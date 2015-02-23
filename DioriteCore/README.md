@@ -17,3 +17,5 @@ https://github.com/GotoFinal/Diorite-API
 * Implement all entities.
 * Implement all other stuff...
 * Make it usable.
+
+PS: Yes, it is in Java 8. If I ever finish it... then java 7 will be very old :)
