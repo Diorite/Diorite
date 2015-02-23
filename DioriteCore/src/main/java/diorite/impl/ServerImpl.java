@@ -20,20 +20,21 @@ import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 
+import diorite.Server;
 import diorite.impl.command.ColoredConsoleCommandSenderImpl;
 import diorite.impl.command.CommandMapImpl;
 import diorite.impl.command.ConsoleCommandSenderImpl;
 import diorite.impl.command.PluginCommandBuilderImpl;
+import diorite.impl.command.defaults.RegisterDefaultCommands;
 import diorite.impl.connection.ServerConnection;
 import diorite.impl.console.ThreadConsoleReader;
 import diorite.impl.log.ForwardLogHandler;
 import diorite.impl.log.LoggerOutputStream;
-import jline.console.ConsoleReader;
-import diorite.Server;
-import diorite.impl.command.defaults.RegisterDefaultCommands;
 import diorite.impl.log.TerminalConsoleWriterThread;
 import diorite.plugin.Plugin;
 import diorite.utils.collections.ConcurrentSimpleStringHashMap;
+import jline.console.ConsoleReader;
+import joptsimple.OptionSet;
 
 public class ServerImpl implements Server, Runnable
 {
@@ -48,7 +49,7 @@ public class ServerImpl implements Server, Runnable
 
     private       ConsoleReader    reader;
     private final Thread           mainServerThread;
-    private       ServerConnection serverConnection;
+    private final ServerConnection serverConnection;
 
     private final YggdrasilAuthenticationService authenticationService;
     private final MinecraftSessionService        sessionService;
@@ -64,7 +65,7 @@ public class ServerImpl implements Server, Runnable
 
     private transient boolean isRunning = true;
 
-    public ServerImpl(final String serverName, final Proxy proxy)
+    public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
     {
         this.serverName = serverName;
         this.mainServerThread = new Thread(this);
@@ -218,7 +219,7 @@ public class ServerImpl implements Server, Runnable
         return this.serverName;
     }
 
-    void start()
+    void start(final OptionSet options)
     {
         {
             final java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
@@ -240,8 +241,11 @@ public class ServerImpl implements Server, Runnable
 
         try
         {
-            this.serverConnection.init(InetAddress.getByName("localhost"), 25565);
-        } catch (UnknownHostException e)
+            final String ip = options.has("ip") ? options.valueOf("ip").toString() : "localhost";
+            final int port = options.has("port") ? (Integer) options.valueOf("port") : DEFAULT_PORT;
+            this.serverConnection.init(InetAddress.getByName(ip), port);
+            System.out.println("Started listening on " + ip + ":" + port);
+        } catch (final UnknownHostException e)
         {
             e.printStackTrace();
         }
@@ -249,6 +253,8 @@ public class ServerImpl implements Server, Runnable
         this.mainServerThread.start();
 
         // TODO configuration and other shit.
+
+        System.out.println("Started Diorite v" + VERSION + " server!");
     }
 
     @Override

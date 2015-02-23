@@ -21,7 +21,7 @@ public class PacketHandshakingInSetProtocol implements PacketHandshakingIn
     {
         this.protocolVersion = data.readVarInt();
         this.serverAddress = data.readText(Short.MAX_VALUE);
-        this.serverPort = data.readVarInt();
+        this.serverPort = data.readUnsignedShort();
         this.requestType = RequestType.getByInt(data.readVarInt());
     }
 
@@ -30,6 +30,7 @@ public class PacketHandshakingInSetProtocol implements PacketHandshakingIn
     {
         data.writeVarInt(this.protocolVersion);
         data.writeText(this.serverAddress);
+        data.writeShort(this.serverPort); // ?
         data.writeVarInt(this.requestType.getValue());
     }
 

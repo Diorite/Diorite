@@ -19,12 +19,11 @@ public enum RequestType
     @SuppressWarnings("MagicNumber")
     public static RequestType getByInt(final int i)
     {
+        System.out.println("type: "+i);
         switch (i)
         {
-            case 0xdd:
             case 1:
                 return STATUS;
-            case 0x15d:
             case 2:
                 return LOGIN;
             default:
