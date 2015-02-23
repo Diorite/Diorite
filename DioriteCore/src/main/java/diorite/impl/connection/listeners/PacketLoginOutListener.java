@@ -2,13 +2,13 @@ package diorite.impl.connection.listeners;
 
 import diorite.impl.connection.packets.login.out.PacketLoginOutDisconnect;
 
-public abstract interface PacketLoginOutListener extends PacketListener
+public interface PacketLoginOutListener extends PacketListener
 {
-//    public abstract void a(PacketLoginOutEncryptionBegin paramPacketLoginOutEncryptionBegin);
+//    void handle(PacketLoginOutEncryptionBegin packet);
 
-//    public abstract void a(PacketLoginOutSuccess paramPacketLoginOutSuccess);
+//    void handle(PacketLoginOutSuccess packet);
 
-    public abstract void handle(PacketLoginOutDisconnect paramPacketLoginOutDisconnect);
+    void handle(PacketLoginOutDisconnect packet);
 
-//    public abstract void a(PacketLoginOutSetCompression paramPacketLoginOutSetCompression);
+//    void handle(PacketLoginOutSetCompression packet);
 }

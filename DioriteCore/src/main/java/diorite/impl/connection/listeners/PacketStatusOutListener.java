@@ -3,9 +3,9 @@ package diorite.impl.connection.listeners;
 import diorite.impl.connection.packets.status.out.PacketStatusOutServerInfo;
 import diorite.impl.connection.packets.status.out.PacketStatusOutPong;
 
-public abstract interface PacketStatusOutListener extends PacketListener
+public interface PacketStatusOutListener extends PacketListener
 {
-    public abstract void handle(PacketStatusOutServerInfo paramPacketStatusOutServerInfo);
+    void handle(PacketStatusOutServerInfo packet);
 
-    public abstract void handle(PacketStatusOutPong paramPacketStatusOutPong);
+    void handle(PacketStatusOutPong packet);
 }

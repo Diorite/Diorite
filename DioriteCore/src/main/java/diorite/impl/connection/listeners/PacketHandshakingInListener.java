@@ -4,5 +4,5 @@ import diorite.impl.connection.packets.handshake.in.PacketHandshakingInSetProtoc
 
 public interface PacketHandshakingInListener extends PacketListener
 {
-    void handle(PacketHandshakingInSetProtocol paramPacketHandshakingInSetProtocol);
+    void handle(PacketHandshakingInSetProtocol packet);
 }

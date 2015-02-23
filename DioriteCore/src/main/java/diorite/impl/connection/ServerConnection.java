@@ -78,19 +78,6 @@ public class ServerConnection
                         } catch (final Exception exception)
                         {
                             exception.printStackTrace();
-//                            if (networkManager.c())
-//                            {
-//                                CrashReport crashreport = CrashReport.a(exception, "Ticking memory connection");
-//                                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Ticking connection");
-//
-//                                crashreportsystemdetails.a("Connection", new CrashReportNetworkManager(this, networkManager));
-//                                throw new ReportedException(crashreport);
-//                            }
-//                            d.warn("Failed to handle packet for " + networkManager.getSocketAddress(), exception);
-//                            ChatComponentText chatcomponenttext = new ChatComponentText("Internal server error");
-//
-//                            networkManager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), new NetworkManagerCloseFuture(this, networkManager, chatcomponenttext), new GenericFutureListener[0]);
-//                            networkManager.k();
                         }
                     }
                 }

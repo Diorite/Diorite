@@ -245,14 +245,6 @@ public class ServerImpl implements Server, Runnable
         {
             e.printStackTrace();
         }
-//        final Thread t = new Thread(() -> {
-//            while (true)
-//            {
-//                ServerImpl.this.serverConnection.update();
-//            }
-//        });
-//        t.setDaemon(true);
-//        t.start();
 
         this.mainServerThread.start();
 

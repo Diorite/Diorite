@@ -12,10 +12,10 @@ public class QueuedPacket
     private final GenericFutureListener<? extends Future<? super Void>>[] listeners;
 
     @SafeVarargs
-    public QueuedPacket(final Packet<?> paramPacket, final GenericFutureListener<? extends Future<? super Void>>... paramVarArgs)
+    public QueuedPacket(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>>... listeners)
     {
-        this.packet = paramPacket;
-        this.listeners = paramVarArgs;
+        this.packet = packet;
+        this.listeners = listeners;
     }
 
     public Packet<?> getPacket()

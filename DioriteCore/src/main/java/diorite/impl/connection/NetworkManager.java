@@ -49,7 +49,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     }
 
     @Override
-    public void channelInactive(final ChannelHandlerContext channelhandlercontext)
+    public void channelInactive(final ChannelHandlerContext channelHandlerContext)
     {
         this.close(new TranslatableComponent("disconnect.endOfStream"));
     }
@@ -68,18 +68,15 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     public void update()
     {
         this.nextPacket();
-//        if ((this.k instanceof IUpdatePlayerListBox)) {
-//            ((IUpdatePlayerListBox)this.k).c();
-//        }
         this.channel.flush();
     }
 
     @Override
-    public void channelActive(final ChannelHandlerContext channelhandlercontext)
+    public void channelActive(final ChannelHandlerContext channelHandlerContext)
             throws Exception
     {
-        super.channelActive(channelhandlercontext);
-        this.channel = channelhandlercontext.channel();
+        super.channelActive(channelHandlerContext);
+        this.channel = channelHandlerContext.channel();
         this.address = this.channel.remoteAddress();
 
         this.preparing = false;
@@ -106,16 +103,16 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     }
 
     @SafeVarargs
-    public final void handle(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>> genericfuturelistener, final GenericFutureListener<? extends Future<? super Void>>... agenericfuturelistener)
+    public final void handle(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>> listener, final GenericFutureListener<? extends Future<? super Void>>... listeners)
     {
         if (this.isChannelOpen())
         {
             this.nextPacket();
-            this.handle(packet, ArrayUtils.add(agenericfuturelistener, 0, genericfuturelistener));
+            this.handle(packet, ArrayUtils.add(listeners, 0, listener));
         }
         else
         {
-            this.packetQueue.add(new QueuedPacket(packet, ArrayUtils.add(agenericfuturelistener, 0, genericfuturelistener)));
+            this.packetQueue.add(new QueuedPacket(packet, ArrayUtils.add(listeners, 0, listener)));
         }
     }
 
@@ -176,7 +173,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     }
 
     @Override
-    public void exceptionCaught(final ChannelHandlerContext channelhandlercontext, final Throwable throwable)
+    public void exceptionCaught(final ChannelHandlerContext channelHandlerContext, final Throwable throwable)
     {
         this.close(new TranslatableComponent("disconnect.genericReason", "Internal Exception: " + throwable));
         throwable.printStackTrace();
