@@ -2,6 +2,7 @@
 Minecraft Server, Implementation of Diorite-API. <br>
 Don't take this project too serious, I created it only to play with Netty and Multithreading. <br>
 It may never be finished, or usable.<br><br>
+Current packets and connections are based on Minecraft code, it may change later.<br><br>
 
 Diorite-API: <br>
 https://github.com/GotoFinal/Diorite-API
