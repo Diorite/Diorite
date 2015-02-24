@@ -11,14 +11,16 @@ import java.nio.charset.Charset;
 import java.util.UUID;
 
 import com.google.common.base.Charsets;
+import com.mojang.authlib.GameProfile;
 
+import diorite.Server;
+import diorite.chat.BaseComponent;
+import diorite.chat.serialize.ComponentSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufProcessor;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import diorite.chat.BaseComponent;
-import diorite.chat.serialize.ComponentSerializer;
 
 public class PacketDataSerializer extends ByteBuf
 // TODO: add methods to serialize items and other stuff.
@@ -75,6 +77,21 @@ public class PacketDataSerializer extends ByteBuf
     {
         this.writeVarInt(oenum.ordinal());
         this.readInt();
+    }
+
+    public void writeGameProfile(final GameProfile gameProfile)
+    {
+        this.writeText((gameProfile.getId() == null) ? "" : gameProfile.getId().toString());
+        this.writeText(gameProfile.getName());
+    }
+
+    public GameProfile readGameProfile()
+    {
+        //noinspection MagicNumber
+        final String uuidStr = this.readText(36);
+        final String name = this.readText(Server.MAX_NICKNAME_SIZE);
+        final UUID uuid = uuidStr.isEmpty() ? null : UUID.fromString(uuidStr);
+        return new GameProfile(uuid, name);
     }
 
     @SuppressWarnings("MagicNumber")

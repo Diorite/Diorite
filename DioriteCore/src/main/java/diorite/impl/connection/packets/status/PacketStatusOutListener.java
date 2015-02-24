@@ -1,5 +1,6 @@
-package diorite.impl.connection.listeners;
+package diorite.impl.connection.packets.status;
 
+import diorite.impl.connection.packets.PacketListener;
 import diorite.impl.connection.packets.status.out.PacketStatusOutServerInfo;
 import diorite.impl.connection.packets.status.out.PacketStatusOutPong;
 

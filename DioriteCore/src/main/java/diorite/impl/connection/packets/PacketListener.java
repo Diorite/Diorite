@@ -1,4 +1,4 @@
-package diorite.impl.connection.listeners;
+package diorite.impl.connection.packets;
 
 import diorite.chat.BaseComponent;
 

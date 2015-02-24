@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.impl.connection.listeners.PacketStatusOutListener;
+import diorite.impl.connection.packets.status.PacketStatusOutListener;
 import diorite.impl.connection.packets.PacketDataSerializer;
 
 public class PacketStatusOutPong implements PacketStatusOut

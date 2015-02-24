@@ -3,7 +3,7 @@ package diorite.impl.connection.packets.status.in;
 import java.io.IOException;
 
 import diorite.impl.connection.packets.PacketDataSerializer;
-import diorite.impl.connection.listeners.PacketStatusInListener;
+import diorite.impl.connection.packets.status.PacketStatusInListener;
 
 public class PacketStatusInStart implements PacketStatusIn
 {

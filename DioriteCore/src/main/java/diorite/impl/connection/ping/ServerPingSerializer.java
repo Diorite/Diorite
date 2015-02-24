@@ -52,7 +52,7 @@ public class ServerPingSerializer
         }
         if (serverPing.getPlayerData() != null)
         {
-            jsonObject.add("version", context.serialize(serverPing.getPlayerData()));
+            jsonObject.add("version", context.serialize(serverPing.getServerData()));
         }
         if (serverPing.getFavicon() != null)
         {

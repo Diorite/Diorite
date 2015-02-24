@@ -27,8 +27,9 @@ public final class Main
         final OptionParser parser = new OptionParser()
         {
             {
-                this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("Port");
-                this.acceptsAll(Arrays.asList("ip", "server-ip"), "IP to listen on").withRequiredArg().ofType(String.class).describedAs("IP");
+                this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port");
+                this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname");
+                this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("online");
             }
         };
         OptionSet options;

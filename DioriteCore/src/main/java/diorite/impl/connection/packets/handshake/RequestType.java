@@ -19,7 +19,6 @@ public enum RequestType
     @SuppressWarnings("MagicNumber")
     public static RequestType getByInt(final int i)
     {
-        System.out.println("type: "+i);
         switch (i)
         {
             case 1:

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.impl.connection.packets.PacketDataSerializer;
-import diorite.impl.connection.listeners.PacketStatusInListener;
+import diorite.impl.connection.packets.status.PacketStatusInListener;
 
 public class PacketStatusInPing implements PacketStatusIn
 {

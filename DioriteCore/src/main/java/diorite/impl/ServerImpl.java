@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.UnknownHostException;
+import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +27,7 @@ import diorite.impl.command.CommandMapImpl;
 import diorite.impl.command.ConsoleCommandSenderImpl;
 import diorite.impl.command.PluginCommandBuilderImpl;
 import diorite.impl.command.defaults.RegisterDefaultCommands;
+import diorite.impl.connection.MinecraftEncryption;
 import diorite.impl.connection.ServerConnection;
 import diorite.impl.console.ThreadConsoleReader;
 import diorite.impl.log.ForwardLogHandler;
@@ -60,13 +62,21 @@ public class ServerImpl implements Server, Runnable
     private int    waitTime           = DEFAULT_WAIT_TIME;
     private int    connectionThrottle = 1000;
     private double mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
+    private final String  hostname;
+    private final int     port;
+    private       boolean onlineMode;
 
     private final double[] recentTps = new double[3];
 
+    private           KeyPair keyPair   = MinecraftEncryption.generateKeyPair();
     private transient boolean isRunning = true;
 
     public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
     {
+        this.hostname = options.has("hostname") ? options.valueOf("hostname").toString() : "localhost";
+        this.port = options.has("port") ? (Integer) options.valueOf("port") : DEFAULT_PORT;
+        this.onlineMode = ! options.has("online") || (Boolean) options.valueOf("online");
+
         this.serverName = serverName;
         this.mainServerThread = new Thread(this);
 
@@ -101,6 +111,16 @@ public class ServerImpl implements Server, Runnable
         this.serverConnection = new ServerConnection(this);
     }
 
+    public KeyPair getKeyPair()
+    {
+        return this.keyPair;
+    }
+
+    public void setKeyPair(final KeyPair keyPair)
+    {
+        this.keyPair = keyPair;
+    }
+
     public int getConnectionThrottle()
     {
         return this.connectionThrottle;
@@ -119,6 +139,26 @@ public class ServerImpl implements Server, Runnable
     public void setConsoleCommandSender(final ConsoleCommandSenderImpl consoleCommandSender)
     {
         this.consoleCommandSender = consoleCommandSender;
+    }
+
+    public boolean isOnlineMode()
+    {
+        return this.onlineMode;
+    }
+
+    public void setOnlineMode(final boolean onlineMode)
+    {
+        this.onlineMode = onlineMode;
+    }
+
+    public int getPort()
+    {
+        return this.port;
+    }
+
+    public String getHostname()
+    {
+        return this.hostname;
     }
 
     public Thread getMainServerThread()
@@ -241,10 +281,8 @@ public class ServerImpl implements Server, Runnable
 
         try
         {
-            final String ip = options.has("ip") ? options.valueOf("ip").toString() : "localhost";
-            final int port = options.has("port") ? (Integer) options.valueOf("port") : DEFAULT_PORT;
-            this.serverConnection.init(InetAddress.getByName(ip), port);
-            System.out.println("Started listening on " + ip + ":" + port);
+            this.serverConnection.init(InetAddress.getByName(this.hostname), this.port);
+            System.out.println("Started listening on " + this.hostname + ":" + this.port);
         } catch (final UnknownHostException e)
         {
             e.printStackTrace();

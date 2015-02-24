@@ -12,12 +12,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.Queues;
 
+import diorite.chat.BaseComponent;
+import diorite.chat.TextComponent;
+import diorite.chat.TranslatableComponent;
 import diorite.impl.Main;
 import diorite.impl.ServerImpl;
-import diorite.impl.connection.listeners.PacketListener;
+import diorite.impl.connection.packets.Packet;
 import diorite.impl.connection.packets.PacketCompressor;
 import diorite.impl.connection.packets.PacketDecompressor;
 import diorite.impl.connection.packets.PacketDecrypter;
+import diorite.impl.connection.packets.PacketEncrypter;
+import diorite.impl.connection.packets.PacketListener;
+import diorite.impl.connection.packets.QueuedPacket;
+import diorite.impl.connection.packets.login.out.PacketLoginOutDisconnect;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -25,12 +32,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import diorite.chat.BaseComponent;
-import diorite.chat.TextComponent;
-import diorite.chat.TranslatableComponent;
-import diorite.impl.connection.packets.Packet;
-import diorite.impl.connection.packets.PacketEncrypter;
-import diorite.impl.connection.packets.QueuedPacket;
 
 public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super PacketListener>>
 {
@@ -251,6 +252,12 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     public void enableAutoRead()
     {
         this.channel.config().setAutoRead(false);
+    }
+
+    public void disconnect(final BaseComponent msg)
+    {
+        this.handle(new PacketLoginOutDisconnect(msg));
+        this.close(msg);
     }
 
     public void close(final BaseComponent baseComponent)

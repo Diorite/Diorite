@@ -10,10 +10,9 @@ import com.mojang.authlib.properties.PropertyMap;
 
 public class GameProfile
 {
-    private final UUID   id;
-    private final String name;
-    private final PropertyMap properties = new PropertyMap();
-    @SuppressWarnings("UnusedDeclaration")
+    private UUID   id;
+    private String name;
+    private PropertyMap properties = new PropertyMap();
     private boolean legacy;
 
     public GameProfile(final UUID id, final String name)
@@ -39,6 +38,31 @@ public class GameProfile
     public PropertyMap getProperties()
     {
         return this.properties;
+    }
+
+    public boolean isLegacy()
+    {
+        return this.legacy;
+    }
+
+    public void setId(final UUID id)
+    {
+        this.id = id;
+    }
+
+    public void setLegacy(final boolean legacy)
+    {
+        this.legacy = legacy;
+    }
+
+    public void setProperties(final PropertyMap properties)
+    {
+        this.properties = properties;
+    }
+
+    public void setName(final String name)
+    {
+        this.name = name;
     }
 
     public boolean isComplete()
@@ -71,10 +95,5 @@ public class GameProfile
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("name", this.name).append("properties", this.properties).append("legacy", this.legacy).toString();
-    }
-
-    public boolean isLegacy()
-    {
-        return this.legacy;
     }
 }

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.chat.BaseComponent;
 import diorite.impl.connection.packets.PacketDataSerializer;
-import diorite.impl.connection.listeners.PacketLoginOutListener;
+import diorite.impl.connection.packets.login.PacketLoginOutListener;
 
 public class PacketLoginOutDisconnect implements PacketLoginOut
 {
