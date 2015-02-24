@@ -8,5 +8,5 @@ public interface Packet<T extends PacketListener>
 
     void writePacket(PacketDataSerializer data) throws IOException;
 
-    <E extends T> void handle(E listener);
+    void handle(T listener);
 }

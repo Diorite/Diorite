@@ -13,6 +13,7 @@ import java.util.UUID;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 
+import diorite.BlockLocation;
 import diorite.Server;
 import diorite.chat.BaseComponent;
 import diorite.chat.serialize.ComponentSerializer;
@@ -52,6 +53,19 @@ public class PacketDataSerializer extends ByteBuf
     public void writeBaseComponent(final BaseComponent baseComponent)
     {
         this.writeText(ComponentSerializer.toString(baseComponent));
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public void writeBlockLocation(final BlockLocation loc)
+    {
+        this.writeLong(((((long) loc.getX()) & 0x3FFFFFF) << 38) | ((((long) loc.getY()) & 0xFFF) << 26) | (((long) loc.getZ()) & 0x3FFFFFF));
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public BlockLocation readBlockLocation()
+    {
+        final long val = this.readLong();
+        return new BlockLocation((int) (val >> 38), (int) ((val >> 26) & 0xFFF), (int) ((val << 38) >> 38));
     }
 
     public void writeByteWord(final byte[] abyte)

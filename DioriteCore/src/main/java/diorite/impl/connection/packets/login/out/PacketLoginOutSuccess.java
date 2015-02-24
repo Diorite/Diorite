@@ -14,6 +14,15 @@ public class PacketLoginOutSuccess implements PacketLoginOut
 {
     private GameProfile profile;
 
+    public PacketLoginOutSuccess()
+    {
+    }
+
+    public PacketLoginOutSuccess(final GameProfile profile)
+    {
+        this.profile = profile;
+    }
+
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {

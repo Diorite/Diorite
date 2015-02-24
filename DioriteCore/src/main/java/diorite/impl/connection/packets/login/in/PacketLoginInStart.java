@@ -8,12 +8,21 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.mojang.authlib.GameProfile;
 
 import diorite.Server;
-import diorite.impl.connection.packets.login.PacketLoginInListener;
 import diorite.impl.connection.packets.PacketDataSerializer;
+import diorite.impl.connection.packets.login.PacketLoginInListener;
 
 public class PacketLoginInStart implements PacketLoginIn
 {
     private GameProfile profile;
+
+    public PacketLoginInStart()
+    {
+    }
+
+    public PacketLoginInStart(final GameProfile profile)
+    {
+        this.profile = profile;
+    }
 
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException

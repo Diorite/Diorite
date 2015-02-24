@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.impl.connection.packets.handshake.PacketHandshakingInListener;
 import diorite.impl.connection.packets.PacketDataSerializer;
+import diorite.impl.connection.packets.handshake.PacketHandshakingInListener;
 import diorite.impl.connection.packets.handshake.RequestType;
 
 public class PacketHandshakingInSetProtocol implements PacketHandshakingIn
@@ -15,6 +15,18 @@ public class PacketHandshakingInSetProtocol implements PacketHandshakingIn
     private String      serverAddress;
     private int         serverPort;
     private RequestType requestType;
+
+    public PacketHandshakingInSetProtocol()
+    {
+    }
+
+    public PacketHandshakingInSetProtocol(final int protocolVersion, final RequestType requestType, final int serverPort, final String serverAddress)
+    {
+        this.protocolVersion = protocolVersion;
+        this.requestType = requestType;
+        this.serverPort = serverPort;
+        this.serverAddress = serverAddress;
+    }
 
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException

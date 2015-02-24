@@ -26,6 +26,7 @@ import diorite.impl.connection.packets.login.PacketLoginInListener;
 import diorite.impl.connection.packets.login.in.PacketLoginInEncryptionBegin;
 import diorite.impl.connection.packets.login.in.PacketLoginInStart;
 import diorite.impl.connection.packets.login.out.PacketLoginOutEncryptionBegin;
+import diorite.impl.connection.packets.login.out.PacketLoginOutSuccess;
 
 public class LoginListener implements PacketLoginInListener
 {
@@ -80,8 +81,10 @@ public class LoginListener implements PacketLoginInListener
         }
     }
 
-    public void acceptPlayer()
+    public void acceptPlayer() // TODO implement compression
     {
+        this.networkManager.handle(new PacketLoginOutSuccess());
+        // TODO: this is only test code
 
     }
 

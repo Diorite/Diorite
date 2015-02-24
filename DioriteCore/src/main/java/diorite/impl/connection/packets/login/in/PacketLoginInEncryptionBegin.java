@@ -13,6 +13,16 @@ public class PacketLoginInEncryptionBegin implements PacketLoginIn
     private byte[] sharedSecret;
     private byte[] verifyToken;
 
+    public PacketLoginInEncryptionBegin()
+    {
+    }
+
+    public PacketLoginInEncryptionBegin(final byte[] sharedSecret, final byte[] verifyToken)
+    {
+        this.sharedSecret = sharedSecret;
+        this.verifyToken = verifyToken;
+    }
+
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
