@@ -9,9 +9,13 @@ import diorite.Difficulty;
 import diorite.Dimension;
 import diorite.GameMode;
 import diorite.WorldType;
+import diorite.impl.connection.EnumProtocol;
+import diorite.impl.connection.EnumProtocolDirection;
+import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.play.PacketPlayOutListener;
 
+@PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutLogin implements PacketPlayOut
 {
     public static final int MAX_WORLD_NAME_SIZE = 32; // should be 16?

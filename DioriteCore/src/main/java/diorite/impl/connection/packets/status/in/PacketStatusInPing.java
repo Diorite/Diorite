@@ -4,9 +4,13 @@ package diorite.impl.connection.packets.status.in;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import diorite.impl.connection.EnumProtocol;
+import diorite.impl.connection.EnumProtocolDirection;
+import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.status.PacketStatusInListener;
 
+@PacketClass(id = 0x01, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketStatusInPing implements PacketStatusIn
 {
     private long ping;
@@ -32,6 +36,7 @@ public class PacketStatusInPing implements PacketStatusIn
         data.writeLong(this.ping);
     }
 
+    @Override
     public void handle(final PacketStatusInListener listener)
     {
         listener.handle(this);

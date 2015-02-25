@@ -4,9 +4,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.chat.BaseComponent;
+import diorite.impl.connection.EnumProtocol;
+import diorite.impl.connection.EnumProtocolDirection;
+import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.login.PacketLoginOutListener;
 
+@PacketClass(id = 0x00, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketLoginOutDisconnect implements PacketLoginOut
 {
     private BaseComponent msg;

@@ -5,9 +5,13 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import diorite.impl.connection.EnumProtocol;
+import diorite.impl.connection.EnumProtocolDirection;
+import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.login.PacketLoginOutListener;
 import diorite.impl.connection.packets.PacketDataSerializer;
 
+@PacketClass(id = 0x03, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketLoginOutSetCompression implements PacketLoginOut
 {
     private int threshold;

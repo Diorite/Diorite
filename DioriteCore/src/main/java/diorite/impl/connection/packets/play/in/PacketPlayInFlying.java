@@ -11,40 +11,30 @@ import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.play.PacketPlayInListener;
 
-@PacketClass(id = 0x00, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInKeepAlive implements PacketPlayIn
+@PacketClass(id = 0x03, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+public class PacketPlayInFlying implements PacketPlayIn
 {
-    private int id;
+    private boolean onGround;
 
-    public PacketPlayInKeepAlive()
+    public PacketPlayInFlying()
     {
     }
 
-    public PacketPlayInKeepAlive(final int id)
+    public PacketPlayInFlying(final boolean onGround)
     {
-        this.id = id;
+        this.onGround = onGround;
     }
 
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.id = data.readVarInt();
+        this.onGround = data.readBoolean();
     }
 
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(this.id);
-    }
-
-    public int getId()
-    {
-        return this.id;
-    }
-
-    public void setId(final int id)
-    {
-        this.id = id;
+        data.writeBoolean(this.onGround);
     }
 
     @Override
@@ -53,9 +43,19 @@ public class PacketPlayInKeepAlive implements PacketPlayIn
         listener.handle(this);
     }
 
+    public boolean isOnGround()
+    {
+        return this.onGround;
+    }
+
+    public void setOnGround(final boolean onGround)
+    {
+        this.onGround = onGround;
+    }
+
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("onGround", this.onGround).toString();
     }
 }

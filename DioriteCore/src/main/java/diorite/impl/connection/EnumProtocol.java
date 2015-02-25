@@ -6,10 +6,11 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import diorite.impl.Main;
 import diorite.impl.connection.packets.Packet;
+import diorite.impl.connection.packets.PacketClass;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 public enum EnumProtocol
 {
@@ -59,8 +60,19 @@ public enum EnumProtocol
         create.put(id, clazz);
     }
 
+    public static void init(final Class<? extends Packet<?>> clazz)
+    {
+        if (! clazz.isAnnotationPresent(PacketClass.class))
+        {
+            throw new IllegalArgumentException("To use this method, class must be annotated with PacketClass");
+        }
+        final PacketClass packetData = clazz.getAnnotation(PacketClass.class);
+        packetData.protocol().init(packetData.direction(), packetData.id(), clazz);
+    }
+
     public Integer getPacketID(final EnumProtocolDirection protocolDirection, final Packet<?> packet)
     {
+        Main.debug("Trying get packet: " + protocolDirection + ", " + packet.getClass().getSimpleName() + ", map: " + this.packetsMap);
         return this.packetsMap.get(protocolDirection).inverse().get(packet.getClass());
     }
 

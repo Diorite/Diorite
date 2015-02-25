@@ -15,6 +15,9 @@ import diorite.chat.serialize.ComponentSerializer;
 import diorite.chat.serialize.TextComponentSerializer;
 import diorite.chat.serialize.TranslatableComponentSerializer;
 import diorite.impl.Main;
+import diorite.impl.connection.EnumProtocol;
+import diorite.impl.connection.EnumProtocolDirection;
+import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.ping.ServerPingPlayerSample;
 import diorite.impl.connection.ping.ServerPingPlayerSampleSerializer;
@@ -24,6 +27,7 @@ import diorite.impl.connection.ping.ServerPing;
 import diorite.impl.connection.ping.ServerPingServerData;
 import diorite.impl.connection.ping.ServerPingServerDataSerializer;
 
+@PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketStatusOutServerInfo implements PacketStatusOut
 {
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ServerPingServerData.class, new ServerPingServerDataSerializer()).registerTypeAdapter(ServerPingPlayerSample.class, new ServerPingPlayerSampleSerializer()).registerTypeAdapter(ServerPing.class, new ServerPingSerializer()).registerTypeAdapter(BaseComponent.class, new ComponentSerializer()).registerTypeAdapter(TextComponent.class, new TextComponentSerializer()).registerTypeAdapter(TranslatableComponent.class, new TranslatableComponentSerializer()).create();

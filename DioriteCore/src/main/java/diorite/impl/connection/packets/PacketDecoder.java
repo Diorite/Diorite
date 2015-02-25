@@ -34,11 +34,13 @@ public class PacketDecoder extends ByteToMessageDecoder
         final PacketDataSerializer dataSerializer = new PacketDataSerializer(byteBuf);
         final int i = dataSerializer.readVarInt();
         final Packet<?> packet = context.channel().attr(this.serverConnection.protocolKey).get().createPacket(this.protocolDirection, i);
-        if (packet == null) {
-            throw new IOException("Bad packet id " + i);
+        if (packet == null)
+        {
+            throw new IOException("Bad packet id " + i + " (" + Integer.toHexString(i) + ")");
         }
         packet.readPacket(dataSerializer);
-        if (dataSerializer.readableBytes() > 0) {
+        if (dataSerializer.readableBytes() > 0)
+        {
             throw new IOException("Packet " + context.channel().attr(this.serverConnection.protocolKey).get().getStatus() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + dataSerializer.readableBytes() + " bytes extra whilst reading packet " + i);
         }
         packets.add(packet);

@@ -140,6 +140,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         }
         else
         {
+            Main.debug("WTF?" +ep1+", "+ep2+", "+packet);
             this.channel.eventLoop().execute(new QueuedProtocolSwitch(this, ep1, ep2, packet, listeners));
         }
     }

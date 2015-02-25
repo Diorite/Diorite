@@ -11,40 +11,40 @@ import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.play.PacketPlayInListener;
 
-@PacketClass(id = 0x00, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInKeepAlive implements PacketPlayIn
+@PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+public class PacketPlayInChat implements PacketPlayIn
 {
-    private int id;
+    private String content;
 
-    public PacketPlayInKeepAlive()
+    public PacketPlayInChat()
     {
     }
 
-    public PacketPlayInKeepAlive(final int id)
+    public PacketPlayInChat(final String content)
     {
-        this.id = id;
+        this.content = content;
     }
 
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.id = data.readVarInt();
+        this.content = data.readText(100);
     }
 
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(this.id);
+        data.writeText(this.content);
     }
 
-    public int getId()
+    public String getContent()
     {
-        return this.id;
+        return this.content;
     }
 
-    public void setId(final int id)
+    public void setContent(final String content)
     {
-        this.id = id;
+        this.content = content;
     }
 
     @Override
@@ -56,6 +56,6 @@ public class PacketPlayInKeepAlive implements PacketPlayIn
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("content", this.content).toString();
     }
 }

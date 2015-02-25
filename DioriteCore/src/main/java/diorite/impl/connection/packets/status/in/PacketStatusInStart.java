@@ -2,9 +2,13 @@ package diorite.impl.connection.packets.status.in;
 
 import java.io.IOException;
 
+import diorite.impl.connection.EnumProtocol;
+import diorite.impl.connection.EnumProtocolDirection;
+import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.status.PacketStatusInListener;
 
+@PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketStatusInStart implements PacketStatusIn
 {
 

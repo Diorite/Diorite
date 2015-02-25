@@ -15,11 +15,13 @@ import diorite.impl.connection.MinecraftEncryption;
 public class ThreadPlayerLookupUUID extends Thread
 {
     private final LoginListener loginListener;
+    private final Runnable onSuccess;
 
-    public ThreadPlayerLookupUUID(final LoginListener loginListener, final String name)
+    public ThreadPlayerLookupUUID(final LoginListener loginListener, final String name, final Runnable onSuccess)
     {
         super(name);
         this.loginListener = loginListener;
+        this.onSuccess = onSuccess;
     }
 
     @Override
@@ -66,6 +68,7 @@ public class ThreadPlayerLookupUUID extends Thread
         //noinspection ObjectToString
         this.loginListener.getLogger().info("Player " + profile.getName() + " (" + profile.getId() + ") [" + this.loginListener.getNetworkManager().getSocketAddress() + "] connected to server! (online-mode: " + this.loginListener.isOnlineMode() + ")");
         this.loginListener.setProtocolState(LoginListener.ProtocolState.READY_TO_ACCEPT);
+        this.onSuccess.run();
     }
 
     public LoginListener getLoginListener()

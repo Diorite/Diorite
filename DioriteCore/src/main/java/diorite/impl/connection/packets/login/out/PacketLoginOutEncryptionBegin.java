@@ -6,10 +6,14 @@ import java.security.PublicKey;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import diorite.impl.connection.EnumProtocol;
+import diorite.impl.connection.EnumProtocolDirection;
 import diorite.impl.connection.MinecraftEncryption;
+import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.login.PacketLoginOutListener;
 import diorite.impl.connection.packets.PacketDataSerializer;
 
+@PacketClass(id = 0x01, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketLoginOutEncryptionBegin implements PacketLoginOut
 {
     public static final int SERVERID_SIZE = 20;

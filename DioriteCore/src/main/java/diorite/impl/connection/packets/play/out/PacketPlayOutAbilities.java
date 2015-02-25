@@ -5,9 +5,13 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import diorite.impl.connection.EnumProtocol;
+import diorite.impl.connection.EnumProtocolDirection;
+import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.play.PacketPlayOutListener;
 
+@PacketClass(id = 0x39, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutAbilities implements PacketPlayOut
 {
     private boolean isInvulnerable;
@@ -21,14 +25,14 @@ public class PacketPlayOutAbilities implements PacketPlayOut
     {
     }
 
-    public PacketPlayOutAbilities(final boolean isInvulnerable, final float walkingSpeed, final float flyingSpeed, final boolean canInstantlyBuild, final boolean canFly, final boolean isFlying)
+    public PacketPlayOutAbilities(final boolean isInvulnerable, final boolean isFlying, final boolean canFly, final boolean canInstantlyBuild, final float walkingSpeed, final float flyingSpeed)
     {
         this.isInvulnerable = isInvulnerable;
+        this.isFlying = isFlying;
+        this.canFly = canFly;
+        this.canInstantlyBuild = canInstantlyBuild;
         this.walkingSpeed = walkingSpeed;
         this.flyingSpeed = flyingSpeed;
-        this.canInstantlyBuild = canInstantlyBuild;
-        this.canFly = canFly;
-        this.isFlying = isFlying;
     }
 
     @Override

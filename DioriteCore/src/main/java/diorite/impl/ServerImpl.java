@@ -166,6 +166,11 @@ public class ServerImpl implements Server, Runnable
         return this.mainServerThread;
     }
 
+    public String getServerModName()
+    {
+        return NANE + " v" + VERSION;
+    }
+
     @Override
     public ConsoleCommandSenderImpl getConsoleSender()
     {

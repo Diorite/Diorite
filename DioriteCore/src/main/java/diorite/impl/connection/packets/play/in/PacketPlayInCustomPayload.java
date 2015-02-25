@@ -1,4 +1,4 @@
-package diorite.impl.connection.packets.play.out;
+package diorite.impl.connection.packets.play.in;
 
 import java.io.IOException;
 
@@ -9,21 +9,21 @@ import diorite.impl.connection.EnumProtocol;
 import diorite.impl.connection.EnumProtocolDirection;
 import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
-import diorite.impl.connection.packets.play.PacketPlayOutListener;
+import diorite.impl.connection.packets.play.PacketPlayInListener;
 
-@PacketClass(id = 0x3F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutCustomPayload implements PacketPlayOut
+@PacketClass(id = 0x17, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+public class PacketPlayInCustomPayload implements PacketPlayIn
 {
     public static final int TAG_SIZE = 20;
-    public static final int MAX_SIZE = 1048576;
+    public static final int MAX_SIZE = 32767;
     private String               tag;
     private PacketDataSerializer dataSerializer;
 
-    public PacketPlayOutCustomPayload()
+    public PacketPlayInCustomPayload()
     {
     }
 
-    public PacketPlayOutCustomPayload(final String tag, final PacketDataSerializer dataSerializer)
+    public PacketPlayInCustomPayload(final String tag, final PacketDataSerializer dataSerializer)
     {
         this.tag = tag;
         this.dataSerializer = dataSerializer;
@@ -69,7 +69,7 @@ public class PacketPlayOutCustomPayload implements PacketPlayOut
     }
 
     @Override
-    public void handle(final PacketPlayOutListener listener)
+    public void handle(final PacketPlayInListener listener)
     {
         listener.handle(this);
     }

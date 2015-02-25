@@ -17,16 +17,32 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 
+import diorite.BlockLocation;
+import diorite.Difficulty;
+import diorite.Dimension;
+import diorite.GameMode;
+import diorite.TeleportData;
+import diorite.WorldType;
 import diorite.chat.BaseComponent;
 import diorite.chat.TextComponent;
 import diorite.impl.ServerImpl;
+import diorite.impl.connection.EnumProtocol;
 import diorite.impl.connection.MinecraftEncryption;
 import diorite.impl.connection.NetworkManager;
+import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.login.PacketLoginInListener;
 import diorite.impl.connection.packets.login.in.PacketLoginInEncryptionBegin;
 import diorite.impl.connection.packets.login.in.PacketLoginInStart;
 import diorite.impl.connection.packets.login.out.PacketLoginOutEncryptionBegin;
 import diorite.impl.connection.packets.login.out.PacketLoginOutSuccess;
+import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
+import diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
+import diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
+import diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
+import diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
+import diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
+import diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
+import io.netty.buffer.Unpooled;
 
 public class LoginListener implements PacketLoginInListener
 {
@@ -83,9 +99,21 @@ public class LoginListener implements PacketLoginInListener
 
     public void acceptPlayer() // TODO implement compression
     {
-        this.networkManager.handle(new PacketLoginOutSuccess());
-        // TODO: this is only test code
+        this.networkManager.handle(new PacketLoginOutSuccess(this.gameProfile), future -> {
+            this.networkManager.setProtocol(EnumProtocol.PLAY);
 
+            this.networkManager.setPacketListener(new PlayListener(LoginListener.this.server, LoginListener.this.networkManager));
+
+
+            // TODO: this is only test code
+            this.networkManager.handle(new PacketPlayOutLogin(0, GameMode.CREATIVE, false, Dimension.OVERWORLD, Difficulty.EASY, 20, WorldType.FLAT));
+            this.networkManager.handle(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(LoginListener.this.server.getServerModName())));
+            this.networkManager.handle(new PacketPlayOutServerDifficulty(Difficulty.EASY));
+            this.networkManager.handle(new PacketPlayOutSpawnPosition(new BlockLocation(0, 70, 0)));
+            this.networkManager.handle(new PacketPlayOutAbilities(false, true, true, true, 1.0f, 1.0f));
+            this.networkManager.handle(new PacketPlayOutHeldItemSlot(3));
+            this.networkManager.handle(new PacketPlayOutPosition(new TeleportData(0, 70, 0)));
+        });
     }
 
     @Override
@@ -100,7 +128,7 @@ public class LoginListener implements PacketLoginInListener
         }
         else
         {
-            new ThreadPlayerLookupUUID(this, "Diorite User Authenticator (" + this.gameProfile.getName() + ") #0 (cracked)").start();
+            new ThreadPlayerLookupUUID(this, "Diorite User Authenticator (" + this.gameProfile.getName() + ") #0 (cracked)", this::acceptPlayer).start();
         }
     }
 
@@ -116,7 +144,7 @@ public class LoginListener implements PacketLoginInListener
         this.secretKey = MinecraftEncryption.createKeySpec(privateKey, packet.getSharedSecret());
         this.protocolState = ProtocolState.AUTHENTICATING;
         this.networkManager.enableEncryption(this.secretKey);
-        new ThreadPlayerLookupUUID(this, "Diorite User Authenticator (" + this.gameProfile.getName() + ") #" + counter.incrementAndGet()).start();
+        new ThreadPlayerLookupUUID(this, "Diorite User Authenticator (" + this.gameProfile.getName() + ") #" + counter.incrementAndGet(), this::acceptPlayer).start();
     }
 
     private String playerInfo()
