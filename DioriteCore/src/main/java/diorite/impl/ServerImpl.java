@@ -286,8 +286,9 @@ public class ServerImpl implements Server, Runnable
 
         try
         {
+            System.out.println("Starting listening on " + this.hostname + ":" + this.port);
             this.serverConnection.init(InetAddress.getByName(this.hostname), this.port);
-            System.out.println("Started listening on " + this.hostname + ":" + this.port);
+            System.out.println("Binded to " + this.hostname + ":" + this.port);
         } catch (final UnknownHostException e)
         {
             e.printStackTrace();

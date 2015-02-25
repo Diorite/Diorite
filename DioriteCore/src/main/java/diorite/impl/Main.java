@@ -29,7 +29,7 @@ public final class Main
             {
                 this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port");
                 this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname");
-                this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("online");
+                this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "hostname to listen on").withRequiredArg().ofType(Boolean.class).describedAs("online");
             }
         };
         OptionSet options;
