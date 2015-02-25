@@ -13,7 +13,7 @@ public enum Difficulty
 
     private final int    level;
     private final String option;
-    private static final TByteObjectMap<Difficulty> diffs = new TByteObjectHashMap<>();
+    private static final TByteObjectMap<Difficulty> elements = new TByteObjectHashMap<>();
 
     Difficulty(final int level, final String option)
     {
@@ -37,14 +37,14 @@ public enum Difficulty
         {
             return null;
         }
-        return diffs.get((byte) id);
+        return elements.get((byte) id);
     }
 
     static
     {
         for (final Difficulty diff : Difficulty.values())
         {
-            diffs.put((byte) diff.level, diff);
+            elements.put((byte) diff.level, diff);
         }
     }
 }

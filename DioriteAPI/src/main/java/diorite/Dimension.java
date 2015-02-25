@@ -11,7 +11,7 @@ public enum Dimension
     END(1);
 
     private final int value;
-    private static final TByteObjectMap<Dimension> dims = new TByteObjectHashMap<>();
+    private static final TByteObjectMap<Dimension> elements = new TByteObjectHashMap<>();
 
     Dimension(final int value)
     {
@@ -29,14 +29,14 @@ public enum Dimension
         {
             return null;
         }
-        return dims.get((byte) id);
+        return elements.get((byte) id);
     }
 
     static
     {
         for (final Dimension type : Dimension.values())
         {
-            dims.put((byte) type.value, type);
+            elements.put((byte) type.value, type);
         }
     }
 }

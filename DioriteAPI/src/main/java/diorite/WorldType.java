@@ -16,7 +16,7 @@ public enum WorldType
     private final int    id;
     private final String name;
     private final int    version;
-    private static final TByteObjectMap<WorldType> types = new TByteObjectHashMap<>();
+    private static final TByteObjectMap<WorldType> elements = new TByteObjectHashMap<>();
 
     WorldType(final int id, final String name, final int version)
     {
@@ -51,18 +51,18 @@ public enum WorldType
         {
             return null;
         }
-        return types.get((byte) id);
+        return elements.get((byte) id);
     }
 
     static
     {
         for (final WorldType type : WorldType.values())
         {
-            types.put((byte) type.id, type);
+            elements.put((byte) type.id, type);
         }
     }
 
-    public static WorldType getType(String name)
+    public static WorldType getType(final String name)
     {
         for (final WorldType type : WorldType.values())
         {

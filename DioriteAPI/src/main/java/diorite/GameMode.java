@@ -14,7 +14,7 @@ public enum GameMode
 
     private final int    id;
     private final String name;
-    private static final TByteObjectMap<GameMode> gameModes = new TByteObjectHashMap<>();
+    private static final TByteObjectMap<GameMode> elements = new TByteObjectHashMap<>();
 
     GameMode(final int id, final String name)
     {
@@ -38,7 +38,7 @@ public enum GameMode
         {
             return NOT_SET;
         }
-        final GameMode gameMode = gameModes.get((byte) id);
+        final GameMode gameMode = elements.get((byte) id);
         return (gameMode == null) ? NOT_SET : gameMode;
     }
 
@@ -46,7 +46,7 @@ public enum GameMode
     {
         for (final GameMode gameMode : GameMode.values())
         {
-            gameModes.put((byte) gameMode.id, gameMode);
+            elements.put((byte) gameMode.id, gameMode);
         }
     }
 }
