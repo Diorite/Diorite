@@ -67,6 +67,7 @@ public enum EnumProtocol
             throw new IllegalArgumentException("To use this method, class must be annotated with PacketClass");
         }
         final PacketClass packetData = clazz.getAnnotation(PacketClass.class);
+        Main.debug("New packet: " + packetData.protocol() + ", " + packetData.direction() + ", " + Integer.toHexString(packetData.id()) + ", " + clazz.getSimpleName());
         packetData.protocol().init(packetData.direction(), packetData.id(), clazz);
     }
 

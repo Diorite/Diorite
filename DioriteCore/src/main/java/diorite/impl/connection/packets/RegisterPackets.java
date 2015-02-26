@@ -13,6 +13,6 @@ public final class RegisterPackets
     public static void init()
     {
         //noinspection unchecked
-        new Reflections(RegisterPackets.class.getPackage().getName()).getTypesAnnotatedWith(PacketClass.class, false).parallelStream().filter(Packet.class::isAssignableFrom).map(packet -> (Class<Packet<?>>) packet).forEach(EnumProtocol::init);
+        new Reflections(RegisterPackets.class.getPackage().getName()).getTypesAnnotatedWith(PacketClass.class, false).stream().filter(Packet.class::isAssignableFrom).map(packet -> (Class<Packet<?>>) packet).forEach(EnumProtocol::init);
     }
 }

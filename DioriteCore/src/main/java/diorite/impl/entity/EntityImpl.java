@@ -1,6 +1,6 @@
 package diorite.impl.entity;
 
-public abstract class Entity
+public abstract class EntityImpl
 {
     private double x;
     private double y;
