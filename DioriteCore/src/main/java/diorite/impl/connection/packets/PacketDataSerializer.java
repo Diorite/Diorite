@@ -17,6 +17,7 @@ import diorite.BlockLocation;
 import diorite.Server;
 import diorite.chat.BaseComponent;
 import diorite.chat.serialize.ComponentSerializer;
+import diorite.impl.map.chunk.ChunkImpl;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufProcessor;
@@ -53,6 +54,11 @@ public class PacketDataSerializer extends ByteBuf
     public void writeBaseComponent(final BaseComponent baseComponent)
     {
         this.writeText(ComponentSerializer.toString(baseComponent));
+    }
+
+    public void writeChunk(final ChunkImpl chunk)
+    {
+        this.writeShort(chunk.getMask()); // TOOD finish
     }
 
     @SuppressWarnings("MagicNumber")
