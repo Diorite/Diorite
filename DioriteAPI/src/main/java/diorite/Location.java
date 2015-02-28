@@ -16,5 +16,5 @@ public interface Location
 
     double getZ();
 
-    ChunkPos getChunkPos
+    ChunkPos getChunkPos();
 }

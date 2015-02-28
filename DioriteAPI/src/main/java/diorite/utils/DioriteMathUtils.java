@@ -165,4 +165,54 @@ public final class DioriteMathUtils
     {
         return num * num;
     }
+
+    public static byte countBits(long num)
+    {
+        byte result;
+        for (result = 0; num > 0; result++)
+        {
+            num &= num - 1;
+        }
+        return result;
+    }
+
+    public static byte countBits(int num)
+    {
+        byte result;
+        for (result = 0; num > 0; result++)
+        {
+            num &= num - 1;
+        }
+        return result;
+    }
+
+    public static byte countBits(short num)
+    {
+        byte result;
+        for (result = 0; num > 0; result++)
+        {
+            num &= num - 1;
+        }
+        return result;
+    }
+
+    public static byte countBits(char num)
+    {
+        byte result;
+        for (result = 0; num > 0; result++)
+        {
+            num &= num - 1;
+        }
+        return result;
+    }
+
+    public static byte countBits(byte num)
+    {
+        byte result;
+        for (result = 0; num > 0; result++)
+        {
+            num &= num - 1;
+        }
+        return result;
+    }
 }
