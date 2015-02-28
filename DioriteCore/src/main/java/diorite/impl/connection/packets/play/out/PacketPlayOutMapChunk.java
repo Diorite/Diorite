@@ -20,6 +20,18 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     private boolean groundUpContinuous;
     private ChunkImpl chunk;
 
+    public PacketPlayOutMapChunk()
+    {
+    }
+
+    public PacketPlayOutMapChunk(final int x, final int z, final boolean groundUpContinuous, final ChunkImpl chunk)
+    {
+        this.x = x;
+        this.z = z;
+        this.groundUpContinuous = groundUpContinuous;
+        this.chunk = chunk;
+    }
+
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {

@@ -39,9 +39,11 @@ import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
 import diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
 import diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
+import diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
 import diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
 import diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
+import diorite.impl.map.chunk.ChunkManagerImpl;
 import io.netty.buffer.Unpooled;
 
 public class LoginListener implements PacketLoginInListener
@@ -113,6 +115,14 @@ public class LoginListener implements PacketLoginInListener
             this.networkManager.handle(new PacketPlayOutAbilities(false, true, true, true, 1.0f, 1.0f));
             this.networkManager.handle(new PacketPlayOutHeldItemSlot(3));
             this.networkManager.handle(new PacketPlayOutPosition(new TeleportData(0, 70, 0)));
+            ChunkManagerImpl mag = new ChunkManagerImpl();
+            for (int x = - 4; x < 5; x++)
+            {
+                for (int z = - 4; z < 5; z++)
+                {
+                    this.networkManager.handle(new PacketPlayOutMapChunk(x, z, true, mag.getChunkAt(x, z)));
+                }
+            }
         });
     }
 

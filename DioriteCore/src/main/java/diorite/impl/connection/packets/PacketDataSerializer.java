@@ -18,6 +18,7 @@ import diorite.Server;
 import diorite.chat.BaseComponent;
 import diorite.chat.serialize.ComponentSerializer;
 import diorite.impl.map.chunk.ChunkImpl;
+import diorite.impl.map.chunk.ChunkPartImpl;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufProcessor;
@@ -58,7 +59,17 @@ public class PacketDataSerializer extends ByteBuf
 
     public void writeChunk(final ChunkImpl chunk)
     {
-        this.writeShort(chunk.getMask()); // TOOD finish
+        this.writeShort(chunk.getMask()); // TODO finish
+        final ChunkPartImpl[] parts = chunk.getChunkParts();
+        byte[] data = new byte[4096];
+        this.writeVarInt(4096);
+        int i = 0;
+        for (char t : parts[0].getBlocks())
+        {
+            data[i++] = (byte) (t & 0xff);
+            data[i++] = (byte) (t >> 8);
+        }
+
     }
 
     @SuppressWarnings("MagicNumber")
