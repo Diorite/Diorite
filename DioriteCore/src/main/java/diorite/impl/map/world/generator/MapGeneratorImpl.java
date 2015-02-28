@@ -14,5 +14,6 @@ public class MapGeneratorImpl // temp code, TODO
                 chunk.setBlock(x, 1, z, 1, DioriteMathUtils.getRandInt(0, 6));
             }
         }
+        chunk.recalculateBlockCounts();
     }
 }

@@ -1,11 +1,12 @@
 package diorite.impl.map.chunk;
 
+import diorite.impl.Main;
 import diorite.map.chunk.Chunk;
 
 public class ChunkImpl implements Chunk
 {
     private final ChunkPartImpl[] chunkParts; // size of 16, parts can be null
-    private       byte[]          biomes;
+    private final byte[]          biomes;
 
     public ChunkImpl(final byte[] biomes, final ChunkPartImpl[] chunkParts)
     {
@@ -22,6 +23,7 @@ public class ChunkImpl implements Chunk
     public ChunkImpl()
     {
         this.chunkParts = new ChunkPartImpl[CHUNK_PARTS];
+        this.biomes = new byte[CHUNK_SIZE * CHUNK_SIZE];
     }
 
     public void setBlock(final int x, final int y, final int z, final byte id, final byte meta)
@@ -60,6 +62,19 @@ public class ChunkImpl implements Chunk
             }
         }
         return mask;
+    }
+
+    public void recalculateBlockCounts()
+    {
+        for (final ChunkPartImpl chunkPart : this.chunkParts)
+        {
+            if (chunkPart == null)
+            {
+                continue;
+            }
+            chunkPart.recalculateBlockCount();
+            Main.debug("Size: " + chunkPart.getBlocksCount());
+        }
     }
 
     public ChunkPartImpl[] getChunkParts()

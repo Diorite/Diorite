@@ -6,7 +6,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 
-import diorite.impl.Main;
 import diorite.impl.connection.packets.Packet;
 import diorite.impl.connection.packets.PacketClass;
 import gnu.trove.map.TIntObjectMap;
@@ -67,19 +66,16 @@ public enum EnumProtocol
             throw new IllegalArgumentException("To use this method, class must be annotated with PacketClass");
         }
         final PacketClass packetData = clazz.getAnnotation(PacketClass.class);
-        Main.debug("New packet: " + packetData.protocol() + ", " + packetData.direction() + ", " + Integer.toHexString(packetData.id()) + ", " + clazz.getSimpleName());
         packetData.protocol().init(packetData.direction(), packetData.id(), clazz);
     }
 
     public Integer getPacketID(final EnumProtocolDirection protocolDirection, final Packet<?> packet)
     {
-        Main.debug("Trying get packet: " + protocolDirection + ", " + packet.getClass().getSimpleName() + ", map: " + this.packetsMap);
         return this.packetsMap.get(protocolDirection).inverse().get(packet.getClass());
     }
 
     public Packet<?> createPacket(final EnumProtocolDirection protocolDirection, final int id) throws IllegalAccessException, InstantiationException
     {
-        Main.debug("create packet for: " + this + ", " + protocolDirection + ", " + id + ", " + this.packetsMap);
         final Class<?> clazz = this.packetsMap.get(protocolDirection).get(id);
         if (clazz == null)
         {

@@ -70,12 +70,12 @@ public class ChunkPartImpl // part of chunk 16x16x16
         return this.skyLight;
     }
 
-    public byte getyPos()
+    public byte getYPos()
     {
         return this.yPos;
     }
 
-    public void setyPos(final byte yPos)
+    public void setYPos(final byte yPos)
     {
         this.yPos = yPos;
     }

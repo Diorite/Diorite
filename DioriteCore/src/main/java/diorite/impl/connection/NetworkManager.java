@@ -167,7 +167,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     @Override
     protected void messageReceived(final ChannelHandlerContext channelHandlerContext, final Packet<? super PacketListener> packet) throws Exception
     {
-        Main.debug("Coś doszło? " + packet + ", " + channelHandlerContext);
         if (this.channel.isOpen())
         {
             packet.handle(this.packetListener);

@@ -17,8 +17,11 @@ import diorite.BlockLocation;
 import diorite.Server;
 import diorite.chat.BaseComponent;
 import diorite.chat.serialize.ComponentSerializer;
+import diorite.impl.Main;
 import diorite.impl.map.chunk.ChunkImpl;
 import diorite.impl.map.chunk.ChunkPartImpl;
+import diorite.map.chunk.Chunk;
+import diorite.utils.DioriteMathUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufProcessor;
@@ -57,19 +60,86 @@ public class PacketDataSerializer extends ByteBuf
         this.writeText(ComponentSerializer.toString(baseComponent));
     }
 
-    public void writeChunk(final ChunkImpl chunk)
+    public void writeChunk(final ChunkImpl chunk, int mask, final boolean skyLight, final boolean biomes)
     {
-        this.writeShort(chunk.getMask()); // TODO finish
-        final ChunkPartImpl[] parts = chunk.getChunkParts();
-        byte[] data = new byte[4096];
-        this.writeVarInt(4096);
-        int i = 0;
-        for (char t : parts[0].getBlocks())
+        Main.debug("Chunk mask: " + Integer.toBinaryString(mask));
+        final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
+
+        // remove empty chunks from mask
+        for (int i = 0, chunkPartsLength = chunkParts.length; i < chunkPartsLength; i++)
         {
-            data[i++] = (byte) (t & 0xff);
-            data[i++] = (byte) (t >> 8);
+            final ChunkPartImpl part = chunkParts[i];
+            if ((part == null) || part.isEmpty())
+            {
+                Main.debug("Removing chunk " + i);
+                mask &= ~ (1 << i);
+            }
+        }
+        Main.debug("Chunk mask: " + Integer.toBinaryString(mask));
+
+        final byte chunkPartsCount = DioriteMathUtils.countBits(chunk.getMask()); // number of chunks to sent
+        final ChunkPartImpl[] chunkPartsToSent = new ChunkPartImpl[chunkPartsCount];
+        Main.debug("Chunk count: " + chunkPartsCount);
+
+        for (int i = 0, j = 0, localMask = 1; i < chunkParts.length; ++ i, localMask <<= 1)
+        {
+            if ((mask & localMask) != 0)
+            {
+                chunkPartsToSent[j++] = chunkParts[i];
+                Main.debug("Adding chunk to sent: " + i + ", as: " + (j - 1));
+            }
         }
 
+        // skyLight ? 2 bytes per block, one byte per light : 2 bytes per block, half per blockLight
+        final int sectionSize = skyLight ? (ChunkPartImpl.CHUNK_DATA_SIZE * 3) : ((ChunkPartImpl.CHUNK_DATA_SIZE * 5) / 2);
+        Main.debug("Section size: " + sectionSize);
+
+        final byte[] data = new byte[(chunkPartsCount * sectionSize) + (biomes ? Chunk.CHUNK_BIOMES_SIZE : 0)]; // size of all chunk parts and biomes if enabled
+        int index = 0;
+        Main.debug("Num Of Bytes: " + data.length);
+
+
+        // write all blocks
+        for (final ChunkPartImpl chunkPart : chunkPartsToSent)
+        {
+            for (final char blockData : chunkPart.getBlocks())
+            {
+                //noinspection MagicNumber
+                data[index++] = (byte) (blockData & 0xff);
+                data[index++] = (byte) (blockData >> 8);
+            }
+        }
+
+        // add all block light
+        for (final ChunkPartImpl chunkPart : chunkPartsToSent)
+        {
+            final byte[] blockLightData = chunkPart.getBlockLight().getRawData();
+            System.arraycopy(blockLightData, 0, data, index, blockLightData.length);
+            index += blockLightData.length;
+        }
+
+        // add skyLight if needed
+        if (skyLight)
+        {
+            for (final ChunkPartImpl chunkPart : chunkPartsToSent)
+            {
+                final byte[] skyLightData = chunkPart.getSkyLight().getRawData();
+                System.arraycopy(skyLightData, 0, data, index, skyLightData.length);
+                index += skyLightData.length;
+            }
+        }
+
+        // and biomes if needed
+        if (biomes)
+        {
+            for (int i = 0; i < chunk.getBiomes().length; ++ i)
+            {
+                data[index++] = chunk.getBiomes()[i];
+            }
+        }
+
+        // write all data with size of it
+        this.writeByteWord(data);
     }
 
     @SuppressWarnings("MagicNumber")

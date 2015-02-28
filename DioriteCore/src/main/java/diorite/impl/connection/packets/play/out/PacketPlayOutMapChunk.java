@@ -46,7 +46,7 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
         data.writeInt(this.x);
         data.writeInt(this.z);
         data.writeBoolean(this.groundUpContinuous);
-        data.writeChunk(this.chunk);
+        data.writeChunk(this.chunk, 0xFFFF, true, true);
     }
 
     @Override
