@@ -60,6 +60,58 @@ public class PacketDataSerializer extends ByteBuf
         this.writeText(ComponentSerializer.toString(baseComponent));
     }
 
+    public void writeChunkUnload()
+    {
+        this.writeChunkContinuous(null, 0, false);
+    }
+
+    public void writeChunkContinuous(final ChunkPartImpl chunkPart, final int mask, final boolean skyLight)
+    {
+        Main.debug("Chunk mask: " + Integer.toBinaryString(mask));
+        if (chunkPart != null)
+        {
+            final int sectionSize = skyLight ? (ChunkPartImpl.CHUNK_DATA_SIZE * 3) : ((ChunkPartImpl.CHUNK_DATA_SIZE * 5) / 2);
+            Main.debug("Section size: " + sectionSize);
+            final byte[] data = new byte[sectionSize];
+            int index = 0;
+            Main.debug("Num Of Bytes: " + data.length);
+            for (final char blockData : chunkPart.getBlocks())
+            {
+                //noinspection MagicNumber
+                data[index++] = (byte) (blockData & 255);
+                //noinspection MagicNumber
+                data[index++] = (byte) ((blockData >> 8) & 255);
+            }
+
+            // add all block light
+            final byte[] blockLightData = chunkPart.getBlockLight().getRawData();
+            System.arraycopy(blockLightData, 0, data, index, blockLightData.length);
+            index += blockLightData.length;
+
+            // add skyLight if needed
+            if (skyLight)
+            {
+                final byte[] skyLightData = chunkPart.getSkyLight().getRawData();
+                System.arraycopy(skyLightData, 0, data, index, skyLightData.length);
+                index += skyLightData.length;
+            }
+
+            // groundUpContinuous
+            this.writeBoolean(true);
+            // mask
+            this.writeShort(mask);
+            // write all data with size of it
+            this.writeByteWord(data);
+        }
+        else
+        {
+            // groundUpContinuous
+            this.writeBoolean(true);
+            // mask
+            this.writeShort(0);
+        }
+    }
+
     public void writeChunk(final ChunkImpl chunk, int mask, final boolean skyLight, final boolean biomes)
     {
         Main.debug("Chunk mask: " + Integer.toBinaryString(mask));
@@ -104,9 +156,11 @@ public class PacketDataSerializer extends ByteBuf
         {
             for (final char blockData : chunkPart.getBlocks())
             {
+//                Main.debug("sending block: "+((byte)(blockData & 255))+"/"+(((blockData >> 8) & 255)));
                 //noinspection MagicNumber
-                data[index++] = (byte) (blockData & 0xff);
-                data[index++] = (byte) (blockData >> 8);
+                data[index++] = (byte) (blockData & 255);
+                //noinspection MagicNumber
+                data[index++] = (byte) ((blockData >> 8) & 255);
             }
         }
 
@@ -138,6 +192,10 @@ public class PacketDataSerializer extends ByteBuf
             }
         }
 
+        // groundUpContinuous
+        this.writeBoolean(false);
+        // mask
+        this.writeShort(mask);
         // write all data with size of it
         this.writeByteWord(data);
     }

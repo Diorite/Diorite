@@ -29,7 +29,7 @@ public class PacketPlayOutServerDifficulty implements PacketPlayOut
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.difficulty = Difficulty.getByID(data.readUnsignedByte());
+        this.difficulty = Difficulty.getByLevel(data.readUnsignedByte());
     }
 
     @Override

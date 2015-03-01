@@ -12,9 +12,9 @@ public class ChunkPartImpl // part of chunk 16x16x16
 
     private volatile byte        yPos; // from 0 to 15
     private final    char[]      blocks; // id and sub-id(0-15) of every block
-    private final     NibbleArray skyLight;
-    private final     NibbleArray blockLight;
-    private volatile  int         blocksCount;
+    private final    NibbleArray skyLight;
+    private final    NibbleArray blockLight;
+    private volatile int         blocksCount;
 
     public ChunkPartImpl(final byte yPos)
     {
@@ -22,6 +22,10 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blocks = new char[CHUNK_DATA_SIZE];
         this.skyLight = new NibbleArray(CHUNK_DATA_SIZE);
         this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
+        //noinspection MagicNumber
+        this.skyLight.fill((byte) 0xf);
+        //noinspection MagicNumber
+        this.blockLight.fill((byte) 0xf);
     }
 
     public ChunkPartImpl(final char[] blocks, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
@@ -32,7 +36,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.yPos = yPos;
     }
 
-    public void setBlock(final int x, final int y, final int z, final byte id, final byte meta)
+    public void setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
         this.blocks[this.toArrayIndex(x, y, z)] = (char) ((id << 4) | meta);
     }

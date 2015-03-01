@@ -108,22 +108,22 @@ public class LoginListener implements PacketLoginInListener
 
 
             // TODO: this is only test code
-            this.networkManager.handle(new PacketPlayOutLogin(0, GameMode.CREATIVE, false, Dimension.OVERWORLD, Difficulty.EASY, 20, WorldType.FLAT));
+            this.networkManager.handle(new PacketPlayOutLogin(1, GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.EASY, 20, WorldType.FLAT));
             this.networkManager.handle(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(LoginListener.this.server.getServerModName())));
             this.networkManager.handle(new PacketPlayOutServerDifficulty(Difficulty.EASY));
             this.networkManager.handle(new PacketPlayOutSpawnPosition(new BlockLocation(0, 70, 0)));
-            this.networkManager.handle(new PacketPlayOutAbilities(false, true, true, true, 0.1f, 0.1f));
+            this.networkManager.handle(new PacketPlayOutAbilities(false, false, false, false, 0.1f, 0.1f));
             this.networkManager.handle(new PacketPlayOutHeldItemSlot(3));
             this.networkManager.handle(new PacketPlayOutPosition(new TeleportData(0, 70, 0)));
             ChunkManagerImpl mag = new ChunkManagerImpl();
-            this.networkManager.handle(new PacketPlayOutMapChunk(0, 0, false, mag.getChunkAt(0, 0)));
-//            for (int x = - 4; x < 5; x++)
-//            {
-//                for (int z = - 4; z < 5; z++)
-//                {
-//                    this.networkManager.handle(new PacketPlayOutMapChunk(x, z, true, mag.getChunkAt(x, z)));
-//                }
-//            }
+            for (int x = - 4; x < 5; x++)
+            {
+                for (int z = - 4; z < 5; z++)
+                {
+                    this.networkManager.handle(new PacketPlayOutMapChunk(x, z, true, mag.getChunkAt(x, z), true, true));
+                }
+            }
+
         });
     }
 

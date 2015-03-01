@@ -64,7 +64,7 @@ public class PacketPlayOutLogin implements PacketPlayOut
         this.hardcore = (gmFlags & 8) == 8;
         this.gameMode = GameMode.getByID(gmFlags & - 9);
         this.dimension = Dimension.getByID(data.readByte());
-        this.difficulty = Difficulty.getByID(data.readUnsignedByte());
+        this.difficulty = Difficulty.getByLevel(data.readUnsignedByte());
         this.maxPlayers = data.readUnsignedByte();
         this.worldType = WorldType.getType(data.readText(MAX_WORLD_NAME_SIZE));
         this.debug = data.readBoolean();
@@ -80,7 +80,7 @@ public class PacketPlayOutLogin implements PacketPlayOut
             gmFlags |= 8;
         }
         data.writeByte(gmFlags);
-        data.writeByte(this.dimension.getValue());
+        data.writeByte(this.dimension.getId());
         data.writeByte(this.difficulty.getLevel());
         data.writeByte(this.maxPlayers);
         data.writeText(this.worldType.getName());

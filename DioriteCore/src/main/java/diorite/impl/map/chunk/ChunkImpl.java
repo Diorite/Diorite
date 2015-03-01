@@ -26,7 +26,7 @@ public class ChunkImpl implements Chunk
         this.biomes = new byte[CHUNK_SIZE * CHUNK_SIZE];
     }
 
-    public void setBlock(final int x, final int y, final int z, final byte id, final byte meta)
+    public void setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
         final byte chunkPosY = (byte) (y / CHUNK_PART_HEIGHT);
         ChunkPartImpl chunkPart = this.chunkParts[chunkPosY];
@@ -43,10 +43,10 @@ public class ChunkImpl implements Chunk
         return this.biomes;
     }
 
-    public void setBlock(final int x, final int y, final int z, final int id, final int meta)
-    {
-        this.setBlock(x, y, z, (byte) id, (byte) meta);
-    }
+//    public void setBlock(final int x, final int y, final int z, final int id, final int meta)
+//    {
+//        this.setBlock(x, y, z, id, meta);
+//    }
 
     // set bit to 1: variable |= (1 << bit)
     // switch bit  : variable ^= (1 << bit)

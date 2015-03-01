@@ -5,12 +5,11 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.impl.Main;
 import diorite.impl.connection.EnumProtocolDirection;
+import diorite.impl.connection.ServerConnection;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import diorite.impl.connection.ServerConnection;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet<?>>
 {
@@ -26,7 +25,6 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>>
     @Override
     protected void encode(final ChannelHandlerContext context, final Packet<?> paramPacket, final ByteBuf paramByteBuf) throws IOException
     {
-        Main.debug("encode packet: " + context + ", " + paramPacket + ", " + paramByteBuf);
         final Integer localInteger = context.channel().attr(this.serverConnection.protocolKey).get().getPacketID(this.protocolDirection, paramPacket);
         if (localInteger == null)
         {

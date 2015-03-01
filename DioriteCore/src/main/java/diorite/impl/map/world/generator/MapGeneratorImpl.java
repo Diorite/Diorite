@@ -11,7 +11,10 @@ public class MapGeneratorImpl // temp code, TODO
         {
             for (int z = 0; z < 16; z++)
             {
-                chunk.setBlock(x, 1, z, 1, DioriteMathUtils.getRandInt(0, 6));
+                for (int y = 0; y < 69; y++)
+                {
+                    chunk.setBlock(x, y, z, 1, DioriteMathUtils.getRandInt(3,4));
+                }
             }
         }
         chunk.recalculateBlockCounts();
