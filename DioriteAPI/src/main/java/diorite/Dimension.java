@@ -1,26 +1,40 @@
 package diorite;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import diorite.utils.DioriteMathUtils;
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import diorite.utils.collections.SimpleStringHashMap;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
-public enum Dimension
+public class Dimension
 {
-    NETHER(- 1),
-    OVERWORLD(0),
-    END(1);
+    public static final Dimension NETHER    = new Dimension("NETHER", - 1);
+    public static final Dimension OVERWORLD = new Dimension("OVERWORLD", 0);
+    public static final Dimension END       = new Dimension("END", 1);
 
-    private final int value;
-    private static final TByteObjectMap<Dimension> elements = new TByteObjectHashMap<>();
+    private final String enumName;
+    private final int    id;
+    private static final Map<String, Dimension>   byName = new SimpleStringHashMap<>(3, .1f);
+    private static final TIntObjectMap<Dimension> byID   = new TIntObjectHashMap<>(3, .1f);
 
-    Dimension(final int value)
+    public Dimension(final String enumName, final int id)
     {
-        this.value = value;
+        this.enumName = enumName;
+        this.id = id;
     }
 
-    public int getValue()
+    public String name()
     {
-        return this.value;
+        return this.enumName;
+    }
+
+    public int getId()
+    {
+        return this.id;
     }
 
     public static Dimension getByID(final int id)
@@ -29,14 +43,30 @@ public enum Dimension
         {
             return null;
         }
-        return elements.get((byte) id);
+        return byID.get((byte) id);
+    }
+
+    public static Dimension getByEnumName(final String name)
+    {
+        return byName.get(name);
+    }
+
+    public static void register(final Dimension element)
+    {
+        byID.put(element.getId(), element);
+        byName.put(element.name(), element);
     }
 
     static
     {
-        for (final Dimension type : Dimension.values())
-        {
-            elements.put((byte) type.value, type);
-        }
+        register(NETHER);
+        register(OVERWORLD);
+        register(END);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).toString();
     }
 }

@@ -215,4 +215,24 @@ public final class DioriteMathUtils
         }
         return result;
     }
+
+    public static boolean isBetweenInclusive(final long min, final long i, final long max)
+    {
+        return (i >= min) && (i <= max);
+    }
+
+    public static boolean isBetweenExclusive(final long min, final long i, final long max)
+    {
+        return (i > min) && (i < max);
+    }
+
+    public static boolean isBetweenInclusive(final double min, final double i, final double max)
+    {
+        return (i >= min) && (i <= max);
+    }
+
+    public static boolean isBetweenExclusive(final double min, final double i, final double max)
+    {
+        return (i > min) && (i < max);
+    }
 }

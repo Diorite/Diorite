@@ -1,25 +1,39 @@
 package diorite;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import diorite.utils.DioriteMathUtils;
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import diorite.utils.collections.SimpleStringHashMap;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
-public enum GameMode
+public class GameMode
 {
-    NOT_SET(- 1, ""),
-    SURVIVAL(0, "survival"),
-    CREATIVE(1, "creative"),
-    ADVENTURE(2, "adventure"),
-    SPECTATOR(3, "spectator");
+    public static final GameMode NOT_SET   = new GameMode("NOT_SET", - 1, "");
+    public static final GameMode SURVIVAL  = new GameMode("SURVIVAL", 0, "survival");
+    public static final GameMode CREATIVE  = new GameMode("CREATIVE", 1, "creative");
+    public static final GameMode ADVENTURE = new GameMode("ADVENTURE", 2, "adventure");
+    public static final GameMode SPECTATOR = new GameMode("SPECTATOR", 3, "spectator");
 
+    private final String enumName;
     private final int    id;
     private final String name;
-    private static final TByteObjectMap<GameMode> elements = new TByteObjectHashMap<>();
+    private static final Map<String, GameMode>   byName = new SimpleStringHashMap<>(5, .1f);
+    private static final TIntObjectMap<GameMode> byID   = new TIntObjectHashMap<>(5, .1f);
 
-    GameMode(final int id, final String name)
+    public GameMode(final String enumName, final int id, final String name)
     {
+        this.enumName = enumName;
         this.id = id;
         this.name = name;
+    }
+
+    public String name()
+    {
+        return this.enumName;
     }
 
     public int getId()
@@ -38,15 +52,33 @@ public enum GameMode
         {
             return NOT_SET;
         }
-        final GameMode gameMode = elements.get((byte) id);
+        final GameMode gameMode = byID.get((byte) id);
         return (gameMode == null) ? NOT_SET : gameMode;
+    }
+
+    public static GameMode getByEnumName(final String name)
+    {
+        return byName.get(name);
+    }
+
+    public static void register(final GameMode element)
+    {
+        byID.put(element.getId(), element);
+        byName.put(element.name(), element);
     }
 
     static
     {
-        for (final GameMode gameMode : GameMode.values())
-        {
-            elements.put((byte) gameMode.id, gameMode);
-        }
+        register(NOT_SET);
+        register(SURVIVAL);
+        register(CREATIVE);
+        register(ADVENTURE);
+        register(SPECTATOR);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("name", this.name).toString();
     }
 }

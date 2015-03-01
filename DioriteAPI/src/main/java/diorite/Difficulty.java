@@ -1,24 +1,38 @@
 package diorite;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import diorite.utils.DioriteMathUtils;
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import diorite.utils.collections.SimpleStringHashMap;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
-public enum Difficulty
+public class Difficulty
 {
-    PEACEFUL(0, "options.difficulty.peaceful"),
-    EASY(1, "options.difficulty.easy"),
-    NORMAL(2, "options.difficulty.normal"),
-    HARD(3, "options.difficulty.hard");
+    public static final Difficulty PEACEFUL = new Difficulty("PEACEFUL", 0, "options.difficulty.peaceful");
+    public static final Difficulty EASY     = new Difficulty("EASY", 1, "options.difficulty.easy");
+    public static final Difficulty NORMAL   = new Difficulty("NORMAL", 2, "options.difficulty.normal");
+    public static final Difficulty HARD     = new Difficulty("HARD", 3, "options.difficulty.hard");
 
+    private final String enumName;
     private final int    level;
     private final String option;
-    private static final TByteObjectMap<Difficulty> elements = new TByteObjectHashMap<>();
+    private static final Map<String, Difficulty>   byName = new SimpleStringHashMap<>(4, .1f);
+    private static final TIntObjectMap<Difficulty> byID   = new TIntObjectHashMap<>(4, .1f);
 
-    Difficulty(final int level, final String option)
+    public Difficulty(final String enumName, final int level, final String option)
     {
+        this.enumName = enumName;
         this.level = level;
         this.option = option;
+    }
+
+    public String name()
+    {
+        return this.enumName;
     }
 
     public int getLevel()
@@ -31,20 +45,37 @@ public enum Difficulty
         return this.option;
     }
 
-    public static Difficulty getByID(final int id)
+    public static Difficulty getByLevel(final int level)
     {
-        if (! DioriteMathUtils.canBeByte(id))
+        if (! DioriteMathUtils.canBeByte(level))
         {
             return null;
         }
-        return elements.get((byte) id);
+        return byID.get((byte) level);
+    }
+
+    public static Difficulty getByEnumName(final String name)
+    {
+        return byName.get(name);
+    }
+
+    public static void register(final Difficulty element)
+    {
+        byID.put(element.getLevel(), element);
+        byName.put(element.name(), element);
     }
 
     static
     {
-        for (final Difficulty diff : Difficulty.values())
-        {
-            elements.put((byte) diff.level, diff);
-        }
+        register(PEACEFUL);
+        register(EASY);
+        register(NORMAL);
+        register(HARD);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("level", this.level).append("option", this.option).toString();
     }
 }
