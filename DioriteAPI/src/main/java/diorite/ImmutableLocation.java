@@ -5,16 +5,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.utils.DioriteMathUtils;
 
-public class Location
+public class ImmutableLocation
 {
-    public static final Location ZERO = new Location(0, 0, 0);
-    private double x;
-    private double y;
-    private double z;
-    private float  yaw;
-    private float  pitch;
+    public static final ImmutableLocation ZERO = new ImmutableLocation(0, 0, 0);
+    private final double x;
+    private final double y;
+    private final double z;
+    private final float  yaw;
+    private final float  pitch;
 
-    public Location(final double x, final double z, final double y)
+    public ImmutableLocation(final double x, final double z, final double y)
     {
         this.x = x;
         this.z = z;
@@ -23,7 +23,7 @@ public class Location
         this.pitch = 0;
     }
 
-    public Location(final double x, final double y, final double z, final float yaw, final float pitch)
+    public ImmutableLocation(final double x, final double y, final double z, final float yaw, final float pitch)
     {
         this.x = x;
         this.y = y;
@@ -57,31 +57,6 @@ public class Location
         return this.yaw;
     }
 
-    public void setX(final double x)
-    {
-        this.x = x;
-    }
-
-    public void setY(final double y)
-    {
-        this.y = y;
-    }
-
-    public void setZ(final double z)
-    {
-        this.z = z;
-    }
-
-    public void setYaw(final float yaw)
-    {
-        this.yaw = yaw;
-    }
-
-    public void setPitch(final float pitch)
-    {
-        this.pitch = pitch;
-    }
-
     public double length()
     {
         return Math.sqrt(this.lengthSquared());
@@ -102,7 +77,7 @@ public class Location
         return Math.sqrt(this.distanceSquaredFromCenter(x, y, z));
     }
 
-    public double distance(final Location location)
+    public double distance(final ImmutableLocation location)
     {
         return Math.sqrt(this.distanceSquared(location));
     }
@@ -123,22 +98,22 @@ public class Location
         return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
     }
 
-    public double distanceSquared(final Location location)
+    public double distanceSquared(final ImmutableLocation location)
     {
         return this.distanceSquared(location.getX(), location.getY(), location.getZ());
     }
 
-    public Location crossProduct(final Location location)
+    public ImmutableLocation crossProduct(final ImmutableLocation location)
     {
-        return new Location((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
+        return new ImmutableLocation((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
     }
 
-    public boolean isInAABB(final Location min, final Location max)
+    public boolean isInAABB(final ImmutableLocation min, final ImmutableLocation max)
     {
         return (this.x >= min.x) && (this.x <= max.x) && (this.y >= min.y) && (this.y <= max.y) && (this.z >= min.z) && (this.z <= max.z);
     }
 
-    public boolean isInSphere(final Location origin, final double radius)
+    public boolean isInSphere(final ImmutableLocation origin, final double radius)
     {
         return (DioriteMathUtils.square(origin.x - this.x) + DioriteMathUtils.square(origin.y - this.y) + DioriteMathUtils.square(origin.z - this.z)) <= DioriteMathUtils.square(radius);
     }
@@ -151,12 +126,12 @@ public class Location
         {
             return true;
         }
-        if (! (o instanceof Location))
+        if (! (o instanceof ImmutableLocation))
         {
             return false;
         }
 
-        final Location that = (Location) o;
+        final ImmutableLocation that = (ImmutableLocation) o;
 
         return (this.x == that.x) && (this.y == that.y) && (this.z == that.z);
 

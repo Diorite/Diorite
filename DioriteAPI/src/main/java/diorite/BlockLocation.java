@@ -5,10 +5,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.utils.DioriteMathUtils;
 
-public class BlockLocation implements Comparable<BlockLocation>
+public class BlockLocation
 {
-    public static       BlockLocation ZERO = new BlockLocation(0, 0, 0);
-    public static final double        HALF = 0.5;
+    public static final BlockLocation ZERO = new BlockLocation(0, 0, 0);
     private final int x;
     private final int y;
     private final int z;
@@ -25,14 +24,29 @@ public class BlockLocation implements Comparable<BlockLocation>
         return this.x;
     }
 
+    public int getY()
+    {
+        return this.y;
+    }
+
     public int getZ()
     {
         return this.z;
     }
 
-    public int getY()
+    public BlockLocation addX(final int x)
     {
-        return this.y;
+        return new BlockLocation(this.x + x, this.y, this.z);
+    }
+
+    public BlockLocation addY(final int y)
+    {
+        return new BlockLocation(this.x, this.y + y, this.z);
+    }
+
+    public BlockLocation addZ(final int z)
+    {
+        return new BlockLocation(this.x, this.y, this.z + z);
     }
 
     public double length()
@@ -70,9 +84,9 @@ public class BlockLocation implements Comparable<BlockLocation>
 
     public double distanceSquaredFromCenter(final double x, final double y, final double z)
     {
-        final double deltaX = ((double) this.x + HALF) - x;
-        final double deltaY = ((double) this.y + HALF) - y;
-        final double deltaZ = ((double) this.z + HALF) - z;
+        final double deltaX = ((double) this.x + 0.5) - x;
+        final double deltaY = ((double) this.y + 0.5) - y;
+        final double deltaZ = ((double) this.z + 0.5) - z;
         return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
     }
 
@@ -128,19 +142,5 @@ public class BlockLocation implements Comparable<BlockLocation>
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("y", this.y).append("z", this.z).toString();
-    }
-
-    @Override
-    public int compareTo(final BlockLocation other)
-    {
-        if (this.y == other.getY())
-        {
-            if (this.z == other.getZ())
-            {
-                return this.x - other.getX();
-            }
-            return this.z - other.getZ();
-        }
-        return this.y - other.getY();
     }
 }

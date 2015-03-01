@@ -58,7 +58,8 @@ public class GameMode
 
     public static GameMode getByEnumName(final String name)
     {
-        return byName.get(name);
+        final GameMode gameMode = byName.get(name);
+        return (gameMode == null) ? NOT_SET : gameMode;
     }
 
     public static void register(final GameMode element)
