@@ -87,12 +87,6 @@ public class HandshakeListener implements PacketHandshakingInListener
                 {
                     this.networkManager.setPacketListener(new LoginListener(this.server, this.networkManager, packet.getServerAddress() + ":" + packet.getServerPort()));
                 }
-
-//                final BaseComponent msg = new TextComponent("Diorite server, Not implemented yet :<");
-//                msg.setColor(ChatColor.AQUA);
-//                this.networkManager.handle(new PacketLoginOutDisconnect(msg));
-//                this.networkManager.close(msg);
-
                 break;
             case STATUS:
                 this.networkManager.setProtocol(EnumProtocol.STATUS);

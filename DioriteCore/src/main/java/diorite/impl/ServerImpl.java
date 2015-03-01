@@ -41,30 +41,26 @@ import joptsimple.OptionSet;
 public class ServerImpl implements Server, Runnable
 {
 
-    private static final Map<String, ServerImpl> instances = new ConcurrentSimpleStringHashMap<>(2, 0.1f);
-
-    private final String serverName;
-
-    private final CommandMapImpl commandMap = new CommandMapImpl();
-
-    private ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
-
-    private       ConsoleReader    reader;
-    private final Thread           mainServerThread;
-    private final ServerConnection serverConnection;
-
-    private final YggdrasilAuthenticationService authenticationService;
-    private final MinecraftSessionService        sessionService;
-    private final GameProfileRepository          gameProfileRepository;
-
-    private long currentTick;
-    private int    tps                = DEFAULT_TPS;
-    private int    waitTime           = DEFAULT_WAIT_TIME;
-    private int    connectionThrottle = 1000;
-    private double mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
-    private final String  hostname;
-    private final int     port;
-    private       boolean onlineMode;
+    protected static final Map<String, ServerImpl> instances          = new ConcurrentSimpleStringHashMap<>(2, 0.1f);
+    protected              int                     tps                = DEFAULT_TPS;
+    protected              int                     waitTime           = DEFAULT_WAIT_TIME;
+    protected              int                     connectionThrottle = 1000;
+    protected              double                  mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
+    protected final        CommandMapImpl          commandMap         = new CommandMapImpl();
+    protected final String                         serverName;
+    protected final Thread                         mainServerThread;
+    protected final YggdrasilAuthenticationService authenticationService;
+    protected final MinecraftSessionService        sessionService;
+    protected final GameProfileRepository          gameProfileRepository;
+    protected final String                         hostname;
+    protected final int                            port;
+    protected       ServerConnection               serverConnection;
+    protected       EntityManagerImpl              entityManager;
+    protected       PlayersManagerImpl             playersManager;
+    protected       ConsoleCommandSenderImpl       consoleCommandSender; //new ConsoleCommandSenderImpl(this);
+    protected       ConsoleReader                  reader;
+    protected       long                           currentTick;
+    protected       boolean                        onlineMode;
 
     private final double[] recentTps = new double[3];
 
@@ -108,6 +104,8 @@ public class ServerImpl implements Server, Runnable
 
         RegisterDefaultCommands.init(this.commandMap);
 
+        this.entityManager = new EntityManagerImpl(this);
+        this.playersManager = new PlayersManagerImpl(this);
         this.serverConnection = new ServerConnection(this);
     }
 
@@ -139,6 +137,16 @@ public class ServerImpl implements Server, Runnable
     public void setConsoleCommandSender(final ConsoleCommandSenderImpl consoleCommandSender)
     {
         this.consoleCommandSender = consoleCommandSender;
+    }
+
+    public EntityManagerImpl getEntityManager()
+    {
+        return this.entityManager;
+    }
+
+    public PlayersManagerImpl getPlayersManager()
+    {
+        return this.playersManager;
     }
 
     public boolean isOnlineMode()
@@ -347,7 +355,7 @@ public class ServerImpl implements Server, Runnable
                     }
                     lastTick = curTime;
 
-
+                    this.playersManager.keepAlive();
                 }
             }
         } catch (final Throwable e)

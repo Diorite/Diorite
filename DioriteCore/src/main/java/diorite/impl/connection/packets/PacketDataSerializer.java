@@ -17,7 +17,6 @@ import diorite.BlockLocation;
 import diorite.Server;
 import diorite.chat.BaseComponent;
 import diorite.chat.serialize.ComponentSerializer;
-import diorite.impl.Main;
 import diorite.impl.map.chunk.ChunkImpl;
 import diorite.impl.map.chunk.ChunkPartImpl;
 import diorite.map.chunk.Chunk;
@@ -60,95 +59,26 @@ public class PacketDataSerializer extends ByteBuf
         this.writeText(ComponentSerializer.toString(baseComponent));
     }
 
-    public void writeChunkUnload()
+    public void writeChunkSimple(final ChunkImpl chunk, final int mask, final boolean skyLight, final boolean groundUpContinuous, boolean writeSize) // groundUpContinuous, with biomes
     {
-        this.writeChunkContinuous(null, 0, false);
-    }
-
-    public void writeChunkContinuous(final ChunkPartImpl chunkPart, final int mask, final boolean skyLight)
-    {
-        Main.debug("Chunk mask: " + Integer.toBinaryString(mask));
-        if (chunkPart != null)
-        {
-            final int sectionSize = skyLight ? (ChunkPartImpl.CHUNK_DATA_SIZE * 3) : ((ChunkPartImpl.CHUNK_DATA_SIZE * 5) / 2);
-            Main.debug("Section size: " + sectionSize);
-            final byte[] data = new byte[sectionSize];
-            int index = 0;
-            Main.debug("Num Of Bytes: " + data.length);
-            for (final char blockData : chunkPart.getBlocks())
-            {
-                //noinspection MagicNumber
-                data[index++] = (byte) (blockData & 255);
-                //noinspection MagicNumber
-                data[index++] = (byte) ((blockData >> 8) & 255);
-            }
-
-            // add all block light
-            final byte[] blockLightData = chunkPart.getBlockLight().getRawData();
-            System.arraycopy(blockLightData, 0, data, index, blockLightData.length);
-            index += blockLightData.length;
-
-            // add skyLight if needed
-            if (skyLight)
-            {
-                final byte[] skyLightData = chunkPart.getSkyLight().getRawData();
-                System.arraycopy(skyLightData, 0, data, index, skyLightData.length);
-                index += skyLightData.length;
-            }
-
-            // groundUpContinuous
-            this.writeBoolean(true);
-            // mask
-            this.writeShort(mask);
-            // write all data with size of it
-            this.writeByteWord(data);
-        }
-        else
-        {
-            // groundUpContinuous
-            this.writeBoolean(true);
-            // mask
-            this.writeShort(0);
-        }
-    }
-
-    public void writeChunk(final ChunkImpl chunk, int mask, final boolean skyLight, final boolean biomes)
-    {
-        Main.debug("Chunk mask: " + Integer.toBinaryString(mask));
         final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
-
-        // remove empty chunks from mask
-        for (int i = 0, chunkPartsLength = chunkParts.length; i < chunkPartsLength; i++)
-        {
-            final ChunkPartImpl part = chunkParts[i];
-            if ((part == null) || part.isEmpty())
-            {
-                Main.debug("Removing chunk " + i);
-                mask &= ~ (1 << i);
-            }
-        }
-        Main.debug("Chunk mask: " + Integer.toBinaryString(mask));
 
         final byte chunkPartsCount = DioriteMathUtils.countBits(chunk.getMask()); // number of chunks to sent
         final ChunkPartImpl[] chunkPartsToSent = new ChunkPartImpl[chunkPartsCount];
-        Main.debug("Chunk count: " + chunkPartsCount);
 
         for (int i = 0, j = 0, localMask = 1; i < chunkParts.length; ++ i, localMask <<= 1)
         {
             if ((mask & localMask) != 0)
             {
                 chunkPartsToSent[j++] = chunkParts[i];
-                Main.debug("Adding chunk to sent: " + i + ", as: " + (j - 1));
             }
         }
 
         // skyLight ? 2 bytes per block, one byte per light : 2 bytes per block, half per blockLight
         final int sectionSize = skyLight ? (ChunkPartImpl.CHUNK_DATA_SIZE * 3) : ((ChunkPartImpl.CHUNK_DATA_SIZE * 5) / 2);
-        Main.debug("Section size: " + sectionSize);
 
-        final byte[] data = new byte[(chunkPartsCount * sectionSize) + (biomes ? Chunk.CHUNK_BIOMES_SIZE : 0)]; // size of all chunk parts and biomes if enabled
+        final byte[] data = new byte[(chunkPartsCount * sectionSize) + (groundUpContinuous ? Chunk.CHUNK_BIOMES_SIZE : 0)]; // size of all chunk parts and biomes if enabled
         int index = 0;
-        Main.debug("Num Of Bytes: " + data.length);
 
 
         // write all blocks
@@ -184,7 +114,7 @@ public class PacketDataSerializer extends ByteBuf
         }
 
         // and biomes if needed
-        if (biomes)
+        if (groundUpContinuous)
         {
             for (int i = 0; i < chunk.getBiomes().length; ++ i)
             {
@@ -192,12 +122,35 @@ public class PacketDataSerializer extends ByteBuf
             }
         }
 
-        // groundUpContinuous
-        this.writeBoolean(false);
+        // write all data with size of it
+        if (writeSize)
+        {
+            this.writeByteWord(data);
+        }
+        else
+        {
+            this.writeBytes(data);
+        }
+    }
+
+    public void writeChunk(final ChunkImpl chunk, int mask, final boolean skyLight, final boolean groundUpContinuous) // groundUpContinuous, with biomes
+    {
+        final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
+
+        // remove empty chunks from mask
+        for (int i = 0, chunkPartsLength = chunkParts.length; i < chunkPartsLength; i++)
+        {
+            final ChunkPartImpl part = chunkParts[i];
+            if ((part == null) || part.isEmpty())
+            {
+                mask &= ~ (1 << i);
+            }
+        }
+
         // mask
         this.writeShort(mask);
-        // write all data with size of it
-        this.writeByteWord(data);
+        // chunk data
+        this.writeChunkSimple(chunk, mask, skyLight, groundUpContinuous, true);
     }
 
     @SuppressWarnings("MagicNumber")

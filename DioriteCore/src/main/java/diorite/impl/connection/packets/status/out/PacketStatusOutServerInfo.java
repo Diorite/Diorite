@@ -14,16 +14,15 @@ import diorite.chat.TranslatableComponent;
 import diorite.chat.serialize.ComponentSerializer;
 import diorite.chat.serialize.TextComponentSerializer;
 import diorite.chat.serialize.TranslatableComponentSerializer;
-import diorite.impl.Main;
 import diorite.impl.connection.EnumProtocol;
 import diorite.impl.connection.EnumProtocolDirection;
 import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
+import diorite.impl.connection.packets.status.PacketStatusOutListener;
+import diorite.impl.connection.ping.ServerPing;
 import diorite.impl.connection.ping.ServerPingPlayerSample;
 import diorite.impl.connection.ping.ServerPingPlayerSampleSerializer;
 import diorite.impl.connection.ping.ServerPingSerializer;
-import diorite.impl.connection.packets.status.PacketStatusOutListener;
-import diorite.impl.connection.ping.ServerPing;
 import diorite.impl.connection.ping.ServerPingServerData;
 import diorite.impl.connection.ping.ServerPingServerDataSerializer;
 
@@ -51,7 +50,6 @@ public class PacketStatusOutServerInfo implements PacketStatusOut
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        Main.debug("JSON: "+GSON.toJson(this.serverPing));
         data.writeText(GSON.toJson(this.serverPing));
     }
 

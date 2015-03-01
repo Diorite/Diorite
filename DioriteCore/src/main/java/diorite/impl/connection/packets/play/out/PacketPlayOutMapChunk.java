@@ -20,7 +20,6 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     private boolean   groundUpContinuous;
     private ChunkImpl chunk;
 
-    private boolean includeBiomes;
     private boolean includeSkyLight;
     private int     mask;
 
@@ -30,33 +29,31 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     {
     }
 
-    public PacketPlayOutMapChunk(final int x, final int z, final boolean groundUpContinuous, final ChunkImpl chunk)
+    public PacketPlayOutMapChunk(final boolean groundUpContinuous, final ChunkImpl chunk)
     {
-        this.x = x;
-        this.z = z;
+        this.x = chunk.getPos().getX();
+        this.z = chunk.getPos().getZ();
         this.groundUpContinuous = groundUpContinuous;
         this.chunk = chunk;
         this.mask = chunk.getMask();
     }
 
-    public PacketPlayOutMapChunk(final int x, final int z, final boolean groundUpContinuous, final ChunkImpl chunk, final boolean includeBiomes, final boolean includeSkyLight)
+    public PacketPlayOutMapChunk(final boolean groundUpContinuous, final ChunkImpl chunk, final boolean includeSkyLight)
     {
-        this.x = x;
-        this.z = z;
+        this.x = chunk.getPos().getX();
+        this.z = chunk.getPos().getZ();
         this.groundUpContinuous = groundUpContinuous;
         this.chunk = chunk;
-        this.includeBiomes = includeBiomes;
         this.includeSkyLight = includeSkyLight;
         this.mask = chunk.getMask();
     }
 
-    public PacketPlayOutMapChunk(final int x, final int z, final boolean groundUpContinuous, final ChunkImpl chunk, final boolean includeBiomes, final boolean includeSkyLight, final int mask)
+    public PacketPlayOutMapChunk(final boolean groundUpContinuous, final ChunkImpl chunk, final boolean includeSkyLight, final int mask)
     {
-        this.x = x;
-        this.z = z;
+        this.x = chunk.getPos().getX();
+        this.z = chunk.getPos().getZ();
         this.groundUpContinuous = groundUpContinuous;
         this.chunk = chunk;
-        this.includeBiomes = includeBiomes;
         this.includeSkyLight = includeSkyLight;
         this.mask = mask;
     }
@@ -74,14 +71,10 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     {
         data.writeInt(this.x);
         data.writeInt(this.z);
-        if (this.groundUpContinuous)
-        {
-            data.writeChunkContinuous(this.chunk.getChunkParts()[this.selectedPart], this.mask, this.includeSkyLight);
-        }
-        else
-        {
-            data.writeChunk(this.chunk, this.mask, this.includeSkyLight, this.includeBiomes);
-        }
+
+        data.writeBoolean(this.groundUpContinuous);
+        data.writeChunk(this.chunk, this.mask, this.includeSkyLight, this.groundUpContinuous);
+
     }
 
     @Override
@@ -130,16 +123,6 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
         this.chunk = chunk;
     }
 
-    public boolean isIncludeBiomes()
-    {
-        return this.includeBiomes;
-    }
-
-    public void setIncludeBiomes(final boolean includeBiomes)
-    {
-        this.includeBiomes = includeBiomes;
-    }
-
     public boolean isIncludeSkyLight()
     {
         return this.includeSkyLight;
@@ -173,6 +156,6 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).append("groundUpContinuous", this.groundUpContinuous).append("chunk", this.chunk).append("includeBiomes", this.includeBiomes).append("includeSkyLight", this.includeSkyLight).append("mask", this.mask).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).append("groundUpContinuous", this.groundUpContinuous).append("chunk", this.chunk).append("includeSkyLight", this.includeSkyLight).append("mask", this.mask).toString();
     }
 }

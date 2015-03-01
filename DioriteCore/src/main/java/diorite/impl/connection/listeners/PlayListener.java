@@ -4,12 +4,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.chat.BaseComponent;
+import diorite.entity.Player;
 import diorite.impl.Main;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.NetworkManager;
 import diorite.impl.connection.packets.play.PacketPlayInListener;
+import diorite.impl.connection.packets.play.in.PacketPlayInArmAnimation;
+import diorite.impl.connection.packets.play.in.PacketPlayInBlockDig;
 import diorite.impl.connection.packets.play.in.PacketPlayInChat;
 import diorite.impl.connection.packets.play.in.PacketPlayInCustomPayload;
+import diorite.impl.connection.packets.play.in.PacketPlayInEntityAction;
 import diorite.impl.connection.packets.play.in.PacketPlayInFlying;
 import diorite.impl.connection.packets.play.in.PacketPlayInHeldItemSlot;
 import diorite.impl.connection.packets.play.in.PacketPlayInKeepAlive;
@@ -17,7 +21,8 @@ import diorite.impl.connection.packets.play.in.PacketPlayInLook;
 import diorite.impl.connection.packets.play.in.PacketPlayInPosition;
 import diorite.impl.connection.packets.play.in.PacketPlayInPositionLook;
 import diorite.impl.connection.packets.play.in.PacketPlayInSettings;
-import diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
+import diorite.impl.entity.EntityImpl;
+import diorite.impl.entity.PlayerImpl;
 
 public class PlayListener implements PacketPlayInListener
 {
@@ -33,8 +38,17 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInKeepAlive packet)
     {
-        Main.debug("KeepAlive!");
-        this.networkManager.handle(new PacketPlayOutKeepAlive(packet.getId()));
+        // TODO kick if inactive
+    }
+
+    public NetworkManager getNetworkManager()
+    {
+        return this.networkManager;
+    }
+
+    public ServerImpl getServer()
+    {
+        return this.server;
     }
 
     @Override
@@ -85,6 +99,28 @@ public class PlayListener implements PacketPlayInListener
     public void handle(final PacketPlayInChat packet)
     {
         Main.debug("Chat packet: " + packet.getContent());
+    }
+
+    @Override
+    public void handle(final PacketPlayInEntityAction packet)
+    {
+        final EntityImpl entity = this.server.getEntityManager().getEntity(packet.getEntityID());
+        if (entity instanceof PlayerImpl)
+        {
+            packet.getEntityAction().doAction(((Player) entity), packet.getJumpBoost());
+        }
+    }
+
+    @Override
+    public void handle(final PacketPlayInArmAnimation packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayInBlockDig packet)
+    {
+        // TODO: implement
     }
 
     @Override

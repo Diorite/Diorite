@@ -12,12 +12,13 @@ public class ChunkManagerImpl
 
     public ChunkImpl getChunkAt(final int x, final int z)
     {
-        ChunkImpl chunk = this.chunks.get(new ChunkPos(x, z));
+        final ChunkPos pos = new ChunkPos(x, z);
+        ChunkImpl chunk = this.chunks.get(pos);
         if (chunk == null)
         {
-            chunk = new ChunkImpl();
+            chunk = new ChunkImpl(pos);
             new MapGeneratorImpl().generateChunk(chunk);
-            this.chunks.put(new ChunkPos(x, z), chunk);
+            this.chunks.put(pos, chunk);
         }
         return chunk;
     }

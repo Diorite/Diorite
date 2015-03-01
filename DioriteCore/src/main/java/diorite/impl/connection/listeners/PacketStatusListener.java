@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import diorite.Server;
 import diorite.chat.BaseComponent;
 import diorite.chat.TextComponent;
-import diorite.impl.Main;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.NetworkManager;
 import diorite.impl.connection.packets.status.PacketStatusInListener;
@@ -45,7 +44,6 @@ public class PacketStatusListener implements PacketStatusInListener
     @Override
     public void handle(final PacketStatusInPing packet)
     {
-        Main.debug("ping: "+packet.getPing());
         this.networkManager.handle(new PacketStatusOutPong(packet.getPing()));
     }
 

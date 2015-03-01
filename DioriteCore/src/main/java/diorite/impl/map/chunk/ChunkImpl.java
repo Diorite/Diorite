@@ -2,26 +2,31 @@ package diorite.impl.map.chunk;
 
 import diorite.impl.Main;
 import diorite.map.chunk.Chunk;
+import diorite.map.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk
 {
+    private final ChunkPos pos;
     private final ChunkPartImpl[] chunkParts; // size of 16, parts can be null
     private final byte[]          biomes;
 
-    public ChunkImpl(final byte[] biomes, final ChunkPartImpl[] chunkParts)
+    public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts)
     {
+        this.pos = pos;
         this.biomes = biomes;
         this.chunkParts = chunkParts;
     }
 
-    public ChunkImpl(final ChunkPartImpl[] chunkParts)
+    public ChunkImpl(final ChunkPos pos, final ChunkPartImpl[] chunkParts)
     {
+        this.pos = pos;
         this.chunkParts = chunkParts;
         this.biomes = new byte[CHUNK_SIZE * CHUNK_SIZE];
     }
 
-    public ChunkImpl()
+    public ChunkImpl(final ChunkPos pos)
     {
+        this.pos = pos;
         this.chunkParts = new ChunkPartImpl[CHUNK_PARTS];
         this.biomes = new byte[CHUNK_SIZE * CHUNK_SIZE];
     }
@@ -36,6 +41,11 @@ public class ChunkImpl implements Chunk
             this.chunkParts[chunkPosY] = chunkPart;
         }
         chunkPart.setBlock(x, y, z, id, meta);
+    }
+
+    public ChunkPos getPos()
+    {
+        return this.pos;
     }
 
     public byte[] getBiomes()
@@ -73,7 +83,6 @@ public class ChunkImpl implements Chunk
                 continue;
             }
             chunkPart.recalculateBlockCount();
-            Main.debug("Size: " + chunkPart.getBlocksCount());
         }
     }
 

@@ -15,7 +15,6 @@ import com.google.common.collect.Queues;
 import diorite.chat.BaseComponent;
 import diorite.chat.TextComponent;
 import diorite.chat.TranslatableComponent;
-import diorite.impl.Main;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.packets.Packet;
 import diorite.impl.connection.packets.PacketCompressor;
@@ -140,7 +139,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         }
         else
         {
-            Main.debug("WTF?" +ep1+", "+ep2+", "+packet);
             this.channel.eventLoop().execute(new QueuedProtocolSwitch(this, ep1, ep2, packet, listeners));
         }
     }

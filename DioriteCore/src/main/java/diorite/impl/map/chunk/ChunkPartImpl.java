@@ -25,7 +25,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
         //noinspection MagicNumber
         this.skyLight.fill((byte) 0xf);
         //noinspection MagicNumber
-        this.blockLight.fill((byte) 0xf);
+        this.blockLight.fill((byte) 0x0);
     }
 
     public ChunkPartImpl(final char[] blocks, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
@@ -34,6 +34,10 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.skyLight = skyLight;
         this.blockLight = blockLight;
         this.yPos = yPos;
+        //noinspection MagicNumber
+        this.skyLight.fill((byte) 0xf);
+        //noinspection MagicNumber
+        this.blockLight.fill((byte) 0x0);
     }
 
     public void setBlock(final int x, final int y, final int z, final int id, final int meta)

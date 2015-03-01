@@ -3,6 +3,7 @@ package diorite.impl.connection.listeners;
 import javax.crypto.SecretKey;
 
 import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
@@ -39,10 +40,11 @@ import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
 import diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
 import diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
-import diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
+import diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
 import diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
 import diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
+import diorite.impl.map.chunk.ChunkImpl;
 import diorite.impl.map.chunk.ChunkManagerImpl;
 import io.netty.buffer.Unpooled;
 
@@ -108,22 +110,25 @@ public class LoginListener implements PacketLoginInListener
 
 
             // TODO: this is only test code
-            this.networkManager.handle(new PacketPlayOutLogin(1, GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.EASY, 20, WorldType.FLAT));
+            this.networkManager.handle(new PacketPlayOutLogin(1, GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
             this.networkManager.handle(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(LoginListener.this.server.getServerModName())));
             this.networkManager.handle(new PacketPlayOutServerDifficulty(Difficulty.EASY));
-            this.networkManager.handle(new PacketPlayOutSpawnPosition(new BlockLocation(0, 70, 0)));
-            this.networkManager.handle(new PacketPlayOutAbilities(false, false, false, false, 0.1f, 0.1f));
+            this.networkManager.handle(new PacketPlayOutSpawnPosition(new BlockLocation(2, 71, - 2)));
+            this.networkManager.handle(new PacketPlayOutAbilities(false, false, false, false, 0.5f, 0.5f));
             this.networkManager.handle(new PacketPlayOutHeldItemSlot(3));
-            this.networkManager.handle(new PacketPlayOutPosition(new TeleportData(0, 70, 0)));
+            this.networkManager.handle(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
             ChunkManagerImpl mag = new ChunkManagerImpl();
-            for (int x = - 4; x < 5; x++)
+            ArrayList<ChunkImpl> chunks = new ArrayList<>(15);
+            for (int x = - 1; x < 1; x++)
             {
-                for (int z = - 4; z < 5; z++)
+                for (int z = - 2; z < 2; z++)
                 {
-                    this.networkManager.handle(new PacketPlayOutMapChunk(x, z, true, mag.getChunkAt(x, z), true, true));
+                    chunks.add(mag.getChunkAt(x, z));
                 }
             }
+            this.networkManager.handle(new PacketPlayOutMapChunkBulk(true, chunks.toArray(new ChunkImpl[chunks.size()])));
 
+            this.server.getPlayersManager().playerJoin(this.gameProfile, this.networkManager);
         });
     }
 

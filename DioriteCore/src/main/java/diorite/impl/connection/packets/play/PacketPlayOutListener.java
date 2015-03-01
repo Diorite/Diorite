@@ -6,6 +6,7 @@ import diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
 import diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
 import diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
 import diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
+import diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
 import diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
 import diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
@@ -27,4 +28,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutHeldItemSlot packet);
 
     void handle(PacketPlayOutPosition packet);
+
+    void handle(PacketPlayOutMapChunkBulk packet);
 }
