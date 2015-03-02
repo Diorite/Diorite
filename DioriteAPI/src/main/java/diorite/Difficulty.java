@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.utils.DioriteMathUtils;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -47,11 +46,7 @@ public class Difficulty
 
     public static Difficulty getByLevel(final int level)
     {
-        if (! DioriteMathUtils.canBeByte(level))
-        {
-            return null;
-        }
-        return byID.get((byte) level);
+        return byID.get(level);
     }
 
     public static Difficulty getByEnumName(final String name)

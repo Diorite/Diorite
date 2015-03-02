@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.utils.DioriteMathUtils;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -48,11 +47,7 @@ public class GameMode
 
     public static GameMode getByID(final int id)
     {
-        if (! DioriteMathUtils.canBeByte(id))
-        {
-            return NOT_SET;
-        }
-        final GameMode gameMode = byID.get((byte) id);
+        final GameMode gameMode = byID.get(id);
         return (gameMode == null) ? NOT_SET : gameMode;
     }
 

@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.utils.DioriteMathUtils;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -46,11 +45,7 @@ public class ChatVisibility
 
     public static ChatVisibility getByID(final int id)
     {
-        if (! DioriteMathUtils.canBeByte(id))
-        {
-            return null;
-        }
-        return byID.get((byte) id);
+        return byID.get(id);
     }
 
     public static ChatVisibility getByEnumName(final String name)

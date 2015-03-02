@@ -61,11 +61,7 @@ public class WorldType
 
     public static WorldType getByID(final int id)
     {
-        if ((id > Byte.MAX_VALUE) || (id < 0))
-        {
-            return null;
-        }
-        return byID.get((byte) id);
+        return byID.get(id);
     }
 
     public static WorldType getByEnumName(final String name)
