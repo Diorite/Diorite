@@ -3,7 +3,6 @@ package diorite.impl.connection.listeners;
 import javax.crypto.SecretKey;
 
 import java.security.PrivateKey;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
@@ -18,35 +17,18 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 
-import diorite.BlockLocation;
-import diorite.Difficulty;
-import diorite.Dimension;
-import diorite.GameMode;
-import diorite.TeleportData;
-import diorite.WorldType;
 import diorite.chat.BaseComponent;
 import diorite.chat.TextComponent;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.EnumProtocol;
 import diorite.impl.connection.MinecraftEncryption;
 import diorite.impl.connection.NetworkManager;
-import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.login.PacketLoginInListener;
 import diorite.impl.connection.packets.login.in.PacketLoginInEncryptionBegin;
 import diorite.impl.connection.packets.login.in.PacketLoginInStart;
 import diorite.impl.connection.packets.login.out.PacketLoginOutEncryptionBegin;
 import diorite.impl.connection.packets.login.out.PacketLoginOutSuccess;
-import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
-import diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
-import diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
-import diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
-import diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
-import diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
-import diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
-import diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
-import diorite.impl.map.chunk.ChunkImpl;
-import diorite.impl.map.chunk.ChunkManagerImpl;
-import io.netty.buffer.Unpooled;
+import diorite.impl.entity.PlayerImpl;
 
 public class LoginListener implements PacketLoginInListener
 {
@@ -106,29 +88,9 @@ public class LoginListener implements PacketLoginInListener
         this.networkManager.handle(new PacketLoginOutSuccess(this.gameProfile), future -> {
             this.networkManager.setProtocol(EnumProtocol.PLAY);
 
-            this.networkManager.setPacketListener(new PlayListener(LoginListener.this.server, LoginListener.this.networkManager));
-
-
-            // TODO: this is only test code
-            this.networkManager.handle(new PacketPlayOutLogin(1, GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
-            this.networkManager.handle(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(LoginListener.this.server.getServerModName())));
-            this.networkManager.handle(new PacketPlayOutServerDifficulty(Difficulty.EASY));
-            this.networkManager.handle(new PacketPlayOutSpawnPosition(new BlockLocation(2, 71, - 2)));
-            this.networkManager.handle(new PacketPlayOutAbilities(false, false, false, false, 0.5f, 0.5f));
-            this.networkManager.handle(new PacketPlayOutHeldItemSlot(3));
-            this.networkManager.handle(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
-            ChunkManagerImpl mag = new ChunkManagerImpl();
-            ArrayList<ChunkImpl> chunks = new ArrayList<>(15);
-            for (int x = - 1; x < 1; x++)
-            {
-                for (int z = - 2; z < 2; z++)
-                {
-                    chunks.add(mag.getChunkAt(x, z));
-                }
-            }
-            this.networkManager.handle(new PacketPlayOutMapChunkBulk(true, chunks.toArray(new ChunkImpl[chunks.size()])));
-
-            this.server.getPlayersManager().playerJoin(this.gameProfile, this.networkManager);
+            PlayerImpl player = this.server.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);
+            this.networkManager.setPacketListener(new PlayListener(LoginListener.this.server, LoginListener.this.networkManager, player));
+            this.server.getPlayersManager().playerJoin(player);
         });
     }
 

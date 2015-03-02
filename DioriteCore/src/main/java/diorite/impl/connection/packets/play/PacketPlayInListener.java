@@ -3,6 +3,7 @@ package diorite.impl.connection.packets.play;
 import diorite.impl.connection.packets.PacketListener;
 import diorite.impl.connection.packets.play.in.PacketPlayInArmAnimation;
 import diorite.impl.connection.packets.play.in.PacketPlayInBlockDig;
+import diorite.impl.connection.packets.play.in.PacketPlayInBlockPlace;
 import diorite.impl.connection.packets.play.in.PacketPlayInChat;
 import diorite.impl.connection.packets.play.in.PacketPlayInCustomPayload;
 import diorite.impl.connection.packets.play.in.PacketPlayInEntityAction;
@@ -39,4 +40,6 @@ public interface PacketPlayInListener extends PacketListener
     void handle(PacketPlayInArmAnimation packet);
 
     void handle(PacketPlayInBlockDig packet);
+
+    void handle(PacketPlayInBlockPlace packet);
 }

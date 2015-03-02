@@ -4,13 +4,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.chat.BaseComponent;
-import diorite.entity.Player;
 import diorite.impl.Main;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.NetworkManager;
 import diorite.impl.connection.packets.play.PacketPlayInListener;
 import diorite.impl.connection.packets.play.in.PacketPlayInArmAnimation;
 import diorite.impl.connection.packets.play.in.PacketPlayInBlockDig;
+import diorite.impl.connection.packets.play.in.PacketPlayInBlockPlace;
 import diorite.impl.connection.packets.play.in.PacketPlayInChat;
 import diorite.impl.connection.packets.play.in.PacketPlayInCustomPayload;
 import diorite.impl.connection.packets.play.in.PacketPlayInEntityAction;
@@ -21,18 +21,19 @@ import diorite.impl.connection.packets.play.in.PacketPlayInLook;
 import diorite.impl.connection.packets.play.in.PacketPlayInPosition;
 import diorite.impl.connection.packets.play.in.PacketPlayInPositionLook;
 import diorite.impl.connection.packets.play.in.PacketPlayInSettings;
-import diorite.impl.entity.EntityImpl;
 import diorite.impl.entity.PlayerImpl;
 
 public class PlayListener implements PacketPlayInListener
 {
     private final ServerImpl     server;
     private final NetworkManager networkManager;
+    private final PlayerImpl     player;
 
-    public PlayListener(final ServerImpl server, final NetworkManager networkManager)
+    public PlayListener(final ServerImpl server, final NetworkManager networkManager, final PlayerImpl player)
     {
         this.server = server;
         this.networkManager = networkManager;
+        this.player = player;
     }
 
     @Override
@@ -104,11 +105,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInEntityAction packet)
     {
-        final EntityImpl entity = this.server.getEntityManager().getEntity(packet.getEntityID());
-        if (entity instanceof PlayerImpl)
-        {
-            packet.getEntityAction().doAction(((Player) entity), packet.getJumpBoost());
-        }
+        packet.getEntityAction().doAction(this.player, packet.getJumpBoost());
     }
 
     @Override
@@ -124,6 +121,12 @@ public class PlayListener implements PacketPlayInListener
     }
 
     @Override
+    public void handle(final PacketPlayInBlockPlace packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
     public void disconnect(final BaseComponent message)
     {
     }
@@ -132,5 +135,10 @@ public class PlayListener implements PacketPlayInListener
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).append("networkManager", this.networkManager).toString();
+    }
+
+    public PlayerImpl getPlayer()
+    {
+        return this.player;
     }
 }

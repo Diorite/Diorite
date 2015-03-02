@@ -7,20 +7,27 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.entity.Entity;
 import diorite.impl.ServerImpl;
+import diorite.impl.map.world.WorldImpl;
 
 public abstract class EntityImpl implements Entity
 {
     protected final ServerImpl server;
-    protected final int      id;
-    protected       UUID     uniqueID;
-    private       double x;
-    private       double y;
-    private       double z;
+    protected final int        id;
+    protected       UUID       uniqueID;
+    private         WorldImpl  world;
+    private         double     x;
+    private         double     y;
+    private         double     z;
 
     protected EntityImpl(final ServerImpl server, final int id)
     {
         this.server = server;
         this.id = id;
+    }
+
+    public WorldImpl getWorld()
+    {
+        return this.world;
     }
 
     @Override
