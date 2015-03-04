@@ -56,6 +56,12 @@ public class NbtTagByteArray extends NbtAbstractTag<NbtTagByteArray>
         return NbtTagType.BYTE_ARRAY;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
+    }
+
     public byte[] getValue()
     {
         return this.value;
@@ -65,11 +71,5 @@ public class NbtTagByteArray extends NbtAbstractTag<NbtTagByteArray>
     {
         Validate.notNull(value, "bytes can't be null");
         this.value = value;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
     }
 }

@@ -52,6 +52,12 @@ public class NbtTagByte extends NbtAbstractTag<NbtTagByte>
         return NbtTagType.BYTE;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
+    }
+
     public byte getValue()
     {
         return this.value;
@@ -60,11 +66,5 @@ public class NbtTagByte extends NbtAbstractTag<NbtTagByte>
     public void setValue(final byte value)
     {
         this.value = value;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
     }
 }

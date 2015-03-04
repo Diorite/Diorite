@@ -87,6 +87,12 @@ public class NbtTagCompound extends NbtAbstractTag<NbtTagCompound>
         return NbtTagType.COMPOUND;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tags", this.tags.keySet()).toString();
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends NbtAbstractTag<?>> T getTag(final String name)
     {
@@ -202,7 +208,6 @@ public class NbtTagCompound extends NbtAbstractTag<NbtTagCompound>
         return array;
     }
 
-
     public NbtTagCompound getCompound(final String name, final NbtTagCompound def)
     {
         return this.getTagOpt(name, NbtTagCompound.class).orElse(def);
@@ -304,10 +309,14 @@ public class NbtTagCompound extends NbtAbstractTag<NbtTagCompound>
         return array;
     }
 
-
     public Map<String, NbtAbstractTag<?>> getTags()
     {
         return (new ImmutableMap.Builder<String, NbtAbstractTag<?>>().putAll(this.tags)).build();
+    }
+
+    public void setTags(final Map<String, NbtAbstractTag<?>> tags)
+    {
+        this.tags = new ConcurrentHashMap<>(tags);
     }
 
     public void removeTag(final NbtAbstractTag<?> tag)
@@ -333,16 +342,5 @@ public class NbtTagCompound extends NbtAbstractTag<NbtTagCompound>
 
         this.tags.put(tag.getName(), tag);
         tag.setParent(this);
-    }
-
-    public void setTags(final Map<String, NbtAbstractTag<?>> tags)
-    {
-        this.tags = new ConcurrentHashMap<>(tags);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tags", this.tags.keySet()).toString();
     }
 }

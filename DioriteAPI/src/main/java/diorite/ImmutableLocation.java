@@ -118,6 +118,21 @@ public class ImmutableLocation
         return (DioriteMathUtils.square(origin.x - this.x) + DioriteMathUtils.square(origin.y - this.y) + DioriteMathUtils.square(origin.z - this.z)) <= DioriteMathUtils.square(radius);
     }
 
+    @Override
+    public int hashCode()
+    {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(this.x);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(this.y);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(this.z);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        result = (31 * result) + ((this.yaw != + 0.0f) ? Float.floatToIntBits(this.yaw) : 0);
+        result = (31 * result) + ((this.pitch != + 0.0f) ? Float.floatToIntBits(this.pitch) : 0);
+        return result;
+    }
 
     @Override
     public boolean equals(final Object o)
@@ -135,22 +150,6 @@ public class ImmutableLocation
 
         return (this.x == that.x) && (this.y == that.y) && (this.z == that.z);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(this.x);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(this.y);
-        result = (31 * result) + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(this.z);
-        result = (31 * result) + (int) (temp ^ (temp >>> 32));
-        result = (31 * result) + ((this.yaw != + 0.0f) ? Float.floatToIntBits(this.yaw) : 0);
-        result = (31 * result) + ((this.pitch != + 0.0f) ? Float.floatToIntBits(this.pitch) : 0);
-        return result;
     }
 
     @Override

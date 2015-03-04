@@ -264,6 +264,12 @@ public abstract class BaseComponent
 
     public abstract BaseComponent duplicate();
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("parent", this.parent).append("color", this.color).append("bold", this.bold).append("italic", this.italic).append("underlined", this.underlined).append("strikethrough", this.strikethrough).append("obfuscated", this.obfuscated).append("extra", this.extra).append("clickEvent", this.clickEvent).append("hoverEvent", this.hoverEvent).toString();
+    }
+
     public static String toLegacyText(final BaseComponent... components)
     {
         final StringBuilder builder = new StringBuilder();
@@ -282,11 +288,5 @@ public abstract class BaseComponent
             builder.append(msg.toPlainText());
         }
         return builder.toString();
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("parent", this.parent).append("color", this.color).append("bold", this.bold).append("italic", this.italic).append("underlined", this.underlined).append("strikethrough", this.strikethrough).append("obfuscated", this.obfuscated).append("extra", this.extra).append("clickEvent", this.clickEvent).append("hoverEvent", this.hoverEvent).toString();
     }
 }

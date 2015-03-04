@@ -58,6 +58,11 @@ public abstract class NbtAbstractTag<T extends NbtAbstractTag<?>>
         return this.name;
     }
 
+    protected void setName(final String name)
+    {
+        this.name = name;
+    }
+
     public byte[] getNameBytes()
     {
         return this.name.getBytes(CHARSET);
@@ -68,9 +73,14 @@ public abstract class NbtAbstractTag<T extends NbtAbstractTag<?>>
         return this.parent;
     }
 
-    protected void setName(final String name)
+    public void setParent(final NbtTagCompound parent)
     {
-        this.name = name;
+        if (this.parent != null)
+        {
+            this.parent.removeTag(this);
+        }
+
+        this.parent = parent;
     }
 
     public abstract NbtTagType getType();
@@ -93,16 +103,6 @@ public abstract class NbtAbstractTag<T extends NbtAbstractTag<?>>
         {
             this.parent.setTag(this);
         }
-    }
-
-    public void setParent(final NbtTagCompound parent)
-    {
-        if (this.parent != null)
-        {
-            this.parent.removeTag(this);
-        }
-
-        this.parent = parent;
     }
 
     @Override

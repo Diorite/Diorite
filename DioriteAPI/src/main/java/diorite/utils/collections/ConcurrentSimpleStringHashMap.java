@@ -45,6 +45,12 @@ public class ConcurrentSimpleStringHashMap<T> extends ConcurrentHashMap<String, 
     }
 
     @Override
+    public T remove(final Object key)
+    {
+        return super.remove((key instanceof String) ? ((String) key).toLowerCase() : key);
+    }
+
+    @Override
     public T putIfAbsent(final String key, final T value)
     {
         return super.putIfAbsent(key.toLowerCase(), value);
@@ -54,12 +60,6 @@ public class ConcurrentSimpleStringHashMap<T> extends ConcurrentHashMap<String, 
     public boolean remove(final Object key, final Object value)
     {
         return super.remove((key instanceof String) ? ((String) key).toLowerCase() : key, value);
-    }
-
-    @Override
-    public T remove(final Object key)
-    {
-        return super.remove((key instanceof String) ? ((String) key).toLowerCase() : key);
     }
 
     @Override

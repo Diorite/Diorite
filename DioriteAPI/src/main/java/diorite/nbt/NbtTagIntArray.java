@@ -63,6 +63,12 @@ public class NbtTagIntArray extends NbtAbstractTag<NbtTagIntArray>
         return NbtTagType.INTEGER_ARRAY;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
+    }
+
     public int[] getValue()
     {
         return this.value;
@@ -72,11 +78,5 @@ public class NbtTagIntArray extends NbtAbstractTag<NbtTagIntArray>
     {
         Validate.notNull(value, "ints can't be null");
         this.value = value;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
     }
 }

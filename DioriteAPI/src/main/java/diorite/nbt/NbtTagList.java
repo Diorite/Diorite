@@ -13,8 +13,8 @@ import com.google.common.collect.ImmutableList;
 
 public class NbtTagList extends NbtAbstractTag<NbtTagList>
 {
-    protected       List<NbtAbstractTag<?>> tagList;
     protected final Class<?>                type;
+    protected       List<NbtAbstractTag<?>> tagList;
 
     public NbtTagList()
     {
@@ -71,22 +71,6 @@ public class NbtTagList extends NbtAbstractTag<NbtTagList>
         this.tagList = new CopyOnWriteArrayList<>(tagList);
     }
 
-    @Override
-    public NbtTagList write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
-    {
-        super.write(outputStream, hasName);
-        outputStream.writeByte(this.getElementsType().getTypeID());
-        outputStream.writeInt(this.tagList.size());
-        for (final NbtAbstractTag<?> tag : this.tagList)
-        {
-            if (this.isVaildType(tag))
-            {
-                tag.write(outputStream, false);
-            }
-        }
-        return this;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public NbtTagList read(final NbtInputStream inputStream, final boolean hasName) throws IOException
@@ -114,9 +98,31 @@ public class NbtTagList extends NbtAbstractTag<NbtTagList>
     }
 
     @Override
+    public NbtTagList write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
+    {
+        super.write(outputStream, hasName);
+        outputStream.writeByte(this.getElementsType().getTypeID());
+        outputStream.writeInt(this.tagList.size());
+        for (final NbtAbstractTag<?> tag : this.tagList)
+        {
+            if (this.isVaildType(tag))
+            {
+                tag.write(outputStream, false);
+            }
+        }
+        return this;
+    }
+
+    @Override
     public NbtTagType getType()
     {
         return NbtTagType.LIST;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tagList", this.tagList).append("type", this.type).toString();
     }
 
     public NbtTagType getElementsType()
@@ -160,6 +166,11 @@ public class NbtTagList extends NbtAbstractTag<NbtTagList>
         return new ImmutableList.Builder<NbtAbstractTag<?>>().addAll(this.tagList).build();
     }
 
+    public void setTags(final List<NbtAbstractTag<?>> tags)
+    {
+        this.tagList = new CopyOnWriteArrayList<>(tags);
+    }
+
     public List<NbtAbstractTag<?>> getMutableTags()
     {
         return this.tagList;
@@ -180,11 +191,6 @@ public class NbtTagList extends NbtAbstractTag<NbtTagList>
         return builder.build();
     }
 
-    public void setTags(final List<NbtAbstractTag<?>> tags)
-    {
-        this.tagList = new CopyOnWriteArrayList<>(tags);
-    }
-
     public void removeTag(final Object tag)
     {
         this.tagList.remove(tag);
@@ -193,11 +199,5 @@ public class NbtTagList extends NbtAbstractTag<NbtTagList>
     public void setTag(final int i, final NbtAbstractTag<?> tag)
     {
         this.tagList.set(i, tag);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tagList", this.tagList).append("type", this.type).toString();
     }
 }

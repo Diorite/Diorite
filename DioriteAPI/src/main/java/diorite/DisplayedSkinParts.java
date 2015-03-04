@@ -140,6 +140,12 @@ public class DisplayedSkinParts
         return flags;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("capeEnabled", this.capeEnabled).append("jacketEnabled", this.jacketEnabled).append("leftSleeveEnabled", this.leftSleeveEnabled).append("rightSleeveEnabled", this.rightSleeveEnabled).append("leftPantsLegEnabled", this.leftPantsLegEnabled).append("rightPantsLegEnabled", this.rightPantsLegEnabled).append("hatEnabled", this.hatEnabled).toString();
+    }
+
     public static DisplayedSkinParts fromByteFlag(final int flags)
     {
         final boolean cape = (flags & CAPE_FLAG) != 0;
@@ -150,11 +156,5 @@ public class DisplayedSkinParts
         final boolean rightPantsLeg = (flags & RIGHT_PANTS_LEG_FLAG) != 0;
         final boolean hat = (flags & HAT_FLAG) != 0;
         return new DisplayedSkinParts(cape, jacket, leftSleeve, rightSleeve, leftPantsLeg, rightPantsLeg, hat);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("capeEnabled", this.capeEnabled).append("jacketEnabled", this.jacketEnabled).append("leftSleeveEnabled", this.leftSleeveEnabled).append("rightSleeveEnabled", this.rightSleeveEnabled).append("leftPantsLegEnabled", this.leftPantsLegEnabled).append("rightPantsLegEnabled", this.rightPantsLegEnabled).append("hatEnabled", this.hatEnabled).toString();
     }
 }

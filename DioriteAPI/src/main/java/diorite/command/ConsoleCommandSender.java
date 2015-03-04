@@ -3,6 +3,12 @@ package diorite.command;
 public interface ConsoleCommandSender extends CommandSender
 {
     @Override
+    default String getName()
+    {
+        return "-Diorite-";
+    }
+
+    @Override
     default boolean isConsole()
     {
         return true;
@@ -18,11 +24,5 @@ public interface ConsoleCommandSender extends CommandSender
     default boolean isCommandBlock()
     {
         return false;
-    }
-
-    @Override
-    default String getName()
-    {
-        return "-Diorite-";
     }
 }

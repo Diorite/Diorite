@@ -24,6 +24,12 @@ public final class ClickEvent
         return this.value;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("action", this.action).append("value", this.value).toString();
+    }
+
     public static enum Action
     {
         OPEN_URL,
@@ -34,11 +40,5 @@ public final class ClickEvent
         private Action()
         {
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("action", this.action).append("value", this.value).toString();
     }
 }

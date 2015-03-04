@@ -18,13 +18,12 @@ public class WorldType
     public static final WorldType CUSTOMIZED             = new WorldType("CUSTOMIZED", 4, "customized");
     public static final WorldType DEBUG_ALL_BLOCK_STATES = new WorldType("DEBUG_ALL_BLOCK_STATES", 5, "debug_all_block_states");
     public static final WorldType NORMAL_1_1             = new WorldType("NORMAL_1_1", 8, "default_1_1", 0);
-
+    private static final Map<String, WorldType>   byName = new SimpleStringHashMap<>(7, .1f);
+    private static final TIntObjectMap<WorldType> byID   = new TIntObjectHashMap<>(7, .1f);
     private final String enumName;
     private final int    id;
     private final String name;
     private final int    version;
-    private static final Map<String, WorldType>   byName = new SimpleStringHashMap<>(7, .1f);
-    private static final TIntObjectMap<WorldType> byID   = new TIntObjectHashMap<>(7, .1f);
 
     public WorldType(final String enumName, final int id, final String name, final int version)
     {
@@ -59,6 +58,12 @@ public class WorldType
         return this.name;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("name", this.name).append("version", this.version).toString();
+    }
+
     public static WorldType getByID(final int id)
     {
         return byID.get(id);
@@ -74,7 +79,6 @@ public class WorldType
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
     }
-
     static
     {
         register(NORMAL);
@@ -96,11 +100,5 @@ public class WorldType
             }
         }
         return null;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("name", this.name).append("version", this.version).toString();
     }
 }

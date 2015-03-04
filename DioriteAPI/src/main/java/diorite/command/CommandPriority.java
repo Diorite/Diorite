@@ -15,6 +15,10 @@ public final class CommandPriority
 
     private static final Map<String, Byte> valuesMap = ImmutableMap.<String, Byte>builder().put("HIGHEST", CommandPriority.HIGHEST).put("HIGH", CommandPriority.HIGH).put("NORMAL", CommandPriority.NORMAL).put("LOW", CommandPriority.LOW).put("LOWEST", CommandPriority.LOWEST).build();
 
+    private CommandPriority()
+    {
+    }
+
     public static byte findByName(final String name)
     {
         Objects.requireNonNull(name, "name can't be null");
@@ -30,9 +34,5 @@ public final class CommandPriority
         {
         }
         throw new IllegalArgumentException("No CommandPriority value for '" + name + "'");
-    }
-
-    private CommandPriority()
-    {
     }
 }

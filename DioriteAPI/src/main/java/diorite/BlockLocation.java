@@ -110,6 +110,14 @@ public class BlockLocation
         return (DioriteMathUtils.square(origin.x - this.x) + DioriteMathUtils.square(origin.y - this.y) + DioriteMathUtils.square(origin.z - this.z)) <= DioriteMathUtils.square(radius);
     }
 
+    @Override
+    public int hashCode()
+    {
+        int result = this.x;
+        result = (31 * result) + this.y;
+        result = (31 * result) + this.z;
+        return result;
+    }
 
     @Override
     public boolean equals(final Object o)
@@ -127,15 +135,6 @@ public class BlockLocation
 
         return (this.x == that.x) && (this.y == that.y) && (this.z == that.z);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = this.x;
-        result = (31 * result) + this.y;
-        result = (31 * result) + this.z;
-        return result;
     }
 
     @Override

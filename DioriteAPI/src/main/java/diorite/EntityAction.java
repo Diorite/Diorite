@@ -20,12 +20,11 @@ public class EntityAction
     public static final EntityAction STOP_SPRINTING  = new EntityAction("STOP_SPRINTING", 4, (p, args) -> p.setSprinting(false));
     public static final EntityAction JUMP_WITH_HORSE = new EntityAction("JUMP_WITH_HORSE", 5, null);
     public static final EntityAction OPEN_INVENTORY  = new EntityAction("OPEN_INVENTORY", 6, null);
-
+    private static final Map<String, EntityAction>   byName = new SimpleStringHashMap<>(6, .1f);
+    private static final TIntObjectMap<EntityAction> byID   = new TIntObjectHashMap<>(6, .1f);
     private final String                       enumName;
     private final int                          id;
     private final BiConsumer<Player, Object[]> onAction; // idk if this is good idea...
-    private static final Map<String, EntityAction>   byName = new SimpleStringHashMap<>(6, .1f);
-    private static final TIntObjectMap<EntityAction> byID   = new TIntObjectHashMap<>(6, .1f);
 
     public EntityAction(final String enumName, final int id, final BiConsumer<Player, Object[]> onAction)
     {
@@ -57,6 +56,12 @@ public class EntityAction
         }
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).toString();
+    }
+
     public static EntityAction getByID(final int id)
     {
         return byID.get(id);
@@ -72,7 +77,6 @@ public class EntityAction
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
     }
-
     static
     {
         register(CROUCH);
@@ -82,11 +86,5 @@ public class EntityAction
         register(STOP_SPRINTING);
         register(JUMP_WITH_HORSE);
         register(OPEN_INVENTORY);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).toString();
     }
 }

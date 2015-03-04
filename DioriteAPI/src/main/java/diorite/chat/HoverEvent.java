@@ -13,6 +13,7 @@ public final class HoverEvent
         this.action = action;
         this.value = value;
     }
+
     public Action getAction()
     {
         return this.action;
@@ -21,6 +22,12 @@ public final class HoverEvent
     public BaseComponent[] getValue()
     {
         return this.value;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("action", this.action).append("value", this.value).toString();
     }
 
     public static enum Action
@@ -32,11 +39,5 @@ public final class HoverEvent
         private Action()
         {
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("action", this.action).append("value", this.value).toString();
     }
 }

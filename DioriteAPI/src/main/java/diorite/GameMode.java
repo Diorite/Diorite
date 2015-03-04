@@ -16,12 +16,11 @@ public class GameMode
     public static final GameMode CREATIVE  = new GameMode("CREATIVE", 1, "creative");
     public static final GameMode ADVENTURE = new GameMode("ADVENTURE", 2, "adventure");
     public static final GameMode SPECTATOR = new GameMode("SPECTATOR", 3, "spectator");
-
+    private static final Map<String, GameMode>   byName = new SimpleStringHashMap<>(5, .1f);
+    private static final TIntObjectMap<GameMode> byID   = new TIntObjectHashMap<>(5, .1f);
     private final String enumName;
     private final int    id;
     private final String name;
-    private static final Map<String, GameMode>   byName = new SimpleStringHashMap<>(5, .1f);
-    private static final TIntObjectMap<GameMode> byID   = new TIntObjectHashMap<>(5, .1f);
 
     public GameMode(final String enumName, final int id, final String name)
     {
@@ -45,6 +44,12 @@ public class GameMode
         return this.name;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("name", this.name).toString();
+    }
+
     public static GameMode getByID(final int id)
     {
         final GameMode gameMode = byID.get(id);
@@ -62,7 +67,6 @@ public class GameMode
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
     }
-
     static
     {
         register(NOT_SET);
@@ -70,11 +74,5 @@ public class GameMode
         register(CREATIVE);
         register(ADVENTURE);
         register(SPECTATOR);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("name", this.name).toString();
     }
 }

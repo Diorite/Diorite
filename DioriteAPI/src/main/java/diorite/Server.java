@@ -17,7 +17,7 @@ public interface Server
     String DEFAULT_SERVER    = "main";
     int    DEFAULT_TPS       = 20;
     int    DEFAULT_WAIT_TIME = NANOS_IN_SECOND / DEFAULT_TPS;
-    int MAX_NICKNAME_SIZE = 16;
+    int    MAX_NICKNAME_SIZE = 16;
 
     ConsoleCommandSender getConsoleSender();
 

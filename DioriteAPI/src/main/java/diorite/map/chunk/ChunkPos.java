@@ -25,6 +25,14 @@ public class ChunkPos
     }
 
     @Override
+    public int hashCode()
+    {
+        int result = this.x;
+        result = (31 * result) + this.z;
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object o)
     {
         if (this == o)
@@ -40,14 +48,6 @@ public class ChunkPos
 
         return (this.x == chunkPos.x) && (this.z == chunkPos.z);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = this.x;
-        result = (31 * result) + this.z;
-        return result;
     }
 
     @Override

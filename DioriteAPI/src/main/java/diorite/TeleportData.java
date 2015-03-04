@@ -194,15 +194,6 @@ public class TeleportData
         this.isPitchRelatvie = isPitchRelatvie;
     }
 
-    public void setRelativeFlags(final int flags)
-    {
-        this.isXRelatvie = (flags & REL_X_FLAG) != 0;
-        this.isYRelatvie = (flags & REL_Y_FLAG) != 0;
-        this.isZRelatvie = (flags & REL_Z_FLAG) != 0;
-        this.isYawRelatvie = (flags & REL_YAW_FLAG) != 0;
-        this.isPitchRelatvie = (flags & REL_PITCH_FLAG) != 0;
-    }
-
     public byte getRelativeFlags()
     {
         byte flags = 0x00;
@@ -229,22 +220,13 @@ public class TeleportData
         return flags;
     }
 
-    @Override
-    public boolean equals(final Object o)
+    public void setRelativeFlags(final int flags)
     {
-        if (this == o)
-        {
-            return true;
-        }
-        if (! (o instanceof TeleportData))
-        {
-            return false;
-        }
-
-        final TeleportData that = (TeleportData) o;
-
-        return (this.isPitchRelatvie == that.isPitchRelatvie) && (this.isXRelatvie == that.isXRelatvie) && (this.isYRelatvie == that.isYRelatvie) && (this.isYawRelatvie == that.isYawRelatvie) && (this.isZRelatvie == that.isZRelatvie) && (Float.compare(that.pitch, this.pitch) == 0) && (Double.compare(that.x, this.x) == 0) && (Double.compare(that.y, this.y) == 0) && (Float.compare(that.yaw, this.yaw) == 0) && (Double.compare(that.z, this.z) == 0);
-
+        this.isXRelatvie = (flags & REL_X_FLAG) != 0;
+        this.isYRelatvie = (flags & REL_Y_FLAG) != 0;
+        this.isZRelatvie = (flags & REL_Z_FLAG) != 0;
+        this.isYawRelatvie = (flags & REL_YAW_FLAG) != 0;
+        this.isPitchRelatvie = (flags & REL_PITCH_FLAG) != 0;
     }
 
     @Override
@@ -266,6 +248,24 @@ public class TeleportData
         result = (31 * result) + (this.isYawRelatvie ? 1 : 0);
         result = (31 * result) + (this.isPitchRelatvie ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof TeleportData))
+        {
+            return false;
+        }
+
+        final TeleportData that = (TeleportData) o;
+
+        return (this.isPitchRelatvie == that.isPitchRelatvie) && (this.isXRelatvie == that.isXRelatvie) && (this.isYRelatvie == that.isYRelatvie) && (this.isYawRelatvie == that.isYawRelatvie) && (this.isZRelatvie == that.isZRelatvie) && (Float.compare(that.pitch, this.pitch) == 0) && (Double.compare(that.x, this.x) == 0) && (Double.compare(that.y, this.y) == 0) && (Float.compare(that.yaw, this.yaw) == 0) && (Double.compare(that.z, this.z) == 0);
+
     }
 
     @Override

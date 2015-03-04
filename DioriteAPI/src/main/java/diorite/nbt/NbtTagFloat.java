@@ -52,6 +52,12 @@ public class NbtTagFloat extends NbtAbstractTag<NbtTagFloat>
         return NbtTagType.FLOAT;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
+    }
+
     public float getValue()
     {
         return this.value;
@@ -60,11 +66,5 @@ public class NbtTagFloat extends NbtAbstractTag<NbtTagFloat>
     public void setValue(final float value)
     {
         this.value = value;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
     }
 }

@@ -9,9 +9,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
 import diorite.ChatColor;
-import diorite.chat.HoverEvent;
 import diorite.chat.BaseComponent;
 import diorite.chat.ClickEvent;
+import diorite.chat.HoverEvent;
 
 public class BaseComponentSerializer
 {

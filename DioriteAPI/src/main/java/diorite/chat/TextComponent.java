@@ -19,6 +19,7 @@ public class TextComponent extends BaseComponent
     {
         this.text = text;
     }
+
     public TextComponent(final TextComponent textComponent)
     {
         super(textComponent);
@@ -84,6 +85,12 @@ public class TextComponent extends BaseComponent
     public BaseComponent duplicate()
     {
         return new TextComponent(this);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("text", this.text).toString();
     }
 
     public static BaseComponent[] fromLegacyText(final String message)
@@ -186,11 +193,5 @@ public class TextComponent extends BaseComponent
         }
 
         return components.toArray(new BaseComponent[components.size()]);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("text", this.text).toString();
     }
 }

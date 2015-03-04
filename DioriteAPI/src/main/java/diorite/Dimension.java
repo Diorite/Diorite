@@ -14,11 +14,10 @@ public class Dimension
     public static final Dimension NETHER    = new Dimension("NETHER", - 1);
     public static final Dimension OVERWORLD = new Dimension("OVERWORLD", 0);
     public static final Dimension END       = new Dimension("END", 1);
-
-    private final String enumName;
-    private final int    id;
     private static final Map<String, Dimension>   byName = new SimpleStringHashMap<>(3, .1f);
     private static final TIntObjectMap<Dimension> byID   = new TIntObjectHashMap<>(3, .1f);
+    private final String enumName;
+    private final int    id;
 
     public Dimension(final String enumName, final int id)
     {
@@ -36,6 +35,12 @@ public class Dimension
         return this.id;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).toString();
+    }
+
     public static Dimension getByID(final int id)
     {
         return byID.get(id);
@@ -51,17 +56,10 @@ public class Dimension
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
     }
-
     static
     {
         register(NETHER);
         register(OVERWORLD);
         register(END);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).toString();
     }
 }

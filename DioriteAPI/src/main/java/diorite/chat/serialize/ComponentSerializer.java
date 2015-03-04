@@ -11,8 +11,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import diorite.chat.TextComponent;
 import diorite.chat.BaseComponent;
+import diorite.chat.TextComponent;
 import diorite.chat.TranslatableComponent;
 
 public class ComponentSerializer implements JsonDeserializer<BaseComponent>

@@ -37,29 +37,14 @@ public class Location
         return this.x;
     }
 
-    public double getY()
-    {
-        return this.y;
-    }
-
-    public double getZ()
-    {
-        return this.z;
-    }
-
-    public float getPitch()
-    {
-        return this.pitch;
-    }
-
-    public float getYaw()
-    {
-        return this.yaw;
-    }
-
     public void setX(final double x)
     {
         this.x = x;
+    }
+
+    public double getY()
+    {
+        return this.y;
     }
 
     public void setY(final double y)
@@ -67,19 +52,34 @@ public class Location
         this.y = y;
     }
 
+    public double getZ()
+    {
+        return this.z;
+    }
+
     public void setZ(final double z)
     {
         this.z = z;
     }
 
-    public void setYaw(final float yaw)
+    public float getPitch()
     {
-        this.yaw = yaw;
+        return this.pitch;
     }
 
     public void setPitch(final float pitch)
     {
         this.pitch = pitch;
+    }
+
+    public float getYaw()
+    {
+        return this.yaw;
+    }
+
+    public void setYaw(final float yaw)
+    {
+        this.yaw = yaw;
     }
 
     public double length()
@@ -143,6 +143,21 @@ public class Location
         return (DioriteMathUtils.square(origin.x - this.x) + DioriteMathUtils.square(origin.y - this.y) + DioriteMathUtils.square(origin.z - this.z)) <= DioriteMathUtils.square(radius);
     }
 
+    @Override
+    public int hashCode()
+    {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(this.x);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(this.y);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(this.z);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        result = (31 * result) + ((this.yaw != + 0.0f) ? Float.floatToIntBits(this.yaw) : 0);
+        result = (31 * result) + ((this.pitch != + 0.0f) ? Float.floatToIntBits(this.pitch) : 0);
+        return result;
+    }
 
     @Override
     public boolean equals(final Object o)
@@ -160,22 +175,6 @@ public class Location
 
         return (this.x == that.x) && (this.y == that.y) && (this.z == that.z);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(this.x);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(this.y);
-        result = (31 * result) + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(this.z);
-        result = (31 * result) + (int) (temp ^ (temp >>> 32));
-        result = (31 * result) + ((this.yaw != + 0.0f) ? Float.floatToIntBits(this.yaw) : 0);
-        result = (31 * result) + ((this.pitch != + 0.0f) ? Float.floatToIntBits(this.pitch) : 0);
-        return result;
     }
 
     @Override

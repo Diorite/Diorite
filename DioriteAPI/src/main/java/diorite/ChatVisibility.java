@@ -14,12 +14,11 @@ public class ChatVisibility
     public static final ChatVisibility FULL   = new ChatVisibility("FULL", 0, "options.chat.visibility.full");
     public static final ChatVisibility SYSTEM = new ChatVisibility("SYSTEM", 1, "options.chat.visibility.system");
     public static final ChatVisibility HIDDEN = new ChatVisibility("HIDDEN", 2, "options.chat.visibility.hidden");
-
+    private static final Map<String, ChatVisibility>   byName = new SimpleStringHashMap<>(3, .1f);
+    private static final TIntObjectMap<ChatVisibility> byID   = new TIntObjectHashMap<>(3, .1f);
     private final String enumName;
     private final int    id;
     private final String option;
-    private static final Map<String, ChatVisibility>   byName = new SimpleStringHashMap<>(3, .1f);
-    private static final TIntObjectMap<ChatVisibility> byID   = new TIntObjectHashMap<>(3, .1f);
 
     public ChatVisibility(final String enumName, final int id, final String option)
     {
@@ -43,6 +42,12 @@ public class ChatVisibility
         return this.option;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("option", this.option).toString();
+    }
+
     public static ChatVisibility getByID(final int id)
     {
         return byID.get(id);
@@ -58,17 +63,10 @@ public class ChatVisibility
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
     }
-
     static
     {
         register(FULL);
         register(SYSTEM);
         register(HIDDEN);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("option", this.option).toString();
     }
 }

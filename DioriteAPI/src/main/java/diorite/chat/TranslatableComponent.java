@@ -16,7 +16,7 @@ import diorite.ChatColor;
 public class TranslatableComponent extends BaseComponent
 {
     private final ResourceBundle locales = ResourceBundle.getBundle("mojang-translations/en_US");
-    private final Pattern format = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
+    private final Pattern        format  = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
     private String              translate;
     private List<BaseComponent> with;
 
@@ -26,6 +26,7 @@ public class TranslatableComponent extends BaseComponent
         this.translate = original.getTranslate();
         this.with.addAll(original.getWith().stream().map(BaseComponent::duplicate).collect(Collectors.toList()));
     }
+
     public TranslatableComponent(final String translate, final Object... with)
     {
         this.translate = translate;
@@ -43,6 +44,7 @@ public class TranslatableComponent extends BaseComponent
         }
         this.setWith(temp);
     }
+
     public TranslatableComponent()
     {
     }
@@ -119,12 +121,6 @@ public class TranslatableComponent extends BaseComponent
         {
             builder.append(ChatColor.MAGIC);
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("locales", this.locales).append("format", this.format).append("translate", this.translate).append("with", this.with).toString();
     }
 
     @Override
@@ -221,5 +217,11 @@ public class TranslatableComponent extends BaseComponent
     public BaseComponent duplicate()
     {
         return new TranslatableComponent(this);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("locales", this.locales).append("format", this.format).append("translate", this.translate).append("with", this.with).toString();
     }
 }

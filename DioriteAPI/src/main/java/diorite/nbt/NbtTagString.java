@@ -56,6 +56,12 @@ public class NbtTagString extends NbtAbstractTag<NbtTagString>
         return NbtTagType.STRING;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
+    }
+
     public String getValue()
     {
         return this.value;
@@ -64,11 +70,5 @@ public class NbtTagString extends NbtAbstractTag<NbtTagString>
     public void setValue(final String value)
     {
         this.value = value;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
     }
 }
