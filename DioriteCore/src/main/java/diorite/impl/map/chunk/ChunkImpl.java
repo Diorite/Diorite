@@ -1,6 +1,5 @@
 package diorite.impl.map.chunk;
 
-import diorite.impl.Main;
 import diorite.map.chunk.Chunk;
 import diorite.map.chunk.ChunkPos;
 

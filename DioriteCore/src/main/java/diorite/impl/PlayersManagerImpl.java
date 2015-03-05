@@ -64,8 +64,8 @@ public class PlayersManagerImpl
        player.getNetworkManager().handle(new PacketPlayOutAbilities(false, false, false, false, 0.5f, 0.5f));
        player.getNetworkManager().handle(new PacketPlayOutHeldItemSlot(3));
        player.getNetworkManager().handle(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
-        ChunkManagerImpl mag = new ChunkManagerImpl();
-        ArrayList<ChunkImpl> chunks = new ArrayList<>(15);
+        final ChunkManagerImpl mag = new ChunkManagerImpl();
+        final ArrayList<ChunkImpl> chunks = new ArrayList<>(15);
         for (int x = - 1; x < 1; x++)
         {
             for (int z = - 2; z < 2; z++)

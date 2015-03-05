@@ -74,7 +74,7 @@ public enum EnumProtocol
         return this.packetsMap.get(protocolDirection).inverse().get(packet.getClass());
     }
 
-    public Packet<?> createPacket(final EnumProtocolDirection protocolDirection, final int id) throws IllegalAccessException, InstantiationException
+    public Packet<?> createPacket(final EnumProtocolDirection protocolDirection, final int id)
     {
         final Class<?> clazz = this.packetsMap.get(protocolDirection).get(id);
         if (clazz == null)

@@ -49,21 +49,25 @@ public class PlayerImpl extends EntityImpl implements Player
 //        this.networkManager.handle();
     }
 
+    @Override
     public boolean isCrouching()
     {
         return this.isCrouching;
     }
 
+    @Override
     public void setCrouching(final boolean isCrouching)
     {
         this.isCrouching = isCrouching;
     }
 
+    @Override
     public boolean isSprinting()
     {
         return this.isSprinting;
     }
 
+    @Override
     public void setSprinting(final boolean isSprinting)
     {
         this.isSprinting = isSprinting;

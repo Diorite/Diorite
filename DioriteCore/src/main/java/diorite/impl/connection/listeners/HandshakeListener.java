@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 
 import com.google.gson.Gson;
@@ -100,5 +102,11 @@ public class HandshakeListener implements PacketHandshakingInListener
     @Override
     public void disconnect(final BaseComponent baseComponent)
     {
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).append("networkManager", this.networkManager).toString();
     }
 }

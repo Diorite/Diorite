@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.google.common.collect.Lists;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -93,5 +96,11 @@ public class ServerConnection
     public List<NetworkManager> getConnections()
     {
         return this.connections;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("protocolKey", this.protocolKey).append("connections", this.connections).append("channelFuture", this.channelFuture).append("server", this.server).toString();
     }
 }

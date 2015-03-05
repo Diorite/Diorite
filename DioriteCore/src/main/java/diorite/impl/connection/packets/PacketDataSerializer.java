@@ -59,7 +59,7 @@ public class PacketDataSerializer extends ByteBuf
         this.writeText(ComponentSerializer.toString(baseComponent));
     }
 
-    public void writeChunkSimple(final ChunkImpl chunk, final int mask, final boolean skyLight, final boolean groundUpContinuous, boolean writeSize) // groundUpContinuous, with biomes
+    public void writeChunkSimple(final ChunkImpl chunk, final int mask, final boolean skyLight, final boolean groundUpContinuous, final boolean writeSize) // groundUpContinuous, with biomes
     {
         final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
 

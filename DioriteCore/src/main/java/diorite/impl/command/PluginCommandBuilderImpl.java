@@ -8,6 +8,8 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.command.CommandExecutor;
 import diorite.command.ExceptionHandler;
@@ -143,5 +145,11 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
             cmd.setExceptionHandler(this.handler);
         }
         return cmd;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugin", this.plugin).append("name", this.name).append("pattern", this.pattern).append("aliases", this.aliases).append("executor", this.executor).append("handler", this.handler).append("priority", this.priority).toString();
     }
 }

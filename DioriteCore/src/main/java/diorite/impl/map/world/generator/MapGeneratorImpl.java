@@ -5,7 +5,7 @@ import diorite.utils.DioriteMathUtils;
 
 public class MapGeneratorImpl // temp code, TODO
 {
-    public void generateChunk(ChunkImpl chunk)
+    public void generateChunk(final ChunkImpl chunk)
     {
         for (int x = 0; x < 16; x++)
         {

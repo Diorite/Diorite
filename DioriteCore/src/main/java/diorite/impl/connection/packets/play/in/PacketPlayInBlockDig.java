@@ -42,7 +42,7 @@ public class PacketPlayInBlockDig implements PacketPlayIn
     {
         this.action = BlockDigAction.values()[data.readByte()];
         this.blockLocation = data.readBlockLocation();
-        this.blockFace = this.toBlockFace(data.readByte());
+        this.blockFace = toBlockFace(data.readByte());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PacketPlayInBlockDig implements PacketPlayIn
     {
         data.writeByte(this.action.ordinal());
         data.writeBlockLocation(this.blockLocation);
-        data.writeByte((this.blockFace == null) ? -1 : this.fromBlockFace(this.blockFace));
+        data.writeByte((this.blockFace == null) ? -1 : fromBlockFace(this.blockFace));
     }
 
     public BlockDigAction getAction()
