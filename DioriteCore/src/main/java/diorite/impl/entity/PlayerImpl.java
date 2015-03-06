@@ -17,6 +17,7 @@ public class PlayerImpl extends EntityImpl implements Player
     protected       NetworkManager networkManager;
     protected       boolean        isCrouching;
     protected       boolean        isSprinting;
+    protected       byte           viewDistance;
 
     public PlayerImpl(final ServerImpl server, final int id, final GameProfile gameProfile, final NetworkManager networkManager)
     {
@@ -71,6 +72,18 @@ public class PlayerImpl extends EntityImpl implements Player
     public void setSprinting(final boolean isSprinting)
     {
         this.isSprinting = isSprinting;
+    }
+
+    @Override
+    public byte getViewDistance()
+    {
+        return this.viewDistance;
+    }
+
+    @Override
+    public void setViewDistance(final byte viewDistance)
+    {
+        this.viewDistance = viewDistance;
     }
 
     @Override
