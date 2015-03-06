@@ -17,4 +17,8 @@ public interface Player extends Entity, PlayerCommandSender
     boolean isSprinting();
 
     void setSprinting(final boolean isSprinting);
+
+    byte getViewDistance();
+
+    void setViewDistance(byte viewDistance);
 }

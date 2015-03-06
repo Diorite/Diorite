@@ -3,20 +3,32 @@ package diorite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import diorite.map.World;
+import diorite.map.chunk.ChunkPos;
 import diorite.utils.DioriteMathUtils;
 
 public class BlockLocation
 {
     public static final BlockLocation ZERO = new BlockLocation(0, 0, 0);
-    private final int x;
-    private final int y;
-    private final int z;
+    private final int   x;
+    private final int   y;
+    private final int   z;
+    private final World world;
 
     public BlockLocation(final int x, final int z, final int y)
     {
         this.x = x;
         this.z = z;
         this.y = y;
+        this.world = null;
+    }
+
+    public BlockLocation(final int x, final int y, final int z, final World world)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = world;
     }
 
     public int getX()
@@ -34,6 +46,11 @@ public class BlockLocation
         return this.z;
     }
 
+    public World getWorld()
+    {
+        return this.world;
+    }
+
     public BlockLocation addX(final int x)
     {
         return new BlockLocation(this.x + x, this.y, this.z);
@@ -47,6 +64,11 @@ public class BlockLocation
     public BlockLocation addZ(final int z)
     {
         return new BlockLocation(this.x, this.y, this.z + z);
+    }
+
+    public BlockLocation add(final int x, final int y, final int z)
+    {
+        return new BlockLocation(this.x + x, this.y + y, this.z + z);
     }
 
     public double length()
@@ -74,6 +96,11 @@ public class BlockLocation
         return Math.sqrt(this.distanceSquared(location));
     }
 
+    public double distance(final Loc location)
+    {
+        return Math.sqrt(this.distanceSquared(location));
+    }
+
     public double distanceSquared(final double x, final double y, final double z)
     {
         final double deltaX = (double) this.x - x;
@@ -88,6 +115,26 @@ public class BlockLocation
         final double deltaY = ((double) this.y + 0.5) - y;
         final double deltaZ = ((double) this.z + 0.5) - z;
         return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
+    }
+
+    public double distanceSquared(final Loc location)
+    {
+        return this.distanceSquared(location.getX(), location.getY(), location.getZ());
+    }
+
+    public BlockLocation crossProduct(final Loc location)
+    {
+        return new BlockLocation((int) ((this.y * location.getZ()) - (this.z * location.getY())), (int) ((this.z * location.getX()) - (this.x * location.getZ())), (int) ((this.x * location.getY()) - (this.y * location.getX())));
+    }
+
+    public boolean isInAABB(final Loc min, final Loc max)
+    {
+        return (this.x >= min.getX()) && (this.x <= max.getX()) && (this.y >= min.getY()) && (this.y <= max.getY()) && (this.z >= min.getZ()) && (this.z <= max.getZ());
+    }
+
+    public boolean isInSphere(final Loc origin, final double radius)
+    {
+        return (DioriteMathUtils.square(origin.getX() - this.x) + DioriteMathUtils.square(origin.getY() - this.y) + DioriteMathUtils.square(origin.getZ() - this.z)) <= DioriteMathUtils.square(radius);
     }
 
     public double distanceSquared(final BlockLocation location)
@@ -108,6 +155,11 @@ public class BlockLocation
     public boolean isInSphere(final BlockLocation origin, final double radius)
     {
         return (DioriteMathUtils.square(origin.x - this.x) + DioriteMathUtils.square(origin.y - this.y) + DioriteMathUtils.square(origin.z - this.z)) <= DioriteMathUtils.square(radius);
+    }
+
+    public ChunkPos getChunkPos()
+    {
+        return new ChunkPos(this.x >> 4, this.z >> 4);
     }
 
     @Override

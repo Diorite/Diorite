@@ -3,9 +3,9 @@ package diorite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.utils.DioriteMathUtils;
+import diorite.map.World;
 
-public class Location
+public class Location extends Loc
 {
     public static final Location ZERO = new Location(0, 0, 0);
     private double x;
@@ -13,6 +13,7 @@ public class Location
     private double z;
     private float  yaw;
     private float  pitch;
+    private World  world;
 
     public Location(final double x, final double z, final double y)
     {
@@ -32,6 +33,25 @@ public class Location
         this.pitch = pitch;
     }
 
+    public Location(final double x, final double y, final double z, final World world)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = world;
+    }
+
+    public Location(final double x, final double y, final double z, final float yaw, final float pitch, final World world)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.world = world;
+    }
+
+    @Override
     public double getX()
     {
         return this.x;
@@ -42,6 +62,7 @@ public class Location
         this.x = x;
     }
 
+    @Override
     public double getY()
     {
         return this.y;
@@ -52,6 +73,7 @@ public class Location
         this.y = y;
     }
 
+    @Override
     public double getZ()
     {
         return this.z;
@@ -62,6 +84,7 @@ public class Location
         this.z = z;
     }
 
+    @Override
     public float getPitch()
     {
         return this.pitch;
@@ -72,6 +95,7 @@ public class Location
         this.pitch = pitch;
     }
 
+    @Override
     public float getYaw()
     {
         return this.yaw;
@@ -82,65 +106,27 @@ public class Location
         this.yaw = yaw;
     }
 
-    public double length()
+    @Override
+    public World getWorld()
     {
-        return Math.sqrt(this.lengthSquared());
+        return this.world;
     }
 
-    public double lengthSquared()
+    public void setWorld(final World world)
     {
-        return DioriteMathUtils.square(this.x) + DioriteMathUtils.square(this.y) + DioriteMathUtils.square(this.z);
+        this.world = world;
     }
 
-    public double distance(final double x, final double y, final double z)
-    {
-        return Math.sqrt(this.distanceSquared(x, y, z));
-    }
-
-    public double distanceFromCenter(final double x, final double y, final double z)
-    {
-        return Math.sqrt(this.distanceSquaredFromCenter(x, y, z));
-    }
-
-    public double distance(final Location location)
-    {
-        return Math.sqrt(this.distanceSquared(location));
-    }
-
-    public double distanceSquared(final double x, final double y, final double z)
-    {
-        final double deltaX = this.x - x;
-        final double deltaY = this.y - y;
-        final double deltaZ = this.z - z;
-        return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
-    }
-
-    public double distanceSquaredFromCenter(final double x, final double y, final double z)
-    {
-        final double deltaX = (this.x + 0.5) - x;
-        final double deltaY = (this.y + 0.5) - y;
-        final double deltaZ = (this.z + 0.5) - z;
-        return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
-    }
-
-    public double distanceSquared(final Location location)
-    {
-        return this.distanceSquared(location.getX(), location.getY(), location.getZ());
-    }
-
-    public Location crossProduct(final Location location)
+    @Override
+    public Location crossProduct(final Loc location)
     {
         return new Location((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
     }
 
-    public boolean isInAABB(final Location min, final Location max)
+    @Override
+    public Location crossProduct(final BlockLocation location)
     {
-        return (this.x >= min.x) && (this.x <= max.x) && (this.y >= min.y) && (this.y <= max.y) && (this.z >= min.z) && (this.z <= max.z);
-    }
-
-    public boolean isInSphere(final Location origin, final double radius)
-    {
-        return (DioriteMathUtils.square(origin.x - this.x) + DioriteMathUtils.square(origin.y - this.y) + DioriteMathUtils.square(origin.z - this.z)) <= DioriteMathUtils.square(radius);
+        return new Location((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
     }
 
     @Override

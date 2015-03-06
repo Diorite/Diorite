@@ -4,12 +4,15 @@ package diorite.utils.collections;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.Iterators;
 
@@ -21,6 +24,11 @@ public final class WeakCollection<T> implements Collection<T>
     public WeakCollection(final int size)
     {
         this.collection = new ArrayList<>(size);
+    }
+
+    private WeakCollection(final Collection<WeakReference<T>> collection)
+    {
+        this.collection = collection;
     }
 
     @Override
@@ -253,6 +261,11 @@ public final class WeakCollection<T> implements Collection<T>
     @Override
     public String toString()
     {
-        return "WeakCollection{" + this.collection.toString() + '}';
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("collection", this.collection).toString();
+    }
+
+    public static <T> WeakCollection<T> usingHashSet(final int size)
+    {
+        return new WeakCollection<>(new HashSet<>(size));
     }
 }
