@@ -19,6 +19,10 @@ public interface Server
     int    DEFAULT_WAIT_TIME = NANOS_IN_SECOND / DEFAULT_TPS;
     int    MAX_NICKNAME_SIZE = 16;
 
+    byte getRenderDistance();
+
+    void setRenderDistance(byte renderDistance);
+
     ConsoleCommandSender getConsoleSender();
 
     double[] getRecentTps();

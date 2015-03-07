@@ -3,17 +3,27 @@ package diorite.map.chunk;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import diorite.map.World;
 import diorite.utils.DioriteMathUtils;
 
 public class ChunkPos
 {
-    private final int x;
-    private final int z;
+    private final int   x;
+    private final int   z;
+    private final World world;
+
+    public ChunkPos(final int x, final int z, final World world)
+    {
+        this.x = x;
+        this.z = z;
+        this.world = world;
+    }
 
     public ChunkPos(final int x, final int z)
     {
         this.x = x;
         this.z = z;
+        this.world = null;
     }
 
     public int getX()
@@ -24,6 +34,11 @@ public class ChunkPos
     public int getZ()
     {
         return this.z;
+    }
+
+    public World getWorld()
+    {
+        return this.world;
     }
 
     public double length()
@@ -68,12 +83,9 @@ public class ChunkPos
         return (DioriteMathUtils.square(origin.getX() - this.x) + DioriteMathUtils.square(origin.getZ() - this.z)) <= DioriteMathUtils.square(radius);
     }
 
-    @Override
-    public int hashCode()
+    public static ChunkPos fromWorldPos(final int x, final int z, final World world)
     {
-        int result = this.x;
-        result = (31 * result) + this.z;
-        return result;
+        return new ChunkPos(x >> 4, z >> 4, world);
     }
 
     @Override
@@ -90,8 +102,17 @@ public class ChunkPos
 
         final ChunkPos chunkPos = (ChunkPos) o;
 
-        return (this.x == chunkPos.x) && (this.z == chunkPos.z);
+        return (this.x == chunkPos.x) && (this.z == chunkPos.z) && ! (this.world != null ? ! this.world.equals(chunkPos.world) : chunkPos.world != null);
 
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = this.x;
+        result = (31 * result) + this.z;
+        result = (31 * result) + ((this.world != null) ? this.world.hashCode() : 0);
+        return result;
     }
 
     @Override

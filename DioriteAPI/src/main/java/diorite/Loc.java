@@ -101,7 +101,7 @@ public abstract class Loc
 
     public ChunkPos getChunkPos()
     {
-        return new ChunkPos((int) this.getX() >> 4, (int) this.getZ() >> 4);
+        return new ChunkPos((int) this.getX() >> 4, (int) this.getZ() >> 4, this.getWorld());
     }
 
     public BlockLocation toBlockLocation()

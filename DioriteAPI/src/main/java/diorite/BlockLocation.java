@@ -159,7 +159,7 @@ public class BlockLocation
 
     public ChunkPos getChunkPos()
     {
-        return new ChunkPos(this.x >> 4, this.z >> 4);
+        return new ChunkPos(this.x >> 4, this.z >> 4, this.world);
     }
 
     @Override

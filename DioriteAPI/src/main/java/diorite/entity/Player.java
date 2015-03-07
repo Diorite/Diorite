@@ -20,5 +20,7 @@ public interface Player extends Entity, PlayerCommandSender
 
     byte getViewDistance();
 
-    void setViewDistance(byte viewDistance);
+    byte getRenderDistance();
+
+    void setRenderDistance(byte viewDistance);
 }
