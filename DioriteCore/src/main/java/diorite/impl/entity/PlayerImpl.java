@@ -7,24 +7,31 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.mojang.authlib.GameProfile;
 
+import diorite.ImmutableLocation;
 import diorite.entity.Player;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.NetworkManager;
+import diorite.impl.map.chunk.PlayerChunksImpl;
+import diorite.map.chunk.ChunkPos;
 
 public class PlayerImpl extends EntityImpl implements Player
 {
-    protected final GameProfile    gameProfile;
-    protected       NetworkManager networkManager;
-    protected       boolean        isCrouching;
-    protected       boolean        isSprinting;
-    protected       byte           viewDistance;
+    protected final GameProfile      gameProfile;
+    protected       NetworkManager   networkManager;
+    protected       boolean          isCrouching;
+    protected       boolean          isSprinting;
+    protected       byte             viewDistance;
+    protected       byte             renderDistance;
+    protected       PlayerChunksImpl playerChunks;
 
-    public PlayerImpl(final ServerImpl server, final int id, final GameProfile gameProfile, final NetworkManager networkManager)
+    public PlayerImpl(final ServerImpl server, final int id, final GameProfile gameProfile, final NetworkManager networkManager, final ImmutableLocation location)
     {
-        super(server, id);
+        super(server, id, location);
         this.gameProfile = gameProfile;
         this.uniqueID = gameProfile.getId();
         this.networkManager = networkManager;
+        this.renderDistance = server.getRenderDistance();
+        this.playerChunks = new PlayerChunksImpl(this);
     }
 
     public GameProfile getGameProfile()
@@ -51,6 +58,16 @@ public class PlayerImpl extends EntityImpl implements Player
     }
 
     @Override
+    public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
+    {
+        if (!ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+        {
+            this.playerChunks.update();
+        }
+        super.move(modX, modY, modZ, modYaw, modPitch);
+    }
+
+    @Override
     public boolean isCrouching()
     {
         return this.isCrouching;
@@ -74,6 +91,11 @@ public class PlayerImpl extends EntityImpl implements Player
         this.isSprinting = isSprinting;
     }
 
+    public void setViewDistance(final byte viewDistance)
+    {
+        this.viewDistance = viewDistance;
+    }
+
     @Override
     public byte getViewDistance()
     {
@@ -81,9 +103,15 @@ public class PlayerImpl extends EntityImpl implements Player
     }
 
     @Override
-    public void setViewDistance(final byte viewDistance)
+    public byte getRenderDistance()
     {
-        this.viewDistance = viewDistance;
+        return this.renderDistance;
+    }
+
+    @Override
+    public void setRenderDistance(final byte renderDistance)
+    {
+        this.renderDistance = renderDistance;
     }
 
     @Override

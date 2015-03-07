@@ -6,8 +6,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.impl.map.chunk.ChunkManagerImpl;
+import diorite.map.World;
 
-public class WorldImpl
+public class WorldImpl implements World
 {
     private final String           name;
     private final UUID             uuid;
@@ -17,7 +18,7 @@ public class WorldImpl
     {
         this.name = name;
         this.uuid = uuid;
-        this.chunkManager = new ChunkManagerImpl();
+        this.chunkManager = new ChunkManagerImpl(this);
     }
 
     public ChunkManagerImpl getChunkManager()

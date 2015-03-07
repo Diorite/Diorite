@@ -1,6 +1,5 @@
 package diorite.impl;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +14,7 @@ import diorite.BlockLocation;
 import diorite.Difficulty;
 import diorite.Dimension;
 import diorite.GameMode;
+import diorite.ImmutableLocation;
 import diorite.TeleportData;
 import diorite.WorldType;
 import diorite.impl.connection.NetworkManager;
@@ -24,13 +24,11 @@ import diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
 import diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
 import diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
 import diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
-import diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
 import diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
 import diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
 import diorite.impl.entity.PlayerImpl;
-import diorite.impl.map.chunk.ChunkImpl;
-import diorite.impl.map.chunk.ChunkManagerImpl;
+import diorite.impl.map.world.WorldImpl;
 import io.netty.buffer.Unpooled;
 
 public class PlayersManagerImpl
@@ -48,7 +46,7 @@ public class PlayersManagerImpl
 
     public PlayerImpl createPlayer(final GameProfile gameProfile, final NetworkManager networkManager)
     {
-        final PlayerImpl player = new PlayerImpl(this.server, this.server.entityManager.getNextID(), gameProfile, networkManager);
+        final PlayerImpl player = new PlayerImpl(this.server, this.server.entityManager.getNextID(), gameProfile, networkManager, new ImmutableLocation(4, 71, - 4, 0, 0, new WorldImpl("world", UUID.randomUUID())));
         this.players.put(gameProfile.getId(), player);
         return player;
     }
@@ -57,24 +55,13 @@ public class PlayersManagerImpl
     {
 
         // TODO: this is only test code
-       player.getNetworkManager().handle(new PacketPlayOutLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
-       player.getNetworkManager().handle(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
-       player.getNetworkManager().handle(new PacketPlayOutServerDifficulty(Difficulty.EASY));
-       player.getNetworkManager().handle(new PacketPlayOutSpawnPosition(new BlockLocation(2, 71, - 2)));
-       player.getNetworkManager().handle(new PacketPlayOutAbilities(false, false, false, false, 0.5f, 0.5f));
-       player.getNetworkManager().handle(new PacketPlayOutHeldItemSlot(3));
-       player.getNetworkManager().handle(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
-        final ChunkManagerImpl mag = new ChunkManagerImpl();
-        final ArrayList<ChunkImpl> chunks = new ArrayList<>(15);
-        for (int x = - 1; x < 1; x++)
-        {
-            for (int z = - 2; z < 2; z++)
-            {
-                chunks.add(mag.getChunkAt(x, z));
-            }
-        }
-        player.getNetworkManager().handle(new PacketPlayOutMapChunkBulk(true, chunks.toArray(new ChunkImpl[chunks.size()])));
-
+        player.getNetworkManager().handle(new PacketPlayOutLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
+        player.getNetworkManager().handle(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
+        player.getNetworkManager().handle(new PacketPlayOutServerDifficulty(Difficulty.EASY));
+        player.getNetworkManager().handle(new PacketPlayOutSpawnPosition(new BlockLocation(2, 71, - 2)));
+        player.getNetworkManager().handle(new PacketPlayOutAbilities(false, false, false, false, 0.5f, 0.5f));
+        player.getNetworkManager().handle(new PacketPlayOutHeldItemSlot(3));
+        player.getNetworkManager().handle(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
     }
 
     public void playerQuit(final PlayerImpl player)

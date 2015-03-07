@@ -1,13 +1,16 @@
 package diorite.impl.map.chunk;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import diorite.map.chunk.Chunk;
 import diorite.map.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk
 {
-    private final ChunkPos pos;
+    private final ChunkPos        pos;
     private final ChunkPartImpl[] chunkParts; // size of 16, parts can be null
     private final byte[]          biomes;
+    private final AtomicInteger usages = new AtomicInteger(0);
 
     public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts)
     {
@@ -40,6 +43,16 @@ public class ChunkImpl implements Chunk
             this.chunkParts[chunkPosY] = chunkPart;
         }
         chunkPart.setBlock(x, y, z, id, meta);
+    }
+
+    public int addUsage()
+    {
+        return this.usages.getAndIncrement();
+    }
+
+    public int removeUsage()
+    {
+        return this.usages.getAndDecrement();
     }
 
     public ChunkPos getPos()

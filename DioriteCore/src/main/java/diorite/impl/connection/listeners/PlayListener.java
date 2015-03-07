@@ -55,6 +55,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInSettings packet)
     {
+        this.player.setViewDistance(packet.getViewDistance());
         // TODO: implement
     }
 
@@ -75,7 +76,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInPositionLook packet)
     {
-        // TODO: implement
+        this.player.move(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
     }
 
     @Override
@@ -87,13 +88,13 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInPosition packet)
     {
-        // TODO: implement
+        this.player.move(packet.getX(), packet.getY(), packet.getZ(), 0, 0);
     }
 
     @Override
     public void handle(final PacketPlayInLook packet)
     {
-        // TODO: implement
+        this.player.move(0, 0, 0, packet.getYaw(), packet.getPitch());
     }
 
     @Override

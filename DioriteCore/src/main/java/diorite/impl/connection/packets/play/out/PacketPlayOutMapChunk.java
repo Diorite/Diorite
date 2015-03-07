@@ -11,6 +11,7 @@ import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.play.PacketPlayOutListener;
 import diorite.impl.map.chunk.ChunkImpl;
+import diorite.map.chunk.ChunkPos;
 
 @PacketClass(id = 0x21, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutMapChunk implements PacketPlayOut
@@ -23,7 +24,7 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     private boolean includeSkyLight;
     private int     mask;
 
-    private int selectedPart; // only if groundUpContinuous
+    private boolean unload;
 
     public PacketPlayOutMapChunk()
     {
@@ -72,6 +73,13 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
         data.writeInt(this.x);
         data.writeInt(this.z);
 
+        if (this.unload)
+        {
+            data.writeBoolean(true);
+            data.writeShort(0);
+            data.writeVarInt(0);
+            return;
+        }
         data.writeBoolean(this.groundUpContinuous);
         data.writeChunk(this.chunk, this.mask, this.includeSkyLight, this.groundUpContinuous);
 
@@ -143,14 +151,18 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
         this.mask = mask;
     }
 
-    public int getSelectedPart()
+    public boolean isUnload()
     {
-        return this.selectedPart;
+        return this.unload;
     }
 
-    public void setSelectedPart(final int selectedPart)
+    public static PacketPlayOutMapChunk unload(final ChunkPos chunk)
     {
-        this.selectedPart = selectedPart;
+        final PacketPlayOutMapChunk packet = new PacketPlayOutMapChunk();
+        packet.unload = true;
+        packet.x = chunk.getX();
+        packet.z = chunk.getZ();
+        return packet;
     }
 
     @Override

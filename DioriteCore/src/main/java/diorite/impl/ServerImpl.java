@@ -61,6 +61,7 @@ public class ServerImpl implements Server, Runnable
     protected       ConsoleReader                  reader;
     protected       long                           currentTick;
     protected       boolean                        onlineMode;
+    protected       byte                           renderDistance;
 
     private final double[] recentTps = new double[3];
 
@@ -107,6 +108,18 @@ public class ServerImpl implements Server, Runnable
         this.entityManager = new EntityManagerImpl(this);
         this.playersManager = new PlayersManagerImpl(this);
         this.serverConnection = new ServerConnection(this);
+    }
+
+    @Override
+    public byte getRenderDistance()
+    {
+        return this.renderDistance;
+    }
+
+    @Override
+    public void setRenderDistance(final byte renderDistance)
+    {
+        this.renderDistance = renderDistance;
     }
 
     public KeyPair getKeyPair()
