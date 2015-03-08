@@ -139,7 +139,18 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         }
         else
         {
-            this.channel.eventLoop().execute(new QueuedProtocolSwitch(this, ep1, ep2, packet, listeners));
+            this.channel.eventLoop().execute(() -> {
+                if (ep1 != ep2)
+                {
+                    this.setProtocol(ep1);
+                }
+                final ChannelFuture channelFuture = this.channel.writeAndFlush(packet);
+                if (listeners != null)
+                {
+                    channelFuture.addListeners(listeners);
+                }
+                channelFuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+            });
         }
     }
 

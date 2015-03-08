@@ -8,6 +8,8 @@ import java.nio.ByteOrder;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.UUID;
 
 import com.google.common.base.Charsets;
@@ -17,6 +19,9 @@ import diorite.BlockLocation;
 import diorite.Server;
 import diorite.chat.BaseComponent;
 import diorite.chat.serialize.ComponentSerializer;
+import diorite.entity.attrib.AttributeModifer;
+import diorite.entity.attrib.AttributeProperty;
+import diorite.entity.attrib.AttributeType;
 import diorite.impl.map.chunk.ChunkImpl;
 import diorite.impl.map.chunk.ChunkPartImpl;
 import diorite.map.chunk.Chunk;
@@ -47,6 +52,42 @@ public class PacketDataSerializer extends ByteBuf
             }
         }
         return 5;
+    }
+
+    public AttributeModifer readAttributeModifer()
+    {
+        final UUID uuid = this.readUUID();
+        final double value = this.readDouble();
+        final byte operation = this.readByte();
+        return new AttributeModifer(uuid, value, operation);
+    }
+
+    public void writeAttributeModifer(final AttributeModifer attribute)
+    {
+        this.writeUUID(attribute.getUuid());
+        this.writeDouble(attribute.getValue());
+        this.writeByte(attribute.getOperation());
+    }
+
+    public AttributeProperty readAttributeProperty()
+    {
+        final AttributeType type = AttributeType.getByKey(this.readText(Short.MAX_VALUE));
+        final double value = this.readDouble();
+        final int size = this.readVarInt();
+        final Collection<AttributeModifer> mods = new HashSet<>(size);
+        for (int i = 0; i < size; i++)
+        {
+            mods.add(this.readAttributeModifer());
+        }
+        return new AttributeProperty(type, mods, value);
+    }
+
+    public void writeAttributeProperty(final AttributeProperty attribute)
+    {
+        this.writeText(attribute.getType().getKey());
+        this.writeDouble(attribute.getValue());
+        this.writeVarInt(attribute.getModifers().size());
+        attribute.getModifers().forEach(this::writeAttributeModifer);
     }
 
     public BaseComponent readBaseComponent()

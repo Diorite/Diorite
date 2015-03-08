@@ -15,17 +15,17 @@ public abstract class EntityImpl implements Entity
     protected final ServerImpl server;
     protected final int        id;
     protected       UUID       uniqueID;
-    protected          WorldImpl  world;
-    protected          double     x;
-    protected          double     y;
-    protected          double     z;
-    protected          float      yaw;
-    protected          float      pitch;
-    protected          double     lastX;
-    protected          double     lastY;
-    protected          double     lastZ;
-    protected          float      lastYaw;
-    protected          float      lastPitch;
+    protected       WorldImpl  world;
+    protected       double     x;
+    protected       double     y;
+    protected       double     z;
+    protected       float      yaw;
+    protected       float      pitch;
+    protected       double     lastX;
+    protected       double     lastY;
+    protected       double     lastZ;
+    protected       float      lastYaw;
+    protected       float      lastPitch;
 
     protected EntityImpl(final ServerImpl server, final int id, final ImmutableLocation location)
     {
@@ -37,7 +37,6 @@ public abstract class EntityImpl implements Entity
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
         this.world = (WorldImpl) location.getWorld();
-        this.move(0,0,0,0,0);
     }
 
     public WorldImpl getWorld()
@@ -98,6 +97,30 @@ public abstract class EntityImpl implements Entity
         this.z += modZ;
         this.yaw += modYaw;
         this.pitch += modPitch;
+    }
+
+    public void setPositionAndRotation(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
+    {
+        this.setPosition(modX, modY, modZ);
+        this.setRotation(modYaw, modPitch);
+    }
+
+    public void setPosition(final double modX, final double modY, final double modZ)
+    {
+        this.lastX = this.x;
+        this.lastY = this.y;
+        this.lastZ = this.z;
+        this.x = modX;
+        this.y = modY;
+        this.z = modZ;
+    }
+
+    public void setRotation(final float modYaw, final float modPitch)
+    {
+        this.lastYaw = this.yaw;
+        this.lastPitch = this.pitch;
+        this.yaw = modYaw;
+        this.pitch = modPitch;
     }
 
     @Override

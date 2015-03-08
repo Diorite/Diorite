@@ -11,6 +11,7 @@ import diorite.ImmutableLocation;
 import diorite.entity.Player;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.NetworkManager;
+import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import diorite.impl.map.chunk.PlayerChunksImpl;
 import diorite.map.chunk.ChunkPos;
 
@@ -44,6 +45,11 @@ public class PlayerImpl extends EntityImpl implements Player
         return this.networkManager;
     }
 
+    public PlayerChunksImpl getPlayerChunks()
+    {
+        return this.playerChunks;
+    }
+
     @Override
     public String getName()
     {
@@ -60,11 +66,21 @@ public class PlayerImpl extends EntityImpl implements Player
     @Override
     public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
     {
-        if (!ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
         {
             this.playerChunks.update();
         }
         super.move(modX, modY, modZ, modYaw, modPitch);
+    }
+
+    @Override
+    public void setPosition(final double modX, final double modY, final double modZ)
+    {
+        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+        {
+            this.playerChunks.update();
+        }
+        super.setPosition(modX, modY, modZ);
     }
 
     @Override
@@ -88,6 +104,14 @@ public class PlayerImpl extends EntityImpl implements Player
     @Override
     public void setSprinting(final boolean isSprinting)
     {
+        if (isSprinting && ! this.isSprinting)
+        {
+            this.networkManager.handle(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED + Player.SPRINT_SPEED_BOOST, Player.FLY_SPEED + Player.SPRINT_SPEED_BOOST));
+        }
+        else if (! isSprinting && this.isSprinting)
+        {
+            this.networkManager.handle(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
+        }
         this.isSprinting = isSprinting;
     }
 

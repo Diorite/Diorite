@@ -55,7 +55,12 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInSettings packet)
     {
+        final byte oldViewDistance = this.player.getViewDistance();
         this.player.setViewDistance(packet.getViewDistance());
+        if (oldViewDistance != this.player.getViewDistance())
+        {
+            this.player.getPlayerChunks().update();
+        }
         // TODO: implement
     }
 
@@ -76,7 +81,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInPositionLook packet)
     {
-        this.player.move(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
+        this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
     }
 
     @Override
@@ -88,13 +93,13 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInPosition packet)
     {
-        this.player.move(packet.getX(), packet.getY(), packet.getZ(), 0, 0);
+        this.player.setPosition(packet.getX(), packet.getY(), packet.getZ());
     }
 
     @Override
     public void handle(final PacketPlayInLook packet)
     {
-        this.player.move(0, 0, 0, packet.getYaw(), packet.getPitch());
+        this.player.setRotation(packet.getYaw(), packet.getPitch());
     }
 
     @Override

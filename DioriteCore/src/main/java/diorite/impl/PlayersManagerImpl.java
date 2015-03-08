@@ -17,6 +17,7 @@ import diorite.GameMode;
 import diorite.ImmutableLocation;
 import diorite.TeleportData;
 import diorite.WorldType;
+import diorite.entity.Player;
 import diorite.impl.connection.NetworkManager;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
@@ -59,7 +60,7 @@ public class PlayersManagerImpl
         player.getNetworkManager().handle(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
         player.getNetworkManager().handle(new PacketPlayOutServerDifficulty(Difficulty.EASY));
         player.getNetworkManager().handle(new PacketPlayOutSpawnPosition(new BlockLocation(2, 71, - 2)));
-        player.getNetworkManager().handle(new PacketPlayOutAbilities(false, false, false, false, 0.5f, 0.5f));
+        player.getNetworkManager().handle(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
         player.getNetworkManager().handle(new PacketPlayOutHeldItemSlot(3));
         player.getNetworkManager().handle(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
     }

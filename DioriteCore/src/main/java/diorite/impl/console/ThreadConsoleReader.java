@@ -1,6 +1,7 @@
 package diorite.impl.console;
 
 import java.io.InputStream;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import diorite.impl.Main;
@@ -27,8 +28,16 @@ public class ThreadConsoleReader extends Thread
         }
         while (this.server.isRunning())
         {
-            Main.debug("Reading...");
-            final String line = this.scanner.nextLine();
+            final String line;
+            try
+            {
+                Main.debug("Reading...");
+                line = this.scanner.nextLine();
+            } catch (final NoSuchElementException ignored)
+            {
+                Main.debug("NoSuchElementException in ThreadConsoleReader");
+                continue;
+            }
             Main.debug("Line: " + line);
             if (line == null)
             {
@@ -36,6 +45,7 @@ public class ThreadConsoleReader extends Thread
                 continue;
             }
             this.server.getCommandMap().dispatch(this.server.getConsoleSender(), line);
+
         }
     }
 }

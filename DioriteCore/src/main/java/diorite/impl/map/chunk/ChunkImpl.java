@@ -47,12 +47,17 @@ public class ChunkImpl implements Chunk
 
     public int addUsage()
     {
-        return this.usages.getAndIncrement();
+        return this.usages.incrementAndGet();
     }
 
     public int removeUsage()
     {
-        return this.usages.getAndDecrement();
+        return this.usages.decrementAndGet();
+    }
+
+    public int getUsages()
+    {
+        return this.usages.intValue();
     }
 
     public ChunkPos getPos()

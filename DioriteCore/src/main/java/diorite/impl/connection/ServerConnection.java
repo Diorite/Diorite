@@ -9,21 +9,37 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import diorite.impl.ServerImpl;
+import diorite.impl.utils.LazyInitVar;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.AttributeKey;
-import diorite.impl.ServerImpl;
-import diorite.impl.utils.LazyInitVar;
 
 public class ServerConnection
 {
+    public final  LazyInitVar<NioEventLoopGroup>     lazyInitNioEventLoopGroup     = new LazyInitVar<NioEventLoopGroup>()
+    {
+        @Override
+        protected NioEventLoopGroup init()
+        {
+            return new NioEventLoopGroup(0, new ThreadFactoryBuilder().setNameFormat("Netty Client IO #%d").setDaemon(true).build());
+        }
+    };
+    public final  LazyInitVar<DefaultEventLoopGroup> lazyInitDefaultEventLoopGroup = new LazyInitVar<DefaultEventLoopGroup>()
+    {
+        @Override
+        protected DefaultEventLoopGroup init()
+        {
+            return new DefaultEventLoopGroup(0, new ThreadFactoryBuilder().setNameFormat("Netty Local Client IO #%d").setDaemon(true).build());
+        }
+    };
+
     public final  AttributeKey<EnumProtocol>         protocolKey                   = AttributeKey.valueOf("protocol");
-    public final  LazyInitVar<NioEventLoopGroup>     lazyInitNioEventLoopGroup     = new LazyInitNioEventLoopGroup();
-    public final  LazyInitVar<DefaultEventLoopGroup> lazyInitDefaultEventLoopGroup = new LazyInitDefaultEventLoopGroup();
     private final List<NetworkManager>               connections                   = Collections.synchronizedList(Lists.newArrayList());
     private ChannelFuture channelFuture;
 

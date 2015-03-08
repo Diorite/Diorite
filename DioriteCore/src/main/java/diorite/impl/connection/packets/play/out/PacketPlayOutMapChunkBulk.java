@@ -1,6 +1,8 @@
 package diorite.impl.connection.packets.play.out;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -26,8 +28,9 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
     {
     }
 
-    public PacketPlayOutMapChunkBulk(final boolean skyLight, final ChunkImpl[] chunks)
+    public PacketPlayOutMapChunkBulk(final boolean skyLight, ChunkImpl[] chunks)
     {
+        chunks = fix(chunks);
         this.skyLight = skyLight;
         this.chunks = chunks;
 
@@ -51,8 +54,9 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
         }
     }
 
-    public PacketPlayOutMapChunkBulk(final boolean skyLight, final ChunkImpl[] chunks, final ChunkMeta[] metas)
+    public PacketPlayOutMapChunkBulk(final boolean skyLight, ChunkImpl[] chunks, final ChunkMeta[] metas)
     {
+        chunks = fix(chunks);
         this.skyLight = skyLight;
         this.chunks = chunks;
         this.metas = metas;
@@ -87,6 +91,19 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
     public void handle(final PacketPlayOutListener listener)
     {
         listener.handle(this);
+    }
+
+    private static ChunkImpl[] fix(final ChunkImpl[] chunks)
+    {
+        final List<ChunkImpl> list = new ArrayList<>(chunks.length);
+        for (final ChunkImpl chunk:chunks)
+        {
+            if (chunk != null)
+            {
+                list.add(chunk);
+            }
+        }
+        return list.toArray(new ChunkImpl[list.size()]);
     }
 
     public boolean isSkyLight()

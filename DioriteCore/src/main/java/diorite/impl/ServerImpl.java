@@ -70,9 +70,10 @@ public class ServerImpl implements Server, Runnable
 
     public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
     {
-        this.hostname = options.has("hostname") ? options.valueOf("hostname").toString() : "localhost";
-        this.port = options.has("port") ? (Integer) options.valueOf("port") : DEFAULT_PORT;
-        this.onlineMode = ! options.has("online") || (Boolean) options.valueOf("online");
+        this.hostname = options.valueOf("hostname").toString();
+        this.port = (Integer) options.valueOf("port");
+        this.onlineMode = (Boolean) options.valueOf("online");
+        this.renderDistance = (Byte) options.valueOf("render");
 
         this.serverName = serverName;
         this.mainServerThread = new Thread(this);
@@ -101,7 +102,16 @@ public class ServerImpl implements Server, Runnable
         this.sessionService = this.authenticationService.createMinecraftSessionService();
         this.gameProfileRepository = this.authenticationService.createProfileRepository();
 
-        Runtime.getRuntime().addShutdownHook(new ServerShutdownThread(this));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try
+            {
+                this.isRunning = false;
+                this.stop();
+            } catch (final Exception e)
+            {
+                e.printStackTrace();
+            }
+        }));
 
         RegisterDefaultCommands.init(this.commandMap);
 
