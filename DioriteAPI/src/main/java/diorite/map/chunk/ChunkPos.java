@@ -41,6 +41,16 @@ public class ChunkPos
         return this.world;
     }
 
+    public ChunkPos add(final ChunkPos other)
+    {
+        return new ChunkPos(this.x + other.x, this.z + other.z, this.world);
+    }
+
+    public ChunkPos add(final int x, final int z)
+    {
+        return new ChunkPos(this.x + x, this.z + z);
+    }
+
     public double length()
     {
         return Math.sqrt(this.lengthSquared());
@@ -65,7 +75,7 @@ public class ChunkPos
     {
         final double deltaX = this.x - x;
         final double deltaZ = this.z - z;
-        return DioriteMathUtils.square(deltaX)+ DioriteMathUtils.square(deltaZ);
+        return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaZ);
     }
 
     public double distanceSquared(final ChunkPos location)

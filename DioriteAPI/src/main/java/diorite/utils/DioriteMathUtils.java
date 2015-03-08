@@ -13,6 +13,162 @@ public final class DioriteMathUtils
     {
     }
 
+    public static byte getInRange(final byte value, final byte min, final byte max)
+    {
+        if (value > max)
+        {
+            return max;
+        }
+        if (value < min)
+        {
+            return min;
+        }
+        return value;
+    }
+
+    public static short getInRange(final short value, final short min, final short max)
+    {
+        if (value > max)
+        {
+            return max;
+        }
+        if (value < min)
+        {
+            return min;
+        }
+        return value;
+    }
+
+    public static int getInRange(final int value, final int min, final int max)
+    {
+        if (value > max)
+        {
+            return max;
+        }
+        if (value < min)
+        {
+            return min;
+        }
+        return value;
+    }
+
+    public static long getInRange(final long value, final long min, final long max)
+    {
+        if (value > max)
+        {
+            return max;
+        }
+        if (value < min)
+        {
+            return min;
+        }
+        return value;
+    }
+
+    public static float getInRange(final float value, final float min, final float max)
+    {
+        if (value > max)
+        {
+            return max;
+        }
+        if (value < min)
+        {
+            return min;
+        }
+        return value;
+    }
+
+    public static double getInRange(final double value, final double min, final double max)
+    {
+        if (value > max)
+        {
+            return max;
+        }
+        if (value < min)
+        {
+            return min;
+        }
+        return value;
+    }
+
+    public static byte getInRangeOrDefault(final byte value, final byte min, final byte max, final byte def)
+    {
+        if (value > max)
+        {
+            return def;
+        }
+        if (value < min)
+        {
+            return def;
+        }
+        return value;
+    }
+
+    public static short getInRangeOrDefault(final short value, final short min, final short max, final short def)
+    {
+        if (value > max)
+        {
+            return def;
+        }
+        if (value < min)
+        {
+            return def;
+        }
+        return value;
+    }
+
+    public static int getInRangeOrDefault(final int value, final int min, final int max, final int def)
+    {
+        if (value > max)
+        {
+            return def;
+        }
+        if (value < min)
+        {
+            return def;
+        }
+        return value;
+    }
+
+    public static long getInRangeOrDefault(final long value, final long min, final long max, final long def)
+    {
+        if (value > max)
+        {
+            return def;
+        }
+        if (value < min)
+        {
+            return def;
+        }
+        return value;
+    }
+
+    public static float getInRangeOrDefault(final float value, final float min, final float max, final float def)
+    {
+        if (value > max)
+        {
+            return def;
+        }
+        if (value < min)
+        {
+            return def;
+        }
+        return value;
+    }
+
+    public static double getInRangeOrDefault(final double value, final double min, final double max, final double def)
+    {
+        if (value > max)
+        {
+            return def;
+        }
+        if (value < min)
+        {
+            return def;
+        }
+        return value;
+    }
+
     public static boolean canBeByte(final int i)
     {
         return (i >= Byte.MIN_VALUE) && (i <= Byte.MAX_VALUE);

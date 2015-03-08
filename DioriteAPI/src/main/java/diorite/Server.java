@@ -13,11 +13,12 @@ public interface Server
     int NANOS_IN_MILLI  = 1000000;
     int NANOS_IN_SECOND = NANOS_IN_MILLI * 1000;
 
-    int    DEFAULT_PORT      = 25565;
-    String DEFAULT_SERVER    = "main";
-    int    DEFAULT_TPS       = 20;
-    int    DEFAULT_WAIT_TIME = NANOS_IN_SECOND / DEFAULT_TPS;
-    int    MAX_NICKNAME_SIZE = 16;
+    int    DEFAULT_PORT            = 25565;
+    String DEFAULT_SERVER          = "main";
+    int    DEFAULT_TPS             = 20;
+    byte   DEFAULT_RENDER_DISTANCE = 10;
+    int    DEFAULT_WAIT_TIME       = NANOS_IN_SECOND / DEFAULT_TPS;
+    int    MAX_NICKNAME_SIZE       = 16;
 
     byte getRenderDistance();
 
