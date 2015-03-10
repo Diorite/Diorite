@@ -7,10 +7,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.ImmutableLocation;
 import diorite.entity.Entity;
+import diorite.impl.GameObjectImpl;
 import diorite.impl.ServerImpl;
 import diorite.impl.map.world.WorldImpl;
 
-public abstract class EntityImpl implements Entity
+public abstract class EntityImpl extends GameObjectImpl implements Entity
 {
     protected final ServerImpl server;
     protected final int        id;
