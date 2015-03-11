@@ -66,11 +66,6 @@ public class ImmutableLocation extends Loc
         return new ImmutableLocation(x, this.y, this.z, this.yaw, this.pitch, this.world);
     }
 
-    public ImmutableLocation addX(final double x)
-    {
-        return new ImmutableLocation(this.x + x, this.y, this.z, this.yaw, this.pitch, this.world);
-    }
-
     @Override
     public double getY()
     {
@@ -80,11 +75,6 @@ public class ImmutableLocation extends Loc
     public ImmutableLocation setY(final double y)
     {
         return new ImmutableLocation(this.x, y, this.z, this.yaw, this.pitch, this.world);
-    }
-
-    public ImmutableLocation addY(final double y)
-    {
-        return new ImmutableLocation(this.x, this.y + y, this.z, this.yaw, this.pitch, this.world);
     }
 
     @Override
@@ -98,9 +88,10 @@ public class ImmutableLocation extends Loc
         return new ImmutableLocation(this.x, this.y, z, this.yaw, this.pitch, this.world);
     }
 
-    public ImmutableLocation addZ(final double z)
+    @Override
+    public float getPitch()
     {
-        return new ImmutableLocation(this.x, this.y, this.z + z, this.yaw, this.pitch, this.world);
+        return this.pitch;
     }
 
     @Override
@@ -114,36 +105,10 @@ public class ImmutableLocation extends Loc
         return new ImmutableLocation(this.x, this.y, this.z, yaw, this.pitch, this.world);
     }
 
-    public ImmutableLocation addYaw(final float yaw)
-    {
-        return new ImmutableLocation(this.x, this.y, this.z, this.yaw + yaw, this.pitch, this.world);
-    }
-
-    @Override
-    public float getPitch()
-    {
-        return this.pitch;
-    }
-
-    public ImmutableLocation setPitch(final float pitch)
-    {
-        return new ImmutableLocation(this.x, this.y, this.z, this.yaw, pitch, this.world);
-    }
-
-    public ImmutableLocation addPitch(final float pitch)
-    {
-        return new ImmutableLocation(this.x, this.y, this.z, this.yaw, this.pitch + pitch, this.world);
-    }
-
     @Override
     public World getWorld()
     {
         return this.world;
-    }
-
-    public ImmutableLocation getInWorld(final World world)
-    {
-        return new ImmutableLocation(this.x, this.y, this.z, this.yaw, this.pitch, world);
     }
 
     @Override
@@ -156,6 +121,41 @@ public class ImmutableLocation extends Loc
     public ImmutableLocation crossProduct(final BlockLocation location)
     {
         return new ImmutableLocation((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
+    }
+
+    public ImmutableLocation setPitch(final float pitch)
+    {
+        return new ImmutableLocation(this.x, this.y, this.z, this.yaw, pitch, this.world);
+    }
+
+    public ImmutableLocation addX(final double x)
+    {
+        return new ImmutableLocation(this.x + x, this.y, this.z, this.yaw, this.pitch, this.world);
+    }
+
+    public ImmutableLocation addY(final double y)
+    {
+        return new ImmutableLocation(this.x, this.y + y, this.z, this.yaw, this.pitch, this.world);
+    }
+
+    public ImmutableLocation addZ(final double z)
+    {
+        return new ImmutableLocation(this.x, this.y, this.z + z, this.yaw, this.pitch, this.world);
+    }
+
+    public ImmutableLocation addYaw(final float yaw)
+    {
+        return new ImmutableLocation(this.x, this.y, this.z, this.yaw + yaw, this.pitch, this.world);
+    }
+
+    public ImmutableLocation addPitch(final float pitch)
+    {
+        return new ImmutableLocation(this.x, this.y, this.z, this.yaw, this.pitch + pitch, this.world);
+    }
+
+    public ImmutableLocation getInWorld(final World world)
+    {
+        return new ImmutableLocation(this.x, this.y, this.z, this.yaw, this.pitch, world);
     }
 
     @Override

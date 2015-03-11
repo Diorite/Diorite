@@ -11,11 +11,11 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class Dimension
 {
-    public static final Dimension NETHER    = new Dimension("NETHER", - 1);
-    public static final Dimension OVERWORLD = new Dimension("OVERWORLD", 0);
-    public static final Dimension END       = new Dimension("END", 1);
-    private static final Map<String, Dimension>   byName = new SimpleStringHashMap<>(3, .1f);
-    private static final TIntObjectMap<Dimension> byID   = new TIntObjectHashMap<>(3, .1f);
+    public static final  Dimension                NETHER    = new Dimension("NETHER", - 1);
+    public static final  Dimension                OVERWORLD = new Dimension("OVERWORLD", 0);
+    public static final  Dimension                END       = new Dimension("END", 1);
+    private static final Map<String, Dimension>   byName    = new SimpleStringHashMap<>(3, .1f);
+    private static final TIntObjectMap<Dimension> byID      = new TIntObjectHashMap<>(3, .1f);
     private final String enumName;
     private final int    id;
 
@@ -56,6 +56,7 @@ public class Dimension
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
     }
+
     static
     {
         register(NETHER);

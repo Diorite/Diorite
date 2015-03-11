@@ -11,12 +11,12 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class Difficulty
 {
-    public static final Difficulty PEACEFUL = new Difficulty("PEACEFUL", 0, "options.difficulty.peaceful");
-    public static final Difficulty EASY     = new Difficulty("EASY", 1, "options.difficulty.easy");
-    public static final Difficulty NORMAL   = new Difficulty("NORMAL", 2, "options.difficulty.normal");
-    public static final Difficulty HARD     = new Difficulty("HARD", 3, "options.difficulty.hard");
-    private static final Map<String, Difficulty>   byName = new SimpleStringHashMap<>(4, .1f);
-    private static final TIntObjectMap<Difficulty> byID   = new TIntObjectHashMap<>(4, .1f);
+    public static final  Difficulty                PEACEFUL = new Difficulty("PEACEFUL", 0, "options.difficulty.peaceful");
+    public static final  Difficulty                EASY     = new Difficulty("EASY", 1, "options.difficulty.easy");
+    public static final  Difficulty                NORMAL   = new Difficulty("NORMAL", 2, "options.difficulty.normal");
+    public static final  Difficulty                HARD     = new Difficulty("HARD", 3, "options.difficulty.hard");
+    private static final Map<String, Difficulty>   byName   = new SimpleStringHashMap<>(4, .1f);
+    private static final TIntObjectMap<Difficulty> byID     = new TIntObjectHashMap<>(4, .1f);
     private final String enumName;
     private final int    level;
     private final String option;
@@ -64,6 +64,7 @@ public class Difficulty
         byID.put(element.getLevel(), element);
         byName.put(element.name(), element);
     }
+
     static
     {
         register(PEACEFUL);

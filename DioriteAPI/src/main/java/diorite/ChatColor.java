@@ -36,7 +36,7 @@ public enum ChatColor
 
     public static final char COLOR_CHAR                   = '§';
     public static final char DEFAULT_ALTERNATE_COLOR_CHAR = '&';
-    private static final Pattern STRIP_COLOR_PATTERN;
+    private static final Pattern                   STRIP_COLOR_PATTERN;
     private static final Map<Integer, ChatColor>   BY_ID;
     private static final Map<Character, ChatColor> BY_CHAR;
     private final        String                    name;

@@ -11,9 +11,9 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class ChatVisibility
 {
-    public static final ChatVisibility FULL   = new ChatVisibility("FULL", 0, "options.chat.visibility.full");
-    public static final ChatVisibility SYSTEM = new ChatVisibility("SYSTEM", 1, "options.chat.visibility.system");
-    public static final ChatVisibility HIDDEN = new ChatVisibility("HIDDEN", 2, "options.chat.visibility.hidden");
+    public static final  ChatVisibility                FULL   = new ChatVisibility("FULL", 0, "options.chat.visibility.full");
+    public static final  ChatVisibility                SYSTEM = new ChatVisibility("SYSTEM", 1, "options.chat.visibility.system");
+    public static final  ChatVisibility                HIDDEN = new ChatVisibility("HIDDEN", 2, "options.chat.visibility.hidden");
     private static final Map<String, ChatVisibility>   byName = new SimpleStringHashMap<>(3, .1f);
     private static final TIntObjectMap<ChatVisibility> byID   = new TIntObjectHashMap<>(3, .1f);
     private final String enumName;
@@ -63,6 +63,7 @@ public class ChatVisibility
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
     }
+
     static
     {
         register(FULL);

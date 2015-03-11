@@ -93,9 +93,13 @@ public class ChunkPos
         return (DioriteMathUtils.square(origin.getX() - this.x) + DioriteMathUtils.square(origin.getZ() - this.z)) <= DioriteMathUtils.square(radius);
     }
 
-    public static ChunkPos fromWorldPos(final int x, final int z, final World world)
+    @Override
+    public int hashCode()
     {
-        return new ChunkPos(x >> 4, z >> 4, world);
+        int result = this.x;
+        result = (31 * result) + this.z;
+        result = (31 * result) + ((this.world != null) ? this.world.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -117,17 +121,13 @@ public class ChunkPos
     }
 
     @Override
-    public int hashCode()
-    {
-        int result = this.x;
-        result = (31 * result) + this.z;
-        result = (31 * result) + ((this.world != null) ? this.world.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).toString();
+    }
+
+    public static ChunkPos fromWorldPos(final int x, final int z, final World world)
+    {
+        return new ChunkPos(x >> 4, z >> 4, world);
     }
 }

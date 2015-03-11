@@ -22,6 +22,7 @@ public enum NbtTagType
     INTEGER_ARRAY(11, NbtTagIntArray.class, NbtTagIntArray::new);
     private static final Map<Byte, NbtTagType>                            typeMap;
     private static final Map<Class<? extends NbtAbstractTag>, NbtTagType> classMap;
+
     static
     {
         {
@@ -41,9 +42,10 @@ public enum NbtTagType
             classMap = mapBuilder.build();
         }
     }
-    private final        byte                                             typeID;
-    private final        Class<? extends NbtAbstractTag>                  typeClass;
-    private final        Supplier<NbtAbstractTag<?>>                      getInstance;
+
+    private final byte                            typeID;
+    private final Class<? extends NbtAbstractTag> typeClass;
+    private final Supplier<NbtAbstractTag<?>>     getInstance;
 
     private NbtTagType(final int typeID, final Class<? extends NbtAbstractTag> type, final Supplier<NbtAbstractTag<?>> getInstance)
     {

@@ -14,9 +14,9 @@ public interface Command
 
     Pattern getPattern();
 
-    void setPattern(String pattern);
-
     void setPattern(Pattern pattern);
+
+    void setPattern(String pattern);
 
     ExceptionHandler getExceptionHandler();
 

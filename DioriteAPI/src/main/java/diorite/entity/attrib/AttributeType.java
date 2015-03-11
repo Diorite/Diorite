@@ -60,6 +60,12 @@ public class AttributeType
         return this.maxValue;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("key", this.key).append("defaultValue", this.defaultValue).append("minValue", this.minValue).append("maxValue", this.maxValue).toString();
+    }
+
     public static AttributeType getByKey(final String key)
     {
         return byKey.get(key);
@@ -75,7 +81,6 @@ public class AttributeType
         byName.put(element.name(), element);
         byKey.put(element.getKey(), element);
     }
-
     static
     {
         register(GENERIC_MAX_HEALTH);
@@ -85,11 +90,5 @@ public class AttributeType
         register(GENERIC_ATTACK_DAMAGE);
         register(HORSE_JUMP_STRENGTH);
         register(ZOMBIE_SPAWN_REINFORCMENTS);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("key", this.key).append("defaultValue", this.defaultValue).append("minValue", this.minValue).append("maxValue", this.maxValue).toString();
     }
 }
