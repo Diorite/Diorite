@@ -13,9 +13,16 @@ import diorite.utils.DioriteMathUtils;
 
 public class AttributePropertyImpl implements AttributeProperty
 {
-    private final AttributeType                    type;
-    private final double                           value;
+    private final AttributeType                type;
+    private final double                       value;
     private final Collection<AttributeModifer> modifers;
+
+    public AttributePropertyImpl(final AttributeType type, final Collection<AttributeModifer> modifers)
+    {
+        this.type = type;
+        this.value = type.getDefaultValue();
+        this.modifers = modifers;
+    }
 
     public AttributePropertyImpl(final AttributeType type)
     {
@@ -57,6 +64,12 @@ public class AttributePropertyImpl implements AttributeProperty
     }
 
     @Override
+    public int hashCode()
+    {
+        return this.modifers.hashCode();
+    }
+
+    @Override
     public boolean equals(final Object o)
     {
         if (this == o)
@@ -72,12 +85,6 @@ public class AttributePropertyImpl implements AttributeProperty
 
         return this.modifers.equals(that.modifers);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return this.modifers.hashCode();
     }
 
     @Override

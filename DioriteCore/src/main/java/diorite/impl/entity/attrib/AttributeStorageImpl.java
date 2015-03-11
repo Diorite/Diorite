@@ -27,6 +27,12 @@ public class AttributeStorageImpl implements AttributeStorage
     }
 
     @Override
+    public void removeAttributeProperty(final AttributeType type)
+    {
+        this.attributes.remove(type);
+    }
+
+    @Override
     public GameObject getGameObject()
     {
         return this.gameObject;
@@ -36,12 +42,6 @@ public class AttributeStorageImpl implements AttributeStorage
     public void addAttributeProperty(final AttributeProperty property)
     {
         this.attributes.put(property.getType(), property);
-    }
-
-    @Override
-    public void removeAttributeProperty(final AttributeType type)
-    {
-        this.attributes.remove(type);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class AttributeStorageImpl implements AttributeStorage
         final AttributeProperty prop = this.attributes.get(type);
         if (prop == null)
         {
-           return;
+            return;
         }
         prop.getModifers().removeIf(mod -> mod.getUuid().equals(uuid));
     }

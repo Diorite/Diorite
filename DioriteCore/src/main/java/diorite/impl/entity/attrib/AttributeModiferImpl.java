@@ -46,6 +46,18 @@ public class AttributeModiferImpl implements AttributeModifer
     }
 
     @Override
+    public int hashCode()
+    {
+        int result;
+        final long temp;
+        result = this.uuid.hashCode();
+        temp = Double.doubleToLongBits(this.value);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        result = (31 * result) + (int) this.operation;
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object o)
     {
         if (this == o)
@@ -61,18 +73,6 @@ public class AttributeModiferImpl implements AttributeModifer
 
         return (this.operation == that.operation) && (Double.compare(that.value, this.value) == 0) && this.uuid.equals(that.uuid);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result;
-        final long temp;
-        result = this.uuid.hashCode();
-        temp = Double.doubleToLongBits(this.value);
-        result = (31 * result) + (int) (temp ^ (temp >>> 32));
-        result = (31 * result) + (int) this.operation;
-        return result;
     }
 
     @Override

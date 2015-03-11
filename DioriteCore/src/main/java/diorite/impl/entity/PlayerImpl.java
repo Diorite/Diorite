@@ -1,5 +1,6 @@
 package diorite.impl.entity;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,9 +10,12 @@ import com.mojang.authlib.GameProfile;
 
 import diorite.ImmutableLocation;
 import diorite.entity.Player;
+import diorite.entity.attrib.AttributeType;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.NetworkManager;
-import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
+import diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
+import diorite.impl.entity.attrib.AttributeModiferImpl;
+import diorite.impl.entity.attrib.AttributePropertyImpl;
 import diorite.impl.map.chunk.PlayerChunksImpl;
 import diorite.map.chunk.ChunkPos;
 
@@ -64,26 +68,6 @@ public class PlayerImpl extends EntityImpl implements Player
     }
 
     @Override
-    public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
-    {
-        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
-        {
-            this.playerChunks.update();
-        }
-        super.move(modX, modY, modZ, modYaw, modPitch);
-    }
-
-    @Override
-    public void setPosition(final double modX, final double modY, final double modZ)
-    {
-        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
-        {
-            this.playerChunks.update();
-        }
-        super.setPosition(modX, modY, modZ);
-    }
-
-    @Override
     public boolean isCrouching()
     {
         return this.isCrouching;
@@ -106,24 +90,24 @@ public class PlayerImpl extends EntityImpl implements Player
     {
         if (isSprinting && ! this.isSprinting)
         {
-            this.networkManager.handle(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED + Player.SPRINT_SPEED_BOOST, Player.FLY_SPEED + Player.SPRINT_SPEED_BOOST));
+            this.networkManager.handle(new PacketPlayOutUpdateAttributes(this.id, Arrays.asList(new AttributePropertyImpl(AttributeType.GENERIC_MOVEMENT_SPEED, Arrays.asList(new AttributeModiferImpl(UUID.randomUUID(), 0.3, (byte) 0))))));
         }
         else if (! isSprinting && this.isSprinting)
         {
-            this.networkManager.handle(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
+            this.networkManager.handle(new PacketPlayOutUpdateAttributes(this.id));
         }
         this.isSprinting = isSprinting;
-    }
-
-    public void setViewDistance(final byte viewDistance)
-    {
-        this.viewDistance = viewDistance;
     }
 
     @Override
     public byte getViewDistance()
     {
         return this.viewDistance;
+    }
+
+    public void setViewDistance(final byte viewDistance)
+    {
+        this.viewDistance = viewDistance;
     }
 
     @Override
@@ -142,6 +126,26 @@ public class PlayerImpl extends EntityImpl implements Player
     public UUID getUniqueID()
     {
         return this.gameProfile.getId();
+    }
+
+    @Override
+    public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
+    {
+        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+        {
+            this.playerChunks.update();
+        }
+        super.move(modX, modY, modZ, modYaw, modPitch);
+    }
+
+    @Override
+    public void setPosition(final double modX, final double modY, final double modZ)
+    {
+        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+        {
+            this.playerChunks.update();
+        }
+        super.setPosition(modX, modY, modZ);
     }
 
     @Override

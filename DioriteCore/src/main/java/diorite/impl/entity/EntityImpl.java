@@ -81,6 +81,12 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity
         return new ImmutableLocation(this.x, this.y, this.z, this.yaw, this.pitch, this.world);
     }
 
+    @Override
+    public ServerImpl getServer()
+    {
+        return this.server;
+    }
+
     public ImmutableLocation getLastLocation()
     {
         return new ImmutableLocation(this.lastX, this.lastY, this.lastZ, this.lastYaw, this.lastPitch);
@@ -122,12 +128,6 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity
         this.lastPitch = this.pitch;
         this.yaw = modYaw;
         this.pitch = modPitch;
-    }
-
-    @Override
-    public ServerImpl getServer()
-    {
-        return this.server;
     }
 
     @Override
