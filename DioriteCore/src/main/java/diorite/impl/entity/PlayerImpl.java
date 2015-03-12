@@ -19,7 +19,7 @@ import diorite.impl.entity.attrib.AttributePropertyImpl;
 import diorite.impl.map.chunk.PlayerChunksImpl;
 import diorite.map.chunk.ChunkPos;
 
-public class PlayerImpl extends EntityImpl implements Player
+public class PlayerImpl extends AttributableEntityImpl implements Player
 {
     protected final GameProfile      gameProfile;
     protected       NetworkManager   networkManager;
