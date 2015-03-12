@@ -2,7 +2,7 @@ package diorite.entity;
 
 import diorite.command.PlayerCommandSender;
 
-public interface Player extends Entity, PlayerCommandSender
+public interface Player extends AttributableEntity, PlayerCommandSender
 {
     float WALK_SPEED         = 0.1f;
     float FLY_SPEED          = 0.05f;
