@@ -1,7 +1,5 @@
 package diorite.impl.entity;
 
-import java.util.UUID;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -15,7 +13,6 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity
 {
     protected final ServerImpl server;
     protected final int        id;
-    protected       UUID       uniqueID;
     protected       WorldImpl  world;
     protected       double     x;
     protected       double     y;
@@ -30,6 +27,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity
 
     protected EntityImpl(final ServerImpl server, final int id, final ImmutableLocation location)
     {
+        super(null);
         this.server = server;
         this.id = id;
         this.x = location.getX();
@@ -49,12 +47,6 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity
     public int getId()
     {
         return this.id;
-    }
-
-    @Override
-    public UUID getUniqueID()
-    {
-        return this.uniqueID;
     }
 
     @Override

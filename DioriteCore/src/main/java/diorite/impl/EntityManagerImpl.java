@@ -1,15 +1,18 @@
 package diorite.impl;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import diorite.EntityManager;
+import diorite.entity.Entity;
 import diorite.impl.entity.EntityImpl;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class EntityManagerImpl
+public class EntityManagerImpl implements EntityManager
 {
     private final ServerImpl server;
     private final AtomicInteger             entityCount = new AtomicInteger();
@@ -20,9 +23,23 @@ public class EntityManagerImpl
         this.server = server;
     }
 
+    @Override
     public EntityImpl getEntity(final int id)
     {
-        return this.map.get(id);
+        return null;
+    }
+
+    @Override
+    public EntityImpl getEntity(final UUID id)
+    {
+        for (final EntityImpl entity : this.map.valueCollection())
+        {
+            if (entity.getUniqueID().equals(id))
+            {
+                return entity;
+            }
+        }
+        return null;
     }
 
     public void addEntity(final EntityImpl entity)
@@ -30,14 +47,16 @@ public class EntityManagerImpl
         this.map.put(entity.getId(), entity);
     }
 
-    public void removeEntity(final EntityImpl entity)
+    @Override
+    public EntityImpl removeEntity(final Entity entity)
     {
-        this.removeEntity(entity.getId());
+        return this.removeEntity(entity.getId());
     }
 
-    public void removeEntity(final int id)
+    @Override
+    public EntityImpl removeEntity(final int id)
     {
-        this.map.remove(id);
+        return this.map.remove(id);
     }
 
     public int getNextID()
@@ -45,11 +64,13 @@ public class EntityManagerImpl
         return this.entityCount.getAndIncrement();
     }
 
+    @Override
     public int getCurrentID()
     {
         return this.entityCount.get();
     }
 
+    @Override
     public ServerImpl getServer()
     {
         return this.server;
