@@ -1,7 +1,5 @@
 package diorite.entity;
 
-import java.util.UUID;
-
 import diorite.GameObject;
 import diorite.ImmutableLocation;
 import diorite.Server;
@@ -9,8 +7,6 @@ import diorite.Server;
 public interface Entity extends GameObject
 {
     int getId();
-
-    UUID getUniqueID();
 
     double getX();
 
