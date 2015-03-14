@@ -32,9 +32,23 @@ public class Stone extends BlockMaterialData
         super(STONE.name(), STONE.getId(), enumName, (byte) type);
     }
 
-    public Stone(final int maxStack, final int durability, final String typeName, final byte type)
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getBlastResistance()
     {
-        super(STONE.name(), STONE.getId(), maxStack, durability, typeName, type);
+        return 30;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getHardness()
+    {
+        return 1.5f;
+    }
+
+    public Stone(final int maxStack, final String typeName, final byte type)
+    {
+        super(STONE.name(), STONE.getId(), maxStack, typeName, type);
     }
 
     @Override

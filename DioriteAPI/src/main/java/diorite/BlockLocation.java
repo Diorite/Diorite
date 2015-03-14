@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.map.World;
 import diorite.map.chunk.ChunkPos;
-import diorite.utils.DioriteMathUtils;
+import diorite.utils.math.DioriteMathUtils;
 
 public class BlockLocation
 {

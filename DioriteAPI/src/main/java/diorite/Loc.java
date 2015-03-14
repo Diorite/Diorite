@@ -2,7 +2,7 @@ package diorite;
 
 import diorite.map.World;
 import diorite.map.chunk.ChunkPos;
-import diorite.utils.DioriteMathUtils;
+import diorite.utils.math.DioriteMathUtils;
 
 public abstract class Loc
 {

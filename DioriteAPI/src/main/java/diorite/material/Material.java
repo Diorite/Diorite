@@ -16,6 +16,7 @@ import diorite.material.blocks.Stone;
 import diorite.material.blocks.liquid.Lava;
 import diorite.material.blocks.liquid.Water;
 import diorite.utils.collections.SimpleStringHashMap;
+import diorite.utils.math.IntRange;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
@@ -417,7 +418,6 @@ public abstract class Material
     private final String enumName;
     private final int    id;
     private final int    maxStack;
-    private final short  durability;
 
     public Material(final String enumName, final int id)
     {
@@ -426,15 +426,9 @@ public abstract class Material
 
     public Material(final String enumName, final int id, final int maxStack)
     {
-        this(enumName, id, maxStack, 0);
-    }
-
-    public Material(final String enumName, final int id, final int maxStack, final int durability)
-    {
         this.enumName = enumName;
         this.id = id;
         this.maxStack = maxStack;
-        this.durability = (short) durability;
     }
 
     public String name()
@@ -450,11 +444,6 @@ public abstract class Material
     public int getMaxStack()
     {
         return this.maxStack;
-    }
-
-    public short getDurability()
-    {
-        return this.durability;
     }
 
     public abstract boolean isBlock();
@@ -473,10 +462,64 @@ public abstract class Material
 
     public abstract boolean isEdible();
 
+    public abstract boolean isReplaceable();
+
+    public abstract boolean isGlowing();
+
+    public abstract int getLuminance();
+
+    public abstract float getBlastResistance();
+
+    public abstract float getHardness();
+
+    public abstract IntRange getExperienceWhenMined();
+
+    // TODO: method to get possible drops
+
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("maxStack", this.maxStack).append("durability", this.durability).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("maxStack", this.maxStack).toString();
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof Material))
+        {
+            return false;
+        }
+
+        final Material material = (Material) o;
+
+        return this.enumName.equals(material.enumName);
+    }
+
+    public final boolean simpleEquals(final Object o)
+    {
+        //noinspection ObjectEquality
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof Material))
+        {
+            return false;
+        }
+
+        final Material material = (Material) o;
+
+        return this.enumName.equals(material.enumName);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.enumName.hashCode();
     }
 
     public static Material getByID(final int id)

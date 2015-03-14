@@ -26,9 +26,22 @@ public class Bedrock extends BlockMaterialData
         super(AIR.name(), AIR.getId(), AIR.getMaxStack(), enumName, (byte) type);
     }
 
-    public Bedrock(final int maxStack, final int durability, final String typeName, final byte type)
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getBlastResistance()
     {
-        super(AIR.name(), AIR.getId(), maxStack, durability, typeName, type);
+        return 18_000_000;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return -1;
+    }
+
+    public Bedrock(final int maxStack, final String typeName, final byte type)
+    {
+        super(AIR.name(), AIR.getId(), maxStack, typeName, type);
     }
 
     @Override

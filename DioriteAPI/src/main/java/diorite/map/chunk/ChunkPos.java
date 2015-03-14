@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.map.World;
-import diorite.utils.DioriteMathUtils;
+import diorite.utils.math.DioriteMathUtils;
 
 public class ChunkPos
 {

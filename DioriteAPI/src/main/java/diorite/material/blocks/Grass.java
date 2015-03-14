@@ -26,9 +26,23 @@ public class Grass extends BlockMaterialData
         super(GRASS.name(), GRASS.getId(), enumName, (byte) type);
     }
 
-    public Grass(final int maxStack, final int durability, final String typeName, final byte type)
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getBlastResistance()
     {
-        super(GRASS.name(), GRASS.getId(), maxStack, durability, typeName, type);
+        return 3;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getHardness()
+    {
+        return 0.6f;
+    }
+
+    public Grass(final int maxStack, final String typeName, final byte type)
+    {
+        super(GRASS.name(), GRASS.getId(), maxStack, typeName, type);
     }
 
     @Override

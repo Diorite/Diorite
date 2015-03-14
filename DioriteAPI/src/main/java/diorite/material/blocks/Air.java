@@ -11,7 +11,7 @@ public class Air extends BlockMaterialData
 {
     public static final byte USED_DATA_VALUES = 1;
 
-    public static final Air  AIR              = new Air();
+    public static final Air AIR = new Air();
 
     private static final Map<String, Air>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
     private static final TByteObjectMap<Air> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
@@ -26,9 +26,9 @@ public class Air extends BlockMaterialData
         super(AIR.name(), AIR.getId(), AIR.getMaxStack(), enumName, (byte) type);
     }
 
-    public Air(final int maxStack, final int durability, final String typeName, final byte type)
+    public Air(final int maxStack, final String typeName, final byte type)
     {
-        super(AIR.name(), AIR.getId(), maxStack, durability, typeName, type);
+        super(AIR.name(), AIR.getId(), maxStack, typeName, type);
     }
 
     @Override
@@ -59,6 +59,24 @@ public class Air extends BlockMaterialData
     public boolean isOccluding()
     {
         return false;
+    }
+
+    @Override
+    public boolean isReplaceable()
+    {
+        return true;
+    }
+
+    @Override
+    public float getBlastResistance()
+    {
+        return 0;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return 0;
     }
 
     public static Air getByID(final int id)

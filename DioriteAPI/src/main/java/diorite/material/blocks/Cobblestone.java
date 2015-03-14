@@ -26,9 +26,23 @@ public class Cobblestone extends BlockMaterialData
         super(COBBLESTONE.name(), COBBLESTONE.getId(), enumName, (byte) type);
     }
 
-    public Cobblestone(final int maxStack, final int durability, final String typeName, final byte type)
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getBlastResistance()
     {
-        super(COBBLESTONE.name(), COBBLESTONE.getId(), maxStack, durability, typeName, type);
+        return 30;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getHardness()
+    {
+        return 2;
+    }
+
+    public Cobblestone(final int maxStack, final String typeName, final byte type)
+    {
+        super(COBBLESTONE.name(), COBBLESTONE.getId(), maxStack, typeName, type);
     }
 
     @Override

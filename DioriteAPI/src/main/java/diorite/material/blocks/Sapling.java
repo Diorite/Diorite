@@ -10,7 +10,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 public class Sapling extends BlockMaterialData
 {
     public static final byte USED_DATA_VALUES = 12;
-    public static final byte OLD_FLAG = 0x08;
+    public static final byte OLD_FLAG         = 0x08;
 
     public static final Sapling SAPLING_OAK            = new Sapling();
     public static final Sapling SAPLING_SPRUCE         = new Sapling("SPRUCE", 0x01);
@@ -38,9 +38,9 @@ public class Sapling extends BlockMaterialData
         super(SAPLING_OAK.name(), SAPLING_OAK.getId(), enumName, (byte) type);
     }
 
-    public Sapling(final int maxStack, final int durability, final String typeName, final byte type)
+    public Sapling(final int maxStack, final String typeName, final byte type)
     {
-        super(SAPLING_OAK.name(), SAPLING_OAK.getId(), maxStack, durability, typeName, type);
+        super(SAPLING_OAK.name(), SAPLING_OAK.getId(), maxStack, typeName, type);
     }
 
     public Sapling getOtherStage()
@@ -106,6 +106,20 @@ public class Sapling extends BlockMaterialData
     public boolean isOccluding()
     {
         return false;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getBlastResistance()
+    {
+        return 0;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getHardness()
+    {
+        return 0;
     }
 
     public static Sapling getByID(final int id)

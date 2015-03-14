@@ -28,9 +28,23 @@ public class Dirt extends BlockMaterialData
         super(DIRT.name(), DIRT.getId(), enumName, (byte) type);
     }
 
-    public Dirt(final int maxStack, final int durability, final String typeName, final byte type)
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getBlastResistance()
     {
-        super(DIRT.name(), DIRT.getId(), maxStack, durability, typeName, type);
+        return 2.5f;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getHardness()
+    {
+        return 0.5f;
+    }
+
+    public Dirt(final int maxStack, final String typeName, final byte type)
+    {
+        super(DIRT.name(), DIRT.getId(), maxStack, typeName, type);
     }
 
     @Override

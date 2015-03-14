@@ -26,13 +26,6 @@ public abstract class Liquid extends BlockMaterialData
         this.liquidType = liquidType;
     }
 
-    public Liquid(final String enumName, final int id, final int maxStack, final int durability, final String typeName, final LiquidStage stage, final LiquidType liquidType)
-    {
-        super(enumName, id, maxStack, durability, typeName, stage.getDataValue());
-        this.stage = stage;
-        this.liquidType = liquidType;
-    }
-
     public abstract Liquid getStage(LiquidStage stage);
 
     public abstract Liquid getLiquidType(LiquidType type);
@@ -122,6 +115,12 @@ public abstract class Liquid extends BlockMaterialData
     public boolean isOccluding()
     {
         return false;
+    }
+
+    @Override
+    public boolean isReplaceable()
+    {
+        return true;
     }
 
     @Override

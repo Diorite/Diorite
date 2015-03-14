@@ -31,9 +31,9 @@ public class Planks extends BlockMaterialData
         super(PLANKS_QAK.name(), PLANKS_QAK.getId(), enumName, (byte) type);
     }
 
-    public Planks(final int maxStack, final int durability, final String typeName, final byte type)
+    public Planks(final int maxStack, final String typeName, final byte type)
     {
-        super(PLANKS_QAK.name(), PLANKS_QAK.getId(), maxStack, durability, typeName, type);
+        super(PLANKS_QAK.name(), PLANKS_QAK.getId(), maxStack, typeName, type);
     }
 
     @Override
@@ -58,6 +58,20 @@ public class Planks extends BlockMaterialData
     public boolean isBurnable()
     {
         return true;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getBlastResistance()
+    {
+        return 15;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getHardness()
+    {
+        return 2;
     }
 
     public static Planks getByID(final int id)
