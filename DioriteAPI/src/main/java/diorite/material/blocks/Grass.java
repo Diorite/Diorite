@@ -12,6 +12,7 @@ public class Grass extends BlockMaterialData
     public static final Grass GRASS = new Grass();
 
     private static final Map<String, Grass>    byName = new SimpleStringHashMap<>(1, .1f);
+    @SuppressWarnings("MagicNumber")
     private static final TByteObjectMap<Grass> byID   = new TByteObjectHashMap<>(1, .1f);
 
     protected Grass()

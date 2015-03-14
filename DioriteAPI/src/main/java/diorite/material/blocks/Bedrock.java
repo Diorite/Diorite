@@ -7,25 +7,25 @@ import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class Air extends BlockMaterialData
+public class Bedrock extends BlockMaterialData
 {
-    public static final Air AIR = new Air();
+    public static final Bedrock BEDROCK = new Bedrock();
 
-    private static final Map<String, Air>    byName = new SimpleStringHashMap<>(1, .1f);
+    private static final Map<String, Bedrock>    byName = new SimpleStringHashMap<>(1, .1f);
     @SuppressWarnings("MagicNumber")
-    private static final TByteObjectMap<Air> byID   = new TByteObjectHashMap<>(1, .1f);
+    private static final TByteObjectMap<Bedrock> byID   = new TByteObjectHashMap<>(1, .1f);
 
-    protected Air()
+    protected Bedrock()
     {
-        super("AIR", 0, 0, "AIR", (byte) 0x00);
+        super("BEDROCK", 7, "BEDROCK", (byte) 0x00);
     }
 
-    public Air(final String enumName, final int type)
+    public Bedrock(final String enumName, final int type)
     {
         super(AIR.name(), AIR.getId(), AIR.getMaxStack(), enumName, (byte) type);
     }
 
-    public Air(final int maxStack, final int durability, final String typeName, final byte type)
+    public Bedrock(final int maxStack, final int durability, final String typeName, final byte type)
     {
         super(AIR.name(), AIR.getId(), maxStack, durability, typeName, type);
     }
@@ -42,17 +42,17 @@ public class Air extends BlockMaterialData
         return getByID(id);
     }
 
-    public static Air getByID(final int id)
+    public static Bedrock getByID(final int id)
     {
         return byID.get((byte) id);
     }
 
-    public static Air getByEnumName(final String name)
+    public static Bedrock getByEnumName(final String name)
     {
         return byName.get(name);
     }
 
-    public static void register(final Air element)
+    public static void register(final Bedrock element)
     {
         byID.put((byte) element.getId(), element);
         byName.put(element.name(), element);
@@ -60,6 +60,6 @@ public class Air extends BlockMaterialData
 
     static
     {
-        Air.register(AIR);
+        Bedrock.register(BEDROCK);
     }
 }

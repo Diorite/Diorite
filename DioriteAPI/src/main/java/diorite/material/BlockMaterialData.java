@@ -5,8 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public abstract class BlockMaterialData extends Material
 {
-    private final String typeName;
-    private final byte   type;
+    protected final String typeName;
+    protected final byte   type;
 
     public BlockMaterialData(final String enumName, final int id, final String typeName, final byte type)
     {

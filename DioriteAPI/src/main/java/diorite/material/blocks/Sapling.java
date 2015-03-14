@@ -9,16 +9,24 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Sapling extends BlockMaterialData
 {
-    public static final Sapling SAPLING_OAK      = new Sapling();
-    public static final Sapling SAPLING_SPRUCE   = new Sapling("SPRUCE", 0x01);
-    public static final Sapling SAPLING_BIRCH    = new Sapling("BIRCH", 0x02);
-    public static final Sapling SAPLING_JUNGLE   = new Sapling("JUNGLE", 0x03);
-    public static final Sapling SAPLING_ACACIA   = new Sapling("ACACIA", 0x04);
-    public static final Sapling SAPLING_DARK_OAK = new Sapling("DARK_OAK", 0x05);
-    // TODO: how to implement other sapling types? (Stage 1)
+    public static final byte OLD_FLAG = 0x08;
 
-    private static final Map<String, Sapling>    byName = new SimpleStringHashMap<>(6, .1f);
-    private static final TByteObjectMap<Sapling> byID   = new TByteObjectHashMap<>(6, .1f);
+    public static final Sapling SAPLING_OAK            = new Sapling();
+    public static final Sapling SAPLING_SPRUCE         = new Sapling("SPRUCE", 0x01);
+    public static final Sapling SAPLING_BIRCH          = new Sapling("BIRCH", 0x02);
+    public static final Sapling SAPLING_JUNGLE         = new Sapling("JUNGLE", 0x03);
+    public static final Sapling SAPLING_ACACIA         = new Sapling("ACACIA", 0x04);
+    public static final Sapling SAPLING_DARK_OAK       = new Sapling("DARK_OAK", 0x05);
+    public static final Sapling SAPLING_QAK_OLDER      = new Sapling("QAK_OLDER", SAPLING_OAK.getType() | OLD_FLAG);
+    public static final Sapling SAPLING_SPRUCE_OLDER   = new Sapling("SPRUCE_OLDER", SAPLING_SPRUCE.getType() | OLD_FLAG);
+    public static final Sapling SAPLING_BIRCH_OLDER    = new Sapling("BIRCH_OLDER", SAPLING_BIRCH.getType() | OLD_FLAG);
+    public static final Sapling SAPLING_JUNGLE_OLDER   = new Sapling("JUNGLE_OLDER", SAPLING_JUNGLE.getType() | OLD_FLAG);
+    public static final Sapling SAPLING_ACACIA_OLDER   = new Sapling("ACACIA_OLDER", SAPLING_ACACIA.getType() | OLD_FLAG);
+    public static final Sapling SAPLING_DARK_OAK_OLDER = new Sapling("DARK_OAK_OLDER", SAPLING_DARK_OAK.getType() | OLD_FLAG);
+
+    private static final Map<String, Sapling>    byName = new SimpleStringHashMap<>(12, .1f);
+    @SuppressWarnings("MagicNumber")
+    private static final TByteObjectMap<Sapling> byID   = new TByteObjectHashMap<>(12, .1f);
 
     protected Sapling()
     {
@@ -33,6 +41,29 @@ public class Sapling extends BlockMaterialData
     public Sapling(final int maxStack, final int durability, final String typeName, final byte type)
     {
         super(SAPLING_OAK.name(), SAPLING_OAK.getId(), maxStack, durability, typeName, type);
+    }
+
+    public Sapling getOtherStage()
+    {
+        return Sapling.getByID(this.getId() ^ (1 << OLD_FLAG));
+    }
+
+    public Sapling normalize() // make sure that sappling is from first stage (NEW)
+    {
+        if (this.getStage() == SaplingStage.NEW)
+        {
+            return this;
+        }
+        return this.getOtherStage();
+    }
+
+    public SaplingStage getStage()
+    {
+        if ((this.type & OLD_FLAG) != 0)
+        {
+            return SaplingStage.OLDER;
+        }
+        return SaplingStage.NEW;
     }
 
     @Override
@@ -71,5 +102,11 @@ public class Sapling extends BlockMaterialData
         Sapling.register(SAPLING_JUNGLE);
         Sapling.register(SAPLING_ACACIA);
         Sapling.register(SAPLING_DARK_OAK);
+    }
+
+    public enum SaplingStage
+    {
+        NEW,
+        OLDER
     }
 }

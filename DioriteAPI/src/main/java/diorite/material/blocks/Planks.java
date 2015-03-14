@@ -17,6 +17,7 @@ public class Planks extends BlockMaterialData
     public static final Planks PLANKS_DARK_OAK = new Planks("DARK_OAK", 0x05);
 
     private static final Map<String, Planks>    byName = new SimpleStringHashMap<>(6, .1f);
+    @SuppressWarnings("MagicNumber")
     private static final TByteObjectMap<Planks> byID   = new TByteObjectHashMap<>(6, .1f);
 
     protected Planks()

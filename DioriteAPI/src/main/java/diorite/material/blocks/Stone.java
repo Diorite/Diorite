@@ -18,6 +18,7 @@ public class Stone extends BlockMaterialData
     public static final Stone STONE_POLISHED_ANDESITE = new Stone("POLISHED_ANDESITE", 0x06);
 
     private static final Map<String, Stone>    byName = new SimpleStringHashMap<>(7, .1f);
+    @SuppressWarnings("MagicNumber")
     private static final TByteObjectMap<Stone> byID   = new TByteObjectHashMap<>(7, .1f);
 
     protected Stone()

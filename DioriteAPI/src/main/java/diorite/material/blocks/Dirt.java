@@ -14,6 +14,7 @@ public class Dirt extends BlockMaterialData
     public static final Dirt DIRT_PODZOL      = new Dirt("PODZOL", 0x02);
 
     private static final Map<String, Dirt>    byName = new SimpleStringHashMap<>(3, .1f);
+    @SuppressWarnings("MagicNumber")
     private static final TByteObjectMap<Dirt> byID   = new TByteObjectHashMap<>(3, .1f);
 
     protected Dirt()

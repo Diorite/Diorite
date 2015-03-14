@@ -12,6 +12,7 @@ public class Cobblestone extends BlockMaterialData
     public static final Cobblestone COBBLESTONE = new Cobblestone();
 
     private static final Map<String, Cobblestone>    byName = new SimpleStringHashMap<>(1, .1f);
+    @SuppressWarnings("MagicNumber")
     private static final TByteObjectMap<Cobblestone> byID   = new TByteObjectHashMap<>(1, .1f);
 
     protected Cobblestone()

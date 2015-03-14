@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.material.blocks.Air;
+import diorite.material.blocks.Bedrock;
 import diorite.material.blocks.Cobblestone;
 import diorite.material.blocks.Dirt;
 import diorite.material.blocks.Grass;
@@ -28,7 +29,7 @@ public class Material
     public static final Cobblestone COBBLESTONE                = Cobblestone.COBBLESTONE;
     public static final Planks      PLANKS                     = Planks.PLANKS_QAK;
     public static final Sapling     SAPLING                    = Sapling.SAPLING_OAK;
-    public static final Material    BEDROCK                    = new Material("BEDROCK", 7);
+    public static final Bedrock     BEDROCK                    = Bedrock.BEDROCK;
     public static final Material    WATER                      = new Material("WATER", 8);
     public static final Material    STATIONARY_WATER           = new Material("STATIONARY_WATER", 9);
     public static final Material    LAVA                       = new Material("LAVA", 10);
