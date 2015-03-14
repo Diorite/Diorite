@@ -22,6 +22,8 @@ import diorite.chat.serialize.ComponentSerializer;
 import diorite.entity.attrib.AttributeModifer;
 import diorite.entity.attrib.AttributeProperty;
 import diorite.entity.attrib.AttributeType;
+import diorite.impl.entity.attrib.AttributeModiferImpl;
+import diorite.impl.entity.attrib.AttributePropertyImpl;
 import diorite.impl.map.chunk.ChunkImpl;
 import diorite.impl.map.chunk.ChunkPartImpl;
 import diorite.map.chunk.Chunk;
@@ -54,12 +56,12 @@ public class PacketDataSerializer extends ByteBuf
         return 5;
     }
 
-    public AttributeModifer readAttributeModifer()
+    public AttributeModiferImpl readAttributeModifer()
     {
         final UUID uuid = this.readUUID();
         final double value = this.readDouble();
         final byte operation = this.readByte();
-        return new AttributeModifer(uuid, value, operation);
+        return new AttributeModiferImpl(uuid, value, operation);
     }
 
     public void writeAttributeModifer(final AttributeModifer attribute)
@@ -69,7 +71,7 @@ public class PacketDataSerializer extends ByteBuf
         this.writeByte(attribute.getOperation());
     }
 
-    public AttributeProperty readAttributeProperty()
+    public AttributePropertyImpl readAttributeProperty()
     {
         final AttributeType type = AttributeType.getByKey(this.readText(Short.MAX_VALUE));
         final double value = this.readDouble();
@@ -79,7 +81,7 @@ public class PacketDataSerializer extends ByteBuf
         {
             mods.add(this.readAttributeModifer());
         }
-        return new AttributeProperty(type, mods, value);
+        return new AttributePropertyImpl(type, mods, value);
     }
 
     public void writeAttributeProperty(final AttributeProperty attribute)

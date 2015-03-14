@@ -2,6 +2,9 @@ package diorite.impl.map.chunk;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import diorite.map.chunk.Chunk;
 import diorite.map.chunk.ChunkPos;
 
@@ -106,5 +109,11 @@ public class ChunkImpl implements Chunk
     public ChunkPartImpl[] getChunkParts()
     {
         return this.chunkParts;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("pos", this.pos).append("usages", this.usages).toString();
     }
 }

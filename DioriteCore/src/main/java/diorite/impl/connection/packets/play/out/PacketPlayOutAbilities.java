@@ -14,6 +14,11 @@ import diorite.impl.connection.packets.play.PacketPlayOutListener;
 @PacketClass(id = 0x39, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutAbilities implements PacketPlayOut
 {
+    public static final byte INVULNERABLE_FLAG = 0x01;
+    public static final byte FLYING_FLAG = 0x02;
+    public static final byte FLY_FLAG = 0x04;
+    public static final byte INSTANTLY_BUILD_FLAG = 0x08;
+
     private boolean isInvulnerable;
     private boolean isFlying;
     private boolean canFly;
@@ -39,10 +44,10 @@ public class PacketPlayOutAbilities implements PacketPlayOut
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         final byte flags = data.readByte();
-        this.isInvulnerable = ((flags & 1) > 0);
-        this.isFlying = ((flags & 2) > 0);
-        this.canFly = ((flags & 4) > 0);
-        this.canInstantlyBuild = ((flags & 8) > 0);
+        this.isInvulnerable = ((flags & INVULNERABLE_FLAG) > 0);
+        this.isFlying = ((flags & FLYING_FLAG) > 0);
+        this.canFly = ((flags & FLY_FLAG) > 0);
+        this.canInstantlyBuild = ((flags & INSTANTLY_BUILD_FLAG) > 0);
         this.flyingSpeed = data.readFloat();
         this.walkingSpeed = data.readFloat();
     }
@@ -53,19 +58,19 @@ public class PacketPlayOutAbilities implements PacketPlayOut
         byte flags = 0;
         if (this.isInvulnerable)
         {
-            -- flags;
+            flags |= INVULNERABLE_FLAG;
         }
         if (this.isFlying)
         {
-            flags |= 2;
+            flags |= FLYING_FLAG;
         }
         if (this.canFly)
         {
-            flags |= 4;
+            flags |= FLY_FLAG;
         }
         if (this.canInstantlyBuild)
         {
-            flags |= 8;
+            flags |= INSTANTLY_BUILD_FLAG;
         }
         data.writeByte(flags);
         data.writeFloat(this.flyingSpeed);
