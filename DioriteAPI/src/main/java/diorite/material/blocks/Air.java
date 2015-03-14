@@ -9,11 +9,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Air extends BlockMaterialData
 {
-    public static final Air AIR = new Air();
+    public static final byte USED_DATA_VALUES = 1;
 
-    private static final Map<String, Air>    byName = new SimpleStringHashMap<>(1, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TByteObjectMap<Air> byID   = new TByteObjectHashMap<>(1, .1f);
+    public static final Air  AIR              = new Air();
+
+    private static final Map<String, Air>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final TByteObjectMap<Air> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
     protected Air()
     {
@@ -40,6 +41,24 @@ public class Air extends BlockMaterialData
     public BlockMaterialData getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public boolean isSolid()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isTransparent()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isOccluding()
+    {
+        return false;
     }
 
     public static Air getByID(final int id)

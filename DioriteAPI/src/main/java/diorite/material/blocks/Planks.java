@@ -9,6 +9,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Planks extends BlockMaterialData
 {
+    public static final byte USED_DATA_VALUES = 6;
+
     public static final Planks PLANKS_QAK      = new Planks();
     public static final Planks PLANKS_SPRUCE   = new Planks("SPRUCE", 0x01);
     public static final Planks PLANKS_BIRCH    = new Planks("BIRCH", 0x02);
@@ -16,9 +18,8 @@ public class Planks extends BlockMaterialData
     public static final Planks PLANKS_ACACIA   = new Planks("ACACIA", 0x04);
     public static final Planks PLANKS_DARK_OAK = new Planks("DARK_OAK", 0x05);
 
-    private static final Map<String, Planks>    byName = new SimpleStringHashMap<>(6, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TByteObjectMap<Planks> byID   = new TByteObjectHashMap<>(6, .1f);
+    private static final Map<String, Planks>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final TByteObjectMap<Planks> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
     protected Planks()
     {
@@ -45,6 +46,18 @@ public class Planks extends BlockMaterialData
     public BlockMaterialData getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public boolean isFlammable()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isBurnable()
+    {
+        return true;
     }
 
     public static Planks getByID(final int id)

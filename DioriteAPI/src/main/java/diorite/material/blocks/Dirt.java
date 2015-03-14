@@ -9,13 +9,14 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Dirt extends BlockMaterialData
 {
+    public static final byte USED_DATA_VALUES = 3;
+
     public static final Dirt DIRT             = new Dirt();
     public static final Dirt DIRT_COARSE_DIRT = new Dirt("COARSE_DIRT", 0x01);
     public static final Dirt DIRT_PODZOL      = new Dirt("PODZOL", 0x02);
 
-    private static final Map<String, Dirt>    byName = new SimpleStringHashMap<>(3, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TByteObjectMap<Dirt> byID   = new TByteObjectHashMap<>(3, .1f);
+    private static final Map<String, Dirt>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final TByteObjectMap<Dirt> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
     protected Dirt()
     {

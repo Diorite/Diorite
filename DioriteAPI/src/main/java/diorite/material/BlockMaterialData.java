@@ -44,6 +44,54 @@ public abstract class BlockMaterialData extends Material
     public abstract BlockMaterialData getType(final int id);
 
     @Override
+    public boolean isBlock()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isSolid()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isTransparent()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isFlammable()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isBurnable()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isOccluding()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean hasGravity()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isEdible()
+    {
+        return false;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("typeName", this.typeName).append("type", this.type).toString();

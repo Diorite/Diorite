@@ -9,11 +9,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Bedrock extends BlockMaterialData
 {
+    public static final byte USED_DATA_VALUES = 1;
+
     public static final Bedrock BEDROCK = new Bedrock();
 
-    private static final Map<String, Bedrock>    byName = new SimpleStringHashMap<>(1, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TByteObjectMap<Bedrock> byID   = new TByteObjectHashMap<>(1, .1f);
+    private static final Map<String, Bedrock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final TByteObjectMap<Bedrock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
     protected Bedrock()
     {

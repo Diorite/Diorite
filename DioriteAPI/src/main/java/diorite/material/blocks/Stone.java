@@ -9,6 +9,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Stone extends BlockMaterialData
 {
+    public static final byte USED_DATA_VALUES = 7;
+
     public static final Stone STONE                   = new Stone();
     public static final Stone STONE_GRANITE           = new Stone("GRANITE", 0x01);
     public static final Stone STONE_POLISHED_GRANITE  = new Stone("POLISHED_GRANITE", 0x02);
@@ -17,9 +19,8 @@ public class Stone extends BlockMaterialData
     public static final Stone STONE_ANDESITE          = new Stone("ANDESITE", 0x05);
     public static final Stone STONE_POLISHED_ANDESITE = new Stone("POLISHED_ANDESITE", 0x06);
 
-    private static final Map<String, Stone>    byName = new SimpleStringHashMap<>(7, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TByteObjectMap<Stone> byID   = new TByteObjectHashMap<>(7, .1f);
+    private static final Map<String, Stone>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final TByteObjectMap<Stone> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
     protected Stone()
     {

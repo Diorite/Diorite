@@ -9,6 +9,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Sapling extends BlockMaterialData
 {
+    public static final byte USED_DATA_VALUES = 12;
     public static final byte OLD_FLAG = 0x08;
 
     public static final Sapling SAPLING_OAK            = new Sapling();
@@ -24,9 +25,8 @@ public class Sapling extends BlockMaterialData
     public static final Sapling SAPLING_ACACIA_OLDER   = new Sapling("ACACIA_OLDER", SAPLING_ACACIA.getType() | OLD_FLAG);
     public static final Sapling SAPLING_DARK_OAK_OLDER = new Sapling("DARK_OAK_OLDER", SAPLING_DARK_OAK.getType() | OLD_FLAG);
 
-    private static final Map<String, Sapling>    byName = new SimpleStringHashMap<>(12, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TByteObjectMap<Sapling> byID   = new TByteObjectHashMap<>(12, .1f);
+    private static final Map<String, Sapling>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final TByteObjectMap<Sapling> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
     protected Sapling()
     {
@@ -76,6 +76,36 @@ public class Sapling extends BlockMaterialData
     public BlockMaterialData getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public boolean isSolid()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isTransparent()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isFlammable()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isBurnable()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isOccluding()
+    {
+        return false;
     }
 
     public static Sapling getByID(final int id)
