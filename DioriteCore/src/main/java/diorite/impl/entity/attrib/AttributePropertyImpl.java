@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import diorite.entity.attrib.AttributeModifer;
 import diorite.entity.attrib.AttributeProperty;
 import diorite.entity.attrib.AttributeType;
-import diorite.utils.DioriteMathUtils;
+import diorite.utils.math.DioriteMathUtils;
 
 public class AttributePropertyImpl implements AttributeProperty
 {

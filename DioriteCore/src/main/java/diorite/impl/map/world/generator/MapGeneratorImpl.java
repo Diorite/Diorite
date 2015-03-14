@@ -1,7 +1,7 @@
 package diorite.impl.map.world.generator;
 
 import diorite.impl.map.chunk.ChunkImpl;
-import diorite.utils.DioriteMathUtils;
+import diorite.utils.math.DioriteRandomUtils;
 
 public class MapGeneratorImpl // temp code, TODO
 {
@@ -13,7 +13,7 @@ public class MapGeneratorImpl // temp code, TODO
             {
                 for (int y = 0; y < 61; y++)
                 {
-                    chunk.setBlock(x, y, z, 1, DioriteMathUtils.getRandInt(3, 4));
+                    chunk.setBlock(x, y, z, 1, DioriteRandomUtils.getRandInt(3, 4));
                 }
             }
         }

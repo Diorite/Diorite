@@ -27,7 +27,7 @@ import diorite.impl.entity.attrib.AttributePropertyImpl;
 import diorite.impl.map.chunk.ChunkImpl;
 import diorite.impl.map.chunk.ChunkPartImpl;
 import diorite.map.chunk.Chunk;
-import diorite.utils.DioriteMathUtils;
+import diorite.utils.math.DioriteMathUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufProcessor;
