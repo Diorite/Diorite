@@ -128,4 +128,17 @@ public abstract class Liquid extends BlockMaterialData
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("stage", this.stage).append("liquidType", this.liquidType).toString();
     }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public float getBlastResistance()
+    {
+        return 500;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return 100;
+    }
 }

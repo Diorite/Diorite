@@ -38,6 +38,14 @@ public class IntRange
     }
 
     @Override
+    public int hashCode()
+    {
+        int result = this.min;
+        result = (31 * result) + this.max;
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object o)
     {
         if (this == o)
@@ -53,14 +61,6 @@ public class IntRange
 
         return (this.max == byteRange.max) && (this.min == byteRange.min);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = this.min;
-        result = (31 * result) + this.max;
-        return result;
     }
 
     @Override

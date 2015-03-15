@@ -42,6 +42,14 @@ public class FloatRange
     }
 
     @Override
+    public int hashCode()
+    {
+        int result = ((this.min != + 0.0f) ? Float.floatToIntBits(this.min) : 0);
+        result = (31 * result) + ((this.max != + 0.0f) ? Float.floatToIntBits(this.max) : 0);
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object o)
     {
         if (this == o)
@@ -57,14 +65,6 @@ public class FloatRange
 
         return (Float.compare(that.max, this.max) == 0) && (Float.compare(that.min, this.min) == 0);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = ((this.min != + 0.0f) ? Float.floatToIntBits(this.min) : 0);
-        result = (31 * result) + ((this.max != + 0.0f) ? Float.floatToIntBits(this.max) : 0);
-        return result;
     }
 
     @Override

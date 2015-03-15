@@ -1,5 +1,8 @@
 package diorite.entity.attrib;
 
+import static diorite.cfg.magic.MagicNumbers.*;
+
+
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,13 +13,13 @@ import diorite.utils.collections.SimpleStringHashMap;
 @SuppressWarnings("MagicNumber")
 public class AttributeType
 {
-    public static final  AttributeType              GENERIC_MAX_HEALTH           = new AttributeType("GENERIC_MAX_HEALTH", "generic.maxHealth", 20.0, 0.0, Double.MAX_VALUE);
-    public static final  AttributeType              GENERIC_FOLLOW_RANGE         = new AttributeType("GENERIC_FOLLOW_RANGE", "generic.followRange", 32.0, 0.0, 2048.0);
-    public static final  AttributeType              GENERIC_KNOCKBACK_RESISTANCE = new AttributeType("GENERIC_KNOCKBACK_RESISTANCE", "generic.knockbackResistance", 0, 0.0, 1.0);
-    public static final  AttributeType              GENERIC_MOVEMENT_SPEED       = new AttributeType("GENERIC_MOVEMENT_SPEED", "generic.movementSpeed", 0.699999988079071, 0.0, Double.MAX_VALUE);
-    public static final  AttributeType              GENERIC_ATTACK_DAMAGE        = new AttributeType("GENERIC_ATTACK_DAMAGE", "generic.attackDamage", 2.0, 0.0, Double.MAX_VALUE);
-    public static final  AttributeType              HORSE_JUMP_STRENGTH          = new AttributeType("HORSE_JUMP_STRENGTH", "horse.jumpStrength", 0.7, 0.0, 2.0);
-    public static final  AttributeType              ZOMBIE_SPAWN_REINFORCMENTS   = new AttributeType("ZOMBIE_SPAWN_REINFORCMENTS", "zombie.spawnReinforcements", 0.0, 0.0, 1.0);
+    public static final  AttributeType              GENERIC_MAX_HEALTH           = new AttributeType("GENERIC_MAX_HEALTH", "generic.maxHealth", ATTRIBUTES__GENERIC_MAX_HEALTH__DEFAULT, ATTRIBUTES__GENERIC_MAX_HEALTH__MIN, ATTRIBUTES__GENERIC_MAX_HEALTH__MAX);
+    public static final  AttributeType              GENERIC_FOLLOW_RANGE         = new AttributeType("GENERIC_FOLLOW_RANGE", "generic.followRange", ATTRIBUTES__GENERIC_FOLLOW_RANGE__DEFAULT, ATTRIBUTES__GENERIC_FOLLOW_RANGE__MIN, ATTRIBUTES__GENERIC_FOLLOW_RANGE__MAX);
+    public static final  AttributeType              GENERIC_KNOCKBACK_RESISTANCE = new AttributeType("GENERIC_KNOCKBACK_RESISTANCE", "generic.knockbackResistance", ATTRIBUTES__GENERIC_KNOCKBACK_RESISTANCE__DEFAULT, ATTRIBUTES__GENERIC_KNOCKBACK_RESISTANCE__MIN, ATTRIBUTES__GENERIC_KNOCKBACK_RESISTANCE__MAX);
+    public static final  AttributeType              GENERIC_MOVEMENT_SPEED       = new AttributeType("GENERIC_MOVEMENT_SPEED", "generic.movementSpeed", ATTRIBUTES__GENERIC_MOVEMENT_SPEED__DEFAULT, ATTRIBUTES__GENERIC_MOVEMENT_SPEED__MIN, ATTRIBUTES__GENERIC_MOVEMENT_SPEED__MAX);
+    public static final  AttributeType              GENERIC_ATTACK_DAMAGE        = new AttributeType("GENERIC_ATTACK_DAMAGE", "generic.attackDamage", ATTRIBUTES__GENERIC_ATTACK_DAMAGE__DEFAULT, ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MIN, ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MAX);
+    public static final  AttributeType              HORSE_JUMP_STRENGTH          = new AttributeType("HORSE_JUMP_STRENGTH", "horse.jumpStrength", ATTRIBUTES__HORSE_JUMP_STRENGTH__DEFAULT, ATTRIBUTES__HORSE_JUMP_STRENGTH__MIN, ATTRIBUTES__HORSE_JUMP_STRENGTH__MAX);
+    public static final  AttributeType              ZOMBIE_SPAWN_REINFORCMENTS   = new AttributeType("ZOMBIE_SPAWN_REINFORCMENTS", "zombie.spawnReinforcements", ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__DEFAULT, ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__MIN, ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__MAX);
     private static final Map<String, AttributeType> byName                       = new SimpleStringHashMap<>(7, .1f);
     private static final Map<String, AttributeType> byKey                        = new SimpleStringHashMap<>(7, .1f);
     private final String enumName;
@@ -81,6 +84,7 @@ public class AttributeType
         byName.put(element.name(), element);
         byKey.put(element.getKey(), element);
     }
+
     static
     {
         register(GENERIC_MAX_HEALTH);

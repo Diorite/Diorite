@@ -2,6 +2,7 @@ package diorite.material.blocks;
 
 import java.util.Map;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.material.BlockMaterialData;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
@@ -26,23 +27,21 @@ public class Cobblestone extends BlockMaterialData
         super(COBBLESTONE.name(), COBBLESTONE.getId(), enumName, (byte) type);
     }
 
-    @SuppressWarnings("MagicNumber")
-    @Override
-    public float getBlastResistance()
-    {
-        return 30;
-    }
-
-    @SuppressWarnings("MagicNumber")
-    @Override
-    public float getHardness()
-    {
-        return 2;
-    }
-
     public Cobblestone(final int maxStack, final String typeName, final byte type)
     {
         super(COBBLESTONE.name(), COBBLESTONE.getId(), maxStack, typeName, type);
+    }
+
+    @Override
+    public float getBlastResistance()
+    {
+        return MagicNumbers.MATERIAL__COBBLESTONE__BLAST_RESISTANCE;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return MagicNumbers.MATERIAL__COBBLESTONE__HARDNESS;
     }
 
     @Override

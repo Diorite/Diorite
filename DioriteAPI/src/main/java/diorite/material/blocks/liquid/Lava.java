@@ -2,6 +2,7 @@ package diorite.material.blocks.liquid;
 
 import java.util.Map;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -87,19 +88,6 @@ public class Lava extends Liquid
     }
 
     @Override
-    public Lava getType(final String name)
-    {
-        return byName.get(name);
-    }
-
-    @SuppressWarnings("MagicNumber")
-    @Override
-    public Lava getType(final int id)
-    {
-        return this.isStill() ? byID.get((byte) (id + 16)) : byID.get((byte) id);
-    }
-
-    @Override
     public Lava getNormalType()
     {
         return (Lava) super.getNormalType();
@@ -151,6 +139,31 @@ public class Lava extends Liquid
     public Lava source()
     {
         return (Lava) super.source();
+    }
+
+    @Override
+    public float getBlastResistance()
+    {
+        return this.isStill() ? MagicNumbers.MATERIAL__LAVA_STILL__BLAST_RESISTANCE : MagicNumbers.MATERIAL__LAVA__BLAST_RESISTANCE;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return this.isStill() ? MagicNumbers.MATERIAL__LAVA_STILL__HARDNESS : MagicNumbers.MATERIAL__LAVA__HARDNESS;
+    }
+
+    @Override
+    public Lava getType(final String name)
+    {
+        return byName.get(name);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public Lava getType(final int id)
+    {
+        return this.isStill() ? byID.get((byte) (id + 16)) : byID.get((byte) id);
     }
 
     @SuppressWarnings("MagicNumber")

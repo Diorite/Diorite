@@ -1,7 +1,6 @@
 package diorite.entity.attrib;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface Attributable
@@ -10,13 +9,15 @@ public interface Attributable
 
     void removeAttributeProperty(AttributeType type);
 
-    void removeModifer(AttributeType type, UUID uuid);
+    void removeModifier(AttributeType type, UUID uuid);
 
     void addAttributeProperty(AttributeProperty property);
 
-    Collection<AttributeModifer> getModifers(AttributeType type);
+    Collection<AttributeModifier> getModifiers(AttributeType type);
 
-    Optional<AttributeProperty> getProperty(AttributeType type);
+    AttributeProperty getProperty(AttributeType type);
 
-    void addModifer(AttributeType type, AttributeModifer modifer);
+    AttributeProperty getProperty(AttributeType type, double value);
+
+    void addModifier(AttributeType type, AttributeModifier modifer);
 }

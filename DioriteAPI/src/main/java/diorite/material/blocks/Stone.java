@@ -2,6 +2,7 @@ package diorite.material.blocks;
 
 import java.util.Map;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.material.BlockMaterialData;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
@@ -32,23 +33,21 @@ public class Stone extends BlockMaterialData
         super(STONE.name(), STONE.getId(), enumName, (byte) type);
     }
 
-    @SuppressWarnings("MagicNumber")
-    @Override
-    public float getBlastResistance()
-    {
-        return 30;
-    }
-
-    @SuppressWarnings("MagicNumber")
-    @Override
-    public float getHardness()
-    {
-        return 1.5f;
-    }
-
     public Stone(final int maxStack, final String typeName, final byte type)
     {
         super(STONE.name(), STONE.getId(), maxStack, typeName, type);
+    }
+
+    @Override
+    public float getBlastResistance()
+    {
+        return MagicNumbers.MATERIAL__STONE__BLAST_RESISTANCE;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return MagicNumbers.MATERIAL__STONE__HARDNESS;
     }
 
     @Override

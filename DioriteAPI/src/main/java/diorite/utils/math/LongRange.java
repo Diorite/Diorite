@@ -38,6 +38,14 @@ public class LongRange
     }
 
     @Override
+    public int hashCode()
+    {
+        int result = (int) (this.min ^ (this.min >>> 32));
+        result = (31 * result) + (int) (this.max ^ (this.max >>> 32));
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object o)
     {
         if (this == o)
@@ -53,14 +61,6 @@ public class LongRange
 
         return (this.max == longRange.max) && (this.min == longRange.min);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = (int) (this.min ^ (this.min >>> 32));
-        result = (31 * result) + (int) (this.max ^ (this.max >>> 32));
-        return result;
     }
 
     @Override

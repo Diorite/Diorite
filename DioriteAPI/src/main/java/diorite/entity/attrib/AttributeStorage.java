@@ -1,7 +1,6 @@
 package diorite.entity.attrib;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
 import diorite.GameObject;
@@ -10,15 +9,19 @@ public interface AttributeStorage
 {
     void removeAttributeProperty(AttributeType type);
 
-    GameObject getGameObject();
+    void removeModifier(AttributeType type, UUID uuid);
 
     void addAttributeProperty(AttributeProperty property);
 
-    Optional<AttributeProperty> getProperty(AttributeType type);
+    Collection<AttributeProperty> getProperties();
 
-    Collection<AttributeModifer> getModifers(AttributeType type);
+    Collection<AttributeModifier> getModifiers(AttributeType type);
 
-    void addModifer(AttributeType type, AttributeModifer modifer);
+    AttributeProperty getProperty(AttributeType type);
 
-    void removeModifer(AttributeType type, UUID uuid);
+    AttributeProperty getProperty(AttributeType type, double value);
+
+    void addModifier(AttributeType type, AttributeModifier modifer);
+
+    GameObject getGameObject();
 }

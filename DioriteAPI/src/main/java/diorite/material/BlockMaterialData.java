@@ -111,9 +111,11 @@ public abstract class BlockMaterialData extends Material
     }
 
     @Override
-    public String toString()
+    public int hashCode()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("typeName", this.typeName).append("type", this.type).toString();
+        int result = super.hashCode();
+        result = (31 * result) + this.typeName.hashCode();
+        return result;
     }
 
     @Override
@@ -138,10 +140,8 @@ public abstract class BlockMaterialData extends Material
     }
 
     @Override
-    public int hashCode()
+    public String toString()
     {
-        int result = super.hashCode();
-        result = (31 * result) + this.typeName.hashCode();
-        return result;
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("typeName", this.typeName).append("type", this.type).toString();
     }
 }

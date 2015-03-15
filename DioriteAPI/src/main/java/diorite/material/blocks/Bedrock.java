@@ -2,6 +2,7 @@ package diorite.material.blocks;
 
 import java.util.Map;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.material.BlockMaterialData;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
@@ -26,22 +27,21 @@ public class Bedrock extends BlockMaterialData
         super(AIR.name(), AIR.getId(), AIR.getMaxStack(), enumName, (byte) type);
     }
 
-    @SuppressWarnings("MagicNumber")
+    public Bedrock(final int maxStack, final String typeName, final byte type)
+    {
+        super(AIR.name(), AIR.getId(), maxStack, typeName, type);
+    }
+
     @Override
     public float getBlastResistance()
     {
-        return 18_000_000;
+        return MagicNumbers.MATERIAL__BEDROCK__BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return -1;
-    }
-
-    public Bedrock(final int maxStack, final String typeName, final byte type)
-    {
-        super(AIR.name(), AIR.getId(), maxStack, typeName, type);
+        return MagicNumbers.MATERIAL__BEDROCK__HARDNESS;
     }
 
     @Override

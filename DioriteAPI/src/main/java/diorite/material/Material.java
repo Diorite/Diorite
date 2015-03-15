@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.material.blocks.Air;
 import diorite.material.blocks.Bedrock;
 import diorite.material.blocks.Cobblestone;
@@ -20,24 +21,22 @@ import diorite.utils.math.IntRange;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
 public abstract class Material
 {
-    protected static final float SLOW_GROW = 0.1f;
+    protected static final float SLOW_GROW      = 0.1f;
+    public static final    int   MATERIALS_SIZE = 385;
 
-    public static final int DEFAULT_STACK_SIZE = 64;
-
-    public static final Air         AIR         = Air.AIR;
-    public static final Stone       STONE       = Stone.STONE;
-    public static final Grass       GRASS       = Grass.GRASS;
-    public static final Dirt        DIRT        = Dirt.DIRT;
-    public static final Cobblestone COBBLESTONE = Cobblestone.COBBLESTONE;
-    public static final Planks      PLANKS      = Planks.PLANKS_QAK;
-    public static final Sapling     SAPLING     = Sapling.SAPLING_OAK;
-    public static final Bedrock     BEDROCK     = Bedrock.BEDROCK;
-    public static final Water       WATER       = Water.WATER_SOURCE;
-    public static final Lava        LAVA        = Lava.LAVA_SOURCE;
-//    public static final Material    SAND                       = new Material("SAND", 12);
+    public static final  Air                     AIR         = Air.AIR;
+    public static final  Stone                   STONE       = Stone.STONE;
+    public static final  Grass                   GRASS       = Grass.GRASS;
+    public static final  Dirt                    DIRT        = Dirt.DIRT;
+    public static final  Cobblestone             COBBLESTONE = Cobblestone.COBBLESTONE;
+    public static final  Planks                  PLANKS      = Planks.PLANKS_QAK;
+    public static final  Sapling                 SAPLING     = Sapling.SAPLING_OAK;
+    public static final  Bedrock                 BEDROCK     = Bedrock.BEDROCK;
+    public static final  Water                   WATER       = Water.WATER_SOURCE;
+    public static final  Lava                    LAVA        = Lava.LAVA_SOURCE;
+    //    public static final Material    SAND                       = new Material("SAND", 12);
 //    public static final Material    GRAVEL                     = new Material("GRAVEL", 13);
 //    public static final Material    GOLD_ORE                   = new Material("GOLD_ORE", 14);
 //    public static final Material    IRON_ORE                   = new Material("IRON_ORE", 15);
@@ -223,9 +222,7 @@ public abstract class Material
 //    public static final Material    JUNGLE_DOOR                = new Material("JUNGLE_DOOR", 195);
 //    public static final Material    ACACIA_DOOR                = new Material("ACACIA_DOOR", 196);
 //    public static final Material    DARK_OAK_DOOR              = new Material("DARK_OAK_DOOR", 197);
-
     // ----- Item Separator -----
-
     //    public static final  Material                IRON_SPADE           = new Material("IRON_SPADE", 256, 1, 250);
 //    public static final  Material                IRON_PICKAXE         = new Material("IRON_PICKAXE", 257, 1, 250);
 //    public static final  Material                IRON_AXE             = new Material("IRON_AXE", 258, 1, 250);
@@ -413,15 +410,15 @@ public abstract class Material
 //    public static final  Material                RECORD_10            = new Material("RECORD_10", 2265, 1);
 //    public static final  Material                RECORD_11            = new Material("RECORD_11", 2266, 1);
 //    public static final  Material                RECORD_12            = new Material("RECORD_12", 2267, 1);
-    private static final Map<String, Material>   byName = new SimpleStringHashMap<>(385, .1f);
-    private static final TIntObjectMap<Material> byID   = new TIntObjectHashMap<>(385, .1f);
+    private static final Map<String, Material>   byName      = new SimpleStringHashMap<>(MATERIALS_SIZE, SLOW_GROW);
+    private static final TIntObjectMap<Material> byID        = new TIntObjectHashMap<>(MATERIALS_SIZE, SLOW_GROW);
     private final String enumName;
     private final int    id;
     private final int    maxStack;
 
     public Material(final String enumName, final int id)
     {
-        this(enumName, id, DEFAULT_STACK_SIZE);
+        this(enumName, id, MagicNumbers.ITEMS__DEFAULT_STACK_SIZE);
     }
 
     public Material(final String enumName, final int id, final int maxStack)
@@ -476,29 +473,6 @@ public abstract class Material
 
     // TODO: method to get possible drops
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("maxStack", this.maxStack).toString();
-    }
-
-    @Override
-    public boolean equals(final Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (! (o instanceof Material))
-        {
-            return false;
-        }
-
-        final Material material = (Material) o;
-
-        return this.enumName.equals(material.enumName);
-    }
-
     public final boolean simpleEquals(final Object o)
     {
         //noinspection ObjectEquality
@@ -520,6 +494,29 @@ public abstract class Material
     public int hashCode()
     {
         return this.enumName.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof Material))
+        {
+            return false;
+        }
+
+        final Material material = (Material) o;
+
+        return this.enumName.equals(material.enumName);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("maxStack", this.maxStack).toString();
     }
 
     public static Material getByID(final int id)

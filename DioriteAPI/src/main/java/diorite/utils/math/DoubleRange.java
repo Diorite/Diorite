@@ -37,7 +37,18 @@ public class DoubleRange
     }
 
     @Override
+    public int hashCode()
+    {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(this.min);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(this.max);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 
+    @Override
     public boolean equals(final Object o)
     {
         if (this == o)
@@ -53,18 +64,6 @@ public class DoubleRange
 
         return (Double.compare(that.max, this.max) == 0) && (Double.compare(that.min, this.min) == 0);
 
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(this.min);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(this.max);
-        result = (31 * result) + (int) (temp ^ (temp >>> 32));
-        return result;
     }
 
     @Override

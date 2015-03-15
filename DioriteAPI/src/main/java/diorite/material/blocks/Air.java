@@ -2,6 +2,7 @@ package diorite.material.blocks;
 
 import java.util.Map;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.material.BlockMaterialData;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
@@ -70,13 +71,13 @@ public class Air extends BlockMaterialData
     @Override
     public float getBlastResistance()
     {
-        return 0;
+        return MagicNumbers.MATERIAL__AIR__BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return 0;
+        return MagicNumbers.MATERIAL__AIR__HARDNESS;
     }
 
     public static Air getByID(final int id)

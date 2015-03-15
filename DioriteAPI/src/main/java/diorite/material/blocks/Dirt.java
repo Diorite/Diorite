@@ -2,6 +2,7 @@ package diorite.material.blocks;
 
 import java.util.Map;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.material.BlockMaterialData;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
@@ -28,23 +29,21 @@ public class Dirt extends BlockMaterialData
         super(DIRT.name(), DIRT.getId(), enumName, (byte) type);
     }
 
-    @SuppressWarnings("MagicNumber")
-    @Override
-    public float getBlastResistance()
-    {
-        return 2.5f;
-    }
-
-    @SuppressWarnings("MagicNumber")
-    @Override
-    public float getHardness()
-    {
-        return 0.5f;
-    }
-
     public Dirt(final int maxStack, final String typeName, final byte type)
     {
         super(DIRT.name(), DIRT.getId(), maxStack, typeName, type);
+    }
+
+    @Override
+    public float getBlastResistance()
+    {
+        return MagicNumbers.MATERIAL__DIRT__BLAST_RESISTANCE;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return MagicNumbers.MATERIAL__DIRT__HARDNESS;
     }
 
     @Override

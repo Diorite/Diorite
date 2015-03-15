@@ -2,6 +2,7 @@ package diorite.material.blocks;
 
 import java.util.Map;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.material.BlockMaterialData;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
@@ -60,18 +61,16 @@ public class Planks extends BlockMaterialData
         return true;
     }
 
-    @SuppressWarnings("MagicNumber")
     @Override
     public float getBlastResistance()
     {
-        return 15;
+        return MagicNumbers.MATERIAL__PLANKS__BLAST_RESISTANCE;
     }
 
-    @SuppressWarnings("MagicNumber")
     @Override
     public float getHardness()
     {
-        return 2;
+        return MagicNumbers.MATERIAL__PLANKS__HARDNESS;
     }
 
     public static Planks getByID(final int id)

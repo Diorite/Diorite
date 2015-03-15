@@ -2,6 +2,7 @@ package diorite.material.blocks;
 
 import java.util.Map;
 
+import diorite.cfg.magic.MagicNumbers;
 import diorite.material.BlockMaterialData;
 import diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
@@ -108,18 +109,22 @@ public class Sapling extends BlockMaterialData
         return false;
     }
 
-    @SuppressWarnings("MagicNumber")
     @Override
     public float getBlastResistance()
     {
-        return 0;
+        return MagicNumbers.MATERIAL__SAPLING__BLAST_RESISTANCE;
     }
 
-    @SuppressWarnings("MagicNumber")
     @Override
     public float getHardness()
     {
-        return 0;
+        return MagicNumbers.MATERIAL__SAPLING__HARDNESS;
+    }
+
+    public enum SaplingStage
+    {
+        NEW,
+        OLDER
     }
 
     public static Sapling getByID(final int id)
@@ -146,11 +151,5 @@ public class Sapling extends BlockMaterialData
         Sapling.register(SAPLING_JUNGLE);
         Sapling.register(SAPLING_ACACIA);
         Sapling.register(SAPLING_DARK_OAK);
-    }
-
-    public enum SaplingStage
-    {
-        NEW,
-        OLDER
     }
 }
