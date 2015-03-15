@@ -3,7 +3,6 @@ package diorite.impl.map.chunk;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import diorite.impl.Main;
 import diorite.impl.map.world.generator.MapGeneratorImpl;
 import diorite.map.World;
 import diorite.map.chunk.ChunkPos;
@@ -33,7 +32,6 @@ public class ChunkManagerImpl
         ChunkImpl chunk = this.chunks.get(pos);
         if ((chunk == null) && generate)
         {
-            Main.debug("[Chunk] creating chunk: "+pos);
             chunk = new ChunkImpl(pos);
             new MapGeneratorImpl().generateChunk(chunk);
             this.chunks.put(pos, chunk);
@@ -43,7 +41,6 @@ public class ChunkManagerImpl
 
     public void unload(final ChunkImpl chunk)
     {
-        Main.debug("[Chunk] removing chunk: "+chunk.getPos());
         this.chunks.remove(chunk.getPos());
     }
 

@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.impl.Main;
 import diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import diorite.impl.entity.PlayerImpl;
@@ -78,8 +77,6 @@ public class PlayerChunksImpl
         final Collection<ChunkImpl> chunksToUnload = new HashSet<>(50);
         final Collection<ChunkImpl> chunksToSent = new HashSet<>(50);
 
-        Main.debug("[Chunks] update (render: " + render + ", view: " + view + "), from: [" + (center.getX() - render) + ", " + (center.getZ() - render) + "] to [" + (center.getX() + render) + ", " + (center.getZ() + render) + "]");
-
         for (int r = 0; r <= render; r++)
         {
             final int copyR = r;
@@ -90,7 +87,6 @@ public class PlayerChunksImpl
                     return;
                 }
                 final boolean isVisible = copyR <= view;
-                Main.debug("Chunmk on: "+chunkPos+" is visible: "+isVisible+", is loaded: "+this.loadedChunks.contains(chunk));
                 if (! this.loadedChunks.contains(chunk))
                 {
                     chunk.addUsage();
@@ -114,7 +110,6 @@ public class PlayerChunksImpl
             }
             chunksToUnload.add(chunk);
             iterator.remove();
-            Main.debug(chunk.getPos() + ": " + chunk.getUsages());
             if (chunk.removeUsage() == 0)
             {
                 this.player.getWorld().getChunkManager().unload(chunk);
@@ -124,7 +119,6 @@ public class PlayerChunksImpl
         final int size = (chunksToSent.size() / CHUNK_BULK_SIZE) + (((chunksToSent.size() % CHUNK_BULK_SIZE) == 0) ? 0 : 1);
         final ChunkImpl[][] chunkBulks = new ChunkImpl[size][CHUNK_BULK_SIZE];
         int i = 0;
-        Main.debug("[Chunks] loading: " + chunksToSent.size());
         for (final ChunkImpl chunk : chunksToSent)
         {
             this.loadedChunks.add(chunk);
@@ -136,7 +130,6 @@ public class PlayerChunksImpl
             this.player.getNetworkManager().handle(new PacketPlayOutMapChunkBulk(true, chunkBulk));
         }
 
-        Main.debug("[Chunks] unloading: " + chunksToUnload.size());
         for (final ChunkImpl chunk : chunksToUnload)
         {
             this.loadedChunks.remove(chunk);

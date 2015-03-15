@@ -36,7 +36,7 @@ public class ThreadConsoleReader extends Thread
             } catch (final NoSuchElementException ignored)
             {
                 Main.debug("NoSuchElementException in ThreadConsoleReader");
-                continue;
+                break;
             }
             Main.debug("Line: " + line);
             if (line == null)

@@ -5,22 +5,24 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import diorite.entity.attrib.AttributeModifer;
+import diorite.entity.attrib.AttributeModifier;
+import diorite.entity.attrib.ModifierOperation;
 
-public class AttributeModiferImpl implements AttributeModifer
+public class AttributeModifierImpl implements AttributeModifier
 {
-    protected final UUID   uuid;
-    protected final double value;
-    protected final byte   operation;
+    protected final UUID              uuid;
+    protected final double            value;
+    protected final ModifierOperation operation;
+    protected boolean serialize = true;
 
-    public AttributeModiferImpl(final UUID uuid, final double value, final byte operation)
+    public AttributeModifierImpl(final UUID uuid, final double value, final ModifierOperation operation)
     {
         this.uuid = (uuid == null) ? UUID.randomUUID() : uuid;
         this.value = value;
         this.operation = operation;
     }
 
-    public AttributeModiferImpl(final double value, final byte operation)
+    public AttributeModifierImpl(final double value, final ModifierOperation operation)
     {
         this.uuid = UUID.randomUUID();
         this.value = value;
@@ -40,9 +42,22 @@ public class AttributeModiferImpl implements AttributeModifer
     }
 
     @Override
-    public byte getOperation()
+    public ModifierOperation getOperation()
     {
         return this.operation;
+    }
+
+    @Override
+    public boolean isSerialize()
+    {
+        return this.serialize;
+    }
+
+    @Override
+    public AttributeModifierImpl setSerialize(final boolean serialize)
+    {
+        this.serialize = serialize;
+        return this;
     }
 
     @Override
@@ -53,7 +68,7 @@ public class AttributeModiferImpl implements AttributeModifer
         result = this.uuid.hashCode();
         temp = Double.doubleToLongBits(this.value);
         result = (31 * result) + (int) (temp ^ (temp >>> 32));
-        result = (31 * result) + (int) this.operation;
+        result = (31 * result) + this.operation.hashCode();
         return result;
     }
 
@@ -64,14 +79,14 @@ public class AttributeModiferImpl implements AttributeModifer
         {
             return true;
         }
-        if (! (o instanceof AttributeModiferImpl))
+        if (! (o instanceof AttributeModifierImpl))
         {
             return false;
         }
 
-        final AttributeModiferImpl that = (AttributeModiferImpl) o;
+        final AttributeModifierImpl that = (AttributeModifierImpl) o;
 
-        return (this.operation == that.operation) && (Double.compare(that.value, this.value) == 0) && this.uuid.equals(that.uuid);
+        return (Double.compare(that.value, this.value) == 0) && this.operation.equals(that.operation) && this.uuid.equals(that.uuid);
 
     }
 

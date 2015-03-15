@@ -1,7 +1,6 @@
 package diorite.impl.entity;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.ImmutableLocation;
 import diorite.entity.AttributableEntity;
-import diorite.entity.attrib.AttributeModifer;
+import diorite.entity.attrib.AttributeModifier;
 import diorite.entity.attrib.AttributeProperty;
 import diorite.entity.attrib.AttributeStorage;
 import diorite.entity.attrib.AttributeType;
@@ -38,9 +37,9 @@ public abstract class AttributableEntityImpl extends EntityImpl implements Attri
     }
 
     @Override
-    public void removeModifer(final AttributeType type, final UUID uuid)
+    public void removeModifier(final AttributeType type, final UUID uuid)
     {
-        this.attributes.removeModifer(type, uuid);
+        this.attributes.removeModifier(type, uuid);
     }
 
     @Override
@@ -50,21 +49,27 @@ public abstract class AttributableEntityImpl extends EntityImpl implements Attri
     }
 
     @Override
-    public Collection<AttributeModifer> getModifers(final AttributeType type)
+    public Collection<AttributeModifier> getModifiers(final AttributeType type)
     {
-        return this.attributes.getModifers(type);
+        return this.attributes.getModifiers(type);
     }
 
     @Override
-    public Optional<AttributeProperty> getProperty(final AttributeType type)
+    public AttributeProperty getProperty(final AttributeType type)
     {
         return this.attributes.getProperty(type);
     }
 
     @Override
-    public void addModifer(final AttributeType type, final AttributeModifer modifer)
+    public AttributeProperty getProperty(final AttributeType type, final double def)
     {
-        this.attributes.addModifer(type, modifer);
+        return this.attributes.getProperty(type, def);
+    }
+
+    @Override
+    public void addModifier(final AttributeType type, final AttributeModifier modifer)
+    {
+        this.attributes.addModifier(type, modifer);
     }
 
     @Override

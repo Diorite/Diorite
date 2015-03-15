@@ -2,6 +2,7 @@ package diorite.impl.connection.packets.play;
 
 import diorite.impl.connection.packets.PacketListener;
 import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
+import diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
 import diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
 import diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
@@ -33,4 +34,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutMapChunkBulk packet);
 
     void handle(PacketPlayOutUpdateAttributes packet);
+
+    void handle(PacketPlayOutChat packet);
 }

@@ -19,10 +19,11 @@ import diorite.BlockLocation;
 import diorite.Server;
 import diorite.chat.BaseComponent;
 import diorite.chat.serialize.ComponentSerializer;
-import diorite.entity.attrib.AttributeModifer;
+import diorite.entity.attrib.AttributeModifier;
 import diorite.entity.attrib.AttributeProperty;
 import diorite.entity.attrib.AttributeType;
-import diorite.impl.entity.attrib.AttributeModiferImpl;
+import diorite.entity.attrib.ModifierOperation;
+import diorite.impl.entity.attrib.AttributeModifierImpl;
 import diorite.impl.entity.attrib.AttributePropertyImpl;
 import diorite.impl.map.chunk.ChunkImpl;
 import diorite.impl.map.chunk.ChunkPartImpl;
@@ -56,19 +57,19 @@ public class PacketDataSerializer extends ByteBuf
         return 5;
     }
 
-    public AttributeModiferImpl readAttributeModifer()
+    public AttributeModifierImpl readAttributeModifer()
     {
         final UUID uuid = this.readUUID();
         final double value = this.readDouble();
         final byte operation = this.readByte();
-        return new AttributeModiferImpl(uuid, value, operation);
+        return new AttributeModifierImpl(uuid, value, ModifierOperation.getByID(operation));
     }
 
-    public void writeAttributeModifer(final AttributeModifer attribute)
+    public void writeAttributeModifer(final AttributeModifier attribute)
     {
         this.writeUUID(attribute.getUuid());
         this.writeDouble(attribute.getValue());
-        this.writeByte(attribute.getOperation());
+        this.writeByte(attribute.getOperation().getId());
     }
 
     public AttributePropertyImpl readAttributeProperty()
@@ -76,7 +77,7 @@ public class PacketDataSerializer extends ByteBuf
         final AttributeType type = AttributeType.getByKey(this.readText(Short.MAX_VALUE));
         final double value = this.readDouble();
         final int size = this.readVarInt();
-        final Collection<AttributeModifer> mods = new HashSet<>(size);
+        final Collection<AttributeModifier> mods = new HashSet<>(size);
         for (int i = 0; i < size; i++)
         {
             mods.add(this.readAttributeModifer());
@@ -87,9 +88,9 @@ public class PacketDataSerializer extends ByteBuf
     public void writeAttributeProperty(final AttributeProperty attribute)
     {
         this.writeText(attribute.getType().getKey());
-        this.writeDouble(attribute.getValue());
-        this.writeVarInt(attribute.getModifers().size());
-        attribute.getModifers().forEach(this::writeAttributeModifer);
+        this.writeDouble(attribute.getBaseValue());
+        this.writeVarInt(attribute.getModifiersCollection().size());
+        attribute.getModifiersCollection().forEach(this::writeAttributeModifer);
     }
 
     public BaseComponent readBaseComponent()

@@ -23,18 +23,18 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>>
     }
 
     @Override
-    protected void encode(final ChannelHandlerContext context, final Packet<?> paramPacket, final ByteBuf paramByteBuf) throws IOException
+    protected void encode(final ChannelHandlerContext context, final Packet<?> packet, final ByteBuf byteBuf) throws IOException
     {
-        final Integer localInteger = context.channel().attr(this.serverConnection.protocolKey).get().getPacketID(this.protocolDirection, paramPacket);
+        final Integer localInteger = context.channel().attr(this.serverConnection.protocolKey).get().getPacketID(this.protocolDirection, packet);
         if (localInteger == null)
         {
-            throw new IOException("Can't serialize unregistered packet");
+            throw new IOException("Can't serialize unregistered packet, " + packet);
         }
-        final PacketDataSerializer dataSerializer = new PacketDataSerializer(paramByteBuf);
+        final PacketDataSerializer dataSerializer = new PacketDataSerializer(byteBuf);
         dataSerializer.writeVarInt(localInteger);
         try
         {
-            paramPacket.writePacket(dataSerializer);
+            packet.writePacket(dataSerializer);
         } catch (final Throwable throwable)
         {
             throwable.printStackTrace();

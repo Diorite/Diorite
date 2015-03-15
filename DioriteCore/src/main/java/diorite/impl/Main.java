@@ -7,7 +7,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import diorite.Server;
 import diorite.impl.connection.packets.RegisterPackets;
-import diorite.material.Material;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
@@ -26,7 +25,6 @@ public final class Main
 
     public static void main(final String[] args)
     {
-        debug(Material.PLANKS);
         final OptionParser parser = new OptionParser()
         {
             {

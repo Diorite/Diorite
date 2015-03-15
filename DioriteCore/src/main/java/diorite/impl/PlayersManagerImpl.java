@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,6 +21,7 @@ import diorite.TeleportData;
 import diorite.WorldType;
 import diorite.entity.Player;
 import diorite.impl.connection.NetworkManager;
+import diorite.impl.connection.packets.Packet;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
@@ -83,6 +86,26 @@ public class PlayersManagerImpl
             this.players.values().parallelStream().forEach(p -> p.getNetworkManager().handle(new PacketPlayOutKeepAlive(p.getId())));
             this.lastKeepAlive = curr;
         }
+    }
+
+    public void forEach(final Packet<?> packet)
+    {
+        this.forEach(player -> player.getNetworkManager().handle(packet));
+    }
+
+    public void forEach(final Predicate<PlayerImpl> predicate, final Packet<?> packet)
+    {
+        this.forEach(predicate, player -> player.getNetworkManager().handle(packet));
+    }
+
+    public void forEach(final Consumer<PlayerImpl> consumer)
+    {
+        this.players.values().parallelStream().forEach(consumer);
+    }
+
+    public void forEach(final Predicate<PlayerImpl> predicate, final Consumer<PlayerImpl> consumer)
+    {
+        this.players.values().parallelStream().filter(predicate).forEach(consumer);
     }
 
     public ServerImpl getServer()

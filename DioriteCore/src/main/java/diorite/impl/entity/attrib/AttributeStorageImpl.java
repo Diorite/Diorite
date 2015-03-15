@@ -3,7 +3,6 @@ package diorite.impl.entity.attrib;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.GameObject;
-import diorite.entity.attrib.AttributeModifer;
+import diorite.entity.attrib.AttributeModifier;
 import diorite.entity.attrib.AttributeProperty;
 import diorite.entity.attrib.AttributeStorage;
 import diorite.entity.attrib.AttributeType;
@@ -33,9 +32,14 @@ public class AttributeStorageImpl implements AttributeStorage
     }
 
     @Override
-    public GameObject getGameObject()
+    public void removeModifier(final AttributeType type, final UUID uuid)
     {
-        return this.gameObject;
+        final AttributeProperty prop = this.attributes.get(type);
+        if (prop == null)
+        {
+            return;
+        }
+        prop.removeModifier(uuid);
     }
 
     @Override
@@ -45,24 +49,46 @@ public class AttributeStorageImpl implements AttributeStorage
     }
 
     @Override
-    public Optional<AttributeProperty> getProperty(final AttributeType type)
+    public Collection<AttributeProperty> getProperties()
     {
-        return Optional.ofNullable(this.attributes.get(type));
+        return this.attributes.values();
     }
 
     @Override
-    public Collection<AttributeModifer> getModifers(final AttributeType type)
+    public Collection<AttributeModifier> getModifiers(final AttributeType type)
     {
         final AttributeProperty prop = this.attributes.get(type);
         if (prop == null)
         {
             return new HashSet<>(1);
         }
-        return new HashSet<>(prop.getModifers());
+        return new HashSet<>(prop.getModifiersCollection());
     }
 
     @Override
-    public void addModifer(final AttributeType type, final AttributeModifer modifer)
+    public AttributeProperty getProperty(final AttributeType type)
+    {
+        AttributeProperty attrib = this.attributes.get(type);
+        if (attrib == null)
+        {
+            this.attributes.put(type, attrib = new AttributePropertyImpl(type));
+        }
+        return attrib;
+    }
+
+    @Override
+    public AttributeProperty getProperty(final AttributeType type, final double value)
+    {
+        AttributeProperty attrib = this.attributes.get(type);
+        if (attrib == null)
+        {
+            this.attributes.put(type, attrib = new AttributePropertyImpl(type, value));
+        }
+        return attrib;
+    }
+
+    @Override
+    public void addModifier(final AttributeType type, final AttributeModifier modifer)
     {
         AttributeProperty prop = this.attributes.get(type);
         if (prop == null)
@@ -70,18 +96,13 @@ public class AttributeStorageImpl implements AttributeStorage
             prop = new AttributePropertyImpl(type, type.getDefaultValue());
             this.attributes.put(type, prop);
         }
-        prop.getModifers().add(modifer);
+        prop.addModifier(modifer);
     }
 
     @Override
-    public void removeModifer(final AttributeType type, final UUID uuid)
+    public GameObject getGameObject()
     {
-        final AttributeProperty prop = this.attributes.get(type);
-        if (prop == null)
-        {
-            return;
-        }
-        prop.getModifers().removeIf(mod -> mod.getUuid().equals(uuid));
+        return this.gameObject;
     }
 
     @Override

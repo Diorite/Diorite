@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.chat.BaseComponent;
+import diorite.chat.TextComponent;
 import diorite.impl.Main;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.NetworkManager;
@@ -21,6 +22,7 @@ import diorite.impl.connection.packets.play.in.PacketPlayInLook;
 import diorite.impl.connection.packets.play.in.PacketPlayInPosition;
 import diorite.impl.connection.packets.play.in.PacketPlayInPositionLook;
 import diorite.impl.connection.packets.play.in.PacketPlayInSettings;
+import diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import diorite.impl.entity.PlayerImpl;
 
 public class PlayListener implements PacketPlayInListener
@@ -74,7 +76,6 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInHeldItemSlot packet)
     {
-        Main.debug("Player want slot: " + packet.getSlot());
         // TODO: implement
     }
 
@@ -105,7 +106,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInChat packet)
     {
-        Main.debug("Chat packet: " + packet.getContent());
+        this.server.getPlayersManager().forEach(new PacketPlayOutChat(new TextComponent(packet.getContent())));
     }
 
     @Override
@@ -135,6 +136,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void disconnect(final BaseComponent message)
     {
+        // TODO: implement
     }
 
     @Override

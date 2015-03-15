@@ -1,6 +1,5 @@
 package diorite.impl.entity;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,18 +8,23 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.mojang.authlib.GameProfile;
 
 import diorite.ImmutableLocation;
+import diorite.cfg.magic.MagicNumbers;
 import diorite.entity.Player;
+import diorite.entity.attrib.AttributeModifier;
+import diorite.entity.attrib.AttributeProperty;
 import diorite.entity.attrib.AttributeType;
+import diorite.entity.attrib.ModifierOperation;
 import diorite.impl.ServerImpl;
 import diorite.impl.connection.NetworkManager;
 import diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
-import diorite.impl.entity.attrib.AttributeModiferImpl;
-import diorite.impl.entity.attrib.AttributePropertyImpl;
+import diorite.impl.entity.attrib.AttributeModifierImpl;
 import diorite.impl.map.chunk.PlayerChunksImpl;
 import diorite.map.chunk.ChunkPos;
 
 public class PlayerImpl extends AttributableEntityImpl implements Player
 {
+    // TODO: move this
+    private static final AttributeModifier tempSprintMod = new AttributeModifierImpl(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE);
     protected final GameProfile      gameProfile;
     protected       NetworkManager   networkManager;
     protected       boolean          isCrouching;
@@ -88,14 +92,13 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     @Override
     public void setSprinting(final boolean isSprinting)
     {
-        if (isSprinting && ! this.isSprinting)
+        final AttributeProperty attrib = this.getProperty(AttributeType.GENERIC_MOVEMENT_SPEED, MagicNumbers.PLAYER__MOVE_SPEED);
+        attrib.removeModifier(tempSprintMod.getUuid());
+        if (isSprinting)
         {
-            this.networkManager.handle(new PacketPlayOutUpdateAttributes(this.id, Arrays.asList(new AttributePropertyImpl(AttributeType.GENERIC_MOVEMENT_SPEED, Arrays.asList(new AttributeModiferImpl(UUID.randomUUID(), 0.3, (byte) 0))))));
+            attrib.addModifier(tempSprintMod);
         }
-        else if (! isSprinting && this.isSprinting)
-        {
-            this.networkManager.handle(new PacketPlayOutUpdateAttributes(this.id));
-        }
+        this.networkManager.handle(new PacketPlayOutUpdateAttributes(this.id, this.attributes));
         this.isSprinting = isSprinting;
     }
 

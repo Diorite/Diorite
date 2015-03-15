@@ -1,24 +1,25 @@
 package diorite.impl.connection.packets.play.out;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import diorite.entity.attrib.AttributeProperty;
+import diorite.entity.attrib.AttributeStorage;
 import diorite.impl.connection.EnumProtocol;
 import diorite.impl.connection.EnumProtocolDirection;
 import diorite.impl.connection.packets.PacketClass;
 import diorite.impl.connection.packets.PacketDataSerializer;
 import diorite.impl.connection.packets.play.PacketPlayOutListener;
 
-@PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x20, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutUpdateAttributes implements PacketPlayOut
 {
     private int entityID;
-    private Collection<AttributeProperty> attributes = new ArrayList<>(2);
+    private Collection<AttributeProperty> attributes = new HashSet<>(2);
 
     public PacketPlayOutUpdateAttributes()
     {
@@ -32,19 +33,25 @@ public class PacketPlayOutUpdateAttributes implements PacketPlayOut
     public PacketPlayOutUpdateAttributes(final int entityID, final Collection<AttributeProperty> attributes)
     {
         this.entityID = entityID;
-        this.attributes = (attributes == null) ? new ArrayList<>(1) : attributes;
+        this.attributes = (attributes == null) ? new HashSet<>(1) : attributes;
+    }
+
+    public PacketPlayOutUpdateAttributes(final int entityID, final AttributeStorage attributes)
+    {
+        this.entityID = entityID;
+        this.attributes = new HashSet<>(attributes.getProperties());
     }
 
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.entityID = data.readVarInt();
-        final int size = data.readVarInt();
+        final int size = data.readInt();
         if (size == 0)
         {
             return;
         }
-        this.attributes = new ArrayList<>(size);
+        this.attributes = new HashSet<>(size);
         for (int i = 0; i < size; i++)
         {
             this.attributes.add(data.readAttributeProperty());
@@ -55,7 +62,7 @@ public class PacketPlayOutUpdateAttributes implements PacketPlayOut
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.entityID);
-        data.writeVarInt(this.attributes.size());
+        data.writeInt(this.attributes.size());
         this.attributes.forEach(data::writeAttributeProperty);
     }
 
