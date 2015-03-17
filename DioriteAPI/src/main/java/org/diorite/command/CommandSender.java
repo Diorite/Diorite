@@ -1,7 +1,9 @@
 package org.diorite.command;
 
+import org.diorite.ChatColor;
 import org.diorite.Server;
 import org.diorite.chat.BaseComponent;
+import org.diorite.chat.DioriteMarkdownParser;
 
 public interface CommandSender
 {
@@ -22,6 +24,38 @@ public interface CommandSender
             for (final String str : strs)
             {
                 this.sendMessage(str);
+            }
+        }
+    }
+
+    default void sendSimpleColoredMessage(final String str)
+    {
+        this.sendMessage(ChatColor.translateAlternateColorCodes(str));
+    }
+
+    default void sendSimpleColoredMessage(final String[] strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.sendSimpleColoredMessage(str);
+            }
+        }
+    }
+
+    default void sendDioriteMessage(final String str)
+    {
+        this.sendMessage(DioriteMarkdownParser.parse(str, false));
+    }
+
+    default void sendDioriteMessage(final String[] strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.sendDioriteMessage(str);
             }
         }
     }
