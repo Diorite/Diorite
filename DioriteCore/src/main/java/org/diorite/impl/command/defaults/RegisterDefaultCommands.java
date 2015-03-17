@@ -13,5 +13,6 @@ public final class RegisterDefaultCommands
         cmds.registerCommand(new TpsCmd());
         cmds.registerCommand(new SetTpsCmd());
         cmds.registerCommand(new ColoredConsoleCmd());
+        cmds.registerCommand(new PerformanceMonitorCmd());
     }
 }

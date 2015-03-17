@@ -1,5 +1,6 @@
 package org.diorite.impl;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Proxy;
@@ -16,11 +17,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
-
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-
 import org.diorite.Server;
 import org.diorite.impl.command.ColoredConsoleCommandSenderImpl;
 import org.diorite.impl.command.CommandMapImpl;
@@ -37,6 +33,11 @@ import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.ConsoleReaderThread;
 import org.diorite.plugin.Plugin;
 import org.diorite.utils.collections.ConcurrentSimpleStringHashMap;
+
+import com.mojang.authlib.GameProfileRepository;
+import com.mojang.authlib.minecraft.MinecraftSessionService;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 
@@ -85,19 +86,33 @@ public class ServerImpl implements Server, Runnable
             throw new IllegalArgumentException("Server is started yet.");
         }
         instances.put(this.serverName, this);
-        final ConsoleReaderThread consoleReader = new ConsoleReaderThread(this, System.in);
-        consoleReader.start();
-
+        if (System.console() == null)
+        {
+            System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
+            Main.useJline = false;
+        }
         try
         {
             this.reader = new ConsoleReader(System.in, System.out);
             this.reader.setExpandEvents(false);
-        } catch (final Throwable e)
+        } catch (final Throwable t)
         {
-            this.consoleCommandSender = new ConsoleCommandSenderImpl(this);
-            e.printStackTrace();
+            try
+            {
+                System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
+                System.setProperty("user.language", "en");
+                Main.useJline = false;
+                this.reader = new ConsoleReader(System.in, System.out);
+                this.reader.setExpandEvents(false);
+            } catch (final IOException e)
+            {
+                this.consoleCommandSender = new ConsoleCommandSenderImpl(this);
+                e.printStackTrace();
+            }
         }
         this.consoleCommandSender = ColoredConsoleCommandSenderImpl.getInstance(this);
+
+        ConsoleReaderThread.start(this);
 
         this.authenticationService = new YggdrasilAuthenticationService(proxy, UUID.randomUUID().toString());
         this.sessionService = this.authenticationService.createMinecraftSessionService();

@@ -5,11 +5,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.ChatColor;
+import org.diorite.chat.DioriteMarkdownParser;
 import org.diorite.chat.TextComponent;
 import org.diorite.impl.ServerImpl;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.multithreading.ChatAction;
 
 public class ChatThread extends Thread
@@ -47,8 +46,12 @@ public class ChatThread extends Thread
                 continue;
             }
             // TODO: chat event
-            final String msg = (action.getSender() == null ? "" : (action.getSender().getName() + ChatColor.AQUA + ": " + ChatColor.GRAY.toString())) + (action.getMsg() == null ? "" : action.getMsg());
-            this.server.getPlayersManager().forEach(new PacketPlayOutChat(new TextComponent(msg)));
+
+            // TODO: implement some needed permissions (Yeach, I need create permissions system too) to use markdown options.
+            final TextComponent base = new TextComponent(((action.getSender() == null) ? "" : (action.getSender().getName() + ChatColor.AQUA + ": " + ChatColor.GRAY.toString())));
+            base.addExtra((action.getMsg() == null) ? new TextComponent("") : DioriteMarkdownParser.parse(action.getMsg(), ChatColor.GRAY));
+            this.server.getPlayersManager().forEach(p -> p.sendMessage(base));
+            this.server.getConsoleSender().sendMessage(base);
         }
     }
 
