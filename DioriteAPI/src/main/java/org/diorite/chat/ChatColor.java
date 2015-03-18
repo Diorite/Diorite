@@ -1,12 +1,12 @@
-package org.diorite;
+package org.diorite.chat;
 
 
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.Validate;
-
 import com.google.common.collect.Maps;
+
+import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("MagicNumber")
 public enum ChatColor

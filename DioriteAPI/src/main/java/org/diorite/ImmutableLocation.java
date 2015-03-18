@@ -3,7 +3,7 @@ package org.diorite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.map.World;
+import org.diorite.world.World;
 
 public class ImmutableLocation extends Loc
 {

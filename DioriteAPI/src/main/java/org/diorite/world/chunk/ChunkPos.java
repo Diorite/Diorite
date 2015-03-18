@@ -1,9 +1,9 @@
-package org.diorite.map.chunk;
+package org.diorite.world.chunk;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.map.World;
+import org.diorite.world.World;
 import org.diorite.utils.math.DioriteMathUtils;
 
 public class ChunkPos

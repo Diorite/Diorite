@@ -1,7 +1,7 @@
 package org.diorite;
 
-import org.diorite.map.World;
-import org.diorite.map.chunk.ChunkPos;
+import org.diorite.world.World;
+import org.diorite.world.chunk.ChunkPos;
 import org.diorite.utils.math.DioriteMathUtils;
 
 public abstract class Loc

@@ -1,4 +1,4 @@
-package org.diorite.map.chunk;
+package org.diorite.world.chunk;
 
 public interface Chunk
 {

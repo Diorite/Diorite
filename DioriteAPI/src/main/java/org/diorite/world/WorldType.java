@@ -1,15 +1,17 @@
-package org.diorite;
+package org.diorite.world;
 
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class WorldType
+public class WorldType implements SimpleEnum<WorldType>
 {
     public static final  WorldType                NORMAL                 = new WorldType("NORMAL", 0, "default", 1);
     public static final  WorldType                FLAT                   = new WorldType("FLAT", 1, "flat");
@@ -38,14 +40,28 @@ public class WorldType
         this(enumName, id, name, 0);
     }
 
+    @Override
     public String name()
     {
         return this.enumName;
     }
 
+    @Override
     public int getId()
     {
         return this.id;
+    }
+
+    @Override
+    public WorldType byId(final int id)
+    {
+        return byID.get(id);
+    }
+
+    @Override
+    public WorldType byName(final String name)
+    {
+        return byName.get(name);
     }
 
     public int getVersion()

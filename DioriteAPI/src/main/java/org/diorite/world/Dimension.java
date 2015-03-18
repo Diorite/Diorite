@@ -1,15 +1,17 @@
-package org.diorite;
+package org.diorite.world;
 
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class Dimension
+public class Dimension implements SimpleEnum<Dimension>
 {
     public static final  Dimension                NETHER    = new Dimension("NETHER", - 1);
     public static final  Dimension                OVERWORLD = new Dimension("OVERWORLD", 0);
@@ -25,14 +27,28 @@ public class Dimension
         this.id = id;
     }
 
+    @Override
     public String name()
     {
         return this.enumName;
     }
 
+    @Override
     public int getId()
     {
         return this.id;
+    }
+
+    @Override
+    public Dimension byId(final int id)
+    {
+        return byID.get(id);
+    }
+
+    @Override
+    public Dimension byName(final String name)
+    {
+        return byName.get(name);
     }
 
     @Override

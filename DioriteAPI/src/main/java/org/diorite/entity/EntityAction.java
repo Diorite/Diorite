@@ -1,4 +1,4 @@
-package org.diorite;
+package org.diorite.entity;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -6,12 +6,13 @@ import java.util.function.BiConsumer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.entity.Player;
+import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class EntityAction
+public class EntityAction implements SimpleEnum
 {
     public static final  EntityAction                CROUCH          = new EntityAction("CROUCH", 0, (p, args) -> p.setCrouching(true));
     public static final  EntityAction                UNCROUCH        = new EntityAction("UNCROUCH", 1, (p, args) -> p.setCrouching(false));
@@ -33,14 +34,28 @@ public class EntityAction
         this.onAction = onAction;
     }
 
+    @Override
     public String name()
     {
         return this.enumName;
     }
 
+    @Override
     public int getId()
     {
         return this.id;
+    }
+
+    @Override
+    public EntityAction byId(final int id)
+    {
+        return byID.get(id);
+    }
+
+    @Override
+    public EntityAction byName(final String name)
+    {
+        return byName.get(name);
     }
 
     public BiConsumer<Player, Object[]> getOnAction()

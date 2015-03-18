@@ -16,12 +16,14 @@ import org.diorite.material.blocks.Sapling;
 import org.diorite.material.blocks.Stone;
 import org.diorite.material.blocks.liquid.Lava;
 import org.diorite.material.blocks.liquid.Water;
+import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
 import org.diorite.utils.math.IntRange;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public abstract class Material
+public abstract class Material implements SimpleEnum<Material>
 {
     protected static final float SLOW_GROW      = 0.1f;
     public static final    int   MATERIALS_SIZE = 385;
@@ -428,14 +430,28 @@ public abstract class Material
         this.maxStack = maxStack;
     }
 
+    @Override
     public String name()
     {
         return this.enumName;
     }
 
+    @Override
     public int getId()
     {
         return this.id;
+    }
+
+    @Override
+    public Material byId(final int id)
+    {
+        return byID.get(id);
+    }
+
+    @Override
+    public Material byName(final String name)
+    {
+        return byName.get(name);
     }
 
     public int getMaxStack()
@@ -524,9 +540,49 @@ public abstract class Material
         return byID.get(id);
     }
 
+    public static Material getByID(final int id, final int meta)
+    {
+        final Material mat = byID.get(id);
+        if (mat instanceof BlockMaterialData)
+        {
+            return ((BlockMaterialData) mat).getType(meta);
+        }
+        return mat;
+    }
+
+    public static Material getByID(final int id, final String meta)
+    {
+        final Material mat = byID.get(id);
+        if (mat instanceof BlockMaterialData)
+        {
+            return ((BlockMaterialData) mat).getType(meta);
+        }
+        return mat;
+    }
+
     public static Material getByEnumName(final String name)
     {
         return byName.get(name);
+    }
+
+    public static Material getByEnumName(final String name, final int meta)
+    {
+        final Material mat = byName.get(name);
+        if (mat instanceof BlockMaterialData)
+        {
+            return ((BlockMaterialData) mat).getType(meta);
+        }
+        return mat;
+    }
+
+    public static Material getByEnumName(final String name, final String meta)
+    {
+        final Material mat = byName.get(name);
+        if (mat instanceof BlockMaterialData)
+        {
+            return ((BlockMaterialData) mat).getType(meta);
+        }
+        return mat;
     }
 
     public static void register(final Material element)

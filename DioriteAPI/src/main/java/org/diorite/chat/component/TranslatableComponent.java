@@ -1,4 +1,4 @@
-package org.diorite.chat;
+package org.diorite.chat.component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.ChatColor;
+import org.diorite.chat.ChatColor;
 
 public class TranslatableComponent extends BaseComponent
 {

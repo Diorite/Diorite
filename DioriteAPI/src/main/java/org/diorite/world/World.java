@@ -1,4 +1,4 @@
-package org.diorite.map;
+package org.diorite.world;
 
 public interface World
 {

@@ -5,17 +5,20 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class Difficulty
+public class Difficulty implements SimpleEnum<Difficulty>
 {
     public static final  Difficulty                PEACEFUL = new Difficulty("PEACEFUL", 0, "options.difficulty.peaceful");
     public static final  Difficulty                EASY     = new Difficulty("EASY", 1, "options.difficulty.easy");
     public static final  Difficulty                NORMAL   = new Difficulty("NORMAL", 2, "options.difficulty.normal");
     public static final  Difficulty                HARD     = new Difficulty("HARD", 3, "options.difficulty.hard");
     private static final Map<String, Difficulty>   byName   = new SimpleStringHashMap<>(4, .1f);
+    @SuppressWarnings("MagicNumber")
     private static final TIntObjectMap<Difficulty> byID     = new TIntObjectHashMap<>(4, .1f);
     private final String enumName;
     private final int    level;
@@ -28,9 +31,28 @@ public class Difficulty
         this.option = option;
     }
 
+    @Override
     public String name()
     {
         return this.enumName;
+    }
+
+    @Override
+    public int getId()
+    {
+        return this.level;
+    }
+
+    @Override
+    public Difficulty byId(final int id)
+    {
+        return byID.get(id);
+    }
+
+    @Override
+    public Difficulty byName(final String name)
+    {
+        return byName.get(name);
     }
 
     public int getLevel()

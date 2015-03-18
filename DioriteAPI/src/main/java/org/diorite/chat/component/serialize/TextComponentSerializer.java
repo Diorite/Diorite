@@ -1,4 +1,4 @@
-package org.diorite.chat.serialize;
+package org.diorite.chat.component.serialize;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -12,8 +12,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.TextComponent;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
 
 public class TextComponentSerializer extends BaseComponentSerializer implements JsonSerializer<TextComponent>, JsonDeserializer<TextComponent>
 {

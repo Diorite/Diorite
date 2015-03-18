@@ -9,20 +9,23 @@ import java.util.function.UnaryOperator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class ModifierOperation
+public class ModifierOperation implements SimpleEnum<ModifierOperation>
 {
     public static final  ModifierOperation                ADD_NUMBER          = new ModifierOperation("ADD_NUMBER", 0, ModifierValue::addX, mod -> mod.setY(mod.getX()));
     public static final  ModifierOperation                MULTIPLY_PERCENTAGE = new ModifierOperation("MULTIPLY_PERCENTAGE", 1, (value, d) -> value.addY(value.getX() * d));
     public static final  ModifierOperation                ADD_PERCENTAGE      = new ModifierOperation("ADD_PERCENTAGE", 2, (value, d) -> value.multipleY(1 + d));
     private static final Map<String, ModifierOperation>   byName              = new SimpleStringHashMap<>(3, .1f);
+    @SuppressWarnings("MagicNumber")
     private static final TIntObjectMap<ModifierOperation> byID                = new TIntObjectHashMap<>(3, .1f);
-    private final String                       enumName;
-    private final int                          id;
-    private static final SortedSet<ModifierOperation>     sortedByID          = new TreeSet<>((e1, e2) -> Integer.compare(e1.id, e2.id));
+    private final String enumName;
+    private final int    id;
+    private static final SortedSet<ModifierOperation> sortedByID = new TreeSet<>((e1, e2) -> Integer.compare(e1.id, e2.id));
     private final ModifierOperationAction      action;
     private final UnaryOperator<ModifierValue> onEnd;
 
@@ -42,14 +45,28 @@ public class ModifierOperation
         this.onEnd = m -> m;
     }
 
+    @Override
     public String name()
     {
         return this.enumName;
     }
 
+    @Override
     public int getId()
     {
         return this.id;
+    }
+
+    @Override
+    public ModifierOperation byId(final int id)
+    {
+        return byID.get(id);
+    }
+
+    @Override
+    public ModifierOperation byName(final String name)
+    {
+        return byName.get(name);
     }
 
     public ModifierOperationAction getAction()

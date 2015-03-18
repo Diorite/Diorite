@@ -1,15 +1,17 @@
-package org.diorite;
+package org.diorite.chat;
 
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class ChatVisibility
+public class ChatVisibility implements SimpleEnum<ChatVisibility>
 {
     public static final  ChatVisibility                FULL   = new ChatVisibility("FULL", 0, "options.chat.visibility.full");
     public static final  ChatVisibility                SYSTEM = new ChatVisibility("SYSTEM", 1, "options.chat.visibility.system");
@@ -27,14 +29,28 @@ public class ChatVisibility
         this.option = option;
     }
 
+    @Override
     public String name()
     {
         return this.enumName;
     }
 
+    @Override
     public int getId()
     {
         return this.id;
+    }
+
+    @Override
+    public ChatVisibility byId(final int id)
+    {
+        return byID.get(id);
+    }
+
+    @Override
+    public ChatVisibility byName(final String name)
+    {
+        return byName.get(name);
     }
 
     public String getOption()

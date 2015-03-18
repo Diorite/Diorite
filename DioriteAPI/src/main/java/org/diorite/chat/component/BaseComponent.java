@@ -1,11 +1,12 @@
-package org.diorite.chat;
+package org.diorite.chat.component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.diorite.ChatColor;
+
+import org.diorite.chat.ChatColor;
 
 public abstract class BaseComponent
 {

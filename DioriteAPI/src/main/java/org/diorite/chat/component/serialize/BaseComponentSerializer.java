@@ -1,4 +1,4 @@
-package org.diorite.chat.serialize;
+package org.diorite.chat.component.serialize;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,10 +8,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
-import org.diorite.ChatColor;
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.ClickEvent;
-import org.diorite.chat.HoverEvent;
+import org.diorite.chat.ChatColor;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.ClickEvent;
+import org.diorite.chat.component.HoverEvent;
 
 public class BaseComponentSerializer
 {

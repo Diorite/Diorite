@@ -1,4 +1,4 @@
-package org.diorite.chat;
+package org.diorite.chat.component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.ChatColor;
+import org.diorite.chat.ChatColor;
 
 public class TextComponent extends BaseComponent
 {

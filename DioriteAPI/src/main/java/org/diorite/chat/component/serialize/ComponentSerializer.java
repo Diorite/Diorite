@@ -1,4 +1,4 @@
-package org.diorite.chat.serialize;
+package org.diorite.chat.component.serialize;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;
@@ -11,9 +11,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.TextComponent;
-import org.diorite.chat.TranslatableComponent;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
+import org.diorite.chat.component.TranslatableComponent;
 
 public class ComponentSerializer implements JsonDeserializer<BaseComponent>
 {

@@ -97,6 +97,21 @@ public class RomanNumeral
         return new RomanNumeral(this.num / other.num, false);
     }
 
+    @Override
+    public String toString()
+    {
+        if (this.romanStr == null)
+        {
+            this.romanStr = toString(this.num);
+        }
+        return this.romanStr;
+    }
+
+    public int toInt()
+    {
+        return this.num;
+    }
+
     private static int letterToNumber(final char letter)
     {
         switch (letter)
@@ -118,16 +133,6 @@ public class RomanNumeral
             default:
                 throw new NumberFormatException("Illegal character \"" + letter + "\" in Roman numeral");
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        if (this.romanStr == null)
-        {
-            this.romanStr = toString(this.num);
-        }
-        return this.romanStr;
     }
 
     private static int pow(int i, final int pow)
@@ -273,10 +278,5 @@ public class RomanNumeral
             k++;
         }
         return roman + StringUtils.join(romanParts);
-    }
-
-    public int toInt()
-    {
-        return this.num;
     }
 }

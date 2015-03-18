@@ -1,4 +1,4 @@
-package org.diorite.chat;
+package org.diorite.chat.component;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
