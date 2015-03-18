@@ -6,14 +6,14 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.ServerImpl;
+import org.diorite.impl.entity.attrib.AttributeStorageImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.AttributableEntity;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeStorage;
 import org.diorite.entity.attrib.AttributeType;
-import org.diorite.impl.ServerImpl;
-import org.diorite.impl.entity.attrib.AttributeStorageImpl;
 
 public abstract class AttributableEntityImpl extends EntityImpl implements AttributableEntity
 {

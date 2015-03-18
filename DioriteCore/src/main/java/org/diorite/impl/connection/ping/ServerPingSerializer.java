@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import org.diorite.chat.BaseComponent;
+import org.diorite.chat.component.BaseComponent;
 
 public class ServerPingSerializer
         implements JsonDeserializer<ServerPing>, JsonSerializer<ServerPing>

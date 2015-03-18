@@ -7,8 +7,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.fusesource.jansi.Ansi;
 
-import org.diorite.ChatColor;
 import org.diorite.impl.ServerImpl;
+import org.diorite.chat.ChatColor;
+
 import jline.Terminal;
 
 public class ColoredConsoleCommandSenderImpl extends ConsoleCommandSenderImpl

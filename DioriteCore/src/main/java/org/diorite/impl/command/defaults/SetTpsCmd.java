@@ -2,9 +2,9 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Server;
 import org.diorite.command.CommandPriority;
-import org.diorite.impl.command.SystemCommandImpl;
 
 public class SetTpsCmd extends SystemCommandImpl
 {

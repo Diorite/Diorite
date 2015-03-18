@@ -5,8 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.map.chunk.Chunk;
-import org.diorite.map.chunk.ChunkPos;
+import org.diorite.world.chunk.Chunk;
+import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk
 {

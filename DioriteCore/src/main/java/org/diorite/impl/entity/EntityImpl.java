@@ -3,11 +3,11 @@ package org.diorite.impl.entity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.ImmutableLocation;
-import org.diorite.entity.Entity;
 import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.map.world.WorldImpl;
+import org.diorite.ImmutableLocation;
+import org.diorite.entity.Entity;
 
 public abstract class EntityImpl extends GameObjectImpl implements Entity
 {

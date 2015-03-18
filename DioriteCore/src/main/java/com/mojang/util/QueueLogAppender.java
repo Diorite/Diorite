@@ -44,6 +44,12 @@ public class QueueLogAppender extends AbstractAppender
         this.queue.add(this.getLayout().toSerializable(event).toString());
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("queue", this.queue).toString();
+    }
+
     @PluginFactory
     public static QueueLogAppender createAppender(@PluginAttribute("name") final String name, @PluginAttribute("ignoreExceptions") final String ignore, @PluginElement("Layout") Layout<? extends Serializable> layout, @PluginElement("Filters") final Filter filter, @PluginAttribute("target") String target)
     {
@@ -87,11 +93,5 @@ public class QueueLogAppender extends AbstractAppender
             }
         }
         return null;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("queue", this.queue).toString();
     }
 }

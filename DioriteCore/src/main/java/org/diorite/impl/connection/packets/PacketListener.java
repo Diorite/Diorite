@@ -1,6 +1,6 @@
 package org.diorite.impl.connection.packets;
 
-import org.diorite.chat.BaseComponent;
+import org.diorite.chat.component.BaseComponent;
 
 @SuppressWarnings("InterfaceMayBeAnnotatedFunctional")
 public interface PacketListener

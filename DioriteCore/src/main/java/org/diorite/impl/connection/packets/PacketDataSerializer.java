@@ -15,22 +15,32 @@ import java.util.UUID;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 
+import org.diorite.impl.entity.attrib.AttributeModifierImpl;
+import org.diorite.impl.entity.attrib.AttributePropertyImpl;
+import org.diorite.impl.inventory.item.ItemStackImpl;
+import org.diorite.impl.map.chunk.ChunkImpl;
+import org.diorite.impl.map.chunk.ChunkPartImpl;
+import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 import org.diorite.Server;
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.serialize.ComponentSerializer;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
-import org.diorite.impl.entity.attrib.AttributeModifierImpl;
-import org.diorite.impl.entity.attrib.AttributePropertyImpl;
-import org.diorite.impl.map.chunk.ChunkImpl;
-import org.diorite.impl.map.chunk.ChunkPartImpl;
-import org.diorite.map.chunk.Chunk;
+import org.diorite.material.Material;
+import org.diorite.nbt.NbtInputStream;
+import org.diorite.nbt.NbtOutputStream;
+import org.diorite.nbt.NbtTagCompound;
+import org.diorite.nbt.NbtTagType;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.world.chunk.Chunk;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.ByteBufProcessor;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
@@ -43,6 +53,122 @@ public class PacketDataSerializer extends ByteBuf
     public PacketDataSerializer(final ByteBuf bytebuf)
     {
         this.byteBuf = bytebuf;
+    }
+
+    public BlockFace readBlockFace()
+    {
+        switch (this.readUnsignedByte())
+        {
+            case 0:
+                return BlockFace.DOWN;
+            case 1:
+                return BlockFace.UP;
+            case 2:
+                return BlockFace.NORTH;
+            case 3:
+                return BlockFace.SOUTH;
+            case 4:
+                return BlockFace.WEST;
+            case 5:
+                return BlockFace.EAST;
+            default:
+                return null;
+        }
+    }
+
+    public void writeBlockFace(final BlockFace face)
+    {
+        if (face == null)
+        {
+            this.writeByte(- 1);
+            return;
+        }
+        switch (face)
+        {
+            case NORTH:
+                this.writeByte(2);
+                break;
+            case EAST:
+                this.writeByte(5);
+                break;
+            case SOUTH:
+                this.writeByte(3);
+                break;
+            case WEST:
+                this.writeByte(4);
+                break;
+            case UP:
+                this.writeByte(1);
+                break;
+            case DOWN:
+                this.writeByte(0);
+                break;
+            default:
+                this.writeByte(- 1);
+                break;
+        }
+    }
+
+    public ItemStackImpl readItemStack()
+    {
+        ItemStackImpl itemstack = null;
+        final short id = this.readShort();
+        if (id >= 0)
+        {
+            final byte amount = this.readByte();
+            final short damage = this.readShort();
+            itemstack = new ItemStackImpl(Material.getByID(id, damage), amount, damage);
+            itemstack.getItemMeta().setTag(this.readNbtTagCompound());
+        }
+        return itemstack;
+    }
+
+    public NbtTagCompound readNbtTagCompound()
+    {
+        final int currIndex = this.readerIndex();
+        final byte firstTag = this.readByte();
+        if (firstTag == NbtTagType.END.getTypeID())
+        {
+            return null;
+        }
+        this.readerIndex(currIndex);
+        try
+        {
+            return (NbtTagCompound) NbtInputStream.readTagFromCompressed(new ByteBufInputStream(this));
+        } catch (final IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void writeItemStack(final ItemStackImpl itemStack)
+    {
+        if (itemStack == null)
+        {
+            this.writeShort(- 1);
+            return;
+        }
+        this.writeShort(itemStack.getMaterial().getId());
+        this.writeByte(itemStack.getAmount());
+        this.writeShort(itemStack.getDurability());
+        this.writeNbtTagCompound(itemStack.getItemMeta().getTag());
+    }
+
+    public void writeNbtTagCompound(final NbtTagCompound nbt)
+    {
+        if (nbt == null)
+        {
+            this.writeByte(NbtTagType.END.getTypeID());
+            return;
+        }
+        try (NbtOutputStream os = new NbtOutputStream(new ByteBufOutputStream(this)))
+        {
+            os.write(nbt);
+        } catch (final IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public AttributeModifierImpl readAttributeModifer()

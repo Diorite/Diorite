@@ -6,10 +6,10 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mojang.util.QueueLogAppender;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.mojang.util.QueueLogAppender;
 
 public class TerminalConsoleWriterThread implements Runnable
 {

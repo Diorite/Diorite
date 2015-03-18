@@ -8,6 +8,7 @@ import org.diorite.impl.connection.packets.PacketDecoder;
 import org.diorite.impl.connection.packets.PacketEncoder;
 import org.diorite.impl.connection.packets.PacketPrepender;
 import org.diorite.impl.connection.packets.PacketSplitter;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelInitializer;

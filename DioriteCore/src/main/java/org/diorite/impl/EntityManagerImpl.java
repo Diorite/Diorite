@@ -6,9 +6,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.entity.EntityImpl;
 import org.diorite.EntityManager;
 import org.diorite.entity.Entity;
-import org.diorite.impl.entity.EntityImpl;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 

@@ -1,9 +1,9 @@
 package com.mojang.authlib.yggdrasil.response;
 
+import com.mojang.authlib.properties.PropertyMap;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.mojang.authlib.properties.PropertyMap;
 
 public class User
 {

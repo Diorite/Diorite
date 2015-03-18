@@ -2,11 +2,11 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
-import org.diorite.command.CommandPriority;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.command.ColoredConsoleCommandSenderImpl;
 import org.diorite.impl.command.ConsoleCommandSenderImpl;
 import org.diorite.impl.command.SystemCommandImpl;
+import org.diorite.command.CommandPriority;
 
 public class ColoredConsoleCmd extends SystemCommandImpl
 {

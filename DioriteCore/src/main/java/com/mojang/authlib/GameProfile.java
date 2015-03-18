@@ -2,11 +2,11 @@ package com.mojang.authlib;
 
 import java.util.UUID;
 
+import com.mojang.authlib.properties.PropertyMap;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.mojang.authlib.properties.PropertyMap;
 
 public class GameProfile
 {
@@ -30,9 +30,19 @@ public class GameProfile
         return this.id;
     }
 
+    public void setId(final UUID id)
+    {
+        this.id = id;
+    }
+
     public String getName()
     {
         return this.name;
+    }
+
+    public void setName(final String name)
+    {
+        this.name = name;
     }
 
     public PropertyMap getProperties()
@@ -40,29 +50,19 @@ public class GameProfile
         return this.properties;
     }
 
-    public boolean isLegacy()
-    {
-        return this.legacy;
-    }
-
-    public void setId(final UUID id)
-    {
-        this.id = id;
-    }
-
-    public void setLegacy(final boolean legacy)
-    {
-        this.legacy = legacy;
-    }
-
     public void setProperties(final PropertyMap properties)
     {
         this.properties = properties;
     }
 
-    public void setName(final String name)
+    public boolean isLegacy()
     {
-        this.name = name;
+        return this.legacy;
+    }
+
+    public void setLegacy(final boolean legacy)
+    {
+        this.legacy = legacy;
     }
 
     public boolean isComplete()

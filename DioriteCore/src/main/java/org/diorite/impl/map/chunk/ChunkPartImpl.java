@@ -3,7 +3,7 @@ package org.diorite.impl.map.chunk;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.map.chunk.Chunk;
+import org.diorite.world.chunk.Chunk;
 import org.diorite.utils.collections.NibbleArray;
 
 public class ChunkPartImpl // part of chunk 16x16x16

@@ -3,10 +3,10 @@ package com.mojang.authlib.yggdrasil.response;
 import java.util.Map;
 import java.util.UUID;
 
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 
 public class MinecraftTexturesPayload
 {

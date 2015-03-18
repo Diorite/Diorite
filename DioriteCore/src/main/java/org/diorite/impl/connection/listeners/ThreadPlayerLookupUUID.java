@@ -3,11 +3,11 @@ package org.diorite.impl.connection.listeners;
 import java.math.BigInteger;
 import java.security.KeyPair;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.MinecraftEncryption;

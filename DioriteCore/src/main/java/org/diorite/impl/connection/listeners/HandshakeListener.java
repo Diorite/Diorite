@@ -7,19 +7,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.gson.Gson;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 
-import com.google.gson.Gson;
-
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.TextComponent;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.handshake.PacketHandshakingInListener;
 import org.diorite.impl.connection.packets.handshake.in.PacketHandshakingInSetProtocol;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
 
 public class HandshakeListener implements PacketHandshakingInListener
 {

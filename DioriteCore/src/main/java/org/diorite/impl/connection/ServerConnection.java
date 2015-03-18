@@ -5,14 +5,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.utils.LazyInitVar;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.DefaultEventLoopGroup;
@@ -41,8 +42,8 @@ public class ServerConnection
 
     public final  AttributeKey<EnumProtocol> protocolKey = AttributeKey.valueOf("protocol");
     private final List<NetworkManager>       connections = Collections.synchronizedList(Lists.newArrayList());
-    private final ServerImpl server;
-    private ChannelFuture channelFuture;
+    private final ServerImpl    server;
+    private       ChannelFuture channelFuture;
 
     public ServerConnection(final ServerImpl server)
     {

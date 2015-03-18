@@ -3,8 +3,8 @@ package org.diorite.impl.command.defaults;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import org.diorite.command.CommandPriority;
 import org.diorite.impl.command.SystemCommandImpl;
+import org.diorite.command.CommandPriority;
 
 public class TpsCmd extends SystemCommandImpl
 {

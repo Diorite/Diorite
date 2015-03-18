@@ -6,15 +6,12 @@ import java.net.SocketAddress;
 import java.util.Objects;
 import java.util.Queue;
 
+import com.google.common.collect.Queues;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.google.common.collect.Queues;
-
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.TextComponent;
-import org.diorite.chat.TranslatableComponent;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketCompressor;
@@ -24,6 +21,10 @@ import org.diorite.impl.connection.packets.PacketEncrypter;
 import org.diorite.impl.connection.packets.PacketListener;
 import org.diorite.impl.connection.packets.QueuedPacket;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutDisconnect;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
+import org.diorite.chat.component.TranslatableComponent;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -39,7 +40,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     private Channel        channel;
     private SocketAddress  address;
     private PacketListener packetListener;
-    private BaseComponent disconnectMessage;
+    private BaseComponent  disconnectMessage;
     private boolean preparing = true;
 
     public NetworkManager(final ServerImpl server)

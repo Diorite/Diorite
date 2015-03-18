@@ -3,9 +3,6 @@ package org.diorite.impl.connection.listeners;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.Server;
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.TextComponent;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.status.PacketStatusInListener;
@@ -16,6 +13,9 @@ import org.diorite.impl.connection.packets.status.out.PacketStatusOutServerInfo;
 import org.diorite.impl.connection.ping.ServerPing;
 import org.diorite.impl.connection.ping.ServerPingPlayerSample;
 import org.diorite.impl.connection.ping.ServerPingServerData;
+import org.diorite.Server;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
 
 public class PacketStatusListener implements PacketStatusInListener
 {

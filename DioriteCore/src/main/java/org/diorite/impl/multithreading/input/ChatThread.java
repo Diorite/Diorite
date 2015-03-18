@@ -5,11 +5,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.diorite.ChatColor;
-import org.diorite.chat.DioriteMarkdownParser;
-import org.diorite.chat.TextComponent;
+
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.multithreading.ChatAction;
+import org.diorite.chat.ChatColor;
+import org.diorite.chat.DioriteMarkdownParser;
+import org.diorite.chat.component.TextComponent;
 
 public class ChatThread extends Thread
 {
@@ -22,6 +23,11 @@ public class ChatThread extends Thread
         this.server = server;
         this.setDaemon(true);
         this.setPriority(Thread.MIN_PRIORITY);
+    }
+
+    public int getActionsSize()
+    {
+        return this.actions.size();
     }
 
     public void add(final ChatAction action)

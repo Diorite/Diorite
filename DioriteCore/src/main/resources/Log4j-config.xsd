@@ -16,7 +16,8 @@
  limitations under the License.
 
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
     <xs:element name="Configuration" type="ConfigurationType"/>
     <xs:complexType name="ConfigurationType">
         <xs:sequence>

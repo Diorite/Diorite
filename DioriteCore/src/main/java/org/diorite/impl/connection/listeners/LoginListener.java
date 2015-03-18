@@ -8,17 +8,15 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.common.base.Charsets;
+import com.mojang.authlib.GameProfile;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.base.Charsets;
-import com.mojang.authlib.GameProfile;
-
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.TextComponent;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.MinecraftEncryption;
@@ -29,6 +27,8 @@ import org.diorite.impl.connection.packets.login.in.PacketLoginInStart;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutEncryptionBegin;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutSuccess;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
 
 public class LoginListener implements PacketLoginInListener
 {

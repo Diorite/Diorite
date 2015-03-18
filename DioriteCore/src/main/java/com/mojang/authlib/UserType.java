@@ -20,6 +20,7 @@ public enum UserType
     {
         return this.name;
     }
+
     static
     {
         BY_NAME = new HashMap<>(UserType.values().length);

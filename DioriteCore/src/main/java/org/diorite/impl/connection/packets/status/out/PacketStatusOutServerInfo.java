@@ -2,18 +2,12 @@ package org.diorite.impl.connection.packets.status.out;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.TextComponent;
-import org.diorite.chat.TranslatableComponent;
-import org.diorite.chat.serialize.ComponentSerializer;
-import org.diorite.chat.serialize.TextComponentSerializer;
-import org.diorite.chat.serialize.TranslatableComponentSerializer;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -25,6 +19,12 @@ import org.diorite.impl.connection.ping.ServerPingPlayerSampleSerializer;
 import org.diorite.impl.connection.ping.ServerPingSerializer;
 import org.diorite.impl.connection.ping.ServerPingServerData;
 import org.diorite.impl.connection.ping.ServerPingServerDataSerializer;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
+import org.diorite.chat.component.TranslatableComponent;
+import org.diorite.chat.component.serialize.ComponentSerializer;
+import org.diorite.chat.component.serialize.TextComponentSerializer;
+import org.diorite.chat.component.serialize.TranslatableComponentSerializer;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketStatusOutServerInfo implements PacketStatusOut

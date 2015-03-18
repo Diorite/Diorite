@@ -3,26 +3,14 @@ package org.diorite.impl.connection.listeners;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.chat.BaseComponent;
 import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInArmAnimation;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockDig;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockPlace;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInChat;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInCustomPayload;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInEntityAction;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInFlying;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInHeldItemSlot;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInKeepAlive;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInLook;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInPosition;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInPositionLook;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInSettings;
+import org.diorite.impl.connection.packets.play.in.*;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.multithreading.ChatAction;
+import org.diorite.chat.component.BaseComponent;
 
 public class PlayListener implements PacketPlayInListener
 {
@@ -127,6 +115,18 @@ public class PlayListener implements PacketPlayInListener
 
     @Override
     public void handle(final PacketPlayInBlockPlace packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayInClientCommand packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayInCloseWindow packet)
     {
         // TODO: implement
     }

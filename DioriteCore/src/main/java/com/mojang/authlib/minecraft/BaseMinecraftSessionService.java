@@ -1,9 +1,9 @@
 package com.mojang.authlib.minecraft;
 
+import com.mojang.authlib.AuthenticationService;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.mojang.authlib.AuthenticationService;
 
 public abstract class BaseMinecraftSessionService implements MinecraftSessionService
 {

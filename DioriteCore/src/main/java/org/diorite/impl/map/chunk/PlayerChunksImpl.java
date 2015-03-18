@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.map.chunk.ChunkPos;
+import org.diorite.world.chunk.ChunkPos;
 
 public class PlayerChunksImpl
 {

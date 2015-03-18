@@ -7,13 +7,13 @@ import java.util.HashSet;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.entity.attrib.AttributeProperty;
-import org.diorite.entity.attrib.AttributeStorage;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
+import org.diorite.entity.attrib.AttributeProperty;
+import org.diorite.entity.attrib.AttributeStorage;
 
 @PacketClass(id = 0x20, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutUpdateAttributes implements PacketPlayOut

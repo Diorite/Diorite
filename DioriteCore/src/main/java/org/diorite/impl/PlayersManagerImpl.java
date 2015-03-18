@@ -7,19 +7,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import com.mojang.authlib.GameProfile;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.mojang.authlib.GameProfile;
-
-import org.diorite.BlockLocation;
-import org.diorite.Difficulty;
-import org.diorite.Dimension;
-import org.diorite.GameMode;
-import org.diorite.ImmutableLocation;
-import org.diorite.TeleportData;
-import org.diorite.WorldType;
-import org.diorite.entity.Player;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
@@ -33,6 +25,15 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficult
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.map.world.WorldImpl;
+import org.diorite.BlockLocation;
+import org.diorite.Difficulty;
+import org.diorite.world.Dimension;
+import org.diorite.GameMode;
+import org.diorite.ImmutableLocation;
+import org.diorite.TeleportData;
+import org.diorite.world.WorldType;
+import org.diorite.entity.Player;
+
 import io.netty.buffer.Unpooled;
 
 public class PlayersManagerImpl

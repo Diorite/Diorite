@@ -5,15 +5,15 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.Difficulty;
-import org.diorite.Dimension;
-import org.diorite.GameMode;
-import org.diorite.WorldType;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
+import org.diorite.Difficulty;
+import org.diorite.world.Dimension;
+import org.diorite.GameMode;
+import org.diorite.world.WorldType;
 
 @PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutLogin implements PacketPlayOut

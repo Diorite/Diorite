@@ -7,9 +7,12 @@ import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Handler;
+
+import com.mojang.authlib.GameProfileRepository;
+import com.mojang.authlib.minecraft.MinecraftSessionService;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,7 +20,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
-import org.diorite.Server;
+
 import org.diorite.impl.command.ColoredConsoleCommandSenderImpl;
 import org.diorite.impl.command.CommandMapImpl;
 import org.diorite.impl.command.ConsoleCommandSenderImpl;
@@ -31,21 +34,17 @@ import org.diorite.impl.log.TerminalConsoleWriterThread;
 import org.diorite.impl.multithreading.input.ChatThread;
 import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.ConsoleReaderThread;
+import org.diorite.Server;
 import org.diorite.plugin.Plugin;
-import org.diorite.utils.collections.ConcurrentSimpleStringHashMap;
-
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 
 public class ServerImpl implements Server, Runnable
 {
+    private static ServerImpl instance;
 
-    protected static final Map<String, ServerImpl> instances  = new ConcurrentSimpleStringHashMap<>(2, 0.1f);
-    protected final        CommandMapImpl          commandMap = new CommandMapImpl();
+    protected final CommandMapImpl commandMap = new CommandMapImpl();
     protected final String                         serverName;
     protected final Thread                         mainServerThread;
     protected final YggdrasilAuthenticationService authenticationService;
@@ -73,6 +72,8 @@ public class ServerImpl implements Server, Runnable
 
     public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
     {
+        instance = this;
+
         this.hostname = options.valueOf("hostname").toString();
         this.port = (Integer) options.valueOf("port");
         this.onlineMode = (Boolean) options.valueOf("online");
@@ -81,11 +82,6 @@ public class ServerImpl implements Server, Runnable
         this.serverName = serverName;
         this.mainServerThread = new Thread(this);
 
-        if (instances.get(this.serverName) != null)
-        {
-            throw new IllegalArgumentException("Server is started yet.");
-        }
-        instances.put(this.serverName, this);
         if (System.console() == null)
         {
             System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
@@ -411,6 +407,11 @@ public class ServerImpl implements Server, Runnable
             e.printStackTrace();
             this.stop();
         }
+    }
+
+    public static ServerImpl getInstance()
+    {
+        return instance;
     }
 
     private static double calcTps(final double avg, final double exp, final double tps)

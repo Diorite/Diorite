@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.map.chunk.ChunkManagerImpl;
-import org.diorite.map.World;
+import org.diorite.world.World;
 
 public class WorldImpl implements World
 {

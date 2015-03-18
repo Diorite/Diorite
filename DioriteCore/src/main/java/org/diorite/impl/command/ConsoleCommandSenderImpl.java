@@ -3,11 +3,11 @@ package org.diorite.impl.command;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.ChatColor;
-import org.diorite.Server;
-import org.diorite.chat.BaseComponent;
-import org.diorite.command.ConsoleCommandSender;
 import org.diorite.impl.ServerImpl;
+import org.diorite.chat.ChatColor;
+import org.diorite.Server;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.command.ConsoleCommandSender;
 
 public class ConsoleCommandSenderImpl implements ConsoleCommandSender
 {

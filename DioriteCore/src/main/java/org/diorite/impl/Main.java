@@ -8,9 +8,10 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.diorite.Server;
-import org.diorite.impl.connection.packets.RegisterPackets;
 import org.fusesource.jansi.AnsiConsole;
+
+import org.diorite.impl.connection.packets.RegisterPackets;
+import org.diorite.Server;
 
 import io.netty.util.ResourceLeakDetector;
 import jline.UnsupportedTerminal;
@@ -19,9 +20,9 @@ import joptsimple.OptionSet;
 
 public final class Main
 {
-    private static final Pattern PERM_GEN_PAT   = Pattern.compile("[^\\d]");
     public static final  float   JAVA_8         = 52.0f;
     public static final  int     MB_128         = 131072; // 1024KB * 128
+    private static final Pattern PERM_GEN_PAT   = Pattern.compile("[^\\d]");
     static               boolean consoleEnabled = true;
     static               boolean useJline       = true;
     static               boolean enabledDebug   = false;
@@ -54,6 +55,7 @@ public final class Main
                 this.acceptsAll(Arrays.asList("debug"), "Enable debug mode");
                 this.acceptsAll(Arrays.asList("ResourceLeakDetector", "rld"), "ResourceLeakDetector level, disabled by default").withRequiredArg().ofType(String.class).describedAs("rld").defaultsTo(ResourceLeakDetector.Level.DISABLED.name());
                 this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port").defaultsTo(Server.DEFAULT_PORT);
+                this.acceptsAll(Arrays.asList("servername", "sn"), "name of server, should be simple like 'main'").withRequiredArg().ofType(String.class).describedAs("servername").defaultsTo(ServerImpl.DEFAULT_SERVER);
                 this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname").defaultsTo("localhost");
                 this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "hostname to listen on").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
                 this.acceptsAll(Arrays.asList("render-distance", "render", "rd"), "chunk render distance").withRequiredArg().ofType(Byte.class).describedAs("render").defaultsTo(Server.DEFAULT_RENDER_DISTANCE);
@@ -129,9 +131,10 @@ public final class Main
                 {
                     System.out.println("Warning, your max perm gen size is not set or less than 128mb. It is recommended you restart Java with the following argument: -XX:MaxPermSize=128M");
                 }
-                System.out.println("Starting server, please wait...");
+                final String serverName = options.valueOf("servername").toString();
+                System.out.println("Starting server (" + serverName + "), please wait...");
                 RegisterPackets.init();
-                new ServerImpl(ServerImpl.DEFAULT_SERVER, Proxy.NO_PROXY, options).start(options);
+                new ServerImpl(serverName, Proxy.NO_PROXY, options).start(options);
             } catch (final Throwable t)
             {
                 t.printStackTrace();

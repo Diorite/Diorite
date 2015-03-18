@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.command.Command;
 import org.diorite.command.CommandMap;
 import org.diorite.command.CommandSender;

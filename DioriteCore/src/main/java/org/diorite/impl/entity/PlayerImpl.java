@@ -2,27 +2,27 @@ package org.diorite.impl.entity;
 
 import java.util.UUID;
 
+import com.mojang.authlib.GameProfile;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.mojang.authlib.GameProfile;
-
-import org.diorite.ImmutableLocation;
-import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.chat.BaseComponent;
-import org.diorite.chat.TextComponent;
-import org.diorite.entity.Player;
-import org.diorite.entity.attrib.AttributeModifier;
-import org.diorite.entity.attrib.AttributeProperty;
-import org.diorite.entity.attrib.AttributeType;
-import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.map.chunk.PlayerChunksImpl;
-import org.diorite.map.chunk.ChunkPos;
+import org.diorite.ImmutableLocation;
+import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
+import org.diorite.entity.Player;
+import org.diorite.entity.attrib.AttributeModifier;
+import org.diorite.entity.attrib.AttributeProperty;
+import org.diorite.entity.attrib.AttributeType;
+import org.diorite.entity.attrib.ModifierOperation;
+import org.diorite.world.chunk.ChunkPos;
 
 public class PlayerImpl extends AttributableEntityImpl implements Player
 {

@@ -3,13 +3,6 @@ package com.mojang.authlib.yggdrasil;
 import java.net.URL;
 import java.util.Map;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.AuthenticationService;
 import com.mojang.authlib.GameProfile;
@@ -23,6 +16,13 @@ import com.mojang.authlib.yggdrasil.request.RefreshRequest;
 import com.mojang.authlib.yggdrasil.response.AuthenticationResponse;
 import com.mojang.authlib.yggdrasil.response.RefreshResponse;
 import com.mojang.authlib.yggdrasil.response.User;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class YggdrasilUserAuthentication extends HttpUserAuthentication
 {

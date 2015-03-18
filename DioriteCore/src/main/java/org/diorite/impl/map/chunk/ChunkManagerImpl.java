@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.diorite.impl.map.world.generator.MapGeneratorImpl;
-import org.diorite.map.World;
-import org.diorite.map.chunk.ChunkPos;
+import org.diorite.world.World;
+import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkManagerImpl
 {

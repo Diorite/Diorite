@@ -1,9 +1,9 @@
 package com.mojang.authlib.yggdrasil.request;
 
+import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 
 public class InvalidateRequest
 {

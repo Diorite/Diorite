@@ -5,13 +5,13 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.BlockFace;
-import org.diorite.BlockLocation;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
+import org.diorite.BlockFace;
+import org.diorite.BlockLocation;
 
 @PacketClass(id = 0x07, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketPlayInBlockDig implements PacketPlayIn
@@ -42,7 +42,7 @@ public class PacketPlayInBlockDig implements PacketPlayIn
     {
         this.action = BlockDigAction.values()[data.readByte()];
         this.blockLocation = data.readBlockLocation();
-        this.blockFace = toBlockFace(data.readByte());
+        this.blockFace = data.readBlockFace();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PacketPlayInBlockDig implements PacketPlayIn
     {
         data.writeByte(this.action.ordinal());
         data.writeBlockLocation(this.blockLocation);
-        data.writeByte((this.blockFace == null) ? - 1 : fromBlockFace(this.blockFace));
+        data.writeBlockFace(this.blockFace);
     }
 
     @Override
@@ -103,48 +103,5 @@ public class PacketPlayInBlockDig implements PacketPlayIn
         DROP_ITEM_STACK,
         DROP_ITEM,
         SHOT_ARROW_OR_EAT
-    }
-
-    protected static BlockFace toBlockFace(final byte b)
-    {
-        switch (b)
-        {
-            case 0:
-                return BlockFace.DOWN;
-            case 1:
-                return BlockFace.UP;
-            case 2:
-                return BlockFace.NORTH;
-            case 3:
-                return BlockFace.SOUTH;
-            case 4:
-                return BlockFace.WEST;
-            case 5:
-                return BlockFace.EAST;
-            default:
-                return null;
-        }
-    }
-
-    protected static byte fromBlockFace(final BlockFace b)
-    {
-        switch (b)
-        {
-
-            case NORTH:
-                return 2;
-            case EAST:
-                return 5;
-            case SOUTH:
-                return 3;
-            case WEST:
-                return 4;
-            case UP:
-                return 1;
-            case DOWN:
-                return 0;
-            default:
-                return - 1;
-        }
     }
 }

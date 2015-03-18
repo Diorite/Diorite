@@ -3,11 +3,11 @@ package com.mojang.authlib.legacy;
 import java.net.Proxy;
 import java.util.Objects;
 
-import org.apache.commons.lang3.Validate;
-
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.HttpAuthenticationService;
+
+import org.apache.commons.lang3.Validate;
 
 public class LegacyAuthenticationService extends HttpAuthenticationService
 {
