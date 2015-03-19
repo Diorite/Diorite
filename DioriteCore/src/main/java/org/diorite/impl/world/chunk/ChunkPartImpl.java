@@ -1,4 +1,4 @@
-package org.diorite.impl.map.chunk;
+package org.diorite.impl.world.chunk;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

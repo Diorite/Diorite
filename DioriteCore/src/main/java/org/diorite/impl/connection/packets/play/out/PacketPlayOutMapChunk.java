@@ -10,7 +10,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
-import org.diorite.impl.map.chunk.ChunkImpl;
+import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.world.chunk.ChunkPos;
 
 @PacketClass(id = 0x21, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)

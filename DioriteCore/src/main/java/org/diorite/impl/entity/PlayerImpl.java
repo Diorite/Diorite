@@ -12,7 +12,7 @@ import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
-import org.diorite.impl.map.chunk.PlayerChunksImpl;
+import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.chat.component.BaseComponent;

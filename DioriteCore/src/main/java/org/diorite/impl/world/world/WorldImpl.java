@@ -1,11 +1,11 @@
-package org.diorite.impl.map.world;
+package org.diorite.impl.world.world;
 
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.map.chunk.ChunkManagerImpl;
+import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.world.World;
 
 public class WorldImpl implements World

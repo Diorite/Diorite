@@ -24,7 +24,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.impl.map.world.WorldImpl;
+import org.diorite.impl.world.world.WorldImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.world.Dimension;

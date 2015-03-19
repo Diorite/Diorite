@@ -1,4 +1,4 @@
-package org.diorite.impl.map.chunk;
+package org.diorite.impl.world.chunk;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

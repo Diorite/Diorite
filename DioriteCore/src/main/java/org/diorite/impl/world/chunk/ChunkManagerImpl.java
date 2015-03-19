@@ -1,9 +1,9 @@
-package org.diorite.impl.map.chunk;
+package org.diorite.impl.world.chunk;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.diorite.impl.map.world.generator.MapGeneratorImpl;
+import org.diorite.impl.world.world.generator.MapGeneratorImpl;
 import org.diorite.world.World;
 import org.diorite.world.chunk.ChunkPos;
 

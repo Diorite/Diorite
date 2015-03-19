@@ -131,6 +131,18 @@ public class PlayListener implements PacketPlayInListener
         // TODO: implement
     }
 
+    @Override
+    public void handle(final PacketPlayInWindowClick packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayInTabComplete packet)
+    {
+        // TODO: implement
+    }
+
     public NetworkManager getNetworkManager()
     {
         return this.networkManager;
