@@ -15,6 +15,7 @@ import java.util.UUID;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
@@ -46,7 +47,6 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 
 public class PacketDataSerializer extends ByteBuf
-// TODO: add methods to serialize items and other stuff.
 {
     private final ByteBuf byteBuf;
 
@@ -242,9 +242,14 @@ public class PacketDataSerializer extends ByteBuf
         // write all blocks
         for (final ChunkPartImpl chunkPart : chunkPartsToSent)
         {
+            Main.debug("ChunkPart: " + chunkPart.hashCode() + ", " + chunk.getPos() + " y = " + chunkPart.getYPos());
+
             for (final char blockData : chunkPart.getBlocks())
-            {
-//                Main.debug("sending block: "+((byte)(blockData & 255))+"/"+(((blockData >> 8) & 255)));
+            {//((blockData >> 4) != 0
+                if ((chunk.getPos().getX() == 0) && (chunk.getPos().getZ() == - 1))
+                {
+                    Main.debug("Floor: " + (blockData >> 4) + ", " + (blockData & 15));
+                }
                 //noinspection MagicNumber
                 data[index++] = (byte) (blockData & 255);
                 //noinspection MagicNumber
@@ -314,14 +319,13 @@ public class PacketDataSerializer extends ByteBuf
     @SuppressWarnings("MagicNumber")
     public void writeBlockLocation(final BlockLocation loc)
     {
-        this.writeLong(((((long) loc.getX()) & 0x3FFFFFF) << 38) | ((((long) loc.getY()) & 0xFFF) << 26) | (((long) loc.getZ()) & 0x3FFFFFF));
+        this.writeLong(loc.asLong());
     }
 
     @SuppressWarnings("MagicNumber")
     public BlockLocation readBlockLocation()
     {
-        final long val = this.readLong();
-        return new BlockLocation((int) (val >> 38), (int) ((val >> 26) & 0xFFF), (int) ((val << 38) >> 38));
+        return BlockLocation.fromLong(this.readLong());
     }
 
     public void writeByteWord(final byte[] abyte)

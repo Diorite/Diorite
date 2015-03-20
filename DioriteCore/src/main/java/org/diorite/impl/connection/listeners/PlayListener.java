@@ -9,7 +9,9 @@ import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 import org.diorite.impl.connection.packets.play.in.*;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.multithreading.BlockBreakAction;
 import org.diorite.impl.multithreading.ChatAction;
+import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.chat.component.BaseComponent;
 
 public class PlayListener implements PacketPlayInListener
@@ -110,12 +112,17 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInBlockDig packet)
     {
+        if (packet.getAction() == PacketPlayInBlockDig.BlockDigAction.FINISH_DIG)
+        {
+            ChunkMultithreadedHandler.add(new BlockBreakAction(packet.getBlockLocation().setWorld(this.player.getWorld()), this.player));
+        }
         // TODO: implement
     }
 
     @Override
     public void handle(final PacketPlayInBlockPlace packet)
     {
+        //   ChunkMultithreadedHandler.add(new BlockPlaceAction(packet.getLocation(), , this.player));
         // TODO: implement
     }
 

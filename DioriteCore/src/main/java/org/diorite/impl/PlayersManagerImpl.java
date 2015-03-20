@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.mojang.authlib.GameProfile;
 
@@ -27,12 +28,12 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.world.world.WorldImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
-import org.diorite.world.Dimension;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.TeleportData;
-import org.diorite.world.WorldType;
 import org.diorite.entity.Player;
+import org.diorite.world.Dimension;
+import org.diorite.world.WorldType;
 
 import io.netty.buffer.Unpooled;
 
@@ -44,14 +45,16 @@ public class PlayersManagerImpl
 
     private transient long lastKeepAlive = System.currentTimeMillis();
 
+    private final WorldImpl world = new WorldImpl("world", UUID.randomUUID()); // testing
+
     public PlayersManagerImpl(final ServerImpl server)
     {
         this.server = server;
     }
 
     public PlayerImpl createPlayer(final GameProfile gameProfile, final NetworkManager networkManager)
-    {
-        final PlayerImpl player = new PlayerImpl(this.server, this.server.entityManager.getNextID(), gameProfile, networkManager, new ImmutableLocation(4, 71, - 4, 0, 0, new WorldImpl("world", UUID.randomUUID())));
+    {// TODO: loading player
+        final PlayerImpl player = new PlayerImpl(this.server, this.server.entityManager.getNextID(), gameProfile, networkManager, new ImmutableLocation(4, 71, - 4, 0, 0, this.world));
         this.players.put(gameProfile.getId(), player);
         return player;
     }
@@ -91,6 +94,7 @@ public class PlayersManagerImpl
 
     public void forEach(final Packet<?> packet)
     {
+        Main.debug("Packet: " + packet + " for: " + this.players.values().parallelStream().map(Player::getName).collect(Collectors.toSet()));
         this.forEach(player -> player.getNetworkManager().handle(packet));
     }
 

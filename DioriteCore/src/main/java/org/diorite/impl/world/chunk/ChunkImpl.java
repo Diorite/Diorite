@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
@@ -48,6 +50,17 @@ public class ChunkImpl implements Chunk
         chunkPart.setBlock(x, y, z, id, meta);
     }
 
+    public BlockMaterialData getBlockType(final int x, final int y, final int z)
+    {
+        final byte chunkPosY = (byte) (y / CHUNK_PART_HEIGHT);
+        final ChunkPartImpl chunkPart = this.chunkParts[chunkPosY];
+        if (chunkPart == null)
+        {
+            return Material.AIR;
+        }
+        return chunkPart.getBlockType(x, y % CHUNK_PART_HEIGHT, z);
+    }
+
     public int addUsage()
     {
         return this.usages.incrementAndGet();
@@ -63,6 +76,7 @@ public class ChunkImpl implements Chunk
         return this.usages.intValue();
     }
 
+    @Override
     public ChunkPos getPos()
     {
         return this.pos;

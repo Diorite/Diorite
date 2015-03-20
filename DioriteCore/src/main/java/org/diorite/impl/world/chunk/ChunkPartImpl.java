@@ -3,16 +3,19 @@ package org.diorite.impl.world.chunk;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.world.chunk.Chunk;
+import org.diorite.impl.Main;
+import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.NibbleArray;
+import org.diorite.world.chunk.Chunk;
 
 public class ChunkPartImpl // part of chunk 16x16x16
 {
     public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
-    private final    char[]      blocks; // id and sub-id(0-15) of every block
+    private final     char[]      blocks; // id and sub-id(0-15) of every block
     private final    NibbleArray skyLight;
     private final    NibbleArray blockLight;
-    private volatile byte        yPos; // from 0 to 15
+    private final    byte        yPos; // from 0 to 15
     private volatile int         blocksCount;
 
     public ChunkPartImpl(final byte yPos)
@@ -41,11 +44,51 @@ public class ChunkPartImpl // part of chunk 16x16x16
 
     public void setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
+        final BlockMaterialData old = this.getBlockType(x, y, z);
+        if ((id == old.getId()) && (meta == old.getType()))
+        {
+            return;
+        }
+        if (old.getType() != 0)
+        {
+            if (id == 0)
+            {
+                this.blocksCount--;
+            }
+        }
+        else if (id != 0)
+        {
+            this.blocksCount++;
+        }
         this.blocks[this.toArrayIndex(x, y, z)] = (char) ((id << 4) | meta);
+    }
+
+    public void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
+    {
+        this.setBlock(x, y, z, material.getId(), material.getType());
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public BlockMaterialData getBlockType(final int x, final int y, final int z)
+    {
+        final char data = this.blocks[this.toArrayIndex(x, y, z)];
+        return (BlockMaterialData) Material.getByID(data >> 4, data & 15);
     }
 
     public char[] getBlocks()
     {
+        for (int x = 0; x < 16; x++)
+        {
+
+            for (int z = 0; z < 16; z++)
+            {
+                BlockMaterialData mat = getBlockType(x, 0, z);
+                if (mat.getId() != 0)
+                {
+                    Main.debug(this.yPos + ": " + mat);
+                }
+            }
+        }
         return this.blocks;
     }
 
@@ -80,11 +123,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
     public byte getYPos()
     {
         return this.yPos;
-    }
-
-    public void setYPos(final byte yPos)
-    {
-        this.yPos = yPos;
     }
 
     public boolean isEmpty()

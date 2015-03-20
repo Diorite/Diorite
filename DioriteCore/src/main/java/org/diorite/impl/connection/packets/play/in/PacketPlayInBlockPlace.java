@@ -67,6 +67,66 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
         data.writeByte((int) (this.cursorZ * 16));
     }
 
+    public BlockLocation getLocation()
+    {
+        return this.location;
+    }
+
+    public void setLocation(final BlockLocation location)
+    {
+        this.location = location;
+    }
+
+    public BlockFace getBlockFace()
+    {
+        return this.blockFace;
+    }
+
+    public void setBlockFace(final BlockFace blockFace)
+    {
+        this.blockFace = blockFace;
+    }
+
+    public ItemStackImpl getItemStack()
+    {
+        return this.itemStack;
+    }
+
+    public void setItemStack(final ItemStackImpl itemStack)
+    {
+        this.itemStack = itemStack;
+    }
+
+    public float getCursorX()
+    {
+        return this.cursorX;
+    }
+
+    public void setCursorX(final float cursorX)
+    {
+        this.cursorX = cursorX;
+    }
+
+    public float getCursorY()
+    {
+        return this.cursorY;
+    }
+
+    public void setCursorY(final float cursorY)
+    {
+        this.cursorY = cursorY;
+    }
+
+    public float getCursorZ()
+    {
+        return this.cursorZ;
+    }
+
+    public void setCursorZ(final float cursorZ)
+    {
+        this.cursorZ = cursorZ;
+    }
+
     @Override
     public void handle(final PacketPlayInListener listener)
     {

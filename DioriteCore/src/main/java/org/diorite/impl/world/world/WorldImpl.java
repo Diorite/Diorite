@@ -5,8 +5,13 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
+import org.diorite.BlockLocation;
+import org.diorite.material.BlockMaterialData;
 import org.diorite.world.World;
+import org.diorite.world.chunk.Chunk;
+import org.diorite.world.chunk.ChunkPos;
 
 public class WorldImpl implements World
 {
@@ -21,9 +26,24 @@ public class WorldImpl implements World
         this.chunkManager = new ChunkManagerImpl(this);
     }
 
+    @Override
     public ChunkManagerImpl getChunkManager()
     {
         return this.chunkManager;
+    }
+
+    @Override
+    public void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
+    {
+        Main.debug("Block edit at: "+x+", "+y+", "+x+", from: "+ this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).getBlockType(Math.abs(x % Chunk.CHUNK_SIZE),y,Math.abs(z % Chunk.CHUNK_SIZE)));
+        this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).setBlock(Math.abs(x % Chunk.CHUNK_SIZE), y, Math.abs(z % Chunk.CHUNK_SIZE), material.getId(), material.getType());
+        Main.debug("Block edit at: "+x+", "+y+", "+x+", after: "+ this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).getBlockType(Math.abs(x % Chunk.CHUNK_SIZE),y,Math.abs(z % Chunk.CHUNK_SIZE)));
+    }
+
+    @Override
+    public void setBlock(final BlockLocation location, final BlockMaterialData material)
+    {
+        this.setBlock(location.getX(), location.getY(), location.getZ(), material);
     }
 
     @Override

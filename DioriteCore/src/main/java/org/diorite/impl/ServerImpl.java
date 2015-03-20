@@ -34,6 +34,7 @@ import org.diorite.impl.log.TerminalConsoleWriterThread;
 import org.diorite.impl.multithreading.input.ChatThread;
 import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.ConsoleReaderThread;
+import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.Server;
 import org.diorite.plugin.Plugin;
 
@@ -129,6 +130,7 @@ public class ServerImpl implements Server, Runnable
 
         this.chatThread = ChatThread.start(this);
         this.commandsThread = CommandsThread.start(this);
+        new ChunkMultithreadedHandler(this).start();
 
         this.entityManager = new EntityManagerImpl(this);
         this.playersManager = new PlayersManagerImpl(this);
