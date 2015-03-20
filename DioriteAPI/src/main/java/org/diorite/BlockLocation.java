@@ -3,9 +3,9 @@ package org.diorite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.world.World;
 import org.diorite.world.chunk.ChunkPos;
-import org.diorite.utils.math.DioriteMathUtils;
 
 public class BlockLocation
 {
@@ -15,11 +15,11 @@ public class BlockLocation
     private final int   z;
     private final World world;
 
-    public BlockLocation(final int x, final int z, final int y)
+    public BlockLocation(final int x, final int y, final int z)
     {
         this.x = x;
-        this.z = z;
         this.y = y;
+        this.z = z;
         this.world = null;
     }
 
@@ -51,24 +51,29 @@ public class BlockLocation
         return this.world;
     }
 
+    public BlockLocation setWorld(final World world)
+    {
+        return new BlockLocation(this.x, this.y, this.z, world);
+    }
+
     public BlockLocation addX(final int x)
     {
-        return new BlockLocation(this.x + x, this.y, this.z);
+        return new BlockLocation(this.x + x, this.y, this.z, this.world);
     }
 
     public BlockLocation addY(final int y)
     {
-        return new BlockLocation(this.x, this.y + y, this.z);
+        return new BlockLocation(this.x, this.y + y, this.z, this.world);
     }
 
     public BlockLocation addZ(final int z)
     {
-        return new BlockLocation(this.x, this.y, this.z + z);
+        return new BlockLocation(this.x, this.y, this.z + z, this.world);
     }
 
     public BlockLocation add(final int x, final int y, final int z)
     {
-        return new BlockLocation(this.x + x, this.y + y, this.z + z);
+        return new BlockLocation(this.x + x, this.y + y, this.z + z, this.world);
     }
 
     public double length()
@@ -144,7 +149,7 @@ public class BlockLocation
 
     public BlockLocation crossProduct(final BlockLocation location)
     {
-        return new BlockLocation((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
+        return new BlockLocation((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()), this.world);
     }
 
     public boolean isInAABB(final BlockLocation min, final BlockLocation max)
@@ -160,6 +165,21 @@ public class BlockLocation
     public ChunkPos getChunkPos()
     {
         return new ChunkPos(this.x >> 4, this.z >> 4, this.world);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public long asLong()
+    {
+        return ((((long) this.x) & 0x3FFFFFF) << 38) | ((((long) this.y) & 0xFFF) << 26) | (((long) this.z) & 0x3FFFFFF);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public static BlockLocation fromLong(final long pos)
+    {
+        final int x = (int) (pos >> 38);
+        final int y = (int) ((pos >> 26) & 0xFFF);
+        final int z = (int) ((pos << 38) >> 38);
+        return new BlockLocation(x, y, z);
     }
 
     @Override

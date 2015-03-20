@@ -39,13 +39,13 @@ public class Planks extends BlockMaterialData
     }
 
     @Override
-    public BlockMaterialData getType(final String name)
+    public Planks getType(final String name)
     {
         return getByEnumName(name);
     }
 
     @Override
-    public BlockMaterialData getType(final int id)
+    public Planks getType(final int id)
     {
         return getByID(id);
     }
@@ -86,7 +86,7 @@ public class Planks extends BlockMaterialData
 
     public static void register(final Planks element)
     {
-        byID.put((byte) element.getId(), element);
+        byID.put(element.getType(), element);
         byName.put(element.name(), element);
     }
 

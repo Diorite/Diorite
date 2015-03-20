@@ -48,13 +48,13 @@ public class Dirt extends BlockMaterialData
     }
 
     @Override
-    public BlockMaterialData getType(final String name)
+    public Dirt getType(final String name)
     {
         return getByEnumName(name);
     }
 
     @Override
-    public BlockMaterialData getType(final int id)
+    public Dirt getType(final int id)
     {
         return getByID(id);
     }
@@ -71,7 +71,7 @@ public class Dirt extends BlockMaterialData
 
     public static void register(final Dirt element)
     {
-        byID.put((byte) element.getId(), element);
+        byID.put(element.getType(), element);
         byName.put(element.name(), element);
     }
 

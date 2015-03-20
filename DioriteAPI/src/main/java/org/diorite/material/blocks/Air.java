@@ -34,13 +34,13 @@ public class Air extends BlockMaterialData
     }
 
     @Override
-    public BlockMaterialData getType(final String name)
+    public Air getType(final String name)
     {
         return getByEnumName(name);
     }
 
     @Override
-    public BlockMaterialData getType(final int id)
+    public Air getType(final int id)
     {
         return getByID(id);
     }
@@ -93,7 +93,7 @@ public class Air extends BlockMaterialData
 
     public static void register(final Air element)
     {
-        byID.put((byte) element.getId(), element);
+        byID.put(element.getType(), element);
         byName.put(element.name(), element);
     }
 

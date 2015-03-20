@@ -69,13 +69,13 @@ public class Sapling extends BlockMaterialData
     }
 
     @Override
-    public BlockMaterialData getType(final String name)
+    public Sapling getType(final String name)
     {
         return getByEnumName(name);
     }
 
     @Override
-    public BlockMaterialData getType(final int id)
+    public Sapling getType(final int id)
     {
         return getByID(id);
     }
@@ -140,7 +140,7 @@ public class Sapling extends BlockMaterialData
 
     public static void register(final Sapling element)
     {
-        byID.put((byte) element.getId(), element);
+        byID.put(element.getType(), element);
         byName.put(element.name(), element);
     }
 

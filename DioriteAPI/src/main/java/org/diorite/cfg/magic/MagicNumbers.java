@@ -3,6 +3,20 @@ package org.diorite.cfg.magic;
 @SuppressWarnings("MagicNumber")
 public final class MagicNumbers
 {
+    /*
+     * ==================
+     * Multithreading
+     * ==================
+     */
+    @MagicNumber("threads.chunk.maxActions")
+    public static final int THREADS__CHUNK__MAX_ACTIONS = 50;
+
+    /*
+     * ==================
+     * ...
+     * ==================
+     */
+
     @MagicNumber("items.defaultStackSize")
     public static final int ITEMS__DEFAULT_STACK_SIZE = 64;
 

@@ -46,13 +46,13 @@ public class Cobblestone extends BlockMaterialData
     }
 
     @Override
-    public BlockMaterialData getType(final String name)
+    public Cobblestone getType(final String name)
     {
         return getByEnumName(name);
     }
 
     @Override
-    public BlockMaterialData getType(final int id)
+    public Cobblestone getType(final int id)
     {
         return getByID(id);
     }
@@ -69,7 +69,7 @@ public class Cobblestone extends BlockMaterialData
 
     public static void register(final Cobblestone element)
     {
-        byID.put((byte) element.getId(), element);
+        byID.put(element.getType(), element);
         byName.put(element.name(), element);
     }
 
