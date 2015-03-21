@@ -93,6 +93,18 @@ public class ChunkPos
         return (DioriteMathUtils.square(origin.getX() - this.x) + DioriteMathUtils.square(origin.getZ() - this.z)) <= DioriteMathUtils.square(radius);
     }
 
+    @SuppressWarnings("MagicNumber")
+    public long asLong()
+    {
+        return (((long) this.x) << 32) | (this.z & 0xffffffffL);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public ChunkPos fromLong(final long l)
+    {
+        return new ChunkPos((int)(l >> 32), (int)l);
+    }
+
     @Override
     public int hashCode()
     {
@@ -116,7 +128,8 @@ public class ChunkPos
 
         final ChunkPos chunkPos = (ChunkPos) o;
 
-        return (this.x == chunkPos.x) && (this.z == chunkPos.z) && ! (this.world != null ? ! this.world.equals(chunkPos.world) : chunkPos.world != null);
+        // check world only if both of them use it
+        return (this.x == chunkPos.x) && (this.z == chunkPos.z) && ((this.world == null) || (chunkPos.world == null) || (this.world.equals(chunkPos.world)));
 
     }
 

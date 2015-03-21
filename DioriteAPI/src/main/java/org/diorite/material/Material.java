@@ -489,6 +489,11 @@ public abstract class Material implements SimpleEnum<Material>
 
     // TODO: method to get possible drops
 
+    public boolean isThisSameID(final Material mat)
+    {
+        return this.enumName.equals(mat.enumName);
+    }
+
     public final boolean simpleEquals(final Object o)
     {
         //noinspection ObjectEquality
