@@ -19,7 +19,6 @@
             <groupId>org.diorite</groupId>
             <artifactId>DioriteAPI</artifactId>
             <version>${project.version}</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
