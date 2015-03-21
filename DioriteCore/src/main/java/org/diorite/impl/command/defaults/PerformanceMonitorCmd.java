@@ -2,8 +2,9 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
-import org.diorite.impl.ServerImpl;
 import org.diorite.impl.command.SystemCommandImpl;
+import org.diorite.impl.multithreading.input.ChatThread;
+import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.command.CommandPriority;
 
 public class PerformanceMonitorCmd extends SystemCommandImpl
@@ -36,8 +37,8 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
             sb.append("&7  == &3CPU &7==\n");
             sb.append("&7    Available Processors: &3").append(rt.availableProcessors()).append("\n");
             sb.append("&7  == &3Diorite &7==\n");
-            sb.append("&7    Waiting chat actions: &3").append(ServerImpl.getInstance().getChatThread().getActionsSize()).append(" &7\n");
-            sb.append("&7    Waiting commands actions: &3").append(ServerImpl.getInstance().getCommandsThread().getActionsSize());
+            sb.append("&7    Waiting chat actions: &3").append(ChatThread.getActionsSize()).append(" &7\n");
+            sb.append("&7    Waiting commands actions: &3").append(CommandsThread.getActionsSize());
             sender.sendSimpleColoredMessage(sb.toString());
         });
     }

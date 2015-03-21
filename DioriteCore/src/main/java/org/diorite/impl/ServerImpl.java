@@ -54,10 +54,10 @@ public class ServerImpl implements Server, Runnable
     protected final int                            port;
     protected final ChatThread                     chatThread;
     protected final CommandsThread                 commandsThread;
-   protected     int      tps                = DEFAULT_TPS;
-    protected     int      waitTime           = DEFAULT_WAIT_TIME;
-    protected     int      connectionThrottle = 1000;
-    protected     double   mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
+    protected int    tps                = DEFAULT_TPS;
+    protected int    waitTime           = DEFAULT_WAIT_TIME;
+    protected int    connectionThrottle = 1000;
+    protected double mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
     protected ServerConnection         serverConnection;
     protected EntityManagerImpl        entityManager;
     protected PlayersManagerImpl       playersManager;
@@ -387,10 +387,5 @@ public class ServerImpl implements Server, Runnable
     public static ServerImpl getInstance()
     {
         return instance;
-    }
-
-    private static double calcTps(final double avg, final double exp, final double tps)
-    {
-        return (avg * exp) + (tps * (1.0D - exp));
     }
 }

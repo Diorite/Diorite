@@ -23,6 +23,10 @@ public class ChunkMultithreadedHandler extends Thread
     public static void add(final BlockBreakAction action)
     {
         breakActions.add(action);
+        synchronized (breakActions)
+        {
+            breakActions.notifyAll();
+        }
     }
 
     public static void add(final BlockPlaceAction action)
@@ -54,6 +58,19 @@ public class ChunkMultithreadedHandler extends Thread
                         final World world = location.getWorld();
                         world.setBlock(location, Material.AIR);
                         this.server.getPlayersManager().forEach(p -> p.getWorld().equals(world), new PacketPlayOutBlockChange(location, Material.AIR));
+                    }
+                    else
+                    {
+                        try
+                        {
+                            synchronized (breakActions)
+                            {
+                                breakActions.wait();
+                            }
+                        } catch (final InterruptedException e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 {

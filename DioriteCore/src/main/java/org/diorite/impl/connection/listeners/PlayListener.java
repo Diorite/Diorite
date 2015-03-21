@@ -10,6 +10,8 @@ import org.diorite.impl.connection.packets.play.in.*;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.multithreading.BlockBreakAction;
 import org.diorite.impl.multithreading.ChatAction;
+import org.diorite.impl.multithreading.input.ChatThread;
+import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.chat.component.BaseComponent;
 
@@ -87,11 +89,11 @@ public class PlayListener implements PacketPlayInListener
         //noinspection HardcodedFileSeparator
         if (str.startsWith("/"))
         {
-            this.server.getCommandsThread().add(new ChatAction(str.substring(1), this.player));
+            CommandsThread.add(new ChatAction(str.substring(1), this.player));
         }
         else
         {
-            this.server.getChatThread().add(new ChatAction(str, this.player));
+            ChatThread.add(new ChatAction(str, this.player));
         }
     }
 

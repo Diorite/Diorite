@@ -14,7 +14,7 @@ import org.diorite.chat.component.TextComponent;
 
 public class ChatThread extends Thread
 {
-    private final Queue<ChatAction> actions = new ConcurrentLinkedQueue<>();
+    private static final Queue<ChatAction> actions = new ConcurrentLinkedQueue<>();
     private final ServerImpl server;
 
     public ChatThread(final ServerImpl server)
@@ -25,14 +25,18 @@ public class ChatThread extends Thread
         this.setPriority(Thread.MIN_PRIORITY);
     }
 
-    public int getActionsSize()
+    public static int getActionsSize()
     {
-        return this.actions.size();
+        return actions.size();
     }
 
-    public void add(final ChatAction action)
+    public static void add(final ChatAction action)
     {
-        this.actions.add(action);
+        actions.add(action);
+        synchronized (actions)
+        {
+            actions.notifyAll();
+        }
     }
 
     @Override
@@ -40,14 +44,18 @@ public class ChatThread extends Thread
     {
         while (this.server.isRunning())
         {
-            final ChatAction action = this.actions.poll();
+            final ChatAction action = actions.poll();
             if (action == null)
             {
                 try
                 {
-                    Thread.sleep(100);
-                } catch (final InterruptedException ignored)
+                    synchronized (actions)
+                    {
+                        actions.wait();
+                    }
+                } catch (final InterruptedException e)
                 {
+                    e.printStackTrace();
                 }
                 continue;
             }
@@ -64,7 +72,7 @@ public class ChatThread extends Thread
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).append("actionsSize", this.actions.size()).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).append("actionsSize", actions.size()).toString();
     }
 
     public static ChatThread start(final ServerImpl server)

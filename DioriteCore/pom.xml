@@ -20,7 +20,6 @@
             <artifactId>DioriteAPI</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
