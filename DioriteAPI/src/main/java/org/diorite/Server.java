@@ -26,8 +26,6 @@ public interface Server
 
     ConsoleCommandSender getConsoleSender();
 
-    double[] getRecentTps();
-
     boolean isRunning();
 
     double getMutli();
