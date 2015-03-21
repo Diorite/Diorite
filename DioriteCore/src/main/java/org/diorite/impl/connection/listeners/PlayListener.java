@@ -3,7 +3,6 @@ package org.diorite.impl.connection.listeners;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
@@ -48,7 +47,6 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInCustomPayload packet)
     {
-        Main.debug("Got plugin message: " + packet.getTag());
         // TODO: implement
     }
 

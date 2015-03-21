@@ -52,8 +52,8 @@ public class ChunkMultithreadedHandler extends Thread
                     {
                         final BlockLocation location = action.getLocation();
                         final World world = location.getWorld();
-                        world.setBlock(location, Material.COBBLESTONE);
-                        this.server.getPlayersManager().forEach(p -> p.getWorld().equals(world), new PacketPlayOutBlockChange(location, Material.COBBLESTONE));
+                        world.setBlock(location, Material.AIR);
+                        this.server.getPlayersManager().forEach(p -> p.getWorld().equals(world), new PacketPlayOutBlockChange(location, Material.AIR));
                     }
                 }
                 {

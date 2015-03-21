@@ -2,15 +2,16 @@ package org.diorite.impl.world.world.generator;
 
 import org.diorite.impl.Main;
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.world.chunk.Chunk;
 
 public class WorldGeneratorImpl // temp code, TODO
 {
     public void generateChunk(final ChunkImpl chunk)
     {
-        Main.debug("Generating: "+chunk.getPos());
-        for (int x = 0; x < 16; x++)
+        Main.debug("Generating: " + chunk.getPos());
+        for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
         {
-            for (int z = 0; z < 16; z++)
+            for (int z = 0; z < Chunk.CHUNK_SIZE; z++)
             {
                 chunk.setBlock(x, 0, z, 3, 0);
 //                for (int y = 0; y < 4; y++)

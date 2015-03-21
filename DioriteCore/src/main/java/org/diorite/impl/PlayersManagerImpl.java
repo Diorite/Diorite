@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import com.mojang.authlib.GameProfile;
 
@@ -94,7 +93,6 @@ public class PlayersManagerImpl
 
     public void forEach(final Packet<?> packet)
     {
-        Main.debug("Packet: " + packet + " for: " + this.players.values().parallelStream().map(Player::getName).collect(Collectors.toSet()));
         this.forEach(player -> player.getNetworkManager().handle(packet));
     }
 

@@ -15,7 +15,6 @@ import java.util.UUID;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 
-import org.diorite.impl.Main;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
@@ -242,14 +241,8 @@ public class PacketDataSerializer extends ByteBuf
         // write all blocks
         for (final ChunkPartImpl chunkPart : chunkPartsToSent)
         {
-            Main.debug("ChunkPart: " + chunkPart.hashCode() + ", " + chunk.getPos() + " y = " + chunkPart.getYPos());
-
             for (final char blockData : chunkPart.getBlocks())
-            {//((blockData >> 4) != 0
-                if ((chunk.getPos().getX() == 0) && (chunk.getPos().getZ() == - 1))
-                {
-                    Main.debug("Floor: " + (blockData >> 4) + ", " + (blockData & 15));
-                }
+            {
                 //noinspection MagicNumber
                 data[index++] = (byte) (blockData & 255);
                 //noinspection MagicNumber
