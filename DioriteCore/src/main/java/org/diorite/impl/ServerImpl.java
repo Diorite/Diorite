@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
-import java.util.Arrays;
 import java.util.UUID;
 import java.util.logging.Handler;
 
@@ -55,8 +54,7 @@ public class ServerImpl implements Server, Runnable
     protected final int                            port;
     protected final ChatThread                     chatThread;
     protected final CommandsThread                 commandsThread;
-    private final double[] recentTps          = new double[3];
-    protected     int      tps                = DEFAULT_TPS;
+   protected     int      tps                = DEFAULT_TPS;
     protected     int      waitTime           = DEFAULT_WAIT_TIME;
     protected     int      connectionThrottle = 1000;
     protected     double   mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
@@ -164,17 +162,6 @@ public class ServerImpl implements Server, Runnable
     public ConsoleCommandSenderImpl getConsoleSender()
     {
         return this.consoleCommandSender;
-    }
-
-    @Override
-    public double[] getRecentTps()
-    {
-        final double[] result = new double[this.recentTps.length];
-        for (int i = 0; i < this.recentTps.length; i++)
-        {
-            result[i] = (this.recentTps[i] > this.tps) ? this.tps : this.recentTps[i];
-        }
-        return result;
     }
 
     @Override
@@ -371,11 +358,8 @@ public class ServerImpl implements Server, Runnable
     {
         try
         {
-
-            Arrays.fill(this.recentTps, (double) DEFAULT_TPS);
             long lastTick = System.nanoTime();
             long catchupTime = 0L;
-            long tickSection = lastTick;
             while (this.isRunning)
             {
                 final long curTime = System.nanoTime();
@@ -388,17 +372,6 @@ public class ServerImpl implements Server, Runnable
                 else
                 {
                     catchupTime = Math.min(NANOS_IN_SECOND, Math.abs(wait));
-                    if ((this.currentTick++ % 100) == 0)
-                    {
-                        final double currentTps = (((double) NANOS_IN_SECOND) / (curTime - tickSection)) * 100;
-                        //noinspection MagicNumber
-                        this.recentTps[0] = calcTps(this.recentTps[0], 0.92D, currentTps);
-                        //noinspection MagicNumber
-                        this.recentTps[1] = calcTps(this.recentTps[1], 0.9835D, currentTps);
-                        //noinspection MagicNumber
-                        this.recentTps[2] = calcTps(this.recentTps[2], 0.9945000000000001D, currentTps);
-                        tickSection = curTime;
-                    }
                     lastTick = curTime;
 
                     this.playersManager.keepAlive();
