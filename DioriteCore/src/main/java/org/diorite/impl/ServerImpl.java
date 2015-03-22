@@ -2,6 +2,7 @@ package org.diorite.impl;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.BindException;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.UnknownHostException;
@@ -37,6 +38,8 @@ import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.Server;
 import org.diorite.plugin.Plugin;
 
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 
@@ -334,6 +337,7 @@ public class ServerImpl implements Server, Runnable
         {
             System.out.println("Starting listening on " + this.hostname + ":" + this.port);
             this.serverConnection.init(InetAddress.getByName(this.hostname), this.port);
+
             System.out.println("Binded to " + this.hostname + ":" + this.port);
         } catch (final UnknownHostException e)
         {

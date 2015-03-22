@@ -6,8 +6,7 @@ import java.io.IOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
-public class LoggerOutputStream
-        extends ByteArrayOutputStream
+public class LoggerOutputStream extends ByteArrayOutputStream
 {
     private final String separator = System.getProperty("line.separator");
     private final Logger logger;
@@ -20,8 +19,7 @@ public class LoggerOutputStream
     }
 
     @Override
-    public void flush()
-            throws IOException
+    public void flush() throws IOException
     {
         synchronized (this)
         {
@@ -34,10 +32,4 @@ public class LoggerOutputStream
             }
         }
     }
-//
-//    @Override
-//    public String toString()
-//    {
-//        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("separator", this.separator).append("logger", this.logger.getName()).append("level", this.level).toString();
-//    }
 }
