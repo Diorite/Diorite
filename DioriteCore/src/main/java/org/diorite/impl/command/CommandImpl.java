@@ -12,9 +12,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.command.Arguments;
 import org.diorite.command.Command;
 import org.diorite.command.CommandExecutor;
-import org.diorite.command.CommandSender;
+import org.diorite.command.sender.CommandSender;
 import org.diorite.command.ExceptionHandler;
 import org.diorite.command.SubCommand;
 
@@ -284,7 +285,7 @@ public abstract class CommandImpl implements Command
         Objects.requireNonNull(args, "args can't be null");
         matchedPattern.reset();
         matchedPattern.find();
-        this.commandExecutor.runCommand(sender, this, label, matchedPattern, args);
+        this.commandExecutor.runCommand(sender, this, label, matchedPattern, new Arguments(args));
     }
 
     @Override

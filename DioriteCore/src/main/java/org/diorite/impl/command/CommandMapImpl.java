@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.command.Command;
 import org.diorite.command.CommandMap;
-import org.diorite.command.CommandSender;
+import org.diorite.command.sender.CommandSender;
 import org.diorite.command.MainCommand;
 import org.diorite.command.PluginCommand;
 import org.diorite.plugin.Plugin;

@@ -3,7 +3,7 @@ package org.diorite.impl.multithreading;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.command.CommandSender;
+import org.diorite.command.sender.CommandSender;
 
 public class ChatAction
 {

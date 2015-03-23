@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.multithreading.ChatAction;
-import org.diorite.command.CommandSender;
+import org.diorite.command.sender.CommandSender;
 
 public class CommandsThread extends Thread
 {
