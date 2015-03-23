@@ -1,7 +1,7 @@
 package org.diorite;
 
 import org.diorite.command.CommandMap;
-import org.diorite.command.ConsoleCommandSender;
+import org.diorite.command.sender.ConsoleCommandSender;
 import org.diorite.command.PluginCommandBuilder;
 import org.diorite.plugin.Plugin;
 

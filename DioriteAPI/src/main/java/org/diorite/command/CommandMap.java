@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.diorite.command.sender.CommandSender;
 import org.diorite.plugin.Plugin;
 
 public interface CommandMap

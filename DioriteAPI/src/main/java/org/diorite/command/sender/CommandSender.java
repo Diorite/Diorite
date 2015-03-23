@@ -1,4 +1,4 @@
-package org.diorite.command;
+package org.diorite.command.sender;
 
 import org.diorite.chat.ChatColor;
 import org.diorite.Server;

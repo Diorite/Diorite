@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.diorite.command.sender.CommandSender;
+
 public interface Command
 {
     @SuppressWarnings("HardcodedFileSeparator")

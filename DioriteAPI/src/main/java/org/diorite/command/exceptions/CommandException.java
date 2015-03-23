@@ -1,4 +1,4 @@
-package org.diorite.command;
+package org.diorite.command.exceptions;
 
 public class CommandException extends RuntimeException
 {

@@ -1,4 +1,4 @@
-package org.diorite.command;
+package org.diorite.command.sender;
 
 public interface BlockCommandSender extends CommandSender
 {

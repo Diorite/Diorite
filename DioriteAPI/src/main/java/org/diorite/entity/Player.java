@@ -1,6 +1,6 @@
 package org.diorite.entity;
 
-import org.diorite.command.PlayerCommandSender;
+import org.diorite.command.sender.PlayerCommandSender;
 
 public interface Player extends AttributableEntity, PlayerCommandSender
 {
