@@ -1,11 +1,11 @@
 package org.diorite.impl.world.chunk;
 
-import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.impl.world.world.WorldImpl;
 import org.diorite.impl.world.world.generator.WorldGeneratorImpl;
 import org.diorite.world.chunk.Chunk;
@@ -14,13 +14,12 @@ import org.diorite.world.chunk.ChunkPos;
 
 import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongObjectHashMap;
-import io.netty.util.internal.ConcurrentSet;
 
 public class ChunkManagerImpl implements ChunkManager
 {
     private final WorldImpl world;
     private final TLongObjectMap<ChunkImpl> chunks     = new TLongObjectHashMap<>(100); // change to ConcurrentHashMap<Long, ChunkImpl> if needed.
-    private final Collection<Long>          generating = new ConcurrentSet<>();
+    private final Map<Long, Object>         generating = new ConcurrentHashMap<>(10);
 
     public ChunkManagerImpl(final WorldImpl world)
     {
@@ -44,23 +43,37 @@ public class ChunkManagerImpl implements ChunkManager
     {
         final long posLong = pos.asLong();
         ChunkImpl chunk = this.chunks.get(posLong);
-        if ((chunk == null) && generate) // TODO: fix double chunk generating when two players need generate this same chunk at similar time
+        if ((chunk == null) && generate)
         {
-            if (this.generating.contains(posLong))
+            final Object lock = this.generating.get(posLong);
+            if (lock != null)
             {
-                //noinspection StatementWithEmptyBody
-                while (this.generating.contains(posLong))
+                try
                 {
-                    // wait for chunk
+                    //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                    synchronized (lock)
+                    {
+                        lock.wait();
+                    }
+                } catch (final InterruptedException e)
+                {
+                    e.printStackTrace();
                 }
-                Main.debug("Wait chunk works!");
                 return this.chunks.get(posLong);
             }
-            this.generating.add(posLong);
+            this.generating.put(posLong, new Object());
             chunk = new ChunkImpl(this.world, pos);
             this.chunks.put(posLong, chunk);
             new WorldGeneratorImpl().generateChunk(chunk);
-            this.generating.remove(posLong);
+            final Object obj = this.generating.remove(posLong);
+            if (obj != null)
+            {
+                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                synchronized (obj)
+                {
+                    obj.notifyAll();
+                }
+            }
         }
         return chunk;
     }
