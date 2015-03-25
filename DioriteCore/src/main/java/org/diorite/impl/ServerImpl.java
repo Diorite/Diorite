@@ -2,7 +2,6 @@ package org.diorite.impl;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.BindException;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.UnknownHostException;
@@ -38,8 +37,6 @@ import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.Server;
 import org.diorite.plugin.Plugin;
 
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 
@@ -61,6 +58,7 @@ public class ServerImpl implements Server, Runnable
     protected int    waitTime           = DEFAULT_WAIT_TIME;
     protected int    connectionThrottle = 1000;
     protected double mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
+    protected int                      compressionThreshold; // -1 -> off
     protected ServerConnection         serverConnection;
     protected EntityManagerImpl        entityManager;
     protected PlayersManagerImpl       playersManager;
@@ -72,14 +70,27 @@ public class ServerImpl implements Server, Runnable
     private           KeyPair keyPair   = MinecraftEncryption.generateKeyPair();
     private transient boolean isRunning = true;
 
+    public int getCompressionThreshold()
+    {
+        return this.compressionThreshold;
+    }
+
+    public void setCompressionThreshold(final int compressionThreshold)
+    {
+        this.compressionThreshold = compressionThreshold;
+    }
+
     public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
     {
         instance = this;
 
+        this.compressionThreshold = (int) options.valueOf("compressionthreshold");
+
         this.hostname = options.valueOf("hostname").toString();
-        this.port = (Integer) options.valueOf("port");
-        this.onlineMode = (Boolean) options.valueOf("online");
-        this.renderDistance = (Byte) options.valueOf("render");
+        this.port = (int) options.valueOf("port");
+        this.onlineMode = (boolean) options.valueOf("online");
+        this.renderDistance = (byte) options.valueOf("render");
+
 
         this.serverName = serverName;
         this.mainServerThread = new Thread(this);
@@ -91,6 +102,7 @@ public class ServerImpl implements Server, Runnable
         }
         try
         {
+
             this.reader = new ConsoleReader(System.in, System.out);
             this.reader.setExpandEvents(false);
         } catch (final Throwable t)

@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
-import org.diorite.impl.utils.LazyInitVar;
+import org.diorite.utils.LazyInitVar;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

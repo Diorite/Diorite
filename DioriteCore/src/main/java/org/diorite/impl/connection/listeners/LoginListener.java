@@ -25,6 +25,7 @@ import org.diorite.impl.connection.packets.login.PacketLoginInListener;
 import org.diorite.impl.connection.packets.login.in.PacketLoginInEncryptionBegin;
 import org.diorite.impl.connection.packets.login.in.PacketLoginInStart;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutEncryptionBegin;
+import org.diorite.impl.connection.packets.login.out.PacketLoginOutSetCompression;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutSuccess;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.chat.component.BaseComponent;
@@ -114,8 +115,14 @@ public class LoginListener implements PacketLoginInListener
         new ThreadPlayerLookupUUID(this, "Diorite User Authenticator (" + this.gameProfile.getName() + ") #" + counter.incrementAndGet(), this::acceptPlayer).start();
     }
 
-    public void acceptPlayer() // TODO implement compression
+    public void acceptPlayer()
     {
+        if (this.server.getCompressionThreshold() >= 0)
+        {
+            this.networkManager.handle(new PacketLoginOutSetCompression(this.server.getCompressionThreshold()), future -> {
+                this.networkManager.setCompression(this.server.getCompressionThreshold());
+            });
+        }
         this.networkManager.handle(new PacketLoginOutSuccess(this.gameProfile), future -> {
             this.networkManager.setProtocol(EnumProtocol.PLAY);
 
