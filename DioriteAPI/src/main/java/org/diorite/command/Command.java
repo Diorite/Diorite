@@ -1,6 +1,7 @@
 package org.diorite.command;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,7 +55,11 @@ public interface Command
 
     boolean matches(String name);
 
+    Matcher matcher(String name);
+
     boolean tryDispatch(CommandSender sender, String label, String[] args);
+
+    List<String> tabComplete(CommandSender sender, String label, Matcher matchedPattern, String[] args);
 
     void dispatch(CommandSender sender, String label, Matcher matchedPattern, String[] args);
 }

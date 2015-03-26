@@ -1,5 +1,6 @@
 package org.diorite.command;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -22,6 +23,8 @@ public interface CommandMap
     Optional<MainCommand> getCommand(String str);
 
     Map<String, MainCommand> getCommandMap();
+
+    List<String> tabComplete(CommandSender sender, String cmdLine);
 
     void dispatch(CommandSender sender, String args);
 }
