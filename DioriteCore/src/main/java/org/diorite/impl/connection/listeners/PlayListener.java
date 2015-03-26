@@ -12,6 +12,7 @@ import org.diorite.impl.multithreading.BlockBreakAction;
 import org.diorite.impl.multithreading.ChatAction;
 import org.diorite.impl.multithreading.input.ChatThread;
 import org.diorite.impl.multithreading.input.CommandsThread;
+import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.chat.component.BaseComponent;
 
@@ -98,6 +99,12 @@ public class PlayListener implements PacketPlayInListener
     }
 
     @Override
+    public void handle(final PacketPlayInTabComplete packet)
+    {
+        TabCompleteThread.add(new ChatAction(packet.getContent(), this.player));
+    }
+
+    @Override
     public void handle(final PacketPlayInEntityAction packet)
     {
         packet.getEntityAction().doAction(this.player, packet.getJumpBoost());
@@ -140,12 +147,6 @@ public class PlayListener implements PacketPlayInListener
 
     @Override
     public void handle(final PacketPlayInWindowClick packet)
-    {
-        // TODO: implement
-    }
-
-    @Override
-    public void handle(final PacketPlayInTabComplete packet)
     {
         // TODO: implement
     }

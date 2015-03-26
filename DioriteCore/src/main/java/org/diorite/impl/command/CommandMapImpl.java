@@ -1,19 +1,22 @@
 package org.diorite.impl.command;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.ServerImpl;
 import org.diorite.command.Command;
 import org.diorite.command.CommandMap;
-import org.diorite.command.sender.CommandSender;
 import org.diorite.command.MainCommand;
 import org.diorite.command.PluginCommand;
+import org.diorite.command.sender.CommandSender;
 import org.diorite.plugin.Plugin;
 import org.diorite.utils.DioriteStringUtils;
 import org.diorite.utils.collections.ConcurrentSimpleStringHashMap;
@@ -84,6 +87,72 @@ public class CommandMapImpl implements CommandMap
     public Map<String, MainCommand> getCommandMap()
     {
         return new HashMap<>(this.commandMap);
+    }
+
+    @Override
+    public List<String> tabComplete(final CommandSender sender, final String cmdLine)
+    {
+        if ((cmdLine == null) || cmdLine.isEmpty())
+        {
+            final List<String> result = this.commandMap.keySet().parallelStream().collect(Collectors.toList());
+            if (result.isEmpty())
+            {
+                return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
+            }
+            else
+            {
+                return result;
+            }
+        }
+        final String[] args = DioriteStringUtils.splitArguments(cmdLine);
+        if (args.length == 0)
+        {
+            final List<String> result = this.commandMap.keySet().parallelStream().collect(Collectors.toList());
+            if (result.isEmpty())
+            {
+                return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
+            }
+            else
+            {
+                return result;
+            }
+        }
+        final String command = args[0];
+        final String[] newArgs;
+        if (args.length == 1)
+        {
+            newArgs = Command.EMPTY_ARGS;
+        }
+        else
+        {
+            newArgs = new String[args.length - 1];
+            System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+        }
+        for (final MainCommand cmd : this.getSortedCommandList())
+        {
+            final Matcher matcher = cmd.matcher(command);
+            if (matcher.matches())
+            {
+                final List<String> result = cmd.tabComplete(sender, command, matcher, newArgs);
+                if (result.isEmpty())
+                {
+                    return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
+                }
+                else
+                {
+                    return result;
+                }
+            }
+        }
+        final List<String> result;
+        if ((args.length > 1) || cmdLine.endsWith(" ") || (result = this.commandMap.keySet().parallelStream().collect(Collectors.toList())).isEmpty())
+        {
+            return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
+        }
+        else
+        {
+            return result;
+        }
     }
 
     @Override

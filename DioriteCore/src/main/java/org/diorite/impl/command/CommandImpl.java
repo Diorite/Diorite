@@ -2,12 +2,14 @@ package org.diorite.impl.command;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -15,9 +17,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.command.Arguments;
 import org.diorite.command.Command;
 import org.diorite.command.CommandExecutor;
-import org.diorite.command.sender.CommandSender;
 import org.diorite.command.ExceptionHandler;
 import org.diorite.command.SubCommand;
+import org.diorite.command.sender.CommandSender;
 
 public abstract class CommandImpl implements Command
 {
@@ -219,6 +221,12 @@ public abstract class CommandImpl implements Command
     }
 
     @Override
+    public Matcher matcher(final String name)
+    {
+        return this.pattern.matcher(name);
+    }
+
+    @Override
     public boolean tryDispatch(final CommandSender sender, final String label, final String[] args)
     {
         final Matcher matcher = this.pattern.matcher(label);
@@ -228,6 +236,64 @@ public abstract class CommandImpl implements Command
         }
         this.dispatch(sender, label, matcher, args);
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(final CommandSender sender, final String label, final Matcher matchedPattern, final String[] args)
+    {
+        Objects.requireNonNull(sender, "sender can't be null");
+        Objects.requireNonNull(label, "label can't be null");
+        Objects.requireNonNull(matchedPattern, "matchedPattern can't be null");
+        Objects.requireNonNull(args, "args can't be null");
+        try // TODO: add supprot for basic exceptions
+        {
+            if ((this.subCommandMap != null) && (args.length > 0))
+            {
+                final String[] newArgs;
+                if (args.length == 1)
+                {
+                    newArgs = EMPTY_ARGS;
+                }
+                else
+                {
+                    newArgs = new String[args.length - 1];
+                    System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+                }
+                for (final SubCommand subCommand : this.subCommandMap.values())
+                {
+                    final Matcher matcher = subCommand.matcher(args[0]);
+                    if (matcher.matches())
+                    {
+                        final CommandExecutor exec = subCommand.getCommandExecutor();
+                        if (exec != null)
+                        {
+                            return exec.onTabComplete(sender, subCommand, args[0], matcher, new Arguments(newArgs));
+                        }
+                        return subCommand.getSubCommandMap().keySet().stream().collect(Collectors.toList());
+                    }
+                }
+            }
+            final CommandExecutor exec = this.commandExecutor;
+            if (exec != null)
+            {
+                return exec.onTabComplete(sender, this, args[0], matchedPattern, new Arguments(args));
+            }
+        } catch (Exception e)
+        {
+            if (this.exceptionHandler != null)
+            {
+                final Optional<Exception> opt = this.exceptionHandler.handle(e);
+                if (opt.isPresent())
+                {
+                    e = opt.get();
+                }
+            }
+            if (e != null)
+            {
+                e.printStackTrace();
+            }
+        }
+        return this.getSubCommandMap().keySet().stream().collect(Collectors.toList());
     }
 
     @Override

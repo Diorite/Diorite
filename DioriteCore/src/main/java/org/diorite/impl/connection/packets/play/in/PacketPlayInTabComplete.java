@@ -15,35 +15,35 @@ import org.diorite.BlockLocation;
 @PacketClass(id = 0x14, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketPlayInTabComplete implements PacketPlayIn
 {
-    private String        cmdLine;
+    private String        content;
     private BlockLocation blockLocation;
 
     public PacketPlayInTabComplete()
     {
     }
 
-    public PacketPlayInTabComplete(final String cmdLine)
+    public PacketPlayInTabComplete(final String content)
     {
-        this.cmdLine = cmdLine;
+        this.content = content;
     }
 
-    public PacketPlayInTabComplete(final String cmdLine, final BlockLocation blockLocation)
+    public PacketPlayInTabComplete(final String content, final BlockLocation blockLocation)
     {
-        this.cmdLine = cmdLine;
+        this.content = content;
         this.blockLocation = blockLocation;
     }
 
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.cmdLine = data.readText(Short.MAX_VALUE);
+        this.content = data.readText(Short.MAX_VALUE);
         this.blockLocation = data.readBoolean() ? data.readBlockLocation() : null;
     }
 
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeText(this.cmdLine);
+        data.writeText(this.content);
         data.writeBoolean(this.blockLocation != null);
         if (this.blockLocation != null)
         {
@@ -51,14 +51,14 @@ public class PacketPlayInTabComplete implements PacketPlayIn
         }
     }
 
-    public String getCmdLine()
+    public String getContent()
     {
-        return this.cmdLine;
+        return this.content;
     }
 
-    public void setCmdLine(final String cmdLine)
+    public void setContent(final String content)
     {
-        this.cmdLine = cmdLine;
+        this.content = content;
     }
 
     public BlockLocation getBlockLocation()
@@ -80,6 +80,6 @@ public class PacketPlayInTabComplete implements PacketPlayIn
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("cmdLine", this.cmdLine).append("blockLocation", this.blockLocation).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("content", this.content).append("blockLocation", this.blockLocation).toString();
     }
 }

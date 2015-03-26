@@ -33,6 +33,7 @@ import org.diorite.impl.log.TerminalConsoleWriterThread;
 import org.diorite.impl.multithreading.input.ChatThread;
 import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.ConsoleReaderThread;
+import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.Server;
 import org.diorite.plugin.Plugin;
@@ -52,8 +53,6 @@ public class ServerImpl implements Server, Runnable
     protected final GameProfileRepository          gameProfileRepository;
     protected final String                         hostname;
     protected final int                            port;
-    protected final ChatThread                     chatThread;
-    protected final CommandsThread                 commandsThread;
     protected int    tps                = DEFAULT_TPS;
     protected int    waitTime           = DEFAULT_WAIT_TIME;
     protected int    connectionThrottle = 1000;
@@ -141,24 +140,15 @@ public class ServerImpl implements Server, Runnable
 
         RegisterDefaultCommands.init(this.commandMap);
 
-        this.chatThread = ChatThread.start(this);
-        this.commandsThread = CommandsThread.start(this);
+        ChatThread.start(this);
+        CommandsThread.start(this);
+        TabCompleteThread.start(this);
         new ChunkMultithreadedHandler(this).start();
 
         this.entityManager = new EntityManagerImpl(this);
         this.playersManager = new PlayersManagerImpl(this);
         this.serverConnection = new ServerConnection(this);
 
-    }
-
-    public ChatThread getChatThread()
-    {
-        return this.chatThread;
-    }
-
-    public CommandsThread getCommandsThread()
-    {
-        return this.commandsThread;
     }
 
     @Override

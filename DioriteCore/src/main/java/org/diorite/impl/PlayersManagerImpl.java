@@ -1,11 +1,13 @@
 package org.diorite.impl;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.mojang.authlib.GameProfile;
 
@@ -69,6 +71,16 @@ public class PlayersManagerImpl
         player.getNetworkManager().handle(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
         player.getNetworkManager().handle(new PacketPlayOutHeldItemSlot(3));
         player.getNetworkManager().handle(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
+    }
+
+    public List<String> getOnlinePlayersNames()
+    {
+        return this.players.values().parallelStream().map(PlayerImpl::getName).collect(Collectors.toList());
+    }
+
+    public Map<UUID, PlayerImpl> getRawPlayers()
+    {
+        return this.players;
     }
 
     public void playerQuit(final PlayerImpl player)
