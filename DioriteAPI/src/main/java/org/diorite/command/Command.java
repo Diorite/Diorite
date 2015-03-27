@@ -10,7 +10,11 @@ import org.diorite.command.sender.CommandSender;
 
 public interface Command
 {
+    String COMMAND_PLUGIN_SEPARATOR = "::";
     @SuppressWarnings("HardcodedFileSeparator")
+    String COMMAND_PREFIX      = "/";
+    @SuppressWarnings("HardcodedFileSeparator")
+    char   COMMAND_PREFIX_CHAR = '/';
     String[] EMPTY_ARGS = new String[0];
 
     String getName();
