@@ -92,7 +92,7 @@ public class LoginListener implements PacketLoginInListener
         if (this.onlineMode)
         {
             this.protocolState = ProtocolState.KEY;
-            this.networkManager.handle(new PacketLoginOutEncryptionBegin(this.serverID, this.server.getKeyPair().getPublic(), this.token));
+            this.networkManager.sendPacket(new PacketLoginOutEncryptionBegin(this.serverID, this.server.getKeyPair().getPublic(), this.token));
         }
         else
         {
@@ -119,11 +119,11 @@ public class LoginListener implements PacketLoginInListener
     {
         if (this.server.getCompressionThreshold() >= 0)
         {
-            this.networkManager.handle(new PacketLoginOutSetCompression(this.server.getCompressionThreshold()), future -> {
+            this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.getCompressionThreshold()), future -> {
                 this.networkManager.setCompression(this.server.getCompressionThreshold());
             });
         }
-        this.networkManager.handle(new PacketLoginOutSuccess(this.gameProfile), future -> {
+        this.networkManager.sendPacket(new PacketLoginOutSuccess(this.gameProfile), future -> {
             this.networkManager.setProtocol(EnumProtocol.PLAY);
 
             PlayerImpl player = this.server.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);

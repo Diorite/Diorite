@@ -1,5 +1,6 @@
 package org.diorite.impl.multithreading.input;
 
+import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutTabComplete;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.multithreading.ChatAction;
 import org.diorite.command.sender.CommandSender;
@@ -69,11 +71,27 @@ public class TabCompleteThread extends Thread
             //noinspection HardcodedFileSeparator
             if ((action.getMsg() != null) && action.getMsg().startsWith("/"))
             {
-                sender.sendSimpleColoredMessage("&7" + StringUtils.join(this.server.getCommandMap().tabComplete(sender, action.getMsg()), "&r, &7"));
+                final Collection<String> strs = this.server.getCommandMap().tabComplete(sender, action.getMsg().substring(1));
+                if (! (sender instanceof PlayerImpl))
+                {
+                    sender.sendSimpleColoredMessage("&7" + StringUtils.join(strs, "&r, &7"));
+                }
+                else
+                {
+                    ((PlayerImpl) sender).getNetworkManager().sendPacket(new PacketPlayOutTabComplete(strs));
+                }
             }
             else
             {
-                sender.sendSimpleColoredMessage("&7" + StringUtils.join(this.server.getPlayersManager().getRawPlayers().values().parallelStream().map(PlayerImpl::getName).collect(Collectors.toList()), "&r, &7"));
+                final Collection<String> strs = this.server.getPlayersManager().getRawPlayers().values().parallelStream().map(PlayerImpl::getName).collect(Collectors.toList());
+                if (! (sender instanceof PlayerImpl))
+                {
+                    sender.sendSimpleColoredMessage("&7" + StringUtils.join(strs, "&r, &7"));
+                }
+                else
+                {
+                    ((PlayerImpl) sender).getNetworkManager().sendPacket(new PacketPlayOutTabComplete(strs));
+                }
             }
         }
     }

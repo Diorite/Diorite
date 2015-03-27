@@ -76,7 +76,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     @Override
     public void sendMessage(final BaseComponent component)
     {
-        this.networkManager.handle(new PacketPlayOutChat(component));
+        this.networkManager.sendPacket(new PacketPlayOutChat(component));
     }
 
     @Override
@@ -106,7 +106,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         {
             attrib.addModifier(tempSprintMod);
         }
-        this.networkManager.handle(new PacketPlayOutUpdateAttributes(this.id, this.attributes));
+        this.networkManager.sendPacket(new PacketPlayOutUpdateAttributes(this.id, this.attributes));
         this.isSprinting = isSprinting;
     }
 

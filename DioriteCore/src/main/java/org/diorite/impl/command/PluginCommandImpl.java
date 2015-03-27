@@ -1,6 +1,7 @@
 package org.diorite.impl.command;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -47,6 +48,20 @@ public class PluginCommandImpl extends MainCommandImpl implements PluginCommand
     public Plugin getPlugin()
     {
         return this.plugin;
+    }
+
+
+    @Override
+    public Matcher matcher(final String name)
+    {
+        if (name.toLowerCase().startsWith(this.plugin.getName().toLowerCase() + COMMAND_PLUGIN_SEPARATOR))
+        {
+            return super.matcher(name.replace(this.plugin.getName().toLowerCase() + COMMAND_PLUGIN_SEPARATOR, ""));
+        }
+        else
+        {
+            return super.matcher(name);
+        }
     }
 
     @Override

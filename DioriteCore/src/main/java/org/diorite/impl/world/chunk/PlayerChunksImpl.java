@@ -110,13 +110,13 @@ public class PlayerChunksImpl
 
         for (final ChunkImpl[] chunkBulk : chunkBulks)
         {
-            this.player.getNetworkManager().handle(new PacketPlayOutMapChunkBulk(true, chunkBulk));
+            this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(true, chunkBulk));
         }
 
         for (final ChunkImpl chunk : chunksToUnload)
         {
             this.loadedChunks.remove(chunk);
-            this.player.getNetworkManager().handle(PacketPlayOutMapChunk.unload(chunk.getPos()));
+            this.player.getNetworkManager().sendPacket(PacketPlayOutMapChunk.unload(chunk.getPos()));
         }
 
     }

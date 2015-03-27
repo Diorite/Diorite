@@ -12,6 +12,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutTabComplete;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 
 public interface PacketPlayOutListener extends PacketListener
@@ -39,4 +40,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutChat packet);
 
     void handle(PacketPlayOutBlockChange packet);
+
+    void handle(PacketPlayOutTabComplete packet);
 }

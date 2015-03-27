@@ -1,5 +1,6 @@
 package org.diorite.impl.command;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -217,7 +218,7 @@ public abstract class CommandImpl implements Command
     @Override
     public boolean matches(final String name)
     {
-        return this.pattern.matcher(name).matches();
+        return this.matcher(name).matches();
     }
 
     @Override
@@ -229,7 +230,7 @@ public abstract class CommandImpl implements Command
     @Override
     public boolean tryDispatch(final CommandSender sender, final String label, final String[] args)
     {
-        final Matcher matcher = this.pattern.matcher(label);
+        final Matcher matcher = this.matcher(label);
         if (! matcher.matches())
         {
             return false;
@@ -269,15 +270,11 @@ public abstract class CommandImpl implements Command
                         {
                             return exec.onTabComplete(sender, subCommand, args[0], matcher, new Arguments(newArgs));
                         }
-                        return subCommand.getSubCommandMap().keySet().stream().collect(Collectors.toList());
+                        return subCommand.getSubCommandMap().keySet().parallelStream().sorted().collect(Collectors.toList());
                     }
                 }
             }
-            final CommandExecutor exec = this.commandExecutor;
-            if (exec != null)
-            {
-                return exec.onTabComplete(sender, this, args[0], matchedPattern, new Arguments(args));
-            }
+            return new ArrayList<>(1);
         } catch (Exception e)
         {
             if (this.exceptionHandler != null)
@@ -293,7 +290,8 @@ public abstract class CommandImpl implements Command
                 e.printStackTrace();
             }
         }
-        return this.getSubCommandMap().keySet().stream().collect(Collectors.toList());
+        final String lcCmd = label.toLowerCase();
+        return this.getSubCommandMap().keySet().parallelStream().filter(s -> s.toLowerCase().startsWith(lcCmd)).sorted().collect(Collectors.toList());
     }
 
     @Override

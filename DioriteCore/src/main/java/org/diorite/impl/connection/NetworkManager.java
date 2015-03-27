@@ -65,12 +65,12 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         this.channel.flush();
     }
 
-    public void handle(final Packet<?> packet)
+    public void sendPacket(final Packet<?> packet)
     {
         if (this.isChannelOpen())
         {
             this.nextPacket();
-            this.handle(packet, null);
+            this.sendPacket(packet, null);
         }
         else
         {
@@ -79,12 +79,12 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     }
 
     @SafeVarargs
-    public final void handle(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>> listener, final GenericFutureListener<? extends Future<? super Void>>... listeners)
+    public final void sendPacket(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>> listener, final GenericFutureListener<? extends Future<? super Void>>... listeners)
     {
         if (this.isChannelOpen())
         {
             this.nextPacket();
-            this.handle(packet, ArrayUtils.add(listeners, 0, listener));
+            this.sendPacket(packet, ArrayUtils.add(listeners, 0, listener));
         }
         else
         {
@@ -92,7 +92,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         }
     }
 
-    private void handle(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>>[] listeners)
+    private void sendPacket(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>>[] listeners)
     {
         final EnumProtocol ep1 = EnumProtocol.getByPacketClass(packet);
         final EnumProtocol ep2 = this.channel.attr(this.server.getServerConnection().protocolKey).get();
@@ -137,7 +137,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
             while (! this.packetQueue.isEmpty())
             {
                 final QueuedPacket queuedpacket = this.packetQueue.poll();
-                this.handle(queuedpacket.getPacket(), queuedpacket.getListeners());
+                this.sendPacket(queuedpacket.getPacket(), queuedpacket.getListeners());
             }
         }
     }
@@ -265,7 +265,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     public void disconnect(final BaseComponent msg)
     {
-        this.handle(new PacketLoginOutDisconnect(msg));
+        this.sendPacket(new PacketLoginOutDisconnect(msg));
         this.close(msg);
     }
 

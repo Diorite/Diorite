@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
@@ -33,7 +35,7 @@ public class CommandMapImpl implements CommandMap
     @Override
     public void registerCommand(final PluginCommand pluginCommand)
     {
-        this.commandMap.put(pluginCommand.getPlugin().getName() + "::" + pluginCommand.getName(), pluginCommand);
+        this.commandMap.put(pluginCommand.getPlugin().getName() + Command.COMMAND_PLUGIN_SEPARATOR + pluginCommand.getName(), pluginCommand);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class CommandMapImpl implements CommandMap
     @Override
     public Optional<MainCommand> getCommand(final Plugin plugin, final String str)
     {
-        MainCommand cmd = this.commandMap.get(plugin + "::" + str);
+        MainCommand cmd = this.commandMap.get(plugin + Command.COMMAND_PLUGIN_SEPARATOR + str);
         if (cmd == null)
         {
             cmd = this.commandMap.get(str);
@@ -75,7 +77,7 @@ public class CommandMapImpl implements CommandMap
         }
         for (final Map.Entry<String, MainCommand> entry : this.commandMap.entrySet())
         {
-            if (entry.getKey().endsWith("::" + str))
+            if (entry.getKey().endsWith(Command.COMMAND_PLUGIN_SEPARATOR + str))
             {
                 return Optional.of(entry.getValue());
             }
@@ -92,30 +94,10 @@ public class CommandMapImpl implements CommandMap
     @Override
     public List<String> tabComplete(final CommandSender sender, final String cmdLine)
     {
-        if ((cmdLine == null) || cmdLine.isEmpty())
+        final String[] args;
+        if ((cmdLine == null) || cmdLine.isEmpty() || ((args = DioriteStringUtils.splitArguments(cmdLine)).length == 0))
         {
-            final List<String> result = this.commandMap.keySet().parallelStream().collect(Collectors.toList());
-            if (result.isEmpty())
-            {
-                return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
-            }
-            else
-            {
-                return result;
-            }
-        }
-        final String[] args = DioriteStringUtils.splitArguments(cmdLine);
-        if (args.length == 0)
-        {
-            final List<String> result = this.commandMap.keySet().parallelStream().collect(Collectors.toList());
-            if (result.isEmpty())
-            {
-                return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
-            }
-            else
-            {
-                return result;
-            }
+            return this.commandMap.keySet().parallelStream().map(s -> Command.COMMAND_PREFIX + s).collect(Collectors.toList());
         }
         final String command = args[0];
         final String[] newArgs;
@@ -144,16 +126,20 @@ public class CommandMapImpl implements CommandMap
                 }
             }
         }
-        final List<String> result;
-        if ((args.length > 1) || cmdLine.endsWith(" ") || (result = this.commandMap.keySet().parallelStream().collect(Collectors.toList())).isEmpty())
+        if ((args.length > 1) || cmdLine.endsWith(" "))
         {
             return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
         }
-        else
-        {
-            return result;
-        }
+        final String lcCmd = command.toLowerCase();
+        final List<String> result = this.commandMap.entrySet().parallelStream().filter(this.tabCompeleterFilter.apply(lcCmd)).map(e -> Command.COMMAND_PREFIX + e.getValue().getFullName()).sorted().collect(Collectors.toList());
+        return result.isEmpty() ? this.commandMap.keySet().parallelStream().map(s -> Command.COMMAND_PREFIX + s).collect(Collectors.toList()) : result;
     }
+
+    private final Function<String, Predicate<Map.Entry<String, MainCommand>>> tabCompeleterFilter = lcCmd -> e -> {
+        final String key = e.getKey();
+        final String plugin = key.substring(0, key.indexOf(Command.COMMAND_PLUGIN_SEPARATOR) + 2);
+        return (key.startsWith(lcCmd) || (! lcCmd.contains(Command.COMMAND_PLUGIN_SEPARATOR) && key.startsWith(plugin + lcCmd))) && ! key.equals(lcCmd);
+    };
 
     @Override
     public void dispatch(final CommandSender sender, final String cmdLine)
@@ -167,6 +153,11 @@ public class CommandMapImpl implements CommandMap
         {
             return;
         }
+        if (sender.isPlayer())
+        {
+            ServerImpl.getInstance().getConsoleSender().sendMessage(sender.getName() + ": " + Command.COMMAND_PREFIX + cmdLine);
+        }
+        //else if (sender.isCommandBlock()) TODO
         final String command = args[0];
         final String[] newArgs;
         if (args.length == 1)
@@ -185,17 +176,19 @@ public class CommandMapImpl implements CommandMap
                 return;
             }
         }
+        // TODO: changeable message
+        sender.sendSimpleColoredMessage("&4No command: &c" + command);
     }
 
     public void registerCommand(final MainCommand command)
     {
         if (command instanceof PluginCommand)
         {
-            this.commandMap.put(((PluginCommand) command).getPlugin().getName() + "::" + command.getName(), command);
+            this.commandMap.put(((PluginCommand) command).getPlugin().getName() + Command.COMMAND_PLUGIN_SEPARATOR + command.getName(), command);
         }
         else if (command instanceof SystemCommandImpl)
         {
-            this.commandMap.put("diorite::" + command.getName(), command);
+            this.commandMap.put("diorite" + Command.COMMAND_PLUGIN_SEPARATOR + command.getName(), command);
         }
         else
         {

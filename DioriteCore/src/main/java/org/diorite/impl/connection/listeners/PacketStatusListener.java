@@ -32,7 +32,7 @@ public class PacketStatusListener implements PacketStatusInListener
     @Override
     public void handle(final PacketStatusInPing packet)
     {
-        this.networkManager.handle(new PacketStatusOutPong(packet.getPing()));
+        this.networkManager.sendPacket(new PacketStatusOutPong(packet.getPing()));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PacketStatusListener implements PacketStatusInListener
         ping.setMotd(new TextComponent("test"));
         ping.setPlayerData(new ServerPingPlayerSample(10, 0));
         ping.setServerData(new ServerPingServerData(Server.NANE + " " + Server.VERSION, 47));
-        this.networkManager.handle(new PacketStatusOutServerInfo(ping));
+        this.networkManager.sendPacket(new PacketStatusOutServerInfo(ping));
     }
 
     @Override

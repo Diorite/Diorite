@@ -64,13 +64,13 @@ public class PlayersManagerImpl
     {
 
         // TODO: this is only test code
-        player.getNetworkManager().handle(new PacketPlayOutLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
-        player.getNetworkManager().handle(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
-        player.getNetworkManager().handle(new PacketPlayOutServerDifficulty(Difficulty.EASY));
-        player.getNetworkManager().handle(new PacketPlayOutSpawnPosition(new BlockLocation(2, 71, - 2)));
-        player.getNetworkManager().handle(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
-        player.getNetworkManager().handle(new PacketPlayOutHeldItemSlot(3));
-        player.getNetworkManager().handle(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
+        player.getNetworkManager().sendPacket(new PacketPlayOutLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
+        player.getNetworkManager().sendPacket(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
+        player.getNetworkManager().sendPacket(new PacketPlayOutServerDifficulty(Difficulty.EASY));
+        player.getNetworkManager().sendPacket(new PacketPlayOutSpawnPosition(new BlockLocation(2, 71, - 2)));
+        player.getNetworkManager().sendPacket(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
+        player.getNetworkManager().sendPacket(new PacketPlayOutHeldItemSlot(3));
+        player.getNetworkManager().sendPacket(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
     }
 
     public List<String> getOnlinePlayersNames()
@@ -98,19 +98,19 @@ public class PlayersManagerImpl
         final long curr = System.currentTimeMillis();
         if ((curr - this.lastKeepAlive) > TimeUnit.SECONDS.toMillis(KEEP_ALIVE_TIMER))
         {
-            this.players.values().parallelStream().forEach(p -> p.getNetworkManager().handle(new PacketPlayOutKeepAlive(p.getId())));
+            this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId())));
             this.lastKeepAlive = curr;
         }
     }
 
     public void forEach(final Packet<?> packet)
     {
-        this.forEach(player -> player.getNetworkManager().handle(packet));
+        this.forEach(player -> player.getNetworkManager().sendPacket(packet));
     }
 
     public void forEach(final Predicate<PlayerImpl> predicate, final Packet<?> packet)
     {
-        this.forEach(predicate, player -> player.getNetworkManager().handle(packet));
+        this.forEach(predicate, player -> player.getNetworkManager().sendPacket(packet));
     }
 
     public void forEach(final Consumer<PlayerImpl> consumer)

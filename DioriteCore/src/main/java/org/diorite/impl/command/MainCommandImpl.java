@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.command.CommandPriority;
 import org.diorite.command.MainCommand;
 
-public class MainCommandImpl extends CommandImpl implements MainCommand
+public abstract class MainCommandImpl extends CommandImpl implements MainCommand
 {
     private byte priority; // commands with higher priority will be checked first, priority can be changed in cfg. (and on runtime)
 
