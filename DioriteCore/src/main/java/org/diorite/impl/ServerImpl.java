@@ -27,15 +27,20 @@ import org.diorite.impl.command.PluginCommandBuilderImpl;
 import org.diorite.impl.command.defaults.RegisterDefaultCommands;
 import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.connection.ServerConnection;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;
-import org.diorite.impl.multithreading.input.ChatThread;
 import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.ConsoleReaderThread;
 import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.Server;
+import org.diorite.chat.ChatColor;
+import org.diorite.chat.ChatPosition;
+import org.diorite.chat.DioriteMarkdownParser;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
 import org.diorite.plugin.Plugin;
 
 import jline.console.ConsoleReader;
@@ -66,6 +71,8 @@ public class ServerImpl implements Server, Runnable
     protected long                     currentTick;
     protected boolean                  onlineMode;
     protected byte                     renderDistance;
+    protected int                      playerTimeout;
+    protected int                      keepAliveTimer;
     private           KeyPair keyPair   = MinecraftEncryption.generateKeyPair();
     private transient boolean isRunning = true;
 
@@ -83,6 +90,8 @@ public class ServerImpl implements Server, Runnable
     {
         instance = this;
 
+        this.keepAliveTimer = (int) options.valueOf("keepalivetimer");
+        this.playerTimeout = (int) options.valueOf("timeout");
         this.compressionThreshold = (int) options.valueOf("compressionthreshold");
 
         this.hostname = options.valueOf("hostname").toString();
@@ -140,7 +149,7 @@ public class ServerImpl implements Server, Runnable
 
         RegisterDefaultCommands.init(this.commandMap);
 
-        ChatThread.start(this);
+        org.diorite.impl.multithreading.input.ChatThread.start(this);
         CommandsThread.start(this);
         TabCompleteThread.start(this);
         new ChunkMultithreadedHandler(this).start();
@@ -148,7 +157,234 @@ public class ServerImpl implements Server, Runnable
         this.entityManager = new EntityManagerImpl(this);
         this.playersManager = new PlayersManagerImpl(this);
         this.serverConnection = new ServerConnection(this);
+        this.serverConnection.start();
 
+    }
+
+    public int getKeepAliveTimer()
+    {
+        return this.keepAliveTimer;
+    }
+
+    public int getPlayerTimeout()
+    {
+        return this.playerTimeout;
+    }
+
+    @Override
+    public void broadcastMessage(final ChatPosition position, final String str)
+    {
+        this.broadcastMessage(position, new TextComponent(str));
+    }
+
+    @Override
+    public void broadcastMessage(final ChatPosition position, final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.broadcastMessage(position, new TextComponent(str));
+            }
+        }
+    }
+
+    @Override
+    public void broadcastSimpleColoredMessage(final ChatPosition position, final String str)
+    {
+        this.broadcastMessage(position, ChatColor.translateAlternateColorCodes(str));
+    }
+
+    @Override
+    public void broadcastSimpleColoredMessage(final ChatPosition position, final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.broadcastSimpleColoredMessage(position, str);
+            }
+        }
+    }
+
+    @Override
+    public void broadcastDioriteMessage(final ChatPosition position, final String str)
+    {
+        this.broadcastMessage(position, DioriteMarkdownParser.parse(str, false));
+    }
+
+    @Override
+    public void broadcastDioriteMessage(final ChatPosition position, final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.broadcastDioriteMessage(position, str);
+            }
+        }
+    }
+
+    @Override
+    public void broadcastMessage(final ChatPosition position, final BaseComponent component)
+    {
+        this.playersManager.forEach(new PacketPlayOutChat(component, position));
+    }
+
+    @Override
+    public void broadcastMessage(final ChatPosition position, final BaseComponent... components)
+    {
+        if (components != null)
+        {
+            for (final BaseComponent component : components)
+            {
+                this.broadcastMessage(position, component);
+            }
+        }
+    }
+
+    @Override
+    public void broadcastMessage(final String str)
+    {
+        this.broadcastMessage(new TextComponent(str));
+    }
+
+    @Override
+    public void broadcastMessage(final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.broadcastMessage(new TextComponent(str));
+            }
+        }
+    }
+
+    @Override
+    public void broadcastSimpleColoredMessage(final String str)
+    {
+        this.broadcastMessage(ChatColor.translateAlternateColorCodes(str));
+    }
+
+    @Override
+    public void broadcastSimpleColoredMessage(final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.broadcastSimpleColoredMessage(str);
+            }
+        }
+    }
+
+    @Override
+    public void broadcastDioriteMessage(final String str)
+    {
+        this.broadcastMessage(DioriteMarkdownParser.parse(str, false));
+    }
+
+    @Override
+    public void broadcastDioriteMessage(final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.broadcastDioriteMessage(str);
+            }
+        }
+    }
+
+    @Override
+    public void broadcastMessage(final BaseComponent component)
+    {
+        this.broadcastMessage(ChatPosition.SYSTEM, component);
+    }
+
+    @Override
+    public void broadcastMessage(final BaseComponent... components)
+    {
+        if (components != null)
+        {
+            for (final BaseComponent component : components)
+            {
+                this.broadcastMessage(component);
+            }
+        }
+    }
+
+    @Override
+    public void sendConsoleMessage(final String str)
+    {
+        this.consoleCommandSender.sendMessage(str);
+    }
+
+    @Override
+    public void sendConsoleMessage(final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.sendConsoleMessage(str);
+            }
+        }
+    }
+
+    @Override
+    public void sendConsoleMessage(final BaseComponent component)
+    {
+        this.consoleCommandSender.sendMessage(component);
+    }
+
+    @Override
+    public void sendConsoleMessage(final BaseComponent... components)
+    {
+        if (components != null)
+        {
+            for (final BaseComponent component : components)
+            {
+                this.sendConsoleMessage(component);
+            }
+        }
+    }
+
+    @Override
+    public void sendConsoleSimpleColoredMessage(final String str)
+    {
+        this.sendConsoleMessage(ChatColor.translateAlternateColorCodes(str));
+    }
+
+    @Override
+    public void sendConsoleSimpleColoredMessage(final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.sendConsoleSimpleColoredMessage(str);
+            }
+        }
+    }
+
+    @Override
+    public void sendConsoleDioriteMessage(final String str)
+    {
+        this.sendConsoleMessage(DioriteMarkdownParser.parse(str, false));
+    }
+
+    @Override
+    public void sendConsoleDioriteMessage(final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.sendConsoleDioriteMessage(str);
+            }
+        }
     }
 
     @Override

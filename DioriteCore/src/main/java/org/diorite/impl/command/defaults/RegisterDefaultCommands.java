@@ -10,8 +10,11 @@ public final class RegisterDefaultCommands
 
     public static void init(final CommandMapImpl cmds)
     {
+        cmds.registerCommand(new SayCmd());
         cmds.registerCommand(new TpsCmd());
+        cmds.registerCommand(new OnlineCmd());
         cmds.registerCommand(new SetTpsCmd());
+        cmds.registerCommand(new BroadcastCmd());
         cmds.registerCommand(new ColoredConsoleCmd());
         cmds.registerCommand(new PerformanceMonitorCmd());
     }

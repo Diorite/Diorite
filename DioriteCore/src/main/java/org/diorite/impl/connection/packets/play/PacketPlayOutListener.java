@@ -5,6 +5,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
@@ -42,4 +43,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutBlockChange packet);
 
     void handle(PacketPlayOutTabComplete packet);
+
+    void handle(PacketPlayOutDisconnect packet);
 }

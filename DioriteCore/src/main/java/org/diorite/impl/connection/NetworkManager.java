@@ -5,6 +5,7 @@ import javax.crypto.SecretKey;
 import java.net.SocketAddress;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Queues;
 
@@ -20,7 +21,7 @@ import org.diorite.impl.connection.packets.PacketDecrypter;
 import org.diorite.impl.connection.packets.PacketEncrypter;
 import org.diorite.impl.connection.packets.PacketListener;
 import org.diorite.impl.connection.packets.QueuedPacket;
-import org.diorite.impl.connection.packets.login.out.PacketLoginOutDisconnect;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.TranslatableComponent;
@@ -37,15 +38,34 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 {
     private final ServerImpl server;
     private final Queue<QueuedPacket> packetQueue = Queues.newConcurrentLinkedQueue();
-    private Channel        channel;
-    private SocketAddress  address;
-    private PacketListener packetListener;
-    private BaseComponent  disconnectMessage;
+    private final int            playerTimeout;
+    private       Channel        channel;
+    private       SocketAddress  address;
+    private       PacketListener packetListener;
+    private       BaseComponent  disconnectMessage;
     private boolean preparing = true;
 
     public NetworkManager(final ServerImpl server)
     {
         this.server = server;
+        this.playerTimeout = (int) TimeUnit.SECONDS.toMillis(this.server.getPlayerTimeout());
+    }
+
+    private long lastKeepAlive = System.currentTimeMillis();
+
+    public void updateKeepAlive()
+    {
+        this.lastKeepAlive = System.currentTimeMillis();
+    }
+
+    public void checkAlive()
+    {
+        if ((System.currentTimeMillis() - this.lastKeepAlive) > this.playerTimeout)
+        {
+            final TextComponent msg = new TextComponent("§4Timeout");
+            this.sendPacket(new PacketPlayOutDisconnect(msg));
+            this.close(msg);
+        }
     }
 
     public void setProtocol(final EnumProtocol enumprotocol)
@@ -261,12 +281,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     public void enableAutoRead()
     {
         this.channel.config().setAutoRead(false);
-    }
-
-    public void disconnect(final BaseComponent msg)
-    {
-        this.sendPacket(new PacketLoginOutDisconnect(msg));
-        this.close(msg);
     }
 
     public void close(final BaseComponent baseComponent)

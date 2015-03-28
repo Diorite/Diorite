@@ -1,6 +1,5 @@
 package org.diorite.impl.connection.listeners;
 
-
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Iterator;
@@ -18,6 +17,7 @@ import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.handshake.PacketHandshakingInListener;
 import org.diorite.impl.connection.packets.handshake.in.PacketHandshakingInSetProtocol;
+import org.diorite.impl.connection.packets.login.out.PacketLoginOutDisconnect;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
@@ -54,7 +54,7 @@ public class HandshakeListener implements PacketHandshakingInListener
                     if ((throttleTracker.containsKey(address)) && (! "127.0.0.1".equals(address.getHostAddress())) && ((currentTime - throttleTracker.get(address)) < connectionThrottle))
                     {
                         throttleTracker.put(address, currentTime);
-                        this.networkManager.disconnect(new TextComponent("Connection throttled! Please wait before reconnecting."));
+                        this.disconnect(new TextComponent("Connection throttled! Please wait before reconnecting."));
                         return;
                     }
                     throttleTracker.put(address, currentTime);
@@ -79,11 +79,11 @@ public class HandshakeListener implements PacketHandshakingInListener
                 }
                 if (packet.getProtocolVersion() > CURRENT_PROTOCOL)
                 {
-                    this.networkManager.disconnect(new TextComponent("Outdated server, we are still on 1.8"));
+                    this.disconnect(new TextComponent("Outdated server, we are still on 1.8"));
                 }
                 else if (packet.getProtocolVersion() < CURRENT_PROTOCOL)
                 {
-                    this.networkManager.disconnect(new TextComponent("Outdated client, we are on 1.8"));
+                    this.disconnect(new TextComponent("Outdated client, we are on 1.8"));
                 }
                 else
                 {
@@ -102,6 +102,8 @@ public class HandshakeListener implements PacketHandshakingInListener
     @Override
     public void disconnect(final BaseComponent baseComponent)
     {
+        this.networkManager.sendPacket(new PacketLoginOutDisconnect(baseComponent));
+        this.networkManager.close(baseComponent);
     }
 
     @Override

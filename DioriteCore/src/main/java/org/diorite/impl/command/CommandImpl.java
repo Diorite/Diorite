@@ -343,13 +343,16 @@ public abstract class CommandImpl implements Command
 
     protected void execute(final CommandSender sender, final String label, final Matcher matchedPattern, final String[] args)
     {
-        Objects.requireNonNull(sender, "sender can't be null");
-        Objects.requireNonNull(label, "label can't be null");
-        Objects.requireNonNull(matchedPattern, "matchedPattern can't be null");
-        Objects.requireNonNull(args, "args can't be null");
-        matchedPattern.reset();
-        matchedPattern.find();
-        this.commandExecutor.runCommand(sender, this, label, matchedPattern, new Arguments(args));
+        if (this.commandExecutor != null)
+        {
+            Objects.requireNonNull(sender, "sender can't be null");
+            Objects.requireNonNull(label, "label can't be null");
+            Objects.requireNonNull(matchedPattern, "matchedPattern can't be null");
+            Objects.requireNonNull(args, "args can't be null");
+            matchedPattern.reset();
+            matchedPattern.find();
+            this.commandExecutor.runCommand(sender, this, label, matchedPattern, new Arguments(args));
+        }
     }
 
     @Override

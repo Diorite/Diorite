@@ -15,8 +15,8 @@ import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
-import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
@@ -68,15 +68,9 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     }
 
     @Override
-    public void sendMessage(final String str)
+    public void sendMessage(final ChatPosition position, final BaseComponent component)
     {
-        this.sendMessage(new TextComponent(str));
-    }
-
-    @Override
-    public void sendMessage(final BaseComponent component)
-    {
-        this.networkManager.sendPacket(new PacketPlayOutChat(component));
+        this.networkManager.sendPacket(new PacketPlayOutChat(component, position));
     }
 
     @Override

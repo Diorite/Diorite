@@ -58,6 +58,8 @@ public final class Main
                 this.acceptsAll(Arrays.asList("servername", "sn"), "name of server, should be simple like 'main'").withRequiredArg().ofType(String.class).describedAs("servername").defaultsTo(ServerImpl.DEFAULT_SERVER);
                 this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname").defaultsTo("localhost");
                 this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "hostname to listen on").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
+                this.acceptsAll(Arrays.asList("timeout", "player-timeout", "pt"), "If player don't send any keep alive packet in this time (seconds), then it will be disconnected.").withRequiredArg().ofType(Integer.class).describedAs("timeout").defaultsTo(30);
+                this.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds server will send keep alive packet to players").withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(15);
                 this.acceptsAll(Arrays.asList("compressionthreshold", "compression-threshold"), "Compression threshold to use, -1 to turn off (default)").withRequiredArg().ofType(Integer.class).describedAs("compressionthreshold").defaultsTo(- 1);
                 this.acceptsAll(Arrays.asList("render-distance", "render", "rd"), "chunk render distance").withRequiredArg().ofType(Byte.class).describedAs("render").defaultsTo(Server.DEFAULT_RENDER_DISTANCE);
                 this.acceptsAll(Arrays.asList("nojline"), "Disables jline and emulates the vanilla console");

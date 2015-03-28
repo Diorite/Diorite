@@ -1,11 +1,11 @@
 package org.diorite.impl.connection;
 
 import java.net.InetAddress;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,9 +21,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.AttributeKey;
 
-public class ServerConnection
+public class ServerConnection extends Thread
 {
-    public final LazyInitVar<NioEventLoopGroup>     lazyInitNioEventLoopGroup     = new LazyInitVar<NioEventLoopGroup>()
+    public static final int                                MILLIS                        = 500;
+    public final        LazyInitVar<NioEventLoopGroup>     lazyInitNioEventLoopGroup     = new LazyInitVar<NioEventLoopGroup>()
     {
         @Override
         protected NioEventLoopGroup init()
@@ -31,7 +32,7 @@ public class ServerConnection
             return new NioEventLoopGroup(0, new ThreadFactoryBuilder().setNameFormat("Netty Client IO #%d").setDaemon(true).build());
         }
     };
-    public final LazyInitVar<DefaultEventLoopGroup> lazyInitDefaultEventLoopGroup = new LazyInitVar<DefaultEventLoopGroup>()
+    public final        LazyInitVar<DefaultEventLoopGroup> lazyInitDefaultEventLoopGroup = new LazyInitVar<DefaultEventLoopGroup>()
     {
         @Override
         protected DefaultEventLoopGroup init()
@@ -41,13 +42,15 @@ public class ServerConnection
     };
 
     public final  AttributeKey<EnumProtocol> protocolKey = AttributeKey.valueOf("protocol");
-    private final List<NetworkManager>       connections = Collections.synchronizedList(Lists.newArrayList());
+    private final Collection<NetworkManager> connections = Collections.synchronizedSet(Sets.newConcurrentHashSet());
     private final ServerImpl    server;
     private       ChannelFuture channelFuture;
 
     public ServerConnection(final ServerImpl server)
     {
         this.server = server;
+        this.setDaemon(true);
+        this.setName("{Diorite-" + server.getServerName() + "|SrvCon}");
     }
 
     public ServerImpl getServer()
@@ -71,33 +74,47 @@ public class ServerConnection
         }
     }
 
+    @Override
+    public void run()
+    {
+        while (this.server.isRunning())
+        {
+            this.update();
+            try
+            {
+                Thread.sleep(MILLIS);
+            } catch (final InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void update()
     {
-        synchronized (this.connections)
+        final Iterator<NetworkManager> iterator = this.connections.iterator();
+        while (iterator.hasNext())
         {
-            final Iterator<NetworkManager> iterator = this.connections.iterator();
-            while (iterator.hasNext())
+            final NetworkManager networkManager = iterator.next();
+            networkManager.checkAlive();
+            if (! networkManager.hasNoChannel())
             {
-                final NetworkManager networkManager = iterator.next();
-                if (! networkManager.hasNoChannel())
+                if (! networkManager.isChannelOpen())
                 {
-                    if (! networkManager.isChannelOpen())
+                    if (! networkManager.isPreparing())
                     {
-                        if (! networkManager.isPreparing())
-                        {
-                            iterator.remove();
-                            networkManager.checkConnection();
-                        }
+                        iterator.remove();
+                        networkManager.checkConnection();
                     }
-                    else
+                }
+                else
+                {
+                    try
                     {
-                        try
-                        {
-                            networkManager.update();
-                        } catch (final Exception exception)
-                        {
-                            exception.printStackTrace();
-                        }
+                        networkManager.update();
+                    } catch (final Exception exception)
+                    {
+                        exception.printStackTrace();
                     }
                 }
             }
@@ -109,7 +126,7 @@ public class ServerConnection
         return this.channelFuture;
     }
 
-    public List<NetworkManager> getConnections()
+    public Collection<NetworkManager> getConnections()
     {
         return this.connections;
     }

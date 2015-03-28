@@ -32,6 +32,7 @@ import org.diorite.Difficulty;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.TeleportData;
+import org.diorite.chat.ChatPosition;
 import org.diorite.entity.Player;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
@@ -40,9 +41,9 @@ import io.netty.buffer.Unpooled;
 
 public class PlayersManagerImpl
 {
-    public static final int                   KEEP_ALIVE_TIMER = 15;
-    private final       Map<UUID, PlayerImpl> players          = new ConcurrentHashMap<>(100, 0.2f, 8);
+    private final Map<UUID, PlayerImpl> players = new ConcurrentHashMap<>(100, 0.2f, 8);
     private final ServerImpl server;
+    private final int        keepAliveTimer;
 
     private transient long lastKeepAlive = System.currentTimeMillis();
 
@@ -51,6 +52,7 @@ public class PlayersManagerImpl
     public PlayersManagerImpl(final ServerImpl server)
     {
         this.server = server;
+        this.keepAliveTimer = (int) TimeUnit.SECONDS.toMillis(this.server.getKeepAliveTimer());
     }
 
     public PlayerImpl createPlayer(final GameProfile gameProfile, final NetworkManager networkManager)
@@ -71,11 +73,22 @@ public class PlayersManagerImpl
         player.getNetworkManager().sendPacket(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
         player.getNetworkManager().sendPacket(new PacketPlayOutHeldItemSlot(3));
         player.getNetworkManager().sendPacket(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
+
+        // TODO: changeable message, events, etc..
+        this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l join to the server!");
+        this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 join to the server!");
+        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
     }
 
     public List<String> getOnlinePlayersNames()
     {
         return this.players.values().parallelStream().map(PlayerImpl::getName).collect(Collectors.toList());
+    }
+
+    public List<String> getOnlinePlayersNames(final String prefix)
+    {
+        final String lcPrefix = prefix.toLowerCase();
+        return this.players.values().parallelStream().map(PlayerImpl::getName).filter(s -> s.toLowerCase().startsWith(lcPrefix)).sorted().collect(Collectors.toList());
     }
 
     public Map<UUID, PlayerImpl> getRawPlayers()
@@ -96,9 +109,11 @@ public class PlayersManagerImpl
     public void keepAlive()
     {
         final long curr = System.currentTimeMillis();
-        if ((curr - this.lastKeepAlive) > TimeUnit.SECONDS.toMillis(KEEP_ALIVE_TIMER))
+        if ((curr - this.lastKeepAlive) > this.keepAliveTimer)
         {
-            this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId())));
+            this.players.values().parallelStream().forEach(p -> {
+                p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId()));
+            });
             this.lastKeepAlive = curr;
         }
     }

@@ -24,6 +24,7 @@ import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.login.PacketLoginInListener;
 import org.diorite.impl.connection.packets.login.in.PacketLoginInEncryptionBegin;
 import org.diorite.impl.connection.packets.login.in.PacketLoginInStart;
+import org.diorite.impl.connection.packets.login.out.PacketLoginOutDisconnect;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutEncryptionBegin;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutSetCompression;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutSuccess;
@@ -154,7 +155,9 @@ public class LoginListener implements PacketLoginInListener
         try
         {
             this.logger.info("Disconnecting " + this.gameProfile + ": " + msg);
-            this.networkManager.disconnect(new TextComponent(msg));
+            final TextComponent tc = new TextComponent(msg);
+            this.networkManager.sendPacket(new PacketLoginOutDisconnect(tc));
+            this.networkManager.close(tc);
         } catch (final Exception exception)
         {
             this.logger.error("Error whilst disconnecting player", exception);

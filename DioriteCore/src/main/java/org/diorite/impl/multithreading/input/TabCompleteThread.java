@@ -3,7 +3,6 @@ package org.diorite.impl.multithreading.input;
 import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -35,10 +34,6 @@ public class TabCompleteThread extends Thread
 
     public static void add(final ChatAction action)
     {
-        if ((action.getMsg() == null) || action.getMsg().isEmpty())
-        {
-            return;
-        }
         actions.add(action);
         synchronized (actions)
         {
@@ -83,7 +78,8 @@ public class TabCompleteThread extends Thread
             }
             else
             {
-                final Collection<String> strs = this.server.getPlayersManager().getRawPlayers().values().parallelStream().map(PlayerImpl::getName).collect(Collectors.toList());
+                final String name = action.getMsg();
+                final Collection<String> strs = ((name == null) || name.trim().isEmpty()) ? this.server.getPlayersManager().getOnlinePlayersNames() : this.server.getPlayersManager().getOnlinePlayersNames(name);
                 if (! (sender instanceof PlayerImpl))
                 {
                     sender.sendSimpleColoredMessage("&7" + StringUtils.join(strs, "&r, &7"));

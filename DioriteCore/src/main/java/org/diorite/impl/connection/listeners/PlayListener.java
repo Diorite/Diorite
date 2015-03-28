@@ -7,6 +7,7 @@ import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 import org.diorite.impl.connection.packets.play.in.*;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.multithreading.BlockBreakAction;
 import org.diorite.impl.multithreading.ChatAction;
@@ -14,6 +15,7 @@ import org.diorite.impl.multithreading.input.ChatThread;
 import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
+import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 
 public class PlayListener implements PacketPlayInListener
@@ -29,10 +31,11 @@ public class PlayListener implements PacketPlayInListener
         this.player = player;
     }
 
+
     @Override
     public void handle(final PacketPlayInKeepAlive packet)
     {
-        // TODO kick if inactive
+        this.networkManager.updateKeepAlive();
     }
 
     @Override
@@ -164,6 +167,14 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void disconnect(final BaseComponent message)
     {
+        this.server.getPlayersManager().playerQuit(this.player);
+
+        this.networkManager.sendPacket(new PacketPlayOutDisconnect(message));
+        this.networkManager.close(message);
+
+        this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.player.getName() + "&7&l left from the server!");
+        this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.player.getName() + "&7 left from the server!");
+        this.server.sendConsoleSimpleColoredMessage("&3" + this.player.getName() + " &7left the server. (" + message.toLegacyText() + "&7)");
         // TODO: implement
     }
 

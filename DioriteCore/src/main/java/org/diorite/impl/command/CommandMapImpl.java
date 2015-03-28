@@ -118,7 +118,7 @@ public class CommandMapImpl implements CommandMap
                 final List<String> result = cmd.tabComplete(sender, command, matcher, newArgs);
                 if (result.isEmpty())
                 {
-                    return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
+                    return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames(args[args.length - 1]);
                 }
                 else
                 {
@@ -126,7 +126,11 @@ public class CommandMapImpl implements CommandMap
                 }
             }
         }
-        if ((args.length > 1) || cmdLine.endsWith(" "))
+        if (args.length > 1)
+        {
+            return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames(args[args.length - 1]);
+        }
+        if (cmdLine.endsWith(" "))
         {
             return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
         }
