@@ -9,6 +9,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
@@ -35,6 +37,8 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     protected       byte             viewDistance;
     protected       byte             renderDistance;
     protected       PlayerChunksImpl playerChunks;
+
+    protected PacketPlayOutAbilities abilities = new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
     public PlayerImpl(final ServerImpl server, final int id, final GameProfile gameProfile, final NetworkManager networkManager, final ImmutableLocation location)
     {
@@ -128,6 +132,87 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     }
 
     @Override
+    public boolean canFly()
+    {
+        return this.abilities.isCanFly();
+    }
+
+    @Override
+    public void setCanFly(final boolean value)
+    {
+        this.abilities.setCanFly(value);
+        if (! value)
+        {
+            this.abilities.setFlying(false);
+        }
+        this.updateAbilities();
+    }
+
+    @Override
+    public void setCanFly(final boolean value, final double flySpeed)
+    {
+        this.abilities.setCanFly(value);
+        this.abilities.setFlyingSpeed((float) flySpeed);
+        if (! value)
+        {
+            this.abilities.setFlying(false);
+        }
+        this.updateAbilities();
+    }
+
+    @Override
+    public float getFlySpeed()
+    {
+        return this.abilities.getFlyingSpeed();
+    }
+
+    @Override
+    public void setFlySpeed(final double flySpeed)
+    {
+        this.abilities.setFlyingSpeed((float) flySpeed);
+        this.updateAbilities();
+    }
+
+    @Override
+    public float getWalkSpeed()
+    {
+        return this.abilities.getWalkingSpeed();
+    }
+
+    @Override
+    public void setWalkSpeed(final double walkSpeed)
+    {
+        this.abilities.setWalkingSpeed((float) walkSpeed);
+        this.updateAbilities();
+    }
+
+    public PacketPlayOutAbilities getAbilities()
+    {
+        return this.abilities;
+    }
+
+    public void setAbilities(final PacketPlayOutAbilities abilities)
+    {
+        this.abilities = abilities;
+    }
+
+    public void setAbilities(final PacketPlayInAbilities abilities)
+    {
+        // TOOD: I should check what player want change here (cheats)
+        this.abilities.setCanFly(abilities.isCanFly());
+        this.abilities.setFlying(abilities.isFlying());
+        this.abilities.setWalkingSpeed(abilities.getWalkingSpeed());
+        this.abilities.setFlyingSpeed(abilities.getFlyingSpeed());
+        this.abilities.setInvulnerable(abilities.isInvulnerable());
+        this.abilities.setCanInstantlyBuild(abilities.isCanInstantlyBuild());
+    }
+
+    private void updateAbilities()
+    {
+        this.abilities.send(this.networkManager);
+    }
+
+    @Override
     public UUID getUniqueID()
     {
         return this.gameProfile.getId();
@@ -138,7 +223,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     {
         if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
         {
-            this.playerChunks.update();
+            this.playerChunks.wantUpdate();
         }
         super.move(modX, modY, modZ, modYaw, modPitch);
     }
@@ -148,7 +233,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     {
         if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
         {
-            this.playerChunks.update();
+            this.playerChunks.wantUpdate();
         }
         super.setPosition(modX, modY, modZ);
     }

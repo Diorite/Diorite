@@ -3,6 +3,7 @@ package org.diorite.impl.world.chunk;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Main;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.NibbleArray;
@@ -31,6 +32,19 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blockLight.fill((byte) 0x0);
     }
 
+    public ChunkPartImpl(final ChunkImpl chunk, final char[] blocks, final byte yPos)
+    {
+        this.chunk = chunk;
+        this.blocks = blocks;
+        this.skyLight = new NibbleArray(CHUNK_DATA_SIZE);
+        this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
+        this.yPos = yPos;
+        //noinspection MagicNumber
+        this.skyLight.fill((byte) 0xf);
+        //noinspection MagicNumber
+        this.blockLight.fill((byte) 0x0);
+    }
+
     public ChunkPartImpl(final ChunkImpl chunk, final char[] blocks, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
     {
         this.chunk = chunk;
@@ -38,10 +52,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.skyLight = skyLight;
         this.blockLight = blockLight;
         this.yPos = yPos;
-        //noinspection MagicNumber
-        this.skyLight.fill((byte) 0xf);
-        //noinspection MagicNumber
-        this.blockLight.fill((byte) 0x0);
     }
 
     public void setBlock(final int x, final int y, final int z, final int id, final int meta)

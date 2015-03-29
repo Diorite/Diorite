@@ -45,7 +45,7 @@ public class PlayListener implements PacketPlayInListener
         this.player.setViewDistance(packet.getViewDistance());
         if (oldViewDistance != this.player.getViewDistance())
         {
-            this.player.getPlayerChunks().update();
+            this.player.getPlayerChunks().wantUpdate();
         }
         // TODO: implement
     }
@@ -105,6 +105,12 @@ public class PlayListener implements PacketPlayInListener
     public void handle(final PacketPlayInTabComplete packet)
     {
         TabCompleteThread.add(new ChatAction(packet.getContent(), this.player));
+    }
+
+    @Override
+    public void handle(final PacketPlayInAbilities packet)
+    {
+        this.player.setAbilities(packet);
     }
 
     @Override
@@ -170,7 +176,8 @@ public class PlayListener implements PacketPlayInListener
         this.server.getPlayersManager().playerQuit(this.player);
 
         this.networkManager.sendPacket(new PacketPlayOutDisconnect(message));
-        this.networkManager.close(message);
+        this.networkManager.close(message, true);
+        this.server.getServerConnection().remove(this.networkManager);
 
         this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.player.getName() + "&7&l left from the server!");
         this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.player.getName() + "&7 left from the server!");

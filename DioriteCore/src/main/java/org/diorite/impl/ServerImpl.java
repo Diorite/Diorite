@@ -1,12 +1,15 @@
 package org.diorite.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Handler;
 
 import com.mojang.authlib.GameProfileRepository;
@@ -35,13 +38,17 @@ import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.ConsoleReaderThread;
 import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
+import org.diorite.impl.world.WorldsManagerImpl;
+import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
+import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
+import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
+import org.diorite.Diorite;
 import org.diorite.Server;
-import org.diorite.chat.ChatColor;
 import org.diorite.chat.ChatPosition;
-import org.diorite.chat.DioriteMarkdownParser;
 import org.diorite.chat.component.BaseComponent;
-import org.diorite.chat.component.TextComponent;
+import org.diorite.entity.Player;
 import org.diorite.plugin.Plugin;
+import org.diorite.world.generator.WorldGenerators;
 
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
@@ -66,6 +73,7 @@ public class ServerImpl implements Server, Runnable
     protected ServerConnection         serverConnection;
     protected EntityManagerImpl        entityManager;
     protected PlayersManagerImpl       playersManager;
+    protected WorldsManagerImpl        worldsManager;
     protected ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
     protected ConsoleReader            reader;
     protected long                     currentTick;
@@ -89,6 +97,7 @@ public class ServerImpl implements Server, Runnable
     public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
     {
         instance = this;
+        Diorite.setServer(this);
 
         this.keepAliveTimer = (int) options.valueOf("keepalivetimer");
         this.playerTimeout = (int) options.valueOf("timeout");
@@ -156,9 +165,10 @@ public class ServerImpl implements Server, Runnable
 
         this.entityManager = new EntityManagerImpl(this);
         this.playersManager = new PlayersManagerImpl(this);
+        this.worldsManager = new WorldsManagerImpl(options.valueOf("defworld").toString());
+
         this.serverConnection = new ServerConnection(this);
         this.serverConnection.start();
-
     }
 
     public int getKeepAliveTimer()
@@ -171,58 +181,9 @@ public class ServerImpl implements Server, Runnable
         return this.playerTimeout;
     }
 
-    @Override
-    public void broadcastMessage(final ChatPosition position, final String str)
+    public WorldsManagerImpl getWorldsManager()
     {
-        this.broadcastMessage(position, new TextComponent(str));
-    }
-
-    @Override
-    public void broadcastMessage(final ChatPosition position, final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.broadcastMessage(position, new TextComponent(str));
-            }
-        }
-    }
-
-    @Override
-    public void broadcastSimpleColoredMessage(final ChatPosition position, final String str)
-    {
-        this.broadcastMessage(position, ChatColor.translateAlternateColorCodes(str));
-    }
-
-    @Override
-    public void broadcastSimpleColoredMessage(final ChatPosition position, final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.broadcastSimpleColoredMessage(position, str);
-            }
-        }
-    }
-
-    @Override
-    public void broadcastDioriteMessage(final ChatPosition position, final String str)
-    {
-        this.broadcastMessage(position, DioriteMarkdownParser.parse(str, false));
-    }
-
-    @Override
-    public void broadcastDioriteMessage(final ChatPosition position, final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.broadcastDioriteMessage(position, str);
-            }
-        }
+        return this.worldsManager;
     }
 
     @Override
@@ -232,159 +193,15 @@ public class ServerImpl implements Server, Runnable
     }
 
     @Override
-    public void broadcastMessage(final ChatPosition position, final BaseComponent... components)
-    {
-        if (components != null)
-        {
-            for (final BaseComponent component : components)
-            {
-                this.broadcastMessage(position, component);
-            }
-        }
-    }
-
-    @Override
-    public void broadcastMessage(final String str)
-    {
-        this.broadcastMessage(new TextComponent(str));
-    }
-
-    @Override
-    public void broadcastMessage(final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.broadcastMessage(new TextComponent(str));
-            }
-        }
-    }
-
-    @Override
-    public void broadcastSimpleColoredMessage(final String str)
-    {
-        this.broadcastMessage(ChatColor.translateAlternateColorCodes(str));
-    }
-
-    @Override
-    public void broadcastSimpleColoredMessage(final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.broadcastSimpleColoredMessage(str);
-            }
-        }
-    }
-
-    @Override
-    public void broadcastDioriteMessage(final String str)
-    {
-        this.broadcastMessage(DioriteMarkdownParser.parse(str, false));
-    }
-
-    @Override
-    public void broadcastDioriteMessage(final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.broadcastDioriteMessage(str);
-            }
-        }
-    }
-
-    @Override
-    public void broadcastMessage(final BaseComponent component)
-    {
-        this.broadcastMessage(ChatPosition.SYSTEM, component);
-    }
-
-    @Override
-    public void broadcastMessage(final BaseComponent... components)
-    {
-        if (components != null)
-        {
-            for (final BaseComponent component : components)
-            {
-                this.broadcastMessage(component);
-            }
-        }
-    }
-
-    @Override
     public void sendConsoleMessage(final String str)
     {
         this.consoleCommandSender.sendMessage(str);
     }
 
     @Override
-    public void sendConsoleMessage(final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.sendConsoleMessage(str);
-            }
-        }
-    }
-
-    @Override
     public void sendConsoleMessage(final BaseComponent component)
     {
         this.consoleCommandSender.sendMessage(component);
-    }
-
-    @Override
-    public void sendConsoleMessage(final BaseComponent... components)
-    {
-        if (components != null)
-        {
-            for (final BaseComponent component : components)
-            {
-                this.sendConsoleMessage(component);
-            }
-        }
-    }
-
-    @Override
-    public void sendConsoleSimpleColoredMessage(final String str)
-    {
-        this.sendConsoleMessage(ChatColor.translateAlternateColorCodes(str));
-    }
-
-    @Override
-    public void sendConsoleSimpleColoredMessage(final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.sendConsoleSimpleColoredMessage(str);
-            }
-        }
-    }
-
-    @Override
-    public void sendConsoleDioriteMessage(final String str)
-    {
-        this.sendConsoleMessage(DioriteMarkdownParser.parse(str, false));
-    }
-
-    @Override
-    public void sendConsoleDioriteMessage(final String... strs)
-    {
-        if (strs != null)
-        {
-            for (final String str : strs)
-            {
-                this.sendConsoleDioriteMessage(str);
-            }
-        }
     }
 
     @Override
@@ -459,6 +276,18 @@ public class ServerImpl implements Server, Runnable
     public String getServerName()
     {
         return this.serverName;
+    }
+
+    @Override
+    public Collection<Player> getOnlinePlayers()
+    {
+        return new CopyOnWriteArraySet<>(this.playersManager.getRawPlayers().values());
+    }
+
+    @Override
+    public Player getPlayer(final UUID uuid)
+    {
+        return this.playersManager.getRawPlayers().get(uuid);
     }
 
     public KeyPair getKeyPair()
@@ -571,8 +400,19 @@ public class ServerImpl implements Server, Runnable
         }
         System.out.println("Starting Diorite v" + VERSION + " server...");
 
+        { // register default generators
+            WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
+            WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
+            WorldGenerators.registerGenerator(TestWorldGeneratorImpl.createInitializer());
+        }
+
+        System.out.println("Loading worlds...");
+        this.worldsManager.init(new File(options.valueOf("worldsdir").toString()));
+        System.out.println("Worlds loaded.");
+
         try
         {
+            System.setProperty("io.netty.eventLoopThreads", options.valueOf("netty").toString());
             System.out.println("Starting listening on " + this.hostname + ":" + this.port);
             this.serverConnection.init(InetAddress.getByName(this.hostname), this.port);
 

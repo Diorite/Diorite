@@ -38,4 +38,6 @@ public interface PacketPlayInListener extends PacketListener
     void handle(PacketPlayInWindowClick packet);
 
     void handle(PacketPlayInTabComplete packet);
+
+    void handle(PacketPlayInAbilities packet);
 }

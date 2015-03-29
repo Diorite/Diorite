@@ -5,44 +5,61 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.world.world.WorldImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
+import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk
 {
-    private final WorldImpl       world;
     private final ChunkPos        pos;
     private final ChunkPartImpl[] chunkParts; // size of 16, parts can be null
     private final byte[]          biomes;
     private final AtomicInteger usages = new AtomicInteger(0);
 
-    public ChunkImpl(final WorldImpl world, final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts)
+    public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts)
     {
-        this.world = world;
         this.pos = pos;
         this.biomes = biomes;
         this.chunkParts = chunkParts;
     }
 
-    public ChunkImpl(final WorldImpl world, final ChunkPos pos, final ChunkPartImpl[] chunkParts)
+    public ChunkImpl(final ChunkPos pos, final byte[] biomes)
     {
-        this.world = world;
+        this.pos = pos;
+        this.chunkParts = new ChunkPartImpl[CHUNK_PARTS];
+        this.biomes = biomes;
+    }
+
+    public ChunkImpl(final ChunkPos pos, final ChunkPartImpl[] chunkParts)
+    {
         this.pos = pos;
         this.chunkParts = chunkParts;
         this.biomes = new byte[CHUNK_SIZE * CHUNK_SIZE];
     }
 
-    public ChunkImpl(final WorldImpl world, final ChunkPos pos)
+    public ChunkImpl(final ChunkPos pos)
     {
-        this.world = world;
         this.pos = pos;
         this.chunkParts = new ChunkPartImpl[CHUNK_PARTS];
         this.biomes = new byte[CHUNK_SIZE * CHUNK_SIZE];
     }
 
+    @Override
+    public void setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
+    {
+        final byte chunkPosY = (byte) (y >> 4);
+        ChunkPartImpl chunkPart = this.chunkParts[chunkPosY];
+        if (chunkPart == null)
+        {
+            chunkPart = new ChunkPartImpl(this, chunkPosY);
+            this.chunkParts[chunkPosY] = chunkPart;
+        }
+        chunkPart.setBlock(x, y % Chunk.CHUNK_PART_HEIGHT, z, materialData);
+    }
+
+    @Override
     public void setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
         final byte chunkPosY = (byte) (y >> 4);
@@ -52,9 +69,10 @@ public class ChunkImpl implements Chunk
             chunkPart = new ChunkPartImpl(this, chunkPosY);
             this.chunkParts[chunkPosY] = chunkPart;
         }
-        chunkPart.setBlock(x, y >> 4, z, id, meta);
+        chunkPart.setBlock(x, y % Chunk.CHUNK_PART_HEIGHT, z, id, meta);
     }
 
+    @Override
     public BlockMaterialData getBlockType(final int x, final int y, final int z)
     {
         final byte chunkPosY = (byte) (y >> 4);
@@ -63,13 +81,13 @@ public class ChunkImpl implements Chunk
         {
             return Material.AIR;
         }
-        return chunkPart.getBlockType(x, y >> 4, z);
+        return chunkPart.getBlockType(x, y % Chunk.CHUNK_PART_HEIGHT, z);
     }
 
     @Override
-    public WorldImpl getWorld()
+    public World getWorld()
     {
-        return this.world;
+        return this.pos.getWorld();
     }
 
     public int addUsage()
@@ -82,6 +100,7 @@ public class ChunkImpl implements Chunk
         return this.usages.decrementAndGet();
     }
 
+    @Override
     public int getUsages()
     {
         return this.usages.intValue();
@@ -119,6 +138,7 @@ public class ChunkImpl implements Chunk
         return mask;
     }
 
+    @Override
     public void recalculateBlockCounts()
     {
         for (final ChunkPartImpl chunkPart : this.chunkParts)

@@ -90,6 +90,11 @@ public class ServerConnection extends Thread
         }
     }
 
+    public void remove(final NetworkManager networkManager)
+    {
+        this.connections.remove(networkManager);
+    }
+
     public void update()
     {
         final Iterator<NetworkManager> iterator = this.connections.iterator();

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.ServerImpl;
-import org.diorite.impl.world.world.WorldImpl;
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Entity;
 

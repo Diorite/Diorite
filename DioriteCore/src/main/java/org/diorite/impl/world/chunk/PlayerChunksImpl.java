@@ -20,6 +20,7 @@ public class PlayerChunksImpl
     private final PlayerImpl player;
     private final Collection<ChunkImpl> loadedChunks  = new HashSet<>(200);
     private final Collection<ChunkImpl> visibleChunks = new HashSet<>(200);
+    private boolean logout;
 
     public PlayerChunksImpl(final PlayerImpl player)
     {
@@ -51,8 +52,28 @@ public class PlayerChunksImpl
         return this.player;
     }
 
+    public void logout()
+    {
+        this.logout = true;
+        this.loadedChunks.parallelStream().forEach(ChunkImpl::removeUsage);
+        this.loadedChunks.clear();
+        this.visibleChunks.clear();
+    }
+
+    private boolean wantUpdate = true;
+
+    public void wantUpdate()
+    {
+        this.wantUpdate = true;
+    }
+
     public void update()
     {
+        if (this.logout || ! this.wantUpdate)
+        {
+            return;
+        }
+        this.wantUpdate = false;
         final byte render = this.getRenderDistance();
         final byte view = this.getViewDistance();
         final ChunkPos center = this.player.getLocation().getChunkPos();
@@ -64,7 +85,7 @@ public class PlayerChunksImpl
         {
             final int copyR = r;
             forChunks(r, center, chunkPos -> {
-                final ChunkImpl chunk = this.player.getWorld().getChunkManager().getChunkAt(chunkPos, true);
+                final ChunkImpl chunk = (ChunkImpl) this.player.getWorld().getChunkManager().getChunkAt(chunkPos, true);
                 if (chunk == null)
                 {
                     return;

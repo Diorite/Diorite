@@ -157,7 +157,8 @@ public class LoginListener implements PacketLoginInListener
             this.logger.info("Disconnecting " + this.gameProfile + ": " + msg);
             final TextComponent tc = new TextComponent(msg);
             this.networkManager.sendPacket(new PacketLoginOutDisconnect(tc));
-            this.networkManager.close(tc);
+            this.networkManager.close(tc, false);
+            this.server.getServerConnection().remove(this.networkManager);
         } catch (final Exception exception)
         {
             this.logger.error("Error whilst disconnecting player", exception);

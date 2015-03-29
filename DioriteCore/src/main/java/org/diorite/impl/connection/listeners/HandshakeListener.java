@@ -103,7 +103,8 @@ public class HandshakeListener implements PacketHandshakingInListener
     public void disconnect(final BaseComponent baseComponent)
     {
         this.networkManager.sendPacket(new PacketLoginOutDisconnect(baseComponent));
-        this.networkManager.close(baseComponent);
+        this.networkManager.close(baseComponent, true);
+        this.server.getServerConnection().remove(this.networkManager);
     }
 
     @Override

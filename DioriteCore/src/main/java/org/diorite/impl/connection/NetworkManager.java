@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
+import org.diorite.impl.connection.listeners.PlayListener;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketCompressor;
 import org.diorite.impl.connection.packets.PacketDecompressor;
@@ -21,7 +22,6 @@ import org.diorite.impl.connection.packets.PacketDecrypter;
 import org.diorite.impl.connection.packets.PacketEncrypter;
 import org.diorite.impl.connection.packets.PacketListener;
 import org.diorite.impl.connection.packets.QueuedPacket;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.TranslatableComponent;
@@ -60,16 +60,25 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     public void checkAlive()
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         if ((System.currentTimeMillis() - this.lastKeepAlive) > this.playerTimeout)
         {
             final TextComponent msg = new TextComponent("§4Timeout");
-            this.sendPacket(new PacketPlayOutDisconnect(msg));
-            this.close(msg);
+            this.packetListener.disconnect(msg);
         }
     }
 
     public void setProtocol(final EnumProtocol enumprotocol)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         this.channel.attr(this.server.getServerConnection().protocolKey).set(enumprotocol);
         this.channel.config().setAutoRead(true);
     }
@@ -81,12 +90,22 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     public void update()
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         this.nextPacket();
         this.channel.flush();
     }
 
     public void sendPacket(final Packet<?> packet)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         if (this.isChannelOpen())
         {
             this.nextPacket();
@@ -101,6 +120,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     @SafeVarargs
     public final void sendPacket(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>> listener, final GenericFutureListener<? extends Future<? super Void>>... listeners)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         if (this.isChannelOpen())
         {
             this.nextPacket();
@@ -114,6 +138,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     private void sendPacket(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>>[] listeners)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         final EnumProtocol ep1 = EnumProtocol.getByPacketClass(packet);
         final EnumProtocol ep2 = this.channel.attr(this.server.getServerConnection().protocolKey).get();
         if (ep2 != ep1)
@@ -152,6 +181,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     private void nextPacket()
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         if (this.isChannelOpen())
         {
             while (! this.packetQueue.isEmpty())
@@ -165,6 +199,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     @SuppressWarnings("TypeMayBeWeakened")
     public void enableEncryption(final SecretKey secretkey)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(MinecraftEncryption.getCipher(2, secretkey)));
         this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(MinecraftEncryption.getCipher(1, secretkey)));
     }
@@ -172,6 +211,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     @Override
     protected void messageReceived(final ChannelHandlerContext channelHandlerContext, final Packet<? super PacketListener> packet) throws Exception
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         if (this.channel.isOpen())
         {
             packet.handle(this.packetListener);
@@ -181,14 +225,35 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     @Override
     public void exceptionCaught(final ChannelHandlerContext channelHandlerContext, final Throwable throwable)
     {
-        this.close(new TranslatableComponent("disconnect.genericReason", "Internal Exception: " + throwable));
-        throwable.printStackTrace();
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
+        if (this.channel.isOpen())
+        {
+            this.close(new TranslatableComponent("disconnect.genericReason", "Internal Exception: " + throwable));
+            this.channel.close();
+            this.server.getServerConnection().remove(this);
+        }
+        else
+        {
+            this.preparing = false;
+            this.packetQueue.clear();
+            this.disconnectMessage = new TranslatableComponent("disconnect.genericReason", "Internal Exception: " + throwable);
+            this.server.getServerConnection().remove(this);
+        }
+        //throwable.printStackTrace();
     }
 
     @Override
-    public void channelActive(final ChannelHandlerContext channelHandlerContext)
-            throws Exception
+    public void channelActive(final ChannelHandlerContext channelHandlerContext) throws Exception
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         super.channelActive(channelHandlerContext);
         this.channel = channelHandlerContext.channel();
         this.address = this.channel.remoteAddress();
@@ -206,7 +271,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     @Override
     public void channelInactive(final ChannelHandlerContext channelHandlerContext)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         this.close(new TranslatableComponent("disconnect.endOfStream"));
+        this.server.getServerConnection().remove(this);
     }
 
     public BaseComponent getDisconnectMessage()
@@ -216,6 +287,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     public void setDisconnectMessage(final BaseComponent disconnectMessage)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         this.disconnectMessage = disconnectMessage;
     }
 
@@ -231,6 +307,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     public void checkConnection()
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         if (! this.isChannelOpen())
         {
             if (this.disconnectMessage != null)
@@ -246,6 +327,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     public void setCompression(final int i)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         if (i >= 0)
         {
             if ((this.channel.pipeline().get("decompress") instanceof PacketDecompressor))
@@ -283,7 +369,9 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         this.channel.config().setAutoRead(false);
     }
 
-    public void close(final BaseComponent baseComponent)
+    private volatile boolean closed = false;
+
+    public void close(final BaseComponent baseComponent, final boolean wasSafe)
     {
         this.preparing = false;
         this.packetQueue.clear();
@@ -292,6 +380,23 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
             this.channel.close();
             this.disconnectMessage = baseComponent;
         }
+        if (! wasSafe)
+        {
+            if (this.packetListener instanceof PlayListener)
+            {
+                final PlayListener listener = (PlayListener) this.packetListener;
+                if (this.server.getPlayersManager().getRawPlayers().containsValue(listener.getPlayer()))
+                {
+                    listener.disconnect(baseComponent);
+                }
+            }
+        }
+        this.closed = true;
+    }
+
+    public void close(final BaseComponent baseComponent)
+    {
+        this.close(baseComponent, false);
     }
 
     public PacketListener getPacketListener()
@@ -301,6 +406,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     public void setPacketListener(final PacketListener packetListener)
     {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
         Objects.requireNonNull(packetListener, "PacketLisener can't be null!");
         this.packetListener = packetListener;
     }

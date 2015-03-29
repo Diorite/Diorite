@@ -26,7 +26,6 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.impl.world.world.WorldImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -47,8 +46,6 @@ public class PlayersManagerImpl
 
     private transient long lastKeepAlive = System.currentTimeMillis();
 
-    private final WorldImpl world = new WorldImpl("world", UUID.randomUUID()); // testing
-
     public PlayersManagerImpl(final ServerImpl server)
     {
         this.server = server;
@@ -57,7 +54,7 @@ public class PlayersManagerImpl
 
     public PlayerImpl createPlayer(final GameProfile gameProfile, final NetworkManager networkManager)
     {// TODO: loading player
-        final PlayerImpl player = new PlayerImpl(this.server, this.server.entityManager.getNextID(), gameProfile, networkManager, new ImmutableLocation(4, 71, - 4, 0, 0, this.world));
+        final PlayerImpl player = new PlayerImpl(this.server, this.server.entityManager.getNextID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
         this.players.put(gameProfile.getId(), player);
         return player;
     }
@@ -69,10 +66,10 @@ public class PlayersManagerImpl
         player.getNetworkManager().sendPacket(new PacketPlayOutLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
         player.getNetworkManager().sendPacket(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
         player.getNetworkManager().sendPacket(new PacketPlayOutServerDifficulty(Difficulty.EASY));
-        player.getNetworkManager().sendPacket(new PacketPlayOutSpawnPosition(new BlockLocation(2, 71, - 2)));
+        player.getNetworkManager().sendPacket(new PacketPlayOutSpawnPosition(new BlockLocation(2, 255, - 2)));
         player.getNetworkManager().sendPacket(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
         player.getNetworkManager().sendPacket(new PacketPlayOutHeldItemSlot(3));
-        player.getNetworkManager().sendPacket(new PacketPlayOutPosition(new TeleportData(4, 71, - 4)));
+        player.getNetworkManager().sendPacket(new PacketPlayOutPosition(new TeleportData(4, 255, - 4)));
 
         // TODO: changeable message, events, etc..
         this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l join to the server!");
@@ -103,12 +100,16 @@ public class PlayersManagerImpl
 
     public void playerQuit(final UUID uuid)
     {
-        this.players.remove(uuid);
+        final PlayerImpl player = this.players.remove(uuid);
+        player.getPlayerChunks().logout();
     }
 
     public void keepAlive()
     {
         final long curr = System.currentTimeMillis();
+        this.players.values().parallelStream().forEach(p -> {
+            p.getPlayerChunks().update();
+        });
         if ((curr - this.lastKeepAlive) > this.keepAliveTimer)
         {
             this.players.values().parallelStream().forEach(p -> {
