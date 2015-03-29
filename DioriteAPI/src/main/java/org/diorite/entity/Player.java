@@ -27,4 +27,18 @@ public interface Player extends AttributableEntity, PlayerCommandSender
     byte getRenderDistance();
 
     void setRenderDistance(byte viewDistance);
+
+    boolean canFly();
+
+    void setCanFly(boolean value);
+
+    void setCanFly(boolean value, double flySpeed);
+
+    float getFlySpeed();
+
+    void setFlySpeed(double flySpeed);
+
+    float getWalkSpeed();
+
+    void setWalkSpeed(double walkSpeed);
 }

@@ -9,6 +9,11 @@ import org.diorite.entity.Player;
 
 public interface PlayerCommandSender extends CommandSender
 {
+    Player getPlayer();
+
+    void sendMessage(ChatPosition position, BaseComponent component);
+
+
     @Override
     default boolean isConsole()
     {
@@ -26,8 +31,6 @@ public interface PlayerCommandSender extends CommandSender
     {
         return false;
     }
-
-    Player getPlayer();
 
     @Override
     default void sendMessage(final String str)
@@ -88,8 +91,6 @@ public interface PlayerCommandSender extends CommandSender
     {
         this.sendMessage(ChatPosition.SYSTEM, component);
     }
-
-    void sendMessage(ChatPosition position, BaseComponent component);
 
     default void sendMessage(final ChatPosition position, final BaseComponent[] components)
     {

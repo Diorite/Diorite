@@ -982,4 +982,14 @@ public abstract class Material implements SimpleEnum<Material>
 //        register(RECORD_11);
 //        register(RECORD_12);
     }
+
+    public static TIntObjectMap<Material> getByID()
+    {
+        return byID;
+    }
+
+    public static Map<String, Material> getByName()
+    {
+        return byName;
+    }
 }

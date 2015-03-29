@@ -17,6 +17,11 @@ public interface CommandSender
 
     void sendMessage(String str);
 
+    void sendMessage(BaseComponent component);
+
+    Server getServer();
+
+
     default void sendMessage(final String[] strs)
     {
         if (strs != null)
@@ -60,8 +65,6 @@ public interface CommandSender
         }
     }
 
-    void sendMessage(BaseComponent component);
-
     default void sendMessage(final BaseComponent[] components)
     {
         if (components != null)
@@ -72,6 +75,4 @@ public interface CommandSender
             }
         }
     }
-
-    Server getServer();
 }

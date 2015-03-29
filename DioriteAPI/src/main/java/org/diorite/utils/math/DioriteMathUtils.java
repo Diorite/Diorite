@@ -1,11 +1,27 @@
 package org.diorite.utils.math;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 @SuppressWarnings("MagicNumber")
 public final class DioriteMathUtils
 {
 
     private DioriteMathUtils()
     {
+    }
+
+    private static final NumberFormat simpleFormat          = new DecimalFormat("###.##");
+    private static final NumberFormat simpleFormatForceZero = new DecimalFormat("###.00");
+
+    public static String formatSimpleDecimal(final double d)
+    {
+        return simpleFormat.format(d);
+    }
+
+    public static String formatSimpleDecimalWithZeros(final double d)
+    {
+        return simpleFormatForceZero.format(d);
     }
 
     public static String toRoman(final int i)

@@ -3,8 +3,8 @@ package org.diorite.world.chunk;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.world.World;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.world.World;
 
 public class ChunkPos
 {
@@ -39,6 +39,11 @@ public class ChunkPos
     public World getWorld()
     {
         return this.world;
+    }
+
+    public ChunkPos setWorld(final World world)
+    {
+        return new ChunkPos(this.x, this.z, world);
     }
 
     public ChunkPos add(final ChunkPos other)
@@ -102,7 +107,7 @@ public class ChunkPos
     @SuppressWarnings("MagicNumber")
     public ChunkPos fromLong(final long l)
     {
-        return new ChunkPos((int)(l >> 32), (int)l);
+        return new ChunkPos((int) (l >> 32), (int) l);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.diorite.world.chunk;
 
+import org.diorite.material.BlockMaterialData;
 import org.diorite.world.World;
 
 public interface Chunk
@@ -10,7 +11,17 @@ public interface Chunk
     int CHUNK_FULL_HEIGHT = 256;
     int CHUNK_BIOMES_SIZE = CHUNK_SIZE * CHUNK_SIZE;
 
+    void setBlock(int x, int y, int z, BlockMaterialData materialData);
+
+    void setBlock(int x, int y, int z, int id, int meta);
+
+    BlockMaterialData getBlockType(int x, int y, int z);
+
     World getWorld();
 
+    int getUsages();
+
     ChunkPos getPos();
+
+    void recalculateBlockCounts();
 }
