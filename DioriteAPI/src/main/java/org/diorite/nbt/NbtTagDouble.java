@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NbtTagDouble extends NbtAbstractTag<NbtTagDouble>
+public class NbtTagDouble extends NbtAbstractTag
 {
     protected double value;
 
@@ -24,47 +24,39 @@ public class NbtTagDouble extends NbtAbstractTag<NbtTagDouble>
         this.value = value;
     }
 
-    public NbtTagDouble(final String name, final NbtTagCompound parent, final double value)
+    public double getValue()
     {
-        super(name, parent);
-        this.value = value;
+        return this.value;
+    }
+
+    public void setValue(final double d)
+    {
+        this.value = d;
     }
 
     @Override
-    public NbtTagDouble read(final NbtInputStream inputStream, final boolean hasName) throws IOException
-    {
-        super.read(inputStream, hasName);
-        this.value = inputStream.readDouble();
-        return this;
-    }
-
-    @Override
-    public NbtTagDouble write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
-    {
-        super.write(outputStream, hasName);
-        outputStream.writeDouble(this.value);
-        return this;
-    }
-
-    @Override
-    public NbtTagType getType()
+    public NbtTagType getTagType()
     {
         return NbtTagType.DOUBLE;
+    }
+
+    @Override
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
+    {
+        super.write(outputStream, anonymous);
+        outputStream.writeDouble(this.value);
+    }
+
+    @Override
+    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    {
+        super.read(inputStream, anonymous);
+        this.value = inputStream.readDouble();
     }
 
     @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
-    }
-
-    public double getValue()
-    {
-        return this.value;
-    }
-
-    public void setValue(final double value)
-    {
-        this.value = value;
     }
 }

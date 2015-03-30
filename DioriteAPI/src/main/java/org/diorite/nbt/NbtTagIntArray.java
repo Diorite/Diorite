@@ -2,21 +2,24 @@ package org.diorite.nbt;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NbtTagIntArray extends NbtAbstractTag<NbtTagIntArray>
+public class NbtTagIntArray extends NbtAbstractTag
 {
+    public static final int[] EMPTY = new int[0];
+
     protected int[] value;
 
     public NbtTagIntArray()
     {
+        this.value = EMPTY;
     }
 
     public NbtTagIntArray(final String name)
     {
         super(name);
+        this.value = EMPTY;
     }
 
     public NbtTagIntArray(final String name, final int[] value)
@@ -25,58 +28,49 @@ public class NbtTagIntArray extends NbtAbstractTag<NbtTagIntArray>
         this.value = value;
     }
 
-    public NbtTagIntArray(final String name, final NbtTagCompound parent, final int[] value)
+    public int[] getValue()
     {
-        super(name, parent);
-        this.value = value;
+        return this.value;
+    }
+
+    public void setValue(final int[] i)
+    {
+        this.value = i;
     }
 
     @Override
-    public NbtTagIntArray read(final NbtInputStream inputStream, final boolean hasName) throws IOException
+    public NbtTagType getTagType()
     {
-        super.read(inputStream, hasName);
-        final int size = inputStream.readInt();
-        final int[] ints = new int[size];
-        for (int i = 0; i < size; i++)
-        {
-            ints[i] = inputStream.readInt();
-        }
-        this.value = ints;
-        return this;
+        return NbtTagType.INTEGER_ARRAY;
     }
 
     @Override
-    public NbtTagIntArray write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
     {
-        super.write(outputStream, hasName);
+        super.write(outputStream, anonymous);
         outputStream.writeInt(this.value.length);
         for (final int i : this.value)
         {
             outputStream.writeInt(i);
         }
-        return this;
     }
 
     @Override
-    public NbtTagType getType()
+    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
     {
-        return NbtTagType.INTEGER_ARRAY;
+        super.read(inputStream, anonymous);
+        final int size = inputStream.readInt();
+        final int[] data = new int[size];
+        for (int i = 0; i < size; i++)
+        {
+            data[i] = inputStream.readInt();
+        }
+        this.value = data;
     }
 
     @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
-    }
-
-    public int[] getValue()
-    {
-        return this.value;
-    }
-
-    public void setValue(final int[] value)
-    {
-        Validate.notNull(value, "ints can't be null");
-        this.value = value;
     }
 }

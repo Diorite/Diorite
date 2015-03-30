@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NbtTagShort extends NbtAbstractTag<NbtTagShort>
+public class NbtTagShort extends NbtAbstractTag
 {
     protected short value;
 
@@ -24,38 +24,10 @@ public class NbtTagShort extends NbtAbstractTag<NbtTagShort>
         this.value = value;
     }
 
-    public NbtTagShort(final String name, final NbtTagCompound parent, final short value)
+    public NbtTagShort(final String name, final int value)
     {
-        super(name, parent);
-        this.value = value;
-    }
-
-    @Override
-    public NbtTagShort read(final NbtInputStream inputStream, final boolean hasName) throws IOException
-    {
-        super.read(inputStream, hasName);
-        this.value = inputStream.readShort();
-        return this;
-    }
-
-    @Override
-    public NbtTagShort write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
-    {
-        super.write(outputStream, hasName);
-        outputStream.writeShort(this.value);
-        return this;
-    }
-
-    @Override
-    public NbtTagType getType()
-    {
-        return NbtTagType.SHORT;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
+        super(name);
+        this.value = (short) value;
     }
 
     public short getValue()
@@ -63,8 +35,34 @@ public class NbtTagShort extends NbtAbstractTag<NbtTagShort>
         return this.value;
     }
 
-    public void setValue(final short value)
+    public void setValue(final short s)
     {
-        this.value = value;
+        this.value = s;
+    }
+
+    @Override
+    public NbtTagType getTagType()
+    {
+        return NbtTagType.SHORT;
+    }
+
+    @Override
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
+    {
+        super.write(outputStream, anonymous);
+        outputStream.writeShort(this.value);
+    }
+
+    @Override
+    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    {
+        super.read(inputStream, anonymous);
+        this.value = inputStream.readShort();
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
     }
 }

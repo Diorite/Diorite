@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NbtTagInt extends NbtAbstractTag<NbtTagInt>
+public class NbtTagInt extends NbtAbstractTag
 {
     protected int value;
 
@@ -24,47 +24,39 @@ public class NbtTagInt extends NbtAbstractTag<NbtTagInt>
         this.value = value;
     }
 
-    public NbtTagInt(final String name, final NbtTagCompound parent, final int value)
+    public int getValue()
     {
-        super(name, parent);
-        this.value = value;
+        return this.value;
+    }
+
+    public void setValue(final int i)
+    {
+        this.value = i;
     }
 
     @Override
-    public NbtTagInt read(final NbtInputStream inputStream, final boolean hasName) throws IOException
-    {
-        super.read(inputStream, hasName);
-        this.value = inputStream.readInt();
-        return this;
-    }
-
-    @Override
-    public NbtTagInt write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
-    {
-        super.write(outputStream, hasName);
-        outputStream.writeInt(this.value);
-        return this;
-    }
-
-    @Override
-    public NbtTagType getType()
+    public NbtTagType getTagType()
     {
         return NbtTagType.INTEGER;
+    }
+
+    @Override
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
+    {
+        super.write(outputStream, anonymous);
+        outputStream.writeInt(this.value);
+    }
+
+    @Override
+    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    {
+        super.read(inputStream, anonymous);
+        this.value = inputStream.readInt();
     }
 
     @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
-    }
-
-    public int getValue()
-    {
-        return this.value;
-    }
-
-    public void setValue(final int value)
-    {
-        this.value = value;
     }
 }

@@ -106,16 +106,16 @@ public abstract class Loc
 
     public BlockLocation toBlockLocation()
     {
-        return new BlockLocation((int) this.getX(), (int) this.getY(), (int) this.getZ());
+        return new BlockLocation((int) this.getX(), (int) this.getY(), (int) this.getZ(), this.getWorld());
     }
 
     public Location toLocation()
     {
-        return new Location(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch());
+        return new Location(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), this.getWorld());
     }
 
     public ImmutableLocation toImmutableLocation()
     {
-        return new ImmutableLocation(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch());
+        return new ImmutableLocation(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), this.getWorld());
     }
 }

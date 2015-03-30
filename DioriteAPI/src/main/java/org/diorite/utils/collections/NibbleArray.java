@@ -10,13 +10,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * An array of nibbles (4-bit values) stored efficiently as a byte array of
  * half the size. The even indices are stored in the least significant nibble
  * and the odd indices in the most significant bits.
- * <p/>
+ * <p>
  * For example, [1 5 8 15] is stored as [0x51 0xf8].
  */
-public final class NibbleArray
+@SuppressWarnings("MagicNumber")
+public class NibbleArray
 {
 
-    private final byte[] data;
+    protected final byte[] data;
 
     /**
      * Construct a new NibbleArray with the given size in nibbles.

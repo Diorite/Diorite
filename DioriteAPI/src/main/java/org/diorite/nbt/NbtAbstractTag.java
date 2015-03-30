@@ -1,19 +1,14 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public abstract class NbtAbstractTag<T extends NbtAbstractTag<?>>
+public abstract class NbtAbstractTag implements NbtTag
 {
-    public static final Charset CHARSET = Charset.forName("UTF-8");
-
     protected String name;
-
-    protected NbtTagCompound parent = null;
+    protected NbtTagContainer parent = null;
 
     public NbtAbstractTag()
     {
@@ -21,87 +16,72 @@ public abstract class NbtAbstractTag<T extends NbtAbstractTag<?>>
 
     public NbtAbstractTag(final String name)
     {
-        this.updateName(name);
+        this.setName(name);
     }
 
-    public NbtAbstractTag(final String name, final NbtTagCompound parent)
-    {
-        this.name = name;
-        this.parent = parent;
-    }
-
-    public NbtAbstractTag<T> read(final NbtInputStream inputStream, final boolean hasName) throws IOException
-    {
-        if (hasName)
-        {
-            final byte[] bytes = new byte[inputStream.readShort()];
-            inputStream.readFully(bytes);
-            this.updateName(new String(bytes, CHARSET));
-        }
-        return this;
-    }
-
-    public NbtAbstractTag<T> write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
-    {
-        outputStream.writeByte(this.getTypeId());
-        if (hasName)
-        {
-            final byte[] name = this.getNameBytes();
-            outputStream.writeShort(name.length);
-            outputStream.write(name);
-        }
-        return this;
-    }
-
+    @Override
     public String getName()
     {
         return this.name;
     }
 
-    protected void setName(final String name)
+    @Override
+    public void setName(final String name)
     {
+        if (this.parent != null)
+        {
+            this.parent.removeTag(this);
+        }
         this.name = name;
+        if (this.parent != null)
+        {
+            if (this.parent instanceof NbtAnonymousTagContainer)
+            {
+                ((NbtAnonymousTagContainer) this.parent).addTag(this);
+            }
+            else
+            {
+                ((NbtNamedTagContainer) this.parent).addTag(this);
+            }
+        }
     }
 
-    public byte[] getNameBytes()
-    {
-        return this.name.getBytes(CHARSET);
-    }
-
-    public NbtTagCompound getParent()
+    @Override
+    public NbtTagContainer getParent()
     {
         return this.parent;
     }
 
-    public void setParent(final NbtTagCompound parent)
+    @Override
+    public void setParent(final NbtTagContainer parent)
     {
         if (this.parent != null)
         {
             this.parent.removeTag(this);
         }
-
         this.parent = parent;
     }
 
-    public abstract NbtTagType getType();
-
-    public byte getTypeId()
+    @Override
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
     {
-        return this.getType().getTypeID();
+        if (! anonymous)
+        {
+            final byte[] name = this.getNameBytes();
+            outputStream.writeShort(name.length);
+            outputStream.write(name);
+        }
     }
 
-    public void updateName(final String name)
+    @Override
+    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
     {
-        Validate.notNull(name, "Name can't be null");
-
-        if (this.parent != null)
+        if (! anonymous)
         {
-            this.parent.removeTag(this);
-        }
-        this.name = name;
-        if (this.parent != null)
-        {
-            this.parent.setTag(this);
+            final int nameSize = inputStream.readShort();
+            final byte[] nameBytes = new byte[nameSize];
+            inputStream.readFully(nameBytes);
+            this.setName(new String(nameBytes, STRING_CHARSET));
         }
     }
 

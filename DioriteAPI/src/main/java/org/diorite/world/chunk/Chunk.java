@@ -23,5 +23,9 @@ public interface Chunk
 
     ChunkPos getPos();
 
+    int getX();
+
+    int getZ();
+
     void recalculateBlockCounts();
 }

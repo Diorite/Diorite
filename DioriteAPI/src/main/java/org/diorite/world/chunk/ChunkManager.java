@@ -2,6 +2,10 @@ package org.diorite.world.chunk;
 
 public interface ChunkManager
 {
+    void unloadAll();
+
+    void saveAll();
+
     void unload(Chunk chunk);
 
     Chunk getChunkAt(ChunkPos pos);

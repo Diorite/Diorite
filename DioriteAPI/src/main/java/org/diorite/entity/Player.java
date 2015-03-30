@@ -1,5 +1,7 @@
 package org.diorite.entity;
 
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
 
 public interface Player extends AttributableEntity, PlayerCommandSender
@@ -13,6 +15,8 @@ public interface Player extends AttributableEntity, PlayerCommandSender
     {
         return this;
     }
+
+    void kick(BaseComponent s);
 
     boolean isCrouching();
 
@@ -41,4 +45,10 @@ public interface Player extends AttributableEntity, PlayerCommandSender
     float getWalkSpeed();
 
     void setWalkSpeed(double walkSpeed);
+
+
+    default void kick(final String s)
+    {
+        this.kick(new TextComponent(s));
+    }
 }

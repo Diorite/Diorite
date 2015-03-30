@@ -1,20 +1,21 @@
 package org.diorite.world;
 
-import java.util.UUID;
-
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
-import org.diorite.Location;
+import org.diorite.ImmutableLocation;
+import org.diorite.Loc;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.generator.WorldGenerator;
 
 public interface World
 {
-    String getName();
+    void save();
 
-    UUID getUuid();
+    Dimension getDimension();
+
+    String getName();
 
     ChunkManager getChunkManager();
 
@@ -50,9 +51,9 @@ public interface World
 
     int getThunderTime();
 
-    Location getSpawn();
+    ImmutableLocation getSpawn();
 
-    void setSpawn(Location spawn);
+    void setSpawn(Loc spawn);
 
     WorldGenerator getGenerator();
 
@@ -63,4 +64,8 @@ public interface World
     void setBlock(BlockLocation location, BlockMaterialData material);
 
     int getMaxHeight();
+
+    long getTime();
+
+    void setTime(long time);
 }

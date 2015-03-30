@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NbtTagString extends NbtAbstractTag<NbtTagString>
+public class NbtTagString extends NbtAbstractTag
 {
     protected String value;
 
@@ -24,51 +24,44 @@ public class NbtTagString extends NbtAbstractTag<NbtTagString>
         this.value = value;
     }
 
-    public NbtTagString(final String name, final NbtTagCompound parent, final String value)
+    public String getValue()
     {
-        super(name, parent);
-        this.value = value;
+        return this.value;
+    }
+
+    public void setValue(final String s)
+    {
+        this.value = s;
     }
 
     @Override
-    public NbtTagString read(final NbtInputStream inputStream, final boolean hasName) throws IOException
-    {
-        super.read(inputStream, hasName);
-        final byte[] data = new byte[inputStream.readShort()];
-        inputStream.readFully(data);
-        this.value = new String(data, CHARSET);
-        return this;
-    }
-
-    @Override
-    public NbtTagString write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
-    {
-        super.write(outputStream, hasName);
-        final byte[] bytes = this.value.getBytes(CHARSET);
-        outputStream.writeShort(bytes.length);
-        outputStream.write(bytes);
-        return this;
-    }
-
-    @Override
-    public NbtTagType getType()
+    public NbtTagType getTagType()
     {
         return NbtTagType.STRING;
+    }
+
+    @Override
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
+    {
+        super.write(outputStream, anonymous);
+        final byte[] outputBytes = this.value.getBytes(NbtTag.STRING_CHARSET);
+        outputStream.writeShort(outputBytes.length);
+        outputStream.write(outputBytes);
+    }
+
+    @Override
+    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    {
+        super.read(inputStream, anonymous);
+        final int size = inputStream.readShort();
+        final byte[] data = new byte[size];
+        inputStream.readFully(data);
+        this.value = new String(data, NbtTag.STRING_CHARSET);
     }
 
     @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
-    }
-
-    public String getValue()
-    {
-        return this.value;
-    }
-
-    public void setValue(final String value)
-    {
-        this.value = value;
     }
 }

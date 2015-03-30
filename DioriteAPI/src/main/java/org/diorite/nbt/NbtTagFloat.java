@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NbtTagFloat extends NbtAbstractTag<NbtTagFloat>
+public class NbtTagFloat extends NbtAbstractTag
 {
     protected float value;
 
@@ -24,38 +24,10 @@ public class NbtTagFloat extends NbtAbstractTag<NbtTagFloat>
         this.value = value;
     }
 
-    public NbtTagFloat(final String name, final NbtTagCompound parent, final float value)
+    public NbtTagFloat(final String name, final double value)
     {
-        super(name, parent);
-        this.value = value;
-    }
-
-    @Override
-    public NbtTagFloat read(final NbtInputStream inputStream, final boolean hasName) throws IOException
-    {
-        super.read(inputStream, hasName);
-        this.value = inputStream.readFloat();
-        return this;
-    }
-
-    @Override
-    public NbtTagFloat write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
-    {
-        super.write(outputStream, hasName);
-        outputStream.writeFloat(this.value);
-        return this;
-    }
-
-    @Override
-    public NbtTagType getType()
-    {
-        return NbtTagType.FLOAT;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
+        super(name);
+        this.value = (float) value;
     }
 
     public float getValue()
@@ -63,8 +35,34 @@ public class NbtTagFloat extends NbtAbstractTag<NbtTagFloat>
         return this.value;
     }
 
-    public void setValue(final float value)
+    public void setValue(final float f)
     {
-        this.value = value;
+        this.value = f;
+    }
+
+    @Override
+    public NbtTagType getTagType()
+    {
+        return NbtTagType.FLOAT;
+    }
+
+    @Override
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
+    {
+        super.write(outputStream, anonymous);
+        outputStream.writeFloat(this.value);
+    }
+
+    @Override
+    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    {
+        super.read(inputStream, anonymous);
+        this.value = inputStream.readFloat();
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
     }
 }

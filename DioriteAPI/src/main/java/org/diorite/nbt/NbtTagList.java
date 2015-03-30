@@ -2,202 +2,118 @@ package org.diorite.nbt;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.google.common.collect.ImmutableList;
-
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class NbtTagList extends NbtAbstractTag<NbtTagList>
+public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContainer
 {
-    protected final Class<?>                type;
-    protected       List<NbtAbstractTag<?>> tagList;
+    protected List<NbtTag> tagList;
 
     public NbtTagList()
     {
-        this.type = null;
-        this.tagList = new CopyOnWriteArrayList<>();
+        this.tagList = new ArrayList<>(1);
     }
 
     public NbtTagList(final String name)
     {
         super(name);
-        this.type = null;
-        this.tagList = new CopyOnWriteArrayList<>();
+        this.tagList = new ArrayList<>(8);
     }
 
-    public NbtTagList(final String name, final Class<NbtAbstractTag<?>> type)
+    public NbtTagList(final String name, final int size)
     {
         super(name);
-        this.type = type;
-        this.tagList = new CopyOnWriteArrayList<>();
+        this.tagList = new ArrayList<>(size);
     }
 
-    public NbtTagList(final String name, final List<NbtAbstractTag<?>> tagList)
+    public NbtTagList(final String name, final Collection<? extends NbtTag> tagList)
     {
         super(name);
-        this.type = null;
-        this.tagList = tagList;
-    }
-
-    public NbtTagList(final String name, final Class<NbtAbstractTag<?>> type, final List<NbtAbstractTag<?>> tagList)
-    {
-        super(name);
-        this.type = type;
-        this.tagList = new CopyOnWriteArrayList<>(tagList);
-    }
-
-    public NbtTagList(final String name, final NbtTagCompound parent, final Class<NbtAbstractTag<?>> type)
-    {
-        super(name, parent);
-        this.type = type;
-        this.tagList = new CopyOnWriteArrayList<>();
-    }
-
-    public NbtTagList(final String name, final NbtTagCompound parent, final List<NbtAbstractTag<?>> tagList)
-    {
-        super(name, parent);
-        this.type = null;
-        this.tagList = new CopyOnWriteArrayList<>(tagList);
-    }
-
-    public NbtTagList(final String name, final NbtTagCompound parent, final Class<NbtAbstractTag<?>> type, final List<NbtAbstractTag<?>> tagList)
-    {
-        super(name, parent);
-        this.type = type;
-        this.tagList = new CopyOnWriteArrayList<>(tagList);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public NbtTagList read(final NbtInputStream inputStream, final boolean hasName) throws IOException
-    {
-        super.read(inputStream, hasName);
-        final NbtTagType tagType = NbtTagType.valueOf(inputStream.readByte());
-        final int size = inputStream.readInt();
-        if (tagType == NbtTagType.END)
-        {
-            return this;
-        }
-        final List<NbtAbstractTag<?>> temp = new ArrayList<>(size);
-        for (int i = 0; i < size; i++)
-        {
-            try
-            {
-                temp.add(inputStream.readTag(tagType, false));
-            } catch (final Exception e)
-            {
-                throw new UnexpectedTagTypeException(e);
-            }
-        }
-        this.tagList = new CopyOnWriteArrayList<>(temp);
-        return this;
+        this.tagList = new ArrayList<>(tagList);
     }
 
     @Override
-    public NbtTagList write(final NbtOutputStream outputStream, final boolean hasName) throws IOException
-    {
-        super.write(outputStream, hasName);
-        outputStream.writeByte(this.getElementsType().getTypeID());
-        outputStream.writeInt(this.tagList.size());
-        for (final NbtAbstractTag<?> tag : this.tagList)
-        {
-            if (this.isVaildType(tag))
-            {
-                tag.write(outputStream, false);
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public NbtTagType getType()
+    public NbtTagType getTagType()
     {
         return NbtTagType.LIST;
     }
 
     @Override
-    public String toString()
+    public void addTag(final NbtTag tag)
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tagList", this.tagList).append("type", this.type).toString();
-    }
-
-    public NbtTagType getElementsType()
-    {
-        if ((this.tagList == null) || this.tagList.isEmpty())
-        {
-            return NbtTagType.END;
-        }
-        final NbtTagType type;
-        if ((this.type != null) && ((type = NbtTagType.valueOf(this.type)) != null))
-        {
-            return type;
-        }
-        return this.tagList.get(0).getType();
-    }
-
-    public boolean isVaildType(final Object object)
-    {
-        Validate.notNull(object, "object can't be null");
-        return this.isVaildType(object.getClass());
-    }
-
-    public boolean isVaildType(final Class<?> clazz)
-    {
-        Validate.notNull(clazz, "class can't be null");
-        return (this.type == null) || this.type.isAssignableFrom(clazz);
-    }
-
-    public void addTag(final NbtAbstractTag<?> tag)
-    {
-        Validate.notNull(tag, "tag can't be null");
-        if (! this.isVaildType(tag))
-        {
-            throw new UnexpectedTagTypeException();
-        }
         this.tagList.add(tag);
     }
 
-    public List<NbtAbstractTag<?>> getTags()
+    @Override
+    public List<NbtTag> getTags()
     {
-        return new ImmutableList.Builder<NbtAbstractTag<?>>().addAll(this.tagList).build();
+        return new ArrayList<>(this.tagList);
     }
 
-    public void setTags(final List<NbtAbstractTag<?>> tags)
-    {
-        this.tagList = new CopyOnWriteArrayList<>(tags);
-    }
-
-    public List<NbtAbstractTag<?>> getMutableTags()
-    {
-        return this.tagList;
-    }
-
+    @Override
     @SuppressWarnings("unchecked")
-    public <E extends NbtAbstractTag<?>> List<E> getTags(final Class<E> tagClass) throws UnexpectedTagTypeException
+    public <T extends NbtTag> List<T> getTags(final Class<T> tagClass)
     {
-        final ImmutableList.Builder<E> builder = new ImmutableList.Builder<>();
-        for (final NbtAbstractTag<?> tag : this.tagList)
+        final List<T> list = new ArrayList<>(this.tagList.size());
+        for (final NbtTag tag : this.tagList)
         {
             if (! tagClass.isInstance(tag))
             {
-                throw new UnexpectedTagTypeException("The list entry should be of type " + tagClass.getSimpleName() + ", but is of type " + tag.getClass().getSimpleName());
+                continue;
             }
-            builder.add((E) tag);
+            list.add((T) tag);
         }
-        return builder.build();
+        return list;
     }
 
-    public void removeTag(final Object tag)
+    @Override
+    public void setTag(final int i, final NbtTag tag)
+    {
+        this.tagList.set(i, tag);
+    }
+
+    @Override
+    public void removeTag(final NbtTag tag)
     {
         this.tagList.remove(tag);
     }
 
-    public void setTag(final int i, final NbtAbstractTag<?> tag)
+    @Override
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
     {
-        this.tagList.set(i, tag);
+        super.write(outputStream, anonymous);
+        outputStream.writeByte((! this.tagList.isEmpty() ? this.tagList.get(0).getTagID() : NbtTagType.END.getTypeID()));
+        outputStream.writeInt(this.tagList.size());
+        for (final NbtTag tag : this.tagList)
+        {
+            tag.write(outputStream, true);
+        }
+    }
+
+    @Override
+    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    {
+        super.read(inputStream, anonymous);
+        this.tagList = new ArrayList<>(8);
+        final byte type = inputStream.readByte();
+        final NbtTagType tagType = NbtTagType.valueOf(type);
+        final int size = inputStream.readInt();
+        if (tagType == NbtTagType.END)
+        {
+            return;
+        }
+        for (int i = 0; i < size; i++)
+        {
+            this.addTag(inputStream.readTag(tagType, true));
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tagList", this.tagList).toString();
     }
 }

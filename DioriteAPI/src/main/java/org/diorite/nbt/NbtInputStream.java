@@ -2,10 +2,15 @@ package org.diorite.nbt;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.ZipException;
+import java.util.zip.InflaterInputStream;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class NbtInputStream extends DataInputStream
 {
@@ -14,46 +19,46 @@ public class NbtInputStream extends DataInputStream
         super(in);
     }
 
-    public NbtAbstractTag<?> readTag() throws IOException
+    public NbtTag readTag() throws IOException
     {
         final byte type = this.readByte();
-        final NbtTagType nbtTagType = NbtTagType.valueOf(type);
-        if (nbtTagType == null)
+        final NbtTagType tagType = NbtTagType.valueOf(type);
+        if (tagType == null)
         {
-            throw new TagNotFoundException("Invalid NBT tag: Found unknown tag type " + type + ".");
+            throw new IOException("Invalid NBT tag: Found unknown tag type " + type + ".");
         }
-        if (nbtTagType == NbtTagType.END)
-        {
-            return null;
-        }
-        return this.readTag(nbtTagType, true);
+        return this.readTag(tagType, false);
     }
 
-    public NbtAbstractTag<?> readTag(final NbtTagType type, final boolean hasName) throws IOException
+    public NbtTag readTag(final NbtTagType type, final boolean anonymous) throws IOException
     {
-        return type.newInstance().read(this, hasName);
+        final NbtTag tag = type.newInstance();
+        tag.read(this, anonymous);
+        return tag;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+    }
+
+    public static NbtInputStream from(final InputStream in) throws IOException
+    {
+        return new NbtInputStream(new DataInputStream(new BufferedInputStream(in)));
     }
 
     public static NbtInputStream fromCompressed(final InputStream in) throws IOException
     {
-        return new NbtInputStream(new BufferedInputStream(new GZIPInputStream(in)));
+        return new NbtInputStream(new DataInputStream(new BufferedInputStream(new GZIPInputStream(in))));
     }
 
-    public static NbtInputStream fromUnknown(final InputStream in) throws IOException
+    public static NbtInputStream fromInflated(final InputStream in) throws IOException
     {
-        final GZIPInputStream zip;
-        try
-        {
-            //noinspection resource,IOResourceOpenedButNotSafelyClosed
-            zip = new GZIPInputStream(in);
-        } catch (final ZipException e)
-        {
-            return new NbtInputStream(in);
-        }
-        return new NbtInputStream(new BufferedInputStream(zip));
+        return new NbtInputStream(new DataInputStream(new BufferedInputStream(new InflaterInputStream(in))));
     }
 
-    public static NbtAbstractTag<?> readTag(final InputStream in) throws IOException
+    public static NbtTag readTag(final InputStream in) throws IOException
     {
         try (NbtInputStream nbtIS = new NbtInputStream(in))
         {
@@ -61,7 +66,7 @@ public class NbtInputStream extends DataInputStream
         }
     }
 
-    public static NbtAbstractTag<?> readTagFromCompressed(final InputStream in) throws IOException
+    public static NbtTag readTagCompressed(final InputStream in) throws IOException
     {
         try (NbtInputStream nbtIS = fromCompressed(in))
         {
@@ -69,11 +74,41 @@ public class NbtInputStream extends DataInputStream
         }
     }
 
-    public static NbtAbstractTag<?> readTagFromUnknown(final InputStream in) throws IOException
+    public static NbtTag readTagInflated(final InputStream in) throws IOException
     {
-        try (NbtInputStream nbtIS = fromUnknown(in))
+        try (NbtInputStream nbtIS = fromInflated(in))
         {
             return nbtIS.readTag();
         }
+    }
+
+    public static NbtInputStream from(final File in) throws IOException
+    {
+        return from(new FileInputStream(in));
+    }
+
+    public static NbtInputStream fromCompressed(final File in) throws IOException
+    {
+        return fromCompressed(new FileInputStream(in));
+    }
+
+    public static NbtInputStream fromInflated(final File in) throws IOException
+    {
+        return fromInflated(new FileInputStream(in));
+    }
+
+    public static NbtTag readTag(final File in) throws IOException
+    {
+        return readTag(new FileInputStream(in));
+    }
+
+    public static NbtTag readTagCompressed(final File in) throws IOException
+    {
+        return readTagCompressed(new FileInputStream(in));
+    }
+
+    public static NbtTag readTagInflated(final File in) throws IOException
+    {
+        return readTagInflated(new FileInputStream(in));
     }
 }
