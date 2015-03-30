@@ -48,6 +48,7 @@ import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Player;
 import org.diorite.plugin.Plugin;
+import org.diorite.world.World;
 import org.diorite.world.generator.WorldGenerators;
 
 import jline.console.ConsoleReader;
@@ -256,8 +257,15 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void stop()
     {
-        this.isRunning = false;
-        // TODO
+        if (this.isRunning)
+        {
+            this.isRunning = false;
+            this.playersManager.forEach(p -> p.kick("§4Server closed!"));
+            this.worldsManager.getWorlds().parallelStream().forEach(World::save);
+            this.serverConnection.close();
+            System.out.println("Goodbye <3");
+            // TODO
+        }
     }
 
     @Override

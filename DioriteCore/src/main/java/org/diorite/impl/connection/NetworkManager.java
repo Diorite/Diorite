@@ -375,11 +375,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     {
         this.preparing = false;
         this.packetQueue.clear();
-        if (this.channel.isOpen())
-        {
-            this.channel.close();
-            this.disconnectMessage = baseComponent;
-        }
         if (! wasSafe)
         {
             if (this.packetListener instanceof PlayListener)
@@ -390,6 +385,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
                     listener.disconnect(baseComponent);
                 }
             }
+        }
+        if (this.channel.isOpen())
+        {
+            this.channel.close();
+            this.disconnectMessage = baseComponent;
         }
         this.closed = true;
     }

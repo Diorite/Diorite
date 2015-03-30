@@ -28,6 +28,7 @@ public class TestWorldGeneratorImpl extends WorldGenerator
     @SuppressWarnings("MagicNumber")
     public ChunkBuilder generate(final ChunkBuilder builder, final ChunkPos pos)
     {
+        // Main.debug("Generating: " + pos + ", (" + this.world.getName() + ")");
         final SimplexOctaveGenerator overhangs = new SimplexOctaveGenerator(this.world, 8);
         final SimplexOctaveGenerator bottoms = new SimplexOctaveGenerator(this.world, 8);
 
@@ -97,9 +98,15 @@ public class TestWorldGeneratorImpl extends WorldGenerator
         return builder;
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("generator", this.generator).toString();
+    }
+
     public static WorldGeneratorInitializer<TestWorldGeneratorImpl> createInitializer()
     {
-        return new WorldGeneratorInitializer<TestWorldGeneratorImpl>("test")
+        return new WorldGeneratorInitializer<TestWorldGeneratorImpl>("default")
         {
             @Override
             public TestWorldGeneratorImpl init(final World world, final String options)
@@ -107,11 +114,5 @@ public class TestWorldGeneratorImpl extends WorldGenerator
                 return new TestWorldGeneratorImpl(world, this.name, options);
             }
         };
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("generator", this.generator).toString();
     }
 }

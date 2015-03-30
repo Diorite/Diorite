@@ -13,6 +13,7 @@ public final class RegisterDefaultCommands
         cmds.registerCommand(new SayCmd());
         cmds.registerCommand(new TpsCmd());
         cmds.registerCommand(new FlyCmd());
+        cmds.registerCommand(new StopCmd());
         cmds.registerCommand(new OnlineCmd());
         cmds.registerCommand(new SetTpsCmd());
         cmds.registerCommand(new BroadcastCmd());

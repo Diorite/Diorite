@@ -133,7 +133,7 @@ public class PacketDataSerializer extends ByteBuf
         this.readerIndex(currIndex);
         try
         {
-            return (NbtTagCompound) NbtInputStream.readTagFromCompressed(new ByteBufInputStream(this));
+            return (NbtTagCompound) NbtInputStream.readTagCompressed(new ByteBufInputStream(this));
         } catch (final IOException e)
         {
             e.printStackTrace();

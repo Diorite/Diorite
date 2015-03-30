@@ -1,6 +1,6 @@
 package org.diorite.impl.world;
 
-import java.util.UUID;
+import java.io.File;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -9,8 +9,12 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
+import org.diorite.ImmutableLocation;
+import org.diorite.Loc;
 import org.diorite.Location;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.nbt.NbtTagCompound;
+import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings;
 import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
@@ -21,37 +25,110 @@ import org.diorite.world.generator.WorldGenerators;
 public class WorldImpl implements World
 {
     private final String           name;
-    private final UUID             uuid;
     private final ChunkManagerImpl chunkManager;
-    private Difficulty       difficulty      = Difficulty.NORMAL;
-    private HardcoreSettings hardcore        = new HardcoreSettings(false);
-    private GameMode         defaultGameMode = GameMode.SURVIVAL;
-    private int maxHeight = 255;
-    private long seed;
+    private final WorldFileImpl    worldFile;
+    private final Dimension        dimension;
+    private Difficulty       difficulty        = Difficulty.NORMAL;
+    private HardcoreSettings hardcore          = new HardcoreSettings(false);
+    private GameMode         defaultGameMode   = GameMode.SURVIVAL;
+    private int              maxHeight         = 255;
+    private byte             forceLoadedRadius = 5;
+    private long           seed;
     private boolean        raining;
     private boolean        thundering;
     private int            clearWeatherTime;
     private int            rainTime;
     private int            thunderTime;
-    private Location       spawn;
+    private Loc            spawn;
     private WorldGenerator generator;
+    private long           time;
+    private boolean noUpdateMode = true;
 
     // TODO: world border impl
 
-    public WorldImpl(final String name, final UUID uuid, final String generator)
+    public WorldImpl(final String name, final Dimension dimension, final File worldFile, final String generator)
     {
         this.name = name;
-        this.uuid = uuid;
+        this.dimension = dimension;
         this.chunkManager = new ChunkManagerImpl(this);
         this.generator = WorldGenerators.getGenerator(generator, this, null);
+        this.worldFile = new WorldFileImpl(worldFile, this);
     }
 
-    public WorldImpl(final String name, final UUID uuid, final String generator, final String generatorOptions)
+    public WorldImpl(final String name, final Dimension dimension, final File worldFile, final String generator, final String generatorOptions)
     {
         this.name = name;
-        this.uuid = uuid;
+        this.dimension = dimension;
         this.chunkManager = new ChunkManagerImpl(this);
         this.generator = WorldGenerators.getGenerator(generator, this, generatorOptions);
+        this.worldFile = new WorldFileImpl(worldFile, this);
+    }
+
+    public void loadNBT(final NbtTagCompound tag)
+    {
+        this.clearWeatherTime = tag.getInt("clearWeatherTime", 0);
+        this.defaultGameMode = GameMode.getByID(tag.getInt("GameType", 0));
+        this.difficulty = Difficulty.getByLevel(tag.getByte("Difficulty", 0));
+        this.raining = tag.getBoolean("raining", false);
+        this.rainTime = tag.getInt("rainTime", 0);
+        this.thundering = tag.getBoolean("thundering", false);
+        this.thunderTime = tag.getInt("thunderTime", 0);
+        this.seed = tag.getLong("RandomSeed", 0);
+        this.time = tag.getLong("Time", 0);
+
+        final NbtTagCompound diTag = tag.getCompound("Diorite", new NbtTagCompound("Diorite"));
+        diTag.setParent(tag);
+        this.hardcore = (new HardcoreSettings(tag.getBoolean("hardcore", false), HardcoreSettings.HardcoreAction.values()[diTag.getByte("HardcoreAction", 0)]));
+        this.forceLoadedRadius = (diTag.getByte("ForceLoadedRadius", 10));
+
+        if (diTag.containsTag("spawnX"))
+        {
+            this.spawn = new Location(diTag.getDouble("spawnX"), diTag.getDouble("spawnY"), diTag.getDouble("spawnZ"), diTag.getFloat("spawnYaw"), diTag.getFloat("spawnPitch"), this);
+        }
+        else
+        {
+            this.spawn = new Location(tag.getInt("spawnX", 0), tag.getInt("spawnY", 128), tag.getInt("spawnZ", 0), this);
+        }
+
+    }
+
+    @Override
+    public void save()
+    {
+        System.out.println("Saving chunks for world: " + this.name);
+        this.chunkManager.unloadAll();
+        System.out.println("Saved chunks for world: " + this.name);
+    }
+
+    public boolean hasSkyLight()
+    {
+        return this.dimension.hasSkyLight();
+    }
+
+    @Override
+    public Dimension getDimension()
+    {
+        return this.dimension;
+    }
+
+    public boolean isNoUpdateMode()
+    {
+        return this.noUpdateMode;
+    }
+
+    public void setNoUpdateMode(final boolean noUpdateMode)
+    {
+        this.noUpdateMode = noUpdateMode;
+    }
+
+    public byte getForceLoadedRadius()
+    {
+        return this.forceLoadedRadius;
+    }
+
+    public void setForceLoadedRadius(final byte forceLoadedRadius)
+    {
+        this.forceLoadedRadius = forceLoadedRadius;
     }
 
     @Override
@@ -61,26 +138,9 @@ public class WorldImpl implements World
     }
 
     @Override
-    public UUID getUuid()
-    {
-        return this.uuid;
-    }
-
-    @Override
     public ChunkManagerImpl getChunkManager()
     {
         return this.chunkManager;
-    }
-
-    @Override
-    public int getMaxHeight()
-    {
-        return this.maxHeight;
-    }
-
-    public void setMaxHeight(final int maxHeight)
-    {
-        this.maxHeight = maxHeight;
     }
 
     @Override
@@ -190,15 +250,15 @@ public class WorldImpl implements World
     }
 
     @Override
-    public Location getSpawn()
+    public ImmutableLocation getSpawn()
     {
-        return this.spawn;
+        return this.spawn.toImmutableLocation();
     }
 
     @Override
-    public void setSpawn(final Location spawn)
+    public void setSpawn(final Loc spawn)
     {
-        this.spawn = spawn;
+        this.spawn = spawn.toImmutableLocation();
     }
 
     @Override
@@ -226,8 +286,36 @@ public class WorldImpl implements World
     }
 
     @Override
+    public int getMaxHeight()
+    {
+        return this.maxHeight;
+    }
+
+    public void setMaxHeight(final int maxHeight)
+    {
+        this.maxHeight = maxHeight;
+    }
+
+    public WorldFileImpl getWorldFile()
+    {
+        return this.worldFile;
+    }
+
+    @Override
+    public long getTime()
+    {
+        return this.time;
+    }
+
+    @Override
+    public void setTime(final long time)
+    {
+        this.time = time;
+    }
+
+    @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).append("uuid", this.uuid).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).toString();
     }
 }

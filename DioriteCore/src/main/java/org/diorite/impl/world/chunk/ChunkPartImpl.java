@@ -3,7 +3,6 @@ package org.diorite.impl.world.chunk;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.NibbleArray;
@@ -13,34 +12,40 @@ public class ChunkPartImpl // part of chunk 16x16x16
 {
     public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
     private final    ChunkImpl   chunk;
-    private final    char[]      blocks; // id and sub-id(0-15) of every block
-    private final    NibbleArray skyLight;
-    private final    NibbleArray blockLight;
     private final    byte        yPos; // from 0 to 15
     private volatile int         blocksCount;
+    private          char[]      blocks; // id and sub-id(0-15) of every block
+    private          NibbleArray skyLight;
+    private          NibbleArray blockLight;
 
-    public ChunkPartImpl(final ChunkImpl chunk, final byte yPos)
+    public ChunkPartImpl(final ChunkImpl chunk, final byte yPos, final boolean hasSkyLight)
     {
         this.chunk = chunk;
         this.yPos = yPos;
         this.blocks = new char[CHUNK_DATA_SIZE];
-        this.skyLight = new NibbleArray(CHUNK_DATA_SIZE);
         this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
-        //noinspection MagicNumber
-        this.skyLight.fill((byte) 0xf);
+        if (hasSkyLight)
+        {
+            this.skyLight = new NibbleArray(CHUNK_DATA_SIZE);
+            //noinspection MagicNumber
+            this.skyLight.fill((byte) 0xf);
+        }
         //noinspection MagicNumber
         this.blockLight.fill((byte) 0x0);
     }
 
-    public ChunkPartImpl(final ChunkImpl chunk, final char[] blocks, final byte yPos)
+    public ChunkPartImpl(final ChunkImpl chunk, final char[] blocks, final byte yPos, final boolean hasSkyLight)
     {
         this.chunk = chunk;
         this.blocks = blocks;
-        this.skyLight = new NibbleArray(CHUNK_DATA_SIZE);
         this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
         this.yPos = yPos;
-        //noinspection MagicNumber
-        this.skyLight.fill((byte) 0xf);
+        if (hasSkyLight)
+        {
+            this.skyLight = new NibbleArray(CHUNK_DATA_SIZE);
+            //noinspection MagicNumber
+            this.skyLight.fill((byte) 0xf);
+        }
         //noinspection MagicNumber
         this.blockLight.fill((byte) 0x0);
     }
@@ -52,6 +57,11 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.skyLight = skyLight;
         this.blockLight = blockLight;
         this.yPos = yPos;
+    }
+
+    public void setBlocks(final char[] blocks)
+    {
+        this.blocks = blocks;
     }
 
     public void setBlock(final int x, final int y, final int z, final int id, final int meta)
@@ -86,6 +96,16 @@ public class ChunkPartImpl // part of chunk 16x16x16
     {
         final char data = this.blocks[this.toArrayIndex(x, y, z)];
         return (BlockMaterialData) Material.getByID(data >> 4, data & 15);
+    }
+
+    public void setBlockLight(final NibbleArray blockLight)
+    {
+        this.blockLight = blockLight;
+    }
+
+    public void setSkyLight(final NibbleArray skyLight)
+    {
+        this.skyLight = skyLight;
     }
 
     public ChunkImpl getChunk()

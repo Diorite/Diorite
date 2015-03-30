@@ -165,7 +165,7 @@ public final class Main
     {
         if (enabledDebug)
         {
-            System.out.println(obj);
+            System.out.println("[DEBUG] " + obj);
         }
     }
 }

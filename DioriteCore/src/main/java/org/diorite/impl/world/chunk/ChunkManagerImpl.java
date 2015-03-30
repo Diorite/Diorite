@@ -2,28 +2,105 @@ package org.diorite.impl.world.chunk;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.generator.ChunkBuilderImpl;
+import org.diorite.BlockLocation;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
 
-import gnu.trove.map.TLongObjectMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
-
 public class ChunkManagerImpl implements ChunkManager
 {
     private final WorldImpl world;
-    private final TLongObjectMap<Chunk> chunks     = new TLongObjectHashMap<>(100); // change to ConcurrentHashMap<Long, ChunkImpl> if needed.
-    private final Map<Long, Object>     generating = new ConcurrentHashMap<>(10);
+    private final Map<Long, Chunk>  chunks     = new ConcurrentHashMap<>(400, .5f, 4); // change to ConcurrentHashMap<Long, ChunkImpl> if needed.
+    private final Map<Long, Object> generating = new ConcurrentHashMap<>(10);
 
     public ChunkManagerImpl(final WorldImpl world)
     {
         this.world = world;
+    }
+
+    public synchronized void loadBase(final int chunkRadius, final BlockLocation center)
+    {
+        final LoadInfo info = new LoadInfo();
+        final int toLoad = chunkRadius * chunkRadius;
+        System.out.println("Loading spawn chunks for world: " + this.world.getName());
+
+        for (int r = 0; r <= chunkRadius; r++)
+        {
+            final int cr = r;
+            PlayerChunksImpl.forChunks(r, center.getChunkPos(), (pos) -> {
+                ((ChunkImpl) this.getChunkAt(pos)).addUsage();
+                if ((info.loadedChunks++ % 10) == 0)
+                {
+                    final long cur = System.currentTimeMillis();
+                    if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(5))
+                    {
+                        //noinspection HardcodedFileSeparator
+                        System.out.println("[ChunkLoader][" + this.world.getName() + "] Chunk: " + info.loadedChunks + "/" + toLoad + " Radius " + cr + "/" + chunkRadius);
+                        info.lastTime = cur;
+                    }
+                }
+            });
+            //noinspection HardcodedFileSeparator
+            System.out.println("[ChunkLoader][" + this.world.getName() + "] Radius " + r + "/" + chunkRadius);
+            info.lastTime = System.currentTimeMillis();
+        }
+        System.out.println("Loaded " + info.loadedChunks + " spawn chunks for world: " + this.world.getName());
+    }
+
+    @Override
+    public void unloadAll()
+    {
+        synchronized (this.chunks)
+        {
+            long time = System.currentTimeMillis();
+            final int size = this.chunks.values().size();
+            int i = 0;
+            for (final Chunk chunk : this.chunks.values())
+            {
+                this.unload(chunk);
+                i++;
+                final long cur = System.currentTimeMillis();
+                if ((cur - time) >= TimeUnit.SECONDS.toMillis(1))
+                {
+                    System.out.println("[ChunkUnLoader][" + this.world.getName() + "] Chunk: " + i + "/" + size);
+                    time = cur;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void saveAll()
+    {
+        long time = System.currentTimeMillis();
+        final int size = this.chunks.values().size();
+        int i = 0;
+        for (final Chunk chunk : this.chunks.values())
+        {
+            this.world.getWorldFile().saveChunk((ChunkImpl) chunk);
+            i++;
+            final long cur = System.currentTimeMillis();
+            if ((cur - time) >= TimeUnit.SECONDS.toMillis(1))
+            {
+                System.out.println("[ChunkSave][" + this.world.getName() + "] Chunk: " + i + "/" + size);
+                time = cur;
+            }
+        }
+    }
+
+    @Override
+    public void unload(final Chunk chunk)
+    {
+        // TODO: some way to delay chunk save, and unload it after some delay (to preved lags when player jumps between 2 chunks)
+        this.world.getWorldFile().saveChunk((ChunkImpl) this.chunks.remove(chunk.getPos().asLong()));
     }
 
     @Override
@@ -63,7 +140,13 @@ public class ChunkManagerImpl implements ChunkManager
             }
             this.generating.put(posLong, new Object());
             pos = pos.setWorld(this.world);
-            this.chunks.put(posLong, chunk = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos).createChunk(pos));
+            chunk = this.world.getWorldFile().loadChunk(pos);
+            Main.debug(chunk);
+            if (chunk == null)
+            {
+                chunk = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos).createChunk(pos);
+            }
+            this.chunks.put(posLong, chunk);
             final Object obj = this.generating.remove(posLong);
             if (obj != null)
             {
@@ -78,15 +161,21 @@ public class ChunkManagerImpl implements ChunkManager
     }
 
     @Override
-    public void unload(final Chunk chunk)
-    {
-        this.chunks.remove(chunk.getPos().asLong());
-    }
-
-    @Override
     public Chunk getChunkAt(final int x, final int z, final boolean generate)
     {
         return this.getChunkAt(new ChunkPos(x, z, this.world), generate);
+    }
+
+    private static class LoadInfo
+    {
+        private int  loadedChunks = 0;
+        private long lastTime     = System.currentTimeMillis();
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("loadedChunks", this.loadedChunks).append("lastTime", this.lastTime).toString();
+        }
     }
 
     @Override

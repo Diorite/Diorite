@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.utils.collections.WeakCollection;
 import org.diorite.world.chunk.ChunkPos;
 
 public class PlayerChunksImpl
@@ -18,9 +20,10 @@ public class PlayerChunksImpl
     public static final int CHUNK_BULK_SIZE = 4;
 
     private final PlayerImpl player;
-    private final Collection<ChunkImpl> loadedChunks  = new HashSet<>(200);
-    private final Collection<ChunkImpl> visibleChunks = new HashSet<>(200);
+    private final Collection<ChunkImpl> loadedChunks  = new WeakCollection<>(200);
+    private final Collection<ChunkImpl> visibleChunks = new WeakCollection<>(200);
     private boolean logout;
+    private boolean wantUpdate = true;
 
     public PlayerChunksImpl(final PlayerImpl player)
     {
@@ -59,8 +62,6 @@ public class PlayerChunksImpl
         this.loadedChunks.clear();
         this.visibleChunks.clear();
     }
-
-    private boolean wantUpdate = true;
 
     public void wantUpdate()
     {
@@ -148,20 +149,18 @@ public class PlayerChunksImpl
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("player", this.player).toString();
     }
 
-    private static void forChunks(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
+    static void forChunks(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
     {
-        for (int x = - r; x <= r; x++)
-        {
+        IntStream.rangeClosed(- r, r).parallel().forEach(x -> {
+
             if ((x == r) || (x == - r))
             {
-                for (int z = - r; z <= r; z++)
-                {
-                    action.accept(center.add(x, z));
-                }
-                continue;
+                IntStream.rangeClosed(- r, r).parallel().forEach(z -> action.accept(center.add(x, z)));
+                return;
             }
             action.accept(center.add(x, r));
             action.accept(center.add(x, - r));
-        }
+        });
     }
+
 }

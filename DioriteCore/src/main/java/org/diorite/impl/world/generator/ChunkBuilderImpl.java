@@ -73,9 +73,10 @@ public class ChunkBuilderImpl implements ChunkBuilder
             {
                 continue;
             }
-            chunkParts[i] = new ChunkPartImpl(chunk, chunkPart.blocks, (byte) i);
+            chunkParts[i] = new ChunkPartImpl(chunk, chunkPart.blocks, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
             chunkParts[i].recalculateBlockCount();
             chunk.getChunkParts()[i] = chunkParts[i];
+            chunk.initHeightMap();
         }
         return chunk;
     }

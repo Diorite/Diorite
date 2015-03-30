@@ -60,7 +60,7 @@ public class FlyCmd extends SystemCommandImpl
             target.setCanFly(on, speed);
 
             //noinspection ObjectEquality
-            if (target == sender)
+            if (target == sender) // this should be this same object
             {
                 sender.sendSimpleColoredMessage("&7Fly &3" + (target.canFly() ? "enabled" : "disabled") + "&7! (Speed: &3" + DioriteMathUtils.formatSimpleDecimal(target.getFlySpeed() * 100) + "&7)");
             }

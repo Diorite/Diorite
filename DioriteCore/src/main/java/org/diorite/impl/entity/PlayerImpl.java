@@ -72,6 +72,12 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     }
 
     @Override
+    public void kick(final BaseComponent s)
+    {
+        this.networkManager.close(s, false);
+    }
+
+    @Override
     public void sendMessage(final ChatPosition position, final BaseComponent component)
     {
         this.networkManager.sendPacket(new PacketPlayOutChat(component, position));

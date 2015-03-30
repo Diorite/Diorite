@@ -33,12 +33,12 @@ public class PacketStatusListener implements PacketStatusInListener
     public void handle(final PacketStatusInPing packet)
     {
         this.networkManager.sendPacket(new PacketStatusOutPong(packet.getPing()));
+        this.disconnect(new TextComponent());
     }
 
     @Override
     public void handle(final PacketStatusInStart packet)
     {
-
         final ServerPing ping = new ServerPing();
         ping.setFavicon(null);
         ping.setMotd(new TextComponent("test"));
@@ -50,7 +50,7 @@ public class PacketStatusListener implements PacketStatusInListener
     @Override
     public void disconnect(final BaseComponent message)
     {
-
+        this.networkManager.close(message, true);
     }
 
     public ServerImpl getServer()
