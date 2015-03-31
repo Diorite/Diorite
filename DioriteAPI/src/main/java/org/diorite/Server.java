@@ -17,11 +17,15 @@ import org.diorite.command.sender.ConsoleCommandSender;
 import org.diorite.entity.Player;
 import org.diorite.plugin.Plugin;
 import org.diorite.utils.math.DioriteRandomUtils;
+import org.diorite.world.WorldsManager;
 
 public interface Server
 {
-    String NANE    = "Diorite";
-    String VERSION = "0.1-SNAPSHOT";
+    String PREFIX     = ChatColor.GRAY.toString() + "[" + ChatColor.DARK_AQUA.toString() + "Diorite" + ChatColor.GRAY.toString() + "]";
+    String PREFIX_RAW = "[Diorite]";
+    String PREFIX_MSG = PREFIX + " " + ChatColor.RESET.toString();
+    String NANE       = "Diorite";
+    String VERSION    = "0.1-SNAPSHOT";
 
     int NANOS_IN_MILLI  = 1000000;
     int NANOS_IN_SECOND = NANOS_IN_MILLI * 1000;
@@ -32,6 +36,8 @@ public interface Server
     byte   DEFAULT_RENDER_DISTANCE = 10;
     int    DEFAULT_WAIT_TIME       = NANOS_IN_SECOND / DEFAULT_TPS;
     int    MAX_NICKNAME_SIZE       = 16;
+
+    WorldsManager getWorldsManager();
 
     void broadcastMessage(ChatPosition position, BaseComponent component);
 

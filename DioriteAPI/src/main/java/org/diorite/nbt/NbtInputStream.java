@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.DeflaterInputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -58,6 +59,11 @@ public class NbtInputStream extends DataInputStream
         return new NbtInputStream(new DataInputStream(new BufferedInputStream(new InflaterInputStream(in))));
     }
 
+    public static NbtInputStream fromDeflater(final InputStream in) throws IOException
+    {
+        return new NbtInputStream(new DataInputStream(new BufferedInputStream(new DeflaterInputStream(in))));
+    }
+
     public static NbtTag readTag(final InputStream in) throws IOException
     {
         try (NbtInputStream nbtIS = new NbtInputStream(in))
@@ -82,6 +88,14 @@ public class NbtInputStream extends DataInputStream
         }
     }
 
+    public static NbtTag readTagDeflater(final InputStream in) throws IOException
+    {
+        try (NbtInputStream nbtIS = fromDeflater(in))
+        {
+            return nbtIS.readTag();
+        }
+    }
+
     public static NbtInputStream from(final File in) throws IOException
     {
         return from(new FileInputStream(in));
@@ -97,6 +111,11 @@ public class NbtInputStream extends DataInputStream
         return fromInflated(new FileInputStream(in));
     }
 
+    public static NbtInputStream fromDeflater(final File in) throws IOException
+    {
+        return fromDeflater(new FileInputStream(in));
+    }
+
     public static NbtTag readTag(final File in) throws IOException
     {
         return readTag(new FileInputStream(in));
@@ -110,5 +129,10 @@ public class NbtInputStream extends DataInputStream
     public static NbtTag readTagInflated(final File in) throws IOException
     {
         return readTagInflated(new FileInputStream(in));
+    }
+
+    public static NbtTag readTagDeflater(final File in) throws IOException
+    {
+        return readTagDeflater(new FileInputStream(in));
     }
 }

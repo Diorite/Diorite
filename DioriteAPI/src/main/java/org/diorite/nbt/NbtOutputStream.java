@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.InflaterOutputStream;
 
@@ -51,6 +53,20 @@ public class NbtOutputStream extends DataOutputStream
         return out;
     }
 
+    public static NbtOutputStream writeDeflated(final NbtTag tag, final OutputStream outputStream) throws IOException
+    {
+        final NbtOutputStream out = new NbtOutputStream(new DeflaterOutputStream(outputStream));
+        out.write(tag);
+        return out;
+    }
+
+    public static NbtOutputStream writeDeflated(final NbtTag tag, final OutputStream outputStream, final Deflater def) throws IOException
+    {
+        final NbtOutputStream out = new NbtOutputStream(new DeflaterOutputStream(outputStream, def));
+        out.write(tag);
+        return out;
+    }
+
     public static NbtOutputStream write(final NbtTag tag, final File file) throws IOException
     {
         file.createNewFile();
@@ -71,6 +87,22 @@ public class NbtOutputStream extends DataOutputStream
     {
         file.createNewFile();
         final NbtOutputStream out = new NbtOutputStream(new InflaterOutputStream(new FileOutputStream(file, false)));
+        out.write(tag);
+        return out;
+    }
+
+    public static NbtOutputStream writeDeflated(final NbtTag tag, final File file) throws IOException
+    {
+        file.createNewFile();
+        final NbtOutputStream out = new NbtOutputStream(new DeflaterOutputStream(new FileOutputStream(file, false)));
+        out.write(tag);
+        return out;
+    }
+
+    public static NbtOutputStream writeDeflated(final NbtTag tag, final File file, final Deflater def) throws IOException
+    {
+        file.createNewFile();
+        final NbtOutputStream out = new NbtOutputStream(new DeflaterOutputStream(new FileOutputStream(file, false), def));
         out.write(tag);
         return out;
     }
@@ -97,5 +129,107 @@ public class NbtOutputStream extends DataOutputStream
         final NbtOutputStream out = new NbtOutputStream(new InflaterOutputStream(new FileOutputStream(file, append)));
         out.write(tag);
         return out;
+    }
+
+    public static NbtOutputStream writeDeflated(final NbtTag tag, final File file, final boolean append) throws IOException
+    {
+        file.createNewFile();
+        final NbtOutputStream out = new NbtOutputStream(new DeflaterOutputStream(new FileOutputStream(file, append)));
+        out.write(tag);
+        return out;
+    }
+
+    public static NbtOutputStream writeDeflated(final NbtTag tag, final File file, final boolean append, final Deflater def) throws IOException
+    {
+        file.createNewFile();
+        final NbtOutputStream out = new NbtOutputStream(new DeflaterOutputStream(new FileOutputStream(file, append), def));
+        out.write(tag);
+        return out;
+    }
+
+
+    public static NbtOutputStream get(final OutputStream outputStream)
+    {
+        return new NbtOutputStream(outputStream);
+    }
+
+    public static NbtOutputStream getCompressed(final OutputStream outputStream) throws IOException
+    {
+        return new NbtOutputStream(new GZIPOutputStream(outputStream));
+    }
+
+    public static NbtOutputStream getInflated(final OutputStream outputStream)
+    {
+        return new NbtOutputStream(new InflaterOutputStream(outputStream));
+    }
+
+    public static NbtOutputStream getDeflated(final OutputStream outputStream)
+    {
+        return new NbtOutputStream(new DeflaterOutputStream(outputStream));
+    }
+
+    public static NbtOutputStream getDeflated(final OutputStream outputStream, final Deflater def)
+    {
+        return new NbtOutputStream(new DeflaterOutputStream(outputStream, def));
+    }
+
+    public static NbtOutputStream get(final File file) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new FileOutputStream(file, false));
+    }
+
+    public static NbtOutputStream getCompressed(final File file) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new GZIPOutputStream(new FileOutputStream(file, false)));
+    }
+
+    public static NbtOutputStream getInflated(final File file) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new InflaterOutputStream(new FileOutputStream(file, false)));
+    }
+
+    public static NbtOutputStream getDeflated(final File file) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new DeflaterOutputStream(new FileOutputStream(file, false)));
+    }
+
+    public static NbtOutputStream getDeflated(final File file, final Deflater def) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new DeflaterOutputStream(new FileOutputStream(file, false), def));
+    }
+
+    public static NbtOutputStream get(final File file, final boolean append) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new FileOutputStream(file, append));
+    }
+
+    public static NbtOutputStream getCompressed(final File file, final boolean append) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new GZIPOutputStream(new FileOutputStream(file, append)));
+    }
+
+    public static NbtOutputStream getInflated(final File file, final boolean append) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new InflaterOutputStream(new FileOutputStream(file, append)));
+    }
+
+    public static NbtOutputStream getDeflated(final File file, final boolean append) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new DeflaterOutputStream(new FileOutputStream(file, append)));
+    }
+
+    public static NbtOutputStream getDeflated(final File file, final boolean append, final Deflater def) throws IOException
+    {
+        file.createNewFile();
+        return new NbtOutputStream(new DeflaterOutputStream(new FileOutputStream(file, append), def));
     }
 }
