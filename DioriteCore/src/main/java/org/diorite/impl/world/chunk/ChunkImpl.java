@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
@@ -99,8 +98,11 @@ public class ChunkImpl implements Chunk
 
     public static ChunkImpl loadFromNBT(final World world, final NbtTagCompound tag)
     {
-        Main.debug("Loading chunk from NBT (" + tag.getTags().size() + "): " + tag);
-        final ChunkPos chunkPos = new ChunkPos(tag.getInt("xPos"), tag.getInt("xPos"), world);
+        if (tag == null)
+        {
+            return null;
+        }
+        final ChunkPos chunkPos = new ChunkPos(tag.getInt("xPos"), tag.getInt("zPos"), world);
         final ChunkImpl chunk = new ChunkImpl(chunkPos);
         chunk.loadFrom(tag);
         return chunk;
@@ -109,11 +111,6 @@ public class ChunkImpl implements Chunk
     @SuppressWarnings("MagicNumber")
     public void loadFrom(final NbtTagCompound tag)
     {
-        final int[] heightMap = tag.getIntArray("HeightMap");
-        if (heightMap != null)
-        {
-            System.arraycopy(tag.getIntArray("HeightMap"), 0, this.heightMap, 0, this.heightMap.length);
-        }
         this.populated = tag.getBoolean("TerrainPopulated");
         tag.getBoolean("LightPopulated"); // TODO
         tag.getLong("InhabitedTime"); // TODO
@@ -123,7 +120,7 @@ public class ChunkImpl implements Chunk
         for (final NbtTagCompound sectionNBT : sectionsList)
         {
             final byte posY = sectionNBT.getByte("Y");
-            final ChunkPartImpl chunkPart = new ChunkPartImpl(this, (byte) (posY << 4), hasSkyLight);
+            final ChunkPartImpl chunkPart = new ChunkPartImpl(this, posY, hasSkyLight);
             final byte[] blocksIDs = sectionNBT.getByteArray("Blocks");
             final ChunkNibbleArray blocksMetaData = new ChunkNibbleArray(sectionNBT.getByteArray("Data"));
             final ChunkNibbleArray additionalData = Optional.ofNullable(sectionNBT.getByteArray("Add")).map(ChunkNibbleArray::new).orElse(null);
@@ -149,6 +146,15 @@ public class ChunkImpl implements Chunk
         {
             System.arraycopy(biomes, 0, this.biomes, 0, this.biomes.length);
         }
+        final int[] heightMap = tag.getIntArray("HeightMap");
+        if (heightMap != null)
+        {
+            System.arraycopy(tag.getIntArray("HeightMap"), 0, this.heightMap, 0, this.heightMap.length);
+        }
+        else
+        {
+            this.initHeightMap();
+        }
     }
 
     @SuppressWarnings("MagicNumber")
@@ -171,7 +177,7 @@ public class ChunkImpl implements Chunk
                 continue;
             }
             final NbtTagCompound sectionNBT = new NbtTagCompound();
-            sectionNBT.setByte("Y", (byte) ((chunkPart.getYPos() >> 4) & 255));
+            sectionNBT.setByte("Y", chunkPart.getYPos());
             final byte[] blocksIDs = new byte[chunkPart.getBlocks().length];
             final ChunkNibbleArray blocksMetaData = new ChunkNibbleArray();
             ChunkNibbleArray additionalData = null;

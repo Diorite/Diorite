@@ -7,10 +7,35 @@ import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.diorite.impl.Main;
-import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtOutputStream;
+import org.diorite.nbt.NbtTagCompound;
 
+/*
+ ** 2011 January 5
+ **
+ ** The author disclaims copyright to this source code.  In place of
+ ** a legal notice, here is a blessing:
+ **
+ **    May you do good and not evil.
+ **    May you find forgiveness for yourself and forgive others.
+ **    May you share freely, never taking more than you give.
+ **/
+
+/*
+ * 2011 February 16
+ *
+ * This source code is based on the work of Scaevolus (see notice above).
+ * It has been slightly modified by Mojang AB to limit the maximum cache
+ * size (relevant to extremely big worlds on Linux systems with limited
+ * number of file handles). The region files are postfixed with ".mcr"
+ * (Minecraft region file) instead of ".data" to differentiate from the
+ * original McRegion files.
+ *
+ */
+
+/*
+ * Some changes have been made as part of the Glowstone and later Diorite project.
+ */
 public final class RegionFileCache
 {
     private static final int MAX_CACHE_SIZE = 256;
@@ -25,7 +50,7 @@ public final class RegionFileCache
     public static synchronized RegionFile getRegionFile(final File basePath, final int chunkX, final int chunkZ)
     {
         final File regionDir = new File(basePath, "region");
-        final File file = new File(regionDir, "r." + (chunkX >> 5) + "." + (chunkZ >> 5) + ".mcr");
+        final File file = new File(regionDir, "r." + (chunkX >> 5) + "." + (chunkZ >> 5) + ".mca");
 
         final Reference<RegionFile> ref = cache.get(file);
 
@@ -76,7 +101,7 @@ public final class RegionFileCache
     }
 
     @SuppressWarnings("MagicNumber")
-    public static NbtInputStream getChunkDataInputStream(final File basePath, final int chunkX, final int chunkZ)
+    public static NbtTagCompound getChunkDataInputStream(final File basePath, final int chunkX, final int chunkZ)
     {
         final RegionFile r = getRegionFile(basePath, chunkX, chunkZ);
         return r.getChunkDataInputStream(chunkX & 31, chunkZ & 31);

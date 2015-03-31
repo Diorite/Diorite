@@ -31,7 +31,7 @@ public class WorldImpl implements World
     private Difficulty       difficulty        = Difficulty.NORMAL;
     private HardcoreSettings hardcore          = new HardcoreSettings(false);
     private GameMode         defaultGameMode   = GameMode.SURVIVAL;
-    private int              maxHeight         = 255;
+    private int              maxHeight         = Chunk.CHUNK_FULL_HEIGHT - 1;
     private byte             forceLoadedRadius = 5;
     private long           seed;
     private boolean        raining;
@@ -87,7 +87,7 @@ public class WorldImpl implements World
         }
         else
         {
-            this.spawn = new Location(tag.getInt("spawnX", 0), tag.getInt("spawnY", 128), tag.getInt("spawnZ", 0), this);
+            this.spawn = new Location(tag.getInt("spawnX", 0), tag.getInt("spawnY", Chunk.CHUNK_FULL_HEIGHT / 2), tag.getInt("spawnZ", 0), this);
         }
 
     }
@@ -96,7 +96,7 @@ public class WorldImpl implements World
     public void save()
     {
         System.out.println("Saving chunks for world: " + this.name);
-        this.chunkManager.unloadAll();
+        this.chunkManager.saveAll();
         System.out.println("Saved chunks for world: " + this.name);
     }
 

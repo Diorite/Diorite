@@ -3,6 +3,7 @@ package org.diorite.impl.command.defaults;
 import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
+import org.diorite.Server;
 import org.diorite.chat.ChatPosition;
 import org.diorite.command.CommandPriority;
 
@@ -24,7 +25,7 @@ public class SayCmd extends SystemCommandImpl
             {
                 chatPosition = ChatPosition.CHAT;
             }
-            sender.getServer().broadcastSimpleColoredMessage(chatPosition, "&7[&3Diorite&7] &r" + args.asText());
+            sender.getServer().broadcastSimpleColoredMessage(chatPosition, Server.PREFIX_MSG + args.asText());
         });
     }
 }

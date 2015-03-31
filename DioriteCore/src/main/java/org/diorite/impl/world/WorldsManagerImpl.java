@@ -13,11 +13,9 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagString;
-import org.diorite.nbt.NbtTagType;
 import org.diorite.world.Dimension;
 import org.diorite.world.World;
 import org.diorite.world.WorldsManager;
@@ -37,6 +35,7 @@ public class WorldsManagerImpl implements WorldsManager
         this.worlds.put(world.getName(), world);
     }
 
+    @Override
     public Collection<World> getWorlds()
     {
         return new HashSet<>(this.worlds.values());

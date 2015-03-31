@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.generator.ChunkBuilderImpl;
 import org.diorite.BlockLocation;
@@ -56,7 +55,7 @@ public class ChunkManagerImpl implements ChunkManager
     }
 
     @Override
-    public void unloadAll()
+    public synchronized void unloadAll()
     {
         synchronized (this.chunks)
         {
@@ -70,6 +69,7 @@ public class ChunkManagerImpl implements ChunkManager
                 final long cur = System.currentTimeMillis();
                 if ((cur - time) >= TimeUnit.SECONDS.toMillis(1))
                 {
+                    //noinspection HardcodedFileSeparator
                     System.out.println("[ChunkUnLoader][" + this.world.getName() + "] Chunk: " + i + "/" + size);
                     time = cur;
                 }
@@ -78,28 +78,29 @@ public class ChunkManagerImpl implements ChunkManager
     }
 
     @Override
-    public void saveAll()
+    public synchronized void saveAll()
     {
-        long time = System.currentTimeMillis();
+        final LoadInfo info = new LoadInfo();
         final int size = this.chunks.values().size();
-        int i = 0;
-        for (final Chunk chunk : this.chunks.values())
+        this.chunks.values().parallelStream().forEach(chunk ->
         {
             this.world.getWorldFile().saveChunk((ChunkImpl) chunk);
-            i++;
+            info.loadedChunks++;
             final long cur = System.currentTimeMillis();
-            if ((cur - time) >= TimeUnit.SECONDS.toMillis(1))
+            if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(1))
             {
-                System.out.println("[ChunkSave][" + this.world.getName() + "] Chunk: " + i + "/" + size);
-                time = cur;
+                //noinspection HardcodedFileSeparator
+                System.out.println("[ChunkSave][" + this.world.getName() + "] Chunk: " + info.loadedChunks + "/" + size);
+                info.lastTime = cur;
             }
-        }
+        });
     }
 
     @Override
     public void unload(final Chunk chunk)
     {
         // TODO: some way to delay chunk save, and unload it after some delay (to preved lags when player jumps between 2 chunks)
+
         this.world.getWorldFile().saveChunk((ChunkImpl) this.chunks.remove(chunk.getPos().asLong()));
     }
 
@@ -141,7 +142,6 @@ public class ChunkManagerImpl implements ChunkManager
             this.generating.put(posLong, new Object());
             pos = pos.setWorld(this.world);
             chunk = this.world.getWorldFile().loadChunk(pos);
-            Main.debug(chunk);
             if (chunk == null)
             {
                 chunk = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos).createChunk(pos);

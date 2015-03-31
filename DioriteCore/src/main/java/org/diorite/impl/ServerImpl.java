@@ -49,6 +49,7 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Player;
 import org.diorite.plugin.Plugin;
 import org.diorite.world.World;
+import org.diorite.world.WorldsManager;
 import org.diorite.world.generator.WorldGenerators;
 
 import jline.console.ConsoleReader;
@@ -182,7 +183,8 @@ public class ServerImpl implements Server, Runnable
         return this.playerTimeout;
     }
 
-    public WorldsManagerImpl getWorldsManager()
+    @Override
+    public WorldsManager getWorldsManager()
     {
         return this.worldsManager;
     }
