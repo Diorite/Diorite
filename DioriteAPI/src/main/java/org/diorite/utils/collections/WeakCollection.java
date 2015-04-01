@@ -268,4 +268,9 @@ public final class WeakCollection<T> implements Collection<T>
     {
         return new WeakCollection<>(new HashSet<>(size));
     }
+
+    public static <T> WeakCollection<T> using(final Collection<WeakReference<T>> collection)
+    {
+        return new WeakCollection<>(collection);
+    }
 }
