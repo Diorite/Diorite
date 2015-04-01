@@ -41,12 +41,12 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInSettings packet)
     {
-        final byte oldViewDistance = this.player.getViewDistance();
+//        final byte oldViewDistance = this.player.getViewDistance();
         this.player.setViewDistance(packet.getViewDistance());
-        if (oldViewDistance != this.player.getViewDistance())
-        {
-            this.player.getPlayerChunks().wantUpdate();
-        }
+//        if (oldViewDistance != this.player.getViewDistance())
+//        {
+//            this.player.getPlayerChunks().wantUpdate();
+//        }
         // TODO: implement
     }
 

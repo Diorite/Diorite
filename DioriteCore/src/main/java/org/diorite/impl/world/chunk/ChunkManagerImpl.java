@@ -82,7 +82,7 @@ public class ChunkManagerImpl implements ChunkManager
     {
         final LoadInfo info = new LoadInfo();
         final int size = this.chunks.values().size();
-        this.chunks.values().parallelStream().forEach(chunk ->
+        this.chunks.values().stream().forEach(chunk ->
         {
             this.world.getWorldFile().saveChunk((ChunkImpl) chunk);
             info.loadedChunks++;

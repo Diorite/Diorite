@@ -101,7 +101,10 @@ public class PlayersManagerImpl
     public void playerQuit(final UUID uuid)
     {
         final PlayerImpl player = this.players.remove(uuid);
-        player.getPlayerChunks().logout();
+        if (player != null)
+        {
+            player.getPlayerChunks().logout();
+        }
     }
 
     public void keepAlive()

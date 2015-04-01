@@ -38,6 +38,7 @@ import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.ConsoleReaderThread;
 import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
+import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
 import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
 import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
@@ -163,6 +164,7 @@ public class ServerImpl implements Server, Runnable
         org.diorite.impl.multithreading.input.ChatThread.start(this);
         CommandsThread.start(this);
         TabCompleteThread.start(this);
+        ChunkUnloaderThread.start(this);
         new ChunkMultithreadedHandler(this).start();
 
         this.entityManager = new EntityManagerImpl(this);
@@ -263,7 +265,7 @@ public class ServerImpl implements Server, Runnable
         {
             this.isRunning = false;
             this.playersManager.forEach(p -> p.kick("§4Server closed!"));
-            this.worldsManager.getWorlds().parallelStream().forEach(World::save);
+            this.worldsManager.getWorlds().stream().forEach(World::save);
             this.serverConnection.close();
             System.out.println("Goodbye <3");
             // TODO

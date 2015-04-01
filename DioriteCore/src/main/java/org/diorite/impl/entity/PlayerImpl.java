@@ -24,7 +24,6 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
-import org.diorite.world.chunk.ChunkPos;
 
 public class PlayerImpl extends AttributableEntityImpl implements Player
 {
@@ -227,20 +226,20 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     @Override
     public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
     {
-        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
-        {
-            this.playerChunks.wantUpdate();
-        }
+//        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+//        {
+//            this.playerChunks.wantUpdate();
+//        }
         super.move(modX, modY, modZ, modYaw, modPitch);
     }
 
     @Override
     public void setPosition(final double modX, final double modY, final double modZ)
     {
-        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
-        {
-            this.playerChunks.wantUpdate();
-        }
+//        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+//        {
+//            this.playerChunks.wantUpdate();
+//        }
         super.setPosition(modX, modY, modZ);
     }
 
