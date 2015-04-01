@@ -1,7 +1,6 @@
 package org.diorite.impl.world.chunk;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -15,13 +14,15 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.utils.collections.WeakCollection;
 import org.diorite.world.chunk.ChunkPos;
 
+import io.netty.util.internal.ConcurrentSet;
+
 public class PlayerChunksImpl
 {
     public static final int CHUNK_BULK_SIZE = 4;
 
     private final PlayerImpl player;
-    private final Collection<ChunkImpl> loadedChunks  = new WeakCollection<>(200);
-    private final Collection<ChunkImpl> visibleChunks = new WeakCollection<>(200);
+    private final Collection<ChunkImpl> loadedChunks  = WeakCollection.using(new ConcurrentSet<>());
+    private final Collection<ChunkImpl> visibleChunks = WeakCollection.using(new ConcurrentSet<>());
     private boolean logout;
     private boolean wantUpdate = true;
 
@@ -79,13 +80,13 @@ public class PlayerChunksImpl
         final byte view = this.getViewDistance();
         final ChunkPos center = this.player.getLocation().getChunkPos();
 
-        final Collection<ChunkImpl> chunksToUnload = new HashSet<>(50);
-        final Collection<ChunkImpl> chunksToSent = new HashSet<>(50);
+        final Collection<ChunkImpl> chunksToUnload = new ConcurrentSet<>();
+        final Collection<ChunkImpl> chunksToSent = new ConcurrentSet<>();
 
         for (int r = 0; r <= render; r++)
         {
             final int copyR = r;
-            forChunks(r, center, chunkPos -> {
+            forChunksParallel(r, center, chunkPos -> {
                 final ChunkImpl chunk = (ChunkImpl) this.player.getWorld().getChunkManager().getChunkAt(chunkPos, true);
                 if (chunk == null)
                 {
@@ -140,7 +141,6 @@ public class PlayerChunksImpl
             this.loadedChunks.remove(chunk);
             this.player.getNetworkManager().sendPacket(PacketPlayOutMapChunk.unload(chunk.getPos()));
         }
-
     }
 
     @Override
@@ -150,6 +150,20 @@ public class PlayerChunksImpl
     }
 
     static void forChunks(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
+    {
+        IntStream.rangeClosed(- r, r).forEach(x -> {
+
+            if ((x == r) || (x == - r))
+            {
+                IntStream.rangeClosed(- r, r).forEach(z -> action.accept(center.add(x, z)));
+                return;
+            }
+            action.accept(center.add(x, r));
+            action.accept(center.add(x, - r));
+        });
+    }
+
+    static void forChunksParallel(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
     {
         IntStream.rangeClosed(- r, r).parallel().forEach(x -> {
 

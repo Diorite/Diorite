@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.nbt.NbtOutputStream;
@@ -47,13 +48,23 @@ public class WorldFileImpl
 
     public ChunkImpl loadChunk(final int x, final int z)
     {
-
-        final NbtTagCompound chunk = RegionFileCache.getChunkDataInputStream(this.worldDir, x, z);
-        if (chunk == null)
+        try
         {
-            return null;
+            final NbtTagCompound chunk = RegionFileCache.getChunkDataInputStream(this.worldDir, x, z);
+            if (chunk == null)
+            {
+                return null;
+            }
+            return ChunkImpl.loadFromNBT(this.world, chunk);
+        } catch (final RuntimeException e)
+        {
+            System.err.println("[WorldFile] Error on chunk (" + x + ", " + z + ") loading: " + e.getMessage() + ", " + e.toString());
+            if (Main.isEnabledDebug())
+            {
+                e.printStackTrace();
+            }
+            return new ChunkImpl(new ChunkPos(x,z, this.world));
         }
-        return ChunkImpl.loadFromNBT(this.world, chunk);
     }
 
     public void saveChunk(final ChunkImpl chunk)

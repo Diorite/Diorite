@@ -90,6 +90,8 @@ public class RegionFile
     private static final int    CHUNK_HEADER_SIZE = 5;
     private static final byte[] emptySector       = new byte[SECTOR_BYTES];
 
+
+//    private final Map<Short, Object> readLocks = new ConcurrentHashMap<>(10);
     private       RandomAccessFile   file;
     private final int[]              offsets;
     private final int[]              chunkTimestamps;
@@ -207,8 +209,26 @@ public class RegionFile
      * gets an NbtTagCompound representing the chunk data returns null if
      * the chunk is not found or an error occurs
      */
-    public NbtTagCompound getChunkDataInputStream(final int x, final int z)
+    public synchronized NbtTagCompound getChunkDataInputStream(final int x, final int z)
     {
+//        final short lockKey = (short) ((x << 5) + z);
+//        final Object lock = this.readLocks.get(lockKey);
+//        if (lock != null)
+//        {
+//            try
+//            {
+//                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+//                synchronized (lock)
+//                {
+//                    lock.wait();
+//                }
+//            } catch (final InterruptedException e)
+//            {
+//                e.printStackTrace();
+//            }
+//            return this.getChunkDataInputStream(x, z);
+//        }
+//        this.readLocks.put(lockKey, new Object());
         this.checkBounds(x, z);
 
         try
@@ -224,7 +244,7 @@ public class RegionFile
             final int numSectors = offset & 0xFF;
             if ((sectorNumber + numSectors) > this.sectorFree.size())
             {
-                System.err.println("Invalid sector: " + sectorNumber + "+" + numSectors + " > " + this.sectorFree.size());
+                System.err.println("[RegionFile] (" + x + ", " + z + ") Invalid sector: " + sectorNumber + "+" + numSectors + " > " + this.sectorFree.size());
                 return null;
                 // throw new IOException("Invalid sector: " + sectorNumber + "+" + numSectors + " > " + this.sectorFree.size());
             }
@@ -233,7 +253,7 @@ public class RegionFile
             final int length = this.file.readInt();
             if (length > (SECTOR_BYTES * numSectors))
             {
-                System.err.println("Invalid length: " + length + " > " + (SECTOR_BYTES * numSectors));
+                System.err.println("[RegionFile] (" + x + ", " + z + ") Invalid length: " + length + " > " + (SECTOR_BYTES * numSectors));
                 return null;
                 //  throw new IOException("Invalid length: " + length + " > " + (SECTOR_BYTES * numSectors));
             }
@@ -252,27 +272,69 @@ public class RegionFile
                 return (NbtTagCompound) NbtInputStream.readTagInflated(new ByteArrayInputStream(data));
             }
 
-            System.err.println("Unknown version: " + version);
+            System.err.println("[RegionFile] (" + x + ", " + z + ") Unknown version: " + version);
             return null;
             // throw new IOException("Unknown version: " + version);
         } catch (final IOException e)
         {
+            System.err.println("[RegionFile] Error on chunk (" + x + ", " + z + ") loading: " + e.getMessage() + ", " + e.toString());
             if (Main.isEnabledDebug())
             {
                 e.printStackTrace();
             }
-            else
-            {
-                System.err.println("Error on chunk loading: " + e.getMessage() + ", " + e.toString());
-            }
-            return null;
+            throw new RuntimeException("[RegionFile] Error on chunk (" + x + ", " + z + ") loading.", e);
         }
+        //finally
+//        {
+//            final Object obj = this.readLocks.remove(lockKey);
+//            if (obj != null)
+//            {
+//                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+//                synchronized (obj)
+//                {
+//                    obj.notifyAll();
+//                }
+//            }
+//        }
     }
 
-    public NbtOutputStream getChunkDataOutputStream(final int x, final int z)
+    public synchronized NbtOutputStream getChunkDataOutputStream(final int x, final int z)
     {
-        this.checkBounds(x, z);
-        return NbtOutputStream.getDeflated(new ChunkBuffer(x, z), new Deflater(Deflater.BEST_SPEED));
+//        final short lockKey = (short) ((x << 5) + z);
+//        final Object lock = this.readLocks.get(lockKey);
+//        if (lock != null)
+//        {
+//            try
+//            {
+//                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+//                synchronized (lock)
+//                {
+//                    lock.wait();
+//                }
+//            } catch (final InterruptedException e)
+//            {
+//                e.printStackTrace();
+//            }
+//            return this.getChunkDataOutputStream(x, z);
+//        }
+//        this.readLocks.put(lockKey, new Object());
+//        try
+//        {
+            this.checkBounds(x, z);
+            return NbtOutputStream.getDeflated(new ChunkBuffer(x, z), new Deflater(Deflater.BEST_SPEED));
+//        }
+//        finally
+//        {
+//            final Object obj = this.readLocks.remove(lockKey);
+//            if (obj != null)
+//            {
+//                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+//                synchronized (obj)
+//                {
+//                    obj.notifyAll();
+//                }
+//            }
+//        }
     }
 
     /*

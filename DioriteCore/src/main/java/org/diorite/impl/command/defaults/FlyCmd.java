@@ -55,7 +55,7 @@ public class FlyCmd extends SystemCommandImpl
 
             if (on == null)
             {
-                on = (speed == target.getFlySpeed()) ? ! target.canFly() : target.canFly();
+                on = ! ((speedArg == null) || speedArg.isEmpty()) || ! target.canFly();
             }
             target.setCanFly(on, speed);
 

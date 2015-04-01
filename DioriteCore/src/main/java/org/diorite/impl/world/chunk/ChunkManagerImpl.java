@@ -34,7 +34,7 @@ public class ChunkManagerImpl implements ChunkManager
         for (int r = 0; r <= chunkRadius; r++)
         {
             final int cr = r;
-            PlayerChunksImpl.forChunks(r, center.getChunkPos(), (pos) -> {
+            PlayerChunksImpl.forChunksParallel(r, center.getChunkPos(), (pos) -> {
                 ((ChunkImpl) this.getChunkAt(pos)).addUsage();
                 if ((info.loadedChunks++ % 10) == 0)
                 {

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.Material;
 import org.diorite.material.blocks.Stone;
+import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.noise.NoiseGenerator;
 import org.diorite.utils.math.noise.SimplexNoiseGenerator;
 import org.diorite.utils.math.noise.SimplexOctaveGenerator;
@@ -32,7 +33,7 @@ public class TestWorldGeneratorImpl extends WorldGenerator
         final SimplexOctaveGenerator overhangs = new SimplexOctaveGenerator(this.world, 8);
         final SimplexOctaveGenerator bottoms = new SimplexOctaveGenerator(this.world, 8);
 
-        overhangs.setScale(1 / 64.0);
+        overhangs.setScale(1 /64.0);
         bottoms.setScale(1 / 128.0);
 
         final int overhangsMagnitude = 16; //used when we generate the noise for the tops of the overhangs
@@ -58,13 +59,13 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 
                         if (density > threshold)
                         {
-                            builder.setBlock(x, y, z, Stone.STONE_DIORITE);
+                            builder.setBlock(x, y, z, Stone.getByID(DioriteRandomUtils.getRandInt(3,4)));
                         }
 
                     }
                     else
                     {
-                        builder.setBlock(x, y, z, Stone.STONE_DIORITE);
+                        builder.setBlock(x, y, z, Stone.getByID(DioriteRandomUtils.getRandInt(3, 4)));
                     }
                 }
 
