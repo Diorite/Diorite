@@ -8,31 +8,31 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class SandStone2 extends Stony
+public class Sandstone extends Stony
 {
     public static final byte  USED_DATA_VALUES = 3;
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SAND_STONE__BLAST_RESISTANCE;
     public static final float HARDNESS         = MagicNumbers.MATERIAL__SAND_STONE__HARDNESS;
 
-    public static final SandStone2 SANDSTONE          = new SandStone2();
-    public static final SandStone2 SANDSTONE_CHISELED = new SandStone2("CHISELED", 0x01);
-    public static final SandStone2 SANDSTONE_SMOOTH   = new SandStone2("SMOOTH", 0x02);
+    public static final Sandstone SANDSTONE          = new Sandstone();
+    public static final Sandstone SANDSTONE_CHISELED = new Sandstone("CHISELED", 0x01);
+    public static final Sandstone SANDSTONE_SMOOTH   = new Sandstone("SMOOTH", 0x02);
 
-    private static final Map<String, SandStone2>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<SandStone2> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Sandstone>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final TByteObjectMap<Sandstone> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
     @SuppressWarnings("MagicNumber")
-    protected SandStone2()
+    protected Sandstone()
     {
         super("SANDSTONE", 24, "minecraft:sandstone", "SANDSTONE", (byte) 0x00);
     }
 
-    public SandStone2(final String enumName, final int type)
+    public Sandstone(final String enumName, final int type)
     {
         super(SANDSTONE.name(), SANDSTONE.getId(), SANDSTONE.getMinecraftId(), enumName, (byte) type);
     }
 
-    public SandStone2(final int maxStack, final String typeName, final byte type)
+    public Sandstone(final int maxStack, final String typeName, final byte type)
     {
         super(SANDSTONE.name(), SANDSTONE.getId(), SANDSTONE.getMinecraftId(), maxStack, typeName, type);
     }
@@ -50,28 +50,28 @@ public class SandStone2 extends Stony
     }
 
     @Override
-    public SandStone2 getType(final String name)
+    public Sandstone getType(final String name)
     {
         return getByEnumName(name);
     }
 
     @Override
-    public SandStone2 getType(final int id)
+    public Sandstone getType(final int id)
     {
         return getByID(id);
     }
 
-    public static SandStone2 getByID(final int id)
+    public static Sandstone getByID(final int id)
     {
         return byID.get((byte) id);
     }
 
-    public static SandStone2 getByEnumName(final String name)
+    public static Sandstone getByEnumName(final String name)
     {
         return byName.get(name);
     }
 
-    public static void register(final SandStone2 element)
+    public static void register(final Sandstone element)
     {
         byID.put(element.getType(), element);
         byName.put(element.name(), element);
@@ -79,8 +79,8 @@ public class SandStone2 extends Stony
 
     static
     {
-        SandStone2.register(SANDSTONE);
-        SandStone2.register(SANDSTONE_CHISELED);
-        SandStone2.register(SANDSTONE_SMOOTH);
+        Sandstone.register(SANDSTONE);
+        Sandstone.register(SANDSTONE_CHISELED);
+        Sandstone.register(SANDSTONE_SMOOTH);
     }
 }
