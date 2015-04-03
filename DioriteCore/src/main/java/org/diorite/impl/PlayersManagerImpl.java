@@ -12,24 +12,13 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.*;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
+import org.diorite.impl.connection.packets.play.out.*;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.BlockLocation;
-import org.diorite.Difficulty;
-import org.diorite.GameMode;
-import org.diorite.ImmutableLocation;
-import org.diorite.TeleportData;
 import org.diorite.chat.ChatPosition;
 import org.diorite.entity.Player;
 import org.diorite.world.Dimension;
@@ -74,6 +63,12 @@ public class PlayersManagerImpl
         this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l join to the server!");
         this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 join to the server!");
         this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
+
+        for(Player p : Diorite.getServer().getOnlinePlayers())
+        {
+            ((PlayerImpl)p).getNetworkManager().sendPacket(new PacketPlayOutPlayerInfo(
+                    PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, player.getGameProfile()));
+        }
     }
 
     public List<String> getOnlinePlayersNames()
@@ -95,6 +90,12 @@ public class PlayersManagerImpl
     public void playerQuit(final PlayerImpl player)
     {
         this.playerQuit(player.getUniqueID());
+
+        for(Player p : Diorite.getServer().getOnlinePlayers())
+        {
+            ((PlayerImpl)p).getNetworkManager().sendPacket(new PacketPlayOutPlayerInfo(
+                    PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player.getGameProfile()));
+        }
     }
 
     public void playerQuit(final UUID uuid)
