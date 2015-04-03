@@ -1,4 +1,4 @@
-package org.diorite.material.blocks.ore;
+package org.diorite.material.blocks.stony.ore;
 
 import java.util.Map;
 
@@ -10,7 +10,9 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class LapisOre extends Ore
 {
-    public static final byte USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 1;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__LAPIS_ORE__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__LAPIS_ORE__HARDNESS;
 
     public static final LapisOre LAPIS_ORE = new LapisOre();
 
@@ -36,13 +38,13 @@ public class LapisOre extends Ore
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__LAPIS_ORE__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__LAPIS_ORE__HARDNESS;
+        return HARDNESS;
     }
 
     @Override

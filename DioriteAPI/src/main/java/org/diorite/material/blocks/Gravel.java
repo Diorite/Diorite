@@ -11,7 +11,9 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Gravel extends BlockMaterialData
 {
-    public static final byte USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 1;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__GRAVEL__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__GRAVEL__HARDNESS;
 
     public static final Gravel GRAVEL = new Gravel();
 
@@ -37,13 +39,13 @@ public class Gravel extends BlockMaterialData
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__GRAVEL__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__GRAVEL__HARDNESS;
+        return HARDNESS;
     }
 
     @Override

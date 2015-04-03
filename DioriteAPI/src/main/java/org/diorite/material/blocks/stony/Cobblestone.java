@@ -1,17 +1,18 @@
-package org.diorite.material.blocks;
+package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class Cobblestone extends BlockMaterialData
+public class Cobblestone extends Stony
 {
-    public static final byte USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 1;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__COBBLESTONE__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__COBBLESTONE__HARDNESS;
 
     public static final Cobblestone COBBLESTONE = new Cobblestone();
 
@@ -36,13 +37,13 @@ public class Cobblestone extends BlockMaterialData
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__COBBLESTONE__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__COBBLESTONE__HARDNESS;
+        return HARDNESS;
     }
 
     @Override

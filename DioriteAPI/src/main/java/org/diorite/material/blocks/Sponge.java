@@ -14,7 +14,9 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Sponge extends BlockMaterialData
 {
-    public static final byte USED_DATA_VALUES = 2;
+    public static final byte  USED_DATA_VALUES = 2;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SPONGE__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__SPONGE__HARDNESS;
 
     public static final Sponge SPONGE     = new Sponge();
     public static final Sponge SPONGE_WET = new Sponge("WET", 0x01, true);
@@ -46,13 +48,13 @@ public class Sponge extends BlockMaterialData
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__SPONGE__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__SPONGE__HARDNESS;
+        return HARDNESS;
     }
 
     @Override

@@ -11,8 +11,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Sapling extends BlockMaterialData
 {
-    public static final byte USED_DATA_VALUES = 12;
-    public static final byte OLD_FLAG         = 0x08;
+    public static final byte  USED_DATA_VALUES = 12;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SAPLING__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__SAPLING__HARDNESS;
+    public static final byte  OLD_FLAG         = 0x08;
 
     public static final Sapling SAPLING_OAK            = new Sapling();
     public static final Sapling SAPLING_SPRUCE         = new Sapling("SPRUCE", 0x01);
@@ -113,13 +115,13 @@ public class Sapling extends BlockMaterialData
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__SAPLING__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__SAPLING__HARDNESS;
+        return HARDNESS;
     }
 
     public enum SaplingStage

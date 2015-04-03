@@ -1,17 +1,18 @@
-package org.diorite.material.blocks;
+package org.diorite.material.blocks.earth;
 
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class Dirt extends BlockMaterialData
+public class Dirt extends Earth
 {
-    public static final byte USED_DATA_VALUES = 3;
+    public static final byte  USED_DATA_VALUES = 3;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DIRT__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__DIRT__HARDNESS;
 
     public static final Dirt DIRT             = new Dirt();
     public static final Dirt DIRT_COARSE_DIRT = new Dirt("COARSE_DIRT", 0x01);
@@ -38,13 +39,13 @@ public class Dirt extends BlockMaterialData
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__DIRT__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__DIRT__HARDNESS;
+        return HARDNESS;
     }
 
     @Override

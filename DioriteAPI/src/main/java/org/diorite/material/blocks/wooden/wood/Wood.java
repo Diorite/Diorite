@@ -1,11 +1,12 @@
-package org.diorite.material.blocks.wood;
+package org.diorite.material.blocks.wooden.wood;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.material.BlockMaterialData;
+import org.diorite.material.blocks.wooden.WoodType;
+import org.diorite.material.blocks.wooden.Wooden;
 
-public abstract class Wood extends BlockMaterialData
+public abstract class Wood extends Wooden
 {
     protected final WoodType woodType;
 

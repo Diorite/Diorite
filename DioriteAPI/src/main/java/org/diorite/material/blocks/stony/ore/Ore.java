@@ -1,8 +1,8 @@
-package org.diorite.material.blocks.ore;
+package org.diorite.material.blocks.stony.ore;
 
-import org.diorite.material.BlockMaterialData;
+import org.diorite.material.blocks.stony.Stony;
 
-public abstract class Ore extends BlockMaterialData
+public abstract class Ore extends Stony
 {
     public Ore(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
     {

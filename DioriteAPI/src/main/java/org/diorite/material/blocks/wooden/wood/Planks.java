@@ -1,8 +1,9 @@
-package org.diorite.material.blocks.wood;
+package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.material.blocks.wooden.WoodType;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -10,7 +11,9 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Planks extends Wood
 {
-    public static final byte USED_DATA_VALUES = 6;
+    public static final byte  USED_DATA_VALUES = 6;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__PLANKS__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__PLANKS__HARDNESS;
 
     public static final Planks PLANKS_OAK      = new Planks();
     public static final Planks PLANKS_SPRUCE   = new Planks("SPRUCE", WoodType.SPRUCE);
@@ -64,13 +67,13 @@ public class Planks extends Wood
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__PLANKS__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__PLANKS__HARDNESS;
+        return HARDNESS;
     }
 
     @Override

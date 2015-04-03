@@ -1,4 +1,4 @@
-package org.diorite.material.blocks.wood;
+package org.diorite.material.blocks.wooden;
 
 @SuppressWarnings("MagicNumber")
 public enum WoodType

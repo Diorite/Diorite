@@ -11,7 +11,9 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Sand extends BlockMaterialData
 {
-    public static final byte USED_DATA_VALUES = 2;
+    public static final byte  USED_DATA_VALUES = 2;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SAND__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__SAND__HARDNESS;
 
     public static final Sand SAND     = new Sand();
     public static final Sand SAND_RED = new Sand("RED_SAND", 0x01);
@@ -38,13 +40,13 @@ public class Sand extends BlockMaterialData
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__SAND__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__SAND__HARDNESS;
+        return HARDNESS;
     }
 
     @Override

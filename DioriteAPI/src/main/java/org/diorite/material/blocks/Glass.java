@@ -11,7 +11,9 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Glass extends BlockMaterialData
 {
-    public static final byte USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 1;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__GLASS__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__GLASS__HARDNESS;
 
     public static final Glass GLASS = new Glass();
 
@@ -37,13 +39,13 @@ public class Glass extends BlockMaterialData
     @Override
     public float getBlastResistance()
     {
-        return MagicNumbers.MATERIAL__GLASS__BLAST_RESISTANCE;
+        return BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return MagicNumbers.MATERIAL__GLASS__HARDNESS;
+        return HARDNESS;
     }
 
     @Override

@@ -10,7 +10,11 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Water extends Liquid
 {
-    public static final byte USED_DATA_VALUES = 16;
+    public static final byte  USED_DATA_VALUES       = 16;
+    public static final float BLAST_RESISTANCE       = MagicNumbers.MATERIAL__WATER__BLAST_RESISTANCE;
+    public static final float HARDNESS               = MagicNumbers.MATERIAL__WATER__HARDNESS;
+    public static final float BLAST_RESISTANCE_STILL = MagicNumbers.MATERIAL__WATER_STILL__BLAST_RESISTANCE;
+    public static final float HARDNESS_STILL         = MagicNumbers.MATERIAL__WATER_STILL__HARDNESS;
 
     public static final Water WATER_SOURCE  = new Water(LiquidType.NORMAL);
     public static final Water WATER_STAGE_1 = new Water(LiquidStage.STAGE_1, LiquidType.NORMAL);
@@ -145,13 +149,13 @@ public class Water extends Liquid
     @Override
     public float getBlastResistance()
     {
-        return this.isStill() ? MagicNumbers.MATERIAL__WATER_STILL__BLAST_RESISTANCE : MagicNumbers.MATERIAL__WATER__BLAST_RESISTANCE;
+        return this.isStill() ? BLAST_RESISTANCE_STILL : BLAST_RESISTANCE;
     }
 
     @Override
     public float getHardness()
     {
-        return this.isStill() ? MagicNumbers.MATERIAL__WATER_STILL__HARDNESS : MagicNumbers.MATERIAL__WATER__HARDNESS;
+        return this.isStill() ? HARDNESS_STILL : HARDNESS;
     }
 
     @Override

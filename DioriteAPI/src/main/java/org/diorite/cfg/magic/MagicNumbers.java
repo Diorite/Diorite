@@ -35,6 +35,12 @@ public final class MagicNumbers
     @MagicNumber("material.stone.blastResistance")
     public static float MATERIAL__STONE__BLAST_RESISTANCE = 30;
 
+    // material/sand stone
+    @MagicNumber("material.sand_stone.hardness")
+    public static float MATERIAL__SAND_STONE__HARDNESS         = 1.5f;
+    @MagicNumber("material.sand_stone.blastResistance")
+    public static float MATERIAL__SAND_STONE__BLAST_RESISTANCE = 30;
+
     // material/sapling
     @MagicNumber("material.sapling.hardness")
     public static float MATERIAL__SAPLING__HARDNESS         = 0;
@@ -130,6 +136,18 @@ public final class MagicNumbers
     public static float MATERIAL__COBBLESTONE__HARDNESS         = 2;
     @MagicNumber("material.cobblestone.blastResistance")
     public static float MATERIAL__COBBLESTONE__BLAST_RESISTANCE = 30;
+
+    // material/noteblock
+    @MagicNumber("material.noteblock.hardness")
+    public static float MATERIAL__NOTEBLOCK__HARDNESS         = 2;
+    @MagicNumber("material.noteblock.blastResistance")
+    public static float MATERIAL__NOTEBLOCK__BLAST_RESISTANCE = 30;
+
+    // material/dispenser
+    @MagicNumber("material.dispenser.hardness")
+    public static float MATERIAL__DISPENSER__HARDNESS         = 2;
+    @MagicNumber("material.dispenser.blastResistance")
+    public static float MATERIAL__DISPENSER__BLAST_RESISTANCE = 30;
 
     // material/bedrock
     @MagicNumber("material.bedrock.hardness")
