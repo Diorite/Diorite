@@ -22,9 +22,12 @@ import org.diorite.impl.connection.packets.PacketDecrypter;
 import org.diorite.impl.connection.packets.PacketEncrypter;
 import org.diorite.impl.connection.packets.PacketListener;
 import org.diorite.impl.connection.packets.QueuedPacket;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.TranslatableComponent;
+import org.diorite.entity.Player;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -52,9 +55,27 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
     }
 
     private long lastKeepAlive = System.currentTimeMillis();
+    private long sentAlive     = System.currentTimeMillis();
+    private int ping;
+
+    public int getPing()
+    {
+        return this.ping;
+    }
+
+    public void setPing(final int ping)
+    {
+        this.ping = ping;
+        if (this.packetListener instanceof PlayListener)
+        {
+            final Player player = ((PlayListener) this.packetListener).getPlayer();
+            this.server.getPlayersManager().forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.UPDATE_LATENCY, new PacketPlayOutPlayerInfo.PlayerInfoData(player.getUniqueID(), ping)));
+        }
+    }
 
     public void updateKeepAlive()
     {
+        this.setPing((int) (System.currentTimeMillis() - this.sentAlive));
         this.lastKeepAlive = System.currentTimeMillis();
     }
 
@@ -142,6 +163,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         {
             this.server.getServerConnection().remove(this);
             return;
+        }
+        if (packet instanceof PacketPlayOutKeepAlive)
+        {
+            this.sentAlive = System.currentTimeMillis();
         }
         final EnumProtocol ep1 = EnumProtocol.getByPacketClass(packet);
         final EnumProtocol ep2 = this.channel.attr(this.server.getServerConnection().protocolKey).get();

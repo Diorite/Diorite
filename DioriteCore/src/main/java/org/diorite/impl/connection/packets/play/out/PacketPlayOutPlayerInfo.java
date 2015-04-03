@@ -1,9 +1,14 @@
 package org.diorite.impl.connection.packets.play.out;
 
-import org.diorite.Diorite;
-import org.diorite.GameMode;
-import org.diorite.chat.component.TextComponent;
-import org.diorite.entity.Player;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.UUID;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.auth.properties.Property;
 import org.diorite.impl.connection.EnumProtocol;
@@ -11,38 +16,53 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.diorite.Diorite;
+import org.diorite.GameMode;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
+import org.diorite.entity.Player;
 
 @PacketClass(id = 0x38, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutPlayerInfo implements PacketPlayOut
 {
-    private PlayerInfoAction action;
-    private List<PlayerInfoData> players;
+    private PlayerInfoAction           action;
+    private Collection<PlayerInfoData> players;
 
-    public PacketPlayOutPlayerInfo(PlayerInfoAction action, List<GameProfile> players)
+    public PacketPlayOutPlayerInfo()
+    {
+    }
+
+    public PacketPlayOutPlayerInfo(final Collection<PlayerInfoData> players, final PlayerInfoAction action)
     {
         this.action = action;
-        this.players = new ArrayList<>(5);
-        for(GameProfile gp : players)
+        this.players = new ArrayList<>(players);
+    }
+
+    public PacketPlayOutPlayerInfo(final PlayerInfoAction action, final PlayerInfoData... players)
+    {
+        this.action = action;
+        this.players = Arrays.asList(players);
+    }
+
+    public PacketPlayOutPlayerInfo(final PlayerInfoAction action, final Collection<GameProfile> players)
+    {
+        this.action = action;
+        this.players = new ArrayList<>(players.size());
+        for (final GameProfile gp : players)
         {
-            Player p = Diorite.getServer().getPlayer(gp.getId());
-            this.players.add(new PlayerInfoData(gp, 0, GameMode.SURVIVAL, new TextComponent(p.getName())));
-            // TODO Set latency (ping), and GameMode
+            final Player p = Diorite.getServer().getPlayer(gp.getId());
+            this.players.add(new PlayerInfoData(gp, p.getPing(), p.getGameMode(), new TextComponent(p.getName())));
         }
     }
 
-    public PacketPlayOutPlayerInfo(PlayerInfoAction action, GameProfile... players)
+    public PacketPlayOutPlayerInfo(final PlayerInfoAction action, final GameProfile... players)
     {
         this.action = action;
-        this.players = new ArrayList<>(5);
-        for(GameProfile gp : players)
+        this.players = new ArrayList<>(players.length);
+        for (final GameProfile gp : players)
         {
-            Player p = Diorite.getServer().getPlayer(gp.getId());
-            this.players.add(new PlayerInfoData(gp, 0, GameMode.SURVIVAL, new TextComponent(p.getName())));
-            // TODO Set latency (ping), and GameMode
+            final Player p = Diorite.getServer().getPlayer(gp.getId());
+            this.players.add(new PlayerInfoData(gp, p.getPing(), p.getGameMode(), new TextComponent(p.getName())));
         }
     }
 
@@ -55,17 +75,17 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(action.getActionId()); // VarInt z numerem akcji
-        data.writeVarInt(players.size()); // Ilosc graczy
-        for(PlayerInfoData pid : players)
+        data.writeVarInt(this.action.getActionId()); // VarInt with action id
+        data.writeVarInt(this.players.size());
+        for (final PlayerInfoData pid : this.players)
         {
-            data.writeUUID(pid.getGameProfile().getId()); // Zawsze wysylamy UUID, a pozniej to juz zalezy od akcji
-            switch(action)
+            data.writeUUID(pid.getGameProfile().getId()); // we always sent UUID, other data depend on action
+            switch (this.action)
             {
                 case ADD_PLAYER:
                     data.writeText(pid.getGameProfile().getName());
                     data.writeVarInt(pid.getGameProfile().getProperties().size());
-                    for(Property p : pid.getGameProfile().getProperties().values())
+                    for (final Property p : pid.getGameProfile().getProperties().values())
                     {
                         data.writeText(p.getName());
                         data.writeText(p.getValue());
@@ -81,7 +101,24 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
                     }
                     data.writeVarInt(pid.getGameMode().getId());
                     data.writeVarInt(pid.getLatency());
-                    if(pid.getDisplayName() == null)
+                    if (pid.getDisplayName() == null)
+                    {
+                        data.writeBoolean(false);
+                    }
+                    else
+                    {
+                        data.writeBoolean(true);
+                        data.writeBaseComponent(pid.getDisplayName());
+                    }
+                    break;
+                case UPDATE_LATENCY:
+                    data.writeVarInt(pid.getLatency());
+                    break;
+                case UPDATE_GAMEMODE:
+                    data.writeVarInt(pid.getGameMode().getId());
+                    break;
+                case UPDATE_DISPLAY_NAME:
+                    if (pid.getDisplayName() == null)
                     {
                         data.writeBoolean(false);
                     }
@@ -94,23 +131,6 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
                 case REMOVE_PLAYER:
                     // No fields
                     break;
-                case UPDATE_LATENCY:
-                    data.writeVarInt(pid.getLatency());
-                    break;
-                case UPDATE_GAMEMODE:
-                    data.writeVarInt(pid.getGameMode().getId());
-                    break;
-                case UPDATE_DISPLAY_NAME:
-                    if(pid.getDisplayName() == null)
-                    {
-                        data.writeBoolean(false);
-                    }
-                    else
-                    {
-                        data.writeBoolean(true);
-                        data.writeBaseComponent(pid.getDisplayName());
-                    }
-                    break;
             }
         }
     }
@@ -118,17 +138,37 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
     @Override
     public void handle(final PacketPlayOutListener listener)
     {
-        // Useless
+        listener.handle(this);
     }
 
-    public class PlayerInfoData
+    public PlayerInfoAction getAction()
     {
-        private int latency;
-        private GameProfile gameProfile;
-        private GameMode gameMode;
-        private TextComponent displayName;
+        return this.action;
+    }
 
-        public PlayerInfoData(GameProfile gameProfile, int latency, GameMode gameMode, TextComponent displayName)
+    public void setAction(final PlayerInfoAction action)
+    {
+        this.action = action;
+    }
+
+    public Collection<PlayerInfoData> getPlayers()
+    {
+        return this.players;
+    }
+
+    public void setPlayers(final Collection<PlayerInfoData> players)
+    {
+        this.players = players;
+    }
+
+    public static class PlayerInfoData
+    {
+        private final GameProfile   gameProfile;
+        private final int           latency;
+        private final GameMode      gameMode;
+        private final BaseComponent displayName;
+
+        public PlayerInfoData(final GameProfile gameProfile, final int latency, final GameMode gameMode, final BaseComponent displayName)
         {
             this.latency = latency;
             this.gameProfile = gameProfile;
@@ -136,24 +176,50 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
             this.displayName = displayName;
         }
 
+        public PlayerInfoData(final UUID uuid, final BaseComponent displayName)
+        {
+            this(new GameProfile(uuid, null), 0, null, displayName);
+        }
+
+        public PlayerInfoData(final UUID uuid, final GameMode gameMode)
+        {
+            this(new GameProfile(uuid, null), 0, gameMode, null);
+        }
+
+        public PlayerInfoData(final UUID uuid)
+        {
+            this(new GameProfile(uuid, null), 0, null, null);
+        }
+
+        public PlayerInfoData(final UUID uuid, final int latency)
+        {
+            this(new GameProfile(uuid, null), latency, null, null);
+        }
+
         public GameProfile getGameProfile()
         {
-            return gameProfile;
+            return this.gameProfile;
         }
 
         public int getLatency()
         {
-            return latency;
+            return this.latency;
         }
 
         public GameMode getGameMode()
         {
-            return gameMode;
+            return this.gameMode;
         }
 
-        public TextComponent getDisplayName()
+        public BaseComponent getDisplayName()
         {
-            return displayName;
+            return this.displayName;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("latency", this.latency).append("gameProfile", this.gameProfile).append("gameMode", this.gameMode).append("displayName", this.displayName).toString();
         }
     }
 
@@ -165,16 +231,22 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
         UPDATE_LATENCY(2),
         UPDATE_DISPLAY_NAME(3);
 
-        private int actionId;
+        private final int actionId;
 
-        PlayerInfoAction(int actionId)
+        PlayerInfoAction(final int actionId)
         {
             this.actionId = actionId;
         }
 
         public int getActionId()
         {
-            return actionId;
+            return this.actionId;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("action", this.action).append("players", this.players).toString();
     }
 }

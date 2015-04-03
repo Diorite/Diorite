@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.gson.Gson;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
@@ -25,7 +23,6 @@ public class HandshakeListener implements PacketHandshakingInListener
 {
     public static final  int                    CLEANUP_THROTTLE = 200;
     public static final  int                    CURRENT_PROTOCOL = 47;
-    private static final Gson                   gson             = new Gson();
     private static final Map<InetAddress, Long> throttleTracker  = new ConcurrentHashMap<>(100, 0.2f, 8);
     private static       int                    throttleCounter  = 0;
     private final ServerImpl     server;
@@ -92,7 +89,7 @@ public class HandshakeListener implements PacketHandshakingInListener
                 break;
             case STATUS:
                 this.networkManager.setProtocol(EnumProtocol.STATUS);
-                this.networkManager.setPacketListener(new PacketStatusListener(this.server, this.networkManager));
+                this.networkManager.setPacketListener(new StatusListener(this.server, this.networkManager));
                 break;
             default:
                 throw new UnsupportedOperationException("Invalid intention " + packet.getRequestType());

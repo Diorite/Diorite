@@ -11,9 +11,11 @@ import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
+import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.chat.ChatPosition;
@@ -35,9 +37,11 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     protected       byte             viewDistance;
     protected       byte             renderDistance;
     protected       PlayerChunksImpl playerChunks;
+    protected       GameMode         gameMode;
 
     protected PacketPlayOutAbilities abilities = new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
+    // TODO: add saving/loading data to/from NBT
     public PlayerImpl(final ServerImpl server, final int id, final GameProfile gameProfile, final NetworkManager networkManager, final ImmutableLocation location)
     {
         super(server, id, location);
@@ -46,6 +50,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         this.networkManager = networkManager;
         this.renderDistance = server.getRenderDistance();
         this.playerChunks = new PlayerChunksImpl(this);
+        this.gameMode = this.world.getDefaultGameMode();
     }
 
     public GameProfile getGameProfile()
@@ -67,6 +72,25 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public String getName()
     {
         return this.gameProfile.getName();
+    }
+
+    @Override
+    public GameMode getGameMode()
+    {
+        return this.gameMode;
+    }
+
+    @Override
+    public void setGameMode(final GameMode gameMode)
+    {
+        this.gameMode = gameMode;
+        this.server.getPlayersManager().forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayOutPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
+    }
+
+    @Override
+    public int getPing()
+    {
+        return this.networkManager.getPing();
     }
 
     @Override

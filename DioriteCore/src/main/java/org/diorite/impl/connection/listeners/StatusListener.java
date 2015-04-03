@@ -17,12 +17,12 @@ import org.diorite.Server;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
-public class PacketStatusListener implements PacketStatusInListener
+public class StatusListener implements PacketStatusInListener
 {
     private final ServerImpl     server;
     private final NetworkManager networkManager;
 
-    public PacketStatusListener(final ServerImpl server, final NetworkManager networkManager)
+    public StatusListener(final ServerImpl server, final NetworkManager networkManager)
     {
         super();
         this.server = server;
@@ -33,6 +33,7 @@ public class PacketStatusListener implements PacketStatusInListener
     public void handle(final PacketStatusInPing packet)
     {
         this.networkManager.sendPacket(new PacketStatusOutPong(packet.getPing()));
+        this.networkManager.setPing((int) packet.getPing());
         this.disconnect(new TextComponent());
     }
 
