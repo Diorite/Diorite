@@ -119,6 +119,30 @@ public final class MagicNumbers
     @MagicNumber("material.gravel.blastResistance")
     public static float MATERIAL__GRAVEL__BLAST_RESISTANCE = 2.5f;
 
+    // material/piston
+    @MagicNumber("material.piston.hardness")
+    public static float MATERIAL__PISTON__HARDNESS         = 0.5f;
+    @MagicNumber("material.piston.blastResistance")
+    public static float MATERIAL__PISTON__BLAST_RESISTANCE = 2.5f;
+
+    // material/piston extension
+    @MagicNumber("material.piston_extension.hardness")
+    public static float MATERIAL__PISTON_EXTENSION__HARDNESS         = 0.5f;
+    @MagicNumber("material.piston_extension.blastResistance")
+    public static float MATERIAL__PISTON_EXTENSION__BLAST_RESISTANCE = 2.5f;
+
+    // material/piston head
+    @MagicNumber("material.piston_head.hardness")
+    public static float MATERIAL__PISTON_HEAD__HARDNESS         = 0.5f;
+    @MagicNumber("material.piston_head.blastResistance")
+    public static float MATERIAL__PISTON_HEAD__BLAST_RESISTANCE = 2.5f;
+
+    // material/sticky piston
+    @MagicNumber("material.sticky_piston.hardness")
+    public static float MATERIAL__STICKY_PISTON__HARDNESS         = 0.5f;
+    @MagicNumber("material.sticky_piston.blastResistance")
+    public static float MATERIAL__STICKY_PISTON__BLAST_RESISTANCE = 2.5f;
+
     // material/gold ore
     @MagicNumber("material.gold_ore.hardness")
     public static float MATERIAL__GOLD_ORE__HARDNESS         = 3;
