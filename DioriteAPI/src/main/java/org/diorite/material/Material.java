@@ -11,11 +11,18 @@ import org.diorite.material.blocks.Bedrock;
 import org.diorite.material.blocks.Cobblestone;
 import org.diorite.material.blocks.Dirt;
 import org.diorite.material.blocks.Grass;
-import org.diorite.material.blocks.Planks;
+import org.diorite.material.blocks.Gravel;
+import org.diorite.material.blocks.Sand;
 import org.diorite.material.blocks.Sapling;
 import org.diorite.material.blocks.Stone;
 import org.diorite.material.blocks.liquid.Lava;
 import org.diorite.material.blocks.liquid.Water;
+import org.diorite.material.blocks.ore.CoalOre;
+import org.diorite.material.blocks.ore.GoldOre;
+import org.diorite.material.blocks.ore.IronOre;
+import org.diorite.material.blocks.wood.Leaves;
+import org.diorite.material.blocks.wood.Log;
+import org.diorite.material.blocks.wood.Planks;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
 import org.diorite.utils.math.IntRange;
@@ -28,24 +35,26 @@ public abstract class Material implements SimpleEnum<Material>
     protected static final float SLOW_GROW      = 0.1f;
     public static final    int   MATERIALS_SIZE = 385;
 
-    public static final  Air                     AIR         = Air.AIR;
-    public static final  Stone                   STONE       = Stone.STONE;
-    public static final  Grass                   GRASS       = Grass.GRASS;
-    public static final  Dirt                    DIRT        = Dirt.DIRT;
-    public static final  Cobblestone             COBBLESTONE = Cobblestone.COBBLESTONE;
-    public static final  Planks                  PLANKS      = Planks.PLANKS_QAK;
-    public static final  Sapling                 SAPLING     = Sapling.SAPLING_OAK;
-    public static final  Bedrock                 BEDROCK     = Bedrock.BEDROCK;
-    public static final  Water                   WATER       = Water.WATER_SOURCE;
-    public static final  Lava                    LAVA        = Lava.LAVA_SOURCE;
-    //    public static final Material    SAND                       = new Material("SAND", 12);
-//    public static final Material    GRAVEL                     = new Material("GRAVEL", 13);
-//    public static final Material    GOLD_ORE                   = new Material("GOLD_ORE", 14);
-//    public static final Material    IRON_ORE                   = new Material("IRON_ORE", 15);
-//    public static final Material    COAL_ORE                   = new Material("COAL_ORE", 16);
-//    public static final Material    LOG                        = new Material("LOG", 17);
-//    public static final Material    LEAVES                     = new Material("LEAVES", 18);
-//    public static final Material    SPONGE                     = new Material("SPONGE", 19);
+    public static final  Air                     AIR           = Air.AIR;
+    public static final  Stone                   STONE         = Stone.STONE;
+    public static final  Grass                   GRASS         = Grass.GRASS;
+    public static final  Dirt                    DIRT          = Dirt.DIRT;
+    public static final  Cobblestone             COBBLESTONE   = Cobblestone.COBBLESTONE;
+    public static final  Planks                  PLANKS        = Planks.PLANKS_OAK;
+    public static final  Sapling                 SAPLING       = Sapling.SAPLING_OAK;
+    public static final  Bedrock                 BEDROCK       = Bedrock.BEDROCK;
+    public static final  Water                   WATER         = Water.WATER_SOURCE;
+    public static final  Water                   WATER_STILL   = Water.WATER_SOURCE_STILL;
+    public static final  Lava                    LAVA          = Lava.LAVA_SOURCE;
+    public static final  Lava                    LAVA_STILL    = Lava.LAVA_SOURCE_STILL;
+    public static final  Sand                    SAND          = Sand.SAND;
+    public static final  Gravel                  GRAVEL        = Gravel.GRAVEL;
+    public static final  GoldOre                 GOLD_ORE      = GoldOre.GOLD_ORE;
+    public static final  IronOre                 IRON_ORE      = IronOre.IRON_ORE;
+    public static final  CoalOre                 COAL_ORE      = CoalOre.COAL_ORE;
+    public static final  Log                     LOG           = Log.LOG_OAK;
+    public static final  Leaves                  LEAVES        = Leaves.LEAVES_OAK;
+    //    public static final Material    SPONGE                     = new Material("SPONGE", 19);
 //    public static final Material    GLASS                      = new Material("GLASS", 20);
 //    public static final Material    LAPIS_ORE                  = new Material("LAPIS_ORE", 21);
 //    public static final Material    LAPIS_BLOCK                = new Material("LAPIS_BLOCK", 22);
@@ -187,9 +196,9 @@ public abstract class Material implements SimpleEnum<Material>
 //    public static final Material    DROPPER                    = new Material("DROPPER", 158);
 //    public static final Material    STAINED_CLAY               = new Material("STAINED_CLAY", 159);
 //    public static final Material    STAINED_GLASS_PANE         = new Material("STAINED_GLASS_PANE", 160);
-//    public static final Material    LEAVES_2                   = new Material("LEAVES_2", 161);
-//    public static final Material    LOG_2                      = new Material("LOG_2", 162);
-//    public static final Material    ACACIA_STAIRS              = new Material("ACACIA_STAIRS", 163);
+    public static final  Leaves                  LEAVES_2      = Leaves.LEAVES_ACACIA;
+    public static final  Log                     LOG_2         = Log.LOG_ACACIA;
+    //    public static final Material    ACACIA_STAIRS              = new Material("ACACIA_STAIRS", 163);
 //    public static final Material    DARK_OAK_STAIRS            = new Material("DARK_OAK_STAIRS", 164);
 //    public static final Material    SLIME_BLOCK                = new Material("SLIME_BLOCK", 165);
 //    public static final Material    BARRIER                    = new Material("BARRIER", 166);
@@ -412,21 +421,24 @@ public abstract class Material implements SimpleEnum<Material>
 //    public static final  Material                RECORD_10            = new Material("RECORD_10", 2265, 1);
 //    public static final  Material                RECORD_11            = new Material("RECORD_11", 2266, 1);
 //    public static final  Material                RECORD_12            = new Material("RECORD_12", 2267, 1);
-    private static final Map<String, Material>   byName      = new SimpleStringHashMap<>(MATERIALS_SIZE, SLOW_GROW);
-    private static final TIntObjectMap<Material> byID        = new TIntObjectHashMap<>(MATERIALS_SIZE, SLOW_GROW);
+    private static final Map<String, Material>   byName        = new SimpleStringHashMap<>(MATERIALS_SIZE, SLOW_GROW);
+    private static final Map<String, Material>   byMinecraftId = new SimpleStringHashMap<>(MATERIALS_SIZE, SLOW_GROW);
+    private static final TIntObjectMap<Material> byID          = new TIntObjectHashMap<>(MATERIALS_SIZE, SLOW_GROW);
     private final String enumName;
     private final int    id;
+    private final String minecraftId;
     private final int    maxStack;
 
-    public Material(final String enumName, final int id)
+    public Material(final String enumName, final int id, final String minecraftId)
     {
-        this(enumName, id, MagicNumbers.ITEMS__DEFAULT_STACK_SIZE);
+        this(enumName, id, minecraftId, MagicNumbers.ITEMS__DEFAULT_STACK_SIZE);
     }
 
-    public Material(final String enumName, final int id, final int maxStack)
+    public Material(final String enumName, final int id, final String minecraftId, final int maxStack)
     {
         this.enumName = enumName;
         this.id = id;
+        this.minecraftId = minecraftId;
         this.maxStack = maxStack;
     }
 
@@ -440,6 +452,11 @@ public abstract class Material implements SimpleEnum<Material>
     public int getId()
     {
         return this.id;
+    }
+
+    public String getMinecraftId()
+    {
+        return this.minecraftId;
     }
 
     @Override
@@ -590,10 +607,16 @@ public abstract class Material implements SimpleEnum<Material>
         return mat;
     }
 
+    public static Material getByMinecraftId(final String name)
+    {
+        return byMinecraftId.get(name);
+    }
+
     public static void register(final Material element)
     {
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
+        byMinecraftId.put(element.getMinecraftId(), element);
     }
 
     static
@@ -607,14 +630,16 @@ public abstract class Material implements SimpleEnum<Material>
         register(SAPLING);
         register(BEDROCK);
         register(WATER);
+        register(WATER_STILL);
         register(LAVA);
-//        register(SAND);
-//        register(GRAVEL);
-//        register(GOLD_ORE);
-//        register(IRON_ORE);
-//        register(COAL_ORE);
-//        register(LOG);
-//        register(LEAVES);
+        register(LAVA_STILL);
+        register(SAND);
+        register(GRAVEL);
+        register(GOLD_ORE);
+        register(IRON_ORE);
+        register(COAL_ORE);
+        register(LOG);
+        register(LEAVES);
 //        register(SPONGE);
 //        register(GLASS);
 //        register(LAPIS_ORE);
@@ -757,8 +782,8 @@ public abstract class Material implements SimpleEnum<Material>
 //        register(DROPPER);
 //        register(STAINED_CLAY);
 //        register(STAINED_GLASS_PANE);
-//        register(LEAVES_2);
-//        register(LOG_2);
+        register(LEAVES_2);
+        register(LOG_2);
 //        register(ACACIA_STAIRS);
 //        register(DARK_OAK_STAIRS);
 //        register(SLIME_BLOCK);

@@ -32,17 +32,17 @@ public class Sapling extends BlockMaterialData
 
     protected Sapling()
     {
-        super("SAPLING", 5, "OAK", (byte) 0x00);
+        super("SAPLING", 5, "minecraft:sapling", "OAK", (byte) 0x00);
     }
 
     public Sapling(final String enumName, final int type)
     {
-        super(SAPLING_OAK.name(), SAPLING_OAK.getId(), enumName, (byte) type);
+        super(SAPLING_OAK.name(), SAPLING_OAK.getId(), SAPLING_OAK.getMinecraftId(), enumName, (byte) type);
     }
 
     public Sapling(final int maxStack, final String typeName, final byte type)
     {
-        super(SAPLING_OAK.name(), SAPLING_OAK.getId(), maxStack, typeName, type);
+        super(SAPLING_OAK.name(), SAPLING_OAK.getId(), SAPLING_OAK.getMinecraftId(), maxStack, typeName, type);
     }
 
     public Sapling getOtherStage()

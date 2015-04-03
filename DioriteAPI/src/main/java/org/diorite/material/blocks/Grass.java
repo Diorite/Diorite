@@ -20,17 +20,17 @@ public class Grass extends BlockMaterialData
 
     protected Grass()
     {
-        super("GRASS", 2, "GRASS", (byte) 0x00);
+        super("GRASS", 2, "minecraft:grass", "GRASS", (byte) 0x00);
     }
 
     public Grass(final String enumName, final int type)
     {
-        super(GRASS.name(), GRASS.getId(), enumName, (byte) type);
+        super(GRASS.name(), GRASS.getId(), GRASS.getMinecraftId(), enumName, (byte) type);
     }
 
     public Grass(final int maxStack, final String typeName, final byte type)
     {
-        super(GRASS.name(), GRASS.getId(), maxStack, typeName, type);
+        super(GRASS.name(), GRASS.getId(), GRASS.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override

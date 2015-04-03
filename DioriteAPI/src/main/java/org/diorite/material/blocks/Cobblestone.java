@@ -20,17 +20,17 @@ public class Cobblestone extends BlockMaterialData
 
     protected Cobblestone()
     {
-        super("COBBLESTONE", 4, "COBBLESTONE", (byte) 0x00);
+        super("COBBLESTONE", 4, "minecraft:cobblestone", "COBBLESTONE", (byte) 0x00);
     }
 
     public Cobblestone(final String enumName, final int type)
     {
-        super(COBBLESTONE.name(), COBBLESTONE.getId(), enumName, (byte) type);
+        super(COBBLESTONE.name(), COBBLESTONE.getId(), COBBLESTONE.getMinecraftId(), enumName, (byte) type);
     }
 
     public Cobblestone(final int maxStack, final String typeName, final byte type)
     {
-        super(COBBLESTONE.name(), COBBLESTONE.getId(), maxStack, typeName, type);
+        super(COBBLESTONE.name(), COBBLESTONE.getId(), COBBLESTONE.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override

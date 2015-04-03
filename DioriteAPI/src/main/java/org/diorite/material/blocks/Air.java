@@ -20,17 +20,17 @@ public class Air extends BlockMaterialData
 
     protected Air()
     {
-        super("AIR", 0, 0, "AIR", (byte) 0x00);
+        super("AIR", 0, "minecraft:air", 0, "AIR", (byte) 0x00);
     }
 
     public Air(final String enumName, final int type)
     {
-        super(AIR.name(), AIR.getId(), AIR.getMaxStack(), enumName, (byte) type);
+        super(AIR.name(), AIR.getId(), AIR.getMinecraftId(), AIR.getMaxStack(), enumName, (byte) type);
     }
 
     public Air(final int maxStack, final String typeName, final byte type)
     {
-        super(AIR.name(), AIR.getId(), maxStack, typeName, type);
+        super(AIR.name(), AIR.getId(), AIR.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override

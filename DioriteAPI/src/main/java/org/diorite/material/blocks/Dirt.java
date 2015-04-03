@@ -22,17 +22,17 @@ public class Dirt extends BlockMaterialData
 
     protected Dirt()
     {
-        super("DIRT", 3, "DIRT", (byte) 0x00);
+        super("DIRT", 3, "minecraft:dirt", "DIRT", (byte) 0x00);
     }
 
     public Dirt(final String enumName, final int type)
     {
-        super(DIRT.name(), DIRT.getId(), enumName, (byte) type);
+        super(DIRT.name(), DIRT.getId(), DIRT.getMinecraftId(), enumName, (byte) type);
     }
 
     public Dirt(final int maxStack, final String typeName, final byte type)
     {
-        super(DIRT.name(), DIRT.getId(), maxStack, typeName, type);
+        super(DIRT.name(), DIRT.getId(), DIRT.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override

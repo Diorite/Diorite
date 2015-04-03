@@ -12,7 +12,7 @@ public class Water extends Liquid
 {
     public static final byte USED_DATA_VALUES = 16;
 
-    public static final Water WATER_SOURCE  = new Water();
+    public static final Water WATER_SOURCE  = new Water(LiquidType.NORMAL);
     public static final Water WATER_STAGE_1 = new Water(LiquidStage.STAGE_1, LiquidType.NORMAL);
     public static final Water WATER_STAGE_2 = new Water(LiquidStage.STAGE_2, LiquidType.NORMAL);
     public static final Water WATER_STAGE_3 = new Water(LiquidStage.STAGE_3, LiquidType.NORMAL);
@@ -31,7 +31,7 @@ public class Water extends Liquid
     public static final Water WATER_STAGE_7_FALLING = new Water(LiquidStage.STAGE_7_FALLING, LiquidType.NORMAL);
 
 
-    public static final Water WATER_SOURCE_STILL  = new Water();
+    public static final Water WATER_SOURCE_STILL  = new Water(LiquidType.STILL);
     public static final Water WATER_STAGE_1_STILL = new Water(LiquidStage.STAGE_1, LiquidType.STILL);
     public static final Water WATER_STAGE_2_STILL = new Water(LiquidStage.STAGE_2, LiquidType.STILL);
     public static final Water WATER_STAGE_3_STILL = new Water(LiquidStage.STAGE_3, LiquidType.STILL);
@@ -52,14 +52,14 @@ public class Water extends Liquid
     private static final Map<String, Water>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SLOW_GROW);
     private static final TByteObjectMap<Water> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SLOW_GROW);
 
-    protected Water()
+    protected Water(final LiquidType liquidType)
     {
-        super("WATER", 8, "SOURCE", LiquidStage.SOURCE, LiquidType.NORMAL);
+        super("WATER", liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStage.SOURCE, liquidType);
     }
 
     public Water(final LiquidStage stage, final LiquidType liquidType)
     {
-        super(WATER_SOURCE.name(), WATER_SOURCE.getId() + ((liquidType == LiquidType.STILL) ? 1 : 0), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidType.STILL ? "_STILL" : ""), stage, liquidType);
+        super(WATER_SOURCE.name(), WATER_SOURCE.getId() + ((liquidType == LiquidType.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidType.STILL ? "_STILL" : ""), stage, liquidType);
     }
 
     @Override
@@ -170,13 +170,13 @@ public class Water extends Liquid
     @SuppressWarnings("MagicNumber")
     protected byte getFixedDataValue()
     {
-        return (byte) (this.getType() + ((this.liquidType == LiquidType.STILL) ? 16 : 0));
+        return (byte) (this.getType() + ((this.liquidType.isStill()) ? 16 : 0));
     }
 
     @SuppressWarnings("MagicNumber")
     public static Water get(final LiquidType type, final LiquidStage stage)
     {
-        return getByID(stage.getDataValue() + ((type == LiquidType.STILL) ? 16 : 0));
+        return getByID(stage.getDataValue() + ((type.isStill()) ? 16 : 0));
     }
 
     public static Water getByID(final int id)

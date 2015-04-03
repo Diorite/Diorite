@@ -12,7 +12,7 @@ public class Lava extends Liquid
 {
     public static final byte USED_DATA_VALUES = 16;
 
-    public static final Lava LAVA_SOURCE  = new Lava();
+    public static final Lava LAVA_SOURCE  = new Lava(LiquidType.NORMAL);
     public static final Lava LAVA_STAGE_1 = new Lava(LiquidStage.STAGE_1, LiquidType.NORMAL);
     public static final Lava LAVA_STAGE_2 = new Lava(LiquidStage.STAGE_2, LiquidType.NORMAL);
     public static final Lava LAVA_STAGE_3 = new Lava(LiquidStage.STAGE_3, LiquidType.NORMAL);
@@ -31,7 +31,7 @@ public class Lava extends Liquid
     public static final Lava LAVA_STAGE_7_FALLING = new Lava(LiquidStage.STAGE_7_FALLING, LiquidType.NORMAL);
 
 
-    public static final Lava LAVA_SOURCE_STILL  = new Lava();
+    public static final Lava LAVA_SOURCE_STILL  = new Lava(LiquidType.STILL);
     public static final Lava LAVA_STAGE_1_STILL = new Lava(LiquidStage.STAGE_1, LiquidType.STILL);
     public static final Lava LAVA_STAGE_2_STILL = new Lava(LiquidStage.STAGE_2, LiquidType.STILL);
     public static final Lava LAVA_STAGE_3_STILL = new Lava(LiquidStage.STAGE_3, LiquidType.STILL);
@@ -52,14 +52,15 @@ public class Lava extends Liquid
     private static final Map<String, Lava>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SLOW_GROW);
     private static final TByteObjectMap<Lava> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SLOW_GROW);
 
-    protected Lava()
+    @SuppressWarnings("MagicNumber")
+    protected Lava(final LiquidType liquidType)
     {
-        super("LAVA", 10, "SOURCE", LiquidStage.SOURCE, LiquidType.NORMAL);
+        super("LAVA", liquidType.isStill() ? 11 : 10, liquidType.isStill() ? "minecraft:flowing_lava" : "minecraft:lava", "SOURCE", LiquidStage.SOURCE, liquidType);
     }
 
     public Lava(final LiquidStage stage, final LiquidType liquidType)
     {
-        super(LAVA_SOURCE.name(), LAVA_SOURCE.getId() + ((liquidType == LiquidType.STILL) ? 1 : 0), LAVA_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidType.STILL ? "_STILL" : ""), stage, liquidType);
+        super(LAVA_SOURCE.name(), LAVA_SOURCE.getId() + ((liquidType.isStill()) ? 1 : 0), liquidType.isNormal() ? LAVA_SOURCE.getMinecraftId() : LAVA_SOURCE_STILL.getMinecraftId(), LAVA_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidType.STILL ? "_STILL" : ""), stage, liquidType);
     }
 
     @Override
@@ -170,7 +171,7 @@ public class Lava extends Liquid
     @SuppressWarnings("MagicNumber")
     protected byte getFixedDataValue()
     {
-        return (byte) (this.getType() + ((this.liquidType == LiquidType.STILL) ? 16 : 0));
+        return (byte) (this.getType() + ((this.liquidType.isStill()) ? 16 : 0));
     }
 
     @SuppressWarnings("MagicNumber")

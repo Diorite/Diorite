@@ -12,16 +12,16 @@ public abstract class Liquid extends BlockMaterialData
     protected final LiquidStage stage;
     protected final LiquidType  liquidType;
 
-    public Liquid(final String enumName, final int id, final String typeName, final LiquidStage stage, final LiquidType liquidType)
+    public Liquid(final String enumName, final int id, final String minecraftId, final String typeName, final LiquidStage stage, final LiquidType liquidType)
     {
-        super(enumName, id, typeName, stage.getDataValue());
+        super(enumName, id, minecraftId, typeName, stage.getDataValue());
         this.stage = stage;
         this.liquidType = liquidType;
     }
 
-    public Liquid(final String enumName, final int id, final int maxStack, final String typeName, final LiquidStage stage, final LiquidType liquidType)
+    public Liquid(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStage stage, final LiquidType liquidType)
     {
-        super(enumName, id, maxStack, typeName, stage.getDataValue());
+        super(enumName, id, minecraftId, maxStack, typeName, stage.getDataValue());
         this.stage = stage;
         this.liquidType = liquidType;
     }
@@ -42,7 +42,7 @@ public abstract class Liquid extends BlockMaterialData
 
     public Liquid getOtherType()
     {
-        return this.getLiquidType((this.liquidType == LiquidType.STILL) ? LiquidType.NORMAL : LiquidType.STILL);
+        return this.getLiquidType((this.liquidType.isStill()) ? LiquidType.NORMAL : LiquidType.STILL);
     }
 
     public Liquid nextStage()
@@ -102,7 +102,7 @@ public abstract class Liquid extends BlockMaterialData
 
     public boolean isStill()
     {
-        return this.liquidType == LiquidType.STILL;
+        return this.liquidType.isStill();
     }
 
     @Override

@@ -20,17 +20,17 @@ public class Bedrock extends BlockMaterialData
 
     protected Bedrock()
     {
-        super("BEDROCK", 7, "BEDROCK", (byte) 0x00);
+        super("BEDROCK", 7, "minecraft:bedrock", "BEDROCK", (byte) 0x00);
     }
 
     public Bedrock(final String enumName, final int type)
     {
-        super(AIR.name(), AIR.getId(), AIR.getMaxStack(), enumName, (byte) type);
+        super(BEDROCK.name(), BEDROCK.getId(), BEDROCK.getMinecraftId(), BEDROCK.getMaxStack(), enumName, (byte) type);
     }
 
     public Bedrock(final int maxStack, final String typeName, final byte type)
     {
-        super(AIR.name(), AIR.getId(), maxStack, typeName, type);
+        super(BEDROCK.name(), BEDROCK.getId(), BEDROCK.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override

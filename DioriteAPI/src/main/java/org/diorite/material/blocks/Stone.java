@@ -26,17 +26,17 @@ public class Stone extends BlockMaterialData
 
     protected Stone()
     {
-        super("STONE", 1, "STONE", (byte) 0x00);
+        super("STONE", 1, "minecraft:stone", "STONE", (byte) 0x00);
     }
 
     public Stone(final String enumName, final int type)
     {
-        super(STONE.name(), STONE.getId(), enumName, (byte) type);
+        super(STONE.name(), STONE.getId(), STONE.getMinecraftId(), enumName, (byte) type);
     }
 
     public Stone(final int maxStack, final String typeName, final byte type)
     {
-        super(STONE.name(), STONE.getId(), maxStack, typeName, type);
+        super(STONE.name(), STONE.getId(), STONE.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override
