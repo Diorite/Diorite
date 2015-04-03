@@ -17,6 +17,7 @@ public class ChatVisibility implements SimpleEnum<ChatVisibility>
     public static final  ChatVisibility                SYSTEM = new ChatVisibility("SYSTEM", 1, "options.chat.visibility.system");
     public static final  ChatVisibility                HIDDEN = new ChatVisibility("HIDDEN", 2, "options.chat.visibility.hidden");
     private static final Map<String, ChatVisibility>   byName = new SimpleStringHashMap<>(3, .1f);
+    @SuppressWarnings("MagicNumber")
     private static final TIntObjectMap<ChatVisibility> byID   = new TIntObjectHashMap<>(3, .1f);
     private final String enumName;
     private final int    id;

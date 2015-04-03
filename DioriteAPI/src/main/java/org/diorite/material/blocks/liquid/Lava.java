@@ -59,12 +59,12 @@ public class Lava extends Liquid
     @SuppressWarnings("MagicNumber")
     protected Lava(final LiquidType liquidType)
     {
-        super("LAVA", liquidType.isStill() ? 11 : 10, liquidType.isStill() ? "minecraft:flowing_lava" : "minecraft:lava", "SOURCE", LiquidStage.SOURCE, liquidType);
+        super("LAVA" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 11 : 10, liquidType.isStill() ? "minecraft:flowing_lava" : "minecraft:lava", "SOURCE", LiquidStage.SOURCE, liquidType);
     }
 
     public Lava(final LiquidStage stage, final LiquidType liquidType)
     {
-        super(LAVA_SOURCE.name(), LAVA_SOURCE.getId() + ((liquidType.isStill()) ? 1 : 0), liquidType.isNormal() ? LAVA_SOURCE.getMinecraftId() : LAVA_SOURCE_STILL.getMinecraftId(), LAVA_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidType.STILL ? "_STILL" : ""), stage, liquidType);
+        super(liquidType.isStill() ? LAVA_SOURCE_STILL.name() : LAVA_SOURCE.name(), LAVA_SOURCE.getId() + ((liquidType.isStill()) ? 1 : 0), liquidType.isNormal() ? LAVA_SOURCE.getMinecraftId() : LAVA_SOURCE_STILL.getMinecraftId(), LAVA_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidType.STILL ? "_STILL" : ""), stage, liquidType);
     }
 
     @Override

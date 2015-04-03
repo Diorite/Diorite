@@ -119,6 +119,54 @@ public final class MagicNumbers
     @MagicNumber("material.gravel.blastResistance")
     public static float MATERIAL__GRAVEL__BLAST_RESISTANCE = 2.5f;
 
+    // material/brown mushroom
+    @MagicNumber("material.brown_mushroom.hardness")
+    public static float MATERIAL__BROWN_MUSHROOM__HARDNESS         = 0;
+    @MagicNumber("material.brown_mushroom.blastResistance")
+    public static float MATERIAL__BROWN_MUSHROOM__BLAST_RESISTANCE = 0;
+
+    // material/red mushroom
+    @MagicNumber("material.red_mushroom.hardness")
+    public static float MATERIAL__RED_MUSHROOM__HARDNESS         = 0;
+    @MagicNumber("material.red_mushroom.blastResistance")
+    public static float MATERIAL__RED_MUSHROOM__BLAST_RESISTANCE = 0;
+
+    // material/dandelion
+    @MagicNumber("material.dandelion.hardness")
+    public static float MATERIAL__DANDELION__HARDNESS         = 0;
+    @MagicNumber("material.dandelion.blastResistance")
+    public static float MATERIAL__DANDELION__BLAST_RESISTANCE = 0;
+
+    // material/flowers (red flower)
+    @MagicNumber("material.flowers.hardness")
+    public static float MATERIAL__FLOWERS__HARDNESS         = 0;
+    @MagicNumber("material.flowers.blastResistance")
+    public static float MATERIAL__FLOWERS__BLAST_RESISTANCE = 0;
+
+    // material/wool
+    @MagicNumber("material.wool.hardness")
+    public static float MATERIAL__WOOL__HARDNESS         = 0.8f;
+    @MagicNumber("material.wool.blastResistance")
+    public static float MATERIAL__WOOL__BLAST_RESISTANCE = 4;
+
+    // material/dead bush
+    @MagicNumber("material.dead_bush.hardness")
+    public static float MATERIAL__DEAD_BUSH__HARDNESS         = 0;
+    @MagicNumber("material.dead_bush.blastResistance")
+    public static float MATERIAL__DEAD_BUSH__BLAST_RESISTANCE = 0;
+
+    // material/tall grass
+    @MagicNumber("material.tall_grass.hardness")
+    public static float MATERIAL__TALL_GRASS__HARDNESS         = 0;
+    @MagicNumber("material.tall_grass.blastResistance")
+    public static float MATERIAL__TALL_GRASS__BLAST_RESISTANCE = 0;
+
+    // material/cobweb
+    @MagicNumber("material.cobweb.hardness")
+    public static float MATERIAL__COBWEB__HARDNESS         = 4f;
+    @MagicNumber("material.cobweb.blastResistance")
+    public static float MATERIAL__COBWEB__BLAST_RESISTANCE = 20f;
+
     // material/piston
     @MagicNumber("material.piston.hardness")
     public static float MATERIAL__PISTON__HARDNESS         = 0.5f;

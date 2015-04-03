@@ -63,7 +63,7 @@ public class Leaves extends Wood
     @SuppressWarnings("MagicNumber")
     public Leaves(final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
     {
-        super(LEAVES_OAK.name(), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, combine(type, checkDecay, decayable), type);
+        super(LEAVES_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, combine(type, checkDecay, decayable), type);
         this.checkDecay = checkDecay;
         this.decayable = decayable;
     }
@@ -71,7 +71,7 @@ public class Leaves extends Wood
     @SuppressWarnings("MagicNumber")
     public Leaves(final int maxStack, final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
     {
-        super(LEAVES_OAK.name(), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), maxStack, enumName, combine(type, checkDecay, decayable), type);
+        super(LEAVES_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), maxStack, enumName, combine(type, checkDecay, decayable), type);
         this.checkDecay = checkDecay;
         this.decayable = decayable;
     }

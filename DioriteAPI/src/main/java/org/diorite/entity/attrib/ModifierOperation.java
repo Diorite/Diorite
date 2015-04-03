@@ -1,6 +1,7 @@
 package org.diorite.entity.attrib;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -135,7 +136,7 @@ public class ModifierOperation implements SimpleEnum<ModifierOperation>
         return byName.get(name);
     }
 
-    public static ArrayList<ModifierOperation> getSortedByID()
+    public static List<ModifierOperation> getSortedByID()
     {
         return new ArrayList<>(sortedByID);
     }

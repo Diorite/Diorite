@@ -58,12 +58,12 @@ public class Water extends Liquid
 
     protected Water(final LiquidType liquidType)
     {
-        super("WATER", liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStage.SOURCE, liquidType);
+        super("WATER" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStage.SOURCE, liquidType);
     }
 
     public Water(final LiquidStage stage, final LiquidType liquidType)
     {
-        super(WATER_SOURCE.name(), WATER_SOURCE.getId() + ((liquidType == LiquidType.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidType.STILL ? "_STILL" : ""), stage, liquidType);
+        super(liquidType.isStill() ? WATER_SOURCE_STILL.name() : WATER_SOURCE.name(), WATER_SOURCE.getId() + ((liquidType == LiquidType.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidType.STILL ? "_STILL" : ""), stage, liquidType);
     }
 
     @Override

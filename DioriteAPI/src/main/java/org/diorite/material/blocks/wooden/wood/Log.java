@@ -63,14 +63,14 @@ public class Log extends Wood implements Rotatable
     @SuppressWarnings("MagicNumber")
     public Log(final String enumName, final WoodType type, final RotateAxis rotateAxis)
     {
-        super(LOG_OAK.name(), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, (byte) (type.getLogFlag() | rotateAxis.getLogFlag()), type);
+        super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, (byte) (type.getLogFlag() | rotateAxis.getLogFlag()), type);
         this.rotateAxis = rotateAxis;
     }
 
     @SuppressWarnings("MagicNumber")
     public Log(final int maxStack, final String enumName, final WoodType type, final RotateAxis rotateAxis)
     {
-        super(LOG_OAK.name(), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), maxStack, enumName, (byte) (type.getLogFlag() | rotateAxis.getLogFlag()), type);
+        super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), maxStack, enumName, (byte) (type.getLogFlag() | rotateAxis.getLogFlag()), type);
         this.rotateAxis = rotateAxis;
     }
 
