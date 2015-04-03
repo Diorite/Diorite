@@ -15,10 +15,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.status.PacketStatusOutListener;
 import org.diorite.impl.connection.ping.ServerPing;
 import org.diorite.impl.connection.ping.ServerPingPlayerSample;
-import org.diorite.impl.connection.ping.ServerPingPlayerSampleSerializer;
-import org.diorite.impl.connection.ping.ServerPingSerializer;
 import org.diorite.impl.connection.ping.ServerPingServerData;
-import org.diorite.impl.connection.ping.ServerPingServerDataSerializer;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.TranslatableComponent;
@@ -29,7 +26,7 @@ import org.diorite.chat.component.serialize.TranslatableComponentSerializer;
 @PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketStatusOutServerInfo implements PacketStatusOut
 {
-    private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ServerPingServerData.class, new ServerPingServerDataSerializer()).registerTypeAdapter(ServerPingPlayerSample.class, new ServerPingPlayerSampleSerializer()).registerTypeAdapter(ServerPing.class, new ServerPingSerializer()).registerTypeAdapter(BaseComponent.class, new ComponentSerializer()).registerTypeAdapter(TextComponent.class, new TextComponentSerializer()).registerTypeAdapter(TranslatableComponent.class, new TranslatableComponentSerializer()).create();
+    private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ServerPingServerData.class, new ServerPingServerData.Serializer()).registerTypeAdapter(ServerPingPlayerSample.class, new ServerPingPlayerSample.Serializer()).registerTypeAdapter(ServerPing.class, new ServerPing.Serializer()).registerTypeAdapter(BaseComponent.class, new ComponentSerializer()).registerTypeAdapter(TextComponent.class, new TextComponentSerializer()).registerTypeAdapter(TranslatableComponent.class, new TranslatableComponentSerializer()).create();
     private ServerPing serverPing;
 
     public PacketStatusOutServerInfo()

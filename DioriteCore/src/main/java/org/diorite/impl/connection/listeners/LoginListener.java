@@ -9,7 +9,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.base.Charsets;
-import com.mojang.authlib.GameProfile;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.diorite.impl.ServerImpl;
+import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.connection.NetworkManager;

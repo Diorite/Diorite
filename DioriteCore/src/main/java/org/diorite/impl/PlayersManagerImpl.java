@@ -9,11 +9,10 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.mojang.authlib.GameProfile;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketDataSerializer;

@@ -2,11 +2,10 @@ package org.diorite.impl.connection.packets.login.in;
 
 import java.io.IOException;
 
-import com.mojang.authlib.GameProfile;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;

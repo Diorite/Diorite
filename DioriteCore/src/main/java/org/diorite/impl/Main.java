@@ -141,8 +141,14 @@ public final class Main
                 }
                 final String serverName = options.valueOf("servername").toString();
                 System.out.println("Starting server (" + serverName + "), please wait...");
+
+                // register all packet classes.
                 RegisterPackets.init();
+
+                // never remove this line, it's needed even if it don't do anything for you.
+                // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
                 Material.getByID().valueCollection().parallelStream().forEach(Material::getId); // material enum init
+
                 new ServerImpl(serverName, Proxy.NO_PROXY, options).start(options);
             } catch (final Throwable t)
             {

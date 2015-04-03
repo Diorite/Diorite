@@ -2,12 +2,11 @@ package org.diorite.impl.entity;
 
 import java.util.UUID;
 
-import com.mojang.authlib.GameProfile;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
+import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;

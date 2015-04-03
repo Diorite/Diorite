@@ -154,6 +154,8 @@ public class PlayerChunksImpl
             this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(true, chunkBulk));
         }
     }
+
+    // old method
 //    public void update()
 //    {
 //        if (this.logout || ! this.wantUpdate)

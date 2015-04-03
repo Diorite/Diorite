@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import com.google.common.base.Charsets;
-import com.mojang.authlib.GameProfile;
 
+import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;

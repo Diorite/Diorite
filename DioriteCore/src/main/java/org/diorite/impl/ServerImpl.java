@@ -12,10 +12,6 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Handler;
 
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.Level;
@@ -23,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
 
+import org.diorite.impl.auth.yggdrasil.YggdrasilSessionService;
 import org.diorite.impl.command.ColoredConsoleCommandSenderImpl;
 import org.diorite.impl.command.CommandMapImpl;
 import org.diorite.impl.command.ConsoleCommandSenderImpl;
@@ -61,18 +58,16 @@ public class ServerImpl implements Server, Runnable
     private static ServerImpl instance;
 
     protected final CommandMapImpl commandMap = new CommandMapImpl();
-    protected final String                         serverName;
-    protected final Thread                         mainServerThread;
-    protected final YggdrasilAuthenticationService authenticationService;
-    protected final MinecraftSessionService        sessionService;
-    protected final GameProfileRepository          gameProfileRepository;
-    protected final String                         hostname;
-    protected final int                            port;
+    protected final String serverName;
+    protected final Thread mainServerThread;
+    protected final String hostname;
+    protected final int    port;
     protected int    tps                = DEFAULT_TPS;
     protected int    waitTime           = DEFAULT_WAIT_TIME;
     protected int    connectionThrottle = 1000;
     protected double mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
     protected int                      compressionThreshold; // -1 -> off
+    protected YggdrasilSessionService  sessionService;
     protected ServerConnection         serverConnection;
     protected EntityManagerImpl        entityManager;
     protected PlayersManagerImpl       playersManager;
@@ -144,9 +139,7 @@ public class ServerImpl implements Server, Runnable
 
         ConsoleReaderThread.start(this);
 
-        this.authenticationService = new YggdrasilAuthenticationService(proxy, UUID.randomUUID().toString());
-        this.sessionService = this.authenticationService.createMinecraftSessionService();
-        this.gameProfileRepository = this.authenticationService.createProfileRepository();
+        this.sessionService = new YggdrasilSessionService(proxy, UUID.randomUUID().toString());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try
@@ -377,19 +370,9 @@ public class ServerImpl implements Server, Runnable
         return this.reader;
     }
 
-    public GameProfileRepository getGameProfileRepository()
-    {
-        return this.gameProfileRepository;
-    }
-
-    public MinecraftSessionService getSessionService()
+    public YggdrasilSessionService getSessionService()
     {
         return this.sessionService;
-    }
-
-    public YggdrasilAuthenticationService getAuthenticationService()
-    {
-        return this.authenticationService;
     }
 
     void start(final OptionSet options)
@@ -405,7 +388,10 @@ public class ServerImpl implements Server, Runnable
 
             final Logger logger = (Logger) LogManager.getRootLogger();
             logger.getAppenders().values().stream().filter(appender -> (appender instanceof ConsoleAppender)).forEach(logger::removeAppender);
-            new Thread(new TerminalConsoleWriterThread(System.out)).start();
+
+            final Thread writer = new Thread(new TerminalConsoleWriterThread(System.out));
+            writer.setDaemon(true);
+            writer.start();
 
             System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
             System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
