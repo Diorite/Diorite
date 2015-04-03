@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.Material;
-import org.diorite.material.blocks.Stone;
+import org.diorite.material.blocks.stony.Stone;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.noise.NoiseGenerator;
 import org.diorite.utils.math.noise.SimplexNoiseGenerator;
