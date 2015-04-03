@@ -38,6 +38,7 @@ public abstract class BlockMaterialData extends Material
 
     public abstract BlockMaterialData getType(final int id);
 
+    // TODO: change that methods/add others when needed
     @Override
     public boolean isBlock()
     {

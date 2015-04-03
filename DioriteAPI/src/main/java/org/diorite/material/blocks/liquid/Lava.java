@@ -70,27 +70,13 @@ public class Lava extends Liquid
     @Override
     public Lava getStage(final LiquidStage stage)
     {
-        for (final Lava lava : byName.values())
-        {
-            if ((lava.getLiquidType() == this.liquidType) && (lava.stage == stage))
-            {
-                return lava;
-            }
-        }
-        return null;
+        return get(this.liquidType, stage);
     }
 
     @Override
     public Lava getLiquidType(final LiquidType type)
     {
-        for (final Lava lava : byName.values())
-        {
-            if ((lava.getStage() == this.stage) && (lava.liquidType == type))
-            {
-                return lava;
-            }
-        }
-        return null;
+        return get(type, this.stage);
     }
 
     @Override

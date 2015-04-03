@@ -24,7 +24,7 @@ public class Sponge extends BlockMaterialData
     private static final Map<String, Sponge>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
     private static final TByteObjectMap<Sponge> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
-    private final boolean isWet;
+    protected final boolean isWet;
 
     @SuppressWarnings("MagicNumber")
     protected Sponge()

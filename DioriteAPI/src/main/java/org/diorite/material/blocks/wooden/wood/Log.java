@@ -51,7 +51,7 @@ public class Log extends Wood implements Rotatable
     private static final Map<String, Log>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
     private static final TByteObjectMap<Log> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
-    private final RotateAxis rotateAxis;
+    protected final RotateAxis rotateAxis;
 
     @SuppressWarnings("MagicNumber")
     protected Log()

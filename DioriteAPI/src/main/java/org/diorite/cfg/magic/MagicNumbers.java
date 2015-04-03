@@ -83,6 +83,24 @@ public final class MagicNumbers
     @MagicNumber("material.sand.blastResistance")
     public static float MATERIAL__SAND__BLAST_RESISTANCE = 2.5f;
 
+    // material/bed block
+    @MagicNumber("material.bed_block.hardness")
+    public static float MATERIAL__BED_BLOCK__HARDNESS         = 0.2f;
+    @MagicNumber("material.bed_block.blastResistance")
+    public static float MATERIAL__BED_BLOCK__BLAST_RESISTANCE = 1;
+
+    // material/powered rail
+    @MagicNumber("material.powered_rail.hardness")
+    public static float MATERIAL__POWERED_RAIL__HARDNESS         = 0.7f;
+    @MagicNumber("material.powered_rail.blastResistance")
+    public static float MATERIAL__POWERED_RAIL__BLAST_RESISTANCE = 3.5f;
+
+    // material/detector rail
+    @MagicNumber("material.detector_rail.hardness")
+    public static float MATERIAL__DETECTOR_RAIL__HARDNESS         = 0.7f;
+    @MagicNumber("material.detector_rail.blastResistance")
+    public static float MATERIAL__DETECTOR_RAIL__BLAST_RESISTANCE = 3.5f;
+
     // material/sponge
     @MagicNumber("material.sponge.hardness")
     public static float MATERIAL__SPONGE__HARDNESS         = 0.6f;

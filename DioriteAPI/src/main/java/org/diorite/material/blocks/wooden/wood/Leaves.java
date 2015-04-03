@@ -49,8 +49,8 @@ public class Leaves extends Wood
     private static final Map<String, Leaves>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
     private static final TByteObjectMap<Leaves> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
-    private final boolean checkDecay;
-    private final boolean decayable;
+    protected final boolean checkDecay;
+    protected final boolean decayable;
 
     @SuppressWarnings("MagicNumber")
     protected Leaves()

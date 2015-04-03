@@ -39,8 +39,8 @@ public class Dispenser extends Stony implements Container, Directional, Activata
     private static final Map<String, Dispenser>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
     private static final TByteObjectMap<Dispenser> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
 
-    private final BlockFace facing;
-    private final boolean   activated;
+    protected final BlockFace facing;
+    protected final boolean   activated;
 
     @SuppressWarnings("MagicNumber")
     protected Dispenser()

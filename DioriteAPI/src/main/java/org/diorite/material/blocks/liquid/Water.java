@@ -69,27 +69,13 @@ public class Water extends Liquid
     @Override
     public Water getStage(final LiquidStage stage)
     {
-        for (final Water water : byName.values())
-        {
-            if ((water.getLiquidType() == this.liquidType) && (water.stage == stage))
-            {
-                return water;
-            }
-        }
-        return null;
+        return get(this.liquidType, stage);
     }
 
     @Override
     public Water getLiquidType(final LiquidType type)
     {
-        for (final Water water : byName.values())
-        {
-            if ((water.getStage() == this.stage) && (water.liquidType == type))
-            {
-                return water;
-            }
-        }
-        return null;
+        return get(type, this.stage);
     }
 
     @Override
