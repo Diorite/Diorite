@@ -1,5 +1,6 @@
 package org.diorite.entity;
 
+import org.diorite.GameMode;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
@@ -15,6 +16,12 @@ public interface Player extends AttributableEntity, PlayerCommandSender
     {
         return this;
     }
+
+    GameMode getGameMode();
+
+    void setGameMode(GameMode gameMode);
+
+    int getPing(); // may not be accurate.
 
     void kick(BaseComponent s);
 
