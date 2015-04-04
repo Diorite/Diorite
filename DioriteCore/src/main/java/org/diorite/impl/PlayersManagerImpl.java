@@ -54,11 +54,13 @@ public class PlayersManagerImpl
 
     public PlayerImpl createPlayer(final GameProfile gameProfile, final NetworkManager networkManager)
     {// TODO: loading player
+        //noinspection MagicNumber
         final PlayerImpl player = new PlayerImpl(this.server, this.server.entityManager.getNextID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
         this.players.put(gameProfile.getId(), player);
         return player;
     }
 
+    @SuppressWarnings("MagicNumber")
     public void playerJoin(final PlayerImpl player)
     {
 
@@ -117,14 +119,10 @@ public class PlayersManagerImpl
     public void keepAlive()
     {
         final long curr = System.currentTimeMillis();
-        this.players.values().parallelStream().forEach(p -> {
-            p.getPlayerChunks().update();
-        });
+        this.players.values().parallelStream().forEach(p -> p.getPlayerChunks().update());
         if ((curr - this.lastKeepAlive) > this.keepAliveTimer)
         {
-            this.players.values().parallelStream().forEach(p -> {
-                p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId()));
-            });
+            this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId())));
             this.lastKeepAlive = curr;
         }
     }

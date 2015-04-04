@@ -59,6 +59,7 @@ public final class Main
                 this.acceptsAll(Arrays.asList("servername", "sn"), "name of server, should be simple like 'main'").withRequiredArg().ofType(String.class).describedAs("servername").defaultsTo(ServerImpl.DEFAULT_SERVER);
                 this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname").defaultsTo("localhost");
                 this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "hostname to listen on").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
+                //noinspection MagicNumber
                 this.acceptsAll(Arrays.asList("timeout", "player-timeout", "pt"), "If player don't send any keep alive packet in this time (seconds), then it will be disconnected.").withRequiredArg().ofType(Integer.class).describedAs("timeout").defaultsTo(60);
                 this.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds server will send keep alive packet to players").withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(10);
                 this.acceptsAll(Arrays.asList("compressionthreshold", "compression-threshold"), "Compression threshold to use, -1 to turn off (default)").withRequiredArg().ofType(Integer.class).describedAs("compressionthreshold").defaultsTo(- 1);

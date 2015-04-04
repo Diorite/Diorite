@@ -11,7 +11,7 @@ public interface Packet<T extends PacketListener>
 {
     void readPacket(PacketDataSerializer data) throws IOException;
 
-    void writePacket(PacketDataSerializer data) throws IOException;
+    void writePacket(PacketDataSerializer data);
 
     void handle(T listener);
 

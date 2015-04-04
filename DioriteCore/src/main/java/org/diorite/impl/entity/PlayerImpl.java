@@ -31,12 +31,12 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     // TODO: move this
     private static final AttributeModifier tempSprintMod = new AttributeModifierImpl(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE);
     protected final GameProfile      gameProfile;
-    protected       NetworkManager   networkManager;
+    protected final NetworkManager   networkManager;
     protected       boolean          isCrouching;
     protected       boolean          isSprinting;
     protected       byte             viewDistance;
     protected       byte             renderDistance;
-    protected       PlayerChunksImpl playerChunks;
+    protected final PlayerChunksImpl playerChunks;
     protected       GameMode         gameMode;
 
     protected PacketPlayOutAbilities abilities = new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
@@ -246,25 +246,25 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         return this.gameProfile.getId();
     }
 
-    @Override
-    public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
-    {
-//        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
-//        {
-//            this.playerChunks.wantUpdate();
-//        }
-        super.move(modX, modY, modZ, modYaw, modPitch);
-    }
+//    @Override
+//    public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
+//    {
+////        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+////        {
+////            this.playerChunks.wantUpdate();
+////        }
+//        super.move(modX, modY, modZ, modYaw, modPitch);
+//    }
 
-    @Override
-    public void setPosition(final double modX, final double modY, final double modZ)
-    {
-//        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
-//        {
-//            this.playerChunks.wantUpdate();
-//        }
-        super.setPosition(modX, modY, modZ);
-    }
+//    @Override
+//    public void setPosition(final double modX, final double modY, final double modZ)
+//    {
+////        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
+////        {
+////            this.playerChunks.wantUpdate();
+////        }
+//        super.setPosition(modX, modY, modZ);
+//    }
 
     @Override
     public String toString()

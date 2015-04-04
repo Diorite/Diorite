@@ -13,12 +13,13 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class ClientCommand implements SimpleEnum<ClientCommand>
 {
-    public static final  ClientCommand                PERFORM_RESPAWN            = new ClientCommand("PERFORM_RESPAWN", 0);
-    public static final  ClientCommand                REQUEST_STATS              = new ClientCommand("REQUEST_STATS", 1);
-    public static final  ClientCommand                OPEN_INVENTORY_ACHIEVEMENT = new ClientCommand("OPEN_INVENTORY_ACHIEVEMENT", 2);
-    private static final Map<String, ClientCommand>   byName                     = new SimpleStringHashMap<>(3, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TIntObjectMap<ClientCommand> byID                       = new TIntObjectHashMap<>(3, .1f);
+    public static final ClientCommand PERFORM_RESPAWN            = new ClientCommand("PERFORM_RESPAWN", 0);
+    public static final ClientCommand REQUEST_STATS              = new ClientCommand("REQUEST_STATS", 1);
+    public static final ClientCommand OPEN_INVENTORY_ACHIEVEMENT = new ClientCommand("OPEN_INVENTORY_ACHIEVEMENT", 2);
+
+    private static final Map<String, ClientCommand>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<ClientCommand> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+
     private final String enumName;
     private final int    id;
 

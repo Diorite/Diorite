@@ -13,7 +13,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity
 {
     protected final ServerImpl server;
     protected final int        id;
-    protected       WorldImpl  world;
+    protected final WorldImpl  world;
     protected       double     x;
     protected       double     y;
     protected       double     z;

@@ -17,7 +17,7 @@ import org.diorite.entity.attrib.AttributeType;
 
 public abstract class AttributableEntityImpl extends EntityImpl implements AttributableEntity
 {
-    protected AttributeStorage attributes = new AttributeStorageImpl(this);
+    protected final AttributeStorage attributes = new AttributeStorageImpl(this);
 
     public AttributableEntityImpl(final ServerImpl server, final int id, final ImmutableLocation location)
     {

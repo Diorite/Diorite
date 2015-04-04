@@ -18,7 +18,7 @@ import org.diorite.world.World;
 public class ChunkMultithreadedHandler extends Thread
 {
     private static final Queue<BlockBreakAction> breakActions = new ConcurrentLinkedQueue<>();
-    private static final Queue<BlockPlaceAction> placeActions = new ConcurrentLinkedQueue<>();
+//    private static final Queue<BlockPlaceAction> placeActions = new ConcurrentLinkedQueue<>();
 
     public static void add(final BlockBreakAction action)
     {
@@ -31,7 +31,7 @@ public class ChunkMultithreadedHandler extends Thread
 
     public static void add(final BlockPlaceAction action)
     {
-        placeActions.add(action);
+//        placeActions.add(action);
     }
 
     private final ServerImpl server;

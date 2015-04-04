@@ -42,6 +42,7 @@ public class PacketDecoder extends ByteToMessageDecoder
         packet.readPacket(dataSerializer);
         if (dataSerializer.readableBytes() > 0)
         {
+            //noinspection HardcodedFileSeparator
             throw new IOException("Packet " + context.channel().attr(this.serverConnection.protocolKey).get().getStatus() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + dataSerializer.readableBytes() + " bytes extra whilst reading packet " + i);
         }
         packets.add(packet);

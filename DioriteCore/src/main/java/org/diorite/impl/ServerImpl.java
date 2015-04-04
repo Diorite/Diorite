@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
 
+import org.diorite.impl.auth.SessionService;
 import org.diorite.impl.auth.yggdrasil.YggdrasilSessionService;
 import org.diorite.impl.command.ColoredConsoleCommandSenderImpl;
 import org.diorite.impl.command.CommandMapImpl;
@@ -66,19 +67,19 @@ public class ServerImpl implements Server, Runnable
     protected int    waitTime           = DEFAULT_WAIT_TIME;
     protected int    connectionThrottle = 1000;
     protected double mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
-    protected int                      compressionThreshold; // -1 -> off
-    protected YggdrasilSessionService  sessionService;
-    protected ServerConnection         serverConnection;
-    protected EntityManagerImpl        entityManager;
-    protected PlayersManagerImpl       playersManager;
-    protected WorldsManagerImpl        worldsManager;
-    protected ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
-    protected ConsoleReader            reader;
-    protected long                     currentTick;
-    protected boolean                  onlineMode;
-    protected byte                     renderDistance;
-    protected int                      playerTimeout;
-    protected int                      keepAliveTimer;
+    protected       int                      compressionThreshold; // -1 -> off
+    protected final YggdrasilSessionService  sessionService;
+    protected final ServerConnection         serverConnection;
+    protected final EntityManagerImpl        entityManager;
+    protected final PlayersManagerImpl       playersManager;
+    protected final WorldsManagerImpl        worldsManager;
+    protected       ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
+    protected       ConsoleReader            reader;
+    protected       long                     currentTick;
+    protected       boolean                  onlineMode;
+    protected       byte                     renderDistance;
+    protected final int                      playerTimeout;
+    protected final int                      keepAliveTimer;
     private           KeyPair keyPair   = MinecraftEncryption.generateKeyPair();
     private transient boolean isRunning = true;
 
@@ -370,7 +371,7 @@ public class ServerImpl implements Server, Runnable
         return this.reader;
     }
 
-    public YggdrasilSessionService getSessionService()
+    public SessionService getSessionService()
     {
         return this.sessionService;
     }

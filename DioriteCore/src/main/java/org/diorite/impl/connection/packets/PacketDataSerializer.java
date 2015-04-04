@@ -32,6 +32,7 @@ import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtOutputStream;
+import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagType;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -154,7 +155,7 @@ public class PacketDataSerializer extends ByteBuf
         this.writeNbtTagCompound(itemStack.getItemMeta().getTag());
     }
 
-    public void writeNbtTagCompound(final NbtTagCompound nbt)
+    public void writeNbtTagCompound(final NbtTag nbt)
     {
         if (nbt == null)
         {

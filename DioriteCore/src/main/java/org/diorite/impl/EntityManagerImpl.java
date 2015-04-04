@@ -17,6 +17,7 @@ public class EntityManagerImpl implements EntityManager
 {
     private final ServerImpl server;
     private final AtomicInteger             entityCount = new AtomicInteger();
+    @SuppressWarnings("MagicNumber")
     private final TIntObjectMap<EntityImpl> map         = new TIntObjectHashMap<>(1000, .4f);
 
     public EntityManagerImpl(final ServerImpl server)

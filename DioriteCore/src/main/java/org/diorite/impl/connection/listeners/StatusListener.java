@@ -44,7 +44,7 @@ public class StatusListener implements PacketStatusInListener
         ping.setFavicon(null);
         ping.setMotd(new TextComponent("test"));
         ping.setPlayerData(new ServerPingPlayerSample(10, 0));
-        ping.setServerData(new ServerPingServerData(Server.NANE + " " + Server.VERSION, 47));
+        ping.setServerData(new ServerPingServerData(Server.NANE + " " + Server.VERSION, HandshakeListener.CURRENT_PROTOCOL));
         this.networkManager.sendPacket(new PacketStatusOutServerInfo(ping));
     }
 
