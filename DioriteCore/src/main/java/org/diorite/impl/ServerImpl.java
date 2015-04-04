@@ -27,9 +27,11 @@ import org.diorite.impl.command.ConsoleCommandSenderImpl;
 import org.diorite.impl.command.PluginCommandBuilderImpl;
 import org.diorite.impl.command.defaults.RegisterDefaultCommands;
 import org.diorite.impl.connection.MinecraftEncryption;
+import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.ServerConnection;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerListHeaderFooter;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutTitle;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
@@ -278,6 +280,32 @@ public class ServerImpl implements Server, Runnable
     public void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player)
     {
         ((PlayerImpl)player).getNetworkManager().sendPacket(new PacketPlayOutPlayerListHeaderFooter(header, footer));
+    }
+
+    @Override
+    public void broadcastTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut)
+    {
+        this.playersManager.forEach((player) -> {
+            final NetworkManager n = player.getNetworkManager();
+
+            if(title != null)
+            {
+                n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_TITLE, title));
+            }
+
+            if(subtitle != null)
+            {
+                n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_SUBTITLE, subtitle));
+            }
+
+            n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_TIMES, fadeIn, stay, fadeOut));
+        });
+    }
+
+    @Override
+    public void removeAllTitles()
+    {
+        this.playersManager.forEach(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.RESET));
     }
 
     @Override
