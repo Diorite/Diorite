@@ -63,9 +63,9 @@ public interface Server
 
     void stop();
 
-    void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer);
+    void updatePlayerListHeaderAndFooter(BaseComponent header, BaseComponent footer);
 
-    void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player);
+    void updatePlayerListHeaderAndFooter(BaseComponent header, BaseComponent footer, Player player);
 
     CommandMap getCommandMap();
 
