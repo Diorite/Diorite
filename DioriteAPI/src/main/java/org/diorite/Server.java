@@ -69,6 +69,10 @@ public interface Server
 
     void broadcastTitle(BaseComponent title, BaseComponent subtitle, int fadeIn, int stay, int fadeOut);
 
+    void sendTitle(BaseComponent title, BaseComponent subtitle, int fadeIn, int stay, int fadeOut, Player player);
+
+    void removeTitle(Player player);
+
     void removeAllTitles();
 
     CommandMap getCommandMap();
