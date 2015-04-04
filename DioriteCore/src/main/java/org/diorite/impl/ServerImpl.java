@@ -149,7 +149,6 @@ public class ServerImpl implements Server, Runnable
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try
             {
-                this.isRunning = false;
                 this.stop();
             } catch (final Exception e)
             {
@@ -259,15 +258,16 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void stop()
     {
-        if (this.isRunning)
+        if (!this.isRunning)
         {
-            this.isRunning = false;
-            this.playersManager.forEach(p -> p.kick("§4Server closed!"));
-            this.worldsManager.getWorlds().stream().forEach(World::save);
-            this.serverConnection.close();
-            System.out.println("Goodbye <3");
-            // TODO
+            return; // TODO This shouldn't never happen. Maybe IllegalStateException?
         }
+        this.isRunning = false;
+        this.playersManager.forEach(p -> p.kick("§4Server closed!"));
+        this.worldsManager.getWorlds().stream().forEach(World::save);
+        this.serverConnection.close();
+        System.out.println("Goodbye <3");
+        // TODO
     }
 
     @Override
