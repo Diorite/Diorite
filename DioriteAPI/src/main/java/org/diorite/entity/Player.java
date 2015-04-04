@@ -75,6 +75,8 @@ public interface Player extends AttributableEntity, PlayerCommandSender
 
     /**
      * Gets player's view distance
+     * This value is defined by client
+     * Determines what distance (chunks) will see the player
      *
      * @return View distance
      */
@@ -83,6 +85,7 @@ public interface Player extends AttributableEntity, PlayerCommandSender
     /**
      * Gets player's render distance
      *
+     * @see Player#getViewDistance()
      * @return Player's render distance
      */
     byte getRenderDistance();

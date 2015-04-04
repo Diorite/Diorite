@@ -41,7 +41,7 @@ public interface Server
 
     void broadcastMessage(ChatPosition position, BaseComponent component);
 
-    void sendConsoleMessage(final String str);
+    void sendConsoleMessage(String str);
 
     void sendConsoleMessage(BaseComponent component);
 
@@ -66,6 +66,10 @@ public interface Server
     void updatePlayerListHeaderAndFooter(BaseComponent header, BaseComponent footer);
 
     void updatePlayerListHeaderAndFooter(BaseComponent header, BaseComponent footer, Player player);
+
+    void broadcastTitle(BaseComponent title, BaseComponent subtitle, int fadeIn, int stay, int fadeOut);
+
+    void removeAllTitles();
 
     CommandMap getCommandMap();
 
