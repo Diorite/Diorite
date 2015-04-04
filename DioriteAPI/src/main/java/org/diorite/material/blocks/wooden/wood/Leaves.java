@@ -46,8 +46,8 @@ public class Leaves extends Wood
     public static final Leaves LEAVES_ACACIA_NO_DECAY_AND_CHECK   = new Leaves("ACACIA_NO_DECAY_AND_CHECK", WoodType.ACACIA, true, false);
     public static final Leaves LEAVES_DARK_OAK_NO_DECAY_AND_CHECK = new Leaves("DARK_OAK_NO_DECAY_AND_CHECK", WoodType.DARK_OAK, true, false);
 
-    private static final Map<String, Leaves>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Leaves> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Leaves>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Leaves> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean checkDecay;
     protected final boolean decayable;

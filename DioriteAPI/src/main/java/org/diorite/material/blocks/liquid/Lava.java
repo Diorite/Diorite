@@ -53,8 +53,8 @@ public class Lava extends Liquid
     public static final Lava LAVA_STAGE_6_FALLING_STILL = new Lava(LiquidStage.STAGE_6_FALLING, LiquidType.STILL);
     public static final Lava LAVA_STAGE_7_FALLING_STILL = new Lava(LiquidStage.STAGE_7_FALLING, LiquidType.STILL);
 
-    private static final Map<String, Lava>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SLOW_GROW);
-    private static final TByteObjectMap<Lava> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SLOW_GROW);
+    private static final Map<String, Lava>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Lava> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected Lava(final LiquidType liquidType)

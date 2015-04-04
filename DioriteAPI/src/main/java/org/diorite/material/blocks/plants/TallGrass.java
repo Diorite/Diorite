@@ -15,11 +15,11 @@ public class TallGrass extends Plant
     public static final float HARDNESS         = MagicNumbers.MATERIAL__TALL_GRASS__HARDNESS;
 
     public static final TallGrass TALL_GRASS_SHRUB = new TallGrass();
-    public static final TallGrass TALL_GRASS_LONG = new TallGrass("LONG", 0x01);
-    public static final TallGrass TALL_GRASS_FERN = new TallGrass("FERN", 0x02);
+    public static final TallGrass TALL_GRASS_LONG  = new TallGrass("LONG", 0x01);
+    public static final TallGrass TALL_GRASS_FERN  = new TallGrass("FERN", 0x02);
 
-    private static final Map<String, TallGrass>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<TallGrass> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, TallGrass>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<TallGrass> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected TallGrass()

@@ -41,8 +41,8 @@ public class BedBlock extends BlockMaterialData implements Directional
     public static final BedBlock BED_HEAD_NORTH_OCCUPIED = new BedBlock("HEAD_NORTH_OCCUPIED", BlockFace.NORTH, true, true);
     public static final BedBlock BED_HEAD_EAST_OCCUPIED  = new BedBlock("HEAD_EAST_OCCUPIED", BlockFace.EAST, true, true);
 
-    private static final Map<String, BedBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<BedBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, BedBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BedBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     private final BlockFace blockFacing;
     private final boolean   isHeadPart;

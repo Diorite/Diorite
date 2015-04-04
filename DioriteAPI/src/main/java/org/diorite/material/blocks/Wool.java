@@ -37,8 +37,8 @@ public class Wool extends BlockMaterialData implements Colorable
     public static final Wool WOOL_RED        = new Wool("RED", DyeColor.RED);
     public static final Wool WOOL_BLACK      = new Wool("BLACK", DyeColor.BLACK);
 
-    private static final Map<String, Wool>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Wool> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Wool>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Wool> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;
 

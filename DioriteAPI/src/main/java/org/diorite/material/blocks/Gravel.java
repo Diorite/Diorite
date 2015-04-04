@@ -17,8 +17,8 @@ public class Gravel extends BlockMaterialData
 
     public static final Gravel GRAVEL = new Gravel();
 
-    private static final Map<String, Gravel>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Gravel> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Gravel>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Gravel> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected Gravel()

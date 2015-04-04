@@ -75,6 +75,7 @@ public class PerlinNoiseGenerator extends NoiseGenerator
         }
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public double noise(double x, double y, double z)
     {

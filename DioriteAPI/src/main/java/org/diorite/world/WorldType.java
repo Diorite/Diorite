@@ -13,15 +13,17 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class WorldType implements SimpleEnum<WorldType>
 {
-    public static final  WorldType                NORMAL                 = new WorldType("NORMAL", 0, "default", 1);
-    public static final  WorldType                FLAT                   = new WorldType("FLAT", 1, "flat");
-    public static final  WorldType                LARGE_BIOMES           = new WorldType("LARGE_BIOMES", 2, "largeBiomes");
-    public static final  WorldType                AMPLIFIED              = new WorldType("AMPLIFIED", 3, "amplified");
-    public static final  WorldType                CUSTOMIZED             = new WorldType("CUSTOMIZED", 4, "customized");
-    public static final  WorldType                DEBUG_ALL_BLOCK_STATES = new WorldType("DEBUG_ALL_BLOCK_STATES", 5, "debug_all_block_states");
-    public static final  WorldType                NORMAL_1_1             = new WorldType("NORMAL_1_1", 8, "default_1_1", 0);
-    private static final Map<String, WorldType>   byName                 = new SimpleStringHashMap<>(7, .1f);
-    private static final TIntObjectMap<WorldType> byID                   = new TIntObjectHashMap<>(7, .1f);
+    public static final WorldType NORMAL                 = new WorldType("NORMAL", 0, "default", 1);
+    public static final WorldType FLAT                   = new WorldType("FLAT", 1, "flat");
+    public static final WorldType LARGE_BIOMES           = new WorldType("LARGE_BIOMES", 2, "largeBiomes");
+    public static final WorldType AMPLIFIED              = new WorldType("AMPLIFIED", 3, "amplified");
+    public static final WorldType CUSTOMIZED             = new WorldType("CUSTOMIZED", 4, "customized");
+    public static final WorldType DEBUG_ALL_BLOCK_STATES = new WorldType("DEBUG_ALL_BLOCK_STATES", 5, "debug_all_block_states");
+    public static final WorldType NORMAL_1_1             = new WorldType("NORMAL_1_1", 8, "default_1_1", 0);
+
+    private static final Map<String, WorldType>   byName = new SimpleStringHashMap<>(7, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<WorldType> byID   = new TIntObjectHashMap<>(7, SMALL_LOAD_FACTOR);
+
     private final String enumName;
     private final int    id;
     private final String name;

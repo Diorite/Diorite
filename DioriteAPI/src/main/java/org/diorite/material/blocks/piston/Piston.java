@@ -29,8 +29,8 @@ public class Piston extends PistonBase
     public static final Piston PISTON_WEST_EXTENDED  = new Piston("WEST_EXTENDED", BlockFace.WEST, true);
     public static final Piston PISTON_EAST_EXTENDED  = new Piston("EAST_EXTENDED", BlockFace.EAST, true);
 
-    private static final Map<String, Piston>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Piston> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Piston>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Piston> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected Piston()

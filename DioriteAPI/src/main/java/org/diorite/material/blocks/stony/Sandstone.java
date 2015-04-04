@@ -18,8 +18,8 @@ public class Sandstone extends Stony
     public static final Sandstone SANDSTONE_CHISELED = new Sandstone("CHISELED", 0x01);
     public static final Sandstone SANDSTONE_SMOOTH   = new Sandstone("SMOOTH", 0x02);
 
-    private static final Map<String, Sandstone>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Sandstone> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Sandstone>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Sandstone> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected Sandstone()

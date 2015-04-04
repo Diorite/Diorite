@@ -18,8 +18,8 @@ public class Dirt extends Earth
     public static final Dirt DIRT_COARSE_DIRT = new Dirt("COARSE_DIRT", 0x01);
     public static final Dirt DIRT_PODZOL      = new Dirt("PODZOL", 0x02);
 
-    private static final Map<String, Dirt>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Dirt> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Dirt>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Dirt> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected Dirt()
     {

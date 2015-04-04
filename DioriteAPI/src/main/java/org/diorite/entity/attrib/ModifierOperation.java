@@ -18,12 +18,13 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class ModifierOperation implements SimpleEnum<ModifierOperation>
 {
-    public static final  ModifierOperation                ADD_NUMBER          = new ModifierOperation("ADD_NUMBER", 0, ModifierValue::addX, mod -> mod.setY(mod.getX()));
-    public static final  ModifierOperation                MULTIPLY_PERCENTAGE = new ModifierOperation("MULTIPLY_PERCENTAGE", 1, (value, d) -> value.addY(value.getX() * d));
-    public static final  ModifierOperation                ADD_PERCENTAGE      = new ModifierOperation("ADD_PERCENTAGE", 2, (value, d) -> value.multipleY(1 + d));
-    private static final Map<String, ModifierOperation>   byName              = new SimpleStringHashMap<>(3, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TIntObjectMap<ModifierOperation> byID                = new TIntObjectHashMap<>(3, .1f);
+    public static final ModifierOperation ADD_NUMBER          = new ModifierOperation("ADD_NUMBER", 0, ModifierValue::addX, mod -> mod.setY(mod.getX()));
+    public static final ModifierOperation MULTIPLY_PERCENTAGE = new ModifierOperation("MULTIPLY_PERCENTAGE", 1, (value, d) -> value.addY(value.getX() * d));
+    public static final ModifierOperation ADD_PERCENTAGE      = new ModifierOperation("ADD_PERCENTAGE", 2, (value, d) -> value.multipleY(1 + d));
+
+    private static final Map<String, ModifierOperation>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<ModifierOperation> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+
     private final String enumName;
     private final int    id;
     private static final SortedSet<ModifierOperation> sortedByID = new TreeSet<>((e1, e2) -> Integer.compare(e1.id, e2.id));

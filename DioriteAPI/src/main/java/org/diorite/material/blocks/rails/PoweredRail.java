@@ -33,8 +33,8 @@ public class PoweredRail extends Rails implements Activatable
     public static final PoweredRail POWERED_RAIL_ASCENDING_NORTH_ACTIVE = new PoweredRail("ASCENDING_NORTH_ACTIVE", RailType.ASCENDING_NORTH, true);
     public static final PoweredRail POWERED_RAIL_ASCENDING_SOUTH_ACTIVE = new PoweredRail("ASCENDING_SOUTH_ACTIVE", RailType.ASCENDING_SOUTH, true);
 
-    private static final Map<String, PoweredRail>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<PoweredRail> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, PoweredRail>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PoweredRail> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean active;
 

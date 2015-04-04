@@ -13,12 +13,13 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class ChatPosition implements SimpleEnum<ChatPosition>
 {
-    public static final  ChatPosition                CHAT   = new ChatPosition("CHAT", 0);
-    public static final  ChatPosition                SYSTEM = new ChatPosition("SYSTEM", 1);
-    public static final  ChatPosition                ACTION = new ChatPosition("ACTION", 2);
-    private static final Map<String, ChatPosition>   byName = new SimpleStringHashMap<>(3, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TIntObjectMap<ChatPosition> byID   = new TIntObjectHashMap<>(3, .1f);
+    public static final ChatPosition CHAT   = new ChatPosition("CHAT", 0);
+    public static final ChatPosition SYSTEM = new ChatPosition("SYSTEM", 1);
+    public static final ChatPosition ACTION = new ChatPosition("ACTION", 2);
+
+    private static final Map<String, ChatPosition>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<ChatPosition> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+
     private final String enumName;
     private final int    id;
 

@@ -32,8 +32,8 @@ public class DetectorRail extends Rails implements Powerable
     public static final DetectorRail DETECTOR_RAIL_ASCENDING_NORTH_POWERED = new DetectorRail("ASCENDING_NORTH_POWERED", RailType.ASCENDING_NORTH, true);
     public static final DetectorRail DETECTOR_RAIL_ASCENDING_SOUTH_POWERED = new DetectorRail("ASCENDING_SOUTH_POWERED", RailType.ASCENDING_SOUTH, true);
 
-    private static final Map<String, DetectorRail>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<DetectorRail> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, DetectorRail>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DetectorRail> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean powered;
 

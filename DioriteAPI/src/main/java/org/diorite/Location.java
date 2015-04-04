@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.world.World;
 
-public class Location extends Loc
+public class Location implements Loc
 {
     public static final Location ZERO = new Location(0, 0, 0);
     private double x;

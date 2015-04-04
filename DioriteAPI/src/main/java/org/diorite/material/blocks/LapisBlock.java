@@ -17,8 +17,8 @@ public class LapisBlock extends BlockMaterialData
 
     public static final LapisBlock LAPIS_BLOCK = new LapisBlock();
 
-    private static final Map<String, LapisBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<LapisBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, LapisBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<LapisBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected LapisBlock()

@@ -22,8 +22,8 @@ public class Planks extends Wood
     public static final Planks PLANKS_ACACIA   = new Planks("ACACIA", WoodType.ACACIA);
     public static final Planks PLANKS_DARK_OAK = new Planks("DARK_OAK", WoodType.DARK_OAK);
 
-    private static final Map<String, Planks>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Planks> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Planks>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Planks> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected Planks()
     {

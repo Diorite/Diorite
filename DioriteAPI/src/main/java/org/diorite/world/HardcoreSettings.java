@@ -46,7 +46,7 @@ public class HardcoreSettings
         DELETE_PLAYER,
         BAN_ALL_PLAYERS,
         DELETE_ALL_PLAYERS,
-        DELETE_WORLD;
+        DELETE_WORLD
     }
 
     @Override

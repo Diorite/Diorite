@@ -34,6 +34,7 @@ public class DyeColor implements SimpleEnum<DyeColor>
 
     private static final Map<String, DyeColor>   byName = new SimpleStringHashMap<>(4, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<DyeColor> byID   = new TIntObjectHashMap<>(4, SMALL_LOAD_FACTOR);
+
     private final String enumName;
     private final int    id;
     private final byte   blockFlag;

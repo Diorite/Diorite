@@ -30,7 +30,7 @@ public abstract class PistonBase extends BlockMaterialData implements Directiona
 
     protected static byte combine(final BlockFace facing, final boolean extended)
     {
-        byte result = (byte) (extended ? EXTENDED_FLAG : 0x00);
+        byte result = extended ? EXTENDED_FLAG : 0x00;
         switch (facing)
         {
             case UP:

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.world.World;
 
-public class ImmutableLocation extends Loc
+public class ImmutableLocation implements Loc
 {
     public static final ImmutableLocation ZERO = new ImmutableLocation(0, 0, 0);
     private final double x;

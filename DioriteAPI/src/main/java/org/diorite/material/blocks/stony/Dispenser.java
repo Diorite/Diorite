@@ -36,8 +36,8 @@ public class Dispenser extends Stony implements Container, Directional, Activata
     public static final Dispenser DISPENSER_WEST_ACTIVE  = new Dispenser("WEST_ACTIVE", BlockFace.WEST, true);
     public static final Dispenser DISPENSER_EAST_ACTIVE  = new Dispenser("EAST_ACTIVE", BlockFace.EAST, true);
 
-    private static final Map<String, Dispenser>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Dispenser> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Dispenser>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Dispenser> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace facing;
     protected final boolean   activated;

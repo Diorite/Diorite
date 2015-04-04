@@ -32,8 +32,8 @@ public class Sapling extends Wood
     public static final Sapling SAPLING_ACACIA_OLDER   = new Sapling("ACACIA_OLDER", WoodType.ACACIA, SaplingStage.OLDER);
     public static final Sapling SAPLING_DARK_OAK_OLDER = new Sapling("DARK_OAK_OLDER", WoodType.DARK_OAK, SaplingStage.OLDER);
 
-    private static final Map<String, Sapling>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Sapling> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Sapling>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Sapling> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final SaplingStage stage;
 

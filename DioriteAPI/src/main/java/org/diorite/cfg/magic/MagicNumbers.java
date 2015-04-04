@@ -1,6 +1,6 @@
 package org.diorite.cfg.magic;
 
-@SuppressWarnings("MagicNumber")
+@SuppressWarnings({"MagicNumber", "CanBeFinal"})
 public final class MagicNumbers
 {
     /*

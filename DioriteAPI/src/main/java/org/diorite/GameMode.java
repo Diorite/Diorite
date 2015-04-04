@@ -18,8 +18,10 @@ public class GameMode implements SimpleEnum<GameMode>
     public static final  GameMode                CREATIVE  = new GameMode("CREATIVE", 1, "creative");
     public static final  GameMode                ADVENTURE = new GameMode("ADVENTURE", 2, "adventure");
     public static final  GameMode                SPECTATOR = new GameMode("SPECTATOR", 3, "spectator");
-    private static final Map<String, GameMode>   byName    = new SimpleStringHashMap<>(5, .1f);
-    private static final TIntObjectMap<GameMode> byID      = new TIntObjectHashMap<>(5, .1f);
+
+    private static final Map<String, GameMode>   byName    = new SimpleStringHashMap<>(5, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<GameMode> byID      = new TIntObjectHashMap<>(5, SMALL_LOAD_FACTOR);
+
     private final String enumName;
     private final int    id;
     private final String name;

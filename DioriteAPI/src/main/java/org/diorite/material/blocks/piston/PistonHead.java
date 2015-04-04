@@ -29,8 +29,8 @@ public class PistonHead extends PistonBase
     public static final PistonHead PISTON_HEAD_WEST_EXTENDED  = new PistonHead("WEST_EXTENDED", BlockFace.WEST, true);
     public static final PistonHead PISTON_HEAD_EAST_EXTENDED  = new PistonHead("EAST_EXTENDED", BlockFace.EAST, true);
 
-    private static final Map<String, PistonHead>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<PistonHead> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, PistonHead>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PistonHead> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected PistonHead()

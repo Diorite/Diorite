@@ -44,7 +44,7 @@ public class NbtInputStream extends DataInputStream
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
     }
 
-    public static NbtInputStream from(final InputStream in) throws IOException
+    public static NbtInputStream from(final InputStream in)
     {
         return new NbtInputStream(new DataInputStream(new BufferedInputStream(in)));
     }
@@ -54,12 +54,12 @@ public class NbtInputStream extends DataInputStream
         return new NbtInputStream(new DataInputStream(new BufferedInputStream(new GZIPInputStream(in))));
     }
 
-    public static NbtInputStream fromInflated(final InputStream in) throws IOException
+    public static NbtInputStream fromInflated(final InputStream in)
     {
         return new NbtInputStream(new DataInputStream(new BufferedInputStream(new InflaterInputStream(in))));
     }
 
-    public static NbtInputStream fromDeflater(final InputStream in) throws IOException
+    public static NbtInputStream fromDeflater(final InputStream in)
     {
         return new NbtInputStream(new DataInputStream(new BufferedInputStream(new DeflaterInputStream(in))));
     }

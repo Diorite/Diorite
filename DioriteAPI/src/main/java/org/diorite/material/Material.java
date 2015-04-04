@@ -54,8 +54,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public abstract class Material implements SimpleEnum<Material>
 {
-    protected static final float SLOW_GROW      = 0.1f;
-    public static final    int   MATERIALS_SIZE = 385;
+    public static final    int   MATERIALS_SIZE    = 385;
 
     public static final  Air                     AIR              = Air.AIR;
     public static final  Stone                   STONE            = Stone.STONE;
@@ -443,9 +442,9 @@ public abstract class Material implements SimpleEnum<Material>
 //    public static final  Material                RECORD_10            = new Material("RECORD_10", 2265, 1);
 //    public static final  Material                RECORD_11            = new Material("RECORD_11", 2266, 1);
 //    public static final  Material                RECORD_12            = new Material("RECORD_12", 2267, 1);
-    private static final Map<String, Material>   byName           = new SimpleStringHashMap<>(MATERIALS_SIZE, SLOW_GROW);
-    private static final Map<String, Material>   byMinecraftId    = new SimpleStringHashMap<>(MATERIALS_SIZE, SLOW_GROW);
-    private static final TIntObjectMap<Material> byID             = new TIntObjectHashMap<>(MATERIALS_SIZE, SLOW_GROW);
+    private static final Map<String, Material>   byName           = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
+    private static final Map<String, Material>   byMinecraftId    = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<Material> byID             = new TIntObjectHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
     private final String enumName;
     private final int    id;
     private final String minecraftId;

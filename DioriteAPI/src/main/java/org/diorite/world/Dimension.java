@@ -13,12 +13,13 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class Dimension implements SimpleEnum<Dimension>
 {
-    public static final  Dimension                NETHER    = new Dimension("NETHER", - 1, false);
-    public static final  Dimension                OVERWORLD = new Dimension("OVERWORLD", 0, true);
-    public static final  Dimension                END       = new Dimension("END", 1, false);
-    private static final Map<String, Dimension>   byName    = new SimpleStringHashMap<>(3, .1f);
-    @SuppressWarnings("MagicNumber")
-    private static final TIntObjectMap<Dimension> byID      = new TIntObjectHashMap<>(3, .1f);
+    public static final Dimension NETHER    = new Dimension("NETHER", - 1, false);
+    public static final Dimension OVERWORLD = new Dimension("OVERWORLD", 0, true);
+    public static final Dimension END       = new Dimension("END", 1, false);
+
+    private static final Map<String, Dimension>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<Dimension> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+
     private final String  enumName;
     private final int     id;
     private final boolean hasSkyLight;

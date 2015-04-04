@@ -48,8 +48,8 @@ public class Log extends Wood implements Rotatable
     public static final Log LOG_ACACIA_BARK   = new Log("ACACIA_BARK", WoodType.ACACIA, RotateAxis.NONE);
     public static final Log LOG_DARK_OAK_BARK = new Log("DARK_OAK_BARK", WoodType.DARK_OAK, RotateAxis.NONE);
 
-    private static final Map<String, Log>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Log> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Log>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Log> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final RotateAxis rotateAxis;
 

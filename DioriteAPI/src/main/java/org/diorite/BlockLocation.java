@@ -114,6 +114,7 @@ public class BlockLocation
         return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
     }
 
+    @SuppressWarnings("MagicNumber")
     public double distanceSquaredFromCenter(final double x, final double y, final double z)
     {
         final double deltaX = ((double) this.x + 0.5) - x;

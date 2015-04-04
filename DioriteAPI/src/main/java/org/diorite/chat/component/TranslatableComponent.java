@@ -1,5 +1,6 @@
 package org.diorite.chat.component;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -15,7 +16,7 @@ import org.diorite.chat.ChatColor;
 
 public class TranslatableComponent extends BaseComponent
 {
-    private final ResourceBundle locales = ResourceBundle.getBundle("mojang-translations/en_US");
+    private final ResourceBundle locales = ResourceBundle.getBundle("mojang-translations" + File.separator + "en_US");
     private final Pattern        format  = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
     private String              translate;
     private List<BaseComponent> with;

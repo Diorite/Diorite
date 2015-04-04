@@ -29,8 +29,8 @@ public class PistonSticky extends PistonBase
     public static final PistonSticky STICKY_PISTON_WEST_EXTENDED  = new PistonSticky("WEST_EXTENDED", BlockFace.WEST, true);
     public static final PistonSticky STICKY_PISTON_EAST_EXTENDED  = new PistonSticky("EAST_EXTENDED", BlockFace.EAST, true);
 
-    private static final Map<String, PistonSticky>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<PistonSticky> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, PistonSticky>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PistonSticky> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected PistonSticky()

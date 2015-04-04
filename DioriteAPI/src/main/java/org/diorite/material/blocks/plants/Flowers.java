@@ -24,8 +24,8 @@ public class Flowers extends Plant
     public static final Flowers FLOWERS_BPINK_TULIP  = new Flowers("PINK_TULIP", 0x07);
     public static final Flowers FLOWERS_OXEYE_DAISY  = new Flowers("OXEYE_DAISY", 0x08);
 
-    private static final Map<String, Flowers>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SLOW_GROW);
-    private static final TByteObjectMap<Flowers> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SLOW_GROW);
+    private static final Map<String, Flowers>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Flowers> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected Flowers()

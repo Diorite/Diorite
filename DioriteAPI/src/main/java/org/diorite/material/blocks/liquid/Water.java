@@ -53,8 +53,8 @@ public class Water extends Liquid
     public static final Water WATER_STAGE_6_FALLING_STILL = new Water(LiquidStage.STAGE_6_FALLING, LiquidType.STILL);
     public static final Water WATER_STAGE_7_FALLING_STILL = new Water(LiquidStage.STAGE_7_FALLING, LiquidType.STILL);
 
-    private static final Map<String, Water>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SLOW_GROW);
-    private static final TByteObjectMap<Water> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SLOW_GROW);
+    private static final Map<String, Water>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<Water> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
 
     protected Water(final LiquidType liquidType)
     {
