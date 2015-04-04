@@ -63,6 +63,10 @@ public interface Server
 
     void stop();
 
+    void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer);
+
+    void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player);
+
     CommandMap getCommandMap();
 
     PluginCommandBuilder createCommand(Plugin plugin, String name);
