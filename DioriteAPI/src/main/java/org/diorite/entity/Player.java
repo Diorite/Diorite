@@ -162,6 +162,28 @@ public interface Player extends AttributableEntity, PlayerCommandSender
     }
 
     /**
+     * Send title to player (a big text in center of screen)
+     *
+     * @param title Title
+     * @param subtitle Sub-title
+     * @param fadeIn Time in which text should appear
+     * @param stay Time in which text should stay on screen
+     * @param fadeOut Time in which text should disappear
+     */
+    default void sendTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut)
+    {
+        this.getServer().sendTitle(title, subtitle, fadeIn, stay, fadeOut, this);
+    }
+
+    /**
+     * Makes title disappear
+     */
+    default void removeTitle()
+    {
+        this.getServer().removeTitle(this);
+    }
+
+    /**
      * Disconnect player from server with specified reason
      *
      * @param reason The reason which should be displayed to player
