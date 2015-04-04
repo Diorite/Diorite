@@ -34,4 +34,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutDisconnect packet);
 
     void handle(PacketPlayOutPlayerInfo packet);
+
+    void handle(PacketPlayOutPlayerListHeaderFooter packet);
 }
