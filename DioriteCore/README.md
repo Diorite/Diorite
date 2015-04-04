@@ -16,6 +16,9 @@ https://github.com/GotoFinal/Diorite-API
 * Implement all blocks.
 * Implement all entities.
 * Implement all other stuff...
-* Make it usable.
+* Make it usable. 
+
+# How to Contribute
+Go here: https://github.com/Diorite/Diorite-Core/blob/master/CONTRIBUTING.md
 
 PS: Yes, it is in Java 8. If I ever finish it... then java 7 will be very old :)
