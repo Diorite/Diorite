@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import com.google.common.collect.Sets;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,28 +15,20 @@ import org.diorite.utils.LazyInitVar;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.AttributeKey;
+import io.netty.util.concurrent.DefaultExecutorServiceFactory;
 
 public class ServerConnection extends Thread
 {
-    public static final int                                MILLIS                        = 500;
-    public final        LazyInitVar<NioEventLoopGroup>     lazyInitNioEventLoopGroup     = new LazyInitVar<NioEventLoopGroup>()
+    public static final int                            MILLIS                    = 500;
+    public final        LazyInitVar<NioEventLoopGroup> lazyInitNioEventLoopGroup = new LazyInitVar<NioEventLoopGroup>()
     {
         @Override
         protected NioEventLoopGroup init()
         {
-            return new NioEventLoopGroup(0, new ThreadFactoryBuilder().setNameFormat("Netty Client IO #%d").setDaemon(true).build());
-        }
-    };
-    public final        LazyInitVar<DefaultEventLoopGroup> lazyInitDefaultEventLoopGroup = new LazyInitVar<DefaultEventLoopGroup>()
-    {
-        @Override
-        protected DefaultEventLoopGroup init()
-        {
-            return new DefaultEventLoopGroup(0, new ThreadFactoryBuilder().setNameFormat("Netty Local Client IO #%d").setDaemon(true).build());
+            return new NioEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Client"));
         }
     };
 

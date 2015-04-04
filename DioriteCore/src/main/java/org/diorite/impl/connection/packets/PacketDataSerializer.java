@@ -1332,6 +1332,18 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public ByteBuf touch()
+    {
+        return this.byteBuf.touch();
+    }
+
+    @Override
+    public ByteBuf touch(final Object o)
+    {
+        return this.byteBuf.touch(o);
+    }
+
+    @Override
     public int refCnt()
     {
         return this.byteBuf.refCnt();
