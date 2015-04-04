@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
@@ -319,7 +318,6 @@ public class ChunkImpl implements Chunk
 
     public int removeUsage()
     {
-        Main.debug("RemoveUsage: (" + this.pos + ") " + this.usages.intValue());
         return this.usages.decrementAndGet();
     }
 

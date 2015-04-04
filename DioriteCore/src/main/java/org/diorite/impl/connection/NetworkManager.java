@@ -396,8 +396,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     private volatile boolean closed = false;
 
-    public void close(final BaseComponent baseComponent, final boolean wasSafe)
+    public synchronized void close(final BaseComponent baseComponent, final boolean wasSafe)
     {
+        if (this.closed)
+        {
+            return;
+        }
+        this.closed = true;
         this.preparing = false;
         this.packetQueue.clear();
         if (! wasSafe)
@@ -416,7 +421,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
             this.channel.close();
             this.disconnectMessage = baseComponent;
         }
-        this.closed = true;
     }
 
     public void close(final BaseComponent baseComponent)
