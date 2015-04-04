@@ -285,8 +285,8 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void broadcastTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut)
     {
-        this.getOnlinePlayers().forEach((player) -> {
-            final NetworkManager n = ((PlayerImpl)player).getNetworkManager();
+        this.playersManager.forEach((player) -> {
+            final NetworkManager n = player.getNetworkManager();
 
             if(title != null)
             {
@@ -305,7 +305,7 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void removeAllTitles()
     {
-        this.getOnlinePlayers().forEach((player) -> ((PlayerImpl)player).getNetworkManager().sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.RESET)));
+        this.playersManager.forEach(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.RESET));
     }
 
     @Override
