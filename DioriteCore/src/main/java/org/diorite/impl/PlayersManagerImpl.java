@@ -82,7 +82,7 @@ public class PlayersManagerImpl
         this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, player.getGameProfile()));
 
         this.server.updatePlayerListHeaderAndFooter(new TextComponent("Welcome to Diorite!"), new TextComponent("http://diorite.org"), player); // TODO Tests, remove it
-        this.server.broadcastTitle(new TextComponent("Welcome to Diorite"), new TextComponent("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
+        player.sendTitle(new TextComponent("Welcome to Diorite"), new TextComponent("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
     }
 
     public List<String> getOnlinePlayersNames()

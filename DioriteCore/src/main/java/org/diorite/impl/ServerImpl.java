@@ -149,7 +149,6 @@ public class ServerImpl implements Server, Runnable
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try
             {
-                this.isRunning = false;
                 this.stop();
             } catch (final Exception e)
             {
@@ -259,15 +258,16 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void stop()
     {
-        if (this.isRunning)
+        if (!this.isRunning)
         {
-            this.isRunning = false;
-            this.playersManager.forEach(p -> p.kick("§4Server closed!"));
-            this.worldsManager.getWorlds().stream().forEach(World::save);
-            this.serverConnection.close();
-            System.out.println("Goodbye <3");
-            // TODO
+            return; // TODO This shouldn't never happen. Maybe IllegalStateException?
         }
+        this.isRunning = false;
+        this.playersManager.forEach(p -> p.kick("§4Server closed!"));
+        this.worldsManager.getWorlds().stream().forEach(World::save);
+        this.serverConnection.close();
+        System.out.println("Goodbye <3");
+        // TODO
     }
 
     @Override
@@ -285,21 +285,31 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void broadcastTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut)
     {
-        this.playersManager.forEach((player) -> {
-            final NetworkManager n = player.getNetworkManager();
+        this.playersManager.forEach((player) -> this.sendTitle(title, subtitle, fadeIn, stay, fadeOut, player));
+    }
 
-            if(title != null)
-            {
-                n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_TITLE, title));
-            }
+    @Override
+    public void sendTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut, final Player player)
+    {
+        final NetworkManager n = ((PlayerImpl)player).getNetworkManager();
 
-            if(subtitle != null)
-            {
-                n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_SUBTITLE, subtitle));
-            }
+        if (title != null)
+        {
+            n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_TITLE, title));
+        }
 
-            n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_TIMES, fadeIn, stay, fadeOut));
-        });
+        if (subtitle != null)
+        {
+            n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_SUBTITLE, subtitle));
+        }
+
+        n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_TIMES, fadeIn, stay, fadeOut));
+    }
+
+    @Override
+    public void removeTitle(final Player player)
+    {
+        ((PlayerImpl)player).getNetworkManager().sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.RESET));
     }
 
     @Override
