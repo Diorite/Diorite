@@ -17,45 +17,154 @@ public interface Player extends AttributableEntity, PlayerCommandSender
         return this;
     }
 
+    /**
+     * Gets this player current {@link GameMode}
+     *
+     * @return Current game mode
+     */
     GameMode getGameMode();
 
+    /**
+     * Sets this player's {@link GameMode}
+     *
+     * @param gameMode New gamemode
+     */
     void setGameMode(GameMode gameMode);
 
+    /**
+     * Gets this player's ping
+     *
+     * @return Ping
+     */
     int getPing(); // may not be accurate.
 
-    void kick(BaseComponent s);
+    /**
+     * Disconnect player from server with specified reason
+     *
+     * @param reason The reason which should be displayed to player
+     */
+    void kick(BaseComponent reason);
 
+    /**
+     * Gets whether the player is crouching or not
+     *
+     * @return True if player crouching
+     */
     boolean isCrouching();
 
-    void setCrouching(final boolean isCrouching);
+    /**
+     * Sets whether the player is crouching or not
+     *
+     * @param isCrouching New crouch status
+     */
+    void setCrouching(boolean isCrouching);
 
+    /**
+     * Gets whether the player is sprinting or not
+     *
+     * @return True if player sprinting
+     */
     boolean isSprinting();
 
-    void setSprinting(final boolean isSprinting);
+    /**
+     * Sets whether the player is sprinting or not.
+     *
+     * @param isSprinting New sprint status
+     */
+    void setSprinting(boolean isSprinting);
 
+    /**
+     * Gets player's view distance
+     *
+     * @return View distance
+     */
     byte getViewDistance();
 
+    /**
+     * Gets player's render distance
+     *
+     * @return Player's render distance
+     */
     byte getRenderDistance();
 
+    /**
+     * Sets player's render distance
+     *
+     * @param viewDistance  New player's view distance
+     */
     void setRenderDistance(byte viewDistance);
 
+    /**
+     * Gets whether player can fly or not
+     *
+     * @return True, if player can fly
+     */
     boolean canFly();
 
+    /**
+     * Sets whether player can fly
+     *
+     * @param value True if player should be able to fly
+     */
     void setCanFly(boolean value);
 
+    /**
+     * Sets whether player can fly and speed
+     *
+     * @param value True if player should be able to fly
+     * @param flySpeed New speed
+     */
     void setCanFly(boolean value, double flySpeed);
 
+    /**
+     * Gets player's current fly speed
+     *
+     * @return Current fly speed
+     */
     float getFlySpeed();
 
+    /**
+     * Sets player's fly speed
+     *
+     * @param flySpeed New fly speed
+     */
     void setFlySpeed(double flySpeed);
 
+    /**
+     * Gets this player's walk speed
+     *
+     * @return Walk speed
+     */
     float getWalkSpeed();
 
+    /**
+     * Sets this player's walk speed
+     *
+     * @param walkSpeed Walk speed
+     */
     void setWalkSpeed(double walkSpeed);
 
-
-    default void kick(final String s)
+    /**
+     * Updates text on tab header/footer for this player
+     * If you want remove header or footer use the blank BaseComponent (NOT NULL!)
+     *
+     * @see org.diorite.Server#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent)
+     * @see org.diorite.Server#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent, Player)
+     * @param header Text which should be displayed in TAB header, shouldn't be null
+     * @param footer Text which should be displayed in TAB footer, shouldn't be null
+     */
+    default void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer)
     {
-        this.kick(new TextComponent(s));
+        this.getServer().updatePlayerListHeaderAndFooter(header, footer, this);
+    }
+
+    /**
+     * Disconnect player from server with specified reason
+     *
+     * @param reason The reason which should be displayed to player
+     */
+    default void kick(final String reason)
+    {
+        this.kick(new TextComponent(reason));
     }
 }
