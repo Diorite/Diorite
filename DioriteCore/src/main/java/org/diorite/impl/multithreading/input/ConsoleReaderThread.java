@@ -17,7 +17,7 @@ public class ConsoleReaderThread extends Thread
 
     public ConsoleReaderThread(final ServerImpl server)
     {
-        super("{Diorite-" + server.getServerName() + "|Console}");
+        super("{Diorite|Console}");
         this.server = server;
         this.setDaemon(true);
     }

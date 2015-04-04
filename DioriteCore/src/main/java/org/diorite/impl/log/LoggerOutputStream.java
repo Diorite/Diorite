@@ -3,11 +3,10 @@ package org.diorite.impl.log;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
+@SuppressWarnings("ClassHasNoToStringMethod")
 public class LoggerOutputStream extends ByteArrayOutputStream
 {
     private final String separator = System.getProperty("line.separator");
@@ -35,9 +34,9 @@ public class LoggerOutputStream extends ByteArrayOutputStream
         }
     }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("logger", this.logger).append("separator", this.separator).append("level", this.level).toString();
-    }
+//    @Override
+//    public String toString()
+//    {
+//        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("logger", this.logger).append("separator", this.separator).append("level", this.level).toString();
+//    }
 }

@@ -24,6 +24,7 @@ public class BroadcastCmd extends SystemCommandImpl
             {
                 chatPosition = ChatPosition.CHAT;
             }
+            sender.getServer().sendConsoleSimpleColoredMessage(args.asText());
             sender.getServer().broadcastSimpleColoredMessage(chatPosition, args.asText());
         });
     }

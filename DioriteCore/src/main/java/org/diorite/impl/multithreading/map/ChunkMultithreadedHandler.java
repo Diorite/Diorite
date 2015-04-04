@@ -38,7 +38,7 @@ public class ChunkMultithreadedHandler extends Thread
 
     public ChunkMultithreadedHandler(final ServerImpl server)
     {
-        super("{Diorite-" + server.getServerName() + "|Chunk}");
+        super("{Diorite|Chunk}");
         this.server = server;
         this.setDaemon(true);
     }

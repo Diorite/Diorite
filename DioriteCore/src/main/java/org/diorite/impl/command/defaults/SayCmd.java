@@ -25,6 +25,7 @@ public class SayCmd extends SystemCommandImpl
             {
                 chatPosition = ChatPosition.CHAT;
             }
+            sender.getServer().sendConsoleSimpleColoredMessage(Server.PREFIX_MSG + args.asText());
             sender.getServer().broadcastSimpleColoredMessage(chatPosition, Server.PREFIX_MSG + args.asText());
         });
     }

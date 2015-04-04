@@ -18,7 +18,7 @@ public class ChatThread extends Thread
 
     public ChatThread(final ServerImpl server)
     {
-        super("{Diorite-" + server.getServerName() + "|Chat}");
+        super("{Diorite|Chat}");
         this.server = server;
         this.setDaemon(true);
         this.setPriority(Thread.MIN_PRIORITY);

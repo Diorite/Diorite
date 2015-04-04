@@ -21,7 +21,7 @@ public class TabCompleteThread extends Thread
 
     public TabCompleteThread(final ServerImpl server)
     {
-        super("{Diorite-" + server.getServerName() + "|TabCpl}");
+        super("{Diorite|TabCpl}");
         this.server = server;
         this.setDaemon(true);
         this.setPriority(Thread.MIN_PRIORITY);

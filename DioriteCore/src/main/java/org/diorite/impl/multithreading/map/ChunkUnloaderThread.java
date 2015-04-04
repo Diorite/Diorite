@@ -18,7 +18,7 @@ public class ChunkUnloaderThread extends Thread
 
     public ChunkUnloaderThread(final ServerImpl server)
     {
-        super("{Diorite-" + server.getServerName() + "|Cmds}");
+        super("{Diorite|ChkUnl}");
         this.server = server;
         this.setDaemon(true);
         this.setPriority(Thread.MIN_PRIORITY);

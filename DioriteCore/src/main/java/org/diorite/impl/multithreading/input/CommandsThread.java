@@ -17,7 +17,7 @@ public class CommandsThread extends Thread
 
     public CommandsThread(final ServerImpl server)
     {
-        super("{Diorite-" + server.getServerName() + "|Cmds}");
+        super("{Diorite|Cmds}");
         this.server = server;
         this.setDaemon(true);
         this.setPriority(Thread.MIN_PRIORITY);

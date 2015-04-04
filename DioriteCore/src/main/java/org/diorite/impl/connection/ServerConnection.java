@@ -50,7 +50,7 @@ public class ServerConnection extends Thread
     {
         this.server = server;
         this.setDaemon(true);
-        this.setName("{Diorite-" + server.getServerName() + "|SrvCon}");
+        this.setName("{Diorite|SrvCon}");
     }
 
     public ServerImpl getServer()
