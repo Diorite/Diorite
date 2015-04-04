@@ -29,6 +29,8 @@ import org.diorite.impl.command.defaults.RegisterDefaultCommands;
 import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.connection.ServerConnection;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerListHeaderFooter;
+import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;
@@ -264,6 +266,18 @@ public class ServerImpl implements Server, Runnable
             System.out.println("Goodbye <3");
             // TODO
         }
+    }
+
+    @Override
+    public void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer)
+    {
+        this.getOnlinePlayers().forEach((player) -> this.updatePlayerListHeaderAndFooter(header, footer, player));
+    }
+
+    @Override
+    public void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player)
+    {
+        ((PlayerImpl)player).getNetworkManager().sendPacket(new PacketPlayOutPlayerListHeaderFooter(header, footer));
     }
 
     @Override

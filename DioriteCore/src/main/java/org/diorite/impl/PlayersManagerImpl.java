@@ -32,6 +32,7 @@ import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.TeleportData;
 import org.diorite.chat.ChatPosition;
+import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
@@ -79,6 +80,8 @@ public class PlayersManagerImpl
         this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
 
         this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, player.getGameProfile()));
+
+        this.server.updatePlayerListHeaderAndFooter(new TextComponent("Welcome to Diorite!"), new TextComponent("http://diorite.org"), player); // TODO Tests, remove it
     }
 
     public List<String> getOnlinePlayersNames()
