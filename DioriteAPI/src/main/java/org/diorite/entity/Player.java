@@ -98,6 +98,21 @@ public interface Player extends AttributableEntity, PlayerCommandSender
     void setRenderDistance(byte viewDistance);
 
     /**
+     * Request that the player's client download and switch resource packs.
+     *
+     * @param resourcePack URL to resource pack
+     */
+    void setResourcePack(String resourcePack);
+
+    /**
+     * Request that the player's client download and switch resource packs.
+     *
+     * @param resourcePack URL to resource pack
+     * @param hash A 40 character lowercase SHA-1 hash of resource pack file
+     */
+    void setResourcePack(String resourcePack, String hash);
+
+    /**
      * Gets whether player can fly or not
      *
      * @return True, if player can fly
