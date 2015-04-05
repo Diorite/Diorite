@@ -1,39 +1,40 @@
-package org.diorite.material.blocks;
+package org.diorite.material.blocks.stony.oreblocks;
 
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
+import org.diorite.material.blocks.stony.ore.Ore;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class LapisBlock extends BlockMaterialData
+public class LapisBlock extends OreBlock
 {
     public static final byte  USED_DATA_VALUES = 1;
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__LAPIS_BLOCK__BLAST_RESISTANCE;
     public static final float HARDNESS         = MagicNumbers.MATERIAL__LAPIS_BLOCK__HARDNESS;
 
-    public static final LapisBlock LAPIS_BLOCK = new LapisBlock();
+    public static final LapisBlock LAPIS_BLOCK = new LapisBlock(Material.LAPIS_ORE);
 
     private static final Map<String, LapisBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<LapisBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
-    protected LapisBlock()
+    protected LapisBlock(final Ore ore)
     {
-        super("LAPIS_BLOCK", 22, "minecraft:lapis_block", "LAPIS_BLOCK", (byte) 0x00);
+        super("LAPIS_BLOCK", 22, "minecraft:lapis_block", "LAPIS_BLOCK", (byte) 0x00, ore);
     }
 
-    public LapisBlock(final String enumName, final int type)
+    public LapisBlock(final String enumName, final int type, final Ore ore)
     {
-        super(LAPIS_BLOCK.name(), LAPIS_BLOCK.getId(), LAPIS_BLOCK.getMinecraftId(), enumName, (byte) type);
+        super(LAPIS_BLOCK.name(), LAPIS_BLOCK.getId(), LAPIS_BLOCK.getMinecraftId(), enumName, (byte) type, ore);
     }
 
-    public LapisBlock(final int maxStack, final String typeName, final byte type)
+    public LapisBlock(final int maxStack, final String typeName, final byte type, final Ore ore)
     {
-        super(LAPIS_BLOCK.name(), LAPIS_BLOCK.getId(), LAPIS_BLOCK.getMinecraftId(), maxStack, typeName, type);
+        super(LAPIS_BLOCK.name(), LAPIS_BLOCK.getId(), LAPIS_BLOCK.getMinecraftId(), maxStack, typeName, type, ore);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.diorite.material.blocks;
+package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 

@@ -1,15 +1,14 @@
-package org.diorite.material.blocks;
+package org.diorite.material.blocks.loose;
 
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class Gravel extends BlockMaterialData
+public class Gravel extends Loose
 {
     public static final byte  USED_DATA_VALUES = 1;
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__GRAVEL__BLAST_RESISTANCE;
