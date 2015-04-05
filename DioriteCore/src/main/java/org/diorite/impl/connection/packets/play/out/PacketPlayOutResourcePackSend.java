@@ -31,7 +31,7 @@ public class PacketPlayOutResourcePackSend implements PacketPlayOut
 
     public String getUrl()
     {
-        return url;
+        return this.url;
     }
 
     public void setUrl(final String url)
@@ -41,7 +41,7 @@ public class PacketPlayOutResourcePackSend implements PacketPlayOut
 
     public String getHash()
     {
-        return hash;
+        return this.hash;
     }
 
     public void setHash(final String hash)
@@ -59,8 +59,8 @@ public class PacketPlayOutResourcePackSend implements PacketPlayOut
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeText(url);
-        data.writeText(hash);
+        data.writeText(this.url);
+        data.writeText(this.hash);
     }
 
     @Override
