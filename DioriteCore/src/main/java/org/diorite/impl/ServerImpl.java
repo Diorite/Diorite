@@ -256,7 +256,7 @@ public class ServerImpl implements Server, Runnable
     }
 
     @Override
-    public void stop()
+    public synchronized void stop()
     {
         if (!this.isRunning)
         {
