@@ -113,11 +113,65 @@ public final class MagicNumbers
     @MagicNumber("material.glass.blastResistance")
     public static float MATERIAL__GLASS__BLAST_RESISTANCE = 1.5f;
 
+    // material/tnt
+    @MagicNumber("material.tnt.hardness")
+    public static float MATERIAL__TNT__HARDNESS         = 0;
+    @MagicNumber("material.tnt.blastResistance")
+    public static float MATERIAL__TNT__BLAST_RESISTANCE = 0;
+
+    // material/obsidian
+    @MagicNumber("material.obsidian.hardness")
+    public static float MATERIAL__OBSIDIAN__HARDNESS         = 0.5f;
+    @MagicNumber("material.obsidian.blastResistance")
+    public static float MATERIAL__OBSIDIAN__BLAST_RESISTANCE = 2.5f;
+
     // material/gravel
     @MagicNumber("material.gravel.hardness")
     public static float MATERIAL__GRAVEL__HARDNESS         = 0.5f;
     @MagicNumber("material.gravel.blastResistance")
     public static float MATERIAL__GRAVEL__BLAST_RESISTANCE = 2.5f;
+
+    // material/mossy cobblestone
+    @MagicNumber("material.mossy_cobblestone.hardness")
+    public static float MATERIAL__MOSSY_COBBLESTONE__HARDNESS         = 0.5f;
+    @MagicNumber("material.mossy_cobblestone.blastResistance")
+    public static float MATERIAL__MOSSY_COBBLESTONE__BLAST_RESISTANCE = 2.5f;
+
+    // material/bookshelf
+    @MagicNumber("material.bookshelf.hardness")
+    public static float MATERIAL__BOOKSHELF__HARDNESS         = 1.5f;
+    @MagicNumber("material.bookshelf.blastResistance")
+    public static float MATERIAL__BOOKSHELF__BLAST_RESISTANCE = 7.5f;
+
+    // material/brick block
+    @MagicNumber("material.brick_block.hardness")
+    public static float MATERIAL__BRICK_BLOCK__HARDNESS         = 2;
+    @MagicNumber("material.brick_block.blastResistance")
+    public static float MATERIAL__BRICK_BLOCK__BLAST_RESISTANCE = 30;
+
+    // material/wooden slabs
+    @MagicNumber("material.wooden_slab.hardness")
+    public static float MATERIAL__WOODEN_SLAB__HARDNESS         = 2;
+    @MagicNumber("material.wooden_slab.blastResistance")
+    public static float MATERIAL__WOODEN_SLAB__BLAST_RESISTANCE = 15;
+
+    // material/stone slabs
+    @MagicNumber("material.stone_slab.hardness")
+    public static float MATERIAL__STONE_SLAB__HARDNESS         = 2;
+    @MagicNumber("material.stone_slab.blastResistance")
+    public static float MATERIAL__STONE_SLAB__BLAST_RESISTANCE = 30;
+
+    // material/gold block
+    @MagicNumber("material.gold_block.hardness")
+    public static float MATERIAL__GOLD_BLOCK__HARDNESS         = 3;
+    @MagicNumber("material.gold_block.blastResistance")
+    public static float MATERIAL__GOLD_BLOCK__BLAST_RESISTANCE = 30;
+
+    // material/iron block
+    @MagicNumber("material.iron_block.hardness")
+    public static float MATERIAL__IRON_BLOCK__HARDNESS         = 5;
+    @MagicNumber("material.iron_block.blastResistance")
+    public static float MATERIAL__IRON_BLOCK__BLAST_RESISTANCE = 30;
 
     // material/brown mushroom
     @MagicNumber("material.brown_mushroom.hardness")

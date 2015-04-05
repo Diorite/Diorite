@@ -24,29 +24,29 @@ public class Log extends Wood implements Rotatable
     public static final Log LOG_SPRUCE   = new Log("SPRUCE", WoodType.SPRUCE, RotateAxis.UP_DOWN);
     public static final Log LOG_BIRCH    = new Log("BIRCH", WoodType.BIRCH, RotateAxis.UP_DOWN);
     public static final Log LOG_JUNGLE   = new Log("JUNGLE", WoodType.JUNGLE, RotateAxis.UP_DOWN);
-    public static final Log LOG_ACACIA   = new Log("ACACIA", WoodType.ACACIA, RotateAxis.UP_DOWN);
-    public static final Log LOG_DARK_OAK = new Log("DARK_OAK", WoodType.DARK_OAK, RotateAxis.UP_DOWN);
+    public static final Log LOG_ACACIA   = new Log2("ACACIA", WoodType.ACACIA, RotateAxis.UP_DOWN);
+    public static final Log LOG_DARK_OAK = new Log2("DARK_OAK", WoodType.DARK_OAK, RotateAxis.UP_DOWN);
 
     public static final Log LOG_OAK_EAST_WEST      = new Log("OAK_EAST_WEST", WoodType.OAK, RotateAxis.EAST_WEST);
     public static final Log LOG_SPRUCE_EAST_WEST   = new Log("SPRUCE_EAST_WEST", WoodType.SPRUCE, RotateAxis.EAST_WEST);
     public static final Log LOG_BIRCH_EAST_WEST    = new Log("BIRCH_EAST_WEST", WoodType.BIRCH, RotateAxis.EAST_WEST);
     public static final Log LOG_JUNGLE_EAST_WEST   = new Log("JUNGLE_EAST_WEST", WoodType.JUNGLE, RotateAxis.EAST_WEST);
-    public static final Log LOG_ACACIA_EAST_WEST   = new Log("ACACIA_EAST_WEST", WoodType.ACACIA, RotateAxis.EAST_WEST);
-    public static final Log LOG_DARK_OAK_EAST_WEST = new Log("DARK_OAK_EAST_WEST", WoodType.DARK_OAK, RotateAxis.EAST_WEST);
+    public static final Log LOG_ACACIA_EAST_WEST   = new Log2("ACACIA_EAST_WEST", WoodType.ACACIA, RotateAxis.EAST_WEST);
+    public static final Log LOG_DARK_OAK_EAST_WEST = new Log2("DARK_OAK_EAST_WEST", WoodType.DARK_OAK, RotateAxis.EAST_WEST);
 
     public static final Log LOG_OAK_NORTH_SOUTH      = new Log("OAK_NORTH_SOUTH", WoodType.OAK, RotateAxis.NORTH_SOUTH);
     public static final Log LOG_SPRUCE_NORTH_SOUTH   = new Log("SPRUCE_NORTH_SOUTH", WoodType.SPRUCE, RotateAxis.NORTH_SOUTH);
     public static final Log LOG_BIRCH_NORTH_SOUTH    = new Log("BIRCH_NORTH_SOUTH", WoodType.BIRCH, RotateAxis.NORTH_SOUTH);
     public static final Log LOG_JUNGLE_NORTH_SOUTH   = new Log("JUNGLE_NORTH_SOUTH", WoodType.JUNGLE, RotateAxis.NORTH_SOUTH);
-    public static final Log LOG_ACACIA_NORTH_SOUTH   = new Log("ACACIA_NORTH_SOUTH", WoodType.ACACIA, RotateAxis.NORTH_SOUTH);
-    public static final Log LOG_DARK_OAK_NORTH_SOUTH = new Log("DARK_OAK_NORTH_SOUTH", WoodType.DARK_OAK, RotateAxis.NORTH_SOUTH);
+    public static final Log LOG_ACACIA_NORTH_SOUTH   = new Log2("ACACIA_NORTH_SOUTH", WoodType.ACACIA, RotateAxis.NORTH_SOUTH);
+    public static final Log LOG_DARK_OAK_NORTH_SOUTH = new Log2("DARK_OAK_NORTH_SOUTH", WoodType.DARK_OAK, RotateAxis.NORTH_SOUTH);
 
     public static final Log LOG_OAK_BARK      = new Log("OAK_BARK", WoodType.OAK, RotateAxis.NONE);
     public static final Log LOG_SPRUCE_BARK   = new Log("SPRUCE_BARK", WoodType.SPRUCE, RotateAxis.NONE);
     public static final Log LOG_BIRCH_BARK    = new Log("BIRCH_BARK", WoodType.BIRCH, RotateAxis.NONE);
     public static final Log LOG_JUNGLE_BARK   = new Log("JUNGLE_BARK", WoodType.JUNGLE, RotateAxis.NONE);
-    public static final Log LOG_ACACIA_BARK   = new Log("ACACIA_BARK", WoodType.ACACIA, RotateAxis.NONE);
-    public static final Log LOG_DARK_OAK_BARK = new Log("DARK_OAK_BARK", WoodType.DARK_OAK, RotateAxis.NONE);
+    public static final Log LOG_ACACIA_BARK   = new Log2("ACACIA_BARK", WoodType.ACACIA, RotateAxis.NONE);
+    public static final Log LOG_DARK_OAK_BARK = new Log2("DARK_OAK_BARK", WoodType.DARK_OAK, RotateAxis.NONE);
 
     private static final Map<String, Log>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Log> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -193,5 +193,27 @@ public class Log extends Wood implements Rotatable
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
+    }
+
+    /**
+     * Helper class for second log ID
+     */
+    public static class Log2 extends Log
+    {
+        public Log2(final String enumName, final WoodType type, final RotateAxis rotateAxis)
+        {
+            super(enumName, type, rotateAxis);
+        }
+
+        public Log2(final int maxStack, final String enumName, final WoodType type, final RotateAxis rotateAxis)
+        {
+            super(maxStack, enumName, type, rotateAxis);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        public static Log getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
     }
 }

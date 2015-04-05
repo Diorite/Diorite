@@ -35,23 +35,23 @@ public class Water extends Liquid
     public static final Water WATER_STAGE_7_FALLING = new Water(LiquidStage.STAGE_7_FALLING, LiquidType.NORMAL);
 
 
-    public static final Water WATER_SOURCE_STILL  = new Water(LiquidType.STILL);
-    public static final Water WATER_STAGE_1_STILL = new Water(LiquidStage.STAGE_1, LiquidType.STILL);
-    public static final Water WATER_STAGE_2_STILL = new Water(LiquidStage.STAGE_2, LiquidType.STILL);
-    public static final Water WATER_STAGE_3_STILL = new Water(LiquidStage.STAGE_3, LiquidType.STILL);
-    public static final Water WATER_STAGE_4_STILL = new Water(LiquidStage.STAGE_4, LiquidType.STILL);
-    public static final Water WATER_STAGE_5_STILL = new Water(LiquidStage.STAGE_5, LiquidType.STILL);
-    public static final Water WATER_STAGE_6_STILL = new Water(LiquidStage.STAGE_6, LiquidType.STILL);
-    public static final Water WATER_STAGE_7_STILL = new Water(LiquidStage.STAGE_7, LiquidType.STILL);
+    public static final Water WATER_SOURCE_STILL  = new WaterStill();
+    public static final Water WATER_STAGE_1_STILL = new WaterStill(LiquidStage.STAGE_1);
+    public static final Water WATER_STAGE_2_STILL = new WaterStill(LiquidStage.STAGE_2);
+    public static final Water WATER_STAGE_3_STILL = new WaterStill(LiquidStage.STAGE_3);
+    public static final Water WATER_STAGE_4_STILL = new WaterStill(LiquidStage.STAGE_4);
+    public static final Water WATER_STAGE_5_STILL = new WaterStill(LiquidStage.STAGE_5);
+    public static final Water WATER_STAGE_6_STILL = new WaterStill(LiquidStage.STAGE_6);
+    public static final Water WATER_STAGE_7_STILL = new WaterStill(LiquidStage.STAGE_7);
 
-    public static final Water WATER_SOURCE_FALLING_STILL  = new Water(LiquidStage.SOURCE_FALLING, LiquidType.STILL);
-    public static final Water WATER_STAGE_1_FALLING_STILL = new Water(LiquidStage.STAGE_1_FALLING, LiquidType.STILL);
-    public static final Water WATER_STAGE_2_FALLING_STILL = new Water(LiquidStage.STAGE_2_FALLING, LiquidType.STILL);
-    public static final Water WATER_STAGE_3_FALLING_STILL = new Water(LiquidStage.STAGE_3_FALLING, LiquidType.STILL);
-    public static final Water WATER_STAGE_4_FALLING_STILL = new Water(LiquidStage.STAGE_4_FALLING, LiquidType.STILL);
-    public static final Water WATER_STAGE_5_FALLING_STILL = new Water(LiquidStage.STAGE_5_FALLING, LiquidType.STILL);
-    public static final Water WATER_STAGE_6_FALLING_STILL = new Water(LiquidStage.STAGE_6_FALLING, LiquidType.STILL);
-    public static final Water WATER_STAGE_7_FALLING_STILL = new Water(LiquidStage.STAGE_7_FALLING, LiquidType.STILL);
+    public static final Water WATER_SOURCE_FALLING_STILL  = new WaterStill(LiquidStage.SOURCE_FALLING);
+    public static final Water WATER_STAGE_1_FALLING_STILL = new WaterStill(LiquidStage.STAGE_1_FALLING);
+    public static final Water WATER_STAGE_2_FALLING_STILL = new WaterStill(LiquidStage.STAGE_2_FALLING);
+    public static final Water WATER_STAGE_3_FALLING_STILL = new WaterStill(LiquidStage.STAGE_3_FALLING);
+    public static final Water WATER_STAGE_4_FALLING_STILL = new WaterStill(LiquidStage.STAGE_4_FALLING);
+    public static final Water WATER_STAGE_5_FALLING_STILL = new WaterStill(LiquidStage.STAGE_5_FALLING);
+    public static final Water WATER_STAGE_6_FALLING_STILL = new WaterStill(LiquidStage.STAGE_6_FALLING);
+    public static final Water WATER_STAGE_7_FALLING_STILL = new WaterStill(LiquidStage.STAGE_7_FALLING);
 
     private static final Map<String, Water>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Water> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
@@ -219,5 +219,27 @@ public class Water extends Liquid
         Water.register(WATER_STAGE_5_FALLING_STILL);
         Water.register(WATER_STAGE_6_FALLING_STILL);
         Water.register(WATER_STAGE_7_FALLING_STILL);
+    }
+
+    /**
+     * Helper class for second water (water still) ID
+     */
+    public static class WaterStill extends Water
+    {
+        public WaterStill()
+        {
+            super(LiquidType.STILL);
+        }
+
+        public WaterStill(final LiquidStage stage)
+        {
+            super(stage, LiquidType.STILL);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        public static Water getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
     }
 }

@@ -22,29 +22,29 @@ public class Leaves extends Wood
     public static final Leaves LEAVES_SPRUCE   = new Leaves("SPRUCE", WoodType.SPRUCE, false, true);
     public static final Leaves LEAVES_BIRCH    = new Leaves("BIRCH", WoodType.BIRCH, false, true);
     public static final Leaves LEAVES_JUNGLE   = new Leaves("JUNGLE", WoodType.JUNGLE, false, true);
-    public static final Leaves LEAVES_ACACIA   = new Leaves("ACACIA", WoodType.ACACIA, false, true);
-    public static final Leaves LEAVES_DARK_OAK = new Leaves("DARK_OAK", WoodType.DARK_OAK, false, true);
+    public static final Leaves LEAVES_ACACIA   = new Leaves2("ACACIA", WoodType.ACACIA, false, true);
+    public static final Leaves LEAVES_DARK_OAK = new Leaves2("DARK_OAK", WoodType.DARK_OAK, false, true);
 
     public static final Leaves LEAVES_OAK_NO_DECAY      = new Leaves("OAK_NO_DECAY", WoodType.OAK, false, false);
     public static final Leaves LEAVES_SPRUCE_NO_DECAY   = new Leaves("SPRUCE_NO_DECAY", WoodType.SPRUCE, false, false);
     public static final Leaves LEAVES_BIRCH_NO_DECAY    = new Leaves("BIRCH_NO_DECAY", WoodType.BIRCH, false, false);
     public static final Leaves LEAVES_JUNGLE_NO_DECAY   = new Leaves("JUNGLE_NO_DECAY", WoodType.JUNGLE, false, false);
-    public static final Leaves LEAVES_ACACIA_NO_DECAY   = new Leaves("ACACIA_NO_DECAY", WoodType.ACACIA, false, false);
-    public static final Leaves LEAVES_DARK_OAK_NO_DECAY = new Leaves("DARK_OAK_NO_DECAY", WoodType.DARK_OAK, false, false);
+    public static final Leaves LEAVES_ACACIA_NO_DECAY   = new Leaves2("ACACIA_NO_DECAY", WoodType.ACACIA, false, false);
+    public static final Leaves LEAVES_DARK_OAK_NO_DECAY = new Leaves2("DARK_OAK_NO_DECAY", WoodType.DARK_OAK, false, false);
 
     public static final Leaves LEAVES_OAK_CHECK_DECAY      = new Leaves("OAK_CHECK_DECAY", WoodType.OAK, true, true);
     public static final Leaves LEAVES_SPRUCE_CHECK_DECAY   = new Leaves("SPRUCE_CHECK_DECAY", WoodType.SPRUCE, true, true);
     public static final Leaves LEAVES_BIRCH_CHECK_DECAY    = new Leaves("BIRCH_CHECK_DECAY", WoodType.BIRCH, true, true);
     public static final Leaves LEAVES_JUNGLE_CHECK_DECAY   = new Leaves("JUNGLE_CHECK_DECAY", WoodType.JUNGLE, true, true);
-    public static final Leaves LEAVES_ACACIA_CHECK_DECAY   = new Leaves("ACACIA_CHECK_DECAY", WoodType.ACACIA, true, true);
-    public static final Leaves LEAVES_DARK_OAK_CHECK_DECAY = new Leaves("DARK_OAK_CHECK_DECAY", WoodType.DARK_OAK, true, true);
+    public static final Leaves LEAVES_ACACIA_CHECK_DECAY   = new Leaves2("ACACIA_CHECK_DECAY", WoodType.ACACIA, true, true);
+    public static final Leaves LEAVES_DARK_OAK_CHECK_DECAY = new Leaves2("DARK_OAK_CHECK_DECAY", WoodType.DARK_OAK, true, true);
 
     public static final Leaves LEAVES_OAK_NO_DECAY_AND_CHECK      = new Leaves("OAK_NO_DECAY_AND_CHECK", WoodType.OAK, true, false);
     public static final Leaves LEAVES_SPRUCE_NO_DECAY_AND_CHECK   = new Leaves("SPRUCE_NO_DECAY_AND_CHECK", WoodType.SPRUCE, true, false);
     public static final Leaves LEAVES_BIRCH_NO_DECAY_AND_CHECK    = new Leaves("BIRCH_NO_DECAY_AND_CHECK", WoodType.BIRCH, true, false);
     public static final Leaves LEAVES_JUNGLE_NO_DECAY_AND_CHECK   = new Leaves("JUNGLE_NO_DECAY_AND_CHECK", WoodType.JUNGLE, true, false);
-    public static final Leaves LEAVES_ACACIA_NO_DECAY_AND_CHECK   = new Leaves("ACACIA_NO_DECAY_AND_CHECK", WoodType.ACACIA, true, false);
-    public static final Leaves LEAVES_DARK_OAK_NO_DECAY_AND_CHECK = new Leaves("DARK_OAK_NO_DECAY_AND_CHECK", WoodType.DARK_OAK, true, false);
+    public static final Leaves LEAVES_ACACIA_NO_DECAY_AND_CHECK   = new Leaves2("ACACIA_NO_DECAY_AND_CHECK", WoodType.ACACIA, true, false);
+    public static final Leaves LEAVES_DARK_OAK_NO_DECAY_AND_CHECK = new Leaves2("DARK_OAK_NO_DECAY_AND_CHECK", WoodType.DARK_OAK, true, false);
 
     private static final Map<String, Leaves>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Leaves> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -217,5 +217,27 @@ public class Leaves extends Wood
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("checkDecay", this.checkDecay).append("decayable", this.decayable).toString();
+    }
+
+    /**
+     * Helper class for second leaves ID
+     */
+    public static class Leaves2 extends Leaves
+    {
+        public Leaves2(final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
+        {
+            super(enumName, type, checkDecay, decayable);
+        }
+
+        public Leaves2(final int maxStack, final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
+        {
+            super(maxStack, enumName, type, checkDecay, decayable);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        public static Leaves getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
     }
 }

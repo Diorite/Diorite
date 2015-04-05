@@ -35,23 +35,23 @@ public class Lava extends Liquid
     public static final Lava LAVA_STAGE_7_FALLING = new Lava(LiquidStage.STAGE_7_FALLING, LiquidType.NORMAL);
 
 
-    public static final Lava LAVA_SOURCE_STILL  = new Lava(LiquidType.STILL);
-    public static final Lava LAVA_STAGE_1_STILL = new Lava(LiquidStage.STAGE_1, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_2_STILL = new Lava(LiquidStage.STAGE_2, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_3_STILL = new Lava(LiquidStage.STAGE_3, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_4_STILL = new Lava(LiquidStage.STAGE_4, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_5_STILL = new Lava(LiquidStage.STAGE_5, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_6_STILL = new Lava(LiquidStage.STAGE_6, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_7_STILL = new Lava(LiquidStage.STAGE_7, LiquidType.STILL);
+    public static final Lava LAVA_SOURCE_STILL  = new LavaStill();
+    public static final Lava LAVA_STAGE_1_STILL = new LavaStill(LiquidStage.STAGE_1);
+    public static final Lava LAVA_STAGE_2_STILL = new LavaStill(LiquidStage.STAGE_2);
+    public static final Lava LAVA_STAGE_3_STILL = new LavaStill(LiquidStage.STAGE_3);
+    public static final Lava LAVA_STAGE_4_STILL = new LavaStill(LiquidStage.STAGE_4);
+    public static final Lava LAVA_STAGE_5_STILL = new LavaStill(LiquidStage.STAGE_5);
+    public static final Lava LAVA_STAGE_6_STILL = new LavaStill(LiquidStage.STAGE_6);
+    public static final Lava LAVA_STAGE_7_STILL = new LavaStill(LiquidStage.STAGE_7);
 
-    public static final Lava LAVA_SOURCE_FALLING_STILL  = new Lava(LiquidStage.SOURCE_FALLING, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_1_FALLING_STILL = new Lava(LiquidStage.STAGE_1_FALLING, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_2_FALLING_STILL = new Lava(LiquidStage.STAGE_2_FALLING, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_3_FALLING_STILL = new Lava(LiquidStage.STAGE_3_FALLING, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_4_FALLING_STILL = new Lava(LiquidStage.STAGE_4_FALLING, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_5_FALLING_STILL = new Lava(LiquidStage.STAGE_5_FALLING, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_6_FALLING_STILL = new Lava(LiquidStage.STAGE_6_FALLING, LiquidType.STILL);
-    public static final Lava LAVA_STAGE_7_FALLING_STILL = new Lava(LiquidStage.STAGE_7_FALLING, LiquidType.STILL);
+    public static final Lava LAVA_SOURCE_FALLING_STILL  = new LavaStill(LiquidStage.SOURCE_FALLING);
+    public static final Lava LAVA_STAGE_1_FALLING_STILL = new LavaStill(LiquidStage.STAGE_1_FALLING);
+    public static final Lava LAVA_STAGE_2_FALLING_STILL = new LavaStill(LiquidStage.STAGE_2_FALLING);
+    public static final Lava LAVA_STAGE_3_FALLING_STILL = new LavaStill(LiquidStage.STAGE_3_FALLING);
+    public static final Lava LAVA_STAGE_4_FALLING_STILL = new LavaStill(LiquidStage.STAGE_4_FALLING);
+    public static final Lava LAVA_STAGE_5_FALLING_STILL = new LavaStill(LiquidStage.STAGE_5_FALLING);
+    public static final Lava LAVA_STAGE_6_FALLING_STILL = new LavaStill(LiquidStage.STAGE_6_FALLING);
+    public static final Lava LAVA_STAGE_7_FALLING_STILL = new LavaStill(LiquidStage.STAGE_7_FALLING);
 
     private static final Map<String, Lava>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Lava> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
@@ -220,5 +220,27 @@ public class Lava extends Liquid
         Lava.register(LAVA_STAGE_5_FALLING_STILL);
         Lava.register(LAVA_STAGE_6_FALLING_STILL);
         Lava.register(LAVA_STAGE_7_FALLING_STILL);
+    }
+
+    /**
+     * Helper class for second lava (lava still) ID
+     */
+    public static class LavaStill extends Lava
+    {
+        public LavaStill()
+        {
+            super(LiquidType.STILL);
+        }
+
+        public LavaStill(final LiquidStage stage)
+        {
+            super(stage, LiquidType.STILL);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        public static Lava getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
     }
 }
