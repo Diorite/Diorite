@@ -12,6 +12,7 @@ import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutResourcePackSend;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
@@ -157,6 +158,18 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public void setRenderDistance(final byte renderDistance)
     {
         this.renderDistance = renderDistance;
+    }
+
+    @Override
+    public void setResourcePack(final String resourcePack)
+    {
+        this.getNetworkManager().sendPacket(new PacketPlayOutResourcePackSend(resourcePack, "DIORITE"));
+    }
+
+    @Override
+    public void setResourcePack(final String resourcePack, final String hash)
+    {
+        this.getNetworkManager().sendPacket(new PacketPlayOutResourcePackSend(resourcePack, hash));
     }
 
     @Override
