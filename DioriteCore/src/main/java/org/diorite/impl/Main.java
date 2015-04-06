@@ -146,10 +146,9 @@ public final class Main
                 // register all packet classes.
                 RegisterPackets.init();
 
-                // never remove this line, it's needed even if it don't do anything for you.
+                // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
                 // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
-                Material.getByID().valueCollection().parallelStream().forEach(Material::getId); // material enum init
-
+                System.out.println("Registered " + Material.getByID().size() + " vanilla minecraft blocks and items.");
                 new ServerImpl(serverName, Proxy.NO_PROXY, options).start(options);
             } catch (final Throwable t)
             {
