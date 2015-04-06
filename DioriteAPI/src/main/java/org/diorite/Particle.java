@@ -34,8 +34,8 @@ public class Particle implements SimpleEnum<Particle>
 
     private final String enumName;
     private final String particleName;
-    private final int id;
-    private final int dataSize;
+    private final int    id;
+    private final int    dataSize;
 
     public Particle(final String enumName, final String name, final int id, final int dataSize)
     {

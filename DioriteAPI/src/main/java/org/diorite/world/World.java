@@ -82,7 +82,7 @@ public interface World
     {
         Collection<Player> temp = new ArrayList<>(Diorite.getServer().getOnlinePlayers().size());
         Diorite.getServer().getOnlinePlayers().forEach(player -> {
-            if(player.getWorld().equals(this))
+            if (player.getWorld().equals(this))
             {
                 temp.add(player);
             }
