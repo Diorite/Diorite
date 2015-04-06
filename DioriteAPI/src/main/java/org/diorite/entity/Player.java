@@ -1,9 +1,11 @@
 package org.diorite.entity;
 
 import org.diorite.GameMode;
+import org.diorite.Particle;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
+import org.diorite.world.World;
 
 public interface Player extends AttributableEntity, PlayerCommandSender
 {
@@ -161,6 +163,33 @@ public interface Player extends AttributableEntity, PlayerCommandSender
      * @param walkSpeed Walk speed
      */
     void setWalkSpeed(double walkSpeed);
+
+    /**
+     * Creates particle only to this player
+     *
+     * @param particle Particle which should be shown
+     * @param isLongDistance If you set this to false, you can show particles only in 256 blocks from player
+     * @param x Location of particle
+     * @param y Location of particle
+     * @param z Location of particle
+     * @param offsetX Offset X
+     * @param offsetY Offset Y
+     * @param offsetZ Offset Z
+     * @param particleData Particle data
+     * @param particleCount Count of particles to display
+     * @param data Special particle data, it should be used only to: ICON_CRACK, BLOCK_CRACK, BLOCK_DUST
+     */
+    void showParticle(Particle particle, boolean isLongDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int... data);
+
+    /**
+     * Returns the world on which is player
+     *
+     * @return World
+     */
+    default World getWorld()
+    {
+        return this.getLocation().getWorld();
+    }
 
     /**
      * Updates text on tab header/footer for this player

@@ -1,10 +1,17 @@
 package org.diorite.world;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
+import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.Loc;
+import org.diorite.Particle;
+import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.generator.WorldGenerator;
@@ -68,4 +75,18 @@ public interface World
     long getTime();
 
     void setTime(long time);
+
+    void showParticle(Particle particle, boolean isLongDistance, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int particleData, int particleCount, int... data);
+
+    default Collection<Player> getPlayersInWorld()
+    {
+        Collection<Player> temp = new ArrayList<>(Diorite.getServer().getOnlinePlayers().size());
+        Diorite.getServer().getOnlinePlayers().forEach(player -> {
+            if(player.getWorld().equals(this))
+            {
+                temp.add(player);
+            }
+        });
+        return temp;
+    }
 }

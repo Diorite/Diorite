@@ -112,6 +112,19 @@ public class Arguments implements Iterable<String>
         }
     }
 
+
+    public Float asFloat(final int index)
+    {
+        this.check(index);
+        try
+        {
+            return Float.valueOf(this.args[index]);
+        } catch (final NumberFormatException e)
+        {
+            return null;
+        }
+    }
+
     public boolean asBoolean(final int index)
     {
         this.check(index);
