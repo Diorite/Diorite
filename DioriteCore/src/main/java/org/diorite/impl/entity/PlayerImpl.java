@@ -14,10 +14,12 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutResourcePackSend;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutWorldParticles;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
+import org.diorite.Particle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
@@ -225,6 +227,12 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     {
         this.abilities.setWalkingSpeed((float) walkSpeed);
         this.updateAbilities();
+    }
+
+    @Override
+    public void showParticle(final Particle particle, final boolean isLongDistance, final float x, final float y, final float z, final float offsetX, final float offsetY, final float offsetZ, final float particleData, final int particleCount, final int... data)
+    {
+        this.getNetworkManager().sendPacket(new PacketPlayOutWorldParticles(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data));
     }
 
     public PacketPlayOutAbilities getAbilities()

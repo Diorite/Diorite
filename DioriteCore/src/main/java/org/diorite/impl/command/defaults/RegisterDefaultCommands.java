@@ -20,5 +20,6 @@ public final class RegisterDefaultCommands
         cmds.registerCommand(new BroadcastCmd());
         cmds.registerCommand(new ColoredConsoleCmd());
         cmds.registerCommand(new PerformanceMonitorCmd());
+        cmds.registerCommand(new ParticleCmd());
     }
 }

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.entity.Player;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagString;
@@ -158,6 +159,12 @@ public class WorldsManagerImpl implements WorldsManager
             }
         }
         return null;
+    }
+
+    @Override
+    public Collection<Player> getPlayersInWorld(final World world)
+    {
+        return world.getPlayersInWorld();
     }
     // TODO: create world and others
     // TODO: maybe some multi-world support by default, separate data between selected worlds etc...

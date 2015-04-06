@@ -12,6 +12,7 @@ import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.Loc;
 import org.diorite.Location;
+import org.diorite.Particle;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.world.Dimension;
@@ -311,6 +312,12 @@ public class WorldImpl implements World
     public void setTime(final long time)
     {
         this.time = time;
+    }
+
+    @Override
+    public void showParticle(final Particle particle, final boolean isLongDistance, final int x, final int y, final int z, final int offsetX, final int offsetY, final int offsetZ, final int particleData, final int particleCount, final int... data)
+    {
+        this.getPlayersInWorld().forEach(player -> player.showParticle(particle, isLongDistance, x, y, x, offsetX, offsetY, offsetZ, particleData, particleCount, data));
     }
 
     @Override

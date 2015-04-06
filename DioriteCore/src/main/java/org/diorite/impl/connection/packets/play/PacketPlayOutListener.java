@@ -40,4 +40,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutTitle packet);
 
     void handle(PacketPlayOutResourcePackSend packet);
+
+    void handle(PacketPlayOutWorldParticles packet);
 }
