@@ -1,4 +1,4 @@
-package org.diorite.material.blocks;
+package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.blocks.Directional;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;

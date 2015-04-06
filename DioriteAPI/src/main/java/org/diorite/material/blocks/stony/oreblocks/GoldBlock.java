@@ -3,37 +3,38 @@ package org.diorite.material.blocks.stony.oreblocks;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
+import org.diorite.material.blocks.stony.ore.Ore;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class GoldBlock extends BlockMaterialData
+public class GoldBlock extends OreBlock
 {
     public static final byte  USED_DATA_VALUES = 1;
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__GOLD_BLOCK__BLAST_RESISTANCE;
     public static final float HARDNESS         = MagicNumbers.MATERIAL__GOLD_BLOCK__HARDNESS;
 
-    public static final GoldBlock GOLD_BLOCK = new GoldBlock();
+    public static final GoldBlock GOLD_BLOCK = new GoldBlock(Material.GOLD_ORE);
 
     private static final Map<String, GoldBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<GoldBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldBlock()
+    protected GoldBlock(final Ore ore)
     {
-        super("GOLD_BLOCK", 41, "minecraft:gold_block", "GOLD_BLOCK", (byte) 0x00);
+        super("GOLD_BLOCK", 41, "minecraft:gold_block", "GOLD_BLOCK", (byte) 0x00, ore);
     }
 
-    public GoldBlock(final String enumName, final int type)
+    public GoldBlock(final String enumName, final int type, final Ore ore)
     {
-        super(GOLD_BLOCK.name(), GOLD_BLOCK.getId(), GOLD_BLOCK.getMinecraftId(), enumName, (byte) type);
+        super(GOLD_BLOCK.name(), GOLD_BLOCK.getId(), GOLD_BLOCK.getMinecraftId(), enumName, (byte) type, ore);
     }
 
-    public GoldBlock(final int maxStack, final String typeName, final byte type)
+    public GoldBlock(final int maxStack, final String typeName, final byte type, final Ore ore)
     {
-        super(GOLD_BLOCK.name(), GOLD_BLOCK.getId(), GOLD_BLOCK.getMinecraftId(), maxStack, typeName, type);
+        super(GOLD_BLOCK.name(), GOLD_BLOCK.getId(), GOLD_BLOCK.getMinecraftId(), maxStack, typeName, type, ore);
     }
 
     @Override

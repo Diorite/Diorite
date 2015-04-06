@@ -3,37 +3,38 @@ package org.diorite.material.blocks.stony.oreblocks;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
+import org.diorite.material.blocks.stony.ore.Ore;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class IronBlock extends BlockMaterialData
+public class IronBlock extends OreBlock
 {
     public static final byte  USED_DATA_VALUES = 1;
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__IRON_BLOCK__BLAST_RESISTANCE;
     public static final float HARDNESS         = MagicNumbers.MATERIAL__IRON_BLOCK__HARDNESS;
 
-    public static final IronBlock IRON_BLOCK = new IronBlock();
+    public static final IronBlock IRON_BLOCK = new IronBlock(Material.IRON_ORE);
 
     private static final Map<String, IronBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<IronBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
-    protected IronBlock()
+    protected IronBlock(final Ore ore)
     {
-        super("IRON_BLOCK", 42, "minecraft:iron_block", "IRON_BLOCK", (byte) 0x00);
+        super("IRON_BLOCK", 42, "minecraft:iron_block", "IRON_BLOCK", (byte) 0x00, ore);
     }
 
-    public IronBlock(final String enumName, final int type)
+    public IronBlock(final String enumName, final int type, final Ore ore)
     {
-        super(IRON_BLOCK.name(), IRON_BLOCK.getId(), IRON_BLOCK.getMinecraftId(), enumName, (byte) type);
+        super(IRON_BLOCK.name(), IRON_BLOCK.getId(), IRON_BLOCK.getMinecraftId(), enumName, (byte) type, ore);
     }
 
-    public IronBlock(final int maxStack, final String typeName, final byte type)
+    public IronBlock(final int maxStack, final String typeName, final byte type, final Ore ore)
     {
-        super(IRON_BLOCK.name(), IRON_BLOCK.getId(), IRON_BLOCK.getMinecraftId(), maxStack, typeName, type);
+        super(IRON_BLOCK.name(), IRON_BLOCK.getId(), IRON_BLOCK.getMinecraftId(), maxStack, typeName, type, ore);
     }
 
     @Override
