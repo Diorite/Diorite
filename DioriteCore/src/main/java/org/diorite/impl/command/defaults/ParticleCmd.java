@@ -25,8 +25,7 @@ public class ParticleCmd extends SystemCommandImpl // TODO
             try
             {
                 particle = Particle.getParticleById(Integer.parseInt(particles));
-            }
-            catch(NumberFormatException e)
+            } catch (NumberFormatException e)
             {
                 particle = Particle.getParticleByName(particles.toUpperCase());
             }
@@ -34,6 +33,7 @@ public class ParticleCmd extends SystemCommandImpl // TODO
             if(particle == null)
             {
                 sender.sendMessage("Sorry, this particle isn't found ("+particles+")");
+                return;
             }
 
             final boolean isLongDistance = args.asBoolean(1);
