@@ -9,11 +9,13 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.BlockImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.collections.NibbleArray;
+import org.diorite.world.Block;
 import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
@@ -59,6 +61,27 @@ public class ChunkImpl implements Chunk
         this.heightMap = new int[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
     }
 
+    @Override
+    public boolean isPopulated()
+    {
+        return this.populated;
+    }
+
+    public void setPopulated(final boolean populated)
+    {
+        this.populated = populated;
+    }
+
+    @Override
+    public void populate()
+    {
+        if (! this.populated)
+        {
+            this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
+            this.populated = true;
+        }
+    }
+
     private void checkPart(final ChunkPartImpl chunkPart)
     {
         if (chunkPart.getBlocksCount() <= 0)
@@ -73,7 +96,7 @@ public class ChunkImpl implements Chunk
             final int x = xz / CHUNK_SIZE;
             final int z = xz % CHUNK_SIZE;
             this.heightMap[((z << 4) | x)] = 0;
-            for (int y = 0; y < CHUNK_FULL_HEIGHT; y++)
+            for (int y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
             {
                 if (this.getBlockType(x, y, z).isSolid())
                 {
@@ -266,6 +289,26 @@ public class ChunkImpl implements Chunk
             return Material.AIR;
         }
         return chunkPart.getBlockType(x, y % Chunk.CHUNK_PART_HEIGHT, z);
+    }
+
+    @Override
+    public BlockMaterialData getHighestBlockType(final int x, final int z)
+    {
+        return this.getBlockType(x, ((z << 4) | x), z);
+    }
+
+    @Override
+    public Block getBlock(final int x, final int y, final int z)
+    {
+        // TODO change when meta-data of block will be added
+        return new BlockImpl(x, y, z, this);
+    }
+
+    @Override
+    public Block getHighestBlock(final int x, final int z)
+    {
+        // TODO change when meta-data of block will be added
+        return this.getBlock(x, this.heightMap[((z << 4) | x)], z);
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.diorite.Location;
 import org.diorite.Particle;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.world.Block;
 import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings;
 import org.diorite.world.World;
@@ -275,8 +276,28 @@ public class WorldImpl implements World
     }
 
     @Override
+    public Block getBlock(final int x, final int y, final int z)
+    {
+        if (y > this.maxHeight)
+        {
+            return null;
+        }
+        return this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).getBlock((x & (Chunk.CHUNK_SIZE - 1)), y, (z & (Chunk.CHUNK_SIZE - 1)));
+    }
+
+    @Override
+    public Block getHighestBlock(final int x, final int z)
+    {
+        return this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).getHighestBlock((x & (Chunk.CHUNK_SIZE - 1)), (z & (Chunk.CHUNK_SIZE - 1)));
+    }
+
+    @Override
     public void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
     {
+        if (y > this.maxHeight)
+        {
+            return;
+        }
         this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).setBlock((x & (Chunk.CHUNK_SIZE - 1)), y, (z & (Chunk.CHUNK_SIZE - 1)), material.getId(), material.getType());
     }
 

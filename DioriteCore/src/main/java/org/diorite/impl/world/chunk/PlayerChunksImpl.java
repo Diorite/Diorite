@@ -66,7 +66,7 @@ public class PlayerChunksImpl
     }
 
     private ChunkPos lastUpdate;
-    private byte lastUpdateR;
+    private byte     lastUpdateR;
     private long lastUnload = System.currentTimeMillis();
 
     public synchronized void checkAndUnload()
@@ -145,6 +145,7 @@ public class PlayerChunksImpl
         int i = 0;
         for (final ChunkImpl chunk : chunksToSent)
         {
+            chunk.populate();
             this.loadedChunks.add(chunk);
             chunkBulks[i / CHUNK_BULK_SIZE][i++ % CHUNK_BULK_SIZE] = chunk;
         }

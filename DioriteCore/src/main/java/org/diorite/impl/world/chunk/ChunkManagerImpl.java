@@ -13,6 +13,7 @@ import org.diorite.BlockLocation;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
+import org.diorite.world.generator.ChunkBuilder;
 
 public class ChunkManagerImpl implements ChunkManager
 {
@@ -144,7 +145,12 @@ public class ChunkManagerImpl implements ChunkManager
             chunk = this.world.getWorldFile().loadChunk(pos);
             if (chunk == null)
             {
-                chunk = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos).createChunk(pos);
+                final ChunkBuilder chunkBuilder = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos);
+                final ChunkPos cPos = pos;
+                this.world.getGenerator().getPopulators().forEach(pop -> pop.prePopulate(chunkBuilder, cPos));
+                final Chunk cChunk = chunkBuilder.createChunk(pos);
+                chunk = cChunk;
+                this.world.getGenerator().getPopulators().forEach(pop -> pop.populate(cChunk));
             }
             this.chunks.put(posLong, chunk);
             final Object obj = this.generating.remove(posLong);

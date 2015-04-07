@@ -24,7 +24,7 @@ public class VoidWorldGeneratorImpl extends WorldGenerator
         return new WorldGeneratorInitializer<VoidWorldGeneratorImpl>("void")
         {
             @Override
-            public VoidWorldGeneratorImpl init(final World world, final String options)
+            public VoidWorldGeneratorImpl baseInit(final World world, final String options)
             {
                 return new VoidWorldGeneratorImpl(world, this.name, options);
             }

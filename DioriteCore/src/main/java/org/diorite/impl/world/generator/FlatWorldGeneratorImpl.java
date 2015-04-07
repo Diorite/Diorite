@@ -48,7 +48,7 @@ public class FlatWorldGeneratorImpl extends WorldGenerator
         return new WorldGeneratorInitializer<FlatWorldGeneratorImpl>("flat")
         {
             @Override
-            public FlatWorldGeneratorImpl init(final World world, final String options)
+            public FlatWorldGeneratorImpl baseInit(final World world, final String options)
             {
                 return new FlatWorldGeneratorImpl(world, this.name, options);
             }
