@@ -16,6 +16,11 @@ public final class DioriteRandomUtils
     {
     }
 
+    public static Random getRandom()
+    {
+        return random;
+    }
+
     public static <T> T getRand(final T[] array)
     {
         return getRand(random, array);
