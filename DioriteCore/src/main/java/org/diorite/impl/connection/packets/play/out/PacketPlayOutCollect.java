@@ -27,6 +27,26 @@ public class PacketPlayOutCollect implements PacketPlayOut
         this.collecterEntityId = collecterEntityId;
     }
 
+    public int getCollectedEntityId()
+    {
+        return this.collectedEntityId;
+    }
+
+    public void setCollectedEntityId(final int collectedEntityId)
+    {
+        this.collectedEntityId = collectedEntityId;
+    }
+
+    public int getCollecterEntityId()
+    {
+        return this.collecterEntityId;
+    }
+
+    public void setCollecterEntityId(final int collecterEntityId)
+    {
+        this.collecterEntityId = collecterEntityId;
+    }
+
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
