@@ -4,10 +4,11 @@ import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Particle;
+import org.diorite.chat.component.TextComponent;
 import org.diorite.command.CommandPriority;
 import org.diorite.entity.Player;
 
-public class ParticleCmd extends SystemCommandImpl // TODO
+public class ParticleCmd extends SystemCommandImpl
 {
     public ParticleCmd()
     {
@@ -16,7 +17,7 @@ public class ParticleCmd extends SystemCommandImpl // TODO
         {
             if(args.length() < 10)
             {
-                sender.sendMessage("Usage: /particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");
+                sender.sendMessage(new TextComponent("&cUsage: /particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]"));
                 return;
             }
 
@@ -32,7 +33,7 @@ public class ParticleCmd extends SystemCommandImpl // TODO
 
             if(particle == null)
             {
-                sender.sendMessage("Sorry, this particle isn't found ("+particles+")");
+                sender.sendMessage(new TextComponent("&cSorry, this particle isn't found ("+particles+")"));
                 return;
             }
 
@@ -52,7 +53,7 @@ public class ParticleCmd extends SystemCommandImpl // TODO
             }
 
             ((Player)sender).showParticle(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data);
-            sender.sendMessage("&aParticle "+particle.name()+" ("+particle.getId()+"/"+particle.getMinecraftParticleName()+") has been created!");
+            sender.sendMessage(new TextComponent("&aParticle "+particle.name()+" ("+particle.getId()+"/"+particle.getMinecraftParticleName()+") has been created!"));
         });
     }
 }

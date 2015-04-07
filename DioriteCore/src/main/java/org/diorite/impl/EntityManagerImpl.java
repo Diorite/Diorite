@@ -28,6 +28,13 @@ public class EntityManagerImpl implements EntityManager
     @Override
     public EntityImpl getEntity(final int id)
     {
+        for (final EntityImpl entity : this.map.valueCollection())
+        {
+            if (entity.getId() == id)
+            {
+                return entity;
+            }
+        }
         return null;
     }
 
