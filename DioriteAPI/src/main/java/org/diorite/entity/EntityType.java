@@ -24,7 +24,7 @@ public class EntityType implements SimpleEnum<EntityType>
     private int                     mcId;
     private String                  mcName;
 
-    public EntityType(String enumName, int enumId, Class<? extends Entity> dioriteEntityClass, int mcId, String mcName)
+    public EntityType(final String enumName, final int enumId, final Class<? extends Entity> dioriteEntityClass, final int mcId, final String mcName)
     {
         this.enumName = enumName;
         this.enumId = enumId;
