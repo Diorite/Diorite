@@ -165,8 +165,9 @@ public interface Player extends AttributableEntity, PlayerCommandSender
     void setWalkSpeed(double walkSpeed);
 
     /**
-     * Creates particle only to this player
+     * Creates particle <b>only</b> to this player
      *
+     * @see org.diorite.world.World#showParticle(Particle, boolean, int, int, int, int, int, int, int, int, int...)
      * @param particle Particle which should be shown
      * @param isLongDistance If you set this to false, you can show particles only in 256 blocks from player
      * @param x Location of particle
