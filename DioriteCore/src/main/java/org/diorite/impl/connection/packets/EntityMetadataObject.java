@@ -9,7 +9,7 @@ public class EntityMetadataObject
     private int index;
     private Object data;
 
-    public EntityMetadataObject(EntityMetadataCodec.DataType dataType, int index, Object data)
+    public EntityMetadataObject(final EntityMetadataCodec.DataType dataType, final int index, final Object data)
     {
         this.dataType = dataType;
         this.index = index;

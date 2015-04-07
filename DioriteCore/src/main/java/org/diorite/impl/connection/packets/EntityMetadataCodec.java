@@ -13,7 +13,7 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
     {
     }
 
-    public static void encode(PacketDataSerializer data, EntityMetadataObject metadataObject)
+    public static void encode(final PacketDataSerializer data, final EntityMetadataObject metadataObject)
     {
         int i = (metadataObject.getDataType().getId() << 5 | metadataObject.getIndex() & 0x1F) & 0xFF;
 
@@ -118,9 +118,9 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
         LOCATION(6), // Int, Int, Int (x, y, z)
         POSITION(7); // Float, Float, Float (pitch, yaw, roll)
 
-        private int id;
+        private final int id;
 
-        DataType(int id)
+        DataType(final int id)
         {
             this.id = id;
         }
@@ -130,7 +130,7 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
             return this.id;
         }
 
-        public static DataType byId(int id)
+        public static DataType byId(final int id)
         {
             for(DataType dp : DataType.values())
             {
