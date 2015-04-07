@@ -23,6 +23,7 @@ import org.diorite.Particle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.entity.EntityType;
 import org.diorite.entity.Player;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
@@ -291,5 +292,11 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.gameProfile.getName()).append("uuid", this.gameProfile.getId()).toString();
+    }
+
+    @Override
+    public EntityType getType()
+    {
+        return EntityType.PLAYER;
     }
 }

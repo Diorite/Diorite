@@ -83,6 +83,13 @@ public class PlayersManagerImpl
 
         this.server.updatePlayerListHeaderAndFooter(new TextComponent("Welcome to Diorite!"), new TextComponent("http://diorite.org"), player); // TODO Tests, remove it
         player.sendTitle(new TextComponent("Welcome to Diorite"), new TextComponent("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
+        /*EntityMinecartRideable entity = new EntityMinecartRideable(4, 180, -4);
+
+        player.getNetworkManager().sendPacket(new PacketPlayOutSpawnEntity(entity));
+        List<EntityMetadataObject> tff = new ArrayList<>();
+        tff.add(new EntityMetadataObject(EntityMetadataCodec.DataType.BYTE, 0, 0x00));
+        tff.add(new EntityMetadataObject(EntityMetadataCodec.DataType.INT, 17, 2));
+        player.getNetworkManager().sendPacket(new PacketPlayOutEntityMetadata(666, tff));*/ // TODO ENTITY TEST
     }
 
     public List<String> getOnlinePlayersNames()

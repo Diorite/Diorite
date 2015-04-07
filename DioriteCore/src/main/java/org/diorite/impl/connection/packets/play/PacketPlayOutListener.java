@@ -44,4 +44,8 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutWorldParticles packet);
 
     void handle(PacketPlayOutCollect packet);
+
+    void handle(PacketPlayOutSpawnEntity packet);
+
+    void handle(PacketPlayOutEntityMetadata packet);
 }
