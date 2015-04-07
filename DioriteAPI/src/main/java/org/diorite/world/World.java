@@ -2,7 +2,6 @@ package org.diorite.world;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
@@ -66,6 +65,10 @@ public interface World
 
     void setGenerator(WorldGenerator generator);
 
+    Block getBlock(int x, int y, int z);
+
+    Block getHighestBlock(int x, int z);
+
     void setBlock(int x, int y, int z, BlockMaterialData material);
 
     void setBlock(BlockLocation location, BlockMaterialData material);
@@ -80,7 +83,7 @@ public interface World
 
     default Collection<Player> getPlayersInWorld()
     {
-        Collection<Player> temp = new ArrayList<>(Diorite.getServer().getOnlinePlayers().size());
+        final Collection<Player> temp = new ArrayList<>(Diorite.getServer().getOnlinePlayers().size());
         Diorite.getServer().getOnlinePlayers().forEach(player -> {
             if (player.getWorld().equals(this))
             {
