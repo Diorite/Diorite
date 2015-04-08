@@ -3,13 +3,13 @@ package org.diorite.material.blocks.wooden;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.blocks.Container;
+import org.diorite.material.blocks.ContainerBlock;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class NoteBlock extends Wooden implements Container
+public class NoteBlock extends Wooden implements ContainerBlock
 {
     public static final byte  USED_DATA_VALUES = 1;
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__NOTEBLOCK__BLAST_RESISTANCE;

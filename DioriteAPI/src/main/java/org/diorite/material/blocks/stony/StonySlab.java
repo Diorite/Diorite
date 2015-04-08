@@ -25,10 +25,15 @@ public abstract class StonySlab extends Stony implements Slab
         this.stoneType = stoneType;
     }
 
+    @SuppressWarnings("MagicNumber")
     protected static byte combine(final SlabType slabType, final StoneSlabType stoneType)
     {
         byte result = slabType.getFlag();
         result |= stoneType.getFlag();
+        if (stoneType.isSecondStoneSlabID())
+        {
+            result += 16;
+        }
         return result;
     }
 

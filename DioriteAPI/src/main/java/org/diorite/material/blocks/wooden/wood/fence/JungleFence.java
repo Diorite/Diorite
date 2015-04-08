@@ -23,17 +23,7 @@ public class JungleFence extends WoodenFence
     @SuppressWarnings("MagicNumber")
     protected JungleFence()
     {
-        super("JUNGLE_FENCE", 190, "minecraft:jungle_fence", "JUNGLE_FENCE", WoodType.OAK);
-    }
-
-    public JungleFence(final String enumName)
-    {
-        super(JUNGLE_FENCE.name(), JUNGLE_FENCE.getId(), JUNGLE_FENCE.getMinecraftId(), enumName, WoodType.OAK);
-    }
-
-    public JungleFence(final int maxStack, final String typeName)
-    {
-        super(JUNGLE_FENCE.name(), JUNGLE_FENCE.getId(), JUNGLE_FENCE.getMinecraftId(), maxStack, typeName, WoodType.OAK);
+        super("JUNGLE_FENCE", 190, "minecraft:jungle_fence", "JUNGLE_FENCE", WoodType.JUNGLE);
     }
 
     @Override

@@ -31,17 +31,17 @@ public abstract class WoodenFence extends Wood
         switch (woodType)
         {
             case OAK:
-                return null;
+                return OAK_FENCE;
             case SPRUCE:
-                return null;
+                return SPRUCE_FENCE;
             case BIRCH:
-                return null;
+                return BIRCH_FENCE;
             case JUNGLE:
-                return null;
+                return JUNGLE_FENCE;
             case ACACIA:
-                return null;
+                return ACACIA_FENCE;
             case DARK_OAK:
-                return null;
+                return DARK_OAK_FENCE;
             default:
                 return null;
         }

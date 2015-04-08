@@ -23,17 +23,7 @@ public class DarkOakFence extends WoodenFence
     @SuppressWarnings("MagicNumber")
     protected DarkOakFence()
     {
-        super("DARK_OAK_FENCE", 191, "minecraft:dark_oak_fence", "DARK_OAK_FENCE", WoodType.OAK);
-    }
-
-    public DarkOakFence(final String enumName)
-    {
-        super(DARK_OAK_FENCE.name(), DARK_OAK_FENCE.getId(), DARK_OAK_FENCE.getMinecraftId(), enumName, WoodType.OAK);
-    }
-
-    public DarkOakFence(final int maxStack, final String typeName)
-    {
-        super(DARK_OAK_FENCE.name(), DARK_OAK_FENCE.getId(), DARK_OAK_FENCE.getMinecraftId(), maxStack, typeName, WoodType.OAK);
+        super("DARK_OAK_FENCE", 191, "minecraft:dark_oak_fence", "DARK_OAK_FENCE", WoodType.DARK_OAK);
     }
 
     @Override

@@ -23,17 +23,7 @@ public class AcaciaFence extends WoodenFence
     @SuppressWarnings("MagicNumber")
     protected AcaciaFence()
     {
-        super("ACACIA_FENCE", 192, "minecraft:acacia_fence", "ACACIA_FENCE", WoodType.OAK);
-    }
-
-    public AcaciaFence(final String enumName)
-    {
-        super(ACACIA_FENCE.name(), ACACIA_FENCE.getId(), ACACIA_FENCE.getMinecraftId(), enumName, WoodType.OAK);
-    }
-
-    public AcaciaFence(final int maxStack, final String typeName)
-    {
-        super(ACACIA_FENCE.name(), ACACIA_FENCE.getId(), ACACIA_FENCE.getMinecraftId(), maxStack, typeName, WoodType.OAK);
+        super("ACACIA_FENCE", 192, "minecraft:acacia_fence", "ACACIA_FENCE", WoodType.ACACIA);
     }
 
     @Override

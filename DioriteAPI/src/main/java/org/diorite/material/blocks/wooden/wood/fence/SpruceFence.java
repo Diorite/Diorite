@@ -23,17 +23,7 @@ public class SpruceFence extends WoodenFence
     @SuppressWarnings("MagicNumber")
     protected SpruceFence()
     {
-        super("SPRUCE_FENCE", 188, "minecraft:spruce_fence", "SPRUCE_FENCE", WoodType.OAK);
-    }
-
-    public SpruceFence(final String enumName)
-    {
-        super(SPRUCE_FENCE.name(), SPRUCE_FENCE.getId(), SPRUCE_FENCE.getMinecraftId(), enumName, WoodType.OAK);
-    }
-
-    public SpruceFence(final int maxStack, final String typeName)
-    {
-        super(SPRUCE_FENCE.name(), SPRUCE_FENCE.getId(), SPRUCE_FENCE.getMinecraftId(), maxStack, typeName, WoodType.OAK);
+        super("SPRUCE_FENCE", 188, "minecraft:spruce_fence", "SPRUCE_FENCE", WoodType.SPRUCE);
     }
 
     @Override

@@ -1,0 +1,89 @@
+package org.diorite.material.blocks.redstone;
+
+import java.util.Map;
+
+import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.utils.collections.SimpleStringHashMap;
+
+import gnu.trove.map.TByteObjectMap;
+import gnu.trove.map.hash.TByteObjectHashMap;
+
+public class RedstoneTorchOn extends RedstoneTorch
+{
+    // TODO: auto-generated class, implement other types (sub-ids).
+    public static final byte  USED_DATA_VALUES = 1;
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__REDSTONE_TORCH_ON__BLAST_RESISTANCE;
+    public static final float HARDNESS         = MagicNumbers.MATERIAL__REDSTONE_TORCH_ON__HARDNESS;
+
+    public static final RedstoneTorchOn REDSTONE_TORCH_ON = new RedstoneTorchOn();
+
+    private static final Map<String, RedstoneTorchOn>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<RedstoneTorchOn> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+
+    @SuppressWarnings("MagicNumber")
+    protected RedstoneTorchOn()
+    {
+        super("REDSTONE_TORCH_ON", 76, "minecraft:redstone_torch", "REDSTONE_TORCH_ON", (byte) 0x00);
+    }
+
+    public RedstoneTorchOn(final String enumName, final int type)
+    {
+        super(REDSTONE_TORCH_ON.name(), REDSTONE_TORCH_ON.getId(), REDSTONE_TORCH_ON.getMinecraftId(), enumName, (byte) type);
+    }
+
+    public RedstoneTorchOn(final int maxStack, final String typeName, final byte type)
+    {
+        super(REDSTONE_TORCH_ON.name(), REDSTONE_TORCH_ON.getId(), REDSTONE_TORCH_ON.getMinecraftId(), maxStack, typeName, type);
+    }
+
+    @Override
+    public float getBlastResistance()
+    {
+        return BLAST_RESISTANCE;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return HARDNESS;
+    }
+
+    @Override
+    public RedstoneTorchOn getType(final String name)
+    {
+        return getByEnumName(name);
+    }
+
+    @Override
+    public RedstoneTorchOn getType(final int id)
+    {
+        return getByID(id);
+    }
+
+    @Override
+    public boolean isActivated()
+    {
+        return true;
+    }
+
+    public static RedstoneTorchOn getByID(final int id)
+    {
+        return byID.get((byte) id);
+    }
+
+    public static RedstoneTorchOn getByEnumName(final String name)
+    {
+        return byName.get(name);
+    }
+
+    public static void register(final RedstoneTorchOn element)
+    {
+        byID.put(element.getType(), element);
+        byName.put(element.name(), element);
+    }
+
+    static
+    {
+        RedstoneTorchOn.register(REDSTONE_TORCH_ON);
+    }
+}

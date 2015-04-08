@@ -1,7 +1,8 @@
 package org.diorite.material.blocks.wooden.wood;
 
-public class WoodenSlab //extends Wood implements Slab
+public class WoodenSlab// extends WoodSlab
 {
+// TODO: auto-generated class, implement other types (sub-ids). 
 //    public static final byte  USED_DATA_VALUES = 1;
 //    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__WOODEN_SLAB__BLAST_RESISTANCE;
 //    public static final float HARDNESS         = MagicNumbers.MATERIAL__WOODEN_SLAB__HARDNESS;
@@ -11,25 +12,20 @@ public class WoodenSlab //extends Wood implements Slab
 //    private static final Map<String, WoodenSlab>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 //    private static final TByteObjectMap<WoodenSlab> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 //
-//    protected final SlabType slabType;
-//
 //    @SuppressWarnings("MagicNumber")
 //    protected WoodenSlab()
 //    {
-//        super("WOODEN_SLAB", 126, "minecraft:wooden_slab", "OAK", (byte) 0x00, WoodType.OAK);
-//        this.slabType = SlabType.BOTTOM;
+//        super("WOODEN_SLAB", 126, "minecraft:wooden_slab", "WOODEN_SLAB", (byte) 0x00);
 //    }
 //
-//    public WoodenSlab(final String enumName, final WoodType woodType, final SlabType slabType)
+//    public WoodenSlab(final String enumName, final int type)
 //    {
 //        super(WOODEN_SLAB.name(), WOODEN_SLAB.getId(), WOODEN_SLAB.getMinecraftId(), enumName, (byte) type);
-//        this.slabType = slabType;
 //    }
 //
-//    public WoodenSlab(final int maxStack, final String typeName, final SlabType slabType)
+//    public WoodenSlab(final int maxStack, final String typeName, final byte type)
 //    {
 //        super(WOODEN_SLAB.name(), WOODEN_SLAB.getId(), WOODEN_SLAB.getMinecraftId(), maxStack, typeName, type);
-//        this.slabType = slabType;
 //    }
 //
 //    @Override
@@ -54,18 +50,6 @@ public class WoodenSlab //extends Wood implements Slab
 //    public WoodenSlab getType(final int id)
 //    {
 //        return getByID(id);
-//    }
-//
-//    @Override
-//    public SlabType getSlabType()
-//    {
-//        return this.slabType;
-//    }
-//
-//    @Override
-//    public Slab getSlab(final SlabType type)
-//    {
-//        return null;
 //    }
 //
 //    public static WoodenSlab getByID(final int id)

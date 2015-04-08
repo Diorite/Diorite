@@ -12,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class StoneSlab extends StonySlab
 {
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final byte  USED_DATA_VALUES = 18;
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_SLAB__BLAST_RESISTANCE;
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_SLAB__HARDNESS;
 
@@ -24,15 +24,17 @@ public class StoneSlab extends StonySlab
     public static final StoneSlab STONE_SLAB_STONE_BRICKS  = new StoneSlab("STONE_BRICKS", SlabType.BOTTOM, StoneSlabType.STONE_BRICKS);
     public static final StoneSlab STONE_SLAB_NETHER_BRICKS = new StoneSlab("NETHER_BRICKS", SlabType.BOTTOM, StoneSlabType.NETHER_BRICKS);
     public static final StoneSlab STONE_SLAB_QUARTZ        = new StoneSlab("QUARTZ", SlabType.BOTTOM, StoneSlabType.QUARTZ);
+    public static final StoneSlab STONE_SLAB_RED_SANDSTONE = new StoneSlab2("RED_SANDSTONE", SlabType.BOTTOM, StoneSlabType.RED_SANDSTONE);
 
-    public static final StoneSlab STONE_SLAB_STONE_SMOOTH         = new StoneSlab("STONE_SMOOTH", SlabType.UPPER, StoneSlabType.STONE);
-    public static final StoneSlab STONE_SLAB_SANDSTONE_SMOOTH     = new StoneSlab("SANDSTONE_SMOOTH", SlabType.UPPER, StoneSlabType.SANDSTONE);
-    public static final StoneSlab STONE_SLAB_WOODEN_SMOOTH        = new StoneSlab("WOODEN_SMOOTH", SlabType.UPPER, StoneSlabType.WOODEN);
-    public static final StoneSlab STONE_SLAB_COBBLESTONE_SMOOTH   = new StoneSlab("COBBLESTONE_SMOOTH", SlabType.UPPER, StoneSlabType.COBBLESTONE);
-    public static final StoneSlab STONE_SLAB_BRICKS_SMOOTH        = new StoneSlab("BRICKS_SMOOTH", SlabType.UPPER, StoneSlabType.BRICKS);
-    public static final StoneSlab STONE_SLAB_STONE_BRICKS_SMOOTH  = new StoneSlab("STONE_BRICKS_SMOOTH", SlabType.UPPER, StoneSlabType.STONE_BRICKS);
-    public static final StoneSlab STONE_SLAB_NETHER_BRICKS_SMOOTH = new StoneSlab("NETHER_BRICKS_SMOOTH", SlabType.UPPER, StoneSlabType.NETHER_BRICKS);
-    public static final StoneSlab STONE_SLAB_QUARTZ_SMOOTH        = new StoneSlab("QUARTZ_SMOOTH", SlabType.UPPER, StoneSlabType.QUARTZ);
+    public static final StoneSlab STONE_SLAB_STONE_UPPER         = new StoneSlab("STONE_UPPER", SlabType.UPPER, StoneSlabType.STONE);
+    public static final StoneSlab STONE_SLAB_SANDSTONE_UPPER     = new StoneSlab("SANDSTONE_UPPER", SlabType.UPPER, StoneSlabType.SANDSTONE);
+    public static final StoneSlab STONE_SLAB_WOODEN_UPPER        = new StoneSlab("WOODEN_UPPER", SlabType.UPPER, StoneSlabType.WOODEN);
+    public static final StoneSlab STONE_SLAB_COBBLESTONE_UPPER   = new StoneSlab("COBBLESTONE_UPPER", SlabType.UPPER, StoneSlabType.COBBLESTONE);
+    public static final StoneSlab STONE_SLAB_BRICKS_UPPER        = new StoneSlab("BRICKS_UPPER", SlabType.UPPER, StoneSlabType.BRICKS);
+    public static final StoneSlab STONE_SLAB_STONE_BRICKS_UPPER  = new StoneSlab("STONE_BRICKS_UPPER", SlabType.UPPER, StoneSlabType.STONE_BRICKS);
+    public static final StoneSlab STONE_SLAB_NETHER_BRICKS_UPPER = new StoneSlab("NETHER_BRICKS_UPPER", SlabType.UPPER, StoneSlabType.NETHER_BRICKS);
+    public static final StoneSlab STONE_SLAB_QUARTZ_UPPER        = new StoneSlab("QUARTZ_UPPER", SlabType.UPPER, StoneSlabType.QUARTZ);
+    public static final StoneSlab STONE_SLAB_RED_SANDSTONE_UPPER = new StoneSlab2("RED_SANDSTONE_UPPER", SlabType.UPPER, StoneSlabType.RED_SANDSTONE);
 
     private static final Map<String, StoneSlab>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StoneSlab> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -43,14 +45,16 @@ public class StoneSlab extends StonySlab
         super("STONE_SLAB", 44, "minecraft:stone_slab", "STONE", SlabType.BOTTOM, StoneSlabType.STONE);
     }
 
+    @SuppressWarnings("MagicNumber")
     public StoneSlab(final String enumName, final SlabType slabType, final StoneSlabType stoneType)
     {
-        super(STONE_SLAB_STONE.name(), STONE_SLAB_STONE.getId(), STONE_SLAB_STONE.getMinecraftId(), enumName, slabType, stoneType);
+        super(STONE_SLAB_STONE.name() + (stoneType.isSecondStoneSlabID() ? "2" : ""), stoneType.isSecondStoneSlabID() ? 182 : 44, STONE_SLAB_STONE.getMinecraftId() + (stoneType.isSecondStoneSlabID() ? "2" : ""), enumName, slabType, stoneType);
     }
 
+    @SuppressWarnings("MagicNumber")
     public StoneSlab(final int maxStack, final String typeName, final SlabType slabType, final StoneSlabType stoneType)
     {
-        super(STONE_SLAB_STONE.name(), STONE_SLAB_STONE.getId(), STONE_SLAB_STONE.getMinecraftId(), maxStack, typeName, slabType, stoneType);
+        super(STONE_SLAB_STONE.name() + (stoneType.isSecondStoneSlabID() ? "2" : ""), stoneType.isSecondStoneSlabID() ? 182 : 44, STONE_SLAB_STONE.getMinecraftId() + (stoneType.isSecondStoneSlabID() ? "2" : ""), maxStack, typeName, slabType, stoneType);
     }
 
     @Override
@@ -119,13 +123,41 @@ public class StoneSlab extends StonySlab
         StoneSlab.register(STONE_SLAB_STONE_BRICKS);
         StoneSlab.register(STONE_SLAB_NETHER_BRICKS);
         StoneSlab.register(STONE_SLAB_QUARTZ);
-        StoneSlab.register(STONE_SLAB_STONE_SMOOTH);
-        StoneSlab.register(STONE_SLAB_SANDSTONE_SMOOTH);
-        StoneSlab.register(STONE_SLAB_WOODEN_SMOOTH);
-        StoneSlab.register(STONE_SLAB_COBBLESTONE_SMOOTH);
-        StoneSlab.register(STONE_SLAB_BRICKS_SMOOTH);
-        StoneSlab.register(STONE_SLAB_STONE_BRICKS_SMOOTH);
-        StoneSlab.register(STONE_SLAB_NETHER_BRICKS_SMOOTH);
-        StoneSlab.register(STONE_SLAB_QUARTZ_SMOOTH);
+        StoneSlab.register(STONE_SLAB_RED_SANDSTONE);
+        StoneSlab.register(STONE_SLAB_STONE_UPPER);
+        StoneSlab.register(STONE_SLAB_SANDSTONE_UPPER);
+        StoneSlab.register(STONE_SLAB_WOODEN_UPPER);
+        StoneSlab.register(STONE_SLAB_COBBLESTONE_UPPER);
+        StoneSlab.register(STONE_SLAB_BRICKS_UPPER);
+        StoneSlab.register(STONE_SLAB_STONE_BRICKS_UPPER);
+        StoneSlab.register(STONE_SLAB_NETHER_BRICKS_UPPER);
+        StoneSlab.register(STONE_SLAB_QUARTZ_UPPER);
+        StoneSlab.register(STONE_SLAB_RED_SANDSTONE_UPPER);
+    }
+
+    /**
+     * Helper class for second stone slab ID
+     */
+    public static class StoneSlab2 extends StoneSlab
+    {
+        public StoneSlab2()
+        {
+        }
+
+        public StoneSlab2(final String enumName, final SlabType slabType, final StoneSlabType stoneType)
+        {
+            super(enumName, slabType, stoneType);
+        }
+
+        public StoneSlab2(final int maxStack, final String typeName, final SlabType slabType, final StoneSlabType stoneType)
+        {
+            super(maxStack, typeName, slabType, stoneType);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        public static StoneSlab getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
     }
 }

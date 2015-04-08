@@ -4,13 +4,13 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.Container;
+import org.diorite.material.blocks.ContainerBlock;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-public class CraftingTable extends BlockMaterialData implements Container
+public class CraftingTable extends BlockMaterialData implements ContainerBlock
 {
     public static final byte  USED_DATA_VALUES = 1;
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__CRAFTING_TABLE__BLAST_RESISTANCE;

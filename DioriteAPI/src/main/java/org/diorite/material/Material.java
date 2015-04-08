@@ -10,10 +10,15 @@ import org.diorite.material.blocks.Air;
 import org.diorite.material.blocks.cold.Ice;
 import org.diorite.material.blocks.cold.PackedIce;
 import org.diorite.material.blocks.cold.SnowBlock;
+import org.diorite.material.blocks.cold.SnowLayer;
 import org.diorite.material.blocks.earth.ClayBlock;
 import org.diorite.material.blocks.earth.Dirt;
+import org.diorite.material.blocks.earth.Farmland;
 import org.diorite.material.blocks.earth.Grass;
 import org.diorite.material.blocks.earth.Mycelium;
+import org.diorite.material.blocks.end.EndPortal;
+import org.diorite.material.blocks.end.EndPortalFrame;
+import org.diorite.material.blocks.end.EndStone;
 import org.diorite.material.blocks.liquid.Lava;
 import org.diorite.material.blocks.liquid.Water;
 import org.diorite.material.blocks.loose.Gravel;
@@ -21,41 +26,22 @@ import org.diorite.material.blocks.loose.Sand;
 import org.diorite.material.blocks.nether.Glowstone;
 import org.diorite.material.blocks.nether.NetherBrick;
 import org.diorite.material.blocks.nether.NetherBrickFence;
+import org.diorite.material.blocks.nether.NetherBrickStairs;
+import org.diorite.material.blocks.nether.NetherPortal;
 import org.diorite.material.blocks.nether.Netherrack;
 import org.diorite.material.blocks.nether.SoulSand;
-import org.diorite.material.blocks.others.Glass;
-import org.diorite.material.blocks.others.GlassPane;
-import org.diorite.material.blocks.others.IronBars;
-import org.diorite.material.blocks.others.MelonBlock;
-import org.diorite.material.blocks.others.SeaLantren;
-import org.diorite.material.blocks.others.Wool;
-import org.diorite.material.blocks.piston.Piston;
-import org.diorite.material.blocks.piston.PistonExtension;
-import org.diorite.material.blocks.piston.PistonHead;
-import org.diorite.material.blocks.piston.PistonSticky;
-import org.diorite.material.blocks.plants.Dandelion;
-import org.diorite.material.blocks.plants.DeadBush;
-import org.diorite.material.blocks.plants.Flowers;
-import org.diorite.material.blocks.plants.MushroomBrown;
-import org.diorite.material.blocks.plants.MushroomRed;
-import org.diorite.material.blocks.plants.TallGrass;
-import org.diorite.material.blocks.plants.WaterLily;
+import org.diorite.material.blocks.others.*;
+import org.diorite.material.blocks.plants.*;
+import org.diorite.material.blocks.rails.ActivatorRail;
 import org.diorite.material.blocks.rails.DetectorRail;
 import org.diorite.material.blocks.rails.PoweredRail;
-import org.diorite.material.blocks.redstone.RedstoneLampOff;
-import org.diorite.material.blocks.redstone.RedstoneLampOn;
-import org.diorite.material.blocks.stony.Bedrock;
-import org.diorite.material.blocks.stony.BrickBlock;
-import org.diorite.material.blocks.stony.Cobblestone;
-import org.diorite.material.blocks.stony.Dispenser;
-import org.diorite.material.blocks.stony.DoubleStoneSlab;
-import org.diorite.material.blocks.stony.EndStone;
-import org.diorite.material.blocks.stony.HardenedClay;
-import org.diorite.material.blocks.stony.MossyCobblestone;
-import org.diorite.material.blocks.stony.Obsidian;
-import org.diorite.material.blocks.stony.Sandstone;
-import org.diorite.material.blocks.stony.Stone;
-import org.diorite.material.blocks.stony.StoneSlab;
+import org.diorite.material.blocks.rails.Rail;
+import org.diorite.material.blocks.redstone.*;
+import org.diorite.material.blocks.redstone.piston.Piston;
+import org.diorite.material.blocks.redstone.piston.PistonExtension;
+import org.diorite.material.blocks.redstone.piston.PistonHead;
+import org.diorite.material.blocks.redstone.piston.PistonSticky;
+import org.diorite.material.blocks.stony.*;
 import org.diorite.material.blocks.stony.ore.CoalOre;
 import org.diorite.material.blocks.stony.ore.DiamondOre;
 import org.diorite.material.blocks.stony.ore.EmeraldOre;
@@ -71,28 +57,39 @@ import org.diorite.material.blocks.stony.oreblocks.EmeraldBlock;
 import org.diorite.material.blocks.stony.oreblocks.GoldBlock;
 import org.diorite.material.blocks.stony.oreblocks.IronBlock;
 import org.diorite.material.blocks.stony.oreblocks.LapisBlock;
+import org.diorite.material.blocks.stony.oreblocks.QuartzBlock;
 import org.diorite.material.blocks.stony.oreblocks.RedstoneBlock;
-import org.diorite.material.blocks.tools.Barrier;
-import org.diorite.material.blocks.tools.Beacon;
-import org.diorite.material.blocks.tools.BedBlock;
-import org.diorite.material.blocks.tools.Cobweb;
-import org.diorite.material.blocks.tools.CraftingTable;
-import org.diorite.material.blocks.tools.DragonEgg;
-import org.diorite.material.blocks.tools.SlimeBlock;
-import org.diorite.material.blocks.tools.Sponge;
-import org.diorite.material.blocks.tools.Tnt;
+import org.diorite.material.blocks.tools.*;
 import org.diorite.material.blocks.wooden.Bookshelf;
 import org.diorite.material.blocks.wooden.NoteBlock;
 import org.diorite.material.blocks.wooden.wood.Leaves;
 import org.diorite.material.blocks.wooden.wood.Log;
 import org.diorite.material.blocks.wooden.wood.Planks;
 import org.diorite.material.blocks.wooden.wood.Sapling;
+import org.diorite.material.blocks.wooden.wood.door.AcaciaDoor;
+import org.diorite.material.blocks.wooden.wood.door.BirchDoor;
+import org.diorite.material.blocks.wooden.wood.door.DarkOakDoor;
+import org.diorite.material.blocks.wooden.wood.door.JungleDoor;
+import org.diorite.material.blocks.wooden.wood.door.OakDoor;
+import org.diorite.material.blocks.wooden.wood.door.SpruceDoor;
 import org.diorite.material.blocks.wooden.wood.fence.AcaciaFence;
-import org.diorite.material.blocks.wooden.wood.fence.BrichFence;
+import org.diorite.material.blocks.wooden.wood.fence.BirchFence;
 import org.diorite.material.blocks.wooden.wood.fence.DarkOakFence;
 import org.diorite.material.blocks.wooden.wood.fence.JungleFence;
 import org.diorite.material.blocks.wooden.wood.fence.OakFence;
 import org.diorite.material.blocks.wooden.wood.fence.SpruceFence;
+import org.diorite.material.blocks.wooden.wood.fencegate.AcaciaFenceGate;
+import org.diorite.material.blocks.wooden.wood.fencegate.BirchFenceGate;
+import org.diorite.material.blocks.wooden.wood.fencegate.DarkOakFenceGate;
+import org.diorite.material.blocks.wooden.wood.fencegate.JungleFenceGate;
+import org.diorite.material.blocks.wooden.wood.fencegate.OakFenceGate;
+import org.diorite.material.blocks.wooden.wood.fencegate.SpruceFenceGate;
+import org.diorite.material.blocks.wooden.wood.stairs.AcaciaStairs;
+import org.diorite.material.blocks.wooden.wood.stairs.BirchStairs;
+import org.diorite.material.blocks.wooden.wood.stairs.DarkOakStairs;
+import org.diorite.material.blocks.wooden.wood.stairs.JungleStairs;
+import org.diorite.material.blocks.wooden.wood.stairs.OakStairs;
+import org.diorite.material.blocks.wooden.wood.stairs.SpruceStairs;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.SimpleStringHashMap;
 import org.diorite.utils.math.IntRange;
@@ -104,204 +101,199 @@ public abstract class Material implements SimpleEnum<Material>
 {
     public static final int MATERIALS_SIZE = 385;
 
-    public static final  Air                     AIR                  = Air.AIR;
-    public static final  Stone                   STONE                = Stone.STONE;
-    public static final  Grass                   GRASS                = Grass.GRASS;
-    public static final  Dirt                    DIRT                 = Dirt.DIRT;
-    public static final  Cobblestone             COBBLESTONE          = Cobblestone.COBBLESTONE;
-    public static final  Planks                  PLANKS               = Planks.PLANKS_OAK;
-    public static final  Sapling                 SAPLING              = Sapling.SAPLING_OAK;
-    public static final  Bedrock                 BEDROCK              = Bedrock.BEDROCK;
-    public static final  Water                   WATER                = Water.WATER_SOURCE;
-    public static final  Water                   WATER_STILL          = Water.WATER_SOURCE_STILL;
-    public static final  Lava                    LAVA                 = Lava.LAVA_SOURCE;
-    public static final  Lava                    LAVA_STILL           = Lava.LAVA_SOURCE_STILL;
-    public static final  Sand                    SAND                 = Sand.SAND;
-    public static final  Gravel                  GRAVEL               = Gravel.GRAVEL;
-    public static final  GoldOre                 GOLD_ORE             = GoldOre.GOLD_ORE;
-    public static final  IronOre                 IRON_ORE             = IronOre.IRON_ORE;
-    public static final  CoalOre                 COAL_ORE             = CoalOre.COAL_ORE;
-    public static final  Log                     LOG                  = Log.LOG_OAK;
-    public static final  Leaves                  LEAVES               = Leaves.LEAVES_OAK;
-    public static final  Sponge                  SPONGE               = Sponge.SPONGE;
-    public static final  Glass                   GLASS                = Glass.GLASS;
-    public static final  LapisOre                LAPIS_ORE            = LapisOre.LAPIS_ORE;
-    public static final  LapisBlock              LAPIS_BLOCK          = LapisBlock.LAPIS_BLOCK;
-    public static final  Dispenser               DISPENSER            = Dispenser.DISPENSER_DOWN;
-    public static final  Sandstone               SANDSTONE            = Sandstone.SANDSTONE;
-    public static final  NoteBlock               NOTEBLOCK            = NoteBlock.NOTEBLOCK;
-    public static final  BedBlock                BED_BLOCK            = BedBlock.BED_FOOT_SOUTH;
-    public static final  PoweredRail             POWERED_RAIL         = PoweredRail.POWERED_RAIL_NORTH_SOUTH;
-    public static final  DetectorRail            DETECTOR_RAIL        = DetectorRail.DETECTOR_RAIL_NORTH_SOUTH;
-    public static final  PistonSticky            PISTON_STICKY        = PistonSticky.STICKY_PISTON_DOWN;
-    public static final  Cobweb                  WEB                  = Cobweb.COBWEB;
-    public static final  TallGrass               TALL_GRASS           = TallGrass.TALL_GRASS_SHRUB;
-    public static final  DeadBush                DEAD_BUSH            = DeadBush.DEAD_BUSH;
-    public static final  Piston                  PISTON               = Piston.PISTON_DOWN;
-    public static final  PistonExtension         PISTON_EXTENSION     = PistonExtension.PISTON_EXTENSION_DOWN;
-    public static final  Wool                    WOOL                 = Wool.WOOL_WHITE;
-    public static final  PistonHead              PISTON_HEAD          = PistonHead.PISTON_HEAD_DOWN;
-    public static final  Dandelion               DANDELION            = Dandelion.DANDELION;
-    public static final  Flowers                 FLOWERS              = Flowers.FLOWERS_POPPY;
-    public static final  MushroomBrown           BROWN_MUSHROOM       = MushroomBrown.BROWN_MUSHROOM;
-    public static final  MushroomRed             RED_MUSHROOM         = MushroomRed.RED_MUSHROOM;
-    public static final  GoldBlock               GOLD_BLOCK           = GoldBlock.GOLD_BLOCK;
-    public static final  IronBlock               IRON_BLOCK           = IronBlock.IRON_BLOCK;
-    public static final  DoubleStoneSlab         DOUBLE_STONE_SLAB    = DoubleStoneSlab.DOUBLE_STONE_SLAB_STONE;
-    public static final  StoneSlab               STONE_SLAB           = StoneSlab.STONE_SLAB_STONE;
-    public static final  BrickBlock              BRICK_BLOCK          = BrickBlock.BRICK_BLOCK;
-    public static final  Tnt                     TNT                  = Tnt.TNT;
-    public static final  Bookshelf               BOOKSHELF            = Bookshelf.BOOKSHELF;
-    public static final  MossyCobblestone        MOSSY_COBBLESTONE    = MossyCobblestone.MOSSY_COBBLESTONE;
-    public static final  Obsidian                OBSIDIAN             = Obsidian.OBSIDIAN;
-    //    public static final Material    TORCH                      = new Material("TORCH", 50);
-//    public static final Material    FIRE                       = new Material("FIRE", 51);
-//    public static final Material    MOB_SPAWNER                = new Material("MOB_SPAWNER", 52);
-//    public static final Material    WOOD_STAIRS                = new Material("WOOD_STAIRS", 53);
-//    public static final Material    CHEST                      = new Material("CHEST", 54);
-//    public static final Material    REDSTONE_WIRE              = new Material("REDSTONE_WIRE", 55);
-    public static final  DiamondOre              DIAMOND_ORE          = DiamondOre.DIAMOND_ORE;
-    public static final  DiamondBlock            DIAMOND_BLOCK        = DiamondBlock.DIAMOND_BLOCK;
-    public static final  CraftingTable           CRAFTING_TABLE       = CraftingTable.CRAFTING_TABLE;
-    //    public static final Material    CROPS                      = new Material("CROPS", 59);
-//    public static final Material    SOIL                       = new Material("SOIL", 60);
-//    public static final Material    FURNACE                    = new Material("FURNACE", 61);
-//    public static final Material    BURNING_FURNACE            = new Material("BURNING_FURNACE", 62);
-//    public static final Material    SIGN_POST                  = new Material("SIGN_POST", 63, 64);
-//    public static final Material    WOODEN_DOOR                = new Material("WOODEN_DOOR", 64);
-//    public static final Material    LADDER                     = new Material("LADDER", 65);
-//    public static final Material    RAILS                      = new Material("RAILS", 66);
-//    public static final Material    COBBLESTONE_STAIRS         = new Material("COBBLESTONE_STAIRS", 67);
-//    public static final Material    WALL_SIGN                  = new Material("WALL_SIGN", 68, 64);
-//    public static final Material    LEVER                      = new Material("LEVER", 69);
-//    public static final Material    STONE_PLATE                = new Material("STONE_PLATE", 70);
-//    public static final Material    IRON_DOOR_BLOCK            = new Material("IRON_DOOR_BLOCK", 71);
-//    public static final Material    WOOD_PLATE                 = new Material("WOOD_PLATE", 72);
-    public static final  RedstoneOre             REDSTONE_ORE         = RedstoneOre.REDSTONE_ORE;
-    public static final  RedstoneOreGlowing      REDSTONE_ORE_GLOWING = RedstoneOreGlowing.REDSTONE_ORE_GLOWING;
-    //    public static final Material    REDSTONE_TORCH_OFF         = new Material("REDSTONE_TORCH_OFF", 75);
-//    public static final Material    REDSTONE_TORCH_ON          = new Material("REDSTONE_TORCH_ON", 76);
-//    public static final Material    STONE_BUTTON               = new Material("STONE_BUTTON", 77);
-//    public static final Material    SNOW                       = new Material("SNOW", 78);
-    public static final  Ice                     ICE                  = Ice.ICE;
-    public static final  SnowBlock               SNOW_BLOCK           = SnowBlock.SNOW_BLOCK;
-    //    public static final Material    CACTUS                     = new Material("CACTUS", 81);
-    public static final  ClayBlock               CLAY_BLOCK           = ClayBlock.CLAY_BLOCK;
-    //    public static final Material    SUGAR_CANE_BLOCK           = new Material("SUGAR_CANE_BLOCK", 83);
-//    public static final Material    JUKEBOX                    = new Material("JUKEBOX", 84);
-    public static final  OakFence                OAK_FENCE            = OakFence.OAK_FENCE;
-    //    public static final Material    PUMPKIN                    = new Material("PUMPKIN", 86);
-    public static final  Netherrack              NETHERRACK           = Netherrack.NETHERRACK;
-    public static final  SoulSand                SOUL_SAND            = SoulSand.SOUL_SAND;
-    public static final  Glowstone               GLOWSTONE            = Glowstone.GLOWSTONE;
-    //    public static final Material    PORTAL                     = new Material("PORTAL", 90);
-//    public static final Material    JACK_O_LANTERN             = new Material("JACK_O_LANTERN", 91);
-//    public static final Material    CAKE_BLOCK                 = new Material("CAKE_BLOCK", 92, 64);
-//    public static final Material    DIODE_BLOCK_OFF            = new Material("DIODE_BLOCK_OFF", 93);
-//    public static final Material    DIODE_BLOCK_ON             = new Material("DIODE_BLOCK_ON", 94);
-//    public static final Material    STAINED_GLASS              = new Material("STAINED_GLASS", 95);
-//    public static final Material    TRAP_DOOR                  = new Material("TRAP_DOOR", 96);
-//    public static final Material    MONSTER_EGGS               = new Material("MONSTER_EGGS", 97);
-//    public static final Material    SMOOTH_BRICK               = new Material("SMOOTH_BRICK", 98);
-//    public static final Material    HUGE_MUSHROOM_1            = new Material("HUGE_MUSHROOM_1", 99);
-//    public static final Material    HUGE_MUSHROOM_2            = new Material("HUGE_MUSHROOM_2", 100);
-    public static final  IronBars                IRON_BARS            = IronBars.IRON_BARS;
-    public static final  GlassPane               GLASS_PANE           = GlassPane.GLASS_PANE;
-    public static final  MelonBlock              MELON_BLOCK          = MelonBlock.MELON_BLOCK;
-    //    public static final Material    PUMPKIN_STEM               = new Material("PUMPKIN_STEM", 104);
-//    public static final Material    MELON_STEM                 = new Material("MELON_STEM", 105);
-//    public static final Material    VINE                       = new Material("VINE", 106);
-//    public static final Material    FENCE_GATE                 = new Material("FENCE_GATE", 107);
-//    public static final Material    BRICK_STAIRS               = new Material("BRICK_STAIRS", 108);
-//    public static final Material    SMOOTH_STAIRS              = new Material("SMOOTH_STAIRS", 109);
-    public static final  Mycelium                MYCELIUM             = Mycelium.MYCELIUM;
-    public static final  WaterLily               WATER_LILY           = WaterLily.WATER_LILY;
-    public static final  NetherBrick             NETHER_BRICK         = NetherBrick.NETHER_BRICK;
-    public static final  NetherBrickFence        NETHER_BRICK_FENCE   = NetherBrickFence.NETHER_BRICK_FENCE;
-    //    public static final Material    NETHER_BRICK_STAIRS        = new Material("NETHER_BRICK_STAIRS", 114);
-//    public static final Material    NETHER_WARTS               = new Material("NETHER_WARTS", 115);
-//    public static final Material    ENCHANTMENT_TABLE          = new Material("ENCHANTMENT_TABLE", 116);
-//    public static final Material    BREWING_STAND              = new Material("BREWING_STAND", 117);
-//    public static final Material    CAULDRON                   = new Material("CAULDRON", 118);
-//    public static final Material    ENDER_PORTAL               = new Material("ENDER_PORTAL", 119);
-//    public static final Material    ENDER_PORTAL_FRAME         = new Material("ENDER_PORTAL_FRAME", 120);
-    public static final  EndStone                END_STONE            = EndStone.END_STONE;
-    public static final  DragonEgg               DRAGON_EGG           = DragonEgg.DRAGON_EGG;
-    public static final  RedstoneLampOff         REDSTONE_LAMP_OFF    = RedstoneLampOff.REDSTONE_LAMP_OFF;
-    public static final  RedstoneLampOn          REDSTONE_LAMP_ON     = RedstoneLampOn.REDSTONE_LAMP_ON;
-    //    public static final Material    WOOD_DOUBLE_STEP           = new Material("WOOD_DOUBLE_STEP", 125);
-//    public static final Material    WOOD_STEP                  = new Material("WOOD_STEP", 126);
-//    public static final Material    COCOA                      = new Material("COCOA", 127);
-//    public static final Material    SANDSTONE_STAIRS           = new Material("SANDSTONE_STAIRS", 128);
-    public static final  EmeraldOre              EMERALD_ORE          = EmeraldOre.EMERALD_ORE;
-    //    public static final Material    ENDER_CHEST                = new Material("ENDER_CHEST", 130);
-//    public static final Material    TRIPWIRE_HOOK              = new Material("TRIPWIRE_HOOK", 131);
-//    public static final Material    TRIPWIRE                   = new Material("TRIPWIRE", 132);
-    public static final  EmeraldBlock            EMERALD_BLOCK        = EmeraldBlock.EMERALD_BLOCK;
-    //    public static final Material    SPRUCE_WOOD_STAIRS         = new Material("SPRUCE_WOOD_STAIRS", 134);
-//    public static final Material    BIRCH_WOOD_STAIRS          = new Material("BIRCH_WOOD_STAIRS", 135);
-//    public static final Material    JUNGLE_WOOD_STAIRS         = new Material("JUNGLE_WOOD_STAIRS", 136);
-//    public static final Material    COMMAND                    = new Material("COMMAND", 137);
-    public static final  Beacon                  BEACON               = Beacon.BEACON;
-    //    public static final Material    COBBLE_WALL                = new Material("COBBLE_WALL", 139);
-//    public static final Material    FLOWER_POT                 = new Material("FLOWER_POT", 140);
-//    public static final Material    CARROT                     = new Material("CARROT", 141);
-//    public static final Material    POTATO                     = new Material("POTATO", 142);
-//    public static final Material    WOOD_BUTTON                = new Material("WOOD_BUTTON", 143);
-//    public static final Material    SKULL                      = new Material("SKULL", 144);
-//    public static final Material    ANVIL                      = new Material("ANVIL", 145);
-//    public static final Material    TRAPPED_CHEST              = new Material("TRAPPED_CHEST", 146);
-//    public static final Material    GOLD_PLATE                 = new Material("GOLD_PLATE", 147);
-//    public static final Material    IRON_PLATE                 = new Material("IRON_PLATE", 148);
-//    public static final Material    REDSTONE_COMPARATOR_OFF    = new Material("REDSTONE_COMPARATOR_OFF", 149);
-//    public static final Material    REDSTONE_COMPARATOR_ON     = new Material("REDSTONE_COMPARATOR_ON", 150);
-//    public static final Material    DAYLIGHT_DETECTOR          = new Material("DAYLIGHT_DETECTOR", 151);
-    public static final  RedstoneBlock           REDSTONE_BLOCK       = RedstoneBlock.REDSTONE_BLOCK;
-    public static final  QuartzOre               QUARTZ_ORE           = QuartzOre.QUARTZ_ORE;
-    //    public static final Material    HOPPER                     = new Material("HOPPER", 154);
-//    public static final Material    QUARTZ_BLOCK               = new Material("QUARTZ_BLOCK", 155);
-//    public static final Material    QUARTZ_STAIRS              = new Material("QUARTZ_STAIRS", 156);
-//    public static final Material    ACTIVATOR_RAIL             = new Material("ACTIVATOR_RAIL", 157);
-//    public static final Material    DROPPER                    = new Material("DROPPER", 158);
-//    public static final Material    STAINED_CLAY               = new Material("STAINED_CLAY", 159);
-//    public static final Material    STAINED_GLASS_PANE         = new Material("STAINED_GLASS_PANE", 160);
-//    public static final  Leaves                  LEAVES_2         = Leaves.LEAVES_ACACIA;
-//    public static final  Log                     LOG_2            = Log.LOG_ACACIA;
-    //    public static final Material    ACACIA_STAIRS              = new Material("ACACIA_STAIRS", 163);
-//    public static final Material    DARK_OAK_STAIRS            = new Material("DARK_OAK_STAIRS", 164);
-    public static final  SlimeBlock              SLIME_BLOCK          = SlimeBlock.SLIME_BLOCK;
-    public static final  Barrier                 BARRIER              = Barrier.BARRIER;
-    //    public static final Material    IRON_TRAPDOOR              = new Material("IRON_TRAPDOOR", 167);
-//    public static final Material    PRISMARINE                 = new Material("PRISMARINE", 168);
-    public static final  SeaLantren              SEA_LANTERN          = SeaLantren.SEA_LANTREN;
-    //    public static final Material    HAY_BLOCK                  = new Material("HAY_BLOCK", 170);
-//    public static final Material    CARPET                     = new Material("CARPET", 171);
-    public static final  HardenedClay            HARDENED_CLAY        = HardenedClay.HARDENED_CLAY;
-    public static final  CoalBlock               COAL_BLOCK           = CoalBlock.COAL_BLOCK;
-    public static final  PackedIce               PACKED_ICE           = PackedIce.PACKED_ICE;
-    //    public static final Material    DOUBLE_PLANT               = new Material("DOUBLE_PLANT", 175);
-//    public static final Material    STANDING_BANNER            = new Material("STANDING_BANNER", 176);
-//    public static final Material    WALL_BANNER                = new Material("WALL_BANNER", 177);
-//    public static final Material    DAYLIGHT_DETECTOR_INVERTED = new Material("DAYLIGHT_DETECTOR_INVERTED", 178);
-//    public static final Material    RED_SANDSTONE              = new Material("RED_SANDSTONE", 179);
-//    public static final Material    RED_SANDSTONE_STAIRS       = new Material("RED_SANDSTONE_STAIRS", 180);
-//    public static final Material    DOUBLE_STONE_SLAB2         = new Material("DOUBLE_STONE_SLAB2", 181);
-//    public static final Material    STONE_SLAB2                = new Material("STONE_SLAB2", 182);
-//    public static final Material    SPRUCE_FENCE_GATE          = new Material("SPRUCE_FENCE_GATE", 183);
-//    public static final Material    BIRCH_FENCE_GATE           = new Material("BIRCH_FENCE_GATE", 184);
-//    public static final Material    JUNGLE_FENCE_GATE          = new Material("JUNGLE_FENCE_GATE", 185);
-//    public static final Material    DARK_OAK_FENCE_GATE        = new Material("DARK_OAK_FENCE_GATE", 186);
-//    public static final Material    ACACIA_FENCE_GATE          = new Material("ACACIA_FENCE_GATE", 187);
-    public static final  SpruceFence             SPRUCE_FENCE         = SpruceFence.SPRUCE_FENCE;
-    public static final  BrichFence              BRICH_FENCE          = BrichFence.BRICH_FENCE;
-    public static final  JungleFence             JUNGLE_FENCE         = JungleFence.JUNGLE_FENCE;
-    public static final  DarkOakFence            DARK_OAK_FENCE       = DarkOakFence.DARK_OAK_FENCE;
-    public static final  AcaciaFence             ACACIA_FENCE         = AcaciaFence.ACACIA_FENCE;
-    //    public static final Material    SPRUCE_DOOR                = new Material("SPRUCE_DOOR", 193);
-//    public static final Material    BIRCH_DOOR                 = new Material("BIRCH_DOOR", 194);
-//    public static final Material    JUNGLE_DOOR                = new Material("JUNGLE_DOOR", 195);
-//    public static final Material    ACACIA_DOOR                = new Material("ACACIA_DOOR", 196);
-//    public static final Material    DARK_OAK_DOOR              = new Material("DARK_OAK_DOOR", 197);
+    public static final  Air                      AIR                        = Air.AIR;
+    public static final  Stone                    STONE                      = Stone.STONE;
+    public static final  Grass                    GRASS                      = Grass.GRASS;
+    public static final  Dirt                     DIRT                       = Dirt.DIRT;
+    public static final  Cobblestone              COBBLESTONE                = Cobblestone.COBBLESTONE;
+    public static final  Planks                   PLANKS                     = Planks.PLANKS_OAK;
+    public static final  Sapling                  SAPLING                    = Sapling.SAPLING_OAK;
+    public static final  Bedrock                  BEDROCK                    = Bedrock.BEDROCK;
+    public static final  Water                    WATER                      = Water.WATER_SOURCE;
+    public static final  Water                    WATER_STILL                = Water.WATER_SOURCE_STILL;
+    public static final  Lava                     LAVA                       = Lava.LAVA_SOURCE;
+    public static final  Lava                     LAVA_STILL                 = Lava.LAVA_SOURCE_STILL;
+    public static final  Sand                     SAND                       = Sand.SAND;
+    public static final  Gravel                   GRAVEL                     = Gravel.GRAVEL;
+    public static final  GoldOre                  GOLD_ORE                   = GoldOre.GOLD_ORE;
+    public static final  IronOre                  IRON_ORE                   = IronOre.IRON_ORE;
+    public static final  CoalOre                  COAL_ORE                   = CoalOre.COAL_ORE;
+    public static final  Log                      LOG                        = Log.LOG_OAK;
+    public static final  Leaves                   LEAVES                     = Leaves.LEAVES_OAK;
+    public static final  Sponge                   SPONGE                     = Sponge.SPONGE;
+    public static final  Glass                    GLASS                      = Glass.GLASS;
+    public static final  LapisOre                 LAPIS_ORE                  = LapisOre.LAPIS_ORE;
+    public static final  LapisBlock               LAPIS_BLOCK                = LapisBlock.LAPIS_BLOCK;
+    public static final  Dispenser                DISPENSER                  = Dispenser.DISPENSER_DOWN;
+    public static final  Sandstone                SANDSTONE                  = Sandstone.SANDSTONE;
+    public static final  NoteBlock                NOTEBLOCK                  = NoteBlock.NOTEBLOCK;
+    public static final  BedBlock                 BED_BLOCK                  = BedBlock.BED_FOOT_SOUTH;
+    public static final  PoweredRail              POWERED_RAIL               = PoweredRail.POWERED_RAIL_NORTH_SOUTH;
+    public static final  DetectorRail             DETECTOR_RAIL              = DetectorRail.DETECTOR_RAIL_NORTH_SOUTH;
+    public static final  PistonSticky             PISTON_STICKY              = PistonSticky.STICKY_PISTON_DOWN;
+    public static final  Cobweb                   WEB                        = Cobweb.COBWEB;
+    public static final  TallGrass                TALL_GRASS                 = TallGrass.TALL_GRASS_SHRUB;
+    public static final  DeadBush                 DEAD_BUSH                  = DeadBush.DEAD_BUSH;
+    public static final  Piston                   PISTON                     = Piston.PISTON_DOWN;
+    public static final  PistonExtension          PISTON_EXTENSION           = PistonExtension.PISTON_EXTENSION_DOWN;
+    public static final  Wool                     WOOL                       = Wool.WOOL_WHITE;
+    public static final  PistonHead               PISTON_HEAD                = PistonHead.PISTON_HEAD_DOWN;
+    public static final  Dandelion                DANDELION                  = Dandelion.DANDELION;
+    public static final  Flowers                  FLOWERS                    = Flowers.FLOWERS_POPPY;
+    public static final  MushroomBrown            BROWN_MUSHROOM             = MushroomBrown.BROWN_MUSHROOM;
+    public static final  MushroomRed              RED_MUSHROOM               = MushroomRed.RED_MUSHROOM;
+    public static final  GoldBlock                GOLD_BLOCK                 = GoldBlock.GOLD_BLOCK;
+    public static final  IronBlock                IRON_BLOCK                 = IronBlock.IRON_BLOCK;
+    public static final  DoubleStoneSlab          DOUBLE_STONE_SLAB          = DoubleStoneSlab.DOUBLE_STONE_SLAB_STONE;
+    public static final  StoneSlab                STONE_SLAB                 = StoneSlab.STONE_SLAB_STONE;
+    public static final  BrickBlock               BRICK_BLOCK                = BrickBlock.BRICK_BLOCK;
+    public static final  Tnt                      TNT                        = Tnt.TNT;
+    public static final  Bookshelf                BOOKSHELF                  = Bookshelf.BOOKSHELF;
+    public static final  MossyCobblestone         MOSSY_COBBLESTONE          = MossyCobblestone.MOSSY_COBBLESTONE;
+    public static final  Obsidian                 OBSIDIAN                   = Obsidian.OBSIDIAN;
+    public static final  Torch                    TORCH                      = Torch.TORCH; // TODO: edit after editing auto-generated class
+    public static final  Fire                     FIRE                       = Fire.FIRE; // TODO: edit after editing auto-generated class
+    public static final  MobSpawner               MOB_SPAWNER                = MobSpawner.MOB_SPAWNER; // TODO: edit after editing auto-generated class
+    public static final  OakStairs                OAK_STAIRS                 = OakStairs.OAK_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  Chest                    CHEST                      = Chest.CHEST; // TODO: edit after editing auto-generated class
+    public static final  RedstoneWire             REDSTONE_WIRE              = RedstoneWire.REDSTONE_WIRE; // TODO: edit after editing auto-generated class
+    public static final  DiamondOre               DIAMOND_ORE                = DiamondOre.DIAMOND_ORE;
+    public static final  DiamondBlock             DIAMOND_BLOCK              = DiamondBlock.DIAMOND_BLOCK;
+    public static final  CraftingTable            CRAFTING_TABLE             = CraftingTable.CRAFTING_TABLE;
+    public static final  WheatBlock               WHEAT_BLOCK                = WheatBlock.WHEAT_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  Farmland                 FARMLAND                   = Farmland.FARMLAND; // TODO: edit after editing auto-generated class
+    public static final  Furnace                  FURNACE                    = Furnace.FURNACE; // TODO: edit after editing auto-generated class
+    public static final  BurningFurnace           BURNING_FURNACE            = BurningFurnace.BURNING_FURNACE; // TODO: edit after editing auto-generated class
+    public static final  StandingSign             STANDING_SIGN              = StandingSign.STANDING_SIGN; // TODO: edit after editing auto-generated class
+    public static final  OakDoor                  OAK_DOOR                   = OakDoor.OAK_DOOR; // TODO: edit after editing auto-generated class
+    public static final  Ladder                   LADDER                     = Ladder.LADDER; // TODO: edit after editing auto-generated class
+    public static final  Rail                     RAIL                       = Rail.RAIL; // TODO: edit after editing auto-generated class
+    public static final  CobblestoneStairs        COBBLESTONE_STAIRS         = CobblestoneStairs.COBBLESTONE_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  WallSign                 WALL_SIGN                  = WallSign.WALL_SIGN; // TODO: edit after editing auto-generated class
+    public static final  Lever                    LEVER                      = Lever.LEVER; // TODO: edit after editing auto-generated class
+    public static final  StonePressurePlate       STONE_PRESSURE_PLATE       = StonePressurePlate.STONE_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
+    public static final  IronDoor                 IRON_DOOR                  = IronDoor.IRON_DOOR; // TODO: edit after editing auto-generated class
+    public static final  WoodenPressurePlate      WOODEN_PRESSURE_PLATE      = WoodenPressurePlate.WOODEN_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
+    public static final  RedstoneOre              REDSTONE_ORE               = RedstoneOre.REDSTONE_ORE;
+    public static final  RedstoneOreGlowing       REDSTONE_ORE_GLOWING       = RedstoneOreGlowing.REDSTONE_ORE_GLOWING;
+    public static final  RedstoneTorchOff         REDSTONE_TORCH_OFF         = RedstoneTorchOff.REDSTONE_TORCH_OFF; // TODO: edit after editing auto-generated class
+    public static final  RedstoneTorchOn          REDSTONE_TORCH_ON          = RedstoneTorchOn.REDSTONE_TORCH_ON; // TODO: edit after editing auto-generated class
+    public static final  StoneButton              STONE_BUTTON               = StoneButton.STONE_BUTTON; // TODO: edit after editing auto-generated class
+    public static final  SnowLayer                SNOW_LAYER                 = SnowLayer.SNOW_LAYER; // TODO: edit after editing auto-generated class
+    public static final  Ice                      ICE                        = Ice.ICE;
+    public static final  SnowBlock                SNOW_BLOCK                 = SnowBlock.SNOW_BLOCK;
+    public static final  Cactus                   CACTUS                     = Cactus.CACTUS; // TODO: edit after editing auto-generated class
+    public static final  ClayBlock                CLAY_BLOCK                 = ClayBlock.CLAY_BLOCK;
+    public static final  SugarCane                SUGAR_CANE                 = SugarCane.SUGAR_CANE; // TODO: edit after editing auto-generated class
+    public static final  Jukebox                  JUKEBOX                    = Jukebox.JUKEBOX; // TODO: edit after editing auto-generated class
+    public static final  OakFence                 OAK_FENCE                  = OakFence.OAK_FENCE;
+    public static final  Pumpkin                  PUMPKIN                    = Pumpkin.PUMPKIN; // TODO: edit after editing auto-generated class
+    public static final  Netherrack               NETHERRACK                 = Netherrack.NETHERRACK;
+    public static final  SoulSand                 SOUL_SAND                  = SoulSand.SOUL_SAND;
+    public static final  Glowstone                GLOWSTONE                  = Glowstone.GLOWSTONE;
+    public static final  NetherPortal             NETHER_PORTAL              = NetherPortal.NETHER_PORTAL; // TODO: edit after editing auto-generated class
+    public static final  PumpkinLantern           PUMPKIN_LANTERN            = PumpkinLantern.PUMPKIN_LANTERN; // TODO: edit after editing auto-generated class
+    public static final  Cake                     CAKE                       = Cake.CAKE; // TODO: edit after editing auto-generated class
+    public static final  RedstoneRepeaterOff      REPEATER_OFF               = RedstoneRepeaterOff.REDSTONE_REPEATER_OFF; // TODO: edit after editing auto-generated class
+    public static final  RedstoneRepeaterOn       REPEATER_ON                = RedstoneRepeaterOn.REDSTONE_REPEATER_ON; // TODO: edit after editing auto-generated class
+    public static final  StainedGlass             STAINED_GLASS              = StainedGlass.STAINED_GLASS; // TODO: edit after editing auto-generated class
+    public static final  WoodenTrapdoor           WOODEN_TRAPDOOR            = WoodenTrapdoor.WOODEN_TRAPDOOR; // TODO: edit after editing auto-generated class
+    public static final  MonsterEggTrap           MONSTER_EGG_TRAP           = MonsterEggTrap.MONSTER_EGG_TRAP; // TODO: edit after editing auto-generated class
+    public static final  StoneBrick               STONE_BRICK                = StoneBrick.STONE_BRICK; // TODO: edit after editing auto-generated class
+    public static final  BrownMushroomBlock       BROWN_MUSHROOM_BLOCK       = BrownMushroomBlock.BROWN_MUSHROOM_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  RedMushroomBlock         RED_MUSHROOM_BLOCK         = RedMushroomBlock.RED_MUSHROOM_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  IronBars                 IRON_BARS                  = IronBars.IRON_BARS;
+    public static final  GlassPane                GLASS_PANE                 = GlassPane.GLASS_PANE;
+    public static final  MelonBlock               MELON_BLOCK                = MelonBlock.MELON_BLOCK;
+    public static final  PumpkinStem              PUMPKIN_STEM               = PumpkinStem.PUMPKIN_STEM; // TODO: edit after editing auto-generated class
+    public static final  MelonStem                MELON_STEM                 = MelonStem.MELON_STEM; // TODO: edit after editing auto-generated class
+    public static final  Vine                     VINE                       = Vine.VINE; // TODO: edit after editing auto-generated class
+    public static final  OakFenceGate             OAK_FENCE_GATE             = OakFenceGate.OAK_FENCE_GATE; // TODO: edit after editing auto-generated class
+    public static final  BrickStairs              BRICK_STAIRS               = BrickStairs.BRICK_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  StoneBrickStairs         STONE_BRICK_STAIRS         = StoneBrickStairs.STONE_BRICK_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  Mycelium                 MYCELIUM                   = Mycelium.MYCELIUM;
+    public static final  WaterLily                WATER_LILY                 = WaterLily.WATER_LILY;
+    public static final  NetherBrick              NETHER_BRICK               = NetherBrick.NETHER_BRICK;
+    public static final  NetherBrickFence         NETHER_BRICK_FENCE         = NetherBrickFence.NETHER_BRICK_FENCE;
+    public static final  NetherBrickStairs        NETHER_BRICK_STAIRS        = NetherBrickStairs.NETHER_BRICK_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  NetherWartBlock          NETHER_WART_BLOCK          = NetherWartBlock.NETHER_WART_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  EnchantingTable          ENCHANTING_TABLE           = EnchantingTable.ENCHANTING_TABLE; // TODO: edit after editing auto-generated class
+    public static final  BrewingStandBlock        BREWING_STAND_BLOCK        = BrewingStandBlock.BREWING_STAND_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  Cauldron                 CAULDRON                   = Cauldron.CAULDRON; // TODO: edit after editing auto-generated class
+    public static final  EndPortal                END_PORTAL                 = EndPortal.END_PORTAL; // TODO: edit after editing auto-generated class
+    public static final  EndPortalFrame           END_PORTAL_FRAME           = EndPortalFrame.END_PORTAL_FRAME; // TODO: edit after editing auto-generated class
+    public static final  EndStone                 END_STONE                  = EndStone.END_STONE;
+    public static final  DragonEgg                DRAGON_EGG                 = DragonEgg.DRAGON_EGG;
+    public static final  RedstoneLampOff          REDSTONE_LAMP_OFF          = RedstoneLampOff.REDSTONE_LAMP_OFF;
+    public static final  RedstoneLampOn           REDSTONE_LAMP_ON           = RedstoneLampOn.REDSTONE_LAMP_ON;
+    //    public static final  DoubleWoodenSlab         DOUBLE_WOODEN_SLAB         = DoubleWoodenSlab.DOUBLE_WOODEN_SLAB; // TODO: edit after editing auto-generated class
+//    public static final  WoodenSlab               WOODEN_SLAB                = WoodenSlab.WOODEN_SLAB; // TODO: edit after editing auto-generated class
+    public static final  Cocoa                    COCOA                      = Cocoa.COCOA; // TODO: edit after editing auto-generated class
+    public static final  SandstoneStairs          SANDSTONE_STAIRS           = SandstoneStairs.SANDSTONE_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  EmeraldOre               EMERALD_ORE                = EmeraldOre.EMERALD_ORE;
+    public static final  EnderChest               ENDER_CHEST                = EnderChest.ENDER_CHEST; // TODO: edit after editing auto-generated class
+    public static final  TripwireHook             TRIPWIRE_HOOK              = TripwireHook.TRIPWIRE_HOOK; // TODO: edit after editing auto-generated class
+    public static final  Tripwire                 TRIPWIRE                   = Tripwire.TRIPWIRE; // TODO: edit after editing auto-generated class
+    public static final  EmeraldBlock             EMERALD_BLOCK              = EmeraldBlock.EMERALD_BLOCK;
+    public static final  SpruceStairs             SPRUCE_STAIRS              = SpruceStairs.SPRUCE_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  BirchStairs              BIRCH_STAIRS               = BirchStairs.BIRCH_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  JungleStairs             JUNGLE_STAIRS              = JungleStairs.JUNGLE_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  CommandBlock             COMMAND_BLOCK              = CommandBlock.COMMAND_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  Beacon                   BEACON                     = Beacon.BEACON;
+    public static final  CobblestoneWall          COBBLESTONE_WALL           = CobblestoneWall.COBBLESTONE_WALL; // TODO: edit after editing auto-generated class
+    public static final  FlowerPot                FLOWER_POT                 = FlowerPot.FLOWER_POT; // TODO: edit after editing auto-generated class
+    public static final  CarrotsBlock             CARROTS_BLOCK              = CarrotsBlock.CARROTS_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  PotatoesBlock            POTATOES_BLOCK             = PotatoesBlock.POTATOES_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  WoodenButton             WOODEN_BUTTON              = WoodenButton.WOODEN_BUTTON; // TODO: edit after editing auto-generated class
+    public static final  SkullBlock               SKULL_BLOCK                = SkullBlock.SKULL_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  Anvil                    ANVIL                      = Anvil.ANVIL; // TODO: edit after editing auto-generated class
+    public static final  TrappedChest             TRAPPED_CHEST              = TrappedChest.TRAPPED_CHEST; // TODO: edit after editing auto-generated class
+    public static final  GoldenPressurePlate      GOLDEN_PRESSURE_PLATE      = GoldenPressurePlate.GOLDEN_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
+    public static final  IronPressurePlate        IRON_PRESSURE_PLATE        = IronPressurePlate.IRON_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
+    public static final  RedstoneComparator       REDSTONE_COMPARATOR        = RedstoneComparator.REDSTONE_COMPARATOR; // TODO: edit after editing auto-generated class
+    public static final  DaylightDetector         DAYLIGHT_DETECTOR          = DaylightDetector.DAYLIGHT_DETECTOR; // TODO: edit after editing auto-generated class
+    public static final  RedstoneBlock            REDSTONE_BLOCK             = RedstoneBlock.REDSTONE_BLOCK;
+    public static final  QuartzOre                QUARTZ_ORE                 = QuartzOre.QUARTZ_ORE;
+    public static final  Hopper                   HOPPER                     = Hopper.HOPPER; // TODO: edit after editing auto-generated class
+    public static final  QuartzBlock              QUARTZ_BLOCK               = QuartzBlock.QUARTZ_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  QuartzStairs             QUARTZ_STAIRS              = QuartzStairs.QUARTZ_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  ActivatorRail            ACTIVATOR_RAIL             = ActivatorRail.ACTIVATOR_RAIL_NORTH_SOUTH; // TODO: edit after editing auto-generated class
+    public static final  Dropper                  DROPPER                    = Dropper.DROPPER; // TODO: edit after editing auto-generated class
+    public static final  StainedHardenedClay      STAINED_HARDENED_CLAY      = StainedHardenedClay.STAINED_HARDENED_CLAY; // TODO: edit after editing auto-generated class
+    public static final  StainedGlassPane         STAINED_GLASS_PANE         = StainedGlassPane.STAINED_GLASS_PANE; // TODO: edit after editing auto-generated class
+    public static final  AcaciaStairs             ACACIA_STAIRS              = AcaciaStairs.ACACIA_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  DarkOakStairs            DARK_OAK_STAIRS            = DarkOakStairs.DARK_OAK_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  SlimeBlock               SLIME_BLOCK                = SlimeBlock.SLIME_BLOCK;
+    public static final  Barrier                  BARRIER                    = Barrier.BARRIER;
+    public static final  IronTrapdoor             IRON_TRAPDOOR              = IronTrapdoor.IRON_TRAPDOOR; // TODO: edit after editing auto-generated class
+    public static final  Prismarine               PRISMARINE                 = Prismarine.PRISMARINE; // TODO: edit after editing auto-generated class
+    public static final  SeaLantren               SEA_LANTERN                = SeaLantren.SEA_LANTREN;
+    public static final  HayBlock                 HAY_BLOCK                  = HayBlock.HAY_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  Carpet                   CARPET                     = Carpet.CARPET; // TODO: edit after editing auto-generated class
+    public static final  HardenedClay             HARDENED_CLAY              = HardenedClay.HARDENED_CLAY;
+    public static final  CoalBlock                COAL_BLOCK                 = CoalBlock.COAL_BLOCK;
+    public static final  PackedIce                PACKED_ICE                 = PackedIce.PACKED_ICE;
+    public static final  DoubleFlowers            DOUBLE_FLOWERS             = DoubleFlowers.DOUBLE_FLOWERS; // TODO: edit after editing auto-generated class
+    public static final  StandingBanner           STANDING_BANNER            = StandingBanner.STANDING_BANNER; // TODO: edit after editing auto-generated class
+    public static final  WallBanner               WALL_BANNER                = WallBanner.WALL_BANNER; // TODO: edit after editing auto-generated class
+    public static final  DaylightDetectorInverted DAYLIGHT_DETECTOR_INVERTED = DaylightDetectorInverted.DAYLIGHT_DETECTOR_INVERTED; // TODO: edit after editing auto-generated class
+    public static final  RedSandstone             RED_SANDSTONE              = RedSandstone.RED_SANDSTONE; // TODO: edit after editing auto-generated class
+    public static final  RedSandstoneStairs       RED_SANDSTONE_STAIRS       = RedSandstoneStairs.RED_SANDSTONE_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  SpruceFenceGate          SPRUCE_FENCE_GATE          = SpruceFenceGate.SPRUCE_FENCE_GATE; // TODO: edit after editing auto-generated class
+    public static final  BirchFenceGate           BIRCH_FENCE_GATE           = BirchFenceGate.BIRCH_FENCE_GATE; // TODO: edit after editing auto-generated class
+    public static final  JungleFenceGate          JUNGLE_FENCE_GATE          = JungleFenceGate.JUNGLE_FENCE_GATE; // TODO: edit after editing auto-generated class
+    public static final  DarkOakFenceGate         DARK_OAK_FENCE_GATE        = DarkOakFenceGate.DARK_OAK_FENCE_GATE; // TODO: edit after editing auto-generated class
+    public static final  AcaciaFenceGate          ACACIA_FENCE_GATE          = AcaciaFenceGate.ACACIA_FENCE_GATE; // TODO: edit after editing auto-generated class
+    public static final  SpruceFence              SPRUCE_FENCE               = SpruceFence.SPRUCE_FENCE;
+    public static final  BirchFence               BIRCH_FENCE                = BirchFence.BRICH_FENCE;
+    public static final  JungleFence              JUNGLE_FENCE               = JungleFence.JUNGLE_FENCE;
+    public static final  DarkOakFence             DARK_OAK_FENCE             = DarkOakFence.DARK_OAK_FENCE;
+    public static final  AcaciaFence              ACACIA_FENCE               = AcaciaFence.ACACIA_FENCE;
+    public static final  SpruceDoor               SPRUCE_DOOR                = SpruceDoor.SPRUCE_DOOR; // TODO: edit after editing auto-generated class
+    public static final  BirchDoor                BIRCH_DOOR                 = BirchDoor.BIRCH_DOOR; // TODO: edit after editing auto-generated class
+    public static final  JungleDoor               JUNGLE_DOOR                = JungleDoor.JUNGLE_DOOR; // TODO: edit after editing auto-generated class
+    public static final  AcaciaDoor               ACACIA_DOOR                = AcaciaDoor.ACACIA_DOOR; // TODO: edit after editing auto-generated class
+    public static final  DarkOakDoor              DARK_OAK_DOOR              = DarkOakDoor.DARK_OAK_DOOR; // TODO: edit after editing auto-generated class
     // ----- Item Separator -----
     //    public static final  Material                IRON_SPADE           = new Material("IRON_SPADE", 256, 1, 250);
 //    public static final  Material                IRON_PICKAXE         = new Material("IRON_PICKAXE", 257, 1, 250);
@@ -490,9 +482,9 @@ public abstract class Material implements SimpleEnum<Material>
 //    public static final  Material                RECORD_10            = new Material("RECORD_10", 2265, 1);
 //    public static final  Material                RECORD_11            = new Material("RECORD_11", 2266, 1);
 //    public static final  Material                RECORD_12            = new Material("RECORD_12", 2267, 1);
-    private static final Map<String, Material>   byName               = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
-    private static final Map<String, Material>   byMinecraftId        = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<Material> byID                 = new TIntObjectHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
+    private static final Map<String, Material>    byName                     = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
+    private static final Map<String, Material>    byMinecraftId              = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<Material>  byID                       = new TIntObjectHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
     private final String enumName;
     private final int    id;
     private final String minecraftId;
@@ -740,154 +732,149 @@ public abstract class Material implements SimpleEnum<Material>
         register(BOOKSHELF);
         register(MOSSY_COBBLESTONE);
         register(OBSIDIAN);
-//        register(TORCH);
-//        register(FIRE);
-//        register(MOB_SPAWNER);
-//        register(WOOD_STAIRS);
-//        register(CHEST);
-//        register(REDSTONE_WIRE);
+        register(TORCH);
+        register(FIRE);
+        register(MOB_SPAWNER);
+        register(OAK_STAIRS);
+        register(CHEST);
+        register(REDSTONE_WIRE);
         register(DIAMOND_ORE);
         register(DIAMOND_BLOCK);
         register(CRAFTING_TABLE);
-//        register(CROPS);
-//        register(SOIL);
-//        register(FURNACE);
-//        register(BURNING_FURNACE);
-//        register(SIGN_POST);
-//        register(WOODEN_DOOR);
-//        register(LADDER);
-//        register(RAILS);
-//        register(COBBLESTONE_STAIRS);
-//        register(WALL_SIGN);
-//        register(LEVER);
-//        register(STONE_PLATE);
-//        register(IRON_DOOR_BLOCK);
-//        register(WOOD_PLATE);
+        register(WHEAT_BLOCK);
+        register(FARMLAND);
+        register(FURNACE);
+        register(BURNING_FURNACE);
+        register(STANDING_SIGN);
+        register(OAK_DOOR);
+        register(LADDER);
+        register(RAIL);
+        register(COBBLESTONE_STAIRS);
+        register(WALL_SIGN);
+        register(LEVER);
+        register(STONE_PRESSURE_PLATE);
+        register(IRON_DOOR);
+        register(WOODEN_PRESSURE_PLATE);
         register(REDSTONE_ORE);
         register(REDSTONE_ORE_GLOWING);
-//        register(REDSTONE_TORCH_OFF);
-//        register(REDSTONE_TORCH_ON);
-//        register(STONE_BUTTON);
-//        register(SNOW);
+        register(REDSTONE_TORCH_OFF);
+        register(REDSTONE_TORCH_ON);
+        register(STONE_BUTTON);
+        register(SNOW_LAYER);
         register(ICE);
         register(SNOW_BLOCK);
-//        register(CACTUS);
+        register(CACTUS);
         register(CLAY_BLOCK);
-//        register(SUGAR_CANE_BLOCK);
-//        register(JUKEBOX);
+        register(SUGAR_CANE);
+        register(JUKEBOX);
         register(OAK_FENCE);
-//        register(PUMPKIN);
+        register(PUMPKIN);
         register(NETHERRACK);
         register(SOUL_SAND);
         register(GLOWSTONE);
-//        register(PORTAL);
-//        register(JACK_O_LANTERN);
-//        register(CAKE_BLOCK);
-//        register(DIODE_BLOCK_OFF);
-//        register(DIODE_BLOCK_ON);
-//        register(STAINED_GLASS);
-//        register(TRAP_DOOR);
-//        register(MONSTER_EGGS);
-//        register(SMOOTH_BRICK);
-//        register(HUGE_MUSHROOM_1);
-//        register(HUGE_MUSHROOM_2);
+        register(NETHER_PORTAL);
+        register(PUMPKIN_LANTERN);
+        register(CAKE);
+        register(REPEATER_OFF);
+        register(REPEATER_ON);
+        register(STAINED_GLASS);
+        register(WOODEN_TRAPDOOR);
+        register(MONSTER_EGG_TRAP);
+        register(STONE_BRICK);
+        register(BROWN_MUSHROOM_BLOCK);
+        register(RED_MUSHROOM_BLOCK);
         register(IRON_BARS);
         register(GLASS_PANE);
         register(MELON_BLOCK);
-//        register(PUMPKIN_STEM);
-//        register(MELON_STEM);
-//        register(VINE);
-//        register(FENCE_GATE);
-//        register(BRICK_STAIRS);
-//        register(SMOOTH_STAIRS);
+        register(PUMPKIN_STEM);
+        register(MELON_STEM);
+        register(VINE);
+        register(OAK_FENCE_GATE);
+        register(BRICK_STAIRS);
+        register(STONE_BRICK_STAIRS);
         register(MYCELIUM);
         register(WATER_LILY);
         register(NETHER_BRICK);
         register(NETHER_BRICK_FENCE);
-//        register(NETHER_BRICK_STAIRS);
-//        register(NETHER_WARTS);
-//        register(ENCHANTMENT_TABLE);
-//        register(BREWING_STAND);
-//        register(CAULDRON);
-//        register(ENDER_PORTAL);
-//        register(ENDER_PORTAL_FRAME);
+        register(NETHER_BRICK_STAIRS);
+        register(NETHER_WART_BLOCK);
+        register(ENCHANTING_TABLE);
+        register(BREWING_STAND_BLOCK);
+        register(CAULDRON);
+        register(END_PORTAL);
+        register(END_PORTAL_FRAME);
         register(END_STONE);
         register(DRAGON_EGG);
-//        register(REDSTONE_LAMP_OFF);
-//        register(REDSTONE_LAMP_ON);
-//        register(WOOD_DOUBLE_STEP);
-//        register(WOOD_STEP);
-//        register(COCOA);
-//        register(SANDSTONE_STAIRS);
+//        register(DOUBLE_WOODEN_SLAB);
+//        register(WOODEN_SLAB);
+        register(COCOA);
+        register(SANDSTONE_STAIRS);
         register(EMERALD_ORE);
-//        register(ENDER_CHEST);
-//        register(TRIPWIRE_HOOK);
-//        register(TRIPWIRE);
+        register(ENDER_CHEST);
+        register(TRIPWIRE_HOOK);
+        register(TRIPWIRE);
         register(EMERALD_BLOCK);
-//        register(SPRUCE_WOOD_STAIRS);
-//        register(BIRCH_WOOD_STAIRS);
-//        register(JUNGLE_WOOD_STAIRS);
-//        register(COMMAND);
+        register(SPRUCE_STAIRS);
+        register(BIRCH_STAIRS);
+        register(JUNGLE_STAIRS);
+        register(COMMAND_BLOCK);
         register(BEACON);
-//        register(COBBLE_WALL);
-//        register(FLOWER_POT);
-//        register(CARROT);
-//        register(POTATO);
-//        register(WOOD_BUTTON);
-//        register(SKULL);
-//        register(ANVIL);
-//        register(TRAPPED_CHEST);
-//        register(GOLD_PLATE);
-//        register(IRON_PLATE);
-//        register(REDSTONE_COMPARATOR_OFF);
-//        register(REDSTONE_COMPARATOR_ON);
-//        register(DAYLIGHT_DETECTOR);
+        register(COBBLESTONE_WALL);
+        register(FLOWER_POT);
+        register(CARROTS_BLOCK);
+        register(POTATOES_BLOCK);
+        register(WOODEN_BUTTON);
+        register(SKULL_BLOCK);
+        register(ANVIL);
+        register(TRAPPED_CHEST);
+        register(GOLDEN_PRESSURE_PLATE);
+        register(IRON_PRESSURE_PLATE);
+        register(REDSTONE_COMPARATOR);
+        register(DAYLIGHT_DETECTOR);
         register(REDSTONE_BLOCK);
         register(QUARTZ_ORE);
-//        register(HOPPER);
-//        register(QUARTZ_BLOCK);
-//        register(QUARTZ_STAIRS);
-//        register(ACTIVATOR_RAIL);
-//        register(DROPPER);
-//        register(STAINED_CLAY);
-//        register(STAINED_GLASS_PANE);
+        register(HOPPER);
+        register(QUARTZ_BLOCK);
+        register(QUARTZ_STAIRS);
+        register(ACTIVATOR_RAIL);
+        register(DROPPER);
+        register(STAINED_HARDENED_CLAY);
+        register(STAINED_GLASS_PANE);
         register(Leaves.LEAVES_ACACIA);
         register(Log.LOG_ACACIA);
-//        register(ACACIA_STAIRS);
-//        register(DARK_OAK_STAIRS);
+        register(ACACIA_STAIRS);
+        register(DARK_OAK_STAIRS);
         register(SLIME_BLOCK);
         register(BARRIER);
-//        register(IRON_TRAPDOOR);
-//        register(PRISMARINE);
+        register(IRON_TRAPDOOR);
+        register(PRISMARINE);
         register(SEA_LANTERN);
-//        register(HAY_BLOCK);
-//        register(CARPET);
+        register(HAY_BLOCK);
+        register(CARPET);
         register(HARDENED_CLAY);
         register(COAL_BLOCK);
         register(PACKED_ICE);
-//        register(DOUBLE_PLANT);
-//        register(STANDING_BANNER);
-//        register(WALL_BANNER);
-//        register(DAYLIGHT_DETECTOR_INVERTED);
-//        register(RED_SANDSTONE);
-//        register(RED_SANDSTONE_STAIRS);
-//        register(DOUBLE_STONE_SLAB2);
-//        register(STONE_SLAB2);
-//        register(SPRUCE_FENCE_GATE);
-//        register(BIRCH_FENCE_GATE);
-//        register(JUNGLE_FENCE_GATE);
-//        register(DARK_OAK_FENCE_GATE);
-//        register(ACACIA_FENCE_GATE);
+        register(DOUBLE_FLOWERS);
+        register(STANDING_BANNER);
+        register(WALL_BANNER);
+        register(DAYLIGHT_DETECTOR_INVERTED);
+        register(RED_SANDSTONE);
+        register(RED_SANDSTONE_STAIRS);
+        register(SPRUCE_FENCE_GATE);
+        register(BIRCH_FENCE_GATE);
+        register(JUNGLE_FENCE_GATE);
+        register(DARK_OAK_FENCE_GATE);
+        register(ACACIA_FENCE_GATE);
         register(SPRUCE_FENCE);
-        register(BRICH_FENCE);
+        register(BIRCH_FENCE);
         register(JUNGLE_FENCE);
         register(DARK_OAK_FENCE);
         register(ACACIA_FENCE);
-//        register(SPRUCE_DOOR);
-//        register(BIRCH_DOOR);
-//        register(JUNGLE_DOOR);
-//        register(ACACIA_DOOR);
-//        register(DARK_OAK_DOOR);
+        register(SPRUCE_DOOR);
+        register(BIRCH_DOOR);
+        register(JUNGLE_DOOR);
+        register(ACACIA_DOOR);
+        register(DARK_OAK_DOOR);
 //        register(IRON_SPADE);
 //        register(IRON_PICKAXE);
 //        register(IRON_AXE);

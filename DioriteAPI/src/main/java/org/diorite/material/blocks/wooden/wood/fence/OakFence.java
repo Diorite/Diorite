@@ -26,16 +26,6 @@ public class OakFence extends WoodenFence
         super("OAK_FENCE", 85, "minecraft:fence", "OAK_FENCE", WoodType.OAK);
     }
 
-    public OakFence(final String enumName)
-    {
-        super(OAK_FENCE.name(), OAK_FENCE.getId(), OAK_FENCE.getMinecraftId(), enumName, WoodType.OAK);
-    }
-
-    public OakFence(final int maxStack, final String typeName)
-    {
-        super(OAK_FENCE.name(), OAK_FENCE.getId(), OAK_FENCE.getMinecraftId(), maxStack, typeName, WoodType.OAK);
-    }
-
     @Override
     public float getBlastResistance()
     {
