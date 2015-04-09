@@ -69,7 +69,7 @@ public final class Main
                 this.acceptsAll(Arrays.asList("netty", "netty-threads"), "Amount of netty event loop threads.").withRequiredArg().ofType(Integer.class).describedAs("netty").defaultsTo(4);
                 this.acceptsAll(Arrays.asList("nojline"), "Disables jline and emulates the vanilla console");
                 this.acceptsAll(Arrays.asList("noconsole"), "Disables the console");
-            }//worldsdir
+            }
         };
         OptionSet options;
         try
