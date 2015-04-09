@@ -1,5 +1,5 @@
 package org.diorite.entity;
 
-public class LivingEntity
+public interface LivingEntity extends AttributableEntity
 {
 }
