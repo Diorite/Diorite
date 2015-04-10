@@ -30,7 +30,7 @@ public final class Main
 
     private Main()
     {
-    }
+    } // push test
 
     public static boolean isUseJline()
     {
