@@ -156,7 +156,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  MobSpawner               MOB_SPAWNER                = MobSpawner.MOB_SPAWNER; // TODO: edit after editing auto-generated class
     public static final  OakStairs                OAK_STAIRS                 = OakStairs.OAK_STAIRS; // TODO: edit after editing auto-generated class
     public static final  Chest                    CHEST                      = Chest.CHEST; // TODO: edit after editing auto-generated class
-    public static final  RedstoneWire             REDSTONE_WIRE              = RedstoneWire.REDSTONE_WIRE; // TODO: edit after editing auto-generated class
+    public static final  RedstoneWire             REDSTONE_WIRE              = RedstoneWire.REDSTONE_WIRE_OFF;
     public static final  DiamondOre               DIAMOND_ORE                = DiamondOre.DIAMOND_ORE;
     public static final  DiamondBlock             DIAMOND_BLOCK              = DiamondBlock.DIAMOND_BLOCK;
     public static final  CraftingTable            CRAFTING_TABLE             = CraftingTable.CRAFTING_TABLE;
