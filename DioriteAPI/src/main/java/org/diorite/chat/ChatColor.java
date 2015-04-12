@@ -1,6 +1,5 @@
 package org.diorite.chat;
 
-
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -34,7 +33,7 @@ public enum ChatColor
     ITALIC("italic", 'o', 20, true),
     RESET("reset", 'r', 21);
 
-    public static final char COLOR_CHAR                   = '§';
+    public static final char COLOR_CHAR                   = '\u00A7'; // to fix encoding problems on Intellij 14.1
     public static final char DEFAULT_ALTERNATE_COLOR_CHAR = '&';
     private static final Pattern                   STRIP_COLOR_PATTERN;
     private static final Map<Integer, ChatColor>   BY_ID;
@@ -113,7 +112,7 @@ public enum ChatColor
         {
             if ((b[i] == altColorChar) && ("0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[(i + 1)]) > - 1))
             {
-                b[i] = '§';
+                b[i] = COLOR_CHAR;
                 b[(i + 1)] = Character.toLowerCase(b[(i + 1)]);
             }
         }
@@ -151,7 +150,7 @@ public enum ChatColor
 
     static
     {
-        STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf('§') + "[0-9A-FK-OR]");
+        STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
 
 
         BY_ID = Maps.newHashMap();

@@ -15,9 +15,20 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Log extends Wood implements Rotatable
-{
-    public static final byte  USED_DATA_VALUES = 24;
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__LOG__BLAST_RESISTANCE;
+{	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
+    public static final byte  USED_DATA_VALUES = 24;	
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__LOG__BLAST_RESISTANCE;	
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__LOG__HARDNESS;
 
     public static final Log LOG_OAK      = new Log();

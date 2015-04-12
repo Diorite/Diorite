@@ -9,9 +9,20 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Flowers extends Plant
-{
-    public static final byte  USED_DATA_VALUES = 9;
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__FLOWERS__BLAST_RESISTANCE;
+{	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
+    public static final byte  USED_DATA_VALUES = 9;	
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__FLOWERS__BLAST_RESISTANCE;	
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__FLOWERS__HARDNESS;
 
     public static final Flowers FLOWERS_POPPY        = new Flowers();

@@ -11,9 +11,20 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class EmeraldBlock extends OreBlock
-{
-    public static final byte  USED_DATA_VALUES = 1;
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__EMERALD_BLOCK__BLAST_RESISTANCE;
+{	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
+    public static final byte  USED_DATA_VALUES = 1;	
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__EMERALD_BLOCK__BLAST_RESISTANCE;	
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__EMERALD_BLOCK__HARDNESS;
 
     public static final EmeraldBlock EMERALD_BLOCK = new EmeraldBlock(Material.EMERALD_ORE);

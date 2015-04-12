@@ -11,8 +11,22 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class PackedIce extends BlockMaterialData
 {
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
     public static final byte  USED_DATA_VALUES = 1;
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__PACKED_ICE__BLAST_RESISTANCE;
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__PACKED_ICE__HARDNESS;
 
     public static final PackedIce PACKED_ICE = new PackedIce();
@@ -24,16 +38,6 @@ public class PackedIce extends BlockMaterialData
     protected PackedIce()
     {
         super("PACKED_ICE", 174, "minecraft:packet_ice", "PACKED_ICE", (byte) 0x00);
-    }
-
-    public PackedIce(final String enumName, final int type)
-    {
-        super(PACKED_ICE.name(), PACKED_ICE.getId(), PACKED_ICE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public PackedIce(final int maxStack, final String typeName, final byte type)
-    {
-        super(PACKED_ICE.name(), PACKED_ICE.getId(), PACKED_ICE.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override

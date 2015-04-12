@@ -11,9 +11,20 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class StoneSlab extends StonySlab
-{
-    public static final byte  USED_DATA_VALUES = 18;
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_SLAB__BLAST_RESISTANCE;
+{	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
+    public static final byte  USED_DATA_VALUES = 18;	
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_SLAB__BLAST_RESISTANCE;	
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_SLAB__HARDNESS;
 
     public static final StoneSlab STONE_SLAB_STONE         = new StoneSlab();

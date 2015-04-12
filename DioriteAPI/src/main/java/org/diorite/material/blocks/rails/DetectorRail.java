@@ -13,9 +13,20 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class DetectorRail extends Rails implements Powerable
-{
-    public static final byte  USED_DATA_VALUES = 12;
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DETECTOR_RAIL__BLAST_RESISTANCE;
+{	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
+    public static final byte  USED_DATA_VALUES = 12;	
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DETECTOR_RAIL__BLAST_RESISTANCE;	
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__DETECTOR_RAIL__HARDNESS;
     public static final byte  POWERED_FLAG     = 0x08;
 

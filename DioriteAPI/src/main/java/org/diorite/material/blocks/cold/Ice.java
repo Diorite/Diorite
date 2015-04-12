@@ -11,8 +11,26 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class Ice extends BlockMaterialData
 {
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
     public static final byte  USED_DATA_VALUES = 1;
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__ICE__BLAST_RESISTANCE;
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */	
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__ICE__BLAST_RESISTANCE;	
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__ICE__HARDNESS;
 
     public static final Ice ICE = new Ice();
@@ -24,16 +42,6 @@ public class Ice extends BlockMaterialData
     protected Ice()
     {
         super("ICE", 79, "minecraft:ice", "ICE", (byte) 0x00);
-    }
-
-    public Ice(final String enumName, final int type)
-    {
-        super(ICE.name(), ICE.getId(), ICE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public Ice(final int maxStack, final String typeName, final byte type)
-    {
-        super(ICE.name(), ICE.getId(), ICE.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override

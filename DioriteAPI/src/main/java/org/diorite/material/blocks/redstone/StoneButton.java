@@ -10,9 +10,20 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class StoneButton extends Button
 {
-    // TODO: auto-generated class, implement other types (sub-ids).
-    public static final byte  USED_DATA_VALUES = 1;
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_BUTTON__BLAST_RESISTANCE;
+    // TODO: auto-generated class, implement other types (sub-ids).	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
+    public static final byte  USED_DATA_VALUES = 1;	
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_BUTTON__BLAST_RESISTANCE;	
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_BUTTON__HARDNESS;
 
     public static final StoneButton STONE_BUTTON = new StoneButton();

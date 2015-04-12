@@ -12,9 +12,20 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class DaylightDetectorInverted extends BlockMaterialData implements Activatable
 {
-    // TODO: auto-generated class, implement other types (sub-ids).
+    // TODO: auto-generated class, implement other types (sub-ids).	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
     public static final byte  USED_DATA_VALUES = 1;
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
     public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DAYLIGHT_DETECTOR_INVERTED__BLAST_RESISTANCE;
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__DAYLIGHT_DETECTOR_INVERTED__HARDNESS;
 
     public static final DaylightDetectorInverted DAYLIGHT_DETECTOR_INVERTED = new DaylightDetectorInverted();

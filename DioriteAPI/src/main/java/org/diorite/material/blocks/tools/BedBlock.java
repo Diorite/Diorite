@@ -15,9 +15,20 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 public class BedBlock extends BlockMaterialData implements Directional
-{
-    public static final byte  USED_DATA_VALUES = 16;
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__BED_BLOCK__BLAST_RESISTANCE;
+{	
+    /**
+     * Sub-ids used by diorite/minecraft by default
+     */
+    public static final byte  USED_DATA_VALUES = 16;	
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__BED_BLOCK__BLAST_RESISTANCE;	
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__BED_BLOCK__HARDNESS;
     public static final byte  OCCUPIED_FLAG    = 0x04;
     public static final byte  HEAD_PART_FLAG   = 0x08; // 1 for head, 0 for foot part
