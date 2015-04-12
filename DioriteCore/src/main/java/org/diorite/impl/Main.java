@@ -12,7 +12,10 @@ import org.fusesource.jansi.AnsiConsole;
 
 import org.diorite.impl.connection.packets.RegisterPackets;
 import org.diorite.Server;
+import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.chat.ChatColor;
 import org.diorite.material.Material;
+import org.diorite.material.blocks.cold.Ice;
 
 import io.netty.util.ResourceLeakDetector;
 import jline.UnsupportedTerminal;
@@ -148,7 +151,9 @@ public final class Main
 
                 // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
                 // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
+                MagicNumbers.MATERIAL__ICE__BLAST_RESISTANCE = 0.86536f;
                 System.out.println("Registered " + Material.getByID().size() + " vanilla minecraft blocks and items.");
+                System.out.println("Test: " + Ice.BLAST_RESISTANCE + ", " + Ice.HARDNESS+", "+ ChatColor.AQUA);
                 new ServerImpl(serverName, Proxy.NO_PROXY, options).start(options);
             } catch (final Throwable t)
             {
