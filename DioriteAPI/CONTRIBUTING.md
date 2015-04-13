@@ -7,11 +7,11 @@ You need use us code style and inspections, if you are using Intellij, you can i
 Just few rules:
 * We are using allman bracket style.
 * Indent by 4 spaces.
-* Don't break lines
+* Don't break lines.
 * No CRLF line endings, LF only, set your Gits 'core.autocrlf' to 'true'.
 * Don't use access modifiers in interfaces. 
-* Use final values where possible
-  * But not in method parameters of abstract methods (including interfaces)
+* Use final values where possible.
+  * But not in method parameters of abstract methods. (including interfaces)
 * Always use braces, so don't use `if (i > 5) return true;`
 * Spaces:
   * Before `if`, `for`, `while`, `switch`, `try`, `catch`, `synchronized` parentheses, like `if (bool)` instead of `if(bool)`
@@ -35,7 +35,7 @@ Just few rules:
 ## Implementing new packets
 If you want implement new packet to diorite: (that exist in vanilla Minecraft)
 * Keep packet name from minecraft decompiled code. **(and only name)**
-  * So names should be like in Bukkit project
+  * So names should be like in Bukkit project.
 * Every packet class must have PacketClass annotation.
 * You should implement read/write packet and handle methods, even if some of them aren't needed.
 * All fields should have getters and setters.
