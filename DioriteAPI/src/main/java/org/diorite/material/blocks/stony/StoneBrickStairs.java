@@ -10,6 +10,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "StoneBrickStairs" and all its subtypes.
+ */
 public class StoneBrickStairs extends BlockMaterialData implements Stairs
 {
     // TODO: auto-generated class, implement other types (sub-ids).	

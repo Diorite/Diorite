@@ -9,6 +9,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "DarkOakDoor" and all its subtypes.
+ */
 public class DarkOakDoor extends WoodenDoor
 {
     // TODO: auto-generated class, implement other types (sub-ids).	

@@ -9,6 +9,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "AcaciaStairs" and all its subtypes.
+ */
 public class AcaciaStairs extends WoodenStairs
 {
     // TODO: auto-generated class, implement other types (sub-ids).	

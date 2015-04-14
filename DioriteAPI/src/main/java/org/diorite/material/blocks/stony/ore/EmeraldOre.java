@@ -8,6 +8,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "EmeraldOre" and all its subtypes.
+ */
 public class EmeraldOre extends Ore
 {	
     /**

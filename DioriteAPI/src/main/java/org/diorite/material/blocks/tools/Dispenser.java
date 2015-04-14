@@ -16,6 +16,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "Dispenser" and all its subtypes.
+ */
 public class Dispenser extends Stony implements ContainerBlock, Directional, Activatable
 {	
     /**

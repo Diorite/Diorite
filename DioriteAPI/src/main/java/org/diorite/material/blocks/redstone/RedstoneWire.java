@@ -10,6 +10,9 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
+/**
+ * Class representing block "RedstoneWire" and all its subtypes.
+ */
 public class RedstoneWire extends BlockMaterialData
 {	
     /**

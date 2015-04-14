@@ -12,6 +12,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "PoweredRail" and all its subtypes.
+ */
 public class PoweredRail extends Rails implements Activatable
 {	
     /**

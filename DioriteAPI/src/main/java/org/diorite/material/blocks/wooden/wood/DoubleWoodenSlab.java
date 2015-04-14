@@ -1,5 +1,8 @@
 package org.diorite.material.blocks.wooden.wood;
 
+/**
+ * Class representing block "DoubleWoodenSlab" and all its subtypes.
+ */
 public class DoubleWoodenSlab// extends WoodSlab
 {
 // TODO: auto-generated class, implement other types (sub-ids). 

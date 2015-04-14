@@ -9,6 +9,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "BirchStairs" and all its subtypes.
+ */
 public class BirchStairs extends WoodenStairs
 {
     // TODO: auto-generated class, implement other types (sub-ids).	

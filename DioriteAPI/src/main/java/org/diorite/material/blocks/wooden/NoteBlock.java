@@ -9,6 +9,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "NoteBlock" and all its subtypes.
+ */
 public class NoteBlock extends Wooden implements ContainerBlock
 {	
     /**

@@ -9,6 +9,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "BirchDoor" and all its subtypes.
+ */
 public class BirchDoor extends WoodenDoor
 {
     // TODO: auto-generated class, implement other types (sub-ids).	

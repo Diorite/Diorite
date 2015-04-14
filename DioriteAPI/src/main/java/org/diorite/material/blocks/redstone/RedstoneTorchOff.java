@@ -8,6 +8,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "RedstoneTorchOff" and all its subtypes.
+ */
 public class RedstoneTorchOff extends RedstoneTorch
 {
     // TODO: auto-generated class, implement other types (sub-ids).	

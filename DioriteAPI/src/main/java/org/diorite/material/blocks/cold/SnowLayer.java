@@ -9,6 +9,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "SnowLayer" and all its subtypes.
+ */
 public class SnowLayer extends BlockMaterialData
 {
     /**
@@ -76,6 +79,11 @@ public class SnowLayer extends BlockMaterialData
     public static SnowLayer getByID(final int id)
     {
         return byID.get((byte) id);
+    }
+
+    public static SnowLayer getSnowLayer(final int layers)
+    {
+        return getByID(layers);
     }
 
     public static SnowLayer getByEnumName(final String name)

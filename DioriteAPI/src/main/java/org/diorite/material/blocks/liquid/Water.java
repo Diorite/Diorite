@@ -8,23 +8,34 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "Water" and all its subtypes.
+ */
 public class Water extends Liquid
-{	
+{
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES       = 16;	
+    public static final byte  USED_DATA_VALUES       = 16;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
      */
-    public static final float BLAST_RESISTANCE       = MagicNumbers.MATERIAL__WATER__BLAST_RESISTANCE;	
+    public static final float BLAST_RESISTANCE       = MagicNumbers.MATERIAL__WATER__BLAST_RESISTANCE;
     /**
      * Hardness of block, can be changed only before server start.
      * Final copy of hardness from {@link MagicNumbers} class.
      */
     public static final float HARDNESS               = MagicNumbers.MATERIAL__WATER__HARDNESS;
+    /**
+     * Blast resistance of block, can be changed only before server start.
+     * Final copy of blast resistance from {@link MagicNumbers} class.
+     */
     public static final float BLAST_RESISTANCE_STILL = MagicNumbers.MATERIAL__WATER_STILL__BLAST_RESISTANCE;
+    /**
+     * Hardness of block, can be changed only before server start.
+     * Final copy of hardness from {@link MagicNumbers} class.
+     */
     public static final float HARDNESS_STILL         = MagicNumbers.MATERIAL__WATER_STILL__HARDNESS;
 
     public static final Water WATER_SOURCE  = new Water(LiquidType.NORMAL);

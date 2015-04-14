@@ -9,11 +9,11 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "PackedIce" and all its subtypes.
+ */
 public class PackedIce extends BlockMaterialData
 {
-    /**
-     * Sub-ids used by diorite/minecraft by default
-     */
     /**
      * Sub-ids used by diorite/minecraft by default
      */

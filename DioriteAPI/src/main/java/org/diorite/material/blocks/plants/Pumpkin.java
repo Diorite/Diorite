@@ -10,6 +10,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "Pumpkin" and all its subtypes.
+ */
 public class Pumpkin extends BlockMaterialData implements Powerable
 {
     // TODO: auto-generated class, implement other types (sub-ids).	

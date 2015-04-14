@@ -10,6 +10,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "Anvil" and all its subtypes.
+ */
 public class Anvil extends BlockMaterialData implements ContainerBlock
 {
     // TODO: auto-generated class, implement other types (sub-ids).	

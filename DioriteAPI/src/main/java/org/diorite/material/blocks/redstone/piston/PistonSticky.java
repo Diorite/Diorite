@@ -9,6 +9,9 @@ import org.diorite.utils.collections.SimpleStringHashMap;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Class representing block "PistonSticky" and all its subtypes.
+ */
 public class PistonSticky extends PistonBase
 {	
     /**
