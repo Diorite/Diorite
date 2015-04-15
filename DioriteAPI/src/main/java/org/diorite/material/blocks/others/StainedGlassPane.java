@@ -90,16 +90,32 @@ public class StainedGlassPane extends BlockMaterialData implements Colorable
         return null; // TODO: implement
     }
 
+    /**
+     * Returns one of StainedGlassPane sub-type based on sub-id, may return null
+     * @param id sub-type id
+     * @return sub-type of StainedGlassPane or null
+     */
     public static StainedGlassPane getByID(final int id)
     {
         return byID.get((byte) id);
     }
 
+    /**
+     * Returns one of StainedGlassPane sub-type based on name (selected by diorite team), may return null
+     * If block contains only one type, sub-name of it will be this same as name of material.
+     * @param name name of sub-type
+     * @return sub-type of StainedGlassPane or null
+     */
     public static StainedGlassPane getByEnumName(final String name)
     {
         return byName.get(name);
     }
 
+    /**
+     * Register new sub-type, may replace existing sub-types.
+     * Should be used only if you know what are you doing, it will not create fully usable material.
+     * @param element sub-type to register
+     */
     public static void register(final StainedGlassPane element)
     {
         byID.put(element.getType(), element);

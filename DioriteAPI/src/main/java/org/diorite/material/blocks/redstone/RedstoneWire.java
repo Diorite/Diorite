@@ -105,11 +105,22 @@ public class RedstoneWire extends BlockMaterialData
         return getByID(power);
     }
 
+    /**
+     * Returns one of RedstoneWire sub-type based on sub-id, may return null
+     * @param id sub-type id
+     * @return sub-type of RedstoneWire or null
+     */
     public static RedstoneWire getByID(final int id)
     {
         return byID.get((byte) id);
     }
 
+    /**
+     * Returns one of RedstoneWire sub-type based on name (selected by diorite team), may return null
+     * If block contains only one type, sub-name of it will be this same as name of material.
+     * @param name name of sub-type
+     * @return sub-type of RedstoneWire or null
+     */
     public static RedstoneWire getByEnumName(final String name)
     {
         return byName.get(name);
@@ -120,6 +131,11 @@ public class RedstoneWire extends BlockMaterialData
         return getByID(power);
     }
 
+    /**
+     * Register new sub-type, may replace existing sub-types.
+     * Should be used only if you know what are you doing, it will not create fully usable material.
+     * @param element sub-type to register
+     */
     public static void register(final RedstoneWire element)
     {
         byID.put(element.getType(), element);

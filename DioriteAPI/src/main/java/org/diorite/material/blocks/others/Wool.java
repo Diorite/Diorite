@@ -111,11 +111,22 @@ public class Wool extends BlockMaterialData implements Colorable
         return getByID(color.getBlockFlag());
     }
 
+    /**
+     * Returns one of Wool sub-type based on sub-id, may return null
+     * @param id sub-type id
+     * @return sub-type of Wool or null
+     */
     public static Wool getByID(final int id)
     {
         return byID.get((byte) id);
     }
 
+    /**
+     * Returns one of Wool sub-type based on name (selected by diorite team), may return null
+     * If block contains only one type, sub-name of it will be this same as name of material.
+     * @param name name of sub-type
+     * @return sub-type of Wool or null
+     */
     public static Wool getByEnumName(final String name)
     {
         return byName.get(name);
@@ -126,6 +137,11 @@ public class Wool extends BlockMaterialData implements Colorable
         return getByID(color.getBlockFlag());
     }
 
+    /**
+     * Register new sub-type, may replace existing sub-types.
+     * Should be used only if you know what are you doing, it will not create fully usable material.
+     * @param element sub-type to register
+     */
     public static void register(final Wool element)
     {
         byID.put(element.getType(), element);

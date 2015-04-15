@@ -174,11 +174,22 @@ public class Sapling extends Wood
         }
     }
 
+    /**
+     * Returns one of Sapling sub-type based on sub-id, may return null
+     * @param id sub-type id
+     * @return sub-type of Sapling or null
+     */
     public static Sapling getByID(final int id)
     {
         return byID.get((byte) id);
     }
 
+    /**
+     * Returns one of Sapling sub-type based on name (selected by diorite team), may return null
+     * If block contains only one type, sub-name of it will be this same as name of material.
+     * @param name name of sub-type
+     * @return sub-type of Sapling or null
+     */
     public static Sapling getByEnumName(final String name)
     {
         return byName.get(name);
@@ -189,6 +200,11 @@ public class Sapling extends Wood
         return getByID(combine(woodType, stage));
     }
 
+    /**
+     * Register new sub-type, may replace existing sub-types.
+     * Should be used only if you know what are you doing, it will not create fully usable material.
+     * @param element sub-type to register
+     */
     public static void register(final Sapling element)
     {
         byID.put(element.getType(), element);

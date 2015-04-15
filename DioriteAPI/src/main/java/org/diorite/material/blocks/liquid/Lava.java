@@ -192,16 +192,32 @@ public class Lava extends Liquid
         return getByID(stage.getDataValue() + ((type == LiquidType.STILL) ? 16 : 0));
     }
 
+    /**
+     * Returns one of Lava sub-type based on sub-id, may return null
+     * @param id sub-type id
+     * @return sub-type of Lava or null
+     */
     public static Lava getByID(final int id)
     {
         return byID.get((byte) id);
     }
 
+    /**
+     * Returns one of Lava sub-type based on name (selected by diorite team), may return null
+     * If block contains only one type, sub-name of it will be this same as name of material.
+     * @param name name of sub-type
+     * @return sub-type of Lava or null
+     */
     public static Lava getByEnumName(final String name)
     {
         return byName.get(name);
     }
 
+    /**
+     * Register new sub-type, may replace existing sub-types.
+     * Should be used only if you know what are you doing, it will not create fully usable material.
+     * @param element sub-type to register
+     */
     public static void register(final Lava element)
     {
         byID.put(element.getFixedDataValue(), element);
@@ -260,7 +276,12 @@ public class Lava extends Liquid
         }
 
         @SuppressWarnings("MagicNumber")
-        public static Lava getByID(final int id)
+        /**
+     * Returns one of Lava sub-type based on sub-id, may return null
+     * @param id sub-type id
+     * @return sub-type of Lava or null
+     */
+    public static Lava getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }
