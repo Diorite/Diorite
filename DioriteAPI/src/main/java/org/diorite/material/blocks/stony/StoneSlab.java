@@ -14,16 +14,16 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * Class representing block "StoneSlab" and all its subtypes.
  */
 public class StoneSlab extends StonySlab
-{	
+{
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 18;	
+    public static final byte  USED_DATA_VALUES = 18;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
      */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_SLAB__BLAST_RESISTANCE;	
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_SLAB__BLAST_RESISTANCE;
     /**
      * Hardness of block, can be changed only before server start.
      * Final copy of hardness from {@link MagicNumbers} class.
@@ -113,7 +113,9 @@ public class StoneSlab extends StonySlab
 
     /**
      * Returns one of StoneSlab sub-type based on sub-id, may return null
+     *
      * @param id sub-type id
+     *
      * @return sub-type of StoneSlab or null
      */
     public static StoneSlab getByID(final int id)
@@ -124,7 +126,9 @@ public class StoneSlab extends StonySlab
     /**
      * Returns one of StoneSlab sub-type based on name (selected by diorite team), may return null
      * If block contains only one type, sub-name of it will be this same as name of material.
+     *
      * @param name name of sub-type
+     *
      * @return sub-type of StoneSlab or null
      */
     public static StoneSlab getByEnumName(final String name)
@@ -135,6 +139,7 @@ public class StoneSlab extends StonySlab
     /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
+     *
      * @param element sub-type to register
      */
     public static void register(final StoneSlab element)
@@ -186,11 +191,11 @@ public class StoneSlab extends StonySlab
 
         @SuppressWarnings("MagicNumber")
         /**
-     * Returns one of StoneSlab sub-type based on sub-id, may return null
-     * @param id sub-type id
-     * @return sub-type of StoneSlab or null
-     */
-    public static StoneSlab getByID(final int id)
+         * Returns one of StoneSlab sub-type based on sub-id, may return null
+         * @param id sub-type id
+         * @return sub-type of StoneSlab or null
+         */
+        public static StoneSlab getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

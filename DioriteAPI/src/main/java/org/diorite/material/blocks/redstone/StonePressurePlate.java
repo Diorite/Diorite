@@ -17,12 +17,12 @@ public class StonePressurePlate extends PressurePlate
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;	
+    public static final byte  USED_DATA_VALUES = 1;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
      */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_PRESSURE_PLATE__BLAST_RESISTANCE;	
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_PRESSURE_PLATE__BLAST_RESISTANCE;
     /**
      * Hardness of block, can be changed only before server start.
      * Final copy of hardness from {@link MagicNumbers} class.
@@ -82,7 +82,9 @@ public class StonePressurePlate extends PressurePlate
 
     /**
      * Returns one of StonePressurePlate sub-type based on sub-id, may return null
+     *
      * @param id sub-type id
+     *
      * @return sub-type of StonePressurePlate or null
      */
     public static StonePressurePlate getByID(final int id)
@@ -93,7 +95,9 @@ public class StonePressurePlate extends PressurePlate
     /**
      * Returns one of StonePressurePlate sub-type based on name (selected by diorite team), may return null
      * If block contains only one type, sub-name of it will be this same as name of material.
+     *
      * @param name name of sub-type
+     *
      * @return sub-type of StonePressurePlate or null
      */
     public static StonePressurePlate getByEnumName(final String name)
@@ -104,6 +108,7 @@ public class StonePressurePlate extends PressurePlate
     /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
+     *
      * @param element sub-type to register
      */
     public static void register(final StonePressurePlate element)

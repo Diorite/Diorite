@@ -78,7 +78,9 @@ public class SnowLayer extends BlockMaterialData
 
     /**
      * Returns one of SnowLayer sub-type based on sub-id, may return null
+     *
      * @param id sub-type id
+     *
      * @return sub-type of SnowLayer or null
      */
     public static SnowLayer getByID(final int id)
@@ -94,7 +96,9 @@ public class SnowLayer extends BlockMaterialData
     /**
      * Returns one of SnowLayer sub-type based on name (selected by diorite team), may return null
      * If block contains only one type, sub-name of it will be this same as name of material.
+     *
      * @param name name of sub-type
+     *
      * @return sub-type of SnowLayer or null
      */
     public static SnowLayer getByEnumName(final String name)
@@ -105,6 +109,7 @@ public class SnowLayer extends BlockMaterialData
     /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
+     *
      * @param element sub-type to register
      */
     public static void register(final SnowLayer element)

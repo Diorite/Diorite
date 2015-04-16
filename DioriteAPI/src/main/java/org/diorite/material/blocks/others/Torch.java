@@ -18,12 +18,12 @@ public class Torch extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;	
+    public static final byte  USED_DATA_VALUES = 1;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
      */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__TORCH__BLAST_RESISTANCE;	
+    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__TORCH__BLAST_RESISTANCE;
     /**
      * Hardness of block, can be changed only before server start.
      * Final copy of hardness from {@link MagicNumbers} class.
@@ -77,7 +77,9 @@ public class Torch extends BlockMaterialData
 
     /**
      * Returns one of Torch sub-type based on sub-id, may return null
+     *
      * @param id sub-type id
+     *
      * @return sub-type of Torch or null
      */
     public static Torch getByID(final int id)
@@ -88,7 +90,9 @@ public class Torch extends BlockMaterialData
     /**
      * Returns one of Torch sub-type based on name (selected by diorite team), may return null
      * If block contains only one type, sub-name of it will be this same as name of material.
+     *
      * @param name name of sub-type
+     *
      * @return sub-type of Torch or null
      */
     public static Torch getByEnumName(final String name)
@@ -99,6 +103,7 @@ public class Torch extends BlockMaterialData
     /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
+     *
      * @param element sub-type to register
      */
     public static void register(final Torch element)
