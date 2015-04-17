@@ -88,9 +88,17 @@ public class SnowLayer extends BlockMaterialData
         return byID.get((byte) id);
     }
 
+    /**
+     * Returns one of SnowLayer sub-type based on how many layers it should have.
+     * From 1 to 8.
+     *
+     * @param id sub-type id
+     *
+     * @return sub-type of SnowLayer or null
+     */
     public static SnowLayer getSnowLayer(final int layers)
     {
-        return getByID(layers);
+        return getByID(layers + 1);
     }
 
     /**
