@@ -41,6 +41,16 @@ public class FloatRange
         return ((double) this.max - (double) this.min);
     }
 
+    public boolean isIn(final float i)
+    {
+        return (i >= this.min) && (i <= this.max);
+    }
+
+    public boolean isIn(final double i)
+    {
+        return (i >= this.min) && (i <= this.max);
+    }
+
     @Override
     public int hashCode()
     {

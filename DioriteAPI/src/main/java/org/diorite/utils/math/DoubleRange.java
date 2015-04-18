@@ -36,6 +36,11 @@ public class DoubleRange
         return (this.max - this.min);
     }
 
+    public boolean isIn(final double i)
+    {
+        return (i >= this.min) && (i <= this.max);
+    }
+
     @Override
     public int hashCode()
     {

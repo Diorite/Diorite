@@ -1,60 +1,170 @@
 package org.diorite;
 
+/**
+ * Represents the face of a block.
+ */
 public enum BlockFace
 {
+    /**
+     * North is facing towards negative z (0, 0, -1).
+     */
     NORTH(0, 0, - 1),
+
+    /**
+     * East is facing towards positive x (1, 0, 0).
+     */
     EAST(1, 0, 0),
+
+    /**
+     * South is facing towards positive z (0, 0, 1).
+     */
     SOUTH(0, 0, 1),
+
+    /**
+     * West is facing towards negative x (-1, 0, 0).
+     */
     WEST(- 1, 0, 0),
+
+    /**
+     * Up is facing towards positive y (0, 1, 0).
+     */
     UP(0, 1, 0),
+
+    /**
+     * Down is facing towards negative y (0, -1, 0).
+     */
     DOWN(0, - 1, 0),
+
+    /**
+     * North-East, facing towards positive x and negative z (1, 0, -1).
+     */
     NORTH_EAST(NORTH, EAST),
+
+    /**
+     * North-West, facing towards negative x and negative z (-1, 0, -1).
+     */
     NORTH_WEST(NORTH, WEST),
+
+    /**
+     * South-East, facing towards positive x and positive z (1, 0, 1).
+     */
     SOUTH_EAST(SOUTH, EAST),
+
+    /**
+     * South-West, facing towards negative x and positive z (-1, 0, 1).
+     */
     SOUTH_WEST(SOUTH, WEST),
+
+    /**
+     * West-North-West, facing towards negative x and negative z (-2, 0, -1).
+     */
     WEST_NORTH_WEST(WEST, NORTH_WEST),
+
+    /**
+     * North-North-West, facing towards negative x and negative z (-1, 0, -2).
+     */
     NORTH_NORTH_WEST(NORTH, NORTH_WEST),
+
+    /**
+     * North-North-East, facing towards positive x and negative z (1, 0, -2).
+     */
     NORTH_NORTH_EAST(NORTH, NORTH_EAST),
+
+    /**
+     * East-North-East, facing towards positive x and negative z (2, 0, -1).
+     */
     EAST_NORTH_EAST(EAST, NORTH_EAST),
+
+    /**
+     * East-South-East, facing towards positive x and positive z (2, 0, 1).
+     */
     EAST_SOUTH_EAST(EAST, SOUTH_EAST),
+
+    /**
+     * South-South-East, facing towards positive x and positive z (1, 0, 2).
+     */
     SOUTH_SOUTH_EAST(SOUTH, SOUTH_EAST),
+
+    /**
+     * South-South-West, facing towards negative x and positive z (-1, 0, 2).
+     */
     SOUTH_SOUTH_WEST(SOUTH, SOUTH_WEST),
+
+    /**
+     * West-South-West, facing towards negative x and positive z (-2, 0, 1).
+     */
     WEST_SOUTH_WEST(WEST, SOUTH_WEST),
+
+    /**
+     * Self, facing itself. (0, 0, 0)
+     */
     SELF(0, 0, 0);
 
     private final int modX;
     private final int modY;
     private final int modZ;
 
-    private BlockFace(final int modX, final int modY, final int modZ)
+    BlockFace(final int modX, final int modY, final int modZ)
     {
         this.modX = modX;
         this.modY = modY;
         this.modZ = modZ;
     }
 
-    private BlockFace(final BlockFace face1, final BlockFace face2)
+    BlockFace(final BlockFace face1, final BlockFace face2)
     {
         this.modX = face1.getModX() + face2.getModX();
         this.modY = face1.getModY() + face2.getModY();
         this.modZ = face1.getModZ() + face2.getModZ();
     }
 
+    /**
+     * @return Amount of X-coordinates to modify to get the represented block
+     */
     public int getModX()
     {
         return this.modX;
     }
 
+    /**
+     * @return Amount of Y-coordinates to modify to get the represented block
+     */
     public int getModY()
     {
         return this.modY;
     }
 
+    /**
+     * @return Amount of Z-coordinates to modify to get the represented block
+     */
     public int getModZ()
     {
         return this.modZ;
     }
 
+    /**
+     * @return true if block face is using only one axis
+     */
+    public boolean isBasic()
+    {
+        switch (this)
+        {
+            case NORTH:
+            case EAST:
+            case SOUTH:
+            case WEST:
+            case UP:
+            case DOWN:
+            case SELF:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * @return Opposite face of block. like UP -> DOWN
+     */
     public BlockFace getOppositeFace()
     {
         switch (this)

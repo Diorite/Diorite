@@ -42,6 +42,16 @@ public class ByteRange
         return (short) ((this.max - this.min) + 1);
     }
 
+    public boolean isIn(final int i)
+    {
+        return (i >= this.min) && (i <= this.max);
+    }
+
+    public boolean isIn(final byte i)
+    {
+        return (i >= this.min) && (i <= this.max);
+    }
+
     @Override
     public int hashCode()
     {

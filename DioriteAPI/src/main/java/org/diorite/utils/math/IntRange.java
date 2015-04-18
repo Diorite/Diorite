@@ -37,6 +37,11 @@ public class IntRange
         return (((long) this.max - (long) this.min) + 1L);
     }
 
+    public boolean isIn(final int i)
+    {
+        return (i >= this.min) && (i <= this.max);
+    }
+
     @Override
     public int hashCode()
     {
