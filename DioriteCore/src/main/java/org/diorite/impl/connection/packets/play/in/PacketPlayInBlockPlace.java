@@ -10,37 +10,31 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
-import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
+import org.diorite.utils.CursorPos;
 
 @PacketClass(id = 0x08, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketPlayInBlockPlace implements PacketPlayIn
 {
     private BlockLocation location;
-    private BlockFace     blockFace;
-    private ItemStackImpl itemStack; // ignored by server, always read as null to prevent memory leaks and client ability to crash server.
-    private float         cursorX;
-    private float         cursorY;
-    private float         cursorZ;
+    // private ItemStackImpl itemStack; // ignored by server, always read as null to prevent memory leaks and client ability to crash server.
+    private CursorPos     cursorPos;
 
     public PacketPlayInBlockPlace()
     {
     }
 
-    public PacketPlayInBlockPlace(final ItemStackImpl itemStack)
-    {
-        this.itemStack = itemStack;
-    }
-
-    public PacketPlayInBlockPlace(final BlockLocation location, final BlockFace blockFace, final ItemStackImpl itemStack, final float cursorX, final float cursorY, final float cursorZ)
+    public PacketPlayInBlockPlace(final BlockLocation location, final BlockFace blockFace, final float cursorX, final float cursorY, final float cursorZ)
     {
         this.location = location;
-        this.blockFace = blockFace;
-        this.itemStack = itemStack;
-        this.cursorX = cursorX;
-        this.cursorY = cursorY;
-        this.cursorZ = cursorZ;
+        this.cursorPos = new CursorPos(blockFace, cursorX, cursorY, cursorZ);
+    }
+
+    public PacketPlayInBlockPlace(final BlockLocation location, final CursorPos cursorPos)
+    {
+        this.location = location;
+        this.cursorPos = cursorPos;
     }
 
     @SuppressWarnings("MagicNumber")
@@ -48,14 +42,12 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.location = data.readBlockLocation();
-        this.blockFace = data.readBlockFace();
+        final BlockFace blockFace = data.readBlockFace();
 
         // this.itemStack = data.readItemStack(); // don't read item stack, skip all bytes instead
         data.skipBytes(data.readableBytes() - 3); // skip rest of bytes, except last 3 (cursor pos)
 
-        this.cursorX = ((float) data.readUnsignedByte()) / 16.0f;
-        this.cursorY = ((float) data.readUnsignedByte()) / 16.0f;
-        this.cursorZ = ((float) data.readUnsignedByte()) / 16.0f;
+        this.cursorPos = new CursorPos(blockFace, data.readUnsignedByte(), data.readUnsignedByte(), data.readUnsignedByte());
     }
 
     @SuppressWarnings("MagicNumber")
@@ -63,11 +55,11 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
         data.writeBlockLocation(this.location);
-        data.writeBlockFace(this.blockFace);
-        data.writeItemStack(this.itemStack);
-        data.writeByte((int) (this.cursorX * 16));
-        data.writeByte((int) (this.cursorY * 16));
-        data.writeByte((int) (this.cursorZ * 16));
+        data.writeBlockFace(this.cursorPos.getBlockFace());
+        data.writeItemStack(null);
+        data.writeByte(this.cursorPos.getPixelX());
+        data.writeByte(this.cursorPos.getPixelY());
+        data.writeByte(this.cursorPos.getPixelZ());
     }
 
     public BlockLocation getLocation()
@@ -80,54 +72,14 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
         this.location = location;
     }
 
-    public BlockFace getBlockFace()
+    public CursorPos getCursorPos()
     {
-        return this.blockFace;
+        return this.cursorPos;
     }
 
-    public void setBlockFace(final BlockFace blockFace)
+    public void setCursorPos(final CursorPos cursorPos)
     {
-        this.blockFace = blockFace;
-    }
-
-    public ItemStackImpl getItemStack()
-    {
-        return this.itemStack;
-    }
-
-    public void setItemStack(final ItemStackImpl itemStack)
-    {
-        this.itemStack = itemStack;
-    }
-
-    public float getCursorX()
-    {
-        return this.cursorX;
-    }
-
-    public void setCursorX(final float cursorX)
-    {
-        this.cursorX = cursorX;
-    }
-
-    public float getCursorY()
-    {
-        return this.cursorY;
-    }
-
-    public void setCursorY(final float cursorY)
-    {
-        this.cursorY = cursorY;
-    }
-
-    public float getCursorZ()
-    {
-        return this.cursorZ;
-    }
-
-    public void setCursorZ(final float cursorZ)
-    {
-        this.cursorZ = cursorZ;
+        this.cursorPos = cursorPos;
     }
 
     @Override
@@ -139,6 +91,6 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("location", this.location).append("blockFace", this.blockFace).append("itemStack", this.itemStack).append("cursorX", this.cursorX).append("cursorY", this.cursorY).append("cursorZ", this.cursorZ).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("location", this.location).append("cursorPos", this.cursorPos).toString();
     }
 }
