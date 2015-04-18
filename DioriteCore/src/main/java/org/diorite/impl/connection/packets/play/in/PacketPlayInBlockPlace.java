@@ -19,7 +19,7 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
 {
     private BlockLocation location;
     private BlockFace     blockFace;
-    private ItemStackImpl itemStack; // ignored by server
+    private ItemStackImpl itemStack; // ignored by server, always read as null to prevent memory leaks and client ability to crash server.
     private float         cursorX;
     private float         cursorY;
     private float         cursorZ;
@@ -49,7 +49,10 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
     {
         this.location = data.readBlockLocation();
         this.blockFace = data.readBlockFace();
-        this.itemStack = data.readItemStack();
+
+        // this.itemStack = data.readItemStack(); // don't read item stack, skip all bytes instead
+        data.skipBytes(data.readableBytes() - 3); // skip rest of bytes, except last 3 (cursor pos)
+
         this.cursorX = ((float) data.readUnsignedByte()) / 16.0f;
         this.cursorY = ((float) data.readUnsignedByte()) / 16.0f;
         this.cursorZ = ((float) data.readUnsignedByte()) / 16.0f;
