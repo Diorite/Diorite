@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.Proxy;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -12,10 +13,7 @@ import org.fusesource.jansi.AnsiConsole;
 
 import org.diorite.impl.connection.packets.RegisterPackets;
 import org.diorite.Server;
-import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.chat.ChatColor;
 import org.diorite.material.Material;
-import org.diorite.material.blocks.cold.Ice;
 
 import io.netty.util.ResourceLeakDetector;
 import jline.UnsupportedTerminal;
@@ -55,23 +53,23 @@ public final class Main
         final OptionParser parser = new OptionParser()
         {
             {
-                this.acceptsAll(Arrays.asList("?"), "Print help");
-                this.acceptsAll(Arrays.asList("debug"), "Enable debug mode");
+                this.acceptsAll(Collections.singletonList("?"), "Print help");
+                this.acceptsAll(Collections.singletonList("debug"), "Enable debug mode");
                 this.acceptsAll(Arrays.asList("resourceleakdetector", "rld"), "ResourceLeakDetector level, disabled by default").withRequiredArg().ofType(String.class).describedAs("rld").defaultsTo(ResourceLeakDetector.Level.DISABLED.name());
                 this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port").defaultsTo(Server.DEFAULT_PORT);
                 this.acceptsAll(Arrays.asList("servername", "sn"), "name of server, should be simple like 'main'").withRequiredArg().ofType(String.class).describedAs("servername").defaultsTo(ServerImpl.DEFAULT_SERVER);
                 this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname").defaultsTo("localhost");
-                this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "hostname to listen on").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
+                this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "is server should be in online-mode").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
                 //noinspection MagicNumber
                 this.acceptsAll(Arrays.asList("timeout", "player-timeout", "pt"), "If player don't send any keep alive packet in this time (seconds), then it will be disconnected.").withRequiredArg().ofType(Integer.class).describedAs("timeout").defaultsTo(60);
                 this.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds server will send keep alive packet to players").withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(10);
                 this.acceptsAll(Arrays.asList("compressionthreshold", "compression-threshold"), "Compression threshold to use, -1 to turn off (default)").withRequiredArg().ofType(Integer.class).describedAs("compressionthreshold").defaultsTo(- 1);
                 this.acceptsAll(Arrays.asList("render-distance", "render", "rd"), "chunk render distance").withRequiredArg().ofType(Byte.class).describedAs("render").defaultsTo(Server.DEFAULT_RENDER_DISTANCE);
-                this.acceptsAll(Arrays.asList("worldsdir"), "Directory where all worlds are stored.").withRequiredArg().ofType(String.class).describedAs("worldsdir").defaultsTo("worlds");
-                this.acceptsAll(Arrays.asList("defworld"), "Name of default world.").withRequiredArg().ofType(String.class).describedAs("defworld").defaultsTo("world");
+                this.acceptsAll(Collections.singletonList("worldsdir"), "Directory where all worlds are stored.").withRequiredArg().ofType(String.class).describedAs("worldsdir").defaultsTo("worlds");
+                this.acceptsAll(Collections.singletonList("defworld"), "Name of default world.").withRequiredArg().ofType(String.class).describedAs("defworld").defaultsTo("world");
                 this.acceptsAll(Arrays.asList("netty", "netty-threads"), "Amount of netty event loop threads.").withRequiredArg().ofType(Integer.class).describedAs("netty").defaultsTo(4);
-                this.acceptsAll(Arrays.asList("nojline"), "Disables jline and emulates the vanilla console");
-                this.acceptsAll(Arrays.asList("noconsole"), "Disables the console");
+                this.acceptsAll(Collections.singletonList("nojline"), "Disables jline and emulates the vanilla console");
+                this.acceptsAll(Collections.singletonList("noconsole"), "Disables the console");
             }
         };
         OptionSet options;
@@ -149,11 +147,10 @@ public final class Main
                 // register all packet classes.
                 RegisterPackets.init();
 
+                // TODO: load "magic values"
                 // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
                 // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
-                MagicNumbers.MATERIAL__ICE__BLAST_RESISTANCE = 0.86536f;
                 System.out.println("Registered " + Material.getByID().size() + " vanilla minecraft blocks and items.");
-                System.out.println("Test: " + Ice.BLAST_RESISTANCE + ", " + Ice.HARDNESS+", "+ ChatColor.AQUA);
                 new ServerImpl(serverName, Proxy.NO_PROXY, options).start(options);
             } catch (final Throwable t)
             {
