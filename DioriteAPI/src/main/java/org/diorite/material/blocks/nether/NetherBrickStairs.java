@@ -2,6 +2,10 @@ package org.diorite.material.blocks.nether;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.Stairs;
@@ -15,11 +19,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class NetherBrickStairs extends BlockMaterialData implements Stairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -31,25 +34,34 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__NETHER_BRICK_STAIRS__HARDNESS;
 
-    public static final NetherBrickStairs NETHER_BRICK_STAIRS = new NetherBrickStairs();
+    public static final NetherBrickStairs NETHER_BRICK_STAIRS_EAST              = new NetherBrickStairs();
+    public static final NetherBrickStairs NETHER_BRICK_STAIRS_WEST              = new NetherBrickStairs("WEST", BlockFace.WEST, false);
+    public static final NetherBrickStairs NETHER_BRICK_STAIRS_SOUTH             = new NetherBrickStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final NetherBrickStairs NETHER_BRICK_STAIRS_NORTH             = new NetherBrickStairs("NORTH", BlockFace.NORTH, false);
+    public static final NetherBrickStairs NETHER_BRICK_STAIRS_EAST_UPSIDE_DOWN  = new NetherBrickStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final NetherBrickStairs NETHER_BRICK_STAIRS_WEST_UPSIDE_DOWN  = new NetherBrickStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final NetherBrickStairs NETHER_BRICK_STAIRS_SOUTH_UPSIDE_DOWN = new NetherBrickStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final NetherBrickStairs NETHER_BRICK_STAIRS_NORTH_UPSIDE_DOWN = new NetherBrickStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, NetherBrickStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<NetherBrickStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+    protected final boolean   upsideDown;
+
     @SuppressWarnings("MagicNumber")
     protected NetherBrickStairs()
     {
-        super("NETHER_BRICK_STAIRS", 114, "minecraft:nether_brick_stairs", "NETHER_BRICK_STAIRS", (byte) 0x00);
+        super("NETHER_BRICK_STAIRS", 114, "minecraft:nether_brick_stairs", "EAST", (byte) 0x00);
+        this.face = BlockFace.EAST;
+        this.upsideDown = false;
     }
 
-    public NetherBrickStairs(final String enumName, final int type)
+    public NetherBrickStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
-        super(NETHER_BRICK_STAIRS.name(), NETHER_BRICK_STAIRS.getId(), NETHER_BRICK_STAIRS.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public NetherBrickStairs(final int maxStack, final String typeName, final byte type)
-    {
-        super(NETHER_BRICK_STAIRS.name(), NETHER_BRICK_STAIRS.getId(), NETHER_BRICK_STAIRS.getMinecraftId(), maxStack, typeName, type);
+        super(NETHER_BRICK_STAIRS_EAST.name(), NETHER_BRICK_STAIRS_EAST.getId(), NETHER_BRICK_STAIRS_EAST.getMinecraftId(), enumName, Stairs.combine(face, upsideDown));
+        this.face = face;
+        this.upsideDown = upsideDown;
     }
 
     @Override
@@ -74,6 +86,44 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
     public NetherBrickStairs getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public boolean isUpsideDown()
+    {
+        return this.upsideDown;
+    }
+
+    @Override
+    public NetherBrickStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public NetherBrickStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    /**
+     * Returns one of NetherBrickStairs sub-type based on {@link BlockFace} and upsideDown flag.
+     * It will never return null;
+     *
+     * @param face       face of block, unsupported face will cause using face from default type.
+     * @param upsideDown if stairs are upside down
+     *
+     * @return sub-type of NetherBrickStairs
+     */
+    public NetherBrickStairs getType(final BlockFace face, final boolean activated)
+    {
+        return getByID(Stairs.combine(face, activated));
     }
 
     /**
@@ -102,6 +152,20 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
     }
 
     /**
+     * Returns one of NetherBrickStairs sub-type based on {@link BlockFace} and upsideDown flag.
+     * It will never return null;
+     *
+     * @param face       face of block, unsupported face will cause using face from default type.
+     * @param upsideDown if stairs are upside down
+     *
+     * @return sub-type of NetherBrickStairs
+     */
+    public static NetherBrickStairs getEndPortalFrame(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -115,6 +179,19 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
 
     static
     {
-        NetherBrickStairs.register(NETHER_BRICK_STAIRS);
+        NetherBrickStairs.register(NETHER_BRICK_STAIRS_EAST);
+        NetherBrickStairs.register(NETHER_BRICK_STAIRS_WEST);
+        NetherBrickStairs.register(NETHER_BRICK_STAIRS_SOUTH);
+        NetherBrickStairs.register(NETHER_BRICK_STAIRS_NORTH);
+        NetherBrickStairs.register(NETHER_BRICK_STAIRS_EAST_UPSIDE_DOWN);
+        NetherBrickStairs.register(NETHER_BRICK_STAIRS_WEST_UPSIDE_DOWN);
+        NetherBrickStairs.register(NETHER_BRICK_STAIRS_SOUTH_UPSIDE_DOWN);
+        NetherBrickStairs.register(NETHER_BRICK_STAIRS_NORTH_UPSIDE_DOWN);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 }

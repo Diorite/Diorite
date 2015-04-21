@@ -204,7 +204,14 @@ public class EndPortalFrame extends BlockMaterialData implements Directional, Ac
 
     static
     {
-        EndPortalFrame.register(END_PORTAL_FRAME);
+        EndPortalFrame.register(END_PORTAL_FRAME_SOUTH);
+        EndPortalFrame.register(END_PORTAL_FRAME_WEST);
+        EndPortalFrame.register(END_PORTAL_FRAME_NORTH);
+        EndPortalFrame.register(END_PORTAL_FRAME_EAST);
+        EndPortalFrame.register(END_PORTAL_FRAME_SOUTH_EYE);
+        EndPortalFrame.register(END_PORTAL_FRAME_WEST_EYE);
+        EndPortalFrame.register(END_PORTAL_FRAME_NORTH_EYE);
+        EndPortalFrame.register(END_PORTAL_FRAME_EAST_EYE);
     }
 
     @Override

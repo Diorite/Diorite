@@ -215,7 +215,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  WaterLily                WATER_LILY                 = WaterLily.WATER_LILY;
     public static final  NetherBrick              NETHER_BRICK               = NetherBrick.NETHER_BRICK;
     public static final  NetherBrickFence         NETHER_BRICK_FENCE         = NetherBrickFence.NETHER_BRICK_FENCE;
-    public static final  NetherBrickStairs        NETHER_BRICK_STAIRS        = NetherBrickStairs.NETHER_BRICK_STAIRS; // TODO: edit after editing auto-generated class
+    public static final  NetherBrickStairs        NETHER_BRICK_STAIRS        = NetherBrickStairs.NETHER_BRICK_STAIRS_EAST; // TODO: edit after editing auto-generated class
     public static final  NetherWartBlock          NETHER_WART_BLOCK          = NetherWartBlock.NETHER_WART_BLOCK; // TODO: edit after editing auto-generated class
     public static final  EnchantingTable          ENCHANTING_TABLE           = EnchantingTable.ENCHANTING_TABLE; // TODO: edit after editing auto-generated class
     public static final  BrewingStandBlock        BREWING_STAND_BLOCK        = BrewingStandBlock.BREWING_STAND_BLOCK; // TODO: edit after editing auto-generated class

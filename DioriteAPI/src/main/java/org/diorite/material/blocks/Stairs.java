@@ -6,9 +6,9 @@ public interface Stairs extends Directional
 {
     byte UPSIDE_DOWN_FLAG = 0x4;
 
-    void isUpsideDown(); // TODO: implement
+    boolean isUpsideDown(); // TODO: implement
 
-    void getUpsideDown(final boolean upsideDown);
+    Stairs getUpsideDown(final boolean upsideDown);
 
     static byte combine(final BlockFace face, final boolean upside)
     {
