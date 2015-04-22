@@ -64,7 +64,7 @@ public class EndPortalFrame extends BlockMaterialData implements Directional, Ac
 
     public EndPortalFrame(final String enumName, final BlockFace face, final boolean activated)
     {
-        super(END_PORTAL_FRAME.name(), END_PORTAL_FRAME.getId(), END_PORTAL_FRAME.getMinecraftId(), enumName, combine(face, activated));
+        super(END_PORTAL_FRAME_SOUTH.name(), END_PORTAL_FRAME_SOUTH.getId(), END_PORTAL_FRAME_SOUTH.getMinecraftId(), enumName, combine(face, activated));
         this.face = face;
         this.activated = activated;
     }

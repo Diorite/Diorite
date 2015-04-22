@@ -9,7 +9,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.BlockLocation;
 import org.diorite.Diorite;
+import org.diorite.ImmutableLocation;
+import org.diorite.Loc;
+import org.diorite.command.exceptions.InvalidCommandArgumentException;
+import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
 
 public class Arguments implements Iterable<String>
@@ -70,6 +75,105 @@ public class Arguments implements Iterable<String>
         return Diorite.getServer().getPlayer(this.asString(index));
     }
 
+    public BlockLocation readCoordinates(final int startIndex, final BlockLocation origin)
+    {
+        this.check(startIndex + 2);
+        return new BlockLocation(this.readCoordinate(startIndex, origin.getX()), this.readCoordinate(startIndex + 1, origin.getY()), this.readCoordinate(startIndex + 2, origin.getZ()), origin.getWorld());
+    }
+
+    public ImmutableLocation readCoordinates(final int startIndex, final boolean withRotation, final Entity entity)
+    {
+        return this.readCoordinates(startIndex, withRotation, entity.getLocation());
+    }
+
+    public ImmutableLocation readCoordinates(final int startIndex, final boolean withRotation, final Loc origin)
+    {
+        this.check(startIndex + (withRotation ? 4 : 2));
+        final double x = this.readCoordinate(startIndex, origin.getX());
+        final double y = this.readCoordinate(startIndex + 1, origin.getY());
+        final double z = this.readCoordinate(startIndex + 2, origin.getZ());
+        if (! withRotation)
+        {
+            return new ImmutableLocation(x, y, z, origin.getYaw(), origin.getPitch(), origin.getWorld());
+        }
+        return new ImmutableLocation(x, y, z, this.readRotation(startIndex + 3, origin.getYaw()), this.readRotation(startIndex + 4, origin.getPitch()), origin.getWorld());
+    }
+
+    public double readCoordinate(final int index, final double origin)
+    {
+        this.check(index);
+        final String str = this.args[index];
+        if (str.charAt(0) == '~')
+        {
+            if (str.length() == 1)
+            {
+                return origin;
+            }
+            final Double d = asDouble(str.substring(1));
+            if (d == null)
+            {
+                throw new InvalidCommandArgumentException("can't parse coordinate from: " + str);
+            }
+            return origin + d;
+        }
+        final Double d = asDouble(str);
+        if (d == null)
+        {
+            throw new InvalidCommandArgumentException("can't parse coordinate from: " + str);
+        }
+        return d;
+    }
+
+    public float readRotation(final int index, final float origin)
+    {
+        this.check(index);
+        final String str = this.args[index];
+        if (str.charAt(0) == '~')
+        {
+            if (str.length() == 1)
+            {
+                return origin;
+            }
+            final Float f = asFloat(str.substring(1));
+            if (f == null)
+            {
+                throw new InvalidCommandArgumentException("can't parse rotation from: " + str);
+            }
+            return origin + f;
+        }
+        final Float f = asFloat(str);
+        if (f == null)
+        {
+            throw new InvalidCommandArgumentException("can't parse rotation from: " + str);
+        }
+        return f;
+    }
+
+    public int readCoordinate(final int index, final int origin)
+    {
+        this.check(index);
+        final String str = this.args[index];
+        if (str.charAt(0) == '~')
+        {
+            if (str.length() == 1)
+            {
+                return origin;
+            }
+            final Integer i = asInt(str.substring(1));
+            if (i == null)
+            {
+                throw new InvalidCommandArgumentException("can't parse coordinate from: " + str);
+            }
+            return origin + i;
+        }
+        final Integer i = asInt(str);
+        if (i == null)
+        {
+            throw new InvalidCommandArgumentException("can't parse coordinate from: " + str);
+        }
+        return i;
+    }
+
     public String asString(final int index)
     {
         this.check(index);
@@ -79,50 +183,25 @@ public class Arguments implements Iterable<String>
     public Integer asInt(final int index)
     {
         this.check(index);
-        try
-        {
-            return Integer.valueOf(this.args[index]);
-        } catch (final NumberFormatException e)
-        {
-            return null;
-        }
+        return asInt(this.args[index]);
     }
 
     public Long asLong(final int index)
     {
         this.check(index);
-        try
-        {
-            return Long.valueOf(this.args[index]);
-        } catch (final NumberFormatException e)
-        {
-            return null;
-        }
+        return asLong(this.args[index]);
     }
 
     public Double asDouble(final int index)
     {
         this.check(index);
-        try
-        {
-            return Double.valueOf(this.args[index]);
-        } catch (final NumberFormatException e)
-        {
-            return null;
-        }
+        return asDouble(this.args[index]);
     }
-
 
     public Float asFloat(final int index)
     {
         this.check(index);
-        try
-        {
-            return Float.valueOf(this.args[index]);
-        } catch (final NumberFormatException e)
-        {
-            return null;
-        }
+        return asFloat(this.args[index]);
     }
 
     public boolean asBoolean(final int index)
@@ -201,6 +280,17 @@ public class Arguments implements Iterable<String>
         }
     }
 
+    public static Float asFloat(final String str)
+    {
+        try
+        {
+            return Float.valueOf(str);
+        } catch (final NumberFormatException e)
+        {
+            return null;
+        }
+    }
+
     public static int asInt(final String str, final int def)
     {
         try
@@ -228,6 +318,17 @@ public class Arguments implements Iterable<String>
         try
         {
             return Double.parseDouble(str);
+        } catch (final NumberFormatException e)
+        {
+            return def;
+        }
+    }
+
+    public static Float asFloat(final String str, final float def)
+    {
+        try
+        {
+            return Float.valueOf(str);
         } catch (final NumberFormatException e)
         {
             return def;

@@ -191,7 +191,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  Netherrack               NETHERRACK                 = Netherrack.NETHERRACK;
     public static final  SoulSand                 SOUL_SAND                  = SoulSand.SOUL_SAND;
     public static final  Glowstone                GLOWSTONE                  = Glowstone.GLOWSTONE;
-    public static final  NetherPortal             NETHER_PORTAL              = NetherPortal.NETHER_PORTAL; // TODO: edit after editing auto-generated class
+    public static final  NetherPortal             NETHER_PORTAL              = NetherPortal.NETHER_PORTAL_EAST_WEST; // TODO: edit after editing auto-generated class
     public static final  PumpkinLantern           PUMPKIN_LANTERN            = PumpkinLantern.PUMPKIN_LANTERN; // TODO: edit after editing auto-generated class
     public static final  Cake                     CAKE                       = Cake.CAKE; // TODO: edit after editing auto-generated class
     public static final  RedstoneRepeaterOff      REPEATER_OFF               = RedstoneRepeaterOff.REDSTONE_REPEATER_OFF; // TODO: edit after editing auto-generated class
@@ -200,8 +200,8 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  WoodenTrapdoor           WOODEN_TRAPDOOR            = WoodenTrapdoor.WOODEN_TRAPDOOR; // TODO: edit after editing auto-generated class
     public static final  MonsterEggTrap           MONSTER_EGG_TRAP           = MonsterEggTrap.MONSTER_EGG_TRAP; // TODO: edit after editing auto-generated class
     public static final  StoneBrick               STONE_BRICK                = StoneBrick.STONE_BRICK; // TODO: edit after editing auto-generated class
-    public static final  BrownMushroomBlock       BROWN_MUSHROOM_BLOCK       = BrownMushroomBlock.BROWN_MUSHROOM_BLOCK; // TODO: edit after editing auto-generated class
-    public static final  RedMushroomBlock         RED_MUSHROOM_BLOCK         = RedMushroomBlock.RED_MUSHROOM_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  BrownMushroomBlock       BROWN_MUSHROOM_BLOCK       = BrownMushroomBlock.BROWN_MUSHROOM_BLOCK_PORES_FULL; // TODO: edit after editing auto-generated class
+    public static final  RedMushroomBlock         RED_MUSHROOM_BLOCK         = RedMushroomBlock.RED_MUSHROOM_BLOCK_PORES_FULL; // TODO: edit after editing auto-generated class
     public static final  IronBars                 IRON_BARS                  = IronBars.IRON_BARS;
     public static final  GlassPane                GLASS_PANE                 = GlassPane.GLASS_PANE;
     public static final  MelonBlock               MELON_BLOCK                = MelonBlock.MELON_BLOCK;
@@ -221,7 +221,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  BrewingStandBlock        BREWING_STAND_BLOCK        = BrewingStandBlock.BREWING_STAND_BLOCK; // TODO: edit after editing auto-generated class
     public static final  Cauldron                 CAULDRON                   = Cauldron.CAULDRON; // TODO: edit after editing auto-generated class
     public static final  EndPortal                END_PORTAL                 = EndPortal.END_PORTAL; // TODO: edit after editing auto-generated class
-    public static final  EndPortalFrame           END_PORTAL_FRAME           = EndPortalFrame.END_PORTAL_FRAME; // TODO: edit after editing auto-generated class
+    public static final  EndPortalFrame           END_PORTAL_FRAME           = EndPortalFrame.END_PORTAL_FRAME_SOUTH; // TODO: edit after editing auto-generated class
     public static final  EndStone                 END_STONE                  = EndStone.END_STONE;
     public static final  DragonEgg                DRAGON_EGG                 = DragonEgg.DRAGON_EGG;
     public static final  RedstoneLampOff          REDSTONE_LAMP_OFF          = RedstoneLampOff.REDSTONE_LAMP_OFF;

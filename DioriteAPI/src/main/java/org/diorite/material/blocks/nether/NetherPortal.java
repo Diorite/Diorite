@@ -2,8 +2,13 @@ package org.diorite.material.blocks.nether;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.Portal;
+import org.diorite.material.blocks.Rotatable;
+import org.diorite.material.blocks.RotateAxis;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -12,13 +17,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "NetherPortal" and all its subtypes.
  */
-public class NetherPortal extends Portal
+public class NetherPortal extends Portal implements Rotatable
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 2;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,25 +34,36 @@ public class NetherPortal extends Portal
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__NETHER_PORTAL__HARDNESS;
 
-    public static final NetherPortal NETHER_PORTAL = new NetherPortal();
+    public static final NetherPortal NETHER_PORTAL_EAST_WEST   = new NetherPortal();
+    public static final NetherPortal NETHER_PORTAL_NORTH_SOUTH = new NetherPortal("NORTH_SOUTH", RotateAxis.NORTH_SOUTH);
 
     private static final Map<String, NetherPortal>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<NetherPortal> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final RotateAxis rotateAxis;
+
     @SuppressWarnings("MagicNumber")
     protected NetherPortal()
     {
-        super("NETHER_PORTAL", 90, "minecraft:portal", "NETHER_PORTAL", (byte) 0x00);
+        super("NETHER_PORTAL", 90, "minecraft:portal", "EAST_WEST", (byte) 0x01);
+        this.rotateAxis = RotateAxis.EAST_WEST;
     }
 
-    public NetherPortal(final String enumName, final int type)
+    public NetherPortal(final String enumName, final RotateAxis rotateAxis)
     {
-        super(NETHER_PORTAL.name(), NETHER_PORTAL.getId(), NETHER_PORTAL.getMinecraftId(), enumName, (byte) type);
+        super(NETHER_PORTAL_EAST_WEST.name(), NETHER_PORTAL_EAST_WEST.getId(), NETHER_PORTAL_EAST_WEST.getMinecraftId(), enumName, combine(rotateAxis));
+        this.rotateAxis = rotateAxis;
     }
 
-    public NetherPortal(final int maxStack, final String typeName, final byte type)
+    private static byte combine(final RotateAxis rotateAxis)
     {
-        super(NETHER_PORTAL.name(), NETHER_PORTAL.getId(), NETHER_PORTAL.getMinecraftId(), maxStack, typeName, type);
+        switch (rotateAxis)
+        {
+            case NORTH_SOUTH:
+                return 0x02;
+            default:
+                return 0x01;
+        }
     }
 
     @Override
@@ -73,6 +88,18 @@ public class NetherPortal extends Portal
     public NetherPortal getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public RotateAxis getRotateAxis()
+    {
+        return RotateAxis.EAST_WEST;
+    }
+
+    @Override
+    public NetherPortal getRotated(final RotateAxis axis)
+    {
+        return getByID(combine(axis));
     }
 
     /**
@@ -101,6 +128,19 @@ public class NetherPortal extends Portal
     }
 
     /**
+     * Returns one of NetherPortal sub-type based on {@link RotateAxis}.
+     * It will never return null;
+     *
+     * @param axis rotate axis of block, unsupported axis will cause using axis from default type.
+     *
+     * @return sub-type of NetherPortal
+     */
+    public static NetherPortal getNetherPortal(final RotateAxis axis)
+    {
+        return getByID(combine(axis));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -114,6 +154,13 @@ public class NetherPortal extends Portal
 
     static
     {
-        NetherPortal.register(NETHER_PORTAL);
+        NetherPortal.register(NETHER_PORTAL_EAST_WEST);
+        NetherPortal.register(NETHER_PORTAL_NORTH_SOUTH);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
     }
 }

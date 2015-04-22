@@ -160,7 +160,7 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
      *
      * @return sub-type of NetherBrickStairs
      */
-    public static NetherBrickStairs getEndPortalFrame(final BlockFace face, final boolean upsideDown)
+    public static NetherBrickStairs getNetherBrickStairs(final BlockFace face, final boolean upsideDown)
     {
         return getByID(Stairs.combine(face, upsideDown));
     }
