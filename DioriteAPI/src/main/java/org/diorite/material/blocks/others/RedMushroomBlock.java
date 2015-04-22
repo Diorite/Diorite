@@ -28,19 +28,19 @@ public class RedMushroomBlock extends MushroomBlock
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__RED_MUSHROOM_BLOCK__HARDNESS;
 
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_PORES_FULL     = new BrownMushroomBlock();
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_NORTH_WEST = new BrownMushroomBlock(Type.CAP_NORTH_WEST);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_NORTH      = new BrownMushroomBlock(Type.CAP_NORTH);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_NORTH_EAST = new BrownMushroomBlock(Type.CAP_NORTH_EAST);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_WEST       = new BrownMushroomBlock(Type.CAP_WEST);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP            = new BrownMushroomBlock(Type.CAP);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_EAST       = new BrownMushroomBlock(Type.CAP_EAST);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_SOUTH_WEST = new BrownMushroomBlock(Type.CAP_SOUTH_WEST);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_SOUTH      = new BrownMushroomBlock(Type.CAP_SOUTH);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_SOUTH_EAST = new BrownMushroomBlock(Type.CAP_SOUTH_EAST);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_STEAM          = new BrownMushroomBlock(Type.STEAM);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_CAP_FULL       = new BrownMushroomBlock(Type.CAP_FULL);
-    public static final BrownMushroomBlock RED_MUSHROOM_BLOCK_STEAM_FULL     = new BrownMushroomBlock(Type.STEAM_FULL);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_PORES_FULL     = new RedMushroomBlock();
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_NORTH_WEST = new RedMushroomBlock(Type.CAP_NORTH_WEST);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_NORTH      = new RedMushroomBlock(Type.CAP_NORTH);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_NORTH_EAST = new RedMushroomBlock(Type.CAP_NORTH_EAST);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_WEST       = new RedMushroomBlock(Type.CAP_WEST);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP            = new RedMushroomBlock(Type.CAP);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_EAST       = new RedMushroomBlock(Type.CAP_EAST);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_SOUTH_WEST = new RedMushroomBlock(Type.CAP_SOUTH_WEST);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_SOUTH      = new RedMushroomBlock(Type.CAP_SOUTH);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_SOUTH_EAST = new RedMushroomBlock(Type.CAP_SOUTH_EAST);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_STEAM          = new RedMushroomBlock(Type.STEAM);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_CAP_FULL       = new RedMushroomBlock(Type.CAP_FULL);
+    public static final RedMushroomBlock RED_MUSHROOM_BLOCK_STEAM_FULL     = new RedMushroomBlock(Type.STEAM_FULL);
 
 
     private static final Map<String, RedMushroomBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
