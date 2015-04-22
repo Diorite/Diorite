@@ -10,6 +10,8 @@ public final class RegisterDefaultCommands
 
     public static void init(final CommandMapImpl cmds)
     {
+        cmds.registerCommand(new DevCmd()); // TODO: remove
+
         cmds.registerCommand(new SayCmd());
         cmds.registerCommand(new TpsCmd());
         cmds.registerCommand(new FlyCmd());
