@@ -7,6 +7,7 @@ import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.BlockLocation;
 import org.diorite.ImmutableLocation;
 
+@SuppressWarnings("MagicNumber")
 public final class EntityMetadataCodec // TODO DataWatcher and other...
 {
     private EntityMetadataCodec()
@@ -15,7 +16,7 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
 
     public static void encode(final PacketDataSerializer data, final EntityMetadataObject metadataObject)
     {
-        int i = (metadataObject.getDataType().getId() << 5 | metadataObject.getIndex() & 0x1F) & 0xFF;
+        final int i = (metadataObject.getDataType().getId() << 5 | metadataObject.getIndex() & 0x1F) & 0xFF;
 
         data.writeByte(i);
         switch (metadataObject.getDataType().getId())
@@ -36,12 +37,11 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
                 data.writeText((String)metadataObject.getData());
                 break;
             case 5:
-                ItemStackImpl itemstack = (ItemStackImpl)metadataObject.getData();
-
+                final ItemStackImpl itemstack = (ItemStackImpl)metadataObject.getData();
                 data.writeItemStack(itemstack);
                 break;
             case 6:
-                BlockLocation blockposition = (BlockLocation)metadataObject.getData();
+                final BlockLocation blockposition = (BlockLocation)metadataObject.getData();
 
                 data.writeInt(blockposition.getX());
                 data.writeInt(blockposition.getY());
@@ -58,12 +58,12 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
 
     public static List<EntityMetadataObject> decode(final PacketDataSerializer data)
     {
-        List<EntityMetadataObject> temp = new ArrayList<>(5);
+        final List<EntityMetadataObject> temp = new ArrayList<>(5);
 
         for (byte b = data.readByte(); b != 127; b = data.readByte())
         {
-            int type = (b & 0xE0) >> 5;
-            int index = b & 0x1F;
+            final int type = (b & 0xE0) >> 5;
+            final int index = b & 0x1F;
 
             EntityMetadataObject object = null;
             switch (type)
@@ -87,16 +87,16 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
                     object = new EntityMetadataObject(DataType.SLOT, index, data.readItemStack());
                     break;
                 case 6:
-                    int x = data.readInt();
-                    int y = data.readInt();
-                    int z = data.readInt();
+                    final int x = data.readInt();
+                    final int y = data.readInt();
+                    final int z = data.readInt();
 
                     object = new EntityMetadataObject(DataType.LOCATION, index, new ImmutableLocation(x, y, z));
                     break;
                 case 7:
-                    float f = data.readFloat();
-                    float f1 = data.readFloat();
-                    float f2 = data.readFloat();
+                    final float f = data.readFloat();
+                    final float f1 = data.readFloat();
+                    final float f2 = data.readFloat();
 
                     //object = new EntityMetadataObject(DataType.POSITION, index, new Vector3f(f, f1, f2)); // TODO
                     break;
@@ -128,18 +128,6 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
         public int getId()
         {
             return this.id;
-        }
-
-        public static DataType byId(final int id)
-        {
-            for(DataType dp : DataType.values())
-            {
-                if(dp.getId() == id)
-                {
-                    return dp;
-                }
-            }
-            return null;
         }
     }
 }

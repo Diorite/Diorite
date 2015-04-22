@@ -18,7 +18,7 @@ public class EntityMetadataObject
 
     public EntityMetadataCodec.DataType getDataType()
     {
-        return dataType;
+        return this.dataType;
     }
 
     public void setDataType(final EntityMetadataCodec.DataType dataType)
@@ -28,7 +28,7 @@ public class EntityMetadataObject
 
     public int getIndex()
     {
-        return index;
+        return this.index;
     }
 
     public void setIndex(final int index)
@@ -38,7 +38,7 @@ public class EntityMetadataObject
 
     public Object getData()
     {
-        return data;
+        return this.data;
     }
 
     public void setData(final Object data)
