@@ -2,6 +2,7 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.Stairs;
@@ -74,6 +75,30 @@ public class SandstoneStairs extends BlockMaterialData implements Stairs
     public SandstoneStairs getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public boolean isUpsideDown()
+    {
+        return false; // TODO: implement
+    }
+
+    @Override
+    public Stairs getUpsideDown(final boolean upsideDown)
+    {
+        return null; // TODO: implement
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return null; // TODO: implement
+    }
+
+    @Override
+    public BlockMaterialData getBlockFacing(final BlockFace face)
+    {
+        return null; // TODO: implement
     }
 
     /**
