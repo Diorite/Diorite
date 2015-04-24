@@ -33,9 +33,9 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
         {
             throw new IllegalArgumentException();
         }
-        this.x = (int)entity.getX() * 32;
-        this.y = (int)entity.getY() * 32;
-        this.z = (int)entity.getZ() * 32;
+        this.x = (int)entity.getX() << 5; // * 32
+        this.y = (int)entity.getY() << 5; // * 32
+        this.z = (int)entity.getZ() << 5; // * 32
         this.pitch = (int)(pitch * 256.0F / 360.0F);
         this.yaw = (int)(yaw * 256.0F / 360.0F);
         // TODO DATA
@@ -50,8 +50,8 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(entity.getId());
-        data.writeByte(entity.getMcId());
+        data.writeVarInt(this.entity.getId());
+        data.writeByte(this.entity.getMcId());
         data.writeInt(this.x);
         data.writeInt(this.y);
         data.writeInt(this.z);
