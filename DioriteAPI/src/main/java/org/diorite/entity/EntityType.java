@@ -82,6 +82,16 @@ public class EntityType implements SimpleEnum<EntityType>
         return this.dioriteEntityClass;
     }
 
+    public static EntityType getEntityTypeById(final int id)
+    {
+        return byID.get(id);
+    }
+
+    public static EntityType getEntityTypeByName(final String name)
+    {
+        return byName.get(name);
+    }
+
     public static void register(final EntityType element)
     {
         byID.put(element.getId(), element);
