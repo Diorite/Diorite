@@ -172,7 +172,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  WallSign                 WALL_SIGN                  = WallSign.WALL_SIGN; // TODO: edit after editing auto-generated class
     public static final  Lever                    LEVER                      = Lever.LEVER; // TODO: edit after editing auto-generated class
     public static final  StonePressurePlate       STONE_PRESSURE_PLATE       = StonePressurePlate.STONE_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
-    public static final  IronDoor                 IRON_DOOR                  = IronDoor.IRON_DOOR; // TODO: edit after editing auto-generated class
+    public static final  IronDoor                 IRON_DOOR                  = IronDoor.IRON_DOOR_BOTTOM_EAST; // TODO: edit after editing auto-generated class
     public static final  WoodenPressurePlate      WOODEN_PRESSURE_PLATE      = WoodenPressurePlate.WOODEN_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
     public static final  RedstoneOre              REDSTONE_ORE               = RedstoneOre.REDSTONE_ORE;
     public static final  RedstoneOreGlowing       REDSTONE_ORE_GLOWING       = RedstoneOreGlowing.REDSTONE_ORE_GLOWING;
@@ -268,7 +268,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  IronTrapdoor             IRON_TRAPDOOR              = IronTrapdoor.IRON_TRAPDOOR; // TODO: edit after editing auto-generated class
     public static final  Prismarine               PRISMARINE                 = Prismarine.PRISMARINE; // TODO: edit after editing auto-generated class
     public static final  SeaLantren               SEA_LANTERN                = SeaLantren.SEA_LANTREN;
-    public static final  HayBlock                 HAY_BLOCK                  = HayBlock.HAY_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  HayBlock                 HAY_BLOCK                  = HayBlock.HAY_BLOCK_UP_DOWN;
     public static final  Carpet                   CARPET                     = Carpet.CARPET_WHITE;
     public static final  HardenedClay             HARDENED_CLAY              = HardenedClay.HARDENED_CLAY;
     public static final  CoalBlock                COAL_BLOCK                 = CoalBlock.COAL_BLOCK;
@@ -292,7 +292,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  SpruceDoor               SPRUCE_DOOR                = SpruceDoor.SPRUCE_DOOR; // TODO: edit after editing auto-generated class
     public static final  BirchDoor                BIRCH_DOOR                 = BirchDoor.BIRCH_DOOR; // TODO: edit after editing auto-generated class
     public static final  JungleDoor               JUNGLE_DOOR                = JungleDoor.JUNGLE_DOOR; // TODO: edit after editing auto-generated class
-    public static final  AcaciaDoor               ACACIA_DOOR                = AcaciaDoor.ACACIA_DOOR; // TODO: edit after editing auto-generated class
+    public static final  AcaciaDoor               ACACIA_DOOR                = AcaciaDoor.ACACIA_DOOR_BOTTOM_EAST; // TODO: edit after editing auto-generated class
     public static final  DarkOakDoor              DARK_OAK_DOOR              = DarkOakDoor.DARK_OAK_DOOR; // TODO: edit after editing auto-generated class
     // ----- Item Separator -----
     //    public static final  Material                IRON_SPADE           = new Material("IRON_SPADE", 256, 1, 250);
@@ -369,7 +369,7 @@ public abstract class Material implements SimpleEnum<Material>
 //    public static final  Material                LAVA_BUCKET          = new Material("LAVA_BUCKET", 327, 1);
 //    public static final  Material                MINECART             = new Material("MINECART", 328, 1);
 //    public static final  Material                SADDLE               = new Material("SADDLE", 329, 1);
-//    public static final  Material                IRON_DOOR            = new Material("IRON_DOOR", 330, 64);
+//    public static final  Material                IRON_DOOR_BOTTOM_EAST            = new Material("IRON_DOOR_BOTTOM_EAST", 330, 64);
 //    public static final  Material                REDSTONE             = new Material("REDSTONE", 331);
 //    public static final  Material                SNOW_BALL            = new Material("SNOW_BALL", 332, 16);
 //    public static final  Material                BOAT                 = new Material("BOAT", 333, 1);
@@ -949,7 +949,7 @@ public abstract class Material implements SimpleEnum<Material>
 //        register(LAVA_BUCKET);
 //        register(MINECART);
 //        register(SADDLE);
-//        register(IRON_DOOR);
+//        register(IRON_DOOR_BOTTOM_EAST);
 //        register(REDSTONE);
 //        register(SNOW_BALL);
 //        register(BOAT);
