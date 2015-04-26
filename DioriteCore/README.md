@@ -9,13 +9,25 @@ https://github.com/GotoFinal/Diorite-API
 
 # Basic goals
 - [x] Make it work, good enough to allow player see flat map, and walk on it.
+- [x] Implement chunk system.
+- [x] Chunk generator.
+- [x] Chat, Commands with API.
+- [ ] Structure generator.
 - [ ] Implement all packets.
 - [ ] Make it multithreaded, and scalable, so if one thread isn't enough to handle all players and data, then create second one to help.
 
-# Dream goals
+# InDev goals
 - [ ] Implement all blocks.
+- [ ] Implement all items.
+- [ ] Implement inventory.
 - [ ] Implement all entities.
-- [ ] Implement all other stuff...
+- [ ] Implement all block states/tile entitles.
+- [ ] Implement basic item/blocks interactions.
+- 
+# Alpha goals
+- [ ] Implement all enchants.
+- [ ] Implement damage/pvp system.
+- [ ] Implement all potion effects.
 - [ ] Make it usable. 
 
 # How to Contribute
