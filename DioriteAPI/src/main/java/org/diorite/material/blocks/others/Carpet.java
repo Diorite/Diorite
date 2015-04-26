@@ -54,7 +54,7 @@ public class Carpet extends BlockMaterialData implements Colorable
     private static final Map<String, Carpet>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Carpet> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
-    private final DyeColor color;
+    protected final DyeColor color;
 
     @SuppressWarnings("MagicNumber")
     protected Carpet()

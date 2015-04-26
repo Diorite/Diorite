@@ -19,7 +19,7 @@ public class Farmland extends Earth
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 2;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -31,25 +31,31 @@ public class Farmland extends Earth
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__FARMLAND__HARDNESS;
 
-    public static final Farmland FARMLAND          = new Farmland();
-    public static final Farmland FARMLAND_HYDRATED = new Farmland("HYDRATED", 0x01, true);
+    public static final Farmland FARMLAND_UNHYDRATED = new Farmland();
+    public static final Farmland FARMLAND_MOISTURE_1 = new Farmland("MOISTURE_1", 1);
+    public static final Farmland FARMLAND_MOISTURE_2 = new Farmland("MOISTURE_2", 2);
+    public static final Farmland FARMLAND_MOISTURE_3 = new Farmland("MOISTURE_3", 3);
+    public static final Farmland FARMLAND_MOISTURE_4 = new Farmland("MOISTURE_4", 4);
+    public static final Farmland FARMLAND_MOISTURE_5 = new Farmland("MOISTURE_5", 5);
+    public static final Farmland FARMLAND_MOISTURE_6 = new Farmland("MOISTURE_6", 6);
+    public static final Farmland FARMLAND_HYDRATED   = new Farmland("HYDRATED", 7);
 
     private static final Map<String, Farmland>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Farmland> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
-    private final boolean hydrated;
+    private final int moisture;
 
     @SuppressWarnings("MagicNumber")
     protected Farmland()
     {
         super("FARMLAND", 60, "minecraft:farmland", "UNHYDRATED", (byte) 0x00);
-        this.hydrated = false;
+        this.moisture = 0;
     }
 
-    public Farmland(final String enumName, final int type, final boolean hydrated)
+    public Farmland(final String enumName, final int moisture)
     {
-        super(FARMLAND.name(), FARMLAND.getId(), FARMLAND.getMinecraftId(), enumName, (byte) type);
-        this.hydrated = hydrated;
+        super(FARMLAND_UNHYDRATED.name(), FARMLAND_UNHYDRATED.getId(), FARMLAND_UNHYDRATED.getMinecraftId(), enumName, (byte) moisture);
+        this.moisture = moisture;
     }
 
     @Override
@@ -77,21 +83,21 @@ public class Farmland extends Earth
     }
 
     /**
-     * @return true if block is hydrated sub-type
+     * @return moisture level, 7 -> full hydrated
      */
-    public boolean isHydrated()
+    public int getMoistured()
     {
-        return this.hydrated;
+        return this.moisture;
     }
 
     /**
-     * @param hydrated if sub-type should be hydrated sub-type.
+     * @param hydrated moisture level.
      *
      * @return selected sub-type of Farmland
      */
-    public Farmland getHydrated(final boolean hydrated)
+    public Farmland getHydrated(final int moisture)
     {
-        return getFarmland(hydrated);
+        return getFarmland(moisture);
     }
 
     /**
@@ -121,17 +127,21 @@ public class Farmland extends Earth
     }
 
     /**
+     * Returns one of Farmland sub-types based on moisture.
+     * It will never return null. (unhydrated version by default)
+     *
      * @param hydrated if sub-type should be hydrated sub-type.
      *
      * @return selected sub-type of Farmland
      */
-    public static Farmland getFarmland(final boolean hydrated)
+    public static Farmland getFarmland(final int moisture)
     {
-        if (hydrated)
+        final Farmland f = getByID(moisture);
+        if (f == null)
         {
-            return FARMLAND_HYDRATED;
+            return FARMLAND_UNHYDRATED;
         }
-        return FARMLAND;
+        return f;
     }
 
     /**
@@ -148,12 +158,19 @@ public class Farmland extends Earth
 
     static
     {
-        Farmland.register(FARMLAND);
+        Farmland.register(FARMLAND_UNHYDRATED);
+        Farmland.register(FARMLAND_MOISTURE_1);
+        Farmland.register(FARMLAND_MOISTURE_2);
+        Farmland.register(FARMLAND_MOISTURE_3);
+        Farmland.register(FARMLAND_MOISTURE_4);
+        Farmland.register(FARMLAND_MOISTURE_5);
+        Farmland.register(FARMLAND_MOISTURE_6);
+        Farmland.register(FARMLAND_HYDRATED);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("hydrated", this.hydrated).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("moisture", this.moisture).toString();
     }
 }

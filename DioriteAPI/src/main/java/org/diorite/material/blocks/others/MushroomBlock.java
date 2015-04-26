@@ -5,6 +5,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.BlockMaterialData;
 
+/**
+ * Base abstract class for mushroom blocks.
+ */
 public abstract class MushroomBlock extends BlockMaterialData
 {
     protected final Type mushroomType;

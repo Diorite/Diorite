@@ -2,11 +2,13 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.DyeColor;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Colorable;
-import org.diorite.material.Material;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,11 +19,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class StainedHardenedClay extends BlockMaterialData implements Colorable
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 16;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -33,25 +34,39 @@ public class StainedHardenedClay extends BlockMaterialData implements Colorable
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STAINED_HARDENED_CLAY__HARDNESS;
 
-    public static final StainedHardenedClay STAINED_HARDENED_CLAY = new StainedHardenedClay();
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_WHITE      = new StainedHardenedClay();
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_ORANGE     = new StainedHardenedClay(DyeColor.ORANGE);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_MAGENTA    = new StainedHardenedClay(DyeColor.MAGENTA);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_LIGHT_BLUE = new StainedHardenedClay(DyeColor.LIGHT_BLUE);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_YELLOW     = new StainedHardenedClay(DyeColor.YELLOW);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_LIME       = new StainedHardenedClay(DyeColor.LIME);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_PINK       = new StainedHardenedClay(DyeColor.PINK);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_GRAY       = new StainedHardenedClay(DyeColor.GRAY);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_SILVER     = new StainedHardenedClay(DyeColor.SILVER);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_CYAN       = new StainedHardenedClay(DyeColor.CYAN);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_PURPLE     = new StainedHardenedClay(DyeColor.PURPLE);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_BLUE       = new StainedHardenedClay(DyeColor.BLUE);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_BROWN      = new StainedHardenedClay(DyeColor.BROWN);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_GREEN      = new StainedHardenedClay(DyeColor.GREEN);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_RED        = new StainedHardenedClay(DyeColor.RED);
+    public static final StainedHardenedClay STAINED_HARDENED_CLAY_BLACK      = new StainedHardenedClay(DyeColor.BLACK);
 
     private static final Map<String, StainedHardenedClay>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StainedHardenedClay> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final DyeColor color;
+
     @SuppressWarnings("MagicNumber")
     protected StainedHardenedClay()
     {
-        super("STAINED_HARDENED_CLAY", 159, "minecraft:stained_hardened_clay", "STAINED_HARDENED_CLAY", (byte) 0x00);
+        super("STAINED_HARDENED_CLAY", 159, "minecraft:stained_hardened_clay", "WHITE", (byte) 0x00);
+        this.color = DyeColor.WHITE;
     }
 
-    public StainedHardenedClay(final String enumName, final int type)
+    public StainedHardenedClay(final DyeColor color)
     {
-        super(STAINED_HARDENED_CLAY.name(), STAINED_HARDENED_CLAY.getId(), STAINED_HARDENED_CLAY.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public StainedHardenedClay(final int maxStack, final String typeName, final byte type)
-    {
-        super(STAINED_HARDENED_CLAY.name(), STAINED_HARDENED_CLAY.getId(), STAINED_HARDENED_CLAY.getMinecraftId(), maxStack, typeName, type);
+        super(STAINED_HARDENED_CLAY_WHITE.name(), STAINED_HARDENED_CLAY_WHITE.getId(), STAINED_HARDENED_CLAY_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
+        this.color = color;
     }
 
     @Override
@@ -81,13 +96,13 @@ public class StainedHardenedClay extends BlockMaterialData implements Colorable
     @Override
     public DyeColor getColor()
     {
-        return null; // TODO: implement
+        return this.color;
     }
 
     @Override
-    public Material getColor(final DyeColor color)
+    public StainedHardenedClay getColor(final DyeColor color)
     {
-        return null; // TODO: implement
+        return getByID(color.getBlockFlag());
     }
 
     /**
@@ -116,6 +131,19 @@ public class StainedHardenedClay extends BlockMaterialData implements Colorable
     }
 
     /**
+     * Returns one of StainedHardenedClay sub-type based on {@link DyeColor}.
+     * It will never return null;
+     *
+     * @param color color of StainedHardenedClay
+     *
+     * @return sub-type of StainedHardenedClay
+     */
+    public static StainedHardenedClay getStainedHardenedClay(final DyeColor color)
+    {
+        return getByID(color.getBlockFlag());
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -129,6 +157,27 @@ public class StainedHardenedClay extends BlockMaterialData implements Colorable
 
     static
     {
-        StainedHardenedClay.register(STAINED_HARDENED_CLAY);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_WHITE);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_ORANGE);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_MAGENTA);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_LIGHT_BLUE);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_YELLOW);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_LIME);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_PINK);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_GRAY);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_SILVER);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_CYAN);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_PURPLE);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_BLUE);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_BROWN);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_GREEN);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_RED);
+        StainedHardenedClay.register(STAINED_HARDENED_CLAY_BLACK);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
     }
 }

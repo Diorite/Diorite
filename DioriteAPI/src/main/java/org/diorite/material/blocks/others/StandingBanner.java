@@ -2,6 +2,10 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -13,11 +17,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class StandingBanner extends BannerBlock
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 16;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,25 +32,79 @@ public class StandingBanner extends BannerBlock
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STANDING_BANNER__HARDNESS;
 
-    public static final StandingBanner STANDING_BANNER = new StandingBanner();
+    public static final StandingBanner STANDING_BANNER_SOUTH            = new StandingBanner();
+    public static final StandingBanner STANDING_BANNER_SOUTH_SOUTH_WEST = new StandingBanner(BlockFace.SOUTH_SOUTH_WEST);
+    public static final StandingBanner STANDING_BANNER_SOUTH_WEST       = new StandingBanner(BlockFace.SOUTH_WEST);
+    public static final StandingBanner STANDING_BANNER_WEST_SOUTH_WEST  = new StandingBanner(BlockFace.WEST_SOUTH_WEST);
+    public static final StandingBanner STANDING_BANNER_WEST             = new StandingBanner(BlockFace.WEST);
+    public static final StandingBanner STANDING_BANNER_WEST_NORTH_WEST  = new StandingBanner(BlockFace.WEST_NORTH_WEST);
+    public static final StandingBanner STANDING_BANNER_NORTH_WEST       = new StandingBanner(BlockFace.NORTH_WEST);
+    public static final StandingBanner STANDING_BANNER_NORTH_NORTH_WEST = new StandingBanner(BlockFace.NORTH_NORTH_WEST);
+    public static final StandingBanner STANDING_BANNER_NORTH            = new StandingBanner(BlockFace.NORTH);
+    public static final StandingBanner STANDING_BANNER_NORTH_NORTH_EAST = new StandingBanner(BlockFace.NORTH_NORTH_EAST);
+    public static final StandingBanner STANDING_BANNER_NORTH_EAST       = new StandingBanner(BlockFace.NORTH_EAST);
+    public static final StandingBanner STANDING_BANNER_EAST_NORTH_EAST  = new StandingBanner(BlockFace.EAST_NORTH_EAST);
+    public static final StandingBanner STANDING_BANNER_EAST             = new StandingBanner(BlockFace.EAST);
+    public static final StandingBanner STANDING_BANNER_EAST_SOUTH_EAST  = new StandingBanner(BlockFace.EAST_SOUTH_EAST);
+    public static final StandingBanner STANDING_BANNER_SOUTH_EAST       = new StandingBanner(BlockFace.SOUTH_EAST);
+    public static final StandingBanner STANDING_BANNER_SOUTH_SOUTH_EAST = new StandingBanner(BlockFace.SOUTH_SOUTH_EAST);
 
     private static final Map<String, StandingBanner>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StandingBanner> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+
     @SuppressWarnings("MagicNumber")
     protected StandingBanner()
     {
-        super("STANDING_BANNER", 176, "minecraft:standing_banner", "STANDING_BANNER", (byte) 0x00);
+        super("STANDING_BANNER_SOUTH", 176, "minecraft:standing_banner", "SOUTH", (byte) 0x00);
+        this.face = BlockFace.SOUTH;
     }
 
-    public StandingBanner(final String enumName, final int type)
+    public StandingBanner(final BlockFace face)
     {
-        super(STANDING_BANNER.name(), STANDING_BANNER.getId(), STANDING_BANNER.getMinecraftId(), enumName, (byte) type);
+        super(STANDING_BANNER_SOUTH.name(), STANDING_BANNER_SOUTH.getId(), STANDING_BANNER_SOUTH.getMinecraftId(), face.name(), combine(face));
+        this.face = face;
     }
 
-    public StandingBanner(final int maxStack, final String typeName, final byte type)
+    @SuppressWarnings("MagicNumber")
+    private static byte combine(final BlockFace face)
     {
-        super(STANDING_BANNER.name(), STANDING_BANNER.getId(), STANDING_BANNER.getMinecraftId(), maxStack, typeName, type);
+        switch (face)
+        {
+            case SOUTH_SOUTH_WEST:
+                return 0x1;
+            case SOUTH_WEST:
+                return 0x2;
+            case WEST_SOUTH_WEST:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case WEST_NORTH_WEST:
+                return 0x5;
+            case NORTH_WEST:
+                return 0x6;
+            case NORTH_NORTH_WEST:
+                return 0x7;
+            case NORTH:
+                return 0x8;
+            case NORTH_NORTH_EAST:
+                return 0x9;
+            case NORTH_EAST:
+                return 0xA;
+            case EAST_NORTH_EAST:
+                return 0xB;
+            case EAST:
+                return 0xC;
+            case EAST_SOUTH_EAST:
+                return 0xD;
+            case SOUTH_EAST:
+                return 0xE;
+            case SOUTH_SOUTH_EAST:
+                return 0xF;
+            default:
+                return 0x0;
+        }
     }
 
     @Override
@@ -72,6 +129,18 @@ public class StandingBanner extends BannerBlock
     public StandingBanner getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public StandingBanner getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
     }
 
     /**
@@ -100,6 +169,19 @@ public class StandingBanner extends BannerBlock
     }
 
     /**
+     * Returns one of StandingBanner sub-type based on {@link BlockFace}.
+     * It will never return null;
+     *
+     * @param face facing of StandingBanner
+     *
+     * @return sub-type of StandingBanner
+     */
+    public static StandingBanner getStandingBanner(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -113,6 +195,27 @@ public class StandingBanner extends BannerBlock
 
     static
     {
-        StandingBanner.register(STANDING_BANNER);
+        StandingBanner.register(STANDING_BANNER_SOUTH);
+        StandingBanner.register(STANDING_BANNER_SOUTH_SOUTH_WEST);
+        StandingBanner.register(STANDING_BANNER_SOUTH_WEST);
+        StandingBanner.register(STANDING_BANNER_WEST_SOUTH_WEST);
+        StandingBanner.register(STANDING_BANNER_WEST);
+        StandingBanner.register(STANDING_BANNER_WEST_NORTH_WEST);
+        StandingBanner.register(STANDING_BANNER_NORTH_WEST);
+        StandingBanner.register(STANDING_BANNER_NORTH_NORTH_WEST);
+        StandingBanner.register(STANDING_BANNER_NORTH);
+        StandingBanner.register(STANDING_BANNER_NORTH_NORTH_EAST);
+        StandingBanner.register(STANDING_BANNER_NORTH_EAST);
+        StandingBanner.register(STANDING_BANNER_EAST_NORTH_EAST);
+        StandingBanner.register(STANDING_BANNER_EAST);
+        StandingBanner.register(STANDING_BANNER_EAST_SOUTH_EAST);
+        StandingBanner.register(STANDING_BANNER_SOUTH_EAST);
+        StandingBanner.register(STANDING_BANNER_SOUTH_SOUTH_EAST);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

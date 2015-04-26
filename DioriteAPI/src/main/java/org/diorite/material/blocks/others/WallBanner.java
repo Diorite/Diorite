@@ -2,6 +2,10 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -13,11 +17,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class WallBanner extends BannerBlock
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 4;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,25 +32,42 @@ public class WallBanner extends BannerBlock
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__WALL_BANNER__HARDNESS;
 
-    public static final WallBanner WALL_BANNER = new WallBanner();
+    public static final WallBanner WALL_BANNER_NORTH = new WallBanner();
+    public static final WallBanner WALL_BANNER_SOUTH = new WallBanner(BlockFace.SOUTH);
+    public static final WallBanner WALL_BANNER_WEST  = new WallBanner(BlockFace.WEST);
+    public static final WallBanner WALL_BANNER_EAST  = new WallBanner(BlockFace.EAST);
 
     private static final Map<String, WallBanner>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WallBanner> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+
     @SuppressWarnings("MagicNumber")
     protected WallBanner()
     {
-        super("WALL_BANNER", 177, "minecraft:wall_banner", "WALL_BANNER", (byte) 0x00);
+        super("WALL_BANNER", 177, "minecraft:wall_banner", "NORTH", (byte) 0x02);
+        this.face = BlockFace.NORTH;
     }
 
-    public WallBanner(final String enumName, final int type)
+    public WallBanner(final BlockFace face)
     {
-        super(WALL_BANNER.name(), WALL_BANNER.getId(), WALL_BANNER.getMinecraftId(), enumName, (byte) type);
+        super(WALL_BANNER_NORTH.name(), WALL_BANNER_NORTH.getId(), WALL_BANNER_NORTH.getMinecraftId(), face.name(), combine(face));
+        this.face = face;
     }
 
-    public WallBanner(final int maxStack, final String typeName, final byte type)
+    private static byte combine(final BlockFace face)
     {
-        super(WALL_BANNER.name(), WALL_BANNER.getId(), WALL_BANNER.getMinecraftId(), maxStack, typeName, type);
+        switch (face)
+        {
+            case SOUTH:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case EAST:
+                return 0x5;
+            default:
+                return 0x2;
+        }
     }
 
     @Override
@@ -72,6 +92,18 @@ public class WallBanner extends BannerBlock
     public WallBanner getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public WallBanner getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
     }
 
     /**
@@ -100,6 +132,19 @@ public class WallBanner extends BannerBlock
     }
 
     /**
+     * Returns one of WallBanner sub-type based on {@link BlockFace}.
+     * It will never return null;
+     *
+     * @param face facing of WallBanner
+     *
+     * @return sub-type of WallBanner
+     */
+    public static WallBanner getWallBanner(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -113,6 +158,15 @@ public class WallBanner extends BannerBlock
 
     static
     {
-        WallBanner.register(WALL_BANNER);
+        WallBanner.register(WALL_BANNER_NORTH);
+        WallBanner.register(WALL_BANNER_SOUTH);
+        WallBanner.register(WALL_BANNER_WEST);
+        WallBanner.register(WALL_BANNER_EAST);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

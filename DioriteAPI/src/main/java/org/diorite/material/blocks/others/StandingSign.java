@@ -2,6 +2,10 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -13,11 +17,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class StandingSign extends SignBlock
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 16;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,25 +32,79 @@ public class StandingSign extends SignBlock
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STANDING_SIGN__HARDNESS;
 
-    public static final StandingSign STANDING_SIGN = new StandingSign();
+    public static final StandingSign STANDING_SIGN_SOUTH            = new StandingSign();
+    public static final StandingSign STANDING_SIGN_SOUTH_SOUTH_WEST = new StandingSign(BlockFace.SOUTH_SOUTH_WEST);
+    public static final StandingSign STANDING_SIGN_SOUTH_WEST       = new StandingSign(BlockFace.SOUTH_WEST);
+    public static final StandingSign STANDING_SIGN_WEST_SOUTH_WEST  = new StandingSign(BlockFace.WEST_SOUTH_WEST);
+    public static final StandingSign STANDING_SIGN_WEST             = new StandingSign(BlockFace.WEST);
+    public static final StandingSign STANDING_SIGN_WEST_NORTH_WEST  = new StandingSign(BlockFace.WEST_NORTH_WEST);
+    public static final StandingSign STANDING_SIGN_NORTH_WEST       = new StandingSign(BlockFace.NORTH_WEST);
+    public static final StandingSign STANDING_SIGN_NORTH_NORTH_WEST = new StandingSign(BlockFace.NORTH_NORTH_WEST);
+    public static final StandingSign STANDING_SIGN_NORTH            = new StandingSign(BlockFace.NORTH);
+    public static final StandingSign STANDING_SIGN_NORTH_NORTH_EAST = new StandingSign(BlockFace.NORTH_NORTH_EAST);
+    public static final StandingSign STANDING_SIGN_NORTH_EAST       = new StandingSign(BlockFace.NORTH_EAST);
+    public static final StandingSign STANDING_SIGN_EAST_NORTH_EAST  = new StandingSign(BlockFace.EAST_NORTH_EAST);
+    public static final StandingSign STANDING_SIGN_EAST             = new StandingSign(BlockFace.EAST);
+    public static final StandingSign STANDING_SIGN_EAST_SOUTH_EAST  = new StandingSign(BlockFace.EAST_SOUTH_EAST);
+    public static final StandingSign STANDING_SIGN_SOUTH_EAST       = new StandingSign(BlockFace.SOUTH_EAST);
+    public static final StandingSign STANDING_SIGN_SOUTH_SOUTH_EAST = new StandingSign(BlockFace.SOUTH_SOUTH_EAST);
 
     private static final Map<String, StandingSign>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StandingSign> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+
     @SuppressWarnings("MagicNumber")
     protected StandingSign()
     {
-        super("STANDING_SIGN", 63, "minecraft:standing_sign", "STANDING_SIGN", (byte) 0x00);
+        super("STANDING_SIGN", 63, "minecraft:standing_sign", "SOUTH", (byte) 0x00);
+        this.face = BlockFace.SOUTH;
     }
 
-    public StandingSign(final String enumName, final int type)
+    public StandingSign(final BlockFace face)
     {
-        super(STANDING_SIGN.name(), STANDING_SIGN.getId(), STANDING_SIGN.getMinecraftId(), enumName, (byte) type);
+        super(STANDING_SIGN_SOUTH.name(), STANDING_SIGN_SOUTH.getId(), STANDING_SIGN_SOUTH.getMinecraftId(), face.name(), combine(face));
+        this.face = face;
     }
 
-    public StandingSign(final int maxStack, final String typeName, final byte type)
+    @SuppressWarnings("MagicNumber")
+    private static byte combine(final BlockFace face)
     {
-        super(STANDING_SIGN.name(), STANDING_SIGN.getId(), STANDING_SIGN.getMinecraftId(), maxStack, typeName, type);
+        switch (face)
+        {
+            case SOUTH_SOUTH_WEST:
+                return 0x1;
+            case SOUTH_WEST:
+                return 0x2;
+            case WEST_SOUTH_WEST:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case WEST_NORTH_WEST:
+                return 0x5;
+            case NORTH_WEST:
+                return 0x6;
+            case NORTH_NORTH_WEST:
+                return 0x7;
+            case NORTH:
+                return 0x8;
+            case NORTH_NORTH_EAST:
+                return 0x9;
+            case NORTH_EAST:
+                return 0xA;
+            case EAST_NORTH_EAST:
+                return 0xB;
+            case EAST:
+                return 0xC;
+            case EAST_SOUTH_EAST:
+                return 0xD;
+            case SOUTH_EAST:
+                return 0xE;
+            case SOUTH_SOUTH_EAST:
+                return 0xF;
+            default:
+                return 0x0;
+        }
     }
 
     @Override
@@ -60,6 +117,18 @@ public class StandingSign extends SignBlock
     public float getHardness()
     {
         return HARDNESS;
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public StandingSign getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
     }
 
     @Override
@@ -100,6 +169,19 @@ public class StandingSign extends SignBlock
     }
 
     /**
+     * Returns one of StandingSign sub-type based on {@link BlockFace}.
+     * It will never return null;
+     *
+     * @param face facing of StandingSign
+     *
+     * @return sub-type of StandingSign
+     */
+    public static StandingSign getStandingSign(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -113,6 +195,27 @@ public class StandingSign extends SignBlock
 
     static
     {
-        StandingSign.register(STANDING_SIGN);
+        StandingSign.register(STANDING_SIGN_SOUTH);
+        StandingSign.register(STANDING_SIGN_SOUTH_SOUTH_WEST);
+        StandingSign.register(STANDING_SIGN_SOUTH_WEST);
+        StandingSign.register(STANDING_SIGN_WEST_SOUTH_WEST);
+        StandingSign.register(STANDING_SIGN_WEST);
+        StandingSign.register(STANDING_SIGN_WEST_NORTH_WEST);
+        StandingSign.register(STANDING_SIGN_NORTH_WEST);
+        StandingSign.register(STANDING_SIGN_NORTH_NORTH_WEST);
+        StandingSign.register(STANDING_SIGN_NORTH);
+        StandingSign.register(STANDING_SIGN_NORTH_NORTH_EAST);
+        StandingSign.register(STANDING_SIGN_NORTH_EAST);
+        StandingSign.register(STANDING_SIGN_EAST_NORTH_EAST);
+        StandingSign.register(STANDING_SIGN_EAST);
+        StandingSign.register(STANDING_SIGN_EAST_SOUTH_EAST);
+        StandingSign.register(STANDING_SIGN_SOUTH_EAST);
+        StandingSign.register(STANDING_SIGN_SOUTH_SOUTH_EAST);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }
