@@ -165,14 +165,14 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  Furnace                  FURNACE                    = Furnace.FURNACE; // TODO: edit after editing auto-generated class
     public static final  BurningFurnace           BURNING_FURNACE            = BurningFurnace.BURNING_FURNACE; // TODO: edit after editing auto-generated class
     public static final  StandingSign             STANDING_SIGN              = StandingSign.STANDING_SIGN; // TODO: edit after editing auto-generated class
-    public static final  OakDoor                  OAK_DOOR                   = OakDoor.OAK_DOOR; // TODO: edit after editing auto-generated class
+    public static final  OakDoor                  OAK_DOOR                   = OakDoor.OAK_DOOR_BOTTOM_EAST;
     public static final  Ladder                   LADDER                     = Ladder.LADDER; // TODO: edit after editing auto-generated class
     public static final  Rail                     RAIL                       = Rail.RAIL; // TODO: edit after editing auto-generated class
     public static final  CobblestoneStairs        COBBLESTONE_STAIRS         = CobblestoneStairs.COBBLESTONE_STAIRS; // TODO: edit after editing auto-generated class
     public static final  WallSign                 WALL_SIGN                  = WallSign.WALL_SIGN; // TODO: edit after editing auto-generated class
     public static final  Lever                    LEVER                      = Lever.LEVER; // TODO: edit after editing auto-generated class
     public static final  StonePressurePlate       STONE_PRESSURE_PLATE       = StonePressurePlate.STONE_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
-    public static final  IronDoor                 IRON_DOOR                  = IronDoor.IRON_DOOR_BOTTOM_EAST; // TODO: edit after editing auto-generated class
+    public static final  IronDoor                 IRON_DOOR                  = IronDoor.IRON_DOOR_BOTTOM_EAST;
     public static final  WoodenPressurePlate      WOODEN_PRESSURE_PLATE      = WoodenPressurePlate.WOODEN_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
     public static final  RedstoneOre              REDSTONE_ORE               = RedstoneOre.REDSTONE_ORE;
     public static final  RedstoneOreGlowing       REDSTONE_ORE_GLOWING       = RedstoneOreGlowing.REDSTONE_ORE_GLOWING;
@@ -289,11 +289,11 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  JungleFence              JUNGLE_FENCE               = JungleFence.JUNGLE_FENCE;
     public static final  DarkOakFence             DARK_OAK_FENCE             = DarkOakFence.DARK_OAK_FENCE;
     public static final  AcaciaFence              ACACIA_FENCE               = AcaciaFence.ACACIA_FENCE;
-    public static final  SpruceDoor               SPRUCE_DOOR                = SpruceDoor.SPRUCE_DOOR; // TODO: edit after editing auto-generated class
-    public static final  BirchDoor                BIRCH_DOOR                 = BirchDoor.BIRCH_DOOR; // TODO: edit after editing auto-generated class
-    public static final  JungleDoor               JUNGLE_DOOR                = JungleDoor.JUNGLE_DOOR; // TODO: edit after editing auto-generated class
-    public static final  AcaciaDoor               ACACIA_DOOR                = AcaciaDoor.ACACIA_DOOR_BOTTOM_EAST; // TODO: edit after editing auto-generated class
-    public static final  DarkOakDoor              DARK_OAK_DOOR              = DarkOakDoor.DARK_OAK_DOOR; // TODO: edit after editing auto-generated class
+    public static final  SpruceDoor               SPRUCE_DOOR                = SpruceDoor.SPRUCE_DOOR_BOTTOM_EAST;
+    public static final  BirchDoor                BIRCH_DOOR                 = BirchDoor.BIRCH_DOOR_BOTTOM_EAST;
+    public static final  JungleDoor               JUNGLE_DOOR                = JungleDoor.JUNGLE_DOOR_BOTTOM_EAST;
+    public static final  AcaciaDoor               ACACIA_DOOR                = AcaciaDoor.ACACIA_DOOR_BOTTOM_EAST;
+    public static final  DarkOakDoor              DARK_OAK_DOOR              = DarkOakDoor.DARK_OAK_DOOR_BOTTOM_EAST;
     // ----- Item Separator -----
     //    public static final  Material                IRON_SPADE           = new Material("IRON_SPADE", 256, 1, 250);
 //    public static final  Material                IRON_PICKAXE         = new Material("IRON_PICKAXE", 257, 1, 250);
