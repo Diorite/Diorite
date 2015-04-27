@@ -2,8 +2,13 @@ package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.blocks.Directional;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -12,13 +17,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Furnace" and all its subtypes.
  */
-public class Furnace extends BlockMaterialData
+public class Furnace extends BlockMaterialData implements Directional
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 4;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,25 +34,27 @@ public class Furnace extends BlockMaterialData
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__FURNACE__HARDNESS;
 
-    public static final Furnace FURNACE = new Furnace();
+    public static final Furnace FURNACE_NORTH = new Furnace();
+    public static final Furnace FURNACE_SOUTH = new Furnace(BlockFace.SOUTH);
+    public static final Furnace FURNACE_WEST  = new Furnace(BlockFace.WEST);
+    public static final Furnace FURNACE_EAST  = new Furnace(BlockFace.EAST);
 
     private static final Map<String, Furnace>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Furnace> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+
     @SuppressWarnings("MagicNumber")
     protected Furnace()
     {
-        super("FURNACE", 61, "minecraft:furnace", "FURNACE", (byte) 0x00);
+        super("FURNACE", 65, "minecraft:ladder", "NORTH", (byte) 0x00);
+        this.face = BlockFace.NORTH;
     }
 
-    public Furnace(final String enumName, final int type)
+    public Furnace(final BlockFace face)
     {
-        super(FURNACE.name(), FURNACE.getId(), FURNACE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public Furnace(final int maxStack, final String typeName, final byte type)
-    {
-        super(FURNACE.name(), FURNACE.getId(), FURNACE.getMinecraftId(), maxStack, typeName, type);
+        super(FURNACE_NORTH.name(), FURNACE_NORTH.getId(), FURNACE_NORTH.getMinecraftId(), face.name(), combine(face));
+        this.face = face;
     }
 
     @Override
@@ -73,6 +79,39 @@ public class Furnace extends BlockMaterialData
     public Furnace getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public Furnace getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        switch (face)
+        {
+            case SOUTH:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case EAST:
+                return 0x5;
+            default:
+                return 0x2;
+        }
     }
 
     /**
@@ -101,6 +140,19 @@ public class Furnace extends BlockMaterialData
     }
 
     /**
+     * Returns one of Furnace sub-type based on {@link BlockFace}
+     * It will never return null.
+     *
+     * @param face facing of Furnace.
+     *
+     * @return sub-type of Furnace
+     */
+    public static Furnace getFurnace(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -114,6 +166,9 @@ public class Furnace extends BlockMaterialData
 
     static
     {
-        Furnace.register(FURNACE);
+        Furnace.register(FURNACE_NORTH);
+        Furnace.register(FURNACE_SOUTH);
+        Furnace.register(FURNACE_WEST);
+        Furnace.register(FURNACE_EAST);
     }
 }

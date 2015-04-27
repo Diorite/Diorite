@@ -2,9 +2,13 @@ package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.ContainerBlock;
+import org.diorite.material.blocks.Directional;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,13 +17,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "EnderChest" and all its subtypes.
  */
-public class EnderChest extends BlockMaterialData implements ContainerBlock
+public class EnderChest extends BlockMaterialData implements Directional
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 4;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -31,25 +34,27 @@ public class EnderChest extends BlockMaterialData implements ContainerBlock
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__ENDER_CHEST__HARDNESS;
 
-    public static final EnderChest ENDER_CHEST = new EnderChest();
+    public static final EnderChest ENDER_CHEST_NORTH = new EnderChest();
+    public static final EnderChest ENDER_CHEST_SOUTH = new EnderChest(BlockFace.SOUTH);
+    public static final EnderChest ENDER_CHEST_WEST  = new EnderChest(BlockFace.WEST);
+    public static final EnderChest ENDER_CHEST_EAST  = new EnderChest(BlockFace.EAST);
 
     private static final Map<String, EnderChest>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<EnderChest> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+
     @SuppressWarnings("MagicNumber")
     protected EnderChest()
     {
-        super("ENDER_CHEST", 130, "minecraft:ender_chest", "ENDER_CHEST", (byte) 0x00);
+        super("ENDER_CHEST", 65, "minecraft:ladder", "NORTH", (byte) 0x00);
+        this.face = BlockFace.NORTH;
     }
 
-    public EnderChest(final String enumName, final int type)
+    public EnderChest(final BlockFace face)
     {
-        super(ENDER_CHEST.name(), ENDER_CHEST.getId(), ENDER_CHEST.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public EnderChest(final int maxStack, final String typeName, final byte type)
-    {
-        super(ENDER_CHEST.name(), ENDER_CHEST.getId(), ENDER_CHEST.getMinecraftId(), maxStack, typeName, type);
+        super(ENDER_CHEST_NORTH.name(), ENDER_CHEST_NORTH.getId(), ENDER_CHEST_NORTH.getMinecraftId(), face.name(), combine(face));
+        this.face = face;
     }
 
     @Override
@@ -74,6 +79,39 @@ public class EnderChest extends BlockMaterialData implements ContainerBlock
     public EnderChest getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public EnderChest getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        switch (face)
+        {
+            case SOUTH:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case EAST:
+                return 0x5;
+            default:
+                return 0x2;
+        }
     }
 
     /**
@@ -102,6 +140,19 @@ public class EnderChest extends BlockMaterialData implements ContainerBlock
     }
 
     /**
+     * Returns one of EnderChest sub-type based on {@link BlockFace}
+     * It will never return null.
+     *
+     * @param face facing of EnderChest.
+     *
+     * @return sub-type of EnderChest
+     */
+    public static EnderChest getEnderChest(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -115,6 +166,9 @@ public class EnderChest extends BlockMaterialData implements ContainerBlock
 
     static
     {
-        EnderChest.register(ENDER_CHEST);
+        EnderChest.register(ENDER_CHEST_NORTH);
+        EnderChest.register(ENDER_CHEST_SOUTH);
+        EnderChest.register(ENDER_CHEST_WEST);
+        EnderChest.register(ENDER_CHEST_EAST);
     }
 }

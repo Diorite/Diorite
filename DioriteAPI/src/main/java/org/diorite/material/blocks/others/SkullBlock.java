@@ -61,27 +61,6 @@ public class SkullBlock extends BlockMaterialData implements Directional
         this.onWall = true;
     }
 
-    private static byte combine(final BlockFace face)
-    {
-        if (face == null)
-        {
-            return 0x1;
-        }
-        switch (face)
-        {
-            case NORTH:
-                return 0x2;
-            case SOUTH:
-                return 0x3;
-            case EAST:
-                return 0x4;
-            case WEST:
-                return 0x5;
-            default:
-                return 0x1;
-        }
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -106,6 +85,12 @@ public class SkullBlock extends BlockMaterialData implements Directional
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("onWall", this.onWall).toString();
+    }
+
     /**
      * @return facing firection of skull, or null if skull is on ground.
      */
@@ -127,6 +112,27 @@ public class SkullBlock extends BlockMaterialData implements Directional
     public SkullBlock getBlockFacing(final BlockFace face)
     {
         return getByID(combine(face));
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        if (face == null)
+        {
+            return 0x1;
+        }
+        switch (face)
+        {
+            case NORTH:
+                return 0x2;
+            case SOUTH:
+                return 0x3;
+            case EAST:
+                return 0x4;
+            case WEST:
+                return 0x5;
+            default:
+                return 0x1;
+        }
     }
 
     /**
@@ -187,11 +193,5 @@ public class SkullBlock extends BlockMaterialData implements Directional
         SkullBlock.register(SKULL_BLOCK_WALL_SOUTH);
         SkullBlock.register(SKULL_BLOCK_WALL_EAST);
         SkullBlock.register(SKULL_BLOCK_WALL_WEST);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("onWall", this.onWall).toString();
     }
 }

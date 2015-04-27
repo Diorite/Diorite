@@ -47,7 +47,7 @@ public class Ladder extends BlockMaterialData implements Directional
     @SuppressWarnings("MagicNumber")
     protected Ladder()
     {
-        super("LADDER_NORTH", 65, "minecraft:ladder", "NORTH", (byte) 0x00);
+        super("LADDER", 65, "minecraft:ladder", "NORTH", (byte) 0x00);
         this.face = BlockFace.NORTH;
     }
 
@@ -55,21 +55,6 @@ public class Ladder extends BlockMaterialData implements Directional
     {
         super(LADDER_NORTH.name(), LADDER_NORTH.getId(), LADDER_NORTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
-    }
-
-    private static byte combine(final BlockFace face)
-    {
-        switch (face)
-        {
-            case SOUTH:
-                return 0x3;
-            case WEST:
-                return 0x4;
-            case EAST:
-                return 0x5;
-            default:
-                return 0x2;
-        }
     }
 
     @Override
@@ -97,6 +82,12 @@ public class Ladder extends BlockMaterialData implements Directional
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    @Override
     public BlockFace getBlockFacing()
     {
         return this.face;
@@ -106,6 +97,21 @@ public class Ladder extends BlockMaterialData implements Directional
     public Ladder getBlockFacing(final BlockFace face)
     {
         return getByID(combine(face));
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        switch (face)
+        {
+            case SOUTH:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case EAST:
+                return 0x5;
+            default:
+                return 0x2;
+        }
     }
 
     /**
@@ -164,11 +170,5 @@ public class Ladder extends BlockMaterialData implements Directional
         Ladder.register(LADDER_SOUTH);
         Ladder.register(LADDER_WEST);
         Ladder.register(LADDER_EAST);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

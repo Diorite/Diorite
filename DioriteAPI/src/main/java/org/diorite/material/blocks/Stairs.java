@@ -24,7 +24,7 @@ public interface Stairs extends Directional
      * Returns one of Stairs sub-type based on facing direction and upside-down state.
      * It will never return null.
      *
-     * @param face  facing direction of stairs.
+     * @param face   facing direction of stairs.
      * @param upside if stairs should be upside-down.
      *
      * @return sub-type of Stairs

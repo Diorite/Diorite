@@ -56,19 +56,6 @@ public class HayBlock extends BlockMaterialData implements Rotatable
         this.rotateAxis = rotateAxis;
     }
 
-    private static byte combine(final RotateAxis axis)
-    {
-        switch (axis)
-        {
-            case EAST_WEST:
-                return 0x4;
-            case NORTH_SOUTH:
-                return 0x8;
-            default:
-                return 0x0;
-        }
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -94,6 +81,12 @@ public class HayBlock extends BlockMaterialData implements Rotatable
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
+    }
+
+    @Override
     public RotateAxis getRotateAxis()
     {
         return this.rotateAxis;
@@ -103,6 +96,19 @@ public class HayBlock extends BlockMaterialData implements Rotatable
     public HayBlock getRotated(final RotateAxis axis)
     {
         return getByID(combine(axis));
+    }
+
+    private static byte combine(final RotateAxis axis)
+    {
+        switch (axis)
+        {
+            case EAST_WEST:
+                return 0x4;
+            case NORTH_SOUTH:
+                return 0x8;
+            default:
+                return 0x0;
+        }
     }
 
     /**
@@ -160,11 +166,5 @@ public class HayBlock extends BlockMaterialData implements Rotatable
         HayBlock.register(HAY_BLOCK_UP_DOWN);
         HayBlock.register(HAY_BLOCK_EAST_WEST);
         HayBlock.register(HAY_BLOCK_NORTH_SOUTH);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
     }
 }

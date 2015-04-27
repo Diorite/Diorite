@@ -3,7 +3,6 @@ package org.diorite.material.blocks.wooden;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.blocks.ContainerBlock;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -12,7 +11,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "NoteBlock" and all its subtypes.
  */
-public class NoteBlock extends Wooden implements ContainerBlock
+public class NoteBlock extends Wooden
 {
     /**
      * Sub-ids used by diorite/minecraft by default

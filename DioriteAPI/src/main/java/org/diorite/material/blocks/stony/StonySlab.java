@@ -25,18 +25,6 @@ public abstract class StonySlab extends Stony implements Slab
         this.stoneType = stoneType;
     }
 
-    @SuppressWarnings("MagicNumber")
-    protected static byte combine(final SlabType slabType, final StoneSlabType stoneType)
-    {
-        byte result = slabType.getFlag();
-        result |= stoneType.getFlag();
-        if (stoneType.isSecondStoneSlabID())
-        {
-            result += 16;
-        }
-        return result;
-    }
-
     @Override
     public SlabType getSlabType()
     {
@@ -52,5 +40,17 @@ public abstract class StonySlab extends Stony implements Slab
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("slabType", this.slabType).append("stoneType", this.stoneType).toString();
+    }
+
+    @SuppressWarnings("MagicNumber")
+    protected static byte combine(final SlabType slabType, final StoneSlabType stoneType)
+    {
+        byte result = slabType.getFlag();
+        result |= stoneType.getFlag();
+        if (stoneType.isSecondStoneSlabID())
+        {
+            result += 16;
+        }
+        return result;
     }
 }

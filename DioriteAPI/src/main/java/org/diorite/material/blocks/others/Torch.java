@@ -58,23 +58,6 @@ public class Torch extends BlockMaterialData implements Directional
         this.face = face;
     }
 
-    private static byte combine(final BlockFace face)
-    {
-        switch (face)
-        {
-            case WEST:
-                return 0x2;
-            case SOUTH:
-                return 0x3;
-            case NORTH:
-                return 0x4;
-            case UP:
-                return 0x5;
-            default:
-                return 0x1;
-        }
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -100,6 +83,12 @@ public class Torch extends BlockMaterialData implements Directional
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    @Override
     public BlockFace getBlockFacing()
     {
         return this.face;
@@ -109,6 +98,23 @@ public class Torch extends BlockMaterialData implements Directional
     public Torch getBlockFacing(final BlockFace face)
     {
         return getByID(combine(face));
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        switch (face)
+        {
+            case WEST:
+                return 0x2;
+            case SOUTH:
+                return 0x3;
+            case NORTH:
+                return 0x4;
+            case UP:
+                return 0x5;
+            default:
+                return 0x1;
+        }
     }
 
     /**
@@ -168,11 +174,5 @@ public class Torch extends BlockMaterialData implements Directional
         Torch.register(TORCH_SOUTH);
         Torch.register(TORCH_NORTH);
         Torch.register(TORCH_UP);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

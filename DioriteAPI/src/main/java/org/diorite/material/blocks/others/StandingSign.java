@@ -67,6 +67,48 @@ public class StandingSign extends SignBlock
         this.face = face;
     }
 
+    @Override
+    public float getBlastResistance()
+    {
+        return BLAST_RESISTANCE;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return HARDNESS;
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public StandingSign getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    @Override
+    public StandingSign getType(final String name)
+    {
+        return getByEnumName(name);
+    }
+
+    @Override
+    public StandingSign getType(final int id)
+    {
+        return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
     @SuppressWarnings("MagicNumber")
     private static byte combine(final BlockFace face)
     {
@@ -105,42 +147,6 @@ public class StandingSign extends SignBlock
             default:
                 return 0x0;
         }
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return this.face;
-    }
-
-    @Override
-    public StandingSign getBlockFacing(final BlockFace face)
-    {
-        return getByID(combine(face));
-    }
-
-    @Override
-    public StandingSign getType(final String name)
-    {
-        return getByEnumName(name);
-    }
-
-    @Override
-    public StandingSign getType(final int id)
-    {
-        return getByID(id);
     }
 
     /**
@@ -211,11 +217,5 @@ public class StandingSign extends SignBlock
         StandingSign.register(STANDING_SIGN_EAST_SOUTH_EAST);
         StandingSign.register(STANDING_SIGN_SOUTH_EAST);
         StandingSign.register(STANDING_SIGN_SOUTH_SOUTH_EAST);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

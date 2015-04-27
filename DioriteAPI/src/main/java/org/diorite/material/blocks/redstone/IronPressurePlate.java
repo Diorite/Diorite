@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.math.DioriteMathUtils;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -11,13 +12,13 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "IronPressurePlate" and all its subtypes.
  */
+@SuppressWarnings("MagicNumber")
 public class IronPressurePlate extends WeightedPressurePlate
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 16;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +30,22 @@ public class IronPressurePlate extends WeightedPressurePlate
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__IRON_PRESSURE_PLATE__HARDNESS;
 
-    public static final IronPressurePlate IRON_PRESSURE_PLATE = new IronPressurePlate();
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_0  = new IronPressurePlate();
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_1  = new IronPressurePlate(0x1);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_2  = new IronPressurePlate(0x2);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_3  = new IronPressurePlate(0x3);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_4  = new IronPressurePlate(0x4);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_5  = new IronPressurePlate(0x5);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_6  = new IronPressurePlate(0x6);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_7  = new IronPressurePlate(0x7);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_8  = new IronPressurePlate(0x8);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_9  = new IronPressurePlate(0x9);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_10 = new IronPressurePlate(0xA);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_11 = new IronPressurePlate(0xB);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_12 = new IronPressurePlate(0xC);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_13 = new IronPressurePlate(0xD);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_14 = new IronPressurePlate(0xE);
+    public static final IronPressurePlate IRON_PRESSURE_PLATE_15 = new IronPressurePlate(0xF);
 
     private static final Map<String, IronPressurePlate>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<IronPressurePlate> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,17 +53,12 @@ public class IronPressurePlate extends WeightedPressurePlate
     @SuppressWarnings("MagicNumber")
     protected IronPressurePlate()
     {
-        super("IRON_PRESSURE_PLATE", 148, "minecraft:heavy_weighted_pressure_plate", "IRON_PRESSURE_PLATE", (byte) 0x00);
+        super("IRON_PRESSURE_PLATE", 148, "minecraft:heavy_weighted_pressure_plate", "0", (byte) 0x00, false);
     }
 
-    public IronPressurePlate(final String enumName, final int type)
+    public IronPressurePlate(final int type)
     {
-        super(IRON_PRESSURE_PLATE.name(), IRON_PRESSURE_PLATE.getId(), IRON_PRESSURE_PLATE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public IronPressurePlate(final int maxStack, final String typeName, final byte type)
-    {
-        super(IRON_PRESSURE_PLATE.name(), IRON_PRESSURE_PLATE.getId(), IRON_PRESSURE_PLATE.getMinecraftId(), maxStack, typeName, type);
+        super(IRON_PRESSURE_PLATE_0.name(), IRON_PRESSURE_PLATE_0.getId(), IRON_PRESSURE_PLATE_0.getMinecraftId(), Integer.toString(type), (byte) type, true);
     }
 
     @Override
@@ -75,9 +86,15 @@ public class IronPressurePlate extends WeightedPressurePlate
     }
 
     @Override
-    public boolean isActivated()
+    public IronPressurePlate getPowerStrength(final int strength)
     {
-        return false; // TODO: implement
+        return getByID(DioriteMathUtils.getInRange(strength, 0, 15));
+    }
+
+    @Override
+    public IronPressurePlate getActivated(final boolean activate)
+    {
+        return getByID(activate ? 15 : 0);
     }
 
     /**
@@ -106,6 +123,19 @@ public class IronPressurePlate extends WeightedPressurePlate
     }
 
     /**
+     * Returns one of IronPressurePlate sub-type based on emitted power.
+     * It will never return null.
+     *
+     * @param power power that should be emitted by plate.
+     *
+     * @return sub-type of IronPressurePlate
+     */
+    public static IronPressurePlate getIronPressurePlate(final int power)
+    {
+        return getByID(DioriteMathUtils.getInRange(power, 0, 15));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -119,6 +149,21 @@ public class IronPressurePlate extends WeightedPressurePlate
 
     static
     {
-        IronPressurePlate.register(IRON_PRESSURE_PLATE);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_0);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_1);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_2);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_3);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_4);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_5);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_6);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_7);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_8);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_9);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_10);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_11);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_12);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_13);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_14);
+        IronPressurePlate.register(IRON_PRESSURE_PLATE_15);
     }
 }

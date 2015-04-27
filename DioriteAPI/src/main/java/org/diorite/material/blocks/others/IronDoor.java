@@ -112,43 +112,16 @@ public class IronDoor extends BlockMaterialData implements Door
     }
 
     @Override
-    public boolean isPowered() throws RuntimeException
+    public String toString()
     {
-        if (! this.topPart)
+        if (this.topPart)
         {
-            throw new RuntimeException("Bottom part don't define if door is powered!");
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("powered", this.powered).append("topPart", true).toString();
         }
-        return this.powered;
-    }
-
-    @Override
-    public IronDoor getPowered(final boolean powered) throws RuntimeException
-    {
-        if (! this.topPart)
+        else
         {
-            throw new RuntimeException("Bottom part don't define if door is powered!");
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("open", this.open).append("blockFace", this.blockFace).append("topPart", false).toString();
         }
-        return getByID(Door.combine(powered, this.hingeOnRightSide));
-    }
-
-    @Override
-    public boolean hasHingeOnRightSide() throws RuntimeException
-    {
-        if (! this.topPart)
-        {
-            throw new RuntimeException("Bottom part don't define side of hinge!");
-        }
-        return this.hingeOnRightSide;
-    }
-
-    @Override
-    public IronDoor getHingeOnRightSide(final boolean onRightSide) throws RuntimeException
-    {
-        if (! this.topPart)
-        {
-            throw new RuntimeException("Bottom part don't define side of hinge!");
-        }
-        return getByID(Door.combine(this.powered, onRightSide));
     }
 
     @Override
@@ -220,6 +193,45 @@ public class IronDoor extends BlockMaterialData implements Door
         return getByID(Door.combine(this.blockFace, open));
     }
 
+    @Override
+    public boolean isPowered() throws RuntimeException
+    {
+        if (! this.topPart)
+        {
+            throw new RuntimeException("Bottom part don't define if door is powered!");
+        }
+        return this.powered;
+    }
+
+    @Override
+    public IronDoor getPowered(final boolean powered) throws RuntimeException
+    {
+        if (! this.topPart)
+        {
+            throw new RuntimeException("Bottom part don't define if door is powered!");
+        }
+        return getByID(Door.combine(powered, this.hingeOnRightSide));
+    }
+
+    @Override
+    public boolean hasHingeOnRightSide() throws RuntimeException
+    {
+        if (! this.topPart)
+        {
+            throw new RuntimeException("Bottom part don't define side of hinge!");
+        }
+        return this.hingeOnRightSide;
+    }
+
+    @Override
+    public IronDoor getHingeOnRightSide(final boolean onRightSide) throws RuntimeException
+    {
+        if (! this.topPart)
+        {
+            throw new RuntimeException("Bottom part don't define side of hinge!");
+        }
+        return getByID(Door.combine(this.powered, onRightSide));
+    }
 
     /**
      * Returns one of IronDoor sub-type based on sub-id, may return null
@@ -300,18 +312,5 @@ public class IronDoor extends BlockMaterialData implements Door
         IronDoor.register(IRON_DOOR_TOP_RIGHT);
         IronDoor.register(IRON_DOOR_TOP_LEFT_POWERED);
         IronDoor.register(IRON_DOOR_TOP_RIGHT_POWERED);
-    }
-
-    @Override
-    public String toString()
-    {
-        if (this.topPart)
-        {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("powered", this.powered).append("topPart", true).toString();
-        }
-        else
-        {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("open", this.open).append("blockFace", this.blockFace).append("topPart", false).toString();
-        }
     }
 }

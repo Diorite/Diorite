@@ -15,11 +15,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class QuartzBlock extends OreBlock
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 5;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -31,7 +30,11 @@ public class QuartzBlock extends OreBlock
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__QUARTZ_BLOCK__HARDNESS;
 
-    public static final QuartzBlock QUARTZ_BLOCK = new QuartzBlock(Material.QUARTZ_ORE);
+    public static final QuartzBlock QUARTZ_BLOCK                    = new QuartzBlock(Material.QUARTZ_ORE);
+    public static final QuartzBlock QUARTZ_BLOCK_CHISELED           = new QuartzBlock("CHISELED", 0x1, Material.QUARTZ_ORE);
+    public static final QuartzBlock QUARTZ_BLOCK_PILLAR_VERTICAL    = new QuartzBlock("PILLAR_VERTICAL", 0x2, Material.QUARTZ_ORE);
+    public static final QuartzBlock QUARTZ_BLOCK_PILLAR_NORTH_SOUTH = new QuartzBlock("PILLAR_NORTH_SOUTH", 0x3, Material.QUARTZ_ORE);
+    public static final QuartzBlock QUARTZ_BLOCK_PILLAR_EAST_WEST   = new QuartzBlock("PILLAR_EAST_WEST", 0x4, Material.QUARTZ_ORE);
 
     private static final Map<String, QuartzBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<QuartzBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -45,11 +48,6 @@ public class QuartzBlock extends OreBlock
     public QuartzBlock(final String enumName, final int type, final Ore ore)
     {
         super(QUARTZ_BLOCK.name(), QUARTZ_BLOCK.getId(), QUARTZ_BLOCK.getMinecraftId(), enumName, (byte) type, ore);
-    }
-
-    public QuartzBlock(final int maxStack, final String typeName, final byte type, final Ore ore)
-    {
-        super(QUARTZ_BLOCK.name(), QUARTZ_BLOCK.getId(), QUARTZ_BLOCK.getMinecraftId(), maxStack, typeName, type, ore);
     }
 
     @Override
@@ -116,5 +114,9 @@ public class QuartzBlock extends OreBlock
     static
     {
         QuartzBlock.register(QUARTZ_BLOCK);
+        QuartzBlock.register(QUARTZ_BLOCK_CHISELED);
+        QuartzBlock.register(QUARTZ_BLOCK_PILLAR_VERTICAL);
+        QuartzBlock.register(QUARTZ_BLOCK_PILLAR_NORTH_SOUTH);
+        QuartzBlock.register(QUARTZ_BLOCK_PILLAR_EAST_WEST);
     }
 }

@@ -228,6 +228,33 @@ public class Water extends Liquid
         byName.put(element.name(), element);
     }
 
+    /**
+     * Helper class for second water (water still) ID
+     */
+    public static class WaterStill extends Water
+    {
+        public WaterStill()
+        {
+            super(LiquidType.STILL);
+        }
+
+        public WaterStill(final LiquidStage stage)
+        {
+            super(stage, LiquidType.STILL);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        /**
+         * Returns one of Water sub-type based on sub-id, may return null
+         * @param id sub-type id
+         * @return sub-type of Water or null
+         */
+        public static Water getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
+    }
+
     static
     {
         Water.register(WATER_SOURCE);
@@ -262,32 +289,5 @@ public class Water extends Liquid
         Water.register(WATER_STAGE_5_FALLING_STILL);
         Water.register(WATER_STAGE_6_FALLING_STILL);
         Water.register(WATER_STAGE_7_FALLING_STILL);
-    }
-
-    /**
-     * Helper class for second water (water still) ID
-     */
-    public static class WaterStill extends Water
-    {
-        public WaterStill()
-        {
-            super(LiquidType.STILL);
-        }
-
-        public WaterStill(final LiquidStage stage)
-        {
-            super(stage, LiquidType.STILL);
-        }
-
-        @SuppressWarnings("MagicNumber")
-        /**
-         * Returns one of Water sub-type based on sub-id, may return null
-         * @param id sub-type id
-         * @return sub-type of Water or null
-         */
-        public static Water getByID(final int id)
-        {
-            return byID.get((byte) (id + 16));
-        }
     }
 }

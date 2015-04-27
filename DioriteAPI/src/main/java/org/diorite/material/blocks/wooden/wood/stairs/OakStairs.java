@@ -50,7 +50,6 @@ public class OakStairs extends WoodenStairs
         super("OAK_STAIRS", 53, "minecraft:oak_stairs", "EAST", WoodType.OAK, BlockFace.EAST, false);
     }
 
-    @SuppressWarnings("MagicNumber")
     public OakStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
         super(OAK_STAIRS_EAST.name(), OAK_STAIRS_EAST.getId(), OAK_STAIRS_EAST.getMinecraftId(), enumName, WoodType.OAK, face, upsideDown);
@@ -81,6 +80,12 @@ public class OakStairs extends WoodenStairs
     }
 
     @Override
+    public OakStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public OakStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -90,12 +95,6 @@ public class OakStairs extends WoodenStairs
     public OakStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public OakStairs getType(final BlockFace face, final boolean upsideDown)
-    {
-        return getByID(Stairs.combine(face, upsideDown));
     }
 
     /**

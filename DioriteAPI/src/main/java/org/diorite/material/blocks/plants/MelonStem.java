@@ -94,6 +94,12 @@ public class MelonStem extends PlantStem
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
+    }
+
     /**
      * Returns one of MelonStem sub-type based on sub-id, may return null
      *
@@ -159,11 +165,5 @@ public class MelonStem extends PlantStem
         MelonStem.register(MELON_BLOCK_5);
         MelonStem.register(MELON_BLOCK_6);
         MelonStem.register(MELON_BLOCK_RIPE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
     }
 }

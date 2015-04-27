@@ -57,11 +57,6 @@ public class PistonExtension extends PistonBase
         super(PISTON_EXTENSION_DOWN.name(), PISTON_EXTENSION_DOWN.getId(), PISTON_EXTENSION_DOWN.getMinecraftId(), enumName, face, extended);
     }
 
-    public PistonExtension(final int maxStack, final String typeName, final BlockFace face, final boolean extended)
-    {
-        super(PISTON_EXTENSION_DOWN.name(), PISTON_EXTENSION_DOWN.getId(), PISTON_EXTENSION_DOWN.getMinecraftId(), maxStack, typeName, face, extended);
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -81,6 +76,18 @@ public class PistonExtension extends PistonBase
     }
 
     @Override
+    public PistonExtension getExtended(final boolean extended)
+    {
+        return getPistonExtension(this.facing, extended);
+    }
+
+    @Override
+    public PistonExtension getType(final BlockFace face, final boolean extended)
+    {
+        return getPistonExtension(face, extended);
+    }
+
+    @Override
     public PistonExtension getType(final int id)
     {
         return getByID(id);
@@ -89,19 +96,7 @@ public class PistonExtension extends PistonBase
     @Override
     public PistonExtension getBlockFacing(final BlockFace face)
     {
-        return getPiston(face, this.extended);
-    }
-
-    @Override
-    public PistonExtension getType(final BlockFace face, final boolean extended)
-    {
-        return getPiston(face, extended);
-    }
-
-    @Override
-    public PistonExtension getExtended(final boolean extended)
-    {
-        return getPiston(this.facing, extended);
+        return getPistonExtension(face, this.extended);
     }
 
     /**
@@ -129,7 +124,16 @@ public class PistonExtension extends PistonBase
         return byName.get(name);
     }
 
-    public static PistonExtension getPiston(final BlockFace face, final boolean extended)
+    /**
+     * Returns one of PistonExtension sub-type based on {@link BlockFace} and extended state.
+     * It will never return null.
+     *
+     * @param face     facing direction of piston.
+     * @param extended if piston should be extended.
+     *
+     * @return sub-type of PistonExtension
+     */
+    public static PistonExtension getPistonExtension(final BlockFace face, final boolean extended)
     {
         return getByID(combine(face, extended));
     }

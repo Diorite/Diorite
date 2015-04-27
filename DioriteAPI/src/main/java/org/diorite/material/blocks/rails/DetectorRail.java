@@ -18,6 +18,11 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 public class DetectorRail extends Rails implements Powerable
 {
     /**
+     * Bit flag defining if rail is powered.
+     * If bit is set to 0, then it isn't powered
+     */
+    public static final byte  POWERED_FLAG     = 0x08;
+    /**
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
@@ -31,7 +36,6 @@ public class DetectorRail extends Rails implements Powerable
      * Final copy of hardness from {@link MagicNumbers} class.
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__DETECTOR_RAIL__HARDNESS;
-    public static final byte  POWERED_FLAG     = 0x08;
 
     public static final DetectorRail DETECTOR_RAIL_NORTH_SOUTH             = new DetectorRail();
     public static final DetectorRail DETECTOR_RAIL_WEST_EAST               = new DetectorRail("WEST_EAST", RailType.FLAT_WEST_EAST, false);
@@ -64,12 +68,6 @@ public class DetectorRail extends Rails implements Powerable
         this.powered = powered;
     }
 
-    public DetectorRail(final int maxStack, final String typeName, final RailType type, final boolean powered)
-    {
-        super(DETECTOR_RAIL_NORTH_SOUTH.name(), DETECTOR_RAIL_NORTH_SOUTH.getId(), DETECTOR_RAIL_NORTH_SOUTH.getMinecraftId(), maxStack, typeName, type, powered ? POWERED_FLAG : 0x00);
-        this.powered = powered;
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -89,15 +87,21 @@ public class DetectorRail extends Rails implements Powerable
     }
 
     @Override
+    public DetectorRail getPowered(final boolean powered)
+    {
+        return getDetectorRail(this.railType, powered);
+    }
+
+    @Override
     public DetectorRail getRailType(final RailType railType)
     {
         return getDetectorRail(railType, this.powered);
     }
 
     @Override
-    public DetectorRail getPowered(final boolean powered)
+    public String toString()
     {
-        return getDetectorRail(this.railType, powered);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("powered", this.powered).toString();
     }
 
     @Override
@@ -112,6 +116,15 @@ public class DetectorRail extends Rails implements Powerable
         return getByID(id);
     }
 
+    /**
+     * Returns sub-type of DetectorRail based on {@link RailType} and powered state.
+     * It will never return null.
+     *
+     * @param railType type of rails
+     * @param activate if rails should be powered.
+     *
+     * @return sub-type of DetectorRail
+     */
     public DetectorRail getType(final RailType railType, final boolean powered)
     {
         return getDetectorRail(railType, powered);
@@ -142,9 +155,23 @@ public class DetectorRail extends Rails implements Powerable
         return byName.get(name);
     }
 
+    /**
+     * Returns sub-type of DetectorRail based on {@link RailType} and powered state.
+     * It will never return null.
+     *
+     * @param railType type of rails
+     * @param activate if rails should be powered.
+     *
+     * @return sub-type of DetectorRail
+     */
     public static DetectorRail getDetectorRail(final RailType type, final boolean isPowered)
     {
-        return getByID(type.getFlag() | (isPowered ? POWERED_FLAG : 0x00));
+        byte flag = type.getFlag();
+        if (flag >= POWERED_FLAG)
+        {
+            flag = RailType.FLAT_NORTH_SOUTH.getFlag();
+        }
+        return getByID(flag | (isPowered ? POWERED_FLAG : 0x00));
     }
 
     /**
@@ -173,11 +200,5 @@ public class DetectorRail extends Rails implements Powerable
         DetectorRail.register(DETECTOR_RAIL_ASCENDING_WEST_POWERED);
         DetectorRail.register(DETECTOR_RAIL_ASCENDING_NORTH_POWERED);
         DetectorRail.register(DETECTOR_RAIL_ASCENDING_SOUTH_POWERED);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("powered", this.powered).toString();
     }
 }

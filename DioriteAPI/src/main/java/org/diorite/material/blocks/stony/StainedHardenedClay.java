@@ -94,6 +94,12 @@ public class StainedHardenedClay extends BlockMaterialData implements Colorable
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
+    }
+
+    @Override
     public DyeColor getColor()
     {
         return this.color;
@@ -173,11 +179,5 @@ public class StainedHardenedClay extends BlockMaterialData implements Colorable
         StainedHardenedClay.register(STAINED_HARDENED_CLAY_GREEN);
         StainedHardenedClay.register(STAINED_HARDENED_CLAY_RED);
         StainedHardenedClay.register(STAINED_HARDENED_CLAY_BLACK);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
     }
 }

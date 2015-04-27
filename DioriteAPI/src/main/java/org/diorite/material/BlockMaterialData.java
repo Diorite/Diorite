@@ -111,6 +111,40 @@ public abstract class BlockMaterialData extends Material
         return IntRange.EMPTY;
     }
 
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = (31 * result) + this.typeName.hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof BlockMaterialData))
+        {
+            return false;
+        }
+        if (! super.equals(o))
+        {
+            return false;
+        }
+
+        final BlockMaterialData that = (BlockMaterialData) o;
+
+        return this.typeName.equals(that.typeName);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("typeName", this.typeName).append("type", this.type).toString();
+    }
 
     public static BlockMaterialData getByID(final int id)
     {
@@ -180,40 +214,5 @@ public abstract class BlockMaterialData extends Material
             return (BlockMaterialData) mat;
         }
         return null;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = super.hashCode();
-        result = (31 * result) + this.typeName.hashCode();
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (! (o instanceof BlockMaterialData))
-        {
-            return false;
-        }
-        if (! super.equals(o))
-        {
-            return false;
-        }
-
-        final BlockMaterialData that = (BlockMaterialData) o;
-
-        return this.typeName.equals(that.typeName);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("typeName", this.typeName).append("type", this.type).toString();
     }
 }

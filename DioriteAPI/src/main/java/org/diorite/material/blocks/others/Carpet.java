@@ -94,6 +94,12 @@ public class Carpet extends BlockMaterialData implements Colorable
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
+    }
+
+    @Override
     public DyeColor getColor()
     {
         return this.color;
@@ -173,11 +179,5 @@ public class Carpet extends BlockMaterialData implements Colorable
         Carpet.register(CARPET_GREEN);
         Carpet.register(CARPET_RED);
         Carpet.register(CARPET_BLACK);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
     }
 }

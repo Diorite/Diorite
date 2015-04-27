@@ -15,17 +15,21 @@ public abstract class Rails extends BlockMaterialData
         this.railType = railType;
     }
 
-    public Rails(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final RailType railType, final byte flags)
-    {
-        super(enumName, id, minecraftId, maxStack, typeName, (byte) (railType.getFlag() | flags));
-        this.railType = railType;
-    }
-
+    /**
+     * @return type of Rails.
+     */
     public RailType getRailType()
     {
         return this.railType;
     }
 
+    /**
+     * Returns sub-type of Rails based on {@link RailType} state.
+     *
+     * @param railType {@link RailType} of Rails,
+     *
+     * @return sub-type of Rails
+     */
     public abstract Rails getRailType(RailType railType);
 
     @Override

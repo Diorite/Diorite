@@ -94,6 +94,12 @@ public class PumpkinStem extends PlantStem
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
+    }
+
     /**
      * Returns one of PumpkinStem sub-type based on sub-id, may return null
      *
@@ -159,11 +165,5 @@ public class PumpkinStem extends PlantStem
         PumpkinStem.register(PUMPKIN_BLOCK_5);
         PumpkinStem.register(PUMPKIN_BLOCK_6);
         PumpkinStem.register(PUMPKIN_BLOCK_RIPE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
     }
 }

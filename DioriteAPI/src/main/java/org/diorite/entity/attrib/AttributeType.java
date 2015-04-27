@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.collections.SimpleStringHashMap;
 
-@SuppressWarnings("MagicNumber")
 public class AttributeType
 {
     public static final  AttributeType              GENERIC_MAX_HEALTH           = new AttributeType("GENERIC_MAX_HEALTH", "generic.maxHealth", ATTRIBUTES__GENERIC_MAX_HEALTH__DEFAULT, ATTRIBUTES__GENERIC_MAX_HEALTH__MIN, ATTRIBUTES__GENERIC_MAX_HEALTH__MAX);

@@ -83,6 +83,12 @@ public class Cake extends BlockMaterialData
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("piecesEaten", this.piecesEaten).toString();
+    }
+
     /**
      * For vanilla cake blocks should return values from 0 to 6.
      *
@@ -170,11 +176,5 @@ public class Cake extends BlockMaterialData
         Cake.register(CAKE_4);
         Cake.register(CAKE_5);
         Cake.register(CAKE_6);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("piecesEaten", this.piecesEaten).toString();
     }
 }

@@ -82,6 +82,12 @@ public class Farmland extends Earth
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("moisture", this.moisture).toString();
+    }
+
     /**
      * @return moisture level, 7 -> full hydrated
      */
@@ -166,11 +172,5 @@ public class Farmland extends Earth
         Farmland.register(FARMLAND_MOISTURE_5);
         Farmland.register(FARMLAND_MOISTURE_6);
         Farmland.register(FARMLAND_HYDRATED);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("moisture", this.moisture).toString();
     }
 }

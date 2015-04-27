@@ -69,26 +69,6 @@ public class EndPortalFrame extends BlockMaterialData implements Directional, Ac
         this.activated = activated;
     }
 
-    protected static byte combine(final BlockFace face, final boolean activated)
-    {
-        byte value = activated ? ACTIVATE_FLAG : 0x0;
-        switch (face)
-        {
-            case WEST:
-                value += 0x1;
-                break;
-            case NORTH:
-                value += 0x2;
-                break;
-            case EAST:
-                value += 0x3;
-                break;
-            default:
-                break;
-        }
-        return value;
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -111,6 +91,12 @@ public class EndPortalFrame extends BlockMaterialData implements Directional, Ac
     public EndPortalFrame getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("activated", this.activated).toString();
     }
 
     @Override
@@ -149,6 +135,26 @@ public class EndPortalFrame extends BlockMaterialData implements Directional, Ac
     public EndPortalFrame getType(final BlockFace face, final boolean activated)
     {
         return getByID(combine(face, activated));
+    }
+
+    protected static byte combine(final BlockFace face, final boolean activated)
+    {
+        byte value = activated ? ACTIVATE_FLAG : 0x0;
+        switch (face)
+        {
+            case WEST:
+                value += 0x1;
+                break;
+            case NORTH:
+                value += 0x2;
+                break;
+            case EAST:
+                value += 0x3;
+                break;
+            default:
+                break;
+        }
+        return value;
     }
 
     /**
@@ -212,11 +218,5 @@ public class EndPortalFrame extends BlockMaterialData implements Directional, Ac
         EndPortalFrame.register(END_PORTAL_FRAME_WEST_EYE);
         EndPortalFrame.register(END_PORTAL_FRAME_NORTH_EYE);
         EndPortalFrame.register(END_PORTAL_FRAME_EAST_EYE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("activated", this.activated).toString();
     }
 }

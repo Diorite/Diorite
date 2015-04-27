@@ -18,6 +18,11 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 public class ActivatorRail extends Rails implements Activatable
 {
     /**
+     * Bit flag defining if rail is active.
+     * If bit is set to 0, then it isn't active
+     */
+    public static final byte  ACTIVE_FLAG      = 0x08;
+    /**
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
@@ -31,7 +36,6 @@ public class ActivatorRail extends Rails implements Activatable
      * Final copy of hardness from {@link MagicNumbers} class.
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__ACTIVATOR_RAIL__HARDNESS;
-    public static final byte  ACTIVE_FLAG      = 0x08;
 
     public static final ActivatorRail ACTIVATOR_RAIL_NORTH_SOUTH     = new ActivatorRail();
     public static final ActivatorRail ACTIVATOR_RAIL_WEST_EAST       = new ActivatorRail("WEST_EAST", RailType.FLAT_WEST_EAST, false);
@@ -65,12 +69,6 @@ public class ActivatorRail extends Rails implements Activatable
         this.active = active;
     }
 
-    public ActivatorRail(final int maxStack, final String typeName, final RailType type, final boolean active)
-    {
-        super(ACTIVATOR_RAIL_NORTH_SOUTH.name(), ACTIVATOR_RAIL_NORTH_SOUTH.getId(), ACTIVATOR_RAIL_NORTH_SOUTH.getMinecraftId(), maxStack, typeName, type, active ? ACTIVE_FLAG : 0x00);
-        this.active = active;
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -90,15 +88,21 @@ public class ActivatorRail extends Rails implements Activatable
     }
 
     @Override
+    public ActivatorRail getActivated(final boolean activate)
+    {
+        return getPoweredRail(this.railType, activate);
+    }
+
+    @Override
     public ActivatorRail getRailType(final RailType railType)
     {
         return getPoweredRail(railType, this.active);
     }
 
     @Override
-    public ActivatorRail getActivated(final boolean activate)
+    public String toString()
     {
-        return getPoweredRail(this.railType, activate);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("active", this.active).toString();
     }
 
     @Override
@@ -113,6 +117,15 @@ public class ActivatorRail extends Rails implements Activatable
         return getByID(id);
     }
 
+    /**
+     * Returns sub-type of ActivatorRail based on {@link RailType} and activate state.
+     * It will never return null.
+     *
+     * @param railType type of rails
+     * @param activate if rails should be activated.
+     *
+     * @return sub-type of ActivatorRail
+     */
     public ActivatorRail getType(final RailType railType, final boolean activate)
     {
         return getPoweredRail(railType, activate);
@@ -143,9 +156,23 @@ public class ActivatorRail extends Rails implements Activatable
         return byName.get(name);
     }
 
-    public static ActivatorRail getPoweredRail(final RailType type, final boolean isActive)
+    /**
+     * Returns sub-type of ActivatorRail based on {@link RailType} and activate state.
+     * It will never return null.
+     *
+     * @param railType type of rails
+     * @param activate if rails should be activated.
+     *
+     * @return sub-type of ActivatorRail
+     */
+    public static ActivatorRail getPoweredRail(final RailType type, final boolean activate)
     {
-        return getByID(type.getFlag() | (isActive ? ACTIVE_FLAG : 0x00));
+        byte flag = type.getFlag();
+        if (flag >= ACTIVE_FLAG)
+        {
+            flag = RailType.FLAT_NORTH_SOUTH.getFlag();
+        }
+        return getByID(flag | (activate ? ACTIVE_FLAG : 0x00));
     }
 
     /**
@@ -174,11 +201,5 @@ public class ActivatorRail extends Rails implements Activatable
         ActivatorRail.register(ACTIVATOR_RAIL_ASCENDING_WEST_ACTIVE);
         ActivatorRail.register(ACTIVATOR_RAIL_ASCENDING_NORTH_ACTIVE);
         ActivatorRail.register(ACTIVATOR_RAIL_ASCENDING_SOUTH_ACTIVE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("active", this.active).toString();
     }
 }

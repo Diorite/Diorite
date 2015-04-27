@@ -74,6 +74,12 @@ public abstract class Trapdoor extends BlockMaterialData implements Openable, Di
      */
     public abstract Trapdoor getType(BlockFace face, boolean open, boolean onTop);
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("open", this.open).append("onTop", this.onTop).toString();
+    }
+
     protected static byte combine(final BlockFace face, final boolean open, final boolean onTop)
     {
         byte result = onTop ? TOP_FLAG : 0x0;
@@ -96,11 +102,5 @@ public abstract class Trapdoor extends BlockMaterialData implements Openable, Di
             result |= OPEN_FLAG;
         }
         return result;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("open", this.open).append("onTop", this.onTop).toString();
     }
 }

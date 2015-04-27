@@ -88,30 +88,6 @@ public class BedBlock extends BlockMaterialData implements Directional
         this.isOccupied = isOccupied;
     }
 
-    private static byte combine(final BlockFace face, final boolean isHeadPart, final boolean isOccupied)
-    {
-        byte result = isHeadPart ? HEAD_PART_FLAG : 0x00;
-        if (isOccupied)
-        {
-            result |= OCCUPIED_FLAG;
-        }
-        switch (face)
-        {
-            case WEST:
-                result |= 0x01;
-                break;
-            case NORTH:
-                result |= 0x02;
-                break;
-            case EAST:
-                result |= 0x03;
-                break;
-            default:
-                return result;
-        }
-        return result;
-    }
-
     public boolean isHeadPart()
     {
         return this.isHeadPart;
@@ -168,9 +144,39 @@ public class BedBlock extends BlockMaterialData implements Directional
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("blockFacing", this.blockFacing).append("isHeadPart", this.isHeadPart).append("isOccupied", this.isOccupied).toString();
+    }
+
     public BedBlock getType(final BlockFace face, final boolean isHeadPart, final boolean isOccupied)
     {
         return getByID(combine(face, isHeadPart, isOccupied));
+    }
+
+    private static byte combine(final BlockFace face, final boolean isHeadPart, final boolean isOccupied)
+    {
+        byte result = isHeadPart ? HEAD_PART_FLAG : 0x00;
+        if (isOccupied)
+        {
+            result |= OCCUPIED_FLAG;
+        }
+        switch (face)
+        {
+            case WEST:
+                result |= 0x01;
+                break;
+            case NORTH:
+                result |= 0x02;
+                break;
+            case EAST:
+                result |= 0x03;
+                break;
+            default:
+                return result;
+        }
+        return result;
     }
 
     /**
@@ -233,11 +239,5 @@ public class BedBlock extends BlockMaterialData implements Directional
         BedBlock.register(BED_HEAD_WEST_OCCUPIED);
         BedBlock.register(BED_HEAD_NORTH_OCCUPIED);
         BedBlock.register(BED_HEAD_EAST_OCCUPIED);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("blockFacing", this.blockFacing).append("isHeadPart", this.isHeadPart).append("isOccupied", this.isOccupied).toString();
     }
 }

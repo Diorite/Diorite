@@ -30,6 +30,12 @@ public abstract class AbstractPumpkin extends Plant implements Directional, Powe
         return AbstractPumpkin.getAbstractPumpkin(powered);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
     protected static byte combine(final BlockFace face)
     {
         switch (face)
@@ -83,11 +89,5 @@ public abstract class AbstractPumpkin extends Plant implements Directional, Powe
         {
             return Pumpkin.getPumpkin(face);
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

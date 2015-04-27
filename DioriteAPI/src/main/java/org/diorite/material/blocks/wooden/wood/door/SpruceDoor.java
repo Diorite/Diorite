@@ -112,46 +112,6 @@ public class SpruceDoor extends WoodenDoor
     }
 
     @Override
-    public boolean isPowered() throws RuntimeException
-    {
-        if (! this.topPart)
-        {
-            throw new RuntimeException("Bottom part don't define if door is powered!");
-        }
-        return this.powered;
-    }
-
-    @Override
-    public SpruceDoor getPowered(final boolean powered) throws RuntimeException
-    {
-        if (! this.topPart)
-        {
-            throw new RuntimeException("Bottom part don't define if door is powered!");
-        }
-        return getByID(Door.combine(powered, this.hingeOnRightSide));
-    }
-
-    @Override
-    public boolean hasHingeOnRightSide() throws RuntimeException
-    {
-        if (! this.topPart)
-        {
-            throw new RuntimeException("Bottom part don't define side of hinge!");
-        }
-        return this.hingeOnRightSide;
-    }
-
-    @Override
-    public SpruceDoor getHingeOnRightSide(final boolean onRightSide) throws RuntimeException
-    {
-        if (! this.topPart)
-        {
-            throw new RuntimeException("Bottom part don't define side of hinge!");
-        }
-        return getByID(Door.combine(this.powered, onRightSide));
-    }
-
-    @Override
     public SpruceDoor getType(final boolean isPowered, final boolean hingeOnRightSide)
     {
         return getByID(Door.combine(isPowered, hingeOnRightSide));
@@ -218,6 +178,59 @@ public class SpruceDoor extends WoodenDoor
             throw new RuntimeException("Top part don't define if door is open!");
         }
         return getByID(Door.combine(this.blockFace, open));
+    }
+
+    @Override
+    public boolean isPowered() throws RuntimeException
+    {
+        if (! this.topPart)
+        {
+            throw new RuntimeException("Bottom part don't define if door is powered!");
+        }
+        return this.powered;
+    }
+
+    @Override
+    public SpruceDoor getPowered(final boolean powered) throws RuntimeException
+    {
+        if (! this.topPart)
+        {
+            throw new RuntimeException("Bottom part don't define if door is powered!");
+        }
+        return getByID(Door.combine(powered, this.hingeOnRightSide));
+    }
+
+    @Override
+    public boolean hasHingeOnRightSide() throws RuntimeException
+    {
+        if (! this.topPart)
+        {
+            throw new RuntimeException("Bottom part don't define side of hinge!");
+        }
+        return this.hingeOnRightSide;
+    }
+
+    @Override
+    public SpruceDoor getHingeOnRightSide(final boolean onRightSide) throws RuntimeException
+    {
+        if (! this.topPart)
+        {
+            throw new RuntimeException("Bottom part don't define side of hinge!");
+        }
+        return getByID(Door.combine(this.powered, onRightSide));
+    }
+
+    @Override
+    public String toString()
+    {
+        if (this.topPart)
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("powered", this.powered).append("topPart", true).toString();
+        }
+        else
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("open", this.open).append("blockFace", this.blockFace).append("topPart", false).toString();
+        }
     }
 
     /**
@@ -299,18 +312,5 @@ public class SpruceDoor extends WoodenDoor
         SpruceDoor.register(SPRUCE_DOOR_TOP_RIGHT);
         SpruceDoor.register(SPRUCE_DOOR_TOP_LEFT_POWERED);
         SpruceDoor.register(SPRUCE_DOOR_TOP_RIGHT_POWERED);
-    }
-
-    @Override
-    public String toString()
-    {
-        if (this.topPart)
-        {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("powered", this.powered).append("topPart", true).toString();
-        }
-        else
-        {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("open", this.open).append("blockFace", this.blockFace).append("topPart", false).toString();
-        }
     }
 }

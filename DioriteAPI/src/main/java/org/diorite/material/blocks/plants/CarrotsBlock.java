@@ -83,6 +83,12 @@ public class CarrotsBlock extends Crops
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
+    }
+
+    @Override
     public int getAge()
     {
         return this.age;
@@ -159,11 +165,5 @@ public class CarrotsBlock extends Crops
         CarrotsBlock.register(CARROTS_BLOCK_5);
         CarrotsBlock.register(CARROTS_BLOCK_6);
         CarrotsBlock.register(CARROTS_BLOCK_RIPE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
     }
 }

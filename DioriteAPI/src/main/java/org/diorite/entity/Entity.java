@@ -2,7 +2,6 @@ package org.diorite.entity;
 
 import org.diorite.GameObject;
 import org.diorite.ImmutableLocation;
-import org.diorite.Location;
 import org.diorite.Server;
 
 public interface Entity extends GameObject
@@ -23,6 +22,6 @@ public interface Entity extends GameObject
 
     default int getMcId()
     {
-        return getType().getMcId();
+        return this.getType().getMcId();
     }
 }

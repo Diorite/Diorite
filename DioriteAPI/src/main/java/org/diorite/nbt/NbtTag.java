@@ -5,29 +5,29 @@ import java.nio.charset.Charset;
 
 public interface NbtTag
 {
-    public static final Charset STRING_CHARSET = Charset.forName("UTF-8");
+    Charset STRING_CHARSET = Charset.forName("UTF-8");
 
-    public String getName();
+    String getName();
 
-    public void setName(String name);
+    void setName(String name);
 
-    default public byte[] getNameBytes()
+    default byte[] getNameBytes()
     {
         return this.getName().getBytes(STRING_CHARSET);
     }
 
-    public NbtTagContainer getParent();
+    NbtTagContainer getParent();
 
-    public void setParent(NbtTagContainer parent);
+    void setParent(NbtTagContainer parent);
 
-    default public byte getTagID()
+    default byte getTagID()
     {
         return this.getTagType().getTypeID();
     }
 
-    public NbtTagType getTagType();
+    NbtTagType getTagType();
 
-    public void write(NbtOutputStream outputStream, boolean anonymous) throws IOException;
+    void write(NbtOutputStream outputStream, boolean anonymous) throws IOException;
 
-    public void read(NbtInputStream inputStream, boolean anonymous) throws IOException;
+    void read(NbtInputStream inputStream, boolean anonymous) throws IOException;
 }

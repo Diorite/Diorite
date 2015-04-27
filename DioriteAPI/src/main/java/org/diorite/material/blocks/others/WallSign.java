@@ -55,21 +55,6 @@ public class WallSign extends SignBlock
         this.face = face;
     }
 
-    private static byte combine(final BlockFace face)
-    {
-        switch (face)
-        {
-            case SOUTH:
-                return 0x3;
-            case WEST:
-                return 0x4;
-            case EAST:
-                return 0x5;
-            default:
-                return 0x2;
-        }
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -104,6 +89,27 @@ public class WallSign extends SignBlock
     public WallSign getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        switch (face)
+        {
+            case SOUTH:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case EAST:
+                return 0x5;
+            default:
+                return 0x2;
+        }
     }
 
     /**
@@ -162,11 +168,5 @@ public class WallSign extends SignBlock
         WallSign.register(WALL_SIGN_SOUTH);
         WallSign.register(WALL_SIGN_WEST);
         WallSign.register(WALL_SIGN_EAST);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

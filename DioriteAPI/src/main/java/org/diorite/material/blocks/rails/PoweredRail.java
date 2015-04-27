@@ -18,6 +18,11 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 public class PoweredRail extends Rails implements Activatable
 {
     /**
+     * Bit flag defining if rail is active.
+     * If bit is set to 0, then it isn't active
+     */
+    public static final byte  ACTIVE_FLAG      = 0x8;
+    /**
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
@@ -31,21 +36,20 @@ public class PoweredRail extends Rails implements Activatable
      * Final copy of hardness from {@link MagicNumbers} class.
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__POWERED_RAIL__HARDNESS;
-    public static final byte  ACTIVE_FLAG      = 0x08;
 
     public static final PoweredRail POWERED_RAIL_NORTH_SOUTH     = new PoweredRail();
-    public static final PoweredRail POWERED_RAIL_WEST_EAST       = new PoweredRail("WEST_EAST", RailType.FLAT_WEST_EAST, false);
-    public static final PoweredRail POWERED_RAIL_ASCENDING_EAST  = new PoweredRail("ASCENDING_EAST", RailType.ASCENDING_EAST, false);
-    public static final PoweredRail POWERED_RAIL_ASCENDING_WEST  = new PoweredRail("ASCENDING_WEST", RailType.ASCENDING_WEST, false);
-    public static final PoweredRail POWERED_RAIL_ASCENDING_NORTH = new PoweredRail("ASCENDING_NORTH", RailType.ASCENDING_NORTH, false);
-    public static final PoweredRail POWERED_RAIL_ASCENDING_SOUTH = new PoweredRail("ASCENDING_SOUTH", RailType.ASCENDING_SOUTH, false);
+    public static final PoweredRail POWERED_RAIL_WEST_EAST       = new PoweredRail(RailType.FLAT_WEST_EAST, false);
+    public static final PoweredRail POWERED_RAIL_ASCENDING_EAST  = new PoweredRail(RailType.ASCENDING_EAST, false);
+    public static final PoweredRail POWERED_RAIL_ASCENDING_WEST  = new PoweredRail(RailType.ASCENDING_WEST, false);
+    public static final PoweredRail POWERED_RAIL_ASCENDING_NORTH = new PoweredRail(RailType.ASCENDING_NORTH, false);
+    public static final PoweredRail POWERED_RAIL_ASCENDING_SOUTH = new PoweredRail(RailType.ASCENDING_SOUTH, false);
 
-    public static final PoweredRail POWERED_RAIL_NORTH_SOUTH_ACTIVE     = new PoweredRail("NORTH_SOUTH_ACTIVE", RailType.FLAT_WEST_EAST, true);
-    public static final PoweredRail POWERED_RAIL_WEST_EAST_ACTIVE       = new PoweredRail("WEST_EAST_ACTIVE", RailType.FLAT_WEST_EAST, true);
-    public static final PoweredRail POWERED_RAIL_ASCENDING_EAST_ACTIVE  = new PoweredRail("ASCENDING_EAST_ACTIVE", RailType.ASCENDING_EAST, true);
-    public static final PoweredRail POWERED_RAIL_ASCENDING_WEST_ACTIVE  = new PoweredRail("ASCENDING_WEST_ACTIVE", RailType.ASCENDING_WEST, true);
-    public static final PoweredRail POWERED_RAIL_ASCENDING_NORTH_ACTIVE = new PoweredRail("ASCENDING_NORTH_ACTIVE", RailType.ASCENDING_NORTH, true);
-    public static final PoweredRail POWERED_RAIL_ASCENDING_SOUTH_ACTIVE = new PoweredRail("ASCENDING_SOUTH_ACTIVE", RailType.ASCENDING_SOUTH, true);
+    public static final PoweredRail POWERED_RAIL_NORTH_SOUTH_ACTIVE     = new PoweredRail(RailType.FLAT_NORTH_SOUTH, true);
+    public static final PoweredRail POWERED_RAIL_WEST_EAST_ACTIVE       = new PoweredRail(RailType.FLAT_WEST_EAST, true);
+    public static final PoweredRail POWERED_RAIL_ASCENDING_EAST_ACTIVE  = new PoweredRail(RailType.ASCENDING_EAST, true);
+    public static final PoweredRail POWERED_RAIL_ASCENDING_WEST_ACTIVE  = new PoweredRail(RailType.ASCENDING_WEST, true);
+    public static final PoweredRail POWERED_RAIL_ASCENDING_NORTH_ACTIVE = new PoweredRail(RailType.ASCENDING_NORTH, true);
+    public static final PoweredRail POWERED_RAIL_ASCENDING_SOUTH_ACTIVE = new PoweredRail(RailType.ASCENDING_SOUTH, true);
 
     private static final Map<String, PoweredRail>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PoweredRail> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -55,19 +59,13 @@ public class PoweredRail extends Rails implements Activatable
     @SuppressWarnings("MagicNumber")
     protected PoweredRail()
     {
-        super("POWERED_RAIL", 27, "minecraft:golden_rail", "NORTH_SOUTH", RailType.FLAT_NORTH_SOUTH, (byte) 0x00);
+        super("POWERED_RAIL", 27, "minecraft:golden_rail", "FLAT_NORTH_SOUTH", RailType.FLAT_NORTH_SOUTH, (byte) 0x00);
         this.active = false;
     }
 
-    public PoweredRail(final String enumName, final RailType type, final boolean active)
+    public PoweredRail(final RailType type, final boolean active)
     {
-        super(POWERED_RAIL_NORTH_SOUTH.name(), POWERED_RAIL_NORTH_SOUTH.getId(), POWERED_RAIL_NORTH_SOUTH.getMinecraftId(), enumName, type, active ? ACTIVE_FLAG : 0x00);
-        this.active = active;
-    }
-
-    public PoweredRail(final int maxStack, final String typeName, final RailType type, final boolean active)
-    {
-        super(POWERED_RAIL_NORTH_SOUTH.name(), POWERED_RAIL_NORTH_SOUTH.getId(), POWERED_RAIL_NORTH_SOUTH.getMinecraftId(), maxStack, typeName, type, active ? ACTIVE_FLAG : 0x00);
+        super(POWERED_RAIL_NORTH_SOUTH.name(), POWERED_RAIL_NORTH_SOUTH.getId(), POWERED_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (active ? "_ACTIVE" : ""), type, active ? ACTIVE_FLAG : 0x00);
         this.active = active;
     }
 
@@ -90,15 +88,21 @@ public class PoweredRail extends Rails implements Activatable
     }
 
     @Override
+    public PoweredRail getActivated(final boolean activate)
+    {
+        return getPoweredRail(this.railType, activate);
+    }
+
+    @Override
     public PoweredRail getRailType(final RailType railType)
     {
         return getPoweredRail(railType, this.active);
     }
 
     @Override
-    public PoweredRail getActivated(final boolean activate)
+    public String toString()
     {
-        return getPoweredRail(this.railType, activate);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("active", this.active).toString();
     }
 
     @Override
@@ -113,6 +117,15 @@ public class PoweredRail extends Rails implements Activatable
         return getByID(id);
     }
 
+    /**
+     * Returns sub-type of PoweredRail based on {@link RailType} and activate state.
+     * It will never return null.
+     *
+     * @param railType type of rails
+     * @param activate if rails should be activated.
+     *
+     * @return sub-type of PoweredRail
+     */
     public PoweredRail getType(final RailType railType, final boolean activate)
     {
         return getPoweredRail(railType, activate);
@@ -143,9 +156,23 @@ public class PoweredRail extends Rails implements Activatable
         return byName.get(name);
     }
 
+    /**
+     * Returns sub-type of PoweredRail based on {@link RailType} and activate state.
+     * It will never return null.
+     *
+     * @param railType type of rails
+     * @param activate if rails should be activated.
+     *
+     * @return sub-type of PoweredRail
+     */
     public static PoweredRail getPoweredRail(final RailType type, final boolean isActive)
     {
-        return getByID(type.getFlag() | (isActive ? ACTIVE_FLAG : 0x00));
+        byte flag = type.getFlag();
+        if (flag >= ACTIVE_FLAG)
+        {
+            flag = RailType.FLAT_NORTH_SOUTH.getFlag();
+        }
+        return getByID(flag | (isActive ? ACTIVE_FLAG : 0x00));
     }
 
     /**
@@ -174,11 +201,5 @@ public class PoweredRail extends Rails implements Activatable
         PoweredRail.register(POWERED_RAIL_ASCENDING_WEST_ACTIVE);
         PoweredRail.register(POWERED_RAIL_ASCENDING_NORTH_ACTIVE);
         PoweredRail.register(POWERED_RAIL_ASCENDING_SOUTH_ACTIVE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("active", this.active).toString();
     }
 }

@@ -50,7 +50,6 @@ public class SpruceStairs extends WoodenStairs
         super("SPRUCE_STAIRS", 134, "minecraft:spruce_stairs", "EAST", WoodType.SPRUCE, BlockFace.EAST, false);
     }
 
-    @SuppressWarnings("MagicNumber")
     public SpruceStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
         super(SPRUCE_STAIRS_EAST.name(), SPRUCE_STAIRS_EAST.getId(), SPRUCE_STAIRS_EAST.getMinecraftId(), enumName, WoodType.SPRUCE, face, upsideDown);
@@ -81,6 +80,12 @@ public class SpruceStairs extends WoodenStairs
     }
 
     @Override
+    public SpruceStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public SpruceStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -90,12 +95,6 @@ public class SpruceStairs extends WoodenStairs
     public SpruceStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public SpruceStairs getType(final BlockFace face, final boolean upsideDown)
-    {
-        return getByID(Stairs.combine(face, upsideDown));
     }
 
     /**

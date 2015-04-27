@@ -50,7 +50,6 @@ public class AcaciaStairs extends WoodenStairs
         super("ACACIA_STAIRS", 163, "minecraft:acacia_stairs", "EAST", WoodType.ACACIA, BlockFace.EAST, false);
     }
 
-    @SuppressWarnings("MagicNumber")
     public AcaciaStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
         super(ACACIA_STAIRS_EAST.name(), ACACIA_STAIRS_EAST.getId(), ACACIA_STAIRS_EAST.getMinecraftId(), enumName, WoodType.ACACIA, face, upsideDown);
@@ -81,6 +80,12 @@ public class AcaciaStairs extends WoodenStairs
     }
 
     @Override
+    public AcaciaStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public AcaciaStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -90,12 +95,6 @@ public class AcaciaStairs extends WoodenStairs
     public AcaciaStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public AcaciaStairs getType(final BlockFace face, final boolean upsideDown)
-    {
-        return getByID(Stairs.combine(face, upsideDown));
     }
 
     /**

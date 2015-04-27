@@ -74,28 +74,6 @@ public class Cocoa extends Crops implements Directional
         this.age = age;
     }
 
-    private static byte combine(final BlockFace face, final int age)
-    {
-        byte result;
-        switch (face)
-        {
-            case EAST:
-                result = 0x1;
-                break;
-            case SOUTH:
-                result = 0x2;
-                break;
-            case WEST:
-                result = 0x3;
-                break;
-            default:
-                result = 0x0;
-                break;
-        }
-        result |= (AGE_RANGE.getIn(age) << 2);
-        return result;
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -144,6 +122,12 @@ public class Cocoa extends Crops implements Directional
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("age", this.age).toString();
+    }
+
     /**
      * Returns one of Cocoa sub-type based on {@link BlockFace} and age.
      * It will never return null.
@@ -156,6 +140,28 @@ public class Cocoa extends Crops implements Directional
     public Cocoa getType(final BlockFace face, final int age)
     {
         return getByID(combine(face, this.age));
+    }
+
+    private static byte combine(final BlockFace face, final int age)
+    {
+        byte result;
+        switch (face)
+        {
+            case EAST:
+                result = 0x1;
+                break;
+            case SOUTH:
+                result = 0x2;
+                break;
+            case WEST:
+                result = 0x3;
+                break;
+            default:
+                result = 0x0;
+                break;
+        }
+        result |= (AGE_RANGE.getIn(age) << 2);
+        return result;
     }
 
     /**
@@ -223,11 +229,5 @@ public class Cocoa extends Crops implements Directional
         Cocoa.register(COCOA_EAST_RIPE);
         Cocoa.register(COCOA_SOUTH_RIPE);
         Cocoa.register(COCOA_WEST_RIPE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("age", this.age).toString();
     }
 }

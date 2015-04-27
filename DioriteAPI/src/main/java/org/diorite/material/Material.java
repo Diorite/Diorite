@@ -155,30 +155,30 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  Fire                     FIRE                       = Fire.FIRE_0;
     public static final  MobSpawner               MOB_SPAWNER                = MobSpawner.MOB_SPAWNER;
     public static final  OakStairs                OAK_STAIRS                 = OakStairs.OAK_STAIRS_EAST;
-    public static final  Chest                    CHEST                      = Chest.CHEST; // TODO: edit after editing auto-generated class
+    public static final  Chest                    CHEST                      = Chest.CHEST_NORTH;
     public static final  RedstoneWire             REDSTONE_WIRE              = RedstoneWire.REDSTONE_WIRE_OFF;
     public static final  DiamondOre               DIAMOND_ORE                = DiamondOre.DIAMOND_ORE;
     public static final  DiamondBlock             DIAMOND_BLOCK              = DiamondBlock.DIAMOND_BLOCK;
     public static final  CraftingTable            CRAFTING_TABLE             = CraftingTable.CRAFTING_TABLE;
     public static final  WheatBlock               WHEAT_BLOCK                = WheatBlock.WHEAT_BLOCK_0;
     public static final  Farmland                 FARMLAND                   = Farmland.FARMLAND_UNHYDRATED;
-    public static final  Furnace                  FURNACE                    = Furnace.FURNACE; // TODO: edit after editing auto-generated class
-    public static final  BurningFurnace           BURNING_FURNACE            = BurningFurnace.BURNING_FURNACE; // TODO: edit after editing auto-generated class
+    public static final  Furnace                  FURNACE                    = Furnace.FURNACE_NORTH;
+    public static final  BurningFurnace           BURNING_FURNACE            = BurningFurnace.BURNING_FURNACE_NORTH;
     public static final  StandingSign             STANDING_SIGN              = StandingSign.STANDING_SIGN_SOUTH;
     public static final  OakDoor                  OAK_DOOR                   = OakDoor.OAK_DOOR_BOTTOM_EAST;
     public static final  Ladder                   LADDER                     = Ladder.LADDER_NORTH;
-    public static final  Rail                     RAIL                       = Rail.RAIL; // TODO: edit after editing auto-generated class
+    public static final  Rail                     RAIL                       = Rail.RAIL_FLAT_NORTH_SOUTH;
     public static final  CobblestoneStairs        COBBLESTONE_STAIRS         = CobblestoneStairs.COBBLESTONE_STAIRS_EAST;
     public static final  WallSign                 WALL_SIGN                  = WallSign.WALL_SIGN_NORTH;
     public static final  Lever                    LEVER                      = Lever.LEVER; // TODO: edit after editing auto-generated class
-    public static final  StonePressurePlate       STONE_PRESSURE_PLATE       = StonePressurePlate.STONE_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
+    public static final  StonePressurePlate       STONE_PRESSURE_PLATE       = StonePressurePlate.STONE_PRESSURE_PLATE;
     public static final  IronDoor                 IRON_DOOR                  = IronDoor.IRON_DOOR_BOTTOM_EAST;
-    public static final  WoodenPressurePlate      WOODEN_PRESSURE_PLATE      = WoodenPressurePlate.WOODEN_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
+    public static final  WoodenPressurePlate      WOODEN_PRESSURE_PLATE      = WoodenPressurePlate.WOODEN_PRESSURE_PLATE;
     public static final  RedstoneOre              REDSTONE_ORE               = RedstoneOre.REDSTONE_ORE;
     public static final  RedstoneOreGlowing       REDSTONE_ORE_GLOWING       = RedstoneOreGlowing.REDSTONE_ORE_GLOWING;
     public static final  RedstoneTorchOff         REDSTONE_TORCH_OFF         = RedstoneTorchOff.REDSTONE_TORCH_OFF; // TODO: edit after editing auto-generated class
     public static final  RedstoneTorchOn          REDSTONE_TORCH_ON          = RedstoneTorchOn.REDSTONE_TORCH_ON; // TODO: edit after editing auto-generated class
-    public static final  StoneButton              STONE_BUTTON               = StoneButton.STONE_BUTTON; // TODO: edit after editing auto-generated class
+    public static final  StoneButton              STONE_BUTTON               = StoneButton.STONE_BUTTON_DOWN;
     public static final  SnowLayer                SNOW_LAYER                 = SnowLayer.SNOW_LAYER_1;
     public static final  Ice                      ICE                        = Ice.ICE;
     public static final  SnowBlock                SNOW_BLOCK                 = SnowBlock.SNOW_BLOCK;
@@ -231,31 +231,31 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  Cocoa                    COCOA                      = Cocoa.COCOA_NORTH_0;
     public static final  SandstoneStairs          SANDSTONE_STAIRS           = SandstoneStairs.SANDSTONE_STAIRS_EAST;
     public static final  EmeraldOre               EMERALD_ORE                = EmeraldOre.EMERALD_ORE;
-    public static final  EnderChest               ENDER_CHEST                = EnderChest.ENDER_CHEST; // TODO: edit after editing auto-generated class
+    public static final  EnderChest               ENDER_CHEST                = EnderChest.ENDER_CHEST_NORTH;
     public static final  TripwireHook             TRIPWIRE_HOOK              = TripwireHook.TRIPWIRE_HOOK; // TODO: edit after editing auto-generated class
     public static final  Tripwire                 TRIPWIRE                   = Tripwire.TRIPWIRE; // TODO: edit after editing auto-generated class
     public static final  EmeraldBlock             EMERALD_BLOCK              = EmeraldBlock.EMERALD_BLOCK;
     public static final  SpruceStairs             SPRUCE_STAIRS              = SpruceStairs.SPRUCE_STAIRS_EAST;
     public static final  BirchStairs              BIRCH_STAIRS               = BirchStairs.BIRCH_STAIRS_EAST;
     public static final  JungleStairs             JUNGLE_STAIRS              = JungleStairs.JUNGLE_STAIRS_EAST;
-    public static final  CommandBlock             COMMAND_BLOCK              = CommandBlock.COMMAND_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  CommandBlock             COMMAND_BLOCK              = CommandBlock.COMMAND_BLOCK;
     public static final  Beacon                   BEACON                     = Beacon.BEACON;
-    public static final  CobblestoneWall          COBBLESTONE_WALL           = CobblestoneWall.COBBLESTONE_WALL; // TODO: edit after editing auto-generated class
+    public static final  CobblestoneWall          COBBLESTONE_WALL           = CobblestoneWall.COBBLESTONE_WALL;
     public static final  FlowerPot                FLOWER_POT                 = FlowerPot.FLOWER_POT_EMPTY;
     public static final  CarrotsBlock             CARROTS_BLOCK              = CarrotsBlock.CARROTS_BLOCK_0;
     public static final  PotatoesBlock            POTATOES_BLOCK             = PotatoesBlock.POTATOES_BLOCK_0;
-    public static final  WoodenButton             WOODEN_BUTTON              = WoodenButton.WOODEN_BUTTON; // TODO: edit after editing auto-generated class
+    public static final  WoodenButton             WOODEN_BUTTON              = WoodenButton.WOODEN_BUTTON_DOWN;
     public static final  SkullBlock               SKULL_BLOCK                = SkullBlock.SKULL_BLOCK_FLOOR;
     public static final  Anvil                    ANVIL                      = Anvil.ANVIL; // TODO: edit after editing auto-generated class
-    public static final  TrappedChest             TRAPPED_CHEST              = TrappedChest.TRAPPED_CHEST; // TODO: edit after editing auto-generated class
-    public static final  GoldenPressurePlate      GOLDEN_PRESSURE_PLATE      = GoldenPressurePlate.GOLDEN_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
-    public static final  IronPressurePlate        IRON_PRESSURE_PLATE        = IronPressurePlate.IRON_PRESSURE_PLATE; // TODO: edit after editing auto-generated class
+    public static final  TrappedChest             TRAPPED_CHEST              = TrappedChest.TRAPPED_CHEST_NORTH;
+    public static final  GoldenPressurePlate      GOLDEN_PRESSURE_PLATE      = GoldenPressurePlate.GOLDEN_PRESSURE_PLATE_0;
+    public static final  IronPressurePlate        IRON_PRESSURE_PLATE        = IronPressurePlate.IRON_PRESSURE_PLATE_0;
     public static final  RedstoneComparator       REDSTONE_COMPARATOR        = RedstoneComparator.REDSTONE_COMPARATOR; // TODO: edit after editing auto-generated class
     public static final  DaylightDetector         DAYLIGHT_DETECTOR          = DaylightDetector.DAYLIGHT_DETECTOR; // TODO: edit after editing auto-generated class
     public static final  RedstoneBlock            REDSTONE_BLOCK             = RedstoneBlock.REDSTONE_BLOCK;
     public static final  QuartzOre                QUARTZ_ORE                 = QuartzOre.QUARTZ_ORE;
     public static final  Hopper                   HOPPER                     = Hopper.HOPPER; // TODO: edit after editing auto-generated class
-    public static final  QuartzBlock              QUARTZ_BLOCK               = QuartzBlock.QUARTZ_BLOCK; // TODO: edit after editing auto-generated class
+    public static final  QuartzBlock              QUARTZ_BLOCK               = QuartzBlock.QUARTZ_BLOCK;
     public static final  QuartzStairs             QUARTZ_STAIRS              = QuartzStairs.QUARTZ_STAIRS_EAST;
     public static final  ActivatorRail            ACTIVATOR_RAIL             = ActivatorRail.ACTIVATOR_RAIL_NORTH_SOUTH;
     public static final  Dropper                  DROPPER                    = Dropper.DROPPER; // TODO: edit after editing auto-generated class
@@ -277,7 +277,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  StandingBanner           STANDING_BANNER            = StandingBanner.STANDING_BANNER_SOUTH;
     public static final  WallBanner               WALL_BANNER                = WallBanner.WALL_BANNER_NORTH;
     public static final  DaylightDetectorInverted DAYLIGHT_DETECTOR_INVERTED = DaylightDetectorInverted.DAYLIGHT_DETECTOR_INVERTED; // TODO: edit after editing auto-generated class
-    public static final  RedSandstone             RED_SANDSTONE              = RedSandstone.RED_SANDSTONE; // TODO: edit after editing auto-generated class
+    public static final  RedSandstone             RED_SANDSTONE              = RedSandstone.RED_SANDSTONE;
     public static final  RedSandstoneStairs       RED_SANDSTONE_STAIRS       = RedSandstoneStairs.RED_SANDSTONE_STAIRS_EAST;
     public static final  SpruceFenceGate          SPRUCE_FENCE_GATE          = SpruceFenceGate.SPRUCE_FENCE_GATE_SOUTH;
     public static final  BirchFenceGate           BIRCH_FENCE_GATE           = BirchFenceGate.BIRCH_FENCE_GATE_SOUTH;
@@ -515,11 +515,6 @@ public abstract class Material implements SimpleEnum<Material>
         return this.id;
     }
 
-    public String getMinecraftId()
-    {
-        return this.minecraftId;
-    }
-
     @Override
     public Material byId(final int id)
     {
@@ -530,6 +525,11 @@ public abstract class Material implements SimpleEnum<Material>
     public Material byName(final String name)
     {
         return byName.get(name);
+    }
+
+    public String getMinecraftId()
+    {
+        return this.minecraftId;
     }
 
     public int getMaxStack()
@@ -678,6 +678,16 @@ public abstract class Material implements SimpleEnum<Material>
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
         byMinecraftId.put(element.getMinecraftId(), element);
+    }
+
+    public static TIntObjectMap<Material> getByID()
+    {
+        return byID;
+    }
+
+    public static Map<String, Material> getByName()
+    {
+        return byName;
     }
 
     static
@@ -1062,15 +1072,5 @@ public abstract class Material implements SimpleEnum<Material>
 //        register(RECORD_10);
 //        register(RECORD_11);
 //        register(RECORD_12);
-    }
-
-    public static TIntObjectMap<Material> getByID()
-    {
-        return byID;
-    }
-
-    public static Map<String, Material> getByName()
-    {
-        return byName;
     }
 }

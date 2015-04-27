@@ -35,6 +35,12 @@ public abstract class MushroomBlock extends BlockMaterialData
      */
     public abstract MushroomBlock getMushroomType(Type mushroomType);
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("mushroomType", this.mushroomType).toString();
+    }
+
     /**
      * Enum with all usable mushroom block texture types.
      */
@@ -119,11 +125,5 @@ public abstract class MushroomBlock extends BlockMaterialData
         {
             return this.flag;
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("mushroomType", this.mushroomType).toString();
     }
 }

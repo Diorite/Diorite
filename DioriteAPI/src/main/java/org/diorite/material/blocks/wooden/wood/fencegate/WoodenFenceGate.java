@@ -54,6 +54,12 @@ public abstract class WoodenFenceGate extends Wood implements FenceGate
         }
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("open", this.open).toString();
+    }
+
     /**
      * Returns sub-type of {@link WoodType} WoodenFenceGate, based on {@link BlockFace} and open state.
      *
@@ -82,11 +88,5 @@ public abstract class WoodenFenceGate extends Wood implements FenceGate
             default:
                 return null;
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("open", this.open).toString();
     }
 }

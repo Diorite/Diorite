@@ -229,6 +229,33 @@ public class Lava extends Liquid
         byName.put(element.name(), element);
     }
 
+    /**
+     * Helper class for second lava (lava still) ID
+     */
+    public static class LavaStill extends Lava
+    {
+        public LavaStill()
+        {
+            super(LiquidType.STILL);
+        }
+
+        public LavaStill(final LiquidStage stage)
+        {
+            super(stage, LiquidType.STILL);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        /**
+         * Returns one of Lava sub-type based on sub-id, may return null
+         * @param id sub-type id
+         * @return sub-type of Lava or null
+         */
+        public static Lava getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
+    }
+
     static
     {
         Lava.register(LAVA_SOURCE);
@@ -263,32 +290,5 @@ public class Lava extends Liquid
         Lava.register(LAVA_STAGE_5_FALLING_STILL);
         Lava.register(LAVA_STAGE_6_FALLING_STILL);
         Lava.register(LAVA_STAGE_7_FALLING_STILL);
-    }
-
-    /**
-     * Helper class for second lava (lava still) ID
-     */
-    public static class LavaStill extends Lava
-    {
-        public LavaStill()
-        {
-            super(LiquidType.STILL);
-        }
-
-        public LavaStill(final LiquidStage stage)
-        {
-            super(stage, LiquidType.STILL);
-        }
-
-        @SuppressWarnings("MagicNumber")
-        /**
-         * Returns one of Lava sub-type based on sub-id, may return null
-         * @param id sub-type id
-         * @return sub-type of Lava or null
-         */
-        public static Lava getByID(final int id)
-        {
-            return byID.get((byte) (id + 16));
-        }
     }
 }

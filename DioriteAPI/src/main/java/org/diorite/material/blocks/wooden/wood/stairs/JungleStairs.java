@@ -50,7 +50,6 @@ public class JungleStairs extends WoodenStairs
         super("JUNGLE_STAIRS", 136, "minecraft:jungle_stairs", "EAST", WoodType.JUNGLE, BlockFace.EAST, false);
     }
 
-    @SuppressWarnings("MagicNumber")
     public JungleStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
         super(JUNGLE_STAIRS_EAST.name(), JUNGLE_STAIRS_EAST.getId(), JUNGLE_STAIRS_EAST.getMinecraftId(), enumName, WoodType.JUNGLE, face, upsideDown);
@@ -81,6 +80,12 @@ public class JungleStairs extends WoodenStairs
     }
 
     @Override
+    public JungleStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public JungleStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -90,12 +95,6 @@ public class JungleStairs extends WoodenStairs
     public JungleStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public JungleStairs getType(final BlockFace face, final boolean upsideDown)
-    {
-        return getByID(Stairs.combine(face, upsideDown));
     }
 
     /**

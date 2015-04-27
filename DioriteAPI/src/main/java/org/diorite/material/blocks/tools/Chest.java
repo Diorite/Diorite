@@ -2,9 +2,13 @@ package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.ContainerBlock;
+import org.diorite.material.blocks.Directional;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,13 +17,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Chest" and all its subtypes.
  */
-public class Chest extends BlockMaterialData implements ContainerBlock
+public class Chest extends BlockMaterialData implements Directional
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 4;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -31,25 +34,27 @@ public class Chest extends BlockMaterialData implements ContainerBlock
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__CHEST__HARDNESS;
 
-    public static final Chest CHEST = new Chest();
+    public static final Chest CHEST_NORTH = new Chest();
+    public static final Chest CHEST_SOUTH = new Chest(BlockFace.SOUTH);
+    public static final Chest CHEST_WEST  = new Chest(BlockFace.WEST);
+    public static final Chest CHEST_EAST  = new Chest(BlockFace.EAST);
 
     private static final Map<String, Chest>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Chest> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+
     @SuppressWarnings("MagicNumber")
     protected Chest()
     {
-        super("CHEST", 54, "minecraft:chest", "CHEST", (byte) 0x00);
+        super("CHEST", 54, "minecraft:chest", "NORTH", (byte) 0x00);
+        this.face = BlockFace.NORTH;
     }
 
-    public Chest(final String enumName, final int type)
+    public Chest(final BlockFace face)
     {
-        super(CHEST.name(), CHEST.getId(), CHEST.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public Chest(final int maxStack, final String typeName, final byte type)
-    {
-        super(CHEST.name(), CHEST.getId(), CHEST.getMinecraftId(), maxStack, typeName, type);
+        super(CHEST_NORTH.name(), CHEST_NORTH.getId(), CHEST_NORTH.getMinecraftId(), face.name(), combine(face));
+        this.face = face;
     }
 
     @Override
@@ -74,6 +79,39 @@ public class Chest extends BlockMaterialData implements ContainerBlock
     public Chest getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public Chest getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        switch (face)
+        {
+            case SOUTH:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case EAST:
+                return 0x5;
+            default:
+                return 0x2;
+        }
     }
 
     /**
@@ -102,6 +140,19 @@ public class Chest extends BlockMaterialData implements ContainerBlock
     }
 
     /**
+     * Returns one of Chest sub-type based on {@link BlockFace}
+     * It will never return null.
+     *
+     * @param face facing of Chest.
+     *
+     * @return sub-type of Chest
+     */
+    public static Chest getChest(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -115,6 +166,9 @@ public class Chest extends BlockMaterialData implements ContainerBlock
 
     static
     {
-        Chest.register(CHEST);
+        Chest.register(CHEST_NORTH);
+        Chest.register(CHEST_SOUTH);
+        Chest.register(CHEST_WEST);
+        Chest.register(CHEST_EAST);
     }
 }

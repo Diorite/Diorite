@@ -2,8 +2,13 @@ package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.blocks.Directional;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -12,13 +17,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "BurningFurnace" and all its subtypes.
  */
-public class BurningFurnace extends BlockMaterialData
+public class BurningFurnace extends BlockMaterialData implements Directional
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 4;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,25 +34,27 @@ public class BurningFurnace extends BlockMaterialData
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__BURNING_FURNACE__HARDNESS;
 
-    public static final BurningFurnace BURNING_FURNACE = new BurningFurnace();
+    public static final BurningFurnace BURNING_FURNACE_NORTH = new BurningFurnace();
+    public static final BurningFurnace BURNING_FURNACE_SOUTH = new BurningFurnace(BlockFace.SOUTH);
+    public static final BurningFurnace BURNING_FURNACE_WEST  = new BurningFurnace(BlockFace.WEST);
+    public static final BurningFurnace BURNING_FURNACE_EAST  = new BurningFurnace(BlockFace.EAST);
 
     private static final Map<String, BurningFurnace>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BurningFurnace> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+
     @SuppressWarnings("MagicNumber")
     protected BurningFurnace()
     {
-        super("BURNING_FURNACE", 62, "minecraft:lit_furnace", "BURNING_FURNACE", (byte) 0x00);
+        super("BURNING_FURNACE", 62, "minecraft:lit_furnace", "NORTH", (byte) 0x00);
+        this.face = BlockFace.NORTH;
     }
 
-    public BurningFurnace(final String enumName, final int type)
+    public BurningFurnace(final BlockFace face)
     {
-        super(BURNING_FURNACE.name(), BURNING_FURNACE.getId(), BURNING_FURNACE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public BurningFurnace(final int maxStack, final String typeName, final byte type)
-    {
-        super(BURNING_FURNACE.name(), BURNING_FURNACE.getId(), BURNING_FURNACE.getMinecraftId(), maxStack, typeName, type);
+        super(BURNING_FURNACE_NORTH.name(), BURNING_FURNACE_NORTH.getId(), BURNING_FURNACE_NORTH.getMinecraftId(), face.name(), combine(face));
+        this.face = face;
     }
 
     @Override
@@ -73,6 +79,39 @@ public class BurningFurnace extends BlockMaterialData
     public BurningFurnace getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public BurningFurnace getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        switch (face)
+        {
+            case SOUTH:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case EAST:
+                return 0x5;
+            default:
+                return 0x2;
+        }
     }
 
     /**
@@ -101,6 +140,19 @@ public class BurningFurnace extends BlockMaterialData
     }
 
     /**
+     * Returns one of BurningFurnace sub-type based on {@link BlockFace}
+     * It will never return null.
+     *
+     * @param face facing of BurningFurnace.
+     *
+     * @return sub-type of BurningFurnace
+     */
+    public static BurningFurnace getBurningFurnace(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -114,6 +166,9 @@ public class BurningFurnace extends BlockMaterialData
 
     static
     {
-        BurningFurnace.register(BURNING_FURNACE);
+        BurningFurnace.register(BURNING_FURNACE_NORTH);
+        BurningFurnace.register(BURNING_FURNACE_SOUTH);
+        BurningFurnace.register(BURNING_FURNACE_WEST);
+        BurningFurnace.register(BURNING_FURNACE_EAST);
     }
 }

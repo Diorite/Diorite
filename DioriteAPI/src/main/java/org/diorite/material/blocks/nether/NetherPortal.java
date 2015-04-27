@@ -55,17 +55,6 @@ public class NetherPortal extends Portal implements Rotatable
         this.rotateAxis = rotateAxis;
     }
 
-    private static byte combine(final RotateAxis rotateAxis)
-    {
-        switch (rotateAxis)
-        {
-            case NORTH_SOUTH:
-                return 0x02;
-            default:
-                return 0x01;
-        }
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -91,6 +80,12 @@ public class NetherPortal extends Portal implements Rotatable
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
+    }
+
+    @Override
     public RotateAxis getRotateAxis()
     {
         return RotateAxis.EAST_WEST;
@@ -100,6 +95,17 @@ public class NetherPortal extends Portal implements Rotatable
     public NetherPortal getRotated(final RotateAxis axis)
     {
         return getByID(combine(axis));
+    }
+
+    private static byte combine(final RotateAxis rotateAxis)
+    {
+        switch (rotateAxis)
+        {
+            case NORTH_SOUTH:
+                return 0x02;
+            default:
+                return 0x01;
+        }
     }
 
     /**
@@ -156,11 +162,5 @@ public class NetherPortal extends Portal implements Rotatable
     {
         NetherPortal.register(NETHER_PORTAL_EAST_WEST);
         NetherPortal.register(NETHER_PORTAL_NORTH_SOUTH);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
     }
 }

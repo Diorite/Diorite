@@ -67,6 +67,48 @@ public class StandingBanner extends BannerBlock
         this.face = face;
     }
 
+    @Override
+    public float getBlastResistance()
+    {
+        return BLAST_RESISTANCE;
+    }
+
+    @Override
+    public float getHardness()
+    {
+        return HARDNESS;
+    }
+
+    @Override
+    public StandingBanner getType(final String name)
+    {
+        return getByEnumName(name);
+    }
+
+    @Override
+    public StandingBanner getType(final int id)
+    {
+        return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public StandingBanner getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
     @SuppressWarnings("MagicNumber")
     private static byte combine(final BlockFace face)
     {
@@ -105,42 +147,6 @@ public class StandingBanner extends BannerBlock
             default:
                 return 0x0;
         }
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
-    }
-
-    @Override
-    public StandingBanner getType(final String name)
-    {
-        return getByEnumName(name);
-    }
-
-    @Override
-    public StandingBanner getType(final int id)
-    {
-        return getByID(id);
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return this.face;
-    }
-
-    @Override
-    public StandingBanner getBlockFacing(final BlockFace face)
-    {
-        return getByID(combine(face));
     }
 
     /**
@@ -211,11 +217,5 @@ public class StandingBanner extends BannerBlock
         StandingBanner.register(STANDING_BANNER_EAST_SOUTH_EAST);
         StandingBanner.register(STANDING_BANNER_SOUTH_EAST);
         StandingBanner.register(STANDING_BANNER_SOUTH_SOUTH_EAST);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

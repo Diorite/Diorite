@@ -95,6 +95,12 @@ public class PotatoesBlock extends Crops
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
+    }
+
     /**
      * Returns one of PotatoesBlock sub-type based on sub-id, may return null
      *
@@ -160,11 +166,5 @@ public class PotatoesBlock extends Crops
         PotatoesBlock.register(POTATOES_BLOCK_5);
         PotatoesBlock.register(POTATOES_BLOCK_6);
         PotatoesBlock.register(POTATOES_BLOCK_RIPE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
     }
 }

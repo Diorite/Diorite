@@ -148,28 +148,6 @@ public class StoneSlab extends StonySlab
         byName.put(element.name(), element);
     }
 
-    static
-    {
-        StoneSlab.register(STONE_SLAB_STONE);
-        StoneSlab.register(STONE_SLAB_SANDSTONE);
-        StoneSlab.register(STONE_SLAB_WOODEN);
-        StoneSlab.register(STONE_SLAB_COBBLESTONE);
-        StoneSlab.register(STONE_SLAB_BRICKS);
-        StoneSlab.register(STONE_SLAB_STONE_BRICKS);
-        StoneSlab.register(STONE_SLAB_NETHER_BRICKS);
-        StoneSlab.register(STONE_SLAB_QUARTZ);
-        StoneSlab.register(STONE_SLAB_RED_SANDSTONE);
-        StoneSlab.register(STONE_SLAB_STONE_UPPER);
-        StoneSlab.register(STONE_SLAB_SANDSTONE_UPPER);
-        StoneSlab.register(STONE_SLAB_WOODEN_UPPER);
-        StoneSlab.register(STONE_SLAB_COBBLESTONE_UPPER);
-        StoneSlab.register(STONE_SLAB_BRICKS_UPPER);
-        StoneSlab.register(STONE_SLAB_STONE_BRICKS_UPPER);
-        StoneSlab.register(STONE_SLAB_NETHER_BRICKS_UPPER);
-        StoneSlab.register(STONE_SLAB_QUARTZ_UPPER);
-        StoneSlab.register(STONE_SLAB_RED_SANDSTONE_UPPER);
-    }
-
     /**
      * Helper class for second stone slab ID
      */
@@ -199,5 +177,27 @@ public class StoneSlab extends StonySlab
         {
             return byID.get((byte) (id + 16));
         }
+    }
+
+    static
+    {
+        StoneSlab.register(STONE_SLAB_STONE);
+        StoneSlab.register(STONE_SLAB_SANDSTONE);
+        StoneSlab.register(STONE_SLAB_WOODEN);
+        StoneSlab.register(STONE_SLAB_COBBLESTONE);
+        StoneSlab.register(STONE_SLAB_BRICKS);
+        StoneSlab.register(STONE_SLAB_STONE_BRICKS);
+        StoneSlab.register(STONE_SLAB_NETHER_BRICKS);
+        StoneSlab.register(STONE_SLAB_QUARTZ);
+        StoneSlab.register(STONE_SLAB_RED_SANDSTONE);
+        StoneSlab.register(STONE_SLAB_STONE_UPPER);
+        StoneSlab.register(STONE_SLAB_SANDSTONE_UPPER);
+        StoneSlab.register(STONE_SLAB_WOODEN_UPPER);
+        StoneSlab.register(STONE_SLAB_COBBLESTONE_UPPER);
+        StoneSlab.register(STONE_SLAB_BRICKS_UPPER);
+        StoneSlab.register(STONE_SLAB_STONE_BRICKS_UPPER);
+        StoneSlab.register(STONE_SLAB_NETHER_BRICKS_UPPER);
+        StoneSlab.register(STONE_SLAB_QUARTZ_UPPER);
+        StoneSlab.register(STONE_SLAB_RED_SANDSTONE_UPPER);
     }
 }

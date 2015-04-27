@@ -90,6 +90,12 @@ public class NetherWartBlock extends Crops
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
+    }
+
     /**
      * Returns one of NetherWartBlock sub-type based on sub-id, may return null
      *
@@ -151,11 +157,5 @@ public class NetherWartBlock extends Crops
         NetherWartBlock.register(NETHER_WART_BLOCK_1);
         NetherWartBlock.register(NETHER_WART_BLOCK_2);
         NetherWartBlock.register(NETHER_WART_BLOCK_RIPE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
     }
 }

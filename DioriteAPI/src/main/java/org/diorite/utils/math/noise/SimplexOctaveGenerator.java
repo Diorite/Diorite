@@ -11,7 +11,6 @@ import org.diorite.world.World;
  * Creates simplex noise through unbiased octaves
  * From Bukkit project https://github.com/Bukkit/Bukkit
  */
-@SuppressWarnings("MagicNumber")
 public class SimplexOctaveGenerator extends OctaveGenerator
 {
     private double wScale = 1;

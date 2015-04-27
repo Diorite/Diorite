@@ -83,6 +83,12 @@ public class Sponge extends BlockMaterialData
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("isWet", this.isWet).toString();
+    }
+
     public boolean isWet()
     {
         return this.isWet;
@@ -134,11 +140,5 @@ public class Sponge extends BlockMaterialData
     {
         Sponge.register(SPONGE);
         Sponge.register(SPONGE_WET);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("isWet", this.isWet).toString();
     }
 }

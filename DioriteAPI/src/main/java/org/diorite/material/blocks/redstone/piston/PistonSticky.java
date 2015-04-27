@@ -57,11 +57,6 @@ public class PistonSticky extends PistonBase
         super(STICKY_PISTON_DOWN.name(), STICKY_PISTON_DOWN.getId(), STICKY_PISTON_DOWN.getMinecraftId(), enumName, face, extended);
     }
 
-    public PistonSticky(final int maxStack, final String typeName, final BlockFace face, final boolean extended)
-    {
-        super(STICKY_PISTON_DOWN.name(), STICKY_PISTON_DOWN.getId(), STICKY_PISTON_DOWN.getMinecraftId(), maxStack, typeName, face, extended);
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -81,6 +76,18 @@ public class PistonSticky extends PistonBase
     }
 
     @Override
+    public PistonSticky getExtended(final boolean extended)
+    {
+        return getPistonSticky(this.facing, extended);
+    }
+
+    @Override
+    public PistonSticky getType(final BlockFace face, final boolean extended)
+    {
+        return getPistonSticky(face, extended);
+    }
+
+    @Override
     public PistonSticky getType(final int id)
     {
         return getByID(id);
@@ -89,19 +96,7 @@ public class PistonSticky extends PistonBase
     @Override
     public PistonSticky getBlockFacing(final BlockFace face)
     {
-        return getPiston(face, this.extended);
-    }
-
-    @Override
-    public PistonSticky getType(final BlockFace face, final boolean extended)
-    {
-        return getPiston(face, extended);
-    }
-
-    @Override
-    public PistonSticky getExtended(final boolean extended)
-    {
-        return getPiston(this.facing, extended);
+        return getPistonSticky(face, this.extended);
     }
 
     /**
@@ -129,7 +124,16 @@ public class PistonSticky extends PistonBase
         return byName.get(name);
     }
 
-    public static PistonSticky getPiston(final BlockFace face, final boolean extended)
+    /**
+     * Returns one of PistonSticky sub-type based on {@link BlockFace} and extended state.
+     * It will never return null.
+     *
+     * @param face     facing direction of piston.
+     * @param extended if piston should be extended.
+     *
+     * @return sub-type of PistonSticky
+     */
+    public static PistonSticky getPistonSticky(final BlockFace face, final boolean extended)
     {
         return getByID(combine(face, extended));
     }

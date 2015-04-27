@@ -54,6 +54,12 @@ public abstract class WoodenStairs extends Wood implements Stairs
         }
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
+    }
+
     /**
      * Returns sub-type of {@link WoodType} WoodenStairs, based on {@link BlockFace} and upside-down state.
      *
@@ -82,11 +88,5 @@ public abstract class WoodenStairs extends Wood implements Stairs
             default:
                 return null;
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 }

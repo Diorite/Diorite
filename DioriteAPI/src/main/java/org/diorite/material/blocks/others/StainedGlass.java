@@ -94,6 +94,12 @@ public class StainedGlass extends BlockMaterialData implements Colorable
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
+    }
+
+    @Override
     public DyeColor getColor()
     {
         return this.color;
@@ -173,11 +179,5 @@ public class StainedGlass extends BlockMaterialData implements Colorable
         StainedGlass.register(STAINED_GLASS_GREEN);
         StainedGlass.register(STAINED_GLASS_RED);
         StainedGlass.register(STAINED_GLASS_BLACK);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
     }
 }

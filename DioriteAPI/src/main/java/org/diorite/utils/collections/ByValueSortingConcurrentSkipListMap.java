@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 public class ByValueSortingConcurrentSkipListMap<K extends Comparable<K>, V extends Comparable<V>> extends ConcurrentSkipListMap<K, V>
 {
+    private static final long serialVersionUID = 3704089208531137243L;
     protected final ByValueComparator<K, V> comparator;
 
     public ByValueSortingConcurrentSkipListMap(final ByValueComparator<K, V> comparator)

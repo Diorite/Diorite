@@ -78,15 +78,21 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
+    public boolean isUpsideDown()
+    {
+        return this.upsideDown;
+    }
+
+    @Override
     public QuartzStairs getUpsideDown(final boolean upsideDown)
     {
         return getByID(Stairs.combine(this.face, upsideDown));
     }
 
     @Override
-    public boolean isUpsideDown()
+    public QuartzStairs getType(final BlockFace face, final boolean upsideDown)
     {
-        return this.upsideDown;
+        return getByID(Stairs.combine(face, upsideDown));
     }
 
     @Override
@@ -102,12 +108,6 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
-    public QuartzStairs getType(final BlockFace face, final boolean upsideDown)
-    {
-        return getByID(Stairs.combine(face, upsideDown));
-    }
-
-    @Override
     public QuartzStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -117,6 +117,12 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
     public QuartzStairs getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 
     /**
@@ -180,11 +186,5 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
         QuartzStairs.register(QUARTZ_STAIRS_WEST_UPSIDE_DOWN);
         QuartzStairs.register(QUARTZ_STAIRS_SOUTH_UPSIDE_DOWN);
         QuartzStairs.register(QUARTZ_STAIRS_NORTH_UPSIDE_DOWN);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 }

@@ -90,20 +90,6 @@ public class Leaves extends Wood
         this.decayable = decayable;
     }
 
-    private static byte combine(final WoodType type, final boolean checkDecay, final boolean decayable)
-    {
-        byte result = type.getLogFlag();
-        if (! decayable)
-        {
-            result |= 0b0100;
-        }
-        if (checkDecay)
-        {
-            result |= 0b1000;
-        }
-        return result;
-    }
-
     public boolean isCheckDecay()
     {
         return this.checkDecay;
@@ -156,6 +142,12 @@ public class Leaves extends Wood
         return getLeaves(woodType, this.checkDecay, this.decayable);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("checkDecay", this.checkDecay).append("decayable", this.decayable).toString();
+    }
+
     public Leaves getCheckDecay(final boolean checkDecay)
     {
         return getLeaves(this.woodType, checkDecay, this.decayable);
@@ -169,6 +161,26 @@ public class Leaves extends Wood
     public Leaves getType(final WoodType woodType, final boolean checkDecay, final boolean decayable)
     {
         return getLeaves(woodType, checkDecay, decayable);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    protected byte getFixedDataValue()
+    {
+        return (byte) (this.getType() + ((this.getWoodType().isSecondLogID()) ? 16 : 0));
+    }
+
+    private static byte combine(final WoodType type, final boolean checkDecay, final boolean decayable)
+    {
+        byte result = type.getLogFlag();
+        if (! decayable)
+        {
+            result |= 0b0100;
+        }
+        if (checkDecay)
+        {
+            result |= 0b1000;
+        }
+        return result;
     }
 
     /**
@@ -202,12 +214,6 @@ public class Leaves extends Wood
         return getByID(combine(type, checkDecay, decayable) + (type.isSecondLogID() ? 16 : 0));
     }
 
-    @SuppressWarnings("MagicNumber")
-    protected byte getFixedDataValue()
-    {
-        return (byte) (this.getType() + ((this.getWoodType().isSecondLogID()) ? 16 : 0));
-    }
-
     /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
@@ -218,6 +224,33 @@ public class Leaves extends Wood
     {
         byID.put(element.getType(), element);
         byName.put(element.name(), element);
+    }
+
+    /**
+     * Helper class for second leaves ID
+     */
+    public static class Leaves2 extends Leaves
+    {
+        public Leaves2(final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
+        {
+            super(enumName, type, checkDecay, decayable);
+        }
+
+        public Leaves2(final int maxStack, final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
+        {
+            super(maxStack, enumName, type, checkDecay, decayable);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        /**
+         * Returns one of Leaves sub-type based on sub-id, may return null
+         * @param id sub-type id
+         * @return sub-type of Leaves or null
+         */
+        public static Leaves getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
     }
 
     static
@@ -246,38 +279,5 @@ public class Leaves extends Wood
         Leaves.register(LEAVES_JUNGLE_NO_DECAY_AND_CHECK);
         Leaves.register(LEAVES_ACACIA_NO_DECAY_AND_CHECK);
         Leaves.register(LEAVES_DARK_OAK_NO_DECAY_AND_CHECK);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("checkDecay", this.checkDecay).append("decayable", this.decayable).toString();
-    }
-
-    /**
-     * Helper class for second leaves ID
-     */
-    public static class Leaves2 extends Leaves
-    {
-        public Leaves2(final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
-        {
-            super(enumName, type, checkDecay, decayable);
-        }
-
-        public Leaves2(final int maxStack, final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
-        {
-            super(maxStack, enumName, type, checkDecay, decayable);
-        }
-
-        @SuppressWarnings("MagicNumber")
-        /**
-         * Returns one of Leaves sub-type based on sub-id, may return null
-         * @param id sub-type id
-         * @return sub-type of Leaves or null
-         */
-        public static Leaves getByID(final int id)
-        {
-            return byID.get((byte) (id + 16));
-        }
     }
 }

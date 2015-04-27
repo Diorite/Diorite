@@ -3,7 +3,6 @@ package org.diorite.material.blocks.tools;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.blocks.ContainerBlock;
 import org.diorite.material.blocks.stony.Stony;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -13,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Dropper" and all its subtypes.
  */
-public class Dropper extends Stony implements ContainerBlock
+public class Dropper extends Stony
 {
     // TODO: auto-generated class, implement other types (sub-ids).	
     /**

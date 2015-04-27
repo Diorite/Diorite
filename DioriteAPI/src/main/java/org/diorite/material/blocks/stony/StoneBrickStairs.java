@@ -78,15 +78,21 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
+    public boolean isUpsideDown()
+    {
+        return this.upsideDown;
+    }
+
+    @Override
     public StoneBrickStairs getUpsideDown(final boolean upsideDown)
     {
         return getByID(Stairs.combine(this.face, upsideDown));
     }
 
     @Override
-    public boolean isUpsideDown()
+    public StoneBrickStairs getType(final BlockFace face, final boolean upsideDown)
     {
-        return this.upsideDown;
+        return getByID(Stairs.combine(face, upsideDown));
     }
 
     @Override
@@ -102,12 +108,6 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
-    public StoneBrickStairs getType(final BlockFace face, final boolean upsideDown)
-    {
-        return getByID(Stairs.combine(face, upsideDown));
-    }
-
-    @Override
     public StoneBrickStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -117,6 +117,12 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
     public StoneBrickStairs getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 
     /**
@@ -180,11 +186,5 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
         StoneBrickStairs.register(STONE_BRICK_STAIRS_WEST_UPSIDE_DOWN);
         StoneBrickStairs.register(STONE_BRICK_STAIRS_SOUTH_UPSIDE_DOWN);
         StoneBrickStairs.register(STONE_BRICK_STAIRS_NORTH_UPSIDE_DOWN);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 }

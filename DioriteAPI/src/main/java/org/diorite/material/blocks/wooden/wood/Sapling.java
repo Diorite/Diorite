@@ -69,13 +69,6 @@ public class Sapling extends Wood
         this.stage = stage;
     }
 
-    private static byte combine(final WoodType woodType, final SaplingStage stage)
-    {
-        byte result = woodType.getPlanksMeta();
-        result |= stage.getFlag();
-        return result;
-    }
-
     public Sapling getOtherStage()
     {
         return this.getType(this.woodType, (this.stage == SaplingStage.NEW) ? SaplingStage.OLDER : SaplingStage.NEW);
@@ -100,6 +93,12 @@ public class Sapling extends Wood
     public Wood getWoodType(final WoodType woodType)
     {
         return getByID(combine(woodType, this.stage));
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("stage", this.stage).toString();
     }
 
     @Override
@@ -174,6 +173,13 @@ public class Sapling extends Wood
         }
     }
 
+    private static byte combine(final WoodType woodType, final SaplingStage stage)
+    {
+        byte result = woodType.getPlanksMeta();
+        result |= stage.getFlag();
+        return result;
+    }
+
     /**
      * Returns one of Sapling sub-type based on sub-id, may return null
      *
@@ -224,11 +230,5 @@ public class Sapling extends Wood
         Sapling.register(SAPLING_JUNGLE);
         Sapling.register(SAPLING_ACACIA);
         Sapling.register(SAPLING_DARK_OAK);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("stage", this.stage).toString();
     }
 }

@@ -94,6 +94,12 @@ public class WheatBlock extends Crops
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
+    }
+
     /**
      * Returns one of WheatBlock sub-type based on sub-id, may return null
      *
@@ -159,11 +165,5 @@ public class WheatBlock extends Crops
         WheatBlock.register(WHEAT_BLOCK_5);
         WheatBlock.register(WHEAT_BLOCK_6);
         WheatBlock.register(WHEAT_BLOCK_RIPE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
     }
 }

@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.ContainerBlock;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "BrewingStandBlock" and all its subtypes.
  */
-public class BrewingStandBlock extends BlockMaterialData implements ContainerBlock
+public class BrewingStandBlock extends BlockMaterialData
 {
     // TODO: auto-generated class, implement other types (sub-ids).	
     /**

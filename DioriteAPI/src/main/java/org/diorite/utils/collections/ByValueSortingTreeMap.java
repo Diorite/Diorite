@@ -5,6 +5,7 @@ import java.util.TreeMap;
 
 public class ByValueSortingTreeMap<K extends Comparable<K>, V extends Comparable<V>> extends TreeMap<K, V>
 {
+    private static final long serialVersionUID = - 369909181602623038L;
     protected final ByValueComparator<K, V> comparator;
 
     public ByValueSortingTreeMap(final ByValueComparator<K, V> comparator)

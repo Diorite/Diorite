@@ -154,16 +154,16 @@ public class Cactus extends Plant implements AgeableBlock
 
     static
     {
-        Cactus.register(CACTUS_0 );
-        Cactus.register(CACTUS_1 );
-        Cactus.register(CACTUS_2 );
-        Cactus.register(CACTUS_3 );
-        Cactus.register(CACTUS_4 );
-        Cactus.register(CACTUS_5 );
-        Cactus.register(CACTUS_6 );
-        Cactus.register(CACTUS_7 );
-        Cactus.register(CACTUS_8 );
-        Cactus.register(CACTUS_9 );
+        Cactus.register(CACTUS_0);
+        Cactus.register(CACTUS_1);
+        Cactus.register(CACTUS_2);
+        Cactus.register(CACTUS_3);
+        Cactus.register(CACTUS_4);
+        Cactus.register(CACTUS_5);
+        Cactus.register(CACTUS_6);
+        Cactus.register(CACTUS_7);
+        Cactus.register(CACTUS_8);
+        Cactus.register(CACTUS_9);
         Cactus.register(CACTUS_10);
         Cactus.register(CACTUS_11);
         Cactus.register(CACTUS_12);

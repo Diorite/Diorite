@@ -87,6 +87,12 @@ public class Jukebox extends BlockMaterialData
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("withDisc", this.withDisc).toString();
+    }
+
     /**
      * Returns one of Jukebox sub-type based on sub-id, may return null
      *
@@ -141,11 +147,5 @@ public class Jukebox extends BlockMaterialData
     {
         Jukebox.register(JUKEBOX);
         Jukebox.register(JUKEBOX_WITH_DISC);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("withDisc", this.withDisc).toString();
     }
 }

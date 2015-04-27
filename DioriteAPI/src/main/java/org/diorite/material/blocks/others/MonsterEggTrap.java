@@ -112,6 +112,12 @@ public class MonsterEggTrap extends Stony
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).toString();
+    }
+
     /**
      * Returns one of MonsterEggTrap sub-type based on sub-id, may return null
      *
@@ -176,11 +182,5 @@ public class MonsterEggTrap extends Stony
         MonsterEggTrap.register(MONSTER_EGG_TRAP_STONE_BRICK_MOSSY);
         MonsterEggTrap.register(MONSTER_EGG_TRAP_STONE_BRICK_CRACKED);
         MonsterEggTrap.register(MONSTER_EGG_TRAP_STONE_BRICK_CHISELED);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).toString();
     }
 }
