@@ -31,12 +31,12 @@ public interface Packet<T extends PacketListener>
         networkManager.sendPacket(this, listener, listeners);
     }
 
-    public static int getPacketID(final Packet<?> packet)
+    static int getPacketID(final Packet<?> packet)
     {
         return getPacketID(packet.getClass());
     }
 
-    public static int getPacketID(@SuppressWarnings("rawtypes") final Class<? extends Packet> clazz)
+    static int getPacketID(@SuppressWarnings("rawtypes") final Class<? extends Packet> clazz)
     {
         if (! clazz.isAnnotationPresent(PacketClass.class))
         {

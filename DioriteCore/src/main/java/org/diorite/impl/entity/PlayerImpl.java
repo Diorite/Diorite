@@ -166,13 +166,13 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     @Override
     public void setResourcePack(final String resourcePack)
     {
-        this.getNetworkManager().sendPacket(new PacketPlayOutResourcePackSend(resourcePack, "DIORITE"));
+        this.networkManager.sendPacket(new PacketPlayOutResourcePackSend(resourcePack, "DIORITE"));
     }
 
     @Override
     public void setResourcePack(final String resourcePack, final String hash)
     {
-        this.getNetworkManager().sendPacket(new PacketPlayOutResourcePackSend(resourcePack, hash));
+        this.networkManager.sendPacket(new PacketPlayOutResourcePackSend(resourcePack, hash));
     }
 
     @Override
@@ -233,7 +233,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     @Override
     public void showParticle(final Particle particle, final boolean isLongDistance, final float x, final float y, final float z, final float offsetX, final float offsetY, final float offsetZ, final float particleData, final int particleCount, final int... data)
     {
-        this.getNetworkManager().sendPacket(new PacketPlayOutWorldParticles(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data));
+        this.networkManager.sendPacket(new PacketPlayOutWorldParticles(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data));
     }
 
     public PacketPlayOutAbilities getAbilities()

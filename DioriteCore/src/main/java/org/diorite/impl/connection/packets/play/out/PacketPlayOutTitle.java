@@ -111,9 +111,9 @@ public class PacketPlayOutTitle implements PacketPlayOut
             return this.actionId;
         }
 
-        public static TitleAction fromId(int id)
+        public static TitleAction fromId(final int id)
         {
-            for(TitleAction ta : TitleAction.values())
+            for(final TitleAction ta : TitleAction.values())
             {
                 if(ta.getActionId() == id)
                 {

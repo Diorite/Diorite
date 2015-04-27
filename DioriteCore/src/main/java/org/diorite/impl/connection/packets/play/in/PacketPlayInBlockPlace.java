@@ -37,7 +37,6 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
         this.cursorPos = cursorPos;
     }
 
-    @SuppressWarnings("MagicNumber")
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
@@ -50,7 +49,6 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
         this.cursorPos = new CursorPos(blockFace, data.readUnsignedByte(), data.readUnsignedByte(), data.readUnsignedByte());
     }
 
-    @SuppressWarnings("MagicNumber")
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {

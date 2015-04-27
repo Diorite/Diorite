@@ -15,7 +15,7 @@ public class ParticleCmd extends SystemCommandImpl
         super("particle", Pattern.compile("(particle)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setCommandExecutor((sender, command, label, matchedPattern, args) ->
         {
-            if(args.length() < 10)
+            if (args.length() < 10)
             {
                 sender.sendMessage(new TextComponent("&cUsage: /particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]"));
                 return;
@@ -31,9 +31,9 @@ public class ParticleCmd extends SystemCommandImpl
                 particle = Particle.getParticleByName(particles.toUpperCase());
             }
 
-            if(particle == null)
+            if (particle == null)
             {
-                sender.sendMessage(new TextComponent("&cSorry, this particle isn't found ("+particles+")"));
+                sender.sendMessage(new TextComponent("&cSorry, this particle isn't found (" + particles + ")"));
                 return;
             }
 
@@ -46,14 +46,14 @@ public class ParticleCmd extends SystemCommandImpl
             final float offsetZ = args.asFloat(7);
             final float particleData = args.asFloat(8);
             final int particleCount = args.asInt(9);
-            int[] data = {};
-            for(int i = 0; i < particle.getDataSize(); i++)
+            int[] data = new int[particle.getDataSize()];
+            for (int i = 0; i < particle.getDataSize(); i++)
             {
-                data[i] = args.asInt(10+i);
+                data[i] = args.asInt(10 + i);
             }
 
-            ((Player)sender).showParticle(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data);
-            sender.sendMessage(new TextComponent("&aParticle "+particle.name()+" ("+particle.getId()+"/"+particle.getMinecraftParticleName()+") has been created!"));
+            ((Player) sender).showParticle(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data);
+            sender.sendMessage(new TextComponent("&aParticle " + particle.name() + " (" + particle.getId() + "/" + particle.getMinecraftParticleName() + ") has been created!"));
         });
     }
 }

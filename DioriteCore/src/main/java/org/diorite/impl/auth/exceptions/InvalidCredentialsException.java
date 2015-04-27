@@ -2,6 +2,8 @@ package org.diorite.impl.auth.exceptions;
 
 public class InvalidCredentialsException extends AuthenticationException
 {
+    private static final long serialVersionUID = 7962557621163975517L;
+
     public InvalidCredentialsException()
     {
     }

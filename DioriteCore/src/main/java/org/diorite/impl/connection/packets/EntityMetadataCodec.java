@@ -16,7 +16,7 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
 
     public static void encode(final PacketDataSerializer data, final EntityMetadataObject metadataObject)
     {
-        final int i = (metadataObject.getDataType().getId() << 5 | metadataObject.getIndex() & 0x1F) & 0xFF;
+        final int i = ((metadataObject.getDataType().getId() << 5) | (metadataObject.getIndex() & 0x1F)) & 0xFF;
 
         data.writeByte(i);
         switch (metadataObject.getDataType().getId())
@@ -25,23 +25,23 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
                 data.writeByte(((Number) metadataObject.getData()).byteValue());
                 break;
             case 1:
-                data.writeShort(((Number)metadataObject.getData()).shortValue());
+                data.writeShort(((Number) metadataObject.getData()).shortValue());
                 break;
             case 2:
-                data.writeInt(((Number)metadataObject.getData()).intValue());
+                data.writeInt(((Number) metadataObject.getData()).intValue());
                 break;
             case 3:
-                data.writeFloat(((Number)metadataObject.getData()).floatValue());
+                data.writeFloat(((Number) metadataObject.getData()).floatValue());
                 break;
             case 4:
-                data.writeText((String)metadataObject.getData());
+                data.writeText((String) metadataObject.getData());
                 break;
             case 5:
-                final ItemStackImpl itemstack = (ItemStackImpl)metadataObject.getData();
+                final ItemStackImpl itemstack = (ItemStackImpl) metadataObject.getData();
                 data.writeItemStack(itemstack);
                 break;
             case 6:
-                final BlockLocation blockposition = (BlockLocation)metadataObject.getData();
+                final BlockLocation blockposition = (BlockLocation) metadataObject.getData();
 
                 data.writeInt(blockposition.getX());
                 data.writeInt(blockposition.getY());
@@ -100,6 +100,8 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
 
                     //object = new EntityMetadataObject(DataType.POSITION, index, new Vector3f(f, f1, f2)); // TODO
                     break;
+                default:
+                    throw new IllegalArgumentException("Unknown entity metadata type: " + type)
             }
             temp.add(object);
         }
@@ -113,9 +115,11 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
         SHORT(1),
         INT(2),
         FLOAT(3),
-        STRING(4), // UTF-8 String (VarInt prefixed)
+        STRING(4),
+        // UTF-8 String (VarInt prefixed)
         SLOT(5),
-        LOCATION(6), // Int, Int, Int (x, y, z)
+        LOCATION(6),
+        // Int, Int, Int (x, y, z)
         POSITION(7); // Float, Float, Float (pitch, yaw, roll)
 
         private final int id;

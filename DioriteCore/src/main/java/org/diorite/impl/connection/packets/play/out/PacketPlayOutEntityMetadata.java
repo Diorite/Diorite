@@ -24,7 +24,7 @@ public class PacketPlayOutEntityMetadata implements PacketPlayOut
     {
     }
 
-    public PacketPlayOutEntityMetadata(final int entityId, List<EntityMetadataObject> metadata)
+    public PacketPlayOutEntityMetadata(final int entityId, final List<EntityMetadataObject> metadata)
     {
         this.entityId = entityId;
         this.metadata = metadata;
@@ -40,8 +40,8 @@ public class PacketPlayOutEntityMetadata implements PacketPlayOut
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(entityId);
-        for (EntityMetadataObject mo : metadata)
+        data.writeVarInt(this.entityId);
+        for (final EntityMetadataObject mo : this.metadata)
         {
             EntityMetadataCodec.encode(data, mo);
         }

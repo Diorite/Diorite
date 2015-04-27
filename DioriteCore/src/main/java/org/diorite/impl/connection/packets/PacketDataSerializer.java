@@ -310,13 +310,11 @@ public class PacketDataSerializer extends ByteBuf
         this.writeChunkSimple(chunk, mask, skyLight, groundUpContinuous, true);
     }
 
-    @SuppressWarnings("MagicNumber")
     public void writeBlockLocation(final BlockLocation loc)
     {
         this.writeLong(loc.asLong());
     }
 
-    @SuppressWarnings("MagicNumber")
     public BlockLocation readBlockLocation()
     {
         return BlockLocation.fromLong(this.readLong());

@@ -36,8 +36,8 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
         this.x = (int)entity.getX() << 5; // * 32
         this.y = (int)entity.getY() << 5; // * 32
         this.z = (int)entity.getZ() << 5; // * 32
-        this.pitch = (int)(pitch * 256.0F / 360.0F);
-        this.yaw = (int)(yaw * 256.0F / 360.0F);
+        this.pitch = (int) ((this.pitch * 256.0F) / 360.0F);
+        this.yaw = (int) ((this.yaw * 256.0F) / 360.0F);
         // TODO DATA
     }
 

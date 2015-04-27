@@ -170,7 +170,7 @@ public class PacketPlayOutWorldParticles implements PacketPlayOut
         this.particleData = data.readFloat();
         this.particleCount = data.readInt();
 
-        int dataCount = this.particle.getDataSize();
+        final int dataCount = this.particle.getDataSize();
         for(int i = 0; i < dataCount; i++)
         {
             this.data[i] = data.readVarInt();
@@ -189,9 +189,9 @@ public class PacketPlayOutWorldParticles implements PacketPlayOut
         data.writeFloat(this.offsetY);
         data.writeFloat(this.offsetZ);
         data.writeFloat(this.particleData);
-        data.writeInt(particleCount);
+        data.writeInt(this.particleCount);
 
-        int dataCount = this.particle.getDataSize();
+        final int dataCount = this.particle.getDataSize();
         for(int i = 0; i < dataCount; i++)
         {
             data.writeVarInt(this.data[i]);

@@ -121,9 +121,7 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 
                         if ((x == r) || (x == rr))
                         {
-                            IntStream.rangeClosed(rr, r).forEach(z -> {
-                                chunk.setBlock(x, chunk.getHighestBlock(x, z).getY(), z, Wool.getByID(DioriteRandomUtils.getRandInt(0, 15)));
-                            });
+                            IntStream.rangeClosed(rr, r).forEach(z -> chunk.setBlock(x, chunk.getHighestBlock(x, z).getY(), z, Wool.getByID(DioriteRandomUtils.getRandInt(0, 15))));
                             return;
                         }
                         chunk.setBlock(x, chunk.getHighestBlock(x, r).getY(), r, Wool.getByID(DioriteRandomUtils.getRandInt(0, 15)));

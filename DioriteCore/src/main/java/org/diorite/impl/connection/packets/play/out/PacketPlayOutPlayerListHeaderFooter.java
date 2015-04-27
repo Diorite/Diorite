@@ -30,7 +30,7 @@ public class PacketPlayOutPlayerListHeaderFooter implements PacketPlayOut
 
     public BaseComponent getHeader()
     {
-        return header;
+        return this.header;
     }
 
     public void setHeader(final BaseComponent header)
@@ -40,7 +40,7 @@ public class PacketPlayOutPlayerListHeaderFooter implements PacketPlayOut
 
     public BaseComponent getFooter()
     {
-        return header;
+        return this.header;
     }
 
     public void setFooter(final BaseComponent footer)
@@ -51,15 +51,15 @@ public class PacketPlayOutPlayerListHeaderFooter implements PacketPlayOut
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        header = data.readBaseComponent();
-        footer = data.readBaseComponent();
+        this.header = data.readBaseComponent();
+        this.footer = data.readBaseComponent();
     }
 
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeBaseComponent(header);
-        data.writeBaseComponent(footer);
+        data.writeBaseComponent(this.header);
+        data.writeBaseComponent(this.footer);
     }
 
     @Override

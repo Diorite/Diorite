@@ -30,7 +30,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
             //noinspection MagicNumber
             this.skyLight.fill((byte) 0xf);
         }
-        //noinspection MagicNumber
         this.blockLight.fill((byte) 0x0);
     }
 
@@ -46,7 +45,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
             //noinspection MagicNumber
             this.skyLight.fill((byte) 0xf);
         }
-        //noinspection MagicNumber
         this.blockLight.fill((byte) 0x0);
     }
 

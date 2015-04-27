@@ -16,7 +16,6 @@ public enum RequestType
         return this.value;
     }
 
-    @SuppressWarnings("MagicNumber")
     public static RequestType getByInt(final int i)
     {
         switch (i)

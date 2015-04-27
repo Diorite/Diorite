@@ -81,7 +81,7 @@ public class ChunkBuilderImpl implements ChunkBuilder
         return chunk;
     }
 
-    private class ChunkPartBuilder // part of chunk 16x16x16
+    private static class ChunkPartBuilder // part of chunk 16x16x16
     {
         public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
         private final ChunkBuilderImpl chunk;
