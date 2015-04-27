@@ -2,6 +2,9 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
@@ -16,11 +19,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class RedSandstoneStairs extends BlockMaterialData implements Stairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -32,25 +34,35 @@ public class RedSandstoneStairs extends BlockMaterialData implements Stairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__RED_SANDSTONE_STAIRS__HARDNESS;
 
-    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS = new RedSandstoneStairs();
+    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS_EAST  = new RedSandstoneStairs();
+    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS_WEST  = new RedSandstoneStairs("WEST", BlockFace.WEST, false);
+    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS_SOUTH = new RedSandstoneStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS_NORTH = new RedSandstoneStairs("NORTH", BlockFace.NORTH, false);
+
+    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS_EAST_UPSIDE_DOWN  = new RedSandstoneStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS_WEST_UPSIDE_DOWN  = new RedSandstoneStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS_SOUTH_UPSIDE_DOWN = new RedSandstoneStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final RedSandstoneStairs RED_SANDSTONE_STAIRS_NORTH_UPSIDE_DOWN = new RedSandstoneStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, RedSandstoneStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedSandstoneStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+    protected final boolean   upsideDown;
+
     @SuppressWarnings("MagicNumber")
     protected RedSandstoneStairs()
     {
-        super("RED_SANDSTONE_STAIRS", 180, "minecraft:red_sandstone_stairs", "RED_SANDSTONE_STAIRS", (byte) 0x00);
+        super("RED_SANDSTONE_STAIRS", 180, "minecraft:red_sandstone_stairs", "EAST", (byte) 0x00);
+        this.face = BlockFace.EAST;
+        this.upsideDown = false;
     }
 
-    public RedSandstoneStairs(final String enumName, final int type)
+    public RedSandstoneStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
-        super(RED_SANDSTONE_STAIRS.name(), RED_SANDSTONE_STAIRS.getId(), RED_SANDSTONE_STAIRS.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public RedSandstoneStairs(final int maxStack, final String typeName, final byte type)
-    {
-        super(RED_SANDSTONE_STAIRS.name(), RED_SANDSTONE_STAIRS.getId(), RED_SANDSTONE_STAIRS.getMinecraftId(), maxStack, typeName, type);
+        super(RED_SANDSTONE_STAIRS_EAST.name(), RED_SANDSTONE_STAIRS_EAST.getId(), RED_SANDSTONE_STAIRS_EAST.getMinecraftId(), enumName, Stairs.combine(face, upsideDown));
+        this.face = face;
+        this.upsideDown = upsideDown;
     }
 
     @Override
@@ -66,6 +78,36 @@ public class RedSandstoneStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
+    public RedSandstoneStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
+    public boolean isUpsideDown()
+    {
+        return this.upsideDown;
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public RedSandstoneStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    @Override
+    public RedSandstoneStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public RedSandstoneStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -75,30 +117,6 @@ public class RedSandstoneStairs extends BlockMaterialData implements Stairs
     public RedSandstoneStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public boolean isUpsideDown()
-    {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public Stairs getUpsideDown(final boolean upsideDown)
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getBlockFacing(final BlockFace face)
-    {
-        return null; // TODO: implement
     }
 
     /**
@@ -127,6 +145,20 @@ public class RedSandstoneStairs extends BlockMaterialData implements Stairs
     }
 
     /**
+     * Returns one of RedSandstoneStairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param blockFace  facing direction of stairs.
+     * @param upsideDown if stairs should be upside-down.
+     *
+     * @return sub-type of RedSandstoneStairs
+     */
+    public static RedSandstoneStairs getRedSandstoneStairs(final BlockFace blockFace, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(blockFace, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -140,6 +172,19 @@ public class RedSandstoneStairs extends BlockMaterialData implements Stairs
 
     static
     {
-        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS);
+        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS_EAST);
+        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS_WEST);
+        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS_SOUTH);
+        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS_NORTH);
+        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS_EAST_UPSIDE_DOWN);
+        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS_WEST_UPSIDE_DOWN);
+        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS_SOUTH_UPSIDE_DOWN);
+        RedSandstoneStairs.register(RED_SANDSTONE_STAIRS_NORTH_UPSIDE_DOWN);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 }

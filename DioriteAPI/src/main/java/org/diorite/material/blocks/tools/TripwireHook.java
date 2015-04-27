@@ -83,7 +83,7 @@ public class TripwireHook extends BlockMaterialData implements Activatable
     }
 
     @Override
-    public BlockMaterialData getActivated(final boolean activate)
+    public TripwireHook getActivated(final boolean activate)
     {
         return null; // TODO: implement
     }

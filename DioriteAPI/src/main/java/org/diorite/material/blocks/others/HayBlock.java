@@ -100,7 +100,7 @@ public class HayBlock extends BlockMaterialData implements Rotatable
     }
 
     @Override
-    public BlockMaterialData getRotated(final RotateAxis axis)
+    public HayBlock getRotated(final RotateAxis axis)
     {
         return getByID(combine(axis));
     }

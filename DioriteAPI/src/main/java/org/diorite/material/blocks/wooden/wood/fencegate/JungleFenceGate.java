@@ -2,7 +2,9 @@ package org.diorite.material.blocks.wooden.wood.fencegate;
 
 import java.util.Map;
 
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.material.blocks.FenceGate;
 import org.diorite.material.blocks.wooden.WoodType;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -14,11 +16,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class JungleFenceGate extends WoodenFenceGate
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,7 +31,15 @@ public class JungleFenceGate extends WoodenFenceGate
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__JUNGLE_FENCE_GATE__HARDNESS;
 
-    public static final JungleFenceGate JUNGLE_FENCE_GATE = new JungleFenceGate();
+    public static final JungleFenceGate JUNGLE_FENCE_GATE_SOUTH = new JungleFenceGate();
+    public static final JungleFenceGate JUNGLE_FENCE_GATE_WEST  = new JungleFenceGate("WEST", BlockFace.WEST, false);
+    public static final JungleFenceGate JUNGLE_FENCE_GATE_NORTH = new JungleFenceGate("NORTH", BlockFace.NORTH, false);
+    public static final JungleFenceGate JUNGLE_FENCE_GATE_EAST  = new JungleFenceGate("EAST", BlockFace.EAST, false);
+
+    public static final JungleFenceGate JUNGLE_FENCE_GATE_SOUTH_OPEN = new JungleFenceGate("SOUTH_OPEN", BlockFace.SOUTH, true);
+    public static final JungleFenceGate JUNGLE_FENCE_GATE_WEST_OPEN  = new JungleFenceGate("WEST_OPEN", BlockFace.WEST, true);
+    public static final JungleFenceGate JUNGLE_FENCE_GATE_NORTH_OPEN = new JungleFenceGate("NORTH_OPEN", BlockFace.NORTH, true);
+    public static final JungleFenceGate JUNGLE_FENCE_GATE_EAST_OPEN  = new JungleFenceGate("EAST_OPEN", BlockFace.EAST, true);
 
     private static final Map<String, JungleFenceGate>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<JungleFenceGate> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -38,7 +47,13 @@ public class JungleFenceGate extends WoodenFenceGate
     @SuppressWarnings("MagicNumber")
     protected JungleFenceGate()
     {
-        super("JUNGLE_FENCE_GATE", 185, "minecraft:jungle_fence_gate", "JUNGLE_FENCE_GATE", WoodType.JUNGLE);
+        super("JUNGLE_FENCE_GATE", 185, "minecraft:jungle_fence_gate", "SOUTH", WoodType.JUNGLE, BlockFace.SOUTH, false);
+    }
+
+    public JungleFenceGate(final String enumName, final BlockFace face, final boolean open)
+    {
+        super(JUNGLE_FENCE_GATE_SOUTH.name(), JUNGLE_FENCE_GATE_SOUTH.getId(), JUNGLE_FENCE_GATE_SOUTH.getMinecraftId(), enumName, WoodType.JUNGLE, face, open);
+
     }
 
     @Override
@@ -54,6 +69,18 @@ public class JungleFenceGate extends WoodenFenceGate
     }
 
     @Override
+    public JungleFenceGate getBlockFacing(final BlockFace face)
+    {
+        return getByID(FenceGate.combine(face, this.open));
+    }
+
+    @Override
+    public JungleFenceGate getOpen(final boolean open)
+    {
+        return getByID(FenceGate.combine(this.face, open));
+    }
+
+    @Override
     public JungleFenceGate getType(final String name)
     {
         return getByEnumName(name);
@@ -63,6 +90,12 @@ public class JungleFenceGate extends WoodenFenceGate
     public JungleFenceGate getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public JungleFenceGate getType(final BlockFace face, final boolean open)
+    {
+        return getByID(FenceGate.combine(face, open));
     }
 
     /**
@@ -91,6 +124,20 @@ public class JungleFenceGate extends WoodenFenceGate
     }
 
     /**
+     * Returns one of JungleFenceGate sub-type based on facing direction and open state.
+     * It will never return null.
+     *
+     * @param blockFace facing direction of gate.
+     * @param open      if gate should be open.
+     *
+     * @return sub-type of JungleFenceGate
+     */
+    public static JungleFenceGate getJungleFenceGate(final BlockFace blockFace, final boolean open)
+    {
+        return getByID(FenceGate.combine(blockFace, open));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -104,6 +151,13 @@ public class JungleFenceGate extends WoodenFenceGate
 
     static
     {
-        JungleFenceGate.register(JUNGLE_FENCE_GATE);
+        JungleFenceGate.register(JUNGLE_FENCE_GATE_SOUTH);
+        JungleFenceGate.register(JUNGLE_FENCE_GATE_WEST);
+        JungleFenceGate.register(JUNGLE_FENCE_GATE_NORTH);
+        JungleFenceGate.register(JUNGLE_FENCE_GATE_EAST);
+        JungleFenceGate.register(JUNGLE_FENCE_GATE_SOUTH_OPEN);
+        JungleFenceGate.register(JUNGLE_FENCE_GATE_WEST_OPEN);
+        JungleFenceGate.register(JUNGLE_FENCE_GATE_NORTH_OPEN);
+        JungleFenceGate.register(JUNGLE_FENCE_GATE_EAST_OPEN);
     }
 }

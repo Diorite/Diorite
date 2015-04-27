@@ -6,9 +6,30 @@ public interface Stairs extends Directional
 {
     byte UPSIDE_DOWN_FLAG = 0x4;
 
-    boolean isUpsideDown(); // TODO: implement
+    /**
+     * @return true if stairs are upside-down
+     */
+    boolean isUpsideDown();
 
-    Stairs getUpsideDown(final boolean upsideDown);
+    /**
+     * Returns sub-type of Stairs based on upside-down state.
+     *
+     * @param upsideDown if staris should be upside-down.
+     *
+     * @return sub-type of Stairs
+     */
+    Stairs getUpsideDown(boolean upsideDown);
+
+    /**
+     * Returns one of Stairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param face  facing direction of stairs.
+     * @param upside if stairs should be upside-down.
+     *
+     * @return sub-type of Stairs
+     */
+    Stairs getType(BlockFace face, boolean upsideDown);
 
     static byte combine(final BlockFace face, final boolean upside)
     {

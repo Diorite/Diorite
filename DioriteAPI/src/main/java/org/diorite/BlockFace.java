@@ -99,6 +99,7 @@ public enum BlockFace
      * Self, facing itself. (0, 0, 0)
      */
     SELF(0, 0, 0);
+    public static final BlockFace[] EMPTY = new BlockFace[0];
 
     private final int modX;
     private final int modY;

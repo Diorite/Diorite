@@ -83,7 +83,7 @@ public class Lever extends BlockMaterialData implements Activatable
     }
 
     @Override
-    public BlockMaterialData getActivated(final boolean activate)
+    public Lever getActivated(final boolean activate)
     {
         return null; // TODO implement
     }

@@ -1,7 +1,5 @@
 package org.diorite.material.blocks;
 
-import org.diorite.material.BlockMaterialData;
-
 /**
  * Implementing block should have open and closed state and allow chaning it.
  */
@@ -19,5 +17,5 @@ public interface Openable
      *
      * @return sub-type of block
      */
-    BlockMaterialData getOpen(boolean open);
+    Openable getOpen(boolean open);
 }

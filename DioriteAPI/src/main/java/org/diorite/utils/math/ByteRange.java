@@ -3,53 +3,206 @@ package org.diorite.utils.math;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Class defining range in bytes, may be used to validate numbers.
+ */
 public class ByteRange
 {
+    /**
+     * Range from 0 to 0.
+     */
     public static final ByteRange EMPTY = new ByteRange(0, 0);
+    /**
+     * Range from {@link Byte.MIN_VALUE} to {@link Byte.MAX_VALUE}
+     */
     public static final ByteRange FULL  = new ByteRange(Byte.MIN_VALUE, Byte.MAX_VALUE);
 
     private final byte min;
     private final byte max;
 
+    /**
+     * Construct new range.
+     *
+     * @param min min value of range.
+     * @param max max value of range.
+     */
     public ByteRange(final byte min, final byte max)
     {
         this.min = min;
         this.max = max;
     }
 
+    /**
+     * Construct new range.
+     *
+     * @param min min value of range.
+     * @param max max value of range.
+     */
     public ByteRange(final int min, final int max)
     {
         this((byte) min, (byte) max);
     }
 
+    /**
+     * @return min value in range.
+     */
     public byte getMin()
     {
         return this.min;
     }
 
+    /**
+     * @return max value in range.
+     */
     public byte getMax()
     {
         return this.max;
     }
 
+    /**
+     * @return random value in range.
+     */
     public byte getRandom()
     {
         return (byte) DioriteRandomUtils.getRandInt(this.min, this.max);
     }
 
+    /**
+     * @return size of range. (max - min + 1)
+     */
     public short size()
     {
         return (short) ((this.max - this.min) + 1);
     }
 
+    /**
+     * Check if given number is in range.
+     *
+     * @param i number to check.
+     *
+     * @return true if it is in range
+     */
     public boolean isIn(final int i)
     {
         return (i >= this.min) && (i <= this.max);
     }
 
+    /**
+     * Check if given number is in range.
+     *
+     * @param i number to check.
+     *
+     * @return true if it is in range
+     */
     public boolean isIn(final byte i)
     {
         return (i >= this.min) && (i <= this.max);
+    }
+
+    /**
+     * Return given number if it is in range, or closest value in range.
+     * {@code i > max -> max}
+     * {@code i < min -> min}
+     * else -> i
+     *
+     * @param i number to validate.
+     *
+     * @return closest number in range.
+     */
+    public int getIn(final byte i)
+    {
+        if (i > this.max)
+        {
+            return this.max;
+        }
+        if (i < this.min)
+        {
+            return this.min;
+        }
+        return i;
+    }
+
+    /**
+     * Return given number if it is in range, or default value.
+     * {@code i > max -> def}
+     * {@code i < min -> def}
+     * else -> i
+     *
+     * @param i   number to validate.
+     * @param def default value.
+     *
+     * @return given number or default value.
+     */
+    public int getIn(final byte i, final byte def)
+    {
+        if (! this.isIn(i))
+        {
+            return def;
+        }
+        return i;
+    }
+
+    /**
+     * Return given number if it is in range, or default value.
+     * {@code i > max -> def}
+     * {@code i < min -> def}
+     * else -> i
+     *
+     * @param i   number to validate.
+     * @param def default value.
+     *
+     * @return given number or default value.
+     */
+    public int getIn(final byte i, final int def)
+    {
+        if (! this.isIn(i))
+        {
+            return def;
+        }
+        return i;
+    }
+
+    /**
+     * Return given number if it is in range, or closest value in range.
+     * {@code i > max -> max}
+     * {@code i < min -> min}
+     * else -> i
+     *
+     * @param i number to validate.
+     *
+     * @return closest number in range.
+     */
+    public byte getIn(final int i)
+    {
+        if (i > this.max)
+        {
+            return this.max;
+        }
+        if (i < this.min)
+        {
+            return this.min;
+        }
+        return (byte) i;
+    }
+
+    /**
+     * Return given number if it is in range, or default value.
+     * {@code i > max -> def}
+     * {@code i < min -> def}
+     * else -> i
+     *
+     * @param i   number to validate.
+     * @param def default value.
+     *
+     * @return given number or default value.
+     */
+    public byte getIn(final int i, final int def)
+    {
+        if (! this.isIn(i))
+        {
+            return (byte) def;
+        }
+        return (byte) i;
     }
 
     @Override
@@ -84,11 +237,25 @@ public class ByteRange
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("min", this.min).append("max", this.max).toString();
     }
 
+    /**
+     * Create range with only gived value in range.
+     *
+     * @param num min and max of range.
+     *
+     * @return range with only one value in range.
+     */
     public static ByteRange fixed(final int num)
     {
         return new ByteRange(num, num);
     }
 
+    /**
+     * Create range with only gived value in range.
+     *
+     * @param num min and max of range.
+     *
+     * @return range with only one value in range.
+     */
     public static ByteRange fixed(final byte num)
     {
         return new ByteRange(num, num);

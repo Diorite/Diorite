@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.blocks.AgeableBlock;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,7 +14,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * Class representing block "Fire" and all its subtypes.
  */
 @SuppressWarnings("MagicNumber")
-public class Fire extends BlockMaterialData
+public class Fire extends BlockMaterialData implements AgeableBlock
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -85,6 +86,18 @@ public class Fire extends BlockMaterialData
         return getByID(id);
     }
 
+    @Override
+    public int getAge()
+    {
+        return this.type;
+    }
+
+    @Override
+    public Fire getAge(final int age)
+    {
+        return getByID(age);
+    }
+
     /**
      * Returns one of Fire sub-type based on sub-id, may return null
      *
@@ -120,7 +133,12 @@ public class Fire extends BlockMaterialData
      */
     public static Fire getFire(final int age)
     {
-        return getByID(age);
+        final Fire fire = getByID(age);
+        if (fire == null)
+        {
+            return FIRE_0;
+        }
+        return fire;
     }
 
     /**
@@ -137,16 +155,16 @@ public class Fire extends BlockMaterialData
 
     static
     {
-        Fire.register(FIRE_0 );
-        Fire.register(FIRE_1 );
-        Fire.register(FIRE_2 );
-        Fire.register(FIRE_3 );
-        Fire.register(FIRE_4 );
-        Fire.register(FIRE_5 );
-        Fire.register(FIRE_6 );
-        Fire.register(FIRE_7 );
-        Fire.register(FIRE_8 );
-        Fire.register(FIRE_9 );
+        Fire.register(FIRE_0);
+        Fire.register(FIRE_1);
+        Fire.register(FIRE_2);
+        Fire.register(FIRE_3);
+        Fire.register(FIRE_4);
+        Fire.register(FIRE_5);
+        Fire.register(FIRE_6);
+        Fire.register(FIRE_7);
+        Fire.register(FIRE_8);
+        Fire.register(FIRE_9);
         Fire.register(FIRE_10);
         Fire.register(FIRE_11);
         Fire.register(FIRE_12);

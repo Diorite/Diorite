@@ -2,6 +2,9 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
@@ -16,11 +19,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class SandstoneStairs extends BlockMaterialData implements Stairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -32,25 +34,35 @@ public class SandstoneStairs extends BlockMaterialData implements Stairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__SANDSTONE_STAIRS__HARDNESS;
 
-    public static final SandstoneStairs SANDSTONE_STAIRS = new SandstoneStairs();
+    public static final SandstoneStairs SANDSTONE_STAIRS_EAST  = new SandstoneStairs();
+    public static final SandstoneStairs SANDSTONE_STAIRS_WEST  = new SandstoneStairs("WEST", BlockFace.WEST, false);
+    public static final SandstoneStairs SANDSTONE_STAIRS_SOUTH = new SandstoneStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final SandstoneStairs SANDSTONE_STAIRS_NORTH = new SandstoneStairs("NORTH", BlockFace.NORTH, false);
+
+    public static final SandstoneStairs SANDSTONE_STAIRS_EAST_UPSIDE_DOWN  = new SandstoneStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final SandstoneStairs SANDSTONE_STAIRS_WEST_UPSIDE_DOWN  = new SandstoneStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final SandstoneStairs SANDSTONE_STAIRS_SOUTH_UPSIDE_DOWN = new SandstoneStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final SandstoneStairs SANDSTONE_STAIRS_NORTH_UPSIDE_DOWN = new SandstoneStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, SandstoneStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SandstoneStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+    protected final boolean   upsideDown;
+
     @SuppressWarnings("MagicNumber")
     protected SandstoneStairs()
     {
-        super("SANDSTONE_STAIRS", 128, "minecraft:sandstone_stairs", "SANDSTONE_STAIRS", (byte) 0x00);
+        super("SANDSTONE_STAIRS", 128, "minecraft:sandstone_stairs", "EAST", (byte) 0x00);
+        this.face = BlockFace.EAST;
+        this.upsideDown = false;
     }
 
-    public SandstoneStairs(final String enumName, final int type)
+    public SandstoneStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
-        super(SANDSTONE_STAIRS.name(), SANDSTONE_STAIRS.getId(), SANDSTONE_STAIRS.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public SandstoneStairs(final int maxStack, final String typeName, final byte type)
-    {
-        super(SANDSTONE_STAIRS.name(), SANDSTONE_STAIRS.getId(), SANDSTONE_STAIRS.getMinecraftId(), maxStack, typeName, type);
+        super(SANDSTONE_STAIRS_EAST.name(), SANDSTONE_STAIRS_EAST.getId(), SANDSTONE_STAIRS_EAST.getMinecraftId(), enumName, Stairs.combine(face, upsideDown));
+        this.face = face;
+        this.upsideDown = upsideDown;
     }
 
     @Override
@@ -66,6 +78,36 @@ public class SandstoneStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
+    public SandstoneStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
+    public boolean isUpsideDown()
+    {
+        return this.upsideDown;
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public SandstoneStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    @Override
+    public SandstoneStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public SandstoneStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -75,30 +117,6 @@ public class SandstoneStairs extends BlockMaterialData implements Stairs
     public SandstoneStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public boolean isUpsideDown()
-    {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public Stairs getUpsideDown(final boolean upsideDown)
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getBlockFacing(final BlockFace face)
-    {
-        return null; // TODO: implement
     }
 
     /**
@@ -127,6 +145,20 @@ public class SandstoneStairs extends BlockMaterialData implements Stairs
     }
 
     /**
+     * Returns one of SandstoneStairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param blockFace  facing direction of stairs.
+     * @param upsideDown if stairs should be upside-down.
+     *
+     * @return sub-type of SandstoneStairs
+     */
+    public static SandstoneStairs getSandstoneStairs(final BlockFace blockFace, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(blockFace, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -140,6 +172,19 @@ public class SandstoneStairs extends BlockMaterialData implements Stairs
 
     static
     {
-        SandstoneStairs.register(SANDSTONE_STAIRS);
+        SandstoneStairs.register(SANDSTONE_STAIRS_EAST);
+        SandstoneStairs.register(SANDSTONE_STAIRS_WEST);
+        SandstoneStairs.register(SANDSTONE_STAIRS_SOUTH);
+        SandstoneStairs.register(SANDSTONE_STAIRS_NORTH);
+        SandstoneStairs.register(SANDSTONE_STAIRS_EAST_UPSIDE_DOWN);
+        SandstoneStairs.register(SANDSTONE_STAIRS_WEST_UPSIDE_DOWN);
+        SandstoneStairs.register(SANDSTONE_STAIRS_SOUTH_UPSIDE_DOWN);
+        SandstoneStairs.register(SANDSTONE_STAIRS_NORTH_UPSIDE_DOWN);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 }

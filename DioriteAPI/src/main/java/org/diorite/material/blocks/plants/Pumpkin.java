@@ -2,9 +2,8 @@ package org.diorite.material.blocks.plants;
 
 import java.util.Map;
 
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.Powerable;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,13 +12,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Pumpkin" and all its subtypes.
  */
-public class Pumpkin extends BlockMaterialData implements Powerable
+public class Pumpkin extends AbstractPumpkin
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 5;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -31,7 +29,11 @@ public class Pumpkin extends BlockMaterialData implements Powerable
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__PUMPKIN__HARDNESS;
 
-    public static final Pumpkin PUMPKIN = new Pumpkin();
+    public static final Pumpkin PUMPKIN_SOUTH = new Pumpkin();
+    public static final Pumpkin PUMPKIN_WEST  = new Pumpkin(BlockFace.WEST);
+    public static final Pumpkin PUMPKIN_NORTH = new Pumpkin(BlockFace.NORTH);
+    public static final Pumpkin PUMPKIN_EAST  = new Pumpkin(BlockFace.EAST);
+    public static final Pumpkin PUMPKIN_SELF  = new Pumpkin(BlockFace.SELF);
 
     private static final Map<String, Pumpkin>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Pumpkin> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -39,17 +41,12 @@ public class Pumpkin extends BlockMaterialData implements Powerable
     @SuppressWarnings("MagicNumber")
     protected Pumpkin()
     {
-        super("PUMPKIN", 86, "minecraft:pumpkin", "PUMPKIN", (byte) 0x00);
+        super("PUMPKIN", 86, "minecraft:pumpkin", BlockFace.SOUTH);
     }
 
-    public Pumpkin(final String enumName, final int type)
+    public Pumpkin(final BlockFace face)
     {
-        super(PUMPKIN.name(), PUMPKIN.getId(), PUMPKIN.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public Pumpkin(final int maxStack, final String typeName, final byte type)
-    {
-        super(PUMPKIN.name(), PUMPKIN.getId(), PUMPKIN.getMinecraftId(), maxStack, typeName, type);
+        super(PUMPKIN_SOUTH.name(), PUMPKIN_SOUTH.getId(), PUMPKIN_SOUTH.getMinecraftId(), face);
     }
 
     @Override
@@ -83,9 +80,9 @@ public class Pumpkin extends BlockMaterialData implements Powerable
     }
 
     @Override
-    public BlockMaterialData getPowered(final boolean powered)
+    public Pumpkin getBlockFacing(final BlockFace face)
     {
-        return null; // TODO: implement
+        return getByID(combine(face));
     }
 
     /**
@@ -114,6 +111,19 @@ public class Pumpkin extends BlockMaterialData implements Powerable
     }
 
     /**
+     * Returns one of Pumpkin sub-type based on {@link BlockFace}.
+     * It will never return null;
+     *
+     * @param face facing of Pumpkin
+     *
+     * @return sub-type of Pumpkin
+     */
+    public static Pumpkin getPumpkin(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -127,6 +137,10 @@ public class Pumpkin extends BlockMaterialData implements Powerable
 
     static
     {
-        Pumpkin.register(PUMPKIN);
+        Pumpkin.register(PUMPKIN_SOUTH);
+        Pumpkin.register(PUMPKIN_WEST);
+        Pumpkin.register(PUMPKIN_NORTH);
+        Pumpkin.register(PUMPKIN_EAST);
+        Pumpkin.register(PUMPKIN_SELF);
     }
 }

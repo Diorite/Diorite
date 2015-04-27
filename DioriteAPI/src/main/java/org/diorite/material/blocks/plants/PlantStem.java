@@ -1,10 +1,10 @@
 package org.diorite.material.blocks.plants;
 
-import org.diorite.material.BlockMaterialData;
-
-public abstract class PlantStem extends BlockMaterialData
+/**
+ * Base abstract class for steam-based blocks
+ */
+public abstract class PlantStem extends Crops
 {
-    // TODO: implement
     public PlantStem(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
     {
         super(enumName, id, minecraftId, typeName, type);

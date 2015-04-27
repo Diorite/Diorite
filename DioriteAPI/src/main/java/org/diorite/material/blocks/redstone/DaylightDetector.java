@@ -83,7 +83,7 @@ public class DaylightDetector extends BlockMaterialData implements Activatable
     }
 
     @Override
-    public BlockMaterialData getActivated(final boolean activate)
+    public DaylightDetector getActivated(final boolean activate)
     {
         return null;  // TODO: implement
     }

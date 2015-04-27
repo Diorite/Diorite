@@ -112,15 +112,7 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
         return getByID(Stairs.combine(face, this.upsideDown));
     }
 
-    /**
-     * Returns one of NetherBrickStairs sub-type based on {@link BlockFace} and upsideDown flag.
-     * It will never return null;
-     *
-     * @param face       face of block, unsupported face will cause using face from default type.
-     * @param upsideDown if stairs are upside down
-     *
-     * @return sub-type of NetherBrickStairs
-     */
+    @Override
     public NetherBrickStairs getType(final BlockFace face, final boolean activated)
     {
         return getByID(Stairs.combine(face, activated));

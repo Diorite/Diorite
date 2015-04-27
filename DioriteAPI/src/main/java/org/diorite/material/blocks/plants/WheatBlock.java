@@ -2,6 +2,9 @@ package org.diorite.material.blocks.plants;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -11,13 +14,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "WheatBlock" and all its subtypes.
  */
-public class WheatBlock extends Plant
+public class WheatBlock extends Crops
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,25 +31,31 @@ public class WheatBlock extends Plant
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__WHEAT_BLOCK__HARDNESS;
 
-    public static final WheatBlock WHEAT_BLOCK = new WheatBlock();
+    public static final WheatBlock WHEAT_BLOCK_0    = new WheatBlock();
+    public static final WheatBlock WHEAT_BLOCK_1    = new WheatBlock("1", 0x1);
+    public static final WheatBlock WHEAT_BLOCK_2    = new WheatBlock("2", 0x2);
+    public static final WheatBlock WHEAT_BLOCK_3    = new WheatBlock("3", 0x3);
+    public static final WheatBlock WHEAT_BLOCK_4    = new WheatBlock("4", 0x4);
+    public static final WheatBlock WHEAT_BLOCK_5    = new WheatBlock("5", 0x5);
+    public static final WheatBlock WHEAT_BLOCK_6    = new WheatBlock("6", 0x6);
+    public static final WheatBlock WHEAT_BLOCK_RIPE = new WheatBlock("RIPE", 0x7);
 
     private static final Map<String, WheatBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WheatBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final int age;
+
     @SuppressWarnings("MagicNumber")
     protected WheatBlock()
     {
-        super("WHEAT_BLOCK", 59, "minecraft:wheat", "WHEAT_BLOCK", (byte) 0x00);
+        super("WHEAT_BLOCK", 59, "minecraft:wheat", "0", (byte) 0x00);
+        this.age = 0;
     }
 
-    public WheatBlock(final String enumName, final int type)
+    public WheatBlock(final String enumName, final int age)
     {
-        super(WHEAT_BLOCK.name(), WHEAT_BLOCK.getId(), WHEAT_BLOCK.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public WheatBlock(final int maxStack, final String typeName, final byte type)
-    {
-        super(WHEAT_BLOCK.name(), WHEAT_BLOCK.getId(), WHEAT_BLOCK.getMinecraftId(), maxStack, typeName, type);
+        super(WHEAT_BLOCK_0.name(), WHEAT_BLOCK_0.getId(), WHEAT_BLOCK_0.getMinecraftId(), enumName, (byte) age);
+        this.age = age;
     }
 
     @Override
@@ -60,6 +68,18 @@ public class WheatBlock extends Plant
     public float getHardness()
     {
         return HARDNESS;
+    }
+
+    @Override
+    public int getAge()
+    {
+        return this.age;
+    }
+
+    @Override
+    public WheatBlock getAge(final int age)
+    {
+        return getByID(age);
     }
 
     @Override
@@ -100,6 +120,24 @@ public class WheatBlock extends Plant
     }
 
     /**
+     * Returns one of WheatBlock sub-type based on age.
+     * It will never return null.
+     *
+     * @param age age of WheatBlock.
+     *
+     * @return sub-type of WheatBlock
+     */
+    public static WheatBlock getWheatBlock(final int age)
+    {
+        final WheatBlock wheatBlock = getByID(age);
+        if (wheatBlock == null)
+        {
+            return WHEAT_BLOCK_0;
+        }
+        return wheatBlock;
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -113,6 +151,19 @@ public class WheatBlock extends Plant
 
     static
     {
-        WheatBlock.register(WHEAT_BLOCK);
+        WheatBlock.register(WHEAT_BLOCK_0);
+        WheatBlock.register(WHEAT_BLOCK_1);
+        WheatBlock.register(WHEAT_BLOCK_2);
+        WheatBlock.register(WHEAT_BLOCK_3);
+        WheatBlock.register(WHEAT_BLOCK_4);
+        WheatBlock.register(WHEAT_BLOCK_5);
+        WheatBlock.register(WHEAT_BLOCK_6);
+        WheatBlock.register(WHEAT_BLOCK_RIPE);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
     }
 }

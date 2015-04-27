@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.Stairs;
 import org.diorite.material.blocks.wooden.WoodType;
 import org.diorite.utils.collections.SimpleStringHashMap;
@@ -17,11 +16,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class AcaciaStairs extends WoodenStairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -33,7 +31,15 @@ public class AcaciaStairs extends WoodenStairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__ACACIA_STAIRS__HARDNESS;
 
-    public static final AcaciaStairs ACACIA_STAIRS = new AcaciaStairs();
+    public static final AcaciaStairs ACACIA_STAIRS_EAST  = new AcaciaStairs();
+    public static final AcaciaStairs ACACIA_STAIRS_WEST  = new AcaciaStairs("WEST", BlockFace.WEST, false);
+    public static final AcaciaStairs ACACIA_STAIRS_SOUTH = new AcaciaStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final AcaciaStairs ACACIA_STAIRS_NORTH = new AcaciaStairs("NORTH", BlockFace.NORTH, false);
+
+    public static final AcaciaStairs ACACIA_STAIRS_EAST_UPSIDE_DOWN  = new AcaciaStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final AcaciaStairs ACACIA_STAIRS_WEST_UPSIDE_DOWN  = new AcaciaStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final AcaciaStairs ACACIA_STAIRS_SOUTH_UPSIDE_DOWN = new AcaciaStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final AcaciaStairs ACACIA_STAIRS_NORTH_UPSIDE_DOWN = new AcaciaStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, AcaciaStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<AcaciaStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -41,7 +47,13 @@ public class AcaciaStairs extends WoodenStairs
     @SuppressWarnings("MagicNumber")
     protected AcaciaStairs()
     {
-        super("ACACIA_STAIRS", 163, "minecraft:acacia_stairs", "ACACIA_STAIRS", WoodType.ACACIA);
+        super("ACACIA_STAIRS", 163, "minecraft:acacia_stairs", "EAST", WoodType.ACACIA, BlockFace.EAST, false);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public AcaciaStairs(final String enumName, final BlockFace face, final boolean upsideDown)
+    {
+        super(ACACIA_STAIRS_EAST.name(), ACACIA_STAIRS_EAST.getId(), ACACIA_STAIRS_EAST.getMinecraftId(), enumName, WoodType.ACACIA, face, upsideDown);
     }
 
     @Override
@@ -57,6 +69,18 @@ public class AcaciaStairs extends WoodenStairs
     }
 
     @Override
+    public AcaciaStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    @Override
+    public AcaciaStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
     public AcaciaStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -69,27 +93,9 @@ public class AcaciaStairs extends WoodenStairs
     }
 
     @Override
-    public boolean isUpsideDown()
+    public AcaciaStairs getType(final BlockFace face, final boolean upsideDown)
     {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public Stairs getUpsideDown(final boolean upsideDown)
-    {
-        return null;  // TODO: implement
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return null;  // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getBlockFacing(final BlockFace face)
-    {
-        return null;  // TODO: implement
+        return getByID(Stairs.combine(face, upsideDown));
     }
 
     /**
@@ -118,6 +124,20 @@ public class AcaciaStairs extends WoodenStairs
     }
 
     /**
+     * Returns one of AcaciaStairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param blockFace  facing direction of stairs.
+     * @param upsideDown if stairs should be upside-down.
+     *
+     * @return sub-type of AcaciaStairs
+     */
+    public static AcaciaStairs getAcaciaStairs(final BlockFace blockFace, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(blockFace, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -131,6 +151,13 @@ public class AcaciaStairs extends WoodenStairs
 
     static
     {
-        AcaciaStairs.register(ACACIA_STAIRS);
+        AcaciaStairs.register(ACACIA_STAIRS_EAST);
+        AcaciaStairs.register(ACACIA_STAIRS_WEST);
+        AcaciaStairs.register(ACACIA_STAIRS_SOUTH);
+        AcaciaStairs.register(ACACIA_STAIRS_NORTH);
+        AcaciaStairs.register(ACACIA_STAIRS_EAST_UPSIDE_DOWN);
+        AcaciaStairs.register(ACACIA_STAIRS_WEST_UPSIDE_DOWN);
+        AcaciaStairs.register(ACACIA_STAIRS_SOUTH_UPSIDE_DOWN);
+        AcaciaStairs.register(ACACIA_STAIRS_NORTH_UPSIDE_DOWN);
     }
 }

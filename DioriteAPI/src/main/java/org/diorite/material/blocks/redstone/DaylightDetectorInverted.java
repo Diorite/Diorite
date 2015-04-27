@@ -83,7 +83,7 @@ public class DaylightDetectorInverted extends BlockMaterialData implements Activ
     }
 
     @Override
-    public BlockMaterialData getActivated(final boolean activate)
+    public DaylightDetectorInverted getActivated(final boolean activate)
     {
         return null; // TODO: implement
     }

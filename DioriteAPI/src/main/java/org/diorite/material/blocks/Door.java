@@ -1,7 +1,6 @@
 package org.diorite.material.blocks;
 
 import org.diorite.BlockFace;
-import org.diorite.material.BlockMaterialData;
 
 /**
  * Used by all door-based blocks
@@ -40,7 +39,7 @@ public interface Door extends Powerable, Directional, Openable
      *
      * @return sub-type of Door
      */
-    BlockMaterialData getType(boolean isPowered, boolean hingeOnRightSide);
+    Door getType(boolean isPowered, boolean hingeOnRightSide);
 
     /**
      * Returns sub-type of Door, it will always return buttom part of block with selected {@link BlockFace} and open state.
@@ -50,7 +49,7 @@ public interface Door extends Powerable, Directional, Openable
      *
      * @return sub-type of Door
      */
-    BlockMaterialData getType(BlockFace face, boolean isOpen);
+    Door getType(BlockFace face, boolean isOpen);
 
 
     /**
@@ -87,7 +86,7 @@ public interface Door extends Powerable, Directional, Openable
      * @throws RuntimeException if this is top part of door
      */
     @Override
-    BlockMaterialData getBlockFacing(BlockFace face) throws RuntimeException;
+    Door getBlockFacing(BlockFace face) throws RuntimeException;
 
     /**
      * Returns true if door is open, only bottom part of door defining if door is open.
@@ -109,7 +108,7 @@ public interface Door extends Powerable, Directional, Openable
      * @throws RuntimeException if this is top part of door
      */
     @Override
-    BlockMaterialData getOpen(boolean open) throws RuntimeException;
+    Door getOpen(boolean open) throws RuntimeException;
 
     /**
      * Returns true if door is powered, only top part of door defining if door is powered.
@@ -131,7 +130,7 @@ public interface Door extends Powerable, Directional, Openable
      * @throws RuntimeException if this is bottom part of door
      */
     @Override
-    BlockMaterialData getPowered(boolean powered) throws RuntimeException;
+    Door getPowered(boolean powered) throws RuntimeException;
 
     /**
      * Returns true if door has hinge on rgiht side, only top part of door defining side of hinge.
@@ -151,7 +150,7 @@ public interface Door extends Powerable, Directional, Openable
      *
      * @throws RuntimeException if this is bottom part of door
      */
-    BlockMaterialData getHingeOnRightSide(boolean onRightSide) throws RuntimeException;
+    Door getHingeOnRightSide(boolean onRightSide) throws RuntimeException;
 
 
     static byte combine(final boolean isPowered, final boolean hingeOnRightSide)
