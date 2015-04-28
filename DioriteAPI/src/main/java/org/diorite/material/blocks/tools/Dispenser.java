@@ -21,6 +21,11 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 public class Dispenser extends Stony implements Directional, Activatable
 {
     /**
+     * Bit flag defining if Dispenser is active.
+     * If bit is set to 0, then it isn't active
+     */
+    public static final byte  ACTIVE_FLAG      = 0x8;
+    /**
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
@@ -34,7 +39,6 @@ public class Dispenser extends Stony implements Directional, Activatable
      * Final copy of hardness from {@link MagicNumbers} class.
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__DISPENSER__HARDNESS;
-    public static final byte  ACTIVE_FLAG      = 0x08;
 
     public static final Dispenser DISPENSER_DOWN  = new Dispenser();
     public static final Dispenser DISPENSER_UP    = new Dispenser("UP", BlockFace.UP, false);
@@ -67,13 +71,6 @@ public class Dispenser extends Stony implements Directional, Activatable
     public Dispenser(final String enumName, final BlockFace facing, final boolean activated)
     {
         super(DISPENSER_DOWN.name(), DISPENSER_DOWN.getId(), DISPENSER_DOWN.getMinecraftId(), enumName, combine(facing, activated));
-        this.facing = facing;
-        this.activated = activated;
-    }
-
-    public Dispenser(final int maxStack, final String typeName, final BlockFace facing, final boolean activated)
-    {
-        super(DISPENSER_DOWN.name(), DISPENSER_DOWN.getId(), DISPENSER_DOWN.getMinecraftId(), maxStack, typeName, combine(facing, activated));
         this.facing = facing;
         this.activated = activated;
     }

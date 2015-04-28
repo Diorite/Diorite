@@ -217,9 +217,9 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  NetherBrickFence         NETHER_BRICK_FENCE         = NetherBrickFence.NETHER_BRICK_FENCE;
     public static final  NetherBrickStairs        NETHER_BRICK_STAIRS        = NetherBrickStairs.NETHER_BRICK_STAIRS_EAST;
     public static final  NetherWartBlock          NETHER_WART_BLOCK          = NetherWartBlock.NETHER_WART_BLOCK_0;
-    public static final  EnchantingTable          ENCHANTING_TABLE           = EnchantingTable.ENCHANTING_TABLE; // TODO: edit after editing auto-generated class
-    public static final  BrewingStandBlock        BREWING_STAND_BLOCK        = BrewingStandBlock.BREWING_STAND_BLOCK; // TODO: edit after editing auto-generated class
-    public static final  Cauldron                 CAULDRON                   = Cauldron.CAULDRON; // TODO: edit after editing auto-generated class
+    public static final  EnchantingTable          ENCHANTING_TABLE           = EnchantingTable.ENCHANTING_TABLE;
+    public static final  BrewingStandBlock        BREWING_STAND_BLOCK        = BrewingStandBlock.BREWING_STAND_BLOCK_EMPTY;
+    public static final  Cauldron                 CAULDRON                   = Cauldron.CAULDRON_EMPTY;
     public static final  EndPortal                END_PORTAL                 = EndPortal.END_PORTAL;
     public static final  EndPortalFrame           END_PORTAL_FRAME           = EndPortalFrame.END_PORTAL_FRAME_SOUTH;
     public static final  EndStone                 END_STONE                  = EndStone.END_STONE;
@@ -258,7 +258,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  QuartzBlock              QUARTZ_BLOCK               = QuartzBlock.QUARTZ_BLOCK;
     public static final  QuartzStairs             QUARTZ_STAIRS              = QuartzStairs.QUARTZ_STAIRS_EAST;
     public static final  ActivatorRail            ACTIVATOR_RAIL             = ActivatorRail.ACTIVATOR_RAIL_NORTH_SOUTH;
-    public static final  Dropper                  DROPPER                    = Dropper.DROPPER; // TODO: edit after editing auto-generated class
+    public static final  Dropper                  DROPPER                    = Dropper.DROPPER_DOWN;
     public static final  StainedHardenedClay      STAINED_HARDENED_CLAY      = StainedHardenedClay.STAINED_HARDENED_CLAY_WHITE;
     public static final  StainedGlassPane         STAINED_GLASS_PANE         = StainedGlassPane.STAINED_GLASS_PANE_WHITE;
     public static final  AcaciaStairs             ACACIA_STAIRS              = AcaciaStairs.ACACIA_STAIRS_EAST;
