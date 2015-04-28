@@ -101,7 +101,7 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
                     //object = new EntityMetadataObject(DataType.POSITION, index, new Vector3f(f, f1, f2)); // TODO
                     break;
                 default:
-                    throw new IllegalArgumentException("Unknown entity metadata type: " + type)
+                    throw new IllegalArgumentException("Unknown entity metadata type: " + type);
             }
             temp.add(object);
         }
