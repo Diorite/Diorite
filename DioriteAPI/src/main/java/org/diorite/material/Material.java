@@ -176,8 +176,8 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  WoodenPressurePlate      WOODEN_PRESSURE_PLATE      = WoodenPressurePlate.WOODEN_PRESSURE_PLATE;
     public static final  RedstoneOre              REDSTONE_ORE               = RedstoneOre.REDSTONE_ORE;
     public static final  RedstoneOreGlowing       REDSTONE_ORE_GLOWING       = RedstoneOreGlowing.REDSTONE_ORE_GLOWING;
-    public static final  RedstoneTorchOff         REDSTONE_TORCH_OFF         = RedstoneTorchOff.REDSTONE_TORCH_OFF; // TODO: edit after editing auto-generated class
-    public static final  RedstoneTorchOn          REDSTONE_TORCH_ON          = RedstoneTorchOn.REDSTONE_TORCH_ON; // TODO: edit after editing auto-generated class
+    public static final  RedstoneTorchOff         REDSTONE_TORCH_OFF         = RedstoneTorchOff.REDSTONE_TORCH_OFF_WEST;
+    public static final  RedstoneTorchOn          REDSTONE_TORCH_ON          = RedstoneTorchOn.REDSTONE_TORCH_ON_WEST;
     public static final  StoneButton              STONE_BUTTON               = StoneButton.STONE_BUTTON_DOWN;
     public static final  SnowLayer                SNOW_LAYER                 = SnowLayer.SNOW_LAYER_1;
     public static final  Ice                      ICE                        = Ice.ICE;
