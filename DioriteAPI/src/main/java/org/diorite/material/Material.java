@@ -194,8 +194,8 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  NetherPortal             NETHER_PORTAL              = NetherPortal.NETHER_PORTAL_EAST_WEST;
     public static final  PumpkinLantern           PUMPKIN_LANTERN            = PumpkinLantern.PUMPKIN_LANTERN_SOUTH;
     public static final  Cake                     CAKE                       = Cake.CAKE_0;
-    public static final  RedstoneRepeaterOff      REPEATER_OFF               = RedstoneRepeaterOff.REDSTONE_REPEATER_OFF; // TODO: edit after editing auto-generated class
-    public static final  RedstoneRepeaterOn       REPEATER_ON                = RedstoneRepeaterOn.REDSTONE_REPEATER_ON; // TODO: edit after editing auto-generated class
+    public static final  RedstoneRepeaterOff      REPEATER_OFF               = RedstoneRepeaterOff.REDSTONE_REPEATER_OFF_NORTH_1;
+    public static final  RedstoneRepeaterOn       REPEATER_ON                = RedstoneRepeaterOn.REDSTONE_REPEATER_ON_NORTH_1;
     public static final  StainedGlass             STAINED_GLASS              = StainedGlass.STAINED_GLASS_WHITE;
     public static final  WoodenTrapdoor           WOODEN_TRAPDOOR            = WoodenTrapdoor.WOODEN_TRAPDOOR_WEST_BOTTOM;
     public static final  MonsterEggTrap           MONSTER_EGG_TRAP           = MonsterEggTrap.MONSTER_EGG_TRAP_STONE;
