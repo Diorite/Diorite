@@ -2,6 +2,7 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -13,11 +14,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class RedstoneTorchOff extends RedstoneTorch
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 5;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +29,11 @@ public class RedstoneTorchOff extends RedstoneTorch
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__REDSTONE_TORCH_OFF__HARDNESS;
 
-    public static final RedstoneTorchOff REDSTONE_TORCH_OFF = new RedstoneTorchOff();
+    public static final RedstoneTorchOff REDSTONE_TORCH_OFF_WEST  = new RedstoneTorchOff();
+    public static final RedstoneTorchOff REDSTONE_TORCH_OFF_EAST  = new RedstoneTorchOff(BlockFace.EAST);
+    public static final RedstoneTorchOff REDSTONE_TORCH_OFF_SOUTH = new RedstoneTorchOff(BlockFace.SOUTH);
+    public static final RedstoneTorchOff REDSTONE_TORCH_OFF_NORTH = new RedstoneTorchOff(BlockFace.NORTH);
+    public static final RedstoneTorchOff REDSTONE_TORCH_OFF_UP    = new RedstoneTorchOff(BlockFace.UP);
 
     private static final Map<String, RedstoneTorchOff>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneTorchOff> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,17 +41,12 @@ public class RedstoneTorchOff extends RedstoneTorch
     @SuppressWarnings("MagicNumber")
     protected RedstoneTorchOff()
     {
-        super("REDSTONE_TORCH_OFF", 75, "minecraft:unlit_redstone_torch", "REDSTONE_TORCH_OFF", (byte) 0x00);
+        super("REDSTONE_TORCH_OFF", 76, "minecraft:redstone_torch", BlockFace.WEST);
     }
 
-    public RedstoneTorchOff(final String enumName, final int type)
+    public RedstoneTorchOff(final BlockFace face)
     {
-        super(REDSTONE_TORCH_OFF.name(), REDSTONE_TORCH_OFF.getId(), REDSTONE_TORCH_OFF.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public RedstoneTorchOff(final int maxStack, final String typeName, final byte type)
-    {
-        super(REDSTONE_TORCH_OFF.name(), REDSTONE_TORCH_OFF.getId(), REDSTONE_TORCH_OFF.getMinecraftId(), maxStack, typeName, type);
+        super(REDSTONE_TORCH_OFF_WEST.name(), REDSTONE_TORCH_OFF_WEST.getId(), REDSTONE_TORCH_OFF_WEST.getMinecraftId(), face);
     }
 
     @Override
@@ -80,6 +79,12 @@ public class RedstoneTorchOff extends RedstoneTorch
         return false;
     }
 
+    @Override
+    public RedstoneTorchOff getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
     /**
      * Returns one of RedstoneTorchOff sub-type based on sub-id, may return null
      *
@@ -106,6 +111,19 @@ public class RedstoneTorchOff extends RedstoneTorch
     }
 
     /**
+     * Returns one of RedstoneTorchOff sub-type based on facing direction.
+     * It will never return null.
+     *
+     * @param face facing direction of RedstoneTorchOff.
+     *
+     * @return sub-type of RedstoneTorchOff
+     */
+    public static RedstoneTorchOff getRedstoneTorchOff(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -119,6 +137,10 @@ public class RedstoneTorchOff extends RedstoneTorch
 
     static
     {
-        RedstoneTorchOff.register(REDSTONE_TORCH_OFF);
+        RedstoneTorchOff.register(REDSTONE_TORCH_OFF_WEST);
+        RedstoneTorchOff.register(REDSTONE_TORCH_OFF_EAST);
+        RedstoneTorchOff.register(REDSTONE_TORCH_OFF_SOUTH);
+        RedstoneTorchOff.register(REDSTONE_TORCH_OFF_NORTH);
+        RedstoneTorchOff.register(REDSTONE_TORCH_OFF_UP);
     }
 }

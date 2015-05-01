@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.Stairs;
 import org.diorite.material.blocks.wooden.WoodType;
 import org.diorite.utils.collections.SimpleStringHashMap;
@@ -17,11 +16,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class SpruceStairs extends WoodenStairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -33,7 +31,15 @@ public class SpruceStairs extends WoodenStairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__SPRUCE_STAIRS__HARDNESS;
 
-    public static final SpruceStairs SPRUCE_STAIRS = new SpruceStairs();
+    public static final SpruceStairs SPRUCE_STAIRS_EAST  = new SpruceStairs();
+    public static final SpruceStairs SPRUCE_STAIRS_WEST  = new SpruceStairs("WEST", BlockFace.WEST, false);
+    public static final SpruceStairs SPRUCE_STAIRS_SOUTH = new SpruceStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final SpruceStairs SPRUCE_STAIRS_NORTH = new SpruceStairs("NORTH", BlockFace.NORTH, false);
+
+    public static final SpruceStairs SPRUCE_STAIRS_EAST_UPSIDE_DOWN  = new SpruceStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final SpruceStairs SPRUCE_STAIRS_WEST_UPSIDE_DOWN  = new SpruceStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final SpruceStairs SPRUCE_STAIRS_SOUTH_UPSIDE_DOWN = new SpruceStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final SpruceStairs SPRUCE_STAIRS_NORTH_UPSIDE_DOWN = new SpruceStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, SpruceStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SpruceStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -41,7 +47,12 @@ public class SpruceStairs extends WoodenStairs
     @SuppressWarnings("MagicNumber")
     protected SpruceStairs()
     {
-        super("SPRUCE_STAIRS", 134, "minecraft:spruce_stairs", "SPRUCE_STAIRS", WoodType.SPRUCE);
+        super("SPRUCE_STAIRS", 134, "minecraft:spruce_stairs", "EAST", WoodType.SPRUCE, BlockFace.EAST, false);
+    }
+
+    public SpruceStairs(final String enumName, final BlockFace face, final boolean upsideDown)
+    {
+        super(SPRUCE_STAIRS_EAST.name(), SPRUCE_STAIRS_EAST.getId(), SPRUCE_STAIRS_EAST.getMinecraftId(), enumName, WoodType.SPRUCE, face, upsideDown);
     }
 
     @Override
@@ -57,6 +68,24 @@ public class SpruceStairs extends WoodenStairs
     }
 
     @Override
+    public SpruceStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    @Override
+    public SpruceStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
+    public SpruceStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public SpruceStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -66,30 +95,6 @@ public class SpruceStairs extends WoodenStairs
     public SpruceStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public boolean isUpsideDown()
-    {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public Stairs getUpsideDown(final boolean upsideDown)
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getBlockFacing(final BlockFace face)
-    {
-        return null; // TODO: implement
     }
 
     /**
@@ -118,6 +123,20 @@ public class SpruceStairs extends WoodenStairs
     }
 
     /**
+     * Returns one of SpruceStairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param blockFace  facing direction of stairs.
+     * @param upsideDown if stairs should be upside-down.
+     *
+     * @return sub-type of SpruceStairs
+     */
+    public static SpruceStairs getSpruceStairs(final BlockFace blockFace, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(blockFace, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -131,6 +150,13 @@ public class SpruceStairs extends WoodenStairs
 
     static
     {
-        SpruceStairs.register(SPRUCE_STAIRS);
+        SpruceStairs.register(SPRUCE_STAIRS_EAST);
+        SpruceStairs.register(SPRUCE_STAIRS_WEST);
+        SpruceStairs.register(SPRUCE_STAIRS_SOUTH);
+        SpruceStairs.register(SPRUCE_STAIRS_NORTH);
+        SpruceStairs.register(SPRUCE_STAIRS_EAST_UPSIDE_DOWN);
+        SpruceStairs.register(SPRUCE_STAIRS_WEST_UPSIDE_DOWN);
+        SpruceStairs.register(SPRUCE_STAIRS_SOUTH_UPSIDE_DOWN);
+        SpruceStairs.register(SPRUCE_STAIRS_NORTH_UPSIDE_DOWN);
     }
 }

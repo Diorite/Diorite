@@ -150,7 +150,6 @@ public final class WeakCollection<T> implements Collection<T>
     }
 
     @Override
-    @SuppressWarnings("all")
     public <U> U[] toArray(final U[] array)
     {
         return this.toCollection().toArray(array);

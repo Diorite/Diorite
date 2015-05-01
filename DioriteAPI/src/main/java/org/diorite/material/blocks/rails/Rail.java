@@ -13,11 +13,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class Rail extends Rails
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 10;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +28,16 @@ public class Rail extends Rails
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__RAIL__HARDNESS;
 
-    public static final Rail RAIL = new Rail();
+    public static final Rail RAIL_FLAT_NORTH_SOUTH  = new Rail();
+    public static final Rail RAIL_FLAT_WEST_EAST    = new Rail(RailType.FLAT_WEST_EAST);
+    public static final Rail RAIL_ASCENDING_EAST    = new Rail(RailType.ASCENDING_EAST);
+    public static final Rail RAIL_ASCENDING_WEST    = new Rail(RailType.ASCENDING_WEST);
+    public static final Rail RAIL_ASCENDING_NORTH   = new Rail(RailType.ASCENDING_NORTH);
+    public static final Rail RAIL_ASCENDING_SOUTH   = new Rail(RailType.ASCENDING_SOUTH);
+    public static final Rail RAIL_CURVED_SOUTH_EAST = new Rail(RailType.CURVED_SOUTH_EAST);
+    public static final Rail RAIL_CURVED_SOUTH_WEST = new Rail(RailType.CURVED_SOUTH_WEST);
+    public static final Rail RAIL_CURVED_NORTH_WEST = new Rail(RailType.CURVED_NORTH_WEST);
+    public static final Rail RAIL_CURVED_NORTH_EAST = new Rail(RailType.CURVED_NORTH_EAST);
 
     private static final Map<String, Rail>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Rail> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,18 +45,13 @@ public class Rail extends Rails
     @SuppressWarnings("MagicNumber")
     protected Rail()
     {
-        super("RAIL", 66, "minecraft:rail", "RAIL", RailType.FLAT_NORTH_SOUTH, (byte) 0x00);
+        super("RAIL", 66, "minecraft:rail", "FLAT_NORTH_SOUTH", RailType.FLAT_NORTH_SOUTH, (byte) 0x00);
     }
 
-//    public Rail(final String enumName, final int type)
-//    {
-//        super(RAIL.name(), RAIL.getId(), RAIL.getMinecraftId(), enumName, (byte) type);
-//    }
-//
-//    public Rail(final int maxStack, final String typeName, final byte type)
-//    {
-//        super(RAIL.name(), RAIL.getId(), RAIL.getMinecraftId(), maxStack, typeName, type);
-//    }
+    public Rail(final RailType type)
+    {
+        super(RAIL_FLAT_NORTH_SOUTH.name(), RAIL_FLAT_NORTH_SOUTH.getId(), RAIL_FLAT_NORTH_SOUTH.getMinecraftId(), type.name(), type, (byte) 0x0);
+    }
 
     @Override
     public float getBlastResistance()
@@ -75,9 +78,9 @@ public class Rail extends Rails
     }
 
     @Override
-    public Rails getRailType(final RailType railType)
+    public Rail getRailType(final RailType railType)
     {
-        return null; // TODO: implement
+        return getByID(railType.getFlag());
     }
 
     /**
@@ -106,6 +109,19 @@ public class Rail extends Rails
     }
 
     /**
+     * Returns one of Rail sub-type based on {@link RailType}.
+     * It will never return null.
+     *
+     * @param railType {@link RailType} of Rail.
+     *
+     * @return sub-type of Rail
+     */
+    public static Rail getRail(final RailType railType)
+    {
+        return getByID(railType.getFlag());
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -119,6 +135,15 @@ public class Rail extends Rails
 
     static
     {
-        Rail.register(RAIL);
+        Rail.register(RAIL_FLAT_NORTH_SOUTH);
+        Rail.register(RAIL_FLAT_WEST_EAST);
+        Rail.register(RAIL_ASCENDING_EAST);
+        Rail.register(RAIL_ASCENDING_WEST);
+        Rail.register(RAIL_ASCENDING_NORTH);
+        Rail.register(RAIL_ASCENDING_SOUTH);
+        Rail.register(RAIL_CURVED_SOUTH_EAST);
+        Rail.register(RAIL_CURVED_SOUTH_WEST);
+        Rail.register(RAIL_CURVED_NORTH_WEST);
+        Rail.register(RAIL_CURVED_NORTH_EAST);
     }
 }

@@ -30,14 +30,14 @@ public final class ClickEvent
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("action", this.action).append("value", this.value).toString();
     }
 
-    public static enum Action
+    public enum Action
     {
         OPEN_URL,
         OPEN_FILE,
         RUN_COMMAND,
         SUGGEST_COMMAND;
 
-        private Action()
+        Action()
         {
         }
     }

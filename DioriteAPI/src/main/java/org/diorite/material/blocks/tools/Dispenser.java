@@ -8,7 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.Activatable;
-import org.diorite.material.blocks.ContainerBlock;
 import org.diorite.material.blocks.Directional;
 import org.diorite.material.blocks.stony.Stony;
 import org.diorite.utils.collections.SimpleStringHashMap;
@@ -19,8 +18,13 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Dispenser" and all its subtypes.
  */
-public class Dispenser extends Stony implements ContainerBlock, Directional, Activatable
+public class Dispenser extends Stony implements Directional, Activatable
 {
+    /**
+     * Bit flag defining if Dispenser is active.
+     * If bit is set to 0, then it isn't active
+     */
+    public static final byte  ACTIVE_FLAG      = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
@@ -35,7 +39,6 @@ public class Dispenser extends Stony implements ContainerBlock, Directional, Act
      * Final copy of hardness from {@link MagicNumbers} class.
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__DISPENSER__HARDNESS;
-    public static final byte  ACTIVE_FLAG      = 0x08;
 
     public static final Dispenser DISPENSER_DOWN  = new Dispenser();
     public static final Dispenser DISPENSER_UP    = new Dispenser("UP", BlockFace.UP, false);
@@ -70,40 +73,6 @@ public class Dispenser extends Stony implements ContainerBlock, Directional, Act
         super(DISPENSER_DOWN.name(), DISPENSER_DOWN.getId(), DISPENSER_DOWN.getMinecraftId(), enumName, combine(facing, activated));
         this.facing = facing;
         this.activated = activated;
-    }
-
-    public Dispenser(final int maxStack, final String typeName, final BlockFace facing, final boolean activated)
-    {
-        super(DISPENSER_DOWN.name(), DISPENSER_DOWN.getId(), DISPENSER_DOWN.getMinecraftId(), maxStack, typeName, combine(facing, activated));
-        this.facing = facing;
-        this.activated = activated;
-    }
-
-    private static byte combine(final BlockFace facing, final boolean activated)
-    {
-        byte result = activated ? ACTIVE_FLAG : 0x00;
-        switch (facing)
-        {
-            case UP:
-                result |= 0x01;
-                break;
-            case NORTH:
-                result |= 0x02;
-                break;
-            case SOUTH:
-                result |= 0x03;
-                break;
-            case WEST:
-                result |= 0x04;
-                break;
-            case EAST:
-                result |= 0x05;
-                break;
-            case DOWN:
-            default:
-                return result;
-        }
-        return result;
     }
 
     @Override
@@ -159,6 +128,39 @@ public class Dispenser extends Stony implements ContainerBlock, Directional, Act
         return getByID(id);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("facing", this.facing).append("activated", this.activated).toString();
+    }
+
+    private static byte combine(final BlockFace facing, final boolean activated)
+    {
+        byte result = activated ? ACTIVE_FLAG : 0x00;
+        switch (facing)
+        {
+            case UP:
+                result |= 0x01;
+                break;
+            case NORTH:
+                result |= 0x02;
+                break;
+            case SOUTH:
+                result |= 0x03;
+                break;
+            case WEST:
+                result |= 0x04;
+                break;
+            case EAST:
+                result |= 0x05;
+                break;
+            case DOWN:
+            default:
+                return result;
+        }
+        return result;
+    }
+
     /**
      * Returns one of Dispenser sub-type based on sub-id, may return null
      *
@@ -184,6 +186,15 @@ public class Dispenser extends Stony implements ContainerBlock, Directional, Act
         return byName.get(name);
     }
 
+    /**
+     * Returns one of Dispenser sub-type based on {@link BlockFace} and activate state
+     * It will never return null.
+     *
+     * @param face     facing direction of Dispenser.
+     * @param activate if Dispenser should be activated/
+     *
+     * @return sub-type of Dispenser
+     */
     public static Dispenser getDispenser(final BlockFace face, final boolean activate)
     {
         return getByID(combine(face, activate));
@@ -215,11 +226,5 @@ public class Dispenser extends Stony implements ContainerBlock, Directional, Act
         Dispenser.register(DISPENSER_SOUTH_ACTIVE);
         Dispenser.register(DISPENSER_WEST_ACTIVE);
         Dispenser.register(DISPENSER_EAST_ACTIVE);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("facing", this.facing).append("activated", this.activated).toString();
     }
 }

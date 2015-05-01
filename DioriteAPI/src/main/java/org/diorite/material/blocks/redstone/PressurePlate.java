@@ -1,28 +1,33 @@
 package org.diorite.material.blocks.redstone;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.Activatable;
 
+/**
+ * Base abstract class for all pressure plate based blocks.
+ */
 public abstract class PressurePlate extends BlockMaterialData implements Activatable
 {
-    public PressurePlate(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
+    protected final boolean activated;
+
+    public PressurePlate(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final boolean activated)
     {
         super(enumName, id, minecraftId, typeName, type);
-    }
-
-    public PressurePlate(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
-    {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        this.activated = activated;
     }
 
     @Override
-    public PressurePlate getActivated(final boolean activate)
+    public boolean isActivated()
     {
-        return null; // TODO: implement
+        return this.activated;
     }
 
-    public static PressurePlate getType(final boolean activate)
+    @Override
+    public String toString()
     {
-        return null; // TODO: implement
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("activated", this.activated).toString();
     }
 }

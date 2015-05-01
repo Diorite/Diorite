@@ -2,9 +2,11 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.Activatable;
+import org.diorite.material.blocks.Directional;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,9 +15,9 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Lever" and all its subtypes.
  */
-public class Lever extends BlockMaterialData implements Activatable
+public class Lever extends BlockMaterialData implements Activatable, Directional
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
+    // TODO: auto-generated class, implement other types (sub-ids).
     /**
      * Sub-ids used by diorite/minecraft by default
      */
@@ -83,9 +85,21 @@ public class Lever extends BlockMaterialData implements Activatable
     }
 
     @Override
-    public BlockMaterialData getActivated(final boolean activate)
+    public Lever getActivated(final boolean activate)
     {
         return null; // TODO implement
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return null;
+    }
+
+    @Override
+    public Directional getBlockFacing(final BlockFace face)
+    {
+        return null;
     }
 
     /**

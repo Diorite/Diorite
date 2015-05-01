@@ -8,7 +8,6 @@ import org.diorite.world.World;
  * Creates perlin noise through unbiased octaves
  * From Bukkit project https://github.com/Bukkit/Bukkit
  */
-@SuppressWarnings("MagicNumber")
 public class PerlinOctaveGenerator extends OctaveGenerator
 {
 

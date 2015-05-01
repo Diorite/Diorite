@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface NbtAnonymousTagContainer extends NbtTagContainer
 {
-    public void addTag(NbtTag tag);
+    void addTag(NbtTag tag);
 
-    public List<NbtTag> getTags();
+    List<NbtTag> getTags();
 
-    public <T extends NbtTag> List<T> getTags(Class<T> tagClass);
+    <T extends NbtTag> List<T> getTags(Class<T> tagClass);
 
-    public void setTag(int i, NbtTag tag);
+    void setTag(int i, NbtTag tag);
 }

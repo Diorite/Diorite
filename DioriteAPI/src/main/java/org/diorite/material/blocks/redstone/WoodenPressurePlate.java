@@ -13,11 +13,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class WoodenPressurePlate extends PressurePlate
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 2;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +28,8 @@ public class WoodenPressurePlate extends PressurePlate
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__WOODEN_PRESSURE_PLATE__HARDNESS;
 
-    public static final WoodenPressurePlate WOODEN_PRESSURE_PLATE = new WoodenPressurePlate();
+    public static final WoodenPressurePlate WOODEN_PRESSURE_PLATE           = new WoodenPressurePlate();
+    public static final WoodenPressurePlate WOODEN_PRESSURE_PLATE_ACTIVATED = new WoodenPressurePlate("ACTIVATED", 0x1, true);
 
     private static final Map<String, WoodenPressurePlate>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WoodenPressurePlate> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,17 +37,12 @@ public class WoodenPressurePlate extends PressurePlate
     @SuppressWarnings("MagicNumber")
     protected WoodenPressurePlate()
     {
-        super("WOODEN_PRESSURE_PLATE", 72, "minecraft:wooden_pressure_plate", "WOODEN_PRESSURE_PLATE", (byte) 0x00);
+        super("WOODEN_PRESSURE_PLATE", 72, "minecraft:wooden_pressure_plate", "WOODEN_PRESSURE_PLATE", (byte) 0x00, false);
     }
 
-    public WoodenPressurePlate(final String enumName, final int type)
+    public WoodenPressurePlate(final String enumName, final int type, final boolean activated)
     {
-        super(WOODEN_PRESSURE_PLATE.name(), WOODEN_PRESSURE_PLATE.getId(), WOODEN_PRESSURE_PLATE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public WoodenPressurePlate(final int maxStack, final String typeName, final byte type)
-    {
-        super(WOODEN_PRESSURE_PLATE.name(), WOODEN_PRESSURE_PLATE.getId(), WOODEN_PRESSURE_PLATE.getMinecraftId(), maxStack, typeName, type);
+        super(WOODEN_PRESSURE_PLATE.name(), WOODEN_PRESSURE_PLATE.getId(), WOODEN_PRESSURE_PLATE.getMinecraftId(), enumName, (byte) type, activated);
     }
 
     @Override
@@ -75,9 +70,9 @@ public class WoodenPressurePlate extends PressurePlate
     }
 
     @Override
-    public boolean isActivated()
+    public WoodenPressurePlate getActivated(final boolean activated)
     {
-        return false; // TODO: implement
+        return getByID(activated ? 1 : 0);
     }
 
     /**
@@ -106,6 +101,19 @@ public class WoodenPressurePlate extends PressurePlate
     }
 
     /**
+     * Returns one of WoodenPressurePlate sub-type based on activated state.
+     * It will never return null.
+     *
+     * @param activated if pressure player should be activated.
+     *
+     * @return sub-type of WoodenPressurePlate
+     */
+    public static WoodenPressurePlate getWoodenPressurePlate(final boolean activated)
+    {
+        return getByID(activated ? 1 : 0);
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -120,5 +128,6 @@ public class WoodenPressurePlate extends PressurePlate
     static
     {
         WoodenPressurePlate.register(WOODEN_PRESSURE_PLATE);
+        WoodenPressurePlate.register(WOODEN_PRESSURE_PLATE_ACTIVATED);
     }
 }

@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConcurrentSimpleStringHashMap<T> extends ConcurrentHashMap<String, T>
 {
 
+    private static final long serialVersionUID = - 6191236306376705410L;
+
     public ConcurrentSimpleStringHashMap(final int initialCapacity, final float loadFactor, final int concurrencyLevel)
     {
         super(initialCapacity, loadFactor, concurrencyLevel);

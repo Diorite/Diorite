@@ -2,6 +2,9 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.SimpleStringHashMap;
@@ -14,11 +17,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class Jukebox extends BlockMaterialData
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 2;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,25 +32,25 @@ public class Jukebox extends BlockMaterialData
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__JUKEBOX__HARDNESS;
 
-    public static final Jukebox JUKEBOX = new Jukebox();
+    public static final Jukebox JUKEBOX           = new Jukebox();
+    public static final Jukebox JUKEBOX_WITH_DISC = new Jukebox("WITH_DISC", 0x1, true);
 
     private static final Map<String, Jukebox>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Jukebox> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected boolean withDisc;
+
     @SuppressWarnings("MagicNumber")
     protected Jukebox()
     {
-        super("JUKEBOX", 84, "minecraft:jukebox", "JUKEBOX", (byte) 0x00);
+        super("JUKEBOX", 84, "minecraft:jukebox", "EMPTY", (byte) 0x00);
+        this.withDisc = false;
     }
 
-    public Jukebox(final String enumName, final int type)
+    public Jukebox(final String enumName, final int type, final boolean withDisc)
     {
         super(JUKEBOX.name(), JUKEBOX.getId(), JUKEBOX.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public Jukebox(final int maxStack, final String typeName, final byte type)
-    {
-        super(JUKEBOX.name(), JUKEBOX.getId(), JUKEBOX.getMinecraftId(), maxStack, typeName, type);
+        this.withDisc = withDisc;
     }
 
     @Override
@@ -63,6 +65,16 @@ public class Jukebox extends BlockMaterialData
         return HARDNESS;
     }
 
+    public boolean isWithDisc()
+    {
+        return this.withDisc;
+    }
+
+    public Jukebox getWithDisc(final boolean withDisc)
+    {
+        return getByID(withDisc ? 1 : 0);
+    }
+
     @Override
     public Jukebox getType(final String name)
     {
@@ -73,6 +85,12 @@ public class Jukebox extends BlockMaterialData
     public Jukebox getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("withDisc", this.withDisc).toString();
     }
 
     /**
@@ -101,6 +119,19 @@ public class Jukebox extends BlockMaterialData
     }
 
     /**
+     * Returns one of Jukebox sub-type with or without disc.
+     * It will never return null.
+     *
+     * @param withDisc if it should contains disc.
+     *
+     * @return sub-type of Jukebox
+     */
+    public static Jukebox getJukebox(final boolean withDisc)
+    {
+        return getByID(withDisc ? 1 : 0);
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -115,5 +146,6 @@ public class Jukebox extends BlockMaterialData
     static
     {
         Jukebox.register(JUKEBOX);
+        Jukebox.register(JUKEBOX_WITH_DISC);
     }
 }

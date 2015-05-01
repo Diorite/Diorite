@@ -2,6 +2,9 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
@@ -16,11 +19,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class StoneBrickStairs extends BlockMaterialData implements Stairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -32,25 +34,35 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_BRICK_STAIRS__HARDNESS;
 
-    public static final StoneBrickStairs STONE_BRICK_STAIRS = new StoneBrickStairs();
+    public static final StoneBrickStairs STONE_BRICK_STAIRS_EAST  = new StoneBrickStairs();
+    public static final StoneBrickStairs STONE_BRICK_STAIRS_WEST  = new StoneBrickStairs("WEST", BlockFace.WEST, false);
+    public static final StoneBrickStairs STONE_BRICK_STAIRS_SOUTH = new StoneBrickStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final StoneBrickStairs STONE_BRICK_STAIRS_NORTH = new StoneBrickStairs("NORTH", BlockFace.NORTH, false);
+
+    public static final StoneBrickStairs STONE_BRICK_STAIRS_EAST_UPSIDE_DOWN  = new StoneBrickStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final StoneBrickStairs STONE_BRICK_STAIRS_WEST_UPSIDE_DOWN  = new StoneBrickStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final StoneBrickStairs STONE_BRICK_STAIRS_SOUTH_UPSIDE_DOWN = new StoneBrickStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final StoneBrickStairs STONE_BRICK_STAIRS_NORTH_UPSIDE_DOWN = new StoneBrickStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, StoneBrickStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StoneBrickStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+    protected final boolean   upsideDown;
+
     @SuppressWarnings("MagicNumber")
     protected StoneBrickStairs()
     {
-        super("STONE_BRICK_STAIRS", 109, "minecraft:stone_brick_stairs", "STONE_BRICK_STAIRS", (byte) 0x00);
+        super("STONE_BRICK_STAIRS", 109, "minecraft:stone_brick_stairs", "EAST", (byte) 0x00);
+        this.face = BlockFace.EAST;
+        this.upsideDown = false;
     }
 
-    public StoneBrickStairs(final String enumName, final int type)
+    public StoneBrickStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
-        super(STONE_BRICK_STAIRS.name(), STONE_BRICK_STAIRS.getId(), STONE_BRICK_STAIRS.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public StoneBrickStairs(final int maxStack, final String typeName, final byte type)
-    {
-        super(STONE_BRICK_STAIRS.name(), STONE_BRICK_STAIRS.getId(), STONE_BRICK_STAIRS.getMinecraftId(), maxStack, typeName, type);
+        super(STONE_BRICK_STAIRS_EAST.name(), STONE_BRICK_STAIRS_EAST.getId(), STONE_BRICK_STAIRS_EAST.getMinecraftId(), enumName, Stairs.combine(face, upsideDown));
+        this.face = face;
+        this.upsideDown = upsideDown;
     }
 
     @Override
@@ -66,6 +78,36 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
+    public boolean isUpsideDown()
+    {
+        return this.upsideDown;
+    }
+
+    @Override
+    public StoneBrickStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
+    public StoneBrickStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public StoneBrickStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    @Override
     public StoneBrickStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -78,27 +120,9 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
-    public boolean isUpsideDown()
+    public String toString()
     {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public Stairs getUpsideDown(final boolean upsideDown)
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getBlockFacing(final BlockFace face)
-    {
-        return null; // TODO: implement
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 
     /**
@@ -127,6 +151,20 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
     }
 
     /**
+     * Returns one of StoneBrickStairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param blockFace  facing direction of stairs.
+     * @param upsideDown if stairs should be upside-down.
+     *
+     * @return sub-type of StoneBrickStairs
+     */
+    public static StoneBrickStairs getStoneBrickStairs(final BlockFace blockFace, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(blockFace, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -140,6 +178,13 @@ public class StoneBrickStairs extends BlockMaterialData implements Stairs
 
     static
     {
-        StoneBrickStairs.register(STONE_BRICK_STAIRS);
+        StoneBrickStairs.register(STONE_BRICK_STAIRS_EAST);
+        StoneBrickStairs.register(STONE_BRICK_STAIRS_WEST);
+        StoneBrickStairs.register(STONE_BRICK_STAIRS_SOUTH);
+        StoneBrickStairs.register(STONE_BRICK_STAIRS_NORTH);
+        StoneBrickStairs.register(STONE_BRICK_STAIRS_EAST_UPSIDE_DOWN);
+        StoneBrickStairs.register(STONE_BRICK_STAIRS_WEST_UPSIDE_DOWN);
+        StoneBrickStairs.register(STONE_BRICK_STAIRS_SOUTH_UPSIDE_DOWN);
+        StoneBrickStairs.register(STONE_BRICK_STAIRS_NORTH_UPSIDE_DOWN);
     }
 }

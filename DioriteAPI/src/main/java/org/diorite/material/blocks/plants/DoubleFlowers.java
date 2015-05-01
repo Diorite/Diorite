@@ -13,11 +13,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class DoubleFlowers extends Plant
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 7;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +28,13 @@ public class DoubleFlowers extends Plant
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__DOUBLE_FLOWERS__HARDNESS;
 
-    public static final DoubleFlowers DOUBLE_FLOWERS = new DoubleFlowers();
+    public static final DoubleFlowers DOUBLE_FLOWERS_SUNFLOWER = new DoubleFlowers();
+    public static final DoubleFlowers DOUBLE_FLOWERS_LILAC     = new DoubleFlowers("LILAC", 0x1);
+    public static final DoubleFlowers DOUBLE_FLOWERS_TALLGRASS = new DoubleFlowers("TALLGRASS", 0x2);
+    public static final DoubleFlowers DOUBLE_FLOWERS_FERN      = new DoubleFlowers("FERN", 0x3);
+    public static final DoubleFlowers DOUBLE_FLOWERS_ROSE_BUSH = new DoubleFlowers("ROSE_BUSH", 0x4);
+    public static final DoubleFlowers DOUBLE_FLOWERS_PEONY     = new DoubleFlowers("PEONY", 0x5);
+    public static final DoubleFlowers DOUBLE_FLOWERS_TOP_ALL   = new DoubleFlowers("TOP_ALL", 0x8);
 
     private static final Map<String, DoubleFlowers>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<DoubleFlowers> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,17 +42,12 @@ public class DoubleFlowers extends Plant
     @SuppressWarnings("MagicNumber")
     protected DoubleFlowers()
     {
-        super("DOUBLE_FLOWERS", 175, "minecraft:double_plant", "DOUBLE_FLOWERS", (byte) 0x00);
+        super("DOUBLE_FLOWERS", 175, "minecraft:double_plant", "SUNFLOWER", (byte) 0x00);
     }
 
     public DoubleFlowers(final String enumName, final int type)
     {
-        super(DOUBLE_FLOWERS.name(), DOUBLE_FLOWERS.getId(), DOUBLE_FLOWERS.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public DoubleFlowers(final int maxStack, final String typeName, final byte type)
-    {
-        super(DOUBLE_FLOWERS.name(), DOUBLE_FLOWERS.getId(), DOUBLE_FLOWERS.getMinecraftId(), maxStack, typeName, type);
+        super(DOUBLE_FLOWERS_SUNFLOWER.name(), DOUBLE_FLOWERS_SUNFLOWER.getId(), DOUBLE_FLOWERS_SUNFLOWER.getMinecraftId(), enumName, (byte) type);
     }
 
     @Override
@@ -113,6 +113,12 @@ public class DoubleFlowers extends Plant
 
     static
     {
-        DoubleFlowers.register(DOUBLE_FLOWERS);
+        DoubleFlowers.register(DOUBLE_FLOWERS_SUNFLOWER);
+        DoubleFlowers.register(DOUBLE_FLOWERS_LILAC);
+        DoubleFlowers.register(DOUBLE_FLOWERS_TALLGRASS);
+        DoubleFlowers.register(DOUBLE_FLOWERS_FERN);
+        DoubleFlowers.register(DOUBLE_FLOWERS_ROSE_BUSH);
+        DoubleFlowers.register(DOUBLE_FLOWERS_PEONY);
+        DoubleFlowers.register(DOUBLE_FLOWERS_TOP_ALL);
     }
 }

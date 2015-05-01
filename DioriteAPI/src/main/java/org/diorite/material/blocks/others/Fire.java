@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.blocks.AgeableBlock;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -12,13 +13,13 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Fire" and all its subtypes.
  */
-public class Fire extends BlockMaterialData
+@SuppressWarnings("MagicNumber")
+public class Fire extends BlockMaterialData implements AgeableBlock
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 16;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,7 +31,22 @@ public class Fire extends BlockMaterialData
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__FIRE__HARDNESS;
 
-    public static final Fire FIRE = new Fire();
+    public static final Fire FIRE_0  = new Fire();
+    public static final Fire FIRE_1  = new Fire(0x1);
+    public static final Fire FIRE_2  = new Fire(0x2);
+    public static final Fire FIRE_3  = new Fire(0x3);
+    public static final Fire FIRE_4  = new Fire(0x4);
+    public static final Fire FIRE_5  = new Fire(0x5);
+    public static final Fire FIRE_6  = new Fire(0x6);
+    public static final Fire FIRE_7  = new Fire(0x7);
+    public static final Fire FIRE_8  = new Fire(0x8);
+    public static final Fire FIRE_9  = new Fire(0x9);
+    public static final Fire FIRE_10 = new Fire(0xA);
+    public static final Fire FIRE_11 = new Fire(0xB);
+    public static final Fire FIRE_12 = new Fire(0xC);
+    public static final Fire FIRE_13 = new Fire(0xD);
+    public static final Fire FIRE_14 = new Fire(0xE);
+    public static final Fire FIRE_15 = new Fire(0xF);
 
     private static final Map<String, Fire>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Fire> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -38,17 +54,12 @@ public class Fire extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected Fire()
     {
-        super("FIRE", 51, "minecraft:fire", "FIRE", (byte) 0x00);
+        super("FIRE", 51, "minecraft:fire", "0", (byte) 0x0);
     }
 
-    public Fire(final String enumName, final int type)
+    public Fire(final int age)
     {
-        super(FIRE.name(), FIRE.getId(), FIRE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public Fire(final int maxStack, final String typeName, final byte type)
-    {
-        super(FIRE.name(), FIRE.getId(), FIRE.getMinecraftId(), maxStack, typeName, type);
+        super(FIRE_0.name(), FIRE_0.getId(), FIRE_0.getMinecraftId(), Integer.toString(age), (byte) age);
     }
 
     @Override
@@ -73,6 +84,18 @@ public class Fire extends BlockMaterialData
     public Fire getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public int getAge()
+    {
+        return this.type;
+    }
+
+    @Override
+    public Fire getAge(final int age)
+    {
+        return getByID(age);
     }
 
     /**
@@ -101,6 +124,24 @@ public class Fire extends BlockMaterialData
     }
 
     /**
+     * Returns one of Fire sub-type based on age.
+     * It will never return null.
+     *
+     * @param age age of fire.
+     *
+     * @return sub-type of Fire
+     */
+    public static Fire getFire(final int age)
+    {
+        final Fire fire = getByID(age);
+        if (fire == null)
+        {
+            return FIRE_0;
+        }
+        return fire;
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -114,6 +155,21 @@ public class Fire extends BlockMaterialData
 
     static
     {
-        Fire.register(FIRE);
+        Fire.register(FIRE_0);
+        Fire.register(FIRE_1);
+        Fire.register(FIRE_2);
+        Fire.register(FIRE_3);
+        Fire.register(FIRE_4);
+        Fire.register(FIRE_5);
+        Fire.register(FIRE_6);
+        Fire.register(FIRE_7);
+        Fire.register(FIRE_8);
+        Fire.register(FIRE_9);
+        Fire.register(FIRE_10);
+        Fire.register(FIRE_11);
+        Fire.register(FIRE_12);
+        Fire.register(FIRE_13);
+        Fire.register(FIRE_14);
+        Fire.register(FIRE_15);
     }
 }

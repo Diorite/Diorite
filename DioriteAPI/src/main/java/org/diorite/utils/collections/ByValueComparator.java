@@ -1,11 +1,13 @@
 package org.diorite.utils.collections;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ByValueComparator<U extends Comparable<U>, T extends Comparable<T>> implements Comparator<U>
+public class ByValueComparator<U extends Comparable<U>, T extends Comparable<T>> implements Comparator<U>, Serializable
 {
+    private static final long serialVersionUID = - 1388731513596719175L;
     protected final boolean   ascend;
     protected final Map<U, T> map;
 

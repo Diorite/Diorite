@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.Activatable;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,9 +12,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "DaylightDetector" and all its subtypes.
  */
-public class DaylightDetector extends BlockMaterialData implements Activatable
+public class DaylightDetector extends BlockMaterialData
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
@@ -74,18 +72,6 @@ public class DaylightDetector extends BlockMaterialData implements Activatable
     public DaylightDetector getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public boolean isActivated()
-    {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getActivated(final boolean activate)
-    {
-        return null;  // TODO: implement
     }
 
     /**

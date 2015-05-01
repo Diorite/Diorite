@@ -13,11 +13,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class StonePressurePlate extends PressurePlate
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 2;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +28,8 @@ public class StonePressurePlate extends PressurePlate
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_PRESSURE_PLATE__HARDNESS;
 
-    public static final StonePressurePlate STONE_PRESSURE_PLATE = new StonePressurePlate();
+    public static final StonePressurePlate STONE_PRESSURE_PLATE           = new StonePressurePlate();
+    public static final StonePressurePlate STONE_PRESSURE_PLATE_ACTIVATED = new StonePressurePlate("ACTIVATED", 0x1, true);
 
     private static final Map<String, StonePressurePlate>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StonePressurePlate> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,17 +37,12 @@ public class StonePressurePlate extends PressurePlate
     @SuppressWarnings("MagicNumber")
     protected StonePressurePlate()
     {
-        super("STONE_PRESSURE_PLATE", 70, "minecraft:stone_pressure_plate", "STONE_PRESSURE_PLATE", (byte) 0x00);
+        super("STONE_PRESSURE_PLATE", 70, "minecraft:stone_pressure_plate", "STONE_PRESSURE_PLATE", (byte) 0x00, false);
     }
 
-    public StonePressurePlate(final String enumName, final int type)
+    public StonePressurePlate(final String enumName, final int type, final boolean activated)
     {
-        super(STONE_PRESSURE_PLATE.name(), STONE_PRESSURE_PLATE.getId(), STONE_PRESSURE_PLATE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public StonePressurePlate(final int maxStack, final String typeName, final byte type)
-    {
-        super(STONE_PRESSURE_PLATE.name(), STONE_PRESSURE_PLATE.getId(), STONE_PRESSURE_PLATE.getMinecraftId(), maxStack, typeName, type);
+        super(STONE_PRESSURE_PLATE.name(), STONE_PRESSURE_PLATE.getId(), STONE_PRESSURE_PLATE.getMinecraftId(), enumName, (byte) type, activated);
     }
 
     @Override
@@ -75,9 +70,9 @@ public class StonePressurePlate extends PressurePlate
     }
 
     @Override
-    public boolean isActivated()
+    public StonePressurePlate getActivated(final boolean activated)
     {
-        return false; // TODO: implement
+        return getByID(activated ? 1 : 0);
     }
 
     /**
@@ -106,6 +101,19 @@ public class StonePressurePlate extends PressurePlate
     }
 
     /**
+     * Returns one of StonePressurePlate sub-type based on activated state.
+     * It will never return null.
+     *
+     * @param activated if pressure player should be activated.
+     *
+     * @return sub-type of StonePressurePlate
+     */
+    public static StonePressurePlate getStonePressurePlate(final boolean activated)
+    {
+        return getByID(activated ? 1 : 0);
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -120,5 +128,6 @@ public class StonePressurePlate extends PressurePlate
     static
     {
         StonePressurePlate.register(STONE_PRESSURE_PLATE);
+        StonePressurePlate.register(STONE_PRESSURE_PLATE_ACTIVATED);
     }
 }

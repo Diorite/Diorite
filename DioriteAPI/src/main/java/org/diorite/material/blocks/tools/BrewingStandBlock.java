@@ -2,9 +2,11 @@ package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.ContainerBlock;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,13 +15,27 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "BrewingStandBlock" and all its subtypes.
  */
-public class BrewingStandBlock extends BlockMaterialData implements ContainerBlock
+public class BrewingStandBlock extends BlockMaterialData
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
+    /**
+     * Bit flag defining if slot 0 of brewing stand have potion in it
+     * If bit is set to 0, then slot is empty.
+     */
+    public static final byte  SLOT_0_FLAG      = 0x1;
+    /**
+     * Bit flag defining if slot 1 of brewing stand have potion in it
+     * If bit is set to 0, then slot is empty.
+     */
+    public static final byte  SLOT_1_FLAG      = 0x2;
+    /**
+     * Bit flag defining if slot 2 of brewing stand have potion in it
+     * If bit is set to 0, then slot is empty.
+     */
+    public static final byte  SLOT_2_FLAG      = 0x4;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -31,25 +47,45 @@ public class BrewingStandBlock extends BlockMaterialData implements ContainerBlo
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__BREWING_STAND_BLOCK__HARDNESS;
 
-    public static final BrewingStandBlock BREWING_STAND_BLOCK = new BrewingStandBlock();
+    public static final BrewingStandBlock BREWING_STAND_BLOCK_EMPTY = new BrewingStandBlock();
+    public static final BrewingStandBlock BREWING_STAND_BLOCK_F_E_E = new BrewingStandBlock("F_E_E", true, false, false);
+    public static final BrewingStandBlock BREWING_STAND_BLOCK_E_F_E = new BrewingStandBlock("E_F_E", false, true, false);
+    public static final BrewingStandBlock BREWING_STAND_BLOCK_F_F_E = new BrewingStandBlock("F_F_E", true, true, false);
+    public static final BrewingStandBlock BREWING_STAND_BLOCK_E_E_F = new BrewingStandBlock("E_E_F", false, false, true);
+    public static final BrewingStandBlock BREWING_STAND_BLOCK_F_E_F = new BrewingStandBlock("F_E_F", true, false, true);
+    public static final BrewingStandBlock BREWING_STAND_BLOCK_E_F_F = new BrewingStandBlock("E_F_F", false, true, true);
+    public static final BrewingStandBlock BREWING_STAND_BLOCK_FULL  = new BrewingStandBlock("FULL", true, true, true);
 
     private static final Map<String, BrewingStandBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BrewingStandBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final boolean[] hasBottle;
+
     @SuppressWarnings("MagicNumber")
     protected BrewingStandBlock()
     {
-        super("BREWING_STAND_BLOCK", 117, "minecraft:brewing_stand", "BREWING_STAND_BLOCK", (byte) 0x00);
+        super("BREWING_STAND_BLOCK", 117, "minecraft:brewing_stand", "EMPTY", (byte) 0x00);
+        this.hasBottle = new boolean[3];
     }
 
-    public BrewingStandBlock(final String enumName, final int type)
+    public BrewingStandBlock(final String enumName, final boolean slot0, final boolean slot1, final boolean slot2)
     {
-        super(BREWING_STAND_BLOCK.name(), BREWING_STAND_BLOCK.getId(), BREWING_STAND_BLOCK.getMinecraftId(), enumName, (byte) type);
+        super(BREWING_STAND_BLOCK_EMPTY.name(), BREWING_STAND_BLOCK_EMPTY.getId(), BREWING_STAND_BLOCK_EMPTY.getMinecraftId(), enumName, combine(slot0, slot1, slot2));
+        this.hasBottle = new boolean[]{slot0, slot1, slot2};
     }
 
-    public BrewingStandBlock(final int maxStack, final String typeName, final byte type)
+    private static byte combine(final boolean slot0, final boolean slot1, final boolean slot2)
     {
-        super(BREWING_STAND_BLOCK.name(), BREWING_STAND_BLOCK.getId(), BREWING_STAND_BLOCK.getMinecraftId(), maxStack, typeName, type);
+        byte result = slot0 ? SLOT_0_FLAG : 0;
+        if (slot1)
+        {
+            result |= SLOT_1_FLAG;
+        }
+        if (slot2)
+        {
+            result |= SLOT_2_FLAG;
+        }
+        return result;
     }
 
     @Override
@@ -62,6 +98,33 @@ public class BrewingStandBlock extends BlockMaterialData implements ContainerBlo
     public float getHardness()
     {
         return HARDNESS;
+    }
+
+    /**
+     * @param slot number of slot, couted from 0.
+     *
+     * @return true if selected slot have item in it.
+     *
+     * @throws ArrayIndexOutOfBoundsException if slot is > 2 or < 0
+     */
+    public boolean isSlotFull(final int slot) throws ArrayIndexOutOfBoundsException
+    {
+        return this.hasBottle[slot];
+    }
+
+    /**
+     * Returns one of BrewingStandBlock sub-type based on used slots.
+     * It will never return null.
+     *
+     * @param isFull0 if brewing stand should have item in slot 0
+     * @param isFull1 if brewing stand should have item in slot 1
+     * @param isFull2 if brewing stand should have item in slot 2
+     *
+     * @return sub-type of BrewingStandBlock
+     */
+    public BrewingStandBlock getType(final boolean isFull0, final boolean isFull1, final boolean isFull2)
+    {
+        return getByID(combine(isFull0, isFull1, isFull2));
     }
 
     @Override
@@ -102,6 +165,21 @@ public class BrewingStandBlock extends BlockMaterialData implements ContainerBlo
     }
 
     /**
+     * Returns one of BrewingStandBlock sub-type based on used slots.
+     * It will never return null.
+     *
+     * @param isFull0 if brewing stand should have item in slot 0
+     * @param isFull1 if brewing stand should have item in slot 1
+     * @param isFull2 if brewing stand should have item in slot 2
+     *
+     * @return sub-type of BrewingStandBlock
+     */
+    public static BrewingStandBlock getBrewingStandBlock(final boolean isFull0, final boolean isFull1, final boolean isFull2)
+    {
+        return getByID(combine(isFull0, isFull1, isFull2));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -115,6 +193,19 @@ public class BrewingStandBlock extends BlockMaterialData implements ContainerBlo
 
     static
     {
-        BrewingStandBlock.register(BREWING_STAND_BLOCK);
+        BrewingStandBlock.register(BREWING_STAND_BLOCK_EMPTY);
+        BrewingStandBlock.register(BREWING_STAND_BLOCK_F_E_E);
+        BrewingStandBlock.register(BREWING_STAND_BLOCK_E_F_E);
+        BrewingStandBlock.register(BREWING_STAND_BLOCK_F_F_E);
+        BrewingStandBlock.register(BREWING_STAND_BLOCK_E_E_F);
+        BrewingStandBlock.register(BREWING_STAND_BLOCK_F_E_F);
+        BrewingStandBlock.register(BREWING_STAND_BLOCK_E_F_F);
+        BrewingStandBlock.register(BREWING_STAND_BLOCK_FULL);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("hasBottle", this.hasBottle).toString();
     }
 }

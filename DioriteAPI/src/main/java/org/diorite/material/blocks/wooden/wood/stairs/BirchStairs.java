@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.Stairs;
 import org.diorite.material.blocks.wooden.WoodType;
 import org.diorite.utils.collections.SimpleStringHashMap;
@@ -17,11 +16,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class BirchStairs extends WoodenStairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -33,7 +31,15 @@ public class BirchStairs extends WoodenStairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__BIRCH_STAIRS__HARDNESS;
 
-    public static final BirchStairs BIRCH_STAIRS = new BirchStairs();
+    public static final BirchStairs BIRCH_STAIRS_EAST  = new BirchStairs();
+    public static final BirchStairs BIRCH_STAIRS_WEST  = new BirchStairs("WEST", BlockFace.WEST, false);
+    public static final BirchStairs BIRCH_STAIRS_SOUTH = new BirchStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final BirchStairs BIRCH_STAIRS_NORTH = new BirchStairs("NORTH", BlockFace.NORTH, false);
+
+    public static final BirchStairs BIRCH_STAIRS_EAST_UPSIDE_DOWN  = new BirchStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final BirchStairs BIRCH_STAIRS_WEST_UPSIDE_DOWN  = new BirchStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final BirchStairs BIRCH_STAIRS_SOUTH_UPSIDE_DOWN = new BirchStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final BirchStairs BIRCH_STAIRS_NORTH_UPSIDE_DOWN = new BirchStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, BirchStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BirchStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -41,7 +47,12 @@ public class BirchStairs extends WoodenStairs
     @SuppressWarnings("MagicNumber")
     protected BirchStairs()
     {
-        super("BIRCH_STAIRS", 135, "minecraft:birch_stairs", "BIRCH_STAIRS", WoodType.BIRCH);
+        super("BIRCH_STAIRS", 135, "minecraft:birch_stairs", "EAST", WoodType.BIRCH, BlockFace.EAST, false);
+    }
+
+    public BirchStairs(final String enumName, final BlockFace face, final boolean upsideDown)
+    {
+        super(BIRCH_STAIRS_EAST.name(), BIRCH_STAIRS_EAST.getId(), BIRCH_STAIRS_EAST.getMinecraftId(), enumName, WoodType.BIRCH, face, upsideDown);
     }
 
     @Override
@@ -57,6 +68,24 @@ public class BirchStairs extends WoodenStairs
     }
 
     @Override
+    public BirchStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    @Override
+    public BirchStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
+    public BirchStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public BirchStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -66,30 +95,6 @@ public class BirchStairs extends WoodenStairs
     public BirchStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public boolean isUpsideDown()
-    {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public Stairs getUpsideDown(final boolean upsideDown)
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getBlockFacing(final BlockFace face)
-    {
-        return null; // TODO: implement
     }
 
     /**
@@ -118,6 +123,20 @@ public class BirchStairs extends WoodenStairs
     }
 
     /**
+     * Returns one of BirchStairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param blockFace  facing direction of stairs.
+     * @param upsideDown if stairs should be upside-down.
+     *
+     * @return sub-type of BirchStairs
+     */
+    public static BirchStairs getBirchStairs(final BlockFace blockFace, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(blockFace, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -131,6 +150,13 @@ public class BirchStairs extends WoodenStairs
 
     static
     {
-        BirchStairs.register(BIRCH_STAIRS);
+        BirchStairs.register(BIRCH_STAIRS_EAST);
+        BirchStairs.register(BIRCH_STAIRS_WEST);
+        BirchStairs.register(BIRCH_STAIRS_SOUTH);
+        BirchStairs.register(BIRCH_STAIRS_NORTH);
+        BirchStairs.register(BIRCH_STAIRS_EAST_UPSIDE_DOWN);
+        BirchStairs.register(BIRCH_STAIRS_WEST_UPSIDE_DOWN);
+        BirchStairs.register(BIRCH_STAIRS_SOUTH_UPSIDE_DOWN);
+        BirchStairs.register(BIRCH_STAIRS_NORTH_UPSIDE_DOWN);
     }
 }

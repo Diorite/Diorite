@@ -14,11 +14,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class RedSandstone extends BlockMaterialData
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 3;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,7 +29,9 @@ public class RedSandstone extends BlockMaterialData
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__RED_SANDSTONE__HARDNESS;
 
-    public static final RedSandstone RED_SANDSTONE = new RedSandstone();
+    public static final RedSandstone RED_SANDSTONE          = new RedSandstone();
+    public static final RedSandstone RED_SANDSTONE_CHISELED = new RedSandstone("CHISELED", 0x1);
+    public static final RedSandstone RED_SANDSTONE_SMOOTH   = new RedSandstone("SMOOTH", 0x2);
 
     private static final Map<String, RedSandstone>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedSandstone> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -44,11 +45,6 @@ public class RedSandstone extends BlockMaterialData
     public RedSandstone(final String enumName, final int type)
     {
         super(RED_SANDSTONE.name(), RED_SANDSTONE.getId(), RED_SANDSTONE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public RedSandstone(final int maxStack, final String typeName, final byte type)
-    {
-        super(RED_SANDSTONE.name(), RED_SANDSTONE.getId(), RED_SANDSTONE.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override
@@ -115,5 +111,7 @@ public class RedSandstone extends BlockMaterialData
     static
     {
         RedSandstone.register(RED_SANDSTONE);
+        RedSandstone.register(RED_SANDSTONE_CHISELED);
+        RedSandstone.register(RED_SANDSTONE_SMOOTH);
     }
 }

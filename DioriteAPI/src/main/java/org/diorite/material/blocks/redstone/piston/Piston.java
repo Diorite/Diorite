@@ -57,11 +57,6 @@ public class Piston extends PistonBase
         super(PISTON_DOWN.name(), PISTON_DOWN.getId(), PISTON_DOWN.getMinecraftId(), enumName, face, extended);
     }
 
-    public Piston(final int maxStack, final String typeName, final BlockFace face, final boolean extended)
-    {
-        super(PISTON_DOWN.name(), PISTON_DOWN.getId(), PISTON_DOWN.getMinecraftId(), maxStack, typeName, face, extended);
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -81,15 +76,9 @@ public class Piston extends PistonBase
     }
 
     @Override
-    public Piston getType(final int id)
+    public Piston getExtended(final boolean extended)
     {
-        return getByID(id);
-    }
-
-    @Override
-    public Piston getBlockFacing(final BlockFace face)
-    {
-        return getPiston(face, this.extended);
+        return getPiston(this.facing, extended);
     }
 
     @Override
@@ -99,9 +88,15 @@ public class Piston extends PistonBase
     }
 
     @Override
-    public Piston getExtended(final boolean extended)
+    public Piston getBlockFacing(final BlockFace face)
     {
-        return getPiston(this.facing, extended);
+        return getPiston(face, this.extended);
+    }
+
+    @Override
+    public Piston getType(final int id)
+    {
+        return getByID(id);
     }
 
     /**
@@ -129,6 +124,15 @@ public class Piston extends PistonBase
         return byName.get(name);
     }
 
+    /**
+     * Returns one of Piston sub-type based on {@link BlockFace} and extended state.
+     * It will never return null.
+     *
+     * @param face     facing direction of piston.
+     * @param extended if piston should be extended.
+     *
+     * @return sub-type of Piston
+     */
     public static Piston getPiston(final BlockFace face, final boolean extended)
     {
         return getByID(combine(face, extended));

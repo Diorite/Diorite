@@ -83,7 +83,7 @@ public class RedstoneComparator extends BlockMaterialData implements Activatable
     }
 
     @Override
-    public BlockMaterialData getActivated(final boolean activate)
+    public RedstoneComparator getActivated(final boolean activate)
     {
         return null; // TODO implement
     }

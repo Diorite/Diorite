@@ -14,7 +14,6 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class MobSpawner extends BlockMaterialData
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */

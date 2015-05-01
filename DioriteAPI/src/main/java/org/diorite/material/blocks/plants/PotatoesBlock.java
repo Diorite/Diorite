@@ -2,6 +2,9 @@ package org.diorite.material.blocks.plants;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -11,13 +14,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "PotatoesBlock" and all its subtypes.
  */
-public class PotatoesBlock extends Plant
+public class PotatoesBlock extends Crops
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,26 +31,33 @@ public class PotatoesBlock extends Plant
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__POTATOES_BLOCK__HARDNESS;
 
-    public static final PotatoesBlock POTATOES_BLOCK = new PotatoesBlock();
+    public static final PotatoesBlock POTATOES_BLOCK_0    = new PotatoesBlock();
+    public static final PotatoesBlock POTATOES_BLOCK_1    = new PotatoesBlock("1", 0x1);
+    public static final PotatoesBlock POTATOES_BLOCK_2    = new PotatoesBlock("2", 0x2);
+    public static final PotatoesBlock POTATOES_BLOCK_3    = new PotatoesBlock("3", 0x3);
+    public static final PotatoesBlock POTATOES_BLOCK_4    = new PotatoesBlock("4", 0x4);
+    public static final PotatoesBlock POTATOES_BLOCK_5    = new PotatoesBlock("5", 0x5);
+    public static final PotatoesBlock POTATOES_BLOCK_6    = new PotatoesBlock("6", 0x6);
+    public static final PotatoesBlock POTATOES_BLOCK_RIPE = new PotatoesBlock("RIPE", 0x7);
 
     private static final Map<String, PotatoesBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PotatoesBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final int age;
+
     @SuppressWarnings("MagicNumber")
     protected PotatoesBlock()
     {
-        super("POTATOES_BLOCK", 142, "minecraft:potatoes", "POTATOES_BLOCK", (byte) 0x00);
+        super("POTATOES_BLOCK", 142, "minecraft:potatoes", "0", (byte) 0x00);
+        this.age = 0;
     }
 
-    public PotatoesBlock(final String enumName, final int type)
+    public PotatoesBlock(final String enumName, final int age)
     {
-        super(POTATOES_BLOCK.name(), POTATOES_BLOCK.getId(), POTATOES_BLOCK.getMinecraftId(), enumName, (byte) type);
+        super(POTATOES_BLOCK_0.name(), POTATOES_BLOCK_0.getId(), POTATOES_BLOCK_0.getMinecraftId(), enumName, (byte) age);
+        this.age = age;
     }
 
-    public PotatoesBlock(final int maxStack, final String typeName, final byte type)
-    {
-        super(POTATOES_BLOCK.name(), POTATOES_BLOCK.getId(), POTATOES_BLOCK.getMinecraftId(), maxStack, typeName, type);
-    }
 
     @Override
     public float getBlastResistance()
@@ -63,6 +72,18 @@ public class PotatoesBlock extends Plant
     }
 
     @Override
+    public int getAge()
+    {
+        return this.age;
+    }
+
+    @Override
+    public PotatoesBlock getAge(final int age)
+    {
+        return getByID(age);
+    }
+
+    @Override
     public PotatoesBlock getType(final String name)
     {
         return getByEnumName(name);
@@ -72,6 +93,12 @@ public class PotatoesBlock extends Plant
     public PotatoesBlock getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("age", this.age).toString();
     }
 
     /**
@@ -100,6 +127,24 @@ public class PotatoesBlock extends Plant
     }
 
     /**
+     * Returns one of PotatoesBlock sub-type based on age.
+     * It will never return null.
+     *
+     * @param age age of PotatoesBlock.
+     *
+     * @return sub-type of PotatoesBlock
+     */
+    public static PotatoesBlock getPotatoesBlock(final int age)
+    {
+        final PotatoesBlock potatoesBlock = getByID(age);
+        if (potatoesBlock == null)
+        {
+            return POTATOES_BLOCK_0;
+        }
+        return potatoesBlock;
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -113,6 +158,13 @@ public class PotatoesBlock extends Plant
 
     static
     {
-        PotatoesBlock.register(POTATOES_BLOCK);
+        PotatoesBlock.register(POTATOES_BLOCK_0);
+        PotatoesBlock.register(POTATOES_BLOCK_1);
+        PotatoesBlock.register(POTATOES_BLOCK_2);
+        PotatoesBlock.register(POTATOES_BLOCK_3);
+        PotatoesBlock.register(POTATOES_BLOCK_4);
+        PotatoesBlock.register(POTATOES_BLOCK_5);
+        PotatoesBlock.register(POTATOES_BLOCK_6);
+        PotatoesBlock.register(POTATOES_BLOCK_RIPE);
     }
 }

@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * Creates noise using unbiased octaves
  * From Bukkit project https://github.com/Bukkit/Bukkit
  */
-@SuppressWarnings("MagicNumber")
 public abstract class OctaveGenerator
 {
     protected final NoiseGenerator[] octaves;

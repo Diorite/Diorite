@@ -38,7 +38,7 @@ public enum NbtTagType
     private final Class<? extends NbtAbstractTag> typeClass;
     private final Supplier<NbtAbstractTag>        getInstance;
 
-    private NbtTagType(final int typeID, final Class<? extends NbtAbstractTag> type, final Supplier<NbtAbstractTag> getInstance)
+    NbtTagType(final int typeID, final Class<? extends NbtAbstractTag> type, final Supplier<NbtAbstractTag> getInstance)
     {
         this.typeID = ((byte) typeID);
         this.typeClass = type;

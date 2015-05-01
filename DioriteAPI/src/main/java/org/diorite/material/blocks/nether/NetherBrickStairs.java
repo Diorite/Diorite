@@ -89,6 +89,12 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
+    }
+
+    @Override
     public boolean isUpsideDown()
     {
         return this.upsideDown;
@@ -101,6 +107,12 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
+    public NetherBrickStairs getType(final BlockFace face, final boolean activated)
+    {
+        return getByID(Stairs.combine(face, activated));
+    }
+
+    @Override
     public BlockFace getBlockFacing()
     {
         return this.face;
@@ -110,20 +122,6 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
     public NetherBrickStairs getBlockFacing(final BlockFace face)
     {
         return getByID(Stairs.combine(face, this.upsideDown));
-    }
-
-    /**
-     * Returns one of NetherBrickStairs sub-type based on {@link BlockFace} and upsideDown flag.
-     * It will never return null;
-     *
-     * @param face       face of block, unsupported face will cause using face from default type.
-     * @param upsideDown if stairs are upside down
-     *
-     * @return sub-type of NetherBrickStairs
-     */
-    public NetherBrickStairs getType(final BlockFace face, final boolean activated)
-    {
-        return getByID(Stairs.combine(face, activated));
     }
 
     /**
@@ -160,7 +158,7 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
      *
      * @return sub-type of NetherBrickStairs
      */
-    public static NetherBrickStairs getEndPortalFrame(final BlockFace face, final boolean upsideDown)
+    public static NetherBrickStairs getNetherBrickStairs(final BlockFace face, final boolean upsideDown)
     {
         return getByID(Stairs.combine(face, upsideDown));
     }
@@ -187,11 +185,5 @@ public class NetherBrickStairs extends BlockMaterialData implements Stairs
         NetherBrickStairs.register(NETHER_BRICK_STAIRS_WEST_UPSIDE_DOWN);
         NetherBrickStairs.register(NETHER_BRICK_STAIRS_SOUTH_UPSIDE_DOWN);
         NetherBrickStairs.register(NETHER_BRICK_STAIRS_NORTH_UPSIDE_DOWN);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 }

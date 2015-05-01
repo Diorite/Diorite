@@ -19,10 +19,10 @@ public abstract class RedstoneLamp extends BlockMaterialData implements Activata
     @Override
     public RedstoneLamp getActivated(final boolean activate)
     {
-        return getType(activate);
+        return getRedstoneLamp(activate);
     }
 
-    public static RedstoneLamp getType(final boolean activate)
+    public static RedstoneLamp getRedstoneLamp(final boolean activate)
     {
         if (activate)
         {

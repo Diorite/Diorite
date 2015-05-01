@@ -1,28 +1,32 @@
 package org.diorite.material.blocks.redstone;
 
-import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.Activatable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-public abstract class WeightedPressurePlate extends BlockMaterialData implements Activatable
+import org.diorite.material.blocks.ACPowerSource;
+
+/**
+ * Base abstract class for all weighted pressure plate based blocks.
+ */
+public abstract class WeightedPressurePlate extends PressurePlate implements ACPowerSource
 {
-    public WeightedPressurePlate(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
-    {
-        super(enumName, id, minecraftId, typeName, type);
-    }
+    protected final int power;
 
-    public WeightedPressurePlate(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    public WeightedPressurePlate(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final boolean activated)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, typeName, type, activated);
+        this.power = type;
     }
 
     @Override
-    public RedstoneRepeater getActivated(final boolean activate)
+    public int getPowerStrength()
     {
-        return null; // TODO: implement
+        return this.power;
     }
 
-    public static RedstoneRepeater getType(final boolean activate)
+    @Override
+    public String toString()
     {
-        return null; // TODO: implement
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("power", this.power).toString();
     }
 }

@@ -145,4 +145,74 @@ public abstract class BlockMaterialData extends Material
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("typeName", this.typeName).append("type", this.type).toString();
     }
+
+    public static BlockMaterialData getByID(final int id)
+    {
+        final Material mat = Material.getByID(id);
+        if (mat instanceof BlockMaterialData)
+        {
+            return (BlockMaterialData) mat;
+        }
+        return null;
+    }
+
+    public static BlockMaterialData getByID(final int id, final int meta)
+    {
+        final Material mat = Material.getByID(id, meta);
+        if (mat instanceof BlockMaterialData)
+        {
+            return (BlockMaterialData) mat;
+        }
+        return null;
+    }
+
+    public static BlockMaterialData getByID(final int id, final String meta)
+    {
+        final Material mat = Material.getByID(id);
+        if (mat instanceof BlockMaterialData)
+        {
+            return (BlockMaterialData) mat;
+        }
+        return null;
+    }
+
+    public static BlockMaterialData getByEnumName(final String name)
+    {
+        final Material mat = Material.getByEnumName(name);
+        if (mat instanceof BlockMaterialData)
+        {
+            return (BlockMaterialData) mat;
+        }
+        return null;
+    }
+
+    public static BlockMaterialData getByEnumName(final String name, final int meta)
+    {
+        final Material mat = Material.getByEnumName(name, meta);
+        if (mat instanceof BlockMaterialData)
+        {
+            return (BlockMaterialData) mat;
+        }
+        return null;
+    }
+
+    public static BlockMaterialData getByEnumName(final String name, final String meta)
+    {
+        final Material mat = Material.getByEnumName(name, meta);
+        if (mat instanceof BlockMaterialData)
+        {
+            return (BlockMaterialData) mat;
+        }
+        return null;
+    }
+
+    public static BlockMaterialData getByMinecraftId(final String name)
+    {
+        final Material mat = Material.getByMinecraftId(name);
+        if (mat instanceof BlockMaterialData)
+        {
+            return (BlockMaterialData) mat;
+        }
+        return null;
+    }
 }

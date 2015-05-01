@@ -356,16 +356,16 @@ public enum LiquidStage
         }
     }
 
+    public static LiquidStage getByID(final int id)
+    {
+        return byID.get((byte) id);
+    }
+
     static
     {
         for (final LiquidStage stage : values())
         {
             byID.put(stage.dataValue, stage);
         }
-    }
-
-    public static LiquidStage getByID(final int id)
-    {
-        return byID.get((byte) id);
     }
 }

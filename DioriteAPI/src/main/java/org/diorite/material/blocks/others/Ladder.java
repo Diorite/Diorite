@@ -2,8 +2,13 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.blocks.Directional;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -12,13 +17,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Ladder" and all its subtypes.
  */
-public class Ladder extends BlockMaterialData
+public class Ladder extends BlockMaterialData implements Directional
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 4;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,25 +34,27 @@ public class Ladder extends BlockMaterialData
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__LADDER__HARDNESS;
 
-    public static final Ladder LADDER = new Ladder();
+    public static final Ladder LADDER_NORTH = new Ladder();
+    public static final Ladder LADDER_SOUTH = new Ladder(BlockFace.SOUTH);
+    public static final Ladder LADDER_WEST  = new Ladder(BlockFace.WEST);
+    public static final Ladder LADDER_EAST  = new Ladder(BlockFace.EAST);
 
     private static final Map<String, Ladder>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Ladder> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+
     @SuppressWarnings("MagicNumber")
     protected Ladder()
     {
-        super("LADDER", 65, "minecraft:ladder", "LADDER", (byte) 0x00);
+        super("LADDER", 65, "minecraft:ladder", "NORTH", (byte) 0x00);
+        this.face = BlockFace.NORTH;
     }
 
-    public Ladder(final String enumName, final int type)
+    public Ladder(final BlockFace face)
     {
-        super(LADDER.name(), LADDER.getId(), LADDER.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public Ladder(final int maxStack, final String typeName, final byte type)
-    {
-        super(LADDER.name(), LADDER.getId(), LADDER.getMinecraftId(), maxStack, typeName, type);
+        super(LADDER_NORTH.name(), LADDER_NORTH.getId(), LADDER_NORTH.getMinecraftId(), face.name(), combine(face));
+        this.face = face;
     }
 
     @Override
@@ -73,6 +79,39 @@ public class Ladder extends BlockMaterialData
     public Ladder getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public Ladder getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    private static byte combine(final BlockFace face)
+    {
+        switch (face)
+        {
+            case SOUTH:
+                return 0x3;
+            case WEST:
+                return 0x4;
+            case EAST:
+                return 0x5;
+            default:
+                return 0x2;
+        }
     }
 
     /**
@@ -101,6 +140,19 @@ public class Ladder extends BlockMaterialData
     }
 
     /**
+     * Returns one of Ladder sub-type based on {@link BlockFace}
+     * It will never return null.
+     *
+     * @param face facing of Ladder.
+     *
+     * @return sub-type of Ladder
+     */
+    public static Ladder getLadder(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -114,6 +166,9 @@ public class Ladder extends BlockMaterialData
 
     static
     {
-        Ladder.register(LADDER);
+        Ladder.register(LADDER_NORTH);
+        Ladder.register(LADDER_SOUTH);
+        Ladder.register(LADDER_WEST);
+        Ladder.register(LADDER_EAST);
     }
 }

@@ -3,6 +3,7 @@ package org.diorite.material.blocks.plants;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.material.blocks.AgeableBlock;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -11,13 +12,13 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "SugarCane" and all its subtypes.
  */
-public class SugarCane extends Plant
+@SuppressWarnings("MagicNumber")
+public class SugarCane extends Plant implements AgeableBlock
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 16;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +30,22 @@ public class SugarCane extends Plant
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__SUGAR_CANE__HARDNESS;
 
-    public static final SugarCane SUGAR_CANE = new SugarCane();
+    public static final SugarCane SUGAR_CANE_0  = new SugarCane();
+    public static final SugarCane SUGAR_CANE_1  = new SugarCane(0x1);
+    public static final SugarCane SUGAR_CANE_2  = new SugarCane(0x2);
+    public static final SugarCane SUGAR_CANE_3  = new SugarCane(0x3);
+    public static final SugarCane SUGAR_CANE_4  = new SugarCane(0x4);
+    public static final SugarCane SUGAR_CANE_5  = new SugarCane(0x5);
+    public static final SugarCane SUGAR_CANE_6  = new SugarCane(0x6);
+    public static final SugarCane SUGAR_CANE_7  = new SugarCane(0x7);
+    public static final SugarCane SUGAR_CANE_8  = new SugarCane(0x8);
+    public static final SugarCane SUGAR_CANE_9  = new SugarCane(0x9);
+    public static final SugarCane SUGAR_CANE_10 = new SugarCane(0xA);
+    public static final SugarCane SUGAR_CANE_11 = new SugarCane(0xB);
+    public static final SugarCane SUGAR_CANE_12 = new SugarCane(0xC);
+    public static final SugarCane SUGAR_CANE_13 = new SugarCane(0xD);
+    public static final SugarCane SUGAR_CANE_14 = new SugarCane(0xE);
+    public static final SugarCane SUGAR_CANE_15 = new SugarCane(0xF);
 
     private static final Map<String, SugarCane>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SugarCane> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,17 +53,12 @@ public class SugarCane extends Plant
     @SuppressWarnings("MagicNumber")
     protected SugarCane()
     {
-        super("SUGAR_CANE", 83, "minecraft:reeds", "SUGAR_CANE", (byte) 0x00);
+        super("SUGAR_CANE", 83, "minecraft:reeds", "0", (byte) 0x00);
     }
 
-    public SugarCane(final String enumName, final int type)
+    public SugarCane(final int age)
     {
-        super(SUGAR_CANE.name(), SUGAR_CANE.getId(), SUGAR_CANE.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public SugarCane(final int maxStack, final String typeName, final byte type)
-    {
-        super(SUGAR_CANE.name(), SUGAR_CANE.getId(), SUGAR_CANE.getMinecraftId(), maxStack, typeName, type);
+        super(SUGAR_CANE_0.name(), SUGAR_CANE_0.getId(), SUGAR_CANE_0.getMinecraftId(), Integer.toString(age), (byte) age);
     }
 
     @Override
@@ -72,6 +83,18 @@ public class SugarCane extends Plant
     public SugarCane getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public int getAge()
+    {
+        return this.type;
+    }
+
+    @Override
+    public SugarCane getAge(final int age)
+    {
+        return getByID(age);
     }
 
     /**
@@ -100,6 +123,24 @@ public class SugarCane extends Plant
     }
 
     /**
+     * Returns one of SugarCane sub-type based on age.
+     * It will never return null.
+     *
+     * @param age age of SugarCane.
+     *
+     * @return sub-type of SugarCane
+     */
+    public static SugarCane getSugarCane(final int age)
+    {
+        final SugarCane sugarCane = getByID(age);
+        if (sugarCane == null)
+        {
+            return SUGAR_CANE_0;
+        }
+        return sugarCane;
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -113,6 +154,21 @@ public class SugarCane extends Plant
 
     static
     {
-        SugarCane.register(SUGAR_CANE);
+        SugarCane.register(SUGAR_CANE_0);
+        SugarCane.register(SUGAR_CANE_1);
+        SugarCane.register(SUGAR_CANE_2);
+        SugarCane.register(SUGAR_CANE_3);
+        SugarCane.register(SUGAR_CANE_4);
+        SugarCane.register(SUGAR_CANE_5);
+        SugarCane.register(SUGAR_CANE_6);
+        SugarCane.register(SUGAR_CANE_7);
+        SugarCane.register(SUGAR_CANE_8);
+        SugarCane.register(SUGAR_CANE_9);
+        SugarCane.register(SUGAR_CANE_10);
+        SugarCane.register(SUGAR_CANE_11);
+        SugarCane.register(SUGAR_CANE_12);
+        SugarCane.register(SUGAR_CANE_13);
+        SugarCane.register(SUGAR_CANE_14);
+        SugarCane.register(SUGAR_CANE_15);
     }
 }

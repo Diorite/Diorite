@@ -14,11 +14,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class CobblestoneWall extends BlockMaterialData
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 2;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -30,7 +29,8 @@ public class CobblestoneWall extends BlockMaterialData
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__COBBLESTONE_WALL__HARDNESS;
 
-    public static final CobblestoneWall COBBLESTONE_WALL = new CobblestoneWall();
+    public static final CobblestoneWall COBBLESTONE_WALL       = new CobblestoneWall();
+    public static final CobblestoneWall COBBLESTONE_WALL_MOSSY = new CobblestoneWall("MOSSY", 0x1);
 
     private static final Map<String, CobblestoneWall>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<CobblestoneWall> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -44,11 +44,6 @@ public class CobblestoneWall extends BlockMaterialData
     public CobblestoneWall(final String enumName, final int type)
     {
         super(COBBLESTONE_WALL.name(), COBBLESTONE_WALL.getId(), COBBLESTONE_WALL.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public CobblestoneWall(final int maxStack, final String typeName, final byte type)
-    {
-        super(COBBLESTONE_WALL.name(), COBBLESTONE_WALL.getId(), COBBLESTONE_WALL.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override
@@ -115,5 +110,6 @@ public class CobblestoneWall extends BlockMaterialData
     static
     {
         CobblestoneWall.register(COBBLESTONE_WALL);
+        CobblestoneWall.register(COBBLESTONE_WALL_MOSSY);
     }
 }

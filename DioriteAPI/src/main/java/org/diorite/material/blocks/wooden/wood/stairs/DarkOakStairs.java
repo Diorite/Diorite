@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.Stairs;
 import org.diorite.material.blocks.wooden.WoodType;
 import org.diorite.utils.collections.SimpleStringHashMap;
@@ -13,15 +12,14 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DarkOakStairs" and all its subtypes.
+ * Class representing block "DarkDarkOakStairs" and all its subtypes.
  */
 public class DarkOakStairs extends WoodenStairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -33,7 +31,15 @@ public class DarkOakStairs extends WoodenStairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__DARK_OAK_STAIRS__HARDNESS;
 
-    public static final DarkOakStairs DARK_OAK_STAIRS = new DarkOakStairs();
+    public static final DarkOakStairs DARK_OAK_STAIRS_EAST  = new DarkOakStairs();
+    public static final DarkOakStairs DARK_OAK_STAIRS_WEST  = new DarkOakStairs("WEST", BlockFace.WEST, false);
+    public static final DarkOakStairs DARK_OAK_STAIRS_SOUTH = new DarkOakStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final DarkOakStairs DARK_OAK_STAIRS_NORTH = new DarkOakStairs("NORTH", BlockFace.NORTH, false);
+
+    public static final DarkOakStairs DARK_OAK_STAIRS_EAST_UPSIDE_DOWN  = new DarkOakStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final DarkOakStairs DARK_OAK_STAIRS_WEST_UPSIDE_DOWN  = new DarkOakStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final DarkOakStairs DARK_OAK_STAIRS_SOUTH_UPSIDE_DOWN = new DarkOakStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final DarkOakStairs DARK_OAK_STAIRS_NORTH_UPSIDE_DOWN = new DarkOakStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, DarkOakStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<DarkOakStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -41,7 +47,12 @@ public class DarkOakStairs extends WoodenStairs
     @SuppressWarnings("MagicNumber")
     protected DarkOakStairs()
     {
-        super("DARK_OAK_STAIRS", 164, "minecraft:dark_oak_stairs", "DARK_OAK_STAIRS", WoodType.DARK_OAK);
+        super("DARK_OAK_STAIRS", 164, "minecraft:dark_oak_stairs", "EAST", WoodType.DARK_OAK, BlockFace.EAST, false);
+    }
+
+    public DarkOakStairs(final String enumName, final BlockFace face, final boolean upsideDown)
+    {
+        super(DARK_OAK_STAIRS_EAST.name(), DARK_OAK_STAIRS_EAST.getId(), DARK_OAK_STAIRS_EAST.getMinecraftId(), enumName, WoodType.DARK_OAK, face, upsideDown);
     }
 
     @Override
@@ -57,6 +68,24 @@ public class DarkOakStairs extends WoodenStairs
     }
 
     @Override
+    public DarkOakStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    @Override
+    public DarkOakStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
+    public DarkOakStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
     public DarkOakStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -66,30 +95,6 @@ public class DarkOakStairs extends WoodenStairs
     public DarkOakStairs getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public boolean isUpsideDown()
-    {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public Stairs getUpsideDown(final boolean upsideDown)
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getBlockFacing(final BlockFace face)
-    {
-        return null; // TODO: implement
     }
 
     /**
@@ -118,6 +123,20 @@ public class DarkOakStairs extends WoodenStairs
     }
 
     /**
+     * Returns one of DarkOakStairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param blockFace  facing direction of stairs.
+     * @param upsideDown if stairs should be upside-down.
+     *
+     * @return sub-type of DarkOakStairs
+     */
+    public static DarkOakStairs getDarkOakStairs(final BlockFace blockFace, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(blockFace, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -131,6 +150,13 @@ public class DarkOakStairs extends WoodenStairs
 
     static
     {
-        DarkOakStairs.register(DARK_OAK_STAIRS);
+        DarkOakStairs.register(DARK_OAK_STAIRS_EAST);
+        DarkOakStairs.register(DARK_OAK_STAIRS_WEST);
+        DarkOakStairs.register(DARK_OAK_STAIRS_SOUTH);
+        DarkOakStairs.register(DARK_OAK_STAIRS_NORTH);
+        DarkOakStairs.register(DARK_OAK_STAIRS_EAST_UPSIDE_DOWN);
+        DarkOakStairs.register(DARK_OAK_STAIRS_WEST_UPSIDE_DOWN);
+        DarkOakStairs.register(DARK_OAK_STAIRS_SOUTH_UPSIDE_DOWN);
+        DarkOakStairs.register(DARK_OAK_STAIRS_NORTH_UPSIDE_DOWN);
     }
 }

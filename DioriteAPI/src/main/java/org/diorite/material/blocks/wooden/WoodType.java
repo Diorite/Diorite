@@ -1,6 +1,5 @@
 package org.diorite.material.blocks.wooden;
 
-@SuppressWarnings("MagicNumber")
 public enum WoodType
 {
     OAK(0b0000, 0x00, false),

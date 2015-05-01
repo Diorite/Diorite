@@ -2,6 +2,7 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
@@ -13,11 +14,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class RedstoneRepeaterOff extends RedstoneRepeater
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 16;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +29,25 @@ public class RedstoneRepeaterOff extends RedstoneRepeater
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__REPEATER_OFF__HARDNESS;
 
-    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF = new RedstoneRepeaterOff();
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_NORTH_1 = new RedstoneRepeaterOff();
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_EAST_1  = new RedstoneRepeaterOff(BlockFace.EAST, 1);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_SOUTH_1 = new RedstoneRepeaterOff(BlockFace.SOUTH, 1);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_WEST_1  = new RedstoneRepeaterOff(BlockFace.WEST, 1);
+
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_NORTH_2 = new RedstoneRepeaterOff(BlockFace.NORTH, 2);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_EAST_2  = new RedstoneRepeaterOff(BlockFace.EAST, 2);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_SOUTH_2 = new RedstoneRepeaterOff(BlockFace.SOUTH, 2);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_WEST_2  = new RedstoneRepeaterOff(BlockFace.WEST, 2);
+
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_NORTH_3 = new RedstoneRepeaterOff(BlockFace.NORTH, 3);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_EAST_3  = new RedstoneRepeaterOff(BlockFace.EAST, 3);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_SOUTH_3 = new RedstoneRepeaterOff(BlockFace.SOUTH, 3);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_WEST_3  = new RedstoneRepeaterOff(BlockFace.WEST, 3);
+
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_NORTH_4 = new RedstoneRepeaterOff(BlockFace.NORTH, 4);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_EAST_4  = new RedstoneRepeaterOff(BlockFace.EAST, 4);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_SOUTH_4 = new RedstoneRepeaterOff(BlockFace.SOUTH, 4);
+    public static final RedstoneRepeaterOff REDSTONE_REPEATER_OFF_WEST_4  = new RedstoneRepeaterOff(BlockFace.WEST, 4);
 
     private static final Map<String, RedstoneRepeaterOff>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneRepeaterOff> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,17 +55,12 @@ public class RedstoneRepeaterOff extends RedstoneRepeater
     @SuppressWarnings("MagicNumber")
     protected RedstoneRepeaterOff()
     {
-        super("REDSTONE_REPEATER_OFF", 93, "minecraft:unpowered_repeater", "REDSTONE_REPEATER_OFF", (byte) 0x00);
+        super("REDSTONE_REPEATER_OFF", 93, "minecraft:unpowered_repeater", BlockFace.NORTH, 1);
     }
 
-    public RedstoneRepeaterOff(final String enumName, final int type)
+    public RedstoneRepeaterOff(final BlockFace face, final int delay)
     {
-        super(REDSTONE_REPEATER_OFF.name(), REDSTONE_REPEATER_OFF.getId(), REDSTONE_REPEATER_OFF.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public RedstoneRepeaterOff(final int maxStack, final String typeName, final byte type)
-    {
-        super(REDSTONE_REPEATER_OFF.name(), REDSTONE_REPEATER_OFF.getId(), REDSTONE_REPEATER_OFF.getMinecraftId(), maxStack, typeName, type);
+        super(REDSTONE_REPEATER_OFF_NORTH_1.name(), REDSTONE_REPEATER_OFF_NORTH_1.getId(), REDSTONE_REPEATER_OFF_NORTH_1.getMinecraftId(), face, delay);
     }
 
     @Override
@@ -78,6 +91,24 @@ public class RedstoneRepeaterOff extends RedstoneRepeater
     public boolean isActivated()
     {
         return false;
+    }
+
+    @Override
+    public RedstoneRepeaterOff getDelay(final int delay)
+    {
+        return getByID(combine(this.face, delay));
+    }
+
+    @Override
+    public RedstoneRepeaterOff getType(final BlockFace face, final int delay)
+    {
+        return getByID(combine(face, delay));
+    }
+
+    @Override
+    public RedstoneRepeaterOff getBlockFacing(final BlockFace face)
+    {
+        return getByID(combine(face, this.delay));
     }
 
     /**
@@ -119,6 +150,21 @@ public class RedstoneRepeaterOff extends RedstoneRepeater
 
     static
     {
-        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_NORTH_1);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_EAST_1);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_SOUTH_1);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_WEST_1);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_NORTH_2);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_EAST_2);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_SOUTH_2);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_WEST_2);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_NORTH_3);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_EAST_3);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_SOUTH_3);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_WEST_3);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_NORTH_4);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_EAST_4);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_SOUTH_4);
+        RedstoneRepeaterOff.register(REDSTONE_REPEATER_OFF_WEST_4);
     }
 }

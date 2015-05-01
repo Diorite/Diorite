@@ -2,7 +2,6 @@ package org.diorite.entity;
 
 import org.diorite.GameObject;
 import org.diorite.ImmutableLocation;
-import org.diorite.Location;
 import org.diorite.Server;
 
 public interface Entity extends GameObject

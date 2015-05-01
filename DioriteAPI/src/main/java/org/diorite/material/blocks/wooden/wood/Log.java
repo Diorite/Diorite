@@ -95,6 +95,12 @@ public class Log extends Wood implements Rotatable
     }
 
     @Override
+    public Log getRotated(final RotateAxis axis)
+    {
+        return getLog(this.woodType, axis);
+    }
+
+    @Override
     public Log getType(final String name)
     {
         return getByEnumName(name);
@@ -137,14 +143,20 @@ public class Log extends Wood implements Rotatable
     }
 
     @Override
-    public Log getRotated(final RotateAxis axis)
+    public String toString()
     {
-        return getLog(this.woodType, axis);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
     }
 
     public Log getType(final WoodType woodType, final RotateAxis facing)
     {
         return getLog(woodType, facing);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    protected byte getFixedDataValue()
+    {
+        return (byte) (this.getType() + ((this.getWoodType().isSecondLogID()) ? 16 : 0));
     }
 
     /**
@@ -178,12 +190,6 @@ public class Log extends Wood implements Rotatable
         return getByID((type.getLogFlag() | facing.getLogFlag()) + (type.isSecondLogID() ? 16 : 0));
     }
 
-    @SuppressWarnings("MagicNumber")
-    protected byte getFixedDataValue()
-    {
-        return (byte) (this.getType() + ((this.getWoodType().isSecondLogID()) ? 16 : 0));
-    }
-
     /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
@@ -194,6 +200,33 @@ public class Log extends Wood implements Rotatable
     {
         byID.put(element.getType(), element);
         byName.put(element.name(), element);
+    }
+
+    /**
+     * Helper class for second log ID
+     */
+    public static class Log2 extends Log
+    {
+        public Log2(final String enumName, final WoodType type, final RotateAxis rotateAxis)
+        {
+            super(enumName, type, rotateAxis);
+        }
+
+        public Log2(final int maxStack, final String enumName, final WoodType type, final RotateAxis rotateAxis)
+        {
+            super(maxStack, enumName, type, rotateAxis);
+        }
+
+        @SuppressWarnings("MagicNumber")
+        /**
+         * Returns one of Log sub-type based on sub-id, may return null
+         * @param id sub-type id
+         * @return sub-type of Log or null
+         */
+        public static Log getByID(final int id)
+        {
+            return byID.get((byte) (id + 16));
+        }
     }
 
     static
@@ -222,38 +255,5 @@ public class Log extends Wood implements Rotatable
         Log.register(LOG_JUNGLE_BARK);
         Log.register(LOG_ACACIA_BARK);
         Log.register(LOG_DARK_OAK_BARK);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
-    }
-
-    /**
-     * Helper class for second log ID
-     */
-    public static class Log2 extends Log
-    {
-        public Log2(final String enumName, final WoodType type, final RotateAxis rotateAxis)
-        {
-            super(enumName, type, rotateAxis);
-        }
-
-        public Log2(final int maxStack, final String enumName, final WoodType type, final RotateAxis rotateAxis)
-        {
-            super(maxStack, enumName, type, rotateAxis);
-        }
-
-        @SuppressWarnings("MagicNumber")
-        /**
-         * Returns one of Log sub-type based on sub-id, may return null
-         * @param id sub-type id
-         * @return sub-type of Log or null
-         */
-        public static Log getByID(final int id)
-        {
-            return byID.get((byte) (id + 16));
-        }
     }
 }

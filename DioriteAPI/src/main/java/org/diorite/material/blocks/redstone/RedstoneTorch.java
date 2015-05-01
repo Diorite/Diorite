@@ -1,28 +1,62 @@
 package org.diorite.material.blocks.redstone;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.Activatable;
+import org.diorite.material.blocks.Directional;
 
-public abstract class RedstoneTorch extends BlockMaterialData implements Activatable
+public abstract class RedstoneTorch extends BlockMaterialData implements Activatable, Directional
 {
-    public RedstoneTorch(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
+    protected final BlockFace face;
+
+    public RedstoneTorch(final String enumName, final int id, final String minecraftId, final BlockFace face)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, face.name(), combine(face));
+        this.face = face;
     }
 
-    public RedstoneTorch(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected static byte combine(final BlockFace face)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        switch (face)
+        {
+            case EAST:
+                return 0x2;
+            case SOUTH:
+                return 0x3;
+            case NORTH:
+                return 0x4;
+            case UP:
+                return 0x5;
+            default:
+                return 0x1;
+        }
     }
 
     @Override
-    public RedstoneTorch getActivated(final boolean activate)
+    public Activatable getActivated(final boolean activate)
     {
-        return getType(activate);
+        return getRedstoneTorch(activate);
     }
 
-    public static RedstoneTorch getType(final boolean activate)
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    /**
+     * Returns one of RedstoneTorch sub-type based on activated state.
+     * It will never return null.
+     *
+     * @param activated if RedstoneTorch should be activated.
+     *
+     * @return sub-type of RedstoneTorch
+     */
+    public static RedstoneTorch getRedstoneTorch(final boolean activate)
     {
         if (activate)
         {
@@ -32,5 +66,11 @@ public abstract class RedstoneTorch extends BlockMaterialData implements Activat
         {
             return Material.REDSTONE_TORCH_OFF;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();
     }
 }

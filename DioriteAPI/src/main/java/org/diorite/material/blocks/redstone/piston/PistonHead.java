@@ -57,11 +57,6 @@ public class PistonHead extends PistonBase
         super(PISTON_HEAD_DOWN.name(), PISTON_HEAD_DOWN.getId(), PISTON_HEAD_DOWN.getMinecraftId(), enumName, face, extended);
     }
 
-    public PistonHead(final int maxStack, final String typeName, final BlockFace face, final boolean extended)
-    {
-        super(PISTON_HEAD_DOWN.name(), PISTON_HEAD_DOWN.getId(), PISTON_HEAD_DOWN.getMinecraftId(), maxStack, typeName, face, extended);
-    }
-
     @Override
     public float getBlastResistance()
     {
@@ -81,6 +76,18 @@ public class PistonHead extends PistonBase
     }
 
     @Override
+    public PistonHead getExtended(final boolean extended)
+    {
+        return getPistonHead(this.facing, extended);
+    }
+
+    @Override
+    public PistonHead getType(final BlockFace face, final boolean extended)
+    {
+        return getPistonHead(face, extended);
+    }
+
+    @Override
     public PistonHead getType(final int id)
     {
         return getByID(id);
@@ -89,19 +96,7 @@ public class PistonHead extends PistonBase
     @Override
     public PistonHead getBlockFacing(final BlockFace face)
     {
-        return getPiston(face, this.extended);
-    }
-
-    @Override
-    public PistonHead getType(final BlockFace face, final boolean extended)
-    {
-        return getPiston(face, extended);
-    }
-
-    @Override
-    public PistonHead getExtended(final boolean extended)
-    {
-        return getPiston(this.facing, extended);
+        return getPistonHead(face, this.extended);
     }
 
     /**
@@ -129,7 +124,16 @@ public class PistonHead extends PistonBase
         return byName.get(name);
     }
 
-    public static PistonHead getPiston(final BlockFace face, final boolean extended)
+    /**
+     * Returns one of PistonHead sub-type based on {@link BlockFace} and extended state.
+     * It will never return null.
+     *
+     * @param face     facing direction of piston.
+     * @param extended if piston should be extended.
+     *
+     * @return sub-type of PistonHead
+     */
+    public static PistonHead getPistonHead(final BlockFace face, final boolean extended)
     {
         return getByID(combine(face, extended));
     }

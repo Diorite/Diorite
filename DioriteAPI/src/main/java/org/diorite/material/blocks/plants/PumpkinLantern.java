@@ -2,9 +2,8 @@ package org.diorite.material.blocks.plants;
 
 import java.util.Map;
 
+import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.BlockMaterialData;
-import org.diorite.material.blocks.Powerable;
 import org.diorite.utils.collections.SimpleStringHashMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,13 +12,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "PumpkinLantern" and all its subtypes.
  */
-public class PumpkinLantern extends BlockMaterialData implements Powerable
+public class PumpkinLantern extends AbstractPumpkin
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 5;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -31,7 +29,11 @@ public class PumpkinLantern extends BlockMaterialData implements Powerable
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__PUMPKIN_LANTERN__HARDNESS;
 
-    public static final PumpkinLantern PUMPKIN_LANTERN = new PumpkinLantern();
+    public static final PumpkinLantern PUMPKIN_LANTERN_SOUTH = new PumpkinLantern();
+    public static final PumpkinLantern PUMPKIN_LANTERN_WEST  = new PumpkinLantern(BlockFace.WEST);
+    public static final PumpkinLantern PUMPKIN_LANTERN_NORTH = new PumpkinLantern(BlockFace.NORTH);
+    public static final PumpkinLantern PUMPKIN_LANTERN_EAST  = new PumpkinLantern(BlockFace.EAST);
+    public static final PumpkinLantern PUMPKIN_LANTERN_SELF  = new PumpkinLantern(BlockFace.SELF);
 
     private static final Map<String, PumpkinLantern>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PumpkinLantern> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -39,17 +41,12 @@ public class PumpkinLantern extends BlockMaterialData implements Powerable
     @SuppressWarnings("MagicNumber")
     protected PumpkinLantern()
     {
-        super("PUMPKIN_LANTERN", 91, "minecraft:lit_pumpkin", "PUMPKIN_LANTERN", (byte) 0x00);
+        super("PUMPKIN_LANTERN", 91, "minecraft:lit_pumpkin", BlockFace.SOUTH);
     }
 
-    public PumpkinLantern(final String enumName, final int type)
+    public PumpkinLantern(final BlockFace face)
     {
-        super(PUMPKIN_LANTERN.name(), PUMPKIN_LANTERN.getId(), PUMPKIN_LANTERN.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public PumpkinLantern(final int maxStack, final String typeName, final byte type)
-    {
-        super(PUMPKIN_LANTERN.name(), PUMPKIN_LANTERN.getId(), PUMPKIN_LANTERN.getMinecraftId(), maxStack, typeName, type);
+        super(PUMPKIN_LANTERN_SOUTH.name(), PUMPKIN_LANTERN_SOUTH.getId(), PUMPKIN_LANTERN_SOUTH.getMinecraftId(), face);
     }
 
     @Override
@@ -83,9 +80,9 @@ public class PumpkinLantern extends BlockMaterialData implements Powerable
     }
 
     @Override
-    public BlockMaterialData getPowered(final boolean powered)
+    public PumpkinLantern getBlockFacing(final BlockFace face)
     {
-        return null; // TODO: implement
+        return getByID(combine(face));
     }
 
     /**
@@ -114,6 +111,19 @@ public class PumpkinLantern extends BlockMaterialData implements Powerable
     }
 
     /**
+     * Returns one of PumpkinLantern sub-type based on {@link BlockFace}.
+     * It will never return null;
+     *
+     * @param face facing of PumpkinLantern
+     *
+     * @return sub-type of PumpkinLantern
+     */
+    public static PumpkinLantern getPumpkinLantern(final BlockFace face)
+    {
+        return getByID(combine(face));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -127,6 +137,10 @@ public class PumpkinLantern extends BlockMaterialData implements Powerable
 
     static
     {
-        PumpkinLantern.register(PUMPKIN_LANTERN);
+        PumpkinLantern.register(PUMPKIN_LANTERN_SOUTH);
+        PumpkinLantern.register(PUMPKIN_LANTERN_WEST);
+        PumpkinLantern.register(PUMPKIN_LANTERN_NORTH);
+        PumpkinLantern.register(PUMPKIN_LANTERN_EAST);
+        PumpkinLantern.register(PUMPKIN_LANTERN_SELF);
     }
 }

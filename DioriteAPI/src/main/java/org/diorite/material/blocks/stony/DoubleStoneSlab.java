@@ -147,28 +147,6 @@ public class DoubleStoneSlab extends StonySlab
         byName.put(element.name(), element);
     }
 
-    static
-    {
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_STONE);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_SANDSTONE);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_WOODEN);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_COBBLESTONE);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_BRICKS);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_STONE_BRICKS);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_NETHER_BRICKS);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_QUARTZ);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_RED_SANDSTONE);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_STONE_SMOOTH);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_SANDSTONE_SMOOTH);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_WOODEN_SMOOTH);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_COBBLESTONE_SMOOTH);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_BRICKS_SMOOTH);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_STONE_BRICKS_SMOOTH);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_NETHER_BRICKS_SMOOTH);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_QUARTZ_SMOOTH);
-        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_RED_SANDSTONE_SMOOTH);
-    }
-
     /**
      * Helper class for second stone slab ID
      */
@@ -198,5 +176,27 @@ public class DoubleStoneSlab extends StonySlab
         {
             return byID.get((byte) (id + 16));
         }
+    }
+
+    static
+    {
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_STONE);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_SANDSTONE);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_WOODEN);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_COBBLESTONE);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_BRICKS);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_STONE_BRICKS);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_NETHER_BRICKS);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_QUARTZ);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_RED_SANDSTONE);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_STONE_SMOOTH);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_SANDSTONE_SMOOTH);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_WOODEN_SMOOTH);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_COBBLESTONE_SMOOTH);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_BRICKS_SMOOTH);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_STONE_BRICKS_SMOOTH);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_NETHER_BRICKS_SMOOTH);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_QUARTZ_SMOOTH);
+        DoubleStoneSlab.register(DOUBLE_STONE_SLAB_RED_SANDSTONE_SMOOTH);
     }
 }

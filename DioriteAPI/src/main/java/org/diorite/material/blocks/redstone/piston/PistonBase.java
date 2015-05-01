@@ -9,6 +9,10 @@ import org.diorite.material.blocks.Directional;
 
 public abstract class PistonBase extends BlockMaterialData implements Directional
 {
+    /**
+     * Bit flag defining if postion in extended.
+     * If bit is set to 0, then it isn't extended..
+     */
     public static final byte EXTENDED_FLAG = 0x08;
 
     protected final BlockFace facing;
@@ -21,11 +25,59 @@ public abstract class PistonBase extends BlockMaterialData implements Directiona
         this.extended = extended;
     }
 
-    public PistonBase(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final BlockFace facing, final boolean extended)
+    /**
+     * @return true if this is extended sub-type.
+     */
+    public boolean isExtended()
     {
-        super(enumName, id, minecraftId, maxStack, typeName, combine(facing, extended));
-        this.facing = facing;
-        this.extended = extended;
+        return this.extended;
+    }
+
+    /**
+     * Returns one of Piston sub-type based on extended state.
+     *
+     * @param extended if piston should be extended.
+     *
+     * @return sub-type of Piston
+     */
+    public PistonBase getExtended(final boolean extended)
+    {
+        return this.getType(combine(this.facing, extended));
+    }
+
+    /**
+     * Returns one of Piston sub-type based on {@link BlockFace} and extended state.
+     * It will never return null.
+     *
+     * @param face     facing direction of piston.
+     * @param extended if piston should be extended.
+     *
+     * @return sub-type of Piston
+     */
+    public PistonBase getType(final BlockFace face, final boolean extended)
+    {
+        return this.getType(combine(face, extended));
+    }
+
+    @Override
+    public abstract PistonBase getType(int id);
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("facing", this.facing).toString();
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.facing;
+    }
+
+    @Override
+    public PistonBase getBlockFacing(final BlockFace face)
+    {
+        return this.getType(combine(face, this.extended));
     }
 
     protected static byte combine(final BlockFace facing, final boolean extended)
@@ -52,41 +104,5 @@ public abstract class PistonBase extends BlockMaterialData implements Directiona
                 return result;
         }
         return result;
-    }
-
-    public boolean isExtended()
-    {
-        return this.extended;
-    }
-
-    public PistonBase getExtended(final boolean extended)
-    {
-        return this.getType(combine(this.facing, extended));
-    }
-
-    public PistonBase getType(final BlockFace face, final boolean extended)
-    {
-        return this.getType(combine(face, extended));
-    }
-
-    @Override
-    public PistonBase getBlockFacing(final BlockFace face)
-    {
-        return this.getType(combine(face, this.extended));
-    }
-
-    @Override
-    public abstract PistonBase getType(int id);
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return this.facing;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("facing", this.facing).toString();
     }
 }

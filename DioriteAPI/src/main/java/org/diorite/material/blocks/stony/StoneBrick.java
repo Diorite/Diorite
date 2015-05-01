@@ -13,11 +13,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class StoneBrick extends Stony
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 4;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +28,10 @@ public class StoneBrick extends Stony
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_BRICK__HARDNESS;
 
-    public static final StoneBrick STONE_BRICK = new StoneBrick();
+    public static final StoneBrick STONE_BRICK          = new StoneBrick(); // TODO: maybe later add some variant enum with all values like MOSSY, CRACKED etc...
+    public static final StoneBrick STONE_BRICK_MOSSY    = new StoneBrick("MOSSY", 0x01);
+    public static final StoneBrick STONE_BRICK_CRACKED  = new StoneBrick("CRACKED", 0x02);
+    public static final StoneBrick STONE_BRICK_CHISELED = new StoneBrick("CHISELED", 0x03);
 
     private static final Map<String, StoneBrick>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StoneBrick> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -43,11 +45,6 @@ public class StoneBrick extends Stony
     public StoneBrick(final String enumName, final int type)
     {
         super(STONE_BRICK.name(), STONE_BRICK.getId(), STONE_BRICK.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public StoneBrick(final int maxStack, final String typeName, final byte type)
-    {
-        super(STONE_BRICK.name(), STONE_BRICK.getId(), STONE_BRICK.getMinecraftId(), maxStack, typeName, type);
     }
 
     @Override
@@ -114,5 +111,8 @@ public class StoneBrick extends Stony
     static
     {
         StoneBrick.register(STONE_BRICK);
+        StoneBrick.register(STONE_BRICK_MOSSY);
+        StoneBrick.register(STONE_BRICK_CRACKED);
+        StoneBrick.register(STONE_BRICK_CHISELED);
     }
 }

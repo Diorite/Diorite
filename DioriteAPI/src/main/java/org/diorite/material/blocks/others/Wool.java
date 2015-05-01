@@ -35,21 +35,21 @@ public class Wool extends BlockMaterialData implements Colorable
     public static final float HARDNESS         = MagicNumbers.MATERIAL__WOOL__HARDNESS;
 
     public static final Wool WOOL_WHITE      = new Wool();
-    public static final Wool WOOL_ORANGE     = new Wool("ORANGE", DyeColor.ORANGE);
-    public static final Wool WOOL_MAGENTA    = new Wool("MAGENTA", DyeColor.MAGENTA);
-    public static final Wool WOOL_LIGHT_BLUE = new Wool("LIGHT_BLUE", DyeColor.LIGHT_BLUE);
-    public static final Wool WOOL_YELLOW     = new Wool("YELLOW", DyeColor.YELLOW);
-    public static final Wool WOOL_LIME       = new Wool("LIME", DyeColor.LIME);
-    public static final Wool WOOL_PINK       = new Wool("PINK", DyeColor.PINK);
-    public static final Wool WOOL_GRAY       = new Wool("GRAY", DyeColor.GRAY);
-    public static final Wool WOOL_SILVER     = new Wool("SILVER", DyeColor.SILVER);
-    public static final Wool WOOL_CYAN       = new Wool("CYAN", DyeColor.CYAN);
-    public static final Wool WOOL_PURPLE     = new Wool("PURPLE", DyeColor.PURPLE);
-    public static final Wool WOOL_BLUE       = new Wool("BLUE", DyeColor.BLUE);
-    public static final Wool WOOL_BROWN      = new Wool("BROWN", DyeColor.BROWN);
-    public static final Wool WOOL_GREEN      = new Wool("GREEN", DyeColor.GREEN);
-    public static final Wool WOOL_RED        = new Wool("RED", DyeColor.RED);
-    public static final Wool WOOL_BLACK      = new Wool("BLACK", DyeColor.BLACK);
+    public static final Wool WOOL_ORANGE     = new Wool(DyeColor.ORANGE);
+    public static final Wool WOOL_MAGENTA    = new Wool(DyeColor.MAGENTA);
+    public static final Wool WOOL_LIGHT_BLUE = new Wool(DyeColor.LIGHT_BLUE);
+    public static final Wool WOOL_YELLOW     = new Wool(DyeColor.YELLOW);
+    public static final Wool WOOL_LIME       = new Wool(DyeColor.LIME);
+    public static final Wool WOOL_PINK       = new Wool(DyeColor.PINK);
+    public static final Wool WOOL_GRAY       = new Wool(DyeColor.GRAY);
+    public static final Wool WOOL_SILVER     = new Wool(DyeColor.SILVER);
+    public static final Wool WOOL_CYAN       = new Wool(DyeColor.CYAN);
+    public static final Wool WOOL_PURPLE     = new Wool(DyeColor.PURPLE);
+    public static final Wool WOOL_BLUE       = new Wool(DyeColor.BLUE);
+    public static final Wool WOOL_BROWN      = new Wool(DyeColor.BROWN);
+    public static final Wool WOOL_GREEN      = new Wool(DyeColor.GREEN);
+    public static final Wool WOOL_RED        = new Wool(DyeColor.RED);
+    public static final Wool WOOL_BLACK      = new Wool(DyeColor.BLACK);
 
     private static final Map<String, Wool>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<Wool> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -59,19 +59,13 @@ public class Wool extends BlockMaterialData implements Colorable
     @SuppressWarnings("MagicNumber")
     protected Wool()
     {
-        super("WOOL", 35, "minecraft:wool", "WOOL", (byte) 0x00);
+        super("WOOL", 35, "minecraft:wool", "WHITE", (byte) 0x00);
         this.color = DyeColor.WHITE;
     }
 
-    public Wool(final String enumName, final DyeColor color)
+    public Wool(final DyeColor color)
     {
-        super(WOOL_WHITE.name(), WOOL_WHITE.getId(), WOOL_WHITE.getMinecraftId(), enumName, color.getBlockFlag());
-        this.color = color;
-    }
-
-    public Wool(final int maxStack, final String typeName, final DyeColor color)
-    {
-        super(WOOL_WHITE.name(), WOOL_WHITE.getId(), WOOL_WHITE.getMinecraftId(), maxStack, typeName, color.getBlockFlag());
+        super(WOOL_WHITE.name(), WOOL_WHITE.getId(), WOOL_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
         this.color = color;
     }
 
@@ -97,6 +91,12 @@ public class Wool extends BlockMaterialData implements Colorable
     public Wool getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
     }
 
     @Override
@@ -136,6 +136,14 @@ public class Wool extends BlockMaterialData implements Colorable
         return byName.get(name);
     }
 
+    /**
+     * Returns one of Wool sub-type based on {@link DyeColor}.
+     * It will never return null;
+     *
+     * @param color color of Wool
+     *
+     * @return sub-type of Wool
+     */
     public static Wool getWool(final DyeColor color)
     {
         return getByID(color.getBlockFlag());
@@ -171,11 +179,5 @@ public class Wool extends BlockMaterialData implements Colorable
         Wool.register(WOOL_GREEN);
         Wool.register(WOOL_RED);
         Wool.register(WOOL_BLACK);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
     }
 }

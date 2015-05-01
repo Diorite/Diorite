@@ -2,6 +2,9 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
@@ -16,11 +19,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class QuartzStairs extends BlockMaterialData implements Stairs
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 8;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -32,25 +34,35 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__QUARTZ_STAIRS__HARDNESS;
 
-    public static final QuartzStairs QUARTZ_STAIRS = new QuartzStairs();
+    public static final QuartzStairs QUARTZ_STAIRS_EAST  = new QuartzStairs();
+    public static final QuartzStairs QUARTZ_STAIRS_WEST  = new QuartzStairs("WEST", BlockFace.WEST, false);
+    public static final QuartzStairs QUARTZ_STAIRS_SOUTH = new QuartzStairs("SOUTH", BlockFace.SOUTH, false);
+    public static final QuartzStairs QUARTZ_STAIRS_NORTH = new QuartzStairs("NORTH", BlockFace.NORTH, false);
+
+    public static final QuartzStairs QUARTZ_STAIRS_EAST_UPSIDE_DOWN  = new QuartzStairs("EAST_UPSIDE_DOWN", BlockFace.EAST, true);
+    public static final QuartzStairs QUARTZ_STAIRS_WEST_UPSIDE_DOWN  = new QuartzStairs("WEST_UPSIDE_DOWN", BlockFace.WEST, true);
+    public static final QuartzStairs QUARTZ_STAIRS_SOUTH_UPSIDE_DOWN = new QuartzStairs("SOUTH_UPSIDE_DOWN", BlockFace.SOUTH, true);
+    public static final QuartzStairs QUARTZ_STAIRS_NORTH_UPSIDE_DOWN = new QuartzStairs("NORTH_UPSIDE_DOWN", BlockFace.NORTH, true);
 
     private static final Map<String, QuartzStairs>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<QuartzStairs> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
+    protected final BlockFace face;
+    protected final boolean   upsideDown;
+
     @SuppressWarnings("MagicNumber")
     protected QuartzStairs()
     {
-        super("QUARTZ_STAIRS", 156, "minecraft:quartz_brick_stairs", "QUARTZ_STAIRS", (byte) 0x00);
+        super("QUARTZ_STAIRS", 156, "minecraft:quartz_brick_stairs", "EAST", (byte) 0x00);
+        this.face = BlockFace.EAST;
+        this.upsideDown = false;
     }
 
-    public QuartzStairs(final String enumName, final int type)
+    public QuartzStairs(final String enumName, final BlockFace face, final boolean upsideDown)
     {
-        super(QUARTZ_STAIRS.name(), QUARTZ_STAIRS.getId(), QUARTZ_STAIRS.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public QuartzStairs(final int maxStack, final String typeName, final byte type)
-    {
-        super(QUARTZ_STAIRS.name(), QUARTZ_STAIRS.getId(), QUARTZ_STAIRS.getMinecraftId(), maxStack, typeName, type);
+        super(QUARTZ_STAIRS_EAST.name(), QUARTZ_STAIRS_EAST.getId(), QUARTZ_STAIRS_EAST.getMinecraftId(), enumName, Stairs.combine(face, upsideDown));
+        this.face = face;
+        this.upsideDown = upsideDown;
     }
 
     @Override
@@ -66,6 +78,36 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
+    public boolean isUpsideDown()
+    {
+        return this.upsideDown;
+    }
+
+    @Override
+    public QuartzStairs getUpsideDown(final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(this.face, upsideDown));
+    }
+
+    @Override
+    public QuartzStairs getType(final BlockFace face, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(face, upsideDown));
+    }
+
+    @Override
+    public BlockFace getBlockFacing()
+    {
+        return this.face;
+    }
+
+    @Override
+    public QuartzStairs getBlockFacing(final BlockFace face)
+    {
+        return getByID(Stairs.combine(face, this.upsideDown));
+    }
+
+    @Override
     public QuartzStairs getType(final String name)
     {
         return getByEnumName(name);
@@ -78,27 +120,9 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
     }
 
     @Override
-    public boolean isUpsideDown()
+    public String toString()
     {
-        return false; // TODO: implement
-    }
-
-    @Override
-    public Stairs getUpsideDown(final boolean upsideDown)
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockFace getBlockFacing()
-    {
-        return null; // TODO: implement
-    }
-
-    @Override
-    public BlockMaterialData getBlockFacing(final BlockFace face)
-    {
-        return null; // TODO: implement
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("upsideDown", this.upsideDown).toString();
     }
 
     /**
@@ -127,6 +151,20 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
     }
 
     /**
+     * Returns one of QuartzStairs sub-type based on facing direction and upside-down state.
+     * It will never return null.
+     *
+     * @param blockFace  facing direction of stairs.
+     * @param upsideDown if stairs should be upside-down.
+     *
+     * @return sub-type of QuartzStairs
+     */
+    public static QuartzStairs getQuartzStairs(final BlockFace blockFace, final boolean upsideDown)
+    {
+        return getByID(Stairs.combine(blockFace, upsideDown));
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -140,6 +178,13 @@ public class QuartzStairs extends BlockMaterialData implements Stairs
 
     static
     {
-        QuartzStairs.register(QUARTZ_STAIRS);
+        QuartzStairs.register(QUARTZ_STAIRS_EAST);
+        QuartzStairs.register(QUARTZ_STAIRS_WEST);
+        QuartzStairs.register(QUARTZ_STAIRS_SOUTH);
+        QuartzStairs.register(QUARTZ_STAIRS_NORTH);
+        QuartzStairs.register(QUARTZ_STAIRS_EAST_UPSIDE_DOWN);
+        QuartzStairs.register(QUARTZ_STAIRS_WEST_UPSIDE_DOWN);
+        QuartzStairs.register(QUARTZ_STAIRS_SOUTH_UPSIDE_DOWN);
+        QuartzStairs.register(QUARTZ_STAIRS_NORTH_UPSIDE_DOWN);
     }
 }

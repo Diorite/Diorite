@@ -13,11 +13,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  */
 public class BrownMushroomBlock extends MushroomBlock
 {
-    // TODO: auto-generated class, implement other types (sub-ids).	
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte  USED_DATA_VALUES = 13;
     /**
      * Blast resistance of block, can be changed only before server start.
      * Final copy of blast resistance from {@link MagicNumbers} class.
@@ -29,7 +28,19 @@ public class BrownMushroomBlock extends MushroomBlock
      */
     public static final float HARDNESS         = MagicNumbers.MATERIAL__BROWN_MUSHROOM_BLOCK__HARDNESS;
 
-    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK = new BrownMushroomBlock();
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_PORES_FULL     = new BrownMushroomBlock();
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_NORTH_WEST = new BrownMushroomBlock(Type.CAP_NORTH_WEST);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_NORTH      = new BrownMushroomBlock(Type.CAP_NORTH);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_NORTH_EAST = new BrownMushroomBlock(Type.CAP_NORTH_EAST);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_WEST       = new BrownMushroomBlock(Type.CAP_WEST);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP            = new BrownMushroomBlock(Type.CAP);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_EAST       = new BrownMushroomBlock(Type.CAP_EAST);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_SOUTH_WEST = new BrownMushroomBlock(Type.CAP_SOUTH_WEST);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_SOUTH      = new BrownMushroomBlock(Type.CAP_SOUTH);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_SOUTH_EAST = new BrownMushroomBlock(Type.CAP_SOUTH_EAST);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_STEAM          = new BrownMushroomBlock(Type.STEAM);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_CAP_FULL       = new BrownMushroomBlock(Type.CAP_FULL);
+    public static final BrownMushroomBlock BROWN_MUSHROOM_BLOCK_STEAM_FULL     = new BrownMushroomBlock(Type.STEAM_FULL);
 
     private static final Map<String, BrownMushroomBlock>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BrownMushroomBlock> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -37,17 +48,12 @@ public class BrownMushroomBlock extends MushroomBlock
     @SuppressWarnings("MagicNumber")
     protected BrownMushroomBlock()
     {
-        super("BROWN_MUSHROOM_BLOCK", 99, "minecraft:brown_mushroom_block", "BROWN_MUSHROOM_BLOCK", (byte) 0x00);
+        super("BROWN_MUSHROOM_BLOCK", 99, "minecraft:brown_mushroom_block", Type.PORES_FULL);
     }
 
-    public BrownMushroomBlock(final String enumName, final int type)
+    public BrownMushroomBlock(final Type type)
     {
-        super(BROWN_MUSHROOM_BLOCK.name(), BROWN_MUSHROOM_BLOCK.getId(), BROWN_MUSHROOM_BLOCK.getMinecraftId(), enumName, (byte) type);
-    }
-
-    public BrownMushroomBlock(final int maxStack, final String typeName, final byte type)
-    {
-        super(BROWN_MUSHROOM_BLOCK.name(), BROWN_MUSHROOM_BLOCK.getId(), BROWN_MUSHROOM_BLOCK.getMinecraftId(), maxStack, typeName, type);
+        super(BROWN_MUSHROOM_BLOCK_PORES_FULL.name(), BROWN_MUSHROOM_BLOCK_PORES_FULL.getId(), BROWN_MUSHROOM_BLOCK_PORES_FULL.getMinecraftId(), type);
     }
 
     @Override
@@ -72,6 +78,12 @@ public class BrownMushroomBlock extends MushroomBlock
     public BrownMushroomBlock getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public BrownMushroomBlock getMushroomType(final Type mushroomType)
+    {
+        return getByID(mushroomType.getFlag());
     }
 
     /**
@@ -100,6 +112,19 @@ public class BrownMushroomBlock extends MushroomBlock
     }
 
     /**
+     * Returns one of BrownMushroomBlock sub-type based on {@link Type}.
+     * It will never return null;
+     *
+     * @param type type of mushroom texture/block.
+     *
+     * @return sub-type of BrownMushroomBlock
+     */
+    public static BrownMushroomBlock getBrownMushroomBlock(final Type type)
+    {
+        return getByID(type.getFlag());
+    }
+
+    /**
      * Register new sub-type, may replace existing sub-types.
      * Should be used only if you know what are you doing, it will not create fully usable material.
      *
@@ -113,6 +138,18 @@ public class BrownMushroomBlock extends MushroomBlock
 
     static
     {
-        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_PORES_FULL);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_NORTH_WEST);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_NORTH);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_NORTH_EAST);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_WEST);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_EAST);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_SOUTH_WEST);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_SOUTH);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_SOUTH_EAST);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_STEAM);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_CAP_FULL);
+        BrownMushroomBlock.register(BROWN_MUSHROOM_BLOCK_STEAM_FULL);
     }
 }

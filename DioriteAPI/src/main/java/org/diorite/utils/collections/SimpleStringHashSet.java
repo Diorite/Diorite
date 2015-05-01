@@ -6,6 +6,8 @@ import java.util.HashSet;
 public class SimpleStringHashSet extends HashSet<String>
 {
 
+    private static final long serialVersionUID = - 6720868725921259299L;
+
     public SimpleStringHashSet(final int initialCapacity)
     {
         super(initialCapacity);

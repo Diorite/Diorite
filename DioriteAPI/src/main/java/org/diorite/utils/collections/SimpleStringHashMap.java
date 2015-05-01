@@ -6,6 +6,8 @@ import java.util.Map;
 public class SimpleStringHashMap<T> extends HashMap<String, T>
 {
 
+    private static final long serialVersionUID = 8109504159029603253L;
+
     public SimpleStringHashMap(final int initialCapacity, final float loadFactor)
     {
         super(initialCapacity, loadFactor);

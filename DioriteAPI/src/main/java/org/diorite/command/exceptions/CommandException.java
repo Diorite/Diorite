@@ -2,6 +2,8 @@ package org.diorite.command.exceptions;
 
 public class CommandException extends RuntimeException
 {
+    private static final long serialVersionUID = - 1593398272242063562L;
+
     public CommandException()
     {
     }

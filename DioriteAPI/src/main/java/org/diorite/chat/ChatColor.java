@@ -44,12 +44,12 @@ public enum ChatColor
     private final        boolean                   isFormat;
     private final        String                    toString;
 
-    private ChatColor(final String name, final char code, final int intCode)
+    ChatColor(final String name, final char code, final int intCode)
     {
         this(name, code, intCode, false);
     }
 
-    private ChatColor(final String name, final char code, final int intCode, final boolean isFormat)
+    ChatColor(final String name, final char code, final int intCode, final boolean isFormat)
     {
         this.name = name;
         this.code = code;
