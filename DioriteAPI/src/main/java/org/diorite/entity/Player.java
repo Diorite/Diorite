@@ -184,6 +184,11 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
     void showParticle(Particle particle, boolean isLongDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int... data);
 
     /**
+     * Sending a inventory content to player
+     */
+    void updateInventory();
+
+    /**
      * Returns the world on which is player
      *
      * @return World
