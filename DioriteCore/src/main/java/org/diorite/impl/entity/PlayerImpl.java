@@ -29,6 +29,7 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
+import org.diorite.inventory.Inventory;
 
 public class PlayerImpl extends AttributableEntityImpl implements Player
 {
@@ -42,6 +43,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     protected       byte             renderDistance;
     protected final PlayerChunksImpl playerChunks;
     protected       GameMode         gameMode;
+    protected       Inventory        inventory;
 
     protected PacketPlayOutAbilities abilities = new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
@@ -298,5 +300,11 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public EntityType getType()
     {
         return EntityType.PLAYER;
+    }
+
+    @Override
+    public Inventory getInventory()
+    {
+        return this.inventory;
     }
 }
