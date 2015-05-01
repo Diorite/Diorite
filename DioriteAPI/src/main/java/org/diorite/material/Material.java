@@ -232,8 +232,8 @@ public abstract class Material implements SimpleEnum<Material>
     public static final  SandstoneStairs          SANDSTONE_STAIRS           = SandstoneStairs.SANDSTONE_STAIRS_EAST;
     public static final  EmeraldOre               EMERALD_ORE                = EmeraldOre.EMERALD_ORE;
     public static final  EnderChest               ENDER_CHEST                = EnderChest.ENDER_CHEST_NORTH;
-    public static final  TripwireHook             TRIPWIRE_HOOK              = TripwireHook.TRIPWIRE_HOOK; // TODO: edit after editing auto-generated class
-    public static final  Tripwire                 TRIPWIRE                   = Tripwire.TRIPWIRE; // TODO: edit after editing auto-generated class
+    public static final  TripwireHook             TRIPWIRE_HOOK              = TripwireHook.TRIPWIRE_HOOK_SOUTH;
+    public static final  Tripwire                 TRIPWIRE                   = Tripwire.TRIPWIRE;
     public static final  EmeraldBlock             EMERALD_BLOCK              = EmeraldBlock.EMERALD_BLOCK;
     public static final  SpruceStairs             SPRUCE_STAIRS              = SpruceStairs.SPRUCE_STAIRS_EAST;
     public static final  BirchStairs              BIRCH_STAIRS               = BirchStairs.BIRCH_STAIRS_EAST;

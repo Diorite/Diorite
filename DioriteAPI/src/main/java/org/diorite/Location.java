@@ -7,7 +7,6 @@ import org.diorite.world.World;
 
 public class Location implements Loc
 {
-    public static final Location ZERO = new Location(0, 0, 0);
     private double x;
     private double y;
     private double z;

@@ -21,7 +21,7 @@ public class ActivatorRail extends Rails implements Activatable
      * Bit flag defining if rail is active.
      * If bit is set to 0, then it isn't active
      */
-    public static final byte  ACTIVE_FLAG      = 0x08;
+    public static final byte  ACTIVE_FLAG      = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */

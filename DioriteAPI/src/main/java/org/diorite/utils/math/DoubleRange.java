@@ -76,7 +76,7 @@ public class DoubleRange
      * Return given number if it is in range, or closest value in range.
      * {@code i > max -> max}
      * {@code i < min -> min}
-     * else -> i
+     * {@code else -> i}
      *
      * @param i number to validate.
      *
@@ -99,7 +99,7 @@ public class DoubleRange
      * Return given number if it is in range, or default value.
      * {@code i > max -> def}
      * {@code i < min -> def}
-     * else -> i
+     * {@code else -> i}
      *
      * @param i   number to validate.
      * @param def default value.

@@ -21,7 +21,7 @@ public class DetectorRail extends Rails implements Powerable
      * Bit flag defining if rail is powered.
      * If bit is set to 0, then it isn't powered
      */
-    public static final byte  POWERED_FLAG     = 0x08;
+    public static final byte  POWERED_FLAG     = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */

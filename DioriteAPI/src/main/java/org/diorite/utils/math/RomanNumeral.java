@@ -152,7 +152,7 @@ public class RomanNumeral
         return i;
     }
 
-    public static int toInt(String roman)
+    public static int toInt(String roman) throws NumberFormatException
     {
         final boolean negative = roman.startsWith("-");
         roman = roman.substring(1);
