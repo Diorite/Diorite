@@ -23,6 +23,6 @@ public interface Entity extends GameObject
 
     default int getMcId()
     {
-        return getType().getMcId();
+        return this.getType().getMcId();
     }
 }
