@@ -5,9 +5,10 @@ import org.diorite.Particle;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
+import org.diorite.inventory.InventoryHolder;
 import org.diorite.world.World;
 
-public interface Player extends AttributableEntity, PlayerCommandSender
+public interface Player extends AttributableEntity, PlayerCommandSender, InventoryHolder
 {
     float WALK_SPEED         = 0.1f;
     float FLY_SPEED          = 0.05f;
@@ -181,6 +182,11 @@ public interface Player extends AttributableEntity, PlayerCommandSender
      * @param data Special particle data, it should be used only to: ICON_CRACK, BLOCK_CRACK, BLOCK_DUST
      */
     void showParticle(Particle particle, boolean isLongDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int... data);
+
+    /**
+     * Sending a inventory content to player
+     */
+    void updateInventory();
 
     /**
      * Returns the world on which is player
