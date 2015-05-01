@@ -2,6 +2,9 @@ package org.diorite.impl.connection.packets.play.out;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -67,5 +70,11 @@ public class PacketPlayOutResourcePackSend implements PacketPlayOut
     public void handle(final PacketPlayOutListener listener)
     {
         listener.handle(this);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("url", this.url).append("hash", this.hash).toString();
     }
 }

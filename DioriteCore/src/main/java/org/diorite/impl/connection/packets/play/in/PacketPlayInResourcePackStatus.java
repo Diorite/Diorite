@@ -2,6 +2,9 @@ package org.diorite.impl.connection.packets.play.in;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -62,7 +65,7 @@ public class PacketPlayInResourcePackStatus implements PacketPlayIn
     {
         LOADED(0), DECLINED(1), FAILED_DOWNLOAD(2), ACCEPTED(3);
 
-        private int id;
+        private final int id;
 
         ResourcePackStatus(final int id)
         {
@@ -85,5 +88,11 @@ public class PacketPlayInResourcePackStatus implements PacketPlayIn
             }
             return null;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("hash", this.hash).append("status", this.status).toString();
     }
 }
