@@ -114,6 +114,12 @@ public class PlayListener implements PacketPlayInListener
     }
 
     @Override
+    public void handle(final PacketPlayInResourcePackStatus packet)
+    {
+        // This is not needed? Maybe create event or something other...
+    }
+
+    @Override
     public void handle(final PacketPlayInEntityAction packet)
     {
         packet.getEntityAction().doAction(this.player, packet.getJumpBoost());

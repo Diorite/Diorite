@@ -307,4 +307,10 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     {
         return this.inventory;
     }
+
+    @Override
+    public void updateInventory()
+    {
+        // TODO Send inventory to player
+    }
 }
