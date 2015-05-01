@@ -5,9 +5,10 @@ import org.diorite.Particle;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
+import org.diorite.inventory.InventoryHolder;
 import org.diorite.world.World;
 
-public interface Player extends AttributableEntity, PlayerCommandSender
+public interface Player extends AttributableEntity, PlayerCommandSender, InventoryHolder
 {
     float WALK_SPEED         = 0.1f;
     float FLY_SPEED          = 0.05f;
