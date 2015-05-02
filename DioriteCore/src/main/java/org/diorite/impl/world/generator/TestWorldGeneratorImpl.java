@@ -6,8 +6,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.Material;
-import org.diorite.material.blocks.others.Wool;
-import org.diorite.material.blocks.stony.Stone;
+import org.diorite.material.blocks.others.WoolMat;
+import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.noise.NoiseGenerator;
 import org.diorite.utils.math.noise.SimplexNoiseGenerator;
@@ -62,13 +62,13 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 
                         if (density > threshold)
                         {
-                            builder.setBlock(x, y, z, Stone.getByID(DioriteRandomUtils.getRandInt(3, 4)));
+                            builder.setBlock(x, y, z, StoneMat.getByID(DioriteRandomUtils.getRandInt(3, 4)));
                         }
 
                     }
                     else
                     {
-                        builder.setBlock(x, y, z, Stone.getByID(DioriteRandomUtils.getRandInt(3, 4)));
+                        builder.setBlock(x, y, z, StoneMat.getByID(DioriteRandomUtils.getRandInt(3, 4)));
                     }
                 }
 
@@ -121,11 +121,11 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 
                         if ((x == r) || (x == rr))
                         {
-                            IntStream.rangeClosed(rr, r).forEach(z -> chunk.setBlock(x, chunk.getHighestBlock(x, z).getY(), z, Wool.getByID(DioriteRandomUtils.getRandInt(0, 15))));
+                            IntStream.rangeClosed(rr, r).forEach(z -> chunk.setBlock(x, chunk.getHighestBlock(x, z).getY(), z, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15))));
                             return;
                         }
-                        chunk.setBlock(x, chunk.getHighestBlock(x, r).getY(), r, Wool.getByID(DioriteRandomUtils.getRandInt(0, 15)));
-                        chunk.setBlock(x, chunk.getHighestBlock(x, rr).getY(), rr, Wool.getByID(DioriteRandomUtils.getRandInt(0, 15)));
+                        chunk.setBlock(x, chunk.getHighestBlock(x, r).getY(), r, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
+                        chunk.setBlock(x, chunk.getHighestBlock(x, rr).getY(), rr, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
                     });
                 });
             }
