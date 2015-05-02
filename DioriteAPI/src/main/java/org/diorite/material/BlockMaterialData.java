@@ -3,21 +3,19 @@ package org.diorite.material;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.utils.math.IntRange;
-
 public abstract class BlockMaterialData extends Material
 {
     protected final String typeName;
     protected final byte   type;
 
-    public BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
+    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
     {
         super(enumName, id, minecraftId);
         this.typeName = typeName;
         this.type = type;
     }
 
-    public BlockMaterialData(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
     {
         super(enumName, id, minecraftId, maxStack);
         this.typeName = typeName;
@@ -51,65 +49,65 @@ public abstract class BlockMaterialData extends Material
         return true;
     }
 
-    @Override
-    public boolean isTransparent()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isFlammable()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isBurnable()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isOccluding()
-    {
-        return true;
-    }
-
-    @Override
-    public boolean hasGravity()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isEdible()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isReplaceable()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isGlowing()
-    {
-        return false;
-    }
-
-    @Override
-    public int getLuminance()
-    {
-        return 0;
-    }
-
-    @Override
-    public IntRange getExperienceWhenMined()
-    {
-        return IntRange.EMPTY;
-    }
+//    @Override
+//    public boolean isTransparent()
+//    {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isFlammable()
+//    {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isBurnable()
+//    {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isOccluding()
+//    {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean hasGravity()
+//    {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isEdible()
+//    {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isReplaceable()
+//    {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isGlowing()
+//    {
+//        return false;
+//    }
+//
+//    @Override
+//    public int getLuminance()
+//    {
+//        return 0;
+//    }
+//
+//    @Override
+//    public IntRange getExperienceWhenMined()
+//    {
+//        return IntRange.EMPTY;
+//    }
 
     @Override
     public int hashCode()
