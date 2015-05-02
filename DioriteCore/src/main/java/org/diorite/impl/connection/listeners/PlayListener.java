@@ -116,7 +116,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInResourcePackStatus packet)
     {
-        // This is not needed? Maybe create event or something other...
+        // TODO This is not needed? Maybe create event or something other...
     }
 
     @Override
