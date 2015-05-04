@@ -12,6 +12,8 @@ public interface ChunkManager
 
     Chunk getChunkAt(int x, int z);
 
+    Chunk getChunkAt(ChunkPos pos, boolean generate, boolean populate);
+
     Chunk getChunkAt(ChunkPos pos, boolean generate);
 
     Chunk getChunkAt(int x, int z, boolean generate);

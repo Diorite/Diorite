@@ -74,7 +74,7 @@ public abstract class NbtAbstractTag implements NbtTag
     }
 
     @Override
-    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    public void read(final NbtInputStream inputStream, final boolean anonymous, final NbtLimiter limiter) throws IOException
     {
         if (! anonymous)
         {

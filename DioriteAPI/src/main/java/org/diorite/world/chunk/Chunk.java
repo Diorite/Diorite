@@ -16,6 +16,8 @@ public interface Chunk
 
     void populate();
 
+    void initHeightMap();
+
     void setBlock(int x, int y, int z, BlockMaterialData materialData);
 
     void setBlock(int x, int y, int z, int id, int meta);
@@ -27,6 +29,8 @@ public interface Chunk
     Block getBlock(int x, int y, int z);
 
     Block getHighestBlock(int x, int z);
+
+    int getHighestBlockY(int x, int z);
 
     World getWorld();
 

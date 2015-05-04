@@ -67,6 +67,8 @@ public interface World
 
     Block getBlock(int x, int y, int z);
 
+    int getHighestBlockY(int x, int z);
+
     Block getHighestBlock(int x, int z);
 
     void setBlock(int x, int y, int z, BlockMaterialData material);

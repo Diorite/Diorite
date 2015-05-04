@@ -53,9 +53,11 @@ public class NbtTagByteArray extends NbtAbstractTag
     }
 
     @Override
-    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    public void read(final NbtInputStream inputStream, final boolean anonymous, final NbtLimiter limiter) throws IOException
     {
-        super.read(inputStream, anonymous);
+        super.read(inputStream, anonymous, limiter);
+        limiter.incrementElementsCount(1);
+
         final int size = inputStream.readInt();
         final byte[] data = new byte[size];
         inputStream.readFully(data);

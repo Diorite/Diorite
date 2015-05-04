@@ -21,23 +21,9 @@ public enum NbtTagType
     COMPOUND(10, NbtTagCompound.class, NbtTagCompound::new),
     INTEGER_ARRAY(11, NbtTagIntArray.class, NbtTagIntArray::new);
     private static final Map<Byte, NbtTagType> typeMap;
-
-    static
-    {
-        {
-            final ImmutableMap.Builder<Byte, NbtTagType> mapBuilder = new ImmutableMap.Builder<>();
-            for (final NbtTagType type : values())
-            {
-                mapBuilder.put(type.typeID, type);
-            }
-            typeMap = mapBuilder.build();
-        }
-    }
-
     private final byte                            typeID;
     private final Class<? extends NbtAbstractTag> typeClass;
     private final Supplier<NbtAbstractTag>        getInstance;
-
     NbtTagType(final int typeID, final Class<? extends NbtAbstractTag> type, final Supplier<NbtAbstractTag> getInstance)
     {
         this.typeID = ((byte) typeID);
@@ -64,5 +50,17 @@ public enum NbtTagType
     public static NbtTagType valueOf(final byte typeID)
     {
         return typeMap.get(typeID);
+    }
+
+    static
+    {
+        {
+            final ImmutableMap.Builder<Byte, NbtTagType> mapBuilder = new ImmutableMap.Builder<>();
+            for (final NbtTagType type : values())
+            {
+                mapBuilder.put(type.typeID, type);
+            }
+            typeMap = mapBuilder.build();
+        }
     }
 }

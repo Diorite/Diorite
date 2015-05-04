@@ -54,9 +54,11 @@ public class NbtTagFloat extends NbtAbstractTag
     }
 
     @Override
-    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    public void read(final NbtInputStream inputStream, final boolean anonymous, final NbtLimiter limiter) throws IOException
     {
-        super.read(inputStream, anonymous);
+        super.read(inputStream, anonymous, limiter);
+        limiter.incrementElementsCount(1);
+
         this.value = inputStream.readFloat();
     }
 

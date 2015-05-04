@@ -1,8 +1,14 @@
 package org.diorite.utils.concurrent;
 
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinPool.ForkJoinWorkerThreadFactory;
 import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.ForkJoinWorkerThread;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public final class ParallelUtils
 {
@@ -54,6 +60,45 @@ public final class ParallelUtils
     public static <T> T realParallelStream(final Supplier<T> streamAction)
     {
         return realParallelStream(streamAction, runtime.availableProcessors());
+    }
+
+    public static void realParallelStream(final Runnable streamAction, final int parallelism, final String name)
+    {
+        realParallelStream(streamAction, parallelism, true, name);
+    }
+
+    public static void realParallelStream(final Runnable streamAction, final String name)
+    {
+        realParallelStream(streamAction, runtime.availableProcessors(), true, name);
+    }
+
+    public static void realParallelStream(final Runnable streamAction, final int parallelism, final boolean await, final String name)
+    {
+        final ForkJoinPool pool = new ForkJoinPool(parallelism, new NamedForkJoinWorkerFactory(name), null, false);
+        if (await)
+        {
+            pool.invoke(createSimpleTask(streamAction));
+        }
+        else
+        {
+            pool.submit(streamAction);
+        }
+    }
+
+    public static void realParallelStream(final Runnable streamAction, final boolean await, final String name)
+    {
+        realParallelStream(streamAction, runtime.availableProcessors(), await, name);
+    }
+
+    public static <T> T realParallelStream(final Supplier<T> streamAction, final int parallelism, final String name)
+    {
+        final ForkJoinPool pool = new ForkJoinPool(parallelism, new NamedForkJoinWorkerFactory(name), null, false);
+        return pool.invoke(createTask(streamAction));
+    }
+
+    public static <T> T realParallelStream(final Supplier<T> streamAction, final String name)
+    {
+        return realParallelStream(streamAction, runtime.availableProcessors(), name);
     }
 
 
@@ -129,5 +174,38 @@ public final class ParallelUtils
                 return true;
             }
         };
+    }
+
+    private static class NamedForkJoinWorkerThread extends ForkJoinWorkerThread
+    {
+
+        private NamedForkJoinWorkerThread(final ForkJoinPool pool, final String name)
+        {
+            super(pool);
+            this.setName(name);
+        }
+    }
+
+    private static class NamedForkJoinWorkerFactory implements ForkJoinWorkerThreadFactory
+    {
+        private final String baseName;
+        private final AtomicInteger i = new AtomicInteger(0);
+
+        private NamedForkJoinWorkerFactory(final String baseName)
+        {
+            this.baseName = baseName;
+        }
+
+        @Override
+        public final ForkJoinWorkerThread newThread(final ForkJoinPool pool)
+        {
+            return new NamedForkJoinWorkerThread(pool, this.baseName + "-" + this.i.getAndIncrement());
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("baseName", this.baseName).append("i", this.i).toString();
+        }
     }
 }

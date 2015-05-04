@@ -94,9 +94,12 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     }
 
     @Override
-    public void read(final NbtInputStream inputStream, final boolean anonymous) throws IOException
+    public void read(final NbtInputStream inputStream, final boolean anonymous, final NbtLimiter limiter) throws IOException
     {
-        super.read(inputStream, anonymous);
+        super.read(inputStream, anonymous, limiter);
+        limiter.incrementElementsCount(1);
+        limiter.incrementComplexity();
+
         this.tagList = new ArrayList<>(8);
         final byte type = inputStream.readByte();
         final NbtTagType tagType = NbtTagType.valueOf(type);
@@ -105,9 +108,12 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
         {
             return;
         }
+
+        limiter.incrementElementsCount(size);
+
         for (int i = 0; i < size; i++)
         {
-            this.addTag(inputStream.readTag(tagType, true));
+            this.addTag(inputStream.readTag(tagType, true, limiter));
         }
     }
 

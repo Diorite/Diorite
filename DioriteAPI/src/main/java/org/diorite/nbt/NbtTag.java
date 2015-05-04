@@ -29,5 +29,5 @@ public interface NbtTag
 
     void write(NbtOutputStream outputStream, boolean anonymous) throws IOException;
 
-    void read(NbtInputStream inputStream, boolean anonymous) throws IOException;
+    void read(NbtInputStream inputStream, boolean anonymous, NbtLimiter limiter) throws IOException;
 }
