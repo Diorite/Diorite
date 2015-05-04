@@ -2,8 +2,6 @@ package org.diorite.impl.log;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -32,7 +30,7 @@ public class TerminalConsoleWriterThread implements Runnable
                     this.output.flush();
                 } catch (final IOException ex)
                 {
-                    Logger.getLogger(TerminalConsoleWriterThread.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
             }
         }

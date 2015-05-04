@@ -282,13 +282,19 @@ public class WorldImpl implements World
         {
             return null;
         }
-        return this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).getBlock((x & (Chunk.CHUNK_SIZE - 1)), y, (z & (Chunk.CHUNK_SIZE - 1)));
+        return this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this), true, false).getBlock((x & (Chunk.CHUNK_SIZE - 1)), y, (z & (Chunk.CHUNK_SIZE - 1)));
+    }
+
+    @Override
+    public int getHighestBlockY(final int x, final int z)
+    {
+        return this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this), true, false).getHighestBlockY((x & (Chunk.CHUNK_SIZE - 1)), (z & (Chunk.CHUNK_SIZE - 1)));
     }
 
     @Override
     public Block getHighestBlock(final int x, final int z)
     {
-        return this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).getHighestBlock((x & (Chunk.CHUNK_SIZE - 1)), (z & (Chunk.CHUNK_SIZE - 1)));
+        return this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this), true, false).getHighestBlock((x & (Chunk.CHUNK_SIZE - 1)), (z & (Chunk.CHUNK_SIZE - 1)));
     }
 
     @Override
@@ -298,7 +304,7 @@ public class WorldImpl implements World
         {
             return;
         }
-        this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this)).setBlock((x & (Chunk.CHUNK_SIZE - 1)), y, (z & (Chunk.CHUNK_SIZE - 1)), material.getId(), material.getType());
+        this.chunkManager.getChunkAt(ChunkPos.fromWorldPos(x, z, this), true, false).setBlock((x & (Chunk.CHUNK_SIZE - 1)), y, (z & (Chunk.CHUNK_SIZE - 1)), material.getId(), material.getType());
     }
 
     @Override

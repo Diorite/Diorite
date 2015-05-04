@@ -15,6 +15,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.nbt.NbtInputStream;
+import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagString;
 import org.diorite.world.Dimension;
@@ -81,7 +82,7 @@ public class WorldsManagerImpl implements WorldsManager
         {
             try
             {
-                final NbtTagCompound tag = ((NbtTagCompound)NbtInputStream.readTagCompressed(file)).getCompound("Data");
+                final NbtTagCompound tag = ((NbtTagCompound)NbtInputStream.readTagCompressed(file, NbtLimiter.getUnlimited())).getCompound("Data");
                 String worldName = tag.getString("LevelName");
                 if (worldName == null)
                 {

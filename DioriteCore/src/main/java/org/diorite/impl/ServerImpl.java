@@ -127,6 +127,7 @@ public class ServerImpl implements Server, Runnable
             this.reader.setExpandEvents(false);
         } catch (final Throwable t)
         {
+            t.printStackTrace();
             try
             {
                 System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
@@ -258,7 +259,7 @@ public class ServerImpl implements Server, Runnable
     @Override
     public synchronized void stop()
     {
-        if (!this.isRunning)
+        if (! this.isRunning)
         {
             return; // TODO This shouldn't never happen. Maybe IllegalStateException?
         }
@@ -279,7 +280,7 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player)
     {
-        ((PlayerImpl)player).getNetworkManager().sendPacket(new PacketPlayOutPlayerListHeaderFooter(header, footer));
+        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayOutPlayerListHeaderFooter(header, footer));
     }
 
     @Override
@@ -291,7 +292,7 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void sendTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut, final Player player)
     {
-        final NetworkManager n = ((PlayerImpl)player).getNetworkManager();
+        final NetworkManager n = ((PlayerImpl) player).getNetworkManager();
 
         if (title != null)
         {
@@ -309,7 +310,7 @@ public class ServerImpl implements Server, Runnable
     @Override
     public void removeTitle(final Player player)
     {
-        ((PlayerImpl)player).getNetworkManager().sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.RESET));
+        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.RESET));
     }
 
     @Override

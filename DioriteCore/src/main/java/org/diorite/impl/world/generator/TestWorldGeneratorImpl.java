@@ -1,17 +1,19 @@
 package org.diorite.impl.world.generator;
 
-import java.util.stream.IntStream;
+import java.util.Objects;
+import java.util.Random;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
-import org.diorite.material.blocks.others.WoolMat;
 import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.noise.NoiseGenerator;
 import org.diorite.utils.math.noise.SimplexNoiseGenerator;
 import org.diorite.utils.math.noise.SimplexOctaveGenerator;
+import org.diorite.world.Block;
 import org.diorite.world.World;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.ChunkBuilder;
@@ -113,21 +115,127 @@ public class TestWorldGeneratorImpl extends WorldGenerator
         return new WorldGeneratorInitializer<TestWorldGeneratorImpl>("default")
         {
             {
+                final Random random = new Random();
                 this.populators.add(chunk -> {
-                    //TODO: this is only test code
-                    int r = 15;
-                    int rr = 0;
-                    IntStream.rangeClosed(0, 15).forEach(x -> {
+                    final World world = chunk.getWorld();
+                    int centerX = (chunk.getX() << 4) + random.nextInt(16);
+                    int centerZ = (chunk.getZ() << 4) + random.nextInt(16);
 
-                        if ((x == r) || (x == rr))
+                    byte data = 0;
+                    int chance = 0;
+                    int height = 4 + random.nextInt(3);
+                    int multiplier = 1;
+
+                    if (random.nextBoolean())
+                    {
+                        data = 2;
+                        height = 5 + random.nextInt(3);
+                    }
+                    chance = 160;
+                    multiplier = 10;
+
+                    for (int i = 0; i < multiplier; i++)
+                    {
+                        centerX = (chunk.getX() << 4) + random.nextInt(16);
+                        centerZ = (chunk.getZ() << 4) + random.nextInt(16);
+                        if (random.nextInt(300) < chance)
                         {
-                            IntStream.rangeClosed(rr, r).forEach(z -> chunk.setBlock(x, chunk.getHighestBlock(x, z).getY(), z, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15))));
-                            return;
+
+                            Block sourceBlock = world.getHighestBlock(centerX, centerZ);
+                            int centerY = sourceBlock.getY();
+
+                            if (Objects.equals(sourceBlock.getType(), Material.GRASS))
+                            {
+                                world.setBlock(centerX, centerY + height + 1, centerZ, BlockMaterialData.getByID(18, data));
+                                for (int j = 0; j < 4; j++)
+                                {
+                                    world.setBlock(centerX, centerY + height + 1 - j, centerZ - 1, BlockMaterialData.getByID(18, data));
+                                    world.setBlock(centerX, centerY + height + 1 - j, centerZ + 1, BlockMaterialData.getByID(18, data));
+                                    world.setBlock(centerX - 1, centerY + height + 1 - j, centerZ, BlockMaterialData.getByID(18, data));
+                                    world.setBlock(centerX + 1, centerY + height + 1 - j, centerZ, BlockMaterialData.getByID(18, data));
+                                }
+
+                                if (random.nextBoolean())
+                                {
+                                    world.setBlock(centerX + 1, centerY + height, centerZ + 1, BlockMaterialData.getByID(18, data));
+                                }
+                                if (random.nextBoolean())
+                                {
+                                    world.setBlock(centerX + 1, centerY + height, centerZ - 1, BlockMaterialData.getByID(18, data));
+                                }
+                                if (random.nextBoolean())
+                                {
+                                    world.setBlock(centerX - 1, centerY + height, centerZ + 1, BlockMaterialData.getByID(18, data));
+                                }
+                                if (random.nextBoolean())
+                                {
+                                    world.setBlock(centerX - 1, centerY + height, centerZ - 1, BlockMaterialData.getByID(18, data));
+                                }
+
+                                world.setBlock(centerX + 1, centerY + height - 1, centerZ + 1, BlockMaterialData.getByID(18, data));
+                                world.setBlock(centerX + 1, centerY + height - 1, centerZ - 1, BlockMaterialData.getByID(18, data));
+                                world.setBlock(centerX - 1, centerY + height - 1, centerZ + 1, BlockMaterialData.getByID(18, data));
+                                world.setBlock(centerX - 1, centerY + height - 1, centerZ - 1, BlockMaterialData.getByID(18, data));
+                                world.setBlock(centerX + 1, centerY + height - 2, centerZ + 1, BlockMaterialData.getByID(18, data));
+                                world.setBlock(centerX + 1, centerY + height - 2, centerZ - 1, BlockMaterialData.getByID(18, data));
+                                world.setBlock(centerX - 1, centerY + height - 2, centerZ + 1, BlockMaterialData.getByID(18, data));
+                                world.setBlock(centerX - 1, centerY + height - 2, centerZ - 1, BlockMaterialData.getByID(18, data));
+
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    for (int k = - 2; k <= 2; k++)
+                                    {
+                                        for (int l = - 2; l <= 2; l++)
+                                        {
+                                            world.setBlock(centerX + k, centerY + height - 1 - j, centerZ + l, BlockMaterialData.getByID(18, data));
+                                        }
+                                    }
+                                }
+
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    if (random.nextBoolean())
+                                    {
+                                        world.setBlock(centerX + 2, centerY + height - 1 - j, centerZ + 2, BlockMaterialData.getByID(0, (byte) 0));
+                                    }
+                                    if (random.nextBoolean())
+                                    {
+                                        world.setBlock(centerX + 2, centerY + height - 1 - j, centerZ - 2, BlockMaterialData.getByID(0, (byte) 0));
+                                    }
+                                    if (random.nextBoolean())
+                                    {
+                                        world.setBlock(centerX - 2, centerY + height - 1 - j, centerZ + 2, BlockMaterialData.getByID(0, (byte) 0));
+                                    }
+                                    if (random.nextBoolean())
+                                    {
+                                        world.setBlock(centerX - 2, centerY + height - 1 - j, centerZ - 2, BlockMaterialData.getByID(0, (byte) 0));
+                                    }
+                                }
+
+                                // Trunk
+                                for (int y = 1; y <= height; y++)
+                                {
+                                    world.setBlock(centerX, centerY + y, centerZ, BlockMaterialData.getByID(17, data));
+                                }
+                            }
                         }
-                        chunk.setBlock(x, chunk.getHighestBlock(x, r).getY(), r, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
-                        chunk.setBlock(x, chunk.getHighestBlock(x, rr).getY(), rr, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
-                    });
+                    }
                 });
+//                this.populators.add(chunk -> {
+//                    //TODO: this is only test code
+//                    int r = 15;
+//                    int rr = 0;
+//                    IntStream.rangeClosed(0, 15).forEach(x -> {
+//
+//                        if ((x == r) || (x == rr))
+//                        {
+//                            IntStream.rangeClosed(rr, r).forEach(z -> chunk.setBlock(x, chunk.getHighestBlock(x, z).getY(), z, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15))));
+//                            return;
+//                        }
+//                        chunk.setBlock(x, chunk.getHighestBlock(x, r).getY(), r, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
+//                        chunk.setBlock(x, chunk.getHighestBlock(x, rr).getY(), rr, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
+//                    });
+//                });
             }
 
             @Override

@@ -31,6 +31,7 @@ import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtInputStream;
+import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
@@ -134,7 +135,7 @@ public class PacketDataSerializer extends ByteBuf
         this.readerIndex(currIndex);
         try
         {
-            return (NbtTagCompound) NbtInputStream.readTagCompressed(new ByteBufInputStream(this));
+            return (NbtTagCompound) NbtInputStream.readTagCompressed(new ByteBufInputStream(this), NbtLimiter.getDefault());
         } catch (final IOException e)
         {
             e.printStackTrace();

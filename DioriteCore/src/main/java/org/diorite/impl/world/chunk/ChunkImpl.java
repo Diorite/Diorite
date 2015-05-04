@@ -27,7 +27,7 @@ public class ChunkImpl implements Chunk
     private final int[]           heightMap;
     private final byte[]          biomes;
     private final AtomicInteger usages = new AtomicInteger(0);
-    private boolean populated;
+    private volatile boolean populated;
 
     public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts, final int[] heightMap)
     {
@@ -77,8 +77,11 @@ public class ChunkImpl implements Chunk
     {
         if (! this.populated)
         {
-            this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
             this.populated = true;
+            synchronized (this)
+            {
+                this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
+            }
         }
     }
 
@@ -90,6 +93,7 @@ public class ChunkImpl implements Chunk
         }
     }
 
+    @Override
     public void initHeightMap()
     {
         IntStream.range(0, CHUNK_SIZE * CHUNK_SIZE).parallel().forEach(xz -> {
@@ -309,6 +313,12 @@ public class ChunkImpl implements Chunk
     {
         // TODO change when meta-data of block will be added
         return this.getBlock(x, this.heightMap[((z << 4) | x)], z);
+    }
+
+    @Override
+    public int getHighestBlockY(final int x, final int z)
+    {
+        return this.heightMap[((z << 4) | x)];
     }
 
     @Override

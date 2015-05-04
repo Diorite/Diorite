@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
 import org.diorite.nbt.NbtInputStream;
+import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
 
@@ -83,6 +84,8 @@ public class RegionFile
 {
     private static final int VERSION_GZIP    = 1;
     private static final int VERSION_DEFLATE = 2;
+    //  private static final int VERSION_RAW     = 100; // no compression make it even slower, due to disc save speed and giant size of file.
+
 
     private static final int SECTOR_BYTES = 4096;
     private static final int SECTOR_INTS  = SECTOR_BYTES / 4;
@@ -91,16 +94,23 @@ public class RegionFile
     private static final byte[] emptySector       = new byte[SECTOR_BYTES];
 
 
-//    private final Map<Short, Object> readLocks = new ConcurrentHashMap<>(10);
+    //    private final Map<Short, Object> readLocks = new ConcurrentHashMap<>(10);
     private       RandomAccessFile   file;
     private final int[]              offsets;
     private final int[]              chunkTimestamps;
     private       ArrayList<Boolean> sectorFree;
     private       int                sizeDelta;
-    private long lastModified = 0;
+    private int  compressionMode = VERSION_DEFLATE;
+    private long lastModified    = 0;
 
     public RegionFile(final File path)
     {
+        this(path, VERSION_DEFLATE);
+    }
+
+    public RegionFile(final File path, final int compressionMode)
+    {
+        this.compressionMode = compressionMode;
         this.offsets = new int[SECTOR_INTS];
         this.chunkTimestamps = new int[SECTOR_INTS];
 
@@ -263,15 +273,20 @@ public class RegionFile
             {
                 final byte[] data = new byte[length - 1];
                 this.file.read(data);
-                return (NbtTagCompound) NbtInputStream.readTagCompressed(new ByteArrayInputStream(data));
+                return (NbtTagCompound) NbtInputStream.readTagCompressed(new ByteArrayInputStream(data), NbtLimiter.getUnlimited());
             }
             if (version == VERSION_DEFLATE)
             {
                 final byte[] data = new byte[length - 1];
                 this.file.read(data);
-                return (NbtTagCompound) NbtInputStream.readTagInflated(new ByteArrayInputStream(data));
+                return (NbtTagCompound) NbtInputStream.readTagInflated(new ByteArrayInputStream(data), NbtLimiter.getUnlimited());
             }
-
+//            if (version == VERSION_RAW)
+//            {
+//                final byte[] data = new byte[length - 1];
+//                this.file.read(data);
+//                return (NbtTagCompound) NbtInputStream.readTag(new ByteArrayInputStream(data));
+//            }
             System.err.println("[RegionFile] (" + x + ", " + z + ") Unknown version: " + version);
             return null;
             // throw new IOException("Unknown version: " + version);
@@ -320,8 +335,26 @@ public class RegionFile
 //        this.readLocks.put(lockKey, new Object());
 //        try
 //        {
-            this.checkBounds(x, z);
+        this.checkBounds(x, z);
+//        if (this.compressionMode == VERSION_RAW)
+//        {
+//            return NbtOutputStream.get(new ChunkBuffer(x, z));
+//        }
+        if (this.compressionMode == VERSION_DEFLATE)
+        {
             return NbtOutputStream.getDeflated(new ChunkBuffer(x, z), new Deflater(Deflater.BEST_SPEED));
+        }
+        if (this.compressionMode == VERSION_GZIP)
+        {
+            try
+            {
+                return NbtOutputStream.getCompressed(new ChunkBuffer(x, z));
+            } catch (final IOException e)
+            {
+                throw new RuntimeException("Can't create gzip output stream for [" + x + ", " + z + "]", e);
+            }
+        }
+        throw new RuntimeException("[RegionFile] (" + x + ", " + z + ") Unknown version on write: " + this.compressionMode);
 //        }
 //        finally
 //        {
@@ -469,7 +502,7 @@ public class RegionFile
     {
         this.file.seek(sectorNumber * SECTOR_BYTES);
         this.file.writeInt(length + 1); // chunk length
-        this.file.writeByte(VERSION_DEFLATE); // chunk version number
+        this.file.writeByte(compressionMode); // chunk version number
         this.file.write(data, 0, length); // chunk data
     }
 

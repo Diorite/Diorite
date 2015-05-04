@@ -1,7 +1,9 @@
 package org.diorite.impl.world.chunk;
 
+import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,11 +34,17 @@ public class ChunkManagerImpl implements ChunkManager
         final int toLoad = chunkRadius * chunkRadius;
         System.out.println("Loading spawn chunks for world: " + this.world.getName());
 
+        final Deque<Chunk> unpopulatedChunks = new ConcurrentLinkedDeque<>();
         for (int r = 0; r <= chunkRadius; r++)
         {
             final int cr = r;
             PlayerChunksImpl.forChunksParallel(r, center.getChunkPos(), (pos) -> {
-                ((ChunkImpl) this.getChunkAt(pos)).addUsage();
+                final ChunkImpl impl = ((ChunkImpl) this.getChunkAt(pos, true, false));
+                impl.addUsage();
+                if (! impl.isPopulated())
+                {
+                    unpopulatedChunks.add(impl);
+                }
                 if ((info.loadedChunks++ % 10) == 0)
                 {
                     final long cur = System.currentTimeMillis();
@@ -52,7 +60,13 @@ public class ChunkManagerImpl implements ChunkManager
             System.out.println("[ChunkLoader][" + this.world.getName() + "] Radius " + r + "/" + chunkRadius);
             info.lastTime = System.currentTimeMillis();
         }
+
         System.out.println("Loaded " + info.loadedChunks + " spawn chunks for world: " + this.world.getName());
+        if (! unpopulatedChunks.isEmpty())
+        {
+            unpopulatedChunks.parallelStream().forEach(Chunk::populate);
+            System.out.println("Populated " + unpopulatedChunks.size() + " spawn chunks for world: " + this.world.getName());
+        }
     }
 
     @Override
@@ -108,7 +122,7 @@ public class ChunkManagerImpl implements ChunkManager
     @Override
     public Chunk getChunkAt(final ChunkPos pos)
     {
-        return this.getChunkAt(pos, true);
+        return this.getChunkAt(pos, true, true);
     }
 
     @Override
@@ -118,7 +132,7 @@ public class ChunkManagerImpl implements ChunkManager
     }
 
     @Override
-    public Chunk getChunkAt(ChunkPos pos, final boolean generate)
+    public Chunk getChunkAt(ChunkPos pos, final boolean generate, final boolean populate)
     {
         final long posLong = pos.asLong();
         Chunk chunk = this.chunks.get(posLong);
@@ -146,13 +160,17 @@ public class ChunkManagerImpl implements ChunkManager
             if (chunk == null)
             {
                 final ChunkBuilder chunkBuilder = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos);
-                final ChunkPos cPos = pos;
-                this.world.getGenerator().getPopulators().forEach(pop -> pop.prePopulate(chunkBuilder, cPos));
-                final Chunk cChunk = chunkBuilder.createChunk(pos);
-                chunk = cChunk;
-                this.world.getGenerator().getPopulators().forEach(pop -> pop.populate(cChunk));
+                chunk = chunkBuilder.createChunk(pos);
+                this.chunks.put(posLong, chunk);
+                if (populate)
+                {
+                    chunk.populate();
+                }
             }
-            this.chunks.put(posLong, chunk);
+            else
+            {
+                this.chunks.put(posLong, chunk);
+            }
             final Object obj = this.generating.remove(posLong);
             if (obj != null)
             {
@@ -163,7 +181,17 @@ public class ChunkManagerImpl implements ChunkManager
                 }
             }
         }
+        if ((chunk != null) && populate)
+        {
+            chunk.populate();
+        }
         return chunk;
+    }
+
+    @Override
+    public Chunk getChunkAt(final ChunkPos pos, final boolean generate)
+    {
+        return this.getChunkAt(pos, generate, generate);
     }
 
     @Override
