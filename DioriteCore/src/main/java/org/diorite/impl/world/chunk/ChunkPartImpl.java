@@ -57,11 +57,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.yPos = yPos;
     }
 
-    public void setBlocks(final char[] blocks)
-    {
-        this.blocks = blocks;
-    }
-
     public void setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
         //Main.debug("setBlock(" + x + ", " + y + ", " + z + ", " + id + ", " + meta + ") -> " + this.yPos + ", " + this.hashCode());
@@ -96,16 +91,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
         return (BlockMaterialData) Material.getByID(data >> 4, data & 15);
     }
 
-    public void setBlockLight(final NibbleArray blockLight)
-    {
-        this.blockLight = blockLight;
-    }
-
-    public void setSkyLight(final NibbleArray skyLight)
-    {
-        this.skyLight = skyLight;
-    }
-
     public ChunkImpl getChunk()
     {
         return this.chunk;
@@ -114,6 +99,11 @@ public class ChunkPartImpl // part of chunk 16x16x16
     public char[] getBlocks()
     {
         return this.blocks;
+    }
+
+    public void setBlocks(final char[] blocks)
+    {
+        this.blocks = blocks;
     }
 
     public int recalculateBlockCount()
@@ -139,9 +129,19 @@ public class ChunkPartImpl // part of chunk 16x16x16
         return this.blockLight;
     }
 
+    public void setBlockLight(final NibbleArray blockLight)
+    {
+        this.blockLight = blockLight;
+    }
+
     public NibbleArray getSkyLight()
     {
         return this.skyLight;
+    }
+
+    public void setSkyLight(final NibbleArray skyLight)
+    {
+        this.skyLight = skyLight;
     }
 
     public byte getYPos()

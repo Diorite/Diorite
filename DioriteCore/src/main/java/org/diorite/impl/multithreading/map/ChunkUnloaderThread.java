@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.multithreading.ChunkUnloadAction;
-import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.world.chunk.Chunk;
 
 public class ChunkUnloaderThread extends Thread
 {
@@ -29,7 +29,7 @@ public class ChunkUnloaderThread extends Thread
         return actions.size();
     }
 
-    public static void add(final ChunkImpl action)
+    public static void add(final Chunk action)
     {
         add(new ChunkUnloadAction(action));
     }
@@ -82,7 +82,7 @@ public class ChunkUnloaderThread extends Thread
                     e.printStackTrace();
                 }
             }
-            final ChunkImpl chunk = action.getChunk().get();
+            final Chunk chunk = action.getChunk().get();
             if ((chunk == null) || (chunk.getUsages() > 0))
             {
                 continue;

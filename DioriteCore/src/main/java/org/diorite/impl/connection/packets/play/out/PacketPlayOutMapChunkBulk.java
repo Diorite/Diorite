@@ -14,6 +14,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
+import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
 
@@ -22,13 +23,13 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
 {
     private boolean     skyLight;
     private ChunkMeta[] metas;
-    private ChunkImpl[] chunks;
+    private Chunk[]     chunks;
 
     public PacketPlayOutMapChunkBulk()
     {
     }
 
-    public PacketPlayOutMapChunkBulk(final boolean skyLight, ChunkImpl[] chunks)
+    public PacketPlayOutMapChunkBulk(final boolean skyLight, Chunk[] chunks)
     {
         chunks = fix(chunks);
         this.skyLight = skyLight;
@@ -37,7 +38,7 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
         this.metas = new ChunkMeta[chunks.length];
         for (int k = 0, chunksLength = chunks.length; k < chunksLength; k++)
         {
-            final ChunkImpl chunk = chunks[k];
+            final ChunkImpl chunk = (ChunkImpl) chunks[k];
             int mask = chunk.getMask();
 
             final ChunkPartImpl[] chunkParts = chunk.getChunkParts();
@@ -54,7 +55,7 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
         }
     }
 
-    public PacketPlayOutMapChunkBulk(final boolean skyLight, ChunkImpl[] chunks, final ChunkMeta[] metas)
+    public PacketPlayOutMapChunkBulk(final boolean skyLight, Chunk[] chunks, final ChunkMeta[] metas)
     {
         chunks = fix(chunks);
         this.skyLight = skyLight;
@@ -79,10 +80,9 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
             data.writeInt(meta.getPos().getZ());
             data.writeShort(meta.getMask());
         }
-        final ChunkImpl[] chunks1 = this.chunks;
-        for (int i = 0, chunks1Length = chunks1.length; i < chunks1Length; i++)
+        for (int i = 0, chunks1Length = this.chunks.length; i < chunks1Length; i++)
         {
-            final ChunkImpl chunk = chunks1[i];
+            final ChunkImpl chunk = (ChunkImpl) this.chunks[i];
             data.writeChunkSimple(chunk, this.metas[i].getMask(), this.skyLight, true, false);
         }
     }
@@ -113,7 +113,7 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
         this.metas = metas;
     }
 
-    public ChunkImpl[] getChunks()
+    public Chunk[] getChunks()
     {
         return this.chunks;
     }
@@ -123,17 +123,17 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
         this.chunks = chunks;
     }
 
-    private static ChunkImpl[] fix(final ChunkImpl[] chunks)
+    private static Chunk[] fix(final Chunk[] chunks)
     {
-        final List<ChunkImpl> list = new ArrayList<>(chunks.length);
-        for (final ChunkImpl chunk : chunks)
+        final List<Chunk> list = new ArrayList<>(chunks.length);
+        for (final Chunk chunk : chunks)
         {
             if (chunk != null)
             {
                 list.add(chunk);
             }
         }
-        return list.toArray(new ChunkImpl[list.size()]);
+        return list.toArray(new Chunk[list.size()]);
     }
 
     public static class ChunkMeta

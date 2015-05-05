@@ -2,12 +2,14 @@ package org.diorite.impl.world.generator;
 
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
+import org.diorite.material.blocks.others.WoolMat;
 import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.noise.NoiseGenerator;
@@ -114,6 +116,12 @@ public class TestWorldGeneratorImpl extends WorldGenerator
     {
         return new WorldGeneratorInitializer<TestWorldGeneratorImpl>("default")
         {
+            @Override
+            public TestWorldGeneratorImpl baseInit(final World world, final String options)
+            {
+                return new TestWorldGeneratorImpl(world, this.name, options);
+            }
+
             {
                 final Random random = new Random();
                 this.populators.add(chunk -> {
@@ -221,27 +229,21 @@ public class TestWorldGeneratorImpl extends WorldGenerator
                         }
                     }
                 });
-//                this.populators.add(chunk -> {
-//                    //TODO: this is only test code
-//                    int r = 15;
-//                    int rr = 0;
-//                    IntStream.rangeClosed(0, 15).forEach(x -> {
-//
-//                        if ((x == r) || (x == rr))
-//                        {
-//                            IntStream.rangeClosed(rr, r).forEach(z -> chunk.setBlock(x, chunk.getHighestBlock(x, z).getY(), z, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15))));
-//                            return;
-//                        }
-//                        chunk.setBlock(x, chunk.getHighestBlock(x, r).getY(), r, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
-//                        chunk.setBlock(x, chunk.getHighestBlock(x, rr).getY(), rr, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
-//                    });
-//                });
-            }
+                this.populators.add(chunk -> {
+                    //TODO: this is only test code
+                    int r = 15;
+                    int rr = 0;
+                    IntStream.rangeClosed(0, 15).forEach(x -> {
 
-            @Override
-            public TestWorldGeneratorImpl baseInit(final World world, final String options)
-            {
-                return new TestWorldGeneratorImpl(world, this.name, options);
+                        if ((x == r) || (x == rr))
+                        {
+                            IntStream.rangeClosed(rr, r).forEach(z -> chunk.setBlock(x, chunk.getHighestBlock(x, z).getY(), z, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15))));
+                            return;
+                        }
+                        chunk.setBlock(x, chunk.getHighestBlock(x, r).getY(), r, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
+                        chunk.setBlock(x, chunk.getHighestBlock(x, rr).getY(), rr, WoolMat.getByID(DioriteRandomUtils.getRandInt(0, 15)));
+                    });
+                });
             }
         };
     }

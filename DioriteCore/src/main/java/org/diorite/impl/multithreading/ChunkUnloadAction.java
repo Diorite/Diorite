@@ -5,19 +5,19 @@ import java.lang.ref.WeakReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.world.chunk.Chunk;
 
 public class ChunkUnloadAction
 {
-    private final WeakReference<ChunkImpl> chunk;
+    private final WeakReference<Chunk> chunk;
     private final long time = System.currentTimeMillis();
 
-    public ChunkUnloadAction(final ChunkImpl chunk)
+    public ChunkUnloadAction(final Chunk chunk)
     {
         this.chunk = new WeakReference<>(chunk);
     }
 
-    public WeakReference<ChunkImpl> getChunk()
+    public WeakReference<Chunk> getChunk()
     {
         return this.chunk;
     }

@@ -47,6 +47,7 @@ public class WorldImpl implements World
     private boolean noUpdateMode = true;
 
     // TODO: world border impl
+    // TODO: add some method allowing to set multiple blocks without calling getChunk so often
 
     public WorldImpl(final String name, final Dimension dimension, final File worldFile, final String generator)
     {
@@ -102,35 +103,10 @@ public class WorldImpl implements World
         System.out.println("Saved chunks for world: " + this.name);
     }
 
-    public boolean hasSkyLight()
-    {
-        return this.dimension.hasSkyLight();
-    }
-
     @Override
     public Dimension getDimension()
     {
         return this.dimension;
-    }
-
-    public boolean isNoUpdateMode()
-    {
-        return this.noUpdateMode;
-    }
-
-    public void setNoUpdateMode(final boolean noUpdateMode)
-    {
-        this.noUpdateMode = noUpdateMode;
-    }
-
-    public byte getForceLoadedRadius()
-    {
-        return this.forceLoadedRadius;
-    }
-
-    public void setForceLoadedRadius(final byte forceLoadedRadius)
-    {
-        this.forceLoadedRadius = forceLoadedRadius;
     }
 
     @Override
@@ -324,11 +300,6 @@ public class WorldImpl implements World
         this.maxHeight = maxHeight;
     }
 
-    public WorldFileImpl getWorldFile()
-    {
-        return this.worldFile;
-    }
-
     @Override
     public long getTime()
     {
@@ -345,6 +316,36 @@ public class WorldImpl implements World
     public void showParticle(final Particle particle, final boolean isLongDistance, final int x, final int y, final int z, final int offsetX, final int offsetY, final int offsetZ, final int particleData, final int particleCount, final int... data)
     {
         this.getPlayersInWorld().forEach(player -> player.showParticle(particle, isLongDistance, x, y, x, offsetX, offsetY, offsetZ, particleData, particleCount, data));
+    }
+
+    public boolean hasSkyLight()
+    {
+        return this.dimension.hasSkyLight();
+    }
+
+    public boolean isNoUpdateMode()
+    {
+        return this.noUpdateMode;
+    }
+
+    public void setNoUpdateMode(final boolean noUpdateMode)
+    {
+        this.noUpdateMode = noUpdateMode;
+    }
+
+    public byte getForceLoadedRadius()
+    {
+        return this.forceLoadedRadius;
+    }
+
+    public void setForceLoadedRadius(final byte forceLoadedRadius)
+    {
+        this.forceLoadedRadius = forceLoadedRadius;
+    }
+
+    public WorldFileImpl getWorldFile()
+    {
+        return this.worldFile;
     }
 
     @Override

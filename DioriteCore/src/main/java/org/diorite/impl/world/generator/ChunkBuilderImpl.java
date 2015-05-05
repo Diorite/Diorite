@@ -61,9 +61,9 @@ public class ChunkBuilderImpl implements ChunkBuilder
     }
 
     @Override
-    public ChunkImpl createChunk(final ChunkPos chunkPos)
+    public ChunkImpl createChunk(final ChunkPos pos)
     {
-        final ChunkImpl chunk = new ChunkImpl(chunkPos, this.biomes);
+        final ChunkImpl chunk = new ChunkImpl(pos, this.biomes);
         final ChunkPartImpl[] chunkParts = new ChunkPartImpl[this.chunkParts.length];
         final ChunkPartBuilder[] chunkPartBuilders = this.chunkParts;
         for (int i = 0, buildersLength = chunkPartBuilders.length; i < buildersLength; i++)
@@ -76,8 +76,8 @@ public class ChunkBuilderImpl implements ChunkBuilder
             chunkParts[i] = new ChunkPartImpl(chunk, chunkPart.blocks, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
             chunkParts[i].recalculateBlockCount();
             chunk.getChunkParts()[i] = chunkParts[i];
-            chunk.initHeightMap();
         }
+        chunk.initHeightMap();
         return chunk;
     }
 

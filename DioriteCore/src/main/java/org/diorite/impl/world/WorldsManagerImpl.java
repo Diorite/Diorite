@@ -43,6 +43,43 @@ public class WorldsManagerImpl implements WorldsManager
         return new HashSet<>(this.worlds.values());
     }
 
+    @Override
+    public World getDefaultWorld()
+    {
+        World defWorld = this.getWorld(this.defaultWorld);
+        if (defWorld == null)
+        {
+            this.createDefaultWorlds();
+            defWorld = this.getWorld(this.defaultWorld);
+        }
+        return defWorld;
+    }
+
+    @Override
+    public World getWorld(final UUID uuid)
+    {
+        return this.worlds.get(uuid);
+    }
+
+    @Override
+    public World getWorld(final String name)
+    {
+        for (final World world : this.worlds.values())
+        {
+            if (world.getName().equalsIgnoreCase(name))
+            {
+                return world;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Collection<Player> getPlayersInWorld(final World world)
+    {
+        return world.getPlayersInWorld();
+    }
+
     public void init(final File worldsFile)
     {
         Validate.notNull(worldsFile, "File can't be null");
@@ -82,7 +119,7 @@ public class WorldsManagerImpl implements WorldsManager
         {
             try
             {
-                final NbtTagCompound tag = ((NbtTagCompound)NbtInputStream.readTagCompressed(file, NbtLimiter.getUnlimited())).getCompound("Data");
+                final NbtTagCompound tag = ((NbtTagCompound) NbtInputStream.readTagCompressed(file, NbtLimiter.getUnlimited())).getCompound("Data");
                 String worldName = tag.getString("LevelName");
                 if (worldName == null)
                 {
@@ -129,43 +166,6 @@ public class WorldsManagerImpl implements WorldsManager
     {
         this.addWorld(new WorldImpl(this.defaultWorld, Dimension.OVERWORLD, null, "default")); // TODO: default generator
         // TODO
-    }
-
-    @Override
-    public World getDefaultWorld()
-    {
-        World defWorld = this.getWorld(this.defaultWorld);
-        if (defWorld == null)
-        {
-            this.createDefaultWorlds();
-            defWorld = this.getWorld(this.defaultWorld);
-        }
-        return defWorld;
-    }
-
-    @Override
-    public World getWorld(final UUID uuid)
-    {
-        return this.worlds.get(uuid);
-    }
-
-    @Override
-    public World getWorld(final String name)
-    {
-        for (final World world : this.worlds.values())
-        {
-            if (world.getName().equalsIgnoreCase(name))
-            {
-                return world;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Collection<Player> getPlayersInWorld(final World world)
-    {
-        return world.getPlayersInWorld();
     }
     // TODO: create world and others
     // TODO: maybe some multi-world support by default, separate data between selected worlds etc...

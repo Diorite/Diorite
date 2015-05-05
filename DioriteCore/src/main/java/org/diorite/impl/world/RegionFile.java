@@ -92,12 +92,10 @@ public class RegionFile
 
     private static final int    CHUNK_HEADER_SIZE = 5;
     private static final byte[] emptySector       = new byte[SECTOR_BYTES];
-
-
-    //    private final Map<Short, Object> readLocks = new ConcurrentHashMap<>(10);
-    private       RandomAccessFile   file;
     private final int[]              offsets;
     private final int[]              chunkTimestamps;
+    //    private final Map<Short, Object> readLocks = new ConcurrentHashMap<>(10);
+    private       RandomAccessFile   file;
     private       ArrayList<Boolean> sectorFree;
     private       int                sizeDelta;
     private int  compressionMode = VERSION_DEFLATE;
@@ -370,40 +368,6 @@ public class RegionFile
 //        }
     }
 
-    /*
-     * lets chunk writing be multithreaded by not locking the whole file as a
-     * chunk is serializing -- only writes when serialization is over
-     */
-    class ChunkBuffer extends ByteArrayOutputStream
-    {
-        private final int x, z;
-
-        ChunkBuffer(final int x, final int z)
-        {
-            super(8096); // initialize to 8KB
-            this.x = x;
-            this.z = z;
-        }
-
-        @Override
-        public void close() throws IOException
-        {
-            try
-            {
-                RegionFile.this.write(this.x, this.z, this.buf, this.count);
-            } finally
-            {
-                super.close();
-            }
-        }
-
-        @Override
-        public String toString()
-        {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).toString();
-        }
-    }
-
     /* write a chunk at (x,z) with length bytes of data to disk */
     protected void write(final int x, final int z, final byte[] data, final int length) throws IOException
     {
@@ -553,5 +517,39 @@ public class RegionFile
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("file", this.file).append("sizeDelta", this.sizeDelta).append("lastModified", this.lastModified).toString();
+    }
+
+    /*
+     * lets chunk writing be multithreaded by not locking the whole file as a
+     * chunk is serializing -- only writes when serialization is over
+     */
+    class ChunkBuffer extends ByteArrayOutputStream
+    {
+        private final int x, z;
+
+        ChunkBuffer(final int x, final int z)
+        {
+            super(8096); // initialize to 8KB
+            this.x = x;
+            this.z = z;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).toString();
+        }
+
+        @Override
+        public void close() throws IOException
+        {
+            try
+            {
+                RegionFile.this.write(this.x, this.z, this.buf, this.count);
+            } finally
+            {
+                super.close();
+            }
+        }
     }
 }

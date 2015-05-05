@@ -4,7 +4,10 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -12,6 +15,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.generator.ChunkBuilderImpl;
 import org.diorite.BlockLocation;
+import org.diorite.utils.concurrent.ParallelUtils;
+import org.diorite.utils.concurrent.ParallelUtils.NamedForkJoinWorkerFactory;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
@@ -22,10 +27,18 @@ public class ChunkManagerImpl implements ChunkManager
     private final WorldImpl world;
     private final Map<Long, Chunk>  chunks     = new ConcurrentHashMap<>(400, .5f, 4); // change to ConcurrentHashMap<Long, ChunkImpl> if needed.
     private final Map<Long, Object> generating = new ConcurrentHashMap<>(10);
+    private final ForkJoinPool pool;
 
     public ChunkManagerImpl(final WorldImpl world)
     {
         this.world = world;
+        // TODO: add way to configure max fork join tasks per world
+        this.pool = new ForkJoinPool(Math.max(1, Runtime.getRuntime().availableProcessors() / 2), new NamedForkJoinWorkerFactory(world.getName() + "-ChunkLoader"), null, false);
+    }
+
+    public ForkJoinPool getPool()
+    {
+        return this.pool;
     }
 
     public synchronized void loadBase(final int chunkRadius, final BlockLocation center)
@@ -38,24 +51,26 @@ public class ChunkManagerImpl implements ChunkManager
         for (int r = 0; r <= chunkRadius; r++)
         {
             final int cr = r;
-            PlayerChunksImpl.forChunksParallel(r, center.getChunkPos(), (pos) -> {
-                final ChunkImpl impl = ((ChunkImpl) this.getChunkAt(pos, true, false));
-                impl.addUsage();
-                if (! impl.isPopulated())
-                {
-                    unpopulatedChunks.add(impl);
-                }
-                if ((info.loadedChunks++ % 10) == 0)
-                {
-                    final long cur = System.currentTimeMillis();
-                    if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(5))
+            this.pool.invoke(ParallelUtils.createSimpleTask(() -> {
+                forChunksParallel(cr, center.getChunkPos(), (pos) -> {
+                    final Chunk impl = this.getChunkAt(pos, true, false);
+                    impl.addUsage();
+                    if (! impl.isPopulated())
                     {
-                        //noinspection HardcodedFileSeparator
-                        System.out.println("[ChunkLoader][" + this.world.getName() + "] Chunk: " + info.loadedChunks + "/" + toLoad + " Radius " + cr + "/" + chunkRadius);
-                        info.lastTime = cur;
+                        unpopulatedChunks.add(impl);
                     }
-                }
-            });
+                    if ((info.loadedChunks++ % 10) == 0)
+                    {
+                        final long cur = System.currentTimeMillis();
+                        if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(5))
+                        {
+                            //noinspection HardcodedFileSeparator
+                            System.out.println("[ChunkLoader][" + this.world.getName() + "] Chunk: " + info.loadedChunks + "/" + toLoad + " Radius " + cr + "/" + chunkRadius);
+                            info.lastTime = cur;
+                        }
+                    }
+                });
+            }));
             //noinspection HardcodedFileSeparator
             System.out.println("[ChunkLoader][" + this.world.getName() + "] Radius " + r + "/" + chunkRadius);
             info.lastTime = System.currentTimeMillis();
@@ -64,7 +79,7 @@ public class ChunkManagerImpl implements ChunkManager
         System.out.println("Loaded " + info.loadedChunks + " spawn chunks for world: " + this.world.getName());
         if (! unpopulatedChunks.isEmpty())
         {
-            unpopulatedChunks.parallelStream().forEach(Chunk::populate);
+            unpopulatedChunks.stream().forEach(Chunk::populate);
             System.out.println("Populated " + unpopulatedChunks.size() + " spawn chunks for world: " + this.world.getName());
         }
     }
@@ -135,55 +150,35 @@ public class ChunkManagerImpl implements ChunkManager
     public Chunk getChunkAt(ChunkPos pos, final boolean generate, final boolean populate)
     {
         final long posLong = pos.asLong();
+        final Object lock = new Object();
+        final Object oldLock = this.generating.putIfAbsent(posLong, lock);
         Chunk chunk = this.chunks.get(posLong);
-        if ((chunk == null) && generate)
+        if ((chunk == null) || (populate && ! chunk.isPopulated()))
         {
-            final Object lock = this.generating.get(posLong);
-            if (lock != null)
+            synchronized ((oldLock == null) ? lock : oldLock)
             {
-                try
+                if ((chunk == null) && generate)
                 {
-                    //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                    synchronized (lock)
+                    pos = pos.setWorld(this.world);
+                    chunk = this.world.getWorldFile().loadChunk(pos);
+                    if (chunk == null)
                     {
-                        lock.wait();
+                        final ChunkBuilder chunkBuilder = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos);
+
+                        chunk = chunkBuilder.createChunk(pos);
+                        this.chunks.put(posLong, chunk);
                     }
-                } catch (final InterruptedException e)
-                {
-                    e.printStackTrace();
+                    else
+                    {
+                        this.chunks.put(posLong, chunk);
+                    }
                 }
-                return this.chunks.get(posLong);
-            }
-            this.generating.put(posLong, new Object());
-            pos = pos.setWorld(this.world);
-            chunk = this.world.getWorldFile().loadChunk(pos);
-            if (chunk == null)
-            {
-                final ChunkBuilder chunkBuilder = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos);
-                chunk = chunkBuilder.createChunk(pos);
-                this.chunks.put(posLong, chunk);
-                if (populate)
+                if ((chunk != null) && populate)
                 {
                     chunk.populate();
                 }
+                this.generating.remove(posLong);
             }
-            else
-            {
-                this.chunks.put(posLong, chunk);
-            }
-            final Object obj = this.generating.remove(posLong);
-            if (obj != null)
-            {
-                //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                synchronized (obj)
-                {
-                    obj.notifyAll();
-                }
-            }
-        }
-        if ((chunk != null) && populate)
-        {
-            chunk.populate();
         }
         return chunk;
     }
@@ -198,6 +193,29 @@ public class ChunkManagerImpl implements ChunkManager
     public Chunk getChunkAt(final int x, final int z, final boolean generate)
     {
         return this.getChunkAt(new ChunkPos(x, z, this.world), generate);
+    }
+
+    public void submitActionOnChunkAt(final ChunkPos pos, final boolean generate, final boolean populate, final Consumer<Chunk> consumer)
+    {
+        this.pool.submit(() -> consumer.accept(this.getChunkAt(pos, generate, populate)));
+    }
+
+    static void forChunksParallel(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
+    {
+        if (r == 0)
+        {
+            action.accept(center);
+            return;
+        }
+        IntStream.rangeClosed(- r, r).parallel().forEach(x -> {
+            if ((x == r) || (x == - r))
+            {
+                IntStream.rangeClosed(- r, r).parallel().forEach(z -> action.accept(center.add(x, z)));
+                return;
+            }
+            action.accept(center.add(x, r));
+            action.accept(center.add(x, - r));
+        });
     }
 
     private static class LoadInfo
