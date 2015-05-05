@@ -43,4 +43,8 @@ public interface Chunk
     int getZ();
 
     void recalculateBlockCounts();
+
+    int addUsage();
+
+    int removeUsage();
 }

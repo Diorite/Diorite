@@ -102,7 +102,7 @@ public final class ParallelUtils
     }
 
 
-    private static ForkJoinTask<Void> createSimpleTask(final Runnable runnable)
+    public static ForkJoinTask<Void> createSimpleTask(final Runnable runnable)
     {
         return new ForkJoinTask<Void>()
         {
@@ -126,7 +126,7 @@ public final class ParallelUtils
         };
     }
 
-    private static ForkJoinTask<Void> createSimpleTask(final Supplier<Boolean> runnable)
+    public static ForkJoinTask<Void> createSimpleTask(final Supplier<Boolean> runnable)
     {
         return new ForkJoinTask<Void>()
         {
@@ -149,7 +149,7 @@ public final class ParallelUtils
         };
     }
 
-    private static <T> ForkJoinTask<T> createTask(final Supplier<T> runnable)
+    public static <T> ForkJoinTask<T> createTask(final Supplier<T> runnable)
     {
         return new ForkJoinTask<T>()
         {
@@ -178,7 +178,6 @@ public final class ParallelUtils
 
     private static class NamedForkJoinWorkerThread extends ForkJoinWorkerThread
     {
-
         private NamedForkJoinWorkerThread(final ForkJoinPool pool, final String name)
         {
             super(pool);
@@ -186,12 +185,12 @@ public final class ParallelUtils
         }
     }
 
-    private static class NamedForkJoinWorkerFactory implements ForkJoinWorkerThreadFactory
+    public static class NamedForkJoinWorkerFactory implements ForkJoinWorkerThreadFactory
     {
         private final String baseName;
         private final AtomicInteger i = new AtomicInteger(0);
 
-        private NamedForkJoinWorkerFactory(final String baseName)
+        public NamedForkJoinWorkerFactory(final String baseName)
         {
             this.baseName = baseName;
         }
