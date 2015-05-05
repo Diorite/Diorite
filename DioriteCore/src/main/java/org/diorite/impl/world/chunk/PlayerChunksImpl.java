@@ -10,7 +10,6 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
@@ -155,7 +154,6 @@ public class PlayerChunksImpl
         });
         // TODO: maybe use other pool for that, and don't use any
         impl.getPool().submit(() -> {
-            Main.debug("Player chunk manager wait for " + latch.getCount() + " chunks...");
             try
             {
                 latch.await();
@@ -163,7 +161,6 @@ public class PlayerChunksImpl
             {
                 e.printStackTrace();
             }
-            Main.debug("Chunks ready to send! " + chunksToSent.size());
 
             final int size = (chunksToSent.size() / CHUNK_BULK_SIZE) + (((chunksToSent.size() % CHUNK_BULK_SIZE) == 0) ? 0 : 1);
             final Chunk[][] chunkBulks = new Chunk[size][CHUNK_BULK_SIZE];
