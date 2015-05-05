@@ -98,6 +98,14 @@ public class WorldType implements SimpleEnum<WorldType>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static WorldType[] values()
+    {
+        return byID.values(new WorldType[byID.size()]);
+    }
+
     static
     {
         register(NORMAL);

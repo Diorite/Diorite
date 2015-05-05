@@ -82,6 +82,14 @@ public class ChatVisibility implements SimpleEnum<ChatVisibility>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static ChatVisibility[] values()
+    {
+        return byID.values(new ChatVisibility[byID.size()]);
+    }
+
     static
     {
         register(FULL);

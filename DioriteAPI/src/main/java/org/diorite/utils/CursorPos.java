@@ -27,14 +27,17 @@ public class CursorPos
     /**
      * Construct new CursorPos using pixel coordinates, from 0 to 16
      *
-     * @param blockFace clicked blockface
-     * @param x x pixel coordinate, from 0 to 16.
-     * @param y y pixel coordinate, from 0 to 16.
-     * @param z z pixel coordinate, from 0 to 16.
+     * @param blockFace clicked blockface, may be null
+     * @param x         x pixel coordinate, from 0 to 16.
+     * @param y         y pixel coordinate, from 0 to 16.
+     * @param z         z pixel coordinate, from 0 to 16.
      */
     public CursorPos(final BlockFace blockFace, final int x, final int y, final int z)
     {
-        Validate.isTrue(blockFace.isBasic(), "BlockFace must be simple.");
+        if (blockFace != null)
+        {
+            Validate.isTrue(blockFace.isBasic(), "BlockFace must be simple or null.");
+        }
         Validate.isTrue(validByteRange.isIn(x), "x pos must be in 0..16 range.");
         Validate.isTrue(validByteRange.isIn(y), "y pos must be in 0..16 range.");
         Validate.isTrue(validByteRange.isIn(z), "z pos must be in 0..16 range.");
@@ -47,14 +50,17 @@ public class CursorPos
     /**
      * Construct new CursorPos using block coordinates, from 0 to 1
      *
-     * @param blockFace clicked blockface
-     * @param x x block coordinate, from 0 to 1.
-     * @param y y block coordinate, from 0 to 1.
-     * @param z z block coordinate, from 0 to 1.
+     * @param blockFace clicked blockface, may be null
+     * @param x         x block coordinate, from 0 to 1.
+     * @param y         y block coordinate, from 0 to 1.
+     * @param z         z block coordinate, from 0 to 1.
      */
     public CursorPos(final BlockFace blockFace, final float x, final float y, final float z)
     {
-        Validate.isTrue(blockFace.isBasic(), "BlockFace must be simple.");
+        if (blockFace != null)
+        {
+            Validate.isTrue(blockFace.isBasic(), "BlockFace must be simple.");
+        }
         Validate.isTrue(validFloatRange.isIn(x), "x (float) pos must be in 0..1 range.");
         Validate.isTrue(validFloatRange.isIn(y), "x (float) pos must be in 0..1 range.");
         Validate.isTrue(validFloatRange.isIn(z), "x (float) pos must be in 0..1 range.");
@@ -62,6 +68,14 @@ public class CursorPos
         this.x = (byte) (x * 16);
         this.y = (byte) (x * 16);
         this.z = (byte) (x * 16);
+    }
+
+    /**
+     * @return true if object is representing valid location of cursor.
+     */
+    public boolean isValid()
+    {
+        return this.blockFace != null;
     }
 
     /**
@@ -151,13 +165,15 @@ public class CursorPos
         }
 
         final CursorPos cursorPos = (CursorPos) o;
-        return (this.x == cursorPos.x) && (this.y == cursorPos.y) && (this.z == cursorPos.z);
+        return (this.x == cursorPos.x) && (this.y == cursorPos.y) && (this.z == cursorPos.z) && (blockFace == cursorPos.blockFace);
+
     }
 
     @Override
     public int hashCode()
     {
-        int result = (int) this.x;
+        int result = (this.blockFace != null) ? this.blockFace.hashCode() : 0;
+        result = (31 * result) + (int) this.x;
         result = (31 * result) + (int) this.y;
         result = (31 * result) + (int) this.z;
         return result;

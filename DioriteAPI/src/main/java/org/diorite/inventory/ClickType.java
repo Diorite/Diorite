@@ -131,6 +131,14 @@ public class ClickType implements SimpleEnum<ClickType>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static ClickType[] values()
+    {
+        return byID.values(new ClickType[byID.size()]);
+    }
+
     static
     {
         register(MOUSE_LEFT);

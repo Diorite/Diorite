@@ -149,6 +149,14 @@ public class ModifierOperation implements SimpleEnum<ModifierOperation>
         sortedByID.add(element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static ModifierOperation[] values()
+    {
+        return byID.values(new ModifierOperation[byID.size()]);
+    }
+
     static
     {
         register(ADD_NUMBER);

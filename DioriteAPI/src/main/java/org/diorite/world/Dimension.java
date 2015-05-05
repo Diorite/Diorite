@@ -82,6 +82,14 @@ public class Dimension implements SimpleEnum<Dimension>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static Dimension[] values()
+    {
+        return byID.values(new Dimension[byID.size()]);
+    }
+
     static
     {
         register(NETHER);

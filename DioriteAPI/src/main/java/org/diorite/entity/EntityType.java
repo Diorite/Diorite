@@ -98,6 +98,14 @@ public class EntityType implements SimpleEnum<EntityType>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static EntityType[] values()
+    {
+        return byID.values(new EntityType[byID.size()]);
+    }
+
     static
     {
         register(PLAYER);

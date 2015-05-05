@@ -13,14 +13,13 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class GameMode implements SimpleEnum<GameMode>
 {
-    public static final  GameMode                NOT_SET   = new GameMode("NOT_SET", - 1, "");
-    public static final  GameMode                SURVIVAL  = new GameMode("SURVIVAL", 0, "survival");
-    public static final  GameMode                CREATIVE  = new GameMode("CREATIVE", 1, "creative");
-    public static final  GameMode                ADVENTURE = new GameMode("ADVENTURE", 2, "adventure");
-    public static final  GameMode                SPECTATOR = new GameMode("SPECTATOR", 3, "spectator");
+    public static final GameMode SURVIVAL  = new GameMode("SURVIVAL", 0, "survival");
+    public static final GameMode CREATIVE  = new GameMode("CREATIVE", 1, "creative");
+    public static final GameMode ADVENTURE = new GameMode("ADVENTURE", 2, "adventure");
+    public static final GameMode SPECTATOR = new GameMode("SPECTATOR", 3, "spectator");
 
-    private static final Map<String, GameMode>   byName    = new SimpleStringHashMap<>(5, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<GameMode> byID      = new TIntObjectHashMap<>(5, SMALL_LOAD_FACTOR);
+    private static final Map<String, GameMode>   byName = new SimpleStringHashMap<>(5, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<GameMode> byID   = new TIntObjectHashMap<>(5, SMALL_LOAD_FACTOR);
 
     private final String enumName;
     private final int    id;
@@ -32,7 +31,6 @@ public class GameMode implements SimpleEnum<GameMode>
         this.id = id;
         this.name = name;
     }
-
 
     @Override
     public String name()
@@ -71,14 +69,12 @@ public class GameMode implements SimpleEnum<GameMode>
 
     public static GameMode getByID(final int id)
     {
-        final GameMode gameMode = byID.get(id);
-        return (gameMode == null) ? NOT_SET : gameMode;
+        return byID.get(id);
     }
 
     public static GameMode getByEnumName(final String name)
     {
-        final GameMode gameMode = byName.get(name);
-        return (gameMode == null) ? NOT_SET : gameMode;
+        return byName.get(name);
     }
 
     public static void register(final GameMode element)
@@ -87,9 +83,16 @@ public class GameMode implements SimpleEnum<GameMode>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static GameMode[] values()
+    {
+        return byID.values(new GameMode[byID.size()]);
+    }
+
     static
     {
-        register(NOT_SET);
         register(SURVIVAL);
         register(CREATIVE);
         register(ADVENTURE);

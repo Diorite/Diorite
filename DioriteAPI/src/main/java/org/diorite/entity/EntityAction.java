@@ -95,6 +95,14 @@ public class EntityAction implements SimpleEnum<EntityAction>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static EntityAction[] values()
+    {
+        return byID.values(new EntityAction[byID.size()]);
+    }
+
     static
     {
         register(CROUCH);

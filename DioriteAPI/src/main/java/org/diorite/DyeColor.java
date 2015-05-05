@@ -102,7 +102,7 @@ public class DyeColor implements SimpleEnum<DyeColor>
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("blockFlag", this.blockFlag).append("itemFlag", this.itemFlag).append("color", this.color).append("fireworkColor", this.fireworkColor).toString();
     }
 
-    public static DyeColor getByLevel(final int level)
+    public static DyeColor getByID(final int level)
     {
         return byID.get(level);
     }
@@ -116,6 +116,14 @@ public class DyeColor implements SimpleEnum<DyeColor>
     {
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
+    }
+
+    /**
+     * @return all values in array.
+     */
+    public static DyeColor[] values()
+    {
+        return byID.values(new DyeColor[byID.size()]);
     }
 
     static

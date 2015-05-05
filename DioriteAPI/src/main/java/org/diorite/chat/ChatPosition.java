@@ -75,6 +75,14 @@ public class ChatPosition implements SimpleEnum<ChatPosition>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static ChatPosition[] values()
+    {
+        return byID.values(new ChatPosition[byID.size()]);
+    }
+
     static
     {
         register(CHAT);

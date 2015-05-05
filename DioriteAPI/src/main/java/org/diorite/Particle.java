@@ -127,6 +127,14 @@ public class Particle implements SimpleEnum<Particle>
         byName.put(particle.name(), particle);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static Particle[] values()
+    {
+        return byID.values(new Particle[byID.size()]);
+    }
+
     @Override
     public String toString()
     {

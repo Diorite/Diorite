@@ -702,6 +702,14 @@ public abstract class Material implements SimpleEnum<Material>
         byMinecraftId.put(element.getMinecraftId(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static Material[] values()
+    {
+        return byID.values(new Material[byID.size()]);
+    }
+
     public static TIntObjectMap<Material> getByID()
     {
         return byID;
