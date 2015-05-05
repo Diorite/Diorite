@@ -75,6 +75,14 @@ public class ClientCommand implements SimpleEnum<ClientCommand>
         byName.put(element.name(), element);
     }
 
+    /**
+     * @return all values in array.
+     */
+    public static ClientCommand[] values()
+    {
+        return byID.values(new ClientCommand[byID.size()]);
+    }
+
     static
     {
         register(PERFORM_RESPAWN);

@@ -29,6 +29,7 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
@@ -135,15 +136,14 @@ public class PacketDataSerializer extends ByteBuf
         this.readerIndex(currIndex);
         try
         {
-            return (NbtTagCompound) NbtInputStream.readTagCompressed(new ByteBufInputStream(this), NbtLimiter.getDefault());
+            return (NbtTagCompound) NbtInputStream.readTag(new ByteBufInputStream(this), NbtLimiter.getDefault());
         } catch (final IOException e)
         {
-            e.printStackTrace();
+            throw new RuntimeException("Can't decode nbt.", e);
         }
-        return null;
     }
 
-    public void writeItemStack(final ItemStackImpl itemStack)
+    public void writeItemStack(final ItemStack itemStack)
     {
         if (itemStack == null)
         {
@@ -153,7 +153,7 @@ public class PacketDataSerializer extends ByteBuf
         this.writeShort(itemStack.getMaterial().getId());
         this.writeByte(itemStack.getAmount());
         this.writeShort(itemStack.getDurability());
-        this.writeNbtTagCompound(itemStack.getItemMeta().getTag());
+        this.writeNbtTagCompound(itemStack.getItemMeta().getRawData());
     }
 
     public void writeNbtTagCompound(final NbtTag nbt)

@@ -53,6 +53,7 @@ public class ItemStackImpl extends GameObjectImpl implements ItemStack
         this(UUID.randomUUID(), material, amount, durability);
     }
 
+    @Override
     public Material getMaterial()
     {
         return this.material;
@@ -63,6 +64,7 @@ public class ItemStackImpl extends GameObjectImpl implements ItemStack
         this.material = material;
     }
 
+    @Override
     public int getAmount()
     {
         return this.amount;
@@ -73,6 +75,7 @@ public class ItemStackImpl extends GameObjectImpl implements ItemStack
         this.amount = amount;
     }
 
+    @Override
     public short getDurability()
     {
         return this.durability;
@@ -97,6 +100,7 @@ public class ItemStackImpl extends GameObjectImpl implements ItemStack
         this.location = inventory;
     }
 
+    @Override
     public ItemMetaImpl getItemMeta()
     {
         // TODO: never return null, and always return valid type

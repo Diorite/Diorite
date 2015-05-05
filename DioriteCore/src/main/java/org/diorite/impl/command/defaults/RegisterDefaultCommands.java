@@ -19,6 +19,7 @@ public final class RegisterDefaultCommands
         cmds.registerCommand(new StopCmd());
         cmds.registerCommand(new OnlineCmd());
         cmds.registerCommand(new SetTpsCmd());
+        cmds.registerCommand(new GamemodeCmd());
         cmds.registerCommand(new BroadcastCmd());
         cmds.registerCommand(new ColoredConsoleCmd());
         cmds.registerCommand(new PerformanceMonitorCmd());

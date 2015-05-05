@@ -42,4 +42,6 @@ public interface PacketPlayInListener extends PacketListener
     void handle(PacketPlayInAbilities packet);
 
     void handle(PacketPlayInResourcePackStatus packet);
+
+    void handle(PacketPlayInSetCreativeSlot packet);
 }

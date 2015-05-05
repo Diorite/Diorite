@@ -11,6 +11,8 @@ import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange.ReasonCodes;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutResourcePackSend;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
@@ -89,8 +91,13 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     @Override
     public void setGameMode(final GameMode gameMode)
     {
+        if (this.gameMode.equals(gameMode))
+        {
+            return;
+        }
         this.gameMode = gameMode;
         this.server.getPlayersManager().forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayOutPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
+        this.networkManager.sendPacket(new PacketPlayOutGameStateChange(ReasonCodes.CHANGE_GAME_MODE, gameMode.getId()));
     }
 
     @Override

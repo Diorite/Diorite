@@ -120,6 +120,12 @@ public class PlayListener implements PacketPlayInListener
     }
 
     @Override
+    public void handle(final PacketPlayInSetCreativeSlot packet)
+    {
+        // TODO: meh.
+    }
+
+    @Override
     public void handle(final PacketPlayInEntityAction packet)
     {
         packet.getEntityAction().doAction(this.player, packet.getJumpBoost());
