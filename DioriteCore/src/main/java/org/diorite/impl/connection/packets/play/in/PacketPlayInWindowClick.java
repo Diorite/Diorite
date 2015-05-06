@@ -17,11 +17,11 @@ import org.diorite.inventory.ClickType;
 public class PacketPlayInWindowClick implements PacketPlayIn
 {
     public static final int SLOT_NOT_NEEDED = - 999;
-    private int           id;
+    private int           id; // inventory id
     private short         clickedSlot;
     private short         actionNumber;
     private ClickType     clickType;
-    private ItemStackImpl clicked; // should be ignored
+    private ItemStackImpl clicked; // should be ignored?
 
     public PacketPlayInWindowClick()
     {
@@ -51,7 +51,6 @@ public class PacketPlayInWindowClick implements PacketPlayIn
         this.clicked = clicked;
     }
 
-    // TODO: finish
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
@@ -60,7 +59,7 @@ public class PacketPlayInWindowClick implements PacketPlayIn
         final byte button = data.readByte();
         this.actionNumber = data.readShort();
         this.clickType = ClickType.get(data.readByte(), button, this.clickedSlot != SLOT_NOT_NEEDED);
-        this.clicked = data.readItemStack();
+        data.skipBytes(data.readableBytes());
     }
 
     @Override

@@ -119,7 +119,8 @@ public class PacketDataSerializer extends ByteBuf
         {
             final byte amount = this.readByte();
             final short damage = this.readShort();
-            itemstack = new ItemStackImpl(Material.getByID(id, damage), amount, damage);
+            final Material mat = Material.getByID(id, damage);
+            itemstack = new ItemStackImpl((mat == null) ? Material.AIR : mat, amount);
             itemstack.getItemMeta().setTag(this.readNbtTagCompound());
         }
         return itemstack;
@@ -150,9 +151,10 @@ public class PacketDataSerializer extends ByteBuf
             this.writeShort(- 1);
             return;
         }
-        this.writeShort(itemStack.getMaterial().getId());
+        final Material mat = itemStack.getMaterial();
+        this.writeShort(mat.getId());
         this.writeByte(itemStack.getAmount());
-        this.writeShort(itemStack.getDurability());
+        this.writeShort(mat.getType());
         this.writeNbtTagCompound(itemStack.getItemMeta().getRawData());
     }
 

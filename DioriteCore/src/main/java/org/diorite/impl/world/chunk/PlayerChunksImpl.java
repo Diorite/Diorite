@@ -14,20 +14,19 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
+import org.diorite.utils.collections.ConcurrentSet;
 import org.diorite.utils.collections.WeakCollection;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
-
-import io.netty.util.internal.ConcurrentSet;
 
 public class PlayerChunksImpl
 {
     public static final int CHUNK_BULK_SIZE = 4;
 
     private final PlayerImpl player;
-    private final Collection<Chunk> loadedChunks  = WeakCollection.using(new ConcurrentSet<>());
-    private final Collection<Chunk> visibleChunks = WeakCollection.using(new ConcurrentSet<>());
-    private boolean logout;
+    private final Collection<Chunk> loadedChunks  = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
+    private final Collection<Chunk> visibleChunks = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
+    private boolean  logout;
     private ChunkPos lastUpdate;
     private byte     lastUpdateR;
     private long lastUnload = System.currentTimeMillis();
