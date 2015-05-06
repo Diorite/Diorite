@@ -40,6 +40,7 @@ public class InventoryType implements SimpleEnum<InventoryType>
 
     private static final Map<String, InventoryType>   byName = new SimpleStringHashMap<>(16, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<InventoryType> byID   = new TIntObjectHashMap<>(16, SMALL_LOAD_FACTOR);
+    private static final Map<String, InventoryType>   byMcId = new SimpleStringHashMap<>(16, SMALL_LOAD_FACTOR);
 
     private final String        enumName;
     private final int           id;
@@ -149,10 +150,19 @@ public class InventoryType implements SimpleEnum<InventoryType>
         return byName.get(name);
     }
 
+    public static InventoryType getByMinecraftId(final String minecraftId)
+    {
+        return byMcId.get(minecraftId);
+    }
+
     public static void register(final InventoryType element)
     {
         byID.put(element.getId(), element);
         byName.put(element.name(), element);
+        if (! element.getMinecraftId().equals(""))
+        {
+            byMcId.put(element.getMinecraftId(), element);
+        }
     }
 
     /**
