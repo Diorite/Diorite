@@ -21,7 +21,8 @@ public abstract class ItemMetaImpl implements ItemMeta
         return this.tag;
     }
 
-    public void setTag(final NbtTagCompound tag)
+    @Override
+    public void setRawData(final NbtTagCompound tag)
     {
         this.tag = tag;
     }

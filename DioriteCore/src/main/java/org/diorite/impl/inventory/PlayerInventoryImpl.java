@@ -1,8 +1,5 @@
 package org.diorite.impl.inventory;
 
-import java.util.HashMap;
-import java.util.Objects;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,11 +13,6 @@ import org.diorite.inventory.PlayerHotbarInventory;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.ItemStackArray;
-import org.diorite.material.Material;
-import org.diorite.utils.DioriteUtils;
-
-import gnu.trove.TIntCollection;
-import gnu.trove.list.array.TIntArrayList;
 
 public class PlayerInventoryImpl extends InventoryImpl<Player> implements PlayerInventory
 {
@@ -31,171 +23,6 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     {
         super(holder);
         this.holder = holder;
-    }
-
-    @Override
-    public int remove(final ItemStack itemStack)
-    {
-        if (itemStack == null)
-        {
-            return - 1;
-        }
-        for (int i = 0, size = this.content.length(); i < size; i++)
-        {
-            final ItemStack item = this.content.get(i);
-            if (Objects.equals(item, itemStack))
-            {
-                this.content.compareAndSet(i, item, null);
-                return i;
-            }
-        }
-        return - 1;
-    }
-
-    @Override
-    public int[] removeAll(final ItemStack itemStack)
-    {
-        if (itemStack == null)
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        final TIntCollection list = new TIntArrayList(10);
-        for (int i = 0, size = this.content.length(); i < size; i++)
-        {
-            final ItemStack item = this.content.get(i);
-            if (Objects.equals(item, itemStack))
-            {
-                this.content.compareAndSet(i, item, null);
-                list.add(i);
-            }
-        }
-        if (list.isEmpty())
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        return list.toArray();
-    }
-
-    @Override
-    public int remove(final Material material)
-    {
-        return this.remove(material, false);
-    }
-
-    @Override
-    public int[] removeAll(final Material material)
-    {
-        return this.removeAll(material, false);
-    }
-
-    @Override
-    public int remove(final Material material, final boolean ignoreType)
-    {
-        if (material == null)
-        {
-            return - 1;
-        }
-        for (int i = 0, size = this.content.length(); i < size; i++)
-        {
-            final ItemStack item = this.content.get(i);
-            if (item == null)
-            {
-                continue;
-            }
-            final Material mat = item.getMaterial();
-            if (ignoreType)
-            {
-                if ((material.getId() != mat.getId()))
-                {
-                    continue;
-                }
-            }
-            else if (! Objects.equals(mat, material))
-            {
-                continue;
-            }
-            this.content.compareAndSet(i, item, null);
-            return i;
-        }
-        return - 1;
-    }
-
-    @Override
-    public int[] removeAll(final Material material, final boolean ignoreType)
-    {
-        if (material == null)
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        final TIntCollection list = new TIntArrayList(10);
-        for (int i = 0, size = this.content.length(); i < size; i++)
-        {
-            final ItemStack item = this.content.get(i);
-            if (item == null)
-            {
-                continue;
-            }
-            final Material mat = item.getMaterial();
-            if (ignoreType)
-            {
-                if ((material.getId() != mat.getId()))
-                {
-                    continue;
-                }
-            }
-            else if (! Objects.equals(mat, material))
-            {
-                continue;
-            }
-            this.content.compareAndSet(i, item, null);
-            list.add(i);
-        }
-        if (list.isEmpty())
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        return list.toArray();
-    }
-
-    @Override
-    public int replace(final ItemStack excepted, final ItemStack newItem)
-    {
-        return 0;
-    }
-
-    @Override
-    public int[] replaceAll(final ItemStack excepted, final ItemStack newItem)
-    {
-        return new int[0];
-    }
-
-    @Override
-    public boolean replace(final int slot, final ItemStack excepted, final ItemStack newItem)
-    {
-        return false;
-    }
-
-    @Override
-    public ItemStackArray getContent()
-    {
-        return this.content;
-    }
-
-    @Override
-    public void setContent(final ItemStackArray items)
-    {
-        if (items.length() == this.content.length())
-        {
-           // this.content = items;
-        }
-        else
-        {
-         //   this.content = ItemStackArray.create(this.content.length());
-            for (int i = 0, size = items.length(); i < size; i++)
-            {
-                this.content.compareAndSet(i, null, items.get(i));
-            }
-        }
     }
 
     @Override
@@ -317,100 +144,9 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     }
 
     @Override
-    public ItemStack[] removeItems(final boolean ifContains, final ItemStack... itmes)
+    public ItemStackArray getContents()
     {
-        return new ItemStack[0];
-    }
-
-    @Override
-    public ItemStack getItem(final int index)
-    {
-        return this.content.get(index);
-    }
-
-    @Override
-    public ItemStack setItem(final int index, final ItemStack item)
-    {
-        return this.content.getAndSet(index, item);
-    }
-
-    @Override
-    public HashMap<Integer, ? extends ItemStack> all(final Material material)
-    {
-        return null;
-    }
-
-    @Override
-    public HashMap<Integer, ? extends ItemStack> all(final ItemStack item)
-    {
-        return null;
-    }
-
-    @Override
-    public int first(final Material material)
-    {
-        return 0;
-    }
-
-    @Override
-    public int first(final ItemStack item)
-    {
-        return 0;
-    }
-
-    @Override
-    public int firstEmpty()
-    {
-        return 0;
-    }
-
-    @Override
-    public boolean contains(final Material material)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean contains(final ItemStack item)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean contains(final Material material, final int amount)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean contains(final ItemStack item, final int amount)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean containsAtLeast(final ItemStack item, final int amount)
-    {
-        return false;
-    }
-
-    @Override
-    public ItemStack[] add(final ItemStack... itemStack)
-    {
-        return new ItemStack[0];
-    }
-
-    @Override
-    public void clear(final int index)
-    {
-        this.content.set(index, null);
-    }
-
-    @Override
-    public void clear()
-    {
-       // this.content = ItemStackArray.create(this.content.length());
-        this.update();
+        return this.content;
     }
 
     @Override
@@ -420,6 +156,7 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
         {
             throw new IllegalArgumentException("Player must be a viewer of inventoy.");
         }
+//        ServerImpl.getInstance().getPlayersManager().getRawPlayers().get(player.getUniqueID()).getNetworkManager().sendPacket(new );
         // TODO: implement
     }
 
@@ -447,30 +184,30 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     @Override
     public PlayerArmorInventory getArmorInventory()
     {
-        return null;
+        return new PlayerArmorInventoryImpl(this);
     }
 
     @Override
     public PlayerCraftingInventory getCraftingInventory()
     {
-        return null;
+        return new PlayerCraftingInventoryImpl(this);
     }
 
     @Override
     public PlayerFullEqInventory getFullEqInventory()
     {
-        return null;
+        return new PlayerFullEqInventoryImpl(this);
     }
 
     @Override
     public PlayerEqInventory getEqInventory()
     {
-        return null;
+        return new PlayerEqInventoryImpl(this);
     }
 
     @Override
     public PlayerHotbarInventory getHotbarInventory()
     {
-        return null;
+        return new PlayerHotbarInventoryImpl(this);
     }
 }

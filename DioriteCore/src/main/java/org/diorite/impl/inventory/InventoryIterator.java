@@ -45,12 +45,6 @@ public class InventoryIterator implements ListIterator<ItemStack>
     }
 
     @Override
-    public int nextIndex()
-    {
-        return this.nextIndex;
-    }
-
-    @Override
     public boolean hasPrevious()
     {
         return this.nextIndex > 0;
@@ -64,9 +58,21 @@ public class InventoryIterator implements ListIterator<ItemStack>
     }
 
     @Override
+    public int nextIndex()
+    {
+        return this.nextIndex;
+    }
+
+    @Override
     public int previousIndex()
     {
         return this.nextIndex - 1;
+    }
+
+    @Override
+    public void remove()
+    {
+        throw new UnsupportedOperationException("Can't change the size of an inventory!");
     }
 
     @Override
@@ -82,12 +88,6 @@ public class InventoryIterator implements ListIterator<ItemStack>
 
     @Override
     public void add(final ItemStack item)
-    {
-        throw new UnsupportedOperationException("Can't change the size of an inventory!");
-    }
-
-    @Override
-    public void remove()
     {
         throw new UnsupportedOperationException("Can't change the size of an inventory!");
     }

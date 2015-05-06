@@ -17,7 +17,6 @@ import com.google.common.base.Charsets;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
-import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.BlockFace;
@@ -111,17 +110,17 @@ public class PacketDataSerializer extends ByteBuf
         }
     }
 
-    public ItemStackImpl readItemStack()
+    public ItemStack readItemStack()
     {
-        ItemStackImpl itemstack = null;
+        ItemStack itemstack = null;
         final short id = this.readShort();
         if (id >= 0)
         {
             final byte amount = this.readByte();
             final short damage = this.readShort();
             final Material mat = Material.getByID(id, damage);
-            itemstack = new ItemStackImpl((mat == null) ? Material.AIR : mat, amount);
-            itemstack.getItemMeta().setTag(this.readNbtTagCompound());
+            itemstack = new ItemStack((mat == null) ? Material.AIR : mat, amount);
+            itemstack.getItemMeta().setRawData(this.readNbtTagCompound());
         }
         return itemstack;
     }

@@ -3,9 +3,9 @@ package org.diorite.impl.connection.packets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.BlockLocation;
 import org.diorite.ImmutableLocation;
+import org.diorite.inventory.item.ItemStack;
 
 @SuppressWarnings("MagicNumber")
 public final class EntityMetadataCodec // TODO DataWatcher and other...
@@ -37,7 +37,7 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
                 data.writeText((String) metadataObject.getData());
                 break;
             case 5:
-                final ItemStackImpl itemstack = (ItemStackImpl) metadataObject.getData();
+                final ItemStack itemstack = (ItemStack) metadataObject.getData();
                 data.writeItemStack(itemstack);
                 break;
             case 6:

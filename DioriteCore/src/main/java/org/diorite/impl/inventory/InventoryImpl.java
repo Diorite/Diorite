@@ -12,9 +12,9 @@ import org.diorite.utils.collections.ConcurrentSet;
 
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {
-    protected final T holder;
-    protected       String          title;
+    protected final T      holder;
     protected final Set<Player> viewers = new ConcurrentSet<>(5, 0.2f, 6);
+    protected       String title;
 
     protected InventoryImpl(final T holder)
     {
@@ -22,9 +22,15 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public InventoryIterator iterator()
+    public Set<Player> getViewers()
     {
-        return new InventoryIterator(this);
+        return this.viewers;
+    }
+
+    @Override
+    public String getTitle()
+    {
+        return this.title;
     }
 
     @Override
@@ -35,21 +41,15 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public String getTitle()
-    {
-        return this.title;
-    }
-
-    @Override
     public T getHolder()
     {
         return this.holder;
     }
 
     @Override
-    public Set<Player> getViewers()
+    public InventoryIterator iterator()
     {
-        return this.viewers;
+        return new InventoryIterator(this);
     }
 
     @Override
