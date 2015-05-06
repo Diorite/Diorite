@@ -1,5 +1,6 @@
 package org.diorite.inventory;
 
+import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 
 public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
@@ -9,7 +10,15 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      *
      * @return The currently held ItemStack
      */
-    ItemStack getItemInHand();
+    default ItemStack getItemInHand()
+    {
+        final Player holder = this.getHolder();
+        if (holder == null)
+        {
+            return null;
+        }
+        return this.getContents().get(holder.getHeldItemSlot());
+    }
 
     /**
      * Sets the item in hand
@@ -18,7 +27,15 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      *
      * @return previous itemstack in hand.
      */
-    ItemStack setItemInHand(ItemStack stack);
+    default ItemStack setItemInHand(final ItemStack stack)
+    {
+        final Player holder = this.getHolder();
+        if (holder == null)
+        {
+            return null;
+        }
+        return this.getContents().getAndSet(holder.getHeldItemSlot(), stack);
+    }
 
     /**
      * Replace the item in hand, if it matches a excepted one.
@@ -28,21 +45,41 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      *
      * @return true if item was replaced.
      */
-    boolean replaceItemInHand(ItemStack excepted, ItemStack stack);
+    default boolean replaceItemInHand(final ItemStack excepted, final ItemStack stack)
+    {
+        final Player holder = this.getHolder();
+        return (holder != null) && this.getContents().compareAndSet(holder.getHeldItemSlot(), excepted, stack);
+    }
 
     /**
      * Get the slot number of the currently held item
      *
      * @return Held item slot number
      */
-    int getHeldItemSlot();
+    default int getHeldItemSlot()
+    {
+        final Player holder = this.getHolder();
+        if (holder == null)
+        {
+            return - 1;
+        }
+        return holder.getHeldItemSlot();
+    }
 
     /**
      * Set the slot number of the currently held item.
      *
      * @param slot The new slot number
      */
-    void setHeldItemSlot(int slot);
+    default void setHeldItemSlot(final int slot)
+    {
+        final Player holder = this.getHolder();
+        if (holder == null)
+        {
+            return;
+        }
+        holder.setHeldItemSlot(slot);
+    }
 
     @Override
     default InventoryType getType()

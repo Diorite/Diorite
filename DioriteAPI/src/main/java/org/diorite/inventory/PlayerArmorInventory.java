@@ -7,22 +7,34 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
     /**
      * @return The ItemStack in the helmet slot
      */
-    ItemStack getHelmet();
+    default ItemStack getHelmet()
+    {
+        return this.getContents().get(0);
+    }
 
     /**
      * @return The ItemStack in the chestplate slot
      */
-    ItemStack getChestplate();
+    default ItemStack getChestplate()
+    {
+        return this.getContents().get(1);
+    }
 
     /**
      * @return The ItemStack in the leg slot
      */
-    ItemStack getLeggings();
+    default ItemStack getLeggings()
+    {
+        return this.getContents().get(2);
+    }
 
     /**
      * @return The ItemStack in the boots slot
      */
-    ItemStack getBoots();
+    default ItemStack getBoots()
+    {
+        return this.getContents().get(3);
+    }
 
     /**
      * Put the given ItemStack into the helmet slot. This does not check if
@@ -32,7 +44,10 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
      *
      * @return previous itemstack used as helmet.
      */
-    ItemStack setHelmet(ItemStack helmet);
+    default ItemStack setHelmet(final ItemStack helmet)
+    {
+        return this.getContents().getAndSet(0, helmet);
+    }
 
     /**
      * Put the given ItemStack into the chestplate slot. This does not check
@@ -42,7 +57,10 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
      *
      * @return previous itemstack used as chestplate.
      */
-    ItemStack setChestplate(ItemStack chestplate);
+    default ItemStack setChestplate(final ItemStack chestplate)
+    {
+        return this.getContents().getAndSet(1, chestplate);
+    }
 
     /**
      * Put the given ItemStack into the leg slot. This does not check if the
@@ -52,7 +70,10 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
      *
      * @return previous itemstack used as leggings.
      */
-    ItemStack setLeggings(ItemStack leggings);
+    default ItemStack setLeggings(final ItemStack leggings)
+    {
+        return this.getContents().getAndSet(2, leggings);
+    }
 
     /**
      * Put the given ItemStack into the boots slot. This does not check if the
@@ -62,7 +83,10 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
      *
      * @return previous itemstack used as boots.
      */
-    ItemStack setBoots(ItemStack boots);
+    default ItemStack setBoots(final ItemStack boots)
+    {
+        return this.getContents().getAndSet(3, boots);
+    }
 
     /**
      * Put the given ItemStack into the helmet slot if it matches a excepted one.
@@ -73,7 +97,10 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
      *
      * @return true if item was replaced.
      */
-    boolean replaceHelmet(ItemStack excepted, ItemStack helmet);
+    default boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet)
+    {
+        return this.getContents().compareAndSet(0, excepted, helmet);
+    }
 
     /**
      * Put the given ItemStack into the chestplate slot if it matches a excepted one.
@@ -84,7 +111,10 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
      *
      * @return true if item was replaced.
      */
-    boolean replaceChestplate(ItemStack excepted, ItemStack chestplate);
+    default boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate)
+    {
+        return this.getContents().compareAndSet(0, excepted, chestplate);
+    }
 
     /**
      * Put the given ItemStack into the leggings slot if it matches a excepted one.
@@ -95,7 +125,10 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
      *
      * @return true if item was replaced.
      */
-    boolean replaceLeggings(ItemStack excepted, ItemStack leggings);
+    default boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings)
+    {
+        return this.getContents().compareAndSet(0, excepted, leggings);
+    }
 
     /**
      * Put the given ItemStack into the boots slot if it matches a excepted one.
@@ -106,7 +139,10 @@ public interface PlayerArmorInventory extends Inventory, PlayerInventoryPart
      *
      * @return true if item was replaced.
      */
-    boolean replaceBoots(ItemStack excepted, ItemStack boots);
+    default boolean replaceBoots(final ItemStack excepted, final ItemStack boots)
+    {
+        return this.getContents().compareAndSet(0, excepted, boots);
+    }
 
     @Override
     default InventoryType getType()

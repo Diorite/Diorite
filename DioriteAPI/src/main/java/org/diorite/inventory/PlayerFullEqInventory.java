@@ -8,7 +8,10 @@ public interface PlayerFullEqInventory extends Inventory, PlayerEqInventory, Pla
      *
      * @return sub-part of player inventory.
      */
-    PlayerEqInventory getEqInventory();
+    default PlayerEqInventory getEqInventory()
+    {
+        return this.getPlayerInventory().getEqInventory();
+    }
 
     /**
      * Returns sub-part of player inventory, contains only
@@ -16,7 +19,10 @@ public interface PlayerFullEqInventory extends Inventory, PlayerEqInventory, Pla
      *
      * @return sub-part of player inventory.
      */
-    PlayerHotbarInventory getHotbarInventory();
+    default PlayerHotbarInventory getHotbarInventory()
+    {
+        return this.getPlayerInventory().getHotbarInventory();
+    }
 
     @Override
     default InventoryType getType()
