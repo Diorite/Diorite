@@ -54,4 +54,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutOpenWindow packet);
 
     void handle(PacketPlayOutCloseWindow packet);
+
+    void handle(PacketPlayOutTransaction packet);
 }
