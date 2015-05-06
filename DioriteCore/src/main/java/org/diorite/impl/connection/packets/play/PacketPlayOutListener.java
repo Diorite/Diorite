@@ -50,4 +50,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutEntityMetadata packet);
 
     void handle(PacketPlayOutGameStateChange packet);
+
+    void handle(PacketPlayOutOpenWindow packet);
 }
