@@ -7,8 +7,12 @@ import org.diorite.inventory.item.ItemStack;
 
 public class PlayerInventoryImpl extends InventoryImpl
 {
-    final ItemStack[] armor   = new ItemStack[4];
-    final ItemStack[] content = new ItemStack[4 * 9];
+    final ItemStack[] armor = new ItemStack[4];
+
+    public PlayerInventoryImpl(final int size)
+    {
+        super(size);
+    }
 
     @Override
     public int remove(final ItemStack itemStack)
@@ -26,32 +30,8 @@ public class PlayerInventoryImpl extends InventoryImpl
     }
 
     @Override
-    public boolean removeItem(final ItemStack itemStack)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean contains(final ItemStack itemStack)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean containsAtLeast(final ItemStack itemStack)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean add(final ItemStack... itemStack)
-    {
-        return false;
-    }
-
-    @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("armor", this.armor).append("content", this.content).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("armor", this.armor).toString();
     }
 }

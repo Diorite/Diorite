@@ -176,4 +176,12 @@ public final class Main
             System.out.println("[DEBUG] " + obj);
         }
     }
+
+    /**
+     * This comment is here just to write some to-do stuff, and other notes
+     * TODO: remember about signs that can run commands -> player can inject commands here, aka force op
+     *
+     * You can make sky with weird colors by GameStateChange, id 7, values from 0 to 60
+     * And rain without rains, id 7, values from -10 to 0.
+     */
 }

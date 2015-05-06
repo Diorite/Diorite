@@ -74,15 +74,50 @@ public class PacketPlayOutGameStateChange implements PacketPlayOut
 
     public static final class ReasonCodes
     {
+        /**
+         * just show message about bed.
+         */
         public static final byte INVALID_BED      = 0x00;
+        /**
+         * Fast rain stop.
+         */
         public static final byte END_RAINING      = 0x01;
+        /**
+         * Fast rain start.
+         */
         public static final byte BEGIN_RAINING    = 0x02;
+        /**
+         * Use gamemode as value.
+         */
         public static final byte CHANGE_GAME_MODE = 0x03;
+        /**
+         * Game end credits
+         */
         public static final byte ENTER_CREDITS    = 0x04;
+        /**
+         * values:
+         *  0 - show popup about demo
+         *  101 - movement controls. (chat message)
+         *  102 - jump controls. (chat message)
+         *  103 - inv controls. (chat message)
+         */
         public static final byte DEMO_MESSAGE     = 0x05;
+        /**
+         * That "ding" sound.
+         */
         public static final byte ARROW_HIT        = 0x06;
+        /**
+         * Used to make sky brighter
+         * Weird sky, rain without rain etc...
+         */
         public static final byte FADE_VALUE       = 0x07;
+        /**
+         * some fade speed, or, whatever.
+         */
         public static final byte FADE_TIME        = 0x08;
+        /**
+         * It shows elder guardian ghost.
+         */
         public static final byte MOB_APPEARANCE   = 0x0A;
 
         private ReasonCodes()

@@ -1,17 +1,16 @@
 package org.diorite.impl.inventory.item;
 
 import java.util.Optional;
-import java.util.UUID;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.GameObjectImpl;
 import org.diorite.inventory.Inventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 
-public class ItemStackImpl extends GameObjectImpl implements ItemStack
+public class ItemStackImpl implements ItemStack
 {
     // TODO: lore, name and other stuff
     private Material     material;
@@ -20,37 +19,22 @@ public class ItemStackImpl extends GameObjectImpl implements ItemStack
     private Inventory    location;
     private ItemMetaImpl itemMeta;
 
-    public ItemStackImpl(final UUID uuid, final Material material, final int amount, final int durability)
+    public ItemStackImpl(final Material material, final int amount, final int durability)
     {
-        super(uuid);
+        Validate.notNull(material, "Material can't be null.");
         this.material = material;
         this.amount = amount;
         this.durability = (short) durability;
     }
 
-    public ItemStackImpl(final UUID uuid, final Material material)
-    {
-        this(uuid, material, 1);
-    }
-
-    public ItemStackImpl(final UUID uuid, final Material material, final int amount)
-    {
-        this(uuid, material, amount, 0);
-    }
-
     public ItemStackImpl(final Material material)
     {
-        this(UUID.randomUUID(), material, 1);
+        this(material, 1);
     }
 
     public ItemStackImpl(final Material material, final int amount)
     {
-        this(UUID.randomUUID(), material, amount, 0);
-    }
-
-    public ItemStackImpl(final Material material, final int amount, final int durability)
-    {
-        this(UUID.randomUUID(), material, amount, durability);
+        this(material, amount, 0);
     }
 
     @Override
@@ -120,6 +104,34 @@ public class ItemStackImpl extends GameObjectImpl implements ItemStack
     public void update()
     {
         // TODO
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof ItemStackImpl))
+        {
+            return false;
+        }
+
+        final ItemStackImpl itemStack = (ItemStackImpl) o;
+
+        return (this.amount == itemStack.amount) && (this.durability == itemStack.durability) && ! (this.material != null ? ! this.material.equals(itemStack.material) : itemStack.material != null) && itemMeta.equals(itemStack.itemMeta);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = (this.material != null) ? this.material.hashCode() : 0;
+        result = (31 * result) + this.amount;
+        result = (31 * result) + (int) this.durability;
+        result = (31 * result) + this.itemMeta.hashCode();
+        return result;
     }
 
     @Override
