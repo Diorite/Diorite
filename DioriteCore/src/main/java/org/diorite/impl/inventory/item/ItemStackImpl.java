@@ -15,7 +15,6 @@ public class ItemStackImpl implements ItemStack
     // TODO: lore, name and other stuff
     private Material     material;
     private int          amount;
-    private short        durability;
     private Inventory    location;
     private ItemMetaImpl itemMeta;
 
@@ -24,7 +23,6 @@ public class ItemStackImpl implements ItemStack
         Validate.notNull(material, "Material can't be null.");
         this.material = material;
         this.amount = amount;
-        this.durability = (short) durability;
     }
 
     public ItemStackImpl(final Material material)
@@ -57,17 +55,6 @@ public class ItemStackImpl implements ItemStack
     public void setAmount(final int amount)
     {
         this.amount = amount;
-    }
-
-    @Override
-    public short getDurability()
-    {
-        return this.durability;
-    }
-
-    public void setDurability(final short durability)
-    {
-        this.durability = durability;
     }
 
     public Optional<Inventory> getLocation()
@@ -120,7 +107,7 @@ public class ItemStackImpl implements ItemStack
 
         final ItemStackImpl itemStack = (ItemStackImpl) o;
 
-        return (this.amount == itemStack.amount) && (this.durability == itemStack.durability) && ! (this.material != null ? ! this.material.equals(itemStack.material) : itemStack.material != null) && itemMeta.equals(itemStack.itemMeta);
+        return (this.amount == itemStack.amount) && ! ((this.material != null) ? ! this.material.equals(itemStack.material) : (itemStack.material != null)) && this.itemMeta.equals(itemStack.itemMeta);
 
     }
 
@@ -129,7 +116,6 @@ public class ItemStackImpl implements ItemStack
     {
         int result = (this.material != null) ? this.material.hashCode() : 0;
         result = (31 * result) + this.amount;
-        result = (31 * result) + (int) this.durability;
         result = (31 * result) + this.itemMeta.hashCode();
         return result;
     }
@@ -137,6 +123,6 @@ public class ItemStackImpl implements ItemStack
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("material", this.material).append("amount", this.amount).append("durability", this.durability).append("location", this.location).append("itemMeta", this.itemMeta).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("material", this.material).append("amount", this.amount).append("location", this.location).append("itemMeta", this.itemMeta).toString();
     }
 }

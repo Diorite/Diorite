@@ -3,6 +3,7 @@ package org.diorite.impl.connection.listeners;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
@@ -122,6 +123,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInSetCreativeSlot packet)
     {
+        Main.debug("creative slot: " + packet.getSlot() + ", item: " + packet.getItem());
         // TODO: meh.
     }
 
@@ -163,12 +165,14 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInCloseWindow packet)
     {
+        Main.debug("Close windows: " + packet.getId());
         // TODO: implement
     }
 
     @Override
     public void handle(final PacketPlayInWindowClick packet)
     {
+        Main.debug("Click (" + packet.getId() + ") slot: " + packet.getClickedSlot() + ", type: " + packet.getClickType() + ", action: " + packet.getActionNumber() + ", item: " + packet.getClicked());
         // TODO: implement
     }
 
