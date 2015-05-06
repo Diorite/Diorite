@@ -101,7 +101,7 @@ public class NoteBlockMat extends WoodenMat
      */
     public static void register(final NoteBlockMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

@@ -103,7 +103,7 @@ public class GlassPaneMat extends BlockMaterialData implements FenceMat
      */
     public static void register(final GlassPaneMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

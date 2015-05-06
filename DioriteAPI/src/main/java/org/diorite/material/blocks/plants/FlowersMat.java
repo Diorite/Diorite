@@ -140,7 +140,7 @@ public class FlowersMat extends FlowerMat
      */
     public static void register(final FlowersMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

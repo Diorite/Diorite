@@ -134,7 +134,7 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
      */
     public static void register(final DoubleWoodenSlabMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

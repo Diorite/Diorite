@@ -101,7 +101,7 @@ public class HardenedClayMat extends StonyMat
      */
     public static void register(final HardenedClayMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

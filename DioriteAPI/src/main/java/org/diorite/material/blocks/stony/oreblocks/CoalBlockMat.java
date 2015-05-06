@@ -103,7 +103,7 @@ public class CoalBlockMat extends OreBlockMat
      */
     public static void register(final CoalBlockMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

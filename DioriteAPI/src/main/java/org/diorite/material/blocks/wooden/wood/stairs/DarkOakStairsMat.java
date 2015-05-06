@@ -149,7 +149,7 @@ public class DarkOakStairsMat extends WoodenStairsMat
      */
     public static void register(final DarkOakStairsMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

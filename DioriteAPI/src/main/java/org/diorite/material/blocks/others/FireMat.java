@@ -154,7 +154,7 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
      */
     public static void register(final FireMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

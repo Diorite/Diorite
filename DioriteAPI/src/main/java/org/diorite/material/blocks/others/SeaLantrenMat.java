@@ -102,7 +102,7 @@ public class SeaLantrenMat extends BlockMaterialData
      */
     public static void register(final SeaLantrenMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

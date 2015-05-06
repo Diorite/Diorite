@@ -103,7 +103,7 @@ public class RedstoneBlockMat extends OreBlockMat
      */
     public static void register(final RedstoneBlockMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

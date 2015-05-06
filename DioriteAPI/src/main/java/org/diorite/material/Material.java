@@ -486,22 +486,24 @@ public abstract class Material implements SimpleEnum<Material>
     private static final Map<String, Material>       byName                     = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
     private static final Map<String, Material>       byMinecraftId              = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<Material>     byID                       = new TIntObjectHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
-    private final String enumName;
-    private final int    id;
-    private final String minecraftId;
-    private final int    maxStack;
+    private final   String enumName;
+    protected final int    id;
+    protected final String minecraftId;
+    protected final int    maxStack;
+    protected final short  type;
 
-    protected Material(final String enumName, final int id, final String minecraftId)
+    protected Material(final String enumName, final int id, final String minecraftId, final short type)
     {
-        this(enumName, id, minecraftId, MagicNumbers.ITEMS__DEFAULT_STACK_SIZE);
+        this(enumName, id, minecraftId, MagicNumbers.ITEMS__DEFAULT_STACK_SIZE, type);
     }
 
-    protected Material(final String enumName, final int id, final String minecraftId, final int maxStack)
+    protected Material(final String enumName, final int id, final String minecraftId, final int maxStack, final short type)
     {
         this.enumName = enumName;
         this.id = id;
         this.minecraftId = minecraftId;
         this.maxStack = maxStack;
+        this.type = type;
     }
 
     @Override
@@ -526,6 +528,14 @@ public abstract class Material implements SimpleEnum<Material>
     public Material byName(final String name)
     {
         return byName.get(name);
+    }
+
+    /**
+     * @return sub-id of material, for blocks is in 0-15 range, for items it use 2 bytes
+     */
+    public short getType()
+    {
+        return this.type;
     }
 
     /**

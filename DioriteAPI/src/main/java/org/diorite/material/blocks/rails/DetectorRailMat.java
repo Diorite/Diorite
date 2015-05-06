@@ -188,7 +188,7 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
      */
     public static void register(final DetectorRailMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

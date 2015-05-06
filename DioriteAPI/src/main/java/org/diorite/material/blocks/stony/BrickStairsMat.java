@@ -179,7 +179,7 @@ public class BrickStairsMat extends BlockMaterialData implements StairsMat
      */
     public static void register(final BrickStairsMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

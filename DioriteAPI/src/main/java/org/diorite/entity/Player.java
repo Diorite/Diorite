@@ -6,6 +6,7 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
 import org.diorite.inventory.InventoryHolder;
+import org.diorite.inventory.PlayerInventory;
 import org.diorite.world.World;
 
 public interface Player extends AttributableEntity, PlayerCommandSender, InventoryHolder
@@ -19,6 +20,9 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
     {
         return this;
     }
+
+    @Override
+    PlayerInventory getInventory();
 
     /**
      * Gets this player current {@link GameMode}
@@ -86,17 +90,32 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
     byte getViewDistance();
 
     /**
+     * Get the slot number of the currently held item
+     *
+     * @return Held item slot number
+     */
+    int getHeldItemSlot();
+
+    /**
+     * Set the slot number of the currently held item
+     *
+     * @param slot new slot id, from 0 to 8.
+     */
+    void setHeldItemSlot(final int slot);
+
+    /**
      * Gets player's render distance
      *
-     * @see Player#getViewDistance()
      * @return Player's render distance
+     *
+     * @see Player#getViewDistance()
      */
     byte getRenderDistance();
 
     /**
      * Sets player's render distance
      *
-     * @param viewDistance  New player's view distance
+     * @param viewDistance New player's view distance
      */
     void setRenderDistance(byte viewDistance);
 
@@ -111,7 +130,7 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
      * Request that the player's client download and switch resource packs.
      *
      * @param resourcePack URL to resource pack
-     * @param hash A 40 character lowercase SHA-1 hash of resource pack file
+     * @param hash         A 40 character lowercase SHA-1 hash of resource pack file
      */
     void setResourcePack(String resourcePack, String hash);
 
@@ -132,7 +151,7 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
     /**
      * Sets whether player can fly and speed
      *
-     * @param value True if player should be able to fly
+     * @param value    True if player should be able to fly
      * @param flySpeed New speed
      */
     void setCanFly(boolean value, double flySpeed);
@@ -168,18 +187,19 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
     /**
      * Creates particle <b>only</b> to this player
      *
-     * @see org.diorite.world.World#showParticle(Particle, boolean, int, int, int, int, int, int, int, int, int...)
-     * @param particle Particle which should be shown
+     * @param particle       Particle which should be shown
      * @param isLongDistance If you set this to false, you can show particles only in 256 blocks from player
-     * @param x Location of particle
-     * @param y Location of particle
-     * @param z Location of particle
-     * @param offsetX Offset X
-     * @param offsetY Offset Y
-     * @param offsetZ Offset Z
-     * @param particleData Particle data
-     * @param particleCount Count of particles to display
-     * @param data Special particle data, it should be used only to: ICON_CRACK, BLOCK_CRACK, BLOCK_DUST
+     * @param x              Location of particle
+     * @param y              Location of particle
+     * @param z              Location of particle
+     * @param offsetX        Offset X
+     * @param offsetY        Offset Y
+     * @param offsetZ        Offset Z
+     * @param particleData   Particle data
+     * @param particleCount  Count of particles to display
+     * @param data           Special particle data, it should be used only to: ICON_CRACK, BLOCK_CRACK, BLOCK_DUST
+     *
+     * @see org.diorite.world.World#showParticle(Particle, boolean, int, int, int, int, int, int, int, int, int...)
      */
     void showParticle(Particle particle, boolean isLongDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int... data);
 
@@ -202,10 +222,11 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
      * Updates text on tab header/footer for this player
      * If you want remove header or footer use the blank BaseComponent (NOT NULL!)
      *
-     * @see org.diorite.Server#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent)
-     * @see org.diorite.Server#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent, Player)
      * @param header Text which should be displayed in TAB header, shouldn't be null
      * @param footer Text which should be displayed in TAB footer, shouldn't be null
+     *
+     * @see org.diorite.Server#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent)
+     * @see org.diorite.Server#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent, Player)
      */
     default void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer)
     {
@@ -215,11 +236,11 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
     /**
      * Send title to player (a big text in center of screen)
      *
-     * @param title Title
+     * @param title    Title
      * @param subtitle Sub-title
-     * @param fadeIn Time in which text should appear
-     * @param stay Time in which text should stay on screen
-     * @param fadeOut Time in which text should disappear
+     * @param fadeIn   Time in which text should appear
+     * @param stay     Time in which text should stay on screen
+     * @param fadeOut  Time in which text should disappear
      */
     default void sendTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut)
     {

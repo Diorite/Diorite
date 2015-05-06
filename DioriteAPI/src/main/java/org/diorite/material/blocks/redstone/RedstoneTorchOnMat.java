@@ -142,7 +142,7 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
      */
     public static void register(final RedstoneTorchOnMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

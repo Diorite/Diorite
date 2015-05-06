@@ -153,7 +153,7 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
      */
     public static void register(final DaylightDetectorMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

@@ -156,7 +156,7 @@ public class StoneButtonMat extends ButtonMat
      */
     public static void register(final StoneButtonMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

@@ -166,7 +166,7 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
      */
     public static void register(final TrappedChestMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

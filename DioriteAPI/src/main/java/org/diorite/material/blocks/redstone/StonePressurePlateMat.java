@@ -126,7 +126,7 @@ public class StonePressurePlateMat extends PressurePlateMat
      */
     public static void register(final StonePressurePlateMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

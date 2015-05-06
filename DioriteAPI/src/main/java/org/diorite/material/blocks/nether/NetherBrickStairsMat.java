@@ -179,7 +179,7 @@ public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
      */
     public static void register(final NetherBrickStairsMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

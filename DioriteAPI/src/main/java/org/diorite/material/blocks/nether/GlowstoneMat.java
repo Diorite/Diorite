@@ -102,7 +102,7 @@ public class GlowstoneMat extends BlockMaterialData
      */
     public static void register(final GlowstoneMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

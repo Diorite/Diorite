@@ -166,7 +166,7 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
      */
     public static void register(final RedstoneWireMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

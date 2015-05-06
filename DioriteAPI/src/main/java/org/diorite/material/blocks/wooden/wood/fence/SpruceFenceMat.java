@@ -102,7 +102,7 @@ public class SpruceFenceMat extends WoodenFenceMat
      */
     public static void register(final SpruceFenceMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

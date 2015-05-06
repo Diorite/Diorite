@@ -189,7 +189,7 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
      */
     public static void register(final PoweredRailMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

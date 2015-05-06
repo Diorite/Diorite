@@ -163,7 +163,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
      */
     public static void register(final StainedHardenedClayMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

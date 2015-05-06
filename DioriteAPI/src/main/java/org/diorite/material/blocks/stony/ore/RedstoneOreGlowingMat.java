@@ -101,7 +101,7 @@ public class RedstoneOreGlowingMat extends OreMat
      */
     public static void register(final RedstoneOreGlowingMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

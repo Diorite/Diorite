@@ -148,7 +148,7 @@ public class IronPressurePlateMat extends WeightedPressurePlateMat
      */
     public static void register(final IronPressurePlateMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

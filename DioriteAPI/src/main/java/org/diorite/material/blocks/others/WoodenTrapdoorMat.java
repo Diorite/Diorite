@@ -170,7 +170,7 @@ public class WoodenTrapdoorMat extends TrapdoorMat
      */
     public static void register(final WoodenTrapdoorMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

@@ -149,7 +149,7 @@ public class JungleFenceGateMat extends WoodenFenceGateMat
      */
     public static void register(final JungleFenceGateMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

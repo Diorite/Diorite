@@ -101,7 +101,7 @@ public class MyceliumMat extends EarthMat
      */
     public static void register(final MyceliumMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

@@ -1,16 +1,20 @@
 package org.diorite.inventory;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ListIterator;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.ItemStackArray;
 import org.diorite.material.Material;
 
 public interface Inventory extends Iterable<ItemStack>
 {
-    ItemStack[] getContent();
+    /**
+     * @return An array of ItemStacks from the inventory.
+     */
+    ItemStackArray getContent();
 
     /**
      * Completely replaces the inventory's contents. Removes all existing
@@ -22,7 +26,22 @@ public interface Inventory extends Iterable<ItemStack>
      * @throws IllegalArgumentException If the array has more items than the
      *                                  inventory.
      */
-    void setContent(ItemStack[] items);
+    void setContent(ItemStackArray items);
+
+    /**
+     * Completely replaces the inventory's contents. Removes all existing
+     * contents and replaces it with the ItemStacks given in the array.
+     *
+     * @param items A complete replacement for the contents; the length must
+     *              be less than or equal to {@link #size()}.
+     *
+     * @throws IllegalArgumentException If the array has more items than the
+     *                                  inventory.
+     */
+    default void setContent(final ItemStack[] items)
+    {
+        this.setContent(ItemStackArray.create(items));
+    }
 
     /**
      * Remove first found item matching given one.
@@ -61,6 +80,60 @@ public interface Inventory extends Iterable<ItemStack>
     int[] removeAll(Material material);
 
     /**
+     * Remove first found item matching given material.
+     *
+     * @param material   material to remove.
+     * @param ignoreType if true, then sub-type of given material will be ignored
+     *
+     * @return slot id of removed item, or -1 if no item was removed.
+     */
+    int remove(Material material, boolean ignoreType);
+
+    /**
+     * Remove all items matching given material.
+     *
+     * @param material   material to remove.
+     * @param ignoreType if true, then sub-type of given material will be ignored
+     *
+     * @return array of slot ids of removed items, empty if no item was removed.
+     */
+    int[] removeAll(Material material, boolean ignoreType);
+
+    /**
+     * Replace first found item matching given one.
+     * NOTE: replace is atomic.
+     *
+     * @param excepted item to replace.
+     * @param newItem  replacement.
+     *
+     * @return slot id of replaced item, or -1 if no item was replaced.
+     */
+    int replace(ItemStack excepted, ItemStack newItem);
+
+    /**
+     * Replace all found items matching give one.
+     * NOTE: every replace is atomic.
+     *
+     * @param excepted item to replace.
+     * @param newItem  replacement.
+     *
+     * @return array of slot ids of replaced items, empty if no item was replaced.
+     */
+    int[] replaceAll(ItemStack excepted, ItemStack newItem);
+
+    /**
+     * Replace item on given slot, only if it matches given item.
+     * NOTE: this is atomic operation.
+     *
+     * @param slot     slot to replace.
+     * @param excepted item to replace.
+     * @param newItem  replacement.
+     *
+     * @return true if item was replaced.
+     */
+    boolean replace(int slot, ItemStack excepted, ItemStack newItem);
+
+    /**
      * Try remove all items from given array,
      * if {@code ifContains} is true, items will be removed only
      * if inventory contains them all, and then empty array (of size 0) will be returned.
@@ -92,8 +165,10 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @param index The index where to put the ItemStack
      * @param item  The ItemStack to set
+     *
+     * @return previous itemstack in this slot.
      */
-    void setItem(int index, ItemStack item);
+    ItemStack setItem(int index, ItemStack item);
 
     /**
      * Returns a HashMap with all slots and ItemStacks in the inventory with
@@ -243,9 +318,9 @@ public interface Inventory extends Iterable<ItemStack>
     void clear();
 
     /**
-     * @return A list of players who are viewing this Inventory.
+     * @return A collection of players who are viewing this Inventory.
      */
-    public List<Player> getViewers();
+    Collection<Player> getViewers();
 
     /**
      * @return A String with the title of inventory.
@@ -290,7 +365,10 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * @return The size of the inventory
      */
-    int size();
+    default int size()
+    {
+        return this.getContent().length();
+    }
 
     @Override
     ListIterator<ItemStack> iterator();

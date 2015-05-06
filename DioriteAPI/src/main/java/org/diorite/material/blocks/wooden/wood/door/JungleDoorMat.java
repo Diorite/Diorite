@@ -304,7 +304,7 @@ public class JungleDoorMat extends WoodenDoorMat
      */
     public static void register(final JungleDoorMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

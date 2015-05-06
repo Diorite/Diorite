@@ -6,30 +6,22 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public abstract class BlockMaterialData extends Material
 {
     protected final String typeName;
-    protected final byte   type;
 
     protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
     {
-        super(enumName, id, minecraftId);
+        super(enumName, id, minecraftId, type);
         this.typeName = typeName;
-        this.type = type;
     }
 
     protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
     {
-        super(enumName, id, minecraftId, maxStack);
+        super(enumName, id, minecraftId, maxStack, type);
         this.typeName = typeName;
-        this.type = type;
     }
 
     public String getTypeName()
     {
         return this.typeName;
-    }
-
-    public byte getType()
-    {
-        return this.type;
     }
 
     public abstract BlockMaterialData getType(String name);

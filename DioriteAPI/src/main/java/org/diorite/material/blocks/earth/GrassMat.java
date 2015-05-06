@@ -100,7 +100,7 @@ public class GrassMat extends EarthMat
      */
     public static void register(final GrassMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

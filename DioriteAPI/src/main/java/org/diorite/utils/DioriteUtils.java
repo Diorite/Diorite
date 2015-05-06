@@ -2,11 +2,15 @@ package org.diorite.utils;
 
 import java.lang.reflect.Field;
 
+import org.diorite.inventory.item.ItemStack;
+
 import sun.misc.Unsafe;
 
 public final class DioriteUtils
 {
     private static final Unsafe unsafeInstance;
+    public static final ItemStack[] EMPTY_ITEM_STACK = new ItemStack[0];
+    public static final int[]       EMPTY_INT        = new int[0];
 
     private DioriteUtils()
     {

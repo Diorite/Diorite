@@ -102,7 +102,7 @@ public class BookshelfMat extends BlockMaterialData
      */
     public static void register(final BookshelfMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

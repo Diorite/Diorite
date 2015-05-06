@@ -102,7 +102,7 @@ public class EndStoneMat extends StonyMat
      */
     public static void register(final EndStoneMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

@@ -138,7 +138,7 @@ public class DoubleFlowersMat extends FlowerMat
      */
     public static void register(final DoubleFlowersMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

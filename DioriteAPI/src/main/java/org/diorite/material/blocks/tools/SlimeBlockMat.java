@@ -102,7 +102,7 @@ public class SlimeBlockMat extends BlockMaterialData
      */
     public static void register(final SlimeBlockMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

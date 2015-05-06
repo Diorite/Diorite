@@ -153,7 +153,7 @@ public class SugarCaneMat extends PlantMat implements AgeableBlockMat
      */
     public static void register(final SugarCaneMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

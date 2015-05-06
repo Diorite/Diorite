@@ -149,7 +149,7 @@ public class SpruceStairsMat extends WoodenStairsMat
      */
     public static void register(final SpruceStairsMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

@@ -258,7 +258,7 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
      */
     public static void register(final LeverMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

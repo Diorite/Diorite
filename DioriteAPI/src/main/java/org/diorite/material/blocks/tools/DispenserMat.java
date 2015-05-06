@@ -215,7 +215,7 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
      */
     public static void register(final DispenserMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

@@ -103,7 +103,7 @@ public class EmeraldBlockMat extends OreBlockMat
      */
     public static void register(final EmeraldBlockMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

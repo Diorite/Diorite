@@ -189,7 +189,7 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
      */
     public static void register(final ActivatorRailMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

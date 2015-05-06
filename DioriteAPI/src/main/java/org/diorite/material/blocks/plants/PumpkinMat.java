@@ -130,7 +130,7 @@ public class PumpkinMat extends AbstractPumpkinMat
      */
     public static void register(final PumpkinMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

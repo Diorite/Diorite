@@ -166,7 +166,7 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
      */
     public static void register(final BurningFurnaceMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

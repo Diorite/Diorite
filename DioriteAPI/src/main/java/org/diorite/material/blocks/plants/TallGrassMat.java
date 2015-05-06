@@ -134,7 +134,7 @@ public class TallGrassMat extends FlowerMat
      */
     public static void register(final TallGrassMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

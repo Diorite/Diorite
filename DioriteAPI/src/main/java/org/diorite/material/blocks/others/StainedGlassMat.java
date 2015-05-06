@@ -163,7 +163,7 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
      */
     public static void register(final StainedGlassMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

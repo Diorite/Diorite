@@ -288,7 +288,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
      */
     public static void register(final AnvilMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 
@@ -334,7 +334,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         }
 
         /**
-         * @return byte-flag for this damage.ł
+         * @return byte-flag for this damage.Ĺ‚
          */
         public byte getFlag()
         {

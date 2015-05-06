@@ -103,7 +103,7 @@ public class GoldBlockMat extends OreBlockMat
      */
     public static void register(final GoldBlockMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

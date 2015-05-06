@@ -140,7 +140,7 @@ public class StoneSlabMat extends StonySlabMat
      */
     public static void register(final StoneSlabMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

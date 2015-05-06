@@ -101,7 +101,7 @@ public class MushroomBrownMat extends MushroomMat
      */
     public static void register(final MushroomBrownMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

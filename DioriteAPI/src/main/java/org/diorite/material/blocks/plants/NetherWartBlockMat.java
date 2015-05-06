@@ -153,7 +153,7 @@ public class NetherWartBlockMat extends CropsMat
      */
     public static void register(final NetherWartBlockMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 

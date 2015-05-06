@@ -163,7 +163,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
      */
     public static void register(final CarpetMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((byte) element.getType(), element);
         byName.put(element.name(), element);
     }
 
