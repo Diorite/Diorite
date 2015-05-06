@@ -52,4 +52,6 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutGameStateChange packet);
 
     void handle(PacketPlayOutOpenWindow packet);
+
+    void handle(PacketPlayOutCloseWindow packet);
 }

@@ -43,11 +43,11 @@ public class PacketPlayOutOpenWindow implements PacketPlayOut
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.windowId = data.readByte();
+        this.windowId = data.readUnsignedByte();
         //noinspection MagicNumber
         this.inventoryType = InventoryType.getByMinecraftId(data.readText(64));
         this.name = data.readBaseComponent();
-        this.size = data.readByte();
+        this.size = data.readUnsignedByte();
         if (this.inventoryType.getMinecraftId().equals("EntityHorse"))
         {
             this.entityId = data.readInt();
