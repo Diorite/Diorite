@@ -47,12 +47,11 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
-        <!--removed to reduce size, will be re-added when needed-->
-        <!--<dependency>-->
-            <!--<groupId>org.yaml</groupId>-->
-            <!--<artifactId>snakeyaml</artifactId>-->
-            <!--<version>1.15</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.15</version>
+        </dependency>
         <!--removed to reduce size, will be re-added when needed-->
         <!--<dependency>-->
             <!--<groupId>org.xerial</groupId>-->
