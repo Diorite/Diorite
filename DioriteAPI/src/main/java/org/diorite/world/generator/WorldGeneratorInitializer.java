@@ -26,7 +26,7 @@ public abstract class WorldGeneratorInitializer<T extends WorldGenerator>
     /**
      * Create new WorldGeneratorInitializer with selected name
      *
-     * @param name Name of world generator, must be unique
+     * @param name Name of world generator, must be unique, pluginname:generator should be used.
      */
     protected WorldGeneratorInitializer(final String name)
     {

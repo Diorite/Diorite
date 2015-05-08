@@ -52,6 +52,12 @@
             <artifactId>snakeyaml</artifactId>
             <version>1.15</version>
         </dependency>
+        <!--Need find other lib, with updated depends-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.velocity</groupId>-->
+            <!--<artifactId>velocity</artifactId>-->
+            <!--<version>1.7</version>-->
+        <!--</dependency>-->
         <!--removed to reduce size, will be re-added when needed-->
         <!--<dependency>-->
             <!--<groupId>org.xerial</groupId>-->
