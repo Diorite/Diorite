@@ -128,7 +128,7 @@ public class WorldsManagerImpl implements WorldsManager
                 String gen = tag.getString("generatorName");
                 if (gen == null)
                 {
-                    tag.addTag(new NbtTagString("generatorName", gen = "default"));
+                    tag.addTag(new NbtTagString("generatorName", gen = "diorite:default"));
                 }
                 String genOpt = tag.getString("generatorOptions");
                 if (genOpt == null)
@@ -164,7 +164,7 @@ public class WorldsManagerImpl implements WorldsManager
 
     private void createDefaultWorlds()
     {
-        this.addWorld(new WorldImpl(this.defaultWorld, Dimension.OVERWORLD, null, "default")); // TODO: default generator
+        this.addWorld(new WorldImpl(this.defaultWorld, Dimension.OVERWORLD, null, "diorite:default")); // TODO: default generator
         // TODO
     }
     // TODO: create world and others

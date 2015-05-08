@@ -60,6 +60,7 @@ public final class Main
                 this.acceptsAll(Arrays.asList("servername", "sn"), "name of server, should be simple like 'main'").withRequiredArg().ofType(String.class).describedAs("servername").defaultsTo(ServerImpl.DEFAULT_SERVER);
                 this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname").defaultsTo("localhost");
                 this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "is server should be in online-mode").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
+                this.acceptsAll(Collections.singletonList("config"), "Configuration file to use.").withRequiredArg().ofType(File.class).describedAs("config").defaultsTo(new File("diorite.yml"));
                 //noinspection MagicNumber
                 this.acceptsAll(Arrays.asList("timeout", "player-timeout", "pt"), "If player don't send any keep alive packet in this time (seconds), then it will be disconnected.").withRequiredArg().ofType(Integer.class).describedAs("timeout").defaultsTo(60);
                 this.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds server will send keep alive packet to players").withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(10);
@@ -89,6 +90,9 @@ public final class Main
                 System.err.println("Cannot run server in a directory with ! or + in the pathname. Please rename the affected folders and try again.");
                 return;
             }
+
+
+
             try
             {
                 Main.enabledDebug = options.has("debug");

@@ -45,7 +45,7 @@ public class FlatWorldGeneratorImpl extends WorldGenerator
 
     public static WorldGeneratorInitializer<FlatWorldGeneratorImpl> createInitializer()
     {
-        return new WorldGeneratorInitializer<FlatWorldGeneratorImpl>("flat")
+        return new WorldGeneratorInitializer<FlatWorldGeneratorImpl>("diorite:flat")
         {
             @Override
             public FlatWorldGeneratorImpl baseInit(final World world, final String options)

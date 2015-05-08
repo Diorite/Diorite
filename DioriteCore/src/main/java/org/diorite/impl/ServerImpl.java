@@ -466,7 +466,7 @@ public class ServerImpl implements Server, Runnable
         {
             System.setProperty("io.netty.eventLoopThreads", options.valueOf("netty").toString());
             System.out.println("Starting listening on " + this.hostname + ":" + this.port);
-            this.serverConnection.init(InetAddress.getByName(this.hostname), this.port);
+            this.serverConnection.init(InetAddress.getByName(this.hostname), this.port, true); // TODO: epoll
 
             System.out.println("Binded to " + this.hostname + ":" + this.port);
         } catch (final UnknownHostException e)

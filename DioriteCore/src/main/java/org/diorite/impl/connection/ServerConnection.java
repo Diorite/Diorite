@@ -10,25 +10,39 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
 import org.diorite.utils.LazyInitVar;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.DefaultExecutorServiceFactory;
 
 public class ServerConnection extends Thread
 {
-    public static final int                            MILLIS                    = 500;
-    public final        LazyInitVar<NioEventLoopGroup> lazyInitNioEventLoopGroup = new LazyInitVar<NioEventLoopGroup>()
+    public static final int                              MILLIS                         = 500;
+    public final        LazyInitVar<NioEventLoopGroup>   lazyInitNioEventLoopGroup      = new LazyInitVar<NioEventLoopGroup>()
     {
         @Override
         protected NioEventLoopGroup init()
         {
             return new NioEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Client"));
+        }
+    };
+    public final        LazyInitVar<EpollEventLoopGroup> lazyInitNioEpollEventLoopGroup = new LazyInitVar<EpollEventLoopGroup>()
+    {
+        @Override
+        protected EpollEventLoopGroup init()
+        {
+            return new EpollEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Epoll Client"));
         }
     };
 
@@ -49,9 +63,23 @@ public class ServerConnection extends Thread
         return this.server;
     }
 
-    public void init(final InetAddress address, final int port)
+    public void init(final InetAddress address, final int port, final boolean useEpoll)
     {
-        this.channelFuture = new ServerBootstrap().channel(NioServerSocketChannel.class).childHandler(new ServerConnectionChannel(this)).group(this.lazyInitNioEventLoopGroup.get()).localAddress(address, port).bind().syncUninterruptibly();
+        final Class<? extends ServerSocketChannel> socketChannelClass;
+        final LazyInitVar<? extends EventLoopGroup> lazyInit;
+        if ((Epoll.isAvailable()) && useEpoll)
+        {
+            socketChannelClass = EpollServerSocketChannel.class;
+            lazyInit = this.lazyInitNioEpollEventLoopGroup;
+            Main.debug("[Netty] Using epoll channel type");
+        }
+        else
+        {
+            socketChannelClass = NioServerSocketChannel.class;
+            lazyInit = this.lazyInitNioEventLoopGroup;
+            Main.debug("[Netty] Using default channel type");
+        }
+        this.channelFuture = new ServerBootstrap().channel(socketChannelClass).childHandler(new ServerConnectionChannel(this)).group(lazyInit.get()).localAddress(address, port).bind().syncUninterruptibly();
     }
 
     public void close()

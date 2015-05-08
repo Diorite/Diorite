@@ -114,7 +114,7 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 
     public static WorldGeneratorInitializer<TestWorldGeneratorImpl> createInitializer()
     {
-        return new WorldGeneratorInitializer<TestWorldGeneratorImpl>("default")
+        return new WorldGeneratorInitializer<TestWorldGeneratorImpl>("diorite:default")
         {
             @Override
             public TestWorldGeneratorImpl baseInit(final World world, final String options)

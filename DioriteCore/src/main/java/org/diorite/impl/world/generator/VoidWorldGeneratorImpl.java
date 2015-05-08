@@ -21,7 +21,7 @@ public class VoidWorldGeneratorImpl extends WorldGenerator
 
     public static WorldGeneratorInitializer<VoidWorldGeneratorImpl> createInitializer()
     {
-        return new WorldGeneratorInitializer<VoidWorldGeneratorImpl>("void")
+        return new WorldGeneratorInitializer<VoidWorldGeneratorImpl>("diorite:void")
         {
             @Override
             public VoidWorldGeneratorImpl baseInit(final World world, final String options)
