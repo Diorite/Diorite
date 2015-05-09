@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.diorite.cfg.DioriteConfig;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.DioriteMarkdownParser;
@@ -36,6 +37,8 @@ public interface Server
     byte   DEFAULT_RENDER_DISTANCE = 10;
     int    DEFAULT_WAIT_TIME       = NANOS_IN_SECOND / DEFAULT_TPS;
     int    MAX_NICKNAME_SIZE       = 16;
+
+    DioriteConfig getConfig();
 
     WorldsManager getWorldsManager();
 

@@ -4,7 +4,9 @@ import java.util.Map.Entry;
 
 import org.diorite.utils.pipeline.BasePipeline;
 
-public class PipelineTest
+import junit.framework.TestCase;
+
+public class PipelineTest extends TestCase
 {
     @org.junit.Test
     public void testPipeline() throws Exception
@@ -16,9 +18,9 @@ public class PipelineTest
         pipeline.addBeforeIfContainsFromTail("key#6", "key#7", "value#7");
         pipeline.add("key#8", "value#8");
 
-        junit.framework.Assert.assertTrue("pipeline should have 1 elements, found: " + pipeline.size(), pipeline.size() == 1);
-        junit.framework.Assert.assertTrue("1 element isn't key#8 ", pipeline.getNameOfFirst().equals("key#8"));
-        junit.framework.Assert.assertTrue("1 element isn't value#8 ", pipeline.getLast().equals("value#8"));
+        assertTrue("pipeline should have 1 elements, found: " + pipeline.size(), pipeline.size() == 1);
+        assertTrue("1 element isn't key#8 ", pipeline.getNameOfFirst().equals("key#8"));
+        assertTrue("1 element isn't value#8 ", pipeline.getLast().equals("value#8"));
 
         pipeline.addAfterIfContainsFromHead("key#9", "key#10", "value#10");
         pipeline.addAfterIfContainsFromTail("key#11", "key#12", "value#12");
@@ -50,7 +52,7 @@ public class PipelineTest
         pipeline.set("key#30", "value#300");
         pipeline.replace("key#33", "key#333", "value#333");
 
-        junit.framework.Assert.assertTrue("pipeline should have 24 elements, found: " + pipeline.size(), pipeline.size() == 24);
+        assertTrue("pipeline should have 24 elements, found: " + pipeline.size(), pipeline.size() == 24);
         final int[] keys = {32, 333, 36, 35, 34, 18, 31, 30, 28, 29, 27, 26, 17, 23, 22, 25, 24, 8, 19, 21, 38, 37, 39, 20};
         final int[] values = {32, 333, 36, 35, 34, 18, 31, 300, 28, 29, 27, 26, 17, 23, 22, 25, 24, 8, 19, 21, 38, 37, 39, 20};
         int i = 0;
@@ -58,8 +60,8 @@ public class PipelineTest
         {
             final String key = e.getKey();
             final String value = e.getValue();
-            junit.framework.Assert.assertTrue("excepted key: 'key#" + keys[i] + "' key: '" + key + "'", key.equals("key#" + keys[i]));
-            junit.framework.Assert.assertTrue("excepted value: 'value#" + values[i] + "' value: '" + value + "'", value.equals("value#" + values[i]));
+            assertTrue("excepted key: 'key#" + keys[i] + "' key: '" + key + "'", key.equals("key#" + keys[i]));
+            assertTrue("excepted value: 'value#" + values[i] + "' value: '" + value + "'", value.equals("value#" + values[i]));
             i++;
         }
     }
