@@ -47,6 +47,7 @@ import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
 import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
 import org.diorite.Diorite;
 import org.diorite.Server;
+import org.diorite.cfg.DioriteConfig;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Player;
@@ -84,6 +85,7 @@ public class ServerImpl implements Server, Runnable
     protected       byte                     renderDistance;
     protected final int                      playerTimeout;
     protected final int                      keepAliveTimer;
+    protected       DioriteConfig            config;
     private           KeyPair keyPair   = MinecraftEncryption.generateKeyPair();
     private transient boolean isRunning = true;
 
@@ -171,6 +173,12 @@ public class ServerImpl implements Server, Runnable
 
         this.serverConnection = new ServerConnection(this);
         this.serverConnection.start();
+    }
+
+    @Override
+    public DioriteConfig getConfig()
+    {
+        return this.config;
     }
 
     public int getKeepAliveTimer()
