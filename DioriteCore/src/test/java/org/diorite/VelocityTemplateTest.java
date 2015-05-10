@@ -1,9 +1,11 @@
 package org.diorite;
 
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,32 @@ import junit.framework.TestCase;
 
 public class VelocityTemplateTest extends TestCase
 {
+    @org.junit.Test
+    public void testTemplateAdv() throws Exception
+    {
+        final VelocityContext context = new VelocityContext();
+        final MyBean bean = this.createBeanAdv();
+        context.put("bean", bean);
+        final Yaml yaml = new Yaml();
+        context.put("list", yaml.dump(bean.getList()));
+        final VelocityEngine ve = new VelocityEngine();
+        ve.setProperty("file.resource.loader.class", ClasspathResourceLoader.class.getName());
+        ve.init();
+        final Template t = ve.getTemplate("mybean1.vm", "UTF-8");
+        final StringWriter writer = new StringWriter();
+        t.merge(context, writer);
+        final String output = writer.toString().trim().replaceAll("\\r\\n", "\n");
+//        System.out.println(output);
+        final String etalon = getLocalResource("etalon2-templateAdv.yaml").trim();
+//        System.out.println(etalon);
+        assertEquals(etalon.length(), output.length());
+        assertEquals(etalon, output);
+        // parse the YAML document
+        final Yaml loader = new Yaml();
+        final MyBean parsedBean = loader.loadAs(etalon, MyBean.class);
+        assertEquals(bean, parsedBean);
+    }
+
     @org.junit.Test
     public void testTemplate() throws Exception
     {
@@ -32,14 +60,28 @@ public class VelocityTemplateTest extends TestCase
         final StringWriter writer = new StringWriter();
         t.merge(context, writer);
         final String output = writer.toString().trim().replaceAll("\\r\\n", "\n");
-         System.out.println(output);
+//        System.out.println(output);
         final String etalon = getLocalResource("etalon2-template.yaml").trim();
         assertEquals(etalon.length(), output.length());
         assertEquals(etalon, output);
         // parse the YAML document
         final Yaml loader = new Yaml();
-        final MyBean parsedBean = loader.loadAs(output, MyBean.class);
+        final MyBean parsedBean = loader.loadAs(etalon, MyBean.class);
         assertEquals(bean, parsedBean);
+    }
+
+    private MyBean createBeanAdv()
+    {
+        final MyBean bean = new MyBean();
+        bean.setId("id123");
+        final List<String> list = new ArrayList<>(3);
+        list.add("\"N*45N^I$#B\"\"\"\"kHJUljdtrkA$'¶◙▲(2<Z*TV©§'''yregerg'''''''''''''erg7:U☺☻♥♠♣♦•'''◘9○↑*4A ♀-↑UA-☼JYA$¶◙▲(2<Z*TV©§\"");
+        list.add("\"N*45N^I$#B\"\"\"\"kHJUG;lkA$¶''''''◙▲(2<Z*TV©§';'tljdtrkA$¶◙▲(2<Z*TV©§''y7:U☺☻♥♠♣♦•◘9○↑*4A''' ♀-↑UA-☼JYA$¶◙▲(2<Z*TV©§\"");
+        list.add("\"N*45N^I$#B\"\"\"\"kHJUG;'lkA$¶◙▲(2<Z*T''''''''''V©§gergergre''gerg';tljdtrkA$¶◙▲(2<'''Z*TV©§y7:U☺☻♥♠♣♦•◘9○↑*4A ♀-↑UA-☼JYA$¶◙▲(2<Z*TV©§\"");
+        bean.setList(list);
+        final Point p = new Point(1.0, 2.0);
+        bean.setPoint(p);
+        return bean;
     }
 
     private MyBean createBean()
@@ -66,7 +108,7 @@ public class VelocityTemplateTest extends TestCase
         }
         final StringBuilder buf = new StringBuilder(3000);
         int i;
-        try (BufferedInputStream is = new BufferedInputStream(input))
+        try (BufferedReader is = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));)
         {
             while ((i = is.read()) != - 1)
             {
