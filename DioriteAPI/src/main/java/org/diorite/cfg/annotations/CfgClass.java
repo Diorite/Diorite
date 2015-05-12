@@ -11,6 +11,12 @@ public @interface CfgClass
 {
 
     String name();
+
     boolean allFields() default true;
+
+    boolean superFields() default true;
+
     boolean ignoreTransient() default true;
+
+    String[] excludeFields() default {};
 }

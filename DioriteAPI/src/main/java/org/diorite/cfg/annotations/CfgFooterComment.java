@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
-@Repeatable(CfgCommentsArray.class)
-public @interface CfgComment
+@Repeatable(CfgFooterCommentsArray.class)
+public @interface CfgFooterComment
 {
     String value();
 }
