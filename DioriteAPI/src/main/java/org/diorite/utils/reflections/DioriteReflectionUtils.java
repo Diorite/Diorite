@@ -7,12 +7,330 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
+import org.diorite.cfg.system.ConfigField;
 import org.diorite.utils.SimpleEnum;
 
 public final class DioriteReflectionUtils
 {
     private DioriteReflectionUtils()
     {
+    }
+
+    /**
+     * Method will try find simple method setter and getter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find element.
+     * @param <T>   type of field.
+     *
+     * @return Element for field value.
+     */
+    public static <T> ReflectElement<T> getReflectElement(final ConfigField field)
+    {
+        return getReflectElement(field.getField(), field.getField().getDeclaringClass());
+    }
+
+    /**
+     * Method will try find simple method setter and getter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param fieldName name of field to find element.
+     * @param clazz     clazz with this field.
+     * @param <T>       type of field.
+     *
+     * @return Element for field value.
+     */
+    public static <T> ReflectElement<T> getReflectElement(String fieldName, final Class<?> clazz)
+    {
+        final ReflectGetter<T> getter = getReflectGetter(fieldName, clazz);
+        if (getter instanceof ReflectField)
+        {
+            final ReflectField<T> reflectField = (ReflectField<T>) getter;
+            return new ReflectElement<T>(reflectField, reflectField);
+        }
+        else
+        {
+            return new ReflectElement<T>(getter, getReflectSetter(fieldName, clazz));
+        }
+    }
+
+    /**
+     * Method will try find simple method setter and getter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find element.
+     * @param <T>   type of field.
+     *
+     * @return Element for field value.
+     */
+    public static <T> ReflectElement<T> getReflectElement(final Field field)
+    {
+        return getReflectElement(field, field.getDeclaringClass());
+    }
+
+    /**
+     * Method will try find simple method setter and getter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find element.
+     * @param clazz clazz with this field.
+     * @param <T>   type of field.
+     *
+     * @return Element for field value.
+     */
+    public static <T> ReflectElement<T> getReflectElement(final Field field, final Class<?> clazz)
+    {
+        final ReflectGetter<T> getter = getReflectGetter(field, clazz);
+        if (getter instanceof ReflectField)
+        {
+            final ReflectField<T> reflectField = (ReflectField<T>) getter;
+            return new ReflectElement<T>(reflectField, reflectField);
+        }
+        else
+        {
+            return new ReflectElement<T>(getter, getReflectSetter(field, clazz));
+        }
+    }
+
+
+    /**
+     * Method will try find simple method setter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find setter.
+     * @param <T>   type of field.
+     *
+     * @return Setter for field value.
+     */
+    public static <T> ReflectSetter<T> getReflectSetter(final ConfigField field)
+    {
+        return getReflectSetter(field.getField(), field.getField().getDeclaringClass());
+    }
+
+    /**
+     * Method will try find simple method setter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param fieldName name of field to find setter.
+     * @param clazz     clazz with this field.
+     * @param <T>       type of field.
+     *
+     * @return Setter for field value.
+     */
+    public static <T> ReflectSetter<T> getReflectSetter(String fieldName, final Class<?> clazz)
+    {
+        final String fieldNameCpy = fieldName;
+        fieldName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+        Method m = null;
+        try
+        {
+            m = clazz.getMethod("get" + fieldName);
+        } catch (final NoSuchMethodException ignored1)
+        {
+            try
+            {
+                m = clazz.getMethod("is" + fieldName);
+            } catch (final NoSuchMethodException ignored2)
+            {
+                for (final Method cm : clazz.getMethods())
+                {
+                    if ((cm.getName().equalsIgnoreCase("get" + fieldName) || cm.getName().equalsIgnoreCase("is" + fieldName)) && (cm.getReturnType() != Void.class) && (cm.getReturnType() != void.class) && (cm.getParameterCount() == 0))
+                    {
+                        m = cm;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (m != null)
+        {
+            return new ReflectMethodSetter<>(m);
+        }
+        else
+        {
+            return new ReflectField<>(getField(clazz, fieldNameCpy));
+        }
+    }
+
+    /**
+     * Method will try find simple method setter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find setter.
+     * @param <T>   type of field.
+     *
+     * @return Setter for field value.
+     */
+    public static <T> ReflectSetter<T> getReflectSetter(final Field field)
+    {
+        return getReflectSetter(field, field.getDeclaringClass());
+    }
+
+    /**
+     * Method will try find simple method setter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find setter.
+     * @param clazz clazz with this field.
+     * @param <T>   type of field.
+     *
+     * @return Setter for field value.
+     */
+    public static <T> ReflectSetter<T> getReflectSetter(final Field field, final Class<?> clazz)
+    {
+        String fieldName = field.getName();
+        fieldName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+        Method m = null;
+        try
+        {
+            m = clazz.getMethod("get" + fieldName);
+        } catch (final NoSuchMethodException ignored1)
+        {
+            try
+            {
+                m = clazz.getMethod("is" + fieldName);
+            } catch (final NoSuchMethodException ignored2)
+            {
+                for (final Method cm : clazz.getMethods())
+                {
+                    if ((cm.getName().equalsIgnoreCase("get" + fieldName) || cm.getName().equalsIgnoreCase("is" + fieldName)) && (cm.getReturnType() != Void.class) && (cm.getReturnType() != void.class) && (cm.getParameterCount() == 0))
+                    {
+                        m = cm;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (m != null)
+        {
+            return new ReflectMethodSetter<>(m);
+        }
+        else
+        {
+            return new ReflectField<>(field);
+        }
+    }
+
+    /**
+     * Method will try find simple method getter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find getter.
+     * @param <T>   type of field.
+     *
+     * @return Getter for field value.
+     */
+    public static <T> ReflectGetter<T> getReflectGetter(final ConfigField field)
+    {
+        return getReflectGetter(field.getField(), field.getField().getDeclaringClass());
+    }
+
+    /**
+     * Method will try find simple method getter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param fieldName name of field to find getter.
+     * @param clazz     clazz with this field.
+     * @param <T>       type of field.
+     *
+     * @return Getter for field value.
+     */
+    public static <T> ReflectGetter<T> getReflectGetter(String fieldName, final Class<?> clazz)
+    {
+        final String fieldNameCpy = fieldName;
+        fieldName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+        Method m = null;
+        try
+        {
+            m = clazz.getMethod("get" + fieldName);
+        } catch (final NoSuchMethodException ignored1)
+        {
+            try
+            {
+                m = clazz.getMethod("is" + fieldName);
+            } catch (final NoSuchMethodException ignored2)
+            {
+                for (final Method cm : clazz.getMethods())
+                {
+                    if ((cm.getName().equalsIgnoreCase("get" + fieldName) || cm.getName().equalsIgnoreCase("is" + fieldName)) && (cm.getReturnType() != Void.class) && (cm.getReturnType() != void.class) && (cm.getParameterCount() == 0))
+                    {
+                        m = cm;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (m != null)
+        {
+            return new ReflectMethodGetter<>(m);
+        }
+        else
+        {
+            return new ReflectField<>(getField(clazz, fieldNameCpy));
+        }
+    }
+
+    /**
+     * Method will try find simple method getter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find getter.
+     * @param <T>   type of field.
+     *
+     * @return Getter for field value.
+     */
+    public static <T> ReflectGetter<T> getReflectGetter(final Field field)
+    {
+        return getReflectGetter(field, field.getDeclaringClass());
+    }
+
+    /**
+     * Method will try find simple method getter for selected field,
+     * or directly use field if method can't be found.
+     *
+     * @param field field to find getter.
+     * @param clazz clazz with this field.
+     * @param <T>   type of field.
+     *
+     * @return Getter for field value.
+     */
+    public static <T> ReflectGetter<T> getReflectGetter(final Field field, final Class<?> clazz)
+    {
+        String fieldName = field.getName();
+        fieldName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+        Method m = null;
+        try
+        {
+            m = clazz.getMethod("get" + fieldName);
+        } catch (final NoSuchMethodException ignored1)
+        {
+            try
+            {
+                m = clazz.getMethod("is" + fieldName);
+            } catch (final NoSuchMethodException ignored2)
+            {
+                for (final Method cm : clazz.getMethods())
+                {
+                    if ((cm.getName().equalsIgnoreCase("get" + fieldName) || cm.getName().equalsIgnoreCase("is" + fieldName)) && (cm.getReturnType() != Void.class) && (cm.getReturnType() != void.class) && (cm.getParameterCount() == 0))
+                    {
+                        m = cm;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (m != null)
+        {
+            return new ReflectMethodGetter<>(m);
+        }
+        else
+        {
+            return new ReflectField<>(field);
+        }
     }
 
     /**
@@ -179,7 +497,10 @@ public final class DioriteReflectionUtils
 
     private static AccessibleObject getAccess(final AccessibleObject o)
     {
-        o.setAccessible(true);
+        if (! o.isAccessible())
+        {
+            o.setAccessible(true);
+        }
         return o;
     }
 
@@ -237,8 +558,7 @@ public final class DioriteReflectionUtils
     {
         for (final Field field : target.getDeclaredFields())
         {
-            if (((name == null) || field.getName().equals(name)) &&
-                        (fieldType.isAssignableFrom(field.getType()) && (index-- <= 0)))
+            if (((name == null) || field.getName().equals(name)) && (fieldType.isAssignableFrom(field.getType()) && (index-- <= 0)))
             {
                 getAccess(field);
                 return new FieldAccessor<>(field);
@@ -280,7 +600,7 @@ public final class DioriteReflectionUtils
      *
      * @throws IllegalStateException If we cannot find this method.
      */
-    private static MethodInvoker getMethod(final Class<?> clazz, final String methodName, final Class<?>... params)
+    public static MethodInvoker getMethod(final Class<?> clazz, final String methodName, final Class<?>... params)
     {
         return getSimpleMethod(clazz, methodName, null, params);
     }
@@ -406,6 +726,107 @@ public final class DioriteReflectionUtils
             return getNestedClass(clazz.getSuperclass(), name);
         }
         throw new IllegalStateException("Unable to find nested class: " + name + " in " + clazz.getName());
+    }
+
+    /**
+     * If given class is non-primitive type {@link Class#isPrimitive()} then it will return
+     * privitive class for it. Like: Boolean.class -> boolean.class
+     * If given class is primitive, then it will return given class.
+     * If given class can't be primitive (like {@link String}) then it will return given class.
+     *
+     * @param clazz class to get primitive of it.
+     *
+     * @return primitive class if possible.
+     */
+    public static Class<?> getPrimitive(final Class<?> clazz)
+    {
+        if (clazz.isPrimitive())
+        {
+            return clazz;
+        }
+        if (clazz == Boolean.class)
+        {
+            return boolean.class;
+        }
+        if (clazz == Byte.class)
+        {
+            return byte.class;
+        }
+        if (clazz == Short.class)
+        {
+            return short.class;
+        }
+        if (clazz == Character.class)
+        {
+            return char.class;
+        }
+        if (clazz == Integer.class)
+        {
+            return int.class;
+        }
+        if (clazz == Long.class)
+        {
+            return long.class;
+        }
+        if (clazz == Float.class)
+        {
+            return float.class;
+        }
+        if (clazz == Double.class)
+        {
+            return double.class;
+        }
+        return clazz;
+    }
+
+    /**
+     * If given class is primitive type {@link Class#isPrimitive()} then it will return
+     * wrapper class for it. Like: boolean.class -> Boolean.class
+     * If given class isn't primitive, then it will return given class.
+     *
+     * @param clazz class to get wrapper of it.
+     *
+     * @return non-primitive class.
+     */
+    public static Class<?> getWrapperClass(final Class<?> clazz)
+    {
+        if (! clazz.isPrimitive())
+        {
+            return clazz;
+        }
+        if (clazz == boolean.class)
+        {
+            return Boolean.class;
+        }
+        if (clazz == byte.class)
+        {
+            return Byte.class;
+        }
+        if (clazz == short.class)
+        {
+            return Short.class;
+        }
+        if (clazz == char.class)
+        {
+            return Character.class;
+        }
+        if (clazz == int.class)
+        {
+            return Integer.class;
+        }
+        if (clazz == long.class)
+        {
+            return Long.class;
+        }
+        if (clazz == float.class)
+        {
+            return Float.class;
+        }
+        if (clazz == double.class)
+        {
+            return Double.class;
+        }
+        throw new Error("Unknown primitive type?"); // not possible?
     }
 
     /**
