@@ -4,7 +4,7 @@
 # Used only in few places for debug information, should be short
 serverName: "Main"
 
-# hostname to listen on.
+# Hostname to listen on.
 hostname: localhost
 
 # Port to listen on.
@@ -13,10 +13,10 @@ port: 25565
 # Enables GameSpy4 protocol server listener. Used to get information about server. Set to -1 to disable.
 queryPort: -1
 
-# port for rcon (remote access to the server console), Set to -1 to disable.
+# Port for rcon (remote access to the server console), Set to -1 to disable.
 rconPort: -1
 
-# password to rcon.
+# Password to rcon.
 rconPassword: ""
 
 # By default it allows packets that are n-1 bytes big to go normally, but a packet that n bytes or more will be compressed down. 0 -> compress everything, -1 -> disabled

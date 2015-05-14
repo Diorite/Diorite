@@ -25,7 +25,6 @@
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.19.0-GA" level="project" />
     <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.9" level="project" />
-    <orderEntry type="module" module-name="Diorite-Velocity" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.2" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-all:5.0.0.Alpha2" level="project" />
