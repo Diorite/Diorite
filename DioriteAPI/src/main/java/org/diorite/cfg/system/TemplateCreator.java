@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.PriorityQueue;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,11 +25,75 @@ import org.diorite.cfg.annotations.CfgField;
 import org.diorite.cfg.annotations.CfgFooterComment;
 import org.diorite.cfg.annotations.CfgFooterComments;
 import org.diorite.cfg.annotations.CfgFooterCommentsArray;
+import org.diorite.utils.reflections.DioriteReflectionUtils;
 
-public class TemplateCreator
+/**
+ * Class for generating config templates, with simple cache system.
+ */
+public final class TemplateCreator
 {
-    public <T> Template<T> getTemplate(final Class<T> clazz)
+    private static final Map<Class<?>, Template<?>> templateMap = new ConcurrentHashMap<>(20, 0.1f, 4);
+
+    private TemplateCreator()
     {
+    }
+
+    /**
+     * Create new template for given class if it is unknown type.
+     * (not map/array/iterable etc..)
+     *
+     * @param c class to check
+     */
+    @SuppressWarnings("ObjectEquality")
+    public static void checkTemplate(Class<?> c)
+    {
+        do
+        {
+            if ((c == null) || (c == Object.class) || (c == Object[].class) || (Map.class.isAssignableFrom(c)) || (Iterable.class.isAssignableFrom(c)) || (Iterator.class.isAssignableFrom(c)) || String.class.isAssignableFrom(c) || DioriteReflectionUtils.getPrimitive(c).isPrimitive() || (c.isArray() && (DioriteReflectionUtils.getPrimitive(c.getComponentType()).isPrimitive() || String.class.isAssignableFrom(c.getComponentType()))))
+            {
+                return;
+            }
+            // generate and cache tempate
+
+            if (c.isArray())
+            {
+                while (c.isArray())
+                {
+                    c = c.getComponentType();
+                }
+                checkTemplate(c);
+            }
+            getTemplate(c, true, true, false);
+            c = c.getSuperclass();
+        } while (true);
+    }
+
+    /**
+     * Get template for given class.
+     *
+     * @param clazz    class to get template.
+     * @param create   if template should be created if it don't exisit yet.
+     * @param cache    if template should be saved to memory if created.
+     * @param recreate if template should be force re-created even if it exisit.
+     * @param <T>      Type of template class
+     *
+     * @return template class or null.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Template<T> getTemplate(final Class<T> clazz, final boolean create, final boolean cache, final boolean recreate)
+    {
+        if (! recreate)
+        {
+            final Template<T> template = (Template<T>) templateMap.get(clazz);
+            if (template != null)
+            {
+                return template;
+            }
+            if (! create)
+            {
+                return null;
+            }
+        }
         final boolean allFields;
 //        final boolean superFields;
         final boolean ignoreTransient;
@@ -57,7 +125,7 @@ public class TemplateCreator
             footer = comments[1];
         }
 
-        final PriorityQueue<ConfigField> fields = new PriorityQueue<>(clazz.getDeclaredFields().length);
+        final Set<ConfigField> fields = new TreeSet<>();
 
         {
             final Collection<Class<?>> classes = new ArrayList<>(5);
@@ -84,11 +152,65 @@ public class TemplateCreator
                     {
                         continue;
                     }
-                    fields.offer(new ConfigField(field, i++));
+                    fields.add(new ConfigField(field, i++));
                 }
             }
         }
-        return new Template<>(name, clazz, header, footer, fields);
+        final Template<T> template = new Template<>(name, clazz, header, footer, fields);
+        if (cache)
+        {
+            templateMap.put(clazz, template);
+        }
+        return template;
+    }
+
+    /**
+     * Get template for given class.
+     * If template don't exisit it will be creted and saved to cache.
+     *
+     * @param clazz class to get template.
+     * @param <T>   Type of template class
+     *
+     * @return template class or null.
+     *
+     * @see #getTemplate(Class, boolean, boolean, boolean)
+     */
+    public static <T> Template<T> getTemplate(final Class<T> clazz)
+    {
+        return getTemplate(clazz, true, true, false);
+    }
+
+    /**
+     * Get template for given class.
+     *
+     * @param clazz  class to get template.
+     * @param create if template should be created if it don't exisit yet.
+     * @param <T>    Type of template class
+     *
+     * @return template class or null.
+     *
+     * @see #getTemplate(Class, boolean, boolean, boolean)
+     */
+    public static <T> Template<T> getTemplate(final Class<T> clazz, final boolean create)
+    {
+        return getTemplate(clazz, create, true, false);
+    }
+
+    /**
+     * Get template for given class.
+     *
+     * @param clazz  class to get template.
+     * @param create if template should be created if it don't exisit yet.
+     * @param cache  if template should be saved to memory if created.
+     * @param <T>    Type of template class
+     *
+     * @return template class or null.
+     *
+     * @see #getTemplate(Class, boolean, boolean, boolean)
+     */
+    public static <T> Template<T> getTemplate(final Class<T> clazz, final boolean create, final boolean cache)
+    {
+        return getTemplate(clazz, create, cache, false);
     }
 
     static String[] readComments(final AnnotatedElement element)
@@ -148,5 +270,4 @@ public class TemplateCreator
         }
         return new String[]{header, footer};
     }
-
 }

@@ -62,7 +62,7 @@ public abstract class TemplateElement<T>
             writer.append('\n');
             if (addComments && (field.getHeader() != null))
             {
-                Template.appendComment(writer, field.getHeader(), false);
+                Template.appendComment(writer, field.getHeader(), level, false);
                 writer.append('\n');
             }
 
@@ -74,12 +74,12 @@ public abstract class TemplateElement<T>
             {
                 if (field.getOption(FieldOptions.OTHERS_FOOTER_NO_NEW_LINE, false))
                 {
-                    Template.appendComment(writer, field.getFooter(), true);
+                    Template.appendComment(writer, field.getFooter(), level, true);
                 }
                 else
                 {
                     writer.append('\n');
-                    Template.appendComment(writer, field.getFooter(), false);
+                    Template.appendComment(writer, field.getFooter(), level, false);
                     writer.append('\n');
                 }
             }

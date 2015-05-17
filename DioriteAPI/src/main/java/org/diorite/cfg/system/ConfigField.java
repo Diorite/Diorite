@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.annotations.CfgName;
-import org.diorite.cfg.annotations.CfgWeight;
+import org.diorite.cfg.annotations.CfgPriority;
 import org.diorite.cfg.annotations.defaults.CfgBooleanArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgBooleanDefault;
 import org.diorite.cfg.annotations.defaults.CfgByteArrayDefault;
@@ -45,7 +45,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
     private final String           name;
     private final String           header;
     private final String           footer;
-    private final int              weight;
+    private final int              priority;
     private final Supplier<Object> def;
     private final Map<FieldOptions, Object> options = new HashMap<>(3);
     private MethodInvoker invoker;
@@ -54,18 +54,21 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
     public ConfigField(final Field field, final int index)
     {
         this.field = field;
+        {
+            TemplateCreator.checkTemplate(field.getType());
+        }
         this.index = index;
 
         final String[] comments = TemplateCreator.readComments(field);
         this.header = comments[0];
         this.footer = comments[1];
         {
-            final CfgName nameInfo = field.getAnnotation(CfgName.class);
-            this.name = (nameInfo != null) ? nameInfo.value() : field.getName();
+            final CfgName annotation = field.getAnnotation(CfgName.class);
+            this.name = (annotation != null) ? annotation.value() : field.getName();
         }
         {
-            final CfgWeight weightInfo = field.getAnnotation(CfgWeight.class);
-            this.weight = (weightInfo != null) ? weightInfo.value() : index;
+            final CfgPriority annotation = field.getAnnotation(CfgPriority.class);
+            this.priority = (annotation != null) ? (annotation.value() * - 1) : index;
         }
 
         for (final FieldOptions option : FieldOptions.values())
@@ -316,9 +319,9 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         return this.index;
     }
 
-    public int getWeight()
+    public int getPriority()
     {
-        return this.weight;
+        return this.priority;
     }
 
     public Object getDefault()
@@ -342,7 +345,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             return false;
         }
         final ConfigField that = (ConfigField) o;
-        return (this.weight == that.weight) && this.field.equals(that.field) && this.name.equals(that.name) && ! ((this.header != null) ? ! this.header.equals(that.header) : (that.header != null)) && ! ((this.footer != null) ? ! this.footer.equals(that.footer) : (that.footer != null));
+        return (this.priority == that.priority) && this.field.equals(that.field) && this.name.equals(that.name) && ! ((this.header != null) ? ! this.header.equals(that.header) : (that.header != null)) && ! ((this.footer != null) ? ! this.footer.equals(that.footer) : (that.footer != null));
     }
 
     @Override
@@ -352,14 +355,14 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         result = (31 * result) + this.name.hashCode();
         result = (31 * result) + ((this.header != null) ? this.header.hashCode() : 0);
         result = (31 * result) + ((this.footer != null) ? this.footer.hashCode() : 0);
-        result = (31 * result) + this.weight;
+        result = (31 * result) + this.priority;
         return result;
     }
 
     @Override
     public int compareTo(final ConfigField o)
     {
-        final int weight = Integer.compare(this.weight, o.weight);
+        final int weight = Integer.compare(this.priority, o.priority);
         if (weight != 0)
         {
             return weight;
@@ -370,6 +373,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("field", this.field).append("name", this.name).append("header", this.header).append("footer", this.footer).append("weight", this.weight).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("field", this.field).append("name", this.name).append("header", this.header).append("footer", this.footer).append("priority", this.priority).toString();
     }
 }

@@ -73,20 +73,41 @@ public class Template<T>
         return this.fields;
     }
 
-    public <E extends Appendable> E dump(final E writter, final T object) throws IOException
+    public <E extends Appendable> E dump(final E writter, final T object, final int level, final boolean writeComments, final ElementPlace elementPlace) throws IOException
     {
-        appendComment(writter, this.header, false);
-        writter.append("\n");
+        if (writeComments)
+        {
+            appendComment(writter, this.header, level, false);
+            writter.append("\n");
+        }
 
         for (final Entry<ConfigField, ReflectElement<?>> entry : this.fields.entrySet())
         {
             final ConfigField field = entry.getKey();
-            TemplateElements.getElement(field).write(writter, field, object, entry.getValue(), 0, true, ElementPlace.NORMAL);
+            TemplateElements.getElement(field).write(writter, field, object, entry.getValue(), level, true, elementPlace);
         }
 
-        writter.append("\n\n");
-        appendComment(writter, this.footer, false);
+        if (writeComments)
+        {
+            writter.append("\n\n");
+            appendComment(writter, this.footer, level, false);
+        }
         return writter;
+    }
+
+    public <E extends Appendable> E dump(final E writter, final T object, final int level, final boolean writeComments) throws IOException
+    {
+        return this.dump(writter, object, level, writeComments, ElementPlace.NORMAL);
+    }
+
+    public <E extends Appendable> E dump(final E writter, final T object, final int level) throws IOException
+    {
+        return this.dump(writter, object, level, true, ElementPlace.NORMAL);
+    }
+
+    public <E extends Appendable> E dump(final E writter, final T object) throws IOException
+    {
+        return this.dump(writter, object, 0, true, ElementPlace.NORMAL);
     }
 
     public String dumpAsString(final T object)
@@ -102,7 +123,19 @@ public class Template<T>
         return builder.toString();
     }
 
-    public static void appendComment(final Appendable writer, final String string, final boolean addSpace) throws IOException
+    protected static void spaces(final Appendable writer, final int level) throws IOException
+    {
+        if (level <= 0)
+        {
+            return;
+        }
+        for (int i = 0; i < level; i++)
+        {
+            writer.append("  ");
+        }
+    }
+
+    public static void appendComment(final Appendable writer, final String string, final int level, final boolean addSpace) throws IOException
     {
         if (string != null)
         {
@@ -116,6 +149,7 @@ public class Template<T>
                 }
                 else
                 {
+                    spaces(writer, level);
                     writer.append("# ");
                 }
                 writer.append(str);

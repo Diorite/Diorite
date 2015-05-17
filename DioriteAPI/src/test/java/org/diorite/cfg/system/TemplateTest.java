@@ -16,7 +16,7 @@ import org.diorite.cfg.annotations.CfgFooterNoNewLine;
 import org.diorite.cfg.annotations.CfgStringArrayMultilineThreshold;
 import org.diorite.cfg.annotations.CfgStringStyle;
 import org.diorite.cfg.annotations.CfgStringStyle.StringStyle;
-import org.diorite.cfg.annotations.CfgWeight;
+import org.diorite.cfg.annotations.CfgPriority;
 
 import junit.framework.TestCase;
 
@@ -25,13 +25,40 @@ public class TemplateTest extends TestCase
     private static final boolean PRINT_TEMPLATE = true;
 
     @org.junit.Test
+    public void testAdvTemplate() throws Exception
+    {
+        final TestAdvConfig testObj = new TestAdvConfig();
+
+        long s = System.nanoTime();
+        final Template<TestAdvConfig> template = TemplateCreator.getTemplate(TestAdvConfig.class);
+        long e = System.nanoTime();
+        long d = e - s;
+
+        System.out.println("[Adv] Temple generation time: " + d + "ns (" + (d / 1_000_000) + "ms)");
+
+        s = System.nanoTime();
+        final String str = template.dumpAsString(testObj);
+        e = System.nanoTime();
+        d = e - s;
+
+        System.out.println("[Adv] dumpAsString time: " + d + "ns (" + (d / 1_000_000) + "ms)");
+        if (PRINT_TEMPLATE)
+        {
+            System.out.println(str);
+        }
+
+        final Yaml yaml = new Yaml();
+        final TestAdvConfig testObjNew = yaml.loadAs(str, TestAdvConfig.class);
+        assertTrue("[Adv] Generated and reader object must be this same!", testObj.equals(testObjNew));
+    }
+
+    @org.junit.Test
     public void testNormalTemplate() throws Exception
     {
         final TestConfig testObj = new TestConfig();
-        final TemplateCreator tc = new TemplateCreator();
 
         long s = System.nanoTime();
-        final Template<TestConfig> template = tc.getTemplate(TestConfig.class);
+        final Template<TestConfig> template = TemplateCreator.getTemplate(TestConfig.class);
         long e = System.nanoTime();
         long d = e - s;
 
@@ -57,10 +84,9 @@ public class TemplateTest extends TestCase
     public void testSimpleTemplate() throws Exception
     {
         final SimpleTestConfig testObj = new SimpleTestConfig();
-        final TemplateCreator tc = new TemplateCreator();
 
         long s = System.nanoTime();
-        final Template<SimpleTestConfig> template = tc.getTemplate(SimpleTestConfig.class);
+        final Template<SimpleTestConfig> template = TemplateCreator.getTemplate(SimpleTestConfig.class);
         long e = System.nanoTime();
         long d = e - s;
 
@@ -82,6 +108,262 @@ public class TemplateTest extends TestCase
         final SimpleTestConfig testObjNew = yaml.loadAs(str, SimpleTestConfig.class);
         assertTrue("[Simple] Generated and reader object must be this same!", testObj.equals(testObjNew));
     }
+
+    @CfgClass(name = "TestAdvConfig", excludeFields = {"money"})
+    @CfgComment("Welcome in test confgiuration file!")
+    @CfgComment("This epic code make configuration simple.")
+    @CfgComment("You will love it!")
+    @CfgFooterComments({"End of file", "I hope you liked it!"})
+    public static class TestAdvConfig
+    {
+        @CfgComment("This option make you happy")
+        @CfgFooterComment("End of happy option :<")
+        @CfgStringStyle(StringStyle.ALWAYS_QUOTED)
+        private String                            playerName    = "someName";
+        @CfgComment("This option make you even more happy")
+        @CfgStringStyle(StringStyle.ALWAYS_MULTI_LINE)
+        private String                            playerSubName = "someOtherName";
+        private int                               money         = 634;
+        private String                            desc          = "Some bigger\n        amount\nof text\n  to test\n    multiline";
+        @CfgStringArrayMultilineThreshold(3)
+        @CfgStringStyle(StringStyle.ALWAYS_MULTI_LINE)
+        @CfgFooterComment("Nope, you don't have friends...")
+        @CfgFooterNoNewLine
+        private List<String>                      friends       = Arrays.asList("player1", "player2", "player3");
+        private List<String>                      strings       = Arrays.asList("This text is just to took some\n    space \nspaaaaaaaaaace", "more text", "and even more\n    fucking textjust to \ntook moreeeeeespaceeeeeeee");
+        @CfgPriority(200)
+        private List<Integer>                     ints          = Arrays.asList(1, 2, 3, 4, 7, 5, 3);
+        private Map<String, Map<Integer, Double>> map           = new HashMap<>(10);
+        private Map<Integer, Map<String, String>> otherMap      = new HashMap<>(10);
+
+        @CfgComment("Sub-class test")
+        private TestConfig subClass = new TestConfig();
+
+        private Map<Collection<Integer>, Collection<Integer>> superMap = new HashMap<>(10);
+
+        public String getPlayerSubName()
+        {
+            return this.playerSubName;
+        }
+
+        public TestConfig getSubClass()
+        {
+            return this.subClass;
+        }
+
+        public void setSubClass(final TestConfig subClass)
+        {
+            this.subClass = subClass;
+        }
+
+        public void setPlayerSubName(final String playerSubName)
+        {
+            this.playerSubName = playerSubName;
+        }
+
+        public String getPlayerName()
+        {
+            return playerName;
+        }
+
+        public Map<Collection<Integer>, Collection<Integer>> getSuperMap()
+        {
+            return this.superMap;
+        }
+
+        public void setSuperMap(final Map<Collection<Integer>, Collection<Integer>> superMap)
+        {
+            this.superMap = superMap;
+        }
+//        public Map<int[], int[]> getSuperMap()
+//        {
+//            return this.superMap;
+//        }
+//
+//        public void setSuperMap(final Map<int[], int[]> superMap)
+//        {
+//            this.superMap = superMap;
+//        }
+
+        public void setPlayerName(final String playerName)
+        {
+            this.playerName = playerName;
+        }
+
+        public int getMoney()
+        {
+            return this.money;
+        }
+
+        public void setMoney(final int money)
+        {
+            this.money = money;
+        }
+
+        public String getDesc()
+        {
+            return desc;
+        }
+
+        public void setDesc(final String desc)
+        {
+            this.desc = desc;
+        }
+
+        public List<String> getFriends()
+        {
+            return friends;
+        }
+
+        public void setFriends(final List<String> friends)
+        {
+            this.friends = friends;
+        }
+
+        public List<String> getStrings()
+        {
+            return strings;
+        }
+
+        public void setStrings(final List<String> strings)
+        {
+            this.strings = strings;
+        }
+
+        public List<Integer> getInts()
+        {
+            return ints;
+        }
+
+        public void setInts(final List<Integer> ints)
+        {
+            this.ints = ints;
+        }
+
+        public Map<String, Map<Integer, Double>> getMap()
+        {
+            return map;
+        }
+
+        public void setMap(final Map<String, Map<Integer, Double>> map)
+        {
+            this.map = map;
+        }
+
+        public Map<Integer, Map<String, String>> getOtherMap()
+        {
+            return otherMap;
+        }
+
+        public void setOtherMap(final Map<Integer, Map<String, String>> otherMap)
+        {
+            this.otherMap = otherMap;
+        }
+
+        @Override
+        public boolean equals(final Object o)
+        {
+            if (this == o)
+            {
+                return true;
+            }
+            if (! (o instanceof TestAdvConfig))
+            {
+                return false;
+            }
+
+            final TestAdvConfig that = (TestAdvConfig) o;
+
+            if (this.playerName != null ? ! this.playerName.equals(that.playerName) : that.playerName != null)
+            {
+                return false;
+            }
+            if (this.playerSubName != null ? ! this.playerSubName.equals(that.playerSubName) : that.playerSubName != null)
+            {
+                return false;
+            }
+            if (this.desc != null ? ! this.desc.equals(that.desc) : that.desc != null)
+            {
+                return false;
+            }
+            if (this.friends != null ? ! this.friends.equals(that.friends) : that.friends != null)
+            {
+                return false;
+            }
+            if (this.strings != null ? ! this.strings.equals(that.strings) : that.strings != null)
+            {
+                return false;
+            }
+            if (this.ints != null ? ! this.ints.equals(that.ints) : that.ints != null)
+            {
+                return false;
+            }
+            if (this.map != null ? ! this.map.equals(that.map) : that.map != null)
+            {
+                return false;
+            }
+            if (this.otherMap != null ? ! this.otherMap.equals(that.otherMap) : that.otherMap != null)
+            {
+                return false;
+            }
+            if (this.subClass != null ? ! this.subClass.equals(that.subClass) : that.subClass != null)
+            {
+                return false;
+            }
+            return ! (superMap != null ? ! superMap.equals(that.superMap) : that.superMap != null);
+
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = this.playerName != null ? this.playerName.hashCode() : 0;
+            result = 31 * result + (this.playerSubName != null ? this.playerSubName.hashCode() : 0);
+            result = 31 * result + (this.desc != null ? this.desc.hashCode() : 0);
+            result = 31 * result + (this.friends != null ? this.friends.hashCode() : 0);
+            result = 31 * result + (this.strings != null ? this.strings.hashCode() : 0);
+            result = 31 * result + (this.ints != null ? this.ints.hashCode() : 0);
+            result = 31 * result + (this.map != null ? this.map.hashCode() : 0);
+            result = 31 * result + (this.otherMap != null ? this.otherMap.hashCode() : 0);
+            result = 31 * result + (this.subClass != null ? this.subClass.hashCode() : 0);
+            result = 31 * result + (this.superMap != null ? this.superMap.hashCode() : 0);
+            return result;
+        }
+
+        {
+            {
+                Map<Integer, Double> subMap1 = new HashMap<>(5);
+                subMap1.put(1, 3.44);
+                subMap1.put(5, 1.22);
+                Map<Integer, Double> subMap2 = new HashMap<>(5);
+                subMap2.put(15, 35.454);
+                subMap2.put(35, 13.242);
+
+                map.put("map1", subMap1);
+                map.put("map2", subMap2);
+                map.put("map3", null);
+            }
+
+            {
+                Map<String, String> subMap1 = new HashMap<>(5);
+                subMap1.put("dosc\ndizwny\nklucz\'\"heh\nTestujemy możliwoścci", "prosta wartość");
+//                subMap1.put("dosc\ndizwny\nklucz\'\"heh\nTestujemy możliwoścci", "wartosc\njest\ntez\ndziwna\nme\"h\"");
+                subMap1.put("'meh'", "\"heh\"");
+                Map<String, String> subMap2 = new HashMap<>(5);
+                subMap2.put("33", "hehe");
+                subMap2.put("67", "32");
+
+                otherMap.put(69, subMap1);
+                otherMap.put(100, subMap2);
+            }
+            {
+                superMap.put(Arrays.asList(1, 2, 3), Arrays.asList(4, 5, 6));
+//                superMap.put(new int[]{1, 2, 3}, new int[]{4, 5, 6});
+//                superMap.put(new int[]{7, 8, 9}, new int[]{10, 11, 12});
+            }
+        }
+    }
+
 
     @CfgClass(name = "TestConfig", excludeFields = {"money"})
     @CfgComment("Welcome in test confgiuration file!")
@@ -105,7 +387,7 @@ public class TemplateTest extends TestCase
         @CfgFooterNoNewLine
         private List<String>                                  friends       = Arrays.asList("player1", "player2", "player3");
         private List<String>                                  strings       = Arrays.asList("This text is just to took some\n    space \nspaaaaaaaaaace", "more text", "and even more\n    fucking textjust to \ntook moreeeeeespaceeeeeeee");
-        @CfgWeight(200)
+        @CfgPriority(200)
         private List<Integer>                                 ints          = Arrays.asList(1, 2, 3, 4, 7, 5, 3);
         private Map<String, Map<Integer, Double>>             map           = new HashMap<>(10);
         private Map<Integer, Map<String, String>>             otherMap      = new HashMap<>(10);

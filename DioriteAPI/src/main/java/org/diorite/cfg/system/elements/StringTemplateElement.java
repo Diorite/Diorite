@@ -24,7 +24,13 @@ public class StringTemplateElement extends TemplateElement<String>
 
     public StringTemplateElement()
     {
-        super(String.class, Object::toString, c -> true);
+        super(String.class, (obj) -> {
+            if (obj instanceof CharSequence)
+            {
+                return obj.toString();
+            }
+            throw new UnsupportedOperationException("Can't convert object to Map: " + obj);
+        }, CharSequence.class::isAssignableFrom);
     }
 
     @Override

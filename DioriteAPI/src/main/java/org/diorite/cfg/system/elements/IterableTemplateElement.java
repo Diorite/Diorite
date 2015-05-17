@@ -9,9 +9,13 @@ import java.util.Map.Entry;
 import org.diorite.cfg.annotations.CfgCollectionStyle.CollectionStyle;
 import org.diorite.cfg.annotations.CfgCollectionType.CollectionType;
 import org.diorite.cfg.system.CfgEntryData;
+import org.diorite.cfg.system.ConfigField;
 import org.diorite.cfg.system.FieldOptions;
+import org.diorite.cfg.system.Template;
+import org.diorite.cfg.system.TemplateCreator;
 import org.diorite.utils.collections.ReflectArrayIterator;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
+import org.diorite.utils.reflections.ReflectElement;
 
 @SuppressWarnings({"rawtypes", "ObjectEquality"})
 public class IterableTemplateElement extends TemplateElement<Iterable>
@@ -355,7 +359,29 @@ public class IterableTemplateElement extends TemplateElement<Iterable>
         }
         else
         {
-            return (object instanceof CharSequence) && (object.toString().indexOf('\n') != - 1);
+            if (object instanceof CharSequence)
+            {
+                if (object.toString().indexOf('\n') != - 1)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                final Template<?> template = TemplateCreator.getTemplate(c, false);
+                if (template == null)
+                {
+                    return false;
+                }
+                for (final Entry<ConfigField, ReflectElement<?>> entry : template.getFields().entrySet())
+                {
+                    if (containsMultilineStrings(entry.getValue().get(object)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

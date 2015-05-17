@@ -57,14 +57,7 @@ public final class TemplateElements
         return elements;
     }
 
-    private static TemplateElement<Object> defaultTemplatesHandler = new TemplateElement<Object>(Object.class, obj -> obj, c -> true)
-    {
-        @Override
-        protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object element, final int level, final ElementPlace elementPlace) throws IOException
-        {
-            StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(element), level, elementPlace);
-        }
-    };
+    private static TemplateElement<Object> defaultTemplatesHandler = new DefaultTemplateElement();
 
     /**
      * Default template handler for all data that don't match in other handlers.
