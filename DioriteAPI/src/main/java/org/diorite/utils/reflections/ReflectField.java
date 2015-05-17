@@ -6,7 +6,7 @@ class ReflectField<E> extends FieldAccessor<E> implements ReflectGetter<E>, Refl
 {
     ReflectField(final Field field)
     {
-        super(field);
+        super(DioriteReflectionUtils.getAccess(field));
     }
 
     ReflectField(final FieldAccessor<?> accessor)

@@ -76,7 +76,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             }
             this.options.put(option, option.get(this, field));
         }
-        System.out.println(this.options);
 
         final Class<?> type = DioriteReflectionUtils.getPrimitive(field.getType());
         Supplier<Object> def = null;

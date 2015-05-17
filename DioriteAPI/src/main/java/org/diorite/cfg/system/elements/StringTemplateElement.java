@@ -8,9 +8,19 @@ import org.diorite.cfg.annotations.CfgStringStyle.StringStyle;
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.FieldOptions;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class StringTemplateElement extends TemplateElement<String>
 {
-    public static final StringTemplateElement INSTANCE = new StringTemplateElement();
+    /**
+     * Chars that can't start key/value without quotes
+     */
+    public static final char[]                CANT_BE_FIRST = {'`', '!', '@', '#', '\'', '\"', '%', '&', '*', '|', '{', '[', ']', '}', ',', '>'};
+    public static final StringTemplateElement INSTANCE      = new StringTemplateElement();
+
+    private static final String[] REP_PREV_1 = new String[]{"\"", "'"};
+    private static final String[] REP_PREV_2 = new String[]{"\\\"", "\\'"};
+    private static final String[] REP_LAST_1 = new String[]{"\"", "\n"};
+    private static final String[] REP_LAST_2 = new String[]{"\\\"", "\\n"};
 
     public StringTemplateElement()
     {
@@ -18,71 +28,99 @@ public class StringTemplateElement extends TemplateElement<String>
     }
 
     @Override
-    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final String element, final int level) throws IOException
+    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
         StringStyle style = field.getOption(FieldOptions.STRING_STYLE, StringStyle.DEFAULT);
-        if ((style == StringStyle.ALWAYS_MULTI_LINE) && (level < 0)) // level under 0 means that we are in simple array, multi line strings don't work here
+        if ((style == StringStyle.ALWAYS_MULTI_LINE) && (elementPlace == ElementPlace.SIMPLE_LIST_OR_MAP)) // multi line strings don't works in simple lists/maps.
         {
             style = StringStyle.DEFAULT;
         }
-        if (style == StringStyle.DEFAULT)
-        {
-            final int linesCount = StringUtils.countMatches(element, '\n');
-            final int maxNewLines = field.getOption(FieldOptions.STRING_MULTILINE_THRESHOLD, 2);
-            if ((level >= 0) && (linesCount >= maxNewLines))
-            {
-                writer.append("|-");
-                final String[] lines = StringUtils.split(element, '\n');
-                for (final String line : lines)
-                {
-                    appendElement(writer, level + 1, line);
-                }
-                return;
-            }
-            boolean needQuote = false;
-            for (int i = 0, size = element.length(); i < size; i++)
-            {
-                final char c = element.charAt(i);
-                if ((c == '\"') || (c == '\''))
-                {
-                    needQuote = true;
-                    break;
-                }
-            }
-            if (needQuote)
-            {
-                writer.append('\"');
-                writer.append(StringUtils.replace(element, "\"", "\\\""));
-                writer.append('\"');
-                return;
-            }
-            writer.append('\'');
-            writer.append(element);
-            writer.append('\'');
-            return;
-        }
+        final String element = elementRaw.toString();
         switch (style)
         {
             case ALWAYS_QUOTED:
-                writer.append('\"');
-                writer.append(StringUtils.replace(element, "\"", "\\\""));
-                writer.append('\"');
+            {
+                writeQuoted(writer, element);
                 break;
+            }
             case ALWAYS_SINGLE_QUOTED:
-                writer.append('\'');
-                writer.append(StringUtils.replaceEach(element, new String[]{"\"", "'"}, new String[]{"\\\"", "\\'"}));
-                writer.append('\'');
+            {
+                writeSingleQuoted(writer, StringUtils.replaceEach(element, REP_PREV_1, REP_PREV_2));
                 break;
+            }
             case ALWAYS_MULTI_LINE:
-                writer.append("|-");
-                final String[] lines = StringUtils.split(element, '\n');
-                for (final String line : lines)
+            {
+                writeMultiLine(writer, element, level, elementPlace);
+                break;
+            }
+            default:
+            {
+                final boolean haveNewLines = StringUtils.contains(element, '\n');
+                if ((elementPlace != ElementPlace.SIMPLE_LIST_OR_MAP) && haveNewLines)
                 {
-                    appendElement(writer, level + 1, line);
+                    writeMultiLine(writer, element, level, elementPlace);
+                    return;
+                }
+                boolean needQuote = false;
+                if (element.isEmpty())
+                {
+                    writeSingleQuoted(writer, element);
+                    return;
+                }
+                final char f = element.charAt(0);
+                for (final char c : CANT_BE_FIRST)
+                {
+                    if (c == f)
+                    {
+                        needQuote = true;
+                        break;
+                    }
+                }
+                if (needQuote)
+                {
+                    writeQuoted(writer, element);
+                    return;
+                }
+                if (StringUtils.isNumeric(element))
+                {
+                    writeQuoted(writer, element);
+                }
+                else
+                {
+                    writer.append(StringUtils.replace(element, "\n", "\\n"));
                 }
                 break;
-            default:
-                break;
+            }
+        }
+    }
+
+    private static void writeQuoted(final Appendable writer, final String element) throws IOException
+    {
+        writer.append('\"');
+        writer.append(StringUtils.replaceEach(element, REP_LAST_1, REP_LAST_2));
+        writer.append('\"');
+    }
+
+    private static void writeSingleQuoted(final Appendable writer, final String element) throws IOException
+    {
+        writer.append('\'');
+        writer.append(StringUtils.replace(element, "\n", "\\n"));
+        writer.append('\'');
+    }
+
+    private static void writeMultiLine(final Appendable writer, final String element, final int level, final ElementPlace elementPlace) throws IOException
+    {
+        writer.append("|2-\n");
+        final String[] lines = StringUtils.split(element, '\n');
+        final int lvl = level + ((elementPlace == ElementPlace.LIST) ? 0 : 1);
+        for (int i = 0, linesLength = lines.length; i < linesLength; i++)
+        {
+            final String line = lines[i];
+            appendElement(writer, lvl, line);
+            if ((i + 1) < linesLength)
+            {
+                writer.append('\n');
+            }
         }
     }
 }

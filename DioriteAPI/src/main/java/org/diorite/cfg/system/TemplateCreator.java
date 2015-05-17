@@ -24,10 +24,10 @@ import org.diorite.cfg.annotations.CfgFooterCommentsArray;
 
 public class TemplateCreator
 {
-    public Template getTemplate(final Class<?> clazz)
+    public <T> Template<T> getTemplate(final Class<T> clazz)
     {
         final boolean allFields;
-        final boolean superFields;
+//        final boolean superFields;
         final boolean ignoreTransient;
         final String name;
         final String header;
@@ -38,7 +38,7 @@ public class TemplateCreator
             if (cfgInfo != null)
             {
                 allFields = cfgInfo.allFields();
-                superFields = cfgInfo.superFields();
+//                superFields = cfgInfo.superFields();
                 ignoreTransient = cfgInfo.ignoreTransient();
                 name = (cfgInfo.name() != null) ? cfgInfo.name() : clazz.getSimpleName();
                 Collections.addAll(excludedFields, cfgInfo.excludeFields());
@@ -46,7 +46,7 @@ public class TemplateCreator
             else
             {
                 allFields = true;
-                superFields = true;
+//                superFields = true;
                 ignoreTransient = true;
                 name = clazz.getSimpleName();
             }
@@ -84,20 +84,11 @@ public class TemplateCreator
                     {
                         continue;
                     }
-                    fields.add(new ConfigField(field, i++));
+                    fields.offer(new ConfigField(field, i++));
                 }
             }
         }
-
-        for (final ConfigField cfgField : fields)
-        {
-        }
-
-        if (footer != null)
-        {
-        }
-
-        return null;
+        return new Template<>(name, clazz, header, footer, fields);
     }
 
     static String[] readComments(final AnnotatedElement element)

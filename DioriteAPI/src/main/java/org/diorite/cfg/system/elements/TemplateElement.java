@@ -9,6 +9,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.ConfigField;
+import org.diorite.cfg.system.FieldOptions;
+import org.diorite.cfg.system.Template;
+import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.ReflectGetter;
 
 public abstract class TemplateElement<T>
@@ -39,7 +42,7 @@ public abstract class TemplateElement<T>
 
     public boolean isValidType(final Class<?> clazz)
     {
-        return this.fieldType.isAssignableFrom(clazz);
+        return DioriteReflectionUtils.getPrimitive(this.fieldType).isAssignableFrom(clazz) || DioriteReflectionUtils.getWrapperClass(this.fieldType).isAssignableFrom(clazz);
     }
 
     public boolean canBeConverted(final Class<?> clazz)
@@ -47,7 +50,7 @@ public abstract class TemplateElement<T>
         return this.isValidType(clazz) || ((this.classPredicate != null) && this.classPredicate.test(clazz));
     }
 
-    public void write(final Appendable writer, final ConfigField field, final Object object, final ReflectGetter<T> invoker, final int level, final boolean addComments) throws IOException
+    public void write(final Appendable writer, final ConfigField field, final Object object, final ReflectGetter<?> invoker, final int level, final boolean addComments, final ElementPlace elementPlace) throws IOException
     {
         Object element = invoker.get(object);
         if (element == null)
@@ -59,24 +62,31 @@ public abstract class TemplateElement<T>
             writer.append('\n');
             if (addComments && (field.getHeader() != null))
             {
-                appendElement(writer, level, field.getHeader());
+                Template.appendComment(writer, field.getHeader(), false);
                 writer.append('\n');
             }
 
             appendElement(writer, level, field.getName());
             writer.append(": ");
-            this.appendValue(writer, field, object, this.validateType(element), level);
+            this.appendValue(writer, field, object, this.validateType(element), level, elementPlace);
 
-            writer.append('\n');
             if (addComments && (field.getFooter() != null))
             {
-                appendElement(writer, level, field.getFooter());
-                writer.append('\n');
+                if (field.getOption(FieldOptions.OTHERS_FOOTER_NO_NEW_LINE, false))
+                {
+                    Template.appendComment(writer, field.getFooter(), true);
+                }
+                else
+                {
+                    writer.append('\n');
+                    Template.appendComment(writer, field.getFooter(), false);
+                    writer.append('\n');
+                }
             }
         }
     }
 
-    public void writeValue(final Appendable writer, final CfgEntryData field, final Object object, final Object element, final int level, final boolean addComments) throws IOException
+    public void writeValue(final Appendable writer, final CfgEntryData field, final Object object, final Object element, final int level, final boolean addComments, final ElementPlace elementPlace) throws IOException
     {
         if (element != null)
         {
@@ -86,9 +96,12 @@ public abstract class TemplateElement<T>
                 writer.append('\n');
             }
 
-            this.appendValue(writer, field, object, this.validateType(element), level);
+            this.appendValue(writer, field, object, this.validateType(element), level, elementPlace);
 
-            writer.append('\n');
+//            if (elementPlace == ElementPlace.NORMAL)
+//            {
+//               writer.append('\n');
+//            }
             if (addComments && (field.getFooter() != null))
             {
                 appendElement(writer, level, field.getFooter());
@@ -97,7 +110,7 @@ public abstract class TemplateElement<T>
         }
     }
 
-    protected abstract void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final T element, final int level) throws IOException;
+    protected abstract void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object element, final int level, final ElementPlace elementPlace) throws IOException;
 
     protected T validateType(final Object obj)
     {
@@ -125,6 +138,13 @@ public abstract class TemplateElement<T>
         {
             writer.append("  ");
         }
+    }
+
+    public enum ElementPlace
+    {
+        NORMAL,
+        LIST,
+        SIMPLE_LIST_OR_MAP,;
     }
 
     @Override

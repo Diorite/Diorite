@@ -6,7 +6,7 @@ class ReflectMethodGetter<E> extends MethodInvoker implements ReflectGetter<E>
 {
     ReflectMethodGetter(final Method method)
     {
-        super(method);
+        super(DioriteReflectionUtils.getAccess(method));
     }
 
     ReflectMethodGetter(final MethodInvoker invoker)

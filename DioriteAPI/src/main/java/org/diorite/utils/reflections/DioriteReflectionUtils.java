@@ -495,7 +495,15 @@ public final class DioriteReflectionUtils
         return getField(getCanonicalClass(className), fieldType, index);
     }
 
-    private static AccessibleObject getAccess(final AccessibleObject o)
+    /**
+     * Set given accessible object as accessible if needed.
+     *
+     * @param o   accessible to get access.
+     * @param <T> type of accessible object, used to keep type of returned value.
+     *
+     * @return this same object as given.
+     */
+    public static <T extends AccessibleObject> T getAccess(final T o)
     {
         if (! o.isAccessible())
         {
@@ -504,7 +512,14 @@ public final class DioriteReflectionUtils
         return o;
     }
 
-    private static Field getAccess(final Field field)
+    /**
+     * Set field as accessible, and remove final flag if set.
+     *
+     * @param field field to get access.
+     *
+     * @return this same field.
+     */
+    public static Field getAccess(final Field field)
     {
         getAccess((AccessibleObject) field);
         if (Modifier.isFinal(field.getModifiers()))
@@ -623,8 +638,7 @@ public final class DioriteReflectionUtils
         {
             if (((methodName == null) || method.getName().equals(methodName)) && ((returnType == null) || method.getReturnType().equals(returnType)) && Arrays.equals(method.getParameterTypes(), params))
             {
-
-                method.setAccessible(true);
+                getAccess(method);
                 return new MethodInvoker(method);
             }
         }
@@ -738,6 +752,7 @@ public final class DioriteReflectionUtils
      *
      * @return primitive class if possible.
      */
+    @SuppressWarnings("ObjectEquality")
     public static Class<?> getPrimitive(final Class<?> clazz)
     {
         if (clazz.isPrimitive())
@@ -788,6 +803,7 @@ public final class DioriteReflectionUtils
      *
      * @return non-primitive class.
      */
+    @SuppressWarnings("ObjectEquality")
     public static Class<?> getWrapperClass(final Class<?> clazz)
     {
         if (! clazz.isPrimitive())

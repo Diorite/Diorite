@@ -13,8 +13,8 @@ import org.diorite.cfg.annotations.CfgCollectionStyle.CollectionStyle;
 import org.diorite.cfg.annotations.CfgCollectionType;
 import org.diorite.cfg.annotations.CfgCollectionType.CollectionType;
 import org.diorite.cfg.annotations.CfgCommentOptions;
+import org.diorite.cfg.annotations.CfgFooterNoNewLine;
 import org.diorite.cfg.annotations.CfgStringArrayMultilineThreshold;
-import org.diorite.cfg.annotations.CfgStringMultilineThreshold;
 import org.diorite.cfg.annotations.CfgStringStyle;
 import org.diorite.cfg.annotations.CfgStringStyle.StringStyle;
 import org.diorite.utils.SimpleEnum;
@@ -27,11 +27,11 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 public class FieldOptions implements SimpleEnum<FieldOptions>
 {
     public static final FieldOptions STRING_STYLE                     = new FieldOptions("STRING_STYLE", 0, CfgStringStyle.class, (f, a) -> (a != null) ? a.value() : StringStyle.DEFAULT);
-    public static final FieldOptions STRING_MULTILINE_THRESHOLD       = new FieldOptions("STRING_MULTILINE_THRESHOLD", 1, CfgStringMultilineThreshold.class, (f, a) -> (a != null) ? a.value() : 2);
     public static final FieldOptions STRING_ARRAY_MULTILINE_THRESHOLD = new FieldOptions("STRING_ARRAY_MULTILINE_THRESHOLD", 2, CfgStringArrayMultilineThreshold.class, (f, a) -> (a != null) ? a.value() : 25);
     public static final FieldOptions COLLECTION_STYLE                 = new FieldOptions("COLLECTION_STYLE", 3, CfgCollectionStyle.class, (f, a) -> (a != null) ? a.value() : CollectionStyle.DEFAULT);
-    public static final FieldOptions COLLECTION_TYPE                  = new FieldOptions("COLLECTION_TYPE", 4, CfgCollectionType.class, (f, a) -> (a != null) ? a.value() : CollectionType.OBJECTS);
+    public static final FieldOptions COLLECTION_TYPE                  = new FieldOptions("COLLECTION_TYPE", 4, CfgCollectionType.class, (f, a) -> (a != null) ? a.value() : CollectionType.UNKNOWN);
     public static final FieldOptions OTHERS_COMMENT_EVERY_ELEMENT     = new FieldOptions("OTHERS_COMMENT_EVERY_ELEMENT", 5, CfgCommentOptions.class, (f, a) -> (a != null) && a.commentEveryElement());
+    public static final FieldOptions OTHERS_FOOTER_NO_NEW_LINE        = new FieldOptions("OTHERS_FOOTER_NO_NEW_LINE", 6, CfgFooterNoNewLine.class, (f, a) -> (a != null) && a.value());
 
     private static final Map<String, FieldOptions>   byName = new SimpleStringHashMap<>(6, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<FieldOptions> byID   = new TIntObjectHashMap<>(6, SMALL_LOAD_FACTOR);
@@ -136,10 +136,10 @@ public class FieldOptions implements SimpleEnum<FieldOptions>
     static
     {
         register(STRING_STYLE);
-        register(STRING_MULTILINE_THRESHOLD);
         register(STRING_ARRAY_MULTILINE_THRESHOLD);
         register(COLLECTION_STYLE);
         register(COLLECTION_TYPE);
         register(OTHERS_COMMENT_EVERY_ELEMENT);
+        register(OTHERS_FOOTER_NO_NEW_LINE);
     }
 }

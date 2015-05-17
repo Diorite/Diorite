@@ -2,21 +2,16 @@ package org.diorite.cfg.system.elements;
 
 import java.io.IOException;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.system.CfgEntryData;
+import org.diorite.utils.collections.ReflectArrayIterator;
 
-public class SimpleTemplateElement<T> extends TemplateElement<T>
+public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
 {
-    public SimpleTemplateElement(final Class<T> fieldType, final Function<Object, T> function, final Predicate<Class<?>> classPredicate)
-    {
-        super(fieldType, function, classPredicate);
-    }
-
-    public SimpleTemplateElement(final Class<T> clazz, final Function<Object, T> function)
+    public SimpleArrayTemplateElement(final Class<T> clazz, final Function<Object, T> function)
     {
         super(clazz, function);
     }
@@ -24,7 +19,7 @@ public class SimpleTemplateElement<T> extends TemplateElement<T>
     @Override
     protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object object, final int level, final ElementPlace elementPlace) throws IOException
     {
-        writer.append(object.toString());
+        IterableTemplateElement.INSTANCE.appendValue(writer, field, source, new ReflectArrayIterator(object), level, elementPlace);
     }
 
     @Override

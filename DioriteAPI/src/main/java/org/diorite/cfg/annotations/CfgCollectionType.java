@@ -13,6 +13,7 @@ public @interface CfgCollectionType
 
     enum CollectionType
     {
+        UNKNOWN,
         OBJECTS,
         STRINGS,
         PRIMITIVES,

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ReflectArrayIterator implements Iterator<Object>
+public class ReflectArrayIterator implements Iterator<Object>, Iterable<Object>
 {
     private final Object array;
     private int currentIndex = 0;
@@ -46,5 +46,11 @@ public class ReflectArrayIterator implements Iterator<Object>
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("array", this.array).append("currentIndex", this.currentIndex).toString();
+    }
+
+    @Override
+    public Iterator<Object> iterator()
+    {
+        return this;
     }
 }
