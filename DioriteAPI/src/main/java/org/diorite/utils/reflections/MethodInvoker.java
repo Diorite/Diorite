@@ -12,6 +12,7 @@ public class MethodInvoker
 
     /**
      * Construct new invoker for given method, it don't check its accessible status.
+     *
      * @param method method to wrap.
      */
     public MethodInvoker(final Method method)
@@ -20,17 +21,12 @@ public class MethodInvoker
     }
 
     /**
-     * Invoke constructor and create new object.
-     *
-     * @param arguments arguments for constructor.
-     *
-     * @return new object.
-     */
-    /**
      * Invoke method and create new object.
-     * @param target target object, use null for static fields.
+     *
+     * @param target    target object, use null for static fields.
      * @param arguments arguments for method.
-     * @return
+     *
+     * @return method invoke result.
      */
     public Object invoke(final Object target, final Object... arguments)
     {

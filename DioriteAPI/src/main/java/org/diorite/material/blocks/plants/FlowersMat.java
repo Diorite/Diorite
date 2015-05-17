@@ -3,7 +3,7 @@ package org.diorite.material.blocks.plants;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -38,7 +38,7 @@ public class FlowersMat extends FlowerMat
     public static final FlowersMat FLOWERS_PINK_TULIP   = new FlowersMat(0x7, FlowerTypeMat.PINK_TULIP);
     public static final FlowersMat FLOWERS_OXEYE_DAISY  = new FlowersMat(0x8, FlowerTypeMat.OXEYE_DAISY);
 
-    private static final Map<String, FlowersMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, FlowersMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<FlowersMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.PowerableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -67,7 +67,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
     public static final TripwireMat TRIPWIRE_IN_AIR_VALID_DISARMED         = new TripwireMat(false, true, true, true);
     public static final TripwireMat TRIPWIRE_POWERED_IN_AIR_VALID_DISARMED = new TripwireMat(true, true, true, true);
 
-    private static final Map<String, TripwireMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, TripwireMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<TripwireMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean powered;

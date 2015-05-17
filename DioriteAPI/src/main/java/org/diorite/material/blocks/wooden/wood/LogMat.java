@@ -10,7 +10,7 @@ import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -63,7 +63,7 @@ public class LogMat extends WoodMat implements RotatableMat
     public static final LogMat LOG_ACACIA_BARK   = new Log2(WoodTypeMat.ACACIA, RotateAxisMat.NONE);
     public static final LogMat LOG_DARK_OAK_BARK = new Log2(WoodTypeMat.DARK_OAK, RotateAxisMat.NONE);
 
-    private static final Map<String, LogMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, LogMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<LogMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final RotateAxisMat rotateAxis;

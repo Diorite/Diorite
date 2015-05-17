@@ -10,7 +10,7 @@ import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
 import org.diorite.material.blocks.stony.StonyMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -54,7 +54,7 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
     public static final DropperMat DROPPER_WEST_POWERED  = new DropperMat(BlockFace.WEST, true);
     public static final DropperMat DROPPER_EAST_POWERED  = new DropperMat(BlockFace.EAST, true);
 
-    private static final Map<String, DropperMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, DropperMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<DropperMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace facing;

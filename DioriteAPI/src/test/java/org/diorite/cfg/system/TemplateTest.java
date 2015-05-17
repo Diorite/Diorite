@@ -13,10 +13,11 @@ import org.diorite.cfg.annotations.CfgComment;
 import org.diorite.cfg.annotations.CfgFooterComment;
 import org.diorite.cfg.annotations.CfgFooterComments;
 import org.diorite.cfg.annotations.CfgFooterNoNewLine;
+import org.diorite.cfg.annotations.CfgPriority;
 import org.diorite.cfg.annotations.CfgStringArrayMultilineThreshold;
 import org.diorite.cfg.annotations.CfgStringStyle;
 import org.diorite.cfg.annotations.CfgStringStyle.StringStyle;
-import org.diorite.cfg.annotations.CfgPriority;
+import org.diorite.cfg.annotations.defaults.CfgIntArrayDefault;
 
 import junit.framework.TestCase;
 
@@ -119,22 +120,23 @@ public class TemplateTest extends TestCase
         @CfgComment("This option make you happy")
         @CfgFooterComment("End of happy option :<")
         @CfgStringStyle(StringStyle.ALWAYS_QUOTED)
-        private String                            playerName    = "someName";
+        private String       playerName    = "someName";
         @CfgComment("This option make you even more happy")
         @CfgStringStyle(StringStyle.ALWAYS_MULTI_LINE)
-        private String                            playerSubName = "someOtherName";
-        private int                               money         = 634;
-        private String                            desc          = "Some bigger\n        amount\nof text\n  to test\n    multiline";
+        private String       playerSubName = "someOtherName";
+        private int          money         = 634;
+        private String       desc          = "Some bigger\n        amount\nof text\n  to test\n    multiline";
         @CfgStringArrayMultilineThreshold(3)
         @CfgStringStyle(StringStyle.ALWAYS_MULTI_LINE)
         @CfgFooterComment("Nope, you don't have friends...")
         @CfgFooterNoNewLine
-        private List<String>                      friends       = Arrays.asList("player1", "player2", "player3");
-        private List<String>                      strings       = Arrays.asList("This text is just to took some\n    space \nspaaaaaaaaaace", "more text", "and even more\n    fucking textjust to \ntook moreeeeeespaceeeeeeee");
+        private List<String> friends       = Arrays.asList("player1", "player2", "player3");
+        private List<String> strings       = Arrays.asList("This text is just to took some\n    space \nspaaaaaaaaaace", "more text", "and even more\n    fucking textjust to \ntook moreeeeeespaceeeeeeee");
         @CfgPriority(200)
-        private List<Integer>                     ints          = Arrays.asList(1, 2, 3, 4, 7, 5, 3);
-        private Map<String, Map<Integer, Double>> map           = new HashMap<>(10);
-        private Map<Integer, Map<String, String>> otherMap      = new HashMap<>(10);
+        @CfgIntArrayDefault({5, 8, 4, 2, 5, 4, 6})
+        private List<Integer> ints;//          = Arrays.asList(1, 2, 3, 4, 7, 5, 3);
+        private Map<String, Map<Integer, Double>> map      = new HashMap<>(10);
+        private Map<Integer, Map<String, String>> otherMap = new HashMap<>(10);
 
         @CfgComment("Sub-class test")
         private TestConfig subClass = new TestConfig();
@@ -294,10 +296,10 @@ public class TemplateTest extends TestCase
             {
                 return false;
             }
-            if (this.ints != null ? ! this.ints.equals(that.ints) : that.ints != null)
-            {
-                return false;
-            }
+//            if (this.ints != null ? ! this.ints.equals(that.ints) : that.ints != null)
+//            {
+//                return false;
+//            }
             if (this.map != null ? ! this.map.equals(that.map) : that.map != null)
             {
                 return false;
@@ -322,7 +324,7 @@ public class TemplateTest extends TestCase
             result = 31 * result + (this.desc != null ? this.desc.hashCode() : 0);
             result = 31 * result + (this.friends != null ? this.friends.hashCode() : 0);
             result = 31 * result + (this.strings != null ? this.strings.hashCode() : 0);
-            result = 31 * result + (this.ints != null ? this.ints.hashCode() : 0);
+//            result = 31 * result + (this.ints != null ? this.ints.hashCode() : 0);
             result = 31 * result + (this.map != null ? this.map.hashCode() : 0);
             result = 31 * result + (this.otherMap != null ? this.otherMap.hashCode() : 0);
             result = 31 * result + (this.subClass != null ? this.subClass.hashCode() : 0);

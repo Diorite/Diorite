@@ -5,9 +5,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Used to define default value of boolean[] type.
+ * It will be read from field only if field have compatybile type.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface CfgBooleanArrayDefault
 {
+    /**
+     * @return default value of configuration field.
+     */
     boolean[] value();
 }

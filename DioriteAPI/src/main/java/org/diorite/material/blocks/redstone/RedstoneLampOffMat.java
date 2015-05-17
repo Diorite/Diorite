@@ -3,7 +3,7 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -30,7 +30,7 @@ public class RedstoneLampOffMat extends RedstoneLampMat
 
     public static final RedstoneLampOffMat REDSTONE_LAMP_OFF = new RedstoneLampOffMat();
 
-    private static final Map<String, RedstoneLampOffMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, RedstoneLampOffMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneLampOffMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

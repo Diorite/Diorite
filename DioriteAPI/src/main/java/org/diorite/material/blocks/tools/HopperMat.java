@@ -10,7 +10,7 @@ import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -52,7 +52,7 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
     public static final HopperMat HOPPER_WEST_POWERED  = new HopperMat(BlockFace.WEST, true);
     public static final HopperMat HOPPER_EAST_POWERED  = new HopperMat(BlockFace.EAST, true);
 
-    private static final Map<String, HopperMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, HopperMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<HopperMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace facing;

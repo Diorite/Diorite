@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -42,7 +42,7 @@ public class WoodenButtonMat extends ButtonMat
     public static final WoodenButtonMat WOODEN_BUTTON_NORTH_POWERED = new WoodenButtonMat(BlockFace.NORTH, true);
     public static final WoodenButtonMat WOODEN_BUTTON_UP_POWERED    = new WoodenButtonMat(BlockFace.UP, true);
 
-    private static final Map<String, WoodenButtonMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, WoodenButtonMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WoodenButtonMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

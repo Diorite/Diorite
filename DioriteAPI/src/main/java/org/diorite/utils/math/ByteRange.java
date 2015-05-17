@@ -13,7 +13,7 @@ public class ByteRange
      */
     public static final ByteRange EMPTY = new ByteRange(0, 0);
     /**
-     * Range from {@link Byte.MIN_VALUE} to {@link Byte.MAX_VALUE}
+     * Range from {@link Byte#MIN_VALUE} to {@link Byte#MAX_VALUE}
      */
     public static final ByteRange FULL  = new ByteRange(Byte.MIN_VALUE, Byte.MAX_VALUE);
 

@@ -148,11 +148,10 @@ public final class TemplateCreator
                 int i = 0;
                 for (final Field field : fieldsSrc.getDeclaredFields())
                 {
-                    if (field.isSynthetic() || (ignoreTransient && Modifier.isTransient(field.getModifiers())) || (! allFields && ! field.isAnnotationPresent(CfgField.class)) || excludedFields.contains(field.getName()) || field.isAnnotationPresent(CfgExclude.class))
+                    if (field.isAnnotationPresent(CfgField.class) || (! field.isAnnotationPresent(CfgExclude.class) && ! field.isSynthetic() && (! ignoreTransient || ! Modifier.isTransient(field.getModifiers())) && (allFields || field.isAnnotationPresent(CfgField.class)) && ! excludedFields.contains(field.getName())))
                     {
-                        continue;
+                        fields.add(new ConfigField(field, i++));
                     }
-                    fields.add(new ConfigField(field, i++));
                 }
             }
         }

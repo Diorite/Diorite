@@ -2,8 +2,8 @@ package org.diorite.inventory.item;
 
 import org.apache.commons.lang3.Validate;
 
-import org.diorite.utils.concurrent.AtomicArray;
-import org.diorite.utils.concurrent.AtomicArrayPart;
+import org.diorite.utils.concurrent.atomic.AtomicArray;
+import org.diorite.utils.concurrent.atomic.AtomicArrayPart;
 
 class ItemStackArrayPart extends AtomicArrayPart<ItemStack> implements ItemStackArray
 {

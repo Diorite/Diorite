@@ -9,7 +9,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DoorMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -47,7 +47,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
     public static final IronDoorMat IRON_DOOR_TOP_LEFT_POWERED  = new IronDoorMat("TOP_LEFT_POWERED", true, false);
     public static final IronDoorMat IRON_DOOR_TOP_RIGHT_POWERED = new IronDoorMat("TOP_RIGHT_POWERED", true, true);
 
-    private static final Map<String, IronDoorMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, IronDoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<IronDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean   powered;

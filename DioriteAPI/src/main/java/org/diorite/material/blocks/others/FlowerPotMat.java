@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -58,7 +58,7 @@ public class FlowerPotMat extends BlockMaterialData
     @Deprecated
     public static final FlowerPotMat FLOWER_POT_LEGACY_DARK_OAK_SAPLING = new FlowerPotMat("LEGACY_DARK_OAK_SAPLING", 0xD);
 
-    private static final Map<String, FlowerPotMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, FlowerPotMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<FlowerPotMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

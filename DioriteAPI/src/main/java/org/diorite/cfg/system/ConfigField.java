@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -34,10 +35,14 @@ import org.diorite.cfg.annotations.defaults.CfgShortArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgShortDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
-import org.diorite.utils.collections.AlphanumComparator;
+import org.diorite.utils.collections.comparators.AlphanumComparator;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.MethodInvoker;
 
+/**
+ * Main implementation of {@link CfgEntryData} contains all information
+ * about config field.
+ */
 public class ConfigField implements Comparable<ConfigField>, CfgEntryData
 {
     private final Field            field;
@@ -50,6 +55,12 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
     private final Map<FieldOptions, Object> options = new HashMap<>(3);
     private MethodInvoker invoker;
 
+    /**
+     * Construct new config field for given {@link Field}.
+     *
+     * @param field source field.
+     * @param index index of field in class. Used to set priority of field.
+     */
     @SuppressWarnings("ObjectEquality")
     public ConfigField(final Field field, final int index)
     {
@@ -84,194 +95,211 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         Supplier<Object> def = null;
         annotation:
         {
+            final boolean isCollection = Object[].class.isAssignableFrom(type) || Iterable.class.isAssignableFrom(type) || Iterator.class.isAssignableFrom(type);
             if (type == boolean.class)
             {
                 final CfgBooleanDefault annotation = field.getAnnotation(CfgBooleanDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == boolean[].class)
+            if ((type == boolean[].class) || isCollection)
             {
                 final CfgBooleanArrayDefault annotation = field.getAnnotation(CfgBooleanArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == byte.class)
+            if (type == byte.class)
             {
                 final CfgByteDefault annotation = field.getAnnotation(CfgByteDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == byte[].class)
+            if ((type == byte[].class) || isCollection)
             {
                 final CfgByteArrayDefault annotation = field.getAnnotation(CfgByteArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == char.class)
+            if (type == char.class)
             {
                 final CfgCharDefault annotation = field.getAnnotation(CfgCharDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == char[].class)
+            if ((type == char[].class) || isCollection)
             {
                 final CfgCharArrayDefault annotation = field.getAnnotation(CfgCharArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == short.class)
+            if (type == short.class)
             {
                 final CfgShortDefault annotation = field.getAnnotation(CfgShortDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == short[].class)
+            if ((type == short[].class) || isCollection)
             {
                 final CfgShortArrayDefault annotation = field.getAnnotation(CfgShortArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == int.class)
+            if (type == int.class)
             {
                 final CfgIntDefault annotation = field.getAnnotation(CfgIntDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == int[].class)
+            if ((type == int[].class) || isCollection)
             {
                 final CfgIntArrayDefault annotation = field.getAnnotation(CfgIntArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == long.class)
+            if (type == long.class)
             {
                 final CfgLongDefault annotation = field.getAnnotation(CfgLongDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == long[].class)
+            if ((type == long[].class) || isCollection)
             {
                 final CfgLongArrayDefault annotation = field.getAnnotation(CfgLongArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == float.class)
+            if (type == float.class)
             {
                 final CfgFloatDefault annotation = field.getAnnotation(CfgFloatDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == float[].class)
+            if ((type == float[].class) || isCollection)
             {
                 final CfgFloatArrayDefault annotation = field.getAnnotation(CfgFloatArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == double.class)
+            if (type == double.class)
             {
                 final CfgDoubleDefault annotation = field.getAnnotation(CfgDoubleDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == double[].class)
+            if ((type == double[].class) || isCollection)
             {
                 final CfgDoubleArrayDefault annotation = field.getAnnotation(CfgDoubleArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == String.class)
+            if (type == String.class)
             {
                 final CfgStringDefault annotation = field.getAnnotation(CfgStringDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else if (type == String[].class)
+            if ((type == String[].class) || isCollection)
             {
                 final CfgStringArrayDefault annotation = field.getAnnotation(CfgStringArrayDefault.class);
                 if (annotation != null)
                 {
                     def = annotation::value;
+                    break annotation;
                 }
             }
-            else
+
+            if (type.isEnum())
             {
-                if (type.isEnum())
+                for (final Annotation a : field.getAnnotations())
                 {
-                    for (final Annotation a : field.getAnnotations())
+                    if (a.getClass().isAnnotationPresent(CfgCustomDefault.class))
                     {
-                        if (a.getClass().isAnnotationPresent(CfgCustomDefault.class))
-                        {
-                            final Annotation annotation = field.getAnnotation(a.getClass());
-                            this.invoker = DioriteReflectionUtils.getMethod(annotation.getClass(), "value");
-                            def = () -> this.invoker.invoke(null);
-                            break annotation;
-                        }
+                        final Annotation annotation = field.getAnnotation(a.getClass());
+                        this.invoker = DioriteReflectionUtils.getMethod(annotation.getClass(), "value");
+                        def = () -> this.invoker.invoke(null);
+                        break annotation;
                     }
                 }
-                final CfgDelegateDefault annotation = field.getAnnotation(CfgDelegateDefault.class);
-                if (annotation != null)
+            }
+            final CfgDelegateDefault annotation = field.getAnnotation(CfgDelegateDefault.class);
+            if (annotation != null)
+            {
+                final String path = annotation.value();
+                switch (path)
                 {
-                    final String path = annotation.value();
-                    switch (path)
-                    {
-                        case "{emptyMap}":
-                            def = () -> new HashMap<>(1);
-                            break;
-                        case "{emptyList}":
-                            def = () -> new ArrayList<>(1);
-                            break;
-                        case "{emptySet}":
-                            def = () -> new HashSet<>(1);
-                            break;
-                        default:
-                            final String[] parts = StringUtils.split(path, '#');
-                            if (parts.length == 1)
-                            {
-                                this.invoker = DioriteReflectionUtils.getMethod(field.getDeclaringClass(), parts[0]);
-                                def = () -> this.invoker.invoke(null);
-                            }
-                            else if (parts.length == 2)
-                            {
-                                this.invoker = DioriteReflectionUtils.getMethod(parts[0], parts[1]);
-                                def = () -> this.invoker.invoke(null);
-                            }
-                            break;
-                    }
+                    case "{emptyMap}":
+                        def = () -> new HashMap<>(1);
+                        break;
+                    case "{emptyList}":
+                        def = () -> new ArrayList<>(1);
+                        break;
+                    case "{emptySet}":
+                        def = () -> new HashSet<>(1);
+                        break;
+                    default:
+                        final String[] parts = StringUtils.split(path, '#');
+                        if (parts.length == 1)
+                        {
+                            this.invoker = DioriteReflectionUtils.getMethod(field.getDeclaringClass(), parts[0]);
+                            def = () -> this.invoker.invoke(null);
+                        }
+                        else if (parts.length == 2)
+                        {
+                            this.invoker = DioriteReflectionUtils.getMethod(parts[0], parts[1]);
+                            def = () -> this.invoker.invoke(null);
+                        }
+                        break;
                 }
             }
         }
@@ -292,11 +320,17 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         return (T) this.options.getOrDefault(option, def);
     }
 
+    /**
+     * @return java source field of this config field.
+     */
     public Field getField()
     {
         return this.field;
     }
 
+    /**
+     * @return name of config field.
+     */
     public String getName()
     {
         return this.name;
@@ -314,16 +348,27 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         return this.footer;
     }
 
+    /**
+     * @return index of field from class file.
+     */
     public int getIndex()
     {
         return this.index;
     }
 
+    /**
+     * Priority is used to choose order of fields.
+     *
+     * @return priority of config field.
+     */
     public int getPriority()
     {
         return this.priority;
     }
 
+    /**
+     * @return default value of field or null.
+     */
     public Object getDefault()
     {
         if (this.def == null)

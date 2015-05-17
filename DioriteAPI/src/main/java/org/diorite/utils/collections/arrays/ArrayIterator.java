@@ -1,16 +1,16 @@
-package org.diorite.utils.collections;
+package org.diorite.utils.collections.arrays;
 
 import java.util.Iterator;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ArrayIterator implements Iterator<Object>, Iterable<Object>
+public class ArrayIterator<T> implements Iterator<T>, Iterable<T>
 {
-    private final Object[] array;
+    private final T[] array;
     private int currentIndex = 0;
 
-    public ArrayIterator(final Object[] array)
+    public ArrayIterator(final T[] array)
     {
         this.array = array;
     }
@@ -23,7 +23,7 @@ public class ArrayIterator implements Iterator<Object>, Iterable<Object>
 
     @SuppressWarnings("IteratorNextCanNotThrowNoSuchElementException")
     @Override
-    public Object next()
+    public T next()
     {
         return this.array[this.currentIndex++];
     }
@@ -41,8 +41,8 @@ public class ArrayIterator implements Iterator<Object>, Iterable<Object>
     }
 
     @Override
-    public Iterator<Object> iterator()
+    public Iterator<T> iterator()
     {
-        return this;
+        return new ArrayIterator<>(this.array);
     }
 }

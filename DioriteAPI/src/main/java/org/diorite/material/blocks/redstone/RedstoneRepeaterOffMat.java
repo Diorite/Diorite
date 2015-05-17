@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -49,7 +49,7 @@ public class RedstoneRepeaterOffMat extends RedstoneRepeaterMat
     public static final RedstoneRepeaterOffMat REDSTONE_REPEATER_OFF_SOUTH_4 = new RedstoneRepeaterOffMat(BlockFace.SOUTH, 4);
     public static final RedstoneRepeaterOffMat REDSTONE_REPEATER_OFF_WEST_4  = new RedstoneRepeaterOffMat(BlockFace.WEST, 4);
 
-    private static final Map<String, RedstoneRepeaterOffMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, RedstoneRepeaterOffMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneRepeaterOffMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

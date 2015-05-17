@@ -5,7 +5,7 @@ import java.util.Map;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.stony.ore.OreMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -32,7 +32,7 @@ public class LapisBlockMat extends OreBlockMat
 
     public static final LapisBlockMat LAPIS_BLOCK = new LapisBlockMat();
 
-    private static final Map<String, LapisBlockMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, LapisBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<LapisBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -18,7 +18,7 @@ public class Difficulty implements SimpleEnum<Difficulty>
     public static final Difficulty NORMAL   = new Difficulty("NORMAL", 2, "options.difficulty.normal");
     public static final Difficulty HARD     = new Difficulty("HARD", 3, "options.difficulty.hard");
 
-    private static final Map<String, Difficulty>   byName = new SimpleStringHashMap<>(4, SMALL_LOAD_FACTOR);
+    private static final Map<String, Difficulty>   byName = new CaseInsensitiveMap<>(4, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<Difficulty> byID   = new TIntObjectHashMap<>(4, SMALL_LOAD_FACTOR);
 
     private final String enumName;

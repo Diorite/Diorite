@@ -93,7 +93,7 @@ import org.diorite.material.blocks.wooden.wood.stairs.JungleStairsMat;
 import org.diorite.material.blocks.wooden.wood.stairs.OakStairsMat;
 import org.diorite.material.blocks.wooden.wood.stairs.SpruceStairsMat;
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -483,8 +483,8 @@ public abstract class Material implements SimpleEnum<Material>
 //    public static final  Material                RECORD_10            = new Material("RECORD_10", 2265, 1);
 //    public static final  Material                RECORD_11            = new Material("RECORD_11", 2266, 1);
 //    public static final  Material                RECORD_12            = new Material("RECORD_12", 2267, 1);
-    private static final Map<String, Material>       byName                     = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
-    private static final Map<String, Material>       byMinecraftId              = new SimpleStringHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
+    private static final Map<String, Material>       byName                     = new CaseInsensitiveMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
+    private static final Map<String, Material>       byMinecraftId              = new CaseInsensitiveMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<Material>     byID                       = new TIntObjectHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
     private final   String enumName;
     protected final int    id;

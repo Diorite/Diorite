@@ -5,7 +5,7 @@ import java.util.Map;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.ChangeablePowerElementMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.ByteRange;
 
 import gnu.trove.map.TByteObjectMap;
@@ -53,7 +53,7 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
     public static final RedstoneWireMat REDSTONE_WIRE_ON_14 = new RedstoneWireMat(0xE);
     public static final RedstoneWireMat REDSTONE_WIRE_ON_15 = new RedstoneWireMat(0xF);
 
-    private static final Map<String, RedstoneWireMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, RedstoneWireMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneWireMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

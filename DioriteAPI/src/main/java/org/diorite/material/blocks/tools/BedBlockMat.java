@@ -9,7 +9,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -56,7 +56,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
     public static final BedBlockMat BED_HEAD_NORTH_OCCUPIED = new BedBlockMat(BlockFace.NORTH, true, true);
     public static final BedBlockMat BED_HEAD_EAST_OCCUPIED  = new BedBlockMat(BlockFace.EAST, true, true);
 
-    private static final Map<String, BedBlockMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, BedBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BedBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     private final BlockFace blockFacing;

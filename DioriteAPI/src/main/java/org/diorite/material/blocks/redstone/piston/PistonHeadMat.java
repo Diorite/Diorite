@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -43,7 +43,7 @@ public class PistonHeadMat extends PistonBaseMat
     public static final PistonHeadMat PISTON_HEAD_WEST_EXTENDED  = new PistonHeadMat(BlockFace.WEST, true);
     public static final PistonHeadMat PISTON_HEAD_EAST_EXTENDED  = new PistonHeadMat(BlockFace.EAST, true);
 
-    private static final Map<String, PistonHeadMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, PistonHeadMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PistonHeadMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

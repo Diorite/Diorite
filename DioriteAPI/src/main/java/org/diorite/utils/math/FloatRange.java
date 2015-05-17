@@ -183,11 +183,12 @@ public class FloatRange
 
     /**
      * Return given number if it is in range, or closest value in range.
-     * {@code i > max -> max}
-     * {@code i < min -> min}
+     * {@code i > max -> def}
+     * {@code i < min -> def}
      * {@code else -> i}
      *
      * @param i number to validate.
+     * @param def default value.
      *
      * @return closest number in range.
      */

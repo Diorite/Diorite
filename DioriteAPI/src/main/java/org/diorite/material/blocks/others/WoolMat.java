@@ -9,7 +9,7 @@ import org.diorite.DyeColor;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.ColorableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -51,7 +51,7 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
     public static final WoolMat WOOL_RED        = new WoolMat(DyeColor.RED);
     public static final WoolMat WOOL_BLACK      = new WoolMat(DyeColor.BLACK);
 
-    private static final Map<String, WoolMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, WoolMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WoolMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;

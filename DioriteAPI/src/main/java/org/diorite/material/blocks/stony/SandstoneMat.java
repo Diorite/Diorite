@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -37,7 +37,7 @@ public class SandstoneMat extends StonyMat implements VariantableMat
     public static final SandstoneMat SANDSTONE_CHISELED = new SandstoneMat(0x1, VariantMat.CHISELED);
     public static final SandstoneMat SANDSTONE_SMOOTH   = new SandstoneMat(0x2, VariantMat.SMOOTH);
 
-    private static final Map<String, SandstoneMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, SandstoneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SandstoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final VariantMat variant;

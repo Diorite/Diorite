@@ -10,7 +10,7 @@ import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
 import org.diorite.material.blocks.stony.StonyMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -54,7 +54,7 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
     public static final DispenserMat DISPENSER_WEST_POWERED  = new DispenserMat(BlockFace.WEST, true);
     public static final DispenserMat DISPENSER_EAST_POWERED  = new DispenserMat(BlockFace.EAST, true);
 
-    private static final Map<String, DispenserMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, DispenserMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<DispenserMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace facing;

@@ -1,15 +1,19 @@
 package org.diorite.cfg.system.elements;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
 
-import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.ConfigField;
-import org.diorite.utils.collections.ArrayIterator;
+import org.diorite.cfg.system.elements.primitives.BooleanTemplateElement;
+import org.diorite.cfg.system.elements.primitives.ByteTemplateElement;
+import org.diorite.cfg.system.elements.primitives.CharTemplateElement;
+import org.diorite.cfg.system.elements.primitives.DoubleTemplateElement;
+import org.diorite.cfg.system.elements.primitives.FloatTemplateElement;
+import org.diorite.cfg.system.elements.primitives.IntTemplateElement;
+import org.diorite.cfg.system.elements.primitives.LongTemplateElement;
+import org.diorite.cfg.system.elements.primitives.ShortTemplateElement;
 import org.diorite.utils.pipeline.BasePipeline;
 import org.diorite.utils.pipeline.Pipeline;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
@@ -52,6 +56,11 @@ public final class TemplateElements
     {
     }
 
+    /**
+     * @return editable pipeline with template elements.
+     *
+     * @see TemplateElements
+     */
     public static Pipeline<TemplateElement<?>> getElements()
     {
         return elements;
@@ -149,105 +158,36 @@ public final class TemplateElements
 
     static
     {
-        elements.addLast(Map.class.getName(), new MapTemplateElement());
-        elements.addLast(Iterable.class.getName(), new IterableTemplateElement());
-        elements.addLast(Iterator.class.getName(), new IteratorTemplateElement());
+        elements.addLast(Map.class.getName(), MapTemplateElement.INSTANCE);
+        elements.addLast(Iterable.class.getName(), IterableTemplateElement.INSTANCE);
+        elements.addLast(Iterator.class.getName(), IteratorTemplateElement.INSTANCE);
 
-        elements.addLast(boolean.class.getName(), new SimpleTemplateElement<>(boolean.class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to Boolean: " + obj);
-        }));
-        addPrimitiveArray(boolean[].class, new SimpleArrayTemplateElement<>(boolean[].class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to boolean[]: " + obj);
-        }));
+        elements.addLast(boolean.class.getName(), BooleanTemplateElement.INSTANCE);
+        addPrimitiveArray(boolean[].class, SimpleArrayTemplateElement.INSTANCE_BOOLEANS);
 
-        elements.addLast(char.class.getName(), new SimpleTemplateElement<>(char.class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to Char: " + obj);
-        }));
-        addPrimitiveArray(char[].class, new SimpleArrayTemplateElement<>(char[].class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to char[]: " + obj);
-        }));
+        elements.addLast(char.class.getName(), CharTemplateElement.INSTANCE);
+        addPrimitiveArray(char[].class, SimpleArrayTemplateElement.INSTANCE_CHARS);
 
-        elements.addLast(long.class.getName(), new SimpleTemplateElement<>(long.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).longValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object to Long: " + obj);
-        }, Number.class::isAssignableFrom));
-        addPrimitiveArray(long[].class, new SimpleArrayTemplateElement<>(long[].class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to long[]: " + obj);
-        }));
+        elements.addLast(long.class.getName(), LongTemplateElement.INSTANCE);
+        addPrimitiveArray(long[].class, SimpleArrayTemplateElement.INSTANCE_LONGS);
 
-        elements.addLast(int.class.getName(), new SimpleTemplateElement<>(int.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).intValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object to Int: " + obj);
-        }, Number.class::isAssignableFrom));
-        addPrimitiveArray(int[].class, new SimpleArrayTemplateElement<>(int[].class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to int[]: " + obj);
-        }));
+        elements.addLast(int.class.getName(), IntTemplateElement.INSTANCE);
+        addPrimitiveArray(int[].class, SimpleArrayTemplateElement.INSTANCE_INTS);
 
-        elements.addLast(short.class.getName(), new SimpleTemplateElement<>(short.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).shortValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object to Short: " + obj);
-        }, Number.class::isAssignableFrom));
-        addPrimitiveArray(short[].class, new SimpleArrayTemplateElement<>(short[].class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to short[]: " + obj);
-        }));
+        elements.addLast(short.class.getName(), ShortTemplateElement.INSTANCE);
+        addPrimitiveArray(short[].class, SimpleArrayTemplateElement.INSTANCE_SHORTS);
 
-        elements.addLast(byte.class.getName(), new SimpleTemplateElement<>(byte.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).byteValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object to Byte: " + obj);
-        }, Number.class::isAssignableFrom));
-        addPrimitiveArray(byte[].class, new SimpleArrayTemplateElement<>(byte[].class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to byte[]: " + obj);
-        }));
+        elements.addLast(byte.class.getName(), ByteTemplateElement.INSTANCE);
+        addPrimitiveArray(byte[].class, SimpleArrayTemplateElement.INSTANCE_BYTES);
 
-        elements.addLast(double.class.getName(), new SimpleTemplateElement<>(double.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).doubleValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object to Double: " + obj);
-        }, Number.class::isAssignableFrom));
-        addPrimitiveArray(double[].class, new SimpleArrayTemplateElement<>(double[].class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to double[]: " + obj);
-        }));
+        elements.addLast(double.class.getName(), DoubleTemplateElement.INSTANCE);
+        addPrimitiveArray(double[].class, SimpleArrayTemplateElement.INSTANCE_DOUBLES);
 
-        elements.addLast(float.class.getName(), new SimpleTemplateElement<>(float.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).floatValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object to Float: " + obj);
-        }, Number.class::isAssignableFrom));
-        addPrimitiveArray(float[].class, new SimpleArrayTemplateElement<>(float[].class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to float[]: " + obj);
-        }));
+        elements.addLast(float.class.getName(), FloatTemplateElement.INSTANCE);
+        addPrimitiveArray(float[].class, SimpleArrayTemplateElement.INSTANCE_FLOATS);
 
-        elements.addLast(Object[].class.getName(), new TemplateElement<Object[]>(Object[].class, obj -> {
-            if (obj instanceof Collection)
-            {
-                return ((Collection) obj).toArray();
-            }
-            throw new UnsupportedOperationException("Can't convert object to Object[]: " + obj);
-        }, Collection.class::isAssignableFrom)
-        {
-            @Override
-            protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
-            {
-                IterableTemplateElement.INSTANCE.appendValue(writer, field, source, new ArrayIterator((elementRaw instanceof Object[]) ? ((Object[]) elementRaw) : this.validateType(elementRaw)), level, elementPlace);
-            }
-        });
+        elements.addLast(Object[].class.getName(), ObjectArrayTemplateElement.INSTANCE);
 
-        elements.addLast(String.class.getName(), new StringTemplateElement());
+        elements.addLast(String.class.getName(), StringTemplateElement.INSTANCE);
     }
 }

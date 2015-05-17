@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -33,7 +33,7 @@ public class PrismarineMat extends BlockMaterialData
     public static final PrismarineMat PRISMARINE_BRICKS = new PrismarineMat("BRICKS", 0x1);
     public static final PrismarineMat PRISMARINE_DARK   = new PrismarineMat("DARK", 0x2);
 
-    private static final Map<String, PrismarineMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, PrismarineMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PrismarineMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

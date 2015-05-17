@@ -1,7 +1,9 @@
-package org.diorite.utils.collections;
+package org.diorite.utils.collections.maps;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
+
+import org.diorite.utils.collections.comparators.ByValueComparator;
 
 public class ByValueSortingConcurrentSkipListMap<K extends Comparable<K>, V extends Comparable<V>> extends ConcurrentSkipListMap<K, V>
 {

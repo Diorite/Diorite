@@ -1,6 +1,6 @@
 package org.diorite.inventory.item;
 
-import org.diorite.utils.concurrent.AtomicArray;
+import org.diorite.utils.concurrent.atomic.AtomicArray;
 
 /**
  * Atomic itemstack array.

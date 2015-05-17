@@ -11,7 +11,7 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.PortalMat;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -39,7 +39,7 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
     public static final NetherPortalMat NETHER_PORTAL_EAST_WEST   = new NetherPortalMat();
     public static final NetherPortalMat NETHER_PORTAL_NORTH_SOUTH = new NetherPortalMat("NORTH_SOUTH", RotateAxisMat.NORTH_SOUTH);
 
-    private static final Map<String, NetherPortalMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, NetherPortalMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<NetherPortalMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final RotateAxisMat rotateAxis;

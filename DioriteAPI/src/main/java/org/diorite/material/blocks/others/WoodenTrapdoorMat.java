@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -49,7 +49,7 @@ public class WoodenTrapdoorMat extends TrapdoorMat
     public static final WoodenTrapdoorMat WOODEN_TRAPDOOR_EAST_TOP_OPEN  = new WoodenTrapdoorMat(BlockFace.EAST, true, true);
     public static final WoodenTrapdoorMat WOODEN_TRAPDOOR_NORTH_TOP_OPEN = new WoodenTrapdoorMat(BlockFace.NORTH, true, true);
 
-    private static final Map<String, WoodenTrapdoorMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, WoodenTrapdoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WoodenTrapdoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

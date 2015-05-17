@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.others.MushroomBlockMat.Type;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -41,7 +41,7 @@ public class CakeMat extends BlockMaterialData
     public static final CakeMat CAKE_5 = new CakeMat(0x5);
     public static final CakeMat CAKE_6 = new CakeMat(0x6);
 
-    private static final Map<String, CakeMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, CakeMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<CakeMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final byte piecesEaten;
@@ -98,7 +98,7 @@ public class CakeMat extends BlockMaterialData
     /**
      * For vanilla cake blocks should return values from 0 to 6.
      *
-     * @return amount of eated pieces of cake <3
+     * @return amount of eated pieces of cake {@literal <3}
      */
     public byte getPiecesEaten()
     {

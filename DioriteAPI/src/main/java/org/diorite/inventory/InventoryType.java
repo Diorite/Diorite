@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -38,9 +38,9 @@ public class InventoryType implements SimpleEnum<InventoryType>
     public static final InventoryType DONKEY            = new InventoryType("DONKEY", 21, "EntityHorse", "Donkey", 1, DONKEY_WITH_CHEST, false);
     public static final InventoryType HORSE             = new InventoryType("HORSE", 22, "EntityHorse", "Horse", 2);
 
-    private static final Map<String, InventoryType>   byName = new SimpleStringHashMap<>(16, SMALL_LOAD_FACTOR);
+    private static final Map<String, InventoryType>   byName = new CaseInsensitiveMap<>(16, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<InventoryType> byID   = new TIntObjectHashMap<>(16, SMALL_LOAD_FACTOR);
-    private static final Map<String, InventoryType>   byMcId = new SimpleStringHashMap<>(16, SMALL_LOAD_FACTOR);
+    private static final Map<String, InventoryType>   byMcId = new CaseInsensitiveMap<>(16, SMALL_LOAD_FACTOR);
 
     private final String        enumName;
     private final int           id;

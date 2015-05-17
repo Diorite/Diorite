@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -35,7 +35,7 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
     public static final RedstoneTorchOnMat REDSTONE_TORCH_ON_NORTH = new RedstoneTorchOnMat(BlockFace.NORTH);
     public static final RedstoneTorchOnMat REDSTONE_TORCH_ON_UP    = new RedstoneTorchOnMat(BlockFace.UP);
 
-    private static final Map<String, RedstoneTorchOnMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, RedstoneTorchOnMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneTorchOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

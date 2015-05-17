@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -40,7 +40,7 @@ public class ClickType implements SimpleEnum<ClickType>
     public static final ClickType MOUSE_RIGHT_DRAG_END      = new ClickType("MOUSE_RIGHT_DRAG_END", 23, 5, 6, false);
     public static final ClickType DOUBLE_CLICK              = new ClickType("DOUBLE_CLICK", 24, 6, 0, true);
 
-    private static final Map<String, ClickType>   byName = new SimpleStringHashMap<>(25, SMALL_LOAD_FACTOR);
+    private static final Map<String, ClickType>   byName = new CaseInsensitiveMap<>(25, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<ClickType> byID   = new TIntObjectHashMap<>(25, SMALL_LOAD_FACTOR);
 
     private final String  enumName;

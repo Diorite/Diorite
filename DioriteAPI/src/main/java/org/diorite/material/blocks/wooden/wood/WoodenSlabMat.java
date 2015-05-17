@@ -5,7 +5,7 @@ import java.util.Map;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -44,7 +44,7 @@ public class WoodenSlabMat extends WoodSlabMat
     public static final WoodenSlabMat WOODEN_SLAB_DARK_OAK_UPPER = new WoodenSlabMat(WoodTypeMat.DARK_OAK, SlabTypeMat.UPPER);
     public static final WoodenSlabMat WOODEN_SLAB_ACACIA_UPPER   = new WoodenSlabMat(WoodTypeMat.ACACIA, SlabTypeMat.UPPER);
 
-    private static final Map<String, WoodenSlabMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, WoodenSlabMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WoodenSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

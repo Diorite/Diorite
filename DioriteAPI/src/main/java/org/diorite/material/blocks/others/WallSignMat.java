@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.AttachableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -38,7 +38,7 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
     public static final WallSignMat WALL_SIGN_WEST  = new WallSignMat(BlockFace.WEST);
     public static final WallSignMat WALL_SIGN_EAST  = new WallSignMat(BlockFace.EAST);
 
-    private static final Map<String, WallSignMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, WallSignMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WallSignMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;

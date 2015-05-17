@@ -3,7 +3,7 @@ package org.diorite.material.blocks.stony.ore;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -30,7 +30,7 @@ public class RedstoneOreGlowingMat extends OreMat
 
     public static final RedstoneOreGlowingMat REDSTONE_ORE_GLOWING = new RedstoneOreGlowingMat();
 
-    private static final Map<String, RedstoneOreGlowingMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, RedstoneOreGlowingMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneOreGlowingMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

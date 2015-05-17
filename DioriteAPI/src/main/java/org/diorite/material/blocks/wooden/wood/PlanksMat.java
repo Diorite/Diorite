@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -36,7 +36,7 @@ public class PlanksMat extends WoodMat
     public static final PlanksMat PLANKS_ACACIA   = new PlanksMat(WoodTypeMat.ACACIA);
     public static final PlanksMat PLANKS_DARK_OAK = new PlanksMat(WoodTypeMat.DARK_OAK);
 
-    private static final Map<String, PlanksMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, PlanksMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PlanksMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected PlanksMat()

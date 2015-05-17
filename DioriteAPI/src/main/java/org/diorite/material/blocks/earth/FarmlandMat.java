@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -40,7 +40,7 @@ public class FarmlandMat extends EarthMat
     public static final FarmlandMat FARMLAND_MOISTURE_6 = new FarmlandMat("MOISTURE_6", 6);
     public static final FarmlandMat FARMLAND_HYDRATED   = new FarmlandMat("HYDRATED", 7);
 
-    private static final Map<String, FarmlandMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, FarmlandMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<FarmlandMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     private final int moisture;
@@ -95,7 +95,7 @@ public class FarmlandMat extends EarthMat
     }
 
     /**
-     * @return moisture level, 7 -> full hydrated
+     * @return moisture level, 7 {@literal ->} full hydrated
      */
     public int getMoistured()
     {
@@ -103,7 +103,7 @@ public class FarmlandMat extends EarthMat
     }
 
     /**
-     * @param hydrated moisture level.
+     * @param moisture moisture level.
      *
      * @return selected sub-type of Farmland
      */
@@ -142,7 +142,7 @@ public class FarmlandMat extends EarthMat
      * Returns one of Farmland sub-types based on moisture.
      * It will never return null. (unhydrated version by default)
      *
-     * @param hydrated if sub-type should be hydrated sub-type.
+     * @param moisture if sub-type should be hydrated sub-type.
      *
      * @return selected sub-type of Farmland
      */

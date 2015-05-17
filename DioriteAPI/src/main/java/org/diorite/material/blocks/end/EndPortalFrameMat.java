@@ -9,7 +9,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -47,7 +47,7 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
     public static final EndPortalFrameMat END_PORTAL_FRAME_NORTH_EYE = new EndPortalFrameMat(BlockFace.NORTH, true);
     public static final EndPortalFrameMat END_PORTAL_FRAME_EAST_EYE  = new EndPortalFrameMat(BlockFace.EAST, true);
 
-    private static final Map<String, EndPortalFrameMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, EndPortalFrameMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<EndPortalFrameMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     private final BlockFace face;

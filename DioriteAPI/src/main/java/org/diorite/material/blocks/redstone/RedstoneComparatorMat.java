@@ -10,7 +10,7 @@ import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -65,7 +65,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
     public static final RedstoneComparatorMat REDSTONE_COMPARATOR_SOUTH_SUBTRACT_POWERED = new RedstoneComparatorMat(BlockFace.SOUTH, true, true);
     public static final RedstoneComparatorMat REDSTONE_COMPARATOR_WEST_SUBTRACT_POWERED  = new RedstoneComparatorMat(BlockFace.WEST, true, true);
 
-    private static final Map<String, RedstoneComparatorMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, RedstoneComparatorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneComparatorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;

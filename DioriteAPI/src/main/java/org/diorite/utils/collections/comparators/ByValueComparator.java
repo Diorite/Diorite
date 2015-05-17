@@ -1,4 +1,4 @@
-package org.diorite.utils.collections;
+package org.diorite.utils.collections.comparators;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -29,7 +29,7 @@ public class ByValueComparator<U extends Comparable<U>, T extends Comparable<T>>
         this.ascend = ascend;
     }
 
-    protected Map<U, T> getMap()
+    public Map<U, T> getMap()
     {
         return this.map;
     }

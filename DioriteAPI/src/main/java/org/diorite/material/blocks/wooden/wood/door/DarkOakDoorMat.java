@@ -9,7 +9,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -47,7 +47,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
     public static final DarkOakDoorMat DARK_OAK_DOOR_TOP_LEFT_POWERED  = new DarkOakDoorMat(true, false);
     public static final DarkOakDoorMat DARK_OAK_DOOR_TOP_RIGHT_POWERED = new DarkOakDoorMat(true, true);
 
-    private static final Map<String, DarkOakDoorMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, DarkOakDoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<DarkOakDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean   powered;

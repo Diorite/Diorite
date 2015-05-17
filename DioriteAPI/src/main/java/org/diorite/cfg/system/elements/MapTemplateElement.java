@@ -9,19 +9,39 @@ import org.diorite.cfg.annotations.CfgCollectionStyle.CollectionStyle;
 import org.diorite.cfg.annotations.CfgCollectionType.CollectionType;
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.FieldOptions;
-import org.diorite.utils.collections.ReflectArrayIterator;
+import org.diorite.utils.collections.arrays.ReflectArrayIterator;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 
+/**
+ * Template handler for all iterable-based objects.
+ * @see Map
+ */
 @SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
 public class MapTemplateElement extends TemplateElement<Map>
 {
+    /**
+     * Instance of template to direct-use.
+     */
     public static final MapTemplateElement INSTANCE = new MapTemplateElement();
 
+    /**
+     * Construct new map template handler.
+     */
     public MapTemplateElement()
     {
         super(Map.class, obj -> {
             throw new UnsupportedOperationException("Can't convert object to Map: " + obj);
-        });
+        }, c -> false);
+    }
+
+    @Override
+    protected Map convertDefault(final Object def)
+    {
+        if (def instanceof Map)
+        {
+            return (Map) def;
+        }
+        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
     }
 
     @Override
@@ -92,7 +112,7 @@ public class MapTemplateElement extends TemplateElement<Map>
             {
                 key = "";
             }
-            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == -1)))
+            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == - 1)))
             {
                 TemplateElements.getElement(String.class).writeValue(writer, field, entry, key, - 1, false, ElementPlace.SIMPLE_LIST_OR_MAP);
                 writer.append(": ");
@@ -151,7 +171,7 @@ public class MapTemplateElement extends TemplateElement<Map>
             {
                 key = "";
             }
-            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == -1)))
+            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == - 1)))
             {
                 spaces(writer, level + 1);
                 TemplateElements.getElement(key.getClass()).appendValue(writer, field, entry, key, level + 1, ElementPlace.NORMAL);
@@ -202,7 +222,7 @@ public class MapTemplateElement extends TemplateElement<Map>
             {
                 key = "";
             }
-            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == -1)))
+            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == - 1)))
             {
                 TemplateElements.getElement(String.class).writeValue(writer, field, entry, key, - 1, false, ElementPlace.SIMPLE_LIST_OR_MAP);
                 writer.append(": ");

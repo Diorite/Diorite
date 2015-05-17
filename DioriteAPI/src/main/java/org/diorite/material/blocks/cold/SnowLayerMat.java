@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -38,7 +38,7 @@ public class SnowLayerMat extends BlockMaterialData
     public static final SnowLayerMat SNOW_LAYER_7 = new SnowLayerMat(0x06);
     public static final SnowLayerMat SNOW_LAYER_8 = new SnowLayerMat(0x07);
 
-    private static final Map<String, SnowLayerMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, SnowLayerMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SnowLayerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
@@ -97,7 +97,7 @@ public class SnowLayerMat extends BlockMaterialData
      * Returns one of SnowLayer sub-type based on how many layers it should have.
      * From 1 to 8.
      *
-     * @param id sub-type id
+     * @param layers layers of snow.
      *
      * @return sub-type of SnowLayer or null
      */

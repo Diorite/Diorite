@@ -10,7 +10,7 @@ import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.ColorableMat;
 import org.diorite.material.blocks.FenceMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -52,7 +52,7 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_RED        = new StainedGlassPaneMat(DyeColor.RED);
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_BLACK      = new StainedGlassPaneMat(DyeColor.BLACK);
 
-    private static final Map<String, StainedGlassPaneMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, StainedGlassPaneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StainedGlassPaneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;

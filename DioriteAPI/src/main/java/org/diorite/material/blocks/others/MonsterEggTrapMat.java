@@ -11,7 +11,7 @@ import org.diorite.material.blocks.stony.CobblestoneMat;
 import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.material.blocks.stony.StoneBrickMat;
 import org.diorite.material.blocks.stony.StonyMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -43,7 +43,7 @@ public class MonsterEggTrapMat extends StonyMat
     public static final MonsterEggTrapMat MONSTER_EGG_TRAP_STONE_BRICK_CRACKED  = new MonsterEggTrapMat("STONE_BRICK_CRACKED", 0x4, StoneBrickMat.STONE_BRICK_CRACKED);
     public static final MonsterEggTrapMat MONSTER_EGG_TRAP_STONE_BRICK_CHISELED = new MonsterEggTrapMat("STONE_BRICK_CHISELED", 0x5, StoneBrickMat.STONE_BRICK_CHISELED);
 
-    private static final Map<String, MonsterEggTrapMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, MonsterEggTrapMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<MonsterEggTrapMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockMaterialData block;

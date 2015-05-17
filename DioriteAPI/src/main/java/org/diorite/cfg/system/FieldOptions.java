@@ -18,22 +18,43 @@ import org.diorite.cfg.annotations.CfgStringArrayMultilineThreshold;
 import org.diorite.cfg.annotations.CfgStringStyle;
 import org.diorite.cfg.annotations.CfgStringStyle.StringStyle;
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
+/**
+ * Simple enum with field annotation-based options.
+ */
 @SuppressWarnings("MagicNumber")
 public class FieldOptions implements SimpleEnum<FieldOptions>
 {
+    /**
+     * @see CfgStringStyle
+     */
     public static final FieldOptions STRING_STYLE                     = new FieldOptions("STRING_STYLE", 0, CfgStringStyle.class, (f, a) -> (a != null) ? a.value() : StringStyle.DEFAULT);
+    /**
+     * @see CfgStringArrayMultilineThreshold
+     */
     public static final FieldOptions STRING_ARRAY_MULTILINE_THRESHOLD = new FieldOptions("STRING_ARRAY_MULTILINE_THRESHOLD", 2, CfgStringArrayMultilineThreshold.class, (f, a) -> (a != null) ? a.value() : 25);
+    /**
+     * @see CfgCollectionStyle
+     */
     public static final FieldOptions COLLECTION_STYLE                 = new FieldOptions("COLLECTION_STYLE", 3, CfgCollectionStyle.class, (f, a) -> (a != null) ? a.value() : CollectionStyle.DEFAULT);
+    /**
+     * @see CfgCollectionType
+     */
     public static final FieldOptions COLLECTION_TYPE                  = new FieldOptions("COLLECTION_TYPE", 4, CfgCollectionType.class, (f, a) -> (a != null) ? a.value() : CollectionType.UNKNOWN);
+    /**
+     * @see CfgCommentOptions
+     */
     public static final FieldOptions OTHERS_COMMENT_EVERY_ELEMENT     = new FieldOptions("OTHERS_COMMENT_EVERY_ELEMENT", 5, CfgCommentOptions.class, (f, a) -> (a != null) && a.commentEveryElement());
+    /**
+     * @see CfgFooterNoNewLine
+     */
     public static final FieldOptions OTHERS_FOOTER_NO_NEW_LINE        = new FieldOptions("OTHERS_FOOTER_NO_NEW_LINE", 6, CfgFooterNoNewLine.class, (f, a) -> (a != null) && a.value());
 
-    private static final Map<String, FieldOptions>   byName = new SimpleStringHashMap<>(6, SMALL_LOAD_FACTOR);
+    private static final Map<String, FieldOptions>   byName = new CaseInsensitiveMap<>(6, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<FieldOptions> byID   = new TIntObjectHashMap<>(6, SMALL_LOAD_FACTOR);
 
     private final String                                      enumName;
@@ -41,7 +62,16 @@ public class FieldOptions implements SimpleEnum<FieldOptions>
     private final Class<? extends Annotation>                 clazz;
     private final BiFunction<ConfigField, Annotation, Object> func;
 
-    <T extends Annotation> FieldOptions(final String enumName, final int id, final Class<T> annotationClass, final BiFunction<ConfigField, T, Object> func)
+    /**
+     * Construct new field option with given name/id, annotation class and function.
+     *
+     * @param enumName        name of option.
+     * @param id              id of option, must be unique.
+     * @param annotationClass used annotation class.
+     * @param func            function to get value of option.
+     * @param <T>             type of annotation.
+     */
+    public <T extends Annotation> FieldOptions(final String enumName, final int id, final Class<T> annotationClass, final BiFunction<ConfigField, T, Object> func)
     {
         this.enumName = enumName;
         this.id = id;
@@ -50,16 +80,41 @@ public class FieldOptions implements SimpleEnum<FieldOptions>
         this.func = (BiFunction<ConfigField, Annotation, Object>) func;
     }
 
+    /**
+     * Get value of field option for given field.
+     *
+     * @param f   config field instance.
+     * @param a   annotation to check.
+     * @param <T> type of annotation.
+     *
+     * @return value of option.
+     */
     public <T extends Annotation> Object get(final ConfigField f, final T a)
     {
         return this.func.apply(f, a);
     }
 
+    /**
+     * Get value of field option for given field.
+     *
+     * @param f       config field instance.
+     * @param element element with annotation to check.
+     * @param <T>     type of annotation.
+     *
+     * @return value of option.
+     */
     public <T extends Annotation> Object get(final ConfigField f, final AnnotatedElement element)
     {
         return this.func.apply(f, element.getAnnotation(this.clazz));
     }
 
+    /**
+     * Check fi given {@link AnnotatedElement} contains annotation used by this option.
+     *
+     * @param element element to checl
+     *
+     * @return true if it contains needed annotation.
+     */
     public boolean contains(final AnnotatedElement element)
     {
         return element.isAnnotationPresent(this.clazz);
@@ -113,6 +168,11 @@ public class FieldOptions implements SimpleEnum<FieldOptions>
         return byName.get(name);
     }
 
+    /**
+     * Register new option.
+     *
+     * @param element option to register.
+     */
     public static void register(final FieldOptions element)
     {
         byID.put(element.getId(), element);

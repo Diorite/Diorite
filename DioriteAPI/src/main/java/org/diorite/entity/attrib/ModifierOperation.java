@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -22,7 +22,7 @@ public class ModifierOperation implements SimpleEnum<ModifierOperation>
     public static final ModifierOperation MULTIPLY_PERCENTAGE = new ModifierOperation("MULTIPLY_PERCENTAGE", 1, (value, d) -> value.addY(value.getX() * d));
     public static final ModifierOperation ADD_PERCENTAGE      = new ModifierOperation("ADD_PERCENTAGE", 2, (value, d) -> value.multipleY(1 + d));
 
-    private static final Map<String, ModifierOperation>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final Map<String, ModifierOperation>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<ModifierOperation> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
 
     private final String enumName;

@@ -3,7 +3,7 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -46,7 +46,7 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_14  = new DaylightDetectorMat(14);
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_15  = new DaylightDetectorMat(15);
 
-    private static final Map<String, DaylightDetectorMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, DaylightDetectorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<DaylightDetectorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

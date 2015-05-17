@@ -16,14 +16,38 @@ import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.ReflectElement;
 
+/**
+ * Object representation of class yaml template, used to generate
+ * string with yaml, from given object.
+ *
+ * @param <T> type of object.
+ */
 public class Template<T>
 {
+    /**
+     * name of template/object.
+     */
     private final String                              name;
+    /**
+     * type of object/template.
+     */
     private final Class<T>                            clazz;
+    /**
+     * header comment, may be ny
+     */
     private final String                              header;
     private final String                              footer;
     private final Map<ConfigField, ReflectElement<?>> fields;
 
+    /**
+     * Construct new template for given class and fields.
+     *
+     * @param name   name of template/object, should be class name.
+     * @param clazz  type of object/template.
+     * @param header header comment, may be null.
+     * @param footer footer comment, may be null.
+     * @param fields collection of fields data.
+     */
     public Template(final String name, final Class<T> clazz, final String header, final String footer, final Collection<ConfigField> fields)
     {
         Validate.notNull(clazz, "Class can't be null!");
@@ -38,6 +62,15 @@ public class Template<T>
         }
     }
 
+    /**
+     * Construct new template for given class and fields.
+     *
+     * @param name   name of template/object, should be class name.
+     * @param clazz  type of object/template.
+     * @param header header comment, may be null.
+     * @param footer footer comment, may be null.
+     * @param fields map of fields data and {@link ReflectElement} for that fields.
+     */
     public Template(final String name, final Class<T> clazz, final String header, final String footer, final Map<ConfigField, ReflectElement<?>> fields)
     {
         Validate.notNull(clazz, "Class can't be null!");
@@ -48,68 +81,140 @@ public class Template<T>
         this.fields = new LinkedHashMap<>(fields);
     }
 
+    /**
+     * @return name of template.
+     */
     public String getName()
     {
         return this.name;
     }
 
+    /**
+     * @return type of template.
+     */
     public Class<T> getClazz()
     {
         return this.clazz;
     }
 
+    /**
+     * @return header comment, may be null.
+     */
     public String getHeader()
     {
         return this.header;
     }
 
+    /**
+     * @return footer comment, may be null.
+     */
     public String getFooter()
     {
         return this.footer;
     }
 
+    /**
+     * @return copy of map contains all fields data.
+     */
     public Map<ConfigField, ReflectElement<?>> getFields()
     {
-        return this.fields;
+        return new LinkedHashMap<>(this.fields);
     }
 
-    public <E extends Appendable> E dump(final E writter, final T object, final int level, final boolean writeComments, final ElementPlace elementPlace) throws IOException
+    /**
+     * dump object to selected {@link Appendable}.
+     *
+     * @param writer        {@link Appendable} to use, all data will be added here.
+     * @param object        object to dump. (will be represented as YAML string in writer)
+     * @param level         current indent level.
+     * @param writeComments if comments should be added to node.
+     * @param elementPlace  element place, used in many templates to check current style and choose valid format.
+     * @param <E>           exact type of appendable, used to return this same type as given.
+     *
+     * @return this same appendalbe as given, after adding string yaml representation of given object.
+     *
+     * @throws IOException from {@link Appendable}
+     */
+    public <E extends Appendable> E dump(final E writer, final T object, final int level, final boolean writeComments, final ElementPlace elementPlace) throws IOException
     {
         if (writeComments)
         {
-            appendComment(writter, this.header, level, false);
-            writter.append("\n");
+            appendComment(writer, this.header, level, false);
+            writer.append("\n");
         }
 
         for (final Entry<ConfigField, ReflectElement<?>> entry : this.fields.entrySet())
         {
             final ConfigField field = entry.getKey();
-            TemplateElements.getElement(field).write(writter, field, object, entry.getValue(), level, true, elementPlace);
+            TemplateElements.getElement(field).write(writer, field, object, entry.getValue(), level, true, elementPlace);
         }
 
         if (writeComments)
         {
-            writter.append("\n\n");
-            appendComment(writter, this.footer, level, false);
+            writer.append("\n\n");
+            appendComment(writer, this.footer, level, false);
         }
-        return writter;
+        return writer;
     }
 
-    public <E extends Appendable> E dump(final E writter, final T object, final int level, final boolean writeComments) throws IOException
+    /**
+     * dump object to selected {@link Appendable}.
+     *
+     * @param writer        {@link Appendable} to use, all data will be added here.
+     * @param object        object to dump. (will be represented as YAML string in writer)
+     * @param level         current indent level.
+     * @param writeComments if comments should be added to node.
+     * @param <E>           exact type of appendable, used to return this same type as given.
+     *
+     * @return this same appendalbe as given, after adding string yaml representation of given object.
+     *
+     * @throws IOException from {@link Appendable}\
+     */
+    public <E extends Appendable> E dump(final E writer, final T object, final int level, final boolean writeComments) throws IOException
     {
-        return this.dump(writter, object, level, writeComments, ElementPlace.NORMAL);
+        return this.dump(writer, object, level, writeComments, ElementPlace.NORMAL);
     }
 
-    public <E extends Appendable> E dump(final E writter, final T object, final int level) throws IOException
+    /**
+     * dump object to selected {@link Appendable}.
+     *
+     * @param writer {@link Appendable} to use, all data will be added here.
+     * @param object object to dump. (will be represented as YAML string in writer)
+     * @param level  current indent level.
+     * @param <E>    exact type of appendable, used to return this same type as given.
+     *
+     * @return this same appendalbe as given, after adding string yaml representation of given object.
+     *
+     * @throws IOException from {@link Appendable}\
+     */
+    public <E extends Appendable> E dump(final E writer, final T object, final int level) throws IOException
     {
-        return this.dump(writter, object, level, true, ElementPlace.NORMAL);
+        return this.dump(writer, object, level, true, ElementPlace.NORMAL);
     }
 
-    public <E extends Appendable> E dump(final E writter, final T object) throws IOException
+    /**
+     * dump object to selected {@link Appendable}.
+     *
+     * @param writer {@link Appendable} to use, all data will be added here.
+     * @param object object to dump. (will be represented as YAML string in writer)
+     * @param <E>    exact type of appendable, used to return this same type as given.
+     *
+     * @return this same appendalbe as given, after adding string yaml representation of given object.
+     *
+     * @throws IOException from {@link Appendable}\
+     */
+    public <E extends Appendable> E dump(final E writer, final T object) throws IOException
     {
-        return this.dump(writter, object, 0, true, ElementPlace.NORMAL);
+        return this.dump(writer, object, 0, true, ElementPlace.NORMAL);
     }
 
+    /**
+     * dump object to YAML string.
+     *
+     * @param object object to dump. (will be represented as YAML string in writer)
+     *
+     * @return string yaml representation of given object.\
+     */
     public String dumpAsString(final T object)
     {
         final StringBuilder builder = new StringBuilder(this.fields.size() << 7);
@@ -123,6 +228,14 @@ public class Template<T>
         return builder.toString();
     }
 
+    /**
+     * Append indent (2 spaces per level)
+     *
+     * @param writer {@link Appendable} to use, all data will be added here.
+     * @param level  current indent level.
+     *
+     * @throws IOException from {@link Appendable}
+     */
     protected static void spaces(final Appendable writer, final int level) throws IOException
     {
         if (level <= 0)
@@ -135,22 +248,34 @@ public class Template<T>
         }
     }
 
+    /**
+     * Append comment to given {@link Appendable}
+     *
+     * @param writer   {@link Appendable} to use, all data will be added here.
+     * @param string   comment string to add, may be multi-line.
+     * @param level    current indent level.
+     * @param addSpace if true, additional space will be added before first # and no indent for first line.
+     *
+     * @throws IOException from {@link Appendable}
+     */
     public static void appendComment(final Appendable writer, final String string, final int level, final boolean addSpace) throws IOException
     {
         if (string != null)
         {
             final String[] split = StringUtils.split(string, '\n');
+            boolean first = true;
             for (int i = 0, splitLength = split.length; i < splitLength; i++)
             {
                 final String str = split[i];
-                if (addSpace)
-                {
-                    writer.append(" # ");
-                }
-                else
+                if (! first || ! addSpace)
                 {
                     spaces(writer, level);
                     writer.append("# ");
+                }
+                else
+                {
+                    first = false;
+                    writer.append(" # ");
                 }
                 writer.append(str);
                 if ((i + 1) < splitLength)
@@ -161,6 +286,7 @@ public class Template<T>
         }
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public boolean equals(final Object o)
     {

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -35,7 +35,7 @@ public class PumpkinLanternMat extends AbstractPumpkinMat
     public static final PumpkinLanternMat PUMPKIN_LANTERN_EAST  = new PumpkinLanternMat(BlockFace.EAST);
     public static final PumpkinLanternMat PUMPKIN_LANTERN_SELF  = new PumpkinLanternMat(BlockFace.SELF);
 
-    private static final Map<String, PumpkinLanternMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, PumpkinLanternMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PumpkinLanternMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

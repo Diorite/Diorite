@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -60,7 +60,7 @@ public class LeavesMat extends WoodMat
     public static final LeavesMat LEAVES_ACACIA_NO_DECAY_AND_CHECK   = new Leaves2("ACACIA_NO_DECAY_AND_CHECK", WoodTypeMat.ACACIA, true, false);
     public static final LeavesMat LEAVES_DARK_OAK_NO_DECAY_AND_CHECK = new Leaves2("DARK_OAK_NO_DECAY_AND_CHECK", WoodTypeMat.DARK_OAK, true, false);
 
-    private static final Map<String, LeavesMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, LeavesMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<LeavesMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean checkDecay;

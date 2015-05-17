@@ -1,4 +1,4 @@
-package org.diorite.utils.concurrent;
+package org.diorite.utils.concurrent.atomic;
 
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;

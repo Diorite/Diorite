@@ -74,9 +74,9 @@ public abstract class TrapdoorMat extends BlockMaterialData implements OpenableM
      * Returns one of IronTrapdoor sub-type based on facing direction, open state and on top state.
      * It will never return null.
      *
-     * @param blockFace facing direction of trapdoor.
-     * @param open      if trapdoor should be open.
-     * @param onTop     if trapdoor should be on top of the block.
+     * @param face  facing direction of trapdoor.
+     * @param open  if trapdoor should be open.
+     * @param onTop if trapdoor should be on top of the block.
      *
      * @return sub-type of IronTrapdoor
      */

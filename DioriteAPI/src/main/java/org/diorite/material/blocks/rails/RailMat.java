@@ -3,7 +3,7 @@ package org.diorite.material.blocks.rails;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -39,7 +39,7 @@ public class RailMat extends RailsMat
     public static final RailMat RAIL_CURVED_NORTH_WEST = new RailMat(RailTypeMat.CURVED_NORTH_WEST);
     public static final RailMat RAIL_CURVED_NORTH_EAST = new RailMat(RailTypeMat.CURVED_NORTH_EAST);
 
-    private static final Map<String, RailMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, RailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

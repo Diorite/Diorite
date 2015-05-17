@@ -13,7 +13,7 @@ public class ShortRange
      */
     public static final ShortRange EMPTY = new ShortRange(0, 0);
     /**
-     * Range from {@link Short.MIN_VALUE} to {@link Short.MAX_VALUE}
+     * Range from {@link Short#MIN_VALUE} to {@link Short#MAX_VALUE}
      */
     public static final ShortRange FULL  = new ShortRange(Short.MIN_VALUE, Short.MAX_VALUE);
 
@@ -187,11 +187,12 @@ public class ShortRange
 
     /**
      * Return given number if it is in range, or closest value in range.
-     * {@code i > max -> max}
-     * {@code i < min -> min}
+     * {@code i > max -> def}
+     * {@code i < min -> def}
      * {@code else -> i}
      *
      * @param i number to validate.
+     * @param def default value.
      *
      * @return closest number in range.
      */

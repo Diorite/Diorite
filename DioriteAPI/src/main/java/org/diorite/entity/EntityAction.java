@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -22,7 +22,7 @@ public class EntityAction implements SimpleEnum<EntityAction>
     public static final EntityAction JUMP_WITH_HORSE = new EntityAction("JUMP_WITH_HORSE", 5, null);
     public static final EntityAction OPEN_INVENTORY  = new EntityAction("OPEN_INVENTORY", 6, null);
 
-    private static final Map<String, EntityAction>   byName = new SimpleStringHashMap<>(6, SMALL_LOAD_FACTOR);
+    private static final Map<String, EntityAction>   byName = new CaseInsensitiveMap<>(6, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<EntityAction> byID   = new TIntObjectHashMap<>(6, SMALL_LOAD_FACTOR);
 
     private final String                       enumName;

@@ -7,7 +7,7 @@ import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -45,7 +45,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
     public static final AnvilMat ANVIL_WEST_EAST_VERY_DAMAGED       = new AnvilMat(AnvilBlockDamage.VERY_DAMAGED, RotateAxisMat.EAST_WEST, true);
     public static final AnvilMat ANVIL_SOUTH_NORTH_VERY_DAMAGED     = new AnvilMat(AnvilBlockDamage.VERY_DAMAGED, RotateAxisMat.NORTH_SOUTH, true);
 
-    private static final Map<String, AnvilMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, AnvilMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<AnvilMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final AnvilBlockDamage damage;
@@ -167,7 +167,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
     /**
      * Returns one of Anvil sub-type based on rotated state.
      *
-     * @param rotated if anvil should be rotated, so NORTH_SOUTH -> SOUTH_NORTH
+     * @param rotated if anvil should be rotated, so NORTH_SOUTH {@literal ->} SOUTH_NORTH
      *
      * @return sub-type of Anvil
      */
@@ -231,7 +231,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
      *
      * @param damage  damage stage of Anvil.
      * @param axis    axis of placment.
-     * @param rotated if anvil should be rotated, so NORTH_SOUTH -> SOUTH_NORTH
+     * @param rotated if anvil should be rotated, so NORTH_SOUTH {@literal ->} SOUTH_NORTH
      *
      * @return sub-type of Anvil
      */
@@ -271,7 +271,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
      *
      * @param damage  damage stage of Anvil.
      * @param axis    axis of placment.
-     * @param rotated if anvil should be rotated, so NORTH_SOUTH -> SOUTH_NORTH
+     * @param rotated if anvil should be rotated, so NORTH_SOUTH {@literal ->} SOUTH_NORTH
      *
      * @return sub-type of Anvil
      */

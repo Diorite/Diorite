@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.SlabTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -49,7 +49,7 @@ public class StoneSlabMat extends StonySlabMat
     public static final StoneSlabMat STONE_SLAB_QUARTZ_UPPER        = new StoneSlabMat("QUARTZ_UPPER", SlabTypeMat.UPPER, StoneSlabTypeMat.QUARTZ);
     public static final StoneSlabMat STONE_SLAB_RED_SANDSTONE_UPPER = new StoneSlab2("RED_SANDSTONE_UPPER", SlabTypeMat.UPPER, StoneSlabTypeMat.RED_SANDSTONE);
 
-    private static final Map<String, StoneSlabMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, StoneSlabMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StoneSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

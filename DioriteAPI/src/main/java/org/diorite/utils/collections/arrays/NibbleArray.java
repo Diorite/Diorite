@@ -1,4 +1,4 @@
-package org.diorite.utils.collections;
+package org.diorite.utils.collections.arrays;
 
 import java.util.Arrays;
 

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -56,7 +56,7 @@ public class BrewingStandBlockMat extends BlockMaterialData
     public static final BrewingStandBlockMat BREWING_STAND_BLOCK_E_F_F = new BrewingStandBlockMat("E_F_F", false, true, true);
     public static final BrewingStandBlockMat BREWING_STAND_BLOCK_FULL  = new BrewingStandBlockMat("FULL", true, true, true);
 
-    private static final Map<String, BrewingStandBlockMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, BrewingStandBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BrewingStandBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean[] hasBottle;
@@ -97,7 +97,7 @@ public class BrewingStandBlockMat extends BlockMaterialData
      *
      * @return true if selected slot have item in it.
      *
-     * @throws ArrayIndexOutOfBoundsException if slot is > 2 or < 0
+     * @throws ArrayIndexOutOfBoundsException if slot is {@literal >} 2 or {@literal <} 0
      */
     public boolean isSlotFull(final int slot) throws ArrayIndexOutOfBoundsException
     {

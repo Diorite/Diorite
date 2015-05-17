@@ -3,7 +3,7 @@ package org.diorite.material.blocks.others;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -42,7 +42,7 @@ public class BrownMushroomBlockMat extends MushroomBlockMat
     public static final BrownMushroomBlockMat BROWN_MUSHROOM_BLOCK_CAP_FULL       = new BrownMushroomBlockMat(Type.CAP_FULL);
     public static final BrownMushroomBlockMat BROWN_MUSHROOM_BLOCK_STEAM_FULL     = new BrownMushroomBlockMat(Type.STEAM_FULL);
 
-    private static final Map<String, BrownMushroomBlockMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, BrownMushroomBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BrownMushroomBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

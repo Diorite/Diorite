@@ -216,7 +216,7 @@ public class Arguments implements Iterable<String>
      * If argument starts from <B>~</B> then returned coordinates are relative to given origin.
      *
      * @param startIndex index of first coordinate, 0 is first element.
-     * @param origin     used to get relative coordinates, if null {@link BlockLocation.ZERO} is used.
+     * @param origin     used to get relative coordinates, if null {@link BlockLocation#ZERO} is used.
      *
      * @return x, y, z block coordinates as {@link BlockLocation}
      *
@@ -257,7 +257,7 @@ public class Arguments implements Iterable<String>
      *
      * @param startIndex   index of first coordinate, 0 is first element.
      * @param withRotation if yaw and pitch should be also read.
-     * @param origin       used to get relative coordinates, if null {@link ImmutableLocation.ZERO} is used.
+     * @param origin       used to get relative coordinates, if null {@link ImmutableLocation#ZERO} is used.
      *
      * @return x, y, z, yaw, pitch as {@link ImmutableLocation}
      *
@@ -284,10 +284,10 @@ public class Arguments implements Iterable<String>
     /**
      * Read single coordinate (x, y or z).
      * If argument starts from <B>~</B> then returned coordinate is relative to given origin.
-     * 4   -> 4
-     * ~   -> origin
-     * ~3  -> origin + 3
-     * ~-3 -> origin - 3
+     * {@literal 4   -> 4}
+     * {@literal ~   -> origin}
+     * {@literal ~3  -> origin + 3}
+     * {@literal ~-3 -> origin - 3}
      *
      * @param index  index of element, 0 is first element.
      * @param origin used to get relative coordinates.
@@ -325,10 +325,10 @@ public class Arguments implements Iterable<String>
     /**
      * Read single rotation (yaw or pitch).
      * If argument starts from <B>~</B> then returned rotation is relative to given origin.
-     * 0.4   -> 0.4
-     * ~     -> origin
-     * ~0.3  -> origin + 0.3
-     * ~-0.3 -> origin - 0.3
+     * {@literal 0.4   -> 0.4}
+     * {@literal ~     -> origin}
+     * {@literal ~0.3  -> origin + 0.3}
+     * {@literal ~-0.3 -> origin - 0.3}
      *
      * @param index  index of element, 0 is first element.
      * @param origin used to get relative rotation.
@@ -366,10 +366,10 @@ public class Arguments implements Iterable<String>
     /**
      * Read single coordinate (x, y or z).
      * If argument starts from <B>~</B> then returned coordinate is relative to given origin.
-     * 4   -> 4
-     * ~   -> origin
-     * ~3  -> origin + 3
-     * ~-3 -> origin - 3
+     * {@literal 4   -> 4}
+     * {@literal ~   -> origin}
+     * {@literal ~3  -> origin + 3}
+     * {@literal ~-3 -> origin - 3}
      *
      * @param index  index of element, 0 is first element.
      * @param origin used to get relative coordinates.
@@ -572,6 +572,12 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to int, if string can't be parsed to int, then it will return null.
+     *
+     * @param str string to parse
+     *
+     * @return parsed value or null.
+     *
      * @see DioriteMathUtils#asInt(String)
      */
     public static Integer asInt(final String str)
@@ -580,6 +586,12 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to long, if string can't be parsed to long, then it will return null.
+     *
+     * @param str string to parse
+     *
+     * @return parsed value or null.
+     *
      * @see DioriteMathUtils#asLong(String)
      */
     public static Long asLong(final String str)
@@ -588,6 +600,12 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to double, if string can't be parsed to double, then it will return null.
+     *
+     * @param str string to parse
+     *
+     * @return parsed value or null.
+     *
      * @see DioriteMathUtils#asDouble(String)
      */
     public static Double asDouble(final String str)
@@ -596,6 +614,12 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to float, if string can't be parsed to float, then it will return null.
+     *
+     * @param str string to parse
+     *
+     * @return parsed value or null.
+     *
      * @see DioriteMathUtils#asFloat(String)
      */
     public static Float asFloat(final String str)
@@ -604,6 +628,13 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to int, if string can't be parsed to int, then it will return given default value.
+     *
+     * @param str string to parse
+     * @param def default value.
+     *
+     * @return parsed value or default value.
+     *
      * @see DioriteMathUtils#asInt(String, int)
      */
     public static int asInt(final String str, final int def)
@@ -612,6 +643,13 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to long, if string can't be parsed to long, then it will return given default value.
+     *
+     * @param str string to parse
+     * @param def default value.
+     *
+     * @return parsed value or default value.
+     *
      * @see DioriteMathUtils#asLong(String, long)
      */
     public static Long asLong(final String str, final long def)
@@ -620,6 +658,13 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to double, if string can't be parsed to double, then it will return given default value.
+     *
+     * @param str string to parse
+     * @param def default value.
+     *
+     * @return parsed value or default value.
+     *
      * @see DioriteMathUtils#asDouble(String, double)
      */
     public static Double asDouble(final String str, final double def)
@@ -628,6 +673,13 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to float, if string can't be parsed to float, then it will return given default value.
+     *
+     * @param str string to parse
+     * @param def default value.
+     *
+     * @return parsed value or default value.
+     *
      * @see DioriteMathUtils#asFloat(String, float)
      */
     public static Float asFloat(final String str, final float def)
@@ -636,6 +688,13 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Simple parse boolean.
+     *
+     * @param str string to parse
+     *
+     * @return parsed value
+     *
+     * @see Boolean#parseBoolean(String)
      * @see DioriteMathUtils#asBoolean(String)
      */
     public static boolean asBoolean(final String str)
@@ -644,6 +703,17 @@ public class Arguments implements Iterable<String>
     }
 
     /**
+     * Parse string to boolean using two collections of words, for true and false values.
+     * If any of trueWords is equals (equalsIgnoreCase) to given string, then method returns ture.
+     * If any of falseWords is equals (equalsIgnoreCase) to given string, then method returns false.
+     * If given word don't match any words from collections, then method returns null
+     *
+     * @param str        string to parse.
+     * @param trueWords  words that mean "true"
+     * @param falseWords words that mean "false"
+     *
+     * @return true/false or null.
+     *
      * @see DioriteMathUtils#asBoolean(String, Collection, Collection)
      */
     public static Boolean asBoolean(final String str, final Collection<String> trueWords, final Collection<String> falseWords)
@@ -652,9 +722,12 @@ public class Arguments implements Iterable<String>
     }
 
     /**
-     * @param strs
+     * Join all strings from array to one single string,
+     * separate elements by single space.
      *
-     * @return
+     * @param strs string to join.
+     *
+     * @return joined strings, separated by single space.
      */
     public static String asText(final String[] strs)
     {
@@ -666,10 +739,13 @@ public class Arguments implements Iterable<String>
     }
 
     /**
-     * @param strs
-     * @param fromIndex
+     * Join all strings from array starting from given index
+     * to one single string, separate elements by single space.
      *
-     * @return
+     * @param strs      string to join.
+     * @param fromIndex starting index.
+     *
+     * @return joined strings, separated by single space.
      */
     public static String asText(final String[] strs, final int fromIndex)
     {
@@ -681,11 +757,14 @@ public class Arguments implements Iterable<String>
     }
 
     /**
-     * @param strs
-     * @param fromIndex
-     * @param toIndex
+     * Join all strings from array starting from given index to other given index,
+     * to one single string, separate elements by single space.
      *
-     * @return
+     * @param strs      string to join.
+     * @param fromIndex starting index.
+     * @param toIndex   end index.
+     *
+     * @return joined strings, separated by single space.
      */
     public static String asText(final String[] strs, final int fromIndex, final int toIndex)
     {

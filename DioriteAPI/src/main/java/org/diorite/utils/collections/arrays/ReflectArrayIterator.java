@@ -1,4 +1,4 @@
-package org.diorite.utils.collections;
+package org.diorite.utils.collections.arrays;
 
 import java.lang.reflect.Array;
 import java.util.Iterator;
@@ -51,6 +51,6 @@ public class ReflectArrayIterator implements Iterator<Object>, Iterable<Object>
     @Override
     public Iterator<Object> iterator()
     {
-        return this;
+        return new ReflectArrayIterator(this.array);
     }
 }

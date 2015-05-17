@@ -3,7 +3,7 @@ package org.diorite.material.blocks.liquid;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -75,7 +75,7 @@ public class WaterMat extends LiquidMat
     public static final WaterMat WATER_STAGE_6_FALLING_STILL = new WaterStill(LiquidStageMat.STAGE_6_FALLING);
     public static final WaterMat WATER_STAGE_7_FALLING_STILL = new WaterStill(LiquidStageMat.STAGE_7_FALLING);
 
-    private static final Map<String, WaterMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
+    private static final Map<String, WaterMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WaterMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
 
     protected WaterMat(final LiquidTypeMat liquidType)

@@ -13,7 +13,7 @@ public class LongRange
      */
     public static final LongRange EMPTY = new LongRange(0, 0);
     /**
-     * Range from {@link Long.MIN_VALUE} to {@link Long.MAX_VALUE}
+     * Range from {@link Long#MIN_VALUE} to {@link Long#MAX_VALUE}
      */
     public static final LongRange FULL  = new LongRange(Long.MIN_VALUE, Long.MAX_VALUE);
 

@@ -3,7 +3,7 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -31,7 +31,7 @@ public class StonePressurePlateMat extends PressurePlateMat
     public static final StonePressurePlateMat STONE_PRESSURE_PLATE         = new StonePressurePlateMat();
     public static final StonePressurePlateMat STONE_PRESSURE_PLATE_POWERED = new StonePressurePlateMat(0x1, true);
 
-    private static final Map<String, StonePressurePlateMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, StonePressurePlateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StonePressurePlateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

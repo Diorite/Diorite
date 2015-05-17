@@ -13,7 +13,7 @@ public class IntRange
      */
     public static final IntRange EMPTY = new IntRange(0, 0);
     /**
-     * Range from {@link Integer.MIN_VALUE} to {@link Integer.MAX_VALUE}
+     * Range from {@link Integer#MIN_VALUE} to {@link Integer#MAX_VALUE}
      */
     public static final IntRange FULL  = new IntRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
 

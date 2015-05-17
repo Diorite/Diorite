@@ -1,4 +1,4 @@
-package org.diorite.utils.concurrent;
+package org.diorite.utils.concurrent.atomic;
 
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
@@ -68,8 +68,8 @@ public interface AtomicArray<E>
     /**
      * Atomically sets the element at position {@code i} to the given
      * updated value if the current value {@code ==} the expected value.
-     * <p>
-     * <p><a href="package-summary.html#weakCompareAndSet">May fail
+     * <br>
+     * <a href="package-summary.html#weakCompareAndSet">May fail
      * spuriously and does not provide ordering guarantees</a>, so is
      * only rarely an appropriate alternative to {@code compareAndSet}.
      *

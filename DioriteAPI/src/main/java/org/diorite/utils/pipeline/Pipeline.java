@@ -2133,7 +2133,8 @@ public interface Pipeline<E> extends Iterable<E>
     String[] toNamesArray();
 
     /**
-     * @param a array to add values into it.
+     * @param a   array to add values into it.
+     * @param <T> type of array
      *
      * @return add all values to given array.
      *

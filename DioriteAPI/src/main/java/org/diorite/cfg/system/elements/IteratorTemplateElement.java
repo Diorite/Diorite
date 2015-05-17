@@ -8,14 +8,24 @@ import org.diorite.cfg.annotations.CfgCollectionStyle.CollectionStyle;
 import org.diorite.cfg.annotations.CfgCollectionType.CollectionType;
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.FieldOptions;
-import org.diorite.utils.collections.ReflectArrayIterator;
+import org.diorite.utils.collections.arrays.ReflectArrayIterator;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 
+/**
+ * Template handler for all iterator-based objects.
+ * @see Iterator
+ */
 @SuppressWarnings({"rawtypes", "ObjectEquality"})
 public class IteratorTemplateElement extends TemplateElement<Iterator>
 {
+    /**
+     * Instance of template to direct-use.
+     */
     public static final IteratorTemplateElement INSTANCE = new IteratorTemplateElement();
 
+    /**
+     * Construct new iterator template handler.
+     */
     public IteratorTemplateElement()
     {
         super(Iterator.class, obj -> {
@@ -25,6 +35,25 @@ public class IteratorTemplateElement extends TemplateElement<Iterator>
             }
             throw new UnsupportedOperationException("Can't convert object to Iterator: " + obj);
         }, Map.class::isAssignableFrom);
+    }
+
+    @Override
+    protected Iterator convertDefault(final Object def)
+    {
+        if (def instanceof Iterator)
+        {
+            return (Iterator) def;
+        }
+        final Class<?> c = def.getClass();
+        if (c.isArray())
+        {
+            return new ReflectArrayIterator(def);
+        }
+        if (def instanceof Iterable)
+        {
+            return ((Iterable) def).iterator();
+        }
+        throw new UnsupportedOperationException("Can't convert default value (" + c.getName() + "): " + def);
     }
 
     @Override

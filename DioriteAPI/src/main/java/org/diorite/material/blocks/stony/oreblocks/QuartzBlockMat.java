@@ -10,7 +10,7 @@ import org.diorite.material.Material;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
 import org.diorite.material.blocks.stony.ore.OreMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -41,7 +41,7 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
     public static final QuartzBlockMat QUARTZ_BLOCK_PILLAR_NORTH_SOUTH = new QuartzBlockMat(0x3, VariantMat.PILLAR_NORTH_SOUTH);
     public static final QuartzBlockMat QUARTZ_BLOCK_PILLAR_EAST_WEST   = new QuartzBlockMat(0x4, VariantMat.PILLAR_EAST_WEST);
 
-    private static final Map<String, QuartzBlockMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, QuartzBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<QuartzBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final VariantMat variant;

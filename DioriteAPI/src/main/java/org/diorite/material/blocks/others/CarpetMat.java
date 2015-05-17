@@ -9,7 +9,7 @@ import org.diorite.DyeColor;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.ColorableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -51,7 +51,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     public static final CarpetMat CARPET_RED        = new CarpetMat(DyeColor.RED);
     public static final CarpetMat CARPET_BLACK      = new CarpetMat(DyeColor.BLACK);
 
-    private static final Map<String, CarpetMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, CarpetMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<CarpetMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;

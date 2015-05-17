@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -49,7 +49,7 @@ public class StandingBannerMat extends BannerBlockMat
     public static final StandingBannerMat STANDING_BANNER_SOUTH_EAST       = new StandingBannerMat(BlockFace.SOUTH_EAST);
     public static final StandingBannerMat STANDING_BANNER_SOUTH_SOUTH_EAST = new StandingBannerMat(BlockFace.SOUTH_SOUTH_EAST);
 
-    private static final Map<String, StandingBannerMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, StandingBannerMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StandingBannerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;

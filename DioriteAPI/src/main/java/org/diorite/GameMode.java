@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -18,7 +18,7 @@ public class GameMode implements SimpleEnum<GameMode>
     public static final GameMode ADVENTURE = new GameMode("ADVENTURE", 2, "adventure");
     public static final GameMode SPECTATOR = new GameMode("SPECTATOR", 3, "spectator");
 
-    private static final Map<String, GameMode>   byName = new SimpleStringHashMap<>(5, SMALL_LOAD_FACTOR);
+    private static final Map<String, GameMode>   byName = new CaseInsensitiveMap<>(5, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<GameMode> byID   = new TIntObjectHashMap<>(5, SMALL_LOAD_FACTOR);
 
     private final String enumName;

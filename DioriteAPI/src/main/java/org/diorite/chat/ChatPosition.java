@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -17,7 +17,7 @@ public class ChatPosition implements SimpleEnum<ChatPosition>
     public static final ChatPosition SYSTEM = new ChatPosition("SYSTEM", 1);
     public static final ChatPosition ACTION = new ChatPosition("ACTION", 2);
 
-    private static final Map<String, ChatPosition>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final Map<String, ChatPosition>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<ChatPosition> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
 
     private final String enumName;

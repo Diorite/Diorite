@@ -13,8 +13,8 @@ public interface FenceGateMat extends DirectionalMat, OpenableMat
      * Returns one of gate sub-type based on facing direction and open state.
      * It will never return null.
      *
-     * @param blockFace facing direction of gate.
-     * @param open      if gate should be open.
+     * @param face facing direction of gate.
+     * @param open if gate should be open.
      *
      * @return sub-type of gate
      */

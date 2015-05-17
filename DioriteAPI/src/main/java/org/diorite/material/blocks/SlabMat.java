@@ -20,7 +20,7 @@ public interface SlabMat
     SlabMat getSlab(SlabTypeMat type);
 
     /**
-     * @return {@link SlabTypeMat.UPPER} type of slab.
+     * @return {@link SlabTypeMat#UPPER} type of slab.
      *
      * @see SlabMat#getSlab(SlabTypeMat)
      */
@@ -30,7 +30,7 @@ public interface SlabMat
     }
 
     /**
-     * @return {@link SlabTypeMat.BOTTOM} type of slab.
+     * @return {@link SlabTypeMat#BOTTOM} type of slab.
      *
      * @see SlabMat#getSlab(SlabTypeMat)
      */
@@ -40,7 +40,7 @@ public interface SlabMat
     }
 
     /**
-     * @return {@link SlabTypeMat.FULL} type of slab.
+     * @return {@link SlabTypeMat#FULL} type of slab.
      *
      * @see SlabMat#getSlab(SlabTypeMat)
      */
@@ -50,7 +50,7 @@ public interface SlabMat
     }
 
     /**
-     * @return {@link SlabTypeMat.SMOOTH_FULL} type of slab.
+     * @return {@link SlabTypeMat#SMOOTH_FULL} type of slab.
      *
      * @see SlabMat#getSlab(SlabTypeMat)
      */

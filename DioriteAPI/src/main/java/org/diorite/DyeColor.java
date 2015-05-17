@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.Color;
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -32,7 +32,7 @@ public class DyeColor implements SimpleEnum<DyeColor>
     public static final DyeColor RED        = new DyeColor("RED", 14, 0xE, 0x1, Color.fromRGB(0x993333), Color.fromRGB(0xB3312C));
     public static final DyeColor BLACK      = new DyeColor("BLACK", 15, 0xF, 0x0, Color.fromRGB(0x191919), Color.fromRGB(0x1E1B1B));
 
-    private static final Map<String, DyeColor>   byName = new SimpleStringHashMap<>(4, SMALL_LOAD_FACTOR);
+    private static final Map<String, DyeColor>   byName = new CaseInsensitiveMap<>(4, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<DyeColor> byID   = new TIntObjectHashMap<>(4, SMALL_LOAD_FACTOR);
 
     private final String enumName;

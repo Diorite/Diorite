@@ -9,7 +9,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.StairsMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -44,7 +44,7 @@ public class QuartzStairsMat extends BlockMaterialData implements StairsMat
     public static final QuartzStairsMat QUARTZ_STAIRS_SOUTH_UPSIDE_DOWN = new QuartzStairsMat(BlockFace.SOUTH, true);
     public static final QuartzStairsMat QUARTZ_STAIRS_NORTH_UPSIDE_DOWN = new QuartzStairsMat(BlockFace.NORTH, true);
 
-    private static final Map<String, QuartzStairsMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, QuartzStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<QuartzStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;

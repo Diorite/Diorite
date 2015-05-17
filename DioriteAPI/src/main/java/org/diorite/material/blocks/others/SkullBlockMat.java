@@ -9,7 +9,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.AttachableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -40,7 +40,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
     public static final SkullBlockMat SKULL_BLOCK_WALL_EAST  = new SkullBlockMat("WALL_EAST", BlockFace.EAST);
     public static final SkullBlockMat SKULL_BLOCK_WALL_WEST  = new SkullBlockMat("WALL_WEST", BlockFace.WEST);
 
-    private static final Map<String, SkullBlockMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, SkullBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SkullBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
@@ -109,7 +109,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
 
     /**
      * Returns sub-type of SkullBlock based on {@link BlockFace}.
-     * Use null or {@link BlockFace.SELF} or {@link BlockFace.UP} to get floor type.
+     * Use null or {@link BlockFace#SELF} or {@link BlockFace#UP} to get floor type.
      *
      * @param face facing of SkullBlock
      *
@@ -123,7 +123,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
 
     /**
      * Returns sub-type of SkullBlock based on attached {@link BlockFace}.
-     * Use null or {@link BlockFace.SELF} or {@link BlockFace.DOWN} to get floor type.
+     * Use null or {@link BlockFace#SELF} or {@link BlockFace#DOWN} to get floor type.
      *
      * @param face facing of SkullBlock
      *
@@ -183,7 +183,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
 
     /**
      * Returns one of SkullBlock sub-type based on {@link BlockFace}.
-     * Use null of {@link BlockFace.SELF} to get floor type.
+     * Use null of {@link BlockFace#SELF} to get floor type.
      * It will never return null;
      *
      * @param face facing of SkullBlock

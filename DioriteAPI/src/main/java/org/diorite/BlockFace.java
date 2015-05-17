@@ -164,7 +164,7 @@ public enum BlockFace
     }
 
     /**
-     * @return Opposite face of block. like UP -> DOWN
+     * @return Opposite face of block. like UP {@literal ->} DOWN
      */
     public BlockFace getOppositeFace()
     {

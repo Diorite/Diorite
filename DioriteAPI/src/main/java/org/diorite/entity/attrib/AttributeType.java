@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 public class AttributeType
 {
@@ -19,8 +19,8 @@ public class AttributeType
     public static final  AttributeType              GENERIC_ATTACK_DAMAGE        = new AttributeType("GENERIC_ATTACK_DAMAGE", "generic.attackDamage", ATTRIBUTES__GENERIC_ATTACK_DAMAGE__DEFAULT, ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MIN, ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MAX);
     public static final  AttributeType              HORSE_JUMP_STRENGTH          = new AttributeType("HORSE_JUMP_STRENGTH", "horse.jumpStrength", ATTRIBUTES__HORSE_JUMP_STRENGTH__DEFAULT, ATTRIBUTES__HORSE_JUMP_STRENGTH__MIN, ATTRIBUTES__HORSE_JUMP_STRENGTH__MAX);
     public static final  AttributeType              ZOMBIE_SPAWN_REINFORCMENTS   = new AttributeType("ZOMBIE_SPAWN_REINFORCMENTS", "zombie.spawnReinforcements", ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__DEFAULT, ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__MIN, ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__MAX);
-    private static final Map<String, AttributeType> byName                       = new SimpleStringHashMap<>(7, .1f);
-    private static final Map<String, AttributeType> byKey                        = new SimpleStringHashMap<>(7, .1f);
+    private static final Map<String, AttributeType> byName                       = new CaseInsensitiveMap<>(7, .1f);
+    private static final Map<String, AttributeType> byKey                        = new CaseInsensitiveMap<>(7, .1f);
     private final String enumName;
 
     private final String key;

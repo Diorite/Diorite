@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.AttachableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.ByteRange;
 
 import gnu.trove.map.TByteObjectMap;
@@ -53,7 +53,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
     public static final CocoaMat COCOA_SOUTH_RIPE = new CocoaMat("SOUTH_RIPE", BlockFace.SOUTH, 2);
     public static final CocoaMat COCOA_WEST_RIPE  = new CocoaMat("WEST_RIPE", BlockFace.WEST, 2);
 
-    private static final Map<String, CocoaMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, CocoaMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<CocoaMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;

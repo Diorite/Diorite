@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -17,7 +17,7 @@ public class Dimension implements SimpleEnum<Dimension>
     public static final Dimension OVERWORLD = new Dimension("OVERWORLD", 0, true);
     public static final Dimension END       = new Dimension("END", 1, false);
 
-    private static final Map<String, Dimension>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final Map<String, Dimension>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<Dimension> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
 
     private final String  enumName;

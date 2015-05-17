@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.PowerableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -51,7 +51,7 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
     public static final ActivatorRailMat ACTIVATOR_RAIL_ASCENDING_NORTH_POWERED = new ActivatorRailMat(RailTypeMat.ASCENDING_NORTH, true);
     public static final ActivatorRailMat ACTIVATOR_RAIL_ASCENDING_SOUTH_POWERED = new ActivatorRailMat(RailTypeMat.ASCENDING_SOUTH, true);
 
-    private static final Map<String, ActivatorRailMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, ActivatorRailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<ActivatorRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean powered;
@@ -166,8 +166,8 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
      * Returns sub-type of ActivatorRail based on {@link RailTypeMat} and powered state.
      * It will never return null.
      *
-     * @param railType type of rails
-     * @param powered  if rails should be powered.
+     * @param type    type of rails
+     * @param powered if rails should be powered.
      *
      * @return sub-type of ActivatorRail
      */

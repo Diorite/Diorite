@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -46,7 +46,7 @@ public class SaplingMat extends WoodMat
     public static final SaplingMat SAPLING_ACACIA_OLDER   = new SaplingMat(WoodTypeMat.ACACIA, SaplingStage.OLDER);
     public static final SaplingMat SAPLING_DARK_OAK_OLDER = new SaplingMat(WoodTypeMat.DARK_OAK, SaplingStage.OLDER);
 
-    private static final Map<String, SaplingMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, SaplingMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SaplingMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final SaplingStage stage;

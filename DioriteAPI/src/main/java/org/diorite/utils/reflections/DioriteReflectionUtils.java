@@ -445,6 +445,7 @@ public final class DioriteReflectionUtils
      * @param target    - the target type.
      * @param name      - the name of the field, or NULL to ignore.
      * @param fieldType - a compatible field type.
+     * @param <T>       - type of field.
      *
      * @return The field accessor.
      */
@@ -459,6 +460,7 @@ public final class DioriteReflectionUtils
      * @param className - lookup name of the class, see {@link #getCanonicalClass(String)}.
      * @param name      - the name of the field, or NULL to ignore.
      * @param fieldType - a compatible field type.
+     * @param <T>       - type of field.
      *
      * @return The field accessor.
      */
@@ -473,6 +475,7 @@ public final class DioriteReflectionUtils
      * @param target    - the target type.
      * @param fieldType - a compatible field type.
      * @param index     - the number of compatible fields to skip.
+     * @param <T>       - type of field.
      *
      * @return The field accessor.
      */
@@ -487,6 +490,7 @@ public final class DioriteReflectionUtils
      * @param className - lookup name of the class, see {@link #getCanonicalClass(String)}.
      * @param fieldType - a compatible field type.
      * @param index     - the number of compatible fields to skip.
+     * @param <T>       - type of field.
      *
      * @return The field accessor.
      */
@@ -724,7 +728,7 @@ public final class DioriteReflectionUtils
      * @param clazz - a class to start with.
      * @param name  - name of class.
      *
-     * @return
+     * @return nested class form given class.
      */
     public static Class<?> getNestedClass(final Class<?> clazz, final String name)
     {
@@ -744,7 +748,7 @@ public final class DioriteReflectionUtils
 
     /**
      * If given class is non-primitive type {@link Class#isPrimitive()} then it will return
-     * privitive class for it. Like: Boolean.class -> boolean.class
+     * privitive class for it. Like: Boolean.class {@literal ->} boolean.class
      * If given class is primitive, then it will return given class.
      * If given class can't be primitive (like {@link String}) then it will return given class.
      *
@@ -796,7 +800,7 @@ public final class DioriteReflectionUtils
 
     /**
      * If given class is primitive type {@link Class#isPrimitive()} then it will return
-     * wrapper class for it. Like: boolean.class -> Boolean.class
+     * wrapper class for it. Like: boolean.class {@literal ->} Boolean.class
      * If given class isn't primitive, then it will return given class.
      *
      * @param clazz class to get wrapper of it.

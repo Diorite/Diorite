@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -37,7 +37,7 @@ public class DirtMat extends EarthMat implements VariantableMat
     public static final DirtMat DIRT_COARSE = new DirtMat(0x1, VariantMat.COARSE);
     public static final DirtMat DIRT_PODZOL = new DirtMat(0x2, VariantMat.PODZOL);
 
-    private static final Map<String, DirtMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, DirtMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<DirtMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final VariantMat variant;

@@ -1,7 +1,7 @@
 package org.diorite.inventory.item;
 
 
-import org.diorite.utils.concurrent.AtomicArrayBase;
+import org.diorite.utils.concurrent.atomic.AtomicArrayBase;
 
 class ItemStackArrayBase extends AtomicArrayBase<ItemStack> implements ItemStackArray
 {

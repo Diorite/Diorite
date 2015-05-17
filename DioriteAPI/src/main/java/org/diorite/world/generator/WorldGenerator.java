@@ -102,9 +102,9 @@ public abstract class WorldGenerator
     /**
      * Main method to generate chunk, implementing class can return other {@link ChunkBuilder} than provided.
      *
-     * @param builder default {@link ChunkBuilder} for {@link Chunk}.
+     * @param builder default {@link ChunkBuilder} for {@link org.diorite.world.chunk.Chunk}.
      * @param pos x, z and world of chunk
-     * @return in most cases, this same {@link ChunkBuilder} as provided, returned value will be used to create {@link Chunk}
+     * @return in most cases, this same {@link ChunkBuilder} as provided, returned value will be used to create {@link org.diorite.world.chunk.Chunk}
      */
     public abstract ChunkBuilder generate(ChunkBuilder builder, ChunkPos pos);
 

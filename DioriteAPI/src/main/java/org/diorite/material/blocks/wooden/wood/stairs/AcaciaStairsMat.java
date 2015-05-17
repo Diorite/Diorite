@@ -6,7 +6,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -41,7 +41,7 @@ public class AcaciaStairsMat extends WoodenStairsMat
     public static final AcaciaStairsMat ACACIA_STAIRS_SOUTH_UPSIDE_DOWN = new AcaciaStairsMat(BlockFace.SOUTH, true);
     public static final AcaciaStairsMat ACACIA_STAIRS_NORTH_UPSIDE_DOWN = new AcaciaStairsMat(BlockFace.NORTH, true);
 
-    private static final Map<String, AcaciaStairsMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, AcaciaStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<AcaciaStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

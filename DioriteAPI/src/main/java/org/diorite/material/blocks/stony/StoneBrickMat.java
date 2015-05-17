@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -38,7 +38,7 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
     public static final StoneBrickMat STONE_BRICK_CRACKED  = new StoneBrickMat(0x2, VariantMat.CRACKED);
     public static final StoneBrickMat STONE_BRICK_CHISELED = new StoneBrickMat(0x3, VariantMat.CHISELED);
 
-    private static final Map<String, StoneBrickMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, StoneBrickMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<StoneBrickMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final VariantMat variant;

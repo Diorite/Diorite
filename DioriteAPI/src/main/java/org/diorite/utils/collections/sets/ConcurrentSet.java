@@ -1,4 +1,4 @@
-package org.diorite.utils.collections;
+package org.diorite.utils.collections.sets;
 
 import java.io.Serializable;
 import java.util.AbstractSet;

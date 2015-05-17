@@ -1,6 +1,7 @@
 package org.diorite.cfg.system.elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,16 +14,26 @@ import org.diorite.cfg.system.ConfigField;
 import org.diorite.cfg.system.FieldOptions;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
-import org.diorite.utils.collections.ReflectArrayIterator;
+import org.diorite.utils.collections.arrays.ReflectArrayIterator;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.ReflectElement;
 
-@SuppressWarnings({"rawtypes", "ObjectEquality"})
+/**
+ * Template handler for all iterable-based objects.
+ * @see Iterable
+ */
+@SuppressWarnings({"rawtypes", "ObjectEquality", "unchecked"})
 public class IterableTemplateElement extends TemplateElement<Iterable>
 {
-    public static final IterableTemplateElement INSTANCE                                 = new IterableTemplateElement();
-    static final        int                     DEFAULT_STRING_ARRAY_MULTILINE_THRESHOLD = 25;
+    /**
+     * Instance of template to direct-use.
+     */
+    public static final IterableTemplateElement INSTANCE = new IterableTemplateElement();
+    static final int DEFAULT_STRING_ARRAY_MULTILINE_THRESHOLD = 25;
 
+    /**
+     * Construct new iterable template handler.
+     */
     public IterableTemplateElement()
     {
         super(Iterable.class, obj -> {
@@ -32,6 +43,27 @@ public class IterableTemplateElement extends TemplateElement<Iterable>
             }
             throw new UnsupportedOperationException("Can't convert object to Iterable: " + obj);
         }, Map.class::isAssignableFrom);
+    }
+
+    @Override
+    protected Iterable convertDefault(final Object def)
+    {
+        if (def instanceof Iterable)
+        {
+            return (Iterable) def;
+        }
+        final Class<?> c = def.getClass();
+        if (c.isArray())
+        {
+            return new ReflectArrayIterator(def);
+        }
+        if (def instanceof Iterator)
+        {
+            final Collection col = new ArrayList<>(10);
+            ((Iterator) def).forEachRemaining(col::add);
+            return col;
+        }
+        throw new UnsupportedOperationException("Can't convert default value (" + c.getName() + "): " + def);
     }
 
     @Override

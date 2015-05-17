@@ -1,4 +1,4 @@
-package org.diorite.utils.concurrent;
+package org.diorite.utils.concurrent.atomic;
 
 
 import java.io.Serializable;
@@ -206,6 +206,11 @@ public class AtomicArrayBase<E> implements Serializable, AtomicArray<E>
 
     /**
      * Reconstitutes the instance from a stream (that is, deserializes it).
+     *
+     * @param s input stream
+     *
+     * @throws java.io.IOException    io exception from input stream.
+     * @throws ClassNotFoundException if one of class don't exist.
      */
     private void readObject(final java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException
     {

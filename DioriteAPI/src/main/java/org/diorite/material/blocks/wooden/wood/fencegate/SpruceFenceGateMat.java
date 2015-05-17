@@ -6,7 +6,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -41,7 +41,7 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
     public static final SpruceFenceGateMat SPRUCE_FENCE_GATE_NORTH_OPEN = new SpruceFenceGateMat(BlockFace.NORTH, true);
     public static final SpruceFenceGateMat SPRUCE_FENCE_GATE_EAST_OPEN  = new SpruceFenceGateMat(BlockFace.EAST, true);
 
-    private static final Map<String, SpruceFenceGateMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, SpruceFenceGateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SpruceFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")

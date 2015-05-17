@@ -1,7 +1,9 @@
-package org.diorite.utils.collections;
+package org.diorite.utils.collections.maps;
 
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.diorite.utils.collections.comparators.ByValueComparator;
 
 public class ByValueSortingTreeMap<K extends Comparable<K>, V extends Comparable<V>> extends TreeMap<K, V>
 {

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -21,7 +21,7 @@ public class WorldType implements SimpleEnum<WorldType>
     public static final WorldType DEBUG_ALL_BLOCK_STATES = new WorldType("DEBUG_ALL_BLOCK_STATES", 5, "debug_all_block_states");
     public static final WorldType NORMAL_1_1             = new WorldType("NORMAL_1_1", 8, "default_1_1", 0);
 
-    private static final Map<String, WorldType>   byName = new SimpleStringHashMap<>(7, SMALL_LOAD_FACTOR);
+    private static final Map<String, WorldType>   byName = new CaseInsensitiveMap<>(7, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<WorldType> byID   = new TIntObjectHashMap<>(7, SMALL_LOAD_FACTOR);
 
     private final String enumName;

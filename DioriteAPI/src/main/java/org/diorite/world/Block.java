@@ -30,7 +30,7 @@ public interface Block
     int getZ();
 
     /**
-     * @return @link World} where block exist.
+     * @return {@link World} where block exist.
      */
     World getWorld();
 
@@ -54,23 +54,26 @@ public interface Block
 
     /**
      * Get relative block using x/y/z coordinates
-     * May return null if y > maxHeight
+     * May return null if y {@literal >} maxHeight
      *
      * @param x number of blocks to go in x axis direction
      * @param y number of blocks to go in y axis direction
      * @param z number of blocks to go in z axis direction
+     *
      * @return relative {@link Block}
      */
     Block getRelative(int x, int y, int z);
 
     /**
      * Get relative block in selected direction
-     * May return null if y > maxHeight
-     * @see #getRelative(int, int, int)
+     * May return null if y {@literal >} maxHeight
      *
-     * @param face direction
+     * @param face  direction
      * @param multi values from direction will be multipled by this value
+     *
      * @return relative {@link Block}
+     *
+     * @see #getRelative(int, int, int)
      */
     default Block getRelative(final BlockFace face, final int multi)
     {
@@ -79,17 +82,20 @@ public interface Block
 
     /**
      * Get relative block
-     * May return null if y > maxHeight
-     * @see #getRelative(BlockFace, int)
-     * @see #getRelative(int, int, int)
+     * May return null if y {@literal >} maxHeight
      *
      * @param face direction
+     *
      * @return relative {@link Block}
+     *
+     * @see #getRelative(BlockFace, int)
+     * @see #getRelative(int, int, int)
      */
     default Block getRelative(final BlockFace face)
     {
         return this.getRelative(face, 1);
     }
+
     /**
      * @return {@link BlockLocation} of block
      */

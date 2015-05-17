@@ -62,12 +62,6 @@ public final class DioriteMathUtils
     }
 
     /**
-     * @param roman
-     *
-     * @return int value of roman number.
-     *
-     * @throws NumberFormatException if string isn't valid roman number.
-     * @see DioriteMathUtils#toRoman(int)
      * Convert given string with roman number to int.
      * Examples:
      * {@code X -> 10}
@@ -81,6 +75,13 @@ public final class DioriteMathUtils
      * {@code IIIIIX -> 5}
      * {@code MDCCCCX -> 1910}
      * {@code MDCDIII -> 1903}
+     *
+     * @param roman roman numver
+     *
+     * @return int value of roman number.
+     *
+     * @throws NumberFormatException if string isn't valid roman number.
+     * @see DioriteMathUtils#toRoman(int)
      */
     public static int fromRoman(final String roman) throws NumberFormatException
     {
@@ -394,7 +395,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Byte.MIN_VALUE} and {@link Byte.MAX_VALUE}
+     * Check in number is in between {@link Byte#MIN_VALUE} and {@link Byte#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -406,7 +407,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Short.MIN_VALUE} and {@link Short.MAX_VALUE}
+     * Check in number is in between {@link Short#MIN_VALUE} and {@link Short#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -418,7 +419,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Byte.MIN_VALUE} and {@link Byte.MAX_VALUE}
+     * Check in number is in between {@link Byte#MIN_VALUE} and {@link Byte#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -430,7 +431,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Short.MIN_VALUE} and {@link Short.MAX_VALUE}
+     * Check in number is in between {@link Short#MIN_VALUE} and {@link Short#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -442,7 +443,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Byte.MIN_VALUE} and {@link Byte.MAX_VALUE}
+     * Check in number is in between {@link Byte#MIN_VALUE} and {@link Byte#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -454,7 +455,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Integer.MIN_VALUE} and {@link Integer.MAX_VALUE}
+     * Check in number is in between {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -466,7 +467,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Long.MIN_VALUE} and {@link Long.MAX_VALUE}
+     * Check in number is in between {@link Long#MIN_VALUE} and {@link Long#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -478,7 +479,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Integer.MIN_VALUE} and {@link Integer.MAX_VALUE}
+     * Check in number is in between {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -490,7 +491,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Short.MIN_VALUE} and {@link Short.MAX_VALUE}
+     * Check in number is in between {@link Short#MIN_VALUE} and {@link Short#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -502,7 +503,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Byte.MIN_VALUE} and {@link Byte.MAX_VALUE}
+     * Check in number is in between {@link Byte#MIN_VALUE} and {@link Byte#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -514,7 +515,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Long.MIN_VALUE} and {@link Long.MAX_VALUE}
+     * Check in number is in between {@link Long#MIN_VALUE} and {@link Long#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -526,7 +527,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link IntegerMIN_VALUE} and {@link Integer.MAX_VALUE}
+     * Check in number is in between {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -538,7 +539,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Short.MIN_VALUE} and {@link Short.MAX_VALUE}
+     * Check in number is in between {@link Short#MIN_VALUE} and {@link Short#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -550,7 +551,7 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Check in number is in between {@link Byte.MIN_VALUE} and {@link Byte.MAX_VALUE}
+     * Check in number is in between {@link Byte#MIN_VALUE} and {@link Byte#MAX_VALUE}
      *
      * @param i number to validate.
      *
@@ -620,12 +621,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * 10: 1010 -> 2
-     * 2: 10 -> 1
-     * 56: 111000 -> 3
-     * 34: 100010 -> 2
-     * 255: 11111111 -> 8
-     * 256: 100000000 -> 1
+     * {@literal 10: 1010 -> 2}
+     * {@literal 2: 10 -> 1}
+     * {@literal 56: 111000 -> 3}
+     * {@literal 34: 100010 -> 2}
+     * {@literal 255: 11111111 -> 8}
+     * {@literal 256: 100000000 -> 1}
      *
      * @param num number to count bits in it.
      *
@@ -644,12 +645,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * 10: 1010 -> 2
-     * 2: 10 -> 1
-     * 56: 111000 -> 3
-     * 34: 100010 -> 2
-     * 255: 11111111 -> 8
-     * 256: 100000000 -> 1
+     * {@literal 10: 1010 -> 2}
+     * {@literal 2: 10 -> 1}
+     * {@literal 56: 111000 -> 3}
+     * {@literal 34: 100010 -> 2}
+     * {@literal 255: 11111111 -> 8}
+     * {@literal 256: 100000000 -> 1}
      *
      * @param num number to count bits in it.
      *
@@ -668,12 +669,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * 10: 1010 -> 2
-     * 2: 10 -> 1
-     * 56: 111000 -> 3
-     * 34: 100010 -> 2
-     * 255: 11111111 -> 8
-     * 256: 100000000 -> 1
+     * {@literal 10: 1010 -> 2}
+     * {@literal 2: 10 -> 1}
+     * {@literal 56: 111000 -> 3}
+     * {@literal 34: 100010 -> 2}
+     * {@literal 255: 11111111 -> 8}
+     * {@literal 256: 100000000 -> 1}
      *
      * @param num number to count bits in it.
      *
@@ -692,12 +693,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * 10: 1010 -> 2
-     * 2: 10 -> 1
-     * 56: 111000 -> 3
-     * 34: 100010 -> 2
-     * 255: 11111111 -> 8
-     * 256: 100000000 -> 1
+     * {@literal 10: 1010 -> 2}
+     * {@literal 2: 10 -> 1}
+     * {@literal 56: 111000 -> 3}
+     * {@literal 34: 100010 -> 2}
+     * {@literal 255: 11111111 -> 8}
+     * {@literal 256: 100000000 -> 1}
      *
      * @param num number to count bits in it.
      *
@@ -716,12 +717,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * 10: 1010 -> 2
-     * 2: 10 -> 1
-     * 56: 111000 -> 3
-     * 34: 100010 -> 2
-     * 255: 11111111 -> 8
-     * 256: 100000000 -> 1
+     * {@literal 10: 1010 -> 2}
+     * {@literal 2: 10 -> 1}
+     * {@literal 56: 111000 -> 3}
+     * {@literal 34: 100010 -> 2}
+     * {@literal 255: 11111111 -> 8}
+     * {@literal 256: 100000000 -> 1}
      *
      * @param num number to count bits in it.
      *

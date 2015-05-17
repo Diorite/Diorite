@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -17,7 +17,7 @@ public class ChatVisibility implements SimpleEnum<ChatVisibility>
     public static final ChatVisibility SYSTEM = new ChatVisibility("SYSTEM", 1, "options.chat.visibility.system");
     public static final ChatVisibility HIDDEN = new ChatVisibility("HIDDEN", 2, "options.chat.visibility.hidden");
 
-    private static final Map<String, ChatVisibility>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final Map<String, ChatVisibility>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<ChatVisibility> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
 
     private final String enumName;

@@ -40,10 +40,10 @@ public final class DioriteUtils
      * Compact given array, it will create the smallest possible array with given items,
      * so it will join duplicated items etc.
      *
-     * @param respectStackSize
-     * @param items
+     * @param respectStackSize if method should respect max stack size.
+     * @param items item to compact.
      *
-     * @return
+     * @return compacted array of items.
      */
     public static ItemStack[] compact(final boolean respectStackSize, final ItemStack... items)
     {

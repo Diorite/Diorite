@@ -8,20 +8,32 @@ import org.diorite.cfg.annotations.CfgStringStyle.StringStyle;
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.FieldOptions;
 
+/**
+ * Template handler for all string-based objects.
+ * @see String
+ * @see CharSequence
+ */
 @SuppressWarnings("HardcodedFileSeparator")
 public class StringTemplateElement extends TemplateElement<String>
 {
     /**
      * Chars that can't start key/value without quotes
      */
-    public static final char[]                CANT_BE_FIRST = {'`', '!', '@', '#', '\'', '\"', '%', '&', '*', '|', '{', '[', ']', '}', ',', '>'};
-    public static final StringTemplateElement INSTANCE      = new StringTemplateElement();
+    public static final char[] CANT_BE_FIRST = {'`', '!', '@', '#', '\'', '\"', '%', '&', '*', '|', '{', '[', ']', '}', ',', '>'};
+
+    /**
+     * Instance of template to direct-use.
+     */
+    public static final StringTemplateElement INSTANCE = new StringTemplateElement();
 
     private static final String[] REP_PREV_1 = new String[]{"\"", "'"};
     private static final String[] REP_PREV_2 = new String[]{"\\\"", "\\'"};
     private static final String[] REP_LAST_1 = new String[]{"\"", "\n"};
     private static final String[] REP_LAST_2 = new String[]{"\\\"", "\\n"};
 
+    /**
+     * Construct new string template handler.
+     */
     public StringTemplateElement()
     {
         super(String.class, (obj) -> {
@@ -31,6 +43,12 @@ public class StringTemplateElement extends TemplateElement<String>
             }
             throw new UnsupportedOperationException("Can't convert object to Map: " + obj);
         }, CharSequence.class::isAssignableFrom);
+    }
+
+    @Override
+    protected String convertDefault(final Object def)
+    {
+        return def.toString();
     }
 
     @Override

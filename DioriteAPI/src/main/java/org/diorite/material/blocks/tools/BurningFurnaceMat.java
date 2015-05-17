@@ -9,7 +9,7 @@ import org.diorite.BlockFace;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -39,7 +39,7 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
     public static final BurningFurnaceMat BURNING_FURNACE_WEST  = new BurningFurnaceMat(BlockFace.WEST);
     public static final BurningFurnaceMat BURNING_FURNACE_EAST  = new BurningFurnaceMat(BlockFace.EAST);
 
-    private static final Map<String, BurningFurnaceMat>    byName = new SimpleStringHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, BurningFurnaceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BurningFurnaceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
