@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.entity.Player;
 import org.diorite.inventory.Inventory;
 import org.diorite.inventory.InventoryHolder;
-import org.diorite.utils.collections.ConcurrentSet;
+import org.diorite.utils.collections.sets.ConcurrentSet;
 
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {

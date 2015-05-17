@@ -21,11 +21,11 @@ import org.diorite.command.PluginCommand;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.plugin.Plugin;
 import org.diorite.utils.DioriteStringUtils;
-import org.diorite.utils.collections.ConcurrentSimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 public class CommandMapImpl implements CommandMap
 {
-    private final Map<String, MainCommand> commandMap = new ConcurrentSimpleStringHashMap<>(50, .20f, 8);
+    private final Map<String, MainCommand> commandMap = new CaseInsensitiveMap<>(50, .20f);
 
     private Iterable<MainCommand> getSortedCommandList()
     {
@@ -33,7 +33,7 @@ public class CommandMapImpl implements CommandMap
     }
 
     @Override
-    public void registerCommand(final PluginCommand pluginCommand)
+    public synchronized void registerCommand(final PluginCommand pluginCommand)
     {
         this.commandMap.put(pluginCommand.getPlugin().getName() + Command.COMMAND_PLUGIN_SEPARATOR + pluginCommand.getName(), pluginCommand);
     }
@@ -184,7 +184,7 @@ public class CommandMapImpl implements CommandMap
         sender.sendSimpleColoredMessage("&4No command: &c" + command);
     }
 
-    public void registerCommand(final MainCommand command)
+    public synchronized void registerCommand(final MainCommand command)
     {
         if (command instanceof PluginCommand)
         {

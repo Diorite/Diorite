@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.SimpleStringHashMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -17,7 +17,7 @@ public class ClientCommand implements SimpleEnum<ClientCommand>
     public static final ClientCommand REQUEST_STATS              = new ClientCommand("REQUEST_STATS", 1);
     public static final ClientCommand OPEN_INVENTORY_ACHIEVEMENT = new ClientCommand("OPEN_INVENTORY_ACHIEVEMENT", 2);
 
-    private static final Map<String, ClientCommand>   byName = new SimpleStringHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final Map<String, ClientCommand>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
     private static final TIntObjectMap<ClientCommand> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
 
     private final String enumName;

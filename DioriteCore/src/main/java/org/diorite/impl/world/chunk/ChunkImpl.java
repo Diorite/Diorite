@@ -14,7 +14,7 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
-import org.diorite.utils.collections.NibbleArray;
+import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.utils.concurrent.ParallelUtils;
 import org.diorite.world.Block;
 import org.diorite.world.World;

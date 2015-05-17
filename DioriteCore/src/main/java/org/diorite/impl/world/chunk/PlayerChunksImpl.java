@@ -14,7 +14,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
-import org.diorite.utils.collections.ConcurrentSet;
+import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.collections.WeakCollection;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;

@@ -1,6 +1,6 @@
 package org.diorite.impl.world.chunk;
 
-import org.diorite.utils.collections.NibbleArray;
+import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.world.chunk.Chunk;
 
 public final class ChunkNibbleArray extends NibbleArray

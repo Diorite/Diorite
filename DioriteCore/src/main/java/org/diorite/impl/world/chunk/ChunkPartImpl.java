@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
-import org.diorite.utils.collections.NibbleArray;
+import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.world.chunk.Chunk;
 
 public class ChunkPartImpl // part of chunk 16x16x16
