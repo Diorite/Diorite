@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.multithreading.ChatAction;
 import org.diorite.chat.ChatColor;
+import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
 public class ChatThread extends Thread
@@ -59,9 +60,8 @@ public class ChatThread extends Thread
                 continue;
             }
             // TODO: chat event
-
             // TODO: implement some needed permissions (Yeach, I need create permissions system too) to use markdown options.
-            final TextComponent base = new TextComponent(((action.getSender() == null) ? "" : (action.getSender().getName() + ChatColor.AQUA + ": " + ChatColor.GRAY.toString() + (action.getMsg() == null ? "" : action.getMsg()))));
+            final BaseComponent base = TextComponent.fromLegacyText(((action.getSender() == null) ? "" : (action.getSender().getName() + ChatColor.AQUA + ": " + ChatColor.GRAY.toString() + (action.getMsg() == null ? "" : action.getMsg()))));
             // base.addExtra((action.getMsg() == null) ? new TextComponent("") : DioriteMarkdownParser.parse(action.getMsg(), ChatColor.GRAY)); TODO: fix
             this.server.getPlayersManager().forEach(p -> p.sendMessage(base));
             this.server.getConsoleSender().sendMessage(base);

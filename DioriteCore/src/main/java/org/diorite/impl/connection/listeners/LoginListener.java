@@ -29,6 +29,7 @@ import org.diorite.impl.connection.packets.login.out.PacketLoginOutEncryptionBeg
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutSetCompression;
 import org.diorite.impl.connection.packets.login.out.PacketLoginOutSuccess;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
@@ -47,7 +48,7 @@ public class LoginListener implements PacketLoginInListener
     private       SecretKey      secretKey;
     private       String         hostname;
     private       ProtocolState  protocolState;
-    private       boolean        onlineMode;
+    private       OnlineMode     onlineMode;
     private       int            ticks;
 
     private String serverID = ""; // unused?
@@ -56,7 +57,7 @@ public class LoginListener implements PacketLoginInListener
     {
         this.server = server;
         this.networkManager = networkManager;
-        this.onlineMode = server.isOnlineMode();
+        this.onlineMode = server.getOnlineMode();
         random.nextBytes(this.token);
         this.protocolState = ProtocolState.HELLO;
     }
@@ -90,7 +91,7 @@ public class LoginListener implements PacketLoginInListener
     {
         Validate.validState(this.protocolState == ProtocolState.HELLO, "Unexpected hello packet");
         this.gameProfile = packet.getProfile();
-        if (this.onlineMode)
+        if (this.onlineMode == OnlineMode.TRUE) // TODO
         {
             this.protocolState = ProtocolState.KEY;
             this.networkManager.sendPacket(new PacketLoginOutEncryptionBegin(this.serverID, this.server.getKeyPair().getPublic(), this.token));
@@ -155,7 +156,7 @@ public class LoginListener implements PacketLoginInListener
         try
         {
             this.logger.info("Disconnecting " + this.gameProfile + ": " + msg);
-            final TextComponent tc = new TextComponent(msg);
+            final BaseComponent tc = TextComponent.fromLegacyText(msg);
             this.networkManager.sendPacket(new PacketLoginOutDisconnect(tc));
             this.networkManager.close(tc, false);
             this.server.getServerConnection().remove(this.networkManager);
@@ -235,12 +236,12 @@ public class LoginListener implements PacketLoginInListener
         return this.server;
     }
 
-    public boolean isOnlineMode()
+    public OnlineMode getOnlineMode()
     {
         return this.onlineMode;
     }
 
-    public void setOnlineMode(final boolean onlineMode)
+    public void setOnlineMode(final OnlineMode onlineMode)
     {
         this.onlineMode = onlineMode;
     }

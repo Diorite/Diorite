@@ -10,6 +10,7 @@ import org.diorite.impl.ServerImpl;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
 import org.diorite.impl.connection.MinecraftEncryption;
+import org.diorite.cfg.DioriteConfig.OnlineMode;
 
 public class ThreadPlayerLookupUUID extends Thread
 {
@@ -29,7 +30,7 @@ public class ThreadPlayerLookupUUID extends Thread
         final GameProfile oldProfile = this.loginListener.getGameProfile();
         try
         {
-            if (! this.loginListener.isOnlineMode())
+            if (this.loginListener.getOnlineMode() != OnlineMode.TRUE) // TODO
             {
                 this.loginListener.setCrackedUUID();
                 this.allow();
@@ -71,7 +72,7 @@ public class ThreadPlayerLookupUUID extends Thread
     {
         final GameProfile profile = this.loginListener.getGameProfile();
         //noinspection ObjectToString
-        this.loginListener.getLogger().info("Player " + profile.getName() + " (" + profile.getId() + ") [" + this.loginListener.getNetworkManager().getSocketAddress() + "] connected to server! (online-mode: " + this.loginListener.isOnlineMode() + ")");
+        this.loginListener.getLogger().info("Player " + profile.getName() + " (" + profile.getId() + ") [" + this.loginListener.getNetworkManager().getSocketAddress() + "] connected to server! (online-mode: " + this.loginListener.getOnlineMode() + ")");
         this.loginListener.setProtocolState(LoginListener.ProtocolState.READY_TO_ACCEPT);
         this.onSuccess.run();
     }

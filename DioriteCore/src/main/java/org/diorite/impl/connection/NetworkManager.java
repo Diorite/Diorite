@@ -88,8 +88,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         }
         if ((System.currentTimeMillis() - this.lastKeepAlive) > this.playerTimeout)
         {
-            final TextComponent msg = new TextComponent("§4Timeout");
-            this.packetListener.disconnect(msg);
+            this.packetListener.disconnect(TextComponent.fromLegacyText("§4Timeout"));
         }
     }
 
@@ -345,7 +344,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
             }
             else if (this.packetListener != null)
             {
-                this.packetListener.disconnect(new TextComponent("Disconnected"));
+                this.packetListener.disconnect(TextComponent.fromLegacyText("Disconnected"));
             }
         }
     }

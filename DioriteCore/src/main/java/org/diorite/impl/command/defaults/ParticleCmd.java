@@ -4,7 +4,6 @@ import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Particle;
-import org.diorite.chat.component.TextComponent;
 import org.diorite.command.CommandPriority;
 import org.diorite.entity.Player;
 
@@ -17,7 +16,7 @@ public class ParticleCmd extends SystemCommandImpl
         {
             if (args.length() < 10)
             {
-                sender.sendMessage(new TextComponent("&cUsage: /particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]"));
+                sender.sendMessage("&cUsage: /particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");
                 return;
             }
 
@@ -33,7 +32,7 @@ public class ParticleCmd extends SystemCommandImpl
 
             if (particle == null)
             {
-                sender.sendMessage(new TextComponent("&cSorry, this particle isn't found (" + particles + ")"));
+                sender.sendSimpleColoredMessage("&cSorry, this particle isn't found (" + particles + ")");
                 return;
             }
 
@@ -53,7 +52,7 @@ public class ParticleCmd extends SystemCommandImpl
             }
 
             ((Player) sender).showParticle(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data);
-            sender.sendMessage(new TextComponent("&aParticle " + particle.name() + " (" + particle.getId() + "/" + particle.getMinecraftParticleName() + ") has been created!"));
+            sender.sendSimpleColoredMessage("&aParticle " + particle.name() + " (" + particle.getId() + "/" + particle.getMinecraftParticleName() + ") has been created!");
         });
     }
 }

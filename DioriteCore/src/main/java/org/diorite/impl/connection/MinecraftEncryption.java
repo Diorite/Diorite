@@ -36,9 +36,8 @@ public final class MinecraftEncryption
             return localKeyPairGenerator.generateKeyPair();
         } catch (final NoSuchAlgorithmException e)
         {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     @SuppressWarnings("TypeMayBeWeakened")
@@ -53,9 +52,8 @@ public final class MinecraftEncryption
             return localMessageDigest.digest();
         } catch (final NoSuchAlgorithmException | UnsupportedEncodingException e)
         {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public static PublicKey generatePublicKey(final byte[] paramArrayOfByte)
@@ -65,10 +63,10 @@ public final class MinecraftEncryption
             final KeySpec localX509EncodedKeySpec = new X509EncodedKeySpec(paramArrayOfByte);
             final KeyFactory localKeyFactory = KeyFactory.getInstance("RSA");
             return localKeyFactory.generatePublic(localX509EncodedKeySpec);
-        } catch (final NoSuchAlgorithmException | InvalidKeySpecException ignored)
+        } catch (final NoSuchAlgorithmException | InvalidKeySpecException e)
         {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     @SuppressWarnings("TypeMayBeWeakened")
@@ -86,9 +84,8 @@ public final class MinecraftEncryption
             return localCipher.doFinal(bytes);
         } catch (final GeneralSecurityException e)
         {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public static Cipher getCipher(final int i, final Key key)

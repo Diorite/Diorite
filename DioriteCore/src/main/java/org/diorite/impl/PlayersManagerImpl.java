@@ -81,8 +81,8 @@ public class PlayersManagerImpl
 
         this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, player.getGameProfile()));
 
-        this.server.updatePlayerListHeaderAndFooter(new TextComponent("Welcome to Diorite!"), new TextComponent("http://diorite.org"), player); // TODO Tests, remove it
-        player.sendTitle(new TextComponent("Welcome to Diorite"), new TextComponent("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
+        this.server.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
+        player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
         /*EntityMinecartRideable entity = new EntityMinecartRideable(4, 180, -4);
 
         player.getNetworkManager().sendPacket(new PacketPlayOutSpawnEntity(entity));

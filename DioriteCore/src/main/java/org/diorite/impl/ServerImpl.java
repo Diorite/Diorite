@@ -1,6 +1,8 @@
 package org.diorite.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
@@ -48,10 +50,15 @@ import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
 import org.diorite.Diorite;
 import org.diorite.Server;
 import org.diorite.cfg.DioriteConfig;
+import org.diorite.cfg.DioriteConfig.OnlineMode;
+import org.diorite.cfg.system.Template;
+import org.diorite.cfg.system.TemplateCreator;
+import org.diorite.cfg.yaml.DioriteYaml;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Player;
 import org.diorite.plugin.Plugin;
+import org.diorite.utils.DioriteUtils;
 import org.diorite.world.World;
 import org.diorite.world.WorldsManager;
 import org.diorite.world.generator.WorldGenerators;
@@ -81,7 +88,7 @@ public class ServerImpl implements Server, Runnable
     protected       ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
     protected       ConsoleReader            reader;
     protected       long                     currentTick;
-    protected       boolean                  onlineMode;
+    protected       OnlineMode               onlineMode;
     protected       byte                     renderDistance;
     protected final int                      playerTimeout;
     protected final int                      keepAliveTimer;
@@ -99,19 +106,117 @@ public class ServerImpl implements Server, Runnable
         this.compressionThreshold = compressionThreshold;
     }
 
+    private void loadConfigFile(final File f)
+    {
+        final Template<DioriteConfig> cfgTemp = TemplateCreator.getTemplate(DioriteConfig.class);
+        boolean needWrite = true;
+        if (f.exists())
+        {
+            final DioriteYaml dy = new DioriteYaml();
+            try
+            {
+                this.config = dy.loadAs(new FileInputStream(f), DioriteConfig.class);
+                if (this.config == null)
+                {
+                    this.config = new DioriteConfig();
+                }
+                else
+                {
+                    needWrite = false;
+                }
+            } catch (final FileNotFoundException ignored) // should be never thrown.
+            {
+                throw new AssertionError("Config file not found...", ignored);
+            }
+        }
+        else
+        {
+            this.config = new DioriteConfig();
+            try
+            {
+                DioriteUtils.createFile(f);
+            } catch (final IOException e)
+            {
+                throw new RuntimeException("Can't create configuration file!", e);
+            }
+        }
+        if (needWrite)
+        {
+            try
+            {
+                cfgTemp.dump(f, this.config);
+            } catch (final IOException e)
+            {
+                throw new RuntimeException("Can't dump configuration file!", e);
+            }
+        }
+    }
+
     public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
     {
         instance = this;
         Diorite.setServer(this);
+        this.loadConfigFile((File) options.valueOf("config"));
+        if (this.config == null)
+        {
+            throw new AssertionError("Configuration instance is null after creating!");
+        }
 
         this.keepAliveTimer = (int) options.valueOf("keepalivetimer");
-        this.playerTimeout = (int) options.valueOf("timeout");
-        this.compressionThreshold = (int) options.valueOf("compressionthreshold");
 
-        this.hostname = options.valueOf("hostname").toString();
-        this.port = (int) options.valueOf("port");
-        this.onlineMode = (boolean) options.valueOf("online");
-        this.renderDistance = (byte) options.valueOf("render");
+        if (options.has("keepalivetimer"))
+        {
+            this.playerTimeout = (int) options.valueOf("timeout");
+        }
+        else
+        {
+            this.playerTimeout = this.config.getPlayerIdleTimeout();
+        }
+        if (options.has("compressionthreshold"))
+        {
+            this.compressionThreshold = (int) options.valueOf("compressionthreshold");
+        }
+        else
+        {
+            this.compressionThreshold = this.config.getNetworkCompressionThreshold();
+        }
+
+        if (options.has("hostname"))
+        {
+            this.hostname = options.valueOf("hostname").toString();
+        }
+        else
+        {
+            this.hostname = this.config.getHostname();
+        }
+
+        if (options.has("port"))
+        {
+            this.port = (int) options.valueOf("port");
+        }
+        else
+        {
+            this.port = this.config.getPort();
+        }
+
+        if (options.has("online"))
+        {
+            final OnlineMode mode = OnlineMode.valueOf(options.valueOf("online").toString().toUpperCase());
+            this.onlineMode = (mode == null) ? OnlineMode.TRUE : mode;
+        }
+        else
+        {
+            this.onlineMode = this.config.getOnlineMode();
+        }
+
+        if (options.has("render"))
+        {
+            this.renderDistance = (byte) options.valueOf("render");
+        }
+        else
+        {
+            this.renderDistance = (byte) this.config.getViewDistance();
+        }
 
 
         this.serverName = serverName;
@@ -397,12 +502,12 @@ public class ServerImpl implements Server, Runnable
         return this.playersManager;
     }
 
-    public boolean isOnlineMode()
+    public OnlineMode getOnlineMode()
     {
         return this.onlineMode;
     }
 
-    public void setOnlineMode(final boolean onlineMode)
+    public void setOnlineMode(final OnlineMode onlineMode)
     {
         this.onlineMode = onlineMode;
     }

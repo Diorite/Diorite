@@ -51,7 +51,7 @@ public class HandshakeListener implements PacketHandshakingInListener
                     if ((throttleTracker.containsKey(address)) && (! "127.0.0.1".equals(address.getHostAddress())) && ((currentTime - throttleTracker.get(address)) < connectionThrottle))
                     {
                         throttleTracker.put(address, currentTime);
-                        this.disconnect(new TextComponent("Connection throttled! Please wait before reconnecting."));
+                        this.disconnect(TextComponent.fromLegacyText("Connection throttled! Please wait before reconnecting."));
                         return;
                     }
                     throttleTracker.put(address, currentTime);
@@ -76,11 +76,11 @@ public class HandshakeListener implements PacketHandshakingInListener
                 }
                 if (packet.getProtocolVersion() > CURRENT_PROTOCOL)
                 {
-                    this.disconnect(new TextComponent("Outdated server, we are still on 1.8"));
+                    this.disconnect(TextComponent.fromLegacyText("Outdated server, we are still on 1.8"));
                 }
                 else if (packet.getProtocolVersion() < CURRENT_PROTOCOL)
                 {
-                    this.disconnect(new TextComponent("Outdated client, we are on 1.8"));
+                    this.disconnect(TextComponent.fromLegacyText("Outdated client, we are on 1.8"));
                 }
                 else
                 {
