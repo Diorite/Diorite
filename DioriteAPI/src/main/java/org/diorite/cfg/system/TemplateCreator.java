@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -25,6 +24,7 @@ import org.diorite.cfg.annotations.CfgField;
 import org.diorite.cfg.annotations.CfgFooterComment;
 import org.diorite.cfg.annotations.CfgFooterComments;
 import org.diorite.cfg.annotations.CfgFooterCommentsArray;
+import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 
 /**
@@ -49,7 +49,7 @@ public final class TemplateCreator
     {
         do
         {
-            if ((c == null) || (c == Object.class) || (c == Object[].class) || (Map.class.isAssignableFrom(c)) || (Iterable.class.isAssignableFrom(c)) || (Iterator.class.isAssignableFrom(c)) || String.class.isAssignableFrom(c) || DioriteReflectionUtils.getPrimitive(c).isPrimitive() || (c.isArray() && (DioriteReflectionUtils.getPrimitive(c.getComponentType()).isPrimitive() || String.class.isAssignableFrom(c.getComponentType()))))
+            if ((c == null) || (Enum.class.isAssignableFrom(c)) || (c == Object.class) || (c == Object[].class) || (c.isArray() && (DioriteReflectionUtils.getPrimitive(c.getComponentType()).isPrimitive() || String.class.isAssignableFrom(c.getComponentType()))) || (TemplateElements.getElement(c) != TemplateElements.getDefaultTemplatesHandler()))
             {
                 return;
             }
@@ -63,6 +63,7 @@ public final class TemplateCreator
                 }
                 checkTemplate(c);
             }
+            System.out.println(c);
             getTemplate(c, true, true, false);
             c = c.getSuperclass();
         } while (true);
@@ -155,7 +156,7 @@ public final class TemplateCreator
                 }
             }
         }
-        final Template<T> template = new Template<>(name, clazz, header, footer, fields);
+        final Template<T> template = new BaseTemplate<>(name, clazz, header, footer, fields);
         if (cache)
         {
             templateMap.put(clazz, template);

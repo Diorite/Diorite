@@ -1,5 +1,7 @@
 package org.diorite.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +33,31 @@ public final class DioriteUtils
         }
     }
 
+    /**
+     * Don't ise that if you don't know what {@link Unsafe} is.
+     *
+     * @return unsafe instance.
+     */
     public static Unsafe getUnsafe()
     {
         return unsafeInstance;
+    }
+
+    /**
+     * Create file directory, and then create file.
+     *
+     * @param file file to create.
+     *
+     * @throws IOException from {@link File#createNewFile()}
+     */
+    public static void createFile(final File file) throws IOException
+    {
+        if (file.exists())
+        {
+            return;
+        }
+        file.getAbsoluteFile().getParentFile().mkdirs();
+        file.createNewFile();
     }
 
     /**
@@ -41,7 +65,7 @@ public final class DioriteUtils
      * so it will join duplicated items etc.
      *
      * @param respectStackSize if method should respect max stack size.
-     * @param items item to compact.
+     * @param items            item to compact.
      *
      * @return compacted array of items.
      */

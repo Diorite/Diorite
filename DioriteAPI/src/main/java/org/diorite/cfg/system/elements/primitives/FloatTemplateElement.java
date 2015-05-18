@@ -20,7 +20,7 @@ public class FloatTemplateElement extends SimpleTemplateElement<Float>
             {
                 return ((Number) obj).floatValue();
             }
-            throw new UnsupportedOperationException("Can't convert object to Float: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Float: " + obj);
         }, Number.class::isAssignableFrom);
     }
 

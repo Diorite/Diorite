@@ -20,7 +20,7 @@ public class DoubleTemplateElement extends SimpleTemplateElement<Double>
             {
                 return ((Number) obj).doubleValue();
             }
-            throw new UnsupportedOperationException("Can't convert object to Double: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Double: " + obj);
         }, Number.class::isAssignableFrom);
     }
 

@@ -15,6 +15,8 @@ public interface CommandSender
 
     boolean isCommandBlock();
 
+    void sendRawMessage(String str);
+
     void sendMessage(String str);
 
     void sendMessage(BaseComponent component);
@@ -22,7 +24,18 @@ public interface CommandSender
     Server getServer();
 
 
-    default void sendMessage(final String[] strs)
+    default void sendRawMessage(final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.sendRawMessage(str);
+            }
+        }
+    }
+
+    default void sendMessage(final String... strs)
     {
         if (strs != null)
         {
@@ -35,10 +48,10 @@ public interface CommandSender
 
     default void sendSimpleColoredMessage(final String str)
     {
-        this.sendMessage(ChatColor.translateAlternateColorCodes(str));
+        this.sendMessage(ChatColor.translateAlternateColorCodesInString(str));
     }
 
-    default void sendSimpleColoredMessage(final String[] strs)
+    default void sendSimpleColoredMessage(final String... strs)
     {
         if (strs != null)
         {
@@ -54,7 +67,7 @@ public interface CommandSender
         this.sendMessage(DioriteMarkdownParser.parse(str, false));
     }
 
-    default void sendDioriteMessage(final String[] strs)
+    default void sendDioriteMessage(final String... strs)
     {
         if (strs != null)
         {
@@ -65,7 +78,7 @@ public interface CommandSender
         }
     }
 
-    default void sendMessage(final BaseComponent[] components)
+    default void sendMessage(final BaseComponent... components)
     {
         if (components != null)
         {

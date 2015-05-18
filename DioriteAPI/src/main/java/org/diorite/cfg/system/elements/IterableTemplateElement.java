@@ -41,7 +41,7 @@ public class IterableTemplateElement extends TemplateElement<Iterable>
             {
                 return ((Map) obj).entrySet();
             }
-            throw new UnsupportedOperationException("Can't convert object to Iterable: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Iterable: " + obj);
         }, Map.class::isAssignableFrom);
     }
 

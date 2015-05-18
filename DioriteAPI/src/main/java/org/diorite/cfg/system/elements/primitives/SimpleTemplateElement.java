@@ -18,7 +18,7 @@ public abstract class SimpleTemplateElement<T> extends TemplateElement<T>
     /**
      * construct new template for given class, convert function and class type checking function.
      *
-     * @param fieldType          type of supproted template element.
+     * @param fieldType      type of supproted template element.
      * @param function       function used to convert other types to this type (may throw errors)
      * @param classPredicate returns true for classes that can be converted into supproted type.
      */
@@ -35,7 +35,7 @@ public abstract class SimpleTemplateElement<T> extends TemplateElement<T>
     public SimpleTemplateElement(final Class<T> clazz)
     {
         super(clazz, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to " + clazz.getSimpleName() + ": " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to " + clazz.getSimpleName() + ": " + obj);
         }, c -> false);
     }
 

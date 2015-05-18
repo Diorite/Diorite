@@ -20,7 +20,7 @@ public class ByteTemplateElement extends SimpleTemplateElement<Byte>
             {
                 return ((Number) obj).byteValue();
             }
-            throw new UnsupportedOperationException("Can't convert object to Byte: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Byte: " + obj);
         }, Number.class::isAssignableFrom);
     }
 

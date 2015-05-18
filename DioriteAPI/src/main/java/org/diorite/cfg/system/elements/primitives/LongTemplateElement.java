@@ -20,7 +20,7 @@ public class LongTemplateElement extends SimpleTemplateElement<Long>
             {
                 return ((Number) obj).longValue();
             }
-            throw new UnsupportedOperationException("Can't convert object to Long: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Long: " + obj);
         }, Number.class::isAssignableFrom);
     }
 

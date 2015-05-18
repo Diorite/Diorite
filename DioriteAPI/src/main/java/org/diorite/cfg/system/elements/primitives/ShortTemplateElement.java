@@ -20,7 +20,7 @@ public class ShortTemplateElement extends SimpleTemplateElement<Short>
             {
                 return ((Number) obj).shortValue();
             }
-            throw new UnsupportedOperationException("Can't convert object to Short: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Short: " + obj);
         }, Number.class::isAssignableFrom);
     }
 

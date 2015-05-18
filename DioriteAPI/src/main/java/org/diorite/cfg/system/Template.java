@@ -1,19 +1,14 @@
 package org.diorite.cfg.system;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.system.elements.TemplateElement.ElementPlace;
-import org.diorite.cfg.system.elements.TemplateElements;
-import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.ReflectElement;
 
 /**
@@ -22,104 +17,32 @@ import org.diorite.utils.reflections.ReflectElement;
  *
  * @param <T> type of object.
  */
-public class Template<T>
+public interface Template<T>
 {
-    /**
-     * name of template/object.
-     */
-    private final String                              name;
-    /**
-     * type of object/template.
-     */
-    private final Class<T>                            clazz;
-    /**
-     * header comment, may be ny
-     */
-    private final String                              header;
-    private final String                              footer;
-    private final Map<ConfigField, ReflectElement<?>> fields;
-
-    /**
-     * Construct new template for given class and fields.
-     *
-     * @param name   name of template/object, should be class name.
-     * @param clazz  type of object/template.
-     * @param header header comment, may be null.
-     * @param footer footer comment, may be null.
-     * @param fields collection of fields data.
-     */
-    public Template(final String name, final Class<T> clazz, final String header, final String footer, final Collection<ConfigField> fields)
-    {
-        Validate.notNull(clazz, "Class can't be null!");
-        this.name = (name == null) ? clazz.getSimpleName() : name;
-        this.clazz = clazz;
-        this.header = header;
-        this.footer = footer;
-        this.fields = new LinkedHashMap<>(fields.size());
-        for (final ConfigField cf : fields)
-        {
-            this.fields.put(cf, DioriteReflectionUtils.getReflectElement(cf));
-        }
-    }
-
-    /**
-     * Construct new template for given class and fields.
-     *
-     * @param name   name of template/object, should be class name.
-     * @param clazz  type of object/template.
-     * @param header header comment, may be null.
-     * @param footer footer comment, may be null.
-     * @param fields map of fields data and {@link ReflectElement} for that fields.
-     */
-    public Template(final String name, final Class<T> clazz, final String header, final String footer, final Map<ConfigField, ReflectElement<?>> fields)
-    {
-        Validate.notNull(clazz, "Class can't be null!");
-        this.name = (name == null) ? clazz.getSimpleName() : name;
-        this.clazz = clazz;
-        this.header = header;
-        this.footer = footer;
-        this.fields = new LinkedHashMap<>(fields);
-    }
-
     /**
      * @return name of template.
      */
-    public String getName()
-    {
-        return this.name;
-    }
+    String getName();
 
     /**
      * @return type of template.
      */
-    public Class<T> getClazz()
-    {
-        return this.clazz;
-    }
+    Class<T> getType();
 
     /**
      * @return header comment, may be null.
      */
-    public String getHeader()
-    {
-        return this.header;
-    }
+    String getHeader();
 
     /**
      * @return footer comment, may be null.
      */
-    public String getFooter()
-    {
-        return this.footer;
-    }
+    String getFooter();
 
     /**
      * @return copy of map contains all fields data.
      */
-    public Map<ConfigField, ReflectElement<?>> getFields()
-    {
-        return new LinkedHashMap<>(this.fields);
-    }
+    Map<ConfigField, ReflectElement<?>> getFields();
 
     /**
      * dump object to selected {@link Appendable}.
@@ -135,27 +58,7 @@ public class Template<T>
      *
      * @throws IOException from {@link Appendable}
      */
-    public <E extends Appendable> E dump(final E writer, final T object, final int level, final boolean writeComments, final ElementPlace elementPlace) throws IOException
-    {
-        if (writeComments)
-        {
-            appendComment(writer, this.header, level, false);
-            writer.append("\n");
-        }
-
-        for (final Entry<ConfigField, ReflectElement<?>> entry : this.fields.entrySet())
-        {
-            final ConfigField field = entry.getKey();
-            TemplateElements.getElement(field).write(writer, field, object, entry.getValue(), level, true, elementPlace);
-        }
-
-        if (writeComments)
-        {
-            writer.append("\n\n");
-            appendComment(writer, this.footer, level, false);
-        }
-        return writer;
-    }
+    <E extends Appendable> E dump(final E writer, final T object, final int level, final boolean writeComments, final ElementPlace elementPlace) throws IOException;
 
     /**
      * dump object to selected {@link Appendable}.
@@ -170,7 +73,7 @@ public class Template<T>
      *
      * @throws IOException from {@link Appendable}\
      */
-    public <E extends Appendable> E dump(final E writer, final T object, final int level, final boolean writeComments) throws IOException
+    default <E extends Appendable> E dump(final E writer, final T object, final int level, final boolean writeComments) throws IOException
     {
         return this.dump(writer, object, level, writeComments, ElementPlace.NORMAL);
     }
@@ -187,7 +90,7 @@ public class Template<T>
      *
      * @throws IOException from {@link Appendable}\
      */
-    public <E extends Appendable> E dump(final E writer, final T object, final int level) throws IOException
+    default <E extends Appendable> E dump(final E writer, final T object, final int level) throws IOException
     {
         return this.dump(writer, object, level, true, ElementPlace.NORMAL);
     }
@@ -203,9 +106,33 @@ public class Template<T>
      *
      * @throws IOException from {@link Appendable}\
      */
-    public <E extends Appendable> E dump(final E writer, final T object) throws IOException
+    default <E extends Appendable> E dump(final E writer, final T object) throws IOException
     {
         return this.dump(writer, object, 0, true, ElementPlace.NORMAL);
+    }
+
+    /**
+     * dump object to selected {@link File} in YAML text format.
+     *
+     * @param file    file to use, it will be created if needed.
+     * @param object  object to dump. (will be represented as YAML string in file)
+     * @param charset encoding of file.
+     *
+     * @throws IOException if file can't be created/edited.
+     */
+    void dump(File file, T object, Charset charset) throws IOException;
+
+    /**
+     * dump object to selected {@link File} in YAML text format.
+     *
+     * @param file   file to use, it will be created if needed.
+     * @param object object to dump. (will be represented as YAML string in file)
+     *
+     * @throws IOException if file can't be created/edited.
+     */
+    default void dump(final File file, final T object) throws IOException
+    {
+        this.dump(file, object, StandardCharsets.UTF_8);
     }
 
     /**
@@ -215,18 +142,7 @@ public class Template<T>
      *
      * @return string yaml representation of given object.\
      */
-    public String dumpAsString(final T object)
-    {
-        final StringBuilder builder = new StringBuilder(this.fields.size() << 7);
-        try
-        {
-            this.dump(builder, object);
-        } catch (final IOException ignored)
-        {
-            throw new AssertionError("IOException on StringBuilder?", ignored); // not possible?
-        }
-        return builder.toString();
-    }
+    String dumpAsString(final T object);
 
     /**
      * Append indent (2 spaces per level)
@@ -236,7 +152,7 @@ public class Template<T>
      *
      * @throws IOException from {@link Appendable}
      */
-    protected static void spaces(final Appendable writer, final int level) throws IOException
+    static void spaces(final Appendable writer, final int level) throws IOException
     {
         if (level <= 0)
         {
@@ -258,7 +174,7 @@ public class Template<T>
      *
      * @throws IOException from {@link Appendable}
      */
-    public static void appendComment(final Appendable writer, final String string, final int level, final boolean addSpace) throws IOException
+    static void appendComment(final Appendable writer, final String string, final int level, final boolean addSpace) throws IOException
     {
         if (string != null)
         {
@@ -284,40 +200,5 @@ public class Template<T>
                 }
             }
         }
-    }
-
-    @SuppressWarnings("rawtypes")
-    @Override
-    public boolean equals(final Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (! (o instanceof Template))
-        {
-            return false;
-        }
-
-        final Template template = (Template) o;
-        return this.name.equals(template.name) && ! (! this.clazz.equals(template.clazz) || ((this.header != null) ? ! this.header.equals(template.header) : (template.header != null)) || ((this.footer != null) ? ! this.footer.equals(template.footer) : (template.footer != null))) && this.fields.equals(template.fields);
-
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = this.name.hashCode();
-        result = (31 * result) + this.clazz.hashCode();
-        result = (31 * result) + ((this.header != null) ? this.header.hashCode() : 0);
-        result = (31 * result) + ((this.footer != null) ? this.footer.hashCode() : 0);
-        result = (31 * result) + this.fields.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).append("clazz", this.clazz).append("header", this.header).append("footer", this.footer).append("fields", this.fields).toString();
     }
 }

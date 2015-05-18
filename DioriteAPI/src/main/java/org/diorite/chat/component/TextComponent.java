@@ -1,6 +1,5 @@
 package org.diorite.chat.component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,9 +92,40 @@ public class TextComponent extends BaseComponent
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("text", this.text).toString();
     }
 
-    public static BaseComponent[] fromLegacyText(final String message)
+    public static TextComponent join(final BaseComponent... components)
     {
-        final ArrayList<BaseComponent> components = new ArrayList<>(message.length());
+        if ((components == null) || (components.length == 0))
+        {
+            return new TextComponent("");
+        }
+        if (components.length == 1)
+        {
+            if (components[0] instanceof TextComponent)
+            {
+                return (TextComponent) components[0];
+            }
+            return (components[0] == null) ? new TextComponent("") : new TextComponent(components[0]);
+        }
+        final TextComponent base = new TextComponent();
+        for (int i = 0, componentsLength = components.length; i < componentsLength; i++)
+        {
+            final BaseComponent component = components[i];
+            if (component == null)
+            {
+                continue;
+            }
+            if ((i + 1) < componentsLength)
+            {
+                component.addExtra("\n");
+            }
+            base.addExtra(component);
+        }
+        return base;
+    }
+
+    public static BaseComponent fromLegacyText(final String message)
+    {
+        final TextComponent base = new TextComponent("");
         StringBuilder builder = new StringBuilder();
         TextComponent component = new TextComponent();
         final Matcher matcher = url.matcher(message);
@@ -123,7 +153,7 @@ public class TextComponent extends BaseComponent
                     component = new TextComponent(old);
                     old.setText(builder.toString());
                     builder = new StringBuilder();
-                    components.add(old);
+                    base.addExtra(old);
                 }
                 switch (format)
                 {
@@ -165,7 +195,7 @@ public class TextComponent extends BaseComponent
                     component = new TextComponent(old);
                     old.setText(builder.toString());
                     builder = new StringBuilder();
-                    components.add(old);
+                    base.addExtra(old);
                 }
 
                 final TextComponent old = component;
@@ -173,7 +203,7 @@ public class TextComponent extends BaseComponent
                 final String urlString = message.substring(i, pos);
                 component.setText(urlString);
                 component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, urlString.startsWith("http") ? urlString : ("http://" + urlString)));
-                components.add(component);
+                base.addExtra(component);
                 i += pos - i - 1;
                 component = old;
                 continue;
@@ -183,15 +213,8 @@ public class TextComponent extends BaseComponent
         if (builder.length() > 0)
         {
             component.setText(builder.toString());
-            components.add(component);
+            base.addExtra(component);
         }
-
-        // The client will crash if the array is empty
-        if (components.isEmpty())
-        {
-            components.add(new TextComponent(""));
-        }
-
-        return components.toArray(new BaseComponent[components.size()]);
+        return base;
     }
 }

@@ -25,4 +25,10 @@ public interface ConsoleCommandSender extends CommandSender
     {
         return false;
     }
+
+    @Override
+    default void sendRawMessage(final String str)
+    {
+        this.sendMessage(str);
+    }
 }

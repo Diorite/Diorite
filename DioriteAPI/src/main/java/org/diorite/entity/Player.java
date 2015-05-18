@@ -262,6 +262,6 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
      */
     default void kick(final String reason)
     {
-        this.kick(new TextComponent(reason));
+        this.kick(TextComponent.join(TextComponent.fromLegacyText(reason)));
     }
 }

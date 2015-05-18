@@ -7,6 +7,9 @@ import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.Validate;
 
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
+
 @SuppressWarnings("MagicNumber")
 public enum ChatColor
 {
@@ -105,7 +108,17 @@ public enum ChatColor
         return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
     }
 
-    public static String translateAlternateColorCodes(final char altColorChar, final String textToTranslate)
+    public static BaseComponent translateAlternateColorCodes(final char altColorChar, final String textToTranslate)
+    {
+        return TextComponent.fromLegacyText(translateAlternateColorCodesInString(altColorChar, textToTranslate));
+    }
+
+    public static BaseComponent translateAlternateColorCodes(final String textToTranslate)
+    {
+        return TextComponent.fromLegacyText(translateAlternateColorCodesInString(DEFAULT_ALTERNATE_COLOR_CHAR, textToTranslate));
+    }
+
+    public static String translateAlternateColorCodesInString(final char altColorChar, final String textToTranslate)
     {
         final char[] b = textToTranslate.toCharArray();
         for (int i = 0; i < (b.length - 1); i++)
@@ -119,9 +132,23 @@ public enum ChatColor
         return new String(b);
     }
 
-    public static String translateAlternateColorCodes(final String textToTranslate)
+    public static String translateAlternateColorCodesInString(final String textToTranslate)
     {
-        return translateAlternateColorCodes(DEFAULT_ALTERNATE_COLOR_CHAR, textToTranslate);
+        return translateAlternateColorCodesInString(DEFAULT_ALTERNATE_COLOR_CHAR, textToTranslate);
+    }
+
+    public static String removeColorCodesInString(final char altColorChar, final String textToTranslate)
+    {
+        final char[] b = textToTranslate.toCharArray();
+        for (int i = 0; i < (b.length - 1); i++)
+        {
+            if ((b[i] == COLOR_CHAR) && ("0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[(i + 1)]) > - 1))
+            {
+                b[i] = altColorChar;
+                b[(i + 1)] = Character.toLowerCase(b[(i + 1)]);
+            }
+        }
+        return new String(b);
     }
 
     public static String getLastColors(final CharSequence input)

@@ -15,7 +15,13 @@ public class CharTemplateElement extends SimpleTemplateElement<Character>
      */
     public CharTemplateElement()
     {
-        super(char.class);
+        super(char.class, obj -> {
+            if (obj instanceof Character)
+            {
+                return (char) obj;
+            }
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Character: " + obj);
+        }, Character.class::isAssignableFrom);
     }
 
     @Override

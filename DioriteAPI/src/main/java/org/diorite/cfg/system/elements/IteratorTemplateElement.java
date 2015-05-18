@@ -33,7 +33,7 @@ public class IteratorTemplateElement extends TemplateElement<Iterator>
             {
                 return ((Iterable) obj).iterator();
             }
-            throw new UnsupportedOperationException("Can't convert object to Iterator: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Iterator: " + obj);
         }, Map.class::isAssignableFrom);
     }
 

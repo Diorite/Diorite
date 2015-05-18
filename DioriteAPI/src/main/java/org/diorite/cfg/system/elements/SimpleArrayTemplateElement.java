@@ -78,7 +78,7 @@ public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
     public SimpleArrayTemplateElement(final Class<T> clazz)
     {
         super(clazz, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to " + clazz.getSimpleName() + ": " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to " + clazz.getSimpleName() + ": " + obj);
         }, c -> false);
     }
 

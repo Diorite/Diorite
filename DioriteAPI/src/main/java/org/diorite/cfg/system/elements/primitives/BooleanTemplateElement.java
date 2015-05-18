@@ -15,7 +15,13 @@ public class BooleanTemplateElement extends SimpleTemplateElement<Boolean>
      */
     public BooleanTemplateElement()
     {
-        super(boolean.class);
+        super(boolean.class, obj -> {
+            if (obj instanceof Boolean)
+            {
+                return (boolean) obj;
+            }
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Boolean: " + obj);
+        }, Boolean.class::isAssignableFrom);
     }
 
     @Override

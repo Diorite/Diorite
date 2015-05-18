@@ -29,7 +29,7 @@ public class ObjectArrayTemplateElement extends SimpleArrayTemplateElement<Objec
             {
                 return ((Collection) obj).toArray();
             }
-            throw new UnsupportedOperationException("Can't convert object to Object[]: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Object[]: " + obj);
         }, Collection.class::isAssignableFrom);
     }
 

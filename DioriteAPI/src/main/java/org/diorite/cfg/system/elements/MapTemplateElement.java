@@ -30,7 +30,7 @@ public class MapTemplateElement extends TemplateElement<Map>
     public MapTemplateElement()
     {
         super(Map.class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object to Map: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Map: " + obj);
         }, c -> false);
     }
 

@@ -31,12 +31,13 @@ public interface Server
     int NANOS_IN_MILLI  = 1000000;
     int NANOS_IN_SECOND = NANOS_IN_MILLI * 1000;
 
-    int    DEFAULT_PORT            = 25565;
-    String DEFAULT_SERVER          = "main";
-    int    DEFAULT_TPS             = 20;
-    byte   DEFAULT_RENDER_DISTANCE = 10;
-    int    DEFAULT_WAIT_TIME       = NANOS_IN_SECOND / DEFAULT_TPS;
-    int    MAX_NICKNAME_SIZE       = 16;
+    int    DEFAULT_PORT                         = 25565;
+    int    DEFAULT_PACKET_COMPRESSION_THRESHOLD = 256;
+    String DEFAULT_SERVER                       = "main";
+    int    DEFAULT_TPS                          = 20;
+    byte   DEFAULT_RENDER_DISTANCE              = 10;
+    int    DEFAULT_WAIT_TIME                    = NANOS_IN_SECOND / DEFAULT_TPS;
+    int    MAX_NICKNAME_SIZE                    = 16;
 
     DioriteConfig getConfig();
 
@@ -159,10 +160,26 @@ public interface Server
 
     default void broadcastMessage(final ChatPosition position, final String str)
     {
-        this.broadcastMessage(position, new TextComponent(str));
+        this.broadcastMessage(position, TextComponent.fromLegacyText(str));
     }
 
     default void broadcastMessage(final ChatPosition position, final String... strs)
+    {
+        if (strs != null)
+        {
+            for (final String str : strs)
+            {
+                this.broadcastMessage(position, TextComponent.fromLegacyText(str));
+            }
+        }
+    }
+
+    default void broadcastRawMessage(final ChatPosition position, final String str)
+    {
+        this.broadcastMessage(position, new TextComponent(str));
+    }
+
+    default void broadcastRawMessage(final ChatPosition position, final String... strs)
     {
         if (strs != null)
         {
@@ -218,7 +235,7 @@ public interface Server
 
     default void broadcastMessage(final String str)
     {
-        this.broadcastMessage(new TextComponent(str));
+        this.broadcastMessage(TextComponent.fromLegacyText(str));
     }
 
     default void broadcastMessage(final String... strs)
@@ -227,7 +244,7 @@ public interface Server
         {
             for (final String str : strs)
             {
-                this.broadcastMessage(new TextComponent(str));
+                this.broadcastMessage(TextComponent.fromLegacyText(str));
             }
         }
     }
@@ -304,7 +321,7 @@ public interface Server
 
     default void sendConsoleSimpleColoredMessage(final String str)
     {
-        this.sendConsoleMessage(ChatColor.translateAlternateColorCodes(str));
+        this.sendConsoleMessage(ChatColor.translateAlternateColorCodesInString(str));
     }
 
     default void sendConsoleSimpleColoredMessage(final String... strs)

@@ -1,5 +1,9 @@
 package org.diorite.cfg.system.elements;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,11 +38,13 @@ import org.diorite.utils.reflections.DioriteReflectionUtils;
  * object types that are 'hard' to convert, should be first,
  * and types that can be easly convert should be last.
  * <p>
- * In default pipeline, first element is {@link Map}, only classes implementing that interface can be used with this template,
+ * In default pipeline, first elements are {@link Enum}, {@link java.net.URI}, {@link java.net.URL}, {@link File} and {@link java.nio.file.Path} handlers.
+ * <p>
+ * Next element is {@link Map}, only classes implementing that interface can be used with this template,
  * if you want add map impelementation that should use other template you MUST add it BEFORE this element, by:
  * {@link #getElements()} and {@link Pipeline#addBefore(String, String, Object)}
  * <p>
- * Second element is {@link Iterable}, if object implementing map interface will be passed to
+ * Next element is {@link Iterable}, if object implementing map interface will be passed to
  * iterable template, it will convert it using {@link Map#entrySet()}
  * <p>
  * Next one is {@link Iterator}, if object implementing {@link Iterable} interface will be passed to
@@ -158,6 +164,12 @@ public final class TemplateElements
 
     static
     {
+        elements.addLast(Enum.class.getName(), EnumTemplateElement.INSTANCE);
+        elements.addLast(URI.class.getName(), URITemplateElement.INSTANCE);
+        elements.addLast(URL.class.getName(), URLTemplateElement.INSTANCE);
+        elements.addLast(File.class.getName(), FileTemplateElement.INSTANCE);
+        elements.addLast(Path.class.getName(), PathTemplateElement.INSTANCE);
+
         elements.addLast(Map.class.getName(), MapTemplateElement.INSTANCE);
         elements.addLast(Iterable.class.getName(), IterableTemplateElement.INSTANCE);
         elements.addLast(Iterator.class.getName(), IteratorTemplateElement.INSTANCE);

@@ -10,6 +10,7 @@ import org.diorite.cfg.system.FieldOptions;
 
 /**
  * Template handler for all string-based objects.
+ *
  * @see String
  * @see CharSequence
  */
@@ -41,7 +42,7 @@ public class StringTemplateElement extends TemplateElement<String>
             {
                 return obj.toString();
             }
-            throw new UnsupportedOperationException("Can't convert object to Map: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to String: " + obj);
         }, CharSequence.class::isAssignableFrom);
     }
 

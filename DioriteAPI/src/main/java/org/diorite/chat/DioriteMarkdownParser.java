@@ -24,7 +24,7 @@ public class DioriteMarkdownParser
 
     public static BaseComponent parse(final String str, final ChatColor defaultColor, final boolean colors)
     {
-        return new TextComponent(str);
+        return TextComponent.fromLegacyText(str);
 //        return new DioriteMarkdownParser(colors ? ChatColor.translateAlternateColorCodes(str) : str, defaultColor).parse();
     }
 }

@@ -20,7 +20,7 @@ public class IntTemplateElement extends SimpleTemplateElement<Integer>
             {
                 return ((Number) obj).intValue();
             }
-            throw new UnsupportedOperationException("Can't convert object to Int: " + obj);
+            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Int: " + obj);
         }, Number.class::isAssignableFrom);
     }
 
