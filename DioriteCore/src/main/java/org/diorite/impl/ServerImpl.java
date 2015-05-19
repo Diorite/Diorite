@@ -377,9 +377,18 @@ public class ServerImpl implements Server, Runnable
             return; // TODO This shouldn't never happen. Maybe IllegalStateException?
         }
         this.isRunning = false;
-        this.playersManager.forEach(p -> p.kick("§4Server closed!"));
-        this.worldsManager.getWorlds().stream().forEach(World::save);
-        this.serverConnection.close();
+        if (this.playersManager != null)
+        {
+            this.playersManager.forEach(p -> p.kick("§4Server closed!"));
+        }
+        if (this.worldsManager != null)
+        {
+            this.worldsManager.getWorlds().stream().forEach(World::save);
+        }
+        if (this.serverConnection != null)
+        {
+            this.serverConnection.close();
+        }
         System.out.println("Goodbye <3");
         // TODO
     }

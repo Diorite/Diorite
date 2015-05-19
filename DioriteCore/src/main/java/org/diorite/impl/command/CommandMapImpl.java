@@ -146,16 +146,43 @@ public class CommandMapImpl implements CommandMap
     };
 
     @Override
-    public void dispatch(final CommandSender sender, final String cmdLine)
+    public Command findCommand(final String cmdLine)
     {
         if ((cmdLine == null) || cmdLine.isEmpty())
         {
-            return;
+            return null;
+        }
+        final int index = cmdLine.indexOf(' ');
+        final String command;
+        if (index == - 1)
+        {
+            command = cmdLine;
+        }
+        else
+        {
+            command = cmdLine.substring(0, index);
+        }
+        for (final MainCommand cmd : this.getSortedCommandList())
+        {
+            if (cmd.matches(command))
+            {
+                return cmd;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean dispatch(final CommandSender sender, final String cmdLine)
+    {
+        if ((cmdLine == null) || cmdLine.isEmpty())
+        {
+            return false;
         }
         final String[] args = DioriteStringUtils.splitArguments(cmdLine);
         if (args.length == 0)
         {
-            return;
+            return false;
         }
         if (sender.isPlayer())
         {
@@ -177,11 +204,12 @@ public class CommandMapImpl implements CommandMap
         {
             if (cmd.tryDispatch(sender, command, newArgs))
             {
-                return;
+                return true;
             }
         }
-        // TODO: changeable message
-        sender.sendSimpleColoredMessage("&4No command: &c" + command);
+        // TO|DO: changeable message
+        //   sender.sendSimpleColoredMessage("&4No command: &c" + command);
+        return false;
     }
 
     public synchronized void registerCommand(final MainCommand command)

@@ -8,13 +8,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.multithreading.ChatAction;
-import org.diorite.chat.ChatColor;
-import org.diorite.chat.component.BaseComponent;
+import org.diorite.impl.pipelines.ChatPipelineImpl;
 import org.diorite.chat.component.TextComponent;
+import org.diorite.entity.Player;
+import org.diorite.event.player.PlayerChatEvent;
+import org.diorite.event.pipelines.ChatPipeline;
 
 public class ChatThread extends Thread
 {
-    private static final Queue<ChatAction> actions = new ConcurrentLinkedQueue<>();
+    private static final ChatPipeline      pipeline = new ChatPipelineImpl(); // TODO: add way to access this pipeline
+    private static final Queue<ChatAction> actions  = new ConcurrentLinkedQueue<>();
     private final ServerImpl server;
 
     public ChatThread(final ServerImpl server)
@@ -32,6 +35,10 @@ public class ChatThread extends Thread
 
     public static void add(final ChatAction action)
     {
+        if ((action == null) || (action.getSender() == null) || (action.getMsg() == null) || !(action.getSender() instanceof Player))
+        {
+            return;
+        }
         actions.add(action);
         synchronized (actions)
         {
@@ -59,12 +66,7 @@ public class ChatThread extends Thread
                 }
                 continue;
             }
-            // TODO: chat event
-            // TODO: implement some needed permissions (Yeach, I need create permissions system too) to use markdown options.
-            final BaseComponent base = TextComponent.fromLegacyText(((action.getSender() == null) ? "" : (action.getSender().getName() + ChatColor.AQUA + ": " + ChatColor.GRAY.toString() + (action.getMsg() == null ? "" : action.getMsg()))));
-            // base.addExtra((action.getMsg() == null) ? new TextComponent("") : DioriteMarkdownParser.parse(action.getMsg(), ChatColor.GRAY)); TODO: fix
-            this.server.getPlayersManager().forEach(p -> p.sendMessage(base));
-            this.server.getConsoleSender().sendMessage(base);
+            pipeline.run(new PlayerChatEvent((Player) action.getSender(), new TextComponent(action.getMsg())));
         }
     }
 
