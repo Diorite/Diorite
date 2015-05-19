@@ -1,9 +1,5 @@
 package org.diorite.chat.component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,13 +7,13 @@ import org.diorite.chat.ChatColor;
 
 public class ComponentBuilder
 {
-    private final Collection<BaseComponent> parts = new ArrayList<>(8);
-    private TextComponent current;
+    private final TextComponent parts = new TextComponent("");
+    private BaseComponent current;
 
     public ComponentBuilder(final ComponentBuilder original)
     {
         this.current = new TextComponent(original.current);
-        this.parts.addAll(original.parts.stream().map(BaseComponent::duplicate).collect(Collectors.toList()));
+        original.parts.getExtra().stream().map(BaseComponent::duplicate).forEach(this.parts::addExtra);
     }
 
     public ComponentBuilder(final String text)
@@ -25,11 +21,24 @@ public class ComponentBuilder
         this.current = new TextComponent(text);
     }
 
+    public ComponentBuilder append(final BaseComponent component)
+    {
+        this.parts.addExtra(this.current);
+        this.current = component;
+        return this;
+    }
+
+    public ComponentBuilder appendLegacy(final String text)
+    {
+        this.parts.addExtra(this.current);
+        this.current = TextComponent.fromLegacyText(text);
+        return this;
+    }
+
     public ComponentBuilder append(final String text)
     {
-        this.parts.add(this.current);
-        this.current = new TextComponent(this.current);
-        this.current.setText(text);
+        this.parts.addExtra(this.current);
+        this.current = new TextComponent(text);
         return this;
     }
 
@@ -81,10 +90,20 @@ public class ComponentBuilder
         return this;
     }
 
-    public BaseComponent[] create()
+    public TextComponent create()
     {
-        this.parts.add(this.current);
-        return this.parts.toArray(new BaseComponent[this.parts.size()]);
+        this.parts.addExtra(this.current);
+        return this.parts;
+    }
+
+    public static ComponentBuilder start(final String text)
+    {
+        return new ComponentBuilder(text);
+    }
+
+    public static ComponentBuilder start(final ComponentBuilder original)
+    {
+        return new ComponentBuilder(original);
     }
 
     @Override

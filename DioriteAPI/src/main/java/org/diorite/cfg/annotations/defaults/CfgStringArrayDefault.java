@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 /**
  * Used to define default value of {@link String[]} type.
  * It will be read from field only if field have compatybile type.
+ *
+ * Strings can be also used for {@link java.io.File} default values.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
