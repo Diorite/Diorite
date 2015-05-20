@@ -14,6 +14,7 @@ import org.fusesource.jansi.AnsiConsole;
 import org.diorite.impl.connection.packets.RegisterPackets;
 import org.diorite.Server;
 import org.diorite.material.Material;
+import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.util.ResourceLeakDetector;
 import jline.UnsupportedTerminal;
@@ -99,7 +100,7 @@ public final class Main
                     final String lvl = options.valueOf("rld").toString();
                     if (lvl.length() == 1)
                     {
-                        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.values()[Integer.parseInt(lvl)]);
+                        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.values()[DioriteMathUtils.asInt(lvl, 0)]);
                     }
                     else
                     {
@@ -134,7 +135,7 @@ public final class Main
                 {
                     if (s.startsWith("-XX:MaxPermSize"))
                     {
-                        maxPermGen = Integer.parseInt(PERM_GEN_PAT.matcher(s).replaceAll(""));
+                        maxPermGen = DioriteMathUtils.asInt(PERM_GEN_PAT.matcher(s).replaceAll(""), 0);
                         maxPermGen <<= 10 * "kmg".indexOf(Character.toLowerCase(s.charAt(s.length() - 1)));
                     }
                 }

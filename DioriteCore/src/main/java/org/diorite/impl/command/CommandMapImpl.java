@@ -216,7 +216,7 @@ public class CommandMapImpl implements CommandMap
     {
         if (command instanceof PluginCommand)
         {
-            this.commandMap.put(((PluginCommand) command).getPlugin().getName() + Command.COMMAND_PLUGIN_SEPARATOR + command.getName(), command);
+            this.registerCommand((PluginCommand) command);
         }
         else if (command instanceof SystemCommandImpl)
         {

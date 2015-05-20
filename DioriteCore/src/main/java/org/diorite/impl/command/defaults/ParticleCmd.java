@@ -6,6 +6,7 @@ import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Particle;
 import org.diorite.command.CommandPriority;
 import org.diorite.entity.Player;
+import org.diorite.utils.math.DioriteMathUtils;
 
 public class ParticleCmd extends SystemCommandImpl
 {
@@ -20,16 +21,9 @@ public class ParticleCmd extends SystemCommandImpl
                 return;
             }
 
-            String particles = args.asString(0);
-            Particle particle;
-            try
-            {
-                particle = Particle.getParticleById(Integer.parseInt(particles));
-            } catch (NumberFormatException e)
-            {
-                particle = Particle.getParticleByName(particles.toUpperCase());
-            }
-
+            final String particles = args.asString(0);
+            final Integer particleID = DioriteMathUtils.asInt(particles);
+            final Particle particle = (particleID == null) ? Particle.getParticleByName(particles.toUpperCase()) : Particle.getParticleById(particleID);
             if (particle == null)
             {
                 sender.sendSimpleColoredMessage("&cSorry, this particle isn't found (" + particles + ")");
