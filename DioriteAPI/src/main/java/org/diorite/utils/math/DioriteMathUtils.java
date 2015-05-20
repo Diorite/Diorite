@@ -795,7 +795,8 @@ public final class DioriteMathUtils
     }
 
     /**
-     * Parse string to int, if string can't be parsed to int, then it will return null.
+     * Parse string to int, if string can't be parsed to int, then it will return null. <br>
+     * Based on {@link Integer#parseInt(String)}
      *
      * @param str string to parse
      *
@@ -803,17 +804,71 @@ public final class DioriteMathUtils
      */
     public static Integer asInt(final String str)
     {
-        try
-        {
-            return Integer.valueOf(str);
-        } catch (final NumberFormatException e)
+        int result = 0;
+        boolean negative = false;
+        int i = 0;
+        final int len = str.length();
+        int limit = - Integer.MAX_VALUE;
+        final int multmin;
+        int digit;
+
+        if (len > 11) // integer number can't have more than 11 chars -> -2 147 483 648
         {
             return null;
         }
+        if (len > 0)
+        {
+            final char firstChar = str.charAt(0);
+            if (firstChar < '0')
+            { // Possible leading "+" or "-"
+                if (firstChar == '-')
+                {
+                    negative = true;
+                    limit = Integer.MIN_VALUE;
+                }
+                else if (firstChar != '+')
+                {
+                    return null;
+                }
+
+                if (len == 1) // Cannot have lone "+" or "-"
+                {
+                    return null;
+                }
+                i++;
+            }
+            multmin = limit / 10;
+            while (i < len)
+            {
+                // Accumulating negatively avoids surprises near MAX_VALUE
+                final char digitChar = str.charAt(i++);
+                if ((digitChar > '9') || (digitChar < '0'))
+                {
+                    return null;
+                }
+                digit = digitChar - '0';
+                if (result < multmin)
+                {
+                    return null;
+                }
+                result *= 10;
+                if (result < (limit + digit))
+                {
+                    return null;
+                }
+                result -= digit;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        return negative ? result : - result;
     }
 
     /**
-     * Parse string to long, if string can't be parsed to long, then it will return null.
+     * Parse string to long, if string can't be parsed to long, then it will return null. <br>
+     * Based on {@link Long#parseLong(String)}
      *
      * @param str string to parse
      *
@@ -821,13 +876,66 @@ public final class DioriteMathUtils
      */
     public static Long asLong(final String str)
     {
-        try
-        {
-            return Long.valueOf(str);
-        } catch (final NumberFormatException e)
+        long result = 0;
+        boolean negative = false;
+        int i = 0;
+        final int len = str.length();
+        long limit = - Long.MAX_VALUE;
+        final long multmin;
+        int digit;
+
+        if (len > 20) // long number can't have more than 11 chars -> -9 223 372 036 854 775 808
         {
             return null;
         }
+        if (len > 0)
+        {
+            final char firstChar = str.charAt(0);
+            if (firstChar < '0')
+            { // Possible leading "+" or "-"
+                if (firstChar == '-')
+                {
+                    negative = true;
+                    limit = Long.MIN_VALUE;
+                }
+                else if (firstChar != '+')
+                {
+                    return null;
+                }
+
+                if (len == 1) // Cannot have lone "+" or "-"
+                {
+                    return null;
+                }
+                i++;
+            }
+            multmin = limit / 10;
+            while (i < len)
+            {
+                // Accumulating negatively avoids surprises near MAX_VALUE
+                final char digitChar = str.charAt(i++);
+                if ((digitChar > '9') || (digitChar < '0'))
+                {
+                    return null;
+                }
+                digit = digitChar - '0';
+                if (result < multmin)
+                {
+                    return null;
+                }
+                result *= 10;
+                if (result < (limit + digit))
+                {
+                    return null;
+                }
+                result -= digit;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        return negative ? result : - result;
     }
 
     /**
@@ -876,13 +984,8 @@ public final class DioriteMathUtils
      */
     public static int asInt(final String str, final int def)
     {
-        try
-        {
-            return Integer.parseInt(str);
-        } catch (final NumberFormatException e)
-        {
-            return def;
-        }
+        final Integer i = asInt(str);
+        return (i == null) ? def : i;
     }
 
     /**
@@ -895,13 +998,8 @@ public final class DioriteMathUtils
      */
     public static long asLong(final String str, final long def)
     {
-        try
-        {
-            return Long.parseLong(str);
-        } catch (final NumberFormatException e)
-        {
-            return def;
-        }
+        final Long l = asLong(str);
+        return (l == null) ? def : l;
     }
 
     /**

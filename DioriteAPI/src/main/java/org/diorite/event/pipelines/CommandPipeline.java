@@ -1,10 +1,9 @@
 package org.diorite.event.pipelines;
 
 import org.diorite.event.others.SenderCommandEvent;
-import org.diorite.event.player.PlayerChatEvent;
 
 /**
- * {@link EventPipeline} using {@link PlayerChatEvent} as type.
+ * {@link EventPipeline} using {@link SenderCommandEvent} as type.
  * <p>
  * Default handlers are: <br>
  * <b>Diorite|Cmd</b> {@literal ->} find command to execute. (only if command ism't already set) <br>

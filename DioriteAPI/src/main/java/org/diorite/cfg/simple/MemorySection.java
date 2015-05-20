@@ -11,6 +11,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.math.DioriteMathUtils;
+
 public class MemorySection implements ConfigurationSection
 {
     protected final Map<String, Object>  map;
@@ -868,13 +870,8 @@ public class MemorySection implements ConfigurationSection
         {
             return ((Number) object).intValue();
         }
-        try
-        {
-            return Integer.valueOf(object.toString());
-        } catch (final NumberFormatException | NullPointerException ignored)
-        {
-        }
-        return 0;
+        final Integer i = DioriteMathUtils.asInt(object.toString());
+        return (i == null) ? 0 : i;
     }
 
 //    static float toFloat(final Object object)
