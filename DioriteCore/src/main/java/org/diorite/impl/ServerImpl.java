@@ -43,6 +43,8 @@ import org.diorite.impl.multithreading.input.ConsoleReaderThread;
 import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
+import org.diorite.impl.pipelines.ChatPipelineImpl;
+import org.diorite.impl.pipelines.CommandPipelineImpl;
 import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
 import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
@@ -57,6 +59,11 @@ import org.diorite.cfg.yaml.DioriteYaml;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Player;
+import org.diorite.event.EventType;
+import org.diorite.event.others.SenderCommandEvent;
+import org.diorite.event.pipelines.ChatPipeline;
+import org.diorite.event.pipelines.CommandPipeline;
+import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.plugin.Plugin;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.world.World;
@@ -152,6 +159,12 @@ public class ServerImpl implements Server, Runnable
         }
     }
 
+    private void registerEvents()
+    {
+        EventType.register(SenderCommandEvent.class, CommandPipeline.class, new CommandPipelineImpl());
+        EventType.register(PlayerChatEvent.class, ChatPipeline.class, new ChatPipelineImpl());
+    }
+
     public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
     {
         instance = this;
@@ -221,6 +234,7 @@ public class ServerImpl implements Server, Runnable
 
         this.serverName = serverName;
         this.mainServerThread = new Thread(this);
+        this.registerEvents();
 
         if (System.console() == null)
         {

@@ -6,8 +6,9 @@ import org.diorite.command.sender.CommandSender;
 import org.diorite.event.others.SenderCommandEvent;
 import org.diorite.event.pipelines.CommandPipeline;
 import org.diorite.utils.DioriteStringUtils;
+import org.diorite.utils.pipeline.SimpleEventPipeline;
 
-public class CommandPipelineImpl extends EventPipelineImpl<SenderCommandEvent> implements CommandPipeline
+public class CommandPipelineImpl extends SimpleEventPipeline<SenderCommandEvent> implements CommandPipeline
 {
     @Override
     public void reset_()

@@ -8,14 +8,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.multithreading.ChatAction;
-import org.diorite.impl.pipelines.CommandPipelineImpl;
+import org.diorite.event.EventType;
 import org.diorite.event.others.SenderCommandEvent;
-import org.diorite.event.pipelines.CommandPipeline;
 
 public class CommandsThread extends Thread
 {
-    private static final CommandPipeline   pipeline = new CommandPipelineImpl(); // TODO: add way to access this pipeline
-    private static final Queue<ChatAction> actions  = new ConcurrentLinkedQueue<>();
+    private static final Queue<ChatAction> actions = new ConcurrentLinkedQueue<>();
     private final ServerImpl server;
 
     public CommandsThread(final ServerImpl server)
@@ -64,7 +62,7 @@ public class CommandsThread extends Thread
                 }
                 continue;
             }
-            pipeline.run(new SenderCommandEvent(action.getSender(), action.getMsg()));
+            EventType.callEvent(new SenderCommandEvent(action.getSender(), action.getMsg()));
         }
     }
 

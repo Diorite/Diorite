@@ -8,6 +8,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
+import org.diorite.event.EventType;
+import org.diorite.event.others.SenderCommandEvent;
 
 import jline.console.ConsoleReader;
 
@@ -39,7 +41,7 @@ public class ConsoleReaderThread extends Thread
                 {
                     continue;
                 }
-                this.server.getCommandMap().dispatch(this.server.getConsoleSender(), line);
+                EventType.callEvent(new SenderCommandEvent(this.server.getConsoleSender(), line));
             }
         } catch (final NoSuchElementException ignored)
         {
