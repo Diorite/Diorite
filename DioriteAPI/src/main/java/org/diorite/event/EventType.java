@@ -1,0 +1,245 @@
+package org.diorite.event;
+
+import java.util.IdentityHashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.event.pipelines.EventPipeline;
+
+/**
+ * Class for all events, all events needs to be registered here. <br>
+ * It don't use {@link org.diorite.utils.SimpleEnum} because it use generic types.
+ *
+ * @param <T> type of event.
+ * @param <E> type of pipeline for this event.
+ */
+public class EventType<T extends Event, E extends EventPipeline<T>>
+{
+    private static final Map<Class<? extends Event>, EventType<?, ?>>            byEventClass    = new IdentityHashMap<>(2);
+    private static final Map<Class<? extends EventPipeline<?>>, EventType<?, ?>> byPipelineClass = new IdentityHashMap<>(2);
+
+    private final Class<T> eventClass;
+    private final Class<E> pipelineClass;
+    private       E        pipeline;
+
+    /**
+     * Construct new event type, not registred event is usless.
+     *
+     * @param eventClass    class of used event.
+     * @param pipelineClass class of used pipeline.
+     * @param pipeline      event pipeline.
+     *
+     * @see #register(EventType)
+     */
+    public EventType(final Class<T> eventClass, final Class<E> pipelineClass, final E pipeline)
+    {
+        this.eventClass = eventClass;
+        this.pipelineClass = pipelineClass;
+        this.pipeline = pipeline;
+    }
+
+    /**
+     * @return event class used by this event.
+     */
+    public Class<T> getEventClass()
+    {
+        return this.eventClass;
+    }
+
+    /**
+     * @return expected pipeline class.
+     */
+    public Class<E> getPipelineClass()
+    {
+        return this.pipelineClass;
+    }
+
+    /**
+     * Every even have own pipeline, may return null if used before event init.
+     *
+     * @return used pipeline.
+     */
+    public E getPipeline()
+    {
+        return this.pipeline;
+    }
+
+    /**
+     * Allow to change event pipeline used be event.
+     *
+     * @param pipeline new pipeline for event.
+     */
+    public void setPipeline(final E pipeline)
+    {
+        if ((pipeline != null) && ! this.pipelineClass.isAssignableFrom(pipeline.getClass()))
+        {
+            throw new RuntimeException("This event need pipeline of " + this.pipelineClass.getName() + " type, not: " + pipeline.getClass());
+        }
+        this.pipeline = pipeline;
+    }
+
+    /**
+     * Construct new event type and register it.
+     *
+     * @param eventClass    class of used event.
+     * @param pipelineClass class of used pipeline.
+     * @param pipeline      event pipeline.
+     * @param <T>           type of event.
+     * @param <E>           type of pipeline for this event.
+     *
+     * @return created and registered event type.
+     *
+     * @throws IllegalArgumentException if event class is already registered.
+     */
+    public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> register(final Class<T> eventClass, final Class<E> pipelineClass, final E pipeline) throws IllegalArgumentException
+    {
+        return register(new EventType<>(eventClass, pipelineClass, pipeline));
+    }
+
+    /**
+     * Register new event type.
+     *
+     * @param type event type to register.
+     * @param <T>  type of event.
+     * @param <E>  type of pipeline for this event.
+     *
+     * @return given event type.
+     *
+     * @throws IllegalArgumentException if event class is already registered.
+     */
+    public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> register(final EventType<T, E> type) throws IllegalArgumentException
+    {
+        if (byEventClass.containsKey(type.getEventClass()))
+        {
+            throw new IllegalArgumentException("Event already registered: " + type + ", existing: " + byEventClass.get(type.getEventClass()));
+        }
+        byEventClass.put(type.getEventClass(), type);
+        final Class<E> clazz = type.getPipelineClass();
+        byPipelineClass.put(clazz, type);
+        return type;
+    }
+
+    /**
+     * Gets event type by given event class. <br>
+     *
+     * @param clazz event class to find event type for it.
+     * @param <T>   type of event.
+     * @param <E>   type of pipeline for this event.
+     *
+     * @return event type for that event or null.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> getByEvent(final Class<T> clazz)
+    {
+        return (EventType<T, E>) byEventClass.get(clazz);
+    }
+
+    /**
+     * Gets event type by given event instance. <br>
+     * It just pass class of given object to {@link #getByEvent(Class)}
+     * and return this same value.
+     *
+     * @param evt event instance to find event type for it.
+     * @param <T> type of event.
+     * @param <E> type of pipeline for this event.
+     *
+     * @return event type for that event or null.
+     *
+     * @see #getByEvent(Class)
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> getByEvent(final T evt)
+    {
+        return (EventType<T, E>) byEventClass.get(evt.getClass());
+    }
+
+    /**
+     * Gets event type by given pipeline clazz. <br>
+     * Method will try get pipeline for special map for given class,
+     * if that fail, then it will iterate over all types and return first
+     * type that pipeline class {@link Class#isAssignableFrom(Class)} given class. <br>
+     * Or return null if there is no matching type.
+     *
+     * @param clazz pipeline class of event to find.
+     * @param <T>   type of event.
+     * @param <E>   type of pipeline for this event.
+     *
+     * @return event type for that pipeline clazz or null.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> getByPipeline(final Class<E> clazz)
+    {
+        final EventType<?, ?> type = byPipelineClass.get(clazz);
+        if (type != null)
+        {
+            return (EventType<T, E>) type;
+        }
+        for (final EventType<?, ?> t : values())
+        {
+            if (t.pipelineClass.isAssignableFrom(clazz))
+            {
+                return (EventType<T, E>) t;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets event type by given pipeline instance.
+     *
+     * @param pipe pipeline of event to find.
+     * @param <T>  type of event.
+     * @param <E>  type of pipeline for this event.
+     *
+     * @return event type for that pipeline or null.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> getByPipeline(final E pipe)
+    {
+        for (final EventType<?, ?> t : values())
+        {
+            //noinspection ObjectEquality
+            if (t.pipeline == pipe)
+            {
+                return (EventType<T, E>) t;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Method will find event type of this event and pass given event to its pipeline. <br>
+     * If it can't find event type or pipeline is null, method will return false.
+     *
+     * @param event event to call.
+     *
+     * @return true if pipeline was found and event was passed to it.
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static boolean callEvent(final Event event)
+    {
+        final EventType pipe = getByEvent(event);
+        if ((pipe == null) || (pipe.pipeline == null))
+        {
+            return false;
+        }
+        pipe.pipeline.run(event);
+        return true;
+    }
+
+    /**
+     * @return all event types in array.
+     */
+    public static EventType<?, ?>[] values()
+    {
+        return byEventClass.values().toArray(new EventType<?, ?>[byEventClass.size()]);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("eventClass", this.eventClass).append("pipelineClass", this.pipelineClass).append("pipeline", (this.pipeline == null) ? null : this.pipeline.toNamesCollection()).toString();
+    }
+}

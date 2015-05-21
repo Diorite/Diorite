@@ -44,13 +44,13 @@ public final class DioriteMathUtils
 
     /**
      * Convert given int to String with roman number.
-     * Examples:
-     * {@code 10 -> X}
-     * {@code 99 -> IC}
-     * {@code 30 -> XXX}
-     * {@code 80 -> LXXX}
-     * {@code 1910 -> MCMX}
-     * {@code 1903 -> MCMIII}
+     * Examples:<br>
+     * {@code 10 -> X}<br>
+     * {@code 99 -> IC}<br>
+     * {@code 30 -> XXX}<br>
+     * {@code 80 -> LXXX}<br>
+     * {@code 1910 -> MCMX}<br>
+     * {@code 1903 -> MCMIII}<br>
      *
      * @param i int to convert.
      *
@@ -63,18 +63,18 @@ public final class DioriteMathUtils
 
     /**
      * Convert given string with roman number to int.
-     * Examples:
-     * {@code X -> 10}
-     * {@code LC -> 99}
-     * {@code XXX -> 30}
-     * {@code LXXX -> 80}
-     * {@code MCMX -> 1910}
-     * {@code MCMIII -> 1903}
+     * Examples:<br>
+     * {@code X -> 10}<br>
+     * {@code LC -> 99}<br>
+     * {@code XXX -> 30}<br>
+     * {@code LXXX -> 80}<br>
+     * {@code MCMX -> 1910}<br>
+     * {@code MCMIII -> 1903}<br>
      * <p>
      * It can also convert not really valid numbers, like:
-     * {@code IIIIIX -> 5}
-     * {@code MDCCCCX -> 1910}
-     * {@code MDCDIII -> 1903}
+     * {@code IIIIIX -> 5}<br>
+     * {@code MDCCCCX -> 1910}<br>
+     * {@code MDCDIII -> 1903}<br>
      *
      * @param roman roman numver
      *
@@ -90,9 +90,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or closest value in range.
-     * {@code value > max -> max}
-     * {@code value < min -> min}
-     * {@code else -> value}
+     * {@code value > max -> max}<br>
+     * {@code value < min -> min}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -115,9 +115,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or closest value in range.
-     * {@code value > max -> max}
-     * {@code value < min -> min}
-     * {@code else -> value}
+     * {@code value > max -> max}<br>
+     * {@code value < min -> min}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -140,9 +140,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or closest value in range.
-     * {@code value > max -> max}
-     * {@code value < min -> min}
-     * {@code else -> value}
+     * {@code value > max -> max}<br>
+     * {@code value < min -> min}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -165,9 +165,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or closest value in range.
-     * {@code value > max -> max}
-     * {@code value < min -> min}
-     * {@code else -> value}
+     * {@code value > max -> max}<br>
+     * {@code value < min -> min}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -190,9 +190,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or closest value in range.
-     * {@code value > max -> max}
-     * {@code value < min -> min}
-     * {@code else -> value}
+     * {@code value > max -> max}<br>
+     * {@code value < min -> min}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -215,9 +215,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or closest value in range.
-     * {@code value > max -> max}
-     * {@code value < min -> min}
-     * {@code else -> value}
+     * {@code value > max -> max}<br>
+     * {@code value < min -> min}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -240,9 +240,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or default value.
-     * {@code value > max -> def}
-     * {@code value < min -> def}
-     * {@code else -> value}
+     * {@code value > max -> def}<br>
+     * {@code value < min -> def}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -266,9 +266,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or default value.
-     * {@code value > max -> def}
-     * {@code value < min -> def}
-     * {@code else -> value}
+     * {@code value > max -> def}<br>
+     * {@code value < min -> def}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -292,9 +292,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or default value.
-     * {@code value > max -> def}
-     * {@code value < min -> def}
-     * {@code else -> value}
+     * {@code value > max -> def}<br>
+     * {@code value < min -> def}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -318,9 +318,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or default value.
-     * {@code value > max -> def}
-     * {@code value < min -> def}
-     * {@code else -> value}
+     * {@code value > max -> def}<br>
+     * {@code value < min -> def}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -344,9 +344,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or default value.
-     * {@code value > max -> def}
-     * {@code value < min -> def}
-     * {@code else -> value}
+     * {@code value > max -> def}<br>
+     * {@code value < min -> def}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -370,9 +370,9 @@ public final class DioriteMathUtils
 
     /**
      * Return given number if it is in range, or default value.
-     * {@code value > max -> def}
-     * {@code value < min -> def}
-     * {@code else -> value}
+     * {@code value > max -> def}<br>
+     * {@code value < min -> def}<br>
+     * {@code else -> value}<br>
      *
      * @param value number to validate.
      * @param min   min value in range. (inclusive)
@@ -621,12 +621,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * {@literal 10: 1010 -> 2}
-     * {@literal 2: 10 -> 1}
-     * {@literal 56: 111000 -> 3}
-     * {@literal 34: 100010 -> 2}
-     * {@literal 255: 11111111 -> 8}
-     * {@literal 256: 100000000 -> 1}
+     * {@literal 10: 1010 -> 2}<br>
+     * {@literal 2: 10 -> 1}<br>
+     * {@literal 56: 111000 -> 3}<br>
+     * {@literal 34: 100010 -> 2}<br>
+     * {@literal 255: 11111111 -> 8}<br>
+     * {@literal 256: 100000000 -> 1}<br>
      *
      * @param num number to count bits in it.
      *
@@ -645,12 +645,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * {@literal 10: 1010 -> 2}
-     * {@literal 2: 10 -> 1}
-     * {@literal 56: 111000 -> 3}
-     * {@literal 34: 100010 -> 2}
-     * {@literal 255: 11111111 -> 8}
-     * {@literal 256: 100000000 -> 1}
+     * {@literal 10: 1010 -> 2}<br>
+     * {@literal 2: 10 -> 1}<br>
+     * {@literal 56: 111000 -> 3}<br>
+     * {@literal 34: 100010 -> 2}<br>
+     * {@literal 255: 11111111 -> 8}<br>
+     * {@literal 256: 100000000 -> 1}<br>
      *
      * @param num number to count bits in it.
      *
@@ -669,12 +669,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * {@literal 10: 1010 -> 2}
-     * {@literal 2: 10 -> 1}
-     * {@literal 56: 111000 -> 3}
-     * {@literal 34: 100010 -> 2}
-     * {@literal 255: 11111111 -> 8}
-     * {@literal 256: 100000000 -> 1}
+     * {@literal 10: 1010 -> 2}<br>
+     * {@literal 2: 10 -> 1}<br>
+     * {@literal 56: 111000 -> 3}<br>
+     * {@literal 34: 100010 -> 2}<br>
+     * {@literal 255: 11111111 -> 8}<br>
+     * {@literal 256: 100000000 -> 1}<br>
      *
      * @param num number to count bits in it.
      *
@@ -693,12 +693,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * {@literal 10: 1010 -> 2}
-     * {@literal 2: 10 -> 1}
-     * {@literal 56: 111000 -> 3}
-     * {@literal 34: 100010 -> 2}
-     * {@literal 255: 11111111 -> 8}
-     * {@literal 256: 100000000 -> 1}
+     * {@literal 10: 1010 -> 2}<br>
+     * {@literal 2: 10 -> 1}<br>
+     * {@literal 56: 111000 -> 3}<br>
+     * {@literal 34: 100010 -> 2}<br>
+     * {@literal 255: 11111111 -> 8}<br>
+     * {@literal 256: 100000000 -> 1}<br>
      *
      * @param num number to count bits in it.
      *
@@ -717,12 +717,12 @@ public final class DioriteMathUtils
     /**
      * count 1 bits in nubmer.
      * <p>
-     * {@literal 10: 1010 -> 2}
-     * {@literal 2: 10 -> 1}
-     * {@literal 56: 111000 -> 3}
-     * {@literal 34: 100010 -> 2}
-     * {@literal 255: 11111111 -> 8}
-     * {@literal 256: 100000000 -> 1}
+     * {@literal 10: 1010 -> 2}<br>
+     * {@literal 2: 10 -> 1}<br>
+     * {@literal 56: 111000 -> 3}<br>
+     * {@literal 34: 100010 -> 2}<br>
+     * {@literal 255: 11111111 -> 8}<br>
+     * {@literal 256: 100000000 -> 1}<br>
      *
      * @param num number to count bits in it.
      *
@@ -1056,10 +1056,10 @@ public final class DioriteMathUtils
 
     /**
      * Parse string to boolean using two collections of words, for true and false values.
-     * If any of trueWords is equals (equalsIgnoreCase) to given string, then method returns ture.
-     * If any of falseWords is equals (equalsIgnoreCase) to given string, then method returns false.
-     * If given word don't match any words from collections, then method returns null
-     *
+     * If any of trueWords is equals (equalsIgnoreCase) to given string, then method returns ture.<br>
+     * If any of falseWords is equals (equalsIgnoreCase) to given string, then method returns false.<br>
+     * If given word don't match any words from collections, then method returns null<br>
+     *<br>
      * @param str        string to parse.
      * @param trueWords  words that mean "true"
      * @param falseWords words that mean "false"
