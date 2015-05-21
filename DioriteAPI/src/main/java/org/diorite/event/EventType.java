@@ -18,7 +18,6 @@ import org.diorite.event.pipelines.EventPipeline;
 public class EventType<T extends Event, E extends EventPipeline<T>>
 {
     private static final Map<Class<? extends Event>, EventType<?, ?>>            byEventClass    = new IdentityHashMap<>(2);
-    private static final Map<Class<? extends EventPipeline<?>>, EventType<?, ?>> byPipelineClass = new IdentityHashMap<>(2);
 
     private final Class<T> eventClass;
     private final Class<E> pipelineClass;
@@ -116,8 +115,6 @@ public class EventType<T extends Event, E extends EventPipeline<T>>
             throw new IllegalArgumentException("Event already registered: " + type + ", existing: " + byEventClass.get(type.getEventClass()));
         }
         byEventClass.put(type.getEventClass(), type);
-        final Class<E> clazz = type.getPipelineClass();
-        byPipelineClass.put(clazz, type);
         return type;
     }
 
@@ -153,60 +150,6 @@ public class EventType<T extends Event, E extends EventPipeline<T>>
     public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> getByEvent(final T evt)
     {
         return (EventType<T, E>) byEventClass.get(evt.getClass());
-    }
-
-    /**
-     * Gets event type by given pipeline clazz. <br>
-     * Method will try get pipeline for special map for given class,
-     * if that fail, then it will iterate over all types and return first
-     * type that pipeline class {@link Class#isAssignableFrom(Class)} given class. <br>
-     * Or return null if there is no matching type.
-     *
-     * @param clazz pipeline class of event to find.
-     * @param <T>   type of event.
-     * @param <E>   type of pipeline for this event.
-     *
-     * @return event type for that pipeline clazz or null.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> getByPipeline(final Class<E> clazz)
-    {
-        final EventType<?, ?> type = byPipelineClass.get(clazz);
-        if (type != null)
-        {
-            return (EventType<T, E>) type;
-        }
-        for (final EventType<?, ?> t : values())
-        {
-            if (t.pipelineClass.isAssignableFrom(clazz))
-            {
-                return (EventType<T, E>) t;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Gets event type by given pipeline instance.
-     *
-     * @param pipe pipeline of event to find.
-     * @param <T>  type of event.
-     * @param <E>  type of pipeline for this event.
-     *
-     * @return event type for that pipeline or null.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T extends Event, E extends EventPipeline<T>> EventType<T, E> getByPipeline(final E pipe)
-    {
-        for (final EventType<?, ?> t : values())
-        {
-            //noinspection ObjectEquality
-            if (t.pipeline == pipe)
-            {
-                return (EventType<T, E>) t;
-            }
-        }
-        return null;
     }
 
     /**
