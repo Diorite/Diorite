@@ -1,5 +1,7 @@
 package org.diorite.entity;
 
+import java.util.List;
+
 import org.diorite.GameMode;
 import org.diorite.Particle;
 import org.diorite.chat.component.BaseComponent;
@@ -23,6 +25,13 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
 
     @Override
     PlayerInventory getInventory();
+
+    /**
+     * Send tab complete packet to player.
+     *
+     * @param strs strings to send.
+     */
+    void sendTabCompletes(List<String> strs);
 
     /**
      * Gets this player current {@link GameMode}

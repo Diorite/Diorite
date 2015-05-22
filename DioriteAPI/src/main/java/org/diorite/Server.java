@@ -2,6 +2,7 @@ package org.diorite;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -38,6 +39,10 @@ public interface Server
     byte   DEFAULT_RENDER_DISTANCE              = 10;
     int    DEFAULT_WAIT_TIME                    = NANOS_IN_SECOND / DEFAULT_TPS;
     int    MAX_NICKNAME_SIZE                    = 16;
+
+    List<String> getOnlinePlayersNames(String prefix);
+
+    List<String> getOnlinePlayersNames();
 
     DioriteConfig getConfig();
 
