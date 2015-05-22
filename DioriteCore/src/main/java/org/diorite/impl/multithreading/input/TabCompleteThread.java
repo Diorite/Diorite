@@ -1,18 +1,15 @@
 package org.diorite.impl.multithreading.input;
 
-import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutTabComplete;
-import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.multithreading.ChatAction;
-import org.diorite.command.sender.CommandSender;
+import org.diorite.event.EventType;
+import org.diorite.event.others.SenderTabCompleteEvent;
 
 public class TabCompleteThread extends Thread
 {
@@ -34,6 +31,10 @@ public class TabCompleteThread extends Thread
 
     public static void add(final ChatAction action)
     {
+        if ((action.getSender() == null) || (action.getMsg() == null))
+        {
+            return;
+        }
         actions.add(action);
         synchronized (actions)
         {
@@ -61,34 +62,7 @@ public class TabCompleteThread extends Thread
                 }
                 continue;
             }
-            // TODO: tab complete event
-            final CommandSender sender = (action.getSender() == null) ? this.server.getConsoleSender() : action.getSender();
-            //noinspection HardcodedFileSeparator
-            if ((action.getMsg() != null) && action.getMsg().startsWith("/"))
-            {
-                final Collection<String> strs = this.server.getCommandMap().tabComplete(sender, action.getMsg().substring(1));
-                if (! (sender instanceof PlayerImpl))
-                {
-                    sender.sendSimpleColoredMessage("&7" + StringUtils.join(strs, "&r, &7"));
-                }
-                else
-                {
-                    ((PlayerImpl) sender).getNetworkManager().sendPacket(new PacketPlayOutTabComplete(strs));
-                }
-            }
-            else
-            {
-                final String name = action.getMsg();
-                final Collection<String> strs = ((name == null) || name.trim().isEmpty()) ? this.server.getPlayersManager().getOnlinePlayersNames() : this.server.getPlayersManager().getOnlinePlayersNames(name);
-                if (! (sender instanceof PlayerImpl))
-                {
-                    sender.sendSimpleColoredMessage("&7" + StringUtils.join(strs, "&r, &7"));
-                }
-                else
-                {
-                    ((PlayerImpl) sender).getNetworkManager().sendPacket(new PacketPlayOutTabComplete(strs));
-                }
-            }
+            EventType.callEvent(new SenderTabCompleteEvent(action.getSender(), action.getMsg()));
         }
     }
 

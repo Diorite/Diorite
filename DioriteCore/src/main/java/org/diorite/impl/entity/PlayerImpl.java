@@ -1,5 +1,6 @@
 package org.diorite.impl.entity;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,6 +16,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange.ReasonCodes;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutResourcePackSend;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutTabComplete;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutWorldParticles;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
@@ -327,6 +329,12 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public PlayerInventory getInventory()
     {
         return this.inventory;
+    }
+
+    @Override
+    public void sendTabCompletes(final List<String> strs)
+    {
+        this.networkManager.sendPacket(new PacketPlayOutTabComplete(strs));
     }
 
     @Override

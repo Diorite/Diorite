@@ -10,6 +10,7 @@ import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Handler;
@@ -45,6 +46,7 @@ import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
 import org.diorite.impl.pipelines.ChatPipelineImpl;
 import org.diorite.impl.pipelines.CommandPipelineImpl;
+import org.diorite.impl.pipelines.TabCompletePipelineImpl;
 import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
 import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
@@ -61,8 +63,10 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
 import org.diorite.event.others.SenderCommandEvent;
+import org.diorite.event.others.SenderTabCompleteEvent;
 import org.diorite.event.pipelines.ChatPipeline;
 import org.diorite.event.pipelines.CommandPipeline;
+import org.diorite.event.pipelines.TabCompletePipeline;
 import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.plugin.Plugin;
 import org.diorite.utils.DioriteUtils;
@@ -162,7 +166,20 @@ public class ServerImpl implements Server, Runnable
     private void registerEvents()
     {
         EventType.register(SenderCommandEvent.class, CommandPipeline.class, new CommandPipelineImpl());
+        EventType.register(SenderTabCompleteEvent.class, TabCompletePipeline.class, new TabCompletePipelineImpl());
         EventType.register(PlayerChatEvent.class, ChatPipeline.class, new ChatPipelineImpl());
+    }
+
+    @Override
+    public List<String> getOnlinePlayersNames(final String prefix)
+    {
+        return this.playersManager.getOnlinePlayersNames(prefix);
+    }
+
+    @Override
+    public List<String> getOnlinePlayersNames()
+    {
+        return this.playersManager.getOnlinePlayersNames();
     }
 
     public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
