@@ -6,16 +6,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.command.Command;
 import org.diorite.command.sender.CommandSender;
-import org.diorite.event.Cancellable;
 
 /**
  * When player type something on chat, and it should be now displayed to whole server.
  */
-public class SenderCommandEvent extends SenderEvent implements Cancellable
+public class SenderCommandEvent extends SenderEvent
 {
-    private String  message;
-    private Command command; // cmd that will be executed
-    private boolean cancelled;
+    protected String  message;
+    protected Command command; // cmd that will be executed
 
     /**
      * Construct new chat event with given sender and message.
@@ -90,7 +88,8 @@ public class SenderCommandEvent extends SenderEvent implements Cancellable
         }
 
         final SenderCommandEvent that = (SenderCommandEvent) o;
-        return (this.cancelled == that.cancelled) && this.message.equals(that.message) && ! ((this.command != null) ? ! this.command.equals(that.command) : (that.command != null));
+
+        return this.message.equals(that.message) && ! ((this.command != null) ? ! this.command.equals(that.command) : (that.command != null));
 
     }
 
@@ -100,25 +99,12 @@ public class SenderCommandEvent extends SenderEvent implements Cancellable
         int result = super.hashCode();
         result = (31 * result) + this.message.hashCode();
         result = (31 * result) + ((this.command != null) ? this.command.hashCode() : 0);
-        result = (31 * result) + (this.cancelled ? 1 : 0);
         return result;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("message", this.message).append("command", this.command).append("cancelled", this.cancelled).toString();
-    }
-
-    @Override
-    public boolean isCancelled()
-    {
-        return this.cancelled;
-    }
-
-    @Override
-    public void setCancelled(final boolean bool)
-    {
-        this.cancelled = bool;
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("message", this.message).append("command", (this.command == null) ? null : this.command.getName()).toString();
     }
 }

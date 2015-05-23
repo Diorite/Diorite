@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
 import org.diorite.Server;
-import org.diorite.event.Cancellable;
 import org.diorite.event.Event;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.EventPipeline;
@@ -74,10 +73,14 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
     @Override
     public void run(final T evt)
     {
-        final Cancellable inst = (evt instanceof Cancellable) ? (Cancellable) evt : null;
         for (final EventPipelineHandler<T> handler : this)
         {
-            if (handler.ignoreCancelled() && (inst != null) && inst.isCancelled())
+            //noinspection ObjectEquality
+            if (handler == this.emptyElement)
+            {
+                continue;
+            }
+            if (handler.ignoreCancelled() && evt.isCancelled())
             {
                 continue;
             }

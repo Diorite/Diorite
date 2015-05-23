@@ -9,18 +9,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.command.Command;
 import org.diorite.command.sender.CommandSender;
-import org.diorite.event.Cancellable;
 
 /**
  * When player type something on chat, and it should be now displayed to whole server.
  */
-public class SenderTabCompleteEvent extends SenderEvent implements Cancellable
+public class SenderTabCompleteEvent extends SenderEvent
 {
-    private       String  message;
-    private       Command command; // cmd that will be executed, may be null
-    private final boolean isCommand; // if tab complete was used when typing command
-    private List<String> completes = new ArrayList<>(5);
-    private boolean cancelled;
+    protected       String  message;
+    protected       Command command; // cmd that will be executed, may be null
+    protected final boolean isCommand; // if tab complete was used when typing command
+    protected List<String> completes = new ArrayList<>(5);
 
     /**
      * Construct new chat event with given sender and message.
@@ -144,7 +142,8 @@ public class SenderTabCompleteEvent extends SenderEvent implements Cancellable
         }
 
         final SenderTabCompleteEvent that = (SenderTabCompleteEvent) o;
-        return (this.cancelled == that.cancelled) && this.message.equals(that.message) && ! ((this.command != null) ? ! this.command.equals(that.command) : (that.command != null));
+
+        return (this.isCommand == that.isCommand) && this.message.equals(that.message) && ! ((this.command != null) ? ! this.command.equals(that.command) : (that.command != null)) && ! ((this.completes != null) ? ! this.completes.equals(that.completes) : (that.completes != null));
 
     }
 
@@ -154,25 +153,14 @@ public class SenderTabCompleteEvent extends SenderEvent implements Cancellable
         int result = super.hashCode();
         result = (31 * result) + this.message.hashCode();
         result = (31 * result) + ((this.command != null) ? this.command.hashCode() : 0);
-        result = (31 * result) + (this.cancelled ? 1 : 0);
+        result = (31 * result) + (this.isCommand ? 1 : 0);
+        result = (31 * result) + ((this.completes != null) ? this.completes.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("message", this.message).append("command", this.command).append("cancelled", this.cancelled).toString();
-    }
-
-    @Override
-    public boolean isCancelled()
-    {
-        return this.cancelled;
-    }
-
-    @Override
-    public void setCancelled(final boolean bool)
-    {
-        this.cancelled = bool;
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("message", this.message).append("command", (this.command == null) ? null : this.command.getName()).append("isCommand", this.isCommand).append("completes", this.completes).toString();
     }
 }

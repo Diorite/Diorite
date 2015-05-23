@@ -12,7 +12,7 @@ import org.diorite.world.World;
  */
 public class WorldEvent extends Event
 {
-    private final World world;
+    protected final World world;
 
     /**
      * Construct new world event.

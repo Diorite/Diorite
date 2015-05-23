@@ -3,7 +3,9 @@ package org.diorite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.world.Block;
 import org.diorite.world.World;
 import org.diorite.world.chunk.ChunkPos;
 
@@ -56,6 +58,16 @@ public class BlockLocation
         return new BlockLocation(this.x, this.y, this.z, world);
     }
 
+    public void setBlock(final BlockMaterialData mat)
+    {
+        this.world.setBlock(this.x, this.y, this.z, mat);
+    }
+
+    public Block getBlock()
+    {
+        return this.world.getBlock(this.x, this.y, this.z);
+    }
+
     public BlockLocation addX(final int x)
     {
         return new BlockLocation(this.x + x, this.y, this.z, this.world);
@@ -75,6 +87,37 @@ public class BlockLocation
     {
         return new BlockLocation(this.x + x, this.y + y, this.z + z, this.world);
     }
+
+    public BlockLocation add(final BlockLocation loc)
+    {
+        return new BlockLocation(this.x + loc.x, this.y + loc.y, this.z + loc.z, (this.world == null) ? loc.world : this.world);
+    }
+
+    public BlockLocation subtractX(final int x)
+    {
+        return new BlockLocation(this.x - x, this.y, this.z, this.world);
+    }
+
+    public BlockLocation subtractY(final int y)
+    {
+        return new BlockLocation(this.x, this.y - y, this.z, this.world);
+    }
+
+    public BlockLocation subtractZ(final int z)
+    {
+        return new BlockLocation(this.x, this.y, this.z - z, this.world);
+    }
+
+    public BlockLocation subtract(final int x, final int y, final int z)
+    {
+        return new BlockLocation(this.x - x, this.y - y, this.z - z, this.world);
+    }
+
+    public BlockLocation subtract(final BlockLocation loc)
+    {
+        return new BlockLocation(this.x - loc.x, this.y - loc.y, this.z - loc.z, (this.world == null) ? loc.world : this.world);
+    }
+
 
     public double length()
     {

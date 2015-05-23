@@ -48,7 +48,7 @@ public interface Block
     void setType(BlockMaterialData type);
 
     /**
-     * Save all wrapper data changes to map
+     * update wrapper data, get current data from map.
      */
     void update();
 

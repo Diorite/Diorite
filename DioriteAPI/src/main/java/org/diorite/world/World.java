@@ -2,6 +2,7 @@ package org.diorite.world;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
@@ -18,6 +19,8 @@ import org.diorite.world.generator.WorldGenerator;
 public interface World
 {
     void save();
+
+    Random getRandom();
 
     Dimension getDimension();
 

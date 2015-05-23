@@ -5,15 +5,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
-import org.diorite.event.Cancellable;
 
 /**
  * When player type something on chat, and it should be now displayed to whole server.
  */
-public class PlayerChatEvent extends PlayerEvent implements Cancellable
+public class PlayerChatEvent extends PlayerEvent
 {
-    private TextComponent message;
-    private boolean       cancelled;
+    protected TextComponent message;
 
     /**
      * Construct new chat event with given player and message.
@@ -62,7 +60,6 @@ public class PlayerChatEvent extends PlayerEvent implements Cancellable
         }
 
         final PlayerChatEvent that = (PlayerChatEvent) o;
-
         return ! ((this.message != null) ? ! this.message.equals(that.message) : (that.message != null));
 
     }
@@ -78,18 +75,6 @@ public class PlayerChatEvent extends PlayerEvent implements Cancellable
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("message", this.message).append("cancelled", this.cancelled).toString();
-    }
-
-    @Override
-    public boolean isCancelled()
-    {
-        return this.cancelled;
-    }
-
-    @Override
-    public void setCancelled(final boolean bool)
-    {
-        this.cancelled = bool;
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("message", (this.message == null) ? null : this.message.toLegacyText()).toString();
     }
 }

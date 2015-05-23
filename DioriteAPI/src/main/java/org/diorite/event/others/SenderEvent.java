@@ -9,7 +9,7 @@ import org.diorite.event.Event;
 
 public abstract class SenderEvent extends Event
 {
-    private final CommandSender sender;
+    protected final CommandSender sender;
 
     /**
      * Construct new sender event.
