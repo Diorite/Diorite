@@ -2,7 +2,7 @@
 If you want contribute to Diorite, you must follow instruction in this file.
 You need use us code style and inspections, if you are using Intellij, you can import it from `DioriteIntellijSettings.zip` file located in root directory of repo. If you are using other IDE, there is small description of code style below.
 
-
+***
 ## Code style
 Just few rules:
 * We are using allman bracket style.
@@ -31,7 +31,8 @@ Just few rules:
     * import static * (all others)
     * Two empty lines, and this same pattern for normal (non-static) imports
 * Just see some code if you aren't sure.
-
+* 
+***
 ## Implementing new packets
 If you want implement new packet to diorite: (that exist in vanilla Minecraft)
 * Keep packet name from minecraft decompiled code. **(and only name)**
@@ -41,6 +42,7 @@ If you want implement new packet to diorite: (that exist in vanilla Minecraft)
 * All fields should have getters and setters.
 * Every packet MUST have empty, public constructor, but you can add other constructors
 
+***
 ## Others
 * Try not to use enums where possible, create classes like this: [**Difficulty.java**](https://github.com/Diorite/Diorite-API/blob/master/src/main/java/org/diorite/Difficulty.java)
   * To keep modding simple.
@@ -48,22 +50,27 @@ If you want implement new packet to diorite: (that exist in vanilla Minecraft)
 * Don't add any Minecraft decompiled source code
 * Use java 8 features.
 
+***
 ## Current TODO list, and stuff that we need.
 * Documentation for all methods in API and in Core if needed and possible.
 * Everything.
 
+***
 ## Plans
 There is few things that we want implement in Diorite, when wrtting your code, make sure that it will not collide with them.
 
+***
 ### Full multiworld support
 Diorite will support multiple worlds with groups and separate player data for each of groups.
 
+***
 ### Custom player data
 Plugins instead of creating own player data storage can use Diorite storage, with special features:
 * Supprot for multiworld, data will be automatically saved per world group.
   * With option to make global variables
 * Maybe some more advanced option to use MySQL/SQLite
 
+***
 ### Scoreboards
 Scoreboards should be plugin-friendly, to allow multiple plugins access them without overriding other plugins data.
 Server administrator or other plugins should decide how scoreboards will work:
@@ -71,10 +78,12 @@ Server administrator or other plugins should decide how scoreboards will work:
 * Make scoreboard show only for few seconds
 * Show scoreboard only for players with selected permission or in selected world/world group
 
+***
 ### Advanced permission system
 Diorite permission system should:
 * Support multiworld by default
 * Support numeric permissions, like level permission where having `foo.bar.5` permissions will automatically make all lower number permissions check return true, like `foo.bar.2`
 
+***
 ### Custom entites
 Some way of creating custom entities from API, I have no idea how to do that.
