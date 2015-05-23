@@ -1,6 +1,6 @@
 # ![Diorite](http://hydra-media.cursecdn.com/minecraft.gamepedia.com/0/08/Diorite.png?version=b51c48a2486c6efd87f3ba9b13c8738a) Diorite-Core
 
-[Diorite-Core](https://github.com/Diorite/Diorite-Core) | [Diorite-API](https://github.com/Diorite/Diorite-API)
+[*Diorite-Core*](https://github.com/Diorite/Diorite-Core) | [Diorite-API](https://github.com/Diorite/Diorite-API)
 
 Minecraft Server, Implementation of Diorite-API.<br/>
 Don't take this project too serious, I created it only to play with Netty and Multithreading.<br/>
