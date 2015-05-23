@@ -1,11 +1,14 @@
 package org.diorite.impl.world;
 
 import java.io.File;
+import java.util.Random;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
+import org.diorite.impl.world.io.ChunkIO;
+import org.diorite.impl.world.io.WorldFile;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -28,7 +31,7 @@ public class WorldImpl implements World
 {
     private final String           name;
     private final ChunkManagerImpl chunkManager;
-    private final WorldFileImpl    worldFile;
+    private final WorldFile        worldFile;
     private final Dimension        dimension;
     private Difficulty       difficulty        = Difficulty.NORMAL;
     private HardcoreSettings hardcore          = new HardcoreSettings(false);
@@ -44,7 +47,8 @@ public class WorldImpl implements World
     private Loc            spawn;
     private WorldGenerator generator;
     private long           time;
-    private boolean noUpdateMode = true;
+    private       boolean noUpdateMode = true;
+    private final Random  random       = new Random();
 
     // TODO: world border impl
     // TODO: add some method allowing to set multiple blocks without calling getChunk so often
@@ -55,7 +59,7 @@ public class WorldImpl implements World
         this.dimension = dimension;
         this.chunkManager = new ChunkManagerImpl(this);
         this.generator = WorldGenerators.getGenerator(generator, this, null);
-        this.worldFile = new WorldFileImpl(worldFile, this);
+        this.worldFile = new WorldFile(worldFile, this, ChunkIO.getDefault());
     }
 
     public WorldImpl(final String name, final Dimension dimension, final File worldFile, final String generator, final String generatorOptions)
@@ -64,7 +68,25 @@ public class WorldImpl implements World
         this.dimension = dimension;
         this.chunkManager = new ChunkManagerImpl(this);
         this.generator = WorldGenerators.getGenerator(generator, this, generatorOptions);
-        this.worldFile = new WorldFileImpl(worldFile, this);
+        this.worldFile = new WorldFile(worldFile, this, ChunkIO.getDefault());
+    }
+
+    public WorldImpl(final WorldFile worldFile, final String name, final Dimension dimension, final String generator, final String generatorOptions)
+    {
+        this.name = name;
+        this.dimension = dimension;
+        this.chunkManager = new ChunkManagerImpl(this);
+        this.generator = WorldGenerators.getGenerator(generator, this, generatorOptions);
+        this.worldFile = worldFile;
+    }
+
+    public WorldImpl(final WorldFile worldFile, final String name, final Dimension dimension, final String generator)
+    {
+        this.name = name;
+        this.dimension = dimension;
+        this.chunkManager = new ChunkManagerImpl(this);
+        this.generator = WorldGenerators.getGenerator(generator, this, null);
+        this.worldFile = worldFile;
     }
 
     public void loadNBT(final NbtTagCompound tag)
@@ -77,6 +99,7 @@ public class WorldImpl implements World
         this.thundering = tag.getBoolean("thundering", false);
         this.thunderTime = tag.getInt("thunderTime", 0);
         this.seed = tag.getLong("RandomSeed", 0);
+        this.random.setSeed(this.seed);
         this.time = tag.getLong("Time", 0);
 
         final NbtTagCompound diTag = tag.getCompound("Diorite", new NbtTagCompound("Diorite"));
@@ -101,6 +124,12 @@ public class WorldImpl implements World
         System.out.println("Saving chunks for world: " + this.name);
         this.chunkManager.saveAll();
         System.out.println("Saved chunks for world: " + this.name);
+    }
+
+    @Override
+    public Random getRandom()
+    {
+        return this.random;
     }
 
     @Override
@@ -131,6 +160,7 @@ public class WorldImpl implements World
     public void setSeed(final long seed)
     {
         this.seed = seed;
+        this.random.setSeed(this.seed);
     }
 
     @Override
@@ -343,7 +373,7 @@ public class WorldImpl implements World
         this.forceLoadedRadius = forceLoadedRadius;
     }
 
-    public WorldFileImpl getWorldFile()
+    public WorldFile getWorldFile()
     {
         return this.worldFile;
     }

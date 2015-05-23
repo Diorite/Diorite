@@ -13,14 +13,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.world.WorldImpl;
-import org.diorite.impl.world.generator.ChunkBuilderImpl;
 import org.diorite.BlockLocation;
+import org.diorite.event.EventType;
+import org.diorite.event.chunk.ChunkGenerateEvent;
+import org.diorite.event.chunk.ChunkLoadEvent;
+import org.diorite.event.chunk.ChunkPopulateEvent;
 import org.diorite.utils.concurrent.ParallelUtils;
 import org.diorite.utils.concurrent.ParallelUtils.NamedForkJoinWorkerFactory;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
-import org.diorite.world.generator.ChunkBuilder;
 
 public class ChunkManagerImpl implements ChunkManager
 {
@@ -112,8 +114,7 @@ public class ChunkManagerImpl implements ChunkManager
     {
         final LoadInfo info = new LoadInfo();
         final int size = this.chunks.values().size();
-        this.chunks.values().stream().forEach(chunk ->
-        {
+        this.chunks.values().stream().forEach(chunk -> {
             this.world.getWorldFile().saveChunk((ChunkImpl) chunk);
             info.loadedChunks++;
             final long cur = System.currentTimeMillis();
@@ -150,37 +151,98 @@ public class ChunkManagerImpl implements ChunkManager
     public Chunk getChunkAt(ChunkPos pos, final boolean generate, final boolean populate)
     {
         final long posLong = pos.asLong();
-        final Object lock = new Object();
-        final Object oldLock = this.generating.putIfAbsent(posLong, lock);
+//        final Object lock = new Object();
+//        final Object oldLock = this.generating.putIfAbsent(posLong, lock);
         Chunk chunk = this.chunks.get(posLong);
         if ((chunk == null) || (populate && ! chunk.isPopulated()))
         {
-            synchronized ((oldLock == null) ? lock : oldLock)
+            final Object lock = this.generating.get(posLong);
+            if (lock != null)
             {
-                if ((chunk == null) && generate)
+                try
                 {
-                    pos = pos.setWorld(this.world);
-                    chunk = this.world.getWorldFile().loadChunk(pos);
-                    if (chunk == null)
+                    //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                    synchronized (lock)
                     {
-                        final ChunkBuilder chunkBuilder = this.world.getGenerator().generate(new ChunkBuilderImpl(), pos);
-
-                        chunk = chunkBuilder.createChunk(pos);
-                        this.chunks.put(posLong, chunk);
+                        lock.wait();
                     }
-                    else
-                    {
-                        this.chunks.put(posLong, chunk);
-                    }
-                }
-                if ((chunk != null) && populate)
+                } catch (final InterruptedException e)
                 {
-                    chunk.populate();
+                    e.printStackTrace();
                 }
-                this.generating.remove(posLong);
+                return this.chunks.get(posLong);
             }
+            this.generating.put(posLong, new Object());
+//            synchronized ((oldLock == null) ? lock : oldLock)
+//            {
+//                if (oldLock != null)
+//                {
+//                    return this.chunks.getOrDefault(posLong, new DumbChunk(pos));
+//                }
+            if (chunk == null)
+            {
+                pos = pos.setWorld(this.world);
+                final ChunkLoadEvent loadEvt = new ChunkLoadEvent(pos);
+                loadEvt.call();
+                if (loadEvt.isCancelled())
+                {
+                    final Object obj = this.generating.remove(posLong);
+                    if (obj != null)
+                    {
+                        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                        synchronized (obj)
+                        {
+                            obj.notifyAll();
+                        }
+                    }
+                    return new DumbChunk(pos);
+                }
+                chunk = loadEvt.getLoadedChunk();
+                if (chunk == null)
+                {
+                    if (generate)
+                    {
+                        final ChunkGenerateEvent genEvt = new ChunkGenerateEvent(pos);
+                        genEvt.call();
+                        if (genEvt.isCancelled() || (genEvt.getGeneratedChunk() == null))
+                        {
+                            final Object obj = this.generating.remove(posLong);
+                            if (obj != null)
+                            {
+                                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                                synchronized (obj)
+                                {
+                                    obj.notifyAll();
+                                }
+                            }
+                            return new DumbChunk(pos);
+                        }
+                        chunk = genEvt.getGeneratedChunk();
+                        this.chunks.put(posLong, chunk);
+                    }
+                }
+                else
+                {
+                    this.chunks.put(posLong, chunk);
+                }
+            }
+            if ((chunk != null) && populate && ! chunk.isPopulated())
+            {
+                EventType.callEvent(new ChunkPopulateEvent(chunk));
+            }
+            final Object obj = this.generating.remove(posLong);
+            if (obj != null)
+            {
+                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                synchronized (obj)
+                {
+                    obj.notifyAll();
+                }
+            }
+            this.generating.remove(posLong);
+//            }
         }
-        return chunk;
+        return (chunk == null) ? new DumbChunk(pos) : chunk;
     }
 
     @Override

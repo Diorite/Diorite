@@ -45,6 +45,9 @@ import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
 import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
 import org.diorite.impl.pipelines.ChatPipelineImpl;
+import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
+import org.diorite.impl.pipelines.ChunkLoadPipelineImpl;
+import org.diorite.impl.pipelines.ChunkPopulatePipelineImpl;
 import org.diorite.impl.pipelines.CommandPipelineImpl;
 import org.diorite.impl.pipelines.TabCompletePipelineImpl;
 import org.diorite.impl.world.WorldsManagerImpl;
@@ -62,9 +65,15 @@ import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
+import org.diorite.event.chunk.ChunkGenerateEvent;
+import org.diorite.event.chunk.ChunkLoadEvent;
+import org.diorite.event.chunk.ChunkPopulateEvent;
 import org.diorite.event.others.SenderCommandEvent;
 import org.diorite.event.others.SenderTabCompleteEvent;
 import org.diorite.event.pipelines.ChatPipeline;
+import org.diorite.event.pipelines.ChunkGeneratePipeline;
+import org.diorite.event.pipelines.ChunkLoadPipeline;
+import org.diorite.event.pipelines.ChunkPopulatePipeline;
 import org.diorite.event.pipelines.CommandPipeline;
 import org.diorite.event.pipelines.TabCompletePipeline;
 import org.diorite.event.player.PlayerChatEvent;
@@ -167,7 +176,12 @@ public class ServerImpl implements Server, Runnable
     {
         EventType.register(SenderCommandEvent.class, CommandPipeline.class, new CommandPipelineImpl());
         EventType.register(SenderTabCompleteEvent.class, TabCompletePipeline.class, new TabCompletePipelineImpl());
+
         EventType.register(PlayerChatEvent.class, ChatPipeline.class, new ChatPipelineImpl());
+
+        EventType.register(ChunkLoadEvent.class, ChunkLoadPipeline.class, new ChunkLoadPipelineImpl());
+        EventType.register(ChunkGenerateEvent.class, ChunkGeneratePipeline.class, new ChunkGeneratePipelineImpl());
+        EventType.register(ChunkPopulateEvent.class, ChunkPopulatePipeline.class, new ChunkPopulatePipelineImpl());
     }
 
     @Override

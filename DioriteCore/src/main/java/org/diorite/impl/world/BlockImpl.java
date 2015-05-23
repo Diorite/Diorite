@@ -68,12 +68,13 @@ public class BlockImpl implements Block
     public void setType(final BlockMaterialData type)
     {
         this.type = type;
+        this.chunk.setBlock(this.x, this.y, this.z, this.type);
     }
 
     @Override
     public void update()
     {
-        this.chunk.setBlock(this.x, this.y, this.z, this.type);
+        this.type = this.chunk.getBlockType(this.x, this.y, this.z);
     }
 
     @Override

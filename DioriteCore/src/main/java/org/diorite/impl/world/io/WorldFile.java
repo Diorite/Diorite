@@ -1,29 +1,35 @@
-package org.diorite.impl.world;
+package org.diorite.impl.world.io;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
-import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.world.chunk.ChunkPos;
 
-public class WorldFileImpl
+public class WorldFile
 {
     private final File             worldDir;
     private final WorldImpl        world;
     private final ChunkManagerImpl chunks;
+    private final ChunkIO          io;
 
-    public WorldFileImpl(final File worldDir, final WorldImpl world)
+    public WorldFile(final File worldDir, final WorldImpl world, final ChunkIO io)
     {
         this.worldDir = worldDir;
         this.world = world;
+        this.io = io;
         this.chunks = world.getChunkManager();
+    }
+
+    public ChunkIO getChunkIO()
+    {
+        return this.io;
     }
 
     public WorldImpl getWorld()
@@ -50,7 +56,7 @@ public class WorldFileImpl
     {
         try
         {
-            final NbtTagCompound chunk = RegionFileCache.getChunkDataInputStream(this.worldDir, x, z);
+            final NbtTagCompound chunk = this.io.getChunkData(this.worldDir, x, z);
             if (chunk == null)
             {
                 return null;
@@ -73,15 +79,7 @@ public class WorldFileImpl
         {
             return;
         }
-        try (NbtOutputStream is = RegionFileCache.getChunkDataOutputStream(this.worldDir, chunk.getX(), chunk.getZ()))
-        {
-            final NbtTagCompound data = new NbtTagCompound("Level");
-            chunk.writeTo(data);
-            is.write(data);
-        } catch (final IOException e)
-        {
-            throw new RuntimeException("can't save chunk on: [" + chunk.getX() + ", " + chunk.getZ() + "]", e);
-        }
+        this.io.saveChunkData(this.worldDir, chunk.getX(), chunk.getZ(), chunk.writeTo(new NbtTagCompound("Level")));
     }
 
     @Override

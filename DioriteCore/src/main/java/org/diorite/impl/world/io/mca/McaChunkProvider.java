@@ -1,4 +1,4 @@
-package org.diorite.impl.world;
+package org.diorite.impl.world.io.mca;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,6 +13,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
+import org.diorite.impl.world.io.ChunkProvider;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtOutputStream;
@@ -80,7 +81,7 @@ import org.diorite.nbt.NbtTagCompound;
  *
  */
 @SuppressWarnings("MagicNumber")
-public class RegionFile
+public class McaChunkProvider implements ChunkProvider
 {
     private static final int VERSION_GZIP    = 1;
     private static final int VERSION_DEFLATE = 2;
@@ -101,12 +102,12 @@ public class RegionFile
     private int  compressionMode = VERSION_DEFLATE;
     private long lastModified    = 0;
 
-    public RegionFile(final File path)
+    public McaChunkProvider(final File path)
     {
         this(path, VERSION_DEFLATE);
     }
 
-    public RegionFile(final File path, final int compressionMode)
+    public McaChunkProvider(final File path, final int compressionMode)
     {
         this.compressionMode = compressionMode;
         this.offsets = new int[SECTOR_INTS];
@@ -136,10 +137,24 @@ public class RegionFile
                     System.err.println("Region \"" + path + "\" under 8K: " + this.file.length() + " increasing by " + (2 * SECTOR_BYTES - this.file.length()));
                 }
 
-                for (long i = this.file.length(); i < (2 * SECTOR_BYTES); ++ i)
+                final long i = this.file.length();
+                if (i < (2 * SECTOR_BYTES))
                 {
-                    this.file.write(0);
+                    long j = (2 * SECTOR_BYTES) - i;
+                    while (j >= emptySector.length)
+                    {
+                        this.file.write(emptySector);
+                        j -= emptySector.length;
+                    }
+                    if (j > 0)
+                    {
+                        this.file.write(new byte[(int) j]);
+                    }
                 }
+//                for (long i = this.file.length(); i < (2 * SECTOR_BYTES); ++ i)
+//                {
+//                     this.file.write(0);
+//                }
             }
 
             // if the file size is not a multiple of 4KB, grow it
@@ -217,8 +232,11 @@ public class RegionFile
      * gets an NbtTagCompound representing the chunk data returns null if
      * the chunk is not found or an error occurs
      */
-    public synchronized NbtTagCompound getChunkDataInputStream(final int x, final int z)
+    @Override
+    public synchronized NbtTagCompound getChunkData(int x, int z)
     {
+        x &= 31;
+        z &= 31;
 //        final short lockKey = (short) ((x << 5) + z);
 //        final Object lock = this.readLocks.get(lockKey);
 //        if (lock != null)
@@ -311,8 +329,10 @@ public class RegionFile
 //        }
     }
 
-    public synchronized NbtOutputStream getChunkDataOutputStream(final int x, final int z)
+    public synchronized NbtOutputStream getChunkDataOutputStream(int x, int z)
     {
+        x &= 31;
+        z &= 31;
 //        final short lockKey = (short) ((x << 5) + z);
 //        final Object lock = this.readLocks.get(lockKey);
 //        if (lock != null)
@@ -366,6 +386,18 @@ public class RegionFile
 //                }
 //            }
 //        }
+    }
+
+    @Override
+    public void saveChunkData(final int x, final int z, final NbtTagCompound data)
+    {
+        try (NbtOutputStream is = this.getChunkDataOutputStream(x, z))
+        {
+            is.write(data);
+        } catch (final IOException e)
+        {
+            throw new RuntimeException("can't save chunk on: [" + x + ", " + z + "]", e);
+        }
     }
 
     /* write a chunk at (x,z) with length bytes of data to disk */
@@ -503,6 +535,7 @@ public class RegionFile
         this.file.writeInt(value);
     }
 
+    @Override
     public void close() throws IOException
     {
         try (final FileChannel fileChannel = this.file.getChannel())
@@ -545,7 +578,7 @@ public class RegionFile
         {
             try
             {
-                RegionFile.this.write(this.x, this.z, this.buf, this.count);
+                McaChunkProvider.this.write(this.x, this.z, this.buf, this.count);
             } finally
             {
                 super.close();

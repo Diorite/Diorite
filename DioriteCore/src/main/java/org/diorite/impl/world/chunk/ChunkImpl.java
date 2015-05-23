@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
 import org.diorite.impl.world.BlockImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
@@ -81,6 +82,7 @@ public class ChunkImpl implements Chunk
             this.populated = true;
             synchronized (this)
             {
+                ChunkGeneratePipelineImpl.addPops(this.pos);
                 this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
             }
         }
@@ -93,7 +95,7 @@ public class ChunkImpl implements Chunk
             IntStream.range(0, CHUNK_SIZE * CHUNK_SIZE).parallel().forEach(xz -> {
                 final int x = xz / CHUNK_SIZE;
                 final int z = xz % CHUNK_SIZE;
-                this.heightMap[((z << 4) | x)] = 0;
+                this.heightMap[((z << 4) | x)] = -1;
                 for (int y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
                 {
                     if (this.getBlockType(x, y, z).isSolid())
@@ -170,7 +172,12 @@ public class ChunkImpl implements Chunk
     public Block getHighestBlock(final int x, final int z)
     {
         // TODO change when meta-data of block will be added
-        return this.getBlock(x, this.heightMap[((z << 4) | x)], z);
+        final int y = this.heightMap[((z << 4) | x)];
+        if (y == - 1)
+        {
+            return null;
+        }
+        return this.getBlock(x, y, z);
     }
 
     @Override
@@ -304,7 +311,7 @@ public class ChunkImpl implements Chunk
     }
 
     @SuppressWarnings("MagicNumber")
-    public void writeTo(final NbtTagCompound tag)
+    public NbtTagCompound writeTo(final NbtTagCompound tag)
     {
         tag.setByte("V", 1);
         tag.setInt("xPos", this.getX());
@@ -365,6 +372,7 @@ public class ChunkImpl implements Chunk
         tag.setByteArray("Biomes", this.biomes);
         tag.setList("Entities", new ArrayList<>(1));
         tag.setList("TileEntities", new ArrayList<>(1));
+        return tag;
     }
 
     public byte[] getBiomes()
