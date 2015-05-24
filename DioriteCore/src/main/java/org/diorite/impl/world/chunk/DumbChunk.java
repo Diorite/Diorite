@@ -30,8 +30,9 @@ public class DumbChunk extends ChunkImpl
     }
 
     @Override
-    public void populate()
+    public boolean populate()
     {
+        return true;
     }
 
     @Override

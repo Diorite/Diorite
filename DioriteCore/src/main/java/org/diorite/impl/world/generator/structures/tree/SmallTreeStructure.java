@@ -44,7 +44,7 @@ public class SmallTreeStructure extends TreeStructure
     @Override
     protected boolean genTree(final ChunkPos chunkPos, final Random random, final BlockLocation location)
     {
-        return this.genTree(chunkPos, random, location, DioriteRandomUtils.getRandInt(random, 4, this.extraBlock ? 7 : 6));
+        return this.genTree(chunkPos, random, location.addY(1), DioriteRandomUtils.getRandInt(random, 4, this.extraBlock ? 7 : 6));
     }
 
     @SuppressWarnings("PointlessArithmeticExpression") // it looks better, java should simplify that on compilation time
@@ -52,7 +52,7 @@ public class SmallTreeStructure extends TreeStructure
     {
         for (int i = 0; i < size; i++)
         {
-            this.setBlock(c, this.logMat);
+            this.setBlock(c, 0 * 0, 0 + i, 0 * 0, this.logMat);
         }
         this.setBlock(c, 0 * 0, size, 0 * 0, this.leavesMat);
         int k = 0;

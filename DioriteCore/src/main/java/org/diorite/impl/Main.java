@@ -152,7 +152,7 @@ public final class Main
                 // TODO: load "magic values"
                 // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
                 // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
-                System.out.println("Registered " + Material.getByID().size() + " vanilla minecraft blocks and items.");
+                System.out.println("Registered " + Material.values().length + " vanilla minecraft blocks and items.");
                 new ServerImpl(serverName, Proxy.NO_PROXY, options).start(options);
             } catch (final Throwable t)
             {

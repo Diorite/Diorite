@@ -244,7 +244,7 @@ public class PacketDataSerializer extends ByteBuf
         // write all blocks
         for (final ChunkPartImpl chunkPart : chunkPartsToSent)
         {
-            for (final char blockData : chunkPart.getBlocks())
+            for (final short blockData : chunkPart.getBlocks().getArray())
             {
                 //noinspection MagicNumber
                 data[index++] = (byte) (blockData & 255);

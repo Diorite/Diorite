@@ -7,6 +7,7 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
+import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.ChunkBuilder;
@@ -85,19 +86,19 @@ public class ChunkBuilderImpl implements ChunkBuilder
     {
         public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
         private final ChunkBuilderImpl chunk;
-        private final char[]           blocks; // id and sub-id(0-15) of every block
+        private final AtomicShortArray blocks; // id and sub-id(0-15) of every block
         private final byte             yPos; // from 0 to 15
 
         private ChunkPartBuilder(final ChunkBuilderImpl chunk, final byte yPos)
         {
             this.chunk = chunk;
             this.yPos = yPos;
-            this.blocks = new char[CHUNK_DATA_SIZE];
+            this.blocks = new AtomicShortArray(CHUNK_DATA_SIZE);
         }
 
         private void setBlock(final int x, final int y, final int z, final int id, final int meta)
         {
-            this.blocks[this.toArrayIndex(x, y, z)] = (char) ((id << 4) | meta);
+            this.blocks.set(this.toArrayIndex(x, y, z), (short) ((id << 4) | meta));
         }
 
         private void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
@@ -108,7 +109,7 @@ public class ChunkBuilderImpl implements ChunkBuilder
         @SuppressWarnings("MagicNumber")
         private BlockMaterialData getBlockType(final int x, final int y, final int z)
         {
-            final char data = this.blocks[this.toArrayIndex(x, y, z)];
+            final short data = this.blocks.get(this.toArrayIndex(x, y, z));
             return (BlockMaterialData) Material.getByID(data >> 4, data & 15);
         }
 

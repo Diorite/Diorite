@@ -18,7 +18,7 @@ public class ChunkGeneratePipelineImpl extends SimpleEventPipeline<ChunkGenerate
 
     public static void addGen(final ChunkPos pos)
     {
-        if (! gens.add(pos))
+        if (Main.isEnabledDebug() && ! gens.add(pos))
         {
             Main.debug("[CHUNK_ERROR] Chunk generated second time: " + pos);
         }
@@ -26,7 +26,7 @@ public class ChunkGeneratePipelineImpl extends SimpleEventPipeline<ChunkGenerate
 
     public static void addPops(final ChunkPos pos)
     {
-        if (! pops.add(pos))
+        if (Main.isEnabledDebug() && ! pops.add(pos))
         {
             Main.debug("[CHUNK_ERROR] Chunk populated second time: " + pos);
         }

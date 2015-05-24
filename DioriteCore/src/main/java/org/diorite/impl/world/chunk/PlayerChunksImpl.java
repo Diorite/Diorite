@@ -13,9 +13,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
-import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.collections.WeakCollection;
+import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
@@ -26,6 +25,7 @@ public class PlayerChunksImpl
     private final PlayerImpl player;
     private final Collection<Chunk> loadedChunks  = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
     private final Collection<Chunk> visibleChunks = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
+    //    private final Collection<Chunk> chunksToReSend = WeakCollection.using(new ConcurrentSet<>(200, 0.1f, 4));
     private boolean  logout;
     private ChunkPos lastUpdate;
     private byte     lastUpdateR;
@@ -83,11 +83,14 @@ public class PlayerChunksImpl
             final Chunk chunk = iterator.next();
             if (chunk.getPos().isInAABB(this.lastUpdate.add(- render, - render), this.lastUpdate.add(render, render)))
             {
+//                if (this.visibleChunks.contains(chunk) && ! chunk.isPopulated() && chunk.populate())
+//                {
+//                    this.chunksToReSend.add(chunk);
+//                }
                 continue;
             }
             iterator.remove();
             chunk.removeUsage();
-            ChunkUnloaderThread.add(chunk);
             this.player.getNetworkManager().sendPacket(PacketPlayOutMapChunk.unload(chunk.getPos()));
         }
     }
@@ -112,6 +115,7 @@ public class PlayerChunksImpl
 
     private void continueUpdate()
     {
+//        this.loadedChunks.parallelStream().filter((chunk) -> ! chunk.isPopulated()).forEach(Chunk::populate);
         final byte render = this.getRenderDistance();
         final byte view = this.getViewDistance();
         if ((this.lastUpdateR >= view) || (this.lastUpdateR >= render))
@@ -119,6 +123,8 @@ public class PlayerChunksImpl
             return;
         }
         final Collection<Chunk> chunksToSent = new ConcurrentSet<>();
+//        chunksToSent.addAll(this.chunksToReSend);
+//        this.chunksToReSend.clear();
         final int r = this.lastUpdateR++;
         final ChunkManagerImpl impl = this.player.getWorld().getChunkManager();
 
@@ -128,13 +134,14 @@ public class PlayerChunksImpl
         // so we need subtract them: (((2 * r) + 1) * 4) - 4 == 8 * r
         final CountDownLatch latch = new CountDownLatch((r == 0) ? 1 : (8 * r));
 
-        forChunks(r, this.lastUpdate, chunkPos -> {
-            impl.submitActionOnChunkAt(chunkPos, true, true, (chunk) -> {
+        forChunks(r, this.lastUpdate, chunkPos -> impl.submitActionOnChunkAt(chunkPos, true, false, (chunk) -> {
+            try
+            {
                 if (chunk == null)
                 {
-                    latch.countDown();
                     return;
                 }
+//                Main.debug("[Latch;" + latch.hashCode() + "] " + chunk.getPos());
                 final boolean isVisible = r <= view;
                 if (! this.loadedChunks.contains(chunk))
                 {
@@ -148,9 +155,12 @@ public class PlayerChunksImpl
                 {
                     this.visibleChunks.add(chunk);
                 }
+            } finally
+            {
                 latch.countDown();
-            });
-        });
+//                Main.debug("[Latch;" + latch.hashCode() + "] " + latch.getCount());
+            }
+        }));
         // TODO: maybe use other pool for that, and don't use any
         impl.getPool().submit(() -> {
             try
@@ -161,12 +171,19 @@ public class PlayerChunksImpl
                 e.printStackTrace();
             }
 
+            for (Iterator<Chunk> iterator = chunksToSent.iterator(); iterator.hasNext(); )
+            {
+                final Chunk chunk = iterator.next();
+                if (! chunk.isPopulated() && ! chunk.populate())
+                {
+                    iterator.remove();
+                }
+            }
             final int size = (chunksToSent.size() / CHUNK_BULK_SIZE) + (((chunksToSent.size() % CHUNK_BULK_SIZE) == 0) ? 0 : 1);
             final Chunk[][] chunkBulks = new Chunk[size][CHUNK_BULK_SIZE];
             int i = 0;
             for (final Chunk chunk : chunksToSent)
             {
-                chunk.populate();
                 this.loadedChunks.add(chunk);
                 chunkBulks[i / CHUNK_BULK_SIZE][i++ % CHUNK_BULK_SIZE] = chunk;
             }

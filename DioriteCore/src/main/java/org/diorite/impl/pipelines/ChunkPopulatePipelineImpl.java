@@ -10,8 +10,8 @@ public class ChunkPopulatePipelineImpl extends SimpleEventPipeline<ChunkPopulate
     @Override
     public void reset_()
     {
-        this.addBefore(EventPriority.NORMAL, "Diorite|Gen", (evt, pipeline) -> {
-            if (evt.isCancelled())
+        this.addBefore(EventPriority.NORMAL, "Diorite|Pop", (evt, pipeline) -> {
+            if (evt.isCancelled() || evt.getChunk().isPopulated())
             {
                 return;
             }

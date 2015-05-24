@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.io.ChunkIO;
 import org.diorite.impl.world.io.WorldFile;
+import org.diorite.impl.world.io.mca.McaWorldFile;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -29,10 +30,10 @@ import org.diorite.world.generator.WorldGenerators;
 
 public class WorldImpl implements World
 {
-    private final String           name;
-    private final ChunkManagerImpl chunkManager;
-    private final WorldFile        worldFile;
-    private final Dimension        dimension;
+    private final String             name;
+    private final ChunkManagerImpl   chunkManager;
+    private final WorldFile<?, ?, ?, ?> worldFile;
+    private final Dimension          dimension;
     private Difficulty       difficulty        = Difficulty.NORMAL;
     private HardcoreSettings hardcore          = new HardcoreSettings(false);
     private GameMode         defaultGameMode   = GameMode.SURVIVAL;
@@ -59,7 +60,7 @@ public class WorldImpl implements World
         this.dimension = dimension;
         this.chunkManager = new ChunkManagerImpl(this);
         this.generator = WorldGenerators.getGenerator(generator, this, null);
-        this.worldFile = new WorldFile(worldFile, this, ChunkIO.getDefault());
+        this.worldFile = new McaWorldFile(worldFile, this, ChunkIO.getDefault());
     }
 
     public WorldImpl(final String name, final Dimension dimension, final File worldFile, final String generator, final String generatorOptions)
@@ -68,10 +69,10 @@ public class WorldImpl implements World
         this.dimension = dimension;
         this.chunkManager = new ChunkManagerImpl(this);
         this.generator = WorldGenerators.getGenerator(generator, this, generatorOptions);
-        this.worldFile = new WorldFile(worldFile, this, ChunkIO.getDefault());
+        this.worldFile = new McaWorldFile(worldFile, this, ChunkIO.getDefault());
     }
 
-    public WorldImpl(final WorldFile worldFile, final String name, final Dimension dimension, final String generator, final String generatorOptions)
+    public WorldImpl(final WorldFile<?, ?, ?, ?> worldFile, final String name, final Dimension dimension, final String generator, final String generatorOptions)
     {
         this.name = name;
         this.dimension = dimension;
@@ -80,7 +81,7 @@ public class WorldImpl implements World
         this.worldFile = worldFile;
     }
 
-    public WorldImpl(final WorldFile worldFile, final String name, final Dimension dimension, final String generator)
+    public WorldImpl(final WorldFile<?, ?, ?, ?> worldFile, final String name, final Dimension dimension, final String generator)
     {
         this.name = name;
         this.dimension = dimension;
@@ -373,6 +374,7 @@ public class WorldImpl implements World
         this.forceLoadedRadius = forceLoadedRadius;
     }
 
+    @SuppressWarnings("rawtypes")
     public WorldFile getWorldFile()
     {
         return this.worldFile;

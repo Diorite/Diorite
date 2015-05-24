@@ -29,6 +29,11 @@ public class DevCmd extends SystemCommandImpl
                     sender.sendSimpleColoredMessage("&3Done.");
                     break;
                 }
+                case "cb":
+                {
+                    sender.sendSimpleColoredMessage(p.getLocation().toBlockLocation().getBlock().toString());
+                    break;
+                }
                 default:
                 {
                     sender.sendSimpleColoredMessage("&4No action...");

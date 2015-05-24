@@ -15,6 +15,7 @@ import org.diorite.utils.math.noise.NoiseGenerator;
 import org.diorite.utils.math.noise.SimplexNoiseGenerator;
 import org.diorite.utils.math.noise.SimplexOctaveGenerator;
 import org.diorite.world.World;
+import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.ChunkBuilder;
 import org.diorite.world.generator.WorldGenerator;
@@ -38,10 +39,10 @@ public class TestWorldGeneratorImpl extends WorldGenerator
     public ChunkBuilder generate(final ChunkBuilder builder, final ChunkPos pos)
     {
         ChunkGeneratePipelineImpl.addGen(pos);
-        if (true)
-        {
-            return this.flat.generate(builder, pos);
-        }
+//        if (true)
+//        {
+//            return this.flat.generate(builder, pos);
+//        }
         // Main.debug("Generating: " + pos + ", (" + this.world.getName() + ")");
         final SimplexOctaveGenerator overhangs = new SimplexOctaveGenerator(this.world, 8);
         final SimplexOctaveGenerator bottoms = new SimplexOctaveGenerator(this.world, 8);
@@ -132,12 +133,13 @@ public class TestWorldGeneratorImpl extends WorldGenerator
                 this.populators.add(chunk -> {
                     final World world = chunk.getWorld();
                     final Structure s = new SmallTreeStructure(WoodTypeMat.OAK);
-                    final Random random = new Random(chunk.getX() ^ chunk.getZ() ^ world.getSeed());
+                    final Random random = new Random(chunk.getPos().asLong() + world.getSeed());
+//                    s.generate(chunk.getPos(), random, (chunk.getX() * 16), chunk.getHighestBlockY(5, 5) + 1, (chunk.getZ() * 16));
                     for (int i = 0; i < 4; i++)
                     {
-                        int x = random.nextInt(16);
-                        int z = random.nextInt(16);
-                        s.generate(chunk.getPos(), random, x, world.getHighestBlockY(x, z), z);
+                        int rx = random.nextInt(Chunk.CHUNK_SIZE);
+                        int rz = random.nextInt(Chunk.CHUNK_SIZE);
+                        s.generate(chunk.getPos(), random, (chunk.getX() << 4) + rx, chunk.getHighestBlockY(rx, rz), (chunk.getZ() << 4) + rz);
                     }
 
                 });

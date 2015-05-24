@@ -86,6 +86,6 @@ public class BlockImpl implements Block
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("y", this.y).append("z", this.z).append("chunk", this.chunk).append("type", this.type).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.getX()).append("y", this.y).append("z", this.getZ()).append("type", this.type.name() + ":" + this.type.getTypeName()).toString();
     }
 }

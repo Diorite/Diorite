@@ -3,23 +3,28 @@ package org.diorite.impl.world.chunk;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
 import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
 import org.diorite.impl.world.BlockImpl;
+import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.utils.concurrent.ParallelUtils;
+import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.Block;
 import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
+import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk
@@ -28,8 +33,8 @@ public class ChunkImpl implements Chunk
     private final ChunkPartImpl[] chunkParts; // size of 16, parts can be null
     private final int[]           heightMap;
     private final byte[]          biomes;
-    private final AtomicInteger usages = new AtomicInteger(0);
-    private volatile boolean populated;
+    private final AtomicInteger usages    = new AtomicInteger(0);
+    private final AtomicBoolean populated = new AtomicBoolean(false);
 
     public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts, final int[] heightMap)
     {
@@ -66,26 +71,46 @@ public class ChunkImpl implements Chunk
     @Override
     public boolean isPopulated()
     {
-        return this.populated;
+        return this.populated.get();
     }
 
     public void setPopulated(final boolean populated)
     {
-        this.populated = populated;
+        this.populated.set(populated);
     }
 
     @Override
-    public void populate()
+    public synchronized boolean populate()
     {
-        if (! this.populated)
+        if (! this.populated.get())
         {
-            this.populated = true;
-            synchronized (this)
+            final ChunkManager cm = this.getWorld().getChunkManager();
+            for (BlockFace face : new BlockFace[]{BlockFace.NORTH, BlockFace.WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST})
+            {
+                {
+                    final Chunk c = cm.getChunkAt(this.pos.add(face.getModX(), face.getModZ()), false, false);
+                    if (c == null)
+                    {
+                        return false;
+                    }
+                }
+                face = face.getOppositeFace();
+                {
+                    final Chunk c = cm.getChunkAt(this.pos.add(face.getModX(), face.getModZ()), false, false);
+                    if (c == null)
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (this.populated.compareAndSet(false, true))
             {
                 ChunkGeneratePipelineImpl.addPops(this.pos);
                 this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
+
             }
         }
+        return true;
     }
 
     @Override
@@ -95,7 +120,7 @@ public class ChunkImpl implements Chunk
             IntStream.range(0, CHUNK_SIZE * CHUNK_SIZE).parallel().forEach(xz -> {
                 final int x = xz / CHUNK_SIZE;
                 final int z = xz % CHUNK_SIZE;
-                this.heightMap[((z << 4) | x)] = -1;
+                this.heightMap[((z << 4) | x)] = - 1;
                 for (int y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
                 {
                     if (this.getBlockType(x, y, z).isSolid())
@@ -236,9 +261,23 @@ public class ChunkImpl implements Chunk
     }
 
     @Override
+    public void checkUsages()
+    {
+        if (this.usages.get() <= 0)
+        {
+            ChunkUnloaderThread.add(this);
+        }
+    }
+
+    @Override
     public int removeUsage()
     {
-        return this.usages.decrementAndGet();
+        final int usages = this.usages.decrementAndGet();
+        if (usages <= 0)
+        {
+            ChunkUnloaderThread.add(this);
+        }
+        return usages;
     }
 
     private void checkPart(final ChunkPartImpl chunkPart)
@@ -264,7 +303,7 @@ public class ChunkImpl implements Chunk
     @SuppressWarnings("MagicNumber")
     public void loadFrom(final NbtTagCompound tag)
     {
-        this.populated = tag.getBoolean("TerrainPopulated");
+        this.populated.set(tag.getBoolean("TerrainPopulated"));
         tag.getBoolean("LightPopulated"); // TODO
         tag.getLong("InhabitedTime"); // TODO
 
@@ -277,15 +316,15 @@ public class ChunkImpl implements Chunk
             final byte[] blocksIDs = sectionNBT.getByteArray("Blocks");
             final ChunkNibbleArray blocksMetaData = new ChunkNibbleArray(sectionNBT.getByteArray("Data"));
             final ChunkNibbleArray additionalData = Optional.ofNullable(sectionNBT.getByteArray("Add")).map(ChunkNibbleArray::new).orElse(null);
-            final char[] blocks = new char[blocksIDs.length];
+            final short[] blocks = new short[blocksIDs.length];
             for (int i = 0; i < blocks.length; ++ i)
             {
                 final int blockDataPos = (i >> 8) & 0xf;
                 final int blockIDPos = (i >> 4) & 0xf;
                 final int blockMetaPos = i & 0xf;
-                blocks[i] = (char) ((((additionalData != null) ? additionalData.get(blockMetaPos, blockDataPos, blockIDPos) : 0) << 12) | ((blocksIDs[i] & 0xff) << 4) | (blocksMetaData.get(blockMetaPos, (blockDataPos), (blockIDPos))));
+                blocks[i] = (short) ((((additionalData != null) ? additionalData.get(blockMetaPos, blockDataPos, blockIDPos) : 0) << 12) | ((blocksIDs[i] & 0xff) << 4) | (blocksMetaData.get(blockMetaPos, (blockDataPos), (blockIDPos))));
             }
-            chunkPart.setBlocks(blocks);
+            chunkPart.setBlocks(new AtomicShortArray(blocks));
             chunkPart.setBlockLight(new NibbleArray(sectionNBT.getByteArray("BlockLight")));
             if (hasSkyLight)
             {
@@ -318,7 +357,7 @@ public class ChunkImpl implements Chunk
         tag.setInt("zPos", this.getZ());
         tag.setLong("LastUpdate", this.getWorld().getTime());
         tag.setIntArray("HeightMap", this.heightMap);
-        tag.setBoolean("TerrainPopulated", this.populated);
+        tag.setBoolean("TerrainPopulated", this.populated.get());
         tag.setBoolean("LightPopulated", false); // TODO
         tag.setLong("InhabitedTime", 0); // TODO: value used to set local difficulty based on play time
         final List<NbtTag> sections = new ArrayList<>(16);
@@ -331,12 +370,12 @@ public class ChunkImpl implements Chunk
             }
             final NbtTagCompound sectionNBT = new NbtTagCompound();
             sectionNBT.setByte("Y", chunkPart.getYPos());
-            final byte[] blocksIDs = new byte[chunkPart.getBlocks().length];
+            final byte[] blocksIDs = new byte[chunkPart.getBlocks().length()];
             final ChunkNibbleArray blocksMetaData = new ChunkNibbleArray();
             ChunkNibbleArray additionalData = null;
-            for (int i = 0; i < chunkPart.getBlocks().length; ++ i)
+            for (int i = 0; i < chunkPart.getBlocks().length(); ++ i)
             {
-                final char block = chunkPart.getBlocks()[i];
+                final short block = chunkPart.getBlocks().get(i);
                 final int blockMeta = i & 15;
                 final int blockData = (i >> 8) & 15;
                 final int blockID = (i >> 4) & 15;

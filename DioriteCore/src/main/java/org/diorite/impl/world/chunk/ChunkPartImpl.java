@@ -6,23 +6,24 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.arrays.NibbleArray;
+import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.chunk.Chunk;
 
 public class ChunkPartImpl // part of chunk 16x16x16
 {
     public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
-    private final    ChunkImpl   chunk;
-    private final    byte        yPos; // from 0 to 15
-    private volatile int         blocksCount;
-    private          char[]      blocks; // id and sub-id(0-15) of every block
-    private          NibbleArray skyLight;
-    private          NibbleArray blockLight;
+    private final    ChunkImpl        chunk;
+    private final    byte             yPos; // from 0 to 15
+    private volatile int              blocksCount;
+    private          AtomicShortArray blocks; // id and sub-id(0-15) of every block
+    private          NibbleArray      skyLight;
+    private          NibbleArray      blockLight;
 
     public ChunkPartImpl(final ChunkImpl chunk, final byte yPos, final boolean hasSkyLight)
     {
         this.chunk = chunk;
         this.yPos = yPos;
-        this.blocks = new char[CHUNK_DATA_SIZE];
+        this.blocks = new AtomicShortArray(CHUNK_DATA_SIZE);
         this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
         if (hasSkyLight)
         {
@@ -33,7 +34,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blockLight.fill((byte) 0x0);
     }
 
-    public ChunkPartImpl(final ChunkImpl chunk, final char[] blocks, final byte yPos, final boolean hasSkyLight)
+    public ChunkPartImpl(final ChunkImpl chunk, final AtomicShortArray blocks, final byte yPos, final boolean hasSkyLight)
     {
         this.chunk = chunk;
         this.blocks = blocks;
@@ -48,7 +49,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blockLight.fill((byte) 0x0);
     }
 
-    public ChunkPartImpl(final ChunkImpl chunk, final char[] blocks, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
+    public ChunkPartImpl(final ChunkImpl chunk, final AtomicShortArray blocks, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
     {
         this.chunk = chunk;
         this.blocks = blocks;
@@ -76,7 +77,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
         {
             this.blocksCount++;
         }
-        this.blocks[this.toArrayIndex(x, y, z)] = (char) ((id << 4) | meta);
+        this.blocks.set(this.toArrayIndex(x, y, z), (short) ((id << 4) | meta));
     }
 
     public void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
@@ -87,8 +88,9 @@ public class ChunkPartImpl // part of chunk 16x16x16
     @SuppressWarnings("MagicNumber")
     public BlockMaterialData getBlockType(final int x, final int y, final int z)
     {
-        final char data = this.blocks[this.toArrayIndex(x, y, z)];
-        return (BlockMaterialData) Material.getByID(data >> 4, data & 15);
+        final short data = this.blocks.get(this.toArrayIndex(x, y, z));
+        final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
+        return (type == null) ? Material.AIR : type;
     }
 
     public ChunkImpl getChunk()
@@ -96,12 +98,12 @@ public class ChunkPartImpl // part of chunk 16x16x16
         return this.chunk;
     }
 
-    public char[] getBlocks()
+    public AtomicShortArray getBlocks()
     {
         return this.blocks;
     }
 
-    public void setBlocks(final char[] blocks)
+    public void setBlocks(final AtomicShortArray blocks)
     {
         this.blocks = blocks;
     }
@@ -109,7 +111,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
     public int recalculateBlockCount()
     {
         this.blocksCount = 0;
-        for (final char type : this.blocks)
+        for (final short type : this.blocks.getArray())
         {
             if (type != 0)
             {

@@ -13,7 +13,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Predicate;
 import java.util.logging.Handler;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -264,7 +266,7 @@ public class ServerImpl implements Server, Runnable
 
 
         this.serverName = serverName;
-        this.mainServerThread = new Thread(this);
+        this.mainServerThread = new Thread(this, "{Diorite|Main}");
         this.registerEvents();
 
         if (System.console() == null)
@@ -508,6 +510,12 @@ public class ServerImpl implements Server, Runnable
     public Collection<Player> getOnlinePlayers()
     {
         return new CopyOnWriteArraySet<>(this.playersManager.getRawPlayers().values());
+    }
+
+    @Override
+    public Collection<Player> getOnlinePlayers(final Predicate<Player> predicate)
+    {
+        return this.playersManager.getRawPlayers().values().stream().filter(predicate).collect(Collectors.toSet());
     }
 
     @Override

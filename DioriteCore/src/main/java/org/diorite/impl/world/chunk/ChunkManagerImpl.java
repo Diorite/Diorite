@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -61,13 +62,13 @@ public class ChunkManagerImpl implements ChunkManager
                     {
                         unpopulatedChunks.add(impl);
                     }
-                    if ((info.loadedChunks++ % 10) == 0)
+                    if ((info.loadedChunks.incrementAndGet() % 10) == 0)
                     {
                         final long cur = System.currentTimeMillis();
                         if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(5))
                         {
                             //noinspection HardcodedFileSeparator
-                            System.out.println("[ChunkLoader][" + this.world.getName() + "] Chunk: " + info.loadedChunks + "/" + toLoad + " Radius " + cr + "/" + chunkRadius);
+                            System.out.println("[ChunkLoader][" + this.world.getName() + "] Chunk: " + info.loadedChunks.get() + "/" + toLoad + " Radius " + cr + "/" + chunkRadius);
                             info.lastTime = cur;
                         }
                     }
@@ -78,7 +79,7 @@ public class ChunkManagerImpl implements ChunkManager
             info.lastTime = System.currentTimeMillis();
         }
 
-        System.out.println("Loaded " + info.loadedChunks + " spawn chunks for world: " + this.world.getName());
+        System.out.println("Loaded " + info.loadedChunks.get() + " spawn chunks for world: " + this.world.getName());
         if (! unpopulatedChunks.isEmpty())
         {
             unpopulatedChunks.stream().forEach(Chunk::populate);
@@ -112,19 +113,7 @@ public class ChunkManagerImpl implements ChunkManager
     @Override
     public synchronized void saveAll()
     {
-        final LoadInfo info = new LoadInfo();
-        final int size = this.chunks.values().size();
-        this.chunks.values().stream().forEach(chunk -> {
-            this.world.getWorldFile().saveChunk((ChunkImpl) chunk);
-            info.loadedChunks++;
-            final long cur = System.currentTimeMillis();
-            if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(1))
-            {
-                //noinspection HardcodedFileSeparator
-                System.out.println("[ChunkSave][" + this.world.getName() + "] Chunk: " + info.loadedChunks + "/" + size);
-                info.lastTime = cur;
-            }
-        });
+        this.world.getWorldFile().getIo().saveChunks(this.chunks.values(), this.world.getWorldFile());
     }
 
     @Override
@@ -132,7 +121,8 @@ public class ChunkManagerImpl implements ChunkManager
     {
         // TODO: some way to delay chunk save, and unload it after some delay (to preved lags when player jumps between 2 chunks)
 
-        this.world.getWorldFile().saveChunk((ChunkImpl) this.chunks.remove(chunk.getPos().asLong()));
+        //noinspection unchecked
+        this.world.getWorldFile().getIo().saveChunk(this.chunks.remove(chunk.getPos().asLong()), this.world.getWorldFile());
     }
 
     @Override
@@ -156,93 +146,73 @@ public class ChunkManagerImpl implements ChunkManager
         Chunk chunk = this.chunks.get(posLong);
         if ((chunk == null) || (populate && ! chunk.isPopulated()))
         {
-            final Object lock = this.generating.get(posLong);
-            if (lock != null)
+            try
             {
-                try
+                final Object lock = this.generating.get(posLong);
+                if (lock != null)
                 {
-                    //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                    synchronized (lock)
-                    {
-                        lock.wait();
-                    }
-                } catch (final InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-                return this.chunks.get(posLong);
-            }
-            this.generating.put(posLong, new Object());
-//            synchronized ((oldLock == null) ? lock : oldLock)
-//            {
-//                if (oldLock != null)
-//                {
-//                    return this.chunks.getOrDefault(posLong, new DumbChunk(pos));
-//                }
-            if (chunk == null)
-            {
-                pos = pos.setWorld(this.world);
-                final ChunkLoadEvent loadEvt = new ChunkLoadEvent(pos);
-                loadEvt.call();
-                if (loadEvt.isCancelled())
-                {
-                    final Object obj = this.generating.remove(posLong);
-                    if (obj != null)
+                    try
                     {
                         //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                        synchronized (obj)
+                        synchronized (lock)
                         {
-                            obj.notifyAll();
+                            lock.wait();
                         }
+                    } catch (final InterruptedException e)
+                    {
+                        e.printStackTrace();
                     }
-                    return new DumbChunk(pos);
+                    return this.chunks.get(posLong);
                 }
-                chunk = loadEvt.getLoadedChunk();
+                this.generating.put(posLong, new Object());
+
                 if (chunk == null)
                 {
-                    if (generate)
+                    pos = pos.setWorld(this.world);
+                    final ChunkLoadEvent loadEvt = new ChunkLoadEvent(pos);
+                    loadEvt.call();
+                    if (loadEvt.isCancelled())
                     {
-                        final ChunkGenerateEvent genEvt = new ChunkGenerateEvent(pos);
-                        genEvt.call();
-                        if (genEvt.isCancelled() || (genEvt.getGeneratedChunk() == null))
+                        return new DumbChunk(pos);
+                    }
+                    chunk = loadEvt.getLoadedChunk();
+                    if (chunk == null)
+                    {
+                        if (generate)
                         {
-                            final Object obj = this.generating.remove(posLong);
-                            if (obj != null)
+                            final ChunkGenerateEvent genEvt = new ChunkGenerateEvent(pos);
+                            genEvt.call();
+                            if (genEvt.isCancelled() || (genEvt.getGeneratedChunk() == null))
                             {
-                                //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                                synchronized (obj)
-                                {
-                                    obj.notifyAll();
-                                }
+                                return new DumbChunk(pos);
                             }
-                            return new DumbChunk(pos);
+                            chunk = genEvt.getGeneratedChunk();
+                            this.chunks.put(posLong, chunk);
                         }
-                        chunk = genEvt.getGeneratedChunk();
+                    }
+                    else
+                    {
                         this.chunks.put(posLong, chunk);
                     }
                 }
-                else
+                if ((chunk != null) && populate && ! chunk.isPopulated())
                 {
-                    this.chunks.put(posLong, chunk);
+                    EventType.callEvent(new ChunkPopulateEvent(chunk));
+                }
+            } finally
+            {
+                final Object lockObj = this.generating.remove(posLong);
+                if (lockObj != null)
+                {
+                    //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                    synchronized (lockObj)
+                    {
+                        lockObj.notifyAll();
+                    }
                 }
             }
-            if ((chunk != null) && populate && ! chunk.isPopulated())
-            {
-                EventType.callEvent(new ChunkPopulateEvent(chunk));
-            }
-            final Object obj = this.generating.remove(posLong);
-            if (obj != null)
-            {
-                //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                synchronized (obj)
-                {
-                    obj.notifyAll();
-                }
-            }
-            this.generating.remove(posLong);
-//            }
         }
-        return (chunk == null) ? new DumbChunk(pos) : chunk;
+        return chunk;
     }
 
     @Override
@@ -282,13 +252,13 @@ public class ChunkManagerImpl implements ChunkManager
 
     private static class LoadInfo
     {
-        private int  loadedChunks = 0;
-        private long lastTime     = System.currentTimeMillis();
+        private final AtomicInteger loadedChunks = new AtomicInteger();
+        private       long          lastTime     = System.currentTimeMillis();
 
         @Override
         public String toString()
         {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("loadedChunks", this.loadedChunks).append("lastTime", this.lastTime).toString();
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("loadedChunks", this.loadedChunks.get()).append("lastTime", this.lastTime).toString();
         }
     }
 

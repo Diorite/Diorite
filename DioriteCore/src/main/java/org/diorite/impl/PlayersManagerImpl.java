@@ -1,5 +1,6 @@
 package org.diorite.impl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -141,6 +142,11 @@ public class PlayersManagerImpl
     public void forEach(final Packet<?> packet)
     {
         this.forEach(player -> player.getNetworkManager().sendPacket(packet));
+    }
+
+    public Collection<PlayerImpl> getOnlinePlayers(final Predicate<PlayerImpl> predicate)
+    {
+        return this.players.values().stream().filter(predicate).collect(Collectors.toSet());
     }
 
     public void forEach(final Predicate<PlayerImpl> predicate, final Packet<?> packet)
