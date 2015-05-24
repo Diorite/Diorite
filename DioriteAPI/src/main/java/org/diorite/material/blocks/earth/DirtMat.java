@@ -140,6 +140,20 @@ public class DirtMat extends EarthMat implements VariantableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DirtMat[] types()
+    {
+        return DirtMat.dirtTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DirtMat[] dirtTypes()
+    {
+        return byID.values(new DirtMat[byID.size()]);
+    }
+
     static
     {
         DirtMat.register(DIRT);

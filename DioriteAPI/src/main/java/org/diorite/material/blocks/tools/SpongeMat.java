@@ -136,6 +136,20 @@ public class SpongeMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SpongeMat[] types()
+    {
+        return SpongeMat.spongeTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SpongeMat[] spongeTypes()
+    {
+        return byID.values(new SpongeMat[byID.size()]);
+    }
+
     static
     {
         SpongeMat.register(SPONGE);

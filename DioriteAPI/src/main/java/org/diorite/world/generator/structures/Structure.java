@@ -49,7 +49,7 @@ public interface Structure
      */
     default boolean canBeReplaced(final Block block)
     {
-        return ! block.getType().isSolid();
+        return (block == null) || ! block.getType().isSolid();
     }
 
     /**

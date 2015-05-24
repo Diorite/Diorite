@@ -161,6 +161,20 @@ public class MelonStemMat extends PlantStemMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public MelonStemMat[] types()
+    {
+        return MelonStemMat.melonStemTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static MelonStemMat[] melonStemTypes()
+    {
+        return byID.values(new MelonStemMat[byID.size()]);
+    }
+
     static
     {
         MelonStemMat.register(MELON_STEM_0);

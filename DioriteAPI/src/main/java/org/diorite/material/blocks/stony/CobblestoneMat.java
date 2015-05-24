@@ -122,6 +122,20 @@ public class CobblestoneMat extends StonyMat implements VariantableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CobblestoneMat[] types()
+    {
+        return CobblestoneMat.cobblestoneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CobblestoneMat[] cobblestoneTypes()
+    {
+        return byID.values(new CobblestoneMat[byID.size()]);
+    }
+
     static
     {
         CobblestoneMat.register(COBBLESTONE);

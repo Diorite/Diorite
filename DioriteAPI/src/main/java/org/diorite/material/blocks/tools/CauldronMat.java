@@ -166,6 +166,20 @@ public class CauldronMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CauldronMat[] types()
+    {
+        return CauldronMat.cauldronTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CauldronMat[] cauldronTypes()
+    {
+        return byID.values(new CauldronMat[byID.size()]);
+    }
+
     static
     {
         CauldronMat.register(CAULDRON_EMPTY);

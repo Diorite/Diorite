@@ -107,6 +107,20 @@ public class CoalBlockMat extends OreBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CoalBlockMat[] types()
+    {
+        return CoalBlockMat.coalBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CoalBlockMat[] coalBlockTypes()
+    {
+        return byID.values(new CoalBlockMat[byID.size()]);
+    }
+
     static
     {
         CoalBlockMat.register(COAL_BLOCK);

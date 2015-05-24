@@ -136,6 +136,11 @@ public abstract class BlockMaterialData extends Material
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("typeName", this.typeName).append("type", this.type).toString();
     }
 
+    /**
+     * @return array contains all other (including current one) sub-types of this material.
+     */
+    public abstract BlockMaterialData[] types();
+
     public static BlockMaterialData getByID(final int id)
     {
         final Material mat = Material.getByID(id);

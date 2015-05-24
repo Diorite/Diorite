@@ -138,6 +138,20 @@ public class RailMat extends RailsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RailMat[] types()
+    {
+        return RailMat.railTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RailMat[] railTypes()
+    {
+        return byID.values(new RailMat[byID.size()]);
+    }
+
     static
     {
         RailMat.register(RAIL_FLAT_NORTH_SOUTH);

@@ -174,6 +174,20 @@ public class IronTrapdoorMat extends TrapdoorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public IronTrapdoorMat[] types()
+    {
+        return IronTrapdoorMat.ironTrapdoorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static IronTrapdoorMat[] ironTrapdoorTypes()
+    {
+        return byID.values(new IronTrapdoorMat[byID.size()]);
+    }
+
     static
     {
         IronTrapdoorMat.register(IRON_TRAPDOOR_WEST_BOTTOM);

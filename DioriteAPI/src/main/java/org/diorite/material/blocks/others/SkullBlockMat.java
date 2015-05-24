@@ -207,6 +207,20 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SkullBlockMat[] types()
+    {
+        return SkullBlockMat.skullBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SkullBlockMat[] skullBlockTypes()
+    {
+        return byID.values(new SkullBlockMat[byID.size()]);
+    }
+
     static
     {
         SkullBlockMat.register(SKULL_BLOCK_FLOOR);

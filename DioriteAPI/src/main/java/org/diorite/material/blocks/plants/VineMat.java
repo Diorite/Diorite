@@ -211,6 +211,20 @@ public class VineMat extends PlantMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public VineMat[] types()
+    {
+        return VineMat.vineTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static VineMat[] vineTypes()
+    {
+        return byID.values(new VineMat[byID.size()]);
+    }
+
     static
     {
         VineMat.register(VINE);

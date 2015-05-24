@@ -106,6 +106,20 @@ public class EnchantingTableMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public EnchantingTableMat[] types()
+    {
+        return EnchantingTableMat.enchantingTableTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static EnchantingTableMat[] enchantingTableTypes()
+    {
+        return byID.values(new EnchantingTableMat[byID.size()]);
+    }
+
     static
     {
         EnchantingTableMat.register(ENCHANTING_TABLE);

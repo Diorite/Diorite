@@ -106,6 +106,20 @@ public class SlimeBlockMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SlimeBlockMat[] types()
+    {
+        return SlimeBlockMat.slimeBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SlimeBlockMat[] slimeBlockTypes()
+    {
+        return byID.values(new SlimeBlockMat[byID.size()]);
+    }
+
     static
     {
         SlimeBlockMat.register(SLIME_BLOCK);

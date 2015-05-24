@@ -179,6 +179,20 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public TorchMat[] types()
+    {
+        return TorchMat.torchTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static TorchMat[] torchTypes()
+    {
+        return byID.values(new TorchMat[byID.size()]);
+    }
+
     static
     {
         TorchMat.register(TORCH_EAST);

@@ -144,6 +144,20 @@ public class FlowersMat extends FlowerMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public FlowersMat[] types()
+    {
+        return FlowersMat.flowersTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static FlowersMat[] flowersTypes()
+    {
+        return byID.values(new FlowersMat[byID.size()]);
+    }
+
     static
     {
         FlowersMat.register(FLOWERS_POPPY);

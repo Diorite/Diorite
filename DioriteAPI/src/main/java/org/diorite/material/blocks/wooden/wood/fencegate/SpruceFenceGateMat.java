@@ -153,6 +153,20 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SpruceFenceGateMat[] types()
+    {
+        return SpruceFenceGateMat.spruceFenceGateTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SpruceFenceGateMat[] spruceFenceGateTypes()
+    {
+        return byID.values(new SpruceFenceGateMat[byID.size()]);
+    }
+
     static
     {
         SpruceFenceGateMat.register(SPRUCE_FENCE_GATE_SOUTH);

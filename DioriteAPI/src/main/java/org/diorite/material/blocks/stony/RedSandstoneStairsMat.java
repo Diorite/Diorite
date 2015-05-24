@@ -183,6 +183,20 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedSandstoneStairsMat[] types()
+    {
+        return RedSandstoneStairsMat.redSandstoneStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedSandstoneStairsMat[] redSandstoneStairsTypes()
+    {
+        return byID.values(new RedSandstoneStairsMat[byID.size()]);
+    }
+
     static
     {
         RedSandstoneStairsMat.register(RED_SANDSTONE_STAIRS_EAST);

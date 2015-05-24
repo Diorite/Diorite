@@ -106,6 +106,20 @@ public class SnowBlockMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SnowBlockMat[] types()
+    {
+        return SnowBlockMat.snowBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SnowBlockMat[] snowBlockTypes()
+    {
+        return byID.values(new SnowBlockMat[byID.size()]);
+    }
+
     static
     {
         SnowBlockMat.register(SNOW_BLOCK);

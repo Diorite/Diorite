@@ -157,6 +157,20 @@ public class NetherWartBlockMat extends CropsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public NetherWartBlockMat[] types()
+    {
+        return NetherWartBlockMat.netherWartBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static NetherWartBlockMat[] netherWartBlockTypes()
+    {
+        return byID.values(new NetherWartBlockMat[byID.size()]);
+    }
+
     static
     {
         NetherWartBlockMat.register(NETHER_WART_BLOCK_0);

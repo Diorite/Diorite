@@ -106,6 +106,20 @@ public class MobSpawnerMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public MobSpawnerMat[] types()
+    {
+        return MobSpawnerMat.mobSpawnerTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static MobSpawnerMat[] mobSpawnerTypes()
+    {
+        return byID.values(new MobSpawnerMat[byID.size()]);
+    }
+
     static
     {
         MobSpawnerMat.register(MOB_SPAWNER);

@@ -131,6 +131,20 @@ public class SnowLayerMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SnowLayerMat[] types()
+    {
+        return SnowLayerMat.snowLayerTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SnowLayerMat[] snowLayerTypes()
+    {
+        return byID.values(new SnowLayerMat[byID.size()]);
+    }
+
     static
     {
         SnowLayerMat.register(SNOW_LAYER_1);

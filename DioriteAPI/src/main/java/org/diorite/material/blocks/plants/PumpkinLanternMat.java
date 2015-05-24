@@ -134,6 +134,20 @@ public class PumpkinLanternMat extends AbstractPumpkinMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PumpkinLanternMat[] types()
+    {
+        return PumpkinLanternMat.pumpkinLanternTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PumpkinLanternMat[] pumpkinLanternTypes()
+    {
+        return byID.values(new PumpkinLanternMat[byID.size()]);
+    }
+
     static
     {
         PumpkinLanternMat.register(PUMPKIN_LANTERN_SOUTH);

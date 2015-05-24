@@ -106,6 +106,20 @@ public class BeaconMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BeaconMat[] types()
+    {
+        return BeaconMat.beaconTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BeaconMat[] beaconTypes()
+    {
+        return byID.values(new BeaconMat[byID.size()]);
+    }
+
     static
     {
         BeaconMat.register(BEACON);

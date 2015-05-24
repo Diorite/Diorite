@@ -308,6 +308,20 @@ public class SpruceDoorMat extends WoodenDoorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SpruceDoorMat[] types()
+    {
+        return SpruceDoorMat.spruceDoorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SpruceDoorMat[] spruceDoorTypes()
+    {
+        return byID.values(new SpruceDoorMat[byID.size()]);
+    }
+
     static
     {
         SpruceDoorMat.register(SPRUCE_DOOR_BOTTOM_EAST);

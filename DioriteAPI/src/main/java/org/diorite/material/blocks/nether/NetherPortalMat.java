@@ -187,6 +187,20 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
         byName.put(element.name(), element);
     }
 
+    @Override
+    public NetherPortalMat[] types()
+    {
+        return NetherPortalMat.netherPortalTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static NetherPortalMat[] netherPortalTypes()
+    {
+        return byID.values(new NetherPortalMat[byID.size()]);
+    }
+
     static
     {
         NetherPortalMat.register(NETHER_PORTAL_EAST_WEST);

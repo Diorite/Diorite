@@ -170,6 +170,20 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public TrappedChestMat[] types()
+    {
+        return TrappedChestMat.trappedChestTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static TrappedChestMat[] trappedChestTypes()
+    {
+        return byID.values(new TrappedChestMat[byID.size()]);
+    }
+
     static
     {
         TrappedChestMat.register(TRAPPED_CHEST_NORTH);

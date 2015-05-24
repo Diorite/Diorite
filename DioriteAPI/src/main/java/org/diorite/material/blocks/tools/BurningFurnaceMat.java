@@ -170,6 +170,20 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BurningFurnaceMat[] types()
+    {
+        return BurningFurnaceMat.burningFurnaceTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BurningFurnaceMat[] burningFurnaceTypes()
+    {
+        return byID.values(new BurningFurnaceMat[byID.size()]);
+    }
+
     static
     {
         BurningFurnaceMat.register(BURNING_FURNACE_NORTH);

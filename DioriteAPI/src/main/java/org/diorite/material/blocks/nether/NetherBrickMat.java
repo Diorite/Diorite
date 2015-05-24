@@ -106,6 +106,20 @@ public class NetherBrickMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public NetherBrickMat[] types()
+    {
+        return NetherBrickMat.netherBrickTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static NetherBrickMat[] netherBrickTypes()
+    {
+        return byID.values(new NetherBrickMat[byID.size()]);
+    }
+
     static
     {
         NetherBrickMat.register(NETHER_BRICK);

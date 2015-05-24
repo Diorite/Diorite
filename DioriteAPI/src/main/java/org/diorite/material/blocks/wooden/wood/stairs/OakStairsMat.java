@@ -153,6 +153,20 @@ public class OakStairsMat extends WoodenStairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public OakStairsMat[] types()
+    {
+        return OakStairsMat.oakStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static OakStairsMat[] oakStairsTypes()
+    {
+        return byID.values(new OakStairsMat[byID.size()]);
+    }
+
     static
     {
         OakStairsMat.register(OAK_STAIRS_EAST);

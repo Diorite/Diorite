@@ -131,6 +131,20 @@ public class DeadBushMat extends FlowerMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DeadBushMat[] types()
+    {
+        return DeadBushMat.deadBushTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DeadBushMat[] deadBushTypes()
+    {
+        return byID.values(new DeadBushMat[byID.size()]);
+    }
+
     static
     {
         DeadBushMat.register(DEAD_BUSH);

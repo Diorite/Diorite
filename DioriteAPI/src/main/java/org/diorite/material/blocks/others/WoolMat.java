@@ -167,6 +167,20 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WoolMat[] types()
+    {
+        return WoolMat.woolTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WoolMat[] woolTypes()
+    {
+        return byID.values(new WoolMat[byID.size()]);
+    }
+
     static
     {
         WoolMat.register(WOOL_WHITE);

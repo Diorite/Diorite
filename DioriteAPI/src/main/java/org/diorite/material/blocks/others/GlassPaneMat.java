@@ -107,6 +107,20 @@ public class GlassPaneMat extends BlockMaterialData implements FenceMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public GlassPaneMat[] types()
+    {
+        return GlassPaneMat.glassPaneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static GlassPaneMat[] glassPaneTypes()
+    {
+        return byID.values(new GlassPaneMat[byID.size()]);
+    }
+
     static
     {
         GlassPaneMat.register(GLASS_PANE);

@@ -153,6 +153,20 @@ public class AcaciaStairsMat extends WoodenStairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public AcaciaStairsMat[] types()
+    {
+        return AcaciaStairsMat.acaciaStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static AcaciaStairsMat[] acaciaStairsTypes()
+    {
+        return byID.values(new AcaciaStairsMat[byID.size()]);
+    }
+
     static
     {
         AcaciaStairsMat.register(ACACIA_STAIRS_EAST);

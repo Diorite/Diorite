@@ -153,6 +153,20 @@ public class SpruceStairsMat extends WoodenStairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SpruceStairsMat[] types()
+    {
+        return SpruceStairsMat.spruceStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SpruceStairsMat[] spruceStairsTypes()
+    {
+        return byID.values(new SpruceStairsMat[byID.size()]);
+    }
+
     static
     {
         SpruceStairsMat.register(SPRUCE_STAIRS_EAST);

@@ -105,6 +105,20 @@ public class EmeraldOreMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public EmeraldOreMat[] types()
+    {
+        return EmeraldOreMat.emeraldOreTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static EmeraldOreMat[] emeraldOreTypes()
+    {
+        return byID.values(new EmeraldOreMat[byID.size()]);
+    }
+
     static
     {
         EmeraldOreMat.register(EMERALD_ORE);

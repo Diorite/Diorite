@@ -292,6 +292,20 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public AnvilMat[] types()
+    {
+        return AnvilMat.anvilTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static AnvilMat[] anvilTypes()
+    {
+        return byID.values(new AnvilMat[byID.size()]);
+    }
+
     static
     {
         AnvilMat.register(ANVIL_NORTH_SOUTH_NEW);
@@ -334,7 +348,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         }
 
         /**
-         * @return byte-flag for this damage.Ĺ‚
+         * @return byte-flag for this damage.Äąâ€š
          */
         public byte getFlag()
         {

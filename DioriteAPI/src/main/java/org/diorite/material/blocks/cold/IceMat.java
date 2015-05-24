@@ -106,6 +106,20 @@ public class IceMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public IceMat[] types()
+    {
+        return IceMat.iceTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static IceMat[] iceTypes()
+    {
+        return byID.values(new IceMat[byID.size()]);
+    }
+
     static
     {
         IceMat.register(ICE);

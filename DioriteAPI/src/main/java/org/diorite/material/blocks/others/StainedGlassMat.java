@@ -167,6 +167,20 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public StainedGlassMat[] types()
+    {
+        return StainedGlassMat.stainedGlassTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static StainedGlassMat[] stainedGlassTypes()
+    {
+        return byID.values(new StainedGlassMat[byID.size()]);
+    }
+
     static
     {
         StainedGlassMat.register(STAINED_GLASS_WHITE);

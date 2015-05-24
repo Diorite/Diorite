@@ -203,6 +203,20 @@ public class BrewingStandBlockMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BrewingStandBlockMat[] types()
+    {
+        return BrewingStandBlockMat.brewingStandBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BrewingStandBlockMat[] brewingStandBlockTypes()
+    {
+        return byID.values(new BrewingStandBlockMat[byID.size()]);
+    }
+
     static
     {
         BrewingStandBlockMat.register(BREWING_STAND_BLOCK_EMPTY);

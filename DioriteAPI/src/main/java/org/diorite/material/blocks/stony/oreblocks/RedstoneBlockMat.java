@@ -107,6 +107,20 @@ public class RedstoneBlockMat extends OreBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedstoneBlockMat[] types()
+    {
+        return RedstoneBlockMat.redstoneBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedstoneBlockMat[] redstoneBlockTypes()
+    {
+        return byID.values(new RedstoneBlockMat[byID.size()]);
+    }
+
     static
     {
         RedstoneBlockMat.register(REDSTONE_BLOCK);

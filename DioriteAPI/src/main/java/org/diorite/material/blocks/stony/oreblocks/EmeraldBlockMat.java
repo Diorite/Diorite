@@ -107,6 +107,20 @@ public class EmeraldBlockMat extends OreBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public EmeraldBlockMat[] types()
+    {
+        return EmeraldBlockMat.emeraldBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static EmeraldBlockMat[] emeraldBlockTypes()
+    {
+        return byID.values(new EmeraldBlockMat[byID.size()]);
+    }
+
     static
     {
         EmeraldBlockMat.register(EMERALD_BLOCK);

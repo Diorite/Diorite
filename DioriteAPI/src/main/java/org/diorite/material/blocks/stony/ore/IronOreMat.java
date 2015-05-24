@@ -105,6 +105,20 @@ public class IronOreMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public IronOreMat[] types()
+    {
+        return IronOreMat.ironOreTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static IronOreMat[] ironOreTypes()
+    {
+        return byID.values(new IronOreMat[byID.size()]);
+    }
+
     static
     {
         IronOreMat.register(IRON_ORE);

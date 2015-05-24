@@ -122,6 +122,20 @@ public class AirMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public AirMat[] types()
+    {
+        return AirMat.airTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static AirMat[] airTypes()
+    {
+        return byID.values(new AirMat[byID.size()]);
+    }
+
     static
     {
         AirMat.register(AIR);

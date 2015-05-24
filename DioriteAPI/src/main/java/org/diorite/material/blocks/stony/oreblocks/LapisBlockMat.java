@@ -107,6 +107,20 @@ public class LapisBlockMat extends OreBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public LapisBlockMat[] types()
+    {
+        return LapisBlockMat.lapisBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static LapisBlockMat[] lapisBlockTypes()
+    {
+        return byID.values(new LapisBlockMat[byID.size()]);
+    }
+
     static
     {
         LapisBlockMat.register(LAPIS_BLOCK);

@@ -160,6 +160,20 @@ public class StoneButtonMat extends ButtonMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public StoneButtonMat[] types()
+    {
+        return StoneButtonMat.stoneButtonTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static StoneButtonMat[] stoneButtonTypes()
+    {
+        return byID.values(new StoneButtonMat[byID.size()]);
+    }
+
     static
     {
         StoneButtonMat.register(STONE_BUTTON_DOWN);

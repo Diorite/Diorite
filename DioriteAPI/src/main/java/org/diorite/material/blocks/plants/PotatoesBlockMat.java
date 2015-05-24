@@ -161,6 +161,20 @@ public class PotatoesBlockMat extends CropsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PotatoesBlockMat[] types()
+    {
+        return PotatoesBlockMat.potatoesBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PotatoesBlockMat[] potatoesBlockTypes()
+    {
+        return byID.values(new PotatoesBlockMat[byID.size()]);
+    }
+
     static
     {
         PotatoesBlockMat.register(POTATOES_BLOCK_0);

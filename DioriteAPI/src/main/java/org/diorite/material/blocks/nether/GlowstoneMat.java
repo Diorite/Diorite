@@ -106,6 +106,20 @@ public class GlowstoneMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public GlowstoneMat[] types()
+    {
+        return GlowstoneMat.glowstoneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static GlowstoneMat[] glowstoneTypes()
+    {
+        return byID.values(new GlowstoneMat[byID.size()]);
+    }
+
     static
     {
         GlowstoneMat.register(GLOWSTONE);

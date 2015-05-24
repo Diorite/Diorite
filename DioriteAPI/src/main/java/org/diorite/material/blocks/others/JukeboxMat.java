@@ -149,6 +149,20 @@ public class JukeboxMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public JukeboxMat[] types()
+    {
+        return JukeboxMat.jukeboxTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static JukeboxMat[] jukeboxTypes()
+    {
+        return byID.values(new JukeboxMat[byID.size()]);
+    }
+
     static
     {
         JukeboxMat.register(JUKEBOX);

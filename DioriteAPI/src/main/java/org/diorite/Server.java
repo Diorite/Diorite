@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -91,6 +92,8 @@ public interface Server
     String getServerName();
 
     Collection<Player> getOnlinePlayers();
+
+    Collection<Player> getOnlinePlayers(Predicate<Player> predicate);
 
     Player getPlayer(UUID uuid);
 

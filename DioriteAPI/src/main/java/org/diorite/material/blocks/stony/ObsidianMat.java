@@ -105,6 +105,20 @@ public class ObsidianMat extends StonyMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public ObsidianMat[] types()
+    {
+        return ObsidianMat.obsidianTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static ObsidianMat[] obsidianTypes()
+    {
+        return byID.values(new ObsidianMat[byID.size()]);
+    }
+
     static
     {
         ObsidianMat.register(OBSIDIAN);

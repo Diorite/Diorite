@@ -193,6 +193,20 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public ActivatorRailMat[] types()
+    {
+        return ActivatorRailMat.activatorRailTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static ActivatorRailMat[] activatorRailTypes()
+    {
+        return byID.values(new ActivatorRailMat[byID.size()]);
+    }
+
     static
     {
         ActivatorRailMat.register(ACTIVATOR_RAIL_NORTH_SOUTH);

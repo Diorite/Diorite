@@ -144,6 +144,20 @@ public class DoubleStoneSlabMat extends StonySlabMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DoubleStoneSlabMat[] types()
+    {
+        return DoubleStoneSlabMat.doubleStoneSlabTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DoubleStoneSlabMat[] doubleStoneSlabTypes()
+    {
+        return byID.values(new DoubleStoneSlabMat[byID.size()]);
+    }
+
     /**
      * Helper class for second stone slab ID
      */

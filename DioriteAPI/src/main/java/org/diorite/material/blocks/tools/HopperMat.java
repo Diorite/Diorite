@@ -214,6 +214,20 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
         byName.put(element.name(), element);
     }
 
+    @Override
+    public HopperMat[] types()
+    {
+        return HopperMat.hopperTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static HopperMat[] hopperTypes()
+    {
+        return byID.values(new HopperMat[byID.size()]);
+    }
+
     static
     {
         HopperMat.register(HOPPER_DOWN);

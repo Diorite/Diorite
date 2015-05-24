@@ -173,6 +173,20 @@ public class CakeMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CakeMat[] types()
+    {
+        return CakeMat.cakeTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CakeMat[] cakeTypes()
+    {
+        return byID.values(new CakeMat[byID.size()]);
+    }
+
     static
     {
         CakeMat.register(CAKE_0);

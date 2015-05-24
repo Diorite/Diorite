@@ -340,6 +340,20 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public TripwireMat[] types()
+    {
+        return TripwireMat.tripwireTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static TripwireMat[] tripwireTypes()
+    {
+        return byID.values(new TripwireMat[byID.size()]);
+    }
+
     static
     {
         TripwireMat.register(TRIPWIRE);

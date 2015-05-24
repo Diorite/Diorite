@@ -211,6 +211,20 @@ public class LogMat extends WoodMat implements RotatableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public LogMat[] types()
+    {
+        return LogMat.logTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static LogMat[] logTypes()
+    {
+        return byID.values(new LogMat[byID.size()]);
+    }
+
     /**
      * Helper class for second log ID
      */

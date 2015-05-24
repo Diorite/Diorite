@@ -205,6 +205,20 @@ public class StandingSignMat extends SignBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public StandingSignMat[] types()
+    {
+        return StandingSignMat.standingSignTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static StandingSignMat[] standingSignTypes()
+    {
+        return byID.values(new StandingSignMat[byID.size()]);
+    }
+
     static
     {
         StandingSignMat.register(STANDING_SIGN_SOUTH);

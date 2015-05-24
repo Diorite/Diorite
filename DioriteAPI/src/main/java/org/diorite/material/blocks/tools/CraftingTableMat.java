@@ -106,6 +106,20 @@ public class CraftingTableMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CraftingTableMat[] types()
+    {
+        return CraftingTableMat.craftingTableTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CraftingTableMat[] craftingTableTypes()
+    {
+        return byID.values(new CraftingTableMat[byID.size()]);
+    }
+
     static
     {
         CraftingTableMat.register(CRAFTING_TABLE);

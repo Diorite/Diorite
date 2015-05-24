@@ -107,6 +107,20 @@ public class EndPortalMat extends BlockMaterialData implements PortalMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public EndPortalMat[] types()
+    {
+        return EndPortalMat.endPortalTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static EndPortalMat[] endPortalTypes()
+    {
+        return byID.values(new EndPortalMat[byID.size()]);
+    }
+
     static
     {
         EndPortalMat.register(END_PORTAL);

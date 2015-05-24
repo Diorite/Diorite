@@ -106,6 +106,20 @@ public class AcaciaFenceMat extends WoodenFenceMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public AcaciaFenceMat[] types()
+    {
+        return AcaciaFenceMat.acaciaFenceTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static AcaciaFenceMat[] acaciaFenceTypes()
+    {
+        return byID.values(new AcaciaFenceMat[byID.size()]);
+    }
+
     static
     {
         AcaciaFenceMat.register(ACACIA_FENCE);

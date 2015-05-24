@@ -105,6 +105,20 @@ public class GoldOreMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public GoldOreMat[] types()
+    {
+        return GoldOreMat.goldOreTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static GoldOreMat[] goldOreTypes()
+    {
+        return byID.values(new GoldOreMat[byID.size()]);
+    }
+
     static
     {
         GoldOreMat.register(GOLD_ORE);

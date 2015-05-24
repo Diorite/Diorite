@@ -161,6 +161,20 @@ public class PumpkinStemMat extends PlantStemMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PumpkinStemMat[] types()
+    {
+        return PumpkinStemMat.pumpkinStemTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PumpkinStemMat[] pumpkinStemTypes()
+    {
+        return byID.values(new PumpkinStemMat[byID.size()]);
+    }
+
     static
     {
         PumpkinStemMat.register(PUMPKIN_STEM_0);

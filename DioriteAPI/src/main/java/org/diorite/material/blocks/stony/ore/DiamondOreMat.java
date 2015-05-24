@@ -105,6 +105,20 @@ public class DiamondOreMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DiamondOreMat[] types()
+    {
+        return DiamondOreMat.diamondOreTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DiamondOreMat[] diamondOreTypes()
+    {
+        return byID.values(new DiamondOreMat[byID.size()]);
+    }
+
     static
     {
         DiamondOreMat.register(DIAMOND_ORE);

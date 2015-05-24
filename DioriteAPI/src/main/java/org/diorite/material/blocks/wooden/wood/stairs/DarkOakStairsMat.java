@@ -153,6 +153,20 @@ public class DarkOakStairsMat extends WoodenStairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DarkOakStairsMat[] types()
+    {
+        return DarkOakStairsMat.darkOakStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DarkOakStairsMat[] darkOakStairsTypes()
+    {
+        return byID.values(new DarkOakStairsMat[byID.size()]);
+    }
+
     static
     {
         DarkOakStairsMat.register(DARK_OAK_STAIRS_EAST);

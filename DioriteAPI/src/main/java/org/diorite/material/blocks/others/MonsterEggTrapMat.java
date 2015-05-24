@@ -180,6 +180,20 @@ public class MonsterEggTrapMat extends StonyMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public MonsterEggTrapMat[] types()
+    {
+        return MonsterEggTrapMat.monsterEggTrapTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static MonsterEggTrapMat[] monsterEggTrapTypes()
+    {
+        return byID.values(new MonsterEggTrapMat[byID.size()]);
+    }
+
     static
     {
         MonsterEggTrapMat.register(MONSTER_EGG_TRAP_STONE);

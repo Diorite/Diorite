@@ -105,6 +105,20 @@ public class ClayBlockMat extends EarthMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public ClayBlockMat[] types()
+    {
+        return ClayBlockMat.clayBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static ClayBlockMat[] clayBlockTypes()
+    {
+        return byID.values(new ClayBlockMat[byID.size()]);
+    }
+
     static
     {
         ClayBlockMat.register(CLAY_BLOCK);

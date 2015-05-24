@@ -105,6 +105,20 @@ public class MushroomRedMat extends MushroomMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public MushroomRedMat[] types()
+    {
+        return MushroomRedMat.mushroomRedTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static MushroomRedMat[] mushroomRedTypes()
+    {
+        return byID.values(new MushroomRedMat[byID.size()]);
+    }
+
     static
     {
         MushroomRedMat.register(RED_MUSHROOM);

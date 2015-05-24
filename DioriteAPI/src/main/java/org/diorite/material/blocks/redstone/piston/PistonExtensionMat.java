@@ -161,6 +161,20 @@ public class PistonExtensionMat extends PistonBaseMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PistonExtensionMat[] types()
+    {
+        return PistonExtensionMat.pistonExtensionTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PistonExtensionMat[] pistonExtensionTypes()
+    {
+        return byID.values(new PistonExtensionMat[byID.size()]);
+    }
+
     static
     {
         PistonExtensionMat.register(PISTON_EXTENSION_DOWN);

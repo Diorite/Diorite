@@ -160,6 +160,20 @@ public class WoodenButtonMat extends ButtonMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WoodenButtonMat[] types()
+    {
+        return WoodenButtonMat.woodenButtonTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WoodenButtonMat[] woodenButtonTypes()
+    {
+        return byID.values(new WoodenButtonMat[byID.size()]);
+    }
+
     static
     {
         WoodenButtonMat.register(WOODEN_BUTTON_DOWN);

@@ -213,6 +213,20 @@ public class LeavesMat extends WoodMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public LeavesMat[] types()
+    {
+        return LeavesMat.leavesTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static LeavesMat[] leavesTypes()
+    {
+        return byID.values(new LeavesMat[byID.size()]);
+    }
+
     /**
      * Helper class for second leaves ID
      */

@@ -168,6 +168,20 @@ public class FarmlandMat extends EarthMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public FarmlandMat[] types()
+    {
+        return FarmlandMat.farmlandTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static FarmlandMat[] farmlandTypes()
+    {
+        return byID.values(new FarmlandMat[byID.size()]);
+    }
+
     static
     {
         FarmlandMat.register(FARMLAND_UNHYDRATED);

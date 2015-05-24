@@ -183,6 +183,20 @@ public class QuartzStairsMat extends BlockMaterialData implements StairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public QuartzStairsMat[] types()
+    {
+        return QuartzStairsMat.quartzStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static QuartzStairsMat[] quartzStairsTypes()
+    {
+        return byID.values(new QuartzStairsMat[byID.size()]);
+    }
+
     static
     {
         QuartzStairsMat.register(QUARTZ_STAIRS_EAST);

@@ -170,6 +170,20 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedstoneWireMat[] types()
+    {
+        return RedstoneWireMat.redstoneWireTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedstoneWireMat[] redstoneWireTypes()
+    {
+        return byID.values(new RedstoneWireMat[byID.size()]);
+    }
+
     static
     {
         RedstoneWireMat.register(REDSTONE_WIRE_OFF);

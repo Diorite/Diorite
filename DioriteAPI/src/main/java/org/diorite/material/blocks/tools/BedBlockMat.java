@@ -221,6 +221,20 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BedBlockMat[] types()
+    {
+        return BedBlockMat.bedBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BedBlockMat[] bedBlockTypes()
+    {
+        return byID.values(new BedBlockMat[byID.size()]);
+    }
+
     static
     {
         BedBlockMat.register(BED_FOOT_SOUTH);

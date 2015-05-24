@@ -105,6 +105,20 @@ public class MyceliumMat extends EarthMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public MyceliumMat[] types()
+    {
+        return MyceliumMat.myceliumTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static MyceliumMat[] myceliumTypes()
+    {
+        return byID.values(new MyceliumMat[byID.size()]);
+    }
+
     static
     {
         MyceliumMat.register(MYCELIUM);

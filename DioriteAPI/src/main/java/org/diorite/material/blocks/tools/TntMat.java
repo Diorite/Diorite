@@ -106,6 +106,20 @@ public class TntMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public TntMat[] types()
+    {
+        return TntMat.tntTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static TntMat[] tntTypes()
+    {
+        return byID.values(new TntMat[byID.size()]);
+    }
+
     static
     {
         TntMat.register(TNT);

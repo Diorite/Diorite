@@ -262,6 +262,20 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
         byName.put(element.name(), element);
     }
 
+    @Override
+    public TripwireHookMat[] types()
+    {
+        return TripwireHookMat.tripwireHookTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static TripwireHookMat[] tripwireHookTypes()
+    {
+        return byID.values(new TripwireHookMat[byID.size()]);
+    }
+
     static
     {
         TripwireHookMat.register(TRIPWIRE_HOOK_SOUTH);

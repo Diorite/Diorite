@@ -223,6 +223,20 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
         byName.put(element.name(), element);
     }
 
+    @Override
+    public EndPortalFrameMat[] types()
+    {
+        return EndPortalFrameMat.endPortalFrameTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static EndPortalFrameMat[] endPortalFrameTypes()
+    {
+        return byID.values(new EndPortalFrameMat[byID.size()]);
+    }
+
     static
     {
         EndPortalFrameMat.register(END_PORTAL_FRAME_SOUTH);

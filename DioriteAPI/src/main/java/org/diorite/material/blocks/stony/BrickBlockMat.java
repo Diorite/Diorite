@@ -105,6 +105,20 @@ public class BrickBlockMat extends StonyMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BrickBlockMat[] types()
+    {
+        return BrickBlockMat.brickBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BrickBlockMat[] brickBlockTypes()
+    {
+        return byID.values(new BrickBlockMat[byID.size()]);
+    }
+
     static
     {
         BrickBlockMat.register(BRICK_BLOCK);

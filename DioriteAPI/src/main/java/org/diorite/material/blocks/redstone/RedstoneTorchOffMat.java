@@ -146,6 +146,20 @@ public class RedstoneTorchOffMat extends RedstoneTorchMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedstoneTorchOffMat[] types()
+    {
+        return RedstoneTorchOffMat.redstoneTorchOffTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedstoneTorchOffMat[] redstoneTorchOffTypes()
+    {
+        return byID.values(new RedstoneTorchOffMat[byID.size()]);
+    }
+
     static
     {
         RedstoneTorchOffMat.register(REDSTONE_TORCH_OFF_WEST);

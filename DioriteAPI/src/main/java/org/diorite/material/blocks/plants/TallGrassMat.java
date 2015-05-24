@@ -138,6 +138,20 @@ public class TallGrassMat extends FlowerMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public TallGrassMat[] types()
+    {
+        return TallGrassMat.tallGrassTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static TallGrassMat[] tallGrassTypes()
+    {
+        return byID.values(new TallGrassMat[byID.size()]);
+    }
+
     static
     {
         TallGrassMat.register(TALL_GRASS_SHRUB);

@@ -262,6 +262,20 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
         byName.put(element.name(), element);
     }
 
+    @Override
+    public LeverMat[] types()
+    {
+        return LeverMat.leverTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static LeverMat[] leverTypes()
+    {
+        return byID.values(new LeverMat[byID.size()]);
+    }
+
     static
     {
         LeverMat.register(LEVER_DOWN);

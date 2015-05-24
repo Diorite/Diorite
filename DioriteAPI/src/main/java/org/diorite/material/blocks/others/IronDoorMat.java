@@ -308,6 +308,20 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public IronDoorMat[] types()
+    {
+        return IronDoorMat.ironDoorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static IronDoorMat[] ironDoorTypes()
+    {
+        return byID.values(new IronDoorMat[byID.size()]);
+    }
+
     static
     {
         IronDoorMat.register(IRON_DOOR_BOTTOM_EAST);

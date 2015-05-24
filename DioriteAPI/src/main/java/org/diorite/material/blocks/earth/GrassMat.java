@@ -104,6 +104,20 @@ public class GrassMat extends EarthMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public GrassMat[] types()
+    {
+        return GrassMat.grassTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static GrassMat[] grassTypes()
+    {
+        return byID.values(new GrassMat[byID.size()]);
+    }
+
     static
     {
         GrassMat.register(GRASS);

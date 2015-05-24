@@ -205,6 +205,20 @@ public class StandingBannerMat extends BannerBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public StandingBannerMat[] types()
+    {
+        return StandingBannerMat.standingBannerTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static StandingBannerMat[] standingBannerTypes()
+    {
+        return byID.values(new StandingBannerMat[byID.size()]);
+    }
+
     static
     {
         StandingBannerMat.register(STANDING_BANNER_SOUTH);

@@ -106,6 +106,20 @@ public class BookshelfMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BookshelfMat[] types()
+    {
+        return BookshelfMat.bookshelfTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BookshelfMat[] bookshelfTypes()
+    {
+        return byID.values(new BookshelfMat[byID.size()]);
+    }
+
     static
     {
         BookshelfMat.register(BOOKSHELF);

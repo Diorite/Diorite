@@ -170,6 +170,20 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public EnderChestMat[] types()
+    {
+        return EnderChestMat.enderChestTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static EnderChestMat[] enderChestTypes()
+    {
+        return byID.values(new EnderChestMat[byID.size()]);
+    }
+
     static
     {
         EnderChestMat.register(ENDER_CHEST_NORTH);

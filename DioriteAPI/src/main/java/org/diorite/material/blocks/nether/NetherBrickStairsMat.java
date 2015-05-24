@@ -183,6 +183,20 @@ public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public NetherBrickStairsMat[] types()
+    {
+        return NetherBrickStairsMat.netherBrickStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static NetherBrickStairsMat[] netherBrickStairsTypes()
+    {
+        return byID.values(new NetherBrickStairsMat[byID.size()]);
+    }
+
     static
     {
         NetherBrickStairsMat.register(NETHER_BRICK_STAIRS_EAST);

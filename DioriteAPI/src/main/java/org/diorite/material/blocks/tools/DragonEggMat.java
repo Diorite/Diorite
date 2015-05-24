@@ -106,6 +106,20 @@ public class DragonEggMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DragonEggMat[] types()
+    {
+        return DragonEggMat.dragonEggTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DragonEggMat[] dragonEggTypes()
+    {
+        return byID.values(new DragonEggMat[byID.size()]);
+    }
+
     static
     {
         DragonEggMat.register(DRAGON_EGG);

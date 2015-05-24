@@ -106,6 +106,20 @@ public class NetherBrickFenceMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public NetherBrickFenceMat[] types()
+    {
+        return NetherBrickFenceMat.netherBrickFenceTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static NetherBrickFenceMat[] netherBrickFenceTypes()
+    {
+        return byID.values(new NetherBrickFenceMat[byID.size()]);
+    }
+
     static
     {
         NetherBrickFenceMat.register(NETHER_BRICK_FENCE);

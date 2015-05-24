@@ -228,6 +228,20 @@ public class CocoaMat extends CropsMat implements AttachableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CocoaMat[] types()
+    {
+        return CocoaMat.cocoaTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CocoaMat[] cocoaTypes()
+    {
+        return byID.values(new CocoaMat[byID.size()]);
+    }
+
     static
     {
         CocoaMat.register(COCOA_NORTH_0);

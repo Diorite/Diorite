@@ -193,6 +193,20 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PoweredRailMat[] types()
+    {
+        return PoweredRailMat.poweredRailTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PoweredRailMat[] poweredRailTypes()
+    {
+        return byID.values(new PoweredRailMat[byID.size()]);
+    }
+
     static
     {
         PoweredRailMat.register(POWERED_RAIL_NORTH_SOUTH);

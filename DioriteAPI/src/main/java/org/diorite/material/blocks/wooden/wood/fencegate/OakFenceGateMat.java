@@ -153,6 +153,20 @@ public class OakFenceGateMat extends WoodenFenceGateMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public OakFenceGateMat[] types()
+    {
+        return OakFenceGateMat.oakFenceGateTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static OakFenceGateMat[] oakFenceGateTypes()
+    {
+        return byID.values(new OakFenceGateMat[byID.size()]);
+    }
+
     static
     {
         OakFenceGateMat.register(OAK_FENCE_GATE_SOUTH);

@@ -105,6 +105,20 @@ public class NoteBlockMat extends WoodenMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public NoteBlockMat[] types()
+    {
+        return NoteBlockMat.noteBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static NoteBlockMat[] noteBlockTypes()
+    {
+        return byID.values(new NoteBlockMat[byID.size()]);
+    }
+
     static
     {
         NoteBlockMat.register(NOTEBLOCK);

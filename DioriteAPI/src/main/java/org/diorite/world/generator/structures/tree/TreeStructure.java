@@ -39,7 +39,7 @@ public abstract class TreeStructure implements Structure
     @Override
     public boolean generate(final ChunkPos chunkPos, final Random random, final BlockLocation location)
     {
-        return FLOOR_MATS.contains(location.subtractY(1).getBlock().getType()) && this.genTree(chunkPos, random, location);
+        return FLOOR_MATS.contains(location.getBlock().getType()) && this.genTree(chunkPos, random, location);
     }
 
     protected abstract boolean genTree(final ChunkPos chunkPos, final Random random, final BlockLocation location);

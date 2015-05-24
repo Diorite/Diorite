@@ -105,6 +105,20 @@ public class CoalOreMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CoalOreMat[] types()
+    {
+        return CoalOreMat.coalOreTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CoalOreMat[] coalOreTypes()
+    {
+        return byID.values(new CoalOreMat[byID.size()]);
+    }
+
     static
     {
         CoalOreMat.register(COAL_ORE);

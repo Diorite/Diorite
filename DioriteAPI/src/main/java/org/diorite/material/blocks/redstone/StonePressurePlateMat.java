@@ -130,6 +130,20 @@ public class StonePressurePlateMat extends PressurePlateMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public StonePressurePlateMat[] types()
+    {
+        return StonePressurePlateMat.stonePressurePlateTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static StonePressurePlateMat[] stonePressurePlateTypes()
+    {
+        return byID.values(new StonePressurePlateMat[byID.size()]);
+    }
+
     static
     {
         StonePressurePlateMat.register(STONE_PRESSURE_PLATE);

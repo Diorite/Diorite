@@ -308,6 +308,20 @@ public class AcaciaDoorMat extends WoodenDoorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public AcaciaDoorMat[] types()
+    {
+        return AcaciaDoorMat.acaciaDoorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static AcaciaDoorMat[] acaciaDoorTypes()
+    {
+        return byID.values(new AcaciaDoorMat[byID.size()]);
+    }
+
     static
     {
         AcaciaDoorMat.register(ACACIA_DOOR_BOTTOM_EAST);

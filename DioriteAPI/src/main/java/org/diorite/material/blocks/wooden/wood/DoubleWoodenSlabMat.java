@@ -138,6 +138,20 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DoubleWoodenSlabMat[] types()
+    {
+        return DoubleWoodenSlabMat.doubleWoodenSlabTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DoubleWoodenSlabMat[] doubleWoodenSlabTypes()
+    {
+        return byID.values(new DoubleWoodenSlabMat[byID.size()]);
+    }
+
     static
     {
         DoubleWoodenSlabMat.register(DOUBLE_WOODEN_SLAB_OAK);

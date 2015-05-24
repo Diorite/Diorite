@@ -123,6 +123,20 @@ public class MossyCobblestoneMat extends StonyMat implements VariantableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public MossyCobblestoneMat[] types()
+    {
+        return MossyCobblestoneMat.mossyCobblestoneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static MossyCobblestoneMat[] mossyCobblestoneTypes()
+    {
+        return byID.values(new MossyCobblestoneMat[byID.size()]);
+    }
+
     static
     {
         MossyCobblestoneMat.register(MOSSY_COBBLESTONE);

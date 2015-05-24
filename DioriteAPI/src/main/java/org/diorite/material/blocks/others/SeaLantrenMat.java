@@ -106,6 +106,20 @@ public class SeaLantrenMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SeaLantrenMat[] types()
+    {
+        return SeaLantrenMat.seaLantrenTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SeaLantrenMat[] seaLantrenTypes()
+    {
+        return byID.values(new SeaLantrenMat[byID.size()]);
+    }
+
     static
     {
         SeaLantrenMat.register(SEA_LANTREN);

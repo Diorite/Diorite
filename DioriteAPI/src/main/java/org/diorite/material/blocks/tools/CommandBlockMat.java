@@ -159,6 +159,20 @@ public class CommandBlockMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CommandBlockMat[] types()
+    {
+        return CommandBlockMat.commandBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CommandBlockMat[] commandBlockTypes()
+    {
+        return byID.values(new CommandBlockMat[byID.size()]);
+    }
+
     static
     {
         CommandBlockMat.register(COMMAND_BLOCK);

@@ -105,6 +105,20 @@ public class WaterLilyMat extends PlantMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WaterLilyMat[] types()
+    {
+        return WaterLilyMat.waterLilyTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WaterLilyMat[] waterLilyTypes()
+    {
+        return byID.values(new WaterLilyMat[byID.size()]);
+    }
+
     static
     {
         WaterLilyMat.register(WATER_LILY);

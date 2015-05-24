@@ -174,6 +174,20 @@ public class WoodenTrapdoorMat extends TrapdoorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WoodenTrapdoorMat[] types()
+    {
+        return WoodenTrapdoorMat.woodenTrapdoorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WoodenTrapdoorMat[] woodenTrapdoorTypes()
+    {
+        return byID.values(new WoodenTrapdoorMat[byID.size()]);
+    }
+
     static
     {
         WoodenTrapdoorMat.register(WOODEN_TRAPDOOR_WEST_BOTTOM);

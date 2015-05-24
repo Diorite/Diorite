@@ -105,6 +105,20 @@ public class RedstoneOreMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedstoneOreMat[] types()
+    {
+        return RedstoneOreMat.redstoneOreTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedstoneOreMat[] redstoneOreTypes()
+    {
+        return byID.values(new RedstoneOreMat[byID.size()]);
+    }
+
     static
     {
         RedstoneOreMat.register(REDSTONE_ORE);

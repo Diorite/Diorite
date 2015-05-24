@@ -105,6 +105,20 @@ public class HardenedClayMat extends StonyMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public HardenedClayMat[] types()
+    {
+        return HardenedClayMat.hardenedClayTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static HardenedClayMat[] hardenedClayTypes()
+    {
+        return byID.values(new HardenedClayMat[byID.size()]);
+    }
+
     static
     {
         HardenedClayMat.register(HARDENED_CLAY);

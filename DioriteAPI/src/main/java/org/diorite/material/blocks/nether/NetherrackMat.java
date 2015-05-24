@@ -106,6 +106,20 @@ public class NetherrackMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public NetherrackMat[] types()
+    {
+        return NetherrackMat.netherrackTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static NetherrackMat[] netherrackTypes()
+    {
+        return byID.values(new NetherrackMat[byID.size()]);
+    }
+
     static
     {
         NetherrackMat.register(NETHERRACK);

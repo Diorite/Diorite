@@ -198,6 +198,20 @@ public class SaplingMat extends WoodMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SaplingMat[] types()
+    {
+        return SaplingMat.saplingTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SaplingMat[] saplingTypes()
+    {
+        return byID.values(new SaplingMat[byID.size()]);
+    }
+
     static
     {
         SaplingMat.register(SAPLING_OAK);

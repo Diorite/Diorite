@@ -142,6 +142,20 @@ public class PlanksMat extends WoodMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PlanksMat[] types()
+    {
+        return PlanksMat.planksTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PlanksMat[] planksTypes()
+    {
+        return byID.values(new PlanksMat[byID.size()]);
+    }
+
     static
     {
         PlanksMat.register(PLANKS_OAK);

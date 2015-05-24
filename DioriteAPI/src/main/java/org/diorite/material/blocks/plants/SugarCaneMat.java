@@ -157,6 +157,20 @@ public class SugarCaneMat extends PlantMat implements AgeableBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SugarCaneMat[] types()
+    {
+        return SugarCaneMat.sugarCaneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SugarCaneMat[] sugarCaneTypes()
+    {
+        return byID.values(new SugarCaneMat[byID.size()]);
+    }
+
     static
     {
         SugarCaneMat.register(SUGAR_CANE_0);

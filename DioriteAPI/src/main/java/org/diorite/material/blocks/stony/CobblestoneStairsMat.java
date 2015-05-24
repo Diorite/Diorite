@@ -183,6 +183,20 @@ public class CobblestoneStairsMat extends BlockMaterialData implements StairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CobblestoneStairsMat[] types()
+    {
+        return CobblestoneStairsMat.cobblestoneStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CobblestoneStairsMat[] cobblestoneStairsTypes()
+    {
+        return byID.values(new CobblestoneStairsMat[byID.size()]);
+    }
+
     static
     {
         CobblestoneStairsMat.register(COBBLESTONE_STAIRS_EAST);

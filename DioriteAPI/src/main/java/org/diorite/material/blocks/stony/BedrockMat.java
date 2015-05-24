@@ -104,6 +104,20 @@ public class BedrockMat extends StonyMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BedrockMat[] types()
+    {
+        return BedrockMat.bedrockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BedrockMat[] bedrockTypes()
+    {
+        return byID.values(new BedrockMat[byID.size()]);
+    }
+
     static
     {
         BedrockMat.register(BEDROCK);

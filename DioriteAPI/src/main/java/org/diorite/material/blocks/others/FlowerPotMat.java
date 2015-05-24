@@ -138,6 +138,20 @@ public class FlowerPotMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public FlowerPotMat[] types()
+    {
+        return FlowerPotMat.flowerPotTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static FlowerPotMat[] flowerPotTypes()
+    {
+        return byID.values(new FlowerPotMat[byID.size()]);
+    }
+
     static
     {
         FlowerPotMat.register(FLOWER_POT_EMPTY);

@@ -111,6 +111,20 @@ public class RedstoneLampOnMat extends RedstoneLampMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedstoneLampOnMat[] types()
+    {
+        return RedstoneLampOnMat.redstoneLampOnTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedstoneLampOnMat[] redstoneLampOnTypes()
+    {
+        return byID.values(new RedstoneLampOnMat[byID.size()]);
+    }
+
     static
     {
         RedstoneLampOnMat.register(REDSTONE_LAMP_ON);

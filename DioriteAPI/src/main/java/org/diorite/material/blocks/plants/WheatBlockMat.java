@@ -161,6 +161,20 @@ public class WheatBlockMat extends CropsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WheatBlockMat[] types()
+    {
+        return WheatBlockMat.wheatBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WheatBlockMat[] wheatBlockTypes()
+    {
+        return byID.values(new WheatBlockMat[byID.size()]);
+    }
+
     static
     {
         WheatBlockMat.register(WHEAT_BLOCK_0);

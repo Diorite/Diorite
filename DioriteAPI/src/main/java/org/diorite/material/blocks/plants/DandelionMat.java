@@ -131,6 +131,20 @@ public class DandelionMat extends FlowerMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DandelionMat[] types()
+    {
+        return DandelionMat.dandelionTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DandelionMat[] dandelionTypes()
+    {
+        return byID.values(new DandelionMat[byID.size()]);
+    }
+
     static
     {
         DandelionMat.register(DANDELION);

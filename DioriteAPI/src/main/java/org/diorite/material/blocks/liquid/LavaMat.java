@@ -234,6 +234,20 @@ public class LavaMat extends LiquidMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public LavaMat[] types()
+    {
+        return LavaMat.lavaTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static LavaMat[] lavaTypes()
+    {
+        return byID.values(new LavaMat[byID.size()]);
+    }
+
     /**
      * Helper class for second lava (lava still) ID
      */

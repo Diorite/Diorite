@@ -152,6 +152,20 @@ public class IronPressurePlateMat extends WeightedPressurePlateMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public IronPressurePlateMat[] types()
+    {
+        return IronPressurePlateMat.ironPressurePlateTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static IronPressurePlateMat[] ironPressurePlateTypes()
+    {
+        return byID.values(new IronPressurePlateMat[byID.size()]);
+    }
+
     static
     {
         IronPressurePlateMat.register(IRON_PRESSURE_PLATE_0);

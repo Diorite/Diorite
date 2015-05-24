@@ -14,7 +14,7 @@ public interface Chunk
 
     boolean isPopulated();
 
-    void populate();
+    boolean populate();
 
     void initHeightMap();
 
@@ -45,6 +45,8 @@ public interface Chunk
     void recalculateBlockCounts();
 
     int addUsage();
+
+    void checkUsages();
 
     int removeUsage();
 }

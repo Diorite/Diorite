@@ -192,6 +192,20 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DetectorRailMat[] types()
+    {
+        return DetectorRailMat.detectorRailTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DetectorRailMat[] detectorRailTypes()
+    {
+        return byID.values(new DetectorRailMat[byID.size()]);
+    }
+
     static
     {
         DetectorRailMat.register(DETECTOR_RAIL_NORTH_SOUTH);

@@ -106,6 +106,20 @@ public class GlassMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public GlassMat[] types()
+    {
+        return GlassMat.glassTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static GlassMat[] glassTypes()
+    {
+        return byID.values(new GlassMat[byID.size()]);
+    }
+
     static
     {
         GlassMat.register(GLASS);

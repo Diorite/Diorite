@@ -157,6 +157,20 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DaylightDetectorInvertedMat[] types()
+    {
+        return DaylightDetectorInvertedMat.daylightDetectorInvertedTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DaylightDetectorInvertedMat[] daylightDetectorInvertedTypes()
+    {
+        return byID.values(new DaylightDetectorInvertedMat[byID.size()]);
+    }
+
     static
     {
         DaylightDetectorInvertedMat.register(DAYLIGHT_DETECTOR_INVERTED_OFF);

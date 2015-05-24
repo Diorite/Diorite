@@ -170,6 +170,20 @@ public class ChestMat extends BlockMaterialData implements DirectionalMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public ChestMat[] types()
+    {
+        return ChestMat.chestTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static ChestMat[] chestTypes()
+    {
+        return byID.values(new ChestMat[byID.size()]);
+    }
+
     static
     {
         ChestMat.register(CHEST_NORTH);

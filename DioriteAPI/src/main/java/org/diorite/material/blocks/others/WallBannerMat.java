@@ -175,6 +175,20 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WallBannerMat[] types()
+    {
+        return WallBannerMat.wallBannerTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WallBannerMat[] wallBannerTypes()
+    {
+        return byID.values(new WallBannerMat[byID.size()]);
+    }
+
     static
     {
         WallBannerMat.register(WALL_BANNER_NORTH);

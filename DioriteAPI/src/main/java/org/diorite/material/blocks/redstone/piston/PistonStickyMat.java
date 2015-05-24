@@ -161,6 +161,20 @@ public class PistonStickyMat extends PistonBaseMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PistonStickyMat[] types()
+    {
+        return PistonStickyMat.pistonStickyTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PistonStickyMat[] pistonStickyTypes()
+    {
+        return byID.values(new PistonStickyMat[byID.size()]);
+    }
+
     static
     {
         PistonStickyMat.register(STICKY_PISTON_DOWN);

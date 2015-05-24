@@ -219,6 +219,20 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DispenserMat[] types()
+    {
+        return DispenserMat.dispenserTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DispenserMat[] dispenserTypes()
+    {
+        return byID.values(new DispenserMat[byID.size()]);
+    }
+
     static
     {
         DispenserMat.register(DISPENSER_DOWN);

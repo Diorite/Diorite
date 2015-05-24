@@ -105,6 +105,20 @@ public class QuartzOreMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public QuartzOreMat[] types()
+    {
+        return QuartzOreMat.quartzOreTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static QuartzOreMat[] quartzOreTypes()
+    {
+        return byID.values(new QuartzOreMat[byID.size()]);
+    }
+
     static
     {
         QuartzOreMat.register(QUARTZ_ORE);

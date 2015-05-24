@@ -105,6 +105,20 @@ public class GravelMat extends LooseMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public GravelMat[] types()
+    {
+        return GravelMat.gravelTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static GravelMat[] gravelTypes()
+    {
+        return byID.values(new GravelMat[byID.size()]);
+    }
+
     static
     {
         GravelMat.register(GRAVEL);

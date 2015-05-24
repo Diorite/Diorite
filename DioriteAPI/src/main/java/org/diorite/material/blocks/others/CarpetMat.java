@@ -167,6 +167,20 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CarpetMat[] types()
+    {
+        return CarpetMat.carpetTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CarpetMat[] carpetTypes()
+    {
+        return byID.values(new CarpetMat[byID.size()]);
+    }
+
     static
     {
         CarpetMat.register(CARPET_WHITE);

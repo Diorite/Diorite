@@ -175,6 +175,20 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WallSignMat[] types()
+    {
+        return WallSignMat.wallSignTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WallSignMat[] wallSignTypes()
+    {
+        return byID.values(new WallSignMat[byID.size()]);
+    }
+
     static
     {
         WallSignMat.register(WALL_SIGN_NORTH);

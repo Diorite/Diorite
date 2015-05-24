@@ -308,6 +308,20 @@ public class JungleDoorMat extends WoodenDoorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public JungleDoorMat[] types()
+    {
+        return JungleDoorMat.jungleDoorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static JungleDoorMat[] jungleDoorTypes()
+    {
+        return byID.values(new JungleDoorMat[byID.size()]);
+    }
+
     static
     {
         JungleDoorMat.register(JUNGLE_DOOR_BOTTOM_EAST);

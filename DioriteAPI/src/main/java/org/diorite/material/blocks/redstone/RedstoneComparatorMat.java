@@ -255,6 +255,20 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedstoneComparatorMat[] types()
+    {
+        return RedstoneComparatorMat.redstoneComparatorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedstoneComparatorMat[] redstoneComparatorTypes()
+    {
+        return byID.values(new RedstoneComparatorMat[byID.size()]);
+    }
+
     static
     {
         RedstoneComparatorMat.register(REDSTONE_COMPARATOR_NORTH);

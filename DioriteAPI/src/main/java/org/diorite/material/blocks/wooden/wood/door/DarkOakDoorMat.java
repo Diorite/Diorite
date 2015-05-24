@@ -308,6 +308,20 @@ public class DarkOakDoorMat extends WoodenDoorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DarkOakDoorMat[] types()
+    {
+        return DarkOakDoorMat.darkOakDoorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DarkOakDoorMat[] darkOakDoorTypes()
+    {
+        return byID.values(new DarkOakDoorMat[byID.size()]);
+    }
+
     static
     {
         DarkOakDoorMat.register(DARK_OAK_DOOR_BOTTOM_EAST);

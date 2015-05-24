@@ -185,6 +185,20 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public HayBlockMat[] types()
+    {
+        return HayBlockMat.hayBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static HayBlockMat[] hayBlockTypes()
+    {
+        return byID.values(new HayBlockMat[byID.size()]);
+    }
+
     static
     {
         HayBlockMat.register(HAY_BLOCK_UP_DOWN);

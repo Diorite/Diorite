@@ -106,6 +106,20 @@ public class CobwebMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CobwebMat[] types()
+    {
+        return CobwebMat.cobwebTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CobwebMat[] cobwebTypes()
+    {
+        return byID.values(new CobwebMat[byID.size()]);
+    }
+
     static
     {
         CobwebMat.register(COBWEB);

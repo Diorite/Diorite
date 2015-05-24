@@ -106,6 +106,20 @@ public class MelonBlockMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public MelonBlockMat[] types()
+    {
+        return MelonBlockMat.melonBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static MelonBlockMat[] melonBlockTypes()
+    {
+        return byID.values(new MelonBlockMat[byID.size()]);
+    }
+
     static
     {
         MelonBlockMat.register(MELON_BLOCK);

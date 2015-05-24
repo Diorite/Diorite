@@ -106,6 +106,20 @@ public class PackedIceMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PackedIceMat[] types()
+    {
+        return PackedIceMat.packedIceTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PackedIceMat[] packedIceTypes()
+    {
+        return byID.values(new PackedIceMat[byID.size()]);
+    }
+
     static
     {
         PackedIceMat.register(PACKED_ICE);

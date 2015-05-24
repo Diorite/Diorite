@@ -153,6 +153,20 @@ public class BirchStairsMat extends WoodenStairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BirchStairsMat[] types()
+    {
+        return BirchStairsMat.birchStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BirchStairsMat[] birchStairsTypes()
+    {
+        return byID.values(new BirchStairsMat[byID.size()]);
+    }
+
     static
     {
         BirchStairsMat.register(BIRCH_STAIRS_EAST);

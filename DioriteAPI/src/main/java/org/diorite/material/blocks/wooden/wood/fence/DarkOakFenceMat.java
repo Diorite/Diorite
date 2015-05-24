@@ -106,6 +106,20 @@ public class DarkOakFenceMat extends WoodenFenceMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DarkOakFenceMat[] types()
+    {
+        return DarkOakFenceMat.darkOakFenceTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DarkOakFenceMat[] darkOakFenceTypes()
+    {
+        return byID.values(new DarkOakFenceMat[byID.size()]);
+    }
+
     static
     {
         DarkOakFenceMat.register(DARK_OAK_FENCE);

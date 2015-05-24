@@ -183,6 +183,20 @@ public class BrickStairsMat extends BlockMaterialData implements StairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BrickStairsMat[] types()
+    {
+        return BrickStairsMat.brickStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BrickStairsMat[] brickStairsTypes()
+    {
+        return byID.values(new BrickStairsMat[byID.size()]);
+    }
+
     static
     {
         BrickStairsMat.register(BRICK_STAIRS_EAST);

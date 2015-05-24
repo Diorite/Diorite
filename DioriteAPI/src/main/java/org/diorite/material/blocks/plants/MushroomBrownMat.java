@@ -105,6 +105,20 @@ public class MushroomBrownMat extends MushroomMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public MushroomBrownMat[] types()
+    {
+        return MushroomBrownMat.mushroomBrownTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static MushroomBrownMat[] mushroomBrownTypes()
+    {
+        return byID.values(new MushroomBrownMat[byID.size()]);
+    }
+
     static
     {
         MushroomBrownMat.register(BROWN_MUSHROOM);

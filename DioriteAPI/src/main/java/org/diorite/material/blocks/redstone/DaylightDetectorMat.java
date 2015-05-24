@@ -157,6 +157,20 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DaylightDetectorMat[] types()
+    {
+        return DaylightDetectorMat.daylightDetectorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DaylightDetectorMat[] daylightDetectorTypes()
+    {
+        return byID.values(new DaylightDetectorMat[byID.size()]);
+    }
+
     static
     {
         DaylightDetectorMat.register(DAYLIGHT_DETECTOR_OFF);

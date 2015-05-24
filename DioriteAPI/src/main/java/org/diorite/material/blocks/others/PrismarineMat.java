@@ -113,6 +113,20 @@ public class PrismarineMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public PrismarineMat[] types()
+    {
+        return PrismarineMat.prismarineTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static PrismarineMat[] prismarineTypes()
+    {
+        return byID.values(new PrismarineMat[byID.size()]);
+    }
+
     static
     {
         PrismarineMat.register(PRISMARINE);

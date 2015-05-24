@@ -168,6 +168,20 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
         byName.put(element.name(), element);
     }
 
+    @Override
+    public StainedGlassPaneMat[] types()
+    {
+        return StainedGlassPaneMat.stainedGlassPaneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static StainedGlassPaneMat[] stainedGlassPaneTypes()
+    {
+        return byID.values(new StainedGlassPaneMat[byID.size()]);
+    }
+
     static
     {
         StainedGlassPaneMat.register(STAINED_GLASS_PANE_WHITE);

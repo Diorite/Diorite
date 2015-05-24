@@ -106,6 +106,20 @@ public class BarrierMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BarrierMat[] types()
+    {
+        return BarrierMat.barrierTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BarrierMat[] barrierTypes()
+    {
+        return byID.values(new BarrierMat[byID.size()]);
+    }
+
     static
     {
         BarrierMat.register(BARRIER);

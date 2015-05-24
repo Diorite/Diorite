@@ -158,6 +158,20 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public FireMat[] types()
+    {
+        return FireMat.fireTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static FireMat[] fireTypes()
+    {
+        return byID.values(new FireMat[byID.size()]);
+    }
+
     static
     {
         FireMat.register(FIRE_0);

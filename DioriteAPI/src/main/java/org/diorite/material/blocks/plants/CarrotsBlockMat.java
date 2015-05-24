@@ -161,6 +161,20 @@ public class CarrotsBlockMat extends CropsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CarrotsBlockMat[] types()
+    {
+        return CarrotsBlockMat.carrotsBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CarrotsBlockMat[] carrotsBlockTypes()
+    {
+        return byID.values(new CarrotsBlockMat[byID.size()]);
+    }
+
     static
     {
         CarrotsBlockMat.register(CARROTS_BLOCK_0);

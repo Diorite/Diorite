@@ -153,6 +153,20 @@ public class RedstoneRepeaterOffMat extends RedstoneRepeaterMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedstoneRepeaterOffMat[] types()
+    {
+        return RedstoneRepeaterOffMat.redstoneRepeaterOffTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedstoneRepeaterOffMat[] redstoneRepeaterOffTypes()
+    {
+        return byID.values(new RedstoneRepeaterOffMat[byID.size()]);
+    }
+
     static
     {
         RedstoneRepeaterOffMat.register(REDSTONE_REPEATER_OFF_NORTH_1);

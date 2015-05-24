@@ -141,6 +141,20 @@ public class SandstoneMat extends StonyMat implements VariantableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SandstoneMat[] types()
+    {
+        return SandstoneMat.sandstoneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SandstoneMat[] sandstoneTypes()
+    {
+        return byID.values(new SandstoneMat[byID.size()]);
+    }
+
     static
     {
         SandstoneMat.register(SANDSTONE);

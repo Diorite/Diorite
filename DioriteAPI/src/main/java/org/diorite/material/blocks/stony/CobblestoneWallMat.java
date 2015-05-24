@@ -112,6 +112,20 @@ public class CobblestoneWallMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CobblestoneWallMat[] types()
+    {
+        return CobblestoneWallMat.cobblestoneWallTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CobblestoneWallMat[] cobblestoneWallTypes()
+    {
+        return byID.values(new CobblestoneWallMat[byID.size()]);
+    }
+
     static
     {
         CobblestoneWallMat.register(COBBLESTONE_WALL);

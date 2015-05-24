@@ -219,6 +219,20 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DropperMat[] types()
+    {
+        return DropperMat.dropperTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DropperMat[] dropperTypes()
+    {
+        return byID.values(new DropperMat[byID.size()]);
+    }
+
     static
     {
         DropperMat.register(DROPPER_DOWN);

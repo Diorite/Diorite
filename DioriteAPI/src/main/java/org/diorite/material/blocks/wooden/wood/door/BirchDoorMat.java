@@ -308,6 +308,20 @@ public class BirchDoorMat extends WoodenDoorMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BirchDoorMat[] types()
+    {
+        return BirchDoorMat.birchDoorTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BirchDoorMat[] birchDoorTypes()
+    {
+        return byID.values(new BirchDoorMat[byID.size()]);
+    }
+
     static
     {
         BirchDoorMat.register(BIRCH_DOOR_BOTTOM_EAST);

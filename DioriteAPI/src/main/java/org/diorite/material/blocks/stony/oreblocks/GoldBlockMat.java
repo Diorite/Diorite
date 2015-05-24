@@ -107,6 +107,20 @@ public class GoldBlockMat extends OreBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public GoldBlockMat[] types()
+    {
+        return GoldBlockMat.goldBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static GoldBlockMat[] goldBlockTypes()
+    {
+        return byID.values(new GoldBlockMat[byID.size()]);
+    }
+
     static
     {
         GoldBlockMat.register(GOLD_BLOCK);

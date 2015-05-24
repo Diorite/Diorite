@@ -107,6 +107,20 @@ public class IronBarsMat extends BlockMaterialData  implements FenceMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public IronBarsMat[] types()
+    {
+        return IronBarsMat.ironBarsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static IronBarsMat[] ironBarsTypes()
+    {
+        return byID.values(new IronBarsMat[byID.size()]);
+    }
+
     static
     {
         IronBarsMat.register(IRON_BARS);

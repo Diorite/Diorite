@@ -157,6 +157,20 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public CactusMat[] types()
+    {
+        return CactusMat.cactusTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static CactusMat[] cactusTypes()
+    {
+        return byID.values(new CactusMat[byID.size()]);
+    }
+
     static
     {
         CactusMat.register(CACTUS_0);

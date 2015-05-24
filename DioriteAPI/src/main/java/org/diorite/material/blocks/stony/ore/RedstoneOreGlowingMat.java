@@ -105,6 +105,20 @@ public class RedstoneOreGlowingMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedstoneOreGlowingMat[] types()
+    {
+        return RedstoneOreGlowingMat.redstoneOreGlowingTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedstoneOreGlowingMat[] redstoneOreGlowingTypes()
+    {
+        return byID.values(new RedstoneOreGlowingMat[byID.size()]);
+    }
+
     static
     {
         RedstoneOreGlowingMat.register(REDSTONE_ORE_GLOWING);

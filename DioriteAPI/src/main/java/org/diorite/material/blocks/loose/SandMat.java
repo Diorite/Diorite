@@ -111,6 +111,20 @@ public class SandMat extends LooseMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SandMat[] types()
+    {
+        return SandMat.sandTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SandMat[] sandTypes()
+    {
+        return byID.values(new SandMat[byID.size()]);
+    }
+
     static
     {
         SandMat.register(SAND);

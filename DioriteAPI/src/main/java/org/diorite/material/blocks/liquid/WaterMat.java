@@ -233,6 +233,20 @@ public class WaterMat extends LiquidMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WaterMat[] types()
+    {
+        return WaterMat.waterTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WaterMat[] waterTypes()
+    {
+        return byID.values(new WaterMat[byID.size()]);
+    }
+
     /**
      * Helper class for second water (water still) ID
      */

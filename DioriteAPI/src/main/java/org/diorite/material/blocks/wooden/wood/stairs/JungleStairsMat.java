@@ -153,6 +153,20 @@ public class JungleStairsMat extends WoodenStairsMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public JungleStairsMat[] types()
+    {
+        return JungleStairsMat.jungleStairsTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static JungleStairsMat[] jungleStairsTypes()
+    {
+        return byID.values(new JungleStairsMat[byID.size()]);
+    }
+
     static
     {
         JungleStairsMat.register(JUNGLE_STAIRS_EAST);

@@ -105,6 +105,20 @@ public class LapisOreMat extends OreMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public LapisOreMat[] types()
+    {
+        return LapisOreMat.lapisOreTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static LapisOreMat[] lapisOreTypes()
+    {
+        return byID.values(new LapisOreMat[byID.size()]);
+    }
+
     static
     {
         LapisOreMat.register(LAPIS_ORE);

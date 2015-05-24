@@ -107,6 +107,20 @@ public class IronBlockMat extends OreBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public IronBlockMat[] types()
+    {
+        return IronBlockMat.ironBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static IronBlockMat[] ironBlockTypes()
+    {
+        return byID.values(new IronBlockMat[byID.size()]);
+    }
+
     static
     {
         IronBlockMat.register(IRON_BLOCK);

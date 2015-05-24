@@ -142,6 +142,20 @@ public class DoubleFlowersMat extends FlowerMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DoubleFlowersMat[] types()
+    {
+        return DoubleFlowersMat.doubleFlowersTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DoubleFlowersMat[] doubleFlowersTypes()
+    {
+        return byID.values(new DoubleFlowersMat[byID.size()]);
+    }
+
     static
     {
         DoubleFlowersMat.register(DOUBLE_FLOWERS_SUNFLOWER);

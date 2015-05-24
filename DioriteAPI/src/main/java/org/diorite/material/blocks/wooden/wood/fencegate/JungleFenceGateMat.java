@@ -153,6 +153,20 @@ public class JungleFenceGateMat extends WoodenFenceGateMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public JungleFenceGateMat[] types()
+    {
+        return JungleFenceGateMat.jungleFenceGateTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static JungleFenceGateMat[] jungleFenceGateTypes()
+    {
+        return byID.values(new JungleFenceGateMat[byID.size()]);
+    }
+
     static
     {
         JungleFenceGateMat.register(JUNGLE_FENCE_GATE_SOUTH);

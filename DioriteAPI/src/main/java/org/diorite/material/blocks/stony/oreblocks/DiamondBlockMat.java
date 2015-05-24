@@ -107,6 +107,20 @@ public class DiamondBlockMat extends OreBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public DiamondBlockMat[] types()
+    {
+        return DiamondBlockMat.diamondBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static DiamondBlockMat[] diamondBlockTypes()
+    {
+        return byID.values(new DiamondBlockMat[byID.size()]);
+    }
+
     static
     {
         DiamondBlockMat.register(DIAMOND_BLOCK);

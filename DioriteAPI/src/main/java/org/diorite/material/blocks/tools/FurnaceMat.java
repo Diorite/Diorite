@@ -170,6 +170,20 @@ public class FurnaceMat extends BlockMaterialData implements DirectionalMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public FurnaceMat[] types()
+    {
+        return FurnaceMat.furnaceTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static FurnaceMat[] furnaceTypes()
+    {
+        return byID.values(new FurnaceMat[byID.size()]);
+    }
+
     static
     {
         FurnaceMat.register(FURNACE_NORTH);

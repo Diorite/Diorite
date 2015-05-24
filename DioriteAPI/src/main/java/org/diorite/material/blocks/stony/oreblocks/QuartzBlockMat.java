@@ -145,6 +145,20 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public QuartzBlockMat[] types()
+    {
+        return QuartzBlockMat.quartzBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static QuartzBlockMat[] quartzBlockTypes()
+    {
+        return byID.values(new QuartzBlockMat[byID.size()]);
+    }
+
     static
     {
         QuartzBlockMat.register(QUARTZ_BLOCK);

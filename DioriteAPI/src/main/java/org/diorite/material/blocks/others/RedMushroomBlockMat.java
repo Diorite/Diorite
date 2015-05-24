@@ -141,6 +141,20 @@ public class RedMushroomBlockMat extends MushroomBlockMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedMushroomBlockMat[] types()
+    {
+        return RedMushroomBlockMat.redMushroomBlockTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedMushroomBlockMat[] redMushroomBlockTypes()
+    {
+        return byID.values(new RedMushroomBlockMat[byID.size()]);
+    }
+
     static
     {
         RedMushroomBlockMat.register(RED_MUSHROOM_BLOCK_PORES_FULL);

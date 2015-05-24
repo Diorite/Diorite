@@ -173,6 +173,20 @@ public class StoneMat extends StonyMat implements VariantableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public StoneMat[] types()
+    {
+        return StoneMat.stoneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static StoneMat[] stoneTypes()
+    {
+        return byID.values(new StoneMat[byID.size()]);
+    }
+
     static
     {
         StoneMat.register(STONE);

@@ -142,6 +142,20 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public RedSandstoneMat[] types()
+    {
+        return RedSandstoneMat.redSandstoneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static RedSandstoneMat[] redSandstoneTypes()
+    {
+        return byID.values(new RedSandstoneMat[byID.size()]);
+    }
+
     static
     {
         RedSandstoneMat.register(RED_SANDSTONE);

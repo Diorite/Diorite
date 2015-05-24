@@ -152,6 +152,20 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public GoldenPressurePlateMat[] types()
+    {
+        return GoldenPressurePlateMat.goldenPressurePlateTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static GoldenPressurePlateMat[] goldenPressurePlateTypes()
+    {
+        return byID.values(new GoldenPressurePlateMat[byID.size()]);
+    }
+
     static
     {
         GoldenPressurePlateMat.register(GOLDEN_PRESSURE_PLATE_0);

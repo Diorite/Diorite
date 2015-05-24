@@ -106,6 +106,20 @@ public class EndStoneMat extends StonyMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public EndStoneMat[] types()
+    {
+        return EndStoneMat.endStoneTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static EndStoneMat[] endStoneTypes()
+    {
+        return byID.values(new EndStoneMat[byID.size()]);
+    }
+
     static
     {
         EndStoneMat.register(END_STONE);

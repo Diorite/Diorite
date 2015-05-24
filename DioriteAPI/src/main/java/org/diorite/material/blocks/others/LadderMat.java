@@ -176,6 +176,20 @@ public class LadderMat extends BlockMaterialData implements AttachableMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public LadderMat[] types()
+    {
+        return LadderMat.ladderTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static LadderMat[] ladderTypes()
+    {
+        return byID.values(new LadderMat[byID.size()]);
+    }
+
     static
     {
         LadderMat.register(LADDER_NORTH);

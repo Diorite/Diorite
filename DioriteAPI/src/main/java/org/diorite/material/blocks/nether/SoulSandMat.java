@@ -106,6 +106,20 @@ public class SoulSandMat extends BlockMaterialData
         byName.put(element.name(), element);
     }
 
+    @Override
+    public SoulSandMat[] types()
+    {
+        return SoulSandMat.soulSandTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static SoulSandMat[] soulSandTypes()
+    {
+        return byID.values(new SoulSandMat[byID.size()]);
+    }
+
     static
     {
         SoulSandMat.register(SOUL_SAND);

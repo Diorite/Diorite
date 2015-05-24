@@ -167,6 +167,20 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
         byName.put(element.name(), element);
     }
 
+    @Override
+    public StainedHardenedClayMat[] types()
+    {
+        return StainedHardenedClayMat.stainedHardenedClayTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static StainedHardenedClayMat[] stainedHardenedClayTypes()
+    {
+        return byID.values(new StainedHardenedClayMat[byID.size()]);
+    }
+
     static
     {
         StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_WHITE);

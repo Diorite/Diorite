@@ -106,6 +106,20 @@ public class JungleFenceMat extends WoodenFenceMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public JungleFenceMat[] types()
+    {
+        return JungleFenceMat.jungleFenceTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static JungleFenceMat[] jungleFenceTypes()
+    {
+        return byID.values(new JungleFenceMat[byID.size()]);
+    }
+
     static
     {
         JungleFenceMat.register(JUNGLE_FENCE);

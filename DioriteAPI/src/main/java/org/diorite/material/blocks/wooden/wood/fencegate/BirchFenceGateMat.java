@@ -153,6 +153,20 @@ public class BirchFenceGateMat extends WoodenFenceGateMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public BirchFenceGateMat[] types()
+    {
+        return BirchFenceGateMat.birchFenceGateTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static BirchFenceGateMat[] birchFenceGateTypes()
+    {
+        return byID.values(new BirchFenceGateMat[byID.size()]);
+    }
+
     static
     {
         BirchFenceGateMat.register(BIRCH_FENCE_GATE_SOUTH);

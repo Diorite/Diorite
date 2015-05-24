@@ -130,6 +130,20 @@ public class WoodenPressurePlateMat extends PressurePlateMat
         byName.put(element.name(), element);
     }
 
+    @Override
+    public WoodenPressurePlateMat[] types()
+    {
+        return WoodenPressurePlateMat.woodenPressurePlateTypes();
+    }
+
+    /**
+     * @return array that contains all sub-types of this block.
+     */
+    public static WoodenPressurePlateMat[] woodenPressurePlateTypes()
+    {
+        return byID.values(new WoodenPressurePlateMat[byID.size()]);
+    }
+
     static
     {
         WoodenPressurePlateMat.register(WOODEN_PRESSURE_PLATE);
