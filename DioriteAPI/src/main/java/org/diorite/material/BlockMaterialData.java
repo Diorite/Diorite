@@ -7,13 +7,13 @@ public abstract class BlockMaterialData extends Material
 {
     protected final String typeName;
 
-    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
+    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, type);
         this.typeName = typeName;
     }
 
-    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, type);
         this.typeName = typeName;

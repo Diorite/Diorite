@@ -20,6 +20,8 @@ public interface World
 {
     void save();
 
+    WorldGroup getWorldGroup();
+
     Random getRandom();
 
     Dimension getDimension();

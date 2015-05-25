@@ -2,6 +2,7 @@ package org.diorite.world.generator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -20,24 +21,24 @@ public abstract class WorldGenerator
     /**
      * {@link World} to generate
      */
-    protected final World  world;
+    protected final World               world;
     /**
      * Name of world generator, must be unique
      */
-    protected final String name;
+    protected final String              name;
     /**
-     * Options for world generator, extending classes should parse it using own format
+     * Options for world generator.
      */
-    protected final String options;
+    protected final Map<String, Object> options;
 
     /**
      * Create new WorldGenerator for selected world
      *
      * @param world {@link World} to generate
      * @param name Name of world generator, must be unique
-     * @param options Options for world generator, extending classes should parse it using own format
+     * @param options Options for world generator.
      */
-    public WorldGenerator(final World world, final String name, final String options)
+    public WorldGenerator(final World world, final String name, final Map<String, Object> options)
     {
         this.world = world;
         this.name = name;
@@ -57,7 +58,7 @@ public abstract class WorldGenerator
      *
      * @return raw options for world generator
      */
-    public String getOptions()
+    public Map<String, Object> getOptions()
     {
         return this.options;
     }

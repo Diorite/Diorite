@@ -100,7 +100,7 @@ public class AtomicShortArray implements Serializable
      *
      * @return the old value
      */
-    public final int getAndSet(final int index, final short value)
+    public final short getAndSet(final int index, final short value)
     {
         boolean success = false;
         short odd;

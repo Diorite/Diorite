@@ -1,5 +1,6 @@
 package org.diorite.world.generator;
 
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -47,20 +48,20 @@ public abstract class WorldGeneratorInitializer<T extends WorldGenerator>
      * All default populator will be added by {@link #init} method
      *
      * @param world world that will be used by generator
-     * @param options string-based options
+     * @param options map of options.
      * @return generator without populators
      */
-    protected abstract T baseInit(World world, String options);
+    protected abstract T baseInit(World world, Map<String, Object> options);
 
     /**
      * This method return ready to use generator, with all default populators.
      * {@link WorldGenerator} is created by {@link #baseInit} method
      *
      * @param world world that will be used by generator
-     * @param options string-based options
+     * @param options map of options.
      * @return generator with populators
      */
-    public T init(final World world, final String options)
+    public T init(final World world, final Map<String, Object> options)
     {
         final T gen = this.baseInit(world, options);
         gen.populators.addAll(this.populators);

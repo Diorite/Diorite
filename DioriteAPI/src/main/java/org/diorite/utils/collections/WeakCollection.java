@@ -16,19 +16,33 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+@SuppressWarnings("ObjectEquality")
 public final class WeakCollection<T> implements Collection<T>
 {
     static final Object NO_VALUE = new Object();
     private final Collection<WeakReference<T>> collection;
+    private final boolean                      identity;
 
     public WeakCollection(final int size)
     {
+        this(size, false);
+    }
+
+    public WeakCollection(final int size, final boolean identity)
+    {
         this.collection = new ArrayList<>(size);
+        this.identity = identity;
     }
 
     private WeakCollection(final Collection<WeakReference<T>> collection)
     {
+        this(collection, false);
+    }
+
+    private WeakCollection(final Collection<WeakReference<T>> collection, final boolean identity)
+    {
         this.collection = collection;
+        this.identity = identity;
     }
 
     @Override
@@ -63,7 +77,7 @@ public final class WeakCollection<T> implements Collection<T>
                 }
 
                 compare = it.next();
-            } while (! object.equals(compare));
+            } while (! (this.identity ? (object == compare) : object.equals(compare)));
 
             return true;
         }
@@ -179,7 +193,7 @@ public final class WeakCollection<T> implements Collection<T>
                 {
                     return false;
                 }
-            } while (! object.equals(it.next()));
+            } while (! (this.identity ? (object == it.next()) : object.equals(it.next())));
 
             it.remove();
             return true;
@@ -268,8 +282,18 @@ public final class WeakCollection<T> implements Collection<T>
         return new WeakCollection<>(new HashSet<>(size));
     }
 
+    public static <T> WeakCollection<T> usingHashSet(final int size, final boolean identity)
+    {
+        return new WeakCollection<>(new HashSet<>(size), identity);
+    }
+
     public static <T> WeakCollection<T> using(final Collection<WeakReference<T>> collection)
     {
         return new WeakCollection<>(collection);
+    }
+
+    public static <T> WeakCollection<T> using(final Collection<WeakReference<T>> collection, final boolean identity)
+    {
+        return new WeakCollection<>(collection, identity);
     }
 }

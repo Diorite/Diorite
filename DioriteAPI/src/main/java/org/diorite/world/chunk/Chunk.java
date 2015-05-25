@@ -18,9 +18,9 @@ public interface Chunk
 
     void initHeightMap();
 
-    void setBlock(int x, int y, int z, BlockMaterialData materialData);
+    BlockMaterialData setBlock(int x, int y, int z, BlockMaterialData materialData);
 
-    void setBlock(int x, int y, int z, int id, int meta);
+    BlockMaterialData setBlock(int x, int y, int z, int id, int meta);
 
     BlockMaterialData getBlockType(int x, int y, int z);
 
