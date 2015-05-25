@@ -11,7 +11,7 @@ import org.diorite.world.chunk.ChunkPos;
 /**
  * Used as null chunk, ignores all actions.
  */
-public class DumbChunk extends ChunkImpl
+public class DumbChunk extends org.diorite.impl.world.chunk.ChunkImpl
 {
     public DumbChunk(final ChunkPos pos)
     {
@@ -41,13 +41,15 @@ public class DumbChunk extends ChunkImpl
     }
 
     @Override
-    public void setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
+    public BlockMaterialData setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
     {
+        return Material.AIR;
     }
 
     @Override
-    public void setBlock(final int x, final int y, final int z, final int id, final int meta)
+    public BlockMaterialData setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
+        return Material.AIR;
     }
 
     @Override

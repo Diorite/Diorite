@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import com.google.common.base.Charsets;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
@@ -219,16 +220,22 @@ public class PacketDataSerializer extends ByteBuf
         this.writeText(ComponentSerializer.toString(baseComponent));
     }
 
-    public void writeChunkSimple(final ChunkImpl chunk, final int mask, final boolean skyLight, final boolean groundUpContinuous, final boolean writeSize) // groundUpContinuous, with biomes
+    public void writeChunkSimple(final ChunkImpl chunk, int mask, final boolean skyLight, final boolean groundUpContinuous, final boolean writeSize) // groundUpContinuous, with biomes
     {
+//        final int realMask = chunk.getMask();
+        mask = chunk.getMask();
+//        if (mask == - 1)
+//        {
+//            mask = realMask;
+//        }
         final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
 
-        final byte chunkPartsCount = DioriteMathUtils.countBits(chunk.getMask()); // number of chunks to sent
+        final byte chunkPartsCount = DioriteMathUtils.countBits(mask); // number of chunks to sent
         final ChunkPartImpl[] chunkPartsToSent = new ChunkPartImpl[chunkPartsCount];
 
         for (int i = 0, j = 0, localMask = 1; i < chunkParts.length; ++ i, localMask <<= 1)
         {
-            if ((mask & localMask) != 0)
+            if ((/*mask*/mask & localMask) != 0)
             {
                 chunkPartsToSent[j++] = chunkParts[i];
             }
@@ -244,6 +251,10 @@ public class PacketDataSerializer extends ByteBuf
         // write all blocks
         for (final ChunkPartImpl chunkPart : chunkPartsToSent)
         {
+            if ((chunkPart == null) || (chunkPart.getBlocks() == null))
+            {
+                Main.debug("chunk part is null: " + chunkPart + ", from: " + chunk);
+            }
             for (final short blockData : chunkPart.getBlocks().getArray())
             {
                 //noinspection MagicNumber
@@ -294,20 +305,22 @@ public class PacketDataSerializer extends ByteBuf
 
     public void writeChunk(final ChunkImpl chunk, int mask, final boolean skyLight, final boolean groundUpContinuous) // groundUpContinuous, with biomes
     {
-        final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
-
-        // remove empty chunks from mask
-        for (int i = 0, chunkPartsLength = chunkParts.length; i < chunkPartsLength; i++)
-        {
-            final ChunkPartImpl part = chunkParts[i];
-            if ((part == null) || part.isEmpty())
-            {
-                mask &= ~ (1 << i);
-            }
-        }
+        mask = chunk.getMask();
+//        final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
+//
+//        // remove empty chunks from mask
+//        for (int i = 0, chunkPartsLength = chunkParts.length; i < chunkPartsLength; i++)
+//        {
+//            final ChunkPartImpl part = chunkParts[i];
+//            if ((part == null) || part.isEmpty())
+//            {
+//                mask &= ~ (1 << i);
+//            }
+//        }
 
         // mask
         this.writeShort(mask);
+//        this.writeShort(mask);
         // chunk data
         this.writeChunkSimple(chunk, mask, skyLight, groundUpContinuous, true);
     }
@@ -853,15 +866,13 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
-    public int setBytes(final int i, final InputStream inputstream, final int j)
-            throws IOException
+    public int setBytes(final int i, final InputStream inputstream, final int j) throws IOException
     {
         return this.byteBuf.setBytes(i, inputstream, j);
     }
 
     @Override
-    public int setBytes(final int i, final ScatteringByteChannel scatteringbytechannel, final int j)
-            throws IOException
+    public int setBytes(final int i, final ScatteringByteChannel scatteringbytechannel, final int j) throws IOException
     {
         return this.byteBuf.setBytes(i, scatteringbytechannel, j);
     }
@@ -999,15 +1010,13 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
-    public ByteBuf readBytes(final OutputStream outputstream, final int i)
-            throws IOException
+    public ByteBuf readBytes(final OutputStream outputstream, final int i) throws IOException
     {
         return this.byteBuf.readBytes(outputstream, i);
     }
 
     @Override
-    public int readBytes(final GatheringByteChannel gatheringbytechannel, final int i)
-            throws IOException
+    public int readBytes(final GatheringByteChannel gatheringbytechannel, final int i) throws IOException
     {
         return this.byteBuf.readBytes(gatheringbytechannel, i);
     }
@@ -1109,15 +1118,13 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
-    public int writeBytes(final InputStream inputstream, final int i)
-            throws IOException
+    public int writeBytes(final InputStream inputstream, final int i) throws IOException
     {
         return this.byteBuf.writeBytes(inputstream, i);
     }
 
     @Override
-    public int writeBytes(final ScatteringByteChannel scatteringbytechannel, final int i)
-            throws IOException
+    public int writeBytes(final ScatteringByteChannel scatteringbytechannel, final int i) throws IOException
     {
         return this.byteBuf.writeBytes(scatteringbytechannel, i);
     }

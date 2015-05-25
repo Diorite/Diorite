@@ -58,31 +58,42 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.yPos = yPos;
     }
 
-    public void setBlock(final int x, final int y, final int z, final int id, final int meta)
+    public BlockMaterialData setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
-        //Main.debug("setBlock(" + x + ", " + y + ", " + z + ", " + id + ", " + meta + ") -> " + this.yPos + ", " + this.hashCode());
         final BlockMaterialData old = this.getBlockType(x, y, z);
         if ((id == old.getId()) && (meta == old.getType()))
         {
-            return;
+            return old;
         }
-        if (old.getType() != 0)
+        if (this.blocks.compareAndSet(this.toArrayIndex(x, y, z), (short) ((old.getId() << 4) | old.getType()), (short) ((id << 4) | meta)))
         {
-            if (id == 0)
+            if (old.getType() != 0)
             {
-                this.blocksCount--;
+                if (id == 0)
+                {
+                    this.blocksCount--;
+                }
             }
+            else if (id != 0)
+            {
+                this.blocksCount++;
+            }
+            return old;
         }
-        else if (id != 0)
-        {
-            this.blocksCount++;
-        }
-        this.blocks.set(this.toArrayIndex(x, y, z), (short) ((id << 4) | meta));
+        return this.getBlockType(x, y, z);
     }
 
-    public void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
+    @SuppressWarnings("MagicNumber")
+    public BlockMaterialData rawSetBlock(final int x, final int y, final int z, final int id, final int meta)
     {
-        this.setBlock(x, y, z, material.getId(), material.getType());
+        final short data = this.blocks.getAndSet(this.toArrayIndex(x, y, z), (short) ((id << 4) | meta));
+        final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
+        return (type == null) ? Material.AIR : type;
+    }
+
+    public BlockMaterialData setBlock(final int x, final int y, final int z, final BlockMaterialData material)
+    {
+        return this.setBlock(x, y, z, material.getId(), material.getType());
     }
 
     @SuppressWarnings("MagicNumber")

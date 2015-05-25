@@ -360,7 +360,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         {
             if ((this.channel.pipeline().get("decompress") instanceof PacketDecompressor))
             {
-                ((PacketDecompressor) this.channel.pipeline().get("decompress")).a(i);
+                ((PacketDecompressor) this.channel.pipeline().get("decompress")).setThreshold(i);
             }
             else
             {

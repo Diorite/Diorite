@@ -1,12 +1,12 @@
 package org.diorite.impl.world.generator;
 
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
-import org.diorite.impl.world.generator.structures.tree.SmallTreeStructure;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
@@ -26,13 +26,13 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 {
     private final NoiseGenerator generator;
 
-    public TestWorldGeneratorImpl(final World world, final String name, final String options)
+    public TestWorldGeneratorImpl(final World world, final String name, final Map<String, Object> options)
     {
         super(world, name, options);
         this.generator = new SimplexNoiseGenerator(world);
     }
 
-    FlatWorldGeneratorImpl flat = new FlatWorldGeneratorImpl(this.world, this.name, this.options);
+    org.diorite.impl.world.generator.FlatWorldGeneratorImpl flat = new org.diorite.impl.world.generator.FlatWorldGeneratorImpl(this.world, this.name, this.options);
 
     @Override
     @SuppressWarnings("MagicNumber")
@@ -124,7 +124,7 @@ public class TestWorldGeneratorImpl extends WorldGenerator
         return new WorldGeneratorInitializer<TestWorldGeneratorImpl>("default")
         {
             @Override
-            public TestWorldGeneratorImpl baseInit(final World world, final String options)
+            public TestWorldGeneratorImpl baseInit(final World world, final Map<String, Object> options)
             {
                 return new TestWorldGeneratorImpl(world, this.name, options);
             }
@@ -132,7 +132,7 @@ public class TestWorldGeneratorImpl extends WorldGenerator
             {
                 this.populators.add(chunk -> {
                     final World world = chunk.getWorld();
-                    final Structure s = new SmallTreeStructure(WoodTypeMat.OAK);
+                    final Structure s = new org.diorite.impl.world.generator.structures.tree.SmallTreeStructure(WoodTypeMat.OAK);
                     final Random random = new Random(chunk.getPos().asLong() + world.getSeed());
 //                    s.generate(chunk.getPos(), random, (chunk.getX() * 16), chunk.getHighestBlockY(5, 5) + 1, (chunk.getZ() * 16));
                     for (int i = 0; i < 4; i++)

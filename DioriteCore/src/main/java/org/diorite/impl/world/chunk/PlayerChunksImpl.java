@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Tickable;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
@@ -18,7 +19,7 @@ import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
-public class PlayerChunksImpl
+public class PlayerChunksImpl implements Tickable
 {
     public static final int CHUNK_BULK_SIZE = 4;
 
@@ -95,27 +96,8 @@ public class PlayerChunksImpl
         }
     }
 
-    public void update()
-    {
-        if (this.logout)
-        {
-            return;
-        }
-        final ChunkPos center = this.player.getLocation().getChunkPos();
-        if (center.equals(this.lastUpdate))
-        {
-            this.continueUpdate();
-            return;
-        }
-        this.lastUpdateR = 0;
-        this.lastUpdate = center;
-        this.continueUpdate();
-        this.checkAndUnload();
-    }
-
     private void continueUpdate()
     {
-//        this.loadedChunks.parallelStream().filter((chunk) -> ! chunk.isPopulated()).forEach(Chunk::populate);
         final byte render = this.getRenderDistance();
         final byte view = this.getViewDistance();
         if ((this.lastUpdateR >= view) || (this.lastUpdateR >= render))
@@ -123,8 +105,6 @@ public class PlayerChunksImpl
             return;
         }
         final Collection<Chunk> chunksToSent = new ConcurrentSet<>();
-//        chunksToSent.addAll(this.chunksToReSend);
-//        this.chunksToReSend.clear();
         final int r = this.lastUpdateR++;
         final ChunkManagerImpl impl = this.player.getWorld().getChunkManager();
 
@@ -134,7 +114,8 @@ public class PlayerChunksImpl
         // so we need subtract them: (((2 * r) + 1) * 4) - 4 == 8 * r
         final CountDownLatch latch = new CountDownLatch((r == 0) ? 1 : (8 * r));
 
-        forChunks(r, this.lastUpdate, chunkPos -> impl.submitActionOnChunkAt(chunkPos, true, false, (chunk) -> {
+        forChunks(r, this.lastUpdate, chunkPos -> {
+            Chunk chunk = impl.getChunkAt(chunkPos, true, false);
             try
             {
                 if (chunk == null)
@@ -160,45 +141,61 @@ public class PlayerChunksImpl
                 latch.countDown();
 //                Main.debug("[Latch;" + latch.hashCode() + "] " + latch.getCount());
             }
-        }));
-        // TODO: maybe use other pool for that, and don't use any
-        impl.getPool().submit(() -> {
-            try
-            {
-                latch.await();
-            } catch (final InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-
-            for (Iterator<Chunk> iterator = chunksToSent.iterator(); iterator.hasNext(); )
-            {
-                final Chunk chunk = iterator.next();
-                if (! chunk.isPopulated() && ! chunk.populate())
-                {
-                    iterator.remove();
-                }
-            }
-            final int size = (chunksToSent.size() / CHUNK_BULK_SIZE) + (((chunksToSent.size() % CHUNK_BULK_SIZE) == 0) ? 0 : 1);
-            final Chunk[][] chunkBulks = new Chunk[size][CHUNK_BULK_SIZE];
-            int i = 0;
-            for (final Chunk chunk : chunksToSent)
-            {
-                this.loadedChunks.add(chunk);
-                chunkBulks[i / CHUNK_BULK_SIZE][i++ % CHUNK_BULK_SIZE] = chunk;
-            }
-
-            for (final Chunk[] chunkBulk : chunkBulks)
-            {
-                this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(true, chunkBulk));
-            }
         });
+        try
+        {
+            latch.await();
+        } catch (final InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        for (final Iterator<Chunk> iterator = chunksToSent.iterator(); iterator.hasNext(); )
+        {
+            final Chunk chunk = iterator.next();
+            if (! chunk.isPopulated() && ! chunk.populate())
+            {
+                iterator.remove();
+            }
+        }
+        final int size = (chunksToSent.size() / CHUNK_BULK_SIZE) + (((chunksToSent.size() % CHUNK_BULK_SIZE) == 0) ? 0 : 1);
+        final Chunk[][] chunkBulks = new Chunk[size][CHUNK_BULK_SIZE];
+        int i = 0;
+        for (final Chunk chunk : chunksToSent)
+        {
+            this.loadedChunks.add(chunk);
+            chunkBulks[i / CHUNK_BULK_SIZE][i++ % CHUNK_BULK_SIZE] = chunk;
+        }
+
+        for (final Chunk[] chunkBulk : chunkBulks)
+        {
+            this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(true, chunkBulk));
+        }
     }
 
     @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("player", this.player).toString();
+    }
+
+    @Override
+    public void doTick()
+    {
+        if (this.logout)
+        {
+            return;
+        }
+        final ChunkPos center = this.player.getLocation().getChunkPos();
+        if (center.equals(this.lastUpdate))
+        {
+            this.continueUpdate();
+            return;
+        }
+        this.lastUpdateR = 0;
+        this.lastUpdate = center;
+        this.continueUpdate();
+        this.checkAndUnload();
     }
 
     static void forChunks(final int r, final ChunkPos center, final Consumer<ChunkPos> action)

@@ -3,7 +3,6 @@ package org.diorite.impl.world.generator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
@@ -62,9 +61,9 @@ public class ChunkBuilderImpl implements ChunkBuilder
     }
 
     @Override
-    public ChunkImpl createChunk(final ChunkPos pos)
+    public org.diorite.impl.world.chunk.ChunkImpl createChunk(final ChunkPos pos)
     {
-        final ChunkImpl chunk = new ChunkImpl(pos, this.biomes);
+        final org.diorite.impl.world.chunk.ChunkImpl chunk = new org.diorite.impl.world.chunk.ChunkImpl(pos, this.biomes);
         final ChunkPartImpl[] chunkParts = new ChunkPartImpl[this.chunkParts.length];
         final ChunkPartBuilder[] chunkPartBuilders = this.chunkParts;
         for (int i = 0, buildersLength = chunkPartBuilders.length; i < buildersLength; i++)
@@ -74,7 +73,7 @@ public class ChunkBuilderImpl implements ChunkBuilder
             {
                 continue;
             }
-            chunkParts[i] = new ChunkPartImpl(chunk, chunkPart.blocks, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
+            chunkParts[i] = new org.diorite.impl.world.chunk.ChunkPartImpl(chunk, chunkPart.blocks, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
             chunkParts[i].recalculateBlockCount();
             chunk.getChunkParts()[i] = chunkParts[i];
         }

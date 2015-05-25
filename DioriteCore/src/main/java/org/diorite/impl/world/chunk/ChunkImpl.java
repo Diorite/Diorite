@@ -10,10 +10,9 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
+import org.diorite.impl.Tickable;
 import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
-import org.diorite.impl.world.BlockImpl;
-import org.diorite.BlockFace;
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
@@ -24,15 +23,14 @@ import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.Block;
 import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
-import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
 
-public class ChunkImpl implements Chunk
+public class ChunkImpl implements Chunk, Tickable
 {
-    private final ChunkPos        pos;
+    private final ChunkPos                                         pos;
     private final ChunkPartImpl[] chunkParts; // size of 16, parts can be null
-    private final int[]           heightMap;
-    private final byte[]          biomes;
+    private final int[]                                            heightMap;
+    private final byte[]                                           biomes;
     private final AtomicInteger usages    = new AtomicInteger(0);
     private final AtomicBoolean populated = new AtomicBoolean(false);
 
@@ -84,31 +82,13 @@ public class ChunkImpl implements Chunk
     {
         if (! this.populated.get())
         {
-            final ChunkManager cm = this.getWorld().getChunkManager();
-            for (BlockFace face : new BlockFace[]{BlockFace.NORTH, BlockFace.WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST})
-            {
-                {
-                    final Chunk c = cm.getChunkAt(this.pos.add(face.getModX(), face.getModZ()), false, false);
-                    if (c == null)
-                    {
-                        return false;
-                    }
-                }
-                face = face.getOppositeFace();
-                {
-                    final Chunk c = cm.getChunkAt(this.pos.add(face.getModX(), face.getModZ()), false, false);
-                    if (c == null)
-                    {
-                        return false;
-                    }
-                }
-            }
             if (this.populated.compareAndSet(false, true))
             {
                 ChunkGeneratePipelineImpl.addPops(this.pos);
                 this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
-
+                return true;
             }
+            return false;
         }
         return true;
     }
@@ -134,10 +114,10 @@ public class ChunkImpl implements Chunk
     }
 
     @Override
-    public void setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
+    public BlockMaterialData setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
     {
         final ChunkPartImpl chunkPart = this.getPart(y);
-        chunkPart.setBlock(x, y % Chunk.CHUNK_PART_HEIGHT, z, materialData);
+        final BlockMaterialData prev = chunkPart.setBlock(x, y % Chunk.CHUNK_PART_HEIGHT, z, materialData);
 
         final int hy = this.heightMap[((z << 4) | x)];
         if (y >= hy)
@@ -159,14 +139,15 @@ public class ChunkImpl implements Chunk
                 }
             }
         }
-
+//        ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getPlayerChunks().getVisibleChunks().contains(this), new PacketPlayOutBlockChange(new BlockLocation(x + (this.pos.getX() << 4), y, z + (this.pos.getZ() << 4), this.getWorld()), materialData));
         this.checkPart(chunkPart);
+        return prev;
     }
 
     @Override
-    public void setBlock(final int x, final int y, final int z, final int id, final int meta)
+    public BlockMaterialData setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
-        this.setBlock(x, y, z, BlockMaterialData.getByID(id, meta));
+        return this.setBlock(x, y, z, BlockMaterialData.getByID(id, meta));
     }
 
     @Override
@@ -190,7 +171,7 @@ public class ChunkImpl implements Chunk
     public Block getBlock(final int x, final int y, final int z)
     {
         // TODO change when meta-data of block will be added
-        return new BlockImpl(x, y, z, this);
+        return new org.diorite.impl.world.BlockImpl(x, y, z, this);
     }
 
     @Override
@@ -212,9 +193,9 @@ public class ChunkImpl implements Chunk
     }
 
     @Override
-    public World getWorld()
+    public WorldImpl getWorld()
     {
-        return this.pos.getWorld();
+        return (WorldImpl) this.pos.getWorld();
     }
 
     @Override
@@ -265,7 +246,7 @@ public class ChunkImpl implements Chunk
     {
         if (this.usages.get() <= 0)
         {
-            ChunkUnloaderThread.add(this);
+            this.getWorld().getChunkManager().unload(this);
         }
     }
 
@@ -275,7 +256,7 @@ public class ChunkImpl implements Chunk
         final int usages = this.usages.decrementAndGet();
         if (usages <= 0)
         {
-            ChunkUnloaderThread.add(this);
+            this.getWorld().getChunkManager().unload(this);
         }
         return usages;
     }
@@ -314,8 +295,8 @@ public class ChunkImpl implements Chunk
             final byte posY = sectionNBT.getByte("Y");
             final ChunkPartImpl chunkPart = new ChunkPartImpl(this, posY, hasSkyLight);
             final byte[] blocksIDs = sectionNBT.getByteArray("Blocks");
-            final ChunkNibbleArray blocksMetaData = new ChunkNibbleArray(sectionNBT.getByteArray("Data"));
-            final ChunkNibbleArray additionalData = Optional.ofNullable(sectionNBT.getByteArray("Add")).map(ChunkNibbleArray::new).orElse(null);
+            final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray(sectionNBT.getByteArray("Data"));
+            final org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = Optional.ofNullable(sectionNBT.getByteArray("Add")).map(org.diorite.impl.world.chunk.ChunkNibbleArray::new).orElse(null);
             final short[] blocks = new short[blocksIDs.length];
             for (int i = 0; i < blocks.length; ++ i)
             {
@@ -371,8 +352,8 @@ public class ChunkImpl implements Chunk
             final NbtTagCompound sectionNBT = new NbtTagCompound();
             sectionNBT.setByte("Y", chunkPart.getYPos());
             final byte[] blocksIDs = new byte[chunkPart.getBlocks().length()];
-            final ChunkNibbleArray blocksMetaData = new ChunkNibbleArray();
-            ChunkNibbleArray additionalData = null;
+            final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray();
+            org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = null;
             for (int i = 0; i < chunkPart.getBlocks().length(); ++ i)
             {
                 final short block = chunkPart.getBlocks().get(i);
@@ -449,6 +430,12 @@ public class ChunkImpl implements Chunk
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("pos", this.pos).append("usages", this.usages).toString();
+    }
+
+    @Override
+    public void doTick()
+    {
+        // TODO
     }
 
     public static ChunkImpl loadFromNBT(final World world, final NbtTagCompound tag)

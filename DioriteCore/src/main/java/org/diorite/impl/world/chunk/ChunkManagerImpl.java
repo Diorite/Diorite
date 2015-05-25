@@ -1,18 +1,22 @@
 package org.diorite.impl.world.chunk;
 
+import java.util.Collection;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Tickable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.BlockLocation;
 import org.diorite.event.EventType;
@@ -20,41 +24,34 @@ import org.diorite.event.chunk.ChunkGenerateEvent;
 import org.diorite.event.chunk.ChunkLoadEvent;
 import org.diorite.event.chunk.ChunkPopulateEvent;
 import org.diorite.utils.concurrent.ParallelUtils;
-import org.diorite.utils.concurrent.ParallelUtils.NamedForkJoinWorkerFactory;
+import org.diorite.utils.math.pack.IntsToLong;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
 
-public class ChunkManagerImpl implements ChunkManager
+public class ChunkManagerImpl implements ChunkManager, Tickable
 {
-    private final WorldImpl world;
-    private final Map<Long, Chunk>  chunks     = new ConcurrentHashMap<>(400, .5f, 4); // change to ConcurrentHashMap<Long, ChunkImpl> if needed.
-    private final Map<Long, Object> generating = new ConcurrentHashMap<>(10);
-    private final ForkJoinPool pool;
+    private final org.diorite.impl.world.WorldImpl world;
+    private final Collection<ChunkGroup> groups     = ImmutableSet.of(new ChunkGroup()); // TODO: multiple groups, one thread per group
+    private final Map<Long, Chunk>       chunks     = new ConcurrentHashMap<>(400, .5f, 4); // change to ConcurrentHashMap<Long, ChunkImpl> if needed.
+    private final Map<Long, Object>      generating = new ConcurrentHashMap<>(10);
 
     public ChunkManagerImpl(final WorldImpl world)
     {
         this.world = world;
-        // TODO: add way to configure max fork join tasks per world
-        this.pool = new ForkJoinPool(Math.max(1, Runtime.getRuntime().availableProcessors() / 2), new NamedForkJoinWorkerFactory(world.getName() + "-ChunkLoader"), null, false);
-    }
-
-    public ForkJoinPool getPool()
-    {
-        return this.pool;
     }
 
     public synchronized void loadBase(final int chunkRadius, final BlockLocation center)
     {
         final LoadInfo info = new LoadInfo();
         final int toLoad = chunkRadius * chunkRadius;
-        System.out.println("Loading spawn chunks for world: " + this.world.getName());
+        System.out.println("[WorldLoader] Loading spawn chunks for world: " + this.world.getName());
 
         final Deque<Chunk> unpopulatedChunks = new ConcurrentLinkedDeque<>();
         for (int r = 0; r <= chunkRadius; r++)
         {
             final int cr = r;
-            this.pool.invoke(ParallelUtils.createSimpleTask(() -> {
+            ParallelUtils.realParallelStream(() -> {
                 forChunksParallel(cr, center.getChunkPos(), (pos) -> {
                     final Chunk impl = this.getChunkAt(pos, true, false);
                     impl.addUsage();
@@ -73,18 +70,21 @@ public class ChunkManagerImpl implements ChunkManager
                         }
                     }
                 });
-            }));
+            });
             //noinspection HardcodedFileSeparator
             System.out.println("[ChunkLoader][" + this.world.getName() + "] Radius " + r + "/" + chunkRadius);
             info.lastTime = System.currentTimeMillis();
         }
 
-        System.out.println("Loaded " + info.loadedChunks.get() + " spawn chunks for world: " + this.world.getName());
+        System.out.println("[WorldLoader] Loaded " + info.loadedChunks.get() + " spawn chunks for world: " + this.world.getName());
         if (! unpopulatedChunks.isEmpty())
         {
             unpopulatedChunks.stream().forEach(Chunk::populate);
-            System.out.println("Populated " + unpopulatedChunks.size() + " spawn chunks for world: " + this.world.getName());
+            System.out.println("[WorldLoader] Populated " + unpopulatedChunks.size() + " spawn chunks for world: " + this.world.getName());
         }
+//        System.out.println("[WorldLoader] Saving...");
+//        this.saveAll();
+//        System.out.println("[WorldLoader] Saved");
     }
 
     @Override
@@ -113,16 +113,45 @@ public class ChunkManagerImpl implements ChunkManager
     @Override
     public synchronized void saveAll()
     {
-        this.world.getWorldFile().getIo().saveChunks(this.chunks.values(), this.world.getWorldFile());
+        final Map<Long, ChunkGroup> temp = new HashMap<>(50);
+        for (final Chunk c : this.chunks.values())
+        {
+            final Long key = IntsToLong.pack(c.getX() >> 5, c.getZ() >> 5);
+            ChunkGroup group = temp.get(key);
+            if (group == null)
+            {
+                for (final ChunkGroup g : this.groups)
+                {
+                    if (g.isIn(c.getPos()))
+                    {
+                        group = g;
+                        temp.put(key, g);
+                        break;
+                    }
+                }
+                assert group != null;
+            }
+            if (! group.saveChunk((ChunkImpl) c))
+            {
+                throw new AssertionError("chunk isn't in valid group: " + c + ", " + group);
+            }
+        }
+//        this.world.getWorldFile().saveChunks((Collection<? extends ChunkImpl>) this.chunks.values());
     }
 
     @Override
     public void unload(final Chunk chunk)
     {
-        // TODO: some way to delay chunk save, and unload it after some delay (to preved lags when player jumps between 2 chunks)
-
-        //noinspection unchecked
-        this.world.getWorldFile().getIo().saveChunk(this.chunks.remove(chunk.getPos().asLong()), this.world.getWorldFile());
+        final ChunkImpl c = (ChunkImpl) chunk;
+        final Runnable r = () -> this.chunks.remove(chunk.getPos().asLong());
+        for (final ChunkGroup g : this.groups)
+        {
+            if (g.saveChunk(c, r))
+            {
+                break;
+            }
+        }
+        // this.world.getWorldFile().saveChunk((ChunkImpl) this.chunks.remove(chunk.getPos().asLong()));
     }
 
     @Override
@@ -184,7 +213,7 @@ public class ChunkManagerImpl implements ChunkManager
                             genEvt.call();
                             if (genEvt.isCancelled() || (genEvt.getGeneratedChunk() == null))
                             {
-                                return new DumbChunk(pos);
+                                return new org.diorite.impl.world.chunk.DumbChunk(pos);
                             }
                             chunk = genEvt.getGeneratedChunk();
                             this.chunks.put(posLong, chunk);
@@ -198,6 +227,16 @@ public class ChunkManagerImpl implements ChunkManager
                 if ((chunk != null) && populate && ! chunk.isPopulated())
                 {
                     EventType.callEvent(new ChunkPopulateEvent(chunk));
+                }
+                if (chunk != null)
+                {
+                    for (final ChunkGroup g : this.groups)
+                    {
+                        if (g.addChunk((ChunkImpl) chunk))
+                        {
+                            break;
+                        }
+                    }
                 }
             } finally
             {
@@ -227,9 +266,10 @@ public class ChunkManagerImpl implements ChunkManager
         return this.getChunkAt(new ChunkPos(x, z, this.world), generate);
     }
 
-    public void submitActionOnChunkAt(final ChunkPos pos, final boolean generate, final boolean populate, final Consumer<Chunk> consumer)
+    @Override
+    public void doTick()
     {
-        this.pool.submit(() -> consumer.accept(this.getChunkAt(pos, generate, populate)));
+        this.groups.forEach(ChunkGroup::doTick);
     }
 
     static void forChunksParallel(final int r, final ChunkPos center, final Consumer<ChunkPos> action)

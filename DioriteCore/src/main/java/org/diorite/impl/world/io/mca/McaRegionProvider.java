@@ -11,14 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.world.io.RegionProvider;
-
-public class McaRegionProvider implements RegionProvider
+public class McaRegionProvider
 {
     private static final int                                    MAX_CACHE_SIZE = 256;
     private final        Map<File, Reference<McaChunkProvider>> cache          = new ConcurrentHashMap<>(25, .2f, 4);
 
-    @Override
     public McaChunkProvider getChunkProvider(final File basePath, final int chunkX, final int chunkZ)
     {
         final File regionDir = new File(basePath, "region");
@@ -41,14 +38,12 @@ public class McaRegionProvider implements RegionProvider
             this.clear();
         }
 
-        final McaChunkProvider reg = new McaChunkProvider(file);
-
+        final McaChunkProvider reg = new McaChunkProvider(file, chunkX, chunkZ);
         this.cache.put(file, new SoftReference<>(reg));
         return reg;
     }
 
-    @Override
-    public void clear()
+    public synchronized void clear()
     {
         for (final Entry<File, Reference<McaChunkProvider>> entry : this.cache.entrySet())
         {
@@ -56,10 +51,9 @@ public class McaRegionProvider implements RegionProvider
             {
                 final Reference<McaChunkProvider> ref = entry.getValue();
                 final McaChunkProvider file;
-                if ((((file = ref.get())) != null) /*&& ! file.isUsed()*/)
+                if ((((file = ref.get())) != null))
                 {
                     file.close();
-//                    iterator.remove();
                 }
             } catch (final IOException e)
             {
@@ -68,6 +62,7 @@ public class McaRegionProvider implements RegionProvider
         }
         this.cache.clear();
     }
+
 
     @Override
     public String toString()

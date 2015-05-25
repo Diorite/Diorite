@@ -6,60 +6,53 @@ import java.util.Collection;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.world.io.mca.McaChunkIO;
-import org.diorite.impl.world.io.mca.McaRegionProvider;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
+import org.diorite.world.chunk.ChunkPos;
 
-@SuppressWarnings("rawtypes")
-public abstract class ChunkIO
+public abstract class ChunkIO<C extends Chunk>
 {
-    public ChunkIO(final RegionProvider provider)
+    protected final File  worldDir;
+    protected World world;
+
+    public ChunkIO(final File worldDir)
     {
-        this.provider = provider;
+        this.worldDir = worldDir;
     }
 
-    protected final RegionProvider provider;
-
-    public RegionProvider getProvider()
+    public ChunkIO(final File worldDir, final World world)
     {
-        return this.provider;
+        this.worldDir = worldDir;
+        this.world = world;
+        worldDir.mkdirs();
     }
 
-    /**
-     * Should save this collection of chunks in best possible way.
-     *
-     * @param chunks chunks to save.
-     */
-    public abstract void saveChunks(Collection<Chunk> chunks, final WorldFile wf);
-
-    /**
-     * Should save this chunks in best possible way.
-     *
-     * @param chunk chunk to save.
-     */
-    public abstract void saveChunk(Chunk chunk, final WorldFile wf);
-
-    public NbtTagCompound getChunkData(final File basePath, final int chunkX, final int chunkZ)
+    public void setWorld(final World world)
     {
-        final ChunkProvider r = this.provider.getChunkProvider(basePath, chunkX, chunkZ);
-        return r.getChunkData(chunkX, chunkZ);
+        this.world = world;
     }
 
-    public void saveChunkData(final File basePath, final int chunkX, final int chunkZ, final NbtTagCompound data)
+    public File getWorldDir()
     {
-        final ChunkProvider r = this.provider.getChunkProvider(basePath, chunkX, chunkZ);
-        r.saveChunkData(chunkX, chunkZ, data);
+        return this.worldDir;
     }
 
-    public static ChunkIO getDefault()
-    {
-        return new McaChunkIO(new McaRegionProvider());
-    }
+    public abstract C loadChunk(ChunkPos pos);
+
+    public abstract C loadChunk(int x, int z);
+
+    public abstract void saveChunk(C chunk);
+
+    public abstract NbtTagCompound getChunkData(final int chunkX, final int chunkZ);
+
+    public abstract void saveChunkData(final int chunkX, final int chunkZ, final NbtTagCompound data);
+
+    public abstract void saveChunks(final Collection<? extends C> chunksToSave);
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("provider", this.provider).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("worldDir", this.worldDir).toString();
     }
 }

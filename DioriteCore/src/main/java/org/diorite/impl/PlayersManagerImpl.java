@@ -113,6 +113,7 @@ public class PlayersManagerImpl
     {
         this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player.getGameProfile()));
         player.getPlayerChunks().logout();
+        this.players.remove(player.getUniqueID());
     }
 
     public void playerQuit(final UUID uuid)
@@ -131,7 +132,7 @@ public class PlayersManagerImpl
     public void keepAlive()
     {
         final long curr = System.currentTimeMillis();
-        this.players.values().parallelStream().forEach(p -> p.getPlayerChunks().update());
+        this.players.values().parallelStream().forEach(p -> p.getPlayerChunks().doTick());
         if ((curr - this.lastKeepAlive) > this.keepAliveTimer)
         {
             this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId())));

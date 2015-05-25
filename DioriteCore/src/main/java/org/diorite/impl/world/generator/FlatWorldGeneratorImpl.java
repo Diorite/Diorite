@@ -1,5 +1,7 @@
 package org.diorite.impl.world.generator;
 
+import java.util.Map;
+
 import org.diorite.material.Material;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.world.World;
@@ -11,7 +13,7 @@ import org.diorite.world.generator.WorldGeneratorInitializer;
 
 public class FlatWorldGeneratorImpl extends WorldGenerator
 {
-    public FlatWorldGeneratorImpl(final World world, final String name, final String options)
+    public FlatWorldGeneratorImpl(final World world, final String name, final Map<String, Object> options)
     {
         super(world, name, options);  // TODO: implement options
     }
@@ -48,7 +50,7 @@ public class FlatWorldGeneratorImpl extends WorldGenerator
         return new WorldGeneratorInitializer<FlatWorldGeneratorImpl>("diorite:flat")
         {
             @Override
-            public FlatWorldGeneratorImpl baseInit(final World world, final String options)
+            public FlatWorldGeneratorImpl baseInit(final World world, final Map<String, Object> options)
             {
                 return new FlatWorldGeneratorImpl(world, this.name, options);
             }

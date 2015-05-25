@@ -321,7 +321,7 @@ public class ServerImpl implements Server, Runnable
 
         this.entityManager = new EntityManagerImpl(this);
         this.playersManager = new PlayersManagerImpl(this);
-        this.worldsManager = new WorldsManagerImpl(options.valueOf("defworld").toString());
+        this.worldsManager = new WorldsManagerImpl();
 
         this.serverConnection = new ServerConnection(this);
         this.serverConnection.start();
@@ -684,6 +684,7 @@ public class ServerImpl implements Server, Runnable
                     lastTick = curTime;
 
                     this.playersManager.keepAlive();
+                    this.worldsManager.doTick();
                 }
             }
         } catch (final Throwable e)

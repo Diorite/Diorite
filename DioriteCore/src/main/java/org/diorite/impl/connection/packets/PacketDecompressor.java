@@ -60,7 +60,7 @@ public class PacketDecompressor extends ByteToMessageDecoder
         }
     }
 
-    public void a(final int threshold)
+    public void setThreshold(final int threshold)
     {
         this.threshold = threshold;
     }

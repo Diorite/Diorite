@@ -1,5 +1,7 @@
 package org.diorite.impl.world.generator;
 
+import java.util.Map;
+
 import org.diorite.world.World;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.ChunkBuilder;
@@ -8,7 +10,7 @@ import org.diorite.world.generator.WorldGeneratorInitializer;
 
 public class VoidWorldGeneratorImpl extends WorldGenerator
 {
-    public VoidWorldGeneratorImpl(final World world, final String name, final String options)
+    public VoidWorldGeneratorImpl(final World world, final String name, final Map<String, Object> options)
     {
         super(world, name, options);
     }
@@ -24,7 +26,7 @@ public class VoidWorldGeneratorImpl extends WorldGenerator
         return new WorldGeneratorInitializer<VoidWorldGeneratorImpl>("diorite:void")
         {
             @Override
-            public VoidWorldGeneratorImpl baseInit(final World world, final String options)
+            public VoidWorldGeneratorImpl baseInit(final World world, final Map<String, Object> options)
             {
                 return new VoidWorldGeneratorImpl(world, this.name, options);
             }

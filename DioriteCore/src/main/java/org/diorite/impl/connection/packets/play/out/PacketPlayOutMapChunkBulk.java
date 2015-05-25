@@ -45,7 +45,7 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
             for (int i = 0, chunkPartsLength = chunkParts.length; i < chunkPartsLength; i++)
             {
                 final ChunkPartImpl part = chunkParts[i];
-                if ((part == null) || part.isEmpty())
+                if (part == null)
                 {
                     mask &= ~ (1 << i);
                 }

@@ -1,15 +1,15 @@
 package org.diorite.impl.world;
 
-import java.io.File;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Tickable;
+import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.io.ChunkIO;
-import org.diorite.impl.world.io.WorldFile;
-import org.diorite.impl.world.io.mca.McaWorldFile;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -17,6 +17,7 @@ import org.diorite.ImmutableLocation;
 import org.diorite.Loc;
 import org.diorite.Location;
 import org.diorite.Particle;
+import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.world.Block;
@@ -28,94 +29,86 @@ import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
 import org.diorite.world.generator.WorldGenerators;
 
-public class WorldImpl implements World
+public class WorldImpl implements World, Tickable
 {
-    private final String             name;
-    private final ChunkManagerImpl   chunkManager;
-    private final WorldFile<?, ?, ?, ?> worldFile;
-    private final Dimension          dimension;
-    private Difficulty       difficulty        = Difficulty.NORMAL;
-    private HardcoreSettings hardcore          = new HardcoreSettings(false);
-    private GameMode         defaultGameMode   = GameMode.SURVIVAL;
-    private int              maxHeight         = Chunk.CHUNK_FULL_HEIGHT - 1;
-    private byte             forceLoadedRadius = 5;
-    private long           seed;
-    private boolean        raining;
-    private boolean        thundering;
-    private int            clearWeatherTime;
-    private int            rainTime;
-    private int            thunderTime;
-    private Loc            spawn;
-    private WorldGenerator generator;
-    private long           time;
-    private       boolean noUpdateMode = true;
-    private final Random  random       = new Random();
+    protected final String             name;
+    protected final WorldGroupImpl     worldGroup;
+    protected final ChunkManagerImpl   chunkManager;
+    protected final ChunkIO<ChunkImpl> chunkIO;
+    protected final Dimension          dimension;
+    protected Difficulty       difficulty        = Difficulty.NORMAL;
+    protected HardcoreSettings hardcore          = new HardcoreSettings(false);
+    protected GameMode         defaultGameMode   = GameMode.SURVIVAL;
+    protected int              maxHeight         = Chunk.CHUNK_FULL_HEIGHT - 1;
+    protected byte             forceLoadedRadius = 5;
+    protected long           seed;
+    protected boolean        raining;
+    protected boolean        thundering;
+    protected int            clearWeatherTime;
+    protected int            rainTime;
+    protected int            thunderTime;
+    protected Loc            spawn;
+    protected WorldGenerator generator;
+    protected long           time;
+    protected       boolean noUpdateMode = true;
+    protected final Random  random       = new Random();
 
     // TODO: world border impl
     // TODO: add some method allowing to set multiple blocks without calling getChunk so often
 
-    public WorldImpl(final String name, final Dimension dimension, final File worldFile, final String generator)
+    public WorldImpl(final ChunkIO<ChunkImpl> chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final String generator, final Map<String, Object> generatorOptions)
     {
         this.name = name;
-        this.dimension = dimension;
-        this.chunkManager = new ChunkManagerImpl(this);
-        this.generator = WorldGenerators.getGenerator(generator, this, null);
-        this.worldFile = new McaWorldFile(worldFile, this, ChunkIO.getDefault());
-    }
-
-    public WorldImpl(final String name, final Dimension dimension, final File worldFile, final String generator, final String generatorOptions)
-    {
-        this.name = name;
+        this.worldGroup = group;
         this.dimension = dimension;
         this.chunkManager = new ChunkManagerImpl(this);
         this.generator = WorldGenerators.getGenerator(generator, this, generatorOptions);
-        this.worldFile = new McaWorldFile(worldFile, this, ChunkIO.getDefault());
+        chunkIO.setWorld(this);
+        this.chunkIO = chunkIO;
     }
 
-    public WorldImpl(final WorldFile<?, ?, ?, ?> worldFile, final String name, final Dimension dimension, final String generator, final String generatorOptions)
+    public WorldImpl(final ChunkIO<ChunkImpl> chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final String generator)
     {
         this.name = name;
-        this.dimension = dimension;
-        this.chunkManager = new ChunkManagerImpl(this);
-        this.generator = WorldGenerators.getGenerator(generator, this, generatorOptions);
-        this.worldFile = worldFile;
-    }
-
-    public WorldImpl(final WorldFile<?, ?, ?, ?> worldFile, final String name, final Dimension dimension, final String generator)
-    {
-        this.name = name;
+        this.worldGroup = group;
         this.dimension = dimension;
         this.chunkManager = new ChunkManagerImpl(this);
         this.generator = WorldGenerators.getGenerator(generator, this, null);
-        this.worldFile = worldFile;
+        chunkIO.setWorld(this);
+        this.chunkIO = chunkIO;
     }
 
-    public void loadNBT(final NbtTagCompound tag)
+    public NbtTagCompound writeTo(final NbtTagCompound tag)
+    {
+        tag.setString("LevelName", this.name);
+        tag.setString("generatorName", this.generator.getName());
+        tag.setString("generatorOptions", this.generator.getOptions().toString());
+
+        tag.setInt("clearWeatherTime", this.clearWeatherTime);
+        tag.setBoolean("raining", this.raining);
+        tag.setInt("rainTime", this.rainTime);
+        tag.setBoolean("thundering", this.thundering);
+        tag.setInt("thunderTime", this.thunderTime);
+        tag.setLong("Time", this.time);
+        return tag;
+    }
+
+    public void loadNBT(final NbtTagCompound tag, final WorldConfig cfg)
     {
         this.clearWeatherTime = tag.getInt("clearWeatherTime", 0);
-        this.defaultGameMode = GameMode.getByID(tag.getInt("GameType", 0));
-        this.difficulty = Difficulty.getByLevel(tag.getByte("Difficulty", 0));
+        this.defaultGameMode = cfg.getGamemode();
+        this.difficulty = cfg.getDifficulty();
         this.raining = tag.getBoolean("raining", false);
         this.rainTime = tag.getInt("rainTime", 0);
         this.thundering = tag.getBoolean("thundering", false);
         this.thunderTime = tag.getInt("thunderTime", 0);
-        this.seed = tag.getLong("RandomSeed", 0);
+        this.seed = cfg.getSeed();
         this.random.setSeed(this.seed);
         this.time = tag.getLong("Time", 0);
 
-        final NbtTagCompound diTag = tag.getCompound("Diorite", new NbtTagCompound("Diorite"));
-        diTag.setParent(tag);
-        this.hardcore = (new HardcoreSettings(tag.getBoolean("hardcore", false), HardcoreSettings.HardcoreAction.values()[diTag.getByte("HardcoreAction", 0)]));
-        this.forceLoadedRadius = (diTag.getByte("ForceLoadedRadius", 10));
-
-        if (diTag.containsTag("spawnX"))
-        {
-            this.spawn = new Location(diTag.getDouble("spawnX"), diTag.getDouble("spawnY"), diTag.getDouble("spawnZ"), diTag.getFloat("spawnYaw"), diTag.getFloat("spawnPitch"), this);
-        }
-        else
-        {
-            this.spawn = new Location(tag.getInt("spawnX", 0), tag.getInt("spawnY", Chunk.CHUNK_FULL_HEIGHT / 2), tag.getInt("spawnZ", 0), this);
-        }
+        this.hardcore = new HardcoreSettings(cfg.isHardcore(), cfg.getHardcoreAction());
+        this.forceLoadedRadius = cfg.getForceLoadedRadius();
+        this.spawn = new Location(cfg.getSpawnX(), cfg.getSpawnY(), cfg.getSpawnZ(), cfg.getSpawnYaw(), cfg.getSpawnPitch(), this);
 
     }
 
@@ -125,6 +118,12 @@ public class WorldImpl implements World
         System.out.println("Saving chunks for world: " + this.name);
         this.chunkManager.saveAll();
         System.out.println("Saved chunks for world: " + this.name);
+    }
+
+    @Override
+    public WorldGroupImpl getWorldGroup()
+    {
+        return this.worldGroup;
     }
 
     @Override
@@ -374,15 +373,20 @@ public class WorldImpl implements World
         this.forceLoadedRadius = forceLoadedRadius;
     }
 
-    @SuppressWarnings("rawtypes")
-    public WorldFile getWorldFile()
+    public ChunkIO<ChunkImpl> getWorldFile()
     {
-        return this.worldFile;
+        return this.chunkIO;
     }
 
     @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).toString();
+    }
+
+    @Override
+    public void doTick()
+    {
+        this.chunkManager.doTick();
     }
 }

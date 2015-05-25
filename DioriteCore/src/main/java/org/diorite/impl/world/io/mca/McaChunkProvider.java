@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.zip.Deflater;
@@ -15,11 +17,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
-import org.diorite.impl.world.io.ChunkProvider;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.utils.math.pack.IntsToLong;
 
 /*
  ** 2011 January 5
@@ -83,12 +85,28 @@ import org.diorite.nbt.NbtTagCompound;
  *
  */
 @SuppressWarnings("MagicNumber")
-public class McaChunkProvider implements ChunkProvider
+public class McaChunkProvider
 {
+    private static final Map<Long, ReadWriteLock> locks = new ConcurrentHashMap<>(10);
+
+    private static ReadWriteLock getLock(final int x, final int z)
+    {
+        return getLock(IntsToLong.pack(x, z));
+    }
+
+    private static ReadWriteLock getLock(final long pos)
+    {
+        final Long key = pos;
+        ReadWriteLock lock = locks.get(key);
+        if (lock == null)
+        {
+            locks.put(key, lock = new ReentrantReadWriteLock());
+        }
+        return lock;
+    }
+
     private static final int VERSION_GZIP    = 1;
     private static final int VERSION_DEFLATE = 2;
-    //  private static final int VERSION_RAW     = 100; // no compression make it even slower, due to disc save speed and giant size of file.
-
 
     private static final int SECTOR_BYTES = 4096;
     private static final int SECTOR_INTS  = SECTOR_BYTES / 4;
@@ -96,151 +114,156 @@ public class McaChunkProvider implements ChunkProvider
     private static final int    CHUNK_HEADER_SIZE = 5;
     private static final byte[] emptySector       = new byte[SECTOR_BYTES];
     private static final byte[] smallBytes        = new byte[2 << 5];
+    private final Long               key;
     private final int[]              offsets;
     private final int[]              chunkTimestamps;
-    //    private final Map<Short, Object> readLocks = new ConcurrentHashMap<>(10);
     private       RandomAccessFile   file;
     private       ArrayList<Boolean> sectorFree;
     private       int                sizeDelta;
     private int  compressionMode = VERSION_DEFLATE;
     private long lastModified    = 0;
-    private final String name;
-    private final ReadWriteLock rwLock  = new ReentrantReadWriteLock();
-//    private final WritterThread writter = new WritterThread();
 
-    public McaChunkProvider(final File path)
+    public McaChunkProvider(final File path, final int x, final int z)
     {
-        this(path, VERSION_DEFLATE);
+        this(path, VERSION_DEFLATE, x, z);
     }
 
-    public McaChunkProvider(final File path, final int compressionMode)
+    public McaChunkProvider(final File path, final int compressionMode, final int x, final int z)
     {
-        this.name = path.getAbsoluteFile().getParentFile().getParentFile().getName() + "|" + path.getName().substring(2, path.getName().length() - 4);
-//        this.writter.setName(this.name);
-//        this.writter.start();
-        this.compressionMode = compressionMode;
-        this.offsets = new int[SECTOR_INTS];
-        this.chunkTimestamps = new int[SECTOR_INTS];
-
-        this.sizeDelta = 0;
-
-        if (path.exists())
-        {
-            this.lastModified = path.lastModified();
-        }
-
+        this.key = IntsToLong.pack(x, z);
+        final ReadWriteLock lock = getLock(this.key);
         try
         {
-            this.file = new RandomAccessFile(path, "rw");
+            lock.writeLock().lock();
+//        this.name = path.getAbsoluteFile().getParentFile().getParentFile().getName() + "|" + path.getName().substring(2, path.getName().length() - 4);
 
-            // seek to the end to prepare size checking
-            this.file.seek(this.file.length());
+            this.compressionMode = compressionMode;
+            this.offsets = new int[SECTOR_INTS];
+            this.chunkTimestamps = new int[SECTOR_INTS];
 
-            // if the file size is under 8KB, grow it (4K chunk offset table, 4K timestamp table)
-            if (this.file.length() < (2 * SECTOR_BYTES))
+            this.sizeDelta = 0;
+
+            if (path.exists())
             {
-                this.sizeDelta += (2 * SECTOR_BYTES) - this.file.length();
-                if (this.lastModified != 0)
-                {
-                    // only give a warning if the region file existed beforehand
-                    System.err.println("Region \"" + path + "\" under 8K: " + this.file.length() + " increasing by " + (2 * SECTOR_BYTES - this.file.length()));
-                }
+                this.lastModified = path.lastModified();
+            }
 
-                final long i = this.file.length();
-                if (i < (2 * SECTOR_BYTES))
+            try
+            {
+                this.file = new RandomAccessFile(path, "rw");
+
+                // seek to the end to prepare size checking
+                this.file.seek(this.file.length());
+
+                // if the file size is under 8KB, grow it (4K chunk offset table, 4K timestamp table)
+                if (this.file.length() < (2 * SECTOR_BYTES))
                 {
-                    long j = (2 * SECTOR_BYTES) - i;
-                    while (j >= emptySector.length)
+                    this.sizeDelta += (2 * SECTOR_BYTES) - this.file.length();
+                    if (this.lastModified != 0)
                     {
-                        this.file.write(emptySector);
-                        j -= emptySector.length;
+                        // only give a warning if the region file existed beforehand
+                        System.err.println("Region \"" + path + "\" under 8K: " + this.file.length() + " increasing by " + (2 * SECTOR_BYTES - this.file.length()));
                     }
-                    while (j >= smallBytes.length)
+
+                    final long i = this.file.length();
+                    if (i < (2 * SECTOR_BYTES))
                     {
-                        this.file.write(smallBytes);
-                        j -= smallBytes.length;
+                        long j = (2 * SECTOR_BYTES) - i;
+                        while (j >= emptySector.length)
+                        {
+                            this.file.write(emptySector);
+                            j -= emptySector.length;
+                        }
+                        while (j >= smallBytes.length)
+                        {
+                            this.file.write(smallBytes);
+                            j -= smallBytes.length;
+                        }
+                        if (j > 0)
+                        {
+                            this.file.write(new byte[(int) j]);
+                        }
                     }
-                    if (j > 0)
-                    {
-                        this.file.write(new byte[(int) j]);
-                    }
-                }
 //                for (long i = this.file.length(); i < (2 * SECTOR_BYTES); ++ i)
 //                {
 //                     this.file.write(0);
 //                }
-            }
-
-            // if the file size is not a multiple of 4KB, grow it
-            if ((this.file.length() & 0xfff) != 0)
-            {
-                this.sizeDelta += SECTOR_BYTES - (this.file.length() & 0xfff);
-                System.err.println("Region \"" + path + "\" not aligned: " + this.file.length() + " increasing by " + (SECTOR_BYTES - (this.file.length() & 0xfff)));
-
-                final long i = this.file.length() & 0xfff;
-                if (i < SECTOR_BYTES)
-                {
-                    long j = SECTOR_BYTES - i;
-                    while (j >= emptySector.length)
-                    {
-                        this.file.write(emptySector);
-                        j -= emptySector.length;
-                    }
-                    while (j >= smallBytes.length)
-                    {
-                        this.file.write(smallBytes);
-                        j -= smallBytes.length;
-                    }
-                    if (j > 0)
-                    {
-                        this.file.write(new byte[(int) j]);
-                    }
-
                 }
-            }
 
-            // set up the available sector map
-            final int nSectors = (int) (this.file.length() / SECTOR_BYTES);
-            this.sectorFree = new ArrayList<>(nSectors);
-            for (int i = 0; i < nSectors; ++ i)
-            {
-                this.sectorFree.add(true);
-            }
-
-            this.sectorFree.set(0, false); // chunk offset table
-            this.sectorFree.set(1, false); // for the last modified info
-
-            // read offsets from offset table
-            this.file.seek(0);
-            for (int i = 0; i < SECTOR_INTS; ++ i)
-            {
-                final int offset = this.file.readInt();
-                this.offsets[i] = offset;
-
-                final int startSector = (offset >> 8);
-                final int numSectors = (offset & 0xff);
-
-                if ((offset != 0) && (startSector >= 0) && ((startSector + numSectors) <= this.sectorFree.size()))
+                // if the file size is not a multiple of 4KB, grow it
+                if ((this.file.length() & 0xfff) != 0)
                 {
-                    for (int sectorNum = 0; sectorNum < numSectors; ++ sectorNum)
+                    this.sizeDelta += SECTOR_BYTES - (this.file.length() & 0xfff);
+                    System.err.println("Region \"" + path + "\" not aligned: " + this.file.length() + " increasing by " + (SECTOR_BYTES - (this.file.length() & 0xfff)));
+
+                    final long i = this.file.length() & 0xfff;
+                    if (i < SECTOR_BYTES)
                     {
-                        this.sectorFree.set(startSector + sectorNum, false);
+                        long j = SECTOR_BYTES - i;
+                        while (j >= emptySector.length)
+                        {
+                            this.file.write(emptySector);
+                            j -= emptySector.length;
+                        }
+                        while (j >= smallBytes.length)
+                        {
+                            this.file.write(smallBytes);
+                            j -= smallBytes.length;
+                        }
+                        if (j > 0)
+                        {
+                            this.file.write(new byte[(int) j]);
+                        }
+
                     }
                 }
-                else if (offset != 0)
+
+                // set up the available sector map
+                final int nSectors = (int) (this.file.length() / SECTOR_BYTES);
+                this.sectorFree = new ArrayList<>(nSectors);
+                for (int i = 0; i < nSectors; ++ i)
                 {
-                    System.err.println("Region \"" + path + "\": offsets[" + i + "] = " + offset + " -> " + startSector + "," + numSectors + " does not fit");
+                    this.sectorFree.add(true);
                 }
-            }
-            // read timestamps from timestamp table
-            for (int i = 0; i < SECTOR_INTS; ++ i)
+
+                this.sectorFree.set(0, false); // chunk offset table
+                this.sectorFree.set(1, false); // for the last modified info
+
+                // read offsets from offset table
+                this.file.seek(0);
+                for (int i = 0; i < SECTOR_INTS; ++ i)
+                {
+                    final int offset = this.file.readInt();
+                    this.offsets[i] = offset;
+
+                    final int startSector = (offset >> 8);
+                    final int numSectors = (offset & 0xff);
+
+                    if ((offset != 0) && (startSector >= 0) && ((startSector + numSectors) <= this.sectorFree.size()))
+                    {
+                        for (int sectorNum = 0; sectorNum < numSectors; ++ sectorNum)
+                        {
+                            this.sectorFree.set(startSector + sectorNum, false);
+                        }
+                    }
+                    else if (offset != 0)
+                    {
+                        System.err.println("Region \"" + path + "\": offsets[" + i + "] = " + offset + " -> " + startSector + "," + numSectors + " does not fit");
+                    }
+                }
+                // read timestamps from timestamp table
+                for (int i = 0; i < SECTOR_INTS; ++ i)
+                {
+                    this.chunkTimestamps[i] = this.file.readInt();
+                }
+            } catch (final IOException e)
             {
-                this.chunkTimestamps[i] = this.file.readInt();
+                System.err.println("Error on RegionFile loading: " + e.getMessage() + ", " + e.toString());
+                e.printStackTrace();
             }
-        } catch (final IOException e)
+        } finally
         {
-            System.err.println("Error on RegionFile loading: " + e.getMessage() + ", " + e.toString());
-            e.printStackTrace();
+            lock.writeLock().unlock();
         }
     }
 
@@ -262,34 +285,15 @@ public class McaChunkProvider implements ChunkProvider
      * gets an NbtTagCompound representing the chunk data returns null if
      * the chunk is not found or an error occurs
      */
-    @Override
     public NbtTagCompound getChunkData(int x, int z)
     {
-//        Main.debug("[" + McaChunkProvider.this.name + "] getChunkData (" + x + ", " + z + "): ");
 
-        this.rwLock.readLock().lock();
+        final ReadWriteLock lock = getLock(this.key);
+        lock.readLock().lock();
         try
         {
             x &= 31;
             z &= 31;
-//        final short lockKey = (short) ((x << 5) + z);
-//        final Object lock = this.readLocks.get(lockKey);
-//        if (lock != null)
-//        {
-//            try
-//            {
-//                //noinspection SynchronizationOnLocalVariableOrMethodParameter
-//                synchronized (lock)
-//                {
-//                    lock.wait();
-//                }
-//            } catch (final InterruptedException e)
-//            {
-//                e.printStackTrace();
-//            }
-//            return this.getChunkDataInputStream(x, z);
-//        }
-//        this.readLocks.put(lockKey, new Object());
             this.checkBounds(x, z);
 
             try
@@ -307,7 +311,6 @@ public class McaChunkProvider implements ChunkProvider
                 {
                     System.err.println("[RegionFile] (" + x + ", " + z + ") Invalid sector: " + sectorNumber + "+" + numSectors + " > " + this.sectorFree.size());
                     return null;
-                    // throw new IOException("Invalid sector: " + sectorNumber + "+" + numSectors + " > " + this.sectorFree.size());
                 }
 
                 this.file.seek(sectorNumber * SECTOR_BYTES);
@@ -316,7 +319,6 @@ public class McaChunkProvider implements ChunkProvider
                 {
                     System.err.println("[RegionFile] (" + x + ", " + z + ") Invalid length: " + length + " > " + (SECTOR_BYTES * numSectors));
                     return null;
-                    //  throw new IOException("Invalid length: " + length + " > " + (SECTOR_BYTES * numSectors));
                 }
 
                 final byte version = this.file.readByte();
@@ -332,12 +334,6 @@ public class McaChunkProvider implements ChunkProvider
                     this.file.read(data);
                     return (NbtTagCompound) NbtInputStream.readTagInflated(new ByteArrayInputStream(data), NbtLimiter.getUnlimited());
                 }
-//            if (version == VERSION_RAW)
-//            {
-//                final byte[] data = new byte[length - 1];
-//                this.file.read(data);
-//                return (NbtTagCompound) NbtInputStream.readTag(new ByteArrayInputStream(data));
-//            }
                 System.err.println("[RegionFile] (" + x + ", " + z + ") Unknown version: " + version);
                 return null;
                 // throw new IOException("Unknown version: " + version);
@@ -350,25 +346,9 @@ public class McaChunkProvider implements ChunkProvider
                 }
                 throw new RuntimeException("[RegionFile] Error on chunk (" + x + ", " + z + ") loading.", e);
             }
-            //finally
-//        {
-//            final Object obj = this.readLocks.remove(lockKey);
-//            if (obj != null)
-//            {
-//                //noinspection SynchronizationOnLocalVariableOrMethodParameter
-//                synchronized (obj)
-//                {
-//                    obj.notifyAll();
-//                }
-//            }
-//        }
         } finally
         {
-//            Main.debug("[" + McaChunkProvider.this.name + "] getChunkData:unlock (" + x + ", " + z + "): ");
-
-            this.rwLock.readLock().unlock();
-//            Main.debug("[" + McaChunkProvider.this.name + "] getChunkData:unlocked (" + x + ", " + z + "): ");
-
+            lock.readLock().unlock();
         }
     }
 
@@ -376,31 +356,7 @@ public class McaChunkProvider implements ChunkProvider
     {
         x &= 31;
         z &= 31;
-//        final short lockKey = (short) ((x << 5) + z);
-//        final Object lock = this.readLocks.get(lockKey);
-//        if (lock != null)
-//        {
-//            try
-//            {
-//                //noinspection SynchronizationOnLocalVariableOrMethodParameter
-//                synchronized (lock)
-//                {
-//                    lock.wait();
-//                }
-//            } catch (final InterruptedException e)
-//            {
-//                e.printStackTrace();
-//            }
-//            return this.getChunkDataOutputStream(x, z);
-//        }
-//        this.readLocks.put(lockKey, new Object());
-//        try
-//        {
         this.checkBounds(x, z);
-//        if (this.compressionMode == VERSION_RAW)
-//        {
-//            return NbtOutputStream.get(new ChunkBuffer(x, z));
-//        }
         if (this.compressionMode == VERSION_DEFLATE)
         {
             return NbtOutputStream.getDeflated(new ChunkBuffer(x, z), new Deflater(Deflater.BEST_SPEED));
@@ -416,25 +372,10 @@ public class McaChunkProvider implements ChunkProvider
             }
         }
         throw new RuntimeException("[RegionFile] (" + x + ", " + z + ") Unknown version on write: " + this.compressionMode);
-//        }
-//        finally
-//        {
-//            final Object obj = this.readLocks.remove(lockKey);
-//            if (obj != null)
-//            {
-//                //noinspection SynchronizationOnLocalVariableOrMethodParameter
-//                synchronized (obj)
-//                {
-//                    obj.notifyAll();
-//                }
-//            }
-//        }
     }
 
-    @Override
     public void saveChunkData(final int x, final int z, final NbtTagCompound data)
     {
-//        Main.debug("[" + McaChunkProvider.this.name + "] saveChunkData (" + x + ", " + z + "): ");
         try (NbtOutputStream is = this.getChunkDataOutputStream(x, z))
         {
             is.write(data);
@@ -442,14 +383,13 @@ public class McaChunkProvider implements ChunkProvider
         {
             throw new RuntimeException("can't save chunk on: [" + x + ", " + z + "]", e);
         }
-//        Main.debug("[" + McaChunkProvider.this.name + "] saveChunkData:end (" + x + ", " + z + "): ");
     }
 
     /* write a chunk at (x,z) with length bytes of data to disk */
     protected synchronized void write(final int x, final int z, final byte[] data, final int length) throws IOException
     {
-//        Main.debug("[" + McaChunkProvider.this.name + "][" + x + ", " + z + "] Write lock");
-        McaChunkProvider.this.rwLock.writeLock().lock();
+        final ReadWriteLock lock = getLock(this.key);
+        lock.writeLock().lock();
         try
         {
             final int offset = this.getOffset(x, z);
@@ -539,11 +479,10 @@ public class McaChunkProvider implements ChunkProvider
                 }
             }
             this.setTimestamp(x, z, (int) (System.currentTimeMillis() / 1000L));
-//            this.file.getChannel().force(true);
+            this.file.getChannel().force(true); // ?
         } finally
         {
-//            Main.debug("[" + McaChunkProvider.this.name + "][" + x + ", " + z + "] Write unlock");
-            McaChunkProvider.this.rwLock.writeLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 
@@ -589,57 +528,18 @@ public class McaChunkProvider implements ChunkProvider
         this.file.writeInt(value);
     }
 
-//    public boolean isUsed()
-//    {
-//        return ! this.actions.isEmpty();
-//    }
-
-//    private boolean closed;
-
-    @Override
     public void close() throws IOException
     {
-        Main.debug("[" + this.name + "] provider cloe: ");
-//        this.closed = true;
-//        synchronized (this.actions)
-//        {
-//            this.actions.notifyAll();
-//        }
-//        while (this.writter.isAlive())
-//        {
-//            Main.debug("[" + this.name + "] Thread was still alive when closing!");
-//            try
-//            {
-//                Thread.sleep(10);
-//            } catch (InterruptedException e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
-//        this.actions.forEach(c -> {
-//            try
-//            {
-//                McaChunkProvider.this.write(c.x, c.z, c.getBuf(), c.getCount());
-//            } catch (final IOException e)
-//            {
-//                throw new RuntimeException(e);
-//            } finally
-//            {
-//                try
-//                {
-//                    c.closeSuper();
-//                } catch (final IOException e)
-//                {
-//                    //noinspection ThrowFromFinallyBlock
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        });
+        final ReadWriteLock lock = getLock(this.key);
+        lock.writeLock().lock();
         try (final FileChannel fileChannel = this.file.getChannel())
         {
             fileChannel.force(true);
             fileChannel.close();
             this.file.close();
+        } finally
+        {
+            lock.writeLock().unlock();
         }
     }
 
@@ -670,32 +570,10 @@ public class McaChunkProvider implements ChunkProvider
         {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).toString();
         }
-//
-//        private void closeSuper() throws IOException
-//        {
-//            super.close();
-//        }
-//
-//        public byte[] getBuf()
-//        {
-//            return this.buf;
-//        }
-//
-//        public int getCount()
-//        {
-//            return this.count;
-//        }
 
         @Override
         public void close() throws IOException
         {
-////            Main.debug("[" + McaChunkProvider.this.name + "] closing chunk buffer?");
-//            McaChunkProvider.this.actions.add(this);
-//            synchronized (McaChunkProvider.this.actions)
-//            {
-////                Main.debug("[" + McaChunkProvider.this.name + "] WT unlock: ");
-//                McaChunkProvider.this.actions.notifyAll();
-//            }
             try
             {
                 McaChunkProvider.this.write(this.x, this.z, this.buf, this.count);
@@ -705,61 +583,4 @@ public class McaChunkProvider implements ChunkProvider
             }
         }
     }
-
-//    private final Queue<ChunkBuffer> actions = new ConcurrentLinkedQueue<>();
-//
-//    private class WritterThread extends Thread
-//    {
-//        private WritterThread()
-//        {
-//            super("{" + McaChunkProvider.this.name + "}");
-//            this.setDaemon(true);
-//        }
-//
-//        @Override
-//        public void run()
-//        {
-////            Main.debug("[" + McaChunkProvider.this.name + "] WT...");
-//            while (! McaChunkProvider.this.closed)
-//            {
-//                final ChunkBuffer c = McaChunkProvider.this.actions.poll();
-//                if (c == null)
-//                {
-//                    try
-//                    {
-//                        synchronized (McaChunkProvider.this.actions)
-//                        {
-//                            McaChunkProvider.this.actions.wait();
-//                        }
-//                    } catch (final InterruptedException e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//                    if (McaChunkProvider.this.closed)
-//                    {
-//                        return;
-//                    }
-//                    continue;
-//                }
-//                try
-//                {
-//                    McaChunkProvider.this.write(c.x, c.z, c.getBuf(), c.getCount());
-//                } catch (final IOException e)
-//                {
-//                    throw new RuntimeException(e);
-//                } finally
-//                {
-//                    try
-//                    {
-//                        c.closeSuper();
-//                    } catch (final IOException e)
-//                    {
-//                        //noinspection ThrowFromFinallyBlock
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            }
-////            Main.debug("[" + McaChunkProvider.this.name + "] Closing write thread: " + this.getName());
-//        }
-//    }
 }
