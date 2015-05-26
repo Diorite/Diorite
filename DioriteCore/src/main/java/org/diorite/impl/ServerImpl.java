@@ -45,7 +45,6 @@ import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.ConsoleReaderThread;
 import org.diorite.impl.multithreading.input.TabCompleteThread;
 import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
-import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
 import org.diorite.impl.pipelines.ChatPipelineImpl;
 import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
 import org.diorite.impl.pipelines.ChunkLoadPipelineImpl;
@@ -316,7 +315,6 @@ public class ServerImpl implements Server, Runnable
         org.diorite.impl.multithreading.input.ChatThread.start(this);
         CommandsThread.start(this);
         TabCompleteThread.start(this);
-        ChunkUnloaderThread.start(this);
         new ChunkMultithreadedHandler(this).start();
 
         this.entityManager = new EntityManagerImpl(this);

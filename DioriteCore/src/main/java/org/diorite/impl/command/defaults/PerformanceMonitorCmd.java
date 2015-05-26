@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.impl.multithreading.input.ChatThread;
 import org.diorite.impl.multithreading.input.CommandsThread;
-import org.diorite.impl.multithreading.map.ChunkUnloaderThread;
 import org.diorite.command.CommandPriority;
 import org.diorite.command.sender.CommandSender;
 
@@ -188,8 +187,7 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
             sb.append("&7    Available Processors: &3").append(rt.availableProcessors()).append("\n");
             sb.append("&7  == &3Diorite &7==\n");
             sb.append("&7    Waiting chat actions: &3").append(ChatThread.getActionsSize()).append("\n");
-            sb.append("&7    Waiting commands actions: &3").append(CommandsThread.getActionsSize()).append("\n");
-            sb.append("&7    Waiting chunk unloads: &3").append(ChunkUnloaderThread.getActionsSize());
+            sb.append("&7    Waiting commands actions: &3").append(CommandsThread.getActionsSize());
         }
         sb.append('\n');
         sender.sendSimpleColoredMessage(sb.toString());
