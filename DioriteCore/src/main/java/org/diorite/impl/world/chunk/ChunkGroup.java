@@ -25,6 +25,11 @@ public class ChunkGroup implements Tickable, Runnable
         this.pool.submit(this);
     }
 
+    public ForkJoinPool getPool()
+    {
+        return this.pool;
+    }
+
     public boolean addChunk(final ChunkImpl chunk)
     {
         return this.isIn(chunk.getPos()) && this.chunks.add(chunk);

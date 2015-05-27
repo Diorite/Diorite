@@ -7,17 +7,38 @@ import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
-import org.diorite.impl.connection.packets.play.in.*;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInArmAnimation;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockDig;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockPlace;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInChat;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInClientCommand;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInCloseWindow;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInCustomPayload;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInEntityAction;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInFlying;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInHeldItemSlot;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInKeepAlive;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInLook;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInPosition;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInPositionLook;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInResourcePackStatus;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInSetCreativeSlot;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInSettings;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInTabComplete;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInWindowClick;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.impl.multithreading.BlockBreakAction;
 import org.diorite.impl.multithreading.ChatAction;
 import org.diorite.impl.multithreading.input.ChatThread;
 import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.impl.multithreading.input.TabCompleteThread;
-import org.diorite.impl.multithreading.map.ChunkMultithreadedHandler;
+import org.diorite.BlockLocation;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.material.Material;
+import org.diorite.world.World;
 
 public class PlayListener implements PacketPlayInListener
 {
@@ -144,7 +165,12 @@ public class PlayListener implements PacketPlayInListener
     {
         if (packet.getAction() == PacketPlayInBlockDig.BlockDigAction.FINISH_DIG)
         {
-            ChunkMultithreadedHandler.add(new BlockBreakAction(packet.getBlockLocation().setWorld(this.player.getWorld()), this.player));
+            final World world = this.player.getWorld();
+            final BlockLocation loc = packet.getBlockLocation().setWorld(world);
+            world.submitAction(loc.getChunkPos(), () -> {
+                world.setBlock(loc, Material.AIR);
+                this.server.getPlayersManager().forEach(p -> p.getWorld().equals(world), new PacketPlayOutBlockChange(loc, Material.AIR));
+            });
         }
         // TODO: implement
     }

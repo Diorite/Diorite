@@ -272,6 +272,30 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         this.groups.forEach(ChunkGroup::doTick);
     }
 
+    @Override
+    public void submitAction(final ChunkPos chunkToSync, final Runnable runnable)
+    {
+        for (final ChunkGroup group : this.groups)
+        {
+            if (group.isIn(chunkToSync))
+            {
+                this.submitAction(group, runnable);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void submitAction(final Chunk chunkToSync, final Runnable runnable)
+    {
+        this.submitAction(chunkToSync.getPos(), runnable);
+    }
+
+    public void submitAction(final ChunkGroup groupToSync, final Runnable runnable)
+    {
+        groupToSync.getPool().submit(runnable);
+    }
+
     static void forChunksParallel(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
     {
         if (r == 0)

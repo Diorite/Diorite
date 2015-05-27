@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Tickable;
+import org.diorite.impl.world.chunk.ChunkGroup;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.io.ChunkIO;
@@ -110,6 +111,23 @@ public class WorldImpl implements World, Tickable
         this.forceLoadedRadius = cfg.getForceLoadedRadius();
         this.spawn = new Location(cfg.getSpawnX(), cfg.getSpawnY(), cfg.getSpawnZ(), cfg.getSpawnYaw(), cfg.getSpawnPitch(), this);
 
+    }
+
+    @Override
+    public void submitAction(final ChunkPos chunkToSync, final Runnable runnable)
+    {
+        this.chunkManager.submitAction(chunkToSync, runnable);
+    }
+
+    @Override
+    public void submitAction(final Chunk chunkToSync, final Runnable runnable)
+    {
+        this.chunkManager.submitAction(chunkToSync, runnable);
+    }
+
+    public void submitAction(final ChunkGroup groupToSync, final Runnable runnable)
+    {
+        this.chunkManager.submitAction(groupToSync, runnable);
     }
 
     @Override
