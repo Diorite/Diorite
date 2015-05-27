@@ -13,11 +13,17 @@ import org.diorite.Loc;
 import org.diorite.Particle;
 import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
+import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
 
 public interface World
 {
+    void submitAction(ChunkPos chunkToSync, Runnable runnable);
+
+    void submitAction(Chunk chunkToSync, Runnable runnable);
+
     void save();
 
     WorldGroup getWorldGroup();

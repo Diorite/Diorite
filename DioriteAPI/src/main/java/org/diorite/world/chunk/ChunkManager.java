@@ -17,4 +17,8 @@ public interface ChunkManager
     Chunk getChunkAt(ChunkPos pos, boolean generate);
 
     Chunk getChunkAt(int x, int z, boolean generate);
+
+    void submitAction(ChunkPos chunkToSync, Runnable runnable);
+
+    void submitAction(Chunk chunkToSync, Runnable runnable);
 }
