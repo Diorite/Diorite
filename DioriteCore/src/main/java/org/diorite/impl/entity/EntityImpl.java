@@ -5,11 +5,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.ServerImpl;
+import org.diorite.impl.Tickable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Entity;
 
-public abstract class EntityImpl extends GameObjectImpl implements Entity
+public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable
 {
     protected final ServerImpl server;
     protected final int        id;
@@ -36,6 +37,12 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
         this.world = (WorldImpl) location.getWorld();
+    }
+
+    @Override
+    public void doTick()
+    {
+        // TODO
     }
 
     public WorldImpl getWorld()

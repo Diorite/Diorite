@@ -102,7 +102,6 @@ public class ServerImpl implements Server, Runnable
     protected       int                      compressionThreshold; // -1 -> off
     protected final YggdrasilSessionService  sessionService;
     protected final ServerConnection         serverConnection;
-    protected final EntityManagerImpl        entityManager;
     protected final PlayersManagerImpl       playersManager;
     protected final WorldsManagerImpl        worldsManager;
     protected       ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
@@ -315,7 +314,6 @@ public class ServerImpl implements Server, Runnable
         CommandsThread.start(this);
         TabCompleteThread.start(this);
 
-        this.entityManager = new EntityManagerImpl(this);
         this.playersManager = new PlayersManagerImpl(this);
         this.worldsManager = new WorldsManagerImpl();
 
@@ -548,11 +546,6 @@ public class ServerImpl implements Server, Runnable
     public void setConsoleCommandSender(final ConsoleCommandSenderImpl consoleCommandSender)
     {
         this.consoleCommandSender = consoleCommandSender;
-    }
-
-    public EntityManagerImpl getEntityManager()
-    {
-        return this.entityManager;
     }
 
     public PlayersManagerImpl getPlayersManager()
