@@ -1,7 +1,9 @@
 package org.diorite.impl.world.chunk;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,7 +14,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Tickable;
 import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
+import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
+import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
@@ -27,12 +31,14 @@ import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk, Tickable
 {
-    private final ChunkPos                                         pos;
+    private final ChunkPos        pos;
     private final ChunkPartImpl[] chunkParts; // size of 16, parts can be null
-    private final int[]                                            heightMap;
-    private final byte[]                                           biomes;
+    private final int[]           heightMap;
+    private final byte[]          biomes;
     private final AtomicInteger usages    = new AtomicInteger(0);
     private final AtomicBoolean populated = new AtomicBoolean(false);
+
+    private final Map<BlockLocation, TileEntityImpl> tileEntities = new HashMap<>(10);
 
     public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts, final int[] heightMap)
     {
@@ -435,6 +441,7 @@ public class ChunkImpl implements Chunk, Tickable
     @Override
     public void doTick()
     {
+        this.tileEntities.values().forEach(TileEntityImpl::doTick);
         // TODO
     }
 
