@@ -7,17 +7,39 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Tickable;
+import org.diorite.impl.entity.EntityImpl;
+import org.diorite.entity.Entity;
 import org.diorite.utils.collections.WeakCollection;
 import org.diorite.world.chunk.ChunkPos;
+
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * One or more chunk files per group, don't split files between multiple groups.
  */
 public class ChunkGroup implements Tickable, Runnable
 {
-    private final Collection<ChunkImpl> chunks   = WeakCollection.usingHashSet(1000, true);
-    private final ForkJoinPool          pool     = new ForkJoinPool(1);
-    private final ForkJoinPool          savePool = new ForkJoinPool(1);
+    @SuppressWarnings("MagicNumber")
+    private final TIntObjectMap<EntityImpl> entities = new TIntObjectHashMap<>(200);
+    private final Collection<ChunkImpl>     chunks   = WeakCollection.usingHashSet(1000, true);
+    private final ForkJoinPool              pool     = new ForkJoinPool(1);
+    private final ForkJoinPool              savePool = new ForkJoinPool(1);
+
+    public void addEntity(final EntityImpl entity)
+    {
+        this.entities.put(entity.getId(), entity);
+    }
+
+    public void removeEntity(final Entity entity)
+    {
+        this.entities.remove(entity.getId());
+    }
+
+    public void removeEntity(final int id)
+    {
+        this.entities.remove(id);
+    }
 
     @Override
     public void doTick()
@@ -73,6 +95,10 @@ public class ChunkGroup implements Tickable, Runnable
     public void run()
     {
         this.chunks.forEach(Tickable::doTick);
+        this.entities.forEachValue((entity) -> {
+            entity.doTick();
+            return true;
+        });
     }
 
     public class ChunkGroupThread extends Thread
@@ -82,5 +108,16 @@ public class ChunkGroup implements Tickable, Runnable
             super(ChunkGroup.this, "ChunkTick@" + System.identityHashCode(ChunkGroup.this));
             this.setDaemon(true);
         }
+    }
+
+    public static void swapEntity(final ChunkGroup from, final ChunkGroup to, final EntityImpl entity)
+    {
+        //noinspection ObjectEquality
+        if (from == to)
+        {
+            return;
+        }
+        from.removeEntity(entity);
+        to.addEntity(entity);
     }
 }

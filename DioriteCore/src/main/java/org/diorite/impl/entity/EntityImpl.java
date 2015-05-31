@@ -1,5 +1,7 @@
 package org.diorite.impl.entity;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -12,6 +14,8 @@ import org.diorite.entity.Entity;
 
 public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable
 {
+    public static final AtomicInteger ENTITY_ID = new AtomicInteger();
+
     protected final ServerImpl server;
     protected final int        id;
     protected final WorldImpl  world;

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Tickable;
+import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.world.chunk.ChunkGroup;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
@@ -123,6 +124,11 @@ public class WorldImpl implements World, Tickable
     public void submitAction(final Chunk chunkToSync, final Runnable runnable)
     {
         this.chunkManager.submitAction(chunkToSync, runnable);
+    }
+
+    public ChunkGroup getChunkGroup(final ChunkPos pos)
+    {
+        return this.chunkManager.getChunkGroup(pos);
     }
 
     public void submitAction(final ChunkGroup groupToSync, final Runnable runnable)
@@ -406,5 +412,10 @@ public class WorldImpl implements World, Tickable
     public void doTick()
     {
         this.chunkManager.doTick();
+    }
+
+    public void addEntity(final EntityImpl entity)
+    {
+        this.getChunkGroup(entity.getLocation().getChunkPos()).addEntity(entity);
     }
 }

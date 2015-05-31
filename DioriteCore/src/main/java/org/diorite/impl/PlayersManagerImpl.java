@@ -26,6 +26,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
+import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
@@ -57,8 +58,10 @@ public class PlayersManagerImpl
     public PlayerImpl createPlayer(final GameProfile gameProfile, final NetworkManager networkManager)
     {// TODO: loading player
         //noinspection MagicNumber
-        final PlayerImpl player = new PlayerImpl(this.server, this.server.entityManager.getNextID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
+
+        final PlayerImpl player = new PlayerImpl(this.server, EntityImpl.ENTITY_ID.getAndIncrement(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
         this.players.put(gameProfile.getId(), player);
+        player.getWorld().addEntity(player);
         return player;
     }
 

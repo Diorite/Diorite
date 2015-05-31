@@ -296,6 +296,18 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         groupToSync.getPool().submit(runnable);
     }
 
+    public ChunkGroup getChunkGroup(final ChunkPos pos)
+    {
+        for (final ChunkGroup group : this.groups)
+        {
+            if (group.isIn(pos))
+            {
+                return group;
+            }
+        }
+        throw new RuntimeException("Can't find ChunkGroup for: " + pos);
+    }
+
     static void forChunksParallel(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
     {
         if (r == 0)
