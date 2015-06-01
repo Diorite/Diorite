@@ -224,6 +224,8 @@ public class PlayListener implements PacketPlayInListener
         this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.player.getName() + "&7&l left from the server!");
         this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.player.getName() + "&7 left from the server!");
         this.server.sendConsoleSimpleColoredMessage("&3" + this.player.getName() + " &7left the server. (" + message.toLegacyText() + "&7)");
+
+        this.player.getWorld().removeEntity(this.player);
         // TODO: implement
     }
 

@@ -20,6 +20,7 @@ import org.diorite.Loc;
 import org.diorite.Location;
 import org.diorite.Particle;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
+import org.diorite.entity.Entity;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.world.Block;
@@ -417,5 +418,10 @@ public class WorldImpl implements World, Tickable
     public void addEntity(final EntityImpl entity)
     {
         this.getChunkGroup(entity.getLocation().getChunkPos()).addEntity(entity);
+    }
+
+    public void removeEntity(final Entity entity)
+    {
+        this.getChunkGroup(entity.getLocation().getChunkPos()).removeEntity(entity);
     }
 }
