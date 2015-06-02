@@ -83,6 +83,10 @@ public class DioriteConfig
     @CfgIntDefault(8)
     private int viewDistance = 8;
 
+    @CfgComment("How many threads are used by diorite to handle command, chat and tab-complete input.")
+    @CfgIntDefault(2)
+    private int inputThreadPoolSize = 2;
+
     @CfgComment("Path to file with administrators UUIDs/nicknames and settings. (Users that have most of permissions by default.)")
     @CfgStringDefault("adms.yml")
     private File administratorsFile = new File("adms.yml");
@@ -237,6 +241,16 @@ public class DioriteConfig
     public void setViewDistance(final int viewDistance)
     {
         this.viewDistance = viewDistance;
+    }
+
+    public int getInputThreadPoolSize()
+    {
+         return this.inputThreadPoolSize;
+    }
+
+    public void setInputThreadPoolSize(final int inputThreadPoolSize)
+    {
+        this.inputThreadPoolSize = inputThreadPoolSize;
     }
 
     public File getAdministratorsFile()
