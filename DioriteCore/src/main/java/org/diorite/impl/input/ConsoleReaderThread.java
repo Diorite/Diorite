@@ -1,4 +1,4 @@
-package org.diorite.impl.multithreading.input;
+package org.diorite.impl.input;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;

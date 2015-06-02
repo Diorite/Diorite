@@ -41,9 +41,8 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;
-import org.diorite.impl.multithreading.input.CommandsThread;
-import org.diorite.impl.multithreading.input.ConsoleReaderThread;
-import org.diorite.impl.multithreading.input.TabCompleteThread;
+import org.diorite.impl.input.ConsoleReaderThread;
+import org.diorite.impl.input.InputThread;
 import org.diorite.impl.pipelines.ChatPipelineImpl;
 import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
 import org.diorite.impl.pipelines.ChunkLoadPipelineImpl;
@@ -91,10 +90,11 @@ public class ServerImpl implements Server, Runnable
     private static ServerImpl instance;
 
     protected final CommandMapImpl commandMap = new CommandMapImpl();
-    protected final String serverName;
-    protected final Thread mainServerThread;
-    protected final String hostname;
-    protected final int    port;
+    protected final String      serverName;
+    protected final Thread      mainServerThread;
+    protected final InputThread inputThread;
+    protected final String      hostname;
+    protected final int         port;
     protected int    tps                = DEFAULT_TPS;
     protected int    waitTime           = DEFAULT_WAIT_TIME;
     protected int    connectionThrottle = 1000;
@@ -310,15 +310,18 @@ public class ServerImpl implements Server, Runnable
 
         RegisterDefaultCommands.init(this.commandMap);
 
-        org.diorite.impl.multithreading.input.ChatThread.start(this);
-        CommandsThread.start(this);
-        TabCompleteThread.start(this);
+        this.inputThread = InputThread.start(this.config.getInputThreadPoolSize());
 
         this.playersManager = new PlayersManagerImpl(this);
         this.worldsManager = new WorldsManagerImpl();
 
         this.serverConnection = new ServerConnection(this);
         this.serverConnection.start();
+    }
+
+    public InputThread getInputThread()
+    {
+        return this.inputThread;
     }
 
     @Override

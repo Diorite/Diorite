@@ -8,9 +8,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.diorite.impl.ServerImpl;
 import org.diorite.impl.command.SystemCommandImpl;
-import org.diorite.impl.multithreading.input.ChatThread;
-import org.diorite.impl.multithreading.input.CommandsThread;
 import org.diorite.command.CommandPriority;
 import org.diorite.command.sender.CommandSender;
 
@@ -183,11 +182,10 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
         if (! onlyMem)
         {
             sb.append('\n');
-            sb.append("&7  == &3CPU &7==\n");
-            sb.append("&7    Available Processors: &3").append(rt.availableProcessors()).append("\n");
+//            sb.append("&7  == &3CPU &7==\n");
+//            sb.append("&7    Available Processors: &3").append(rt.availableProcessors()).append("\n");
             sb.append("&7  == &3Diorite &7==\n");
-            sb.append("&7    Waiting chat actions: &3").append(ChatThread.getActionsSize()).append("\n");
-            sb.append("&7    Waiting commands actions: &3").append(CommandsThread.getActionsSize());
+            sb.append("&7    Waiting input actions: &3").append(ServerImpl.getInstance().getInputThread().getActionsSize());
         }
         sb.append('\n');
         sender.sendSimpleColoredMessage(sb.toString());
