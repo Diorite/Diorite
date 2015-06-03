@@ -43,6 +43,9 @@ useNativeTransport: true
 # It determines the server-side viewing distance, measured in chunks in each direction of the player. (radius)
 viewDistance: 8
 
+# How many threads are used by diorite to handle command, chat and tab-complete input.
+inputThreadPoolSize: 2
+
 # Path to file with administrators UUIDs/nicknames and settings. (Users that have most of permissions by default.)
 administratorsFile: "adms.yml"
 
