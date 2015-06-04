@@ -5,13 +5,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.command.sender.CommandSender;
 
-public class ChatAction
+public class InputAction
 {
-    private final String        msg;
-    private final CommandSender sender;
-    private final Type          type;
+    private final String          msg;
+    private final CommandSender   sender;
+    private final InputActionType type;
 
-    public ChatAction(final String msg, final CommandSender sender, final Type type)
+    public InputAction(final String msg, final CommandSender sender, final InputActionType type)
     {
         this.msg = msg;
         this.sender = sender;
@@ -28,7 +28,7 @@ public class ChatAction
         return this.sender;
     }
 
-    public Type getType()
+    public InputActionType getType()
     {
         return this.type;
     }
@@ -48,12 +48,12 @@ public class ChatAction
         {
             return true;
         }
-        if (! (o instanceof ChatAction))
+        if (! (o instanceof InputAction))
         {
             return false;
         }
 
-        final ChatAction that = (ChatAction) o;
+        final InputAction that = (InputAction) o;
 
         return ! ((this.msg != null) ? ! this.msg.equals(that.msg) : (that.msg != null)) && ! ((this.sender != null) ? ! this.sender.equals(that.sender) : (that.sender != null));
     }
@@ -62,12 +62,5 @@ public class ChatAction
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("msg", this.msg).append("sender", this.sender).toString();
-    }
-
-    public enum Type
-    {
-        CHAT,
-        COMMAND,
-        TAB_COMPLETE;
     }
 }

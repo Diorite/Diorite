@@ -30,8 +30,8 @@ import org.diorite.impl.connection.packets.play.in.PacketPlayInWindowClick;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.impl.input.ChatAction;
-import org.diorite.impl.input.ChatAction.Type;
+import org.diorite.impl.input.InputAction;
+import org.diorite.impl.input.InputActionType;
 import org.diorite.BlockLocation;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
@@ -113,18 +113,18 @@ public class PlayListener implements PacketPlayInListener
         //noinspection HardcodedFileSeparator
         if (str.startsWith("/"))
         {
-            this.server.getInputThread().add(new ChatAction(str.substring(1), this.player, Type.COMMAND));
+            this.server.getInputThread().add(new InputAction(str.substring(1), this.player, InputActionType.COMMAND));
         }
         else
         {
-            this.server.getInputThread().add(new ChatAction(str, this.player, Type.CHAT));
+            this.server.getInputThread().add(new InputAction(str, this.player, InputActionType.CHAT));
         }
     }
 
     @Override
     public void handle(final PacketPlayInTabComplete packet)
     {
-        this.server.getInputThread().add(new ChatAction(packet.getContent(), this.player, Type.TAB_COMPLETE));
+        this.server.getInputThread().add(new InputAction(packet.getContent(), this.player, InputActionType.TAB_COMPLETE));
     }
 
     @Override

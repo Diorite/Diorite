@@ -9,16 +9,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.chat.component.TextComponent;
-import org.diorite.entity.Player;
-import org.diorite.event.EventType;
-import org.diorite.event.others.SenderCommandEvent;
-import org.diorite.event.others.SenderTabCompleteEvent;
-import org.diorite.event.player.PlayerChatEvent;
-
 public class InputThread
 {
-    private final Queue<ChatAction> actions = new ConcurrentLinkedQueue<>();
+    private final Queue<InputAction> actions = new ConcurrentLinkedQueue<>();
     private final ForkJoinPool pool;
 
     public InputThread(final ForkJoinPool pool)
@@ -26,47 +19,13 @@ public class InputThread
         this.pool = pool;
     }
 
-    public void add(final ChatAction action)
+    public void add(final InputAction action)
     {
-        if (action == null)
+        if ((action == null) || ! action.getType().checkAction(action))
         {
             return;
         }
-        switch (action.getType())
-        {
-            case CHAT:
-                if ((action.getSender() == null) || (action.getMsg() == null) || ! (action.getSender() instanceof Player))
-                {
-                    return;
-                }
-                break;
-            case COMMAND:
-                if ((action.getMsg() == null) || action.getMsg().isEmpty() || (action.getSender() == null))
-                {
-                    return;
-                }
-                break;
-            case TAB_COMPLETE:
-                if ((action.getSender() == null) || (action.getMsg() == null))
-                {
-                    return;
-                }
-                break;
-        }
-        this.pool.submit(() -> {
-            switch (action.getType())
-            {
-                case CHAT:
-                    EventType.callEvent(new PlayerChatEvent((Player) action.getSender(), new TextComponent(action.getMsg())));
-                    break;
-                case COMMAND:
-                    EventType.callEvent(new SenderCommandEvent(action.getSender(), action.getMsg()));
-                    break;
-                case TAB_COMPLETE:
-                    EventType.callEvent(new SenderTabCompleteEvent(action.getSender(), action.getMsg()));
-                    break;
-            }
-        });
+        this.pool.submit(() -> action.getType().doAction(action));
     }
 
     public int getActionsSize()
@@ -87,7 +46,7 @@ public class InputThread
         public InputWorkerThread(final ForkJoinPool pool)
         {
             super(pool);
-            this.setName("[Diorite|Input-" + i.getAndIncrement() + "]");
+            this.setName("{Diorite|Input-" + i.getAndIncrement() + "}");
         }
     }
 
