@@ -2,11 +2,17 @@ package org.diorite.cfg.system;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +41,8 @@ import org.diorite.cfg.annotations.defaults.CfgShortArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgShortDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
+import org.diorite.cfg.system.elements.TemplateElement;
+import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.utils.collections.comparators.AlphanumComparator;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.MethodInvoker;
@@ -66,7 +74,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
     {
         this.field = field;
         {
-            TemplateCreator.checkTemplate(field.getType());
+            getAllPossibleTypes(field).forEach(TemplateCreator::checkTemplate);
         }
         this.index = index;
 
@@ -96,7 +104,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         annotation:
         {
             final boolean isCollection = Object[].class.isAssignableFrom(type) || Iterable.class.isAssignableFrom(type) || Iterator.class.isAssignableFrom(type);
-            if (type == boolean.class)
             {
                 final CfgBooleanDefault annotation = field.getAnnotation(CfgBooleanDefault.class);
                 if (annotation != null)
@@ -105,7 +112,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if ((type == boolean[].class) || isCollection)
             {
                 final CfgBooleanArrayDefault annotation = field.getAnnotation(CfgBooleanArrayDefault.class);
                 if (annotation != null)
@@ -114,7 +120,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if (type == byte.class)
             {
                 final CfgByteDefault annotation = field.getAnnotation(CfgByteDefault.class);
                 if (annotation != null)
@@ -123,34 +128,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if ((type == byte[].class) || isCollection)
-            {
-                final CfgByteArrayDefault annotation = field.getAnnotation(CfgByteArrayDefault.class);
-                if (annotation != null)
-                {
-                    def = annotation::value;
-                    break annotation;
-                }
-            }
-            if (type == char.class)
-            {
-                final CfgCharDefault annotation = field.getAnnotation(CfgCharDefault.class);
-                if (annotation != null)
-                {
-                    def = annotation::value;
-                    break annotation;
-                }
-            }
-            if ((type == char[].class) || isCollection)
-            {
-                final CfgCharArrayDefault annotation = field.getAnnotation(CfgCharArrayDefault.class);
-                if (annotation != null)
-                {
-                    def = annotation::value;
-                    break annotation;
-                }
-            }
-            if (type == short.class)
             {
                 final CfgShortDefault annotation = field.getAnnotation(CfgShortDefault.class);
                 if (annotation != null)
@@ -159,16 +136,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if ((type == short[].class) || isCollection)
-            {
-                final CfgShortArrayDefault annotation = field.getAnnotation(CfgShortArrayDefault.class);
-                if (annotation != null)
-                {
-                    def = annotation::value;
-                    break annotation;
-                }
-            }
-            if (type == int.class)
             {
                 final CfgIntDefault annotation = field.getAnnotation(CfgIntDefault.class);
                 if (annotation != null)
@@ -177,16 +144,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if ((type == int[].class) || isCollection)
-            {
-                final CfgIntArrayDefault annotation = field.getAnnotation(CfgIntArrayDefault.class);
-                if (annotation != null)
-                {
-                    def = annotation::value;
-                    break annotation;
-                }
-            }
-            if (type == long.class)
             {
                 final CfgLongDefault annotation = field.getAnnotation(CfgLongDefault.class);
                 if (annotation != null)
@@ -195,16 +152,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if ((type == long[].class) || isCollection)
-            {
-                final CfgLongArrayDefault annotation = field.getAnnotation(CfgLongArrayDefault.class);
-                if (annotation != null)
-                {
-                    def = annotation::value;
-                    break annotation;
-                }
-            }
-            if (type == float.class)
             {
                 final CfgFloatDefault annotation = field.getAnnotation(CfgFloatDefault.class);
                 if (annotation != null)
@@ -213,16 +160,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if ((type == float[].class) || isCollection)
-            {
-                final CfgFloatArrayDefault annotation = field.getAnnotation(CfgFloatArrayDefault.class);
-                if (annotation != null)
-                {
-                    def = annotation::value;
-                    break annotation;
-                }
-            }
-            if (type == double.class)
             {
                 final CfgDoubleDefault annotation = field.getAnnotation(CfgDoubleDefault.class);
                 if (annotation != null)
@@ -231,7 +168,63 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if ((type == double[].class) || isCollection)
+
+            {
+                final CfgByteArrayDefault annotation = field.getAnnotation(CfgByteArrayDefault.class);
+                if (annotation != null)
+                {
+                    def = annotation::value;
+                    break annotation;
+                }
+            }
+            {
+                final CfgCharDefault annotation = field.getAnnotation(CfgCharDefault.class);
+                if (annotation != null)
+                {
+                    def = annotation::value;
+                    break annotation;
+                }
+            }
+            {
+                final CfgCharArrayDefault annotation = field.getAnnotation(CfgCharArrayDefault.class);
+                if (annotation != null)
+                {
+                    def = annotation::value;
+                    break annotation;
+                }
+            }
+            {
+                final CfgShortArrayDefault annotation = field.getAnnotation(CfgShortArrayDefault.class);
+                if (annotation != null)
+                {
+                    def = annotation::value;
+                    break annotation;
+                }
+            }
+            {
+                final CfgIntArrayDefault annotation = field.getAnnotation(CfgIntArrayDefault.class);
+                if (annotation != null)
+                {
+                    def = annotation::value;
+                    break annotation;
+                }
+            }
+            {
+                final CfgLongArrayDefault annotation = field.getAnnotation(CfgLongArrayDefault.class);
+                if (annotation != null)
+                {
+                    def = annotation::value;
+                    break annotation;
+                }
+            }
+            {
+                final CfgFloatArrayDefault annotation = field.getAnnotation(CfgFloatArrayDefault.class);
+                if (annotation != null)
+                {
+                    def = annotation::value;
+                    break annotation;
+                }
+            }
             {
                 final CfgDoubleArrayDefault annotation = field.getAnnotation(CfgDoubleArrayDefault.class);
                 if (annotation != null)
@@ -240,7 +233,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if (type == String.class)
             {
                 final CfgStringDefault annotation = field.getAnnotation(CfgStringDefault.class);
                 if (annotation != null)
@@ -249,7 +241,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     break annotation;
                 }
             }
-            if ((type == String[].class) || isCollection)
             {
                 final CfgStringArrayDefault annotation = field.getAnnotation(CfgStringArrayDefault.class);
                 if (annotation != null)
@@ -263,48 +254,103 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             {
                 for (final Annotation a : field.getAnnotations())
                 {
-                    if (a.getClass().isAnnotationPresent(CfgCustomDefault.class))
+                    if (a.annotationType().isAnnotationPresent(CfgCustomDefault.class))
                     {
-                        final Annotation annotation = field.getAnnotation(a.getClass());
+                        final Annotation annotation = field.getAnnotation(a.annotationType());
                         this.invoker = DioriteReflectionUtils.getMethod(annotation.getClass(), "value");
-                        def = () -> this.invoker.invoke(null);
+                        def = () -> this.invoker.invoke(annotation);
                         break annotation;
                     }
                 }
             }
-            final CfgDelegateDefault annotation = field.getAnnotation(CfgDelegateDefault.class);
-            if (annotation != null)
+        }
+        final CfgDelegateDefault annotation = field.getAnnotation(CfgDelegateDefault.class);
+        if (annotation != null)
+        {
+            final String path = annotation.value();
+            switch (path)
             {
-                final String path = annotation.value();
-                switch (path)
-                {
-                    case "{emptyMap}":
-                        def = () -> new HashMap<>(1);
-                        break;
-                    case "{emptyList}":
-                        def = () -> new ArrayList<>(1);
-                        break;
-                    case "{emptySet}":
-                        def = () -> new HashSet<>(1);
-                        break;
-                    default:
-                        final String[] parts = StringUtils.split(path, '#');
-                        if (parts.length == 1)
-                        {
-                            this.invoker = DioriteReflectionUtils.getMethod(field.getDeclaringClass(), parts[0]);
-                            def = () -> this.invoker.invoke(null);
-                        }
-                        else if (parts.length == 2)
-                        {
-                            this.invoker = DioriteReflectionUtils.getMethod(parts[0], parts[1]);
-                            def = () -> this.invoker.invoke(null);
-                        }
-                        break;
-                }
+                case "{emptyMap}":
+                    def = () -> new HashMap<>(1);
+                    break;
+                case "{emptyList}":
+                    def = () -> new ArrayList<>(1);
+                    break;
+                case "{emptySet}":
+                    def = () -> new HashSet<>(1);
+                    break;
+                default:
+                    final String[] parts = StringUtils.split(path, '#');
+                    if (parts.length == 1)
+                    {
+                        this.invoker = DioriteReflectionUtils.getMethod(field.getDeclaringClass(), parts[0]);
+                        def = () -> this.invoker.invoke(null);
+                    }
+                    else if (parts.length == 2)
+                    {
+                        this.invoker = DioriteReflectionUtils.getMethod(parts[0], parts[1]);
+                        def = () -> this.invoker.invoke(null);
+                    }
+                    break;
             }
         }
         this.def = def;
     }
+
+    public static void getAllPossibleTypes(final Set<Class<?>> classes, final Set<Type> checkedTypes, final Type rawType)
+    {
+        if (! checkedTypes.add(rawType))
+        {
+            return;
+        }
+        if (rawType instanceof Class)
+        {
+            classes.add((Class<?>) rawType);
+        }
+        if (rawType instanceof WildcardType)
+        {
+            final WildcardType type = (WildcardType) rawType;
+            for (final Type t : type.getLowerBounds())
+            {
+                getAllPossibleTypes(classes, checkedTypes, t);
+            }
+            for (final Type t : type.getUpperBounds())
+            {
+                getAllPossibleTypes(classes, checkedTypes, t);
+            }
+        }
+        if (rawType instanceof GenericArrayType)
+        {
+            getAllPossibleTypes(classes, checkedTypes, ((GenericArrayType) rawType).getGenericComponentType());
+        }
+        if (rawType instanceof TypeVariable)
+        {
+            final TypeVariable<?> type = (TypeVariable<?>) rawType;
+            for (final Type t : type.getBounds())
+            {
+                getAllPossibleTypes(classes, checkedTypes, t);
+            }
+        }
+        if (rawType instanceof ParameterizedType)
+        {
+            final ParameterizedType type = (ParameterizedType) rawType;
+            getAllPossibleTypes(classes, checkedTypes, type.getRawType());
+            getAllPossibleTypes(classes, checkedTypes, type.getOwnerType());
+            for (final Type t : type.getActualTypeArguments())
+            {
+                getAllPossibleTypes(classes, checkedTypes, t);
+            }
+        }
+    }
+
+    public static Set<Class<?>> getAllPossibleTypes(final Field field)
+    {
+        final Set<Class<?>> classes = new HashSet<>(1);
+        classes.add(field.getType());
+        getAllPossibleTypes(classes, new HashSet<>(5), field.getGenericType());
+        return classes;
+    }
+
 
     @Override
     public <T> T getOption(final FieldOptions option)
@@ -367,15 +413,24 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
     }
 
     /**
+     * @return true if field have default value.
+     */
+    public boolean hasDefaultValue()
+    {
+        return this.def != null;
+    }
+
+    /**
      * @return default value of field or null.
      */
-    public Object getDefault()
+    public Object getDefaultValue()
     {
         if (this.def == null)
         {
             return null;
         }
-        return this.def.get();
+        final TemplateElement<?> templateElement = TemplateElements.getElement(this);
+        return templateElement.convertDefault(this.def.get(), this.field.getType());
     }
 
     @Override

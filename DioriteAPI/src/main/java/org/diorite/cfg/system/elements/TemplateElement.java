@@ -38,7 +38,7 @@ public abstract class TemplateElement<T>
     /**
      * Construct new template for given class, convert function and class type checking function.
      *
-     * @param fieldType          type of supproted template element.
+     * @param fieldType      type of supproted template element.
      * @param function       function used to convert other types to this type (may throw errors)
      * @param classPredicate returns true for classes that can be converted into supproted type.
      */
@@ -82,38 +82,63 @@ public abstract class TemplateElement<T>
     }
 
     /**
-     * Convert object from default-value annotation to compatible type.
-     * May throw error if object can't be converted.
+     * Convert object from default-value annotation to compatible type. <br>
+     * May throw error if object can't be converted.<br>
+     * This method don't need to check if object is already good one.
      *
-     * @param def object to convert.
+     * @param def       object to convert.
      * @param fieldType expected type of returned object.
      *
      * @return converted object.
      */
-    protected abstract T convertDefault(Object def, Class<?> fieldType);
+    protected abstract T convertDefault0(Object def, Class<?> fieldType);
+
+    /**
+     * Convert object from default-value annotation to compatible type.<br>
+     * May throw error if object can't be converted.
+     *
+     * @param def       object to convert.
+     * @param fieldType expected type of returned object.
+     *
+     * @return converted object.
+     */
+    @SuppressWarnings("unchecked")
+    public T convertDefault(final Object def, final Class<?> fieldType)
+    {
+        if (def == null)
+        {
+            return null;
+        }
+        if (DioriteReflectionUtils.getWrapperClass(fieldType).isAssignableFrom(def.getClass()))
+        {
+            return (T) def;
+        }
+        return this.convertDefault0(def, fieldType);
+    }
 
     /**
      * Wrtie header/footer comments, field name (key) and value to slected writer ({@link Appendable}) using this template.
      *
-     * @param writer       {@link Appendable} to use, all data will be added here.
-     * @param field        config field with basic field data and options.
-     * @param object       object contains this field.
-     * @param invoker      getter for field value.
-     * @param level        current indent level.
-     * @param addComments  if comments should be added to node.
-     * @param elementPlace element place, used in many templates to check current style and choose valid format.
+     * @param writer             {@link Appendable} to use, all data will be added here.
+     * @param field              config field with basic field data and options.
+     * @param object             object contains this field.
+     * @param invoker            getter for field value.
+     * @param level              current indent level.
+     * @param addComments        if comments should be added to node.
+     * @param elementPlace       element place, used in many templates to check current style and choose valid format.
+     * @param forceDefaultValues if true, all values will be set to default ones.
      *
      * @throws IOException from {@link Appendable}
      */
-    public void write(final Appendable writer, final ConfigField field, final Object object, final ReflectGetter<?> invoker, final int level, final boolean addComments, final ElementPlace elementPlace) throws IOException
+    public void write(final Appendable writer, final ConfigField field, final Object object, final ReflectGetter<?> invoker, final int level, final boolean addComments, final ElementPlace elementPlace, final boolean forceDefaultValues) throws IOException
     {
         Object element = invoker.get(object);
-        if (element == null)
+        if ((forceDefaultValues || (element == null)) && field.hasDefaultValue())
         {
-            final Object def = field.getDefault();
+            final Object def = field.getDefaultValue();
             if (def != null)
             {
-                element = this.convertDefault(field.getDefault(), field.getField().getType());
+                element = def;
             }
         }
         if (element != null)

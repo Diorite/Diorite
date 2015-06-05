@@ -26,7 +26,7 @@ public class DefaultTemplateElement extends TemplateElement<Object>
     }
 
     @Override
-    protected Object convertDefault(final Object def, final Class<?> fieldType)
+    protected Object convertDefault0(final Object def, final Class<?> fieldType)
     {
         return def;
     }

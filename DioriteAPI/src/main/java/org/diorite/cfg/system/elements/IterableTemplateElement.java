@@ -46,7 +46,7 @@ public class IterableTemplateElement extends TemplateElement<Iterable>
     }
 
     @Override
-    protected Iterable convertDefault(final Object def, final Class<?> fieldType)
+    protected Iterable convertDefault0(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Iterable)
         {

@@ -25,7 +25,7 @@ public class CharTemplateElement extends SimpleTemplateElement<Character>
     }
 
     @Override
-    protected Character convertDefault(final Object def, final Class<?> fieldType)
+    protected Character convertDefault0(final Object def, final Class<?> fieldType)
     {
         throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
     }

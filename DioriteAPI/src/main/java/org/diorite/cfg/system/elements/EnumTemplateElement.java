@@ -28,7 +28,7 @@ public class EnumTemplateElement extends TemplateElement<Enum>
     }
 
     @Override
-    protected Enum convertDefault(final Object def, final Class<?> fieldType)
+    protected Enum convertDefault0(final Object def, final Class<?> fieldType)
     {
         if (def instanceof String)
         {

@@ -30,7 +30,7 @@ public class SimpleEnumTemplateElement extends TemplateElement<SimpleEnum>
     }
 
     @Override
-    protected SimpleEnum convertDefault(final Object def, final Class<?> fieldType)
+    protected SimpleEnum convertDefault0(final Object def, final Class<?> fieldType)
     {
         if (def instanceof String)
         {

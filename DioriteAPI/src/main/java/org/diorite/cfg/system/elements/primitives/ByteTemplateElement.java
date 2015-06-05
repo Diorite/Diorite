@@ -25,7 +25,7 @@ public class ByteTemplateElement extends SimpleTemplateElement<Byte>
     }
 
     @Override
-    protected Byte convertDefault(final Object def, final Class<?> fieldType)
+    protected Byte convertDefault0(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Number)
         {

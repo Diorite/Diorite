@@ -38,7 +38,7 @@ public class IteratorTemplateElement extends TemplateElement<Iterator>
     }
 
     @Override
-    protected Iterator convertDefault(final Object def, final Class<?> fieldType)
+    protected Iterator convertDefault0(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Iterator)
         {

@@ -38,7 +38,7 @@ public class FileTemplateElement extends TemplateElement<File>
     }
 
     @Override
-    protected File convertDefault(final Object def, final Class<?> fieldType)
+    protected File convertDefault0(final Object def, final Class<?> fieldType)
     {
         try
         {

@@ -1,11 +1,16 @@
 package org.diorite.cfg.system;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,6 +38,7 @@ public class BaseTemplate<T> implements Template<T>
     private final String                              header;
     private final String                              footer;
     private final Map<ConfigField, ReflectElement<?>> fields;
+    private final Map<String, ConfigField>            nameFields;
 
     /**
      * Construct new template for given class and fields.
@@ -55,6 +61,11 @@ public class BaseTemplate<T> implements Template<T>
         {
             this.fields.put(cf, DioriteReflectionUtils.getReflectElement(cf));
         }
+        this.nameFields = new HashMap<>(fields.size());
+        for (final ConfigField cf : fields)
+        {
+            this.nameFields.put(cf.getName(), cf);
+        }
     }
 
     /**
@@ -74,69 +85,78 @@ public class BaseTemplate<T> implements Template<T>
         this.header = header;
         this.footer = footer;
         this.fields = new LinkedHashMap<>(fields);
+        this.nameFields = new HashMap<>(fields.size());
+        for (final ConfigField cf : this.fields.keySet())
+        {
+            this.nameFields.put(cf.getName(), cf);
+        }
     }
 
-    /**
-     * @return name of template.
-     */
     @Override
     public String getName()
     {
         return this.name;
     }
 
-    /**
-     * @return type of template.
-     */
     @Override
     public Class<T> getType()
     {
         return this.type;
     }
 
-    /**
-     * @return header comment, may be null.
-     */
     @Override
     public String getHeader()
     {
         return this.header;
     }
 
-    /**
-     * @return footer comment, may be null.
-     */
     @Override
     public String getFooter()
     {
         return this.footer;
     }
 
-    /**
-     * @return copy of map contains all fields data.
-     */
     @Override
     public Map<ConfigField, ReflectElement<?>> getFields()
     {
         return new LinkedHashMap<>(this.fields);
     }
 
-    /**
-     * dump object to selected {@link Appendable}.
-     *
-     * @param writer        {@link Appendable} to use, all data will be added here.
-     * @param object        object to dump. (will be represented as YAML string in writer)
-     * @param level         current indent level.
-     * @param writeComments if comments should be added to node.
-     * @param elementPlace  element place, used in many templates to check current style and choose valid format.
-     * @param <E>           exact type of appendable, used to return this same type as given.
-     *
-     * @return this same appendalbe as given, after adding string yaml representation of given object.
-     *
-     * @throws IOException from {@link Appendable}
-     */
     @Override
-    public <E extends Appendable> E dump(final E writer, final T object, final int level, final boolean writeComments, final ElementPlace elementPlace) throws IOException
+    public Map<String, ConfigField> getFieldsNameMap()
+    {
+        return new HashMap<>(this.nameFields);
+    }
+
+    @Override
+    public T load(final String str)
+    {
+        return TemplateYamlConstructor.getInstance().loadAs(str, this.type);
+    }
+
+    @Override
+    public T load(final Reader reader)
+    {
+        return TemplateYamlConstructor.getInstance().loadAs(reader, this.type);
+    }
+
+    @Override
+    public T load(final InputStream is)
+    {
+        return TemplateYamlConstructor.getInstance().loadAs(is, this.type);
+    }
+
+    @Override
+    public T load(final File file, final Charset charset) throws IOException
+    {
+        try (final InputStreamReader in = new InputStreamReader(new FileInputStream(file), charset))
+        {
+            return this.load(in);
+        }
+    }
+
+    @Override
+    public <E extends Appendable> E dump(final E writer, final T object, final int level, final boolean writeComments, final ElementPlace elementPlace, final boolean forceDefaultValues) throws IOException
     {
         if (writeComments)
         {
@@ -147,7 +167,7 @@ public class BaseTemplate<T> implements Template<T>
         for (final Entry<ConfigField, ReflectElement<?>> entry : this.fields.entrySet())
         {
             final ConfigField field = entry.getKey();
-            TemplateElements.getElement(field).write(writer, field, object, entry.getValue(), level, true, elementPlace);
+            TemplateElements.getElement(field).write(writer, field, object, entry.getValue(), level, true, elementPlace, forceDefaultValues);
         }
 
         if (writeComments)
@@ -159,35 +179,45 @@ public class BaseTemplate<T> implements Template<T>
     }
 
     @Override
-    public void dump(final File file, final T object, final Charset charset) throws IOException
+    public void dump(final File file, final T object, final Charset charset, final boolean forceDefaultValues) throws IOException
     {
         try (final OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), charset))
         {
-            this.dump(out, object);
+            this.dump(out, object, forceDefaultValues);
             out.flush();
             out.close();
         }
     }
 
-    /**
-     * dump object to YAML string.
-     *
-     * @param object object to dump. (will be represented as YAML string in writer)
-     *
-     * @return string yaml representation of given object.\
-     */
     @Override
-    public String dumpAsString(final T object)
+    public String dumpAsString(final T object, final boolean forceDefaultValues)
     {
         final StringBuilder builder = new StringBuilder(this.fields.size() << 7);
         try
         {
-            this.dump(builder, object);
+            this.dump(builder, object, forceDefaultValues);
         } catch (final IOException ignored)
         {
             throw new AssertionError("IOException on StringBuilder?", ignored); // not possible?
         }
         return builder.toString();
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Override
+    public T fillDefaults(final T obj)
+    {
+        for (final Entry<ConfigField, ReflectElement<?>> entry : this.fields.entrySet())
+        {
+            final ConfigField field = entry.getKey();
+            final ReflectElement<?> element = entry.getValue();
+            if (! field.hasDefaultValue() || (element == null))
+            {
+                continue;
+            }
+            element.set(obj, field.getDefaultValue());
+        }
+        return obj;
     }
 
     @SuppressWarnings("rawtypes")

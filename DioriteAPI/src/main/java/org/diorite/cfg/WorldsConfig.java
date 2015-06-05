@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,34 +22,42 @@ import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
 import org.diorite.cfg.annotations.defaults.CfgIntDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
+import org.diorite.cfg.system.Template;
+import org.diorite.cfg.system.TemplateCreator;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings.HardcoreAction;
 
-@SuppressWarnings("HardcodedFileSeparator")
+@SuppressWarnings({"HardcodedFileSeparator", "SimplifiableIfStatement"})
 public class WorldsConfig
 {
     private static final List<WorldConfig>      def2;
     private static final List<WorldGroupConfig> def1;
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("defaultWorld", this.defaultWorld).append("groups", this.groups).toString();
+    }
 
     static
     {
+        final Template<WorldConfig> template = TemplateCreator.getTemplate(WorldConfig.class, true);
         def2 = new ArrayList<>(3);
         {
-            final WorldConfig w = new WorldConfig();
+            final WorldConfig w = template.fillDefaults(new WorldConfig());
             w.seed = defaultSeed();
             def2.add(w);
         }
         {
-            final WorldConfig w = new WorldConfig();
+            final WorldConfig w = template.fillDefaults(new WorldConfig());
             w.name = "world_nether";
             w.seed = defaultSeed();
             w.dimension = Dimension.NETHER;
             def2.add(w);
         }
         {
-            final WorldConfig w = new WorldConfig();
+            final WorldConfig w = template.fillDefaults(new WorldConfig());
             w.name = "world_end";
             w.seed = defaultSeed();
             w.dimension = Dimension.END;
@@ -70,7 +77,7 @@ public class WorldsConfig
 
     private static List<WorldConfig> defaultWorldsConfig()
     {
-        return def2;
+        return new ArrayList<>(def2);
     }
 
     private static GameMode defaultGamemode()
@@ -95,11 +102,11 @@ public class WorldsConfig
 
     @CfgComment("Default world where players are logged in.")
     @CfgStringDefault("world")
-    private String defaultWorld = "world";
+    private String defaultWorld;
 
-    @CfgComment("All groups")
+    @CfgComment("All groups, every group have separate players data. (EQ, level etc..)")
     @CfgDelegateDefault("org.diorite.cfg.WorldsConfig#defaultGroupConfig")
-    private List<WorldGroupConfig> groups = new ArrayList<>(def1);
+    private List<WorldGroupConfig> groups;
 
     public String getDefaultWorld()
     {
@@ -159,6 +166,36 @@ public class WorldsConfig
         {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).append("worlds", this.worlds).toString();
         }
+
+        @Override
+        public boolean equals(final Object o)
+        {
+            if (this == o)
+            {
+                return true;
+            }
+            if (! (o instanceof WorldGroupConfig))
+            {
+                return false;
+            }
+
+            final WorldGroupConfig that = (WorldGroupConfig) o;
+
+            if ((this.name != null) ? ! this.name.equals(that.name) : (that.name != null))
+            {
+                return false;
+            }
+            return ! ((this.worlds != null) ? ! this.worlds.equals(that.worlds) : (that.worlds != null));
+
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = (this.name != null) ? this.name.hashCode() : 0;
+            result = (31 * result) + ((this.worlds != null) ? this.worlds.hashCode() : 0);
+            return result;
+        }
     }
 
     @CfgClass(name = "WorldConfig")
@@ -167,46 +204,46 @@ public class WorldsConfig
     {
         @CfgComment("Name of world, must be unique.")
         @CfgStringDefault("world")
-        private String  name    = "world";
+        private String name;
 
         @CfgComment("If world should be loaded on start.")
         @CfgBooleanDefault(true)
-        private boolean enabled = true;
+        private boolean enabled;
 
         @CfgComment("Default gamemode for new players.")
         @CfgDelegateDefault("org.diorite.cfg.WorldsConfig#defaultGamemode")
-        private GameMode gamemode = GameMode.SURVIVAL;
+        private GameMode gamemode;
 
         @CfgComment("If true, then gamemode will be always changed on join to default one.")
         @CfgBooleanDefault(false)
-        private boolean forceGamemode = false;
+        private boolean forceGamemode;
 
         @CfgComment("Difficulty for world.")
         @CfgDelegateDefault("org.diorite.cfg.WorldsConfig#defaultDifficulty")
-        private Difficulty difficulty = Difficulty.NORMAL;
+        private Difficulty difficulty;
 
         @CfgComment("Enable PvP on the server. Players shooting themselves with arrows will only receive damage if PvP is enabled.")
         @CfgBooleanDefault(true)
-        private boolean pvp = true;
+        private boolean pvp;
 
         @CfgComment("If world is in hardcore mode.")
         @CfgBooleanDefault(false)
-        private boolean hardcore = false;
+        private boolean hardcore;
 
         @CfgComment("Action when player die.")
         @CfgHardcoreActionDefault(HardcoreAction.BAN_PLAYER)
-        private HardcoreAction hardcoreAction = HardcoreAction.BAN_PLAYER;
+        private HardcoreAction hardcoreAction;
 
         @CfgComment("This part of world are always loaded. (radius of chunks from spawn point)")
         @CfgByteDefault(10)
-        private byte forceLoadedRadius = 10;
+        private byte forceLoadedRadius;
 
         @CfgComment("X coordinates of spawn location.")
         private int spawnX;
 
         @CfgComment("Y coordinates of spawn location, -1 means that diorite should find highest block.")
         @CfgIntDefault(- 1)
-        private int spawnY = - 1;
+        private int spawnY;
 
         @CfgComment("Z coordinates of spawn location.")
         private int spawnZ;
@@ -223,15 +260,15 @@ public class WorldsConfig
 
         @CfgComment("Type/Dimension of world.")
         @CfgDelegateDefault("org.diorite.cfg.WorldsConfig#defaultDimension")
-        private Dimension dimension = Dimension.OVERWORLD;
+        private Dimension dimension;
 
         @CfgComment("Generator for world.")
-        @CfgStringDefault("default")
-        private String generator = "diorite:default";
+        @CfgStringDefault("diorite:default")
+        private String generator;
 
         @CfgComment("Generator settings, every generator may have own options here.")
         @CfgDelegateDefault("{emptyMap}")
-        private Map<String, Object> generatorSettings = new HashMap<>(1);
+        private Map<String, Object> generatorSettings;
 
         public String getName()
         {
@@ -418,12 +455,146 @@ public class WorldsConfig
         {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).append("gamemode", this.gamemode).append("forceGamemode", this.forceGamemode).append("difficulty", this.difficulty).append("pvp", this.pvp).append("seed", this.seed).append("dimension", this.dimension).toString();
         }
+
+        @Override
+        public boolean equals(final Object o)
+        {
+            if (this == o)
+            {
+                return true;
+            }
+            if (! (o instanceof WorldConfig))
+            {
+                return false;
+            }
+
+            final WorldConfig that = (WorldConfig) o;
+
+            if (this.enabled != that.enabled)
+            {
+                return false;
+            }
+            if (this.forceGamemode != that.forceGamemode)
+            {
+                return false;
+            }
+            if (this.pvp != that.pvp)
+            {
+                return false;
+            }
+            if (this.hardcore != that.hardcore)
+            {
+                return false;
+            }
+            if (this.forceLoadedRadius != that.forceLoadedRadius)
+            {
+                return false;
+            }
+            if (this.spawnX != that.spawnX)
+            {
+                return false;
+            }
+            if (this.spawnY != that.spawnY)
+            {
+                return false;
+            }
+            if (this.spawnZ != that.spawnZ)
+            {
+                return false;
+            }
+            if (Float.compare(that.spawnYaw, this.spawnYaw) != 0)
+            {
+                return false;
+            }
+            if (Float.compare(that.spawnPitch, this.spawnPitch) != 0)
+            {
+                return false;
+            }
+            if (this.seed != that.seed)
+            {
+                return false;
+            }
+            if ((this.name != null) ? ! this.name.equals(that.name) : (that.name != null))
+            {
+                return false;
+            }
+            if ((this.gamemode != null) ? ! this.gamemode.equals(that.gamemode) : (that.gamemode != null))
+            {
+                return false;
+            }
+            if ((this.difficulty != null) ? ! this.difficulty.equals(that.difficulty) : (that.difficulty != null))
+            {
+                return false;
+            }
+            if (this.hardcoreAction != that.hardcoreAction)
+            {
+                return false;
+            }
+            if ((this.dimension != null) ? ! this.dimension.equals(that.dimension) : (that.dimension != null))
+            {
+                return false;
+            }
+            if ((this.generator != null) ? ! this.generator.equals(that.generator) : (that.generator != null))
+            {
+                return false;
+            }
+            return ! ((this.generatorSettings != null) ? ! this.generatorSettings.equals(that.generatorSettings) : (that.generatorSettings != null));
+
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = (this.name != null) ? this.name.hashCode() : 0;
+            result = (31 * result) + (this.enabled ? 1 : 0);
+            result = (31 * result) + ((this.gamemode != null) ? this.gamemode.hashCode() : 0);
+            result = (31 * result) + (this.forceGamemode ? 1 : 0);
+            result = (31 * result) + ((this.difficulty != null) ? this.difficulty.hashCode() : 0);
+            result = (31 * result) + (this.pvp ? 1 : 0);
+            result = (31 * result) + (this.hardcore ? 1 : 0);
+            result = (31 * result) + ((this.hardcoreAction != null) ? this.hardcoreAction.hashCode() : 0);
+            result = (31 * result) + (int) this.forceLoadedRadius;
+            result = (31 * result) + this.spawnX;
+            result = (31 * result) + this.spawnY;
+            result = (31 * result) + this.spawnZ;
+            result = (31 * result) + ((this.spawnYaw != + 0.0f) ? Float.floatToIntBits(this.spawnYaw) : 0);
+            result = (31 * result) + ((this.spawnPitch != + 0.0f) ? Float.floatToIntBits(this.spawnPitch) : 0);
+            result = (31 * result) + (int) (this.seed ^ (this.seed >>> 32));
+            result = (31 * result) + ((this.dimension != null) ? this.dimension.hashCode() : 0);
+            result = (31 * result) + ((this.generator != null) ? this.generator.hashCode() : 0);
+            result = (31 * result) + ((this.generatorSettings != null) ? this.generatorSettings.hashCode() : 0);
+            return result;
+        }
     }
 
     @Override
-    public String toString()
+    public boolean equals(final Object o)
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("defaultWorld", this.defaultWorld).append("groups", this.groups).toString();
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof WorldsConfig))
+        {
+            return false;
+        }
+
+        final WorldsConfig that = (WorldsConfig) o;
+
+        if ((this.defaultWorld != null) ? ! this.defaultWorld.equals(that.defaultWorld) : (that.defaultWorld != null))
+        {
+            return false;
+        }
+        return ! ((this.groups != null) ? ! this.groups.equals(that.groups) : (that.groups != null));
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = (this.defaultWorld != null) ? this.defaultWorld.hashCode() : 0;
+        result = (31 * result) + ((this.groups != null) ? this.groups.hashCode() : 0);
+        return result;
     }
 
     @Retention(RetentionPolicy.RUNTIME)

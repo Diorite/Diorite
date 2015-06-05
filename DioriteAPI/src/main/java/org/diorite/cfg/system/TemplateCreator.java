@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,10 +34,29 @@ import org.diorite.utils.reflections.DioriteReflectionUtils;
  */
 public final class TemplateCreator
 {
-    private static final Map<Class<?>, Template<?>> templateMap = new ConcurrentHashMap<>(20, 0.1f, 4);
+    private static final Map<Class<?>, Template<?>>              templateMap = new ConcurrentHashMap<>(20, 0.1f, 4);
+    private static final Map<Class<?>, Map<String, ConfigField>> fields      = new ConcurrentHashMap<>(20, 0.1f, 4);
 
     private TemplateCreator()
     {
+    }
+
+    /**
+     * Get {@link ConfigField} instance for given field by class and key/name.
+     *
+     * @param clazz clazz with field.
+     * @param key   name of field.
+     *
+     * @return config field instance for given field.
+     */
+    public static ConfigField getField(final Class<?> clazz, final String key)
+    {
+        final Map<String, ConfigField> map = fields.get(clazz);
+        if (map == null)
+        {
+            return null;
+        }
+        return map.get(key);
     }
 
     /**
@@ -45,28 +66,39 @@ public final class TemplateCreator
      * @param c class to check
      */
     @SuppressWarnings("ObjectEquality")
-    public static void checkTemplate(Class<?> c)
+    public static void checkTemplate(final Type type)
     {
-        do
+        if (type instanceof Class)
         {
-            if ((c == null) || (Enum.class.isAssignableFrom(c)) || (c == Object.class) || (c == Object[].class) || (c.isArray() && (DioriteReflectionUtils.getPrimitive(c.getComponentType()).isPrimitive() || String.class.isAssignableFrom(c.getComponentType()))) || (TemplateElements.getElement(c) != TemplateElements.getDefaultTemplatesHandler()))
+            Class<?> c = (Class<?>) type;
+            do
             {
-                return;
-            }
-            // generate and cache tempate
-
-            if (c.isArray())
-            {
-                while (c.isArray())
+                if ((c == null) || (Enum.class.isAssignableFrom(c)) || (c == Object.class) || (c == Object[].class) || (c.isArray() && (DioriteReflectionUtils.getPrimitive(c.getComponentType()).isPrimitive() || String.class.isAssignableFrom(c.getComponentType()))) || (TemplateElements.getElement(c) != TemplateElements.getDefaultTemplatesHandler()))
                 {
-                    c = c.getComponentType();
+                    return;
                 }
-                checkTemplate(c);
+                // generate and cache template
+
+                if (c.isArray())
+                {
+                    while (c.isArray())
+                    {
+                        c = c.getComponentType();
+                    }
+                    checkTemplate(c);
+                }
+                getTemplate(c, true, true, false);
+                c = c.getSuperclass();
+            } while (true);
+        }
+        else if (type instanceof ParameterizedType)
+        {
+            final ParameterizedType pType = (ParameterizedType) type;
+            for (final Type t : pType.getActualTypeArguments())
+            {
+                checkTemplate(t);
             }
-            System.out.println(c);
-            getTemplate(c, true, true, false);
-            c = c.getSuperclass();
-        } while (true);
+        }
     }
 
     /**
@@ -160,6 +192,7 @@ public final class TemplateCreator
         if (cache)
         {
             templateMap.put(clazz, template);
+            TemplateCreator.fields.put(clazz, template.getFieldsNameMap());
         }
         return template;
     }

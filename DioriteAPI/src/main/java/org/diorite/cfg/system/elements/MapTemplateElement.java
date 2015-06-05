@@ -35,7 +35,7 @@ public class MapTemplateElement extends TemplateElement<Map>
     }
 
     @Override
-    protected Map convertDefault(final Object def, final Class<?> fieldType)
+    protected Map convertDefault0(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Map)
         {

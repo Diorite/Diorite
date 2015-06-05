@@ -18,10 +18,11 @@ import org.diorite.cfg.annotations.defaults.CfgBooleanDefault;
 import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
 import org.diorite.cfg.annotations.defaults.CfgIntDefault;
-import org.diorite.cfg.annotations.defaults.CfgShortDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
+import org.diorite.cfg.system.Template;
+import org.diorite.cfg.system.TemplateCreator;
 
-@SuppressWarnings("HardcodedFileSeparator")
+@SuppressWarnings({"HardcodedFileSeparator", "SimplifiableIfStatement"})
 @CfgClass(name = "DioriteConfig")
 @CfgComments({"Welcome in Diorite configuration file, in this file you will", "find every option needed to configurate your server."})
 @CfgFooterComment("End of configuration!")
@@ -30,83 +31,83 @@ public class DioriteConfig
 {
     @CfgComment("Used only in few places for debug information, should be short")
     @CfgStringDefault("Main")
-    private String serverName = "Main";
+    private String serverName;
 
     @CfgComment("Hostname to listen on.")
     @CfgStringDefault("localhost")
-    private String hostname = "localhost";
+    private String hostname;
 
     @CfgComment("Port to listen on.")
-    @CfgShortDefault(Server.DEFAULT_PORT)
-    private int port = Server.DEFAULT_PORT;
+    @CfgIntDefault(Server.DEFAULT_PORT)
+    private int port;
 
     @CfgComment("Enables GameSpy4 protocol server listener. Used to get information about server. Set to -1 to disable.")
-    @CfgShortDefault(- 1)
-    private int queryPort = - 1;
+    @CfgIntDefault(- 1)
+    private int queryPort;
 
     @CfgComment("Port for rcon (remote access to the server console), Set to -1 to disable.")
-    @CfgShortDefault(- 1)
-    private int rconPort = - 1;
+    @CfgIntDefault(- 1)
+    private int rconPort;
 
     @CfgComment("Password to rcon.")
     @CfgStringDefault("")
-    private String rconPassword = "";
+    private String rconPassword;
 
     @CfgComment("By default it allows packets that are n-1 bytes big to go normally, but a packet that n bytes or more will be compressed down. 0 -> compress everything, -1 -> disabled")
     @CfgIntDefault(Server.DEFAULT_PACKET_COMPRESSION_THRESHOLD)
-    private int networkCompressionThreshold = Server.DEFAULT_PACKET_COMPRESSION_THRESHOLD;
+    private int networkCompressionThreshold;
 
     @CfgComment("Can be true, false or auto. If true all players will be authorized with Mojang, if false everyone can join with any nickname (no connections to mojang). With \"auto\", players that seems to be premium (they have premium nickname) will be authorized with Mojang, other players can join without it. (You should use online mode true, or at least find some authorization plugin for players.)")
     @CfgOnlineModeDefault(OnlineMode.TRUE)
-    private OnlineMode onlineMode = OnlineMode.TRUE;
+    private OnlineMode onlineMode;
 
     @CfgComment("The maximum number of players that can play on the server at the same time.")
     @CfgIntDefault(10)
-    private int maxPlayers = 10;
+    private int maxPlayers;
 
     @CfgComment("Players are kicked if they are idle for more than that many seconds.")
     @CfgIntDefault(600)
-    private int playerIdleTimeout = 600;
+    private int playerIdleTimeout;
 
     @CfgComment("Optional URI to a resource pack. The player may choose to use it. Set to empty to disable.")
     @CfgStringDefault("")
-    private String resourcePack = "";
+    private String resourcePack;
 
     @CfgComment("Optional SHA-1 digest of the resource pack, in lowercase hexadecimal. It's recommended to specify this. This is not yet used to verify the integrity of the resource pack, but improves the effectiveness and reliability of caching.")
     @CfgStringDefault("")
-    private String resourcePackHash = "";
+    private String resourcePackHash;
 
     @CfgComment("Linux server performance improvements: optimized packet sending/receiving on Linux. Windows or other systems that don't support epoll will just ignore this setting.")
     @CfgBooleanDefault(true)
-    private boolean useNativeTransport = true;
+    private boolean useNativeTransport;
 
     @CfgComment("It determines the server-side viewing distance, measured in chunks in each direction of the player. (radius)")
     @CfgIntDefault(8)
-    private int viewDistance = 8;
+    private int viewDistance;
 
     @CfgComment("How many threads are used by diorite to handle command, chat and tab-complete input.")
     @CfgIntDefault(2)
-    private int inputThreadPoolSize = 2;
+    private int inputThreadPoolSize;
 
     @CfgComment("Path to file with administrators UUIDs/nicknames and settings. (Users that have most of permissions by default.)")
     @CfgStringDefault("adms.yml")
-    private File administratorsFile = new File("adms.yml");
+    private File administratorsFile;
 
     @CfgComment("If true, only players from special file can join to server.")
     @CfgBooleanDefault(false)
-    private boolean whiteListEnabled = false;
+    private boolean whiteListEnabled;
 
     @CfgComment("Path to file with UUID/nicknames of players added to whitelist.")
     @CfgStringDefault("whitelist.yml")
-    private File whiteListFile = new File("whitelist.yml");
+    private File whiteListFile;
 
     @CfgComment("Message of the day, used on client server list. You may use JSON message here too.")
     @CfgStringDefault("&7Welcome on &3diorite &7server&3!\n&7Join and play today&3!")
-    private String motd = "&7Welcome on &3diorite &7server&3!\n&7Join and play today&3!";
+    private String motd;
 
     @CfgComment("Worlds configuration.")
     @CfgDelegateDefault("org.diorite.cfg.DioriteConfig#defaultWorlds")
-    private WorldsConfig worlds = new WorldsConfig();
+    private WorldsConfig worlds;
 
     public String getServerName()
     {
@@ -308,6 +309,126 @@ public class DioriteConfig
         this.worlds = worlds;
     }
 
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof DioriteConfig))
+        {
+            return false;
+        }
+
+        final DioriteConfig that = (DioriteConfig) o;
+
+        if (this.port != that.port)
+        {
+            return false;
+        }
+        if (this.queryPort != that.queryPort)
+        {
+            return false;
+        }
+        if (this.rconPort != that.rconPort)
+        {
+            return false;
+        }
+        if (this.networkCompressionThreshold != that.networkCompressionThreshold)
+        {
+            return false;
+        }
+        if (this.maxPlayers != that.maxPlayers)
+        {
+            return false;
+        }
+        if (this.playerIdleTimeout != that.playerIdleTimeout)
+        {
+            return false;
+        }
+        if (this.useNativeTransport != that.useNativeTransport)
+        {
+            return false;
+        }
+        if (this.viewDistance != that.viewDistance)
+        {
+            return false;
+        }
+        if (this.inputThreadPoolSize != that.inputThreadPoolSize)
+        {
+            return false;
+        }
+        if (this.whiteListEnabled != that.whiteListEnabled)
+        {
+            return false;
+        }
+        if ((this.serverName != null) ? ! this.serverName.equals(that.serverName) : (that.serverName != null))
+        {
+            return false;
+        }
+        if ((this.hostname != null) ? ! this.hostname.equals(that.hostname) : (that.hostname != null))
+        {
+            return false;
+        }
+        if ((this.rconPassword != null) ? ! this.rconPassword.equals(that.rconPassword) : (that.rconPassword != null))
+        {
+            return false;
+        }
+        if (this.onlineMode != that.onlineMode)
+        {
+            return false;
+        }
+        if ((this.resourcePack != null) ? ! this.resourcePack.equals(that.resourcePack) : (that.resourcePack != null))
+        {
+            return false;
+        }
+        if ((this.resourcePackHash != null) ? ! this.resourcePackHash.equals(that.resourcePackHash) : (that.resourcePackHash != null))
+        {
+            return false;
+        }
+        if ((this.administratorsFile != null) ? ! this.administratorsFile.equals(that.administratorsFile) : (that.administratorsFile != null))
+        {
+            return false;
+        }
+        if ((this.whiteListFile != null) ? ! this.whiteListFile.equals(that.whiteListFile) : (that.whiteListFile != null))
+        {
+            return false;
+        }
+        if ((this.motd != null) ? ! this.motd.equals(that.motd) : (that.motd != null))
+        {
+            return false;
+        }
+        return ! ((this.worlds != null) ? ! this.worlds.equals(that.worlds) : (that.worlds != null));
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = (this.serverName != null) ? this.serverName.hashCode() : 0;
+        result = (31 * result) + ((this.hostname != null) ? this.hostname.hashCode() : 0);
+        result = (31 * result) + this.port;
+        result = (31 * result) + this.queryPort;
+        result = (31 * result) + this.rconPort;
+        result = (31 * result) + ((this.rconPassword != null) ? this.rconPassword.hashCode() : 0);
+        result = (31 * result) + this.networkCompressionThreshold;
+        result = (31 * result) + ((this.onlineMode != null) ? this.onlineMode.hashCode() : 0);
+        result = (31 * result) + this.maxPlayers;
+        result = (31 * result) + this.playerIdleTimeout;
+        result = (31 * result) + ((this.resourcePack != null) ? this.resourcePack.hashCode() : 0);
+        result = (31 * result) + ((this.resourcePackHash != null) ? this.resourcePackHash.hashCode() : 0);
+        result = (31 * result) + (this.useNativeTransport ? 1 : 0);
+        result = (31 * result) + this.viewDistance;
+        result = (31 * result) + this.inputThreadPoolSize;
+        result = (31 * result) + ((this.administratorsFile != null) ? this.administratorsFile.hashCode() : 0);
+        result = (31 * result) + (this.whiteListEnabled ? 1 : 0);
+        result = (31 * result) + ((this.whiteListFile != null) ? this.whiteListFile.hashCode() : 0);
+        result = (31 * result) + ((this.motd != null) ? this.motd.hashCode() : 0);
+        result = (31 * result) + ((this.worlds != null) ? this.worlds.hashCode() : 0);
+        return result;
+    }
+
     public enum OnlineMode
     {
         TRUE,
@@ -326,11 +447,12 @@ public class DioriteConfig
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("serverName", this.serverName).append("hostname", this.hostname).append("port", this.port).append("queryPort", this.queryPort).append("networkCompressionThreshold", this.networkCompressionThreshold).append("onlineMode", this.onlineMode).append("maxPlayers", this.maxPlayers).append("playerIdleTimeout", this.playerIdleTimeout).append("resourcePack", this.resourcePack).append("resourcePackHash", this.resourcePackHash).append("useNativeTransport", this.useNativeTransport).append("viewDistance", this.viewDistance).append("administratorsFile", this.administratorsFile).append("whiteListEnabled", this.whiteListEnabled).append("whiteListFile", this.whiteListFile).append("motd", this.motd).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("serverName", this.serverName).append("hostname", this.hostname).append("port", this.port).append("queryPort", this.queryPort).append("rconPort", this.rconPort).append("rconPassword", this.rconPassword).append("networkCompressionThreshold", this.networkCompressionThreshold).append("onlineMode", this.onlineMode).append("maxPlayers", this.maxPlayers).append("playerIdleTimeout", this.playerIdleTimeout).append("resourcePack", this.resourcePack).append("resourcePackHash", this.resourcePackHash).append("useNativeTransport", this.useNativeTransport).append("viewDistance", this.viewDistance).append("inputThreadPoolSize", this.inputThreadPoolSize).append("administratorsFile", this.administratorsFile).append("whiteListEnabled", this.whiteListEnabled).append("whiteListFile", this.whiteListFile).append("motd", this.motd).append("worlds", this.worlds).toString();
     }
 
     private static WorldsConfig defaultWorlds()
     {
-        return new WorldsConfig();
+        final Template<WorldsConfig> template = TemplateCreator.getTemplate(WorldsConfig.class, true);
+        return template.fillDefaults(new WorldsConfig());
     }
 }
