@@ -31,7 +31,7 @@ import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkManagerImpl implements ChunkManager, Tickable
 {
-    private final org.diorite.impl.world.WorldImpl world;
+    private final WorldImpl world;
     private final Collection<ChunkGroup> groups     = ImmutableSet.of(new ChunkGroup()); // TODO: multiple groups, one thread per group
     private final Map<Long, Chunk>       chunks     = new ConcurrentHashMap<>(400, .5f, 4); // change to ConcurrentHashMap<Long, ChunkImpl> if needed.
     private final Map<Long, Object>      generating = new ConcurrentHashMap<>(10);

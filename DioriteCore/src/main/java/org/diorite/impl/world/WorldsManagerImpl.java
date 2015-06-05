@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,6 +25,8 @@ import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.utils.DioriteUtils;
+import org.diorite.utils.concurrent.ParallelUtils;
 import org.diorite.world.World;
 import org.diorite.world.WorldsManager;
 
@@ -115,25 +118,35 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
         if (! worldsFile.exists())
         {
             worldsFile.mkdirs();
-            return;
         }
         this.config = cfg.getWorlds();
         if (! worldsFile.isDirectory())
         {
             throw new IllegalArgumentException("Worlds can be only loaded from directory. Not from file: " + worldsFile.getPath());
         }
+
+        final Collection<Runnable> loaders = new HashSet<>(10);
         for (final WorldGroupConfig wgc : this.config.getGroups())
         {
             final WorldGroupImpl wgImpl = new WorldGroupImpl(wgc.getName(), new File(worldsFile, wgc.getName()));
             this.groups.put(wgc.getName(), wgImpl);
-            for (final WorldConfig wc : wgc.getWorlds())
-            {
+            loaders.addAll(wgc.getWorlds().stream().filter(WorldConfig::isEnabled).map(wc -> (Runnable) () -> {
                 final File wFile = new File(wgImpl.getDataFolder(), wc.getName());
                 final WorldImpl wImpl = new WorldImpl(new McaChunkIO(wFile), wc.getName(), wgImpl, wc.getDimension(), wc.getGenerator(), wc.getGeneratorSettings());
                 this.loadWorld(wImpl, wc);
                 wgImpl.addWorld(wImpl);
-            }
+            }).collect(Collectors.toList()));
         }
+        System.out.println("[WorldLoader] Loading " + loaders.size() + " worlds...");
+        if (Runtime.getRuntime().availableProcessors() >= 8) // parallel loading don't make any sense for small amout of cores
+        {
+            ParallelUtils.realParallelStream(() -> loaders.parallelStream().forEach(Runnable::run), loaders.size());
+        }
+        else
+        {
+            loaders.stream().forEach(Runnable::run);
+        }
+        System.out.println("[WorldLoader] Loaded all " + loaders.size() + " worlds!");
     }
 
     private void loadWorld(final WorldImpl world, final WorldConfig worldConfig)
@@ -154,6 +167,13 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
         }
         else
         {
+            try
+            {
+                DioriteUtils.createFile(file);
+            } catch (final IOException e)
+            {
+                throw new RuntimeException("Can't create file: " + file, e);
+            }
             world.loadNBT(new NbtTagCompound(), worldConfig);
             { // write
                 try (final NbtOutputStream os = NbtOutputStream.getCompressed(file))

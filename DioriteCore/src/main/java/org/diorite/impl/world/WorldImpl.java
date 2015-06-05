@@ -84,6 +84,10 @@ public class WorldImpl implements World, Tickable
     public NbtTagCompound writeTo(final NbtTagCompound tag)
     {
         tag.setString("LevelName", this.name);
+        if (this.generator == null)
+        {
+            this.generator = WorldGenerators.getGenerator("diorite:default", this, null);
+        }
         tag.setString("generatorName", this.generator.getName());
         tag.setString("generatorOptions", this.generator.getOptions().toString());
 
