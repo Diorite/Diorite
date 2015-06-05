@@ -35,7 +35,7 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
      *
      * @return enum element or null.
      */
-    static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final String name, final int id, final Class<? extends SimpleEnum<T>> enumClass)
+    static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final String name, final int id, final Class<T> enumClass)
     {
         return DioriteReflectionUtils.getSimpleEnumValueSafe(name, id, enumClass);
     }
@@ -55,5 +55,61 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
     static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final String name, final int id, final T def)
     {
         return DioriteReflectionUtils.getSimpleEnumValueSafe(name, id, def);
+    }
+
+    /**
+     * Safe method to get one of enum values by ordinal.
+     *
+     * @param id        ordinal id.
+     * @param enumClass class of enum.
+     * @param <T>       type of enum.
+     *
+     * @return enum element or null.
+     */
+    static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final int id, final Class<T> enumClass)
+    {
+        return DioriteReflectionUtils.getSimpleEnumValueSafe(null, id, enumClass);
+    }
+
+    /**
+     * Safe method to get one of enum values by ordinal.
+     *
+     * @param id  ordinal id.
+     * @param def default value, can't be null.
+     * @param <T> type of enum.
+     *
+     * @return enum element or def.
+     */
+    static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final int id, final T def)
+    {
+        return DioriteReflectionUtils.getSimpleEnumValueSafe(null, id, def);
+    }
+
+    /**
+     * Safe method to get one of enum values by name.
+     *
+     * @param name      name of enum field (ignore-case)
+     * @param enumClass class of enum.
+     * @param <T>       type of enum.
+     *
+     * @return enum element or null.
+     */
+    static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final String name, final Class<T> enumClass)
+    {
+        return DioriteReflectionUtils.getSimpleEnumValueSafe(name, - 1, enumClass);
+    }
+
+    /**
+     * Safe method to get one of enum values by name.
+     *
+     * @param name name of enum field (ignore-case)
+     * @param def  default value, can't be null.
+     * @param <T>  type of enum.
+     *
+     * @return enum element or def.
+     */
+    static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final String name, final T def)
+    {
+        return DioriteReflectionUtils.getSimpleEnumValueSafe(name, - 1, def);
     }
 }

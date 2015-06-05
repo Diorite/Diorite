@@ -161,7 +161,7 @@ public class IterableTemplateElement extends TemplateElement<Iterable>
         {
             final Object o = iterator.next();
             appendElement(writer, level, "- ");
-            TemplateElements.getElement(o.getClass()).writeValue(writer, field, element, o, level + 1, commentEveryElement || isFirst, ElementPlace.LIST);
+            TemplateElements.getElement(o.getClass()).writeValue(writer, field, element, o, level, commentEveryElement || isFirst, ElementPlace.LIST);
             isFirst = false;
             if (iterator.hasNext())
             {

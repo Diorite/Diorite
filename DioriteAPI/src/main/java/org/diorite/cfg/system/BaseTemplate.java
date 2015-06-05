@@ -148,12 +148,11 @@ public class BaseTemplate<T> implements Template<T>
         {
             final ConfigField field = entry.getKey();
             TemplateElements.getElement(field).write(writer, field, object, entry.getValue(), level, true, elementPlace);
-            writer.append('\n');
         }
 
         if (writeComments)
         {
-            writer.append("\n\n");
+            writer.append("\n");
             Template.appendComment(writer, this.footer, level, false);
         }
         return writer;

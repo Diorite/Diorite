@@ -16,6 +16,7 @@ import org.diorite.cfg.annotations.CfgComments;
 import org.diorite.cfg.annotations.CfgFooterComment;
 import org.diorite.cfg.annotations.defaults.CfgBooleanDefault;
 import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
+import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
 import org.diorite.cfg.annotations.defaults.CfgIntDefault;
 import org.diorite.cfg.annotations.defaults.CfgShortDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
@@ -102,6 +103,10 @@ public class DioriteConfig
     @CfgComment("Message of the day, used on client server list. You may use JSON message here too.")
     @CfgStringDefault("&7Welcome on &3diorite &7server&3!\n&7Join and play today&3!")
     private String motd = "&7Welcome on &3diorite &7server&3!\n&7Join and play today&3!";
+
+    @CfgComment("Worlds configuration.")
+    @CfgDelegateDefault("org.diorite.cfg.DioriteConfig#defaultWorlds")
+    private WorldsConfig worlds = new WorldsConfig();
 
     public String getServerName()
     {
@@ -245,7 +250,7 @@ public class DioriteConfig
 
     public int getInputThreadPoolSize()
     {
-         return this.inputThreadPoolSize;
+        return this.inputThreadPoolSize;
     }
 
     public void setInputThreadPoolSize(final int inputThreadPoolSize)
@@ -293,6 +298,16 @@ public class DioriteConfig
         this.motd = motd;
     }
 
+    public WorldsConfig getWorlds()
+    {
+        return this.worlds;
+    }
+
+    public void setWorlds(final WorldsConfig worlds)
+    {
+        this.worlds = worlds;
+    }
+
     public enum OnlineMode
     {
         TRUE,
@@ -312,5 +327,10 @@ public class DioriteConfig
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("serverName", this.serverName).append("hostname", this.hostname).append("port", this.port).append("queryPort", this.queryPort).append("networkCompressionThreshold", this.networkCompressionThreshold).append("onlineMode", this.onlineMode).append("maxPlayers", this.maxPlayers).append("playerIdleTimeout", this.playerIdleTimeout).append("resourcePack", this.resourcePack).append("resourcePackHash", this.resourcePackHash).append("useNativeTransport", this.useNativeTransport).append("viewDistance", this.viewDistance).append("administratorsFile", this.administratorsFile).append("whiteListEnabled", this.whiteListEnabled).append("whiteListFile", this.whiteListFile).append("motd", this.motd).toString();
+    }
+
+    private static WorldsConfig defaultWorlds()
+    {
+        return new WorldsConfig();
     }
 }

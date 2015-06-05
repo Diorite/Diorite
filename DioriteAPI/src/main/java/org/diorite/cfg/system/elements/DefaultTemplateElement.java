@@ -26,7 +26,7 @@ public class DefaultTemplateElement extends TemplateElement<Object>
     }
 
     @Override
-    protected Object convertDefault(final Object def)
+    protected Object convertDefault(final Object def, final Class<?> fieldType)
     {
         return def;
     }
@@ -38,7 +38,7 @@ public class DefaultTemplateElement extends TemplateElement<Object>
         if (template != null)
         {
             writer.append('\n');
-            template.dump(writer, element, level + 1, true, elementPlace);
+            template.dump(writer, element, level + 1, false, elementPlace);
         }
         else
         {

@@ -1,6 +1,7 @@
 package org.diorite.world.generator;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -14,8 +15,12 @@ public final class WorldGenerators
     {
     }
 
-    public static WorldGenerator getGenerator(final String name, final World world, final Map<String, Object> options)
+    public static WorldGenerator getGenerator(final String name, final World world, Map<String, Object> options)
     {
+        if (options == null)
+        {
+            options = new HashMap<>(1);
+        }
         for (final WorldGeneratorInitializer<?> gen : generators)
         {
             if (gen.getName().equalsIgnoreCase(name))

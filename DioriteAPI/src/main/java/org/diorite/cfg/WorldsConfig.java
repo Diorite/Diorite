@@ -17,7 +17,6 @@ import org.diorite.Difficulty;
 import org.diorite.GameMode;
 import org.diorite.cfg.annotations.CfgClass;
 import org.diorite.cfg.annotations.CfgComment;
-import org.diorite.cfg.annotations.CfgFooterComment;
 import org.diorite.cfg.annotations.defaults.CfgBooleanDefault;
 import org.diorite.cfg.annotations.defaults.CfgByteDefault;
 import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
@@ -29,19 +28,15 @@ import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings.HardcoreAction;
 
 @SuppressWarnings("HardcodedFileSeparator")
-@CfgClass(name = "WorldsConfig")
-@CfgComment("Welcome in Diorite worlds configuration file.")
-@CfgFooterComment("End of configuration!")
-@CfgFooterComment("=====================")
 public class WorldsConfig
 {
-    private static final List<WorldGroupConfig> def1 = Collections.singletonList(new WorldGroupConfig());
-    private static final List<WorldConfig>      def2 = new ArrayList<>(3);
+    private static final List<WorldConfig>      def2;
+    private static final List<WorldGroupConfig> def1;
+
 
     static
     {
-        final WorldGroupConfig g = def1.get(0);
-        g.name = "default";
+        def2 = new ArrayList<>(3);
         {
             final WorldConfig w = new WorldConfig();
             w.seed = defaultSeed();
@@ -61,8 +56,12 @@ public class WorldsConfig
             w.dimension = Dimension.END;
             def2.add(w);
         }
+        def1 = Collections.singletonList(new WorldGroupConfig());
+        final WorldGroupConfig g = def1.get(0);
+        g.name = "default";
         g.worlds = new ArrayList<>(def2);
     }
+
 
     private static List<WorldGroupConfig> defaultGroupConfig()
     {
@@ -168,7 +167,11 @@ public class WorldsConfig
     {
         @CfgComment("Name of world, must be unique.")
         @CfgStringDefault("world")
-        private String name = "world";
+        private String  name    = "world";
+
+        @CfgComment("If world should be loaded on start.")
+        @CfgBooleanDefault(true)
+        private boolean enabled = true;
 
         @CfgComment("Default gamemode for new players.")
         @CfgDelegateDefault("org.diorite.cfg.WorldsConfig#defaultGamemode")
@@ -238,6 +241,16 @@ public class WorldsConfig
         public void setName(final String name)
         {
             this.name = name;
+        }
+
+        public boolean isEnabled()
+        {
+            return this.enabled;
+        }
+
+        public void setEnabled(final boolean enabled)
+        {
+            this.enabled = enabled;
         }
 
         public GameMode getGamemode()

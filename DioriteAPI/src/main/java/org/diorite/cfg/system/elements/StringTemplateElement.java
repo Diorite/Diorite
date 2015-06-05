@@ -137,7 +137,7 @@ public class StringTemplateElement extends TemplateElement<String>
     {
         writer.append("|2-\n");
         final String[] lines = StringUtils.split(element, '\n');
-        final int lvl = level + ((elementPlace == ElementPlace.LIST) ? 0 : 1);
+        final int lvl = level + 1;//((elementPlace == ElementPlace.LIST) ? 0 : 1);
         for (int i = 0, linesLength = lines.length; i < linesLength; i++)
         {
             final String line = lines[i];

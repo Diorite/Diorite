@@ -139,9 +139,9 @@ public abstract class TemplateElement<T>
                 {
                     writer.append('\n');
                     Template.appendComment(writer, field.getFooter(), level, false);
-                    writer.append('\n');
                 }
             }
+            writer.append('\n');
         }
     }
 
@@ -162,7 +162,7 @@ public abstract class TemplateElement<T>
     {
         if (element != null)
         {
-            if (addComments && (field.getHeader() != null))
+            if (addComments && (field.getHeader() != null) && (elementPlace == ElementPlace.NORMAL))
             {
                 appendElement(writer, level, field.getHeader());
                 writer.append('\n');
