@@ -33,7 +33,7 @@ public class URLTemplateElement extends TemplateElement<URL>
     }
 
     @Override
-    protected URL convertDefault(final Object def)
+    protected URL convertDefault(final Object def, final Class<?> fieldType)
     {
         try
         {

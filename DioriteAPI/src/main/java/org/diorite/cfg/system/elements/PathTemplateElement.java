@@ -38,7 +38,7 @@ public class PathTemplateElement extends TemplateElement<Path>
     }
 
     @Override
-    protected Path convertDefault(final Object def)
+    protected Path convertDefault(final Object def, final Class<?> fieldType)
     {
         try
         {

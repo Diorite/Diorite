@@ -25,7 +25,7 @@ public class DoubleTemplateElement extends SimpleTemplateElement<Double>
     }
 
     @Override
-    protected Double convertDefault(final Object def)
+    protected Double convertDefault(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Number)
         {

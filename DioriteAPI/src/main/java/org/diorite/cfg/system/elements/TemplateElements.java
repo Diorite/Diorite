@@ -18,6 +18,7 @@ import org.diorite.cfg.system.elements.primitives.FloatTemplateElement;
 import org.diorite.cfg.system.elements.primitives.IntTemplateElement;
 import org.diorite.cfg.system.elements.primitives.LongTemplateElement;
 import org.diorite.cfg.system.elements.primitives.ShortTemplateElement;
+import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.pipeline.BasePipeline;
 import org.diorite.utils.pipeline.Pipeline;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
@@ -165,6 +166,7 @@ public final class TemplateElements
     static
     {
         elements.addLast(Enum.class.getName(), EnumTemplateElement.INSTANCE);
+        elements.addLast(SimpleEnum.class.getName(), SimpleEnumTemplateElement.INSTANCE);
         elements.addLast(URI.class.getName(), URITemplateElement.INSTANCE);
         elements.addLast(URL.class.getName(), URLTemplateElement.INSTANCE);
         elements.addLast(File.class.getName(), FileTemplateElement.INSTANCE);

@@ -86,10 +86,11 @@ public abstract class TemplateElement<T>
      * May throw error if object can't be converted.
      *
      * @param def object to convert.
+     * @param fieldType expected type of returned object.
      *
      * @return converted object.
      */
-    protected abstract T convertDefault(Object def);
+    protected abstract T convertDefault(Object def, Class<?> fieldType);
 
     /**
      * Wrtie header/footer comments, field name (key) and value to slected writer ({@link Appendable}) using this template.
@@ -112,7 +113,7 @@ public abstract class TemplateElement<T>
             final Object def = field.getDefault();
             if (def != null)
             {
-                element = this.convertDefault(field.getDefault());
+                element = this.convertDefault(field.getDefault(), field.getField().getType());
             }
         }
         if (element != null)

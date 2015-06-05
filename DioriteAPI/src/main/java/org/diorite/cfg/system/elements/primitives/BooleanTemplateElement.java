@@ -25,7 +25,7 @@ public class BooleanTemplateElement extends SimpleTemplateElement<Boolean>
     }
 
     @Override
-    protected Boolean convertDefault(final Object def)
+    protected Boolean convertDefault(final Object def, final Class<?> fieldType)
     {
         throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
     }

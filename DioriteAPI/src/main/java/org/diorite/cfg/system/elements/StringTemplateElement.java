@@ -47,7 +47,7 @@ public class StringTemplateElement extends TemplateElement<String>
     }
 
     @Override
-    protected String convertDefault(final Object def)
+    protected String convertDefault(final Object def, final Class<?> fieldType)
     {
         return def.toString();
     }

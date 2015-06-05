@@ -25,7 +25,7 @@ public class IntTemplateElement extends SimpleTemplateElement<Integer>
     }
 
     @Override
-    protected Integer convertDefault(final Object def)
+    protected Integer convertDefault(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Number)
         {

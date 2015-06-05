@@ -33,7 +33,7 @@ public class URITemplateElement extends TemplateElement<URI>
     }
 
     @Override
-    protected URI convertDefault(final Object def)
+    protected URI convertDefault(final Object def, final Class<?> fieldType)
     {
         if (def instanceof URI)
         {

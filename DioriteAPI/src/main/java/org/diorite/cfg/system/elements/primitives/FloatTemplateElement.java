@@ -25,7 +25,7 @@ public class FloatTemplateElement extends SimpleTemplateElement<Float>
     }
 
     @Override
-    protected Float convertDefault(final Object def)
+    protected Float convertDefault(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Number)
         {

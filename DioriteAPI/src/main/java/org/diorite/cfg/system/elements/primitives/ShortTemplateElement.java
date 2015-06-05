@@ -25,7 +25,7 @@ public class ShortTemplateElement extends SimpleTemplateElement<Short>
     }
 
     @Override
-    protected Short convertDefault(final Object def)
+    protected Short convertDefault(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Number)
         {

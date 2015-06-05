@@ -83,7 +83,7 @@ public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
     }
 
     @Override
-    protected T convertDefault(final Object def)
+    protected T convertDefault(final Object def, final Class<?> fieldType)
     {
         final Class<?> c = def.getClass();
         if (this.fieldType.isAssignableFrom(c))

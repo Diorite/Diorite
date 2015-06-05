@@ -25,7 +25,7 @@ public class LongTemplateElement extends SimpleTemplateElement<Long>
     }
 
     @Override
-    protected Long convertDefault(final Object def)
+    protected Long convertDefault(final Object def, final Class<?> fieldType)
     {
         if (def instanceof Number)
         {
