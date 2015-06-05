@@ -1,8 +1,6 @@
 package org.diorite.impl.world;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,18 +15,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Tickable;
 import org.diorite.impl.world.io.mca.McaChunkIO;
+import org.diorite.cfg.DioriteConfig;
 import org.diorite.cfg.WorldsConfig;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.cfg.WorldsConfig.WorldGroupConfig;
-import org.diorite.cfg.system.Template;
-import org.diorite.cfg.system.TemplateCreator;
-import org.diorite.cfg.yaml.DioriteYaml;
 import org.diorite.entity.Player;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
-import org.diorite.utils.DioriteUtils;
 import org.diorite.world.World;
 import org.diorite.world.WorldsManager;
 
@@ -114,7 +109,7 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
         return world.getPlayersInWorld();
     }
 
-    public void init(final File worldsFile)
+    public void init(final DioriteConfig cfg, final File worldsFile)
     {
         Validate.notNull(worldsFile, "File can't be null");
         if (! worldsFile.exists())
@@ -122,68 +117,22 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
             worldsFile.mkdirs();
             return;
         }
-        if (worldsFile.isDirectory())
-        {
-            final Template<WorldsConfig> cfgTemp = TemplateCreator.getTemplate(WorldsConfig.class);
-            final File f = new File(worldsFile, "worlds.yml");
-            boolean needWrite = true;
-            if (f.exists())
-            {
-                final DioriteYaml dy = new DioriteYaml();
-                try
-                {
-                    this.config = dy.loadAs(new FileInputStream(f), WorldsConfig.class);
-                    if (this.config == null)
-                    {
-                        this.config = new WorldsConfig();
-                    }
-                    else
-                    {
-                        needWrite = false;
-                    }
-                } catch (final FileNotFoundException ignored) // should be never thrown.
-                {
-                    throw new AssertionError("Config file not found...", ignored);
-                }
-            }
-            else
-            {
-                this.config = new WorldsConfig();
-                try
-                {
-                    DioriteUtils.createFile(f);
-                } catch (final IOException e)
-                {
-                    throw new RuntimeException("Can't create configuration file!", e);
-                }
-            }
-            if (needWrite)
-            {
-                try
-                {
-                    cfgTemp.dump(f, this.config);
-                } catch (final IOException e)
-                {
-                    throw new RuntimeException("Can't dump configuration file!", e);
-                }
-            }
-
-            for (final WorldGroupConfig wgc : this.config.getGroups())
-            {
-                final WorldGroupImpl wgImpl = new WorldGroupImpl(wgc.getName(), new File(worldsFile, wgc.getName()));
-                this.groups.put(wgc.getName(), wgImpl);
-                for (final WorldConfig wc : wgc.getWorlds())
-                {
-                    final File wFile = new File(wgImpl.getDataFolder(), wc.getName());
-                    final WorldImpl wImpl = new WorldImpl(new McaChunkIO(wFile), wc.getName(), wgImpl, wc.getDimension(), wc.getGenerator(), wc.getGeneratorSettings());
-                    this.loadWorld(wImpl, wc);
-                    wgImpl.addWorld(wImpl);
-                }
-            }
-        }
-        else
+        this.config = cfg.getWorlds();
+        if (! worldsFile.isDirectory())
         {
             throw new IllegalArgumentException("Worlds can be only loaded from directory. Not from file: " + worldsFile.getPath());
+        }
+        for (final WorldGroupConfig wgc : this.config.getGroups())
+        {
+            final WorldGroupImpl wgImpl = new WorldGroupImpl(wgc.getName(), new File(worldsFile, wgc.getName()));
+            this.groups.put(wgc.getName(), wgImpl);
+            for (final WorldConfig wc : wgc.getWorlds())
+            {
+                final File wFile = new File(wgImpl.getDataFolder(), wc.getName());
+                final WorldImpl wImpl = new WorldImpl(new McaChunkIO(wFile), wc.getName(), wgImpl, wc.getDimension(), wc.getGenerator(), wc.getGeneratorSettings());
+                this.loadWorld(wImpl, wc);
+                wgImpl.addWorld(wImpl);
+            }
         }
     }
 

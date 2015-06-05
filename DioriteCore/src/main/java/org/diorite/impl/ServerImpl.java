@@ -38,11 +38,11 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerListHeaderFooter;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutTitle;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.input.ConsoleReaderThread;
+import org.diorite.impl.input.InputThread;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;
-import org.diorite.impl.input.ConsoleReaderThread;
-import org.diorite.impl.input.InputThread;
 import org.diorite.impl.pipelines.ChatPipelineImpl;
 import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
 import org.diorite.impl.pipelines.ChunkLoadPipelineImpl;
@@ -57,6 +57,9 @@ import org.diorite.Diorite;
 import org.diorite.Server;
 import org.diorite.cfg.DioriteConfig;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
+import org.diorite.cfg.WorldsConfig;
+import org.diorite.cfg.WorldsConfig.WorldConfig;
+import org.diorite.cfg.WorldsConfig.WorldGroupConfig;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
 import org.diorite.cfg.yaml.DioriteYaml;
@@ -127,6 +130,9 @@ public class ServerImpl implements Server, Runnable
 
     private void loadConfigFile(final File f)
     {
+        TemplateCreator.getTemplate(WorldGroupConfig.class);
+        TemplateCreator.getTemplate(WorldsConfig.class);
+        TemplateCreator.getTemplate(WorldConfig.class);
         final Template<DioriteConfig> cfgTemp = TemplateCreator.getTemplate(DioriteConfig.class);
         boolean needWrite = true;
         if (f.exists())
@@ -626,7 +632,7 @@ public class ServerImpl implements Server, Runnable
         }
 
         System.out.println("Loading worlds...");
-        this.worldsManager.init(new File(options.valueOf("worldsdir").toString()));
+        this.worldsManager.init(this.config, new File(options.valueOf("worldsdir").toString()));
         System.out.println("Worlds loaded.");
 
         try
