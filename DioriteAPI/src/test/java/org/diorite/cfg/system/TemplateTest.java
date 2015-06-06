@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 
 public class TemplateTest extends TestCase
 {
-    private static final boolean PRINT_TEMPLATE = true;
+    private static final boolean PRINT_TEMPLATE = false;
 
     @org.junit.Test
     public void testAdvTemplate() throws Exception
