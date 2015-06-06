@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  */
 public class MethodInvoker
 {
-    private final Method method;
+    protected final Method method;
 
     /**
      * Construct new invoker for given method, it don't check its accessible status.

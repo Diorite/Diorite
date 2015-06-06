@@ -1,6 +1,7 @@
 package org.diorite.utils.reflections;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 
 class ReflectField<E> extends FieldAccessor<E> implements ReflectGetter<E>, ReflectSetter<E>
 {
@@ -12,5 +13,11 @@ class ReflectField<E> extends FieldAccessor<E> implements ReflectGetter<E>, Refl
     ReflectField(final FieldAccessor<?> accessor)
     {
         super(accessor.getField());
+    }
+
+    @Override
+    public Type getGenericType()
+    {
+        return this.field.getGenericType();
     }
 }

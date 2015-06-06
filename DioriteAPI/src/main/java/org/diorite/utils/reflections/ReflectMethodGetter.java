@@ -1,6 +1,7 @@
 package org.diorite.utils.reflections;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 class ReflectMethodGetter<E> extends MethodInvoker implements ReflectGetter<E>
 {
@@ -19,5 +20,11 @@ class ReflectMethodGetter<E> extends MethodInvoker implements ReflectGetter<E>
     {
         //noinspection unchecked
         return (E) super.invoke(src);
+    }
+
+    @Override
+    public Type getGenericType()
+    {
+        return this.method.getGenericReturnType();
     }
 }

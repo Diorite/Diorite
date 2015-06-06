@@ -1,5 +1,7 @@
 package org.diorite.utils.reflections;
 
+import java.lang.reflect.Type;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -61,6 +63,12 @@ public class ReflectElement<E> implements ReflectGetter<E>, ReflectSetter<E>
     public void set(final Object src, final Object obj)
     {
         this.setter.set(src, obj);
+    }
+
+    @Override
+    public Type getGenericType()
+    {
+        return (this.getter == null) ? null : this.getter.getGenericType();
     }
 
     @Override

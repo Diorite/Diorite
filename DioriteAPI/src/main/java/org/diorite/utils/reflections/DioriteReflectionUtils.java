@@ -10,6 +10,7 @@ import java.util.Arrays;
 import org.diorite.cfg.system.ConfigField;
 import org.diorite.utils.SimpleEnum;
 
+@SuppressWarnings("unchecked")
 public final class DioriteReflectionUtils
 {
     private DioriteReflectionUtils()
@@ -40,7 +41,7 @@ public final class DioriteReflectionUtils
      *
      * @return Element for field value.
      */
-    public static <T> ReflectElement<T> getReflectElement(String fieldName, final Class<?> clazz)
+    public static <T> ReflectElement<T> getReflectElement(final String fieldName, final Class<?> clazz)
     {
         final ReflectGetter<T> getter = getReflectGetter(fieldName, clazz);
         if (getter instanceof ReflectField)
@@ -184,21 +185,15 @@ public final class DioriteReflectionUtils
         Method m = null;
         try
         {
-            m = clazz.getMethod("get" + fieldName);
+            m = clazz.getMethod("set" + fieldName);
         } catch (final NoSuchMethodException ignored1)
         {
-            try
+            for (final Method cm : clazz.getMethods())
             {
-                m = clazz.getMethod("is" + fieldName);
-            } catch (final NoSuchMethodException ignored2)
-            {
-                for (final Method cm : clazz.getMethods())
+                if (cm.getName().equalsIgnoreCase("set" + fieldName) && (cm.getParameterCount() == 1))
                 {
-                    if ((cm.getName().equalsIgnoreCase("get" + fieldName) || cm.getName().equalsIgnoreCase("is" + fieldName)) && (cm.getReturnType() != Void.class) && (cm.getReturnType() != void.class) && (cm.getParameterCount() == 0))
-                    {
-                        m = cm;
-                        break;
-                    }
+                    m = cm;
+                    break;
                 }
             }
         }
@@ -371,14 +366,12 @@ public final class DioriteReflectionUtils
     {
         do
         {
-            System.out.println("trying for: " + name + ", " + enumClass + ", " + def);
             try
             {
                 final Method m = enumClass.getMethod("values");
                 final SimpleEnum<?>[] objects = (SimpleEnum<?>[]) m.invoke(null);
                 for (final SimpleEnum<?> object : objects)
                 {
-                    System.out.println("Object: " + object);
                     if (object.name().equalsIgnoreCase(name) || (object.getId() == id))
                     {
                         return (T) object;

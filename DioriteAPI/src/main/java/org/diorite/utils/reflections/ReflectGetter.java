@@ -1,9 +1,11 @@
 package org.diorite.utils.reflections;
 
-@FunctionalInterface
+import java.lang.reflect.Type;
+
 /**
  * Classes implementing this interface can get something from given object.
- */ public interface ReflectGetter<E>
+ */
+public interface ReflectGetter<E>
 {
     /**
      * Get value from given object.
@@ -13,4 +15,10 @@ package org.diorite.utils.reflections;
      * @return value from object.
      */
     E get(Object src);
+
+
+    /**
+     * @return generic type.
+     */
+    Type getGenericType();
 }

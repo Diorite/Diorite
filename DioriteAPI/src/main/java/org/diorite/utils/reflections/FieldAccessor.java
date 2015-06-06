@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class FieldAccessor<T>
 {
-    private final Field field;
+    protected final Field field;
 
     /**
      * Construct new invoker for given constructor, it don't check its accessible status.
