@@ -28,18 +28,21 @@ public interface Server
     String PREFIX_RAW = "[Diorite]";
     String PREFIX_MSG = PREFIX + " " + ChatColor.RESET.toString();
     String NANE       = "Diorite";
-    String VERSION    = "0.1-SNAPSHOT";
 
     int NANOS_IN_MILLI  = 1000000;
     int NANOS_IN_SECOND = NANOS_IN_MILLI * 1000;
 
-    int    DEFAULT_PORT                         = 25565;
-    int    DEFAULT_PACKET_COMPRESSION_THRESHOLD = 256;
-    String DEFAULT_SERVER                       = "main";
-    int    DEFAULT_TPS                          = 20;
-    byte   DEFAULT_RENDER_DISTANCE              = 10;
-    int    DEFAULT_WAIT_TIME                    = NANOS_IN_SECOND / DEFAULT_TPS;
-    int    MAX_NICKNAME_SIZE                    = 16;
+    int  DEFAULT_PORT                         = 25565;
+    int  DEFAULT_PACKET_COMPRESSION_THRESHOLD = 256;
+    int  DEFAULT_TPS                          = 20;
+    byte DEFAULT_RENDER_DISTANCE              = 10;
+    int  DEFAULT_WAIT_TIME                    = NANOS_IN_SECOND / DEFAULT_TPS;
+    int  MAX_NICKNAME_SIZE                    = 16;
+
+    static String getVersion()
+    {
+        return "0.1-SNAPSHOT";
+    }
 
     List<String> getOnlinePlayersNames(String prefix);
 
@@ -88,8 +91,6 @@ public interface Server
     CommandMap getCommandMap();
 
     PluginCommandBuilder createCommand(Plugin plugin, String name);
-
-    String getServerName();
 
     Collection<Player> getOnlinePlayers();
 
