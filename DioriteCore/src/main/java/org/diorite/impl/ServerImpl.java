@@ -24,6 +24,7 @@ import org.apache.logging.log4j.core.appender.ConsoleAppender;
 
 import org.diorite.impl.auth.SessionService;
 import org.diorite.impl.auth.yggdrasil.YggdrasilSessionService;
+import org.diorite.impl.cfg.DioriteConfigImpl;
 import org.diorite.impl.command.ColoredConsoleCommandSenderImpl;
 import org.diorite.impl.command.CommandMapImpl;
 import org.diorite.impl.command.ConsoleCommandSenderImpl;
@@ -53,7 +54,6 @@ import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
 import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
 import org.diorite.Diorite;
 import org.diorite.Server;
-import org.diorite.cfg.DioriteConfig;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
@@ -82,13 +82,12 @@ import org.diorite.world.generator.WorldGenerators;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 
-public class ServerImpl implements Server, Runnable
+public class ServerImpl implements Server
 {
     private static ServerImpl instance;
 
     protected final CommandMapImpl commandMap = new CommandMapImpl();
-    protected final String      serverName;
-    protected final Thread      mainServerThread;
+    protected final Thread      mainThread;
     protected final InputThread inputThread;
     protected final String      hostname;
     protected final int         port;
@@ -96,7 +95,6 @@ public class ServerImpl implements Server, Runnable
     protected int    waitTime           = DEFAULT_WAIT_TIME;
     protected int    connectionThrottle = 1000;
     protected double mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
-    protected       int                      compressionThreshold; // -1 -> off
     protected final YggdrasilSessionService  sessionService;
     protected final ServerConnection         serverConnection;
     protected final PlayersManagerImpl       playersManager;
@@ -104,27 +102,25 @@ public class ServerImpl implements Server, Runnable
     protected       ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
     protected       ConsoleReader            reader;
     protected       long                     currentTick;
-    protected       OnlineMode               onlineMode;
-    protected       byte                     renderDistance;
-    protected final int                      playerTimeout;
     protected final int                      keepAliveTimer;
-    protected       DioriteConfig            config;
-    private           KeyPair keyPair   = MinecraftEncryption.generateKeyPair();
-    private transient boolean isRunning = true;
+    protected       DioriteConfigImpl        config;
+    private                    KeyPair keyPair    = MinecraftEncryption.generateKeyPair();
+    private transient volatile boolean isRunning  = true;
+    private transient volatile boolean hasStopped = false;
 
     public int getCompressionThreshold()
     {
-        return this.compressionThreshold;
+        return this.config.getNetworkCompressionThreshold();
     }
 
     public void setCompressionThreshold(final int compressionThreshold)
     {
-        this.compressionThreshold = compressionThreshold;
+        this.config.setNetworkCompressionThreshold(compressionThreshold);
     }
 
     private void loadConfigFile(final File f)
     {
-        final Template<DioriteConfig> cfgTemp = TemplateCreator.getTemplate(DioriteConfig.class);
+        final Template<DioriteConfigImpl> cfgTemp = TemplateCreator.getTemplate(DioriteConfigImpl.class);
         boolean needWrite = true;
         if (f.exists())
         {
@@ -133,7 +129,7 @@ public class ServerImpl implements Server, Runnable
                 this.config = cfgTemp.load(f);
                 if (this.config == null)
                 {
-                    this.config = cfgTemp.fillDefaults(new DioriteConfig());
+                    this.config = cfgTemp.fillDefaults(new DioriteConfigImpl());
                 }
                 else
                 {
@@ -146,7 +142,7 @@ public class ServerImpl implements Server, Runnable
         }
         else
         {
-            this.config = cfgTemp.fillDefaults(new DioriteConfig());
+            this.config = cfgTemp.fillDefaults(new DioriteConfigImpl());
             try
             {
                 DioriteUtils.createFile(f);
@@ -191,75 +187,29 @@ public class ServerImpl implements Server, Runnable
         return this.playersManager.getOnlinePlayersNames();
     }
 
-    public ServerImpl(final String serverName, final Proxy proxy, final OptionSet options)
+    public ServerImpl(final Proxy proxy, final OptionSet options)
     {
         instance = this;
+        this.mainThread = Thread.currentThread();
         Diorite.setServer(this);
         this.loadConfigFile((File) options.valueOf("config"));
         if (this.config == null)
         {
             throw new AssertionError("Configuration instance is null after creating!");
         }
-
         this.keepAliveTimer = (int) options.valueOf("keepalivetimer");
 
-        if (options.has("keepalivetimer"))
-        {
-            this.playerTimeout = (int) options.valueOf("timeout");
-        }
-        else
-        {
-            this.playerTimeout = this.config.getPlayerIdleTimeout();
-        }
-        if (options.has("compressionthreshold"))
-        {
-            this.compressionThreshold = (int) options.valueOf("compressionthreshold");
-        }
-        else
-        {
-            this.compressionThreshold = this.config.getNetworkCompressionThreshold();
-        }
-
-        if (options.has("hostname"))
-        {
-            this.hostname = options.valueOf("hostname").toString();
-        }
-        else
-        {
-            this.hostname = this.config.getHostname();
-        }
-
-        if (options.has("port"))
-        {
-            this.port = (int) options.valueOf("port");
-        }
-        else
-        {
-            this.port = this.config.getPort();
-        }
+        this.hostname = options.has("hostname") ? options.valueOf("hostname").toString() : this.config.getHostname();
+        this.port = options.has("port") ? (int) options.valueOf("port") : this.config.getPort();
 
         if (options.has("online"))
         {
             final OnlineMode mode = OnlineMode.valueOf(options.valueOf("online").toString().toUpperCase());
-            this.onlineMode = (mode == null) ? OnlineMode.TRUE : mode;
+            if (mode != null)
+            {
+                this.config.setOnlineMode(mode);
+            }
         }
-        else
-        {
-            this.onlineMode = this.config.getOnlineMode();
-        }
-
-        if (options.has("render"))
-        {
-            this.renderDistance = (byte) options.valueOf("render");
-        }
-        else
-        {
-            this.renderDistance = (byte) this.config.getViewDistance();
-        }
-
-
-        this.serverName = serverName;
-        this.mainServerThread = new Thread(this, "{Diorite|Main}");
         this.registerEvents();
 
         if (System.console() == null)
@@ -297,7 +247,7 @@ public class ServerImpl implements Server, Runnable
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try
             {
-                this.stop();
+                this.onStop();
             } catch (final Exception e)
             {
                 e.printStackTrace();
@@ -321,7 +271,7 @@ public class ServerImpl implements Server, Runnable
     }
 
     @Override
-    public DioriteConfig getConfig()
+    public DioriteConfigImpl getConfig()
     {
         return this.config;
     }
@@ -333,7 +283,7 @@ public class ServerImpl implements Server, Runnable
 
     public int getPlayerTimeout()
     {
-        return this.playerTimeout;
+        return this.config.getPlayerIdleTimeout();
     }
 
     @Override
@@ -363,13 +313,13 @@ public class ServerImpl implements Server, Runnable
     @Override
     public byte getRenderDistance()
     {
-        return this.renderDistance;
+        return (byte) this.config.getViewDistance();
     }
 
     @Override
     public void setRenderDistance(final byte renderDistance)
     {
-        this.renderDistance = renderDistance;
+        this.config.setViewDistance(renderDistance);
     }
 
     @Override
@@ -414,8 +364,19 @@ public class ServerImpl implements Server, Runnable
     {
         if (! this.isRunning)
         {
-            return; // TODO This shouldn't never happen. Maybe IllegalStateException?
+            return;
         }
+        this.isRunning = false;
+        // TODO
+    }
+
+    public synchronized void onStop()
+    {
+        if (this.hasStopped)
+        {
+            return;
+        }
+        this.hasStopped = true;
         this.isRunning = false;
         if (this.playersManager != null)
         {
@@ -424,13 +385,13 @@ public class ServerImpl implements Server, Runnable
         if (this.worldsManager != null)
         {
             this.worldsManager.getWorlds().stream().forEach(World::save);
+            Main.debug("done?");
         }
         if (this.serverConnection != null)
         {
             this.serverConnection.close();
         }
         System.out.println("Goodbye <3");
-        // TODO
     }
 
     @Override
@@ -494,12 +455,6 @@ public class ServerImpl implements Server, Runnable
     }
 
     @Override
-    public String getServerName()
-    {
-        return this.serverName;
-    }
-
-    @Override
     public Collection<Player> getOnlinePlayers()
     {
         return new CopyOnWriteArraySet<>(this.playersManager.getRawPlayers().values());
@@ -554,12 +509,12 @@ public class ServerImpl implements Server, Runnable
 
     public OnlineMode getOnlineMode()
     {
-        return this.onlineMode;
+        return this.config.getOnlineMode();
     }
 
     public void setOnlineMode(final OnlineMode onlineMode)
     {
-        this.onlineMode = onlineMode;
+        this.config.setOnlineMode(onlineMode);
     }
 
     public int getPort()
@@ -574,12 +529,12 @@ public class ServerImpl implements Server, Runnable
 
     public Thread getMainServerThread()
     {
-        return this.mainServerThread;
+        return this.mainThread;
     }
 
     public String getServerModName()
     {
-        return NANE + " v" + VERSION;
+        return NANE + " v" + Server.getVersion();
     }
 
     public ConsoleReader getReader()
@@ -613,7 +568,7 @@ public class ServerImpl implements Server, Runnable
             System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
             System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
         }
-        System.out.println("Starting Diorite v" + VERSION + " server...");
+        System.out.println("Starting Diorite v" + Server.getVersion() + " server...");
 
         { // register default generators
             WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
@@ -622,14 +577,14 @@ public class ServerImpl implements Server, Runnable
         }
 
         System.out.println("Loading worlds...");
-        this.worldsManager.init(this.config, new File(options.valueOf("worldsdir").toString()));
+        this.worldsManager.init(this.config, this.config.getWorlds().getWorldsDir());
         System.out.println("Worlds loaded.");
 
         try
         {
-            System.setProperty("io.netty.eventLoopThreads", options.valueOf("netty").toString());
+            System.setProperty("io.netty.eventLoopThreads", options.has("netty") ? options.valueOf("netty").toString() : Integer.toString(this.config.getNettyThreads()));
             System.out.println("Starting listening on " + this.hostname + ":" + this.port);
-            this.serverConnection.init(InetAddress.getByName(this.hostname), this.port, true); // TODO: epoll
+            this.serverConnection.init(InetAddress.getByName(this.hostname), this.port, this.config.isUseNativeTransport());
 
             System.out.println("Binded to " + this.hostname + ":" + this.port);
         } catch (final UnknownHostException e)
@@ -637,20 +592,18 @@ public class ServerImpl implements Server, Runnable
             e.printStackTrace();
         }
 
-        this.mainServerThread.start();
-
         // TODO configuration and other shit.
 
-        System.out.println("Started Diorite v" + VERSION + " server!");
+        System.out.println("Started Diorite v" + Server.getVersion() + " server!");
+        this.run();
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("serverName", this.serverName).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
     }
 
-    @Override
     public void run()
     {
         try
@@ -678,6 +631,12 @@ public class ServerImpl implements Server, Runnable
         } catch (final Throwable e)
         {
             e.printStackTrace();
+            this.stop();
+            return;
+        }
+        Main.debug("Main loop finished, stopping server.");
+        if (! this.hasStopped)
+        {
             this.stop();
         }
     }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -16,6 +17,7 @@ import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.BlockLocation;
@@ -113,31 +115,49 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     @Override
     public synchronized void saveAll()
     {
-        final Map<Long, ChunkGroup> temp = new HashMap<>(50);
-        for (final Chunk c : this.chunks.values())
+        final CountDownLatch latch;
+        synchronized (this.chunks)
         {
-            final Long key = IntsToLong.pack(c.getX() >> 5, c.getZ() >> 5);
-            ChunkGroup group = temp.get(key);
-            if (group == null)
+           latch = new CountDownLatch(this.chunks.size());
+            Main.debug("Chunks to save: "+this.chunks.size());
+            final Map<Long, ChunkGroup> temp = new HashMap<>(50);
+            for (final Chunk c : this.chunks.values())
             {
-                for (final ChunkGroup g : this.groups)
+                final Long key = IntsToLong.pack(c.getX() >> 5, c.getZ() >> 5);
+                ChunkGroup group = temp.get(key);
+                if (group == null)
                 {
-                    if (g.isIn(c.getPos()))
+                    for (final ChunkGroup g : this.groups)
                     {
-                        group = g;
-                        temp.put(key, g);
-                        break;
+                        if (g.isIn(c.getPos()))
+                        {
+                            group = g;
+                            temp.put(key, g);
+                            break;
+                        }
                     }
+                    assert group != null;
                 }
-                assert group != null;
-            }
-            if (! group.saveChunk((ChunkImpl) c))
-            {
-                throw new AssertionError("chunk isn't in valid group: " + c + ", " + group);
+                if (! group.saveChunk((ChunkImpl) c, null, () -> {
+                    latch.countDown();
+                    Main.debug("Chunks to save: "+latch.getCount());
+                }))
+                {
+                    throw new AssertionError("chunk isn't in valid group: " + c + ", " + group);
+                }
             }
         }
-//        this.world.getWorldFile().saveChunks((Collection<? extends ChunkImpl>) this.chunks.values());
+        try
+        {
+            Main.debug("Waiting for: "+latch.getCount());
+            latch.await();
+            Main.debug("Done...");
+        } catch (final InterruptedException e)
+        {
+            e.printStackTrace();
+        }
     }
+
 
     @Override
     public void unload(final Chunk chunk)
@@ -152,6 +172,11 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
             }
         }
         // this.world.getWorldFile().saveChunk((ChunkImpl) this.chunks.remove(chunk.getPos().asLong()));
+    }
+
+    public Collection<ChunkGroup> getGroups()
+    {
+        return this.groups;
     }
 
     @Override

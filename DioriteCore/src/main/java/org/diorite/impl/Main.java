@@ -58,17 +58,10 @@ public final class Main
                 this.acceptsAll(Collections.singletonList("debug"), "Enable debug mode");
                 this.acceptsAll(Arrays.asList("resourceleakdetector", "rld"), "ResourceLeakDetector level, disabled by default").withRequiredArg().ofType(String.class).describedAs("rld").defaultsTo(ResourceLeakDetector.Level.DISABLED.name());
                 this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port").defaultsTo(Server.DEFAULT_PORT);
-                this.acceptsAll(Arrays.asList("servername", "sn"), "name of server, should be simple like 'main'").withRequiredArg().ofType(String.class).describedAs("servername").defaultsTo(ServerImpl.DEFAULT_SERVER);
                 this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname").defaultsTo("localhost");
                 this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "is server should be in online-mode").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
                 this.acceptsAll(Collections.singletonList("config"), "Configuration file to use.").withRequiredArg().ofType(File.class).describedAs("config").defaultsTo(new File("diorite.yml"));
-                //noinspection MagicNumber
-                this.acceptsAll(Arrays.asList("timeout", "player-timeout", "pt"), "If player don't send any keep alive packet in this time (seconds), then it will be disconnected.").withRequiredArg().ofType(Integer.class).describedAs("timeout").defaultsTo(600);
                 this.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds server will send keep alive packet to players").withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(10);
-                this.acceptsAll(Arrays.asList("compressionthreshold", "compression-threshold"), "Compression threshold to use, -1 to turn off (default)").withRequiredArg().ofType(Integer.class).describedAs("compressionthreshold").defaultsTo(Server.DEFAULT_PACKET_COMPRESSION_THRESHOLD);
-                this.acceptsAll(Arrays.asList("render-distance", "render", "rd"), "chunk render distance").withRequiredArg().ofType(Byte.class).describedAs("render").defaultsTo(Server.DEFAULT_RENDER_DISTANCE);
-                this.acceptsAll(Collections.singletonList("worldsdir"), "Directory where all worlds are stored.").withRequiredArg().ofType(String.class).describedAs("worldsdir").defaultsTo("worlds");
-                this.acceptsAll(Collections.singletonList("defworld"), "Name of default world.").withRequiredArg().ofType(String.class).describedAs("defworld").defaultsTo("world");
                 this.acceptsAll(Arrays.asList("netty", "netty-threads"), "Amount of netty event loop threads.").withRequiredArg().ofType(Integer.class).describedAs("netty").defaultsTo(4);
                 this.acceptsAll(Collections.singletonList("nojline"), "Disables jline and emulates the vanilla console");
                 this.acceptsAll(Collections.singletonList("noconsole"), "Disables the console");
@@ -143,8 +136,7 @@ public final class Main
                 {
                     System.out.println("Warning, your max perm gen size is not set or less than 128mb. It is recommended you restart Java with the following argument: -XX:MaxPermSize=128M");
                 }
-                final String serverName = options.valueOf("servername").toString();
-                System.out.println("Starting server (" + serverName + "), please wait...");
+                System.out.println("Starting server, please wait...");
 
                 // register all packet classes.
                 RegisterPackets.init();
@@ -153,7 +145,7 @@ public final class Main
                 // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
                 // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
                 System.out.println("Registered " + Material.values().length + " vanilla minecraft blocks and items.");
-                new ServerImpl(serverName, Proxy.NO_PROXY, options).start(options);
+                new ServerImpl(Proxy.NO_PROXY, options).start(options);
             } catch (final Throwable t)
             {
                 t.printStackTrace();

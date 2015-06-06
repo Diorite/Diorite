@@ -10,6 +10,7 @@ import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.entity.Entity;
 import org.diorite.utils.collections.WeakCollection;
+import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.world.chunk.ChunkPos;
 
 import gnu.trove.map.TIntObjectMap;
@@ -22,7 +23,7 @@ public class ChunkGroup implements Tickable, Runnable
 {
     @SuppressWarnings("MagicNumber")
     private final TIntObjectMap<EntityImpl> entities = new TIntObjectHashMap<>(200);
-    private final Collection<ChunkImpl>     chunks   = WeakCollection.usingHashSet(1000, true);
+    private final Collection<ChunkImpl>     chunks   = WeakCollection.using(new ConcurrentSet<>(1000, 0.5f, 4), true);
     private final ForkJoinPool              pool     = new ForkJoinPool(1);
     private final ForkJoinPool              savePool = new ForkJoinPool(1);
 
@@ -47,6 +48,11 @@ public class ChunkGroup implements Tickable, Runnable
         this.pool.submit(this);
     }
 
+    public ForkJoinPool getSavePool()
+    {
+        return this.savePool;
+    }
+
     public ForkJoinPool getPool()
     {
         return this.pool;
@@ -67,13 +73,36 @@ public class ChunkGroup implements Tickable, Runnable
         return false;
     }
 
-    public boolean saveChunk(final ChunkImpl chunk, final Runnable action)
+    public boolean saveChunk(final ChunkImpl chunk, final Runnable pre)
     {
         if (this.chunks.contains(chunk))
         {
             this.savePool.submit(() -> {
-                action.run();
+                if (pre != null)
+                {
+                    pre.run();
+                }
                 chunk.getWorld().getWorldFile().saveChunk(chunk);
+            });
+            return true;
+        }
+        return false;
+    }
+
+    public boolean saveChunk(final ChunkImpl chunk, final Runnable pre, final Runnable after)
+    {
+        if (this.chunks.contains(chunk))
+        {
+            this.savePool.submit(() -> {
+                if (pre != null)
+                {
+                    pre.run();
+                }
+                chunk.getWorld().getWorldFile().saveChunk(chunk);
+                if (after != null)
+                {
+                    after.run();
+                }
             });
             return true;
         }

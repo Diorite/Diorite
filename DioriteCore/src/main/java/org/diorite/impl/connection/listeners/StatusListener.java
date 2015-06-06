@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
+import org.diorite.impl.cfg.DioriteConfigImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.status.PacketStatusInListener;
 import org.diorite.impl.connection.packets.status.in.PacketStatusInPing;
@@ -14,7 +15,6 @@ import org.diorite.impl.connection.ping.ServerPing;
 import org.diorite.impl.connection.ping.ServerPingPlayerSample;
 import org.diorite.impl.connection.ping.ServerPingServerData;
 import org.diorite.Server;
-import org.diorite.cfg.DioriteConfig;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
@@ -43,11 +43,11 @@ public class StatusListener implements PacketStatusInListener
     public void handle(final PacketStatusInStart packet)
     {
         final ServerPing ping = new ServerPing();
-        final DioriteConfig cfg = ServerImpl.getInstance().getConfig();
+        final DioriteConfigImpl cfg = ServerImpl.getInstance().getConfig();
         ping.setFavicon(null);
         ping.setMotd(ChatColor.translateAlternateColorCodes(cfg.getMotd()));
         ping.setPlayerData(new ServerPingPlayerSample(cfg.getMaxPlayers(), ServerImpl.getInstance().getOnlinePlayers().size()));
-        ping.setServerData(new ServerPingServerData(Server.NANE + " " + Server.VERSION, HandshakeListener.CURRENT_PROTOCOL));
+        ping.setServerData(new ServerPingServerData(Server.NANE + " " + Server.getVersion(), HandshakeListener.CURRENT_PROTOCOL));
         this.networkManager.sendPacket(new PacketStatusOutServerInfo(ping));
     }
 
