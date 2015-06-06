@@ -15,6 +15,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
 
     public NbtTagCompound()
     {
+        super("");
         this.tags = new HashMap<>(1);
     }
 
@@ -89,11 +90,22 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
     @Override
     public void addTag(final NbtTag tag)
     {
-        if (this.tags.containsKey(tag))
+        if (this.tags.containsKey(tag.getName()))
         {
             this.tags.get(tag.getName()).setParent(null);
         }
         this.tags.put(tag.getName(), tag);
+        tag.setParent(this);
+    }
+
+    @Override
+    public void setTag(final String key, final NbtTag tag)
+    {
+        if (this.tags.containsKey(key))
+        {
+            this.tags.get(key).setParent(null);
+        }
+        this.tags.put(key, tag);
         tag.setParent(this);
     }
 

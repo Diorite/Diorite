@@ -18,6 +18,8 @@ public interface NbtNamedTagContainer extends NbtTagContainer
 
     void addTag(NbtTag tag);
 
+    void setTag(String key, NbtTag tag);
+
     void addTag(String path, NbtTag tag);
 
     boolean containsTag(String name);
