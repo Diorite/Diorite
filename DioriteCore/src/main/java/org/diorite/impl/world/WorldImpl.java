@@ -87,6 +87,7 @@ public class WorldImpl implements World, Tickable
         if (this.generator == null)
         {
             this.generator = WorldGenerators.getGenerator("diorite:default", this, null);
+            assert this.generator != null;
         }
         tag.setString("generatorName", this.generator.getName());
         tag.setString("generatorOptions", this.generator.getOptions().toString());

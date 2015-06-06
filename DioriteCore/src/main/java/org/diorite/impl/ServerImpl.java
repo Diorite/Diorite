@@ -1,8 +1,6 @@
 package org.diorite.impl;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
@@ -57,12 +55,8 @@ import org.diorite.Diorite;
 import org.diorite.Server;
 import org.diorite.cfg.DioriteConfig;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
-import org.diorite.cfg.WorldsConfig;
-import org.diorite.cfg.WorldsConfig.WorldConfig;
-import org.diorite.cfg.WorldsConfig.WorldGroupConfig;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
-import org.diorite.cfg.yaml.DioriteYaml;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Player;
@@ -130,33 +124,29 @@ public class ServerImpl implements Server, Runnable
 
     private void loadConfigFile(final File f)
     {
-        TemplateCreator.getTemplate(WorldGroupConfig.class);
-        TemplateCreator.getTemplate(WorldsConfig.class);
-        TemplateCreator.getTemplate(WorldConfig.class);
         final Template<DioriteConfig> cfgTemp = TemplateCreator.getTemplate(DioriteConfig.class);
         boolean needWrite = true;
         if (f.exists())
         {
-            final DioriteYaml dy = new DioriteYaml();
             try
             {
-                this.config = dy.loadAs(new FileInputStream(f), DioriteConfig.class);
+                this.config = cfgTemp.load(f);
                 if (this.config == null)
                 {
-                    this.config = new DioriteConfig();
+                    this.config = cfgTemp.fillDefaults(new DioriteConfig());
                 }
                 else
                 {
                     needWrite = false;
                 }
-            } catch (final FileNotFoundException ignored) // should be never thrown.
+            } catch (final IOException e)
             {
-                throw new AssertionError("Config file not found...", ignored);
+                throw new RuntimeException("IO exception when loading config file: " + f, e);
             }
         }
         else
         {
-            this.config = new DioriteConfig();
+            this.config = cfgTemp.fillDefaults(new DioriteConfig());
             try
             {
                 DioriteUtils.createFile(f);
@@ -169,7 +159,7 @@ public class ServerImpl implements Server, Runnable
         {
             try
             {
-                cfgTemp.dump(f, this.config);
+                cfgTemp.dump(f, this.config, false);
             } catch (final IOException e)
             {
                 throw new RuntimeException("Can't dump configuration file!", e);

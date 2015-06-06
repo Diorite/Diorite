@@ -157,8 +157,8 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
         {
             try
             {
-                final NbtTagCompound tag = ((NbtTagCompound) NbtInputStream.readTagCompressed(file, NbtLimiter.getUnlimited())).getCompound("Data");
-                world.loadNBT(tag, worldConfig);
+                final NbtTagCompound tag = ((NbtTagCompound) NbtInputStream.readTagCompressed(file, NbtLimiter.getUnlimited()));
+                world.loadNBT(tag.getCompound(""), worldConfig);
             } catch (final IOException e)
             {
                 System.err.println("Can't read world in: " + world.getWorldFile().getWorldDir().getPath());
@@ -178,7 +178,11 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
             { // write
                 try (final NbtOutputStream os = NbtOutputStream.getCompressed(file))
                 {
-                    os.write(world.writeTo(new NbtTagCompound("Data")));
+                    final NbtTagCompound nbt = new NbtTagCompound();
+                    world.writeTo(nbt);
+                    final NbtTagCompound nbtData = new NbtTagCompound();
+                    nbtData.setTag("data", nbt);
+                    os.write(nbtData);
                     os.flush();
                     os.close();
                 } catch (final IOException e)

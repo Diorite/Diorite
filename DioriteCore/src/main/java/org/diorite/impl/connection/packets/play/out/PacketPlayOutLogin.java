@@ -80,7 +80,7 @@ public class PacketPlayOutLogin implements PacketPlayOut
             gmFlags |= 8;
         }
         data.writeByte(gmFlags);
-        data.writeByte(this.dimension.getId());
+        data.writeByte(this.dimension.getDimensionId());
         data.writeByte(this.difficulty.getLevel());
         data.writeByte(this.maxPlayers);
         data.writeText(this.worldType.getName());
