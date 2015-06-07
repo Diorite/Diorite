@@ -292,6 +292,7 @@ public class DioriteYamlConstructor extends Constructor
             return result;
         }
     }
+
     protected class DioriteConstructMapping extends ConstructMapping
     {
         @Override
@@ -301,25 +302,51 @@ public class DioriteYamlConstructor extends Constructor
             if (template != null)
             {
                 final ConfigField field = template.getFieldsNameMap().get(name);
-                final ReflectElement<?> prop = template.getFields().get(field);
-                return new GenericProperty(name, field.getField().getType(), prop.getGenericType())
+                if (field != null)
                 {
-                    @Override
-                    public void set(final Object object, final Object value) throws Exception
+                    final ReflectElement<?> prop = template.getFields().get(field);
+                    return new GenericProperty(name, field.getField().getType(), prop.getGenericType())
                     {
-                        prop.set(object, value);
-                    }
+                        @Override
+                        public void set(final Object object, final Object value) throws Exception
+                        {
+                            prop.set(object, value);
+                        }
 
-                    @Override
-                    public Object get(final Object object)
-                    {
-                        return prop.get(object);
-                    }
-                };
+                        @Override
+                        public Object get(final Object object)
+                        {
+                            return prop.get(object);
+                        }
+                    };
+                }
+                System.out.println("[YAML] Unknown entry in one of confguration file on " + type.getName() + "#" + name + ". Skipping...");
+                return EMPTY;
             }
             return super.getProperty(type, name);
         }
     }
+
+    private static final Property EMPTY = new Property("empty", Object.class)
+    {
+        @Override
+        public Class<?>[] getActualTypeArguments()
+        {
+            return new Class<?>[0];
+        }
+
+        @Override
+        public void set(final Object object, final Object value) throws Exception
+        {
+
+        }
+
+        @Override
+        public Object get(final Object object)
+        {
+            return null;
+        }
+    };
 
 
     public static class ConstructorException extends org.yaml.snakeyaml.constructor.ConstructorException
