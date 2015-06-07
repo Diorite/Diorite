@@ -1,6 +1,8 @@
 package org.diorite.impl.connection.packets.play.out;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,52 +13,55 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.world.chunk.ChunkPos;
 
+@SuppressWarnings("MagicNumber")
 @PacketClass(id = 0x21, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutMapChunk implements PacketPlayOut
 {
-    private int       x;
-    private int       z;
-    private boolean   groundUpContinuous;
-    private ChunkImpl chunk;
+    public static final int MASK = 0xffff;
 
-    private boolean includeSkyLight;
-    private int     mask;
-
-    private boolean unload;
+    private int             x;
+    private int             z;
+    private ChunkPacketData data;
+    private boolean         fullChunk;
+    private boolean         unload;
 
     public PacketPlayOutMapChunk()
     {
     }
 
-    public PacketPlayOutMapChunk(final boolean groundUpContinuous, final ChunkImpl chunk)
+    public PacketPlayOutMapChunk(final int x, final int z, final ChunkPacketData data, final boolean fullChunk)
     {
-        this.x = chunk.getPos().getX();
-        this.z = chunk.getPos().getZ();
-        this.groundUpContinuous = groundUpContinuous;
-        this.chunk = chunk;
-        this.mask = chunk.getMask();
+        this.x = x;
+        this.z = z;
+        this.data = data;
+        this.fullChunk = fullChunk;
     }
 
-    public PacketPlayOutMapChunk(final boolean groundUpContinuous, final ChunkImpl chunk, final boolean includeSkyLight)
+    public PacketPlayOutMapChunk(final boolean fullChunk, final ChunkImpl chunk)
     {
         this.x = chunk.getPos().getX();
         this.z = chunk.getPos().getZ();
-        this.groundUpContinuous = groundUpContinuous;
-        this.chunk = chunk;
-        this.includeSkyLight = includeSkyLight;
-        this.mask = chunk.getMask();
+        this.fullChunk = fullChunk;
+        this.data = createChunkPacketData(chunk, fullChunk, chunk.getWorld().hasSkyLight(), chunk.getMask());
     }
 
-    public PacketPlayOutMapChunk(final boolean groundUpContinuous, final ChunkImpl chunk, final boolean includeSkyLight, final int mask)
+    public PacketPlayOutMapChunk(final boolean fullChunk, final ChunkImpl chunk, final boolean includeSkyLight)
     {
         this.x = chunk.getPos().getX();
         this.z = chunk.getPos().getZ();
-        this.groundUpContinuous = groundUpContinuous;
-        this.chunk = chunk;
-        this.includeSkyLight = includeSkyLight;
-        this.mask = mask;
+        this.fullChunk = fullChunk;
+        this.data = createChunkPacketData(chunk, fullChunk, includeSkyLight, chunk.getMask());
+    }
+
+    public PacketPlayOutMapChunk(final boolean fullChunk, final ChunkImpl chunk, final boolean includeSkyLight, final int mask)
+    {
+        this.x = chunk.getPos().getX();
+        this.z = chunk.getPos().getZ();
+        this.fullChunk = fullChunk;
+        this.data = createChunkPacketData(chunk, fullChunk, includeSkyLight, mask);
     }
 
     @Override
@@ -64,7 +69,10 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     {
         this.x = data.readInt();
         this.z = data.readInt();
-        // TODO: this
+        this.fullChunk = data.readBoolean();
+        this.data = new ChunkPacketData();
+        this.data.mask = data.readShort();
+        this.data.rawData = data.readByteWord();
     }
 
     @Override
@@ -80,9 +88,9 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
             data.writeVarInt(0);
             return;
         }
-        data.writeBoolean(this.groundUpContinuous);
-        data.writeChunk(this.chunk, this.mask, this.includeSkyLight, this.groundUpContinuous);
-
+        data.writeBoolean(this.fullChunk);
+        data.writeShort(this.data.mask & MASK);
+        data.writeBytes(this.data.rawData);
     }
 
     @Override
@@ -111,44 +119,14 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
         this.z = z;
     }
 
-    public boolean isGroundUpContinuous()
+    public boolean isFullChunk()
     {
-        return this.groundUpContinuous;
+        return this.fullChunk;
     }
 
-    public void setGroundUpContinuous(final boolean groundUpContinuous)
+    public void setFullChunk(final boolean fullChunk)
     {
-        this.groundUpContinuous = groundUpContinuous;
-    }
-
-    public ChunkImpl getChunk()
-    {
-        return this.chunk;
-    }
-
-    public void setChunk(final ChunkImpl chunk)
-    {
-        this.chunk = chunk;
-    }
-
-    public boolean isIncludeSkyLight()
-    {
-        return this.includeSkyLight;
-    }
-
-    public void setIncludeSkyLight(final boolean includeSkyLight)
-    {
-        this.includeSkyLight = includeSkyLight;
-    }
-
-    public int getMask()
-    {
-        return this.mask;
-    }
-
-    public void setMask(final int mask)
-    {
-        this.mask = mask;
+        this.fullChunk = fullChunk;
     }
 
     public boolean isUnload()
@@ -159,7 +137,7 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).append("groundUpContinuous", this.groundUpContinuous).append("chunk", this.chunk).append("includeSkyLight", this.includeSkyLight).append("mask", this.mask).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).append("data", this.data).append("fullChunk", this.fullChunk).append("unload", this.unload).toString();
     }
 
     public static PacketPlayOutMapChunk unload(final ChunkPos chunk)
@@ -169,5 +147,97 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
         packet.x = chunk.getX();
         packet.z = chunk.getZ();
         return packet;
+    }
+
+    protected static int calcArraySize(final int chunkParts, final boolean hasSkyLight, final boolean fullChunk)
+    {
+        final int blocksSize = chunkParts << 13; // 8192 bits per chunk part
+        final int blockLight = chunkParts << 11; // 2048 bits per chunk part
+        final int skyLightSize = hasSkyLight ? (chunkParts << 11) : 0; // 2048 bits per chunk part
+        final int biomesSize = fullChunk ? 256 : 0;
+
+        return blocksSize + blockLight + skyLightSize + biomesSize;
+    }
+
+    protected static ChunkPacketData createChunkPacketData(final ChunkImpl chunk, final boolean fullChunk, final boolean hasSkyLight, final int mask)
+    {
+        final ChunkPartImpl[] chunkParts = chunk.getChunkParts();
+        final ChunkPacketData chunkPacketData = new ChunkPacketData();
+        final Collection<ChunkPartImpl> chunkPartsList = new ArrayList<>(10);
+        for (int j = 0; j < chunkParts.length; j++)
+        {
+            final ChunkPartImpl chunkPart = chunkParts[j];
+            if ((chunkPart != null) && ((! fullChunk) || (! chunkPart.isEmpty())) && ((mask & (1 << j)) != 0))
+            {
+                chunkPacketData.mask |= 1 << j;
+                chunkPartsList.add(chunkPart);
+            }
+        }
+        chunkPacketData.rawData = new byte[calcArraySize(Integer.bitCount(chunkPacketData.mask), hasSkyLight, fullChunk)];
+        int j = 0;
+        for (final ChunkPartImpl chunkPart : chunkPartsList)
+        {
+            final short[] achar = chunkPart.getBlocks().getArray();
+            for (int k = achar.length, l = 0; l < k; ++ l)
+            {
+                final short blockData = achar[l];
+                chunkPacketData.rawData[j++] = (byte) (blockData & 0xff);
+                chunkPacketData.rawData[j++] = (byte) ((blockData >> 8) & 0xff);
+            }
+        }
+        for (final ChunkPartImpl chunkPart : chunkPartsList)
+        {
+            j = appendArray(chunkPart.getBlockLight().getRawData(), chunkPacketData.rawData, j);
+        }
+        if (hasSkyLight)
+        {
+            for (final ChunkPartImpl chunkPart : chunkPartsList)
+            {
+                j = appendArray(chunkPart.getSkyLight().getRawData(), chunkPacketData.rawData, j);
+            }
+        }
+        if (fullChunk)
+        {
+            appendArray(chunk.getBiomes(), chunkPacketData.rawData, j);
+        }
+        return chunkPacketData;
+    }
+
+    protected static int appendArray(final byte[] sourceArray, final byte[] targetArray, final int currentLength)
+    {
+        System.arraycopy(sourceArray, 0, targetArray, currentLength, sourceArray.length);
+        return currentLength + sourceArray.length;
+    }
+
+    public static class ChunkPacketData
+    {
+        protected byte[] rawData;
+        protected int    mask;
+
+        public byte[] getRawData()
+        {
+            return this.rawData;
+        }
+
+        public void setRawData(final byte[] rawData)
+        {
+            this.rawData = rawData;
+        }
+
+        public int getMask()
+        {
+            return this.mask;
+        }
+
+        public void setMask(final int mask)
+        {
+            this.mask = mask;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rawData", this.rawData).append("mask", this.mask).toString();
+        }
     }
 }

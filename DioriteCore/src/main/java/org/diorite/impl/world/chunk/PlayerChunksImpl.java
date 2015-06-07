@@ -24,8 +24,8 @@ public class PlayerChunksImpl implements Tickable
     public static final int CHUNK_BULK_SIZE = 4;
 
     private final PlayerImpl player;
-    private final Collection<Chunk> loadedChunks  = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
-    private final Collection<Chunk> visibleChunks = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
+    private final Collection<ChunkImpl> loadedChunks  = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
+    private final Collection<ChunkImpl> visibleChunks = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
     //    private final Collection<Chunk> chunksToReSend = WeakCollection.using(new ConcurrentSet<>(200, 0.1f, 4));
     private boolean  logout;
     private ChunkPos lastUpdate;
@@ -42,12 +42,12 @@ public class PlayerChunksImpl implements Tickable
         return this.player.getRenderDistance();
     }
 
-    public Collection<Chunk> getVisibleChunks()
+    public Collection<ChunkImpl> getVisibleChunks()
     {
         return this.visibleChunks;
     }
 
-    public Collection<Chunk> getLoadedChunks()
+    public Collection<ChunkImpl> getLoadedChunks()
     {
         return this.loadedChunks;
     }
@@ -79,7 +79,7 @@ public class PlayerChunksImpl implements Tickable
         }
         this.lastUnload = curr;
         final byte render = this.getRenderDistance();
-        for (final Iterator<Chunk> iterator = this.loadedChunks.iterator(); iterator.hasNext(); )
+        for (final Iterator<ChunkImpl> iterator = this.loadedChunks.iterator(); iterator.hasNext(); )
         {
             final Chunk chunk = iterator.next();
             if (chunk.getPos().isInAABB(this.lastUpdate.add(- render, - render), this.lastUpdate.add(render, render)))
@@ -104,7 +104,7 @@ public class PlayerChunksImpl implements Tickable
         {
             return;
         }
-        final Collection<Chunk> chunksToSent = new ConcurrentSet<>();
+        final Collection<ChunkImpl> chunksToSent = new ConcurrentSet<>();
         final int r = this.lastUpdateR++;
         final ChunkManagerImpl impl = this.player.getWorld().getChunkManager();
 
@@ -115,7 +115,7 @@ public class PlayerChunksImpl implements Tickable
         final CountDownLatch latch = new CountDownLatch((r == 0) ? 1 : (8 * r));
 
         forChunks(r, this.lastUpdate, chunkPos -> {
-            Chunk chunk = impl.getChunkAt(chunkPos, true, false);
+            ChunkImpl chunk = (ChunkImpl) impl.getChunkAt(chunkPos, true, false);
             try
             {
                 if (chunk == null)
@@ -150,26 +150,26 @@ public class PlayerChunksImpl implements Tickable
             e.printStackTrace();
         }
 
-        for (final Iterator<Chunk> iterator = chunksToSent.iterator(); iterator.hasNext(); )
+        for (final Iterator<ChunkImpl> iterator = chunksToSent.iterator(); iterator.hasNext(); )
         {
-            final Chunk chunk = iterator.next();
+            final ChunkImpl chunk = iterator.next();
             if (! chunk.isPopulated() && ! chunk.populate())
             {
                 iterator.remove();
             }
         }
         final int size = (chunksToSent.size() / CHUNK_BULK_SIZE) + (((chunksToSent.size() % CHUNK_BULK_SIZE) == 0) ? 0 : 1);
-        final Chunk[][] chunkBulks = new Chunk[size][CHUNK_BULK_SIZE];
+        final ChunkImpl[][] chunkBulks = new ChunkImpl[size][CHUNK_BULK_SIZE];
         int i = 0;
-        for (final Chunk chunk : chunksToSent)
+        for (final ChunkImpl chunk : chunksToSent)
         {
             this.loadedChunks.add(chunk);
             chunkBulks[i / CHUNK_BULK_SIZE][i++ % CHUNK_BULK_SIZE] = chunk;
         }
 
-        for (final Chunk[] chunkBulk : chunkBulks)
+        for (final ChunkImpl[] chunkBulk : chunkBulks)
         {
-            this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(true, chunkBulk));
+            this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(chunkBulk));
         }
     }
 
