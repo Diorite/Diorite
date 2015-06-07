@@ -631,13 +631,13 @@ public class ServerImpl implements Server
         } catch (final Throwable e)
         {
             e.printStackTrace();
-            this.stop();
+            this.onStop();
             return;
         }
-        Main.debug("Main loop finished, stopping server.");
+        Main.debug("Main loop finished, stopping server. (" + this.hasStopped + ")");
         if (! this.hasStopped)
         {
-            this.stop();
+            this.onStop();
         }
     }
 
