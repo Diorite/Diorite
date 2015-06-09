@@ -14,6 +14,7 @@ import org.diorite.utils.reflections.DioriteReflectionUtils;
 
 /**
  * Template handler for all iterable-based objects.
+ *
  * @see Map
  */
 @SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
@@ -171,7 +172,7 @@ public class MapTemplateElement extends TemplateElement<Map>
             {
                 key = "";
             }
-            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == - 1)))
+            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || Enum.class.isAssignableFrom(kc) || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == - 1)))
             {
                 spaces(writer, level + 1);
                 TemplateElements.getElement(key.getClass()).appendValue(writer, field, entry, key, level + 1, ElementPlace.NORMAL);
@@ -195,7 +196,8 @@ public class MapTemplateElement extends TemplateElement<Map>
                 }
                 continue;
             }
-            TemplateElements.getElement(value.getClass()).writeValue(writer, field, element, value, level + 1, commentEveryElement || isFirst, ElementPlace.NORMAL);
+            final boolean canAddComments = ! isPrimitiveOrStrings(value);
+            TemplateElements.getElement(value.getClass()).writeValue(writer, field, element, value, level + 1, canAddComments && (commentEveryElement || isFirst), ElementPlace.NORMAL);
 
             isFirst = false;
             if (! iterator.hasNext())
@@ -222,7 +224,7 @@ public class MapTemplateElement extends TemplateElement<Map>
             {
                 key = "";
             }
-            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == - 1)))
+            if (DioriteReflectionUtils.getPrimitive(kc = key.getClass()).isPrimitive() || Enum.class.isAssignableFrom(kc) || (String.class.isAssignableFrom(kc) && (key.toString().indexOf('\n') == - 1)))
             {
                 TemplateElements.getElement(String.class).writeValue(writer, field, entry, key, - 1, false, ElementPlace.SIMPLE_LIST_OR_MAP);
                 writer.append(": ");
@@ -281,7 +283,7 @@ public class MapTemplateElement extends TemplateElement<Map>
             return true;
         }
         final Class<?> c = object.getClass();
-        return DioriteReflectionUtils.getPrimitive(c).isPrimitive() || ((! withString || String.class.isAssignableFrom(c)) && ! IterableTemplateElement.containsMultilineStrings(object));
+        return DioriteReflectionUtils.getPrimitive(c).isPrimitive() || Enum.class.isAssignableFrom(c) || ((! withString || String.class.isAssignableFrom(c)) && ! IterableTemplateElement.containsMultilineStrings(object));
     }
 
     static boolean isPrimitive(final Object object)
@@ -313,9 +315,10 @@ public class MapTemplateElement extends TemplateElement<Map>
             {
                 return isPrimitive(new ReflectArrayIterator(object));
             }
-            return DioriteReflectionUtils.getPrimitive(c.getComponentType()).isPrimitive();
+            final Class<?> ctc = DioriteReflectionUtils.getPrimitive(c.getComponentType());
+            return ctc.isPrimitive() || Enum.class.isAssignableFrom(ctc);
         }
-        return DioriteReflectionUtils.getPrimitive(c).isPrimitive();
+        return DioriteReflectionUtils.getPrimitive(c).isPrimitive() || Enum.class.isAssignableFrom(c);
     }
 
     static boolean isPrimitiveOrStrings(final Object object)
@@ -349,7 +352,7 @@ public class MapTemplateElement extends TemplateElement<Map>
             }
             return DioriteReflectionUtils.getPrimitive(c.getComponentType()).isPrimitive() || (String.class.isAssignableFrom(c.getComponentType()) && ! IterableTemplateElement.containsMultilineStrings(object));
         }
-        return DioriteReflectionUtils.getPrimitive(c).isPrimitive() || (String.class.isAssignableFrom(c) && ! IterableTemplateElement.containsMultilineStrings(object));
+        return DioriteReflectionUtils.getPrimitive(c).isPrimitive() || Enum.class.isAssignableFrom(c) || (String.class.isAssignableFrom(c) && ! IterableTemplateElement.containsMultilineStrings(object));
     }
 
     static boolean isAnyStringBigger(final Object object, final int maxLength)

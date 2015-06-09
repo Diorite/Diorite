@@ -189,7 +189,7 @@ public abstract class TemplateElement<T>
         {
             if (addComments && (field.getHeader() != null) && (elementPlace == ElementPlace.NORMAL))
             {
-                appendElement(writer, level, field.getHeader());
+                Template.appendComment(writer, field.getHeader(), level, false);
                 writer.append('\n');
             }
 
@@ -201,7 +201,7 @@ public abstract class TemplateElement<T>
 //            }
             if (addComments && (field.getFooter() != null))
             {
-                appendElement(writer, level, field.getFooter());
+                Template.appendComment(writer, field.getFooter(), level, false);
                 writer.append('\n');
             }
         }

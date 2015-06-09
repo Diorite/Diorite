@@ -38,6 +38,10 @@ public class StringTemplateElement extends TemplateElement<String>
     public StringTemplateElement()
     {
         super(String.class, (obj) -> {
+            if (obj instanceof Enum)
+            {
+                return ((Enum<?>) obj).name();
+            }
             if (obj instanceof CharSequence)
             {
                 return obj.toString();
@@ -60,7 +64,7 @@ public class StringTemplateElement extends TemplateElement<String>
         {
             style = StringStyle.DEFAULT;
         }
-        final String element = elementRaw.toString();
+        final String element = Enum.class.isAssignableFrom(elementRaw.getClass()) ? ((Enum<?>) elementRaw).name() : elementRaw.toString();
         switch (style)
         {
             case ALWAYS_QUOTED:
