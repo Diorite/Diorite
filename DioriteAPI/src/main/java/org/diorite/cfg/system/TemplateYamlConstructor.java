@@ -14,6 +14,26 @@ import org.diorite.utils.reflections.ReflectElement;
 
 public class TemplateYamlConstructor extends DioriteYamlConstructor
 {
+    private final ClassLoader customClassLoader;
+
+    /**
+     * Construct new TemplateYamlConstructor using custom class loader.ł
+     *
+     * @param customClassLoader other class loader than normal.
+     */
+    public TemplateYamlConstructor(final ClassLoader customClassLoader)
+    {
+        this.customClassLoader = customClassLoader;
+    }
+
+    /**
+     * Construct new default TemplateYamlConstructor.
+     */
+    public TemplateYamlConstructor()
+    {
+        this.customClassLoader = null;
+    }
+
     private static class FieldCounter
     {
         private final Template<?>              template;
@@ -30,6 +50,16 @@ public class TemplateYamlConstructor extends DioriteYamlConstructor
         {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("template", this.template).append("fields", this.fields.keySet()).toString();
         }
+    }
+
+    @Override
+    protected Class<?> getClassForName(final String name) throws ClassNotFoundException
+    {
+        if (this.customClassLoader != null)
+        {
+            return Class.forName(name, true, this.customClassLoader);
+        }
+        return Class.forName(name);
     }
 
     {
@@ -75,8 +105,27 @@ public class TemplateYamlConstructor extends DioriteYamlConstructor
         }
     }
 
+    /**
+     * @return snake yaml instance using DioriteYaml constructor extension, used by all templates.
+     */
     public static DioriteYaml getInstance()
     {
         return new DioriteYaml(new TemplateYamlConstructor());
+    }
+
+    /**
+     * @param customClassLoader other class loader than normal.
+     *
+     * @return snake yaml instance using DioriteYaml constructor extension, used by all templates.
+     */
+    public static DioriteYaml getInstance(final ClassLoader customClassLoader)
+    {
+        return new DioriteYaml(new TemplateYamlConstructor(customClassLoader));
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("customClassLoader", this.customClassLoader).toString();
     }
 }

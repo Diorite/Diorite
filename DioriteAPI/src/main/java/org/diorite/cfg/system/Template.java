@@ -1,8 +1,10 @@
 package org.diorite.cfg.system;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -52,13 +54,51 @@ public interface Template<T>
     Map<String, ConfigField> getFieldsNameMap();
 
     /**
+     * @return class loader used by template.
+     */
+    ClassLoader getDefaultClassLoader();
+
+    /**
+     * Load object from string using this template.
+     *
+     * @param str         string with object data in yaml.
+     * @param classLoader other class loader to use when creating objects.
+     *
+     * @return object created from yaml data and template.
+     */
+    T load(String str, ClassLoader classLoader);
+
+    /**
+     * Load object from {@link Reader} using this template.
+     *
+     * @param reader      {@link Reader} with object data in yaml.
+     * @param classLoader other class loader to use when creating objects.
+     *
+     * @return object created from yaml data and template.
+     */
+    T load(Reader reader, ClassLoader classLoader);
+
+    /**
+     * Load object from {@link InputStream} using this template.
+     *
+     * @param is          {@link InputStream} with object data in yaml.
+     * @param classLoader other class loader to use when creating objects.
+     *
+     * @return object created from yaml data and template.
+     */
+    T load(InputStream is, ClassLoader classLoader);
+
+    /**
      * Load object from string using this template.
      *
      * @param str string with object data in yaml.
      *
      * @return object created from yaml data and template.
      */
-    T load(String str);
+    default T load(final String str)
+    {
+        return this.load(str, this.getDefaultClassLoader());
+    }
 
     /**
      * Load object from {@link Reader} using this template.
@@ -67,7 +107,10 @@ public interface Template<T>
      *
      * @return object created from yaml data and template.
      */
-    T load(Reader reader);
+    default T load(final Reader reader)
+    {
+        return this.load(reader, this.getDefaultClassLoader());
+    }
 
     /**
      * Load object from {@link InputStream} using this template.
@@ -76,7 +119,29 @@ public interface Template<T>
      *
      * @return object created from yaml data and template.
      */
-    T load(InputStream is);
+    default T load(final InputStream is)
+    {
+        return this.load(is, this.getDefaultClassLoader());
+    }
+
+    /**
+     * Load object from {@link File} using this template.
+     *
+     * @param file        {@link File} with object data in yaml.
+     * @param charset     encoding of file.
+     * @param classLoader other class loader to use when creating objects.
+     *
+     * @return object created from yaml data and template.
+     *
+     * @throws IOException if file can't be found or it can't be opened.
+     */
+    default T load(final File file, final Charset charset, final ClassLoader classLoader) throws IOException
+    {
+        try (final InputStreamReader in = new InputStreamReader(new FileInputStream(file), charset))
+        {
+            return this.load(in, classLoader);
+        }
+    }
 
     /**
      * Load object from {@link File} using this template.
@@ -88,7 +153,10 @@ public interface Template<T>
      *
      * @throws IOException if file can't be found or it can't be opened.
      */
-    T load(File file, Charset charset) throws IOException;
+    default T load(final File file, final Charset charset) throws IOException
+    {
+        return this.load(file, charset, this.getDefaultClassLoader());
+    }
 
     /**
      * Load object from {@link File} using this template. (UTF-8)
@@ -261,6 +329,7 @@ public interface Template<T>
     {
         this.dump(file, object, StandardCharsets.UTF_8, false);
     }
+
     /**
      * dump object to YAML string.
      *

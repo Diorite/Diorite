@@ -1,11 +1,9 @@
 package org.diorite.cfg.system;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.charset.Charset;
@@ -39,6 +37,8 @@ public class BaseTemplate<T> implements Template<T>
     private final String                              footer;
     private final Map<ConfigField, ReflectElement<?>> fields;
     private final Map<String, ConfigField>            nameFields;
+    private final ClassLoader                         defaultClassLoader;
+
 
     /**
      * Construct new template for given class and fields.
@@ -50,6 +50,35 @@ public class BaseTemplate<T> implements Template<T>
      * @param fields collection of fields data.
      */
     public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Collection<ConfigField> fields)
+    {
+        this(name, type, header, footer, fields, BaseTemplate.class.getClassLoader());
+    }
+
+    /**
+     * Construct new template for given class and fields.
+     *
+     * @param name   name of template/object, should be class name.
+     * @param type   type of object/template.
+     * @param header header comment, may be null.
+     * @param footer footer comment, may be null.
+     * @param fields map of fields data and {@link ReflectElement} for that fields.
+     */
+    public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Map<ConfigField, ReflectElement<?>> fields)
+    {
+        this(name, type, header, footer, fields, BaseTemplate.class.getClassLoader());
+    }
+
+    /**
+     * Construct new template for given class and fields.
+     *
+     * @param name        name of template/object, should be class name.
+     * @param type        type of object/template.
+     * @param header      header comment, may be null.
+     * @param footer      footer comment, may be null.
+     * @param fields      collection of fields data.
+     * @param classLoader default class loader to use when creating objects.
+     */
+    public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Collection<ConfigField> fields, final ClassLoader classLoader)
     {
         Validate.notNull(type, "Class can't be null!");
         this.name = (name == null) ? type.getSimpleName() : name;
@@ -66,18 +95,20 @@ public class BaseTemplate<T> implements Template<T>
         {
             this.nameFields.put(cf.getName(), cf);
         }
+        this.defaultClassLoader = classLoader;
     }
 
     /**
      * Construct new template for given class and fields.
      *
-     * @param name   name of template/object, should be class name.
-     * @param type   type of object/template.
-     * @param header header comment, may be null.
-     * @param footer footer comment, may be null.
-     * @param fields map of fields data and {@link ReflectElement} for that fields.
+     * @param name        name of template/object, should be class name.
+     * @param type        type of object/template.
+     * @param header      header comment, may be null.
+     * @param footer      footer comment, may be null.
+     * @param fields      map of fields data and {@link ReflectElement} for that fields.
+     * @param classLoader default class loader to use when creating objects.
      */
-    public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Map<ConfigField, ReflectElement<?>> fields)
+    public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Map<ConfigField, ReflectElement<?>> fields, final ClassLoader classLoader)
     {
         Validate.notNull(type, "Class can't be null!");
         this.name = (name == null) ? type.getSimpleName() : name;
@@ -90,6 +121,7 @@ public class BaseTemplate<T> implements Template<T>
         {
             this.nameFields.put(cf.getName(), cf);
         }
+        this.defaultClassLoader = classLoader;
     }
 
     @Override
@@ -129,30 +161,27 @@ public class BaseTemplate<T> implements Template<T>
     }
 
     @Override
-    public T load(final String str)
+    public ClassLoader getDefaultClassLoader()
     {
-        return TemplateYamlConstructor.getInstance().loadAs(str, this.type);
+        return this.defaultClassLoader;
     }
 
     @Override
-    public T load(final Reader reader)
+    public T load(final String str, final ClassLoader classLoader)
     {
-        return TemplateYamlConstructor.getInstance().loadAs(reader, this.type);
+        return TemplateYamlConstructor.getInstance(classLoader).loadAs(str, this.type);
     }
 
     @Override
-    public T load(final InputStream is)
+    public T load(final Reader reader, final ClassLoader classLoader)
     {
-        return TemplateYamlConstructor.getInstance().loadAs(is, this.type);
+        return TemplateYamlConstructor.getInstance(classLoader).loadAs(reader, this.type);
     }
 
     @Override
-    public T load(final File file, final Charset charset) throws IOException
+    public T load(final InputStream is, final ClassLoader classLoader)
     {
-        try (final InputStreamReader in = new InputStreamReader(new FileInputStream(file), charset))
-        {
-            return this.load(in);
-        }
+        return TemplateYamlConstructor.getInstance(classLoader).loadAs(is, this.type);
     }
 
     @Override
