@@ -30,7 +30,6 @@ import org.diorite.utils.reflections.ReflectElement;
  */
 public class BaseTemplate<T> implements Template<T>
 {
-    // TODO: add methods for loading data from YAML
     private final String                              name;
     private final Class<T>                            type;
     private final String                              header;
