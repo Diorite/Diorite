@@ -52,7 +52,7 @@ public class DarkOakFenceGateMat extends WoodenFenceGateMat
 
     protected DarkOakFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(DARK_OAK_FENCE_GATE_SOUTH.name(), DARK_OAK_FENCE_GATE_SOUTH.getId(), DARK_OAK_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.DARK_OAK, face, open);
+        super(DARK_OAK_FENCE_GATE_SOUTH.name(), DARK_OAK_FENCE_GATE_SOUTH.ordinal(), DARK_OAK_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.DARK_OAK, face, open);
     }
 
     protected DarkOakFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)

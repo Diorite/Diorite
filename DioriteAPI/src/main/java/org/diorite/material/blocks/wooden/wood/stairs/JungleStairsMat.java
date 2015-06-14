@@ -52,7 +52,7 @@ public class JungleStairsMat extends WoodenStairsMat
 
     protected JungleStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(JUNGLE_STAIRS_EAST.name(), JUNGLE_STAIRS_EAST.getId(), JUNGLE_STAIRS_EAST.getMinecraftId(), WoodTypeMat.JUNGLE, face, upsideDown);
+        super(JUNGLE_STAIRS_EAST.name(), JUNGLE_STAIRS_EAST.ordinal(), JUNGLE_STAIRS_EAST.getMinecraftId(), WoodTypeMat.JUNGLE, face, upsideDown);
     }
 
     protected JungleStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)

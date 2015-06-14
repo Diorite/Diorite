@@ -63,7 +63,7 @@ public class StandingBannerMat extends BannerBlockMat
 
     protected StandingBannerMat(final BlockFace face)
     {
-        super(STANDING_BANNER_SOUTH.name(), STANDING_BANNER_SOUTH.getId(), STANDING_BANNER_SOUTH.getMinecraftId(), face.name(), combine(face));
+        super(STANDING_BANNER_SOUTH.name(), STANDING_BANNER_SOUTH.ordinal(), STANDING_BANNER_SOUTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

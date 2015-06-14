@@ -49,7 +49,7 @@ public class JukeboxMat extends BlockMaterialData
 
     protected JukeboxMat(final String enumName, final int type, final boolean withDisc)
     {
-        super(JUKEBOX.name(), JUKEBOX.getId(), JUKEBOX.getMinecraftId(), enumName, (byte) type);
+        super(JUKEBOX.name(), JUKEBOX.ordinal(), JUKEBOX.getMinecraftId(), enumName, (byte) type);
         this.withDisc = withDisc;
     }
 

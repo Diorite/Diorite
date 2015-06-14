@@ -52,7 +52,7 @@ public class CauldronMat extends BlockMaterialData
 
     protected CauldronMat(final String enumName, final int type, final int waterLevel)
     {
-        super(CAULDRON_EMPTY.name(), CAULDRON_EMPTY.getId(), CAULDRON_EMPTY.getMinecraftId(), enumName, (byte) type);
+        super(CAULDRON_EMPTY.name(), CAULDRON_EMPTY.ordinal(), CAULDRON_EMPTY.getMinecraftId(), enumName, (byte) type);
         this.waterLevel = waterLevel;
     }
 

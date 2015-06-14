@@ -60,7 +60,7 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
 
     protected RedSandstoneStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(RED_SANDSTONE_STAIRS_EAST.name(), RED_SANDSTONE_STAIRS_EAST.getId(), RED_SANDSTONE_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
+        super(RED_SANDSTONE_STAIRS_EAST.name(), RED_SANDSTONE_STAIRS_EAST.ordinal(), RED_SANDSTONE_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
         this.face = face;
         this.upsideDown = upsideDown;
     }

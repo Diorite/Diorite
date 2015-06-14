@@ -81,7 +81,7 @@ public class VineMat extends PlantMat
 
     protected VineMat(final BlockFace... faces)
     {
-        super(VINE.name(), VINE.getId(), VINE.getMinecraftId(), Arrays.stream(faces).map(Enum::name).reduce((a, b) -> a + "_" + b).orElse("NONE"), combine(faces));
+        super(VINE.name(), VINE.ordinal(), VINE.getMinecraftId(), Arrays.stream(faces).map(Enum::name).reduce((a, b) -> a + "_" + b).orElse("NONE"), combine(faces));
         this.faces = faces.clone();
     }
 

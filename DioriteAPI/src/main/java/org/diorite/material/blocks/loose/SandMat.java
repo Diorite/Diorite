@@ -42,7 +42,7 @@ public class SandMat extends LooseMat
 
     protected SandMat(final String enumName, final int type)
     {
-        super(SAND.name(), SAND.getId(), SAND.getMinecraftId(), enumName, (byte) type);
+        super(SAND.name(), SAND.ordinal(), SAND.getMinecraftId(), enumName, (byte) type);
     }
 
     protected SandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

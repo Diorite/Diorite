@@ -43,7 +43,7 @@ public class TallGrassMat extends FlowerMat
 
     protected TallGrassMat(final int type, final FlowerTypeMat flowerType)
     {
-        super(TALL_GRASS_SHRUB.name(), TALL_GRASS_SHRUB.getId(), TALL_GRASS_SHRUB.getMinecraftId(), (byte) type, flowerType);
+        super(TALL_GRASS_SHRUB.name(), TALL_GRASS_SHRUB.ordinal(), TALL_GRASS_SHRUB.getMinecraftId(), (byte) type, flowerType);
     }
 
     protected TallGrassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType)

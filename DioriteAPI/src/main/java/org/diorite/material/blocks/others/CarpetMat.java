@@ -65,7 +65,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
 
     protected CarpetMat(final DyeColor color)
     {
-        super(CARPET_WHITE.name(), CARPET_WHITE.getId(), CARPET_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
+        super(CARPET_WHITE.name(), CARPET_WHITE.ordinal(), CARPET_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
         this.color = color;
     }
 

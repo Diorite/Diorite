@@ -65,7 +65,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
 
     protected StainedHardenedClayMat(final DyeColor color)
     {
-        super(STAINED_HARDENED_CLAY_WHITE.name(), STAINED_HARDENED_CLAY_WHITE.getId(), STAINED_HARDENED_CLAY_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
+        super(STAINED_HARDENED_CLAY_WHITE.name(), STAINED_HARDENED_CLAY_WHITE.ordinal(), STAINED_HARDENED_CLAY_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
         this.color = color;
     }
 

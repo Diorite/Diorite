@@ -53,7 +53,7 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
 
     protected NetherPortalMat(final String enumName, final RotateAxisMat rotateAxis)
     {
-        super(NETHER_PORTAL_EAST_WEST.name(), NETHER_PORTAL_EAST_WEST.getId(), NETHER_PORTAL_EAST_WEST.getMinecraftId(), enumName, combine(rotateAxis));
+        super(NETHER_PORTAL_EAST_WEST.name(), NETHER_PORTAL_EAST_WEST.ordinal(), NETHER_PORTAL_EAST_WEST.getMinecraftId(), enumName, combine(rotateAxis));
         this.rotateAxis = rotateAxis;
     }
 

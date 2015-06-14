@@ -17,7 +17,7 @@ import org.diorite.utils.reflections.DioriteReflectionUtils;
  *
  * @see Map
  */
-@SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MapTemplateElement extends TemplateElement<Map>
 {
     /**

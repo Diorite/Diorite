@@ -70,7 +70,7 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
 
     protected DropperMat(final BlockFace facing, final boolean powered)
     {
-        super(DROPPER_DOWN.name(), DROPPER_DOWN.getId(), DROPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered));
+        super(DROPPER_DOWN.name(), DROPPER_DOWN.ordinal(), DROPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered));
         this.facing = facing;
         this.powered = powered;
     }

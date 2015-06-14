@@ -63,7 +63,7 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
 
     protected EndPortalFrameMat(final BlockFace face, final boolean activated)
     {
-        super(END_PORTAL_FRAME_SOUTH.name(), END_PORTAL_FRAME_SOUTH.getId(), END_PORTAL_FRAME_SOUTH.getMinecraftId(), face.name() + (activated ? "_EYE" : ""), combine(face, activated));
+        super(END_PORTAL_FRAME_SOUTH.name(), END_PORTAL_FRAME_SOUTH.ordinal(), END_PORTAL_FRAME_SOUTH.getMinecraftId(), face.name() + (activated ? "_EYE" : ""), combine(face, activated));
         this.face = face;
         this.activated = activated;
     }

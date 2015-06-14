@@ -58,7 +58,7 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
 
     protected GoldenPressurePlateMat(final int type)
     {
-        super(GOLDEN_PRESSURE_PLATE_0.name(), GOLDEN_PRESSURE_PLATE_0.getId(), GOLDEN_PRESSURE_PLATE_0.getMinecraftId(), Integer.toString(type), (byte) type, true);
+        super(GOLDEN_PRESSURE_PLATE_0.name(), GOLDEN_PRESSURE_PLATE_0.ordinal(), GOLDEN_PRESSURE_PLATE_0.getMinecraftId(), Integer.toString(type), (byte) type, true);
     }
 
     protected GoldenPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final int power)

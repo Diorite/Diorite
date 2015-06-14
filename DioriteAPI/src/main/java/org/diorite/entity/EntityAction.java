@@ -1,63 +1,40 @@
 package org.diorite.entity;
 
-import java.util.Map;
 import java.util.function.BiConsumer;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class EntityAction implements SimpleEnum<EntityAction>
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class EntityAction extends ASimpleEnum<EntityAction>
 {
-    public static final EntityAction CROUCH          = new EntityAction("CROUCH", 0, (p, args) -> p.setCrouching(true));
-    public static final EntityAction UNCROUCH        = new EntityAction("UNCROUCH", 1, (p, args) -> p.setCrouching(false));
-    public static final EntityAction LEAVE_BED       = new EntityAction("LEAVE_BED", 2, null);
-    public static final EntityAction START_SPRINTING = new EntityAction("START_SPRINTING", 3, (p, args) -> p.setSprinting(true));
-    public static final EntityAction STOP_SPRINTING  = new EntityAction("STOP_SPRINTING", 4, (p, args) -> p.setSprinting(false));
-    public static final EntityAction JUMP_WITH_HORSE = new EntityAction("JUMP_WITH_HORSE", 5, null);
-    public static final EntityAction OPEN_INVENTORY  = new EntityAction("OPEN_INVENTORY", 6, null);
+    static
+    {
+        init(EntityAction.class, 7);
+    }
 
-    private static final Map<String, EntityAction>   byName = new CaseInsensitiveMap<>(6, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<EntityAction> byID   = new TIntObjectHashMap<>(6, SMALL_LOAD_FACTOR);
+    public static final EntityAction CROUCH          = new EntityAction("CROUCH", (p, args) -> p.setCrouching(true));
+    public static final EntityAction UNCROUCH        = new EntityAction("UNCROUCH", (p, args) -> p.setCrouching(false));
+    public static final EntityAction LEAVE_BED       = new EntityAction("LEAVE_BED", null);
+    public static final EntityAction START_SPRINTING = new EntityAction("START_SPRINTING", (p, args) -> p.setSprinting(true));
+    public static final EntityAction STOP_SPRINTING  = new EntityAction("STOP_SPRINTING", (p, args) -> p.setSprinting(false));
+    public static final EntityAction JUMP_WITH_HORSE = new EntityAction("JUMP_WITH_HORSE", null);
+    public static final EntityAction OPEN_INVENTORY  = new EntityAction("OPEN_INVENTORY", null);
 
-    private final String                       enumName;
-    private final int                          id;
     private final BiConsumer<Player, Object[]> onAction; // idk if this is good idea...
 
-    public EntityAction(final String enumName, final int id, final BiConsumer<Player, Object[]> onAction)
+    public EntityAction(final String enumName, final int enumId, final BiConsumer<Player, Object[]> onAction)
     {
-        this.enumName = enumName;
-        this.id = id;
+        super(enumName, enumId);
         this.onAction = onAction;
     }
 
-    @Override
-    public String name()
+    public EntityAction(final String enumName, final BiConsumer<Player, Object[]> onAction)
     {
-        return this.enumName;
-    }
-
-    @Override
-    public int getId()
-    {
-        return this.id;
-    }
-
-    @Override
-    public EntityAction byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public EntityAction byName(final String name)
-    {
-        return byName.get(name);
+        super(enumName);
+        this.onAction = onAction;
     }
 
     public BiConsumer<Player, Object[]> getOnAction()
@@ -73,26 +50,38 @@ public class EntityAction implements SimpleEnum<EntityAction>
         }
     }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).toString();
-    }
-
-    public static EntityAction getByID(final int id)
-    {
-        return byID.get(id);
-    }
-
-    public static EntityAction getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
+    /**
+     * Register new {@link EntityAction} entry in this enum.
+     *
+     * @param element new element to register.
+     */
     public static void register(final EntityAction element)
     {
-        byID.put(element.getId(), element);
-        byName.put(element.name(), element);
+        ASimpleEnum.register(EntityAction.class, element);
+    }
+
+    /**
+     * Get one of {@link EntityAction} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static EntityAction getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(EntityAction.class, ordinal);
+    }
+
+    /**
+     * Get one of {@link EntityAction} entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static EntityAction getByEnumName(final String name)
+    {
+        return getByEnumName(EntityAction.class, name);
     }
 
     /**
@@ -100,17 +89,18 @@ public class EntityAction implements SimpleEnum<EntityAction>
      */
     public static EntityAction[] values()
     {
-        return byID.values(new EntityAction[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(EntityAction.class);
+        return (EntityAction[]) map.values(new EntityAction[map.size()]);
     }
 
     static
     {
-        register(CROUCH);
-        register(UNCROUCH);
-        register(LEAVE_BED);
-        register(START_SPRINTING);
-        register(STOP_SPRINTING);
-        register(JUMP_WITH_HORSE);
-        register(OPEN_INVENTORY);
+        EntityAction.register(CROUCH);
+        EntityAction.register(UNCROUCH);
+        EntityAction.register(LEAVE_BED);
+        EntityAction.register(START_SPRINTING);
+        EntityAction.register(STOP_SPRINTING);
+        EntityAction.register(JUMP_WITH_HORSE);
+        EntityAction.register(OPEN_INVENTORY);
     }
 }

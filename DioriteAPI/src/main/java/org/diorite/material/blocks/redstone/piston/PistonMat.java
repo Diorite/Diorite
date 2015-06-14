@@ -54,7 +54,7 @@ public class PistonMat extends PistonBaseMat
 
     protected PistonMat(final BlockFace face, final boolean extended)
     {
-        super(PISTON_DOWN.name(), PISTON_DOWN.getId(), PISTON_DOWN.getMinecraftId(), face, extended);
+        super(PISTON_DOWN.name(), PISTON_DOWN.ordinal(), PISTON_DOWN.getMinecraftId(), face, extended);
     }
 
     protected PistonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended)

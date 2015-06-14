@@ -58,7 +58,7 @@ public class SugarCaneMat extends PlantMat implements AgeableBlockMat
 
     protected SugarCaneMat(final int age)
     {
-        super(SUGAR_CANE_0.name(), SUGAR_CANE_0.getId(), SUGAR_CANE_0.getMinecraftId(), Integer.toString(age), (byte) age);
+        super(SUGAR_CANE_0.name(), SUGAR_CANE_0.ordinal(), SUGAR_CANE_0.getMinecraftId(), Integer.toString(age), (byte) age);
     }
 
     protected SugarCaneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

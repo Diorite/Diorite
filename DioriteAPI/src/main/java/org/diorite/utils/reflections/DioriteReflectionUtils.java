@@ -6,6 +6,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 import org.diorite.cfg.system.ConfigField;
 import org.diorite.utils.SimpleEnum;
@@ -362,17 +364,24 @@ public final class DioriteReflectionUtils
         return getSimpleEnumValueSafe(name, id, def.getClass(), def);
     }
 
+    private static final Map<Class<?>, Method> simpleEnumMethods = new IdentityHashMap<>(40);
+
     private static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final String name, final int id, Class<?> enumClass, final Object def)
     {
         do
         {
             try
             {
-                final Method m = enumClass.getMethod("values");
+                Method m = simpleEnumMethods.get(enumClass);
+                if (m == null)
+                {
+                    m = enumClass.getMethod("values");
+                    simpleEnumMethods.put(enumClass, m);
+                }
                 final SimpleEnum<?>[] objects = (SimpleEnum<?>[]) m.invoke(null);
                 for (final SimpleEnum<?> object : objects)
                 {
-                    if (object.name().equalsIgnoreCase(name) || (object.getId() == id))
+                    if (object.name().equalsIgnoreCase(name) || (object.ordinal() == id))
                     {
                         return (T) object;
                     }

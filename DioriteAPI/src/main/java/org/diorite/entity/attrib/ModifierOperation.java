@@ -2,73 +2,50 @@ package org.diorite.entity.attrib;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.UnaryOperator;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class ModifierOperation implements SimpleEnum<ModifierOperation>
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class ModifierOperation extends ASimpleEnum<ModifierOperation>
 {
-    public static final ModifierOperation ADD_NUMBER          = new ModifierOperation("ADD_NUMBER", 0, ModifierValue::addX, mod -> mod.setY(mod.getX()));
-    public static final ModifierOperation MULTIPLY_PERCENTAGE = new ModifierOperation("MULTIPLY_PERCENTAGE", 1, (value, d) -> value.addY(value.getX() * d));
-    public static final ModifierOperation ADD_PERCENTAGE      = new ModifierOperation("ADD_PERCENTAGE", 2, (value, d) -> value.multipleY(1 + d));
+    static
+    {
+        init(ModifierOperation.class, 3);
+    }
 
-    private static final Map<String, ModifierOperation>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<ModifierOperation> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+    public static final ModifierOperation ADD_NUMBER          = new ModifierOperation("ADD_NUMBER", ModifierValue::addX, mod -> mod.setY(mod.getX()));
+    public static final ModifierOperation MULTIPLY_PERCENTAGE = new ModifierOperation("MULTIPLY_PERCENTAGE", (value, d) -> value.addY(value.getX() * d));
+    public static final ModifierOperation ADD_PERCENTAGE      = new ModifierOperation("ADD_PERCENTAGE", (value, d) -> value.multipleY(1 + d));
 
-    private final String enumName;
-    private final int    id;
-    private static final SortedSet<ModifierOperation> sortedByID = new TreeSet<>((e1, e2) -> Integer.compare(e1.id, e2.id));
+    private static final SortedSet<ModifierOperation> sortedByID = new TreeSet<>((e1, e2) -> Integer.compare(e1.ordinal, e2.ordinal));
     private final ModifierOperationAction      action;
     private final UnaryOperator<ModifierValue> onEnd;
 
-    public ModifierOperation(final String enumName, final int id, final ModifierOperationAction action, final UnaryOperator<ModifierValue> onEnd)
+    public ModifierOperation(final String enumName, final int enumId, final ModifierOperationAction action, final UnaryOperator<ModifierValue> onEnd)
     {
-        this.enumName = enumName;
-        this.id = id;
+        super(enumName, enumId);
         this.action = action;
         this.onEnd = onEnd;
     }
 
-    public ModifierOperation(final String enumName, final int id, final ModifierOperationAction action)
+    public ModifierOperation(final String enumName, final ModifierOperationAction action, final UnaryOperator<ModifierValue> onEnd)
     {
-        this.enumName = enumName;
-        this.id = id;
+        super(enumName);
+        this.action = action;
+        this.onEnd = onEnd;
+    }
+
+    public ModifierOperation(final String enumName, final ModifierOperationAction action)
+    {
+        super(enumName);
         this.action = action;
         this.onEnd = m -> m;
-    }
-
-    @Override
-    public String name()
-    {
-        return this.enumName;
-    }
-
-    @Override
-    public int getId()
-    {
-        return this.id;
-    }
-
-    @Override
-    public ModifierOperation byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public ModifierOperation byName(final String name)
-    {
-        return byName.get(name);
     }
 
     public ModifierOperationAction getAction()
@@ -91,62 +68,49 @@ public class ModifierOperation implements SimpleEnum<ModifierOperation>
         return this.onEnd.apply(value);
     }
 
-    @Override
-    public int hashCode()
-    {
-        return this.id;
-    }
-
-    @Override
-    public boolean equals(final Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (! (o instanceof ModifierOperation))
-        {
-            return false;
-        }
-
-        final ModifierOperation that = (ModifierOperation) o;
-
-        return this.id == that.id;
-
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("enumName", this.enumName).toString();
-    }
-
     @FunctionalInterface
     public interface ModifierOperationAction
     {
         ModifierValue use(ModifierValue value, double modValue);
     }
-
-    public static ModifierOperation getByID(final int id)
-    {
-        return byID.get(id);
-    }
-
-    public static ModifierOperation getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
     public static List<ModifierOperation> getSortedByID()
     {
         return new ArrayList<>(sortedByID);
     }
 
+    /**
+     * Register new {@link ModifierOperation} entry in this enum.
+     *
+     * @param element new element to register.
+     */
     public static void register(final ModifierOperation element)
     {
-        byID.put(element.getId(), element);
-        byName.put(element.name(), element);
+        ASimpleEnum.register(ModifierOperation.class, element);
         sortedByID.add(element);
+    }
+
+    /**
+     * Get one of {@link ModifierOperation} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static ModifierOperation getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(ModifierOperation.class, ordinal);
+    }
+
+    /**
+     * Get one of {@link ModifierOperation} entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static ModifierOperation getByEnumName(final String name)
+    {
+        return getByEnumName(ModifierOperation.class, name);
     }
 
     /**
@@ -154,13 +118,15 @@ public class ModifierOperation implements SimpleEnum<ModifierOperation>
      */
     public static ModifierOperation[] values()
     {
-        return byID.values(new ModifierOperation[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ModifierOperation.class);
+        return (ModifierOperation[]) map.values(new ModifierOperation[map.size()]);
     }
+
 
     static
     {
-        register(ADD_NUMBER);
-        register(MULTIPLY_PERCENTAGE);
-        register(ADD_PERCENTAGE);
+        ModifierOperation.register(ADD_NUMBER);
+        ModifierOperation.register(MULTIPLY_PERCENTAGE);
+        ModifierOperation.register(ADD_PERCENTAGE);
     }
 }

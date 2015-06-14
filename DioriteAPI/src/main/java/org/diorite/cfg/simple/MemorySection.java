@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -410,13 +411,7 @@ public class MemorySection implements ConfigurationSection
 
         final List<String> result = new ArrayList<>(10);
 
-        for (final Object object : list)
-        {
-            if ((object instanceof String) || (this.isPrimitiveWrapper(object)))
-            {
-                result.add(String.valueOf(object));
-            }
-        }
+        result.addAll(list.stream().filter(object -> (object instanceof String) || (this.isPrimitiveWrapper(object))).map(String::valueOf).collect(Collectors.toList()));
 
         return result;
     }
@@ -742,13 +737,7 @@ public class MemorySection implements ConfigurationSection
             return result;
         }
 
-        for (final Object object : list)
-        {
-            if (object instanceof Map)
-            {
-                result.add((Map<?, ?>) object);
-            }
-        }
+        result.addAll(list.stream().filter(object -> object instanceof Map).map(object -> (Map<?, ?>) object).collect(Collectors.toList()));
 
         return result;
     }
@@ -796,10 +785,7 @@ public class MemorySection implements ConfigurationSection
         {
             final Set<String> keys = section.getKeys(deep);
 
-            for (final String key : keys)
-            {
-                output.add(createPath(section, key, this));
-            }
+            output.addAll(keys.stream().map(key -> createPath(section, key, this)).collect(Collectors.toList()));
         }
     }
 

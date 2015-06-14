@@ -75,7 +75,7 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
 
     protected LeverMat(final BlockFace face, final boolean rotated, final boolean powered)
     {
-        super(LEVER_DOWN.name(), LEVER_DOWN.getId(), LEVER_DOWN.getMinecraftId(), face.name() + (rotated ? "_SOUTH" : "") + (powered ? "_POWERED" : ""), combine(face, rotated, powered));
+        super(LEVER_DOWN.name(), LEVER_DOWN.ordinal(), LEVER_DOWN.getMinecraftId(), face.name() + (rotated ? "_SOUTH" : "") + (powered ? "_POWERED" : ""), combine(face, rotated, powered));
         this.face = face;
         this.rotated = rotated;
         this.powered = powered;

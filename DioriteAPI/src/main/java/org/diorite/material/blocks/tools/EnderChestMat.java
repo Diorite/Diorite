@@ -53,7 +53,7 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
 
     protected EnderChestMat(final BlockFace face)
     {
-        super(ENDER_CHEST_NORTH.name(), ENDER_CHEST_NORTH.getId(), ENDER_CHEST_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(ENDER_CHEST_NORTH.name(), ENDER_CHEST_NORTH.ordinal(), ENDER_CHEST_NORTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

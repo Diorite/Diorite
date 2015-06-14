@@ -51,7 +51,7 @@ public class SandstoneMat extends StonyMat implements VariantableMat
 
     protected SandstoneMat(final int type, final VariantMat variant)
     {
-        super(SANDSTONE.name(), SANDSTONE.getId(), SANDSTONE.getMinecraftId(), variant.name(), (byte) type);
+        super(SANDSTONE.name(), SANDSTONE.ordinal(), SANDSTONE.getMinecraftId(), variant.name(), (byte) type);
         this.variant = variant;
     }
 

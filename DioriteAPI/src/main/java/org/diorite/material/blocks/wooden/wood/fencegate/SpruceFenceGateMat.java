@@ -52,7 +52,7 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
 
     protected SpruceFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(SPRUCE_FENCE_GATE_SOUTH.name(), SPRUCE_FENCE_GATE_SOUTH.getId(), SPRUCE_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.SPRUCE, face, open);
+        super(SPRUCE_FENCE_GATE_SOUTH.name(), SPRUCE_FENCE_GATE_SOUTH.ordinal(), SPRUCE_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.SPRUCE, face, open);
     }
 
     protected SpruceFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)

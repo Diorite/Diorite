@@ -49,7 +49,7 @@ public class FlowersMat extends FlowerMat
 
     protected FlowersMat(final int type, final FlowerTypeMat flowerType)
     {
-        super(FLOWERS_POPPY.name(), FLOWERS_POPPY.getId(), FLOWERS_POPPY.getMinecraftId(), (byte) type, flowerType);
+        super(FLOWERS_POPPY.name(), FLOWERS_POPPY.ordinal(), FLOWERS_POPPY.getMinecraftId(), (byte) type, flowerType);
     }
 
     protected FlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType)

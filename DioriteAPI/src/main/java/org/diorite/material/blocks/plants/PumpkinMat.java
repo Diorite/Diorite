@@ -46,7 +46,7 @@ public class PumpkinMat extends AbstractPumpkinMat
 
     protected PumpkinMat(final BlockFace face)
     {
-        super(PUMPKIN_SOUTH.name(), PUMPKIN_SOUTH.getId(), PUMPKIN_SOUTH.getMinecraftId(), face);
+        super(PUMPKIN_SOUTH.name(), PUMPKIN_SOUTH.ordinal(), PUMPKIN_SOUTH.getMinecraftId(), face);
     }
 
     protected PumpkinMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)

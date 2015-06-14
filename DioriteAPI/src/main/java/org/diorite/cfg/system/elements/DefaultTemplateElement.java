@@ -9,7 +9,7 @@ import org.diorite.cfg.system.TemplateCreator;
 /**
  * Last template handler, trying get template for unknown object, or change it to string.
  */
-@SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class DefaultTemplateElement extends TemplateElement<Object>
 {
     /**

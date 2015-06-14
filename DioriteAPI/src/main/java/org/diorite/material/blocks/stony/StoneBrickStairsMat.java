@@ -60,7 +60,7 @@ public class StoneBrickStairsMat extends BlockMaterialData implements StairsMat
 
     protected StoneBrickStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(STONE_BRICK_STAIRS_EAST.name(), STONE_BRICK_STAIRS_EAST.getId(), STONE_BRICK_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
+        super(STONE_BRICK_STAIRS_EAST.name(), STONE_BRICK_STAIRS_EAST.ordinal(), STONE_BRICK_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
         this.face = face;
         this.upsideDown = upsideDown;
     }

@@ -14,7 +14,6 @@ import org.diorite.cfg.system.CfgEntryData;
  *
  * @see URL
  */
-@SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
 public class URLTemplateElement extends TemplateElement<URL>
 {
     /**

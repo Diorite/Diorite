@@ -11,7 +11,7 @@ import org.diorite.utils.math.DioriteMathUtils;
  *
  * @see SimpleEnum
  */
-@SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SimpleEnumTemplateElement extends TemplateElement<SimpleEnum>
 {
     /**

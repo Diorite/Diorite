@@ -60,7 +60,7 @@ public class IronTrapdoorMat extends TrapdoorMat
 
     protected IronTrapdoorMat(final BlockFace face, final boolean open, final boolean onTop)
     {
-        super(IRON_TRAPDOOR_WEST_BOTTOM.name(), IRON_TRAPDOOR_WEST_BOTTOM.getId(), IRON_TRAPDOOR_WEST_BOTTOM.getMinecraftId(), face, open, onTop);
+        super(IRON_TRAPDOOR_WEST_BOTTOM.name(), IRON_TRAPDOOR_WEST_BOTTOM.ordinal(), IRON_TRAPDOOR_WEST_BOTTOM.getMinecraftId(), face, open, onTop);
     }
 
     protected IronTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop)

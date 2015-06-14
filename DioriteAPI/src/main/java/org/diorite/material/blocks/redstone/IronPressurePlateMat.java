@@ -58,7 +58,7 @@ public class IronPressurePlateMat extends WeightedPressurePlateMat
 
     protected IronPressurePlateMat(final int type)
     {
-        super(IRON_PRESSURE_PLATE_0.name(), IRON_PRESSURE_PLATE_0.getId(), IRON_PRESSURE_PLATE_0.getMinecraftId(), Integer.toString(type), (byte) type, true);
+        super(IRON_PRESSURE_PLATE_0.name(), IRON_PRESSURE_PLATE_0.ordinal(), IRON_PRESSURE_PLATE_0.getMinecraftId(), Integer.toString(type), (byte) type, true);
     }
 
     protected IronPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final int power)

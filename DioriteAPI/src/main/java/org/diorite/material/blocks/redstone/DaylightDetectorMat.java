@@ -57,7 +57,7 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
 
     protected DaylightDetectorMat(final int power)
     {
-        super(DAYLIGHT_DETECTOR_OFF.name(), DAYLIGHT_DETECTOR_OFF.getId(), DAYLIGHT_DETECTOR_OFF.getMinecraftId(), power);
+        super(DAYLIGHT_DETECTOR_OFF.name(), DAYLIGHT_DETECTOR_OFF.ordinal(), DAYLIGHT_DETECTOR_OFF.getMinecraftId(), power);
     }
 
     protected DaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power)

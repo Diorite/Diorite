@@ -69,7 +69,7 @@ public class SpruceDoorMat extends WoodenDoorMat
 
     protected SpruceDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.getId(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.SPRUCE);
+        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.SPRUCE);
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +79,7 @@ public class SpruceDoorMat extends WoodenDoorMat
 
     protected SpruceDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.getId(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.SPRUCE);
+        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.SPRUCE);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;

@@ -1,59 +1,35 @@
 package org.diorite;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class GameMode implements SimpleEnum<GameMode>
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class GameMode extends ASimpleEnum<GameMode>
 {
-    public static final GameMode SURVIVAL  = new GameMode("SURVIVAL", 0, "survival");
-    public static final GameMode CREATIVE  = new GameMode("CREATIVE", 1, "creative");
-    public static final GameMode ADVENTURE = new GameMode("ADVENTURE", 2, "adventure");
-    public static final GameMode SPECTATOR = new GameMode("SPECTATOR", 3, "spectator");
+    static
+    {
+        init(GameMode.class, 4);
+    }
 
-    private static final Map<String, GameMode>   byName = new CaseInsensitiveMap<>(5, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<GameMode> byID   = new TIntObjectHashMap<>(5, SMALL_LOAD_FACTOR);
+    public static final GameMode SURVIVAL  = new GameMode("SURVIVAL", "survival");
+    public static final GameMode CREATIVE  = new GameMode("CREATIVE", "creative");
+    public static final GameMode ADVENTURE = new GameMode("ADVENTURE", "adventure");
+    public static final GameMode SPECTATOR = new GameMode("SPECTATOR", "spectator");
 
-    private final String enumName;
-    private final int    id;
     private final String name;
 
-    public GameMode(final String enumName, final int id, final String name)
+    public GameMode(final String enumName, final int enumId, final String name)
     {
-        this.enumName = enumName;
-        this.id = id;
+        super(enumName, enumId);
         this.name = name;
     }
 
-    @Override
-    public String name()
+    public GameMode(final String enumName, final String name)
     {
-        return this.enumName;
-    }
-
-    @Override
-    public int getId()
-    {
-        return this.id;
-    }
-
-    @Override
-    public GameMode byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public GameMode byName(final String name)
-    {
-        return byName.get(name);
+        super(enumName);
+        this.name = name;
     }
 
     public String getName()
@@ -61,26 +37,38 @@ public class GameMode implements SimpleEnum<GameMode>
         return this.name;
     }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("name", this.name).toString();
-    }
-
-    public static GameMode getByID(final int id)
-    {
-        return byID.get(id);
-    }
-
-    public static GameMode getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
+    /**
+     * Register new {@link GameMode} entry in this enum.
+     *
+     * @param element new element to register.
+     */
     public static void register(final GameMode element)
     {
-        byID.put(element.getId(), element);
-        byName.put(element.name(), element);
+        ASimpleEnum.register(GameMode.class, element);
+    }
+
+    /**
+     * Get one of {@link GameMode} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static GameMode getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(GameMode.class, ordinal);
+    }
+
+    /**
+     * Get one of GameMode entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static GameMode getByEnumName(final String name)
+    {
+        return getByEnumName(GameMode.class, name);
     }
 
     /**
@@ -88,14 +76,15 @@ public class GameMode implements SimpleEnum<GameMode>
      */
     public static GameMode[] values()
     {
-        return byID.values(new GameMode[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(GameMode.class);
+        return (GameMode[]) map.values(new GameMode[map.size()]);
     }
 
     static
     {
-        register(SURVIVAL);
-        register(CREATIVE);
-        register(ADVENTURE);
-        register(SPECTATOR);
+        GameMode.register(SURVIVAL);
+        GameMode.register(CREATIVE);
+        GameMode.register(ADVENTURE);
+        GameMode.register(SPECTATOR);
     }
 }

@@ -42,7 +42,7 @@ public class WoodenPressurePlateMat extends PressurePlateMat
 
     protected WoodenPressurePlateMat(final int type, final boolean powered)
     {
-        super(WOODEN_PRESSURE_PLATE.name(), WOODEN_PRESSURE_PLATE.getId(), WOODEN_PRESSURE_PLATE.getMinecraftId(), powered ? "POWERED" : "WOODEN_PRESSURE_PLATE", (byte) type, powered);
+        super(WOODEN_PRESSURE_PLATE.name(), WOODEN_PRESSURE_PLATE.ordinal(), WOODEN_PRESSURE_PLATE.getMinecraftId(), powered ? "POWERED" : "WOODEN_PRESSURE_PLATE", (byte) type, powered);
     }
 
     protected WoodenPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered)

@@ -52,7 +52,7 @@ public class OakStairsMat extends WoodenStairsMat
 
     protected OakStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(OAK_STAIRS_EAST.name(), OAK_STAIRS_EAST.getId(), OAK_STAIRS_EAST.getMinecraftId(), WoodTypeMat.OAK, face, upsideDown);
+        super(OAK_STAIRS_EAST.name(), OAK_STAIRS_EAST.ordinal(), OAK_STAIRS_EAST.getMinecraftId(), WoodTypeMat.OAK, face, upsideDown);
     }
 
     protected OakStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)

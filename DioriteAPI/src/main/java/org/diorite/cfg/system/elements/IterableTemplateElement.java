@@ -22,7 +22,7 @@ import org.diorite.utils.reflections.ReflectElement;
  * Template handler for all iterable-based objects.
  * @see Iterable
  */
-@SuppressWarnings({"rawtypes", "ObjectEquality", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class IterableTemplateElement extends TemplateElement<Iterable>
 {
     /**

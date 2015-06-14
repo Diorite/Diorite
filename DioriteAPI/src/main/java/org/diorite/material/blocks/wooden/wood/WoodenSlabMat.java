@@ -53,10 +53,9 @@ public class WoodenSlabMat extends WoodSlabMat
         super("WOODEN_SLAB", 126, "minecraft:wooden_slab", "OAK", WoodTypeMat.OAK, SlabTypeMat.BOTTOM);
     }
 
-    @SuppressWarnings("MagicNumber")
     public WoodenSlabMat(final WoodTypeMat woodType, final SlabTypeMat slabType)
     {
-        super(WOODEN_SLAB_OAK.name(), WOODEN_SLAB_OAK.getId(), WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType);
+        super(WOODEN_SLAB_OAK.name(), WOODEN_SLAB_OAK.ordinal(), WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType);
     }
 
     @Override

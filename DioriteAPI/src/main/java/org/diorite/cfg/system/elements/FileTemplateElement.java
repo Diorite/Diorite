@@ -15,7 +15,6 @@ import org.diorite.cfg.system.CfgEntryData;
  * @see Path
  * @see File
  */
-@SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
 public class FileTemplateElement extends TemplateElement<File>
 {
     /**

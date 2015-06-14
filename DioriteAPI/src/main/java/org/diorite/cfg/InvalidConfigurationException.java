@@ -2,6 +2,7 @@ package org.diorite.cfg;
 
 public class InvalidConfigurationException extends RuntimeException
 {
+    private static final long serialVersionUID = 0L;
 
     public InvalidConfigurationException()
     {

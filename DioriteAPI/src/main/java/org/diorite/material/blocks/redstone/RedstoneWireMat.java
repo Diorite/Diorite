@@ -64,7 +64,7 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
 
     protected RedstoneWireMat(final int type)
     {
-        super(REDSTONE_WIRE_OFF.name(), REDSTONE_WIRE_OFF.getId(), REDSTONE_WIRE_OFF.getMinecraftId(), ((type == 0) ? "OFF" : ("ON_" + type)), (byte) type);
+        super(REDSTONE_WIRE_OFF.name(), REDSTONE_WIRE_OFF.ordinal(), REDSTONE_WIRE_OFF.getMinecraftId(), ((type == 0) ? "OFF" : ("ON_" + type)), (byte) type);
     }
 
     protected RedstoneWireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

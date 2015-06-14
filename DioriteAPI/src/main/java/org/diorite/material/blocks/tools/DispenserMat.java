@@ -70,7 +70,7 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
 
     protected DispenserMat(final BlockFace facing, final boolean powered)
     {
-        super(DISPENSER_DOWN.name(), DISPENSER_DOWN.getId(), DISPENSER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered));
+        super(DISPENSER_DOWN.name(), DISPENSER_DOWN.ordinal(), DISPENSER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered));
         this.facing = facing;
         this.powered = powered;
     }

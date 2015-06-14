@@ -1,78 +1,63 @@
 package org.diorite.chat;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class ChatPosition implements SimpleEnum<ChatPosition>
+public class ChatPosition extends ASimpleEnum<ChatPosition>
 {
-    public static final ChatPosition CHAT   = new ChatPosition("CHAT", 0);
-    public static final ChatPosition SYSTEM = new ChatPosition("SYSTEM", 1);
-    public static final ChatPosition ACTION = new ChatPosition("ACTION", 2);
-
-    private static final Map<String, ChatPosition>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<ChatPosition> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
-
-    private final String enumName;
-    private final int    id;
-
-    public ChatPosition(final String enumName, final int id)
+    static
     {
-        this.enumName = enumName;
-        this.id = id;
+        init(ChatPosition.class, 3);
     }
 
-    @Override
-    public String name()
+    public static final ChatPosition CHAT   = new ChatPosition("CHAT");
+    public static final ChatPosition SYSTEM = new ChatPosition("SYSTEM");
+    public static final ChatPosition ACTION = new ChatPosition("ACTION");
+
+    public ChatPosition(final String enumName, final int enumId)
     {
-        return this.enumName;
+        super(enumName, enumId);
     }
 
-    @Override
-    public int getId()
+    public ChatPosition(final String enumName)
     {
-        return this.id;
+        super(enumName);
     }
 
-    @Override
-    public ChatPosition byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public ChatPosition byName(final String name)
-    {
-        return byName.get(name);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).toString();
-    }
-
-    public static ChatPosition getByID(final int id)
-    {
-        return byID.get(id);
-    }
-
-    public static ChatPosition getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
+    /**
+     * Register new {@link ChatPosition} entry in this enum.
+     *
+     * @param element new element to register.
+     */
     public static void register(final ChatPosition element)
     {
-        byID.put(element.getId(), element);
-        byName.put(element.name(), element);
+        ASimpleEnum.register(ChatPosition.class, element);
+    }
+
+    /**
+     * Get one of {@link ChatPosition} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static ChatPosition getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(ChatPosition.class, ordinal);
+    }
+
+    /**
+     * Get one of {@link ChatPosition} entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static ChatPosition getByEnumName(final String name)
+    {
+        return getByEnumName(ChatPosition.class, name);
     }
 
     /**
@@ -80,13 +65,14 @@ public class ChatPosition implements SimpleEnum<ChatPosition>
      */
     public static ChatPosition[] values()
     {
-        return byID.values(new ChatPosition[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ChatPosition.class);
+        return (ChatPosition[]) map.values(new ChatPosition[map.size()]);
     }
 
     static
     {
-        register(CHAT);
-        register(SYSTEM);
-        register(ACTION);
+        ChatPosition.register(CHAT);
+        ChatPosition.register(SYSTEM);
+        ChatPosition.register(ACTION);
     }
 }

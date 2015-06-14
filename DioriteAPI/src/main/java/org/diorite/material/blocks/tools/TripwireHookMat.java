@@ -83,7 +83,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
 
     protected TripwireHookMat(final BlockFace face, final boolean ready, final boolean powered)
     {
-        super(TRIPWIRE_HOOK_SOUTH.name(), TRIPWIRE_HOOK_SOUTH.getId(), TRIPWIRE_HOOK_SOUTH.getMinecraftId(), face.name() + (ready ? "_READY" : "") + (powered ? "_POWERED" : ""), combine(face, ready, powered));
+        super(TRIPWIRE_HOOK_SOUTH.name(), TRIPWIRE_HOOK_SOUTH.ordinal(), TRIPWIRE_HOOK_SOUTH.getMinecraftId(), face.name() + (ready ? "_READY" : "") + (powered ? "_POWERED" : ""), combine(face, ready, powered));
         this.face = face;
         this.ready = ready;
         this.powered = powered;

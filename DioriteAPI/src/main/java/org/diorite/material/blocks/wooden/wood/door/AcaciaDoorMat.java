@@ -69,7 +69,7 @@ public class AcaciaDoorMat extends WoodenDoorMat
 
     protected AcaciaDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(ACACIA_DOOR_BOTTOM_EAST.name(), ACACIA_DOOR_BOTTOM_EAST.getId(), ACACIA_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.ACACIA);
+        super(ACACIA_DOOR_BOTTOM_EAST.name(), ACACIA_DOOR_BOTTOM_EAST.ordinal(), ACACIA_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.ACACIA);
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +79,7 @@ public class AcaciaDoorMat extends WoodenDoorMat
 
     protected AcaciaDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(ACACIA_DOOR_BOTTOM_EAST.name(), ACACIA_DOOR_BOTTOM_EAST.getId(), ACACIA_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.ACACIA);
+        super(ACACIA_DOOR_BOTTOM_EAST.name(), ACACIA_DOOR_BOTTOM_EAST.ordinal(), ACACIA_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.ACACIA);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;

@@ -56,7 +56,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
 
     protected SkullBlockMat(final String enumName, final BlockFace face)
     {
-        super(SKULL_BLOCK_FLOOR.name(), SKULL_BLOCK_FLOOR.getId(), SKULL_BLOCK_FLOOR.getMinecraftId(), enumName, combine(face));
+        super(SKULL_BLOCK_FLOOR.name(), SKULL_BLOCK_FLOOR.ordinal(), SKULL_BLOCK_FLOOR.getMinecraftId(), enumName, combine(face));
         this.face = face;
         this.onWall = true;
     }

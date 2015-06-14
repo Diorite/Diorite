@@ -69,7 +69,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
 
     protected CocoaMat(final String enumName, final BlockFace face, final int age)
     {
-        super(COCOA_NORTH_0.name(), COCOA_NORTH_0.getId(), COCOA_NORTH_0.getMinecraftId(), enumName, combine(face, age));
+        super(COCOA_NORTH_0.name(), COCOA_NORTH_0.ordinal(), COCOA_NORTH_0.getMinecraftId(), enumName, combine(face, age));
         this.face = face;
         this.age = age;
     }

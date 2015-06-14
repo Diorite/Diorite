@@ -49,7 +49,7 @@ public class CommandBlockMat extends BlockMaterialData
 
     protected CommandBlockMat(final boolean triggered)
     {
-        super(COMMAND_BLOCK.name(), COMMAND_BLOCK.getId(), COMMAND_BLOCK.getMinecraftId(), triggered ? "TRIGGERED" : "COMMAND_BLOCK", (byte) (triggered ? 1 : 0));
+        super(COMMAND_BLOCK.name(), COMMAND_BLOCK.ordinal(), COMMAND_BLOCK.getMinecraftId(), triggered ? "TRIGGERED" : "COMMAND_BLOCK", (byte) (triggered ? 1 : 0));
         this.triggered = triggered;
     }
 

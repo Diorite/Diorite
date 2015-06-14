@@ -52,7 +52,7 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
 
     protected WallSignMat(final BlockFace face)
     {
-        super(WALL_SIGN_NORTH.name(), WALL_SIGN_NORTH.getId(), WALL_SIGN_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(WALL_SIGN_NORTH.name(), WALL_SIGN_NORTH.ordinal(), WALL_SIGN_NORTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

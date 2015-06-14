@@ -14,7 +14,6 @@ import org.diorite.cfg.system.CfgEntryData;
  *
  * @see URI
  */
-@SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
 public class URITemplateElement extends TemplateElement<URI>
 {
     /**

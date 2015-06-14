@@ -231,7 +231,6 @@ public class BaseTemplate<T> implements Template<T>
         return builder.toString();
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public T fillDefaults(final T obj)
     {

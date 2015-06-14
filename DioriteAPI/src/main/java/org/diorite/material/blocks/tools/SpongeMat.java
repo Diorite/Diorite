@@ -49,7 +49,7 @@ public class SpongeMat extends BlockMaterialData
 
     protected SpongeMat(final boolean isWet)
     {
-        super(SPONGE.name(), SPONGE.getId(), SPONGE.getMinecraftId(), isWet ? "WEY" : "DRY", (byte) (isWet ? 1 : 0));
+        super(SPONGE.name(), SPONGE.ordinal(), SPONGE.getMinecraftId(), isWet ? "WEY" : "DRY", (byte) (isWet ? 1 : 0));
         this.isWet = isWet;
     }
 

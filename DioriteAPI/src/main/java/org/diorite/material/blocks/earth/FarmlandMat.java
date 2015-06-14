@@ -54,7 +54,7 @@ public class FarmlandMat extends EarthMat
 
     protected FarmlandMat(final String enumName, final int moisture)
     {
-        super(FARMLAND_UNHYDRATED.name(), FARMLAND_UNHYDRATED.getId(), FARMLAND_UNHYDRATED.getMinecraftId(), enumName, (byte) moisture);
+        super(FARMLAND_UNHYDRATED.name(), FARMLAND_UNHYDRATED.ordinal(), FARMLAND_UNHYDRATED.getMinecraftId(), enumName, (byte) moisture);
         this.moisture = moisture;
     }
 

@@ -52,7 +52,7 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
 
     protected RedSandstoneMat(final int type, final VariantMat variant)
     {
-        super(RED_SANDSTONE.name(), RED_SANDSTONE.getId(), RED_SANDSTONE.getMinecraftId(), variant.name(), (byte) type);
+        super(RED_SANDSTONE.name(), RED_SANDSTONE.ordinal(), RED_SANDSTONE.getMinecraftId(), variant.name(), (byte) type);
         this.variant = variant;
     }
 

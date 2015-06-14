@@ -88,5 +88,5 @@ public enum FlowerTypeMat
     /**
      * @see DeadBushMat#DEAD_BUSH
      */
-    DEAD_BUSH;
+    DEAD_BUSH
 }

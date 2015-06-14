@@ -52,7 +52,7 @@ public class JungleFenceGateMat extends WoodenFenceGateMat
 
     protected JungleFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(JUNGLE_FENCE_GATE_SOUTH.name(), JUNGLE_FENCE_GATE_SOUTH.getId(), JUNGLE_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.JUNGLE, face, open);
+        super(JUNGLE_FENCE_GATE_SOUTH.name(), JUNGLE_FENCE_GATE_SOUTH.ordinal(), JUNGLE_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.JUNGLE, face, open);
     }
 
     protected JungleFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)

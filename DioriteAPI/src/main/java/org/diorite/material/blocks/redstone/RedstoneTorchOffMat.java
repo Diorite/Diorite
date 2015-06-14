@@ -46,7 +46,7 @@ public class RedstoneTorchOffMat extends RedstoneTorchMat
 
     protected RedstoneTorchOffMat(final BlockFace face)
     {
-        super(REDSTONE_TORCH_OFF_WEST.name(), REDSTONE_TORCH_OFF_WEST.getId(), REDSTONE_TORCH_OFF_WEST.getMinecraftId(), face);
+        super(REDSTONE_TORCH_OFF_WEST.name(), REDSTONE_TORCH_OFF_WEST.ordinal(), REDSTONE_TORCH_OFF_WEST.getMinecraftId(), face);
     }
 
     protected RedstoneTorchOffMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)

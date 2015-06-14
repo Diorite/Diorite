@@ -52,7 +52,7 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
 
     protected StoneBrickMat(final int type, final VariantMat varaint)
     {
-        super(STONE_BRICK.name(), STONE_BRICK.getId(), STONE_BRICK.getMinecraftId(), varaint.name(), (byte) type);
+        super(STONE_BRICK.name(), STONE_BRICK.ordinal(), STONE_BRICK.getMinecraftId(), varaint.name(), (byte) type);
         this.variant = varaint;
     }
 

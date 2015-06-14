@@ -85,7 +85,7 @@ public class WaterMat extends LiquidMat
 
     protected WaterMat(final LiquidStageMat stage, final LiquidTypeMat liquidType)
     {
-        super(liquidType.isStill() ? WATER_SOURCE_STILL.name() : WATER_SOURCE.name(), WATER_SOURCE.getId() + ((liquidType == LiquidTypeMat.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType);
+        super(liquidType.isStill() ? WATER_SOURCE_STILL.name() : WATER_SOURCE.name(), WATER_SOURCE.ordinal() + ((liquidType == LiquidTypeMat.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType);
     }
 
     public WaterMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType)

@@ -54,7 +54,7 @@ public class MelonStemMat extends PlantStemMat
 
     protected MelonStemMat(final String enumName, final int age)
     {
-        super(MELON_STEM_0.name(), MELON_STEM_0.getId(), MELON_STEM_0.getMinecraftId(), enumName, (byte) age);
+        super(MELON_STEM_0.name(), MELON_STEM_0.ordinal(), MELON_STEM_0.getMinecraftId(), enumName, (byte) age);
         this.age = age;
     }
 

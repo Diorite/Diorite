@@ -3,8 +3,11 @@ package org.diorite.chat;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
-public class DioriteMarkdownParser
+public final class DioriteMarkdownParser
 {
+    private DioriteMarkdownParser()
+    {
+    }
     // TODO: rewrite
 
     public static BaseComponent parse(final String str)

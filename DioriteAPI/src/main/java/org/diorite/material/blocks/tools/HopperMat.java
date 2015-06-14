@@ -68,7 +68,7 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
 
     protected HopperMat(final BlockFace facing, final boolean powered)
     {
-        super(HOPPER_DOWN.name(), HOPPER_DOWN.getId(), HOPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered));
+        super(HOPPER_DOWN.name(), HOPPER_DOWN.ordinal(), HOPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered));
         this.facing = facing;
         this.powered = powered;
     }

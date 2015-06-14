@@ -53,7 +53,7 @@ public class WoodenButtonMat extends ButtonMat
 
     protected WoodenButtonMat(final BlockFace face, final boolean powered)
     {
-        super(WOODEN_BUTTON_DOWN.name(), WOODEN_BUTTON_DOWN.getId(), WOODEN_BUTTON_DOWN.getMinecraftId(), face, powered);
+        super(WOODEN_BUTTON_DOWN.name(), WOODEN_BUTTON_DOWN.ordinal(), WOODEN_BUTTON_DOWN.getMinecraftId(), face, powered);
     }
 
     protected WoodenButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered)

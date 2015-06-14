@@ -15,7 +15,7 @@ import org.diorite.utils.reflections.DioriteReflectionUtils;
  * Template handler for all iterator-based objects.
  * @see Iterator
  */
-@SuppressWarnings({"rawtypes", "ObjectEquality"})
+@SuppressWarnings({"rawtypes"})
 public class IteratorTemplateElement extends TemplateElement<Iterator>
 {
     /**

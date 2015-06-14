@@ -52,7 +52,7 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
 
     protected WallBannerMat(final BlockFace face)
     {
-        super(WALL_BANNER_NORTH.name(), WALL_BANNER_NORTH.getId(), WALL_BANNER_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(WALL_BANNER_NORTH.name(), WALL_BANNER_NORTH.ordinal(), WALL_BANNER_NORTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

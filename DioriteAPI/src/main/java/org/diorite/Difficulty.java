@@ -1,59 +1,41 @@
 package org.diorite;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class Difficulty implements SimpleEnum<Difficulty>
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class Difficulty extends ASimpleEnum<Difficulty>
 {
+    static
+    {
+        init(Difficulty.class, 4);
+    }
+
     public static final Difficulty PEACEFUL = new Difficulty("PEACEFUL", 0, "options.difficulty.peaceful");
     public static final Difficulty EASY     = new Difficulty("EASY", 1, "options.difficulty.easy");
     public static final Difficulty NORMAL   = new Difficulty("NORMAL", 2, "options.difficulty.normal");
     public static final Difficulty HARD     = new Difficulty("HARD", 3, "options.difficulty.hard");
 
-    private static final Map<String, Difficulty>   byName = new CaseInsensitiveMap<>(4, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<Difficulty> byID   = new TIntObjectHashMap<>(4, SMALL_LOAD_FACTOR);
+    private static final TIntObjectMap<Difficulty> byLevel = new TIntObjectHashMap<>(4, SMALL_LOAD_FACTOR);
 
-    private final String enumName;
     private final int    level;
     private final String option;
 
-    public Difficulty(final String enumName, final int level, final String option)
+    public Difficulty(final String enumName, final int enumId, final int level, final String option)
     {
-        this.enumName = enumName;
+        super(enumName, enumId);
         this.level = level;
         this.option = option;
     }
 
-    @Override
-    public String name()
+    public Difficulty(final String enumName, final int level, final String option)
     {
-        return this.enumName;
-    }
-
-    @Override
-    public int getId()
-    {
-        return this.level;
-    }
-
-    @Override
-    public Difficulty byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public Difficulty byName(final String name)
-    {
-        return byName.get(name);
+        super(enumName);
+        this.level = level;
+        this.option = option;
     }
 
     public int getLevel()
@@ -66,26 +48,43 @@ public class Difficulty implements SimpleEnum<Difficulty>
         return this.option;
     }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("level", this.level).append("option", this.option).toString();
-    }
-
     public static Difficulty getByLevel(final int level)
     {
-        return byID.get(level);
+        return byLevel.get(level);
     }
 
-    public static Difficulty getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
+    /**
+     * Register new {@link Difficulty} entry in this enum.
+     *
+     * @param element new element to register.
+     */
     public static void register(final Difficulty element)
     {
-        byID.put(element.getLevel(), element);
-        byName.put(element.name(), element);
+        ASimpleEnum.register(Difficulty.class, element);
+    }
+
+    /**
+     * Get one of {@link Difficulty} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static Difficulty getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(Difficulty.class, ordinal);
+    }
+
+    /**
+     * Get one of Difficulty entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static Difficulty getByEnumName(final String name)
+    {
+        return getByEnumName(Difficulty.class, name);
     }
 
     /**
@@ -93,14 +92,15 @@ public class Difficulty implements SimpleEnum<Difficulty>
      */
     public static Difficulty[] values()
     {
-        return byID.values(new Difficulty[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(Difficulty.class);
+        return (Difficulty[]) map.values(new Difficulty[map.size()]);
     }
 
     static
     {
-        register(PEACEFUL);
-        register(EASY);
-        register(NORMAL);
-        register(HARD);
+        Difficulty.register(PEACEFUL);
+        Difficulty.register(EASY);
+        Difficulty.register(NORMAL);
+        Difficulty.register(HARD);
     }
 }

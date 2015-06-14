@@ -63,7 +63,7 @@ public class StandingSignMat extends SignBlockMat
 
     protected StandingSignMat(final BlockFace face)
     {
-        super(STANDING_SIGN_SOUTH.name(), STANDING_SIGN_SOUTH.getId(), STANDING_SIGN_SOUTH.getMinecraftId(), face.name(), combine(face));
+        super(STANDING_SIGN_SOUTH.name(), STANDING_SIGN_SOUTH.ordinal(), STANDING_SIGN_SOUTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

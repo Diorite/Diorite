@@ -69,7 +69,7 @@ public class FlowerPotMat extends BlockMaterialData
 
     protected FlowerPotMat(final String enumName, final int type)
     {
-        super(FLOWER_POT_EMPTY.name(), FLOWER_POT_EMPTY.getId(), FLOWER_POT_EMPTY.getMinecraftId(), enumName, (byte) type);
+        super(FLOWER_POT_EMPTY.name(), FLOWER_POT_EMPTY.ordinal(), FLOWER_POT_EMPTY.getMinecraftId(), enumName, (byte) type);
     }
 
     protected FlowerPotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

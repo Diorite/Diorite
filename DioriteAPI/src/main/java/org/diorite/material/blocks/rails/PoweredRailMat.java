@@ -65,7 +65,7 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
 
     protected PoweredRailMat(final RailTypeMat type, final boolean powered)
     {
-        super(POWERED_RAIL_NORTH_SOUTH.name(), POWERED_RAIL_NORTH_SOUTH.getId(), POWERED_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00);
+        super(POWERED_RAIL_NORTH_SOUTH.name(), POWERED_RAIL_NORTH_SOUTH.ordinal(), POWERED_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00);
         this.powered = powered;
     }
 

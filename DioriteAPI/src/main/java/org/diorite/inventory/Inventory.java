@@ -173,7 +173,7 @@ public interface Inventory extends Iterable<ItemStack>
             final Material mat = item.getMaterial();
             if (ignoreType)
             {
-                if ((material.getId() != mat.getId()))
+                if ((material.ordinal() != mat.ordinal()))
                 {
                     continue;
                 }
@@ -215,7 +215,7 @@ public interface Inventory extends Iterable<ItemStack>
             final Material mat = item.getMaterial();
             if (ignoreType)
             {
-                if ((material.getId() != mat.getId()))
+                if ((material.ordinal() != mat.ordinal()))
                 {
                     continue;
                 }

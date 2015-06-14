@@ -86,7 +86,7 @@ public class LavaMat extends LiquidMat
 
     protected LavaMat(final LiquidStageMat stage, final LiquidTypeMat liquidType)
     {
-        super(liquidType.isStill() ? LAVA_SOURCE_STILL.name() : LAVA_SOURCE.name(), LAVA_SOURCE.getId() + ((liquidType.isStill()) ? 1 : 0), liquidType.isNormal() ? LAVA_SOURCE.getMinecraftId() : LAVA_SOURCE_STILL.getMinecraftId(), LAVA_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType);
+        super(liquidType.isStill() ? LAVA_SOURCE_STILL.name() : LAVA_SOURCE.name(), LAVA_SOURCE.ordinal() + ((liquidType.isStill()) ? 1 : 0), liquidType.isNormal() ? LAVA_SOURCE.getMinecraftId() : LAVA_SOURCE_STILL.getMinecraftId(), LAVA_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType);
     }
 
     protected LavaMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType)

@@ -9,7 +9,7 @@ import org.diorite.cfg.system.CfgEntryData;
  *
  * @see Enum
  */
-@SuppressWarnings({"rawtypes", "unchecked", "ObjectEquality"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class EnumTemplateElement extends TemplateElement<Enum>
 {
     /**

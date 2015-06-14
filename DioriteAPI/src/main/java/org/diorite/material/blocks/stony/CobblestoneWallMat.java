@@ -43,7 +43,7 @@ public class CobblestoneWallMat extends BlockMaterialData
 
     protected CobblestoneWallMat(final String enumName, final int type)
     {
-        super(COBBLESTONE_WALL.name(), COBBLESTONE_WALL.getId(), COBBLESTONE_WALL.getMinecraftId(), enumName, (byte) type);
+        super(COBBLESTONE_WALL.name(), COBBLESTONE_WALL.ordinal(), COBBLESTONE_WALL.getMinecraftId(), enumName, (byte) type);
     }
 
     protected CobblestoneWallMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

@@ -52,7 +52,7 @@ public class AcaciaFenceGateMat extends WoodenFenceGateMat
 
     protected AcaciaFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(ACACIA_FENCE_GATE_SOUTH.name(), ACACIA_FENCE_GATE_SOUTH.getId(), ACACIA_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.ACACIA, face, open);
+        super(ACACIA_FENCE_GATE_SOUTH.name(), ACACIA_FENCE_GATE_SOUTH.ordinal(), ACACIA_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.ACACIA, face, open);
     }
 
     protected AcaciaFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)

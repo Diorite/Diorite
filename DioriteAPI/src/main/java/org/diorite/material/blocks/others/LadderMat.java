@@ -53,7 +53,7 @@ public class LadderMat extends BlockMaterialData implements AttachableMat
 
     protected LadderMat(final BlockFace face)
     {
-        super(LADDER_NORTH.name(), LADDER_NORTH.getId(), LADDER_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(LADDER_NORTH.name(), LADDER_NORTH.ordinal(), LADDER_NORTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

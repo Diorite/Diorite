@@ -69,7 +69,7 @@ public class BirchDoorMat extends WoodenDoorMat
 
     protected BirchDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.getId(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.BIRCH);
+        super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.ordinal(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.BIRCH);
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +79,7 @@ public class BirchDoorMat extends WoodenDoorMat
 
     protected BirchDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.getId(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.BIRCH);
+        super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.ordinal(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.BIRCH);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;

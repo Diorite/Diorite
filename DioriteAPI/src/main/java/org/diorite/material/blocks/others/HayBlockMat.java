@@ -53,7 +53,7 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
 
     protected HayBlockMat(final RotateAxisMat rotateAxis)
     {
-        super(HAY_BLOCK_UP_DOWN.name(), HAY_BLOCK_UP_DOWN.getId(), HAY_BLOCK_UP_DOWN.getMinecraftId(), rotateAxis.name(), combine(rotateAxis));
+        super(HAY_BLOCK_UP_DOWN.name(), HAY_BLOCK_UP_DOWN.ordinal(), HAY_BLOCK_UP_DOWN.getMinecraftId(), rotateAxis.name(), combine(rotateAxis));
         this.rotateAxis = rotateAxis;
     }
 

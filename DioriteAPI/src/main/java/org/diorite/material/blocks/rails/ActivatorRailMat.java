@@ -65,7 +65,7 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
 
     protected ActivatorRailMat(final RailTypeMat type, final boolean powered)
     {
-        super(ACTIVATOR_RAIL_NORTH_SOUTH.name(), ACTIVATOR_RAIL_NORTH_SOUTH.getId(), ACTIVATOR_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00);
+        super(ACTIVATOR_RAIL_NORTH_SOUTH.name(), ACTIVATOR_RAIL_NORTH_SOUTH.ordinal(), ACTIVATOR_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00);
         this.powered = powered;
     }
 

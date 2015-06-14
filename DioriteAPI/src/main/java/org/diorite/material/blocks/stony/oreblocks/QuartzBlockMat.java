@@ -55,7 +55,7 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
 
     protected QuartzBlockMat(final int type, final VariantMat variant)
     {
-        super(QUARTZ_BLOCK.name(), QUARTZ_BLOCK.getId(), QUARTZ_BLOCK.getMinecraftId(), variant.name(), (byte) type, QUARTZ_BLOCK.getOre());
+        super(QUARTZ_BLOCK.name(), QUARTZ_BLOCK.ordinal(), QUARTZ_BLOCK.getMinecraftId(), variant.name(), (byte) type, QUARTZ_BLOCK.getOre());
         this.variant = variant;
     }
 

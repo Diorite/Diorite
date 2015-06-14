@@ -60,7 +60,7 @@ public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
 
     protected NetherBrickStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(NETHER_BRICK_STAIRS_EAST.name(), NETHER_BRICK_STAIRS_EAST.getId(), NETHER_BRICK_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
+        super(NETHER_BRICK_STAIRS_EAST.name(), NETHER_BRICK_STAIRS_EAST.ordinal(), NETHER_BRICK_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
         this.face = face;
         this.upsideDown = upsideDown;
     }

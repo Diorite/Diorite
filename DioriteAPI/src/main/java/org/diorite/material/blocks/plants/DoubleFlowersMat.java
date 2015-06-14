@@ -47,7 +47,7 @@ public class DoubleFlowersMat extends FlowerMat
 
     protected DoubleFlowersMat(final int type, final FlowerTypeMat flowerType)
     {
-        super(DOUBLE_FLOWERS_SUNFLOWER.name(), DOUBLE_FLOWERS_SUNFLOWER.getId(), DOUBLE_FLOWERS_SUNFLOWER.getMinecraftId(), (byte) type, flowerType);
+        super(DOUBLE_FLOWERS_SUNFLOWER.name(), DOUBLE_FLOWERS_SUNFLOWER.ordinal(), DOUBLE_FLOWERS_SUNFLOWER.getMinecraftId(), (byte) type, flowerType);
     }
 
     protected DoubleFlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType)

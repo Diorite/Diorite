@@ -1,4 +1,4 @@
-package org.diorite.event.others;
+package org.diorite.event.input;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;

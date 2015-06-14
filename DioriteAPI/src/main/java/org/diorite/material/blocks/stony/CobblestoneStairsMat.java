@@ -60,7 +60,7 @@ public class CobblestoneStairsMat extends BlockMaterialData implements StairsMat
 
     protected CobblestoneStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(COBBLESTONE_STAIRS_EAST.name(), COBBLESTONE_STAIRS_EAST.getId(), COBBLESTONE_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
+        super(COBBLESTONE_STAIRS_EAST.name(), COBBLESTONE_STAIRS_EAST.ordinal(), COBBLESTONE_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
         this.face = face;
         this.upsideDown = upsideDown;
     }

@@ -55,7 +55,7 @@ public class CakeMat extends BlockMaterialData
 
     protected CakeMat(final int piecesEaten)
     {
-        super(CAKE_0.name(), CAKE_0.getId(), CAKE_0.getMinecraftId(), Integer.toString(piecesEaten), (byte) piecesEaten);
+        super(CAKE_0.name(), CAKE_0.ordinal(), CAKE_0.getMinecraftId(), Integer.toString(piecesEaten), (byte) piecesEaten);
         this.piecesEaten = (byte) piecesEaten;
     }
 

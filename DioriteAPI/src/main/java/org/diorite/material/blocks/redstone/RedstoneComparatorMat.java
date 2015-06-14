@@ -83,7 +83,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
 
     protected RedstoneComparatorMat(final BlockFace face, final boolean subtractionMode, final boolean powered)
     {
-        super(REDSTONE_COMPARATOR_NORTH.name(), REDSTONE_COMPARATOR_NORTH.getId(), REDSTONE_COMPARATOR_NORTH.getMinecraftId(), face.name() + (subtractionMode ? "_SUBTRACT" : "") + (powered ? "_POWERED" : ""), combine(face, subtractionMode, powered));
+        super(REDSTONE_COMPARATOR_NORTH.name(), REDSTONE_COMPARATOR_NORTH.ordinal(), REDSTONE_COMPARATOR_NORTH.getMinecraftId(), face.name() + (subtractionMode ? "_SUBTRACT" : "") + (powered ? "_POWERED" : ""), combine(face, subtractionMode, powered));
         this.face = face;
         this.subtractionMode = subtractionMode;
         this.powered = powered;

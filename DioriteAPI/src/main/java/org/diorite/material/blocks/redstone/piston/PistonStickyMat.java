@@ -54,7 +54,7 @@ public class PistonStickyMat extends PistonBaseMat
 
     protected PistonStickyMat(final BlockFace face, final boolean extended)
     {
-        super(STICKY_PISTON_DOWN.name(), STICKY_PISTON_DOWN.getId(), STICKY_PISTON_DOWN.getMinecraftId(), face, extended);
+        super(STICKY_PISTON_DOWN.name(), STICKY_PISTON_DOWN.ordinal(), STICKY_PISTON_DOWN.getMinecraftId(), face, extended);
     }
 
     protected PistonStickyMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended)

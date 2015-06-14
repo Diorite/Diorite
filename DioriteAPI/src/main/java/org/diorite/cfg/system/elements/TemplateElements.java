@@ -54,7 +54,6 @@ import org.diorite.utils.reflections.DioriteReflectionUtils;
  * Next elements are all primitives arrays: boolean, char, long, int, short. byte, double, float,
  * then Object[], all primitives and {@link String} at the end.
  */
-@SuppressWarnings("rawtypes")
 public final class TemplateElements
 {
     private static final Pipeline<TemplateElement<?>> elements = new BasePipeline<>();

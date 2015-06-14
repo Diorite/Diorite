@@ -59,7 +59,7 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
 
     protected FireMat(final int age)
     {
-        super(FIRE_0.name(), FIRE_0.getId(), FIRE_0.getMinecraftId(), Integer.toString(age), (byte) age);
+        super(FIRE_0.name(), FIRE_0.ordinal(), FIRE_0.getMinecraftId(), Integer.toString(age), (byte) age);
     }
 
     protected FireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

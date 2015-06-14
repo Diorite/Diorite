@@ -54,7 +54,7 @@ public class PumpkinStemMat extends PlantStemMat
 
     protected PumpkinStemMat(final String enumName, final int age)
     {
-        super(PUMPKIN_STEM_0.name(), PUMPKIN_STEM_0.getId(), PUMPKIN_STEM_0.getMinecraftId(), enumName, (byte) age);
+        super(PUMPKIN_STEM_0.name(), PUMPKIN_STEM_0.ordinal(), PUMPKIN_STEM_0.getMinecraftId(), enumName, (byte) age);
         this.age = age;
     }
 

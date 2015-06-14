@@ -52,7 +52,7 @@ public class BirchStairsMat extends WoodenStairsMat
 
     protected BirchStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(BIRCH_STAIRS_EAST.name(), BIRCH_STAIRS_EAST.getId(), BIRCH_STAIRS_EAST.getMinecraftId(), WoodTypeMat.BIRCH, face, upsideDown);
+        super(BIRCH_STAIRS_EAST.name(), BIRCH_STAIRS_EAST.ordinal(), BIRCH_STAIRS_EAST.getMinecraftId(), WoodTypeMat.BIRCH, face, upsideDown);
     }
 
     protected BirchStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)

@@ -60,7 +60,7 @@ public class QuartzStairsMat extends BlockMaterialData implements StairsMat
 
     protected QuartzStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(QUARTZ_STAIRS_EAST.name(), QUARTZ_STAIRS_EAST.getId(), QUARTZ_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
+        super(QUARTZ_STAIRS_EAST.name(), QUARTZ_STAIRS_EAST.ordinal(), QUARTZ_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
         this.face = face;
         this.upsideDown = upsideDown;
     }

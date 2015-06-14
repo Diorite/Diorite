@@ -6,13 +6,20 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.SimpleEnum;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class Particle implements SimpleEnum<Particle>
+@SuppressWarnings("MagicNumber")
+public class Particle extends ASimpleEnum<Particle>
 {
+    static
+    {
+        init(Particle.class, 42);
+    }
+
     public static final Particle EXPLOSION_NORMAL  = new Particle("EXPLOSION_NORMAL", "explode", 0);
     public static final Particle EXPLOSION_LARGE   = new Particle("EXPLOSION_LARGE", "largeexplode", 1);
     public static final Particle EXPLOSION_HUGE    = new Particle("EXPLOSION_HUGE", "hugeexplosion", 2);
@@ -56,37 +63,28 @@ public class Particle implements SimpleEnum<Particle>
     public static final Particle ITEM_TAKE         = new Particle("ITEM_TAKE", "take", 40);
     public static final Particle MOB_APPEARANCE    = new Particle("MOB_APPEARANCE", "mobappearance", 41);
 
-    private static final Map<String, Particle>   byName = new CaseInsensitiveMap<>(42, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<Particle> byID   = new TIntObjectHashMap<>(42, SMALL_LOAD_FACTOR);
-
-    private final String enumName;
+    private static final TIntObjectMap<Particle> byParticleID   = new TIntObjectHashMap<>(42, SMALL_LOAD_FACTOR);
+    private static final Map<String, Particle>   byParticleName = new CaseInsensitiveMap<>(42, SMALL_LOAD_FACTOR);
     private final String particleName;
-    private final int    id;
+    private final int    particleId;
     private final int    dataSize;
 
-    public Particle(final String enumName, final String name, final int id, final int dataSize)
+    public Particle(final String enumName, final String name, final int particleId, final int dataSize)
     {
-        this.enumName = enumName;
+        super(enumName);
         this.particleName = name;
-        this.id = id;
+        this.particleId = particleId;
         this.dataSize = dataSize;
     }
 
-    public Particle(final String enumName, final String name, final int id)
+    public Particle(final String enumName, final String name, final int particleId)
     {
-        this(enumName, name, id, 0);
+        this(enumName, name, particleId, 0);
     }
 
-    @Override
-    public String name()
+    public int getParticleId()
     {
-        return this.enumName;
-    }
-
-    @Override
-    public int getId()
-    {
-        return this.id;
+        return this.particleId;
     }
 
     public int getDataSize()
@@ -94,37 +92,55 @@ public class Particle implements SimpleEnum<Particle>
         return this.dataSize;
     }
 
-    public String getMinecraftParticleName()
+    public String getParticleName()
     {
         return this.particleName;
     }
 
-    @Override
-    public Particle byId(final int id)
+    public static Particle getByParticleId(final int id)
     {
-        return byID.get(id);
+        return byParticleID.get(id);
     }
 
-    @Override
-    public Particle byName(final String name)
+    public static Particle getByParticleName(final String name)
     {
-        return byName.get(name);
+        return byParticleName.get(name);
     }
 
-    public static Particle getParticleById(final int id)
+    /**
+     * Register new {@link Particle} entry in this enum.
+     *
+     * @param element new element to register.
+     */
+    public static void register(final Particle element)
     {
-        return byID.get(id);
+        ASimpleEnum.register(Particle.class, element);
+        byParticleID.put(element.getParticleId(), element);
+        byParticleName.put(element.getParticleName(), element);
     }
 
-    public static Particle getParticleByName(final String name)
+    /**
+     * Get one of {@link Particle} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static Particle getByEnumOrdinal(final int ordinal)
     {
-        return byName.get(name);
+        return getByEnumOrdinal(Particle.class, ordinal);
     }
 
-    public static void register(final Particle particle)
+    /**
+     * Get one of Particle entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static Particle getByEnumName(final String name)
     {
-        byID.put(particle.getId(), particle);
-        byName.put(particle.name(), particle);
+        return getByEnumName(Particle.class, name);
     }
 
     /**
@@ -132,58 +148,59 @@ public class Particle implements SimpleEnum<Particle>
      */
     public static Particle[] values()
     {
-        return byID.values(new Particle[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(Particle.class);
+        return (Particle[]) map.values(new Particle[map.size()]);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("particleName", this.particleName).append("id", this.id).append("dataSize", this.dataSize).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("particleName", this.particleName).append("id", this.particleId).append("dataSize", this.dataSize).toString();
     }
 
     static
     {
-        register(EXPLOSION_NORMAL);
-        register(EXPLOSION_HUGE);
-        register(EXPLOSION_LARGE);
-        register(FIREWORKS_SPARK);
-        register(WATER_BUBBLE);
-        register(WATER_SPLASH);
-        register(WATER_WAKE);
-        register(SUSPENDED);
-        register(SUSPENDED_DEPTH);
-        register(CRIT);
-        register(CRIT_MAGIC);
-        register(SMOKE_NORMAL);
-        register(SMOKE_LARGE);
-        register(SPELL);
-        register(SPELL_INSTANT);
-        register(SPELL_MOB);
-        register(SPELL_MOB_AMBIENT);
-        register(SPELL_WITCH);
-        register(DRIP_LAVA);
-        register(DRIP_WATER);
-        register(VILLAGER_ANGRY);
-        register(VILLAGER_HAPPY);
-        register(TOWN_AURA);
-        register(PORTAL);
-        register(NOTE);
-        register(ENCHANTMENT_TABLE);
-        register(FLAME);
-        register(LAVA);
-        register(FOOTSTEP);
-        register(CLOUD);
-        register(REDSTONE);
-        register(SNOWBALL);
-        register(SNOW_SHOVEL);
-        register(SLIME);
-        register(HEART);
-        register(BARRIER);
-        register(ITEM_CRACK);
-        register(BLOCK_CRACK);
-        register(BLOCK_DUST);
-        register(WATER_DROP);
-        register(ITEM_TAKE);
-        register(MOB_APPEARANCE);
+        Particle.register(EXPLOSION_NORMAL);
+        Particle.register(EXPLOSION_HUGE);
+        Particle.register(EXPLOSION_LARGE);
+        Particle.register(FIREWORKS_SPARK);
+        Particle.register(WATER_BUBBLE);
+        Particle.register(WATER_SPLASH);
+        Particle.register(WATER_WAKE);
+        Particle.register(SUSPENDED);
+        Particle.register(SUSPENDED_DEPTH);
+        Particle.register(CRIT);
+        Particle.register(CRIT_MAGIC);
+        Particle.register(SMOKE_NORMAL);
+        Particle.register(SMOKE_LARGE);
+        Particle.register(SPELL);
+        Particle.register(SPELL_INSTANT);
+        Particle.register(SPELL_MOB);
+        Particle.register(SPELL_MOB_AMBIENT);
+        Particle.register(SPELL_WITCH);
+        Particle.register(DRIP_LAVA);
+        Particle.register(DRIP_WATER);
+        Particle.register(VILLAGER_ANGRY);
+        Particle.register(VILLAGER_HAPPY);
+        Particle.register(TOWN_AURA);
+        Particle.register(PORTAL);
+        Particle.register(NOTE);
+        Particle.register(ENCHANTMENT_TABLE);
+        Particle.register(FLAME);
+        Particle.register(LAVA);
+        Particle.register(FOOTSTEP);
+        Particle.register(CLOUD);
+        Particle.register(REDSTONE);
+        Particle.register(SNOWBALL);
+        Particle.register(SNOW_SHOVEL);
+        Particle.register(SLIME);
+        Particle.register(HEART);
+        Particle.register(BARRIER);
+        Particle.register(ITEM_CRACK);
+        Particle.register(BLOCK_CRACK);
+        Particle.register(BLOCK_DUST);
+        Particle.register(WATER_DROP);
+        Particle.register(ITEM_TAKE);
+        Particle.register(MOB_APPEARANCE);
     }
 }

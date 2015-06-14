@@ -54,7 +54,7 @@ public class CarrotsBlockMat extends CropsMat
 
     protected CarrotsBlockMat(final String enumName, final int age)
     {
-        super(CARROTS_BLOCK_0.name(), CARROTS_BLOCK_0.getId(), CARROTS_BLOCK_0.getMinecraftId(), enumName, (byte) age);
+        super(CARROTS_BLOCK_0.name(), CARROTS_BLOCK_0.ordinal(), CARROTS_BLOCK_0.getMinecraftId(), enumName, (byte) age);
         this.age = age;
     }
 

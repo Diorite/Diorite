@@ -42,7 +42,7 @@ public class StonePressurePlateMat extends PressurePlateMat
 
     protected StonePressurePlateMat(final int type, final boolean powered)
     {
-        super(STONE_PRESSURE_PLATE.name(), STONE_PRESSURE_PLATE.getId(), STONE_PRESSURE_PLATE.getMinecraftId(), powered ? "POWERED" : "WOODEN_PRESSURE_PLATE", (byte) type, powered);
+        super(STONE_PRESSURE_PLATE.name(), STONE_PRESSURE_PLATE.ordinal(), STONE_PRESSURE_PLATE.getMinecraftId(), powered ? "POWERED" : "WOODEN_PRESSURE_PLATE", (byte) type, powered);
     }
 
     protected StonePressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered)

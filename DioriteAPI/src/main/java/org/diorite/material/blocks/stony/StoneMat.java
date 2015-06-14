@@ -51,7 +51,7 @@ public class StoneMat extends StonyMat implements VariantableMat
 
     protected StoneMat(final String enumName, final int type, final VariantMat variant)
     {
-        super(STONE.name(), STONE.getId(), STONE.getMinecraftId(), enumName, (byte) type);
+        super(STONE.name(), STONE.ordinal(), STONE.getMinecraftId(), enumName, (byte) type);
         this.variant = variant;
     }
 

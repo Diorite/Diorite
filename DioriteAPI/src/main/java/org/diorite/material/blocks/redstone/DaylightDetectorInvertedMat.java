@@ -57,7 +57,7 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
 
     protected DaylightDetectorInvertedMat(final int power)
     {
-        super(DAYLIGHT_DETECTOR_INVERTED_OFF.name(), DAYLIGHT_DETECTOR_INVERTED_OFF.getId(), DAYLIGHT_DETECTOR_INVERTED_OFF.getMinecraftId(), power);
+        super(DAYLIGHT_DETECTOR_INVERTED_OFF.name(), DAYLIGHT_DETECTOR_INVERTED_OFF.ordinal(), DAYLIGHT_DETECTOR_INVERTED_OFF.getMinecraftId(), power);
     }
 
     protected DaylightDetectorInvertedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power)

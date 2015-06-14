@@ -53,7 +53,7 @@ public class StoneButtonMat extends ButtonMat
 
     protected StoneButtonMat(final BlockFace face, final boolean powered)
     {
-        super(STONE_BUTTON_DOWN.name(), STONE_BUTTON_DOWN.getId(), STONE_BUTTON_DOWN.getMinecraftId(), face, powered);
+        super(STONE_BUTTON_DOWN.name(), STONE_BUTTON_DOWN.ordinal(), STONE_BUTTON_DOWN.getMinecraftId(), face, powered);
     }
 
     protected StoneButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered)

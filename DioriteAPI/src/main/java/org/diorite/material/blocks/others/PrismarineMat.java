@@ -44,7 +44,7 @@ public class PrismarineMat extends BlockMaterialData
 
     protected PrismarineMat(final String enumName, final int type)
     {
-        super(PRISMARINE.name(), PRISMARINE.getId(), PRISMARINE.getMinecraftId(), enumName, (byte) type);
+        super(PRISMARINE.name(), PRISMARINE.ordinal(), PRISMARINE.getMinecraftId(), enumName, (byte) type);
     }
 
     protected PrismarineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

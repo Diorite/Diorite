@@ -59,7 +59,7 @@ public class SaplingMat extends WoodMat
 
     protected SaplingMat(final WoodTypeMat woodType, final SaplingStage stage)
     {
-        super(SAPLING_OAK.name(), SAPLING_OAK.getId(), SAPLING_OAK.getMinecraftId(), woodType + (stage.getFlag() == 0 ? "" : "_" + stage.name()), combine(woodType, stage), woodType);
+        super(SAPLING_OAK.name(), SAPLING_OAK.ordinal(), SAPLING_OAK.getMinecraftId(), woodType + (stage.getFlag() == 0 ? "" : "_" + stage.name()), combine(woodType, stage), woodType);
         this.stage = stage;
     }
 

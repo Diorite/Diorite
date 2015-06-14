@@ -46,7 +46,7 @@ public class PlanksMat extends WoodMat
 
     protected PlanksMat(final WoodTypeMat woodType)
     {
-        super(PLANKS_OAK.name(), PLANKS_OAK.getId(), PLANKS_OAK.getMinecraftId(), woodType.name(), woodType.getPlanksMeta(), woodType);
+        super(PLANKS_OAK.name(), PLANKS_OAK.ordinal(), PLANKS_OAK.getMinecraftId(), woodType.name(), woodType.getPlanksMeta(), woodType);
     }
 
     protected PlanksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType)

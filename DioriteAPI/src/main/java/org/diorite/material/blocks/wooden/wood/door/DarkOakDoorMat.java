@@ -69,7 +69,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
 
     protected DarkOakDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(DARK_OAK_DOOR_BOTTOM_EAST.name(), DARK_OAK_DOOR_BOTTOM_EAST.getId(), DARK_OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.DARK_OAK);
+        super(DARK_OAK_DOOR_BOTTOM_EAST.name(), DARK_OAK_DOOR_BOTTOM_EAST.ordinal(), DARK_OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.DARK_OAK);
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +79,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
 
     protected DarkOakDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(DARK_OAK_DOOR_BOTTOM_EAST.name(), DARK_OAK_DOOR_BOTTOM_EAST.getId(), DARK_OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.DARK_OAK);
+        super(DARK_OAK_DOOR_BOTTOM_EAST.name(), DARK_OAK_DOOR_BOTTOM_EAST.ordinal(), DARK_OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.DARK_OAK);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;

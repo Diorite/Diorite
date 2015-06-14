@@ -58,7 +58,7 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
 
     protected CactusMat(final int age)
     {
-        super(CACTUS_0.name(), CACTUS_0.getId(), CACTUS_0.getMinecraftId(), Integer.toString(age), (byte) age);
+        super(CACTUS_0.name(), CACTUS_0.ordinal(), CACTUS_0.getMinecraftId(), Integer.toString(age), (byte) age);
     }
 
     protected CactusMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

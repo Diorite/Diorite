@@ -87,7 +87,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
 
     protected TripwireMat(final boolean powered, final boolean inAir, final boolean valid, final boolean disarmed)
     {
-        super(TRIPWIRE.name(), TRIPWIRE.getId(), TRIPWIRE.getMinecraftId(), combineName(powered, inAir, valid, disarmed), combine(powered, inAir, valid, disarmed));
+        super(TRIPWIRE.name(), TRIPWIRE.ordinal(), TRIPWIRE.getMinecraftId(), combineName(powered, inAir, valid, disarmed), combine(powered, inAir, valid, disarmed));
         this.powered = powered;
         this.inAir = inAir;
         this.valid = valid;

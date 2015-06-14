@@ -8,8 +8,8 @@ import org.diorite.Difficulty;
 import org.diorite.GameMode;
 import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings.HardcoreAction;
+import org.diorite.world.WorldType;
 
-@SuppressWarnings({"HardcodedFileSeparator", "SimplifiableIfStatement"})
 public interface WorldsConfig
 {
     File getWorldsDir();
@@ -42,6 +42,8 @@ public interface WorldsConfig
         long getSeed();
 
         Dimension getDimension();
+
+        WorldType getWorldType();
 
         String getGenerator();
 

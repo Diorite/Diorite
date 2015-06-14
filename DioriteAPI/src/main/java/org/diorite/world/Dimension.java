@@ -1,62 +1,40 @@
 package org.diorite.world;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class Dimension implements SimpleEnum<Dimension>
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class Dimension extends ASimpleEnum<Dimension>
 {
-    public static final Dimension NETHER    = new Dimension("NETHER", 0, false, - 1);
-    public static final Dimension OVERWORLD = new Dimension("OVERWORLD", 1, true, 0);
-    public static final Dimension END       = new Dimension("END", 2, false, 1);
+    static
+    {
+        init(Dimension.class, 3);
+    }
 
-    private static final Map<String, Dimension>   byName  = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<Dimension> byID    = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+    public static final Dimension NETHER    = new Dimension("NETHER", false, - 1);
+    public static final Dimension OVERWORLD = new Dimension("OVERWORLD", true, 0);
+    public static final Dimension END       = new Dimension("END", false, 1);
+
     private static final TIntObjectMap<Dimension> byDimID = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
 
-
-    private final String  enumName;
-    private final int     enumId;
     private final boolean hasSkyLight;
     private final int     id;
 
     public Dimension(final String enumName, final int enumId, final boolean hasSkyLight, final int id)
     {
-        this.enumName = enumName;
-        this.enumId = enumId;
+        super(enumName, enumId);
         this.hasSkyLight = hasSkyLight;
         this.id = id;
     }
 
-    @Override
-    public String name()
+    public Dimension(final String enumName, final boolean hasSkyLight, final int id)
     {
-        return this.enumName;
-    }
-
-    @Override
-    public int getId()
-    {
-        return this.enumId;
-    }
-
-    @Override
-    public Dimension byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public Dimension byName(final String name)
-    {
-        return byName.get(name);
+        super(enumName);
+        this.hasSkyLight = hasSkyLight;
+        this.id = id;
     }
 
     public int getDimensionId()
@@ -74,32 +52,44 @@ public class Dimension implements SimpleEnum<Dimension>
         return this.hasSkyLight;
     }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("enumId", this.enumId).toString();
-    }
-
-    public static Dimension getByID(final int id)
-    {
-        return byID.get(id);
-    }
-
     public static Dimension getByDimensionId(final int id)
     {
         return byDimID.get(id);
     }
 
-    public static Dimension getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
+    /**
+     * Register new {@link Dimension} entry in this enum.
+     *
+     * @param element new element to register.
+     */
     public static void register(final Dimension element)
     {
-        byID.put(element.getId(), element);
+        ASimpleEnum.register(Dimension.class, element);
         byDimID.put(element.getDimensionId(), element);
-        byName.put(element.name(), element);
+    }
+
+    /**
+     * Get one of {@link Dimension} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static Dimension getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(Dimension.class, ordinal);
+    }
+
+    /**
+     * Get one of Dimension entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static Dimension getByEnumName(final String name)
+    {
+        return getByEnumName(Dimension.class, name);
     }
 
     /**
@@ -107,13 +97,14 @@ public class Dimension implements SimpleEnum<Dimension>
      */
     public static Dimension[] values()
     {
-        return byID.values(new Dimension[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(Dimension.class);
+        return (Dimension[]) map.values(new Dimension[map.size()]);
     }
 
     static
     {
-        register(NETHER);
-        register(OVERWORLD);
-        register(END);
+        Dimension.register(NETHER);
+        Dimension.register(OVERWORLD);
+        Dimension.register(END);
     }
 }

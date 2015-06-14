@@ -54,7 +54,7 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
 
     protected TorchMat(final BlockFace face)
     {
-        super(TORCH_EAST.name(), TORCH_EAST.getId(), TORCH_EAST.getMinecraftId(), face.name(), combine(face));
+        super(TORCH_EAST.name(), TORCH_EAST.ordinal(), TORCH_EAST.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

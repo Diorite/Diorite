@@ -52,7 +52,7 @@ public class SpruceStairsMat extends WoodenStairsMat
 
     protected SpruceStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(SPRUCE_STAIRS_EAST.name(), SPRUCE_STAIRS_EAST.getId(), SPRUCE_STAIRS_EAST.getMinecraftId(), WoodTypeMat.SPRUCE, face, upsideDown);
+        super(SPRUCE_STAIRS_EAST.name(), SPRUCE_STAIRS_EAST.ordinal(), SPRUCE_STAIRS_EAST.getMinecraftId(), WoodTypeMat.SPRUCE, face, upsideDown);
     }
 
     protected SpruceStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)

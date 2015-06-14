@@ -1,58 +1,34 @@
 package org.diorite.chat;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class ChatVisibility implements SimpleEnum<ChatVisibility>
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class ChatVisibility extends ASimpleEnum<ChatVisibility>
 {
-    public static final ChatVisibility FULL   = new ChatVisibility("FULL", 0, "options.chat.visibility.full");
-    public static final ChatVisibility SYSTEM = new ChatVisibility("SYSTEM", 1, "options.chat.visibility.system");
-    public static final ChatVisibility HIDDEN = new ChatVisibility("HIDDEN", 2, "options.chat.visibility.hidden");
+    static
+    {
+        init(ChatVisibility.class, 3);
+    }
 
-    private static final Map<String, ChatVisibility>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<ChatVisibility> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+    public static final ChatVisibility FULL   = new ChatVisibility("FULL", "options.chat.visibility.full");
+    public static final ChatVisibility SYSTEM = new ChatVisibility("SYSTEM", "options.chat.visibility.system");
+    public static final ChatVisibility HIDDEN = new ChatVisibility("HIDDEN", "options.chat.visibility.hidden");
 
-    private final String enumName;
-    private final int    id;
     private final String option;
 
-    public ChatVisibility(final String enumName, final int id, final String option)
+    public ChatVisibility(final String enumName, final int enumId, final String option)
     {
-        this.enumName = enumName;
-        this.id = id;
+        super(enumName, enumId);
         this.option = option;
     }
 
-    @Override
-    public String name()
+    public ChatVisibility(final String enumName, final String option)
     {
-        return this.enumName;
-    }
-
-    @Override
-    public int getId()
-    {
-        return this.id;
-    }
-
-    @Override
-    public ChatVisibility byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public ChatVisibility byName(final String name)
-    {
-        return byName.get(name);
+        super(enumName);
+        this.option = option;
     }
 
     public String getOption()
@@ -60,26 +36,38 @@ public class ChatVisibility implements SimpleEnum<ChatVisibility>
         return this.option;
     }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("option", this.option).toString();
-    }
-
-    public static ChatVisibility getByID(final int id)
-    {
-        return byID.get(id);
-    }
-
-    public static ChatVisibility getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
+    /**
+     * Register new {@link ChatVisibility} entry in this enum.
+     *
+     * @param element new element to register.
+     */
     public static void register(final ChatVisibility element)
     {
-        byID.put(element.getId(), element);
-        byName.put(element.name(), element);
+        ASimpleEnum.register(ChatVisibility.class, element);
+    }
+
+    /**
+     * Get one of {@link ChatVisibility} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static ChatVisibility getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(ChatVisibility.class, ordinal);
+    }
+
+    /**
+     * Get one of {@link ChatVisibility} entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static ChatVisibility getByEnumName(final String name)
+    {
+        return getByEnumName(ChatVisibility.class, name);
     }
 
     /**
@@ -87,13 +75,14 @@ public class ChatVisibility implements SimpleEnum<ChatVisibility>
      */
     public static ChatVisibility[] values()
     {
-        return byID.values(new ChatVisibility[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ChatVisibility.class);
+        return (ChatVisibility[]) map.values(new ChatVisibility[map.size()]);
     }
 
     static
     {
-        register(FULL);
-        register(SYSTEM);
-        register(HIDDEN);
+        ChatVisibility.register(FULL);
+        ChatVisibility.register(SYSTEM);
+        ChatVisibility.register(HIDDEN);
     }
 }

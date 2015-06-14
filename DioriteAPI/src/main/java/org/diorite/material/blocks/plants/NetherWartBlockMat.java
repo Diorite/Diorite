@@ -50,7 +50,7 @@ public class NetherWartBlockMat extends CropsMat
 
     protected NetherWartBlockMat(final String enumName, final int age)
     {
-        super(NETHER_WART_BLOCK_0.name(), NETHER_WART_BLOCK_0.getId(), NETHER_WART_BLOCK_0.getMinecraftId(), enumName, (byte) age);
+        super(NETHER_WART_BLOCK_0.name(), NETHER_WART_BLOCK_0.ordinal(), NETHER_WART_BLOCK_0.getMinecraftId(), enumName, (byte) age);
         this.age = age;
     }
 

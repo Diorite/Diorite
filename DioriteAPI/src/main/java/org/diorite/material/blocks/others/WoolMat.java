@@ -65,7 +65,7 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
 
     protected WoolMat(final DyeColor color)
     {
-        super(WOOL_WHITE.name(), WOOL_WHITE.getId(), WOOL_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
+        super(WOOL_WHITE.name(), WOOL_WHITE.ordinal(), WOOL_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
         this.color = color;
     }
 

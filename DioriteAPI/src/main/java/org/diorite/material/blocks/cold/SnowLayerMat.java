@@ -49,7 +49,7 @@ public class SnowLayerMat extends BlockMaterialData
 
     protected SnowLayerMat(final int type)
     {
-        super(SNOW_LAYER_1.name(), SNOW_LAYER_1.getId(), SNOW_LAYER_1.getMinecraftId(), Integer.toString(type + 1), (byte) type);
+        super(SNOW_LAYER_1.name(), SNOW_LAYER_1.ordinal(), SNOW_LAYER_1.getMinecraftId(), Integer.toString(type + 1), (byte) type);
     }
 
     protected SnowLayerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)

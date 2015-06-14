@@ -63,7 +63,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
 
     protected AnvilMat(final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated)
     {
-        super(ANVIL_NORTH_SOUTH_NEW.name(), ANVIL_NORTH_SOUTH_NEW.getId(), ANVIL_NORTH_SOUTH_NEW.getMinecraftId(), combineName(damage, axis, rotated), combine(damage, axis, rotated));
+        super(ANVIL_NORTH_SOUTH_NEW.name(), ANVIL_NORTH_SOUTH_NEW.ordinal(), ANVIL_NORTH_SOUTH_NEW.getMinecraftId(), combineName(damage, axis, rotated), combine(damage, axis, rotated));
         this.damage = damage;
         this.axis = axis;
         this.rotated = rotated;

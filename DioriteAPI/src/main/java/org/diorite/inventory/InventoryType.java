@@ -2,58 +2,55 @@ package org.diorite.inventory;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
-public class InventoryType implements SimpleEnum<InventoryType>
+@SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
+public class InventoryType extends ASimpleEnum<InventoryType>
 {
-    public static final InventoryType PLAYER            = new InventoryType("PLAYER", 0, "", "Player", 45);
-    public static final InventoryType PLAYER_CRAFTING   = new InventoryType("PLAYER_CRAFTING", 1, "", "Crafting", 5, PLAYER, true);
-    public static final InventoryType PLAYER_ARMOR      = new InventoryType("PLAYER_ARMOR", 2, "", "Armor", 5, PLAYER, true);
-    public static final InventoryType PLAYER_HOTBAR     = new InventoryType("PLAYER_HOTBAR", 3, "", "Hotbar", 9, PLAYER, true);
-    public static final InventoryType PLAYER_EQ         = new InventoryType("PLAYER_EQ", 4, "", "Inventory", 27, PLAYER, true);
-    public static final InventoryType PLAYER_FULL_EQ    = new InventoryType("PLAYER_FULL_EQ", 5, "", "Inventory", 36, PLAYER, true);
-    public static final InventoryType CHEST             = new InventoryType("CHEST", 6, "minecraft:chest", "Chest", 27);
-    public static final InventoryType LARGE_CHEST       = new InventoryType("LARGE_CHEST", 7, "minecraft:chest", "Large Chest", 54);
-    public static final InventoryType DISPENSER         = new InventoryType("DISPENSER", 8, "minecraft:dispenser", "Dispenser", 9);
-    public static final InventoryType DROPPER           = new InventoryType("DROPPER", 9, "minecraft:dropper", "Dropper", 9);
-    public static final InventoryType FURNACE           = new InventoryType("FURNACE", 10, "minecraft:furnace", "Furnace", 3);
-    public static final InventoryType WORKBENCH         = new InventoryType("WORKBENCH", 11, "minecraft:crafting_table", "Crafting", 10);
-    public static final InventoryType ENCHANTING        = new InventoryType("ENCHANTING", 12, "minecraft:enchanting_table", "Enchanting", 2);
-    public static final InventoryType BREWING           = new InventoryType("BREWING", 13, "minecraft:brewing_stand", "Brewing", 4);
-    public static final InventoryType MERCHANT          = new InventoryType("MERCHANT", 14, "minecraft:villager", "Villager", 3);
-    public static final InventoryType ENDER_CHEST       = new InventoryType("ENDER_CHEST", 15, "", "Ender Chest", 27);
-    public static final InventoryType ANVIL             = new InventoryType("ANVIL", 16, "minecraft:anvil", "Repairing", 3);
-    public static final InventoryType BEACON            = new InventoryType("BEACON", 17, "minecraft:beacon", "Beacon", 1);
-    public static final InventoryType HOPPER            = new InventoryType("HOPPER", 18, "minecraft:hopper", "Item Hopper", 5);
-    public static final InventoryType DONKEY_WITH_CHEST = new InventoryType("DONKEY_WITH_CHEST", 19, "EntityHorse", "Donkey", 16);
-    public static final InventoryType DONKEY_CHEST      = new InventoryType("DONKEY_CHEST", 20, "EntityHorse", "Donkey", 15, DONKEY_WITH_CHEST, true);
-    public static final InventoryType DONKEY            = new InventoryType("DONKEY", 21, "EntityHorse", "Donkey", 1, DONKEY_WITH_CHEST, false);
-    public static final InventoryType HORSE             = new InventoryType("HORSE", 22, "EntityHorse", "Horse", 2);
+    static
+    {
+        init(InventoryType.class, 23);
+    }
 
-    private static final Map<String, InventoryType>   byName = new CaseInsensitiveMap<>(16, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<InventoryType> byID   = new TIntObjectHashMap<>(16, SMALL_LOAD_FACTOR);
-    private static final Map<String, InventoryType>   byMcId = new CaseInsensitiveMap<>(16, SMALL_LOAD_FACTOR);
+    public static final InventoryType PLAYER            = new InventoryType("PLAYER", "", "Player", 45);
+    public static final InventoryType PLAYER_CRAFTING   = new InventoryType("PLAYER_CRAFTING", "", "Crafting", 5, PLAYER, true);
+    public static final InventoryType PLAYER_ARMOR      = new InventoryType("PLAYER_ARMOR", "", "Armor", 5, PLAYER, true);
+    public static final InventoryType PLAYER_HOTBAR     = new InventoryType("PLAYER_HOTBAR", "", "Hotbar", 9, PLAYER, true);
+    public static final InventoryType PLAYER_EQ         = new InventoryType("PLAYER_EQ", "", "Inventory", 27, PLAYER, true);
+    public static final InventoryType PLAYER_FULL_EQ    = new InventoryType("PLAYER_FULL_EQ", "", "Inventory", 36, PLAYER, true);
+    public static final InventoryType CHEST             = new InventoryType("CHEST", "minecraft:chest", "Chest", 27);
+    public static final InventoryType LARGE_CHEST       = new InventoryType("LARGE_CHEST", "minecraft:chest", "Large Chest", 54);
+    public static final InventoryType DISPENSER         = new InventoryType("DISPENSER", "minecraft:dispenser", "Dispenser", 9);
+    public static final InventoryType DROPPER           = new InventoryType("DROPPER", "minecraft:dropper", "Dropper", 9);
+    public static final InventoryType FURNACE           = new InventoryType("FURNACE", "minecraft:furnace", "Furnace", 3);
+    public static final InventoryType WORKBENCH         = new InventoryType("WORKBENCH", "minecraft:crafting_table", "Crafting", 10);
+    public static final InventoryType ENCHANTING        = new InventoryType("ENCHANTING", "minecraft:enchanting_table", "Enchanting", 2);
+    public static final InventoryType BREWING           = new InventoryType("BREWING", "minecraft:brewing_stand", "Brewing", 4);
+    public static final InventoryType MERCHANT          = new InventoryType("MERCHANT", "minecraft:villager", "Villager", 3);
+    public static final InventoryType ENDER_CHEST       = new InventoryType("ENDER_CHEST", "", "Ender Chest", 27);
+    public static final InventoryType ANVIL             = new InventoryType("ANVIL", "minecraft:anvil", "Repairing", 3);
+    public static final InventoryType BEACON            = new InventoryType("BEACON", "minecraft:beacon", "Beacon", 1);
+    public static final InventoryType HOPPER            = new InventoryType("HOPPER", "minecraft:hopper", "Item Hopper", 5);
+    public static final InventoryType DONKEY_WITH_CHEST = new InventoryType("DONKEY_WITH_CHEST", "EntityHorse", "Donkey", 16);
+    public static final InventoryType DONKEY_CHEST      = new InventoryType("DONKEY_CHEST", "EntityHorse", "Donkey", 15, DONKEY_WITH_CHEST, true);
+    public static final InventoryType DONKEY            = new InventoryType("DONKEY", "EntityHorse", "Donkey", 1, DONKEY_WITH_CHEST, false);
+    public static final InventoryType HORSE             = new InventoryType("HORSE", "EntityHorse", "Horse", 2);
 
-    private final String        enumName;
-    private final int           id;
+    private static final Map<String, InventoryType> byMcId = new CaseInsensitiveMap<>(16, SMALL_LOAD_FACTOR);
+
     private final String        minecraftId;
     private final String        defaultTitle;
     private final int           size;
     private final InventoryType parent;
     private final boolean       needParent;
 
-    public InventoryType(final String enumName, final int id, final String minecraftId, final String defaultTitle, final int size, final InventoryType parent, final boolean needParent)
+    public InventoryType(final String enumName, final int enumId, final String minecraftId, final String defaultTitle, final int size, final InventoryType parent, final boolean needParent)
     {
-        this.enumName = enumName;
-        this.id = id;
+        super(enumName, enumId);
         this.minecraftId = minecraftId;
         this.defaultTitle = defaultTitle;
         this.size = size;
@@ -61,33 +58,19 @@ public class InventoryType implements SimpleEnum<InventoryType>
         this.needParent = needParent;
     }
 
-    public InventoryType(final String enumName, final int id, final String minecraftId, final String defaultTitle, final int size)
+    public InventoryType(final String enumName, final String minecraftId, final String defaultTitle, final int size, final InventoryType parent, final boolean needParent)
     {
-        this(enumName, id, minecraftId, defaultTitle, size, null, false);
+        super(enumName);
+        this.minecraftId = minecraftId;
+        this.defaultTitle = defaultTitle;
+        this.size = size;
+        this.parent = parent;
+        this.needParent = needParent;
     }
 
-    @Override
-    public String name()
+    public InventoryType(final String enumName, final String minecraftId, final String defaultTitle, final int size)
     {
-        return this.enumName;
-    }
-
-    @Override
-    public int getId()
-    {
-        return this.id;
-    }
-
-    @Override
-    public InventoryType byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public InventoryType byName(final String name)
-    {
-        return byName.get(name);
+        this(enumName, minecraftId, defaultTitle, size, null, false);
     }
 
     /**
@@ -134,35 +117,48 @@ public class InventoryType implements SimpleEnum<InventoryType>
         return this.minecraftId;
     }
 
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("name", this.defaultTitle).toString();
-    }
-
-    public static InventoryType getByID(final int id)
-    {
-        return byID.get(id);
-    }
-
-    public static InventoryType getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
     public static InventoryType getByMinecraftId(final String minecraftId)
     {
         return byMcId.get(minecraftId);
     }
 
+
+    /**
+     * Register new option.
+     *
+     * @param element option to register.
+     */
     public static void register(final InventoryType element)
     {
-        byID.put(element.getId(), element);
-        byName.put(element.name(), element);
-        if (! element.getMinecraftId().equals(""))
+        ASimpleEnum.register(InventoryType.class, element);
+        if (! element.getMinecraftId().isEmpty())
         {
             byMcId.put(element.getMinecraftId(), element);
         }
+    }
+
+    /**
+     * Get one of {@link InventoryType} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static InventoryType getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(InventoryType.class, ordinal);
+    }
+
+    /**
+     * Get one of InventoryType entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static InventoryType getByEnumName(final String name)
+    {
+        return getByEnumName(InventoryType.class, name);
     }
 
     /**
@@ -170,32 +166,33 @@ public class InventoryType implements SimpleEnum<InventoryType>
      */
     public static InventoryType[] values()
     {
-        return byID.values(new InventoryType[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(InventoryType.class);
+        return (InventoryType[]) map.values(new InventoryType[map.size()]);
     }
 
     static
     {
-        register(PLAYER);
-        register(PLAYER_CRAFTING);
-        register(PLAYER_ARMOR);
-        register(PLAYER_HOTBAR);
-        register(PLAYER_EQ);
-        register(CHEST);
-        register(LARGE_CHEST);
-        register(DISPENSER);
-        register(DROPPER);
-        register(FURNACE);
-        register(WORKBENCH);
-        register(ENCHANTING);
-        register(BREWING);
-        register(MERCHANT);
-        register(ENDER_CHEST);
-        register(ANVIL);
-        register(BEACON);
-        register(HOPPER);
-        register(DONKEY_WITH_CHEST);
-        register(DONKEY_CHEST);
-        register(DONKEY);
-        register(HORSE);
+        InventoryType.register(PLAYER);
+        InventoryType.register(PLAYER_CRAFTING);
+        InventoryType.register(PLAYER_ARMOR);
+        InventoryType.register(PLAYER_HOTBAR);
+        InventoryType.register(PLAYER_EQ);
+        InventoryType.register(CHEST);
+        InventoryType.register(LARGE_CHEST);
+        InventoryType.register(DISPENSER);
+        InventoryType.register(DROPPER);
+        InventoryType.register(FURNACE);
+        InventoryType.register(WORKBENCH);
+        InventoryType.register(ENCHANTING);
+        InventoryType.register(BREWING);
+        InventoryType.register(MERCHANT);
+        InventoryType.register(ENDER_CHEST);
+        InventoryType.register(ANVIL);
+        InventoryType.register(BEACON);
+        InventoryType.register(HOPPER);
+        InventoryType.register(DONKEY_WITH_CHEST);
+        InventoryType.register(DONKEY_CHEST);
+        InventoryType.register(DONKEY);
+        InventoryType.register(HORSE);
     }
 }

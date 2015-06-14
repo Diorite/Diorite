@@ -69,7 +69,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
      * @param field source field.
      * @param index index of field in class. Used to set priority of field.
      */
-    @SuppressWarnings("ObjectEquality")
     public ConfigField(final Field field, final int index)
     {
         this.field = field;

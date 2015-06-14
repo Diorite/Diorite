@@ -46,10 +46,9 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
         super("DOUBLE_WOODEN_SLAB", 125, "minecraft:double_wooden_slab", "OAK", WoodTypeMat.OAK, SlabTypeMat.BOTTOM);
     }
 
-    @SuppressWarnings("MagicNumber")
     protected DoubleWoodenSlabMat(final WoodTypeMat woodType, final SlabTypeMat slabType)
     {
-        super(DOUBLE_WOODEN_SLAB_OAK.name(), DOUBLE_WOODEN_SLAB_OAK.getId(), DOUBLE_WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType);
+        super(DOUBLE_WOODEN_SLAB_OAK.name(), DOUBLE_WOODEN_SLAB_OAK.ordinal(), DOUBLE_WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType);
     }
 
     protected DoubleWoodenSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SlabTypeMat slabType)

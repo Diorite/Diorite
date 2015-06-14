@@ -57,7 +57,7 @@ public class MonsterEggTrapMat extends StonyMat
 
     protected MonsterEggTrapMat(final String enumName, final int type, final BlockMaterialData block)
     {
-        super(MONSTER_EGG_TRAP_STONE.name(), MONSTER_EGG_TRAP_STONE.getId(), MONSTER_EGG_TRAP_STONE.getMinecraftId(), enumName, (byte) type);
+        super(MONSTER_EGG_TRAP_STONE.name(), MONSTER_EGG_TRAP_STONE.ordinal(), MONSTER_EGG_TRAP_STONE.getMinecraftId(), enumName, (byte) type);
         this.block = block;
     }
 

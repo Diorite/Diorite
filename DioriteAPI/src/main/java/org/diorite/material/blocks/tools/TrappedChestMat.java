@@ -53,7 +53,7 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
 
     protected TrappedChestMat(final BlockFace face)
     {
-        super(TRAPPED_CHEST_NORTH.name(), TRAPPED_CHEST_NORTH.getId(), TRAPPED_CHEST_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(TRAPPED_CHEST_NORTH.name(), TRAPPED_CHEST_NORTH.ordinal(), TRAPPED_CHEST_NORTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

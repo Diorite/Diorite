@@ -618,15 +618,15 @@ public abstract class Material implements SimpleEnum<Material>
     }
 
     @Override
-    public int getId()
+    public int ordinal()
     {
         return this.id;
     }
 
     @Override
-    public Material byId(final int id)
+    public Material byOrdinal(final int ordinal)
     {
-        return byID.get(id);
+        return byID.get(ordinal);
     }
 
     @Override
@@ -812,7 +812,7 @@ public abstract class Material implements SimpleEnum<Material>
 
     public static void register(final Material element)
     {
-        byID.put(element.getId(), element);
+        byID.put(element.ordinal(), element);
         byName.put(element.name(), element);
         byMinecraftId.put(element.getMinecraftId(), element);
     }

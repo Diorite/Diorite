@@ -53,7 +53,7 @@ public class BrownMushroomBlockMat extends MushroomBlockMat
 
     protected BrownMushroomBlockMat(final Type type)
     {
-        super(BROWN_MUSHROOM_BLOCK_PORES_FULL.name(), BROWN_MUSHROOM_BLOCK_PORES_FULL.getId(), BROWN_MUSHROOM_BLOCK_PORES_FULL.getMinecraftId(), type);
+        super(BROWN_MUSHROOM_BLOCK_PORES_FULL.name(), BROWN_MUSHROOM_BLOCK_PORES_FULL.ordinal(), BROWN_MUSHROOM_BLOCK_PORES_FULL.getMinecraftId(), type);
     }
 
     protected BrownMushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType)

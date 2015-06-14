@@ -69,7 +69,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
 
     protected IronDoorMat(final String enumName, final boolean powered, final boolean hingeOnRightSide)
     {
-        super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.getId(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(powered, hingeOnRightSide));
+        super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.ordinal(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(powered, hingeOnRightSide));
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +79,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
 
     protected IronDoorMat(final String enumName, final BlockFace blockFace, final boolean open)
     {
-        super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.getId(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(blockFace, open));
+        super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.ordinal(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(blockFace, open));
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;

@@ -64,7 +64,7 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
 
     protected DetectorRailMat(final RailTypeMat type, final boolean powered)
     {
-        super(DETECTOR_RAIL_NORTH_SOUTH.name(), DETECTOR_RAIL_NORTH_SOUTH.getId(), DETECTOR_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00);
+        super(DETECTOR_RAIL_NORTH_SOUTH.name(), DETECTOR_RAIL_NORTH_SOUTH.ordinal(), DETECTOR_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00);
         this.powered = powered;
     }
 

@@ -60,7 +60,7 @@ public class WoodenTrapdoorMat extends TrapdoorMat
 
     protected WoodenTrapdoorMat(final BlockFace face, final boolean open, final boolean onTop)
     {
-        super(WOODEN_TRAPDOOR_WEST_BOTTOM.name(), WOODEN_TRAPDOOR_WEST_BOTTOM.getId(), WOODEN_TRAPDOOR_WEST_BOTTOM.getMinecraftId(), face, open, onTop);
+        super(WOODEN_TRAPDOOR_WEST_BOTTOM.name(), WOODEN_TRAPDOOR_WEST_BOTTOM.ordinal(), WOODEN_TRAPDOOR_WEST_BOTTOM.getMinecraftId(), face, open, onTop);
     }
 
     protected WoodenTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop)

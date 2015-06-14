@@ -54,7 +54,7 @@ public class PistonExtensionMat extends PistonBaseMat
 
     protected PistonExtensionMat(final BlockFace face, final boolean extended)
     {
-        super(PISTON_EXTENSION_DOWN.name(), PISTON_EXTENSION_DOWN.getId(), PISTON_EXTENSION_DOWN.getMinecraftId(), face, extended);
+        super(PISTON_EXTENSION_DOWN.name(), PISTON_EXTENSION_DOWN.ordinal(), PISTON_EXTENSION_DOWN.getMinecraftId(), face, extended);
     }
 
     protected PistonExtensionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended)

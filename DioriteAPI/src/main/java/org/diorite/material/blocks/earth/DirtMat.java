@@ -50,7 +50,7 @@ public class DirtMat extends EarthMat implements VariantableMat
 
     protected DirtMat(final int type, final VariantMat variant)
     {
-        super(DIRT.name(), DIRT.getId(), DIRT.getMinecraftId(), variant.name(), (byte) type);
+        super(DIRT.name(), DIRT.ordinal(), DIRT.getMinecraftId(), variant.name(), (byte) type);
         this.variant = variant;
     }
 

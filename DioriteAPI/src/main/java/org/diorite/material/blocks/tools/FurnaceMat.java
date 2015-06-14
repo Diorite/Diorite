@@ -53,7 +53,7 @@ public class FurnaceMat extends BlockMaterialData implements DirectionalMat
 
     protected FurnaceMat(final BlockFace face)
     {
-        super(FURNACE_NORTH.name(), FURNACE_NORTH.getId(), FURNACE_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(FURNACE_NORTH.name(), FURNACE_NORTH.ordinal(), FURNACE_NORTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

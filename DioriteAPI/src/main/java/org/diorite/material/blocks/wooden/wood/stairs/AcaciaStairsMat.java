@@ -52,7 +52,7 @@ public class AcaciaStairsMat extends WoodenStairsMat
 
     protected AcaciaStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(ACACIA_STAIRS_EAST.name(), ACACIA_STAIRS_EAST.getId(), ACACIA_STAIRS_EAST.getMinecraftId(), WoodTypeMat.ACACIA, face, upsideDown);
+        super(ACACIA_STAIRS_EAST.name(), ACACIA_STAIRS_EAST.ordinal(), ACACIA_STAIRS_EAST.getMinecraftId(), WoodTypeMat.ACACIA, face, upsideDown);
     }
 
     protected AcaciaStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)

@@ -53,7 +53,7 @@ public class RedMushroomBlockMat extends MushroomBlockMat
 
     protected RedMushroomBlockMat(final Type type)
     {
-        super(RED_MUSHROOM_BLOCK_PORES_FULL.name(), RED_MUSHROOM_BLOCK_PORES_FULL.getId(), RED_MUSHROOM_BLOCK_PORES_FULL.getMinecraftId(), type);
+        super(RED_MUSHROOM_BLOCK_PORES_FULL.name(), RED_MUSHROOM_BLOCK_PORES_FULL.ordinal(), RED_MUSHROOM_BLOCK_PORES_FULL.getMinecraftId(), type);
     }
 
     protected RedMushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType)

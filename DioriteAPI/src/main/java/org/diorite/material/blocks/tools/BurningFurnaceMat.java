@@ -53,7 +53,7 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
 
     protected BurningFurnaceMat(final BlockFace face)
     {
-        super(BURNING_FURNACE_NORTH.name(), BURNING_FURNACE_NORTH.getId(), BURNING_FURNACE_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(BURNING_FURNACE_NORTH.name(), BURNING_FURNACE_NORTH.ordinal(), BURNING_FURNACE_NORTH.getMinecraftId(), face.name(), combine(face));
         this.face = face;
     }
 

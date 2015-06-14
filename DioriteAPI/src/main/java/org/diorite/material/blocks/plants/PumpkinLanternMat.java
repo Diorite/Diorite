@@ -46,7 +46,7 @@ public class PumpkinLanternMat extends AbstractPumpkinMat
 
     protected PumpkinLanternMat(final BlockFace face)
     {
-        super(PUMPKIN_LANTERN_SOUTH.name(), PUMPKIN_LANTERN_SOUTH.getId(), PUMPKIN_LANTERN_SOUTH.getMinecraftId(), face);
+        super(PUMPKIN_LANTERN_SOUTH.name(), PUMPKIN_LANTERN_SOUTH.ordinal(), PUMPKIN_LANTERN_SOUTH.getMinecraftId(), face);
     }
 
     protected PumpkinLanternMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)

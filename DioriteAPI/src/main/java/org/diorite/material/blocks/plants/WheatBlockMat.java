@@ -54,7 +54,7 @@ public class WheatBlockMat extends CropsMat
 
     protected WheatBlockMat(final String enumName, final int age)
     {
-        super(WHEAT_BLOCK_0.name(), WHEAT_BLOCK_0.getId(), WHEAT_BLOCK_0.getMinecraftId(), enumName, (byte) age);
+        super(WHEAT_BLOCK_0.name(), WHEAT_BLOCK_0.ordinal(), WHEAT_BLOCK_0.getMinecraftId(), enumName, (byte) age);
         this.age = age;
     }
 

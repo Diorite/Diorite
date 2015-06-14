@@ -60,7 +60,7 @@ public class RedstoneRepeaterOffMat extends RedstoneRepeaterMat
 
     protected RedstoneRepeaterOffMat(final BlockFace face, final int delay)
     {
-        super(REDSTONE_REPEATER_OFF_NORTH_1.name(), REDSTONE_REPEATER_OFF_NORTH_1.getId(), REDSTONE_REPEATER_OFF_NORTH_1.getMinecraftId(), face, delay);
+        super(REDSTONE_REPEATER_OFF_NORTH_1.name(), REDSTONE_REPEATER_OFF_NORTH_1.ordinal(), REDSTONE_REPEATER_OFF_NORTH_1.getMinecraftId(), face, delay);
     }
 
     protected RedstoneRepeaterOffMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int delay)

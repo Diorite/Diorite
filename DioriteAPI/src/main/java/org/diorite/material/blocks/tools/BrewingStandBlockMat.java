@@ -70,7 +70,7 @@ public class BrewingStandBlockMat extends BlockMaterialData
 
     protected BrewingStandBlockMat(final String enumName, final boolean slot0, final boolean slot1, final boolean slot2)
     {
-        super(BREWING_STAND_BLOCK_EMPTY.name(), BREWING_STAND_BLOCK_EMPTY.getId(), BREWING_STAND_BLOCK_EMPTY.getMinecraftId(), enumName, combine(slot0, slot1, slot2));
+        super(BREWING_STAND_BLOCK_EMPTY.name(), BREWING_STAND_BLOCK_EMPTY.ordinal(), BREWING_STAND_BLOCK_EMPTY.getMinecraftId(), enumName, combine(slot0, slot1, slot2));
         this.hasBottle = new boolean[]{slot0, slot1, slot2};
     }
 

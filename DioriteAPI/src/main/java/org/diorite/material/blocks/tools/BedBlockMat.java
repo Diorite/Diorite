@@ -74,7 +74,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
 
     protected BedBlockMat(final BlockFace face, final boolean isHeadPart, final boolean isOccupied)
     {
-        super(BED_FOOT_SOUTH.name(), BED_FOOT_SOUTH.getId(), BED_FOOT_SOUTH.getMinecraftId(), (isHeadPart ? "HEAD_" : "FOOT_") + face.name() + (isOccupied ? "_OCCUPIED" : ""), combine(face, isHeadPart, isOccupied));
+        super(BED_FOOT_SOUTH.name(), BED_FOOT_SOUTH.ordinal(), BED_FOOT_SOUTH.getMinecraftId(), (isHeadPart ? "HEAD_" : "FOOT_") + face.name() + (isOccupied ? "_OCCUPIED" : ""), combine(face, isHeadPart, isOccupied));
         this.blockFacing = face;
         this.isHeadPart = isHeadPart;
         this.isOccupied = isOccupied;

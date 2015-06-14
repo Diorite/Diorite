@@ -69,7 +69,7 @@ public class JungleDoorMat extends WoodenDoorMat
 
     protected JungleDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.getId(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.JUNGLE);
+        super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.ordinal(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.JUNGLE);
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +79,7 @@ public class JungleDoorMat extends WoodenDoorMat
 
     protected JungleDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.getId(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.JUNGLE);
+        super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.ordinal(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.JUNGLE);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;

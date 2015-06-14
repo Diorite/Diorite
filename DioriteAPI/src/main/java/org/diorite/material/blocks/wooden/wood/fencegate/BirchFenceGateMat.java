@@ -52,7 +52,7 @@ public class BirchFenceGateMat extends WoodenFenceGateMat
 
     protected BirchFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(BIRCH_FENCE_GATE_SOUTH.name(), BIRCH_FENCE_GATE_SOUTH.getId(), BIRCH_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.BIRCH, face, open);
+        super(BIRCH_FENCE_GATE_SOUTH.name(), BIRCH_FENCE_GATE_SOUTH.ordinal(), BIRCH_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.BIRCH, face, open);
     }
 
     protected BirchFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)
