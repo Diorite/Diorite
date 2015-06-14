@@ -139,7 +139,7 @@ public class BaseTemplateTest extends TestCase
 
             final TestCfg testCfg = (TestCfg) o;
 
-            return ! ((this.value != null) ? ! this.value.equals(testCfg.value) : (testCfg.value != null)) && ! ((meh != null) ? ! meh.equals(testCfg.meh) : (testCfg.meh != null));
+            return ! ((this.value != null) ? ! this.value.equals(testCfg.value) : (testCfg.value != null)) && ! ((this.meh != null) ? ! this.meh.equals(testCfg.meh) : (testCfg.meh != null));
 
         }
 

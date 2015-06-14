@@ -165,7 +165,7 @@ public class TemplateTest extends TestCase
 
         public String getPlayerName()
         {
-            return playerName;
+            return this.playerName;
         }
 
         public Map<Collection<Integer>, Collection<Integer>> getSuperMap()
@@ -204,7 +204,7 @@ public class TemplateTest extends TestCase
 
         public String getDesc()
         {
-            return desc;
+            return this.desc;
         }
 
         public void setDesc(final String desc)
@@ -214,7 +214,7 @@ public class TemplateTest extends TestCase
 
         public List<String> getFriends()
         {
-            return friends;
+            return this.friends;
         }
 
         public void setFriends(final List<String> friends)
@@ -224,7 +224,7 @@ public class TemplateTest extends TestCase
 
         public List<String> getStrings()
         {
-            return strings;
+            return this.strings;
         }
 
         public void setStrings(final List<String> strings)
@@ -234,7 +234,7 @@ public class TemplateTest extends TestCase
 
         public List<Integer> getInts()
         {
-            return ints;
+            return this.ints;
         }
 
         public void setInts(final List<Integer> ints)
@@ -244,7 +244,7 @@ public class TemplateTest extends TestCase
 
         public Map<String, Map<Integer, Double>> getMap()
         {
-            return map;
+            return this.map;
         }
 
         public void setMap(final Map<String, Map<Integer, Double>> map)
@@ -254,7 +254,7 @@ public class TemplateTest extends TestCase
 
         public Map<Integer, Map<String, String>> getOtherMap()
         {
-            return otherMap;
+            return this.otherMap;
         }
 
         public void setOtherMap(final Map<Integer, Map<String, String>> otherMap)
@@ -276,23 +276,23 @@ public class TemplateTest extends TestCase
 
             final TestAdvConfig that = (TestAdvConfig) o;
 
-            if (this.playerName != null ? ! this.playerName.equals(that.playerName) : that.playerName != null)
+            if ((this.playerName != null) ? ! this.playerName.equals(that.playerName) : (that.playerName != null))
             {
                 return false;
             }
-            if (this.playerSubName != null ? ! this.playerSubName.equals(that.playerSubName) : that.playerSubName != null)
+            if ((this.playerSubName != null) ? ! this.playerSubName.equals(that.playerSubName) : (that.playerSubName != null))
             {
                 return false;
             }
-            if (this.desc != null ? ! this.desc.equals(that.desc) : that.desc != null)
+            if ((this.desc != null) ? ! this.desc.equals(that.desc) : (that.desc != null))
             {
                 return false;
             }
-            if (this.friends != null ? ! this.friends.equals(that.friends) : that.friends != null)
+            if ((this.friends != null) ? ! this.friends.equals(that.friends) : (that.friends != null))
             {
                 return false;
             }
-            if (this.strings != null ? ! this.strings.equals(that.strings) : that.strings != null)
+            if ((this.strings != null) ? ! this.strings.equals(that.strings) : (that.strings != null))
             {
                 return false;
             }
@@ -300,66 +300,66 @@ public class TemplateTest extends TestCase
 //            {
 //                return false;
 //            }
-            if (this.map != null ? ! this.map.equals(that.map) : that.map != null)
+            if ((this.map != null) ? ! this.map.equals(that.map) : (that.map != null))
             {
                 return false;
             }
-            if (this.otherMap != null ? ! this.otherMap.equals(that.otherMap) : that.otherMap != null)
+            if ((this.otherMap != null) ? ! this.otherMap.equals(that.otherMap) : (that.otherMap != null))
             {
                 return false;
             }
-            if (this.subClass != null ? ! this.subClass.equals(that.subClass) : that.subClass != null)
+            if ((this.subClass != null) ? ! this.subClass.equals(that.subClass) : (that.subClass != null))
             {
                 return false;
             }
-            return ! (superMap != null ? ! superMap.equals(that.superMap) : that.superMap != null);
+            return ! ((this.superMap != null) ? ! this.superMap.equals(that.superMap) : (that.superMap != null));
 
         }
 
         @Override
         public int hashCode()
         {
-            int result = this.playerName != null ? this.playerName.hashCode() : 0;
-            result = 31 * result + (this.playerSubName != null ? this.playerSubName.hashCode() : 0);
-            result = 31 * result + (this.desc != null ? this.desc.hashCode() : 0);
-            result = 31 * result + (this.friends != null ? this.friends.hashCode() : 0);
-            result = 31 * result + (this.strings != null ? this.strings.hashCode() : 0);
+            int result = (this.playerName != null) ? this.playerName.hashCode() : 0;
+            result = (31 * result) + ((this.playerSubName != null) ? this.playerSubName.hashCode() : 0);
+            result = (31 * result) + ((this.desc != null) ? this.desc.hashCode() : 0);
+            result = (31 * result) + ((this.friends != null) ? this.friends.hashCode() : 0);
+            result = (31 * result) + ((this.strings != null) ? this.strings.hashCode() : 0);
 //            result = 31 * result + (this.ints != null ? this.ints.hashCode() : 0);
-            result = 31 * result + (this.map != null ? this.map.hashCode() : 0);
-            result = 31 * result + (this.otherMap != null ? this.otherMap.hashCode() : 0);
-            result = 31 * result + (this.subClass != null ? this.subClass.hashCode() : 0);
-            result = 31 * result + (this.superMap != null ? this.superMap.hashCode() : 0);
+            result = (31 * result) + ((this.map != null) ? this.map.hashCode() : 0);
+            result = (31 * result) + ((this.otherMap != null) ? this.otherMap.hashCode() : 0);
+            result = (31 * result) + ((this.subClass != null) ? this.subClass.hashCode() : 0);
+            result = (31 * result) + ((this.superMap != null) ? this.superMap.hashCode() : 0);
             return result;
         }
 
         {
             {
-                Map<Integer, Double> subMap1 = new HashMap<>(5);
+                final Map<Integer, Double> subMap1 = new HashMap<>(5);
                 subMap1.put(1, 3.44);
                 subMap1.put(5, 1.22);
-                Map<Integer, Double> subMap2 = new HashMap<>(5);
+                final Map<Integer, Double> subMap2 = new HashMap<>(5);
                 subMap2.put(15, 35.454);
                 subMap2.put(35, 13.242);
 
-                map.put("map1", subMap1);
-                map.put("map2", subMap2);
-                map.put("map3", null);
+                this.map.put("map1", subMap1);
+                this.map.put("map2", subMap2);
+                this.map.put("map3", null);
             }
 
             {
-                Map<String, String> subMap1 = new HashMap<>(5);
+                final Map<String, String> subMap1 = new HashMap<>(5);
                 subMap1.put("dosc\ndizwny\nklucz\'\"heh\nTestujemy możliwoścci", "prosta wartość");
 //                subMap1.put("dosc\ndizwny\nklucz\'\"heh\nTestujemy możliwoścci", "wartosc\njest\ntez\ndziwna\nme\"h\"");
                 subMap1.put("'meh'", "\"heh\"");
-                Map<String, String> subMap2 = new HashMap<>(5);
+                final Map<String, String> subMap2 = new HashMap<>(5);
                 subMap2.put("33", "hehe");
                 subMap2.put("67", "32");
 
-                otherMap.put(69, subMap1);
-                otherMap.put(100, subMap2);
+                this.otherMap.put(69, subMap1);
+                this.otherMap.put(100, subMap2);
             }
             {
-                superMap.put(Arrays.asList(1, 2, 3), Arrays.asList(4, 5, 6));
+                this.superMap.put(Arrays.asList(1, 2, 3), Arrays.asList(4, 5, 6));
 //                superMap.put(new int[]{1, 2, 3}, new int[]{4, 5, 6});
 //                superMap.put(new int[]{7, 8, 9}, new int[]{10, 11, 12});
             }
@@ -407,7 +407,7 @@ public class TemplateTest extends TestCase
 
         public String getPlayerName()
         {
-            return playerName;
+            return this.playerName;
         }
 
         public Map<Collection<Integer>, Collection<Integer>> getSuperMap()
@@ -446,7 +446,7 @@ public class TemplateTest extends TestCase
 
         public String getDesc()
         {
-            return desc;
+            return this.desc;
         }
 
         public void setDesc(final String desc)
@@ -456,7 +456,7 @@ public class TemplateTest extends TestCase
 
         public List<String> getFriends()
         {
-            return friends;
+            return this.friends;
         }
 
         public void setFriends(final List<String> friends)
@@ -466,7 +466,7 @@ public class TemplateTest extends TestCase
 
         public List<String> getStrings()
         {
-            return strings;
+            return this.strings;
         }
 
         public void setStrings(final List<String> strings)
@@ -476,7 +476,7 @@ public class TemplateTest extends TestCase
 
         public List<Integer> getInts()
         {
-            return ints;
+            return this.ints;
         }
 
         public void setInts(final List<Integer> ints)
@@ -486,7 +486,7 @@ public class TemplateTest extends TestCase
 
         public Map<String, Map<Integer, Double>> getMap()
         {
-            return map;
+            return this.map;
         }
 
         public void setMap(final Map<String, Map<Integer, Double>> map)
@@ -496,7 +496,7 @@ public class TemplateTest extends TestCase
 
         public Map<Integer, Map<String, String>> getOtherMap()
         {
-            return otherMap;
+            return this.otherMap;
         }
 
         public void setOtherMap(final Map<Integer, Map<String, String>> otherMap)
@@ -522,76 +522,76 @@ public class TemplateTest extends TestCase
 //            {
 //                return false;
 //            }
-            if (this.playerName != null ? ! this.playerName.equals(that.playerName) : that.playerName != null)
+            if ((this.playerName != null) ? ! this.playerName.equals(that.playerName) : (that.playerName != null))
             {
                 return false;
             }
-            if (this.desc != null ? ! this.desc.equals(that.desc) : that.desc != null)
+            if ((this.desc != null) ? ! this.desc.equals(that.desc) : (that.desc != null))
             {
                 return false;
             }
-            if (this.friends != null ? ! this.friends.equals(that.friends) : that.friends != null)
+            if ((this.friends != null) ? ! this.friends.equals(that.friends) : (that.friends != null))
             {
                 return false;
             }
-            if (this.strings != null ? ! this.strings.equals(that.strings) : that.strings != null)
+            if ((this.strings != null) ? ! this.strings.equals(that.strings) : (that.strings != null))
             {
                 return false;
             }
-            if (this.ints != null ? ! this.ints.equals(that.ints) : that.ints != null)
+            if ((this.ints != null) ? ! this.ints.equals(that.ints) : (that.ints != null))
             {
                 return false;
             }
-            if (this.map != null ? ! this.map.equals(that.map) : that.map != null)
+            if ((this.map != null) ? ! this.map.equals(that.map) : (that.map != null))
             {
                 return false;
             }
-            return ! (this.otherMap != null ? ! this.otherMap.equals(that.otherMap) : that.otherMap != null);
+            return ! ((this.otherMap != null) ? ! this.otherMap.equals(that.otherMap) : (that.otherMap != null));
 
         }
 
         @Override
         public int hashCode()
         {
-            int result = this.playerName != null ? this.playerName.hashCode() : 0;
+            int result = (this.playerName != null) ? this.playerName.hashCode() : 0;
 //            result = 31 * result + this.money;
-            result = 31 * result + (this.desc != null ? this.desc.hashCode() : 0);
-            result = 31 * result + (this.friends != null ? this.friends.hashCode() : 0);
-            result = 31 * result + (this.strings != null ? this.strings.hashCode() : 0);
-            result = 31 * result + (this.ints != null ? this.ints.hashCode() : 0);
-            result = 31 * result + (this.map != null ? this.map.hashCode() : 0);
-            result = 31 * result + (this.otherMap != null ? this.otherMap.hashCode() : 0);
+            result = (31 * result) + ((this.desc != null) ? this.desc.hashCode() : 0);
+            result = (31 * result) + ((this.friends != null) ? this.friends.hashCode() : 0);
+            result = (31 * result) + ((this.strings != null) ? this.strings.hashCode() : 0);
+            result = (31 * result) + ((this.ints != null) ? this.ints.hashCode() : 0);
+            result = (31 * result) + ((this.map != null) ? this.map.hashCode() : 0);
+            result = (31 * result) + ((this.otherMap != null) ? this.otherMap.hashCode() : 0);
             return result;
         }
 
         {
             {
-                Map<Integer, Double> subMap1 = new HashMap<>(5);
+                final Map<Integer, Double> subMap1 = new HashMap<>(5);
                 subMap1.put(1, 3.44);
                 subMap1.put(5, 1.22);
-                Map<Integer, Double> subMap2 = new HashMap<>(5);
+                final Map<Integer, Double> subMap2 = new HashMap<>(5);
                 subMap2.put(15, 35.454);
                 subMap2.put(35, 13.242);
 
-                map.put("map1", subMap1);
-                map.put("map2", subMap2);
-                map.put("map3", null);
+                this.map.put("map1", subMap1);
+                this.map.put("map2", subMap2);
+                this.map.put("map3", null);
             }
 
             {
-                Map<String, String> subMap1 = new HashMap<>(5);
+                final Map<String, String> subMap1 = new HashMap<>(5);
                 subMap1.put("dosc\ndizwny\nklucz\'\"heh\nTestujemy możliwoścci", "prosta wartość");
 //                subMap1.put("dosc\ndizwny\nklucz\'\"heh\nTestujemy możliwoścci", "wartosc\njest\ntez\ndziwna\nme\"h\"");
                 subMap1.put("'meh'", "\"heh\"");
-                Map<String, String> subMap2 = new HashMap<>(5);
+                final Map<String, String> subMap2 = new HashMap<>(5);
                 subMap2.put("33", "hehe");
                 subMap2.put("67", "32");
 
-                otherMap.put(69, subMap1);
-                otherMap.put(100, subMap2);
+                this.otherMap.put(69, subMap1);
+                this.otherMap.put(100, subMap2);
             }
             {
-                superMap.put(Arrays.asList(1, 2, 3), Arrays.asList(4, 5, 6));
+                this.superMap.put(Arrays.asList(1, 2, 3), Arrays.asList(4, 5, 6));
 //                superMap.put(new int[]{1, 2, 3}, new int[]{4, 5, 6});
 //                superMap.put(new int[]{7, 8, 9}, new int[]{10, 11, 12});
             }
@@ -612,7 +612,7 @@ public class TemplateTest extends TestCase
 
         public String getPlayerName()
         {
-            return playerName;
+            return this.playerName;
         }
 
         public Map<Collection<Integer>, Collection<Integer>> getSuperMap()
@@ -651,7 +651,7 @@ public class TemplateTest extends TestCase
 
         public String getDesc()
         {
-            return desc;
+            return this.desc;
         }
 
         public void setDesc(final String desc)
@@ -661,7 +661,7 @@ public class TemplateTest extends TestCase
 
         public List<String> getFriends()
         {
-            return friends;
+            return this.friends;
         }
 
         public void setFriends(final List<String> friends)
@@ -671,7 +671,7 @@ public class TemplateTest extends TestCase
 
         public List<String> getStrings()
         {
-            return strings;
+            return this.strings;
         }
 
         public void setStrings(final List<String> strings)
@@ -681,7 +681,7 @@ public class TemplateTest extends TestCase
 
         public List<Integer> getInts()
         {
-            return ints;
+            return this.ints;
         }
 
         public void setInts(final List<Integer> ints)
@@ -691,7 +691,7 @@ public class TemplateTest extends TestCase
 
         public Map<String, Map<Integer, Double>> getMap()
         {
-            return map;
+            return this.map;
         }
 
         public void setMap(final Map<String, Map<Integer, Double>> map)
@@ -701,7 +701,7 @@ public class TemplateTest extends TestCase
 
         public Map<Integer, Map<String, String>> getOtherMap()
         {
-            return otherMap;
+            return this.otherMap;
         }
 
         public void setOtherMap(final Map<Integer, Map<String, String>> otherMap)
@@ -727,76 +727,76 @@ public class TemplateTest extends TestCase
             {
                 return false;
             }
-            if (this.playerName != null ? ! this.playerName.equals(that.playerName) : that.playerName != null)
+            if ((this.playerName != null) ? ! this.playerName.equals(that.playerName) : (that.playerName != null))
             {
                 return false;
             }
-            if (this.desc != null ? ! this.desc.equals(that.desc) : that.desc != null)
+            if ((this.desc != null) ? ! this.desc.equals(that.desc) : (that.desc != null))
             {
                 return false;
             }
-            if (this.friends != null ? ! this.friends.equals(that.friends) : that.friends != null)
+            if ((this.friends != null) ? ! this.friends.equals(that.friends) : (that.friends != null))
             {
                 return false;
             }
-            if (this.strings != null ? ! this.strings.equals(that.strings) : that.strings != null)
+            if ((this.strings != null) ? ! this.strings.equals(that.strings) : (that.strings != null))
             {
                 return false;
             }
-            if (this.ints != null ? ! this.ints.equals(that.ints) : that.ints != null)
+            if ((this.ints != null) ? ! this.ints.equals(that.ints) : (that.ints != null))
             {
                 return false;
             }
-            if (this.map != null ? ! this.map.equals(that.map) : that.map != null)
+            if ((this.map != null) ? ! this.map.equals(that.map) : (that.map != null))
             {
                 return false;
             }
-            return ! (this.otherMap != null ? ! this.otherMap.equals(that.otherMap) : that.otherMap != null);
+            return ! ((this.otherMap != null) ? ! this.otherMap.equals(that.otherMap) : (that.otherMap != null));
 
         }
 
         @Override
         public int hashCode()
         {
-            int result = this.playerName != null ? this.playerName.hashCode() : 0;
-            result = 31 * result + this.money;
-            result = 31 * result + (this.desc != null ? this.desc.hashCode() : 0);
-            result = 31 * result + (this.friends != null ? this.friends.hashCode() : 0);
-            result = 31 * result + (this.strings != null ? this.strings.hashCode() : 0);
-            result = 31 * result + (this.ints != null ? this.ints.hashCode() : 0);
-            result = 31 * result + (this.map != null ? this.map.hashCode() : 0);
-            result = 31 * result + (this.otherMap != null ? this.otherMap.hashCode() : 0);
+            int result = (this.playerName != null) ? this.playerName.hashCode() : 0;
+            result = (31 * result) + this.money;
+            result = (31 * result) + ((this.desc != null) ? this.desc.hashCode() : 0);
+            result = (31 * result) + ((this.friends != null) ? this.friends.hashCode() : 0);
+            result = (31 * result) + ((this.strings != null) ? this.strings.hashCode() : 0);
+            result = (31 * result) + ((this.ints != null) ? this.ints.hashCode() : 0);
+            result = (31 * result) + ((this.map != null) ? this.map.hashCode() : 0);
+            result = (31 * result) + ((this.otherMap != null) ? this.otherMap.hashCode() : 0);
             return result;
         }
 
         {
             {
-                Map<Integer, Double> subMap1 = new HashMap<>(5);
+                final Map<Integer, Double> subMap1 = new HashMap<>(5);
                 subMap1.put(1, 3.44);
                 subMap1.put(5, 1.22);
-                Map<Integer, Double> subMap2 = new HashMap<>(5);
+                final Map<Integer, Double> subMap2 = new HashMap<>(5);
                 subMap2.put(15, 35.454);
                 subMap2.put(35, 13.242);
 
-                map.put("map1", subMap1);
-                map.put("map2", subMap2);
-                map.put("map3", null);
+                this.map.put("map1", subMap1);
+                this.map.put("map2", subMap2);
+                this.map.put("map3", null);
             }
 
             {
-                Map<String, String> subMap1 = new HashMap<>(5);
+                final Map<String, String> subMap1 = new HashMap<>(5);
                 subMap1.put("dosc\ndizwny\nklucz\'\"heh\nTestujemy możliwoścci", "prosta wartość");
 //                subMap1.put("dosc\ndizwny\nklucz\'\"heh\nTestujemy możliwoścci", "wartosc\njest\ntez\ndziwna\nme\"h\"");
                 subMap1.put("'meh'", "\"heh\"");
-                Map<String, String> subMap2 = new HashMap<>(5);
+                final Map<String, String> subMap2 = new HashMap<>(5);
                 subMap2.put("33", "hehe");
                 subMap2.put("67", "32");
 
-                otherMap.put(69, subMap1);
-                otherMap.put(100, subMap2);
+                this.otherMap.put(69, subMap1);
+                this.otherMap.put(100, subMap2);
             }
             {
-                superMap.put(Arrays.asList(1, 2, 3), Arrays.asList(4, 5, 6));
+                this.superMap.put(Arrays.asList(1, 2, 3), Arrays.asList(4, 5, 6));
 //                superMap.put(new int[]{1, 2, 3}, new int[]{4, 5, 6});
 //                superMap.put(new int[]{7, 8, 9}, new int[]{10, 11, 12});
             }

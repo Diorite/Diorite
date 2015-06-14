@@ -1,78 +1,63 @@
 package org.diorite.impl.connection;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
-public class ClientCommand implements SimpleEnum<ClientCommand>
+public class ClientCommand extends ASimpleEnum<ClientCommand>
 {
-    public static final ClientCommand PERFORM_RESPAWN            = new ClientCommand("PERFORM_RESPAWN", 0);
-    public static final ClientCommand REQUEST_STATS              = new ClientCommand("REQUEST_STATS", 1);
-    public static final ClientCommand OPEN_INVENTORY_ACHIEVEMENT = new ClientCommand("OPEN_INVENTORY_ACHIEVEMENT", 2);
-
-    private static final Map<String, ClientCommand>   byName = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<ClientCommand> byID   = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
-
-    private final String enumName;
-    private final int    id;
-
-    public ClientCommand(final String enumName, final int id)
+    static
     {
-        this.enumName = enumName;
-        this.id = id;
+        init(ClientCommand.class, 3);
     }
 
-    @Override
-    public String name()
+    public static final ClientCommand PERFORM_RESPAWN            = new ClientCommand("PERFORM_RESPAWN");
+    public static final ClientCommand REQUEST_STATS              = new ClientCommand("REQUEST_STATS");
+    public static final ClientCommand OPEN_INVENTORY_ACHIEVEMENT = new ClientCommand("OPEN_INVENTORY_ACHIEVEMENT");
+
+    public ClientCommand(final String enumName, final int enumId)
     {
-        return this.enumName;
+        super(enumName, enumId);
     }
 
-    @Override
-    public int getId()
+    public ClientCommand(final String enumName)
     {
-        return this.id;
+        super(enumName);
     }
 
-    @Override
-    public ClientCommand byId(final int id)
-    {
-        return byID.get(id);
-    }
-
-    @Override
-    public ClientCommand byName(final String name)
-    {
-        return byName.get(name);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).toString();
-    }
-
-    public static ClientCommand getByID(final int id)
-    {
-        return byID.get(id);
-    }
-
-    public static ClientCommand getByEnumName(final String name)
-    {
-        return byName.get(name);
-    }
-
+    /**
+     * Register new {@link ClientCommand} entry in this enum.
+     *
+     * @param element new element to register.
+     */
     public static void register(final ClientCommand element)
     {
-        byID.put(element.getId(), element);
-        byName.put(element.name(), element);
+        ASimpleEnum.register(ClientCommand.class, element);
+    }
+
+    /**
+     * Get one of {@link ClientCommand} entry by its ordinal id.
+     *
+     * @param ordinal ordinal id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static ClientCommand getByEnumOrdinal(final int ordinal)
+    {
+        return getByEnumOrdinal(ClientCommand.class, ordinal);
+    }
+
+    /**
+     * Get one of ClientCommand entry by its name.
+     *
+     * @param name name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static ClientCommand getByEnumName(final String name)
+    {
+        return getByEnumName(ClientCommand.class, name);
     }
 
     /**
@@ -80,13 +65,14 @@ public class ClientCommand implements SimpleEnum<ClientCommand>
      */
     public static ClientCommand[] values()
     {
-        return byID.values(new ClientCommand[byID.size()]);
+        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ClientCommand.class);
+        return (ClientCommand[]) map.values(new ClientCommand[map.size()]);
     }
 
     static
     {
-        register(PERFORM_RESPAWN);
-        register(REQUEST_STATS);
-        register(OPEN_INVENTORY_ACHIEVEMENT);
+        ClientCommand.register(PERFORM_RESPAWN);
+        ClientCommand.register(REQUEST_STATS);
+        ClientCommand.register(OPEN_INVENTORY_ACHIEVEMENT);
     }
 }

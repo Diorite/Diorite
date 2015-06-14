@@ -106,7 +106,7 @@ public class AttributePropertyImpl implements AttributeProperty
             for (final Iterator<AttributeModifier> iterator = attribs.iterator(); iterator.hasNext(); )
             {
                 final AttributeModifier modifier = iterator.next();
-                if (modifier.getOperation().getId() == operation.getId())
+                if (modifier.getOperation().ordinal() == operation.ordinal())
                 {
                     modifierValue = operation.use(modifierValue, modifier.getValue());
                     iterator.remove();
