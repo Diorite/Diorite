@@ -9,7 +9,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.ImmutableLocation;
 import org.diorite.world.World;
+import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
 public abstract class WorldGenerator
@@ -21,21 +23,21 @@ public abstract class WorldGenerator
     /**
      * {@link World} to generate
      */
-    protected final World               world;
+    protected final World                  world;
     /**
      * Name of world generator, must be unique
      */
-    protected final String              name;
+    protected final String                 name;
     /**
      * Options for world generator.
      */
-    protected final Map<String, Object> options;
+    protected final Map<String, Object>    options;
 
     /**
      * Create new WorldGenerator for selected world
      *
-     * @param world {@link World} to generate
-     * @param name Name of world generator, must be unique
+     * @param world   {@link World} to generate
+     * @param name    Name of world generator, must be unique
      * @param options Options for world generator.
      */
     public WorldGenerator(final World world, final String name, final Map<String, Object> options)
@@ -46,7 +48,6 @@ public abstract class WorldGenerator
     }
 
     /**
-     *
      * @return Name of world generator
      */
     public String getName()
@@ -55,7 +56,6 @@ public abstract class WorldGenerator
     }
 
     /**
-     *
      * @return raw options for world generator
      */
     public Map<String, Object> getOptions()
@@ -64,7 +64,6 @@ public abstract class WorldGenerator
     }
 
     /**
-     *
      * @return {@link World} to generate
      */
     public World getWorld()
@@ -74,6 +73,7 @@ public abstract class WorldGenerator
 
     /**
      * Add new {@link ChunkPopulator} to generator
+     *
      * @param chunkPopulator {@link ChunkPopulator} to add.
      */
     public void addPopulator(final ChunkPopulator chunkPopulator)
@@ -83,6 +83,7 @@ public abstract class WorldGenerator
 
     /**
      * Remove {@link ChunkPopulator} from generator
+     *
      * @param chunkPopulator {@link ChunkPopulator} to remove.
      */
     public void removePopulator(final ChunkPopulator chunkPopulator)
@@ -104,10 +105,56 @@ public abstract class WorldGenerator
      * Main method to generate chunk, implementing class can return other {@link ChunkBuilder} than provided.
      *
      * @param builder default {@link ChunkBuilder} for {@link org.diorite.world.chunk.Chunk}.
-     * @param pos x, z and world of chunk
+     * @param pos     x, z and world of chunk
+     *
      * @return in most cases, this same {@link ChunkBuilder} as provided, returned value will be used to create {@link org.diorite.world.chunk.Chunk}
      */
     public abstract ChunkBuilder generate(ChunkBuilder builder, ChunkPos pos);
+
+    /**
+     * Method to generate biome grid, if generator want override biomes, it should override this method.
+     *
+     * @param builder default {@link ChunkBuilder} for {@link org.diorite.world.chunk.Chunk}.
+     * @param pos     x, z and world of chunk
+     *
+     * @return in most cases, this same {@link ChunkBuilder} as provided, returned value will be used to create {@link org.diorite.world.chunk.Chunk}
+     */
+    public ChunkBuilder generateBiomes(final ChunkBuilder builder, final ChunkPos pos)
+    {
+        final BiomeGrid biomes = new BiomeGrid();
+        final int[] biomeValues = builder.getBiomesInput()[0].generateValues(pos.getX() * Chunk.CHUNK_SIZE, pos.getZ() * Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE);
+        for (int i = 0; i < biomeValues.length; i++)
+        {
+            biomes.rawData()[i] = (byte) biomeValues[i];
+        }
+        builder.setBiomeGrid(biomes);
+        return builder;
+    }
+
+    /**
+     * May be used to suggest default spawn location. <br>
+     * Diorite will choose some location if this return null.
+     *
+     * @return spawn location to use, or null
+     */
+    public ImmutableLocation getSpawnLocation()
+    {
+        return null;
+    }
+
+    /**
+     * Check if spawn can be set at this point.
+     *
+     * @param x x coordinate of spawn location to check.
+     * @param y y coordinate of spawn location to check.
+     * @param z z coordinate of spawn location to check.
+     *
+     * @return true if this is valid spawn location.
+     */
+    public boolean canSpawn(final double x, final double y, final double z)
+    {
+        return true;
+    }
 
     @Override
     public boolean equals(final Object o)
