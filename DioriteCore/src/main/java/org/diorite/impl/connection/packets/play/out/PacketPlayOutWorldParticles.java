@@ -159,7 +159,7 @@ public class PacketPlayOutWorldParticles implements PacketPlayOut
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.particle = Particle.getParticleById(data.readInt());
+        this.particle = Particle.getByParticleId(data.readInt());
         this.longDistance = data.readBoolean();
         this.x = data.readFloat();
         this.y = data.readFloat();
@@ -180,7 +180,7 @@ public class PacketPlayOutWorldParticles implements PacketPlayOut
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeInt(this.particle.getId());
+        data.writeInt(this.particle.ordinal());
         data.writeBoolean(this.longDistance);
         data.writeFloat(this.x);
         data.writeFloat(this.y);

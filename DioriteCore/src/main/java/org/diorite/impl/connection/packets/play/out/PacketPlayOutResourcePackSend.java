@@ -10,6 +10,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInResourcePackStatus;
 
 @PacketClass(id = 0x48, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutResourcePackSend implements PacketPlayOut
@@ -23,7 +24,7 @@ public class PacketPlayOutResourcePackSend implements PacketPlayOut
 
     public PacketPlayOutResourcePackSend(final String url, final String hash)
     {
-        if (hash.length() > 40)
+        if (hash.length() > PacketPlayInResourcePackStatus.MAX_HASH_SIZE)
         {
             throw new IllegalArgumentException("Hash is too long (max 40, was " + hash.length() + ")");
         }
@@ -55,8 +56,8 @@ public class PacketPlayOutResourcePackSend implements PacketPlayOut
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.url = data.readText(32767);
-        this.hash = data.readText(40);
+        this.url = data.readText(Short.MAX_VALUE);
+        this.hash = data.readText(PacketPlayInResourcePackStatus.MAX_HASH_SIZE);
     }
 
     @Override

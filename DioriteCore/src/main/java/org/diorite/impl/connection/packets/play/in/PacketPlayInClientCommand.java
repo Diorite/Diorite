@@ -29,13 +29,13 @@ public class PacketPlayInClientCommand implements PacketPlayIn
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.command = ClientCommand.getByID(data.readVarInt());
+        this.command = ClientCommand.getByEnumOrdinal(data.readVarInt());
     }
 
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(this.command.getId());
+        data.writeVarInt(this.command.ordinal());
     }
 
     @Override

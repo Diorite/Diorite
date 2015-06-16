@@ -40,7 +40,7 @@ public class PacketPlayInSettings implements PacketPlayIn
     {
         this.locale = data.readText(7);
         this.viewDistance = data.readByte();
-        this.chatVisibility = ChatVisibility.getByID(data.readByte());
+        this.chatVisibility = ChatVisibility.getByEnumOrdinal(data.readByte());
         this.colorsEnabled = data.readBoolean();
         this.displayedSkinParts = DisplayedSkinParts.fromByteFlag(data.readUnsignedByte());
     }
@@ -50,7 +50,7 @@ public class PacketPlayInSettings implements PacketPlayIn
     {
         data.writeText(this.locale);
         data.writeByte(this.viewDistance);
-        data.writeByte(this.chatVisibility.getId());
+        data.writeByte(this.chatVisibility.ordinal());
         data.writeBoolean(this.colorsEnabled);
         data.writeByte(this.displayedSkinParts.toByteFlag());
     }

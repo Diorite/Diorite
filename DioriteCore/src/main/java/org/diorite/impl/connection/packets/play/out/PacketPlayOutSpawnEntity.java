@@ -26,6 +26,7 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
     {
     }
 
+    @SuppressWarnings("MagicNumber")
     public PacketPlayOutSpawnEntity(final Entity entity)
     {
         this.entity = entity;

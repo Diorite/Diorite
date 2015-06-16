@@ -3,18 +3,55 @@ package org.diorite.impl.world.generator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.chunk.Chunk;
-import org.diorite.world.chunk.ChunkPos;
+import org.diorite.world.generator.BiomeGrid;
 import org.diorite.world.generator.ChunkBuilder;
+import org.diorite.world.generator.biomegrid.MapLayer;
 
 public class ChunkBuilderImpl implements ChunkBuilder
 {
     private final ChunkPartBuilder[] chunkParts = new ChunkPartBuilder[Chunk.CHUNK_PARTS]; // size of 16, parts can be null
-    private final byte[]             biomes     = new byte[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
+    private MapLayer[]  biomesInput;
+    private BiomeGrid biomeGrid;
+
+    public ChunkBuilderImpl(final MapLayer[] biomesInput)
+    {
+        this.biomesInput = biomesInput;
+    }
+
+    @Override
+    public MapLayer[] getBiomesInput()
+    {
+        return this.biomesInput;
+    }
+
+    @Override
+    public void setBiomesInput(final MapLayer[] biomesInput)
+    {
+        this.biomesInput = biomesInput;
+    }
+
+    public ChunkPartBuilder[] getChunkParts()
+    {
+        return this.chunkParts;
+    }
+
+    @Override
+    public BiomeGrid getBiomeGrid()
+    {
+        return this.biomeGrid;
+    }
+
+    @Override
+    public void setBiomeGrid(final BiomeGrid biomeGrid)
+    {
+        this.biomeGrid = biomeGrid;
+    }
 
     @Override
     public void setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
@@ -55,15 +92,9 @@ public class ChunkBuilderImpl implements ChunkBuilder
     }
 
     @Override
-    public byte[] getBiomes()
+    public void init(final Chunk bChunk)
     {
-        return this.biomes;
-    }
-
-    @Override
-    public org.diorite.impl.world.chunk.ChunkImpl createChunk(final ChunkPos pos)
-    {
-        final org.diorite.impl.world.chunk.ChunkImpl chunk = new org.diorite.impl.world.chunk.ChunkImpl(pos, this.biomes);
+        final ChunkImpl chunk = (ChunkImpl) bChunk;
         final ChunkPartImpl[] chunkParts = new ChunkPartImpl[this.chunkParts.length];
         final ChunkPartBuilder[] chunkPartBuilders = this.chunkParts;
         for (int i = 0, buildersLength = chunkPartBuilders.length; i < buildersLength; i++)
@@ -73,12 +104,13 @@ public class ChunkBuilderImpl implements ChunkBuilder
             {
                 continue;
             }
-            chunkParts[i] = new org.diorite.impl.world.chunk.ChunkPartImpl(chunk, chunkPart.blocks, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
+            chunkParts[i] = new ChunkPartImpl(chunkPart.blocks, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
             chunkParts[i].recalculateBlockCount();
-            chunk.getChunkParts()[i] = chunkParts[i];
         }
+        chunk.setChunkParts(chunkParts);
         chunk.initHeightMap();
-        return chunk;
+        chunk.setBiomes(this.biomeGrid.rawData().clone());
+        chunk.init();
     }
 
     private static class ChunkPartBuilder // part of chunk 16x16x16
@@ -102,7 +134,7 @@ public class ChunkBuilderImpl implements ChunkBuilder
 
         private void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
         {
-            this.setBlock(x, y, z, material.getId(), material.getType());
+            this.setBlock(x, y, z, material.ordinal(), material.getType());
         }
 
         @SuppressWarnings("MagicNumber")

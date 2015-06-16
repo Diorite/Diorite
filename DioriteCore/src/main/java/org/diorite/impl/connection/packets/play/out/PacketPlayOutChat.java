@@ -38,14 +38,14 @@ public class PacketPlayOutChat implements PacketPlayOut
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.content = data.readBaseComponent();
-        this.chatPosition = ChatPosition.getByID(data.readByte());
+        this.chatPosition = ChatPosition.getByEnumOrdinal(data.readByte());
     }
 
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
         data.writeBaseComponent(this.content);
-        data.writeByte(this.chatPosition.getId());
+        data.writeByte(this.chatPosition.ordinal());
     }
 
     @Override

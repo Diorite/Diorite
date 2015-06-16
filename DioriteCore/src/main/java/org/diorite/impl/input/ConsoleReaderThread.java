@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
 import org.diorite.event.EventType;
-import org.diorite.event.others.SenderCommandEvent;
+import org.diorite.event.input.SenderCommandEvent;
 
 import jline.console.ConsoleReader;
 

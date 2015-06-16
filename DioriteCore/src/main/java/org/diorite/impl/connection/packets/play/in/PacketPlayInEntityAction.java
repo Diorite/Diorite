@@ -40,7 +40,7 @@ public class PacketPlayInEntityAction implements PacketPlayIn
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.entityID = data.readVarInt();
-        this.entityAction = EntityAction.getByID(data.readVarInt());
+        this.entityAction = EntityAction.getByEnumOrdinal(data.readVarInt());
         this.jumpBoost = data.readVarInt();
     }
 
@@ -48,7 +48,7 @@ public class PacketPlayInEntityAction implements PacketPlayIn
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.entityID);
-        data.writeVarInt(this.entityAction.getId());
+        data.writeVarInt(this.entityAction.ordinal());
         data.writeVarInt(this.jumpBoost);
     }
 

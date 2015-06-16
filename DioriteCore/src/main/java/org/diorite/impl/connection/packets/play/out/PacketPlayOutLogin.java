@@ -62,8 +62,8 @@ public class PacketPlayOutLogin implements PacketPlayOut
         this.entityID = data.readInt();
         final int gmFlags = data.readUnsignedByte();
         this.hardcore = (gmFlags & 8) == 8;
-        this.gameMode = GameMode.getByID(gmFlags & - 9);
-        this.dimension = Dimension.getByID(data.readByte());
+        this.gameMode = GameMode.getByEnumOrdinal(gmFlags & - 9);
+        this.dimension = Dimension.getByDimensionId(data.readByte());
         this.difficulty = Difficulty.getByLevel(data.readUnsignedByte());
         this.maxPlayers = data.readUnsignedByte();
         this.worldType = WorldType.getType(data.readText(MAX_WORLD_NAME_SIZE));
@@ -74,7 +74,7 @@ public class PacketPlayOutLogin implements PacketPlayOut
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
         data.writeInt(this.entityID);
-        int gmFlags = this.gameMode.getId();
+        int gmFlags = this.gameMode.ordinal();
         if (this.hardcore)
         {
             gmFlags |= 8;

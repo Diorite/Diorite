@@ -2,7 +2,6 @@ package org.diorite.impl.connection.packets.play.out;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,10 +17,12 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.world.World;
 
 
-@SuppressWarnings("MagicNumber")
 @PacketClass(id = 0x26, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutMapChunkBulk implements PacketPlayOut
 {
+    public static final int HEADER_SIZE = 10;
+    public static final int MAX_SIZE    = 0x1fff00; // 2096896
+
     private int[]             xCords;
     private int[]             zCords;
     private ChunkPacketData[] datas;
@@ -30,6 +31,33 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
 
     public PacketPlayOutMapChunkBulk()
     {
+    }
+
+    public PacketPlayOutMapChunkBulk(final int[] xCords, final int[] zCords, final ChunkPacketData[] datas, final boolean hasSkyLight, final World world)
+    {
+        this.xCords = xCords;
+        this.zCords = zCords;
+        this.datas = datas;
+        this.hasSkyLight = hasSkyLight;
+        this.world = world;
+    }
+
+    public PacketPlayOutMapChunkBulk(final List<PacketPlayOutMapChunk> chunks, final World world)
+    {
+        final int size = chunks.size();
+        this.xCords = new int[size];
+        this.zCords = new int[size];
+        this.datas = new ChunkPacketData[size];
+        this.world = world;
+        this.hasSkyLight = this.world.getDimension().hasSkyLight();
+        for (int j = 0; j < size; ++ j)
+        {
+            final PacketPlayOutMapChunk chunk = chunks.get(j);
+            final ChunkPacketData chunkData = chunk.getData();
+            this.xCords[j] = chunk.getX();
+            this.zCords[j] = chunk.getZ();
+            this.datas[j] = chunkData;
+        }
     }
 
     public PacketPlayOutMapChunkBulk(ChunkImpl[] chunks)
@@ -51,9 +79,23 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
         }
     }
 
-    public PacketPlayOutMapChunkBulk(final Collection<ChunkImpl> chunks)
+    public PacketPlayOutMapChunkBulk(final List<ChunkImpl> chunks)
     {
-        this(chunks.toArray(new ChunkImpl[chunks.size()]));
+        fix(chunks);
+        final int size = chunks.size();
+        this.xCords = new int[size];
+        this.zCords = new int[size];
+        this.datas = new ChunkPacketData[size];
+        this.world = chunks.get(0).getWorld();
+        this.hasSkyLight = this.world.getDimension().hasSkyLight();
+        for (int j = 0; j < size; ++ j)
+        {
+            final ChunkImpl chunk = chunks.get(j);
+            final ChunkPacketData chunkData = PacketPlayOutMapChunk.createChunkPacketData(chunk, true, this.hasSkyLight, PacketPlayOutMapChunk.MASK);
+            this.xCords[j] = chunk.getX();
+            this.zCords[j] = chunk.getZ();
+            this.datas[j] = chunkData;
+        }
     }
 
     @Override
@@ -163,6 +205,12 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
             }
         }
         return list.toArray(new ChunkImpl[list.size()]);
+    }
+
+    private static List<ChunkImpl> fix(final List<ChunkImpl> chunks)
+    {
+        chunks.removeIf(c -> c == null);
+        return chunks;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class PacketPlayOutBlockChange implements PacketPlayOut
     public PacketPlayOutBlockChange(final BlockLocation location, final BlockMaterialData material)
     {
         this.location = location;
-        this.rawID = material.getId();
+        this.rawID = material.ordinal();
         this.rawType = (byte) material.getType();
     }
 
@@ -72,7 +72,7 @@ public class PacketPlayOutBlockChange implements PacketPlayOut
 
     public void setMaterial(final BlockMaterialData material)
     {
-        this.rawID = material.getId();
+        this.rawID = material.ordinal();
         this.rawType = (byte) material.getType();
     }
 

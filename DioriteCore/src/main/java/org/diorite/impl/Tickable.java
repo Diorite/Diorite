@@ -6,10 +6,5 @@ package org.diorite.impl;
 @FunctionalInterface
 public interface Tickable
 {
-    void doTick();
-
-    default int updateEveryNTicks()
-    {
-        return 1;
-    }
+    void doTick(final int tps);
 }

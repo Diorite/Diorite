@@ -2,6 +2,9 @@ package org.diorite.impl.connection.packets.play.out;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -45,7 +48,11 @@ public class PacketPlayOutTitle implements PacketPlayOut
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.action = TitleAction.fromId(data.readVarInt());
-        switch(this.action)
+        if (this.action == null)
+        {
+            return;
+        }
+        switch (this.action)
         {
             case SET_TITLE:
             case SET_SUBTITLE:
@@ -67,7 +74,7 @@ public class PacketPlayOutTitle implements PacketPlayOut
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.action.getActionId());
-        switch(this.action)
+        switch (this.action)
         {
             case SET_TITLE:
             case SET_SUBTITLE:
@@ -113,14 +120,20 @@ public class PacketPlayOutTitle implements PacketPlayOut
 
         public static TitleAction fromId(final int id)
         {
-            for(final TitleAction ta : TitleAction.values())
+            for (final TitleAction ta : TitleAction.values())
             {
-                if(ta.getActionId() == id)
+                if (ta.getActionId() == id)
                 {
                     return ta;
                 }
             }
             return null;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("action", this.action).append("text", this.text).append("fadeIn", this.fadeIn).append("stay", this.stay).append("fadeOut", this.fadeOut).toString();
     }
 }

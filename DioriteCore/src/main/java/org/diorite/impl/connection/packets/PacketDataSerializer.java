@@ -151,7 +151,7 @@ public class PacketDataSerializer extends ByteBuf
             return;
         }
         final Material mat = itemStack.getMaterial();
-        this.writeShort(mat.getId());
+        this.writeShort(mat.ordinal());
         this.writeByte(itemStack.getAmount());
         this.writeShort(mat.getType());
         this.writeNbtTagCompound(itemStack.getItemMeta().getRawData());
@@ -178,14 +178,14 @@ public class PacketDataSerializer extends ByteBuf
         final UUID uuid = this.readUUID();
         final double value = this.readDouble();
         final byte operation = this.readByte();
-        return new AttributeModifierImpl(uuid, value, ModifierOperation.getByID(operation));
+        return new AttributeModifierImpl(uuid, value, ModifierOperation.getByEnumOrdinal(operation));
     }
 
     public void writeAttributeModifer(final AttributeModifier attribute)
     {
         this.writeUUID(attribute.getUuid());
         this.writeDouble(attribute.getValue());
-        this.writeByte(attribute.getOperation().getId());
+        this.writeByte(attribute.getOperation().ordinal());
     }
 
     public AttributePropertyImpl readAttributeProperty()

@@ -45,7 +45,7 @@ public class PacketPlayOutEntityMetadata implements PacketPlayOut
         {
             EntityMetadataCodec.encode(data, mo);
         }
-        data.writeByte(127);
+        data.writeByte(Byte.MAX_VALUE); // mark end of data
     }
 
     @Override

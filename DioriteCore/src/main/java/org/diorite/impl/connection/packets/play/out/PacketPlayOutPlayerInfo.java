@@ -99,7 +99,7 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
                             data.writeBoolean(false);
                         }
                     }
-                    data.writeVarInt(pid.getGameMode().getId());
+                    data.writeVarInt(pid.getGameMode().ordinal());
                     data.writeVarInt(pid.getLatency());
                     if (pid.getDisplayName() == null)
                     {
@@ -115,7 +115,7 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
                     data.writeVarInt(pid.getLatency());
                     break;
                 case UPDATE_GAMEMODE:
-                    data.writeVarInt(pid.getGameMode().getId());
+                    data.writeVarInt(pid.getGameMode().ordinal());
                     break;
                 case UPDATE_DISPLAY_NAME:
                     if (pid.getDisplayName() == null)

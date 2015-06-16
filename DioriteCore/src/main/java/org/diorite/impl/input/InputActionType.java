@@ -3,8 +3,8 @@ package org.diorite.impl.input;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
-import org.diorite.event.others.SenderCommandEvent;
-import org.diorite.event.others.SenderTabCompleteEvent;
+import org.diorite.event.input.SenderCommandEvent;
+import org.diorite.event.input.SenderTabCompleteEvent;
 import org.diorite.event.player.PlayerChatEvent;
 
 public enum InputActionType

@@ -14,6 +14,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 @PacketClass(id = 0x19, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketPlayInResourcePackStatus implements PacketPlayIn
 {
+    public static final int MAX_HASH_SIZE = 40;
     private String hash;
     private ResourcePackStatus status;
 
@@ -44,7 +45,7 @@ public class PacketPlayInResourcePackStatus implements PacketPlayIn
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.hash = data.readText(40);
+        this.hash = data.readText(MAX_HASH_SIZE);
         this.status = ResourcePackStatus.byId(data.readVarInt());
     }
 

@@ -134,6 +134,11 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
         return this.unload;
     }
 
+    public ChunkPacketData getData()
+    {
+        return this.data;
+    }
+
     @Override
     public String toString()
     {

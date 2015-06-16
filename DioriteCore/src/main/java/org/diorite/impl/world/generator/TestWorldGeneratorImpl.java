@@ -6,7 +6,7 @@ import java.util.Random;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
+import org.diorite.impl.pipelines.event.chunk.ChunkGeneratePipelineImpl;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
@@ -91,17 +91,17 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 
                 for (int y = bottomHeight + 1; (y > bottomHeight) && (y < maxHeight); y++)
                 { //the overhang
-                    final int thisblock = builder.getBlockType(x, y, z).getId();
-                    final int blockabove = builder.getBlockType(x, y + 1, z).getId();
+                    final int thisblock = builder.getBlockType(x, y, z).ordinal();
+                    final int blockabove = builder.getBlockType(x, y + 1, z).ordinal();
 
-                    if ((thisblock != Material.AIR.getId()) && (blockabove == Material.AIR.getId()))
+                    if ((thisblock != Material.AIR.ordinal()) && (blockabove == Material.AIR.ordinal()))
                     {
                         builder.setBlock(x, y, z, Material.GRASS);
-                        if (builder.getBlockType(x, y - 1, z).getType() != Material.AIR.getId())
+                        if (builder.getBlockType(x, y - 1, z).getType() != Material.AIR.ordinal())
                         {
                             builder.setBlock(x, y - 1, z, Material.DIRT);
                         }
-                        if (builder.getBlockType(x, y - 2, z).getType() != Material.AIR.getId())
+                        if (builder.getBlockType(x, y - 2, z).getType() != Material.AIR.ordinal())
                         {
                             builder.setBlock(x, y - 2, z, Material.DIRT);
                         }
