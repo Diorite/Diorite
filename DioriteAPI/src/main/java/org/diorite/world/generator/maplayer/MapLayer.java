@@ -1,4 +1,4 @@
-package org.diorite.world.generator.biomegrid;
+package org.diorite.world.generator.maplayer;
 
 import java.util.Objects;
 import java.util.Random;
@@ -9,8 +9,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.world.Biome;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
-import org.diorite.world.generator.biomegrid.WhittakerMapLayer.ClimateType;
-import org.diorite.world.generator.biomegrid.ZoomMapLayer.ZoomType;
+import org.diorite.world.generator.maplayer.WhittakerMapLayer.ClimateType;
+import org.diorite.world.generator.maplayer.ZoomMapLayer.ZoomType;
 
 
 @SuppressWarnings("MagicNumber")

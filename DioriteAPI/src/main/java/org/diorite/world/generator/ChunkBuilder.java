@@ -2,7 +2,7 @@ package org.diorite.world.generator;
 
 import org.diorite.material.BlockMaterialData;
 import org.diorite.world.chunk.Chunk;
-import org.diorite.world.generator.biomegrid.MapLayer;
+import org.diorite.world.generator.maplayer.MapLayer;
 
 public interface ChunkBuilder
 {

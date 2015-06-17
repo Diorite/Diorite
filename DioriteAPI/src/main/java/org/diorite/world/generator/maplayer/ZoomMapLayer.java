@@ -1,4 +1,4 @@
-package org.diorite.world.generator.biomegrid;
+package org.diorite.world.generator.maplayer;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

@@ -145,8 +145,8 @@ public abstract class WorldGenerator
     /**
      * Check if spawn can be set at this point.
      *
-     * @param x x coordinate of spawn location to check.
-     * @param y y coordinate of spawn location to check.
+     * @param x x coordinate of spawn location to check. <br>
+     * @param y y coordinate of spawn location to check. <br>
      * @param z z coordinate of spawn location to check.
      *
      * @return true if this is valid spawn location.
@@ -188,4 +188,5 @@ public abstract class WorldGenerator
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("world", this.world.getName()).append("name", this.name).append("options", this.options).toString();
     }
+
 }

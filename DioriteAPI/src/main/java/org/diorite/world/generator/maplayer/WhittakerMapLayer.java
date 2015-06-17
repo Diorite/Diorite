@@ -1,4 +1,4 @@
-package org.diorite.world.generator.biomegrid;
+package org.diorite.world.generator.maplayer;
 
 import java.util.EnumMap;
 

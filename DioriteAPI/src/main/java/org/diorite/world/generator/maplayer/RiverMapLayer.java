@@ -1,4 +1,4 @@
-package org.diorite.world.generator.biomegrid;
+package org.diorite.world.generator.maplayer;
 
 import static org.diorite.world.Biome.DEEP_OCEAN;
 import static org.diorite.world.Biome.FROZEN_RIVER;
