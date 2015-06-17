@@ -1,11 +1,11 @@
-package org.diorite.impl.pipelines;
+package org.diorite.impl.pipelines.event.input;
 
 import org.apache.commons.lang3.StringUtils;
 
 import org.diorite.command.sender.CommandSender;
 import org.diorite.entity.Player;
-import org.diorite.event.others.SenderTabCompleteEvent;
-import org.diorite.event.pipelines.TabCompletePipeline;
+import org.diorite.event.input.SenderTabCompleteEvent;
+import org.diorite.event.pipelines.event.input.TabCompletePipeline;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
 public class TabCompletePipelineImpl extends SimpleEventPipeline<SenderTabCompleteEvent> implements TabCompletePipeline

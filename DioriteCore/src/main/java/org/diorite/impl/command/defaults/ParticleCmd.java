@@ -23,7 +23,7 @@ public class ParticleCmd extends SystemCommandImpl
 
             final String particles = args.asString(0);
             final Integer particleID = DioriteMathUtils.asInt(particles);
-            final Particle particle = (particleID == null) ? Particle.getParticleByName(particles.toUpperCase()) : Particle.getParticleById(particleID);
+            final Particle particle = (particleID == null) ? Particle.getByParticleName(particles.toUpperCase()) : Particle.getByParticleId(particleID);
             if (particle == null)
             {
                 sender.sendSimpleColoredMessage("&cSorry, this particle isn't found (" + particles + ")");
@@ -46,7 +46,7 @@ public class ParticleCmd extends SystemCommandImpl
             }
 
             ((Player) sender).showParticle(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data);
-            sender.sendSimpleColoredMessage("&aParticle " + particle.name() + " (" + particle.getId() + "/" + particle.getMinecraftParticleName() + ") has been created!");
+            sender.sendSimpleColoredMessage("&aParticle " + particle.name() + " (" + particle.ordinal() + "/" + particle.getParticleName() + ") has been created!");
         });
     }
 }

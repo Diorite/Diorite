@@ -61,8 +61,8 @@ public class WorldGroupImpl implements WorldGroup, Tickable
     }
 
     @Override
-    public void doTick()
+    public void doTick(final int tps)
     {
-        this.worlds.forEach(WorldImpl::doTick);
+        this.worlds.forEach(w -> w.doTick(tps));
     }
 }

@@ -3,20 +3,21 @@ package org.diorite.impl.world;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.world.Biome;
 import org.diorite.world.Block;
 import org.diorite.world.World;
-import org.diorite.world.chunk.Chunk;
 
 public class BlockImpl implements Block
 {
     private final byte              x; // x pos on chunk, not map
     private final int               y;
     private final byte              z; // z pos on chunk, not map
-    private final Chunk             chunk;
+    private final ChunkImpl         chunk;
     private       BlockMaterialData type;
 
-    public BlockImpl(final int x, final int y, final int z, final Chunk chunk, final BlockMaterialData type)
+    public BlockImpl(final int x, final int y, final int z, final ChunkImpl chunk, final BlockMaterialData type)
     {
         this.x = (byte) x;
         this.y = y;
@@ -25,7 +26,7 @@ public class BlockImpl implements Block
         this.type = type;
     }
 
-    public BlockImpl(final int x, final int y, final int z, final Chunk chunk)
+    public BlockImpl(final int x, final int y, final int z, final ChunkImpl chunk)
     {
         this.x = (byte) x;
         this.y = y;
@@ -69,6 +70,12 @@ public class BlockImpl implements Block
     {
         this.type = type;
         this.chunk.setBlock(this.x, this.y, this.z, this.type);
+    }
+
+    @Override
+    public Biome getBiome()
+    {
+        return this.chunk.getBiome(this.x, this.y, this.z);
     }
 
     @Override

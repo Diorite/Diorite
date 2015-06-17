@@ -12,16 +12,14 @@ import org.diorite.world.chunk.Chunk;
 public class ChunkPartImpl // part of chunk 16x16x16
 {
     public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
-    private final    ChunkImpl        chunk;
     private final    byte             yPos; // from 0 to 15
     private volatile int              blocksCount;
     private          AtomicShortArray blocks; // id and sub-id(0-15) of every block
     private          NibbleArray      skyLight;
     private          NibbleArray      blockLight;
 
-    public ChunkPartImpl(final ChunkImpl chunk, final byte yPos, final boolean hasSkyLight)
+    public ChunkPartImpl(final byte yPos, final boolean hasSkyLight)
     {
-        this.chunk = chunk;
         this.yPos = yPos;
         this.blocks = new AtomicShortArray(CHUNK_DATA_SIZE);
         this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
@@ -34,9 +32,8 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blockLight.fill((byte) 0x0);
     }
 
-    public ChunkPartImpl(final ChunkImpl chunk, final AtomicShortArray blocks, final byte yPos, final boolean hasSkyLight)
+    public ChunkPartImpl(final AtomicShortArray blocks, final byte yPos, final boolean hasSkyLight)
     {
-        this.chunk = chunk;
         this.blocks = blocks;
         this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
         this.yPos = yPos;
@@ -49,23 +46,30 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blockLight.fill((byte) 0x0);
     }
 
-    public ChunkPartImpl(final ChunkImpl chunk, final AtomicShortArray blocks, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
+    public ChunkPartImpl(final AtomicShortArray blocks, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
     {
-        this.chunk = chunk;
         this.blocks = blocks;
         this.skyLight = skyLight;
         this.blockLight = blockLight;
         this.yPos = yPos;
     }
 
+    /**
+     * Take a snapshot of this section which will not reflect future changes.
+     */
+    public ChunkPartImpl snapshot()
+    {
+        return new ChunkPartImpl(new AtomicShortArray(this.blocks.getArray()), this.skyLight.snapshot(), this.blockLight.snapshot(), this.yPos);
+    }
+
     public BlockMaterialData setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
         final BlockMaterialData old = this.getBlockType(x, y, z);
-        if ((id == old.getId()) && (meta == old.getType()))
+        if ((id == old.ordinal()) && (meta == old.getType()))
         {
             return old;
         }
-        if (this.blocks.compareAndSet(this.toArrayIndex(x, y, z), (short) ((old.getId() << 4) | old.getType()), (short) ((id << 4) | meta)))
+        if (this.blocks.compareAndSet(toArrayIndex(x, y, z), (short) ((old.ordinal() << 4) | old.getType()), (short) ((id << 4) | meta)))
         {
             if (old.getType() != 0)
             {
@@ -86,27 +90,22 @@ public class ChunkPartImpl // part of chunk 16x16x16
     @SuppressWarnings("MagicNumber")
     public BlockMaterialData rawSetBlock(final int x, final int y, final int z, final int id, final int meta)
     {
-        final short data = this.blocks.getAndSet(this.toArrayIndex(x, y, z), (short) ((id << 4) | meta));
+        final short data = this.blocks.getAndSet(toArrayIndex(x, y, z), (short) ((id << 4) | meta));
         final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
         return (type == null) ? Material.AIR : type;
     }
 
     public BlockMaterialData setBlock(final int x, final int y, final int z, final BlockMaterialData material)
     {
-        return this.setBlock(x, y, z, material.getId(), material.getType());
+        return this.setBlock(x, y, z, material.ordinal(), material.getType());
     }
 
     @SuppressWarnings("MagicNumber")
     public BlockMaterialData getBlockType(final int x, final int y, final int z)
     {
-        final short data = this.blocks.get(this.toArrayIndex(x, y, z));
+        final short data = this.blocks.get(toArrayIndex(x, y, z));
         final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
         return (type == null) ? Material.AIR : type;
-    }
-
-    public ChunkImpl getChunk()
-    {
-        return this.chunk;
     }
 
     public AtomicShortArray getBlocks()
@@ -168,7 +167,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
     }
 
     @SuppressWarnings("MagicNumber")
-    public int toArrayIndex(final int x, final int y, final int z)
+    public static int toArrayIndex(final int x, final int y, final int z)
     {
         return ((y & 0xf) << 8) | (z << 4) | x;
     }

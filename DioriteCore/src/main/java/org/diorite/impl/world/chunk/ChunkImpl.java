@@ -2,21 +2,24 @@ package org.diorite.impl.world.chunk;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Tickable;
-import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
+import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.pipelines.event.chunk.ChunkGeneratePipelineImpl;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.BlockLocation;
+import org.diorite.event.EventType;
+import org.diorite.event.chunk.ChunkUnloadEvent;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
@@ -24,6 +27,7 @@ import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.utils.concurrent.ParallelUtils;
 import org.diorite.utils.concurrent.atomic.AtomicShortArray;
+import org.diorite.world.Biome;
 import org.diorite.world.Block;
 import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
@@ -31,14 +35,15 @@ import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk, Tickable
 {
-    private final ChunkPos        pos;
-    private final ChunkPartImpl[] chunkParts; // size of 16, parts can be null
-    private final int[]           heightMap;
-    private final byte[]          biomes;
-    private final AtomicInteger usages    = new AtomicInteger(0);
+    private final ChunkPos pos;
+    private final int[]    heightMap;
     private final AtomicBoolean populated = new AtomicBoolean(false);
+    private byte[]          biomes;
+    private ChunkPartImpl[] chunkParts; // size of 16, parts can be null
 
     private final Map<BlockLocation, TileEntityImpl> tileEntities = new HashMap<>(10);
+    private final Set<EntityImpl>                    entities     = new HashSet<>(4);
+
 
     public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts, final int[] heightMap)
     {
@@ -51,7 +56,6 @@ public class ChunkImpl implements Chunk, Tickable
     public ChunkImpl(final ChunkPos pos, final byte[] biomes)
     {
         this.pos = pos;
-        this.chunkParts = new ChunkPartImpl[CHUNK_PARTS];
         this.biomes = biomes;
         this.heightMap = new int[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
     }
@@ -60,16 +64,95 @@ public class ChunkImpl implements Chunk, Tickable
     {
         this.pos = pos;
         this.chunkParts = chunkParts;
-        this.biomes = new byte[CHUNK_SIZE * CHUNK_SIZE];
         this.heightMap = new int[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
     }
 
     public ChunkImpl(final ChunkPos pos)
     {
         this.pos = pos;
-        this.chunkParts = new ChunkPartImpl[CHUNK_PARTS];
-        this.biomes = new byte[CHUNK_SIZE * CHUNK_SIZE];
         this.heightMap = new int[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
+    }
+
+    @Override
+    @SuppressWarnings("MagicNumber")
+    public Biome getBiome(final int x, final int y, final int z) // y is ignored, added for future possible changes.
+    {
+        if ((this.biomes == null) && ! this.load())
+        {
+            return null;
+        }
+        return Biome.getByBiomeId(this.biomes[((z * Chunk.CHUNK_SIZE) + x)] & 0xFF);
+    }
+
+    public void setBiome(final int x, final int y, final int z, final Biome biome) // y is ignored, added for future possible changes.
+    {
+        if (this.biomes == null)
+        {
+            return;
+        }
+        this.biomes[((z * Chunk.CHUNK_SIZE) + x)] = (byte) biome.getBiomeId();
+    }
+
+    @Override
+    public boolean isLoaded()
+    {
+        return this.chunkParts != null;
+    }
+
+    @Override
+    public boolean load()
+    {
+        return this.load(true);
+    }
+
+    @Override
+    public boolean load(final boolean generate)
+    {
+        return this.isLoaded() || this.pos.getWorld().getChunkManager().loadChunk(this.pos.getX(), this.pos.getZ(), generate);
+    }
+
+    @Override
+    public boolean unload()
+    {
+        return this.unload(true, true);
+    }
+
+    @Override
+    public boolean unload(final boolean save)
+    {
+        return this.unload(save, true);
+    }
+
+    @Override
+    public boolean unload(final boolean save, final boolean safe)
+    {
+        if (! this.isLoaded())
+        {
+            return true;
+        }
+        final ChunkUnloadEvent unloadEvt = new ChunkUnloadEvent(this, safe);
+        EventType.callEvent(unloadEvt);
+        return ! unloadEvt.isCancelled();
+    }
+
+    public void setBiomes(final byte[] biomes)
+    {
+        this.biomes = biomes;
+    }
+
+    public void setChunkParts(final ChunkPartImpl[] chunkParts)
+    {
+        this.chunkParts = chunkParts;
+    }
+
+    public Map<BlockLocation, TileEntityImpl> getTileEntities()
+    {
+        return this.tileEntities;
+    }
+
+    public Set<EntityImpl> getEntities()
+    {
+        return this.entities;
     }
 
     @Override
@@ -119,7 +202,6 @@ public class ChunkImpl implements Chunk, Tickable
         }, "[" + this.pos.getX() + "," + this.pos.getZ() + "]initHeightMap");
     }
 
-    @Override
     public BlockMaterialData setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
     {
         final ChunkPartImpl chunkPart = this.getPart(y);
@@ -150,7 +232,6 @@ public class ChunkImpl implements Chunk, Tickable
         return prev;
     }
 
-    @Override
     public BlockMaterialData setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
         return this.setBlock(x, y, z, BlockMaterialData.getByID(id, meta));
@@ -205,12 +286,6 @@ public class ChunkImpl implements Chunk, Tickable
     }
 
     @Override
-    public int getUsages()
-    {
-        return this.usages.intValue();
-    }
-
-    @Override
     public ChunkPos getPos()
     {
         return this.pos;
@@ -228,7 +303,6 @@ public class ChunkImpl implements Chunk, Tickable
         return this.pos.getZ();
     }
 
-    @Override
     public void recalculateBlockCounts()
     {
         for (final ChunkPartImpl chunkPart : this.chunkParts)
@@ -239,32 +313,6 @@ public class ChunkImpl implements Chunk, Tickable
             }
             chunkPart.recalculateBlockCount();
         }
-    }
-
-    @Override
-    public int addUsage()
-    {
-        return this.usages.incrementAndGet();
-    }
-
-    @Override
-    public void checkUsages()
-    {
-        if (this.usages.get() <= 0)
-        {
-            this.getWorld().getChunkManager().unload(this);
-        }
-    }
-
-    @Override
-    public int removeUsage()
-    {
-        final int usages = this.usages.decrementAndGet();
-        if (usages <= 0)
-        {
-            this.getWorld().getChunkManager().unload(this);
-        }
-        return usages;
     }
 
     private void checkPart(final ChunkPartImpl chunkPart)
@@ -281,7 +329,7 @@ public class ChunkImpl implements Chunk, Tickable
         ChunkPartImpl chunkPart = this.chunkParts[chunkPosY];
         if (chunkPart == null)
         {
-            chunkPart = new ChunkPartImpl(this, chunkPosY, this.getWorld().getDimension().hasSkyLight());
+            chunkPart = new ChunkPartImpl(chunkPosY, this.getWorld().getDimension().hasSkyLight());
             this.chunkParts[chunkPosY] = chunkPart;
         }
         return chunkPart;
@@ -290,40 +338,37 @@ public class ChunkImpl implements Chunk, Tickable
     @SuppressWarnings("MagicNumber")
     public void loadFrom(final NbtTagCompound tag)
     {
-        this.populated.set(tag.getBoolean("TerrainPopulated"));
-        tag.getBoolean("LightPopulated"); // TODO
-        tag.getLong("InhabitedTime"); // TODO
-
-        final List<NbtTagCompound> sectionsList = tag.getList("Sections", NbtTagCompound.class);
-        final boolean hasSkyLight = this.getWorld().getDimension().hasSkyLight();
-        for (final NbtTagCompound sectionNBT : sectionsList)
+        final List<NbtTagCompound> sectionList = tag.getList("Sections", NbtTagCompound.class);
+        final ChunkPartImpl[] sections = new ChunkPartImpl[16];
+        for (final NbtTagCompound sectionTag : sectionList)
         {
-            final byte posY = sectionNBT.getByte("Y");
-            final ChunkPartImpl chunkPart = new ChunkPartImpl(this, posY, hasSkyLight);
-            final byte[] blocksIDs = sectionNBT.getByteArray("Blocks");
-            final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray(sectionNBT.getByteArray("Data"));
-            final org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = Optional.ofNullable(sectionNBT.getByteArray("Add")).map(org.diorite.impl.world.chunk.ChunkNibbleArray::new).orElse(null);
-            final short[] blocks = new short[blocksIDs.length];
-            for (int i = 0; i < blocks.length; ++ i)
+            final byte y = sectionTag.getByte("Y");
+            final byte[] rawTypes = sectionTag.getByteArray("Blocks");
+            final NibbleArray extTypes = sectionTag.containsTag("Add") ? new NibbleArray(sectionTag.getByteArray("Add")) : null;
+            final NibbleArray data = new NibbleArray(sectionTag.getByteArray("Data"));
+            final NibbleArray blockLight = new NibbleArray(sectionTag.getByteArray("BlockLight"));
+            final NibbleArray skyLight = new NibbleArray(sectionTag.getByteArray("SkyLight"));
+
+            final short[] types = new short[rawTypes.length];
+            for (int i = 0; i < rawTypes.length; i++)
             {
-                final int blockDataPos = (i >> 8) & 0xf;
-                final int blockIDPos = (i >> 4) & 0xf;
-                final int blockMetaPos = i & 0xf;
-                blocks[i] = (short) ((((additionalData != null) ? additionalData.get(blockMetaPos, blockDataPos, blockIDPos) : 0) << 12) | ((blocksIDs[i] & 0xff) << 4) | (blocksMetaData.get(blockMetaPos, (blockDataPos), (blockIDPos))));
+                types[i] = (short) ((((extTypes == null) ? 0 : extTypes.get(i)) << 12) | ((rawTypes[i] & 0xff) << 4) | data.get(i));
             }
-            chunkPart.setBlocks(new AtomicShortArray(blocks));
-            chunkPart.setBlockLight(new NibbleArray(sectionNBT.getByteArray("BlockLight")));
-            if (hasSkyLight)
-            {
-                chunkPart.setSkyLight(new NibbleArray(sectionNBT.getByteArray("SkyLight")));
-            }
-            chunkPart.recalculateBlockCount();
-            this.chunkParts[posY] = chunkPart;
+            sections[y] = new ChunkPartImpl(new AtomicShortArray(types), skyLight, blockLight, y);
         }
+        System.arraycopy(sections, 0, this.chunkParts, 0, sections.length);
+
+        this.populated.set(tag.getBoolean("TerrainPopulated"));
+        // TODO: load tile entites and other entities
+
         final byte[] biomes = tag.getByteArray("Biomes");
         if (biomes != null)
         {
-            System.arraycopy(biomes, 0, this.biomes, 0, this.biomes.length);
+            this.biomes = biomes;
+        }
+        else
+        {
+            this.biomes = new byte[CHUNK_BIOMES_SIZE];
         }
         final int[] heightMap = tag.getIntArray("HeightMap");
         if (heightMap != null)
@@ -334,6 +379,37 @@ public class ChunkImpl implements Chunk, Tickable
         {
             this.initHeightMap();
         }
+
+        this.init();
+//        tag.getBoolean("LightPopulated"); // TODO
+//        tag.getLong("InhabitedTime"); // TODO
+//
+//        final List<NbtTagCompound> sectionsList = tag.getList("Sections", NbtTagCompound.class);
+//        final boolean hasSkyLight = this.getWorld().getDimension().hasSkyLight();
+//        for (final NbtTagCompound sectionNBT : sectionsList)
+//        {
+//            final byte posY = sectionNBT.getByte("Y");
+//            final ChunkPartImpl chunkPart = new ChunkPartImpl(this, posY, hasSkyLight);
+//            final byte[] blocksIDs = sectionNBT.getByteArray("Blocks");
+//            final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray(sectionNBT.getByteArray("Data"));
+//            final org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = Optional.ofNullable(sectionNBT.getByteArray("Add")).map(org.diorite.impl.world.chunk.ChunkNibbleArray::new).orElse(null);
+//            final short[] blocks = new short[blocksIDs.length];
+//            for (int i = 0; i < blocks.length; ++ i)
+//            {
+//                final int blockDataPos = (i >> 8) & 0xf;
+//                final int blockIDPos = (i >> 4) & 0xf;
+//                final int blockMetaPos = i & 0xf;
+//                blocks[i] = (short) ((((additionalData != null) ? additionalData.get(blockMetaPos, blockDataPos, blockIDPos) : 0) << 12) | ((blocksIDs[i] & 0xff) << 4) | (blocksMetaData.get(blockMetaPos, (blockDataPos), (blockIDPos))));
+//            }
+//            chunkPart.setBlocks(new AtomicShortArray(blocks));
+//            chunkPart.setBlockLight(new NibbleArray(sectionNBT.getByteArray("BlockLight")));
+//            if (hasSkyLight)
+//            {
+//                chunkPart.setSkyLight(new NibbleArray(sectionNBT.getByteArray("SkyLight")));
+//            }
+//            chunkPart.recalculateBlockCount();
+//            this.chunkParts[posY] = chunkPart;
+//        }
     }
 
     @SuppressWarnings("MagicNumber")
@@ -416,6 +492,10 @@ public class ChunkImpl implements Chunk, Tickable
     // set bit to 0: variable &= ~(1 << bit)
     public int getMask()
     {
+        if (! this.isLoaded())
+        {
+            this.load();
+        }
         int mask = 0x0;
         for (int i = 0, chunkPartsLength = this.chunkParts.length; i < chunkPartsLength; i++)
         {
@@ -435,14 +515,19 @@ public class ChunkImpl implements Chunk, Tickable
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("pos", this.pos).append("usages", this.usages).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("pos", this.pos).toString();
     }
 
     @Override
-    public void doTick()
+    public void doTick(final int tps)
     {
-        this.tileEntities.values().forEach(TileEntityImpl::doTick);
+        this.tileEntities.values().forEach(e -> e.doTick(tps));
         // TODO
+    }
+
+    public void init()
+    {
+        // TODO: init tile entities and other stuff
     }
 
     public static ChunkImpl loadFromNBT(final World world, final NbtTagCompound tag)

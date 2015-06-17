@@ -41,7 +41,7 @@ import org.diorite.world.WorldType;
 
 import io.netty.buffer.Unpooled;
 
-public class PlayersManagerImpl
+public class PlayersManagerImpl implements Tickable
 {
     private final Map<UUID, PlayerImpl> players = new ConcurrentHashMap<>(100, 0.2f, 8);
     private final ServerImpl server;
@@ -61,7 +61,7 @@ public class PlayersManagerImpl
 
         final PlayerImpl player = new PlayerImpl(this.server, EntityImpl.ENTITY_ID.getAndIncrement(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
         this.players.put(gameProfile.getId(), player);
-        player.getWorld().addEntity(player);
+//        player.getWorld().addEntity(player);
         return player;
     }
 
@@ -81,7 +81,7 @@ public class PlayersManagerImpl
         // TODO: changeable message, events, etc..
         this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l join to the server!");
         this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 join to the server!");
-        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
+//        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
 
         this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, player.getGameProfile()));
 
@@ -115,7 +115,6 @@ public class PlayersManagerImpl
     public void playerQuit(final PlayerImpl player)
     {
         this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player.getGameProfile()));
-        player.getPlayerChunks().logout();
         this.players.remove(player.getUniqueID());
     }
 
@@ -132,10 +131,11 @@ public class PlayersManagerImpl
         }
     }
 
-    public void keepAlive()
+    @Override
+    public void doTick(final int tps)
     {
         final long curr = System.currentTimeMillis();
-        this.players.values().parallelStream().forEach(p -> p.getPlayerChunks().doTick());
+        this.players.values().parallelStream().forEach(p -> p.getPlayerChunks().doTick(tps));
         if ((curr - this.lastKeepAlive) > this.keepAliveTimer)
         {
             this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId())));

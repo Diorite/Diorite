@@ -1,10 +1,10 @@
-package org.diorite.impl.pipelines;
+package org.diorite.impl.pipelines.event.input;
 
 import org.diorite.impl.ServerImpl;
 import org.diorite.command.Command;
 import org.diorite.command.sender.CommandSender;
-import org.diorite.event.others.SenderCommandEvent;
-import org.diorite.event.pipelines.CommandPipeline;
+import org.diorite.event.input.SenderCommandEvent;
+import org.diorite.event.pipelines.event.input.CommandPipeline;
 import org.diorite.utils.DioriteStringUtils;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 

@@ -7,8 +7,10 @@ import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Predicate;
@@ -42,12 +44,13 @@ import org.diorite.impl.input.InputThread;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;
-import org.diorite.impl.pipelines.ChatPipelineImpl;
-import org.diorite.impl.pipelines.ChunkGeneratePipelineImpl;
-import org.diorite.impl.pipelines.ChunkLoadPipelineImpl;
-import org.diorite.impl.pipelines.ChunkPopulatePipelineImpl;
-import org.diorite.impl.pipelines.CommandPipelineImpl;
-import org.diorite.impl.pipelines.TabCompletePipelineImpl;
+import org.diorite.impl.pipelines.event.chunk.ChunkGeneratePipelineImpl;
+import org.diorite.impl.pipelines.event.chunk.ChunkLoadPipelineImpl;
+import org.diorite.impl.pipelines.event.chunk.ChunkPopulatePipelineImpl;
+import org.diorite.impl.pipelines.event.chunk.ChunkUnloadPipelineImpl;
+import org.diorite.impl.pipelines.event.input.CommandPipelineImpl;
+import org.diorite.impl.pipelines.event.input.TabCompletePipelineImpl;
+import org.diorite.impl.pipelines.event.player.ChatPipelineImpl;
 import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
 import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
@@ -64,14 +67,16 @@ import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkGenerateEvent;
 import org.diorite.event.chunk.ChunkLoadEvent;
 import org.diorite.event.chunk.ChunkPopulateEvent;
-import org.diorite.event.others.SenderCommandEvent;
-import org.diorite.event.others.SenderTabCompleteEvent;
-import org.diorite.event.pipelines.ChatPipeline;
-import org.diorite.event.pipelines.ChunkGeneratePipeline;
-import org.diorite.event.pipelines.ChunkLoadPipeline;
-import org.diorite.event.pipelines.ChunkPopulatePipeline;
-import org.diorite.event.pipelines.CommandPipeline;
-import org.diorite.event.pipelines.TabCompletePipeline;
+import org.diorite.event.chunk.ChunkUnloadEvent;
+import org.diorite.event.input.SenderCommandEvent;
+import org.diorite.event.input.SenderTabCompleteEvent;
+import org.diorite.event.pipelines.event.chunk.ChunkGeneratePipeline;
+import org.diorite.event.pipelines.event.chunk.ChunkLoadPipeline;
+import org.diorite.event.pipelines.event.chunk.ChunkPopulatePipeline;
+import org.diorite.event.pipelines.event.chunk.ChunkUnloadPipeline;
+import org.diorite.event.pipelines.event.input.CommandPipeline;
+import org.diorite.event.pipelines.event.input.TabCompletePipeline;
+import org.diorite.event.pipelines.event.player.ChatPipeline;
 import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.plugin.Plugin;
 import org.diorite.utils.DioriteUtils;
@@ -104,9 +109,10 @@ public class ServerImpl implements Server
     protected       long                     currentTick;
     protected final int                      keepAliveTimer;
     protected       DioriteConfigImpl        config;
-    private                    KeyPair keyPair    = MinecraftEncryption.generateKeyPair();
-    private transient volatile boolean isRunning  = true;
-    private transient volatile boolean hasStopped = false;
+    private final              double[] recentTps  = new double[3];
+    private                    KeyPair  keyPair    = MinecraftEncryption.generateKeyPair();
+    private transient volatile boolean  isRunning  = true;
+    private transient volatile boolean  hasStopped = false;
 
     public int getCompressionThreshold()
     {
@@ -116,6 +122,17 @@ public class ServerImpl implements Server
     public void setCompressionThreshold(final int compressionThreshold)
     {
         this.config.setNetworkCompressionThreshold(compressionThreshold);
+    }
+
+    @Override
+    public double[] getRecentTps()
+    {
+        final double[] result = new double[this.recentTps.length];
+        for (int i = 0; i < this.recentTps.length; i++)
+        {
+            result[i] = (this.recentTps[i] > this.tps) ? this.tps : this.recentTps[i];
+        }
+        return result;
     }
 
     private void loadConfigFile(final File f)
@@ -171,6 +188,7 @@ public class ServerImpl implements Server
         EventType.register(PlayerChatEvent.class, ChatPipeline.class, new ChatPipelineImpl());
 
         EventType.register(ChunkLoadEvent.class, ChunkLoadPipeline.class, new ChunkLoadPipelineImpl());
+        EventType.register(ChunkUnloadEvent.class, ChunkUnloadPipeline.class, new ChunkUnloadPipelineImpl());
         EventType.register(ChunkGenerateEvent.class, ChunkGeneratePipeline.class, new ChunkGeneratePipelineImpl());
         EventType.register(ChunkPopulateEvent.class, ChunkPopulatePipeline.class, new ChunkPopulatePipelineImpl());
     }
@@ -296,6 +314,10 @@ public class ServerImpl implements Server
     public void broadcastMessage(final ChatPosition position, final BaseComponent component)
     {
         this.playersManager.forEach(new PacketPlayOutChat(component, position));
+        if (! Objects.equals(position, ChatPosition.ACTION))
+        {
+            this.sendConsoleMessage(component);
+        }
     }
 
     @Override
@@ -606,10 +628,13 @@ public class ServerImpl implements Server
 
     public void run()
     {
+        Arrays.fill(this.recentTps, (double) DEFAULT_TPS);
+
         try
         {
             long lastTick = System.nanoTime();
             long catchupTime = 0L;
+            long tickSection = lastTick;
             while (this.isRunning)
             {
                 final long curTime = System.nanoTime();
@@ -622,10 +647,21 @@ public class ServerImpl implements Server
                 else
                 {
                     catchupTime = Math.min(NANOS_IN_SECOND, Math.abs(wait));
+                    if ((this.currentTick++ % 100) == 0)
+                    {
+                        final double currentTps = (((double) NANOS_IN_SECOND) / (curTime - tickSection)) * 100;
+                        //noinspection MagicNumber
+                        this.recentTps[0] = calcTps(this.recentTps[0], 0.92D, currentTps);
+                        //noinspection MagicNumber
+                        this.recentTps[1] = calcTps(this.recentTps[1], 0.9835D, currentTps);
+                        //noinspection MagicNumber
+                        this.recentTps[2] = calcTps(this.recentTps[2], 0.9945000000000001D, currentTps);
+                        tickSection = curTime;
+                    }
                     lastTick = curTime;
 
-                    this.playersManager.keepAlive();
-                    this.worldsManager.doTick();
+                    this.playersManager.doTick(this.tps);
+                    this.worldsManager.doTick(this.tps);
                 }
             }
         } catch (final Throwable e)
@@ -639,6 +675,11 @@ public class ServerImpl implements Server
         {
             this.onStop();
         }
+    }
+
+    private static double calcTps(final double avg, final double exp, final double tps)
+    {
+        return (avg * exp) + (tps * (1.0D - exp));
     }
 
     public static ServerImpl getInstance()

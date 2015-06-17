@@ -28,8 +28,9 @@ import org.diorite.cfg.system.TemplateCreator;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings.HardcoreAction;
+import org.diorite.world.WorldType;
 
-@SuppressWarnings({"HardcodedFileSeparator", "SimplifiableIfStatement"})
+@SuppressWarnings({"SimplifiableIfStatement"})
 public class WorldsConfigImpl implements WorldsConfig
 {
     private static final List<WorldConfigImpl>      def2;
@@ -89,6 +90,11 @@ public class WorldsConfigImpl implements WorldsConfig
     private static Dimension defaultDimension()
     {
         return Dimension.OVERWORLD;
+    }
+
+    private static WorldType defaultWorldType()
+    {
+        return WorldType.NORMAL;
     }
 
     private static Difficulty defaultDifficulty()
@@ -276,9 +282,13 @@ public class WorldsConfigImpl implements WorldsConfig
         @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultSeed")
         private long seed;
 
-        @CfgComment("Type/Dimension of world.")
+        @CfgComment("Dimension of world.")
         @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultDimension")
         private Dimension dimension;
+
+        @CfgComment("Type of world.")
+        @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultWorldType")
+        private WorldType worldType;
 
         @CfgComment("Generator for world.")
         @CfgStringDefault("diorite:default")
@@ -374,6 +384,17 @@ public class WorldsConfigImpl implements WorldsConfig
         public void setDimension(final Dimension dimension)
         {
             this.dimension = dimension;
+        }
+
+        @Override
+        public WorldType getWorldType()
+        {
+            return this.worldType;
+        }
+
+        public void setWorldType(final WorldType worldType)
+        {
+            this.worldType = worldType;
         }
 
         @Override

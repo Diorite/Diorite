@@ -44,7 +44,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     }
 
     @Override
-    public void doTick()
+    public void doTick(final int tps)
     {
         // TODO
     }

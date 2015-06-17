@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 public class SystemCommandImpl extends MainCommandImpl
 {
+    private static final Pattern SYSTEM_CMD_PATTERN = Pattern.compile("diorite" + COMMAND_PLUGIN_SEPARATOR, Pattern.LITERAL);
+
     public SystemCommandImpl(final String name, final Collection<String> aliases, final byte priority)
     {
         super(name, aliases, priority);
@@ -27,7 +29,7 @@ public class SystemCommandImpl extends MainCommandImpl
     {
         if (name.toLowerCase().startsWith("diorite" + COMMAND_PLUGIN_SEPARATOR))
         {
-            return super.matcher(name.replace("diorite" + COMMAND_PLUGIN_SEPARATOR, ""));
+            return super.matcher(SYSTEM_CMD_PATTERN.matcher(name).replaceAll(""));
         }
         else
         {

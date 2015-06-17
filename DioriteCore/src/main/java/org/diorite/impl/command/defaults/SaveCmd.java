@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Server;
 import org.diorite.command.CommandPriority;
-import org.diorite.world.World;
 
 public class SaveCmd extends SystemCommandImpl
 {
@@ -16,7 +15,7 @@ public class SaveCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             sender.getServer().broadcastSimpleColoredMessage(Server.PREFIX_MSG + "§7Saving all worlds...");
             ForkJoinPool.commonPool().submit(() -> {
-                sender.getServer().getWorldsManager().getWorlds().parallelStream().forEach(World::save);
+                sender.getServer().getWorldsManager().getWorlds().parallelStream().forEach(w -> w.save(args.has(0) && args.asBoolean(0)));
                 sender.getServer().broadcastSimpleColoredMessage(Server.PREFIX_MSG + "§7All worlds saved!");
             });
         });

@@ -1,8 +1,8 @@
 package org.diorite.impl.world.chunk;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.concurrent.CountDownLatch;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -14,27 +14,32 @@ import org.diorite.impl.Tickable;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunk;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.utils.collections.WeakCollection;
+import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.utils.collections.sets.ConcurrentSet;
-import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
+
+import gnu.trove.TLongCollection;
+import gnu.trove.iterator.TLongIterator;
+import gnu.trove.set.TLongSet;
+import gnu.trove.set.hash.TLongHashSet;
 
 public class PlayerChunksImpl implements Tickable
 {
     public static final int CHUNK_BULK_SIZE = 4;
 
     private final PlayerImpl player;
-    private final Collection<ChunkImpl> loadedChunks  = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
-    private final Collection<ChunkImpl> visibleChunks = WeakCollection.using(new ConcurrentSet<>(500, 0.1f, 4));
-    //    private final Collection<Chunk> chunksToReSend = WeakCollection.using(new ConcurrentSet<>(200, 0.1f, 4));
-    private boolean  logout;
-    private ChunkPos lastUpdate;
-    private byte     lastUpdateR;
+    @SuppressWarnings("MagicNumber")
+    private final TLongSet visibleChunks = new TLongHashSet(400);
+    private final ChunkLock chunkLock;
+    private       boolean   logout;
+    private       ChunkPos  lastUpdate;
+    private       byte      lastUpdateR;
     private long lastUnload = System.currentTimeMillis();
 
     public PlayerChunksImpl(final PlayerImpl player)
     {
         this.player = player;
+        this.chunkLock = player.getWorld().createLock(player.getName());
     }
 
     public byte getRenderDistance()
@@ -42,14 +47,9 @@ public class PlayerChunksImpl implements Tickable
         return this.player.getRenderDistance();
     }
 
-    public Collection<ChunkImpl> getVisibleChunks()
+    public TLongSet getVisibleChunks()
     {
         return this.visibleChunks;
-    }
-
-    public Collection<ChunkImpl> getLoadedChunks()
-    {
-        return this.loadedChunks;
     }
 
     public byte getViewDistance()
@@ -65,12 +65,15 @@ public class PlayerChunksImpl implements Tickable
     public void logout()
     {
         this.logout = true;
-        this.loadedChunks.parallelStream().forEach(Chunk::removeUsage);
-        this.loadedChunks.clear();
+        for (final TLongIterator it = this.visibleChunks.iterator(); it.hasNext(); )
+        {
+            final long key = it.next();
+            this.chunkLock.release(key);
+        }
         this.visibleChunks.clear();
     }
 
-    public synchronized void checkAndUnload()
+    private void checkOld()
     {
         final long curr = System.currentTimeMillis();
         if ((curr - this.lastUnload) < TimeUnit.SECONDS.toMillis(5))
@@ -79,22 +82,21 @@ public class PlayerChunksImpl implements Tickable
         }
         this.lastUnload = curr;
         final byte render = this.getRenderDistance();
-        for (final Iterator<ChunkImpl> iterator = this.loadedChunks.iterator(); iterator.hasNext(); )
+
+        for (final TLongIterator it = this.visibleChunks.iterator(); it.hasNext(); )
         {
-            final Chunk chunk = iterator.next();
-            if (chunk.getPos().isInAABB(this.lastUpdate.add(- render, - render), this.lastUpdate.add(render, render)))
+            final long key = it.next();
+            final ChunkPos chunkPos = ChunkPos.fromLong(key);
+            if (chunkPos.isInAABB(this.lastUpdate.add(- render, - render), this.lastUpdate.add(render, render)))
             {
-//                if (this.visibleChunks.contains(chunk) && ! chunk.isPopulated() && chunk.populate())
-//                {
-//                    this.chunksToReSend.add(chunk);
-//                }
                 continue;
             }
-            iterator.remove();
-            chunk.removeUsage();
-            this.player.getNetworkManager().sendPacket(PacketPlayOutMapChunk.unload(chunk.getPos()));
+            it.remove();
+            this.chunkLock.release(key);
+            this.player.getNetworkManager().sendPacket(PacketPlayOutMapChunk.unload(chunkPos));
         }
     }
+
 
     private void continueUpdate()
     {
@@ -104,72 +106,55 @@ public class PlayerChunksImpl implements Tickable
         {
             return;
         }
+        final TLongCollection oldChunks = new TLongHashSet(this.visibleChunks);
         final Collection<ChunkImpl> chunksToSent = new ConcurrentSet<>();
         final int r = this.lastUpdateR++;
         final ChunkManagerImpl impl = this.player.getWorld().getChunkManager();
 
-        // size is 8 * r, for empty rectangle of radius r (remember about center block)
-        // so each side need (2 * r) + 1 units, so for whole rectangle,
-        // we have (((2 * r) + 1) * 4) but corners are this same for all sides,
-        // so we need subtract them: (((2 * r) + 1) * 4) - 4 == 8 * r
-        final CountDownLatch latch = new CountDownLatch((r == 0) ? 1 : (8 * r));
-
         forChunks(r, this.lastUpdate, chunkPos -> {
-            ChunkImpl chunk = (ChunkImpl) impl.getChunkAt(chunkPos, true, false);
-            try
+            impl.forcePopulation(chunkPos.getX(), chunkPos.getZ());
+            long key = chunkPos.asLong();
+            if (this.visibleChunks.contains(key))
             {
-                if (chunk == null)
-                {
-                    return;
-                }
-//                Main.debug("[Latch;" + latch.hashCode() + "] " + chunk.getPos());
-                final boolean isVisible = r <= view;
-                if (! this.loadedChunks.contains(chunk))
-                {
-                    chunk.addUsage();
-                    if (isVisible)
-                    {
-                        chunksToSent.add(chunk);
-                    }
-                }
-                if (isVisible)
-                {
-                    this.visibleChunks.add(chunk);
-                }
-            } finally
-            {
-                latch.countDown();
-//                Main.debug("[Latch;" + latch.hashCode() + "] " + latch.getCount());
+                oldChunks.remove(key);
             }
-        });
-        try
-        {
-            latch.await();
-        } catch (final InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+            else
+            {
+                this.visibleChunks.add(key);
+                this.chunkLock.acquire(key);
+                chunksToSent.add(impl.getChunk(chunkPos));
+            }
 
-        for (final Iterator<ChunkImpl> iterator = chunksToSent.iterator(); iterator.hasNext(); )
+        });
+        if (chunksToSent.isEmpty() && oldChunks.isEmpty())
         {
-            final ChunkImpl chunk = iterator.next();
-            if (! chunk.isPopulated() && ! chunk.populate())
-            {
-                iterator.remove();
-            }
+            return;
         }
-        final int size = (chunksToSent.size() / CHUNK_BULK_SIZE) + (((chunksToSent.size() % CHUNK_BULK_SIZE) == 0) ? 0 : 1);
-        final ChunkImpl[][] chunkBulks = new ChunkImpl[size][CHUNK_BULK_SIZE];
-        int i = 0;
+        List<PacketPlayOutMapChunk> packets = new ArrayList<>(6);
+        int bulkSize = 6;
+
         for (final ChunkImpl chunk : chunksToSent)
         {
-            this.loadedChunks.add(chunk);
-            chunkBulks[i / CHUNK_BULK_SIZE][i++ % CHUNK_BULK_SIZE] = chunk;
+            chunk.load();
+            final PacketPlayOutMapChunk packet = new PacketPlayOutMapChunk(true, chunk);
+            final int messageSize = PacketPlayOutMapChunkBulk.HEADER_SIZE + packet.getData().getRawData().length;
+
+            // send current data if too big
+            if ((bulkSize + messageSize) > PacketPlayOutMapChunkBulk.MAX_SIZE)
+            {
+                this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(packets, this.player.getWorld()));
+                packets = new ArrayList<>(6);
+                bulkSize = 6;
+            }
+
+            bulkSize += messageSize;
+            packets.add(packet);
         }
 
-        for (final ChunkImpl[] chunkBulk : chunkBulks)
+        // send rest if exist
+        if (! packets.isEmpty())
         {
-            this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(chunkBulk));
+            this.player.getNetworkManager().sendPacket(new PacketPlayOutMapChunkBulk(packets, this.player.getWorld()));
         }
     }
 
@@ -180,7 +165,7 @@ public class PlayerChunksImpl implements Tickable
     }
 
     @Override
-    public void doTick()
+    public void doTick(final int tps)
     {
         if (this.logout)
         {
@@ -195,7 +180,7 @@ public class PlayerChunksImpl implements Tickable
         this.lastUpdateR = 0;
         this.lastUpdate = center;
         this.continueUpdate();
-        this.checkAndUnload();
+        this.checkOld();
     }
 
     static void forChunks(final int r, final ChunkPos center, final Consumer<ChunkPos> action)

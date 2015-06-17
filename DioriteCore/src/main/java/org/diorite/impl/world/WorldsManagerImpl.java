@@ -18,7 +18,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.cfg.DioriteConfigImpl;
 import org.diorite.impl.cfg.WorldsConfigImpl;
-import org.diorite.impl.world.io.mca.McaChunkIO;
+import org.diorite.impl.world.io.anvil.AnvilChunkIoService;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.cfg.WorldsConfig.WorldGroupConfig;
 import org.diorite.entity.Player;
@@ -133,7 +133,7 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
             this.groups.put(wgc.getName(), wgImpl);
             loaders.addAll(wgc.getWorlds().stream().filter(WorldConfig::isEnabled).map(wc -> (Runnable) () -> {
                 final File wFile = new File(wgImpl.getDataFolder(), wc.getName());
-                final WorldImpl wImpl = new WorldImpl(new McaChunkIO(wFile), wc.getName(), wgImpl, wc.getDimension(), wc.getGenerator(), wc.getGeneratorSettings());
+                final WorldImpl wImpl = new WorldImpl(new AnvilChunkIoService(wFile), wc.getName(), wgImpl, wc.getDimension(), wc.getWorldType(), wc.getGenerator(), wc.getGeneratorSettings());
                 this.loadWorld(wImpl, wc);
                 wgImpl.addWorld(wImpl);
             }).collect(Collectors.toList()));
@@ -147,16 +147,18 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
     private void loadWorld(final WorldImpl world, final WorldConfig worldConfig)
     {
         world.setNoUpdateMode(true);
-        final File file = new File(world.getWorldFile().getWorldDir(), "level.dat");
+        final File file = new File(world.getWorldFile(), "level.dat");
+        boolean isNew = true;
         if (file.exists())
         {
             try
             {
+                isNew = false;
                 final NbtTagCompound tag = ((NbtTagCompound) NbtInputStream.readTagCompressed(file, NbtLimiter.getUnlimited()));
                 world.loadNBT(tag.getCompound(""), worldConfig);
             } catch (final IOException e)
             {
-                System.err.println("Can't read world in: " + world.getWorldFile().getWorldDir().getPath());
+                System.err.println("Can't read world in: " + world.getWorldFile().getPath());
                 e.printStackTrace();
             }
         }
@@ -187,7 +189,11 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
             }
         }
         this.addWorld(world);
-        world.getChunkManager().loadBase(world.getForceLoadedRadius(), world.getSpawn().toBlockLocation());
+        if (isNew)
+        {
+            world.initSpawn();
+        }
+        world.loadBase(world.getForceLoadedRadius(), world.getSpawn().toBlockLocation());
         world.setNoUpdateMode(false);
     }
 
@@ -198,8 +204,8 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
     }
 
     @Override
-    public void doTick()
+    public void doTick(final int tps)
     {
-        this.worlds.values().forEach(WorldImpl::doTick);
+        this.worlds.values().forEach(w -> w.doTick(tps));
     }
 }

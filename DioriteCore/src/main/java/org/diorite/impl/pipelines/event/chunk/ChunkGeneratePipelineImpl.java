@@ -1,15 +1,14 @@
-package org.diorite.impl.pipelines;
+package org.diorite.impl.pipelines.event.chunk;
 
 import java.util.Set;
 
 import org.diorite.impl.Main;
-import org.diorite.impl.world.generator.ChunkBuilderImpl;
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.event.chunk.ChunkGenerateEvent;
-import org.diorite.event.pipelines.ChunkGeneratePipeline;
+import org.diorite.event.pipelines.event.chunk.ChunkGeneratePipeline;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 import org.diorite.world.chunk.ChunkPos;
-import org.diorite.world.generator.ChunkBuilder;
 
 public class ChunkGeneratePipelineImpl extends SimpleEventPipeline<ChunkGenerateEvent> implements ChunkGeneratePipeline
 {
@@ -40,8 +39,16 @@ public class ChunkGeneratePipelineImpl extends SimpleEventPipeline<ChunkGenerate
             {
                 return;
             }
-            final ChunkBuilder chunkBuilder = evt.getWorld().getGenerator().generate(new ChunkBuilderImpl(), evt.getChunkPos());
-            evt.setGeneratedChunk(chunkBuilder.createChunk(evt.getChunkPos()));
+            try
+            {
+                ((WorldImpl) evt.getWorld()).getChunkManager().generateChunk(evt.getChunk(), evt.getChunkX(), evt.getChunkZ());
+            } catch (Throwable e)
+            {
+                System.err.println("[ChunkIO] Error while generating chunk (" + evt.getChunkX() + "," + evt.getChunkZ() + ")");
+                e.printStackTrace();
+                evt.cancel();
+            }
+//            final ChunkBuilder chunkBuilder = evt.getWorld().getGenerator().generate(new ChunkBuilderImpl(), evt.getChunkPos());
         });
     }
 }

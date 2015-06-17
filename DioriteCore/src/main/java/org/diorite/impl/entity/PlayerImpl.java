@@ -41,11 +41,11 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     private static final AttributeModifier tempSprintMod = new AttributeModifierImpl(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE);
     protected final GameProfile      gameProfile;
     protected final NetworkManager   networkManager;
+    protected final PlayerChunksImpl playerChunks;
     protected       boolean          isCrouching;
     protected       boolean          isSprinting;
     protected       byte             viewDistance;
     protected       byte             renderDistance;
-    protected final PlayerChunksImpl playerChunks;
     protected       GameMode         gameMode;
     protected       PlayerInventory  inventory;
 
@@ -59,8 +59,8 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         this.uniqueID = gameProfile.getId();
         this.networkManager = networkManager;
         this.renderDistance = server.getRenderDistance();
-        this.playerChunks = new PlayerChunksImpl(this);
         this.gameMode = this.world.getDefaultGameMode();
+        this.playerChunks = new PlayerChunksImpl(this);
     }
 
     public GameProfile getGameProfile()
@@ -99,7 +99,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         }
         this.gameMode = gameMode;
         this.server.getPlayersManager().forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayOutPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
-        this.networkManager.sendPacket(new PacketPlayOutGameStateChange(ReasonCodes.CHANGE_GAME_MODE, gameMode.getId()));
+        this.networkManager.sendPacket(new PacketPlayOutGameStateChange(ReasonCodes.CHANGE_GAME_MODE, gameMode.ordinal()));
     }
 
     @Override

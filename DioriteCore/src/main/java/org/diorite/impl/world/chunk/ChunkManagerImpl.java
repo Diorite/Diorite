@@ -1,371 +1,438 @@
 package org.diorite.impl.world.chunk;
 
+import java.io.IOException;
 import java.util.Collection;
-import java.util.Deque;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.stream.IntStream;
-
-import com.google.common.collect.ImmutableSet;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.world.WorldImpl;
-import org.diorite.BlockLocation;
+import org.diorite.impl.world.generator.ChunkBuilderImpl;
+import org.diorite.impl.world.io.ChunkIoService;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkGenerateEvent;
 import org.diorite.event.chunk.ChunkLoadEvent;
 import org.diorite.event.chunk.ChunkPopulateEvent;
-import org.diorite.utils.concurrent.ParallelUtils;
 import org.diorite.utils.math.pack.IntsToLong;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
+import org.diorite.world.generator.WorldGenerator;
+import org.diorite.world.generator.biomegrid.MapLayer;
 
 public class ChunkManagerImpl implements ChunkManager, Tickable
 {
-    private final WorldImpl world;
-    private final Collection<ChunkGroup> groups     = ImmutableSet.of(new ChunkGroup()); // TODO: multiple groups, one thread per group
-    private final Map<Long, Chunk>       chunks     = new ConcurrentHashMap<>(400, .5f, 4); // change to ConcurrentHashMap<Long, ChunkImpl> if needed.
-    private final Map<Long, Object>      generating = new ConcurrentHashMap<>(10);
 
-    public ChunkManagerImpl(final WorldImpl world)
+    /**
+     * The world this ChunkManager is managing.
+     */
+    private final WorldImpl world;
+
+    /**
+     * The chunk I/O service used to read chunks from the disk and write them to
+     * the disk.
+     */
+    private final ChunkIoService service;
+
+    /**
+     * The chunk generator used to generate new chunks.
+     */
+    private final WorldGenerator generator;
+
+    /**
+     * The biome maps used to fill chunks biome grid and terrain generation.
+     */
+    private final MapLayer[] biomeGrid;
+
+    /**
+     * A map of chunks currently loaded in memory.
+     */
+    private final ConcurrentMap<Long, ChunkImpl> chunks = new ConcurrentHashMap<>(1000, .25f, 8);
+
+    /**
+     * A map of chunks which are being kept loaded by players or other factors.
+     */
+    private final ConcurrentMap<Long, Set<ChunkLock>> locks = new ConcurrentHashMap<>(1000, .25f, 8);
+
+    public ChunkManagerImpl(final WorldImpl world, final ChunkIoService service, final WorldGenerator generator)
     {
         this.world = world;
+        this.service = service;
+        this.generator = generator;
+        this.biomeGrid = MapLayer.initialize(world.getSeed(), world.getDimension(), world.getWorldType());
     }
 
-    public synchronized void loadBase(final int chunkRadius, final BlockLocation center)
+    /**
+     * Get the chunk generator.
+     */
+    public WorldGenerator getGenerator()
     {
-        final LoadInfo info = new LoadInfo();
-        final int toLoad = chunkRadius * chunkRadius;
-        System.out.println("[WorldLoader] Loading spawn chunks for world: " + this.world.getName());
+        return this.generator;
+    }
 
-        final Deque<Chunk> unpopulatedChunks = new ConcurrentLinkedDeque<>();
-        for (int r = 0; r <= chunkRadius; r++)
-        {
-            final int cr = r;
-            ParallelUtils.realParallelStream(() -> {
-                forChunksParallel(cr, center.getChunkPos(), (pos) -> {
-                    final Chunk impl = this.getChunkAt(pos, true, false);
-                    impl.addUsage();
-                    if (! impl.isPopulated())
-                    {
-                        unpopulatedChunks.add(impl);
-                    }
-                    if ((info.loadedChunks.incrementAndGet() % 10) == 0)
-                    {
-                        final long cur = System.currentTimeMillis();
-                        if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(5))
-                        {
-                            //noinspection HardcodedFileSeparator
-                            System.out.println("[ChunkLoader][" + this.world.getName() + "] Chunk: " + info.loadedChunks.get() + "/" + toLoad + " Radius " + cr + "/" + chunkRadius);
-                            info.lastTime = cur;
-                        }
-                    }
-                });
-            });
-            //noinspection HardcodedFileSeparator
-            System.out.println("[ChunkLoader][" + this.world.getName() + "] Radius " + r + "/" + chunkRadius);
-            info.lastTime = System.currentTimeMillis();
-        }
+    public ChunkIoService getService()
+    {
+        return this.service;
+    }
 
-        System.out.println("[WorldLoader] Loaded " + info.loadedChunks.get() + " spawn chunks for world: " + this.world.getName());
-        if (! unpopulatedChunks.isEmpty())
-        {
-            unpopulatedChunks.stream().forEach(Chunk::populate);
-            System.out.println("[WorldLoader] Populated " + unpopulatedChunks.size() + " spawn chunks for world: " + this.world.getName());
-        }
-//        System.out.println("[WorldLoader] Saving...");
-//        this.saveAll();
-//        System.out.println("[WorldLoader] Saved");
+    public MapLayer[] getBiomeGrid()
+    {
+        return this.biomeGrid;
+    }
+
+    public WorldImpl getWorld()
+    {
+        return this.world;
     }
 
     @Override
-    public synchronized void unloadAll()
+    public ChunkImpl getChunk(final ChunkPos pos)
     {
-        synchronized (this.chunks)
+        return this.getChunk(pos.getX(), pos.getZ());
+    }
+
+    /**
+     * Gets a chunk object representing the specified coordinates, which might
+     * not yet be loaded.
+     *
+     * @param x The X coordinate.
+     * @param z The Z coordinate.
+     *
+     * @return The chunk.
+     */
+    @Override
+    public ChunkImpl getChunk(final int x, final int z)
+    {
+        final Long key = IntsToLong.pack(x, z);
+        if (this.chunks.containsKey(key))
         {
-            long time = System.currentTimeMillis();
-            final int size = this.chunks.values().size();
-            int i = 0;
-            for (final Chunk chunk : this.chunks.values())
-            {
-                this.unload(chunk);
-                i++;
-                final long cur = System.currentTimeMillis();
-                if ((cur - time) >= TimeUnit.SECONDS.toMillis(1))
-                {
-                    //noinspection HardcodedFileSeparator
-                    System.out.println("[ChunkUnLoader][" + this.world.getName() + "] Chunk: " + i + "/" + size);
-                    time = cur;
-                }
-            }
+            return this.chunks.get(key);
+        }
+        else
+        {
+            // only create chunk if it's not in the map already
+            final ChunkImpl chunk = new ChunkImpl(new ChunkPos(x, z, this.world));
+            final ChunkImpl prev = this.chunks.putIfAbsent(key, chunk);
+            // if it was created in the intervening time, the earlier one wins
+            return (prev == null) ? chunk : prev;
         }
     }
 
+    /**
+     * Checks if the Chunk at the specified coordinates is loaded.
+     *
+     * @param x The X coordinate.
+     * @param z The Z coordinate.
+     *
+     * @return true if the chunk is loaded, otherwise false.
+     */
     @Override
-    public synchronized void saveAll()
+    public boolean isChunkLoaded(final int x, final int z)
     {
-        final CountDownLatch latch;
-        synchronized (this.chunks)
+        final Long key = IntsToLong.pack(x, z);
+        return this.chunks.containsKey(key) && this.chunks.get(key).isLoaded();
+    }
+
+    /**
+     * Check whether a chunk has locks on it preventing it from being unloaded.
+     *
+     * @param x The X coordinate.
+     * @param z The Z coordinate.
+     *
+     * @return Whether the chunk is in use.
+     */
+    @Override
+    public boolean isChunkInUse(final int x, final int z)
+    {
+        final Long key = IntsToLong.pack(x, z);
+        final Set<ChunkLock> lockSet = this.locks.get(key);
+        return (lockSet != null) && ! lockSet.isEmpty();
+    }
+
+    /**
+     * Call the ChunkIoService to load a chunk, optionally generating the chunk.
+     *
+     * @param x        The X coordinate of the chunk to load.
+     * @param z        The Y coordinate of the chunk to load.
+     * @param generate Whether to generate the chunk if needed.
+     *
+     * @return True on success, false on failure.
+     */
+    @Override
+    public boolean loadChunk(final int x, final int z, final boolean generate)
+    {
+        final ChunkLoadEvent loadEvt = new ChunkLoadEvent(new ChunkPos(x, z, this.world));
+        EventType.callEvent(loadEvt);
+        if (loadEvt.isCancelled())
         {
-           latch = new CountDownLatch(this.chunks.size());
-            Main.debug("Chunks to save: "+this.chunks.size());
-            final Map<Long, ChunkGroup> temp = new HashMap<>(50);
-            for (final Chunk c : this.chunks.values())
+            return false;
+        }
+        final ChunkImpl chunk = (ChunkImpl) loadEvt.getLoadedChunk();
+
+        if (chunk == null)
+        {
+            throw new NullPointerException("Loaded null chunk from: " + x + ", " + z);
+        }
+        // stop here if we can't generate
+        if (! generate || ! loadEvt.isNeedBeGenerated())
+        {
+            return false;
+        }
+
+        // get generating
+        final ChunkGenerateEvent genEvt = new ChunkGenerateEvent(chunk);
+        EventType.callEvent(genEvt);
+        return ! genEvt.isCancelled();
+    }
+
+    /**
+     * Unload chunks with no locks on them.
+     */
+    @Override
+    public void unloadOldChunks()
+    {
+        for (final Map.Entry<Long, ChunkImpl> entry : this.chunks.entrySet())
+        {
+            final Set<ChunkLock> lockSet = this.locks.get(entry.getKey());
+            if ((lockSet == null) || lockSet.isEmpty())
             {
-                final Long key = IntsToLong.pack(c.getX() >> 5, c.getZ() >> 5);
-                ChunkGroup group = temp.get(key);
-                if (group == null)
+                if (! entry.getValue().unload(true, true))
                 {
-                    for (final ChunkGroup g : this.groups)
-                    {
-                        if (g.isIn(c.getPos()))
-                        {
-                            group = g;
-                            temp.put(key, g);
-                            break;
-                        }
-                    }
-                    assert group != null;
-                }
-                if (! group.saveChunk((ChunkImpl) c, null, () -> {
-                    latch.countDown();
-                    Main.debug("Chunks to save: "+latch.getCount());
-                }))
-                {
-                    throw new AssertionError("chunk isn't in valid group: " + c + ", " + group);
+                    System.err.println("[ChunkIO] Failed to unload chunk " + this.world.getName() + ":" + entry.getKey());
                 }
             }
+            // cannot remove old chunks from cache - GlowBlock and GlowBlockState keep references.
+            // they must either be changed to look up the chunk again all the time, or this code left out.
+            /*if (!entry.getValue().isLoaded()) {
+                //GlowServer.logger.info("Removing from cache " + entry.getKey());
+                chunks.entrySet().remove(entry);
+                locks.remove(entry.getKey());
+            }*/
         }
+    }
+
+    /**
+     * Populate a single chunk if needed.
+     */
+    @Override
+    public void populateChunk(final int x, final int z, final boolean force)
+    {
+        final ChunkImpl chunk = this.getChunk(x, z);
+        final ChunkPopulateEvent popEvt = new ChunkPopulateEvent(chunk, force);
+        EventType.callEvent(popEvt);
+    }
+
+    /**
+     * Force a chunk to be populated by loading the chunks in an area around it. Used when streaming chunks to players
+     * so that they do not have to watch chunks being populated.
+     *
+     * @param x The X coordinate.
+     * @param z The Z coordinate.
+     */
+    @Override
+    public void forcePopulation(final int x, final int z)
+    {
         try
         {
-            Main.debug("Waiting for: "+latch.getCount());
-            latch.await();
-            Main.debug("Done...");
-        } catch (final InterruptedException e)
+            final ChunkImpl chunk = this.getChunk(x, z);
+            final ChunkPopulateEvent popEvt = new ChunkPopulateEvent(chunk, true);
+            EventType.callEvent(popEvt);
+        } catch (final Throwable e)
         {
+            System.err.println("[ChunkIO] Error while populating chunk (" + x + "," + z + ")");
             e.printStackTrace();
         }
     }
 
-
+    /**
+     * Initialize a single chunk from the chunk generator.
+     */
     @Override
-    public void unload(final Chunk chunk)
+    public void generateChunk(final Chunk chunk, final int x, final int z)
     {
-        final ChunkImpl c = (ChunkImpl) chunk;
-        final Runnable r = () -> this.chunks.remove(chunk.getPos().asLong());
-        for (final ChunkGroup g : this.groups)
+        final ChunkPos pos = new ChunkPos(x, z, this.world);
+        this.generator.generate(this.generator.generateBiomes(new ChunkBuilderImpl(this.biomeGrid), pos), pos).init(chunk);
+    }
+
+    /**
+     * Forces generation of the given chunk.
+     *
+     * @param x The X coordinate.
+     * @param z The Z coordinate.
+     *
+     * @return Whether the chunk was successfully regenerated.
+     */
+    @Override
+    public boolean forceRegeneration(final int x, final int z)
+    {
+        final ChunkImpl chunk = this.getChunk(x, z);
+
+        if ((chunk == null) || ! chunk.unload(false, false))
         {
-            if (g.saveChunk(c, r))
-            {
-                break;
-            }
+            return false;
         }
-        // this.world.getWorldFile().saveChunk((ChunkImpl) this.chunks.remove(chunk.getPos().asLong()));
+        chunk.setPopulated(false);
+        try
+        {
+            final ChunkGenerateEvent genEvt = new ChunkGenerateEvent(chunk);
+            EventType.callEvent(genEvt);
+            if (genEvt.isCancelled())
+            {
+                return false;
+            }
+            final ChunkPopulateEvent popEvt = new ChunkPopulateEvent(chunk, false); // should this be forced?
+            EventType.callEvent(popEvt);
+            if (popEvt.isCancelled())
+            {
+                return false;
+            }
+        } catch (final Throwable e)
+        {
+            System.err.println("[ChunkIO] Error while regenerating chunk (" + x + "," + z + ")");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public Collection<ChunkGroup> getGroups()
-    {
-        return this.groups;
-    }
-
+    /**
+     * Gets a list of loaded chunks.
+     *
+     * @return The currently loaded chunks.
+     */
     @Override
-    public Chunk getChunkAt(final ChunkPos pos)
+    public List<ChunkImpl> getLoadedChunks()
     {
-        return this.getChunkAt(pos, true, true);
+        return this.chunks.values().stream().filter(ChunkImpl::isLoaded).collect(Collectors.toList());
     }
 
+    /**
+     * Performs the save for the given chunk using the storage provider.
+     *
+     * @param chunk The chunk to save.
+     */
     @Override
-    public Chunk getChunkAt(final int x, final int z)
+    public boolean save(final Chunk chunk)
     {
-        return this.getChunkAt(new ChunkPos(x, z, this.world), true);
-    }
-
-    @Override
-    public Chunk getChunkAt(ChunkPos pos, final boolean generate, final boolean populate)
-    {
-        final long posLong = pos.asLong();
-//        final Object lock = new Object();
-//        final Object oldLock = this.generating.putIfAbsent(posLong, lock);
-        Chunk chunk = this.chunks.get(posLong);
-        if ((chunk == null) || (populate && ! chunk.isPopulated()))
+        if (chunk.isLoaded())
         {
             try
             {
-                final Object lock = this.generating.get(posLong);
-                if (lock != null)
-                {
-                    try
-                    {
-                        //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                        synchronized (lock)
-                        {
-                            lock.wait();
-                        }
-                    } catch (final InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    return this.chunks.get(posLong);
-                }
-                this.generating.put(posLong, new Object());
-
-                if (chunk == null)
-                {
-                    pos = pos.setWorld(this.world);
-                    final ChunkLoadEvent loadEvt = new ChunkLoadEvent(pos);
-                    loadEvt.call();
-                    if (loadEvt.isCancelled())
-                    {
-                        return new DumbChunk(pos);
-                    }
-                    chunk = loadEvt.getLoadedChunk();
-                    if (chunk == null)
-                    {
-                        if (generate)
-                        {
-                            final ChunkGenerateEvent genEvt = new ChunkGenerateEvent(pos);
-                            genEvt.call();
-                            if (genEvt.isCancelled() || (genEvt.getGeneratedChunk() == null))
-                            {
-                                return new org.diorite.impl.world.chunk.DumbChunk(pos);
-                            }
-                            chunk = genEvt.getGeneratedChunk();
-                            this.chunks.put(posLong, chunk);
-                        }
-                    }
-                    else
-                    {
-                        this.chunks.put(posLong, chunk);
-                    }
-                }
-                if ((chunk != null) && populate && ! chunk.isPopulated())
-                {
-                    EventType.callEvent(new ChunkPopulateEvent(chunk));
-                }
-                if (chunk != null)
-                {
-                    for (final ChunkGroup g : this.groups)
-                    {
-                        if (g.addChunk((ChunkImpl) chunk))
-                        {
-                            break;
-                        }
-                    }
-                }
-            } finally
+                this.service.write((ChunkImpl) chunk);
+                return true;
+            } catch (final IOException e)
             {
-                final Object lockObj = this.generating.remove(posLong);
-                if (lockObj != null)
-                {
-                    //noinspection SynchronizationOnLocalVariableOrMethodParameter
-                    synchronized (lockObj)
-                    {
-                        lockObj.notifyAll();
-                    }
-                }
+                System.err.println("[ChunkIO] Error while saving " + chunk);
+                e.printStackTrace();
+                return false;
             }
         }
-        return chunk;
+        return false;
+    }
+
+    public int[] getBiomeGridAtLowerRes(final int x, final int z, final int sizeX, final int sizeZ)
+    {
+        return this.biomeGrid[1].generateValues(x, z, sizeX, sizeZ);
     }
 
     @Override
-    public Chunk getChunkAt(final ChunkPos pos, final boolean generate)
+    public void doTick(final int tps)
     {
-        return this.getChunkAt(pos, generate, generate);
+        this.chunks.values().stream().filter(ChunkImpl::isLoaded).forEach(c -> c.doTick(tps));
     }
 
-    @Override
-    public Chunk getChunkAt(final int x, final int z, final boolean generate)
+    /**
+     * Look up the set of locks on a given chunk.
+     *
+     * @param key The chunk key.
+     *
+     * @return The set of locks for that chunk.
+     */
+    private Collection<ChunkLock> getLockSet(final Long key)
     {
-        return this.getChunkAt(new ChunkPos(x, z, this.world), generate);
-    }
-
-    @Override
-    public void doTick()
-    {
-        this.groups.forEach(ChunkGroup::doTick);
-    }
-
-    @Override
-    public void submitAction(final ChunkPos chunkToSync, final Runnable runnable)
-    {
-        for (final ChunkGroup group : this.groups)
+        if (this.locks.containsKey(key))
         {
-            if (group.isIn(chunkToSync))
+            return this.locks.get(key);
+        }
+        else
+        {
+            // only create chunk if it's not in the map already
+            final Set<ChunkLock> set = new HashSet<>(5);
+            final Set<ChunkLock> prev = this.locks.putIfAbsent(key, set);
+            // if it was created in the intervening time, the earlier one wins
+            return (prev == null) ? set : prev;
+        }
+    }
+
+    /**
+     * A group of locks on chunks to prevent them from being unloaded while in use.
+     */
+    public static class ChunkLock implements Iterable<Long>
+    {
+        private final ChunkManagerImpl cm;
+        private final String           desc;
+        private final Collection<Long> keys = new HashSet<>(5);
+
+        public ChunkLock(final ChunkManagerImpl cm, final String desc)
+        {
+            this.cm = cm;
+            this.desc = desc;
+        }
+
+        public void acquire(final Long key)
+        {
+            if (this.keys.contains(key))
             {
-                this.submitAction(group, runnable);
                 return;
             }
+            this.keys.add(key);
+            this.cm.getLockSet(key).add(this);
         }
-    }
 
-    @Override
-    public void submitAction(final Chunk chunkToSync, final Runnable runnable)
-    {
-        this.submitAction(chunkToSync.getPos(), runnable);
-    }
-
-    public void submitAction(final ChunkGroup groupToSync, final Runnable runnable)
-    {
-        groupToSync.getPool().submit(runnable);
-    }
-
-    public ChunkGroup getChunkGroup(final ChunkPos pos)
-    {
-        for (final ChunkGroup group : this.groups)
+        public void release(final Long key)
         {
-            if (group.isIn(pos))
+            if (! this.keys.contains(key))
             {
-                return group;
-            }
-        }
-        throw new RuntimeException("Can't find ChunkGroup for: " + pos);
-    }
-
-    static void forChunksParallel(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
-    {
-        if (r == 0)
-        {
-            action.accept(center);
-            return;
-        }
-        IntStream.rangeClosed(- r, r).parallel().forEach(x -> {
-            if ((x == r) || (x == - r))
-            {
-                IntStream.rangeClosed(- r, r).parallel().forEach(z -> action.accept(center.add(x, z)));
                 return;
             }
-            action.accept(center.add(x, r));
-            action.accept(center.add(x, - r));
-        });
-    }
+            this.keys.remove(key);
+            this.cm.getLockSet(key).remove(this);
+        }
 
-    private static class LoadInfo
-    {
-        private final AtomicInteger loadedChunks = new AtomicInteger();
-        private       long          lastTime     = System.currentTimeMillis();
+        public void clear()
+        {
+            for (final Long key : this.keys)
+            {
+                this.cm.getLockSet(key).remove(this);
+            }
+            this.keys.clear();
+        }
+
+        @Override
+        public Iterator<Long> iterator()
+        {
+            return this.keys.iterator();
+        }
 
         @Override
         public String toString()
         {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("loadedChunks", this.loadedChunks.get()).append("lastTime", this.lastTime).toString();
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("cm", this.cm).append("desc", this.desc).append("keys", this.keys).toString();
         }
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("world", this.world).append("chunks", this.chunks.keySet()).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("world", this.world).append("generator", this.generator).toString();
     }
 }

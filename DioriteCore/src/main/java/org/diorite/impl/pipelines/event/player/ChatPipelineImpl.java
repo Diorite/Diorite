@@ -1,10 +1,10 @@
-package org.diorite.impl.pipelines;
+package org.diorite.impl.pipelines.event.player;
 
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.ComponentBuilder;
 import org.diorite.event.EventPriority;
-import org.diorite.event.pipelines.ChatPipeline;
+import org.diorite.event.pipelines.event.player.ChatPipeline;
 import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 

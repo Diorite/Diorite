@@ -165,10 +165,10 @@ public class PlayListener implements PacketPlayInListener
         {
             final World world = this.player.getWorld();
             final BlockLocation loc = packet.getBlockLocation().setWorld(world);
-            world.submitAction(loc.getChunkPos(), () -> {
+//            world.submitAction(loc.getChunkPos(), () -> { TODO: do it right
                 world.setBlock(loc, Material.AIR);
                 this.server.getPlayersManager().forEach(p -> p.getWorld().equals(world), new PacketPlayOutBlockChange(loc, Material.AIR));
-            });
+//            });
         }
         // TODO: implement
     }
@@ -221,9 +221,9 @@ public class PlayListener implements PacketPlayInListener
 
         this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.player.getName() + "&7&l left from the server!");
         this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.player.getName() + "&7 left from the server!");
-        this.server.sendConsoleSimpleColoredMessage("&3" + this.player.getName() + " &7left the server. (" + message.toLegacyText() + "&7)");
+//        this.server.sendConsoleSimpleColoredMessage("&3" + this.player.getName() + " &7left the server. (" + message.toLegacyText() + "&7)");
 
-        this.player.getWorld().removeEntity(this.player);
+//        this.player.getWorld().removeEntity(this.player); // TODO re-add, or something
         // TODO: implement
     }
 
