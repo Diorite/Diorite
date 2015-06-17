@@ -12,7 +12,6 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.pipelines.event.chunk.ChunkGeneratePipelineImpl;
 import org.diorite.impl.world.TileEntityImpl;
@@ -33,7 +32,7 @@ import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
-public class ChunkImpl implements Chunk, Tickable
+public class ChunkImpl implements Chunk
 {
     private final ChunkPos pos;
     private final int[]    heightMap;
@@ -516,13 +515,6 @@ public class ChunkImpl implements Chunk, Tickable
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("pos", this.pos).toString();
-    }
-
-    @Override
-    public void doTick(final int tps)
-    {
-        this.tileEntities.values().forEach(e -> e.doTick(tps));
-        // TODO
     }
 
     public void init()

@@ -27,7 +27,7 @@ import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
-import org.diorite.world.generator.biomegrid.MapLayer;
+import org.diorite.world.generator.maplayer.MapLayer;
 
 public class ChunkManagerImpl implements ChunkManager, Tickable
 {
@@ -139,7 +139,8 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     public boolean isChunkLoaded(final int x, final int z)
     {
         final Long key = IntsToLong.pack(x, z);
-        return this.chunks.containsKey(key) && this.chunks.get(key).isLoaded();
+        final ChunkImpl chunk = this.chunks.get(key);
+        return (chunk != null) && chunk.isLoaded();
     }
 
     /**
@@ -347,7 +348,9 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     @Override
     public void doTick(final int tps)
     {
-        this.chunks.values().stream().filter(ChunkImpl::isLoaded).forEach(c -> c.doTick(tps));
+        this.chunks.values().stream().filter(ChunkImpl::isLoaded).forEach(c -> {
+            c.getTileEntities().values().forEach(t -> t.doTick(tps));
+        });
     }
 
     /**
