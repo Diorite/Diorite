@@ -47,6 +47,8 @@ public interface Block
      */
     void setType(BlockMaterialData type);
 
+    Biome getBiome();
+
     /**
      * update wrapper data, get current data from map.
      */
@@ -109,6 +111,6 @@ public interface Block
      */
     default Chunk getChunk()
     {
-        return this.getWorld().getChunkManager().getChunkAt(this.getLocation().getChunkPos());
+        return this.getWorld().getChunkManager().getChunk(this.getLocation().getChunkPos());
     }
 }

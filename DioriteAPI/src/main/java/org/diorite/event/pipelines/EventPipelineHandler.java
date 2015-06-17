@@ -3,7 +3,7 @@ package org.diorite.event.pipelines;
 import org.diorite.event.Event;
 
 /**
- * Used by {@link org.diorite.event.pipelines.EventPipeline} as type of {@link org.diorite.utils.pipeline.Pipeline}
+ * Used by {@link EventPipeline} as type of {@link org.diorite.utils.pipeline.Pipeline}
  *
  * @param <T> type of event data to process.
  */

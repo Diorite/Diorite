@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
-import org.diorite.event.others.SenderEvent;
+import org.diorite.event.input.SenderEvent;
 
 /**
  * Base class for player related events.

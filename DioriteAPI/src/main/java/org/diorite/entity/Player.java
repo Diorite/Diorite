@@ -3,6 +3,7 @@ package org.diorite.entity;
 import java.util.List;
 
 import org.diorite.GameMode;
+import org.diorite.OfflinePlayer;
 import org.diorite.Particle;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
@@ -11,7 +12,7 @@ import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.world.World;
 
-public interface Player extends AttributableEntity, PlayerCommandSender, InventoryHolder
+public interface Player extends AttributableEntity, PlayerCommandSender, InventoryHolder, OfflinePlayer
 {
     float WALK_SPEED         = 0.1f;
     float FLY_SPEED          = 0.05f;
@@ -21,6 +22,12 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
     default Player getPlayer()
     {
         return this;
+    }
+
+    @Override
+    default boolean isOnline()
+    {
+        return this.getServer().getPlayer(this.getUniqueID()) != null;
     }
 
     @Override

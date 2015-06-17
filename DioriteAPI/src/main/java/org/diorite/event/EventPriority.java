@@ -1,7 +1,9 @@
 package org.diorite.event;
 
+import org.diorite.event.pipelines.EventPipeline;
+
 /**
- * Event priority used in {@link org.diorite.event.pipelines.EventPipeline}
+ * Event priority used in {@link EventPipeline}
  * <p>
  * Higher priority means that this action will be performed later, after
  * actions with lower priority.

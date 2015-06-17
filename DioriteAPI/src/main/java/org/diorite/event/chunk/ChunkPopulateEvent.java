@@ -10,17 +10,28 @@ import org.diorite.world.chunk.Chunk;
  */
 public class ChunkPopulateEvent extends ChunkEvent
 {
-    protected final Chunk chunk;
+    protected final Chunk   chunk;
+    protected final boolean force;
 
     /**
      * Construct new chunk populate event.
      *
      * @param chunk chunk to populate, can't by null.
+     * @param force
      */
-    public ChunkPopulateEvent(final Chunk chunk)
+    public ChunkPopulateEvent(final Chunk chunk, final boolean force)
     {
         super(chunk.getPos());
         this.chunk = chunk;
+        this.force = force;
+    }
+
+    /**
+     * @return true if chunk should be force-populated.
+     */
+    public boolean isForce()
+    {
+        return this.force;
     }
 
     /**

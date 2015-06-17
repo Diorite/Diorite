@@ -1,5 +1,6 @@
 package org.diorite.world;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -13,18 +14,22 @@ import org.diorite.Loc;
 import org.diorite.Particle;
 import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
-import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
 
 public interface World
 {
-    void submitAction(ChunkPos chunkToSync, Runnable runnable);
+//    void submitAction(ChunkPos chunkToSync, Runnable runnable);
+//
+//    void submitAction(Chunk chunkToSync, Runnable runnable);
+//
+//    void save();
+//
 
-    void submitAction(Chunk chunkToSync, Runnable runnable);
-
-    void save();
+    /**
+     * @return folder with world data (if used).
+     */
+    File getWorldFile();
 
     WorldGroup getWorldGroup();
 
@@ -96,6 +101,7 @@ public interface World
 
     default Collection<Player> getPlayersInWorld()
     {
+        // TODO: improve
         final Collection<Player> temp = new ArrayList<>(Diorite.getServer().getOnlinePlayers().size());
         Diorite.getServer().getOnlinePlayers().forEach(player -> {
             if (player.getWorld().equals(this))
@@ -105,4 +111,16 @@ public interface World
         });
         return temp;
     }
+
+    Biome getBiome(int x, int y, int z);
+
+    void setBiome(int x, int y, int z, Biome biome); // y is ignored, added for future possible changes.
+
+    boolean isAutoSave();
+
+    void setAutoSave(boolean value);
+
+    void save();
+
+    void save(boolean async);
 }

@@ -105,7 +105,7 @@ public class ChunkPos
     }
 
     @SuppressWarnings("MagicNumber")
-    public ChunkPos fromLong(final long l)
+    public static ChunkPos fromLong(final long l)
     {
         return new ChunkPos((int) (l >> 32), (int) l);
     }

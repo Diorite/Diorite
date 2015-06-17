@@ -1,6 +1,7 @@
-package org.diorite.event.pipelines;
+package org.diorite.event.pipelines.event.input;
 
-import org.diorite.event.others.SenderCommandEvent;
+import org.diorite.event.input.SenderCommandEvent;
+import org.diorite.event.pipelines.EventPipeline;
 
 /**
  * {@link EventPipeline} using {@link SenderCommandEvent} as type.

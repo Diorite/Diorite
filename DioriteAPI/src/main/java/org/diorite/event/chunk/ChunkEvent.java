@@ -45,6 +45,22 @@ public class ChunkEvent extends Event
         return this.chunkPos;
     }
 
+    /**
+     * @return chunk X position related to event.
+     */
+    public int getChunkX()
+    {
+        return this.chunkPos.getX();
+    }
+
+    /**
+     * @return chunk Z position related to event.
+     */
+    public int getChunkZ()
+    {
+        return this.chunkPos.getZ();
+    }
+
     @Override
     public boolean equals(final Object o)
     {

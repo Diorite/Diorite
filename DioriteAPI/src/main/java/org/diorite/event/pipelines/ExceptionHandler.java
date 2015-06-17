@@ -1,7 +1,5 @@
 package org.diorite.event.pipelines;
 
-import org.diorite.event.Event;
-
 /**
  * Interface used by {@link ExceptionPipeline} to handle exceptions.
  */
@@ -17,7 +15,7 @@ public interface ExceptionHandler
 
     /**
      * If this will return true,
-     * then exception pipeline will not invoke {@link #tryCatch(Event, EventPipeline)}
+     * then exception pipeline will not invoke {@link #tryCatch(ExceptionEvent)}
      * method if event is cancelled.
      *
      * @return if handler should ignore cancelled/handled exceptions.

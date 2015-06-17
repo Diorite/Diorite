@@ -11,7 +11,8 @@ import org.diorite.world.chunk.ChunkPos;
  */
 public class ChunkLoadEvent extends ChunkEvent
 {
-    protected Chunk loadedChunk;
+    protected Chunk   loadedChunk;
+    protected boolean needBeGenerated;
 
     /**
      * Construct new chunk load event.
@@ -32,6 +33,26 @@ public class ChunkLoadEvent extends ChunkEvent
     public Chunk getLoadedChunk()
     {
         return this.loadedChunk;
+    }
+
+    /**
+     * After load pipeline, if this value if true, chunk will be regenerated.
+     *
+     * @return true if chunk should be regenerated.
+     */
+    public boolean isNeedBeGenerated()
+    {
+        return this.needBeGenerated;
+    }
+
+    /**
+     * After load pipeline, if this value if true, chunk will be regenerated.
+     *
+     * @param needBeGenerated if chunk should be regenerated.
+     */
+    public void setNeedBeGenerated(final boolean needBeGenerated)
+    {
+        this.needBeGenerated = needBeGenerated;
     }
 
     /**

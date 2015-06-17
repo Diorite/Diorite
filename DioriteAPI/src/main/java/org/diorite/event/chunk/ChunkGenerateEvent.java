@@ -4,44 +4,33 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.world.chunk.Chunk;
-import org.diorite.world.chunk.ChunkPos;
 
 /**
  * When map want generate new chunk.
  */
 public class ChunkGenerateEvent extends ChunkEvent
 {
-    protected Chunk generatedChunk;
+    protected final Chunk chunk;
 
     /**
-     * Construct new chunk pre load event.
+     * Construct new chunk generate event.
      *
-     * @param chunkPos pos of this chunk, must contains world.
+     * @param chunk chunk to generate.
      */
-    public ChunkGenerateEvent(final ChunkPos chunkPos)
+    public ChunkGenerateEvent(final Chunk chunk)
     {
-        super(chunkPos);
+        super(chunk.getPos());
+        this.chunk = chunk;
     }
 
     /**
-     * Returns chunk that was generated in this event, it will be
-     * null at the beginning of pipeline.
+     * Returns chunk that was generated in this event.
      *
-     * @return loaded chunk or null.
+     * @return generated chunk.
      */
-    public Chunk getGeneratedChunk()
+    public Chunk getChunk()
     {
-        return this.generatedChunk;
-    }
-
-    /**
-     * Set generated chunk, setting to to null will work like cancelling event at the end.
-     *
-     * @param generatedChunk new genwerated chunk.
-     */
-    public void setGeneratedChunk(final Chunk generatedChunk)
-    {
-        this.generatedChunk = generatedChunk;
+        return this.chunk;
     }
 
     @Override
@@ -62,7 +51,7 @@ public class ChunkGenerateEvent extends ChunkEvent
 
         final ChunkGenerateEvent that = (ChunkGenerateEvent) o;
 
-        return ! ((this.generatedChunk != null) ? ! this.generatedChunk.equals(that.generatedChunk) : (that.generatedChunk != null));
+        return this.chunk.equals(that.chunk);
 
     }
 
@@ -70,13 +59,13 @@ public class ChunkGenerateEvent extends ChunkEvent
     public int hashCode()
     {
         int result = super.hashCode();
-        result = (31 * result) + ((this.generatedChunk != null) ? this.generatedChunk.hashCode() : 0);
+        result = (31 * result) + this.chunk.hashCode();
         return result;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("generatedChunk", this.generatedChunk).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("chunk", this.chunk).toString();
     }
 }

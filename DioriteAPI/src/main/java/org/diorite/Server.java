@@ -44,6 +44,8 @@ public interface Server
         return "0.1-SNAPSHOT";
     }
 
+    double[] getRecentTps();
+
     List<String> getOnlinePlayersNames(String prefix);
 
     List<String> getOnlinePlayersNames();

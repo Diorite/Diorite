@@ -1,24 +1,30 @@
 package org.diorite.world.chunk;
 
+import java.util.List;
+
 public interface ChunkManager
 {
-    void unloadAll();
+    Chunk getChunk(final ChunkPos pos);
 
-    void saveAll();
+    Chunk getChunk(int x, int z);
 
-    void unload(Chunk chunk);
+    boolean isChunkLoaded(int x, int z);
 
-    Chunk getChunkAt(ChunkPos pos);
+    boolean isChunkInUse(int x, int z);
 
-    Chunk getChunkAt(int x, int z);
+    boolean loadChunk(int x, int z, boolean generate);
 
-    Chunk getChunkAt(ChunkPos pos, boolean generate, boolean populate);
+    void unloadOldChunks();
 
-    Chunk getChunkAt(ChunkPos pos, boolean generate);
+    void populateChunk(int x, int z, boolean force);
 
-    Chunk getChunkAt(int x, int z, boolean generate);
+    void forcePopulation(int x, int z);
 
-    void submitAction(ChunkPos chunkToSync, Runnable runnable);
+    void generateChunk(Chunk chunk, int x, int z);
 
-    void submitAction(Chunk chunkToSync, Runnable runnable);
+    boolean forceRegeneration(int x, int z);
+
+    List<? extends Chunk> getLoadedChunks();
+
+    boolean save(Chunk chunk);
 }

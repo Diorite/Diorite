@@ -1,4 +1,4 @@
-package org.diorite.event.others;
+package org.diorite.event.input;
 
 import java.util.ArrayList;
 import java.util.List;
