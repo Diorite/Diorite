@@ -5,7 +5,7 @@ import org.diorite.utils.concurrent.atomic.AtomicArray;
 /**
  * Atomic itemstack array.
  */
-public interface ItemStackArray extends AtomicArray<ItemStack>, Iterable<ItemStack>
+public interface ItemStackArray extends AtomicArray<ItemStack>
 {
     @Override
     ItemStackArray getSubArray(int offset, int length);

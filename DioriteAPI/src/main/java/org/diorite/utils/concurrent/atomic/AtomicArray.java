@@ -1,9 +1,10 @@
 package org.diorite.utils.concurrent.atomic;
 
+import java.util.Iterator;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
-public interface AtomicArray<E>
+public interface AtomicArray<E> extends Iterable<E>
 {
     int SHIFT_BASE = 31;
 
@@ -185,4 +186,32 @@ public interface AtomicArray<E>
      * @return the String representation of the current values of array
      */
     String toString();
+
+    @Override
+    default Iterator<E> iterator()
+    {
+        return new Iterator<E>()
+        {
+            private int currentIndex = 0;
+
+            @Override
+            public boolean hasNext()
+            {
+                return (this.currentIndex < AtomicArray.this.length());
+            }
+
+            @SuppressWarnings("IteratorNextCanNotThrowNoSuchElementException") // it will be thrown be array itself.
+            @Override
+            public E next()
+            {
+                return AtomicArray.this.get(this.currentIndex++);
+            }
+
+            @Override
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
 }
