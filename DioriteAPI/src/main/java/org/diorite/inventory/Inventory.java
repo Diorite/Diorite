@@ -889,6 +889,8 @@ public interface Inventory extends Iterable<ItemStack>
      */
     InventoryHolder getHolder();
 
+    int getWindowId();
+
     /**
      * @return The size of the inventory
      */
