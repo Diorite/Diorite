@@ -79,7 +79,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInHeldItemSlot packet)
     {
-        // TODO: implement
+        this.player.setHeldItemSlot(packet.getSlot());
     }
 
     @Override

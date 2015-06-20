@@ -1,8 +1,12 @@
 package org.diorite.impl.inventory;
 
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.ServerImpl;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutWindowItems;
 import org.diorite.entity.Player;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerArmorInventory;
@@ -16,13 +20,19 @@ import org.diorite.inventory.item.ItemStackArray;
 
 public class PlayerInventoryImpl extends InventoryImpl<Player> implements PlayerInventory
 {
+    private final int windowId;
     private final Player holder;
     private final ItemStackArray content = ItemStackArray.create(InventoryType.PLAYER.getSize());
 
-    public PlayerInventoryImpl(final Player holder)
+    public PlayerInventoryImpl(final Player holder, final int windowId)
     {
         super(holder);
+        this.windowId = windowId;
         this.holder = holder;
+        if (windowId == 0) // Owner of inventory always must be in viewers to be able to update
+        {
+            this.viewers.add(holder);
+        }
     }
 
     @Override
@@ -156,17 +166,26 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
         {
             throw new IllegalArgumentException("Player must be a viewer of inventoy.");
         }
-//        ServerImpl.getInstance().getPlayersManager().getRawPlayers().get(player.getUniqueID()).getNetworkManager().sendPacket(new );
-        // TODO: implement
+
+        int windowId;
+
+        if (this.holder.getUniqueID().equals(player.getUniqueID())) // Updating inventory to owner
+        {
+            windowId = 0;
+        }
+        else
+        {
+            windowId = this.getWindowId();
+        }
+
+        //noinspection unchecked
+        ServerImpl.getInstance().getPlayersManager().getRawPlayers().get(player.getUniqueID()).getNetworkManager().sendPacket(new PacketPlayOutWindowItems(windowId, this.content));
     }
 
     @Override
     public void update()
     {
-        for (final Player player : this.viewers)
-        {
-            // TODO: implement
-        }
+        this.viewers.forEach(this::update);
     }
 
     @Override
@@ -209,5 +228,11 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     public PlayerHotbarInventory getHotbarInventory()
     {
         return new PlayerHotbarInventoryImpl(this);
+    }
+
+    @Override
+    public int getWindowId()
+    {
+        return 0;
     }
 }
