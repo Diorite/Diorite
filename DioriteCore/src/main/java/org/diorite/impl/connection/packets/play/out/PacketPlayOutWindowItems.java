@@ -14,18 +14,19 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.ItemStackArray;
 
 @PacketClass(id = 0x30, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutWindowItems implements PacketPlayOut
 {
     private int             windowId;
-    private List<ItemStack> items;
+    private ItemStackArray  items;
 
     public PacketPlayOutWindowItems()
     {
     }
 
-    public PacketPlayOutWindowItems(final int windowId, final List<ItemStack> items)
+    public PacketPlayOutWindowItems(final int windowId, final ItemStackArray items)
     {
         this.windowId = windowId;
         this.items = items;
@@ -33,7 +34,11 @@ public class PacketPlayOutWindowItems implements PacketPlayOut
 
     public PacketPlayOutWindowItems(final int windowId, final ItemStack... items)
     {
-        this.items = Arrays.asList(items);
+        this.items = ItemStackArray.create(items);
+        if (this.items.length() == 0)
+        {
+            throw new IllegalArgumentException();
+        }
         this.windowId = windowId;
     }
 
@@ -47,18 +52,14 @@ public class PacketPlayOutWindowItems implements PacketPlayOut
         this.windowId = windowId;
     }
 
-    public List<ItemStack> getItems()
+    public ItemStackArray getItems()
     {
         return this.items;
     }
 
-    public void addItem(final ItemStack item)
+    public void setItems(final ItemStackArray items)
     {
-        if (this.items == null)
-        {
-            this.items = new ArrayList<>(10);
-        }
-        this.items.add(item);
+        this.items = items;
     }
 
     @Override
@@ -66,17 +67,17 @@ public class PacketPlayOutWindowItems implements PacketPlayOut
     {
         this.windowId = data.readUnsignedByte();
         final short count = data.readShort();
-        for (int i = 0; count < i; i++)
-        {
-            this.items.add(data.readItemStack());
-        }
+        //for (int i = 0; count < i; i++)
+        //{
+        //    this.items.add(data.readItemStack());
+        //} // TODO
     }
 
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
         data.writeByte(this.windowId);
-        data.writeShort(this.items.size());
+        data.writeShort(this.items.length());
         this.items.forEach(data::writeItemStack);
     }
 

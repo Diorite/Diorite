@@ -28,6 +28,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficult
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.inventory.item.ItemMetaImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -36,6 +37,8 @@ import org.diorite.TeleportData;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
+import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.Material;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
 
@@ -68,7 +71,6 @@ public class PlayersManagerImpl implements Tickable
     @SuppressWarnings("MagicNumber")
     public void playerJoin(final PlayerImpl player)
     {
-
         // TODO: this is only test code
         player.getNetworkManager().sendPacket(new PacketPlayOutLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
         player.getNetworkManager().sendPacket(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
@@ -87,6 +89,9 @@ public class PlayersManagerImpl implements Tickable
 
         this.server.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
         player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
+
+        player.getInventory().add(new ItemStack(Material.ACACIA_FENCE));
+        player.getInventory().update();
         /*EntityMinecartRideable entity = new EntityMinecartRideable(4, 180, -4);
 
         player.getNetworkManager().sendPacket(new PacketPlayOutSpawnEntity(entity));

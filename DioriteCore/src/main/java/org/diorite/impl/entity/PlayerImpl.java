@@ -20,6 +20,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutTabComplete;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutWorldParticles;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
+import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
@@ -61,6 +62,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         this.renderDistance = server.getRenderDistance();
         this.gameMode = this.world.getDefaultGameMode();
         this.playerChunks = new PlayerChunksImpl(this);
+        this.inventory = new PlayerInventoryImpl(this, 0); // 0 because this is owner of this inventory, and we need this to update
     }
 
     public GameProfile getGameProfile()
@@ -340,6 +342,6 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     @Override
     public void updateInventory()
     {
-        // TODO Send inventory to player
+        this.inventory.update(this);
     }
 }

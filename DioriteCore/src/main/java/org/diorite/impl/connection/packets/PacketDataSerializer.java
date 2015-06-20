@@ -28,6 +28,7 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
+import org.diorite.inventory.item.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtInputStream;
@@ -154,7 +155,8 @@ public class PacketDataSerializer extends ByteBuf
         this.writeShort(mat.ordinal());
         this.writeByte(itemStack.getAmount());
         this.writeShort(mat.getType());
-        this.writeNbtTagCompound(itemStack.getItemMeta().getRawData());
+        final ItemMeta meta = itemStack.getItemMeta();
+        this.writeNbtTagCompound((meta == null) ? null : meta.getRawData());
     }
 
     public void writeNbtTagCompound(final NbtTag nbt)
