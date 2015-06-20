@@ -11,7 +11,7 @@ import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.generator.BiomeGrid;
 import org.diorite.world.generator.ChunkBuilder;
-import org.diorite.world.generator.biomegrid.MapLayer;
+import org.diorite.world.generator.maplayer.MapLayer;
 
 public class ChunkBuilderImpl implements ChunkBuilder
 {
