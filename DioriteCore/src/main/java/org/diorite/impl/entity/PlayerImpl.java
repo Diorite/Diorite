@@ -34,6 +34,7 @@ import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.inventory.PlayerInventory;
+import org.diorite.utils.math.pack.IntsToLong;
 
 public class PlayerImpl extends AttributableEntityImpl implements Player
 {
@@ -76,6 +77,11 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public PlayerChunksImpl getPlayerChunks()
     {
         return this.playerChunks;
+    }
+
+    public boolean isVisibleChunk(final int x, final int z)
+    {
+        return this.playerChunks.getVisibleChunks().contains(IntsToLong.pack(x, z));
     }
 
     @Override

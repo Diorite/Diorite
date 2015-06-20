@@ -55,6 +55,7 @@ import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
 import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
 import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
+import org.diorite.impl.world.tick.TickGroups;
 import org.diorite.Diorite;
 import org.diorite.Server;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
@@ -92,6 +93,7 @@ public class ServerImpl implements Server
     private static ServerImpl instance;
 
     protected final CommandMapImpl commandMap = new CommandMapImpl();
+    protected final TickGroups     ticker     = new TickGroups(this);
     protected final Thread      mainThread;
     protected final InputThread inputThread;
     protected final String      hostname;
@@ -620,6 +622,11 @@ public class ServerImpl implements Server
         this.run();
     }
 
+    public TickGroups getTicker()
+    {
+        return this.ticker;
+    }
+
     @Override
     public String toString()
     {
@@ -661,7 +668,7 @@ public class ServerImpl implements Server
                     lastTick = curTime;
 
                     this.playersManager.doTick(this.tps);
-                    this.worldsManager.doTick(this.tps);
+                    this.ticker.doTick(this.tps);
                 }
             }
         } catch (final Throwable e)

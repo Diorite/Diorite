@@ -1,5 +1,6 @@
 package org.diorite.impl.world.tick;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.utils.math.pack.IntsToLong;
+import org.diorite.world.World;
 
 import gnu.trove.iterator.TLongIterator;
 
@@ -44,6 +46,29 @@ public class ChunksTickGroup implements TickGroupImpl
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("chunks", this.chunks).toString();
+    }
+
+    @Override
+    public boolean removeWorld(final World world)
+    {
+        boolean result = false;
+        for (final Iterator<ChunkGroup> it = this.chunks.iterator(); it.hasNext(); )
+        {
+            final ChunkGroup group = it.next();
+            if (world.equals(group.getWorld()))
+            {
+                group.clear();
+                it.remove();
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return this.chunks.isEmpty();
     }
 }
 

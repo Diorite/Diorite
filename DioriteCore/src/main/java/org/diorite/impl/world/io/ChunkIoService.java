@@ -16,7 +16,7 @@ public interface ChunkIoService
     /**
      * Reads a single chunk. The provided chunk must not yet be initialized.
      *
-     * @param chunk The GlowChunk to read into.
+     * @param chunk The ChunkImpl to read into.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -25,7 +25,7 @@ public interface ChunkIoService
     /**
      * Writes a single chunk.
      *
-     * @param chunk The {@link GlowChunk} to write from.
+     * @param chunk The {@link ChunkImpl} to write from.
      *
      * @throws IOException if an I/O error occurs.
      */

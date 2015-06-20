@@ -15,10 +15,12 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Tickable;
+import org.diorite.impl.ServerImpl;
 import org.diorite.impl.cfg.DioriteConfigImpl;
 import org.diorite.impl.cfg.WorldsConfigImpl;
 import org.diorite.impl.world.io.anvil.AnvilChunkIoService;
+import org.diorite.impl.world.tick.TickGroupImpl;
+import org.diorite.impl.world.tick.WorldTickGroup;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.cfg.WorldsConfig.WorldGroupConfig;
 import org.diorite.entity.Player;
@@ -30,16 +32,12 @@ import org.diorite.utils.DioriteUtils;
 import org.diorite.world.World;
 import org.diorite.world.WorldsManager;
 
-public class WorldsManagerImpl implements WorldsManager, Tickable
+public class WorldsManagerImpl implements WorldsManager
 {
     private WorldImpl        defaultWorld;
     private WorldsConfigImpl config;
     private final Map<String, WorldGroupImpl> groups = new ConcurrentHashMap<>(5, .1f, 4);
     private final Map<String, WorldImpl>      worlds = new ConcurrentHashMap<>(5, .1f, 4);
-
-    public WorldsManagerImpl()
-    {
-    }
 
     public void setDefaultWorld(final WorldImpl defaultWorld)
     {
@@ -50,6 +48,30 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
     public void addWorld(final WorldImpl world)
     {
         this.worlds.put(world.getName(), world);
+
+        ServerImpl.getInstance().getTicker().getGroups().add(new WorldTickGroup(world)); // TODO: something better?
+    }
+
+    public void removeWorld(final String worldName)
+    {
+        final WorldImpl world = this.worlds.remove(worldName);
+        if (world == null)
+        {
+            return;
+        }
+        for (final TickGroupImpl group : ServerImpl.getInstance().getTicker().getGroups())
+        {
+            group.removeWorld(world);
+        }
+    }
+
+    public void removeWorld(final World world)
+    {
+        this.worlds.remove(world.getName());
+        for (final TickGroupImpl group : ServerImpl.getInstance().getTicker().getGroups())
+        {
+            group.removeWorld(world);
+        }
     }
 
     @Override
@@ -201,11 +223,5 @@ public class WorldsManagerImpl implements WorldsManager, Tickable
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("worlds", this.worlds).toString();
-    }
-
-    @Override
-    public void doTick(final int tps)
-    {
-        this.worlds.values().forEach(w -> w.doTick(tps));
     }
 }

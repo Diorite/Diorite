@@ -211,10 +211,9 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
                     System.err.println("[ChunkIO] Failed to unload chunk " + this.world.getName() + ":" + entry.getKey());
                 }
             }
-            // cannot remove old chunks from cache - GlowBlock and GlowBlockState keep references.
+            // cannot remove old chunks from cache - Block and BlockState keep references.
             // they must either be changed to look up the chunk again all the time, or this code left out.
             /*if (!entry.getValue().isLoaded()) {
-                //GlowServer.logger.info("Removing from cache " + entry.getKey());
                 chunks.entrySet().remove(entry);
                 locks.remove(entry.getKey());
             }*/

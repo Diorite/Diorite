@@ -1,6 +1,7 @@
 package org.diorite.impl.world.tick;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
@@ -9,28 +10,35 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.ServerImpl;
 import org.diorite.impl.Tickable;
 import org.diorite.utils.SpammyError;
 import org.diorite.utils.collections.sets.ConcurrentSet;
-import org.diorite.world.TickGroup;
 
 public class TickGroups implements Tickable
 {
-    private static final Object                key    = new Object(); // key to spammy messages
-    private              Collection<TickGroup> groups = new ConcurrentSet<>(10);
+    private static final Object key = new Object(); // key to spammy messages
 
-    public Collection<TickGroup> getGroups()
+    protected final ServerImpl server;
+    private Collection<TickGroupImpl> groups = new ConcurrentSet<>(10);
+
+    public TickGroups(final ServerImpl server)
+    {
+        this.server = server;
+    }
+
+    public Collection<TickGroupImpl> getGroups()
     {
         return this.groups;
     }
 
-    public void setGroups(final Collection<TickGroup> groups)
+    public void setGroups(final Collection<TickGroupImpl> groups)
     {
         this.groups = groups;
     }
 
     @Override
-    public void doTick(final int tps)
+    public synchronized void doTick(final int tps)
     {
         if (this.groups.isEmpty())
         {
@@ -63,10 +71,25 @@ public class TickGroups implements Tickable
          * if two grups can be join, try join them.
          */
         final CountDownLatch latch = new CountDownLatch(this.groups.size());
-        this.groups.forEach(tickGroup -> {
-            pool.submit(() -> tickGroup.doTick(tps));
-            latch.countDown();
-        });
+        for (final Iterator<TickGroupImpl> it = this.groups.iterator(); it.hasNext(); )
+        {
+            final TickGroupImpl tickGroup = it.next();
+            if (tickGroup.isEmpty())
+            {
+                it.remove();
+                latch.countDown();
+                continue;
+            }
+            pool.submit(() -> {
+                try
+                {
+                    tickGroup.doTick(tps);
+                } finally
+                {
+                    latch.countDown();
+                }
+            });
+        }
         try
         {
             latch.await();

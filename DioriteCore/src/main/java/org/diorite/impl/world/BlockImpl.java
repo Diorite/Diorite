@@ -70,6 +70,9 @@ public class BlockImpl implements Block
     {
         this.type = type;
         this.chunk.setBlock(this.x, this.y, this.z, this.type);
+
+//        final PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(new BlockLocation(this.getX(), this.y, this.getZ(), this.getWorld()), type);
+//        ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(this.getWorld()) && p.isVisibleChunk(this.x, this.z), packet);
     }
 
     @Override
