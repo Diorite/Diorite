@@ -52,6 +52,7 @@ import org.diorite.impl.pipelines.event.input.CommandPipelineImpl;
 import org.diorite.impl.pipelines.event.input.TabCompletePipelineImpl;
 import org.diorite.impl.pipelines.event.player.BlockDestroyPipelineImpl;
 import org.diorite.impl.pipelines.event.player.ChatPipelineImpl;
+import org.diorite.impl.scheduler.SchedulerImpl;
 import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
 import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
@@ -83,6 +84,7 @@ import org.diorite.event.pipelines.event.player.ChatPipeline;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.plugin.Plugin;
+import org.diorite.scheduler.Scheduler;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.world.World;
 import org.diorite.world.WorldsManager;
@@ -97,6 +99,7 @@ public class ServerImpl implements Server
 
     protected final CommandMapImpl commandMap = new CommandMapImpl();
     protected final TickGroups     ticker     = new TickGroups(this);
+    protected final Scheduler      scheduler  = new SchedulerImpl();
     protected final Thread      mainThread;
     protected final InputThread inputThread;
     protected final String      hostname;
@@ -315,6 +318,12 @@ public class ServerImpl implements Server
     public WorldsManager getWorldsManager()
     {
         return this.worldsManager;
+    }
+
+    @Override
+    public Scheduler getScheduler()
+    {
+        return this.scheduler;
     }
 
     @Override
