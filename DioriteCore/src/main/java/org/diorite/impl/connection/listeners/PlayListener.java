@@ -35,6 +35,8 @@ import org.diorite.impl.input.InputActionType;
 import org.diorite.BlockLocation;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.event.EventType;
+import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.material.Material;
 import org.diorite.world.World;
 
@@ -163,14 +165,11 @@ public class PlayListener implements PacketPlayInListener
     {
         if (packet.getAction() == PacketPlayInBlockDig.BlockDigAction.FINISH_DIG)
         {
-            final World world = this.player.getWorld();
-            final BlockLocation loc = packet.getBlockLocation().setWorld(world);
-//            world.submitAction(loc.getChunkPos(), () -> { TODO: do it right
-                world.setBlock(loc, Material.AIR);
-                this.server.getPlayersManager().forEach(p -> p.getWorld().equals(world), new PacketPlayOutBlockChange(loc, Material.AIR));
-//            });
+            final BlockLocation loc = packet.getBlockLocation();
+            EventType.callEvent(new PlayerBlockDestroyEvent(this.player, this.player.getWorld().getBlock(loc.getX(), loc.getY(), loc.getZ())));
         }
         // TODO: implement
+        // TODO od animacji kopania bedzie osobny event/pipeline
     }
 
     @Override

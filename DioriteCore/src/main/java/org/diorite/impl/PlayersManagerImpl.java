@@ -90,7 +90,14 @@ public class PlayersManagerImpl implements Tickable
         this.server.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
         player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
 
-        player.getInventory().add(new ItemStack(Material.ACACIA_FENCE));
+        player.getInventory().getFullEqInventory().add(new ItemStack(Material.ACACIA_FENCE));
+        player.getInventory().getFullEqInventory().add(new ItemStack(Material.BOOKSHELF));
+        player.getInventory().getFullEqInventory().add(new ItemStack(Material.BIRCH_FENCE_GATE));
+        player.getInventory().getFullEqInventory().add(new ItemStack(Material.BEDROCK));
+        player.getInventory().getFullEqInventory().add(new ItemStack(Material.ANVIL));
+        player.getInventory().getFullEqInventory().add(new ItemStack(Material.DROPPER));
+        player.getInventory().getFullEqInventory().add(new ItemStack(Material.DIAMOND_ORE));
+        player.getInventory().setItem(18, new ItemStack(Material.EMERALD_ORE, 7));
         player.getInventory().update();
         /*EntityMinecartRideable entity = new EntityMinecartRideable(4, 180, -4);
 

@@ -167,19 +167,8 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
             throw new IllegalArgumentException("Player must be a viewer of inventoy.");
         }
 
-        int windowId;
-
-        if (this.holder.getUniqueID().equals(player.getUniqueID())) // Updating inventory to owner
-        {
-            windowId = 0;
-        }
-        else
-        {
-            windowId = this.getWindowId();
-        }
-
         //noinspection unchecked
-        ServerImpl.getInstance().getPlayersManager().getRawPlayers().get(player.getUniqueID()).getNetworkManager().sendPacket(new PacketPlayOutWindowItems(windowId, this.content));
+        ServerImpl.getInstance().getPlayersManager().getRawPlayers().get(player.getUniqueID()).getNetworkManager().sendPacket(new PacketPlayOutWindowItems(this.windowId, this.content));
     }
 
     @Override
@@ -233,6 +222,6 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     @Override
     public int getWindowId()
     {
-        return 0;
+        return this.windowId;
     }
 }
