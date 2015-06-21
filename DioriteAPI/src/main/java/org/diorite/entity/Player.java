@@ -10,6 +10,7 @@ import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.PlayerInventory;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.world.World;
 
 public interface Player extends AttributableEntity, PlayerCommandSender, InventoryHolder, OfflinePlayer
@@ -149,6 +150,13 @@ public interface Player extends AttributableEntity, PlayerCommandSender, Invento
      * @param hash         A 40 character lowercase SHA-1 hash of resource pack file
      */
     void setResourcePack(String resourcePack, String hash);
+
+    /**
+     *
+     * // TODO
+     * @return
+     */
+    ItemStack getCursor();
 
     /**
      * Gets whether player can fly or not
