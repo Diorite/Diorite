@@ -200,7 +200,7 @@ public interface AtomicArray<E> extends Iterable<E>
                 return (this.currentIndex < AtomicArray.this.length());
             }
 
-            @SuppressWarnings("IteratorNextCanNotThrowNoSuchElementException") // it will be thrown be array itself.
+            @SuppressWarnings("IteratorNextCanNotThrowNoSuchElementException") // it will be thrown by array itself.
             @Override
             public E next()
             {
