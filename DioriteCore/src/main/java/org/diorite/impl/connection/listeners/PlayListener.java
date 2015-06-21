@@ -27,18 +27,17 @@ import org.diorite.impl.connection.packets.play.in.PacketPlayInSetCreativeSlot;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInSettings;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInTabComplete;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInWindowClick;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
-import org.diorite.BlockLocation;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
-import org.diorite.material.Material;
-import org.diorite.world.World;
+import org.diorite.inventory.ClickType;
+import org.diorite.inventory.PlayerInventory;
+import org.diorite.inventory.item.ItemStack;
 
 public class PlayListener implements PacketPlayInListener
 {
@@ -165,8 +164,7 @@ public class PlayListener implements PacketPlayInListener
     {
         if (packet.getAction() == PacketPlayInBlockDig.BlockDigAction.FINISH_DIG)
         {
-            final BlockLocation loc = packet.getBlockLocation();
-            EventType.callEvent(new PlayerBlockDestroyEvent(this.player, this.player.getWorld().getBlock(loc.getX(), loc.getY(), loc.getZ())));
+            EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
         }
         // TODO: implement
         // TODO od animacji kopania bedzie osobny event/pipeline
@@ -192,11 +190,48 @@ public class PlayListener implements PacketPlayInListener
         // TODO: implement
     }
 
+    @SuppressWarnings("ObjectEquality")
     @Override
-    public void handle(final PacketPlayInWindowClick packet)
+    public void handle(final PacketPlayInWindowClick p)
     {
-        Main.debug("Click (" + packet.getId() + ") slot: " + packet.getClickedSlot() + ", type: " + packet.getClickType() + ", action: " + packet.getActionNumber() + ", item: " + packet.getClicked());
-        // TODO: implement
+        System.out.println("Click (" + p.getId() + ") slot: " + p.getClickedSlot() + ", type: " + p.getClickType() + ", action: " + p.getActionNumber() + ", item: " + p.getClicked());
+
+        final ItemStack cur = this.player.getCursor();
+        final int slot = p.getClickedSlot();
+        final PlayerInventory inv = this.player.getInventory();
+
+        // TODO Move it to better place (pipeline!) and optimize code
+        if (p.getClickType() == ClickType.MOUSE_LEFT)
+        {
+            if (cur == null)
+            {
+                if (inv.getItem(slot) != null)
+                {
+                    this.player.setCursorItem(inv.getItem(slot));
+                    inv.setItem(slot, null);
+                }
+            }
+            else
+            {
+                if (inv.getItem(slot) == null)
+                {
+                    inv.setItem(slot, this.player.getCursor());
+                    this.player.setCursorItem(null);
+                }
+                else
+                {
+                    final ItemStack temp = inv.getItem(slot);
+                    inv.setItem(slot, this.player.getCursor());
+                    this.player.setCursorItem(temp);
+                }
+            }
+        }
+        // TODO all other click types
+        else
+        {
+            this.player.sendMessage("Inventory action not supported yet. Refreshing inventory");
+            inv.update();
+        }
     }
 
     public NetworkManager getNetworkManager()

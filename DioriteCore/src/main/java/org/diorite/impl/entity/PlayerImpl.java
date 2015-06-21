@@ -35,6 +35,7 @@ import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.inventory.PlayerInventory;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.pack.IntsToLong;
 
 public class PlayerImpl extends AttributableEntityImpl implements Player
@@ -50,6 +51,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     protected       byte             renderDistance;
     protected       GameMode         gameMode;
     protected       PlayerInventory  inventory;
+    protected       ItemStack        cursorItem;
 
     protected PacketPlayOutAbilities abilities = new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
@@ -349,5 +351,16 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public void updateInventory()
     {
         this.inventory.update(this);
+    }
+
+    @Override
+    public ItemStack getCursor()
+    {
+        return this.cursorItem;
+    }
+
+    public void setCursorItem(final ItemStack cursorItem)
+    {
+        this.cursorItem = cursorItem;
     }
 }
