@@ -1,11 +1,12 @@
 package org.diorite.world.chunk;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.scheduler.Synchronizable;
 import org.diorite.world.Biome;
 import org.diorite.world.Block;
 import org.diorite.world.World;
 
-public interface Chunk
+public interface Chunk extends Synchronizable
 {
     int CHUNK_SIZE        = 16;
     int CHUNK_PARTS       = 16;

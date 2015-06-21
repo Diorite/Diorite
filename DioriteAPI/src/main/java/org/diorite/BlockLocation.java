@@ -217,9 +217,9 @@ public class BlockLocation
         return ((((long) this.x) & 0x3FFFFFF) << 38) | ((((long) this.y) & 0xFFF) << 26) | (((long) this.z) & 0x3FFFFFF);
     }
 
-    public Location toLocation()
+    public ImmutableLocation toLocation()
     {
-        return new Location(this.x, this.y, this.z, this.world);
+        return new ImmutableLocation(this.x, this.y, this.z, this.world);
     }
 
     @SuppressWarnings("MagicNumber")

@@ -12,6 +12,7 @@ import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.ItemStackArray;
 import org.diorite.material.Material;
+import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.DioriteUtils;
 
 import gnu.trove.TIntCollection;
@@ -20,7 +21,7 @@ import gnu.trove.list.array.TIntArrayList;
 /**
  * Represent inventory, contains default implementation for most of methods.
  */
-public interface Inventory extends Iterable<ItemStack>
+public interface Inventory extends Iterable<ItemStack>, Synchronizable
 {
     /**
      * @return An array of ItemStacks from the inventory.

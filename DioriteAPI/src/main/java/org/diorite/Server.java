@@ -19,10 +19,12 @@ import org.diorite.command.PluginCommandBuilder;
 import org.diorite.command.sender.ConsoleCommandSender;
 import org.diorite.entity.Player;
 import org.diorite.plugin.Plugin;
+import org.diorite.scheduler.Scheduler;
+import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.world.WorldsManager;
 
-public interface Server
+public interface Server extends Synchronizable
 {
     String PREFIX     = ChatColor.GRAY.toString() + "[" + ChatColor.DARK_AQUA.toString() + "Diorite" + ChatColor.GRAY.toString() + "]";
     String PREFIX_RAW = "[Diorite]";
@@ -53,6 +55,8 @@ public interface Server
     DioriteConfig getConfig();
 
     WorldsManager getWorldsManager();
+
+    Scheduler getScheduler();
 
     void broadcastMessage(ChatPosition position, BaseComponent component);
 

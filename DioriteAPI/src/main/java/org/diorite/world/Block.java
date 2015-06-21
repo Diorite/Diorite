@@ -3,6 +3,7 @@ package org.diorite.world;
 import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.scheduler.Synchronizable;
 import org.diorite.world.chunk.Chunk;
 
 /**
@@ -112,5 +113,15 @@ public interface Block
     default Chunk getChunk()
     {
         return this.getWorld().getChunkManager().getChunk(this.getLocation().getChunkPos());
+    }
+
+    /**
+     * By default it uses {@link #getChunk()}
+     *
+     * @return object that can be used in scheduler.
+     */
+    default Synchronizable getSynchronizable()
+    {
+        return this.getChunk();
     }
 }
