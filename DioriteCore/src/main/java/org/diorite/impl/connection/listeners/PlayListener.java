@@ -35,6 +35,7 @@ import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
+import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.ItemStack;
@@ -194,44 +195,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInWindowClick p)
     {
-        System.out.println("Click (" + p.getId() + ") slot: " + p.getClickedSlot() + ", type: " + p.getClickType() + ", action: " + p.getActionNumber() + ", item: " + p.getClicked());
-
-        final ItemStack cur = this.player.getCursor();
-        final int slot = p.getClickedSlot();
-        final PlayerInventory inv = this.player.getInventory();
-
-        // TODO Move it to better place (pipeline!) and optimize code
-        if (p.getClickType() == ClickType.MOUSE_LEFT)
-        {
-            if (cur == null)
-            {
-                if (inv.getItem(slot) != null)
-                {
-                    this.player.setCursorItem(inv.getItem(slot));
-                    inv.setItem(slot, null);
-                }
-            }
-            else
-            {
-                if (inv.getItem(slot) == null)
-                {
-                    inv.setItem(slot, this.player.getCursor());
-                    this.player.setCursorItem(null);
-                }
-                else
-                {
-                    final ItemStack temp = inv.getItem(slot);
-                    inv.setItem(slot, this.player.getCursor());
-                    this.player.setCursorItem(temp);
-                }
-            }
-        }
-        // TODO all other click types
-        else
-        {
-            this.player.sendMessage("Inventory action not supported yet. Refreshing inventory");
-            inv.update();
-        }
+        EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType()));
     }
 
     public NetworkManager getNetworkManager()
