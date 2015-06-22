@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-import org.diorite.impl.Tickable;
+import org.diorite.Server;
 import org.diorite.plugin.Plugin;
 import org.diorite.scheduler.DioriteTask;
 import org.diorite.scheduler.DioriteWorker;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.scheduler.Synchronizable;
+import org.diorite.scheduler.TaskBuilder;
 
-public class SchedulerImpl implements Scheduler, Tickable
+public class SchedulerImpl extends Scheduler
 {
     // TODO: implement,
     // such code, much wow.
@@ -70,62 +71,23 @@ public class SchedulerImpl implements Scheduler, Tickable
     }
 
     @Override
-    public DioriteTask runTask(final Plugin plugin, final Runnable task) throws IllegalArgumentException
+    protected DioriteTask runTask(final TaskBuilder builder, final long startDelay) throws IllegalArgumentException
     {
+        if (builder.isSingle() && (startDelay != 0))
+        {
+            throw new IllegalArgumentException("Single task can't have additional delay.");
+        }
+
         return null;
     }
 
-    @Override
-    public DioriteTask runTask(final Plugin plugin, final Runnable task, final Synchronizable sync) throws IllegalArgumentException
+    public void runTasks(final Class<? extends Synchronizable> type)
     {
-        return null;
-    }
-
-    @Override
-    public DioriteTask runTaskAsynchronously(final Plugin plugin, final Runnable task) throws IllegalArgumentException
-    {
-        return null;
-    }
-
-    @Override
-    public DioriteTask runTaskLater(final Plugin plugin, final Runnable task, final long delay) throws IllegalArgumentException
-    {
-        return null;
-    }
-
-    @Override
-    public DioriteTask runTaskLater(final Plugin plugin, final Runnable task, final long delay, final Synchronizable sync) throws IllegalArgumentException
-    {
-        return null;
-    }
-
-    @Override
-    public DioriteTask runTaskLaterAsynchronously(final Plugin plugin, final Runnable task, final long delay) throws IllegalArgumentException
-    {
-        return null;
-    }
-
-    @Override
-    public DioriteTask runTaskTimer(final Plugin plugin, final Runnable task, final long delay, final long period) throws IllegalArgumentException
-    {
-        return null;
-    }
-
-    @Override
-    public DioriteTask runTaskTimer(final Plugin plugin, final Runnable task, final long delay, final long period, final Synchronizable sync) throws IllegalArgumentException
-    {
-        return null;
-    }
-
-    @Override
-    public DioriteTask runTaskTimerAsynchronously(final Plugin plugin, final Runnable task, final long delay, final long period) throws IllegalArgumentException
-    {
-        return null;
-    }
-
-    @Override
-    public void doTick(final int tps)
-    {
+        if (type == null)
+        {
+            this.runTasks(Server.class);
+            return;
+        }
         // TODO
     }
 }
