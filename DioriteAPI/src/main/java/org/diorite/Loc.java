@@ -1,8 +1,9 @@
 package org.diorite;
 
-import org.diorite.world.World;
-import org.diorite.world.chunk.ChunkPos;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.world.World;
+import org.diorite.world.chunk.Chunk;
+import org.diorite.world.chunk.ChunkPos;
 
 public interface Loc
 {
@@ -17,6 +18,11 @@ public interface Loc
     float getYaw();
 
     World getWorld();
+
+    default Chunk getChunk()
+    {
+        return this.getWorld().getChunkAt(this.getChunkPos());
+    }
 
     default double length()
     {
@@ -106,7 +112,7 @@ public interface Loc
 
     default BlockLocation toBlockLocation()
     {
-        return new BlockLocation((int) this.getX(), (int) this.getY(), (int) this.getZ(), this.getWorld());
+        return new BlockLocation(DioriteMathUtils.floor(this.getX()), DioriteMathUtils.floor(this.getY()), DioriteMathUtils.floor(this.getZ()), this.getWorld());
     }
 
     default Location toLocation()

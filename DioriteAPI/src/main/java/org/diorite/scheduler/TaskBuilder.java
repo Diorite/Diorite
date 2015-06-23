@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
+import org.diorite.plugin.Plugin;
 
 /**
  * Simple builder class to build all types of tasks.
@@ -14,16 +15,21 @@ import org.diorite.Diorite;
  */
 public class TaskBuilder
 {
+    private final Plugin   plugin;
     private final Runnable runnable;
     private boolean        async          = false;
     private boolean        isRealTime     = false;
+    private boolean        safeMode       = true;
     private long           delay          = 0;
     private TaskType       type           = TaskType.SINGLE;
     private Synchronizable synchronizable = Diorite.getServer();
+    private String name; // optional
 
-    private TaskBuilder(final Runnable runnable)
+    private TaskBuilder(final Plugin plugin, final Runnable runnable)
     {
-        Validate.notNull(runnable, "Task must have runnable");
+        Validate.notNull(plugin, "Plugin can't by null.");
+        Validate.notNull(runnable, "Runnable can't be null.");
+        this.plugin = plugin;
         this.runnable = runnable;
     }
 
@@ -69,8 +75,23 @@ public class TaskBuilder
      */
     public TaskBuilder syncTo(final Synchronizable synchronizable)
     {
+        Validate.notNull(synchronizable, "Can't synchronize to null object");
         this.async = false;
         this.synchronizable = synchronizable;
+        return this;
+    }
+
+    /**
+     * Change name of task, you don't need set it, it isn't used by any important code. <br>
+     * It may be used by some statisitc/timing systems.
+     *
+     * @param name new name of task.
+     *
+     * @return this same task builder for chaining method.
+     */
+    public TaskBuilder name(final String name)
+    {
+        this.name = name + "@" + System.identityHashCode(this.runnable);
         return this;
     }
 
@@ -98,6 +119,40 @@ public class TaskBuilder
     public TaskBuilder gameTime()
     {
         this.isRealTime = false;
+        return this;
+    }
+
+    /**
+     * <b>This is default value/state of builder.</b> <br>
+     * This works only for sync to object tasks. <br>
+     * Safe sync task will automatically unregister when
+     * sync object will be invalid, like after player
+     * logout or chunk unload. <br>
+     *
+     * @return this same task builder for chaining method.
+     *
+     * @see Synchronizable#isValidSynchronizable()
+     */
+    public TaskBuilder safe()
+    {
+        this.safeMode = true;
+        return this;
+    }
+
+    /**
+     * This works only for sync to object tasks. <br>
+     * This will turn off safe mode! <br>
+     * Safe sync task will automatically unregister when
+     * sync object will be invalid, like after player
+     * logout or chunk unload. <br>
+     *
+     * @return this same task builder for chaining method.
+     *
+     * @see Synchronizable#isValidSynchronizable()
+     */
+    public TaskBuilder unsafe()
+    {
+        this.safeMode = false;
         return this;
     }
 
@@ -171,7 +226,145 @@ public class TaskBuilder
             this.delay += startDelay;
             return Diorite.getScheduler().runTask(this, 0);
         }
+        if (this.name == null)
+        {
+            this.name = this.runnable.getClass().getName() + "@" + System.identityHashCode(this.runnable);
+        }
         return Diorite.getScheduler().runTask(this, startDelay);
+    }
+
+    /**
+     * Create new TaskBuilder with selected runnable, it can't be null.
+     *
+     * @param plugin   plugin that want register task.
+     * @param runnable runnable to use as task.
+     *
+     * @return new task builder.
+     *
+     * @see #async(Runnable)
+     * @see #sync(Runnable)
+     * @see #sync(Runnable, Synchronizable)
+     * @see #start()
+     */
+    public static TaskBuilder start(final Plugin plugin, final Runnable runnable)
+    {
+        return new TaskBuilder(plugin, runnable);
+    }
+
+    /**
+     * Simple method to create new sync task and run it. <br>
+     * Equal to: <br>
+     * <ol>
+     * <li>{@link #start(Runnable)}</li>
+     * <li>{@link #start()}</li>
+     * </ol>
+     *
+     * @param plugin   plugin that want register task.
+     * @param runnable runnable to use as task.
+     *
+     * @return finished and registered diorite task.
+     */
+    public static DioriteTask sync(final Plugin plugin, final Runnable runnable)
+    {
+        return new TaskBuilder(plugin, runnable).start();
+    }
+
+    /**
+     * Simple method to create new sync task and run it. <br>
+     * Equal to: <br>
+     * <ol>
+     * <li>{@link #start(Runnable)}</li>
+     * <li>{@link #syncTo(Synchronizable)}</li>
+     * <li>{@link #start()}</li>
+     * </ol>
+     *
+     * @param plugin         plugin that want register task.
+     * @param runnable       runnable to use as task.
+     * @param synchronizable object to sync with it. (task will be executed in this same thread as object is ticked as long as object exist in memory)
+     *
+     * @return finished and registered diorite task.
+     */
+    public static DioriteTask sync(final Plugin plugin, final Runnable runnable, final Synchronizable synchronizable)
+    {
+        return new TaskBuilder(plugin, runnable).syncTo(synchronizable).start();
+    }
+
+    /**
+     * Simple method to create new async task and run it. <br>
+     * Equal to: <br>
+     * <ol>
+     * <li>{@link #start(Runnable)}</li>
+     * <li>{@link #async()}</li>
+     * <li>{@link #start()}</li>
+     * </ol>
+     *
+     * @param plugin   plugin that want register task.
+     * @param runnable runnable to use as task.
+     *
+     * @return finished and registered diorite task.
+     */
+    public static DioriteTask async(final Plugin plugin, final Runnable runnable)
+    {
+        return new TaskBuilder(plugin, runnable).async().start();
+    }
+
+    /**
+     * Getters
+     */
+
+    /**
+     * @return plugin that wan't register this task.
+     */
+    public Plugin getPlugin()
+    {
+        return this.plugin;
+    }
+
+    /**
+     * @return name of task.
+     */
+    public String getName()
+    {
+        if ((this.name == null))
+        {
+            return this.runnable.getClass().getName() + "@" + System.identityHashCode(this.runnable);
+        }
+        return this.name;
+    }
+
+    /**
+     * Check if task will be in safe mode. <br>
+     * This works only for sync to object tasks. <br>
+     * Safe sync task will automatically unregister when
+     * sync object will be invalid, like after player
+     * logout or chunk unload. <br>
+     *
+     * @return if task is in safe mode.
+     *
+     * @see Synchronizable#isValidSynchronizable()
+     */
+    public boolean isSafeMode()
+    {
+        return this.safeMode;
+    }
+
+    /**
+     * Only for sync tasks, async task can't use synchronizable objects. <br>
+     * Default object is server instance, that means that task will be executed
+     * before ticking worlds in main thread. <br>
+     * Using other object (entity or chunk) will cause that task will be always executed in this same
+     * thread as object is ticked. <br>
+     * NOTE: Task store weak reference to object, if weak reference will be free, task will be canceled.
+     *
+     * @return Synchronizable object, or null if task is async.
+     */
+    public Synchronizable getSynchronizable()
+    {
+        if (this.async)
+        {
+            return null;
+        }
+        return this.synchronizable;
     }
 
     /**
@@ -237,96 +430,6 @@ public class TaskBuilder
     public boolean isRepeated()
     {
         return this.type == TaskType.REPEATED;
-    }
-
-    /**
-     * Only for sync tasks, async task can't use synchronizable objects. <br>
-     * Default object is server instance, that means that task will be executed
-     * before ticking worlds in main thread. <br>
-     * Using other object (entity or chunk) will cause that task will be always executed in this same
-     * thread as object is ticked. <br>
-     * NOTE: Task store weak reference to object, if weak reference will be free, task will be canceled.
-     *
-     * @return Synchronizable object, or null if task is async.
-     */
-    public Synchronizable getSynchronizable()
-    {
-        if (this.async)
-        {
-            return null;
-        }
-        return this.synchronizable;
-    }
-
-    /**
-     * Create new TaskBuilder with selected runnable, it can't be null.
-     *
-     * @param runnable runnable to use as task.
-     *
-     * @return new task builder.
-     *
-     * @see #async(Runnable)
-     * @see #sync(Runnable)
-     * @see #sync(Runnable, Synchronizable)
-     * @see #start()
-     */
-    public static TaskBuilder start(final Runnable runnable)
-    {
-        return new TaskBuilder(runnable);
-    }
-
-    /**
-     * Simple method to create new sync task and run it. <br>
-     * Equal to: <br>
-     * <ol>
-     * <li>{@link #start(Runnable)}</li>
-     * <li>{@link #start()}</li>
-     * </ol>
-     *
-     * @param runnable runnable to use as task.
-     *
-     * @return finished and registered diorite task.
-     */
-    public static DioriteTask sync(final Runnable runnable)
-    {
-        return new TaskBuilder(runnable).start();
-    }
-
-    /**
-     * Simple method to create new sync task and run it. <br>
-     * Equal to: <br>
-     * <ol>
-     * <li>{@link #start(Runnable)}</li>
-     * <li>{@link #syncTo(Synchronizable)}</li>
-     * <li>{@link #start()}</li>
-     * </ol>
-     *
-     * @param runnable       runnable to use as task.
-     * @param synchronizable object to sync with it. (task will be executed in this same thread as object is ticked as long as object exist in memory)
-     *
-     * @return finished and registered diorite task.
-     */
-    public static DioriteTask sync(final Runnable runnable, final Synchronizable synchronizable)
-    {
-        return new TaskBuilder(runnable).syncTo(synchronizable).start();
-    }
-
-    /**
-     * Simple method to create new async task and run it. <br>
-     * Equal to: <br>
-     * <ol>
-     * <li>{@link #start(Runnable)}</li>
-     * <li>{@link #async()}</li>
-     * <li>{@link #start()}</li>
-     * </ol>
-     *
-     * @param runnable runnable to use as task.
-     *
-     * @return finished and registered diorite task.
-     */
-    public static DioriteTask async(final Runnable runnable)
-    {
-        return new TaskBuilder(runnable).async().start();
     }
 
     @Override

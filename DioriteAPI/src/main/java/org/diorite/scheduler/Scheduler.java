@@ -114,7 +114,7 @@ public abstract class Scheduler
      *
      * @return Active workers
      */
-    public abstract List<DioriteWorker> getActiveWorkers();
+    public abstract List<? extends DioriteWorker> getActiveWorkers();
 
     /**
      * Returns a list of all pending tasks. The ordering of the tasks is not
@@ -122,7 +122,7 @@ public abstract class Scheduler
      *
      * @return Active workers
      */
-    public abstract List<DioriteTask> getPendingTasks();
+    public abstract List<? extends DioriteTask>  getPendingTasks();
 
     /**
      * Create task from given builder.

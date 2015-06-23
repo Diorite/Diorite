@@ -55,6 +55,10 @@ public interface DioriteTask
         return this.isSynchronizedTo(Diorite.getServer());
     }
 
+    Synchronizable getSynchronizable();
+
+    String getTaskName();
+
     /**
      * Will attempt to cancel this task.
      */

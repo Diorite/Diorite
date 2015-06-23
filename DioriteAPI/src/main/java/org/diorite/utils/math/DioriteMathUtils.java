@@ -1059,7 +1059,8 @@ public final class DioriteMathUtils
      * If any of trueWords is equals (equalsIgnoreCase) to given string, then method returns ture.<br>
      * If any of falseWords is equals (equalsIgnoreCase) to given string, then method returns false.<br>
      * If given word don't match any words from collections, then method returns null<br>
-     *<br>
+     * <br>
+     *
      * @param str        string to parse.
      * @param trueWords  words that mean "true"
      * @param falseWords words that mean "false"
