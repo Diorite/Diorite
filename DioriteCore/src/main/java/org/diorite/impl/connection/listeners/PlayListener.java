@@ -31,16 +31,12 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
-import org.diorite.impl.world.BlockImpl;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
-import org.diorite.inventory.ClickType;
-import org.diorite.inventory.PlayerInventory;
-import org.diorite.inventory.item.ItemStack;
 
 public class PlayListener implements PacketPlayInListener
 {
@@ -66,7 +62,7 @@ public class PlayListener implements PacketPlayInListener
     public void handle(final PacketPlayInSettings packet)
     {
 //        final byte oldViewDistance = this.player.getViewDistance();
-        this.player.setViewDistance(packet.getViewDistance());
+        this.server.sync(() -> this.player.setViewDistance(packet.getViewDistance()), this.player);
 //        if (oldViewDistance != this.player.getViewDistance())
 //        {
 //            this.player.getPlayerChunks().wantUpdate();
@@ -83,13 +79,13 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInHeldItemSlot packet)
     {
-        this.player.setHeldItemSlot(packet.getSlot());
+        this.server.sync(() -> this.player.setHeldItemSlot(packet.getSlot()), this.player);
     }
 
     @Override
     public void handle(final PacketPlayInPositionLook packet)
     {
-        this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
+        this.server.sync(() -> this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), this.player);
     }
 
     @Override
@@ -101,13 +97,13 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInPosition packet)
     {
-        this.player.setPosition(packet.getX(), packet.getY(), packet.getZ());
+        this.server.sync(() -> this.player.setPosition(packet.getX(), packet.getY(), packet.getZ()), this.player);
     }
 
     @Override
     public void handle(final PacketPlayInLook packet)
     {
-        this.player.setRotation(packet.getYaw(), packet.getPitch());
+        this.server.sync(() -> this.player.setRotation(packet.getYaw(), packet.getPitch()), this.player);
     }
 
     @Override
@@ -134,7 +130,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInAbilities packet)
     {
-        this.player.setAbilities(packet);
+        this.server.sync(() -> this.player.setAbilities(packet), this.player);
     }
 
     @Override
@@ -153,7 +149,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInEntityAction packet)
     {
-        packet.getEntityAction().doAction(this.player, packet.getJumpBoost());
+        this.server.sync(() -> packet.getEntityAction().doAction(this.player, packet.getJumpBoost()), this.player);
     }
 
     @Override
@@ -165,18 +161,21 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInBlockDig packet)
     {
-        if (packet.getAction() == PacketPlayInBlockDig.BlockDigAction.FINISH_DIG)
-        {
-            EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
-        }
-        // TODO: implement
-        // TODO od animacji kopania bedzie osobny event/pipeline
+        this.server.sync(() -> {
+            if (packet.getAction() == PacketPlayInBlockDig.BlockDigAction.FINISH_DIG)
+            {
+                EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
+            }
+
+            // TODO: implement
+            // TODO od animacji kopania bedzie osobny event/pipeline
+        }, this.player);
     }
 
     @Override
     public void handle(final PacketPlayInBlockPlace packet)
     {
-        EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace())));
+        this.server.sync(() -> EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()))), this.player);
     }
 
     @Override
@@ -196,7 +195,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInWindowClick p)
     {
-        EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType()));
+        this.server.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType())), this.player);
     }
 
     public NetworkManager getNetworkManager()
