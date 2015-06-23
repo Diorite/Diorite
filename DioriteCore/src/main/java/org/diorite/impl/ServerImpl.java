@@ -51,6 +51,7 @@ import org.diorite.impl.pipelines.event.chunk.ChunkUnloadPipelineImpl;
 import org.diorite.impl.pipelines.event.input.CommandPipelineImpl;
 import org.diorite.impl.pipelines.event.input.TabCompletePipelineImpl;
 import org.diorite.impl.pipelines.event.player.BlockDestroyPipelineImpl;
+import org.diorite.impl.pipelines.event.player.BlockPlacePipelineImpl;
 import org.diorite.impl.pipelines.event.player.ChatPipelineImpl;
 import org.diorite.impl.pipelines.event.player.InventoryClickPipelineImpl;
 import org.diorite.impl.scheduler.SchedulerImpl;
@@ -81,9 +82,11 @@ import org.diorite.event.pipelines.event.chunk.ChunkUnloadPipeline;
 import org.diorite.event.pipelines.event.input.CommandPipeline;
 import org.diorite.event.pipelines.event.input.TabCompletePipeline;
 import org.diorite.event.pipelines.event.player.BlockDestroyPipeline;
+import org.diorite.event.pipelines.event.player.BlockPlacePipeline;
 import org.diorite.event.pipelines.event.player.ChatPipeline;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
+import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.plugin.Plugin;
@@ -199,6 +202,7 @@ public class ServerImpl implements Server
         EventType.register(PlayerChatEvent.class, ChatPipeline.class, new ChatPipelineImpl());
 
         EventType.register(PlayerBlockDestroyEvent.class, BlockDestroyPipeline.class, new BlockDestroyPipelineImpl());
+        EventType.register(PlayerBlockPlaceEvent.class, BlockPlacePipeline.class, new BlockPlacePipelineImpl());
         EventType.register(PlayerInventoryClickEvent.class, InventoryClickPipeline.class, new InventoryClickPipelineImpl());
 
         EventType.register(ChunkLoadEvent.class, ChunkLoadPipeline.class, new ChunkLoadPipelineImpl());

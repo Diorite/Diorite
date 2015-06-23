@@ -1,5 +1,6 @@
 package org.diorite.impl.pipelines.event.player;
 
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutTransaction;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
@@ -22,12 +23,14 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             evt.getPlayer().sendMessage(evt.toString());
             final boolean accepted = this.handleClick(evt);
+
+            ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayOutTransaction(evt.getWindowId(), evt.getActionNumber(), accepted));
+
             if (!accepted)
             {
                 System.out.println("Rejected inventory click action from player " + evt.getPlayer().getName());
-                evt.getPlayer().getInventory().update();
+                //evt.getPlayer().getInventory().update();
             }
-            // TODO Send result packet
         });
     }
 

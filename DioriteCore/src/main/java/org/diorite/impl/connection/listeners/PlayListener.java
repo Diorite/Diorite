@@ -31,10 +31,12 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
+import org.diorite.impl.world.BlockImpl;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
+import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
 import org.diorite.inventory.PlayerInventory;
@@ -174,8 +176,7 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInBlockPlace packet)
     {
-        //   ChunkMultithreadedHandler.add(new BlockPlaceAction(packet.getLocation(), , this.player));
-        // TODO: implement
+        EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace())));
     }
 
     @Override

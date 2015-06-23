@@ -114,7 +114,7 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
         {
             return null;
         }
-        return this.content.get(this.holder.getHeldItemSlot());
+        return this.getHotbarInventory().getContents().get(this.holder.getHeldItemSlot());
     }
 
     @Override
