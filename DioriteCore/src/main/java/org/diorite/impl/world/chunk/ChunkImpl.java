@@ -34,15 +34,32 @@ import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk
 {
-    private final ChunkPos pos;
-    private final int[]    heightMap;
-    private final AtomicBoolean populated = new AtomicBoolean(false);
-    private byte[]          biomes;
-    private ChunkPartImpl[] chunkParts; // size of 16, parts can be null
+    protected volatile Thread     lastTickThread;
+    protected final ChunkPos pos;
+    protected final int[]    heightMap;
+    protected final AtomicBoolean populated = new AtomicBoolean(false);
+    protected byte[]          biomes;
+    protected ChunkPartImpl[] chunkParts; // size of 16, parts can be null
 
-    private final Map<BlockLocation, TileEntityImpl> tileEntities = new HashMap<>(10);
-    private final Set<EntityImpl>                    entities     = new HashSet<>(4);
+    protected final Map<BlockLocation, TileEntityImpl> tileEntities = new HashMap<>(10);
+    protected final Set<EntityImpl>                    entities     = new HashSet<>(4);
 
+    @Override
+    public Thread getLastTickThread()
+    {
+        return this.lastTickThread;
+    }
+
+    @Override
+    public boolean isValidSynchronizable()
+    {
+        return this.isLoaded();
+    }
+
+    public void setLastTickThread(final Thread lastTickThread)
+    {
+        this.lastTickThread = lastTickThread;
+    }
 
     public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts, final int[] heightMap)
     {

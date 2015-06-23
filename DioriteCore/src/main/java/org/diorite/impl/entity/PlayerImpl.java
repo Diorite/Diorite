@@ -68,6 +68,19 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         this.inventory = new PlayerInventoryImpl(this, 0); // 0 because this is owner of this inventory, and we need this to update
     }
 
+    @Override
+    public boolean isValidSynchronizable()
+    {
+        return this.isOnline() && super.isValidSynchronizable();
+    }
+
+    @Override
+    public void doTick(final int tps)
+    {
+        super.doTick(tps);
+        this.playerChunks.doTick(tps);
+    }
+
     public GameProfile getGameProfile()
     {
         return this.gameProfile;
@@ -303,26 +316,6 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         return this.gameProfile.getId();
     }
 
-//    @Override
-//    public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
-//    {
-////        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
-////        {
-////            this.playerChunks.wantUpdate();
-////        }
-//        super.move(modX, modY, modZ, modYaw, modPitch);
-//    }
-
-//    @Override
-//    public void setPosition(final double modX, final double modY, final double modZ)
-//    {
-////        if (! ChunkPos.fromWorldPos((int) this.x, (int) this.z, this.world).equals(ChunkPos.fromWorldPos((int) this.lastX, (int) this.lastZ, this.world)))
-////        {
-////            this.playerChunks.wantUpdate();
-////        }
-//        super.setPosition(modX, modY, modZ);
-//    }
-
     @Override
     public String toString()
     {
@@ -362,5 +355,10 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public void setCursorItem(final ItemStack cursorItem)
     {
         this.cursorItem = cursorItem;
+    }
+
+    public void onLogout()
+    {
+        this.world.getChunkAt(this.getLocation().getChunkPos()).getEntities().remove(this);
     }
 }

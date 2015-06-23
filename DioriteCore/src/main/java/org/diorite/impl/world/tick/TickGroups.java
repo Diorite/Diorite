@@ -84,6 +84,8 @@ public class TickGroups implements Tickable
                 try
                 {
                     tickGroup.doTick(tps);
+                    this.server.runScheduler(false);
+                    this.server.runSync();
                 } finally
                 {
                     latch.countDown();
