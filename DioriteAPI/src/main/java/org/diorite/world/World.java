@@ -14,17 +14,38 @@ import org.diorite.Loc;
 import org.diorite.Particle;
 import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
+import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
 
 public interface World
 {
-//    void submitAction(ChunkPos chunkToSync, Runnable runnable);
-//
-//    void submitAction(Chunk chunkToSync, Runnable runnable);
-//
-//    void save();
-//
+    void loadChunk(Chunk chunk);
+
+    void loadChunk(int x, int z);
+
+    void loadChunk(ChunkPos pos);
+
+    boolean loadChunk(int x, int z, boolean generate);
+
+    boolean unloadChunk(Chunk chunk);
+
+    boolean unloadChunk(int x, int z);
+
+    boolean unloadChunk(int x, int z, boolean save);
+
+    boolean unloadChunk(int x, int z, boolean save, boolean safe);
+
+    boolean regenerateChunk(int x, int z);
+
+    boolean refreshChunk(int x, int z);
+
+    boolean isChunkLoaded(Chunk chunk);
+
+    boolean isChunkLoaded(int x, int z);
+
+    boolean isChunkInUse(int x, int z);
 
     /**
      * @return folder with world data (if used).
@@ -81,6 +102,10 @@ public interface World
 
     void setGenerator(WorldGenerator generator);
 
+    Chunk getChunkAt(int x, int z);
+
+    Chunk getChunkAt(ChunkPos pos);
+
     Block getBlock(int x, int y, int z);
 
     int getHighestBlockY(int x, int z);
@@ -115,6 +140,16 @@ public interface World
     Biome getBiome(int x, int y, int z);
 
     void setBiome(int x, int y, int z, Biome biome); // y is ignored, added for future possible changes.
+
+    boolean hasSkyLight();
+
+    boolean isNoUpdateMode();
+
+    void setNoUpdateMode(boolean noUpdateMode);
+
+    byte getForceLoadedRadius();
+
+    void setForceLoadedRadius(byte forceLoadedRadius);
 
     boolean isAutoSave();
 

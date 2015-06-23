@@ -10,10 +10,23 @@ import org.diorite.world.Block;
  * Object supported by default: <br>
  * - {@link org.diorite.entity.Entity} <br>
  * - {@link org.diorite.world.chunk.Chunk} <br>
- * - {@link org.diorite.inventory.Inventory} <br>
  * - {@link org.diorite.Server} (default value, task will be executed before world ticking) <br>
  * Also {@link org.diorite.world.Block} is partially supproted by scheduler, but {@link Block#getChunk()} is used.
  */
 public interface Synchronizable
 {
+    /**
+     * Method need return last used tick thrad.
+     *
+     * @return last used tick thread.
+     */
+    Thread getLastTickThread();
+
+    /**
+     * Method should check if task sync to this object should
+     * be unregistred, like after player exit.
+     *
+     * @return true if task don't need to be unregistred.
+     */
+    boolean isValidSynchronizable();
 }
