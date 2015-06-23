@@ -9,10 +9,10 @@ import org.diorite.inventory.item.ItemStack;
 
 public class PlayerInventoryClickEvent extends PlayerEvent
 {
-    private final int windowId;
-    private final int clickedSlot;
-    private final short actionNumber;
-    private final ClickType clickType;
+    private int windowId;
+    private int clickedSlot;
+    private short actionNumber;
+    private ClickType clickType;
 
     /**
      * Construct new player event.
@@ -37,14 +37,19 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         return this.windowId;
     }
 
+    public void setWindowId(final int windowId)
+    {
+        this.windowId = windowId;
+    }
+
     public int getClickedSlot()
     {
         return this.clickedSlot;
     }
 
-    public ItemStack getClickedItem()
+    public void setClickedSlot(final int clickedSlot)
     {
-        return this.getPlayer().getInventory().getItem(this.clickedSlot);
+        this.clickedSlot = clickedSlot;
     }
 
     public short getActionNumber()
@@ -52,9 +57,19 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         return this.actionNumber;
     }
 
+    public void setActionNumber(final short actionNumber)
+    {
+        this.actionNumber = actionNumber;
+    }
+
     public ClickType getClickType()
     {
         return this.clickType;
+    }
+
+    public void setClickType(final ClickType clickType)
+    {
+        this.clickType = clickType;
     }
 
     @Override
