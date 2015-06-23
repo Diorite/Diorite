@@ -9,9 +9,11 @@ import java.net.UnknownHostException;
 import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Predicate;
 import java.util.logging.Handler;
@@ -88,6 +90,7 @@ import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.plugin.Plugin;
 import org.diorite.scheduler.Scheduler;
+import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.world.World;
 import org.diorite.world.WorldsManager;
@@ -100,9 +103,10 @@ public class ServerImpl implements Server
 {
     private static ServerImpl instance;
 
-    protected final CommandMapImpl commandMap = new CommandMapImpl();
-    protected final TickGroups     ticker     = new TickGroups(this);
-    protected final Scheduler      scheduler  = new SchedulerImpl();
+    protected final CommandMapImpl                        commandMap = new CommandMapImpl();
+    protected final TickGroups                            ticker     = new TickGroups(this);
+    protected final SchedulerImpl                         scheduler  = new SchedulerImpl();
+    protected final ConcurrentLinkedQueue<SimpleSyncTask> syncQueue  = new ConcurrentLinkedQueue<>();
     protected final Thread      mainThread;
     protected final InputThread inputThread;
     protected final String      hostname;
@@ -133,6 +137,48 @@ public class ServerImpl implements Server
     public void setCompressionThreshold(final int compressionThreshold)
     {
         this.config.setNetworkCompressionThreshold(compressionThreshold);
+    }
+
+    private interface SimpleSyncTask extends Runnable
+    {
+        Synchronizable getSynchronizable();
+    }
+
+    public void sync(final Runnable runnable, final Synchronizable sync)
+    {
+        this.syncQueue.add(new SimpleSyncTask()
+        {
+            @Override
+            public Synchronizable getSynchronizable()
+            {
+                return sync;
+            }
+
+            @Override
+            public void run()
+            {
+                runnable.run();
+            }
+        });
+    }
+
+    public void sync(final Runnable runnable)
+    {
+        this.sync(runnable, this);
+    }
+
+    public void runSync()
+    {
+        for (final Iterator<SimpleSyncTask> it = this.syncQueue.iterator(); it.hasNext(); )
+        {
+            final SimpleSyncTask st = it.next();
+            //noinspection ObjectEquality
+            if (st.getSynchronizable().getLastTickThread() == Thread.currentThread())
+            {
+                st.run();
+                it.remove();
+            }
+        }
     }
 
     @Override
@@ -651,6 +697,11 @@ public class ServerImpl implements Server
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
     }
 
+    public void runScheduler(final boolean withAsync)
+    {
+        this.scheduler.tick(this.currentTick, withAsync);
+    }
+
     public void run()
     {
         Arrays.fill(this.recentTps, (double) DEFAULT_TPS);
@@ -685,6 +736,10 @@ public class ServerImpl implements Server
                     }
                     lastTick = curTime;
 
+                    this.runScheduler(true);
+
+                    this.runSync();
+
                     this.playersManager.doTick(this.tps);
                     this.ticker.doTick(this.tps);
                 }
@@ -700,6 +755,18 @@ public class ServerImpl implements Server
         {
             this.onStop();
         }
+    }
+
+    @Override
+    public Thread getLastTickThread()
+    {
+        return this.mainThread;
+    }
+
+    @Override
+    public boolean isValidSynchronizable()
+    {
+        return this.isRunning;
     }
 
     private static double calcTps(final double avg, final double exp, final double tps)

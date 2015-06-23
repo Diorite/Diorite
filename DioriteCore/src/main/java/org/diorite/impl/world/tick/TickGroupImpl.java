@@ -31,7 +31,9 @@ public interface TickGroupImpl extends Tickable, TickGroup
 
     default void tickChunk(final ChunkImpl chunk, final int tps)
     {
+        chunk.setLastTickThread(Thread.currentThread());
         chunk.getTileEntities().values().forEach(t -> t.doTick(tps));
+        chunk.getEntities().forEach(e -> e.doTick(tps));
         // Test code, more gooold!
         final Random rand = chunk.getWorld().getRandom();
         for (int i = 0; i < Chunk.CHUNK_PART_HEIGHT; i++)

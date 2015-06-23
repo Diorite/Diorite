@@ -5,59 +5,125 @@ import java.lang.ref.WeakReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
 import org.diorite.Diorite;
 import org.diorite.plugin.Plugin;
 import org.diorite.scheduler.DioriteTask;
 import org.diorite.scheduler.Synchronizable;
 
-public class DioriteTaskImpl implements DioriteTask
+public class DioriteTaskImpl implements DioriteTask, Runnable
 {
-    private final int                           taskId;
-    private final Plugin                        owner;
-    private final boolean                       async;
-    private final boolean                       isRealTime;
-    private final long                          delay;
-    private final long                          period;
-    private final WeakReference<Synchronizable> synchronizable;
+    protected static final int STATE_SINGLE      = - 1;
+    protected static final int STATE_CANCEL      = - 2;
+    protected static final int STATE_FUTURE      = - 3;
+    protected static final int STATE_FUTURE_DONE = - 4;
 
-    public DioriteTaskImpl(final int taskId, final Plugin owner, final boolean async, final boolean isRealTime, final long delay, final long period, final WeakReference<Synchronizable> synchronizable)
+    private volatile DioriteTaskImpl next = null;
+    private volatile long                          period;
+    private          long                          nextRun;
+    private final    String                        name;
+    private final    Runnable                      task;
+    private final    Plugin                        plugin;
+    private final    boolean                       safeMode;
+    private final    WeakReference<Synchronizable> synchronizable;
+    private final    int                           id;
+
+    DioriteTaskImpl(final String name)
     {
-        this.taskId = taskId;
-        this.owner = owner;
-        this.async = async;
-        this.isRealTime = isRealTime;
-        this.delay = delay;
+        this(name, null, null, null, false, - 1, STATE_SINGLE);
+    }
+
+    DioriteTaskImpl(final String name, final Runnable task)
+    {
+        this(name, null, task, null, false, - 1, STATE_SINGLE);
+    }
+
+    DioriteTaskImpl(final Runnable task)
+    {
+        this(task.getClass().getName() + "@" + System.identityHashCode(task), null, task, null, false, - 1, STATE_SINGLE);
+    }
+
+    DioriteTaskImpl(final String name, final Plugin plugin, final Runnable task, final Synchronizable synchronizable, final boolean safeMode, final int id, final long period)
+    {
+        this.name = name;
+        this.plugin = plugin;
+        this.task = task;
+        this.safeMode = safeMode;
+        this.synchronizable = new WeakReference<>(synchronizable);
+        this.id = id;
         this.period = period;
-        this.synchronizable = synchronizable;
     }
 
     @Override
-    public int getTaskId()
+    public final int getTaskId()
     {
-        return this.taskId;
+        return this.id;
     }
 
     @Override
-    public Plugin getOwner()
+    public final Plugin getOwner()
     {
-        return this.owner;
+        return this.plugin;
     }
 
     @Override
     public boolean isAsync()
     {
-        return this.async;
+        return false;
     }
 
-    public boolean isRealTime()
+    @Override
+    public boolean isSynchronizedTo(final Synchronizable obj)
     {
-        return this.isRealTime;
+        return ! this.isAsync() && obj.equals(this.checkReference());
     }
 
-    public long getDelay()
+    @Override
+    public boolean isSynchronizedTo(final Class<? extends Synchronizable> clazz)
     {
-        return this.delay;
+        if (this.isAsync())
+        {
+            return false;
+        }
+        final Synchronizable sync = this.checkReference();
+        return (sync != null) && clazz.isInstance(sync);
+    }
+
+    @Override
+    public Synchronizable getSynchronizable()
+    {
+        return this.checkReference();
+    }
+
+    private Synchronizable checkReference()
+    {
+        final Synchronizable sync = this.synchronizable.get();
+        if (this.safeMode)
+        {
+            if (sync == null)
+            {
+                this.cancel();
+                return null;
+            }
+            if (! sync.isValidSynchronizable())
+            {
+                this.synchronizable.clear();
+                this.cancel();
+                return null;
+            }
+        }
+        return sync;
+    }
+
+    @Override
+    public void run()
+    {
+        this.task.run();
+    }
+
+    @Override
+    public String getTaskName()
+    {
+        return this.name;
     }
 
     public long getPeriod()
@@ -65,49 +131,52 @@ public class DioriteTaskImpl implements DioriteTask
         return this.period;
     }
 
-    public WeakReference<Synchronizable> getWeakSynchronizable()
+    void setPeriod(final long period)
     {
-        return this.synchronizable;
+        this.period = period;
     }
 
-    public Synchronizable getSynchronizable()
+    public long getNextRun()
     {
-        return this.checkReference();
+        return this.nextRun;
     }
 
-    @Override
-    public boolean isSynchronizedTo(final Synchronizable obj)
+    void setNextRun(final long nextRun)
     {
-        return obj.equals(this.checkReference());
+        this.nextRun = nextRun;
     }
 
-    @Override
-    public boolean isSynchronizedTo(final Class<? extends Synchronizable> clazz)
+    DioriteTaskImpl getNext()
     {
-        final Synchronizable sync = this.checkReference();
-        return (sync != null) && clazz.isInstance(sync);
+        return this.next;
     }
 
-    private Synchronizable checkReference()
+    void setNext(final DioriteTaskImpl next)
     {
-        final Synchronizable sync = this.synchronizable.get();
-        if (sync == null)
-        {
-            Main.debug("Task: " + this.taskId + " cancelled due to empty weak reference.");
-            this.cancel();
-        }
-        return sync;
+        this.next = next;
+    }
+
+    public Runnable getTask()
+    {
+        return this.task;
     }
 
     @Override
     public void cancel()
     {
-        Diorite.getScheduler().cancelTask(this.taskId);
+        Diorite.getScheduler().cancelTask(this.id);
+    }
+
+    public boolean forceCancel()
+    {
+        this.period = STATE_CANCEL;
+        return true;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("taskId", this.taskId).append("owner", this.owner).append("async", this.async).append("isRealTime", this.isRealTime).append("delay", this.delay).append("period", this.period).append("synchronizable", this.synchronizable).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("period", this.period).append("nextRun", this.nextRun).append("task", this.task).append("plugin", this.plugin).append("synchronizable", this.synchronizable).append("id", this.id).toString();
     }
 }
+

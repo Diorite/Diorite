@@ -28,7 +28,6 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficult
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.impl.inventory.item.ItemMetaImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -39,6 +38,7 @@ import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
+import org.diorite.scheduler.TaskBuilder;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
 
@@ -99,6 +99,11 @@ public class PlayersManagerImpl implements Tickable
         player.getInventory().getFullEqInventory().add(new ItemStack(Material.DIAMOND_ORE));
         player.getInventory().setItem(18, new ItemStack(Material.EMERALD_ORE, 7));
         player.getInventory().update();
+
+
+        // First plugin in diorite! and it is lambda... :D
+        TaskBuilder.start(() -> "Test", () -> player.sendMessage("Task test! ;) " + player.getLocation())).syncTo(player).delay(20).repeated().start(200);
+//        TaskBuilder.start(() -> "Test", ()->player.sendMessage("Task test-2! ;) "+System.currentTimeMillis())).realTime().delay(1500).repeated().start(535);
         /*EntityMinecartRideable entity = new EntityMinecartRideable(4, 180, -4);
 
         player.getNetworkManager().sendPacket(new PacketPlayOutSpawnEntity(entity));
@@ -128,26 +133,26 @@ public class PlayersManagerImpl implements Tickable
     {
         this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player.getGameProfile()));
         this.players.remove(player.getUniqueID());
+        player.onLogout();
     }
 
-    public void playerQuit(final UUID uuid)
-    {
-        final PlayerImpl player = this.players.remove(uuid);
-        if (player != null)
-        {
-            this.playerQuit(player);
-        }
-        else
-        {
-            this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, new GameProfile(uuid, null))); // name isn't needed when removing player
-        }
-    }
+//    public void playerQuit(final UUID uuid)
+//    {
+//        final PlayerImpl player = this.players.remove(uuid);
+//        if (player != null)
+//        {
+//            this.playerQuit(player);
+//        }
+//        else
+//        {
+//            this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, new GameProfile(uuid, null))); // name isn't needed when removing player
+//        }
+//    }
 
     @Override
     public void doTick(final int tps)
     {
         final long curr = System.currentTimeMillis();
-        this.players.values().parallelStream().forEach(p -> p.getPlayerChunks().doTick(tps));
         if ((curr - this.lastKeepAlive) > this.keepAliveTimer)
         {
             this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId())));
