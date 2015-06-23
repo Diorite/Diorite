@@ -1,5 +1,6 @@
 package org.diorite.impl.entity;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,9 +33,9 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     private            float      lastYaw;
     private            float      lastPitch;
 
-    protected EntityImpl(final ServerImpl server, final int id, final ImmutableLocation location)
+    protected EntityImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
     {
-        super(null);
+        super(uuid);
         this.server = server;
         this.id = id;
         this.x = location.getX();
@@ -155,18 +156,18 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     }
 
     @SuppressWarnings("ObjectEquality")
-    private void updateChunk(final ChunkImpl chunk, final ChunkImpl newChunk)
+    public void updateChunk(final ChunkImpl chunk, final ChunkImpl newChunk)
     {
         if (chunk == null)
         {
-            newChunk.getEntities().add(this);
+            newChunk.addEntity(this);
         }
         else if (chunk != newChunk)
         {
             synchronized (this)
             {
-                chunk.getEntities().remove(this);
-                newChunk.getEntities().add(this);
+                chunk.removeEntity(this);
+                newChunk.addEntity(this);
             }
         }
     }

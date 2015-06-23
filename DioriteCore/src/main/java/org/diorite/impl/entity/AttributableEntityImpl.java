@@ -19,9 +19,9 @@ public abstract class AttributableEntityImpl extends EntityImpl implements Attri
 {
     protected final AttributeStorage attributes = new AttributeStorageImpl(this);
 
-    public AttributableEntityImpl(final ServerImpl server, final int id, final ImmutableLocation location)
+    public AttributableEntityImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
     {
-        super(server, id, location);
+        super(uuid, server, id, location);
     }
 
     @Override

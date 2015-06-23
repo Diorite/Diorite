@@ -1,6 +1,6 @@
 package org.diorite.impl.inventory;
 
-import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -20,9 +20,10 @@ import org.diorite.inventory.item.ItemStackArray;
 
 public class PlayerInventoryImpl extends InventoryImpl<Player> implements PlayerInventory
 {
-    private final int windowId;
+    private final int    windowId;
     private final Player holder;
-    private final ItemStackArray content = ItemStackArray.create(InventoryType.PLAYER.getSize());
+    private final ItemStackArray             content    = ItemStackArray.create(InventoryType.PLAYER.getSize());
+    private final AtomicReference<ItemStack> cursorItem = new AtomicReference<>();
 
     public PlayerInventoryImpl(final Player holder, final int windowId)
     {
@@ -33,6 +34,24 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
         {
             this.viewers.add(holder);
         }
+    }
+
+    @Override
+    public ItemStack getCursorItem()
+    {
+        return this.cursorItem.get();
+    }
+
+    // should be in API too?
+    public void setCursorItem(final ItemStack cursorItem)
+    {
+        this.cursorItem.set(cursorItem);
+    }
+
+    // atomic
+    public boolean setCursorItem(final ItemStack excepted, final ItemStack cursorItem)
+    {
+        return this.cursorItem.compareAndSet(excepted, cursorItem);
     }
 
     @Override

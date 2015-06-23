@@ -300,8 +300,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
             this.server.getServerConnection().remove(this);
             return;
         }
-        this.close(new TranslatableComponent("disconnect.endOfStream"));
-        this.server.getServerConnection().remove(this);
+        this.server.sync(() -> {
+            this.close(new TranslatableComponent("disconnect.endOfStream"));
+            this.server.getServerConnection().remove(this);
+        });
     }
 
     public BaseComponent getDisconnectMessage()
@@ -395,36 +397,42 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
 
     private volatile boolean closed = false;
 
-    public synchronized void close(final BaseComponent baseComponent, final boolean wasSafe)
+    public void close(final BaseComponent baseComponent, final boolean wasSafe)
     {
         if (this.closed)
         {
             return;
         }
-        this.closed = true;
-        this.preparing = false;
-        this.packetQueue.clear();
-        if (! wasSafe)
-        {
-            if (this.packetListener instanceof PlayListener)
+        this.server.sync(() -> {
+            if (this.closed)
             {
-                final PlayListener listener = (PlayListener) this.packetListener;
-                if (this.server.getPlayersManager().getRawPlayers().containsValue(listener.getPlayer()))
+                return;
+            }
+            this.closed = true;
+            this.preparing = false;
+            this.packetQueue.clear();
+            if (! wasSafe)
+            {
+                if (this.packetListener instanceof PlayListener)
                 {
-                    listener.disconnect(baseComponent);
+                    final PlayListener listener = (PlayListener) this.packetListener;
+                    if (this.server.getPlayersManager().getRawPlayers().containsValue(listener.getPlayer()))
+                    {
+                        listener.disconnect(baseComponent);
+                    }
                 }
             }
-        }
-        if (this.channel.isOpen())
-        {
-            this.channel.close();
-            this.disconnectMessage = baseComponent;
-        }
+            if (this.channel.isOpen())
+            {
+                this.channel.close();
+                this.disconnectMessage = baseComponent;
+            }
+        });
     }
 
     public void close(final BaseComponent baseComponent)
     {
-        this.close(baseComponent, false);
+        this.server.sync(() -> this.close(baseComponent, false));
     }
 
     public PacketListener getPacketListener()

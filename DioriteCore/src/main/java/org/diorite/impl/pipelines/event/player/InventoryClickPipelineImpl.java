@@ -1,12 +1,13 @@
 package org.diorite.impl.pipelines.event.player;
 
+import java.util.Objects;
+
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutTransaction;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.event.EventPriority;
+import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
-import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
@@ -15,60 +16,53 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
     @Override
     public void reset_()
     {
-        this.addBefore(EventPriority.NORMAL, "Diorite|HandleInv", (evt, pipeline) ->
-        {
+        this.addLast("Diorite|Handle", (evt, pipeline) -> {
             if (evt.isCancelled())
             {
+                ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayOutTransaction(evt.getWindowId(), evt.getActionNumber(), false));
                 return;
             }
             evt.getPlayer().sendMessage(evt.toString());
+            System.out.println(evt.toString());
             final boolean accepted = this.handleClick(evt);
 
             ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayOutTransaction(evt.getWindowId(), evt.getActionNumber(), accepted));
 
-            if (!accepted)
+            if (! accepted)
             {
                 System.out.println("Rejected inventory click action from player " + evt.getPlayer().getName());
             }
         });
     }
 
-    @SuppressWarnings("ObjectEquality")
     protected boolean handleClick(final PlayerInventoryClickEvent e)
     {
         final PlayerImpl player = (PlayerImpl) e.getPlayer();
         final ClickType ct = e.getClickType();
-        final ItemStack cur = e.getPlayer().getCursor();
+        final ItemStack cursor = e.getCursorItem();
         final int slot = e.getClickedSlot();
-        final PlayerInventory inv = player.getInventory();
+        final PlayerInventoryImpl inv = player.getInventory();
 
-        if (ct == ClickType.MOUSE_LEFT)
+        final ItemStack clicked = e.getClickedItem();
+        if (Objects.equals(ct, ClickType.MOUSE_LEFT))
         {
-            if (cur == null)
+            if (cursor == null)
             {
-                if (inv.getItem(slot) != null)
+                if ((clicked != null) && (! inv.replace(slot, clicked, null) || ! inv.setCursorItem(null, clicked)))
                 {
-                    player.setCursorItem(inv.getItem(slot));
-                    inv.setItem(slot, null);
+                    return false; // item changed before we made own change
                 }
             }
             else
             {
-                if (inv.getItem(slot) == null)
+                if (! inv.replace(slot, clicked, cursor) || ! inv.setCursorItem(cursor, clicked))
                 {
-                    inv.setItem(slot, player.getCursor());
-                    player.setCursorItem(null);
-                }
-                else
-                {
-                    final ItemStack temp = inv.getItem(slot);
-                    inv.setItem(slot, player.getCursor());
-                    player.setCursorItem(temp);
+                    return false; // item changed before we made own change
                 }
             }
         }
-        // TODO all other click types
-        else
+        // TODO all other click types, and remember about throwing item on cursor to ground when closing eq
+        else// if (Objects.equals(ct, ClickType.MOUSE))
         {
             return false;
         }

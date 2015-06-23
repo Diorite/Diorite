@@ -1,11 +1,10 @@
 package org.diorite.impl.world.chunk;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
@@ -24,6 +23,7 @@ import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.collections.arrays.NibbleArray;
+import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.concurrent.ParallelUtils;
 import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.Biome;
@@ -34,15 +34,15 @@ import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkImpl implements Chunk
 {
-    protected volatile Thread     lastTickThread;
-    protected final ChunkPos pos;
-    protected final int[]    heightMap;
+    protected volatile Thread   lastTickThread;
+    protected final    ChunkPos pos;
+    protected final    int[]    heightMap;
     protected final AtomicBoolean populated = new AtomicBoolean(false);
     protected byte[]          biomes;
     protected ChunkPartImpl[] chunkParts; // size of 16, parts can be null
 
-    protected final Map<BlockLocation, TileEntityImpl> tileEntities = new HashMap<>(10);
-    protected final Set<EntityImpl>                    entities     = new HashSet<>(4);
+    protected final Map<BlockLocation, TileEntityImpl> tileEntities = new ConcurrentHashMap<>(10, .2f, 2);
+    protected final Set<EntityImpl>                    entities     = new ConcurrentSet<>(4, .3f, 2);
 
     @Override
     public Thread getLastTickThread()
@@ -169,6 +169,16 @@ public class ChunkImpl implements Chunk
     public Set<EntityImpl> getEntities()
     {
         return this.entities;
+    }
+
+    public boolean removeEntity(final EntityImpl entity)
+    {
+        return this.entities.remove(entity);
+    }
+
+    public boolean addEntity(final EntityImpl entity)
+    {
+        return this.entities.add(entity);
     }
 
     @Override

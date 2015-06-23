@@ -149,6 +149,12 @@ public class ServerImpl implements Server
 
     public void sync(final Runnable runnable, final Synchronizable sync)
     {
+        //noinspection ObjectEquality
+        if (Thread.currentThread() == sync.getLastTickThread())
+        {
+            runnable.run();
+            return;
+        }
         this.syncQueue.add(new SimpleSyncTask()
         {
             @Override
@@ -167,6 +173,12 @@ public class ServerImpl implements Server
 
     public void sync(final Runnable runnable)
     {
+        //noinspection ObjectEquality
+        if (Thread.currentThread() == this.mainThread)
+        {
+            runnable.run();
+            return;
+        }
         this.sync(runnable, this);
     }
 

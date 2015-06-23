@@ -64,7 +64,7 @@ public class PlayersManagerImpl implements Tickable
 
         final PlayerImpl player = new PlayerImpl(this.server, EntityImpl.ENTITY_ID.getAndIncrement(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
         this.players.put(gameProfile.getId(), player);
-//        player.getWorld().addEntity(player);
+        player.updateChunk(null, player.getChunk());
         return player;
     }
 

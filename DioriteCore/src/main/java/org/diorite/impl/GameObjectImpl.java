@@ -9,7 +9,7 @@ import org.diorite.GameObject;
 
 public abstract class GameObjectImpl implements GameObject
 {
-    protected UUID uniqueID;
+    protected final UUID uniqueID;
 
     public GameObjectImpl(final UUID uuid)
     {
@@ -19,22 +19,7 @@ public abstract class GameObjectImpl implements GameObject
     @Override
     public UUID getUniqueID()
     {
-        if (this.uniqueID == null)
-        {
-            this.uniqueID = UUID.randomUUID();
-        }
         return this.uniqueID;
-    }
-
-    public void setUniqueID(final UUID uniqueID)
-    {
-        this.uniqueID = uniqueID;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return (this.uniqueID != null) ? this.uniqueID.hashCode() : 0;
     }
 
     @Override
@@ -51,8 +36,14 @@ public abstract class GameObjectImpl implements GameObject
 
         final GameObjectImpl that = (GameObjectImpl) o;
 
-        return ! ((this.uniqueID != null) ? ! this.uniqueID.equals(that.uniqueID) : (that.uniqueID != null));
+        return this.uniqueID.equals(that.uniqueID);
 
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.uniqueID.hashCode();
     }
 
     @Override

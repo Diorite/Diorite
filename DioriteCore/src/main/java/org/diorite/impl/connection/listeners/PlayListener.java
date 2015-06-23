@@ -211,18 +211,21 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void disconnect(final BaseComponent message)
     {
-        this.server.getPlayersManager().playerQuit(this.player);
+        final PlayerImpl player = this.player;
+        this.server.sync(() -> {
+            this.server.getPlayersManager().playerQuit(player);
 
-        this.networkManager.sendPacket(new PacketPlayOutDisconnect(message));
-        this.networkManager.close(message, true);
-        this.server.getServerConnection().remove(this.networkManager);
+            this.networkManager.sendPacket(new PacketPlayOutDisconnect(message));
+            this.networkManager.close(message, true);
+            this.server.getServerConnection().remove(this.networkManager);
 
-        this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.player.getName() + "&7&l left from the server!");
-        this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.player.getName() + "&7 left from the server!");
+            this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l left from the server!");
+            this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 left from the server!");
 //        this.server.sendConsoleSimpleColoredMessage("&3" + this.player.getName() + " &7left the server. (" + message.toLegacyText() + "&7)");
 
 //        this.player.getWorld().removeEntity(this.player); // TODO re-add, or something
-        // TODO: implement
+            // TODO: implement
+        });
     }
 
     @Override

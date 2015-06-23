@@ -34,33 +34,29 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
-import org.diorite.inventory.PlayerInventory;
-import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.pack.IntsToLong;
 
-public class PlayerImpl extends AttributableEntityImpl implements Player
+public class PlayerImpl extends LivingEntityImpl implements Player
 {
     // TODO: move this
     private static final AttributeModifier tempSprintMod = new AttributeModifierImpl(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE);
-    protected final GameProfile      gameProfile;
-    protected final NetworkManager   networkManager;
-    protected final PlayerChunksImpl playerChunks;
-    protected       boolean          isCrouching;
-    protected       boolean          isSprinting;
-    protected       byte             viewDistance;
-    protected       byte             renderDistance;
-    protected       GameMode         gameMode;
-    protected       PlayerInventory  inventory;
-    protected       ItemStack        cursorItem;
+    protected final GameProfile         gameProfile;
+    protected final NetworkManager      networkManager;
+    protected final PlayerChunksImpl    playerChunks;
+    protected       boolean             isCrouching;
+    protected       boolean             isSprinting;
+    protected       byte                viewDistance;
+    protected       byte                renderDistance;
+    protected       GameMode            gameMode;
+    protected       PlayerInventoryImpl inventory;
 
     protected PacketPlayOutAbilities abilities = new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
     // TODO: add saving/loading data to/from NBT
     public PlayerImpl(final ServerImpl server, final int id, final GameProfile gameProfile, final NetworkManager networkManager, final ImmutableLocation location)
     {
-        super(server, id, location);
+        super(gameProfile.getId(), server, id, location);
         this.gameProfile = gameProfile;
-        this.uniqueID = gameProfile.getId();
         this.networkManager = networkManager;
         this.renderDistance = server.getRenderDistance();
         this.gameMode = this.world.getDefaultGameMode();
@@ -78,7 +74,10 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     public void doTick(final int tps)
     {
         super.doTick(tps);
-        this.playerChunks.doTick(tps);
+        if (this.playerChunks != null) // sometimes it is null on first tick o.O
+        {
+            this.playerChunks.doTick(tps);
+        }
     }
 
     public GameProfile getGameProfile()
@@ -134,7 +133,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     @Override
     public void kick(final BaseComponent s)
     {
-        this.networkManager.close(s, false);
+        this.server.sync(() -> this.networkManager.close(s, false));
     }
 
     @Override
@@ -329,7 +328,7 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
     }
 
     @Override
-    public PlayerInventory getInventory()
+    public PlayerInventoryImpl getInventory()
     {
         return this.inventory;
     }
@@ -346,19 +345,8 @@ public class PlayerImpl extends AttributableEntityImpl implements Player
         this.inventory.update(this);
     }
 
-    @Override
-    public ItemStack getCursor()
-    {
-        return this.cursorItem;
-    }
-
-    public void setCursorItem(final ItemStack cursorItem)
-    {
-        this.cursorItem = cursorItem;
-    }
-
     public void onLogout()
     {
-        this.world.getChunkAt(this.getLocation().getChunkPos()).getEntities().remove(this);
+        this.world.getChunkAt(this.getLocation().getChunkPos()).removeEntity(this);
     }
 }
