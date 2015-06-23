@@ -9,19 +9,22 @@ import org.diorite.inventory.item.ItemStack;
 
 public class PlayerInventoryClickEvent extends PlayerEvent
 {
-    private int windowId;
-    private int clickedSlot;
-    private short actionNumber;
-    private ClickType clickType;
+    protected final int       windowId;
+    protected final int       clickedSlot;
+    protected final short     actionNumber;
+    protected final ClickType clickType;
+
+    protected final ItemStack clickedItem;
+    protected final ItemStack cursorItem;
 
     /**
      * Construct new player event.
      *
-     * @param player player related to event, can't be null.
-     * @param actionNumber
-     * @param windowId
-     * @param clickedSlot
-     * @param clickType
+     * @param player       player related to event, can't be null.
+     * @param actionNumber action number send by client.
+     * @param windowId     id of inventory window.
+     * @param clickedSlot  clicked slot number.
+     * @param clickType    type of click.
      */
     public PlayerInventoryClickEvent(final Player player, final short actionNumber, final int windowId, final int clickedSlot, final ClickType clickType)
     {
@@ -30,6 +33,9 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         this.clickedSlot = clickedSlot;
         this.actionNumber = actionNumber;
         this.clickType = clickType;
+
+        this.clickedItem = player.getInventory().getItem(clickedSlot);
+        this.cursorItem = player.getInventory().getCursorItem();
     }
 
     public int getWindowId()
@@ -37,19 +43,9 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         return this.windowId;
     }
 
-    public void setWindowId(final int windowId)
-    {
-        this.windowId = windowId;
-    }
-
     public int getClickedSlot()
     {
         return this.clickedSlot;
-    }
-
-    public void setClickedSlot(final int clickedSlot)
-    {
-        this.clickedSlot = clickedSlot;
     }
 
     public short getActionNumber()
@@ -57,19 +53,19 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         return this.actionNumber;
     }
 
-    public void setActionNumber(final short actionNumber)
-    {
-        this.actionNumber = actionNumber;
-    }
-
     public ClickType getClickType()
     {
         return this.clickType;
     }
 
-    public void setClickType(final ClickType clickType)
+    public ItemStack getClickedItem()
     {
-        this.clickType = clickType;
+        return this.clickedItem;
+    }
+
+    public ItemStack getCursorItem()
+    {
+        return this.cursorItem;
     }
 
     @Override

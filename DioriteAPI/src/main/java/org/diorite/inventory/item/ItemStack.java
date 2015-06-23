@@ -150,7 +150,7 @@ public class ItemStack
     {
         int result = (this.material != null) ? this.material.hashCode() : 0;
         result = (31 * result) + this.amount;
-        result = (31 * result) + this.itemMeta.hashCode();
+        result = (31 * result) + ((this.itemMeta != null) ? this.itemMeta.hashCode() : 0);
         return result;
     }
 

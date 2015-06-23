@@ -1,5 +1,7 @@
 package org.diorite.inventory;
 
+import org.diorite.inventory.item.ItemStack;
+
 public interface PlayerInventory extends Inventory, PlayerArmorInventory, PlayerCraftingInventory, PlayerFullEqInventory
 {
     @Override
@@ -7,6 +9,13 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
     {
         return this;
     }
+
+    /**
+     * Get item hold in cursor by player.
+     *
+     * @return item hold in cursor by player.
+     */
+    ItemStack getCursorItem();
 
     /**
      * Returns sub-part of player inventory, contains only
