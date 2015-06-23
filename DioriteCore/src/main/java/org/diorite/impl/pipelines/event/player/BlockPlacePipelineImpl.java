@@ -34,7 +34,6 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
             {
                 item.setAmount(item.getAmount() - 1);
             }
-            //evt.getPlayer().getInventory().update(); // TODO remove this. This shouldn't be needed
             evt.getBlock().setType((BlockMaterialData) item.getMaterial());
             ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getBlock().getWorld()), new PacketPlayOutBlockChange(evt.getBlock().getLocation(), evt.getBlock().getType()));
         });

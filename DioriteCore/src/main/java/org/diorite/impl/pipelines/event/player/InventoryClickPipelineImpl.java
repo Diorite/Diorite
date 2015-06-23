@@ -29,7 +29,6 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             if (!accepted)
             {
                 System.out.println("Rejected inventory click action from player " + evt.getPlayer().getName());
-                //evt.getPlayer().getInventory().update();
             }
         });
     }
