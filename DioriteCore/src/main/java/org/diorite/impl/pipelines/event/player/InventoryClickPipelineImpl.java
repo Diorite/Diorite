@@ -55,9 +55,84 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else
             {
-                if (! inv.replace(slot, clicked, cursor) || ! inv.setCursorItem(cursor, clicked))
+                if (cursor.isSimilar(clicked))
                 {
-                    return false; // item changed before we made own change
+                    final ItemStack newCursor = clicked.combine(cursor);
+
+                    if (! inv.setCursorItem(cursor, newCursor))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (! inv.replace(slot, clicked, cursor) || ! inv.setCursorItem(cursor, clicked))
+                    {
+                        return false; // item changed before we made own change
+                    }
+                }
+            }
+        }
+        else if (Objects.equals(ct, ClickType.MOUSE_RIGHT))
+        {
+            if (cursor == null)
+            {
+                if (clicked == null)
+                {
+                    return true;
+                }
+                final ItemStack splitted = clicked.split(this.getAmountToStayInHand(clicked.getAmount()));
+                if (splitted != null)
+                {
+                    if (! inv.setCursorItem(null, splitted))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (! inv.setCursorItem(null, clicked))
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                if (clicked == null)
+                {
+                    final ItemStack splitted = cursor.split(1);
+                    if (splitted == null)
+                    {
+                        if (! inv.replace(slot, null, cursor))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (! inv.replace(slot, null, splitted))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    if (clicked.isSimilar(cursor))
+                    {
+                        if (! inv.setCursorItem(cursor, clicked.combine(cursor)))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (! inv.replace(slot, clicked, cursor) || ! inv.setCursorItem(cursor, clicked))
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
         }
@@ -68,5 +143,14 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         }
 
         return true;
+    }
+
+    protected int getAmountToStayInHand(final int amount)
+    {
+        if ((amount % 2) == 0)
+        {
+            return amount / 2;
+        }
+        return (amount / 2) + 1;
     }
 }
