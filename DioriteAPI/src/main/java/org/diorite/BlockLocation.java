@@ -33,6 +33,22 @@ public class BlockLocation
         this.world = world;
     }
 
+    public BlockLocation(final double x, final double y, final double z)
+    {
+        this.x = DioriteMathUtils.floor(x);
+        this.y = DioriteMathUtils.floor(y);
+        this.z = DioriteMathUtils.floor(z);
+        this.world = null;
+    }
+
+    public BlockLocation(final double x, final double y, final double z, final World world)
+    {
+        this.x = DioriteMathUtils.floor(x);
+        this.y = DioriteMathUtils.floor(y);
+        this.z = DioriteMathUtils.floor(z);
+        this.world = world;
+    }
+
     public int getX()
     {
         return this.x;

@@ -19,6 +19,30 @@ public final class DioriteMathUtils
     private static final NumberFormat simpleFormatForceZero = new DecimalFormat("###.00");
 
     /**
+     * Change tps to number of milliseconds per tick, 1000/tps.
+     *
+     * @param tps tick per second.
+     *
+     * @return number of milliseconds per tick.
+     */
+    public static int millisecondsPerTick(final int tps)
+    {
+        return 1000 / tps;
+    }
+
+    /**
+     * Change tps to number of centiseconds per tick, 100/tps.
+     *
+     * @param tps tick per second.
+     *
+     * @return number of centiseconds per tick.
+     */
+    public static int centisecondsPerTick(final int tps)
+    {
+        return 100 / tps;
+    }
+
+    /**
      * returns string from double formatted to DecimalFormat("###.##")
      *
      * @param d value to format.
@@ -574,7 +598,7 @@ public final class DioriteMathUtils
     public static int floor(final double num)
     {
         final int floor = (int) num;
-        return (floor == num) ? floor : (floor - (int) (Double.doubleToRawLongBits(num) >>> 63));
+        return (floor == num) ? floor : ((num > 0) ? floor : (floor - 1));
     }
 
     /**
@@ -588,8 +612,38 @@ public final class DioriteMathUtils
      */
     public static int ceil(final double num)
     {
+        final int ceil = (int) num;
+        return (ceil == num) ? ceil : ((num > 0) ? (ceil + 1) : ceil);
+    }
+
+    /**
+     * Round down given number.
+     *
+     * @param num number to round down.
+     *
+     * @return rounded number.
+     *
+     * @see Math#round(double)
+     */
+    public static int floor(final float num)
+    {
         final int floor = (int) num;
-        return (floor == num) ? floor : (floor + (int) (~ Double.doubleToRawLongBits(num) >>> 63));
+        return (floor == num) ? floor : ((num > 0) ? floor : (floor - 1));
+    }
+
+    /**
+     * Round up given number.
+     *
+     * @param num number to round up.
+     *
+     * @return rounded number.
+     *
+     * @see Math#round(double)
+     */
+    public static int ceil(final float num)
+    {
+        final int ceil = (int) num;
+        return (ceil == num) ? ceil : ((num > 0) ? (ceil + 1) : ceil);
     }
 
     /**
