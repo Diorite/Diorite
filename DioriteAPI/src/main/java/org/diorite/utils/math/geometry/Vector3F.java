@@ -10,14 +10,14 @@ import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.world.World;
 
 /**
- * From Bukkit project.
+ * Float version of {@link Vector}
  * <p>
  * Represents a mutable vector. Because the components of Vectors are mutable,
  * storing Vectors long term may be dangerous if passing code modifies the
  * Vector later. If you want to keep around a Vector, it may be wise to call
  * <code>clone()</code> in order to get a copy.
  */
-public class Vector implements Cloneable, Serializable
+public class Vector3F implements Cloneable, Serializable
 {
     private static final long serialVersionUID = 0;
 
@@ -26,14 +26,14 @@ public class Vector implements Cloneable, Serializable
      */
     private static final double epsilon = 0.000001;
 
-    protected double x;
-    protected double y;
-    protected double z;
+    protected float x;
+    protected float y;
+    protected float z;
 
     /**
      * Construct the vector with all components as 0.
      */
-    public Vector()
+    public Vector3F()
     {
         this.x = 0;
         this.y = 0;
@@ -47,7 +47,7 @@ public class Vector implements Cloneable, Serializable
      * @param y Y component
      * @param z Z component
      */
-    public Vector(final int x, final int y, final int z)
+    public Vector3F(final int x, final int y, final int z)
     {
         this.x = x;
         this.y = y;
@@ -61,11 +61,11 @@ public class Vector implements Cloneable, Serializable
      * @param y Y component
      * @param z Z component
      */
-    public Vector(final double x, final double y, final double z)
+    public Vector3F(final double x, final double y, final double z)
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.x = (float) x;
+        this.y = (float) y;
+        this.z = (float) z;
     }
 
     /**
@@ -75,7 +75,7 @@ public class Vector implements Cloneable, Serializable
      * @param y Y component
      * @param z Z component
      */
-    public Vector(final float x, final float y, final float z)
+    public Vector3F(final float x, final float y, final float z)
     {
         this.x = x;
         this.y = y;
@@ -89,7 +89,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector add(final Vector vec)
+    public Vector3F add(final Vector3F vec)
     {
         this.x += vec.x;
         this.y += vec.y;
@@ -104,7 +104,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector subtract(final Vector vec)
+    public Vector3F subtract(final Vector3F vec)
     {
         this.x -= vec.x;
         this.y -= vec.y;
@@ -119,7 +119,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector multiply(final Vector vec)
+    public Vector3F multiply(final Vector3F vec)
     {
         this.x *= vec.x;
         this.y *= vec.y;
@@ -134,7 +134,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector divide(final Vector vec)
+    public Vector3F divide(final Vector3F vec)
     {
         this.x /= vec.x;
         this.y /= vec.y;
@@ -149,7 +149,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector copy(final Vector vec)
+    public Vector3F copy(final Vector3F vec)
     {
         this.x = vec.x;
         this.y = vec.y;
@@ -192,7 +192,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the distance
      */
-    public double distance(final Vector o)
+    public double distance(final Vector3F o)
     {
         return Math.sqrt(DioriteMathUtils.square(this.x - o.x) + DioriteMathUtils.square(this.y - o.y) + DioriteMathUtils.square(this.z - o.z));
     }
@@ -204,7 +204,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the distance
      */
-    public double distanceSquared(final Vector o)
+    public double distanceSquared(final Vector3F o)
     {
         return DioriteMathUtils.square(this.x - o.x) + DioriteMathUtils.square(this.y - o.y) + DioriteMathUtils.square(this.z - o.z);
     }
@@ -216,7 +216,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return angle in radians
      */
-    public float angle(final Vector other)
+    public float angle(final Vector3F other)
     {
         final double dot = this.dot(other) / (this.length() * other.length());
 
@@ -230,7 +230,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return this same vector (now a midpoint)
      */
-    public Vector midpoint(final Vector other)
+    public Vector3F midpoint(final Vector3F other)
     {
         this.x = (this.x + other.x) / 2;
         this.y = (this.y + other.y) / 2;
@@ -245,12 +245,12 @@ public class Vector implements Cloneable, Serializable
      *
      * @return a new midpoint vector
      */
-    public Vector getMidpoint(final Vector other)
+    public Vector3F getMidpoint(final Vector3F other)
     {
         final double x = (this.x + other.x) / 2;
         final double y = (this.y + other.y) / 2;
         final double z = (this.z + other.z) / 2;
-        return new Vector(x, y, z);
+        return new Vector3F(x, y, z);
     }
 
     /**
@@ -261,7 +261,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector multiply(final int m)
+    public Vector3F multiply(final int m)
     {
         this.x *= m;
         this.y *= m;
@@ -277,7 +277,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector multiply(final double m)
+    public Vector3F multiply(final double m)
     {
         this.x *= m;
         this.y *= m;
@@ -293,7 +293,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector multiply(final float m)
+    public Vector3F multiply(final float m)
     {
         this.x *= m;
         this.y *= m;
@@ -309,7 +309,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return dot product
      */
-    public double dot(final Vector other)
+    public double dot(final Vector3F other)
     {
         return (this.x * other.x) + (this.y * other.y) + (this.z * other.z);
     }
@@ -327,11 +327,11 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector crossProduct(final Vector o)
+    public Vector3F crossProduct(final Vector3F o)
     {
-        final double newX = (this.y * o.z) - (o.y * this.z);
-        final double newY = (this.z * o.x) - (o.z * this.x);
-        final double newZ = (this.x * o.y) - (o.x * this.y);
+        final float newX = (this.y * o.z) - (o.y * this.z);
+        final float newY = (this.z * o.x) - (o.z * this.x);
+        final float newZ = (this.x * o.y) - (o.x * this.y);
 
         this.x = newX;
         this.y = newY;
@@ -344,7 +344,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector normalize()
+    public Vector3F normalize()
     {
         final double length = this.length();
 
@@ -360,7 +360,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return the same vector
      */
-    public Vector zero()
+    public Vector3F zero()
     {
         this.x = 0;
         this.y = 0;
@@ -379,7 +379,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return whether this vector is in the AABB
      */
-    public boolean isInAABB(final Vector min, final Vector max)
+    public boolean isInAABB(final Vector3F min, final Vector3F max)
     {
         return (this.x >= min.x) && (this.x <= max.x) && (this.y >= min.y) && (this.y <= max.y) && (this.z >= min.z) && (this.z <= max.z);
     }
@@ -392,7 +392,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return whether this vector is in the sphere
      */
-    public boolean isInSphere(final Vector origin, final double radius)
+    public boolean isInSphere(final Vector3F origin, final double radius)
     {
         return (DioriteMathUtils.square(origin.x - this.x) + DioriteMathUtils.square(origin.y - this.y) + DioriteMathUtils.square(origin.z - this.z)) <= DioriteMathUtils.square(radius);
     }
@@ -402,7 +402,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return The X component.
      */
-    public double getX()
+    public float getX()
     {
         return this.x;
     }
@@ -423,7 +423,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return The Y component.
      */
-    public double getY()
+    public float getY()
     {
         return this.y;
     }
@@ -444,7 +444,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return The Z component.
      */
-    public double getZ()
+    public float getZ()
     {
         return this.z;
     }
@@ -467,7 +467,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setX(final int x)
+    public Vector3F setX(final int x)
     {
         this.x = x;
         return this;
@@ -480,9 +480,9 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setX(final double x)
+    public Vector3F setX(final double x)
     {
-        this.x = x;
+        this.x = (float) x;
         return this;
     }
 
@@ -493,7 +493,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setX(final float x)
+    public Vector3F setX(final float x)
     {
         this.x = x;
         return this;
@@ -506,7 +506,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setY(final int y)
+    public Vector3F setY(final int y)
     {
         this.y = y;
         return this;
@@ -519,9 +519,9 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setY(final double y)
+    public Vector3F setY(final double y)
     {
-        this.y = y;
+        this.y = (float) y;
         return this;
     }
 
@@ -532,7 +532,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setY(final float y)
+    public Vector3F setY(final float y)
     {
         this.y = y;
         return this;
@@ -545,7 +545,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setZ(final int z)
+    public Vector3F setZ(final int z)
     {
         this.z = z;
         return this;
@@ -558,9 +558,9 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setZ(final double z)
+    public Vector3F setZ(final double z)
     {
-        this.z = z;
+        this.z = (float) z;
         return this;
     }
 
@@ -571,7 +571,7 @@ public class Vector implements Cloneable, Serializable
      *
      * @return This vector.
      */
-    public Vector setZ(final float z)
+    public Vector3F setZ(final float z)
     {
         this.z = z;
         return this;
@@ -587,12 +587,12 @@ public class Vector implements Cloneable, Serializable
     @Override
     public boolean equals(final Object obj)
     {
-        if (! (obj instanceof Vector))
+        if (! (obj instanceof Vector3F))
         {
             return false;
         }
 
-        final Vector other = (Vector) obj;
+        final Vector3F other = (Vector3F) obj;
 
         return (Math.abs(this.x - other.x) < epsilon) && (Math.abs(this.y - other.y) < epsilon) && (Math.abs(this.z - other.z) < epsilon) && (this.getClass().equals(obj.getClass()));
     }
@@ -619,11 +619,11 @@ public class Vector implements Cloneable, Serializable
      * @return vector
      */
     @Override
-    public Vector clone()
+    public Vector3F clone()
     {
         try
         {
-            return (Vector) super.clone();
+            return (Vector3F) super.clone();
         } catch (final CloneNotSupportedException e)
         {
             throw new Error(e);
@@ -688,13 +688,13 @@ public class Vector implements Cloneable, Serializable
     }
 
     /**
-     * Get as {@link Vector3F}
+     * Get as {@link Vector}
      *
-     * @return {@link Vector3F} with this same values.
+     * @return {@link Vector} with this same values.
      */
-    public Vector3F toVector3F()
+    public Vector toVector()
     {
-        return new Vector3F(this.x, this.y, this.z);
+        return new Vector(this.x, this.y, this.z);
     }
 
     /**
@@ -715,9 +715,9 @@ public class Vector implements Cloneable, Serializable
      *
      * @return minimum
      */
-    public static Vector getMinimum(final Vector v1, final Vector v2)
+    public static Vector3F getMinimum(final Vector3F v1, final Vector3F v2)
     {
-        return new Vector(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y), Math.min(v1.z, v2.z));
+        return new Vector3F(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y), Math.min(v1.z, v2.z));
     }
 
     /**
@@ -728,9 +728,9 @@ public class Vector implements Cloneable, Serializable
      *
      * @return maximum
      */
-    public static Vector getMaximum(final Vector v1, final Vector v2)
+    public static Vector3F getMaximum(final Vector3F v1, final Vector3F v2)
     {
-        return new Vector(Math.max(v1.x, v2.x), Math.max(v1.y, v2.y), Math.max(v1.z, v2.z));
+        return new Vector3F(Math.max(v1.x, v2.x), Math.max(v1.y, v2.y), Math.max(v1.z, v2.z));
     }
 
     /**
@@ -739,8 +739,8 @@ public class Vector implements Cloneable, Serializable
      *
      * @return A random vector.
      */
-    public static Vector getRandom()
+    public static Vector3F getRandom()
     {
-        return new Vector(DioriteRandomUtils.nextDouble(), DioriteRandomUtils.nextDouble(), DioriteRandomUtils.nextDouble());
+        return new Vector3F(DioriteRandomUtils.nextDouble(), DioriteRandomUtils.nextDouble(), DioriteRandomUtils.nextDouble());
     }
 }
