@@ -81,7 +81,22 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     return true;
                 }
-                final ItemStack splitted = clicked.split(this.getAmountToStayInHand(clicked.getAmount()));
+
+                final ItemStack splitted;
+
+                if (clicked.getAmount() == 1)
+                {
+                    splitted = clicked;
+                    if (! inv.replace(slot, clicked, null))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    splitted = clicked.split(this.getAmountToStayInHand(clicked.getAmount()));
+                }
+
                 if (splitted != null)
                 {
                     if (! inv.setCursorItem(null, splitted))
@@ -98,7 +113,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 }
             }
             else
-            {
+            { // cursor != null
                 if (clicked == null)
                 {
                     final ItemStack splitted = cursor.split(1);
@@ -134,8 +149,8 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                         }
                     }
                 }
-            }
-        }
+            } // end cursor != null
+        } // end MOUSE_RIGHT
         // TODO all other click types, and remember about throwing item on cursor to ground when closing eq
         else// if (Objects.equals(ct, ClickType.MOUSE))
         {
