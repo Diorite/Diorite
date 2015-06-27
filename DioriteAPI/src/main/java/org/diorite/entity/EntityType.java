@@ -10,11 +10,11 @@ public class EntityType extends ASimpleEnum<EntityType>
 {
     static
     {
-        init(EntityType.class, 2);
+        init(EntityType.class, 3);
     }
 
-    public static final EntityType PLAYER            = new EntityType("PLAYER", Player.class, - 1 /* ??? */, "PLAYER" /* ??? */);
-    public static final EntityType MINECART_RIDEABLE = new EntityType("MINECART_RIDEABLE", MinecartRideable.class, /*42*/ 50, "MinecartRideable");
+    public static final EntityType ITEM              = new EntityType("ITEM", Item.class, 2, "Item");
+    public static final EntityType PLAYER            = new EntityType("PLAYER", Player.class, - 1, "Player");
     // TODO
 
     private final Class<? extends Entity> dioriteEntityClass;
@@ -105,7 +105,7 @@ public class EntityType extends ASimpleEnum<EntityType>
 
     static
     {
+        EntityType.register(ITEM);
         EntityType.register(PLAYER);
-        EntityType.register(MINECART_RIDEABLE);
     }
 }

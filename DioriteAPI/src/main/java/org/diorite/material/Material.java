@@ -755,6 +755,11 @@ public abstract class Material implements SimpleEnum<Material>
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("maxStack", this.maxStack).toString();
     }
 
+    public int getId()
+    {
+        return id;
+    }
+
     public static Material getByID(final int id)
     {
         return byID.get(id);

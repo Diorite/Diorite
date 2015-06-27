@@ -9,6 +9,14 @@ public interface Entity extends GameObject, Synchronizable
 {
     EntityType getType();
 
+    float getVelocityX();
+
+    float getVelocityY();
+
+    float getVelocityZ();
+
+    boolean exist();
+
     int getId();
 
     double getX();
