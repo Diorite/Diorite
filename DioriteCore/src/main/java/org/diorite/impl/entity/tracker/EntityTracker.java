@@ -1,7 +1,10 @@
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.tracker;
 
-import java.util.Set;
+import java.util.Collection;
 
+import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.utils.collections.WeakCollection;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.math.DioriteMathUtils;
 
@@ -17,7 +20,7 @@ public class EntityTracker
     private       int        pitch;
     private       int        headRot;
 
-    private final Set<PlayerImpl> tracked = new ConcurrentSet<>(5, .3F, 3);
+    private final Collection<PlayerImpl> tracked = WeakCollection.using(new ConcurrentSet<>(5, .3F, 3), true);
 
     public EntityTracker(final EntityImpl entity, final int trackRange)
     {
@@ -42,9 +45,14 @@ public class EntityTracker
         {
             final double dX = player.getX() - (this.xLoc / 32);
             final double dZ = player.getZ() - (this.zLoc / 32);
-            if ((dX >= - this.trackRange) && (dX <= this.trackRange) && (dZ >= - this.trackRange) && (dZ <= this.trackRange))
+            if (((dX < - this.trackRange) || (dX > this.trackRange) || (dZ < - this.trackRange) || (dZ > this.trackRange)))
             {
-
+                return;
+            }
+            if (!this.tracked.contains(player))
+            {
+                player.getNetworkManager().sendPackets(this.tracker.getSpawnPackets());
+                this.tracked.add(player);
             }
         }
     }

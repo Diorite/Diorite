@@ -38,7 +38,6 @@ import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
-import org.diorite.scheduler.TaskBuilder;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
 
@@ -64,7 +63,7 @@ public class PlayersManagerImpl implements Tickable
 
         final PlayerImpl player = new PlayerImpl(this.server, EntityImpl.ENTITY_ID.getAndIncrement(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
         this.players.put(gameProfile.getId(), player);
-        player.updateChunk(null, player.getChunk());
+//        player.updateChunk(null, player.getChunk());
         return player;
     }
 
@@ -99,18 +98,6 @@ public class PlayersManagerImpl implements Tickable
         player.getInventory().getFullEqInventory().add(new ItemStack(Material.DIAMOND_ORE));
         player.getInventory().setItem(18, new ItemStack(Material.EMERALD_ORE, 7));
         player.getInventory().update();
-
-
-        // First plugin in diorite! and it is lambda... :D
-        TaskBuilder.start(() -> "Test", () -> player.sendMessage("Task test! ;) " + player.getLocation())).syncTo(player).delay(20).repeated().start(200);
-//        TaskBuilder.start(() -> "Test", ()->player.sendMessage("Task test-2! ;) "+System.currentTimeMillis())).realTime().delay(1500).repeated().start(535);
-        /*EntityMinecartRideable entity = new EntityMinecartRideable(4, 180, -4);
-
-        player.getNetworkManager().sendPacket(new PacketPlayOutSpawnEntity(entity));
-        List<EntityMetadataObject> tff = new ArrayList<>();
-        tff.add(new EntityMetadataObject(EntityMetadataCodec.DataType.BYTE, 0, 0x00));
-        tff.add(new EntityMetadataObject(EntityMetadataCodec.DataType.INT, 17, 2));
-        player.getNetworkManager().sendPacket(new PacketPlayOutEntityMetadata(666, tff));*/ // TODO ENTITY TEST
     }
 
     public List<String> getOnlinePlayersNames()
@@ -165,6 +152,12 @@ public class PlayersManagerImpl implements Tickable
         this.forEach(player -> player.getNetworkManager().sendPacket(packet));
     }
 
+    public void forEachExcept(final Player except, final Packet<?> packet)
+    {
+        //noinspection ObjectEquality
+        this.forEach(p -> p != except, player -> player.getNetworkManager().sendPacket(packet));
+    }
+
     public Collection<PlayerImpl> getOnlinePlayers(final Predicate<PlayerImpl> predicate)
     {
         return this.players.values().stream().filter(predicate).collect(Collectors.toSet());
@@ -175,15 +168,34 @@ public class PlayersManagerImpl implements Tickable
         this.forEach(predicate, player -> player.getNetworkManager().sendPacket(packet));
     }
 
+    public void forEachExcept(final Player except, final Predicate<PlayerImpl> predicate, final Packet<?> packet)
+    {
+        //noinspection ObjectEquality
+        this.forEach(p -> (p != except) && predicate.test(p), player -> player.getNetworkManager().sendPacket(packet));
+    }
+
+    public void forEachExcept(final Player except, final Consumer<PlayerImpl> consumer)
+    {
+        //noinspection ObjectEquality
+        this.players.values().stream().filter(p -> p != except).forEach(consumer);
+    }
+
     public void forEach(final Consumer<PlayerImpl> consumer)
     {
-        this.players.values().parallelStream().forEach(consumer);
+        this.players.values().stream().forEach(consumer);
+    }
+
+    public void forEachExcept(final Player except, final Predicate<PlayerImpl> predicate, final Consumer<PlayerImpl> consumer)
+    {
+        //noinspection ObjectEquality
+        this.players.values().stream().filter(p -> (p != except) && predicate.test(p)).forEach(consumer);
     }
 
     public void forEach(final Predicate<PlayerImpl> predicate, final Consumer<PlayerImpl> consumer)
     {
-        this.players.values().parallelStream().filter(predicate).forEach(consumer);
+        this.players.values().stream().filter(predicate).forEach(consumer);
     }
+
 
     public ServerImpl getServer()
     {

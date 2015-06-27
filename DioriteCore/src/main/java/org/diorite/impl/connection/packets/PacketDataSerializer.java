@@ -10,6 +10,7 @@ import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 
 import com.google.common.base.Charsets;
@@ -17,6 +18,7 @@ import com.google.common.base.Charsets;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
+import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.BlockFace;
@@ -109,6 +111,22 @@ public class PacketDataSerializer extends ByteBuf
                 this.writeByte(- 1);
                 break;
         }
+    }
+
+    public void writeEntityMetadata(final EntityMetadataEntry<?> data)
+    {
+        EntityMetadataCodec.encode(this, data);
+    }
+
+    public void writeEntityMetadata(final Iterable<EntityMetadataEntry<?>> data)
+    {
+        data.forEach(this::writeEntityMetadata);
+        this.writeByte(Byte.MAX_VALUE); // mark end of metadata
+    }
+
+    public List<EntityMetadataEntry<?>> readEntityMetadata()
+    {
+        return EntityMetadataCodec.decode(this);
     }
 
     public ItemStack readItemStack()

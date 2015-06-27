@@ -60,4 +60,10 @@ public interface PacketPlayOutListener extends PacketListener
     void handle(PacketPlayOutSetSlot packet);
 
     void handle(PacketPlayOutWindowItems packet);
+
+    void handle(PacketPlayOutEntityDestroy packet);
+
+    void handle(PacketPlayOutSpawnEntityLiving packet);
+
+    void handle(PacketPlayOutNamedEntitySpawn packet);
 }

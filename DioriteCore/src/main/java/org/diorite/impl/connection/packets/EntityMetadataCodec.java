@@ -3,102 +3,114 @@ package org.diorite.impl.connection.packets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.diorite.impl.entity.meta.entry.EntityMetadataBlockLocationEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataObjectEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataShortEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataVector3FEntry;
 import org.diorite.BlockLocation;
-import org.diorite.ImmutableLocation;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.utils.math.geometry.Vector3F;
 
-@SuppressWarnings("MagicNumber")
-public final class EntityMetadataCodec // TODO DataWatcher and other...
+@SuppressWarnings({"MagicNumber", "unchecked"})
+public final class EntityMetadataCodec
 {
     private EntityMetadataCodec()
     {
     }
 
-    public static void encode(final PacketDataSerializer data, final EntityMetadataObject metadataObject)
+    public static void encode(final PacketDataSerializer data, final EntityMetadataEntry<?> metadataObject)
     {
         final int i = ((metadataObject.getDataType().getId() << 5) | (metadataObject.getIndex() & 0x1F)) & 0xFF;
 
         data.writeByte(i);
-        switch (metadataObject.getDataType().getId())
+        switch (metadataObject.getDataType())
         {
-            case 0:
-                data.writeByte(((Number) metadataObject.getData()).byteValue());
+            case BYTE:
+                data.writeByte(((EntityMetadataByteEntry) metadataObject).getValue());
                 break;
-            case 1:
-                data.writeShort(((Number) metadataObject.getData()).shortValue());
+            case SHORT:
+                data.writeShort(((EntityMetadataShortEntry) metadataObject).getValue());
                 break;
-            case 2:
-                data.writeInt(((Number) metadataObject.getData()).intValue());
+            case INT:
+                data.writeInt(((EntityMetadataIntEntry) metadataObject).getValue());
                 break;
-            case 3:
-                data.writeFloat(((Number) metadataObject.getData()).floatValue());
+            case FLOAT:
+                data.writeFloat(((EntityMetadataFloatEntry) metadataObject).getValue());
                 break;
-            case 4:
-                data.writeText((String) metadataObject.getData());
+            case STRING:
+                data.writeText(((EntityMetadataObjectEntry<String>) metadataObject).getData());
                 break;
-            case 5:
-                final ItemStack itemstack = (ItemStack) metadataObject.getData();
+            case ITEM_STACK:
+                final ItemStack itemstack = ((EntityMetadataObjectEntry<ItemStack>) metadataObject).getData();
                 data.writeItemStack(itemstack);
                 break;
-            case 6:
-                final BlockLocation blockposition = (BlockLocation) metadataObject.getData();
+            case LOCATION:
+                final BlockLocation blockposition = ((EntityMetadataObjectEntry<BlockLocation>) metadataObject).getData();
 
                 data.writeInt(blockposition.getX());
                 data.writeInt(blockposition.getY());
                 data.writeInt(blockposition.getZ());
                 break;
-            case 7:
-                //Vector3f vector3f = (Vector3f)watchableobject.b();
+            case ROTATION:
+                final Vector3F vector3f = ((EntityMetadataObjectEntry<Vector3F>) metadataObject).getData();
 
-                //packetdataserializer.writeFloat(vector3f.getX());
-                //packetdataserializer.writeFloat(vector3f.getY());
-                //packetdataserializer.writeFloat(vector3f.getZ()); // TODO
+                data.writeFloat(vector3f.getX());
+                data.writeFloat(vector3f.getY());
+                data.writeFloat(vector3f.getZ());
+            default:
+                throw new UnsupportedOperationException("Unknown entity metadata type (" + metadataObject.getDataType() + "): " + metadataObject);
         }
     }
 
-    public static List<EntityMetadataObject> decode(final PacketDataSerializer data)
+    public static List<EntityMetadataEntry<?>> decode(final PacketDataSerializer data)
     {
-        final List<EntityMetadataObject> temp = new ArrayList<>(5);
+        final List<EntityMetadataEntry<?>> temp = new ArrayList<>(5);
 
         for (byte b = data.readByte(); b != 127; b = data.readByte())
         {
             final int type = (b & 0xE0) >> 5;
             final int index = b & 0x1F;
 
-            EntityMetadataObject object = null;
+            final EntityMetadataEntry<?> object;
             switch (type)
             {
                 case 0:
-                    object = new EntityMetadataObject(DataType.BYTE, index, data.readByte());
+                    object = new EntityMetadataByteEntry(index, data.readByte());
                     break;
                 case 1:
-                    object = new EntityMetadataObject(DataType.SHORT, index, data.readShort());
+                    object = new EntityMetadataShortEntry(index, data.readShort());
                     break;
                 case 2:
-                    object = new EntityMetadataObject(DataType.INT, index, data.readInt());
+                    object = new EntityMetadataIntEntry(index, data.readInt());
                     break;
                 case 3:
-                    object = new EntityMetadataObject(DataType.FLOAT, index, data.readFloat());
+                    object = new EntityMetadataFloatEntry(index, data.readFloat());
                     break;
                 case 4:
-                    object = new EntityMetadataObject(DataType.STRING, index, data.readText(32767));
+                    object = new EntityMetadataStringEntry(index, data.readText(Short.MAX_VALUE));
                     break;
                 case 5:
-                    object = new EntityMetadataObject(DataType.SLOT, index, data.readItemStack());
+                    object = new EntityMetadataItemStackEntry(index, data.readItemStack());
                     break;
                 case 6:
                     final int x = data.readInt();
                     final int y = data.readInt();
                     final int z = data.readInt();
 
-                    object = new EntityMetadataObject(DataType.LOCATION, index, new ImmutableLocation(x, y, z));
+                    object = new EntityMetadataBlockLocationEntry(index, new BlockLocation(x, y, z));
                     break;
                 case 7:
                     final float f = data.readFloat();
                     final float f1 = data.readFloat();
                     final float f2 = data.readFloat();
 
-                    //object = new EntityMetadataObject(DataType.POSITION, index, new Vector3f(f, f1, f2)); // TODO
+                    object = new EntityMetadataVector3FEntry(index, new Vector3F(f, f1, f2));
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown entity metadata type: " + type);
@@ -109,29 +121,4 @@ public final class EntityMetadataCodec // TODO DataWatcher and other...
         return temp;
     }
 
-    public enum DataType
-    {
-        BYTE(0),
-        SHORT(1),
-        INT(2),
-        FLOAT(3),
-        STRING(4),
-        // UTF-8 String (VarInt prefixed)
-        SLOT(5),
-        LOCATION(6),
-        // Int, Int, Int (x, y, z)
-        POSITION(7); // Float, Float, Float (pitch, yaw, roll)
-
-        private final int id;
-
-        DataType(final int id)
-        {
-            this.id = id;
-        }
-
-        public int getId()
-        {
-            return this.id;
-        }
-    }
 }
