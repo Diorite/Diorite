@@ -34,7 +34,17 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         this.actionNumber = actionNumber;
         this.clickType = clickType;
 
-        this.clickedItem = player.getInventory().getItem(clickedSlot);
+        ItemStack clickedItem;
+        try
+        {
+            clickedItem = player.getInventory().getItem(clickedSlot);
+        }
+        catch (final IndexOutOfBoundsException ignored)
+        {
+            clickedItem = null;
+        }
+
+        this.clickedItem = clickedItem;
         this.cursorItem = player.getInventory().getCursorItem();
     }
 
