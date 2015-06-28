@@ -1,5 +1,6 @@
 package org.diorite.impl.command.defaults;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
@@ -25,7 +26,10 @@ public class SayCmd extends SystemCommandImpl
             {
                 chatPosition = ChatPosition.CHAT;
             }
-            sender.getServer().sendConsoleSimpleColoredMessage(Server.PREFIX_MSG + args.asText());
+            if (Objects.equals(chatPosition, ChatPosition.ACTION))
+            {
+                sender.getServer().sendConsoleSimpleColoredMessage(Server.PREFIX_MSG + args.asText());
+            }
             sender.getServer().broadcastSimpleColoredMessage(chatPosition, Server.PREFIX_MSG + args.asText());
         });
     }
