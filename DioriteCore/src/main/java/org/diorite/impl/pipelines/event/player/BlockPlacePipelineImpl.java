@@ -26,14 +26,16 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
                 evt.setCancelled(true);
                 return;
             }
+
             if (item.getAmount() == 1)
             {
-                evt.getPlayer().getInventory().remove(item);
+                evt.getPlayer().getInventory().getHotbarInventory().replace(evt.getPlayer().getHeldItemSlot(), item, null);
             }
             else
             {
                 item.setAmount(item.getAmount() - 1);
             }
+
             evt.getBlock().setType((BlockMaterialData) item.getMaterial());
             ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getBlock().getWorld()), new PacketPlayOutBlockChange(evt.getBlock().getLocation(), evt.getBlock().getType()));
         });
