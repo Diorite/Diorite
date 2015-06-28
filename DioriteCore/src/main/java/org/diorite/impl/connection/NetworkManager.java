@@ -197,7 +197,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         {
             this.channel.config().setAutoRead(false);
         }
-        if (this.channe                     l.eventLoop().inEventLoop())
+        if (this.channel.eventLoop().inEventLoop())
         {
             if (ep1 != ep2)
             {

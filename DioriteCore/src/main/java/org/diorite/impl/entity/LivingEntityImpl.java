@@ -13,11 +13,30 @@ import org.diorite.entity.LivingEntity;
 
 public abstract class LivingEntityImpl extends AttributableEntityImpl implements LivingEntity
 {
-   protected static final byte META_KEY_HEALTH               = 6;
-   protected static final byte META_KEY_POTION_EFFECT_COLOR  = 7;
-   protected static final byte META_KEY_POTION_IS_AMBIENT    = 8;
-   protected static final byte META_KEY_ARROWS_IN_BODY       = 9;
-   protected static final byte META_KEY_NO_AI                = 15;
+    /**
+     * float entry, hp of entity
+     */
+    protected static final byte META_KEY_HEALTH = 6;
+
+    /**
+     * byte entry, Potion effect color over entity
+     */
+    protected static final byte META_KEY_POTION_EFFECT_COLOR = 7;
+
+    /**
+     * byte/bool entry, if potion is ambiend (less visible)
+     */
+    protected static final byte META_KEY_POTION_IS_AMBIENT = 8;
+
+    /**
+     * byte entry, number of arrows in player.
+     */
+    protected static final byte META_KEY_ARROWS_IN_BODY = 9;
+
+    /**
+     * byte/bool entry, if entity have AI
+     */
+    protected static final byte META_KEY_NO_AI = 15;
 
     public LivingEntityImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
     {

@@ -31,7 +31,6 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
-import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
@@ -218,12 +217,6 @@ public class PlayListener implements PacketPlayInListener
             this.networkManager.sendPacket(new PacketPlayOutDisconnect(message));
             this.networkManager.close(message, true);
             this.server.getServerConnection().remove(this.networkManager);
-
-            this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.player.getName() + "&7&l left from the server!");
-            this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.player.getName() + "&7 left from the server!");
-//        this.server.sendConsoleSimpleColoredMessage("&3" + this.player.getName() + " &7left the server. (" + message.toLegacyText() + "&7)");
-
-//        this.player.getWorld().removeEntity(this.player); // TODO re-add, or something
             // TODO: implement
 //        });
     }

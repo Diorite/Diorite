@@ -26,6 +26,7 @@ import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
+import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
@@ -47,6 +48,7 @@ import org.diorite.utils.math.pack.IntsToLong;
 import gnu.trove.TIntCollection;
 import gnu.trove.list.array.TIntArrayList;
 
+// TODO: add Human or other entity not fully a player class for bots/npcs
 public class PlayerImpl extends LivingEntityImpl implements Player
 {
     @SuppressWarnings("MagicNumber")
@@ -54,10 +56,25 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     @SuppressWarnings("MagicNumber")
     public static final ImmutableEntityBoundingBox DIE_SIZE  = new ImmutableEntityBoundingBox(0.2F, 0.2F);
 
-    protected static final byte META_KEY_SKIN_FLAGS        = 10;
-    protected static final byte META_KEY_CAPE              = 16;
+    /**
+     * byte entry with visible skin parts flags.
+     */
+    protected static final byte META_KEY_SKIN_FLAGS = 10;
+
+    /**
+     * byte entry, 0x02 bool cape hidden
+     */
+    protected static final byte META_KEY_CAPE = 16;
+
+    /**
+     * float entry, amount of absorption hearts (yellow/gold ones)
+     */
     protected static final byte META_KEY_ABSORPTION_HEARTS = 17;
-    protected static final byte META_KEY_SCORE             = 18;
+
+    /**
+     * int entry, amount of player points
+     */
+    protected static final byte META_KEY_SCORE = 18;
 
 
     // TODO: move this
@@ -132,6 +149,24 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     public PacketPlayOut getSpawnPacket()
     {
         return new PacketPlayOutNamedEntitySpawn(this);
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    public void removeEntityFromView(final BaseTracker<?> e)
+    {
+        final int id = e.getId();
+        if (id == - 1)
+        {
+            return;
+        }
+        if ((e.getTracker() instanceof PlayerImpl) || (this.lastTickThread == Thread.currentThread()))
+        {
+            this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(id));
+        }
+        else
+        {
+            this.removeQueue.add(id);
+        }
     }
 
     @SuppressWarnings("ObjectEquality")
@@ -419,6 +454,9 @@ public class PlayerImpl extends LivingEntityImpl implements Player
 
     public void onLogout()
     {
-        this.world.getChunkAt(this.getLocation().getChunkPos()).removeEntity(this);
+        this.remove(true);
+
+        this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.getName() + "&7&l left from the server!");
+        this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.getName() + "&7 left from the server!");
     }
 }

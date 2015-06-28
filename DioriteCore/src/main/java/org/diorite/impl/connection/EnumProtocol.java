@@ -42,7 +42,7 @@ public enum EnumProtocol
         return this.status;
     }
 
-    public void init(final EnumProtocolDirection enumProtocolDirection, final int id, final Class<? extends Packet<?>> clazz)
+    public synchronized void init(final EnumProtocolDirection enumProtocolDirection, final int id, final Class<? extends Packet<?>> clazz)
     {
         BiMap<Integer, Class<?>> create = this.packetsMap.get(enumProtocolDirection);
         if (create == null)
@@ -52,9 +52,11 @@ public enum EnumProtocol
         }
         if (create.containsValue(clazz))
         {
-            final String string = enumProtocolDirection + " packet " + clazz + " is already known to ID " + create.inverse().get(clazz);
-//            LogManager.getLogger().fatal(string);
-            throw new IllegalArgumentException(string);
+            throw new IllegalArgumentException(enumProtocolDirection + " packet " + clazz.getName() + " is already known to ID " + Integer.toHexString(create.inverse().get(clazz)) + " (" + create.get(id) + ")");
+        }
+        if (create.containsKey(id))
+        {
+            throw new IllegalArgumentException(enumProtocolDirection + " packet (" + clazz.getName() + ") with id " + Integer.toHexString(id) + " is already known to packet " + create.get(id));
         }
         classEnumProtocolMap.put(clazz, this);
         create.put(id, clazz);

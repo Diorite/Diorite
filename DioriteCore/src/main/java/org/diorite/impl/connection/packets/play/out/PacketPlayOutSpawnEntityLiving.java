@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 
-@PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x0F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutSpawnEntityLiving implements PacketPlayOut
 {
     private int                              entityId;
@@ -21,9 +21,9 @@ public class PacketPlayOutSpawnEntityLiving implements PacketPlayOut
     private int                              x; // WARNING! This is 'fixed-point' number
     private int                              y; // WARNING! This is 'fixed-point' number
     private int                              z; // WARNING! This is 'fixed-point' number
-    private int                              yaw;
-    private int                              pitch;
-    private int                              headPitch;
+    private byte                             yaw;
+    private byte                             pitch;
+    private byte                             headPitch;
     private short                            movX;
     private short                            movY;
     private short                            movZ;
@@ -38,11 +38,12 @@ public class PacketPlayOutSpawnEntityLiving implements PacketPlayOut
     {
         this.entityId = entity.getId();
         this.entityTypeId = (byte) entity.getMcId();
-        this.x = (int) entity.getX() << 5; // * 32
-        this.y = (int) entity.getY() << 5; // * 32
-        this.z = (int) entity.getZ() << 5; // * 32
-        this.yaw = (int) ((this.yaw * 256.0F) / 360.0F);
-        this.pitch = (int) ((this.pitch * 256.0F) / 360.0F);
+        this.x = (int) (entity.getX() * 32);
+        this.y = (int) (entity.getY() * 32);
+        this.z = (int) (entity.getZ() * 32);
+        this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);
+        this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
+        this.headPitch = (byte) ((entity.getHeadPitch() * 256.0F) / 360.0F);
 
         this.movX = (short) (entity.getVelocityX() * 8000); // IDK why 8000
         this.movY = (short) (entity.getVelocityY() * 8000);
@@ -61,6 +62,7 @@ public class PacketPlayOutSpawnEntityLiving implements PacketPlayOut
         this.z = data.readInt();
         this.yaw = data.readByte();
         this.pitch = data.readByte();
+        this.headPitch = data.readByte();
         this.movX = data.readShort();
         this.movY = data.readShort();
         this.movZ = data.readShort();
@@ -141,32 +143,32 @@ public class PacketPlayOutSpawnEntityLiving implements PacketPlayOut
         this.z = z;
     }
 
-    public int getPitch()
+    public byte getPitch()
     {
         return this.pitch;
     }
 
-    public void setPitch(final int pitch)
-    {
-        this.pitch = pitch;
-    }
-
-    public int getYaw()
+    public byte getYaw()
     {
         return this.yaw;
     }
 
-    public void setYaw(final int yaw)
+    public void setYaw(final byte yaw)
     {
         this.yaw = yaw;
     }
 
-    public int getHeadPitch()
+    public void setPitch(final byte pitch)
+    {
+        this.pitch = pitch;
+    }
+
+    public byte getHeadPitch()
     {
         return this.headPitch;
     }
 
-    public void setHeadPitch(final int headPitch)
+    public void setHeadPitch(final byte headPitch)
     {
         this.headPitch = headPitch;
     }

@@ -16,6 +16,9 @@ import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 
 public class ItemImpl extends EntityImpl implements Item, EntityObject
 {
+    /**
+     * ItemStack entry
+     */
     protected static final byte META_KEY_ITEM = 10;
     private static final   int  DESPAWN_TIME  = 30000; // 5 min, TODO: add config value for that.
 
@@ -53,11 +56,12 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         super.doTick(tps);
         if (! this.aiEnabled)
         {
-            this.timeLived += DioriteMathUtils.centisecondsPerTick(tps);
-            if (this.timeLived >= DESPAWN_TIME)
-            {
-                this.remove();
-            }
+            return;
+        }
+        this.timeLived += DioriteMathUtils.centisecondsPerTick(tps);
+        if (this.timeLived >= DESPAWN_TIME)
+        {
+            this.remove(true);
             return;
         }
     }

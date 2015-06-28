@@ -13,6 +13,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
+import org.diorite.impl.entity.tracker.Trackable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ImmutableLocation;
@@ -20,15 +21,35 @@ import org.diorite.entity.Entity;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
 import org.diorite.world.chunk.Chunk;
 
-public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable
+public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable, Trackable
 {
-    public static final    AtomicInteger ENTITY_ID                     = new AtomicInteger();
-    public static final    int           MAX_AIR_LEVEL                 = 300;
-    protected static final byte          META_KEY_BASIC_FLAGS          = 0;
-    protected static final byte          META_KEY_AIR                  = 1;
-    protected static final byte          META_KEY_NAME_TAG             = 2;
-    protected static final byte          META_KEY_ALWAYS_SHOW_NAME_TAG = 3;
-    protected static final byte          META_KEY_SILENT               = 4;
+    public static final AtomicInteger ENTITY_ID     = new AtomicInteger();
+    public static final int           MAX_AIR_LEVEL = 300;
+
+    /**
+     * byte entry, with flags. {@link org.diorite.impl.entity.EntityImpl.BasicFlags}
+     */
+    protected static final byte META_KEY_BASIC_FLAGS = 0;
+
+    /**
+     * short entry, air level
+     */
+    protected static final byte META_KEY_AIR = 1;
+
+    /**
+     * String entry, name/name tag
+     */
+    protected static final byte META_KEY_NAME_TAG = 2;
+
+    /**
+     * byte/bool entry, if name tag should be visible
+     */
+    protected static final byte META_KEY_ALWAYS_SHOW_NAME_TAG = 3;
+
+    /**
+     * byte/bool entry, if entity should make sound.
+     */
+    protected static final byte META_KEY_SILENT = 4;
 
     /**
      * Contains mask for basic flags used in matadata at index 0
@@ -78,8 +99,6 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         this.world = (WorldImpl) location.getWorld();
         this.metadata = new EntityMetadata();
         this.initMetadata();
-
-        this.updateChunk(null, this.world.getChunkAt(location.getChunkPos()));
     }
 
     public void initMetadata()
@@ -95,6 +114,18 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 //        this.metadata.add(new EntityMetadataByteEntry(META_KEY_ALWAYS_SHOW_NAME_TAG, 1));
 //        this.metadata.add(new EntityMetadataStringEntry(META_KEY_NAME_TAG, ChatColor.translateAlternateColorCodesInString("&a#&3OnlyDiorite")));
 
+    }
+
+    public boolean isOnGround()
+    {
+        // TODO: implement in better way
+        return (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().subtractY(1).getBlock().getType().isSolid();
+    }
+
+    @Override
+    public int getTrackRange()
+    {
+        return 64;
     }
 
     public EntityMetadata getMetadata()
@@ -120,7 +151,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         return this.velZ;
     }
 
-    public float getHeadRotation()
+    public float getHeadPitch()
     {
         return 0.0F;
     }
@@ -146,15 +177,15 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         return this.id != - 1;
     }
 
-    public void remove()
+    public void remove(final boolean full)
     {
+        if (full)
+        {
+            this.world.removeEntity(this);
+            return;
+        }
         this.id = - 1;
         this.getChunk().removeEntity(this);
-        final Chunk c = this.getChunk();
-        final int x = c.getX();
-        final int z = c.getZ();
-
-        this.server.getPlayersManager().forEach(p -> p.isVisibleChunk(x, z), p -> p.removeEntityFromView(this));
     }
 
     @Override

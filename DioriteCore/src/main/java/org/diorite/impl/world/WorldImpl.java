@@ -12,6 +12,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Tickable;
+import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.tracker.EntityTrackers;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
@@ -54,6 +57,7 @@ public class WorldImpl implements World, Tickable
     protected final ChunkManagerImpl chunkManager;
     protected final Dimension        dimension;
     protected final WorldType        worldType;
+    protected final EntityTrackers   entityTrackers;
     protected     Difficulty       difficulty        = Difficulty.NORMAL;
     protected     HardcoreSettings hardcore          = new HardcoreSettings(false);
     protected     GameMode         defaultGameMode   = GameMode.SURVIVAL;
@@ -75,6 +79,7 @@ public class WorldImpl implements World, Tickable
     protected       int     saveTimer    = DEFAULT_AUTOSAVE_TIME;
     protected       boolean autosave     = true;
 
+
     // TODO: world border impl
     // TODO: add some method allowing to set multiple blocks without calling getChunk so often
 
@@ -88,11 +93,17 @@ public class WorldImpl implements World, Tickable
         this.chunkManager = new ChunkManagerImpl(this, chunkIO, WorldGenerators.getGenerator(generator, this, generatorOptions));
 
         this.spawnLock = this.createLock("spawn loader");
+        this.entityTrackers = new EntityTrackers(this);
     }
 
     public WorldImpl(final ChunkIoService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator)
     {
         this(chunkIO, name, group, dimension, worldType, generator, null);
+    }
+
+    public EntityTrackers getEntityTrackers()
+    {
+        return this.entityTrackers;
     }
 
     static void forChunksParallel(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
@@ -618,6 +629,7 @@ public class WorldImpl implements World, Tickable
     @Override
     public void doTick(final int tps)
     {
+        this.entityTrackers.doTick(tps);
         this.activeChunks.clear();
         for (final Player entity : this.getPlayersInWorld())
         {
@@ -688,13 +700,22 @@ public class WorldImpl implements World, Tickable
         }
     }
 
-//    public void addEntity(final EntityImpl entity)
-//    {
-//        this.getChunkGroup(entity.getLocation().getChunkPos()).addEntity(entity);
-//    }
-//
-//    public void removeEntity(final Entity entity)
-//    {
-//        this.getChunkGroup(entity.getLocation().getChunkPos()).removeEntity(entity);
-//    }
+    public void addEntity(final EntityImpl entity)
+    {
+        if (entity instanceof PlayerImpl)
+        {
+            this.entityTrackers.addTracked((PlayerImpl) entity);
+        }
+        else
+        {
+            this.entityTrackers.addTracked(entity);
+        }
+        entity.updateChunk(null, this.getChunkAt(entity.getLocation().getChunkPos()));
+    }
+
+    public void removeEntity(final EntityImpl entity)
+    {
+        this.entityTrackers.removeTracked(entity);
+        entity.remove(false);
+    }
 }

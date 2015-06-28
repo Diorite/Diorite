@@ -16,17 +16,17 @@ import org.diorite.impl.entity.EntityObject;
 @PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutSpawnEntity implements PacketPlayOut
 {
-    private int                              entityId;
-    private byte                             entityTypeId;
-    private int                              x; // WARNING! This is 'fixed-point' number
-    private int                              y; // WARNING! This is 'fixed-point' number
-    private int                              z; // WARNING! This is 'fixed-point' number
-    private int                              pitch;
-    private int                              yaw;
-    private int                              objectData;
-    private short                            movX;
-    private short                            movY;
-    private short                            movZ;
+    private int   entityId;
+    private byte  entityTypeId;
+    private int   x; // WARNING! This is 'fixed-point' number
+    private int   y; // WARNING! This is 'fixed-point' number
+    private int   z; // WARNING! This is 'fixed-point' number
+    private byte  pitch;
+    private byte  yaw;
+    private int   objectData;
+    private short movX;
+    private short movY;
+    private short movZ;
 
     public PacketPlayOutSpawnEntity()
     {
@@ -41,11 +41,11 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
         {
             throw new IllegalArgumentException();
         }
-        this.x = (int) entity.getX() << 5; // * 32
-        this.y = (int) entity.getY() << 5; // * 32
-        this.z = (int) entity.getZ() << 5; // * 32
-        this.pitch = (int) ((this.pitch * 256.0F) / 360.0F);
-        this.yaw = (int) ((this.yaw * 256.0F) / 360.0F);
+        this.x = (int) (entity.getX() * 32);
+        this.y = (int) (entity.getY() * 32);
+        this.z = (int) (entity.getZ() * 32);
+        this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
+        this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);
 
         this.objectData = entity.getEntityObjectData();
 
@@ -149,22 +149,22 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
         this.z = z;
     }
 
-    public int getPitch()
+    public byte getPitch()
     {
         return this.pitch;
     }
 
-    public void setPitch(final int pitch)
+    public void setPitch(final byte pitch)
     {
         this.pitch = pitch;
     }
 
-    public int getYaw()
+    public byte getYaw()
     {
         return this.yaw;
     }
 
-    public void setYaw(final int yaw)
+    public void setYaw(final byte yaw)
     {
         this.yaw = yaw;
     }

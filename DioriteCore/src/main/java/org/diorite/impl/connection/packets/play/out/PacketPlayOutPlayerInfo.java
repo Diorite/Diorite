@@ -16,6 +16,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
+import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.chat.component.BaseComponent;
@@ -63,6 +64,16 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
         {
             final Player p = Diorite.getServer().getPlayer(gp.getId());
             this.players.add(new PlayerInfoData(gp, p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
+        }
+    }
+
+    public PacketPlayOutPlayerInfo(final PlayerInfoAction action, final PlayerImpl... players)
+    {
+        this.action = action;
+        this.players = new ArrayList<>(players.length);
+        for (final PlayerImpl p : players)
+        {
+            this.players.add(new PlayerInfoData(p.getGameProfile(), p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
         }
     }
 
