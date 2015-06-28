@@ -166,20 +166,87 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             if (slot >= HOTBAR_BEGIN_ID)
             {
                 // clicked on hotbar
-                inv.replace(slot, clicked, null);
+                if (! inv.replace(slot, clicked, null))
+                {
+                    return false;
+                }
                 inv.getFullEqInventory().add(clicked);
             }
             else
             {
                 // clicked on other slot
-                inv.replace(slot, clicked, null);
+                if (! inv.replace(slot, clicked, null))
+                {
+                    return false;
+                }
                 inv.getHotbarInventory().add(clicked);
             }
         }
-        // TODO all other click types, and remember about throwing item on cursor to ground when closing eq
-        else// if (Objects.equals(ct, ClickType.MOUSE))
+        else if (Objects.equals(ct, ClickType.DROP_KEY))
         {
-            return false;
+            if (clicked.getAmount() == 1)
+            {
+                if (! inv.replace(slot, clicked, null))
+                {
+                    return false;
+                }
+                // TODO wywalic itemek na ziemie
+            }
+            else
+            {
+                final ItemStack toDrop = clicked.split(1);
+                // TODO wywalic itemek toDrop na ziemie
+            }
+        }
+        else if (Objects.equals(ct, ClickType.CTRL_DROP_KEY))
+        {
+            if (! inv.replace(slot, clicked, null))
+            {
+                return false;
+            }
+
+            // TODO Gdy juz beda entities to wywalic itemek na ziemie. Aktualnie po prostu znika
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_1))
+        {
+            return this.handleNumKey(slot, inv, clicked, 1);
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_2))
+        {
+            return this.handleNumKey(slot, inv, clicked, 2);
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_3))
+        {
+            return this.handleNumKey(slot, inv, clicked, 3);
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_4))
+        {
+            return this.handleNumKey(slot, inv, clicked, 4);
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_5))
+        {
+            return this.handleNumKey(slot, inv, clicked, 5);
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_6))
+        {
+            return this.handleNumKey(slot, inv, clicked, 6);
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_7))
+        {
+            return this.handleNumKey(slot, inv, clicked, 7);
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_8))
+        {
+            return this.handleNumKey(slot, inv, clicked, 8);
+        }
+        else if (Objects.equals(ct, ClickType.NUM_KEY_9))
+        {
+            return this.handleNumKey(slot, inv, clicked, 9);
+        }
+        // TODO all other click types, and remember about throwing item on cursor to ground when closing eq
+        else
+        {
+            return false; // Action not supported
         }
 
         return true;
@@ -188,5 +255,12 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
     protected int getAmountToStayInHand(final int amount)
     {
         return ((amount % 2) == 0) ? (amount / 2) : ((amount / 2) + 1);
+    }
+
+    protected boolean handleNumKey(final int slot, final PlayerInventoryImpl inv, final ItemStack clicked, int id)
+    {
+        id -= 1;
+        final ItemStack inHeldSlot = inv.getHotbarInventory().getItem(id);
+        return inv.replace(slot, clicked, inHeldSlot) && inv.getHotbarInventory().replace(id, inHeldSlot, clicked);
     }
 }
