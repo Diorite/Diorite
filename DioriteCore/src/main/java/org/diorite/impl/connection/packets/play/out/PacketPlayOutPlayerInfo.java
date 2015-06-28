@@ -69,7 +69,7 @@ public class PacketPlayOutPlayerInfo implements PacketPlayOut
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        // Useless
+        // TODO
     }
 
     @Override

@@ -175,6 +175,10 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInBlockPlace packet)
     {
+        if (packet.getCursorPos().getBlockFace() == null)
+        {
+            return; // prevent java.lang.IllegalArgumentException: Y can't be bigger than 256 // TODO
+        }
         this.server.sync(() -> EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()))), this.player);
     }
 

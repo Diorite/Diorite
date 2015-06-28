@@ -13,6 +13,8 @@ import org.diorite.utils.pipeline.SimpleEventPipeline;
 
 public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInventoryClickEvent> implements InventoryClickPipeline
 {
+    private static final int HOTBAR_BEGIN_ID = 36;
+
     @Override
     public void reset_()
     {
@@ -158,7 +160,21 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 return true;
             }
 
+            // TODO zbroja wskakuje na pola od armoru - tylko jesli sa wolne
+            // TODO dopracowac to bo ledwo dziala
 
+            if (slot >= HOTBAR_BEGIN_ID)
+            {
+                // clicked on hotbar
+                inv.replace(slot, clicked, null);
+                inv.getFullEqInventory().add(clicked);
+            }
+            else
+            {
+                // clicked on other slot
+                inv.replace(slot, clicked, null);
+                inv.getHotbarInventory().add(clicked);
+            }
         }
         // TODO all other click types, and remember about throwing item on cursor to ground when closing eq
         else// if (Objects.equals(ct, ClickType.MOUSE))
