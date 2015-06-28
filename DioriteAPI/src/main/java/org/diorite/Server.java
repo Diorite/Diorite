@@ -175,7 +175,14 @@ public interface Server extends Synchronizable
 
     default void broadcastMessage(final ChatPosition position, final String str)
     {
-        this.broadcastMessage(position, TextComponent.fromLegacyText(str));
+        if (position.equals(ChatPosition.ACTION)) // json don't work for action
+        {
+            this.broadcastRawMessage(ChatPosition.ACTION, str);
+        }
+        else
+        {
+            this.broadcastMessage(position, TextComponent.fromLegacyText(str));
+        }
     }
 
     default void broadcastMessage(final ChatPosition position, final String... strs)
@@ -184,7 +191,14 @@ public interface Server extends Synchronizable
         {
             for (final String str : strs)
             {
-                this.broadcastMessage(position, TextComponent.fromLegacyText(str));
+                if (position.equals(ChatPosition.ACTION)) // json don't work for action
+                {
+                    this.broadcastRawMessage(ChatPosition.ACTION, str);
+                }
+                else
+                {
+                    this.broadcastMessage(position, TextComponent.fromLegacyText(str));
+                }
             }
         }
     }
@@ -207,7 +221,14 @@ public interface Server extends Synchronizable
 
     default void broadcastSimpleColoredMessage(final ChatPosition position, final String str)
     {
-        this.broadcastMessage(position, ChatColor.translateAlternateColorCodes(str));
+        if (position.equals(ChatPosition.ACTION)) // json don't work for action
+        {
+            this.broadcastRawMessage(ChatPosition.ACTION, ChatColor.translateAlternateColorCodesInString(str));
+        }
+        else
+        {
+            this.broadcastMessage(position, ChatColor.translateAlternateColorCodes(str));
+        }
     }
 
     default void broadcastSimpleColoredMessage(final ChatPosition position, final String... strs)
