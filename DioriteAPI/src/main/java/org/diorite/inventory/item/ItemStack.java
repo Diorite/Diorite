@@ -145,6 +145,63 @@ public class ItemStack
         return this.material.equals(b.getMaterial()) && ItemMeta.equals(this.itemMeta, b.getItemMeta());
     }
 
+    /**
+     * Subtract the specified number of items and creates a new ItemStack with given amount of items
+     *
+     * @param size Number of items which should be removed from this itemstack and moved to new
+     * @return ItemStack with specified amount of items
+     *         null when number of items in this ItemStack is 1
+     * @throws IllegalArgumentException when size is greater than amount of items in this ItemStack
+     */
+    public ItemStack split(final int size)
+    {
+        if (size > this.amount)
+        {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.amount == 1)
+        {
+            return null;
+        }
+
+        final ItemStack temp = new ItemStack(this);
+
+        this.amount -= size;
+        temp.setAmount(size);
+
+        return temp;
+    }
+
+    /**
+     * Adds one ItemStack to another and returns the remainder
+     *
+     * @param other ItemStack to add
+     * @return All of which failed to add
+     */
+    public ItemStack combine(final ItemStack other)
+    {
+        if (! this.isSimilar(other))
+        {
+            throw new IllegalArgumentException();
+        }
+
+        if ((this.amount + other.getAmount()) > 64) // TODO Magic number - stack size
+        {
+            final int pendingItems = (this.amount + other.getAmount()) - 64;
+            this.amount = 64;
+
+            final ItemStack temp = new ItemStack(this);
+            temp.setAmount(pendingItems);
+            return temp;
+        }
+        else
+        {
+            this.amount += other.getAmount();
+            return null;
+        }
+    }
+
     @Override
     public int hashCode()
     {
@@ -168,7 +225,7 @@ public class ItemStack
 
         final ItemStack itemStack = (ItemStack) o;
 
-        return (this.amount == itemStack.amount) && ! ((this.material != null) ? ! this.material.equals(itemStack.material) : (itemStack.material != null)) && this.itemMeta.equals(itemStack.itemMeta);
+        return (this.amount == itemStack.amount) && ! ((this.material != null) ? ! this.material.equals(itemStack.material) : (itemStack.material != null)) && ((this.itemMeta == null) || this.itemMeta.equals(itemStack.itemMeta));
 
     }
 
