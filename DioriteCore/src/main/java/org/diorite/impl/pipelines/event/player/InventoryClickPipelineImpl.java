@@ -151,6 +151,15 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 }
             } // end cursor != null
         } // end MOUSE_RIGHT
+        else if (Objects.equals(ct, ClickType.SHIFT_MOUSE_LEFT) || Objects.equals(ct, ClickType.SHIFT_MOUSE_RIGHT))
+        {
+            if (clicked == null)
+            {
+                return true;
+            }
+
+
+        }
         // TODO all other click types, and remember about throwing item on cursor to ground when closing eq
         else// if (Objects.equals(ct, ClickType.MOUSE))
         {
@@ -162,10 +171,6 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
     protected int getAmountToStayInHand(final int amount)
     {
-        if ((amount % 2) == 0)
-        {
-            return amount / 2;
-        }
-        return (amount / 2) + 1;
+        return ((amount % 2) == 0) ? (amount / 2) : ((amount / 2) + 1);
     }
 }
