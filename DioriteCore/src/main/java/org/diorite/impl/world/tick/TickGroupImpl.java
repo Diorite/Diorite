@@ -6,7 +6,9 @@ import java.util.Random;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.ServerImpl;
 import org.diorite.impl.Tickable;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.material.BlockMaterialData;
@@ -62,8 +64,8 @@ public interface TickGroupImpl extends Tickable, TickGroup
             }
             final BlockMaterialData newMat = rand.nextBoolean() ? Material.GOLD_BLOCK : Material.GOLD_ORE;
             b.setType(newMat);
-//            final PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(b.getLocation(), newMat);
-//            ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(b.getWorld()) && p.isVisibleChunk(b.getChunk().getX(), b.getChunk().getZ()), packet);
+            final PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(b.getLocation(), newMat);
+            ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(b.getWorld()) && p.isVisibleChunk(b.getChunk().getX(), b.getChunk().getZ()), packet);
 
         }
         // TODO

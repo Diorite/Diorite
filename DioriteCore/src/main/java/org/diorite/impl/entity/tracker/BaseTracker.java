@@ -48,10 +48,19 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         return this.id;
     }
 
+    private boolean first = true;
+
     public void tick(final int tps, final Iterable<PlayerImpl> players)
     {
+        if (this.first)
+        {
+            this.first = false;
+            this.updatePlayers(players);
+            this.sendToAllExceptOwn(new PacketPlayOutEntityTeleport(this.tracker));
+            return;
+        }
         double deltaX = 0, deltaY = 0, deltaZ = 0;
-        this.isMoving = (this.tracker.getLocation().distanceSquared(this.xLoc, this.yLoc, this.zLoc) > 1.0);
+        this.isMoving = (this.tracker.getLocation().distanceSquared(this.xLoc, this.yLoc, this.zLoc) > 0.1);
         if (this.isMoving)
         {
             deltaX = this.tracker.getX() - this.xLoc;
