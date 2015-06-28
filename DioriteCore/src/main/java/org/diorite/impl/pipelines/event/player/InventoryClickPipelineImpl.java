@@ -243,6 +243,11 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         {
             return this.handleNumKey(slot, inv, clicked, 9);
         }
+        else if (Objects.equals(ct, ClickType.MOUSE_MIDDLE))
+        {
+            // TODO Dowiedziec sie co to robi, ale prawdopodobnie jest to sensowne tylko na creative
+            return true;
+        }
         // TODO all other click types, and remember about throwing item on cursor to ground when closing eq
         else
         {
