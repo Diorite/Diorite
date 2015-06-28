@@ -1,12 +1,17 @@
 package org.diorite.impl.command.defaults;
 
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange;
+import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.command.CommandPriority;
+import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.Material;
 
 public class DevCmd extends SystemCommandImpl
 {
@@ -32,6 +37,13 @@ public class DevCmd extends SystemCommandImpl
                 case "cb":
                 {
                     sender.sendSimpleColoredMessage(p.getLocation().toBlockLocation().getBlock().toString());
+                    break;
+                }
+                case "en":
+                {
+                    ItemImpl item = new ItemImpl(UUID.randomUUID(), p.getServer(), EntityImpl.ENTITY_ID.getAndIncrement(), p.getLocation().addY(2));
+                    item.setItemStack(new ItemStack(Material.TNT));
+                    p.getWorld().addEntity(item);
                     break;
                 }
                 default:

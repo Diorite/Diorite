@@ -17,6 +17,7 @@ import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
@@ -38,7 +39,6 @@ import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
-import org.diorite.scheduler.TaskBuilder;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
 
@@ -62,15 +62,16 @@ public class PlayersManagerImpl implements Tickable
     {// TODO: loading player
         //noinspection MagicNumber
 
-        final PlayerImpl player = new PlayerImpl(this.server, EntityImpl.ENTITY_ID.getAndIncrement(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
-        this.players.put(gameProfile.getId(), player);
-        player.updateChunk(null, player.getChunk());
-        return player;
+        return new PlayerImpl(this.server, EntityImpl.ENTITY_ID.getAndIncrement(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
     }
 
     @SuppressWarnings("MagicNumber")
     public void playerJoin(final PlayerImpl player)
     {
+        this.players.put(player.getUniqueID(), player);
+        this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
+        this.server.getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
+
         // TODO: this is only test code
         player.getNetworkManager().sendPacket(new PacketPlayOutLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
         player.getNetworkManager().sendPacket(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
@@ -85,11 +86,13 @@ public class PlayersManagerImpl implements Tickable
         this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 join to the server!");
 //        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
 
-        this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, player.getGameProfile()));
 
         this.server.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
         player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
 
+        player.getWorld().addEntity(player);
+
+        // debug code
         player.getInventory().getFullEqInventory().add(new ItemStack(Material.ACACIA_FENCE));
         player.getInventory().getFullEqInventory().add(new ItemStack(Material.BOOKSHELF));
         player.getInventory().getFullEqInventory().add(new ItemStack(Material.BIRCH_FENCE_GATE));
@@ -100,17 +103,14 @@ public class PlayersManagerImpl implements Tickable
         player.getInventory().setItem(18, new ItemStack(Material.EMERALD_ORE, 7));
         player.getInventory().update();
 
-
-        // First plugin in diorite! and it is lambda... :D
-        TaskBuilder.start(() -> "Test", () -> player.sendMessage("Task test! ;) " + player.getLocation())).syncTo(player).delay(20).repeated().start(200);
-//        TaskBuilder.start(() -> "Test", ()->player.sendMessage("Task test-2! ;) "+System.currentTimeMillis())).realTime().delay(1500).repeated().start(535);
-        /*EntityMinecartRideable entity = new EntityMinecartRideable(4, 180, -4);
-
-        player.getNetworkManager().sendPacket(new PacketPlayOutSpawnEntity(entity));
-        List<EntityMetadataObject> tff = new ArrayList<>();
-        tff.add(new EntityMetadataObject(EntityMetadataCodec.DataType.BYTE, 0, 0x00));
-        tff.add(new EntityMetadataObject(EntityMetadataCodec.DataType.INT, 17, 2));
-        player.getNetworkManager().sendPacket(new PacketPlayOutEntityMetadata(666, tff));*/ // TODO ENTITY TEST
+        this.server.addSync(() -> {
+            PacketPlayOut[] newPackets = player.getSpawnPackets();
+            this.server.getPlayersManager().forEachExcept(player, p -> {
+                PacketPlayOut[] playerPackets = p.getSpawnPackets();
+                player.getNetworkManager().sendPackets(playerPackets);
+                p.getNetworkManager().sendPackets(newPackets);
+            });
+        });
     }
 
     public List<String> getOnlinePlayersNames()
@@ -165,6 +165,23 @@ public class PlayersManagerImpl implements Tickable
         this.forEach(player -> player.getNetworkManager().sendPacket(packet));
     }
 
+    public void forEachExcept(final Player except, final Packet<?> packet)
+    {
+        //noinspection ObjectEquality
+        this.forEach(p -> p != except, player -> player.getNetworkManager().sendPacket(packet));
+    }
+
+    public void forEach(final Packet<?>[] packets)
+    {
+        this.forEach(player -> player.getNetworkManager().sendPackets(packets));
+    }
+
+    public void forEachExcept(final Player except, final Packet<?>[] packets)
+    {
+        //noinspection ObjectEquality
+        this.forEach(p -> p != except, player -> player.getNetworkManager().sendPackets(packets));
+    }
+
     public Collection<PlayerImpl> getOnlinePlayers(final Predicate<PlayerImpl> predicate)
     {
         return this.players.values().stream().filter(predicate).collect(Collectors.toSet());
@@ -175,15 +192,45 @@ public class PlayersManagerImpl implements Tickable
         this.forEach(predicate, player -> player.getNetworkManager().sendPacket(packet));
     }
 
+    public void forEachExcept(final Player except, final Predicate<PlayerImpl> predicate, final Packet<?> packet)
+    {
+        //noinspection ObjectEquality
+        this.forEach(p -> (p != except) && predicate.test(p), player -> player.getNetworkManager().sendPacket(packet));
+    }
+
+    public void forEach(final Predicate<PlayerImpl> predicate, final Packet<?>[] packets)
+    {
+        this.forEach(predicate, player -> player.getNetworkManager().sendPackets(packets));
+    }
+
+    public void forEachExcept(final Player except, final Predicate<PlayerImpl> predicate, final Packet<?>[] packets)
+    {
+        //noinspection ObjectEquality
+        this.forEach(p -> (p != except) && predicate.test(p), player -> player.getNetworkManager().sendPackets(packets));
+    }
+
+    public void forEachExcept(final Player except, final Consumer<PlayerImpl> consumer)
+    {
+        //noinspection ObjectEquality
+        this.players.values().stream().filter(p -> p != except).forEach(consumer);
+    }
+
     public void forEach(final Consumer<PlayerImpl> consumer)
     {
-        this.players.values().parallelStream().forEach(consumer);
+        this.players.values().stream().forEach(consumer);
+    }
+
+    public void forEachExcept(final Player except, final Predicate<PlayerImpl> predicate, final Consumer<PlayerImpl> consumer)
+    {
+        //noinspection ObjectEquality
+        this.players.values().stream().filter(p -> (p != except) && predicate.test(p)).forEach(consumer);
     }
 
     public void forEach(final Predicate<PlayerImpl> predicate, final Consumer<PlayerImpl> consumer)
     {
-        this.players.values().parallelStream().filter(predicate).forEach(consumer);
+        this.players.values().stream().filter(predicate).forEach(consumer);
     }
+
 
     public ServerImpl getServer()
     {

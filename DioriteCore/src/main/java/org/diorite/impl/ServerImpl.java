@@ -182,6 +182,29 @@ public class ServerImpl implements Server
         this.sync(runnable, this);
     }
 
+    public void addSync(final Runnable runnable, final Synchronizable sync)
+    {
+        this.syncQueue.add(new SimpleSyncTask()
+        {
+            @Override
+            public Synchronizable getSynchronizable()
+            {
+                return sync;
+            }
+
+            @Override
+            public void run()
+            {
+                runnable.run();
+            }
+        });
+    }
+
+    public void addSync(final Runnable runnable)
+    {
+        this.addSync(runnable, this);
+    }
+
     public void runSync()
     {
         for (final Iterator<SimpleSyncTask> it = this.syncQueue.iterator(); it.hasNext(); )

@@ -119,6 +119,30 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         this.channel.flush();
     }
 
+    public void sendPackets(final Packet<?>[] packets)
+    {
+        if (this.closed)
+        {
+            this.server.getServerConnection().remove(this);
+            return;
+        }
+        if (this.isChannelOpen())
+        {
+            this.nextPacket();
+            for (final Packet<?> packet : packets)
+            {
+                this.sendPacket(packet, null);
+            }
+        }
+        else
+        {
+            for (final Packet<?> packet : packets)
+            {
+                this.packetQueue.add(new QueuedPacket(packet, null));
+            }
+        }
+    }
+
     public void sendPacket(final Packet<?> packet)
     {
         if (this.closed)

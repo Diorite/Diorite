@@ -11,47 +11,45 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.entity.EntityObject;
+import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 
-@PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutSpawnEntity implements PacketPlayOut
+@PacketClass(id = 0x0F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+public class PacketPlayOutSpawnEntityLiving implements PacketPlayOut
 {
-    private int   entityId;
-    private byte  entityTypeId;
-    private int   x; // WARNING! This is 'fixed-point' number
-    private int   y; // WARNING! This is 'fixed-point' number
-    private int   z; // WARNING! This is 'fixed-point' number
-    private byte  pitch;
-    private byte  yaw;
-    private int   objectData;
-    private short movX;
-    private short movY;
-    private short movZ;
+    private int                              entityId;
+    private byte                             entityTypeId;
+    private int                              x; // WARNING! This is 'fixed-point' number
+    private int                              y; // WARNING! This is 'fixed-point' number
+    private int                              z; // WARNING! This is 'fixed-point' number
+    private byte                             yaw;
+    private byte                             pitch;
+    private byte                             headPitch;
+    private short                            movX;
+    private short                            movY;
+    private short                            movZ;
+    private Iterable<EntityMetadataEntry<?>> metadata;
 
-    public PacketPlayOutSpawnEntity()
+    public PacketPlayOutSpawnEntityLiving()
     {
     }
 
     @SuppressWarnings("MagicNumber")
-    public <T extends EntityImpl & EntityObject> PacketPlayOutSpawnEntity(final T entity)
+    public PacketPlayOutSpawnEntityLiving(final EntityImpl entity)
     {
         this.entityId = entity.getId();
         this.entityTypeId = (byte) entity.getMcId();
-        if (entity.getType().isLiving())
-        {
-            throw new IllegalArgumentException();
-        }
         this.x = (int) (entity.getX() * 32);
         this.y = (int) (entity.getY() * 32);
         this.z = (int) (entity.getZ() * 32);
-        this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
         this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);
-
-        this.objectData = entity.getEntityObjectData();
+        this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
+        this.headPitch = (byte) ((entity.getHeadPitch() * 256.0F) / 360.0F);
 
         this.movX = (short) (entity.getVelocityX() * 8000); // IDK why 8000
         this.movY = (short) (entity.getVelocityY() * 8000);
         this.movZ = (short) (entity.getVelocityZ() * 8000);
+        // TODO pasre metadata from entity, or get it if possible
+        this.metadata = entity.getMetadata().getEntries();
     }
 
     @Override
@@ -62,35 +60,31 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
         this.x = data.readInt();
         this.y = data.readInt();
         this.z = data.readInt();
-        this.pitch = data.readByte();
         this.yaw = data.readByte();
-        this.objectData = data.readInt();
-        if (this.objectData > 0)
-        {
-            this.movX = data.readShort();
-            this.movY = data.readShort();
-            this.movZ = data.readShort();
-        }
+        this.pitch = data.readByte();
+        this.headPitch = data.readByte();
+        this.movX = data.readShort();
+        this.movY = data.readShort();
+        this.movZ = data.readShort();
+        this.metadata = data.readEntityMetadata();
     }
 
     @Override
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-//        System.out.println("write packet...2");
+//        System.out.println("write packet...3");
         data.writeVarInt(this.entityId);
         data.writeByte(this.entityTypeId);
         data.writeInt(this.x);
         data.writeInt(this.y);
         data.writeInt(this.z);
-        data.writeByte(this.pitch);
         data.writeByte(this.yaw);
-        data.writeInt(this.objectData);
-        if (this.objectData > 0)
-        {
-            data.writeShort(this.movX);
-            data.writeShort(this.movY);
-            data.writeShort(this.movZ);
-        }
+        data.writeByte(this.pitch);
+        data.writeByte(this.headPitch);
+        data.writeShort(this.movX);
+        data.writeShort(this.movY);
+        data.writeShort(this.movZ);
+        data.writeEntityMetadata(this.metadata);
     }
 
     @Override
@@ -154,11 +148,6 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
         return this.pitch;
     }
 
-    public void setPitch(final byte pitch)
-    {
-        this.pitch = pitch;
-    }
-
     public byte getYaw()
     {
         return this.yaw;
@@ -169,14 +158,19 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
         this.yaw = yaw;
     }
 
-    public int getObjectData()
+    public void setPitch(final byte pitch)
     {
-        return this.objectData;
+        this.pitch = pitch;
     }
 
-    public void setObjectData(final int objectData)
+    public byte getHeadPitch()
     {
-        this.objectData = objectData;
+        return this.headPitch;
+    }
+
+    public void setHeadPitch(final byte headPitch)
+    {
+        this.headPitch = headPitch;
     }
 
     public short getMovX()
@@ -209,9 +203,19 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
         this.movZ = movZ;
     }
 
+    public Iterable<EntityMetadataEntry<?>> getMetadata()
+    {
+        return this.metadata;
+    }
+
+    public void setMetadata(final Iterable<EntityMetadataEntry<?>> metadata)
+    {
+        this.metadata = metadata;
+    }
+
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("entityId", this.entityId).append("entityTypeId", this.entityTypeId).append("x", this.x).append("y", this.y).append("z", this.z).append("pitch", this.pitch).append("yaw", this.yaw).append("objectData", this.objectData).append("movX", this.movX).append("movY", this.movY).append("movZ", this.movZ).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("entityId", this.entityId).append("entityTypeId", this.entityTypeId).append("x", this.x).append("y", this.y).append("z", this.z).append("yaw", this.yaw).append("pitch", this.pitch).append("headPitch", this.headPitch).append("movX", this.movX).append("movY", this.movY).append("movZ", this.movZ).append("metadata", this.metadata).toString();
     }
 }

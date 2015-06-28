@@ -10,16 +10,23 @@ import org.diorite.impl.ServerImpl;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityDestroy;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange.ReasonCodes;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutNamedEntitySpawn;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutResourcePackSend;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutTabComplete;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutWorldParticles;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
+import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
+import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
@@ -28,23 +35,56 @@ import org.diorite.Particle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Player;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
+import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.math.pack.IntsToLong;
 
+import gnu.trove.TIntCollection;
+import gnu.trove.list.array.TIntArrayList;
+
+// TODO: add Human or other entity not fully a player class for bots/npcs
 public class PlayerImpl extends LivingEntityImpl implements Player
 {
+    @SuppressWarnings("MagicNumber")
+    public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.6F, 1.8F);
+    @SuppressWarnings("MagicNumber")
+    public static final ImmutableEntityBoundingBox DIE_SIZE  = new ImmutableEntityBoundingBox(0.2F, 0.2F);
+
+    /**
+     * byte entry with visible skin parts flags.
+     */
+    protected static final byte META_KEY_SKIN_FLAGS = 10;
+
+    /**
+     * byte entry, 0x02 bool cape hidden
+     */
+    protected static final byte META_KEY_CAPE = 16;
+
+    /**
+     * float entry, amount of absorption hearts (yellow/gold ones)
+     */
+    protected static final byte META_KEY_ABSORPTION_HEARTS = 17;
+
+    /**
+     * int entry, amount of player points
+     */
+    protected static final byte META_KEY_SCORE = 18;
+
+
     // TODO: move this
     private static final AttributeModifier tempSprintMod = new AttributeModifierImpl(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE);
+
+    protected final TIntCollection removeQueue = new TIntArrayList(5, - 1);
+
     protected final GameProfile         gameProfile;
     protected final NetworkManager      networkManager;
     protected final PlayerChunksImpl    playerChunks;
-    protected       boolean             isCrouching;
-    protected       boolean             isSprinting;
     protected       byte                viewDistance;
     protected       byte                renderDistance;
     protected       GameMode            gameMode;
@@ -56,12 +96,23 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     public PlayerImpl(final ServerImpl server, final int id, final GameProfile gameProfile, final NetworkManager networkManager, final ImmutableLocation location)
     {
         super(gameProfile.getId(), server, id, location);
+        this.aabb = BASE_SIZE.create(this);
         this.gameProfile = gameProfile;
         this.networkManager = networkManager;
         this.renderDistance = server.getRenderDistance();
         this.gameMode = this.world.getDefaultGameMode();
         this.playerChunks = new PlayerChunksImpl(this);
         this.inventory = new PlayerInventoryImpl(this, 0); // 0 because this is owner of this inventory, and we need this to update
+    }
+
+    @Override
+    public void initMetadata()
+    {
+        super.initMetadata();
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_SKIN_FLAGS, 0));
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_CAPE, 0));
+        this.metadata.add(new EntityMetadataFloatEntry(META_KEY_ABSORPTION_HEARTS, 0));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_SCORE, 0));
     }
 
     @Override
@@ -77,6 +128,62 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         if (this.playerChunks != null) // sometimes it is null on first tick o.O
         {
             this.playerChunks.doTick(tps);
+
+
+            // send remove entity packets
+            if (! this.removeQueue.isEmpty())
+            {
+                final int[] ids;
+                synchronized (this.removeQueue)
+                {
+                    ids = this.removeQueue.toArray();
+                    this.removeQueue.clear();
+                }
+                this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(ids));
+            }
+        }
+
+    }
+
+    @Override
+    public PacketPlayOut getSpawnPacket()
+    {
+        return new PacketPlayOutNamedEntitySpawn(this);
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    public void removeEntityFromView(final BaseTracker<?> e)
+    {
+        final int id = e.getId();
+        if (id == - 1)
+        {
+            return;
+        }
+        if ((e.getTracker() instanceof PlayerImpl) || (this.lastTickThread == Thread.currentThread()))
+        {
+            this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(id));
+        }
+        else
+        {
+            this.removeQueue.add(id);
+        }
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    public void removeEntityFromView(final Entity e)
+    {
+        final int id = e.getId();
+        if (id == - 1)
+        {
+            return;
+        }
+        if ((e instanceof PlayerImpl) || (this.lastTickThread == Thread.currentThread()))
+        {
+            this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(id));
+        }
+        else
+        {
+            this.removeQueue.add(id);
         }
     }
 
@@ -145,19 +252,19 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     @Override
     public boolean isCrouching()
     {
-        return this.isCrouching;
+        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED);
     }
 
     @Override
     public void setCrouching(final boolean isCrouching)
     {
-        this.isCrouching = isCrouching;
+        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED, isCrouching);
     }
 
     @Override
     public boolean isSprinting()
     {
-        return this.isSprinting;
+        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING);
     }
 
     @Override
@@ -169,8 +276,8 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         {
             attrib.addModifier(tempSprintMod);
         }
-        this.networkManager.sendPacket(new PacketPlayOutUpdateAttributes(this.id, this.attributes));
-        this.isSprinting = isSprinting;
+        this.networkManager.sendPacket(new PacketPlayOutUpdateAttributes(0, this.attributes));
+        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING, isSprinting);
     }
 
     @Override
@@ -347,6 +454,9 @@ public class PlayerImpl extends LivingEntityImpl implements Player
 
     public void onLogout()
     {
-        this.world.getChunkAt(this.getLocation().getChunkPos()).removeEntity(this);
+        this.remove(true);
+
+        this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.getName() + "&7&l left from the server!");
+        this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.getName() + "&7 left from the server!");
     }
 }

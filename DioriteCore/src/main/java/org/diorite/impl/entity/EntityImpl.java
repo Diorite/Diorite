@@ -9,29 +9,82 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.Tickable;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
+import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
+import org.diorite.impl.entity.tracker.Trackable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Entity;
+import org.diorite.utils.math.geometry.EntityBoundingBox;
+import org.diorite.world.chunk.Chunk;
 
-public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable
+public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable, Trackable
 {
-    public static final AtomicInteger ENTITY_ID = new AtomicInteger();
+    public static final AtomicInteger ENTITY_ID     = new AtomicInteger();
+    public static final int           MAX_AIR_LEVEL = 300;
 
-    protected final    ServerImpl server;
-    protected final    int        id;
-    protected final    WorldImpl  world;
-    protected volatile Thread     lastTickThread;
-    private            double     x;
-    private            double     y;
-    private            double     z;
-    private            float      yaw;
-    private            float      pitch;
-    private            double     lastX;
-    private            double     lastY;
-    private            double     lastZ;
-    private            float      lastYaw;
-    private            float      lastPitch;
+    /**
+     * byte entry, with flags. {@link org.diorite.impl.entity.EntityImpl.BasicFlags}
+     */
+    protected static final byte META_KEY_BASIC_FLAGS = 0;
+
+    /**
+     * short entry, air level
+     */
+    protected static final byte META_KEY_AIR = 1;
+
+    /**
+     * String entry, name/name tag
+     */
+    protected static final byte META_KEY_NAME_TAG = 2;
+
+    /**
+     * byte/bool entry, if name tag should be visible
+     */
+    protected static final byte META_KEY_ALWAYS_SHOW_NAME_TAG = 3;
+
+    /**
+     * byte/bool entry, if entity should make sound.
+     */
+    protected static final byte META_KEY_SILENT = 4;
+
+    /**
+     * Contains mask for basic flags used in matadata at index 0
+     * http://wiki.vg/Entities#Entity
+     */
+    public static final class BasicFlags
+    {
+        public static final byte ON_FIRE   = 0x01;
+        public static final byte CROUCHED  = 0x01;
+        public static final byte SPRINTING = 0x01;
+        public static final byte ACTION    = 0x01;
+        public static final byte INVISIBLE = 0x01;
+
+        private BasicFlags()
+        {
+        }
+    }
+
+    protected final    ServerImpl        server;
+    protected final    WorldImpl         world;
+    protected volatile Thread            lastTickThread;
+    protected          EntityBoundingBox aabb;
+    private            int               id;
+    private            double            x;
+    private            double            y;
+    private            double            z;
+    private            float             yaw;
+    private            float             pitch;
+    private            float             velX;
+    private            float             velY;
+    private            float             velZ;
+    protected          EntityMetadata    metadata;
+
+
+    protected boolean aiEnabled = true; // don't do any actions if AI is disabled
 
     protected EntityImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
     {
@@ -44,12 +97,95 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
         this.world = (WorldImpl) location.getWorld();
-        this.updateChunk(null, this.world.getChunkAt(location.getChunkPos()));
+        this.metadata = new EntityMetadata();
+        this.initMetadata();
+    }
+
+    public void initMetadata()
+    {
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_BASIC_FLAGS, 0));
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_AIR, MAX_AIR_LEVEL));
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_SILENT, 0));
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_ALWAYS_SHOW_NAME_TAG, 0));
+        this.metadata.add(new EntityMetadataStringEntry(META_KEY_NAME_TAG, ""));
+
+
+        // test TODO: remove
+//        this.metadata.add(new EntityMetadataByteEntry(META_KEY_ALWAYS_SHOW_NAME_TAG, 1));
+//        this.metadata.add(new EntityMetadataStringEntry(META_KEY_NAME_TAG, ChatColor.translateAlternateColorCodesInString("&a#&3OnlyDiorite")));
+
+    }
+
+    public boolean isOnGround()
+    {
+        // TODO: implement in better way
+        return (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().subtractY(1).getBlock().getType().isSolid();
+    }
+
+    @Override
+    public int getTrackRange()
+    {
+        return 64;
+    }
+
+    public EntityMetadata getMetadata()
+    {
+        return this.metadata;
+    }
+
+    @Override
+    public float getVelocityX()
+    {
+        return this.velX;
+    }
+
+    @Override
+    public float getVelocityY()
+    {
+        return this.velY;
+    }
+
+    @Override
+    public float getVelocityZ()
+    {
+        return this.velZ;
+    }
+
+    public float getHeadPitch()
+    {
+        return 0.0F;
     }
 
     public ChunkImpl getChunk()
     {
         return this.world.getChunkAt(((int) this.x) >> 4, ((int) this.z) >> 4);
+    }
+
+    public boolean isAiEnabled()
+    {
+        return this.aiEnabled;
+    }
+
+    public void setAiEnabled(final boolean aiEnabled)
+    {
+        this.aiEnabled = aiEnabled;
+    }
+
+    @Override
+    public boolean exist()
+    {
+        return this.id != - 1;
+    }
+
+    public void remove(final boolean full)
+    {
+        if (full)
+        {
+            this.world.removeEntity(this);
+            return;
+        }
+        this.id = - 1;
+        this.getChunk().removeEntity(this);
     }
 
     @Override
@@ -100,6 +236,16 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         return this.y;
     }
 
+    public float getYaw()
+    {
+        return this.yaw;
+    }
+
+    public float getPitch()
+    {
+        return this.pitch;
+    }
+
     @Override
     public ImmutableLocation getLocation()
     {
@@ -112,20 +258,11 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         return this.server;
     }
 
-    public ImmutableLocation getLastLocation()
-    {
-        return new ImmutableLocation(this.lastX, this.lastY, this.lastZ, this.lastYaw, this.lastPitch);
-    }
 
     public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
     {
         final ChunkImpl chunk = this.getChunk();
 
-        this.lastX = this.x;
-        this.lastY = this.y;
-        this.lastZ = this.z;
-        this.lastYaw = this.yaw;
-        this.lastPitch = this.pitch;
         this.x += modX;
         this.y += modY;
         this.z += modZ;
@@ -145,9 +282,6 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     {
         final ChunkImpl chunk = this.getChunk();
 
-        this.lastX = this.x;
-        this.lastY = this.y;
-        this.lastZ = this.z;
         this.x = newX;
         this.y = newY;
         this.z = newZ;
@@ -174,11 +308,22 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 
     public void setRotation(final float newYaw, final float newPitch)
     {
-        this.lastYaw = this.yaw;
-        this.lastPitch = this.pitch;
         this.yaw = newYaw;
         this.pitch = newPitch;
     }
+
+    /**
+     * @return Packet need to spawn entity
+     */
+    public abstract PacketPlayOut getSpawnPacket();
+
+    /**
+     * Need return array of packet in valid order needed to spawn entity with all data. <br>
+     * Like base spawn packet, potion effects, metadata, passanger etc...
+     *
+     * @return array of packets.
+     */
+    public abstract PacketPlayOut[] getSpawnPackets();
 
     @Override
     public String toString()
