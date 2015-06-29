@@ -39,6 +39,18 @@ public class BoundingBox implements Cloneable
         return box;
     }
 
+    public final BoundingBox grow(final double x, final double y, final double z)
+    {
+        final BoundingBox bb = new BoundingBox();
+        bb.min.setX(this.min.getX() - x);
+        bb.min.setY(this.min.getY() - y);
+        bb.min.setZ(this.min.getZ() - z);
+        bb.max.setX(this.max.getX() + x);
+        bb.max.setY(this.max.getY() + y);
+        bb.max.setZ(this.max.getZ() + z);
+        return bb;
+    }
+
     public static BoundingBox fromPositionAndSize(final Vector pos, final Vector size)
     {
         final BoundingBox box = new BoundingBox();
