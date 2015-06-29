@@ -143,6 +143,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
             }
         }
 
+        this.aabb.setCenter(this);
     }
 
     @Override

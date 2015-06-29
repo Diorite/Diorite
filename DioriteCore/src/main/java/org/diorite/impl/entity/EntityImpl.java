@@ -1,7 +1,10 @@
 package org.diorite.impl.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -18,6 +21,7 @@ import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Entity;
+import org.diorite.utils.math.geometry.BoundingBox;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
 import org.diorite.world.chunk.Chunk;
 
@@ -250,6 +254,40 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     public ImmutableLocation getLocation()
     {
         return new ImmutableLocation(this.x, this.y, this.z, this.yaw, this.pitch, this.world);
+    }
+
+    @Override
+    public List<Entity> getNearbyEntities(final double x, final double y, final double z)
+    {
+        final BoundingBox bb = this.aabb.grow(x, y, z);
+
+        final List<Entity> entities = new ArrayList<>(25);
+        final int chunkScanSize = 3; // TODO allow changing this
+
+        final int cx = this.getLocation().getChunk().getX(); // Chunk X location
+        final int cz = this.getLocation().getChunk().getZ(); // Chunk Z location
+
+        final int cxBeginScan = cx - chunkScanSize;
+        final int czBeginScan = cz - chunkScanSize;
+
+        final int cxEndScan = cx + chunkScanSize;
+        final int czEndScan = cz + chunkScanSize;
+
+        for (int i = cxBeginScan; i <= cxEndScan; i++)
+        {
+            for (int j = czBeginScan; j <= czEndScan; j++)
+            {
+                final ChunkImpl chunk = (ChunkImpl)this.getLocation().getWorld().getChunkAt(i, j);
+                if (!chunk.isLoaded())
+                {
+                    continue;
+                }
+
+                entities.addAll(chunk.getEntities().stream().filter(entity -> BoundingBox.intersects(bb, entity.aabb)).collect(Collectors.toList()));
+            }
+        }
+
+        return entities;
     }
 
     @Override

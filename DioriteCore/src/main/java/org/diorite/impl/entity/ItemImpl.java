@@ -4,12 +4,15 @@ import java.util.UUID;
 
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutCollect;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityMetadata;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnEntity;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.ImmutableLocation;
+import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Item;
+import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
@@ -48,6 +51,20 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM, item));
     }
 
+    public boolean pickUpItem(final PlayerImpl player)
+    {
+        // TODO Dopracowac mechanike podnoszenia w wypadku gdy gracz ma pelne eq
+        if (player.getInventory().getFullEqInventory().add(this.getItemStack()).length != 0)
+        {
+            return false;
+        }
+        player.getInventory().update(); // TODO REMOVE!!!
+
+        player.getNetworkManager().sendPacket(new PacketPlayOutCollect(this.getId(), player.getId())); // TODO Entity tracker zeby inni widzieli podnoszenie
+        this.remove(true);
+        return true;
+    }
+
     private int timeLived = 0; // in centiseconds, 1/100 of second.
 
     @Override
@@ -63,6 +80,20 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         {
             this.remove(true);
             return;
+        }
+
+        for (final Entity entity : this.getNearbyEntities(1, 2, 1))
+        {
+            // TODO Dobre miejsce zeby dodac laczenie sie kilku takich samych itemkow w jeden
+            if (!(entity instanceof Player))
+            {
+                continue;
+            }
+
+            if (this.pickUpItem((PlayerImpl)entity))
+            {
+                break;
+            }
         }
     }
 
