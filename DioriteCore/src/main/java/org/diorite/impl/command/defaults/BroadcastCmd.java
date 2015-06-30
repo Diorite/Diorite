@@ -3,6 +3,7 @@ package org.diorite.impl.command.defaults;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import org.diorite.chat.ChatColor;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.chat.ChatPosition;
 import org.diorite.command.CommandPriority;
@@ -29,7 +30,7 @@ public class BroadcastCmd extends SystemCommandImpl
             {
                 sender.getServer().sendConsoleSimpleColoredMessage(args.asText());
             }
-            sender.getServer().broadcastSimpleColoredMessage(chatPosition, args.asText());
+            sender.getServer().broadcastSimpleColoredMessage(chatPosition, ChatColor.GRAY + "[" + ChatColor.DARK_AQUA + "Server" + ChatColor.GRAY + "] " + ChatColor.WHITE + args.asText());
         });
     }
 }
