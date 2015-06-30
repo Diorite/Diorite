@@ -125,22 +125,29 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     public void doTick(final int tps)
     {
         super.doTick(tps);
-        if (this.playerChunks != null) // sometimes it is null on first tick o.O
+        if (this.playerChunks == null) // sometimes it is null on first tick o.O
         {
-            this.playerChunks.doTick(tps);
+            return;
+        }
+        this.playerChunks.doTick(tps);
 
 
-            // send remove entity packets
-            if (! this.removeQueue.isEmpty())
+        // send remove entity packets
+        if (! this.removeQueue.isEmpty())
+        {
+            final int[] ids;
+            synchronized (this.removeQueue)
             {
-                final int[] ids;
-                synchronized (this.removeQueue)
-                {
-                    ids = this.removeQueue.toArray();
-                    this.removeQueue.clear();
-                }
-                this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(ids));
+                ids = this.removeQueue.toArray();
+                this.removeQueue.clear();
             }
+            this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(ids));
+        }
+
+        // TODO: maybe don't pickup every tick?
+        for (final ItemImpl entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
+        {
+            entity.pickUpItem(this);
         }
     }
 

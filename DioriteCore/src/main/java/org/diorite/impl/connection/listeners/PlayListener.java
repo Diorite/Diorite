@@ -214,15 +214,12 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void disconnect(final BaseComponent message)
     {
-//        final PlayerImpl player = this.player;
-//        this.server.sync(() -> {
-            this.server.getPlayersManager().playerQuit(this.player);
+        this.server.getPlayersManager().playerQuit(this.player);
 
-            this.networkManager.sendPacket(new PacketPlayOutDisconnect(message));
-            this.networkManager.close(message, true);
-            this.server.getServerConnection().remove(this.networkManager);
-            // TODO: implement
-//        });
+        this.networkManager.sendPacket(new PacketPlayOutDisconnect(message));
+        this.networkManager.close(message, true);
+        this.server.getServerConnection().remove(this.networkManager);
+        // TODO: implement
     }
 
     @Override

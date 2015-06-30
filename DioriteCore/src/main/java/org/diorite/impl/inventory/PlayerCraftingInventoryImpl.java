@@ -16,10 +16,4 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
     {
         super(playerInventory, content);
     }
-
-    @Override
-    public int getWindowId()
-    {
-        return 0; // Unused
-    }
 }

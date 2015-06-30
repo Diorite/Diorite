@@ -16,10 +16,4 @@ public class PlayerArmorInventoryImpl extends PlayerInventoryPartImpl implements
     {
         super(playerInventory, content);
     }
-
-    @Override
-    public int getWindowId()
-    {
-        return 0; // Unused in this inventory
-    }
 }

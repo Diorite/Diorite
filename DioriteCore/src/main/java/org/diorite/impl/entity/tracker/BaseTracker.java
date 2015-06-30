@@ -4,10 +4,12 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityMetadata;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityTeleport;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutRelEntityMoveLook;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 
 @SuppressWarnings({"ObjectEquality", "MagicNumber"})
@@ -55,6 +57,9 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         if (this.first)
         {
             this.first = false;
+            this.xLoc = this.tracker.getX();
+            this.yLoc = this.tracker.getY();
+            this.zLoc = this.tracker.getZ();
             this.updatePlayers(players);
             this.sendToAllExceptOwn(new PacketPlayOutEntityTeleport(this.tracker));
             return;
@@ -79,7 +84,7 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
 
         if (this.isMoving && ! this.tracked.isEmpty())
         {
-            if ((deltaX < 4) && (deltaX > -4) && (deltaY < 4) && (deltaY > -4)  && (deltaZ < 4) && (deltaZ > -4) )
+            if ((deltaX < 4) && (deltaX > - 4) && (deltaY < 4) && (deltaY > - 4) && (deltaZ < 4) && (deltaZ > - 4))
             {
                 this.sendToAllExceptOwn(new PacketPlayOutRelEntityMoveLook(this.tracker, deltaX, deltaY, deltaZ));
             }
@@ -88,6 +93,14 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
                 this.sendToAllExceptOwn(new PacketPlayOutEntityTeleport(this.tracker));
             }
         }
+
+        // meta update
+        final Collection<EntityMetadataEntry<?>> meta = this.tracker.getMetadata().popOutdatedEntries();
+        if ((meta != null) && ! meta.isEmpty())
+        {
+            this.sendToAll(new PacketPlayOutEntityMetadata(this.tracker, meta));
+        }
+
     }
 
     public void sendToAll(final PacketPlayOut packet)

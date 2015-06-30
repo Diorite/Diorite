@@ -26,7 +26,7 @@ import org.diorite.cfg.system.TemplateCreator;
 
 @SuppressWarnings({"HardcodedFileSeparator", "SimplifiableIfStatement"})
 @CfgClass(name = "DioriteConfig")
-@CfgComments({"Welcome in Diorite configuration file, in this file you will", "find every option needed to configurate your server."})
+@CfgComments({"Welcome in Diorite configuration file, in this file you will", "find every option needed to configure your server."})
 @CfgFooterComment("End of configuration!")
 @CfgFooterComment("=====================")
 public class DioriteConfigImpl implements DioriteConfig

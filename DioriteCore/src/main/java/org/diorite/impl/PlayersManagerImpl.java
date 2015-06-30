@@ -62,7 +62,7 @@ public class PlayersManagerImpl implements Tickable
     {// TODO: loading player
         //noinspection MagicNumber
 
-        return new PlayerImpl(this.server, EntityImpl.ENTITY_ID.getAndIncrement(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
+        return new PlayerImpl(this.server, EntityImpl.getNextEntityID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
     }
 
     @SuppressWarnings("MagicNumber")
@@ -131,7 +131,7 @@ public class PlayersManagerImpl implements Tickable
 
     public void playerQuit(final PlayerImpl player)
     {
-        this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player.getGameProfile()));
+        this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player));
         this.players.remove(player.getUniqueID());
         player.onLogout();
     }

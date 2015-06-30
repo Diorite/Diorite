@@ -20,8 +20,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
     public void reset_()
     {
         // TODO Drop item on ground, not to eq
-        this.addBefore(EventPriority.NORMAL, "Diorite|RemoveBlock", (evt, pipeline) ->
-        {
+        this.addBefore(EventPriority.NORMAL, "Diorite|RemoveBlock", (evt, pipeline) -> {
             if (evt.isCancelled())
             {
                 return;
@@ -40,14 +39,13 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
             evt.getPlayer().getInventory().update(); // TODO This shouldn't be needed
         });*/
 
-        this.addAfter(EventPriority.NORMAL, "Diorite|DropItem", (evt, pipeline) ->
-        {
+        this.addAfter(EventPriority.NORMAL, "Diorite|DropItem", (evt, pipeline) -> {
             if (evt.isCancelled())
             {
                 return;
             }
             // TODO Drop naturally
-            ItemImpl item = new ItemImpl(UUID.randomUUID(), (ServerImpl)evt.getPlayer().getServer(), EntityImpl.ENTITY_ID.getAndIncrement(), evt.getBlock().getLocation().addY(1).toLocation());
+            ItemImpl item = new ItemImpl(UUID.randomUUID(), (ServerImpl) this.getServer(), EntityImpl.getNextEntityID(), evt.getBlock().getLocation().addY(1).toLocation());
             item.setItemStack(new ItemStack(evt.getBlock().getType()));
             ((WorldImpl) evt.getBlock().getLocation().getWorld()).addEntity(item);
         });

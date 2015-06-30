@@ -1,5 +1,7 @@
 package org.diorite.impl.entity.meta;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -39,12 +41,27 @@ public class EntityMetadata
         }
     }
 
-    public Iterable<EntityMetadataEntry<?>> getOutdatedEntries()
+    public Collection<EntityMetadataEntry<?>> getOutdatedEntries()
     {
         return this.data.valueCollection().stream().filter(EntityMetadataEntry::isDirty).collect(Collectors.toSet());
     }
 
-    public Iterable<EntityMetadataEntry<?>> getEntries()
+    /**
+     * WARN: this method will mark all entires as updated again
+     *
+     * @return outdated entires of metadata.
+     */
+    public Collection<EntityMetadataEntry<?>> popOutdatedEntries()
+    {
+        final Collection<EntityMetadataEntry<?>> result = new HashSet<>(3);
+        this.data.valueCollection().stream().filter(EntityMetadataEntry::isDirty).forEach(e -> {
+            e.setClean();
+            result.add(e);
+        });
+        return result;
+    }
+
+    public Collection<EntityMetadataEntry<?>> getEntries()
     {
         return this.data.valueCollection().stream().collect(Collectors.toSet());
     }
