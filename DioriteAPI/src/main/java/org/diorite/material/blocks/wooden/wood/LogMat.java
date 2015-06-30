@@ -207,7 +207,7 @@ public class LogMat extends WoodMat implements RotatableMat
      */
     public static void register(final LogMat element)
     {
-        byID.put((byte) element.getType(), element);
+        byID.put((byte) (element.getType() + ((element instanceof Log2) ? 16:0)), element);
         byName.put(element.name(), element);
     }
 
