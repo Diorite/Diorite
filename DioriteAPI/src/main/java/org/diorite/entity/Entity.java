@@ -1,6 +1,6 @@
 package org.diorite.entity;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.diorite.GameObject;
 import org.diorite.ImmutableLocation;
@@ -31,7 +31,11 @@ public interface Entity extends GameObject, Synchronizable
 
     Server getServer();
 
-    List<Entity> getNearbyEntities(double x, double y, double z);
+    Collection<? extends Entity> getNearbyEntities(double x, double y, double z);
+
+    <T extends Entity> Collection<? extends T> getNearbyEntities(double x, double y, double z, Class<? extends T> type);
+
+    <T extends Entity> Collection<? extends T> getNearbyEntities(double x, double y, double z, EntityType type);
 
     default int getMcId()
     {
