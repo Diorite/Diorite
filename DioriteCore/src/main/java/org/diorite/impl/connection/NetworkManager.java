@@ -432,7 +432,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
             {
                 return;
             }
-            this.closed = true;
             this.preparing = false;
             this.packetQueue.clear();
             if (! wasSafe)
@@ -446,6 +445,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
                     }
                 }
             }
+            this.closed = true;
             if (this.channel.isOpen())
             {
                 this.channel.close();
