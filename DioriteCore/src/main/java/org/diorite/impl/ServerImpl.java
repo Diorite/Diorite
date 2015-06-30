@@ -56,6 +56,8 @@ import org.diorite.impl.pipelines.event.player.BlockDestroyPipelineImpl;
 import org.diorite.impl.pipelines.event.player.BlockPlacePipelineImpl;
 import org.diorite.impl.pipelines.event.player.ChatPipelineImpl;
 import org.diorite.impl.pipelines.event.player.InventoryClickPipelineImpl;
+import org.diorite.impl.plugin.JarPluginLoader;
+import org.diorite.impl.plugin.PluginManagerImpl;
 import org.diorite.impl.scheduler.SchedulerImpl;
 import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
@@ -91,7 +93,8 @@ import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.DioriteUtils;
@@ -127,6 +130,8 @@ public class ServerImpl implements Server
     protected       long                     currentTick;
     protected final int                      keepAliveTimer;
     protected       DioriteConfigImpl        config;
+    protected       PluginManager            pluginManager;
+    protected       File                     pluginsDirectory = new File("plugins"); // TODO Allow to change this
     private final              double[] recentTps  = new double[3];
     private                    KeyPair  keyPair    = MinecraftEncryption.generateKeyPair();
     private transient volatile boolean  isRunning  = true;
@@ -275,6 +280,31 @@ public class ServerImpl implements Server
         }
     }
 
+    private void loadPlugins()
+    {
+        this.pluginManager = new PluginManagerImpl();
+        this.pluginManager.registerPluginLoader(new JarPluginLoader());
+
+        Main.debug("Plugins directory is: " + this.pluginsDirectory.getAbsolutePath());
+        if (! this.pluginsDirectory.exists())
+        {
+            this.pluginsDirectory.mkdir();
+            Main.debug("Created plugins directory...");
+        }
+
+        for (final File file : this.pluginsDirectory.listFiles())
+        {
+            if (file.isDirectory())
+            {
+                continue;
+            }
+
+            this.pluginManager.loadPlugin(file);
+        }
+
+        Main.debug("Loaded " + this.pluginManager.getPlugins().size() + " plugins!");
+    }
+
     private void registerEvents()
     {
         EventType.register(SenderCommandEvent.class, CommandPipeline.class, new CommandPipelineImpl());
@@ -380,6 +410,8 @@ public class ServerImpl implements Server
 
         this.serverConnection = new ServerConnection(this);
         this.serverConnection.start();
+
+        this.loadPlugins();
     }
 
     public InputThread getInputThread()
@@ -570,15 +602,21 @@ public class ServerImpl implements Server
     }
 
     @Override
+    public PluginManager getPluginManager()
+    {
+        return null;
+    }
+
+    @Override
     public CommandMapImpl getCommandMap()
     {
         return this.commandMap;
     }
 
     @Override
-    public PluginCommandBuilderImpl createCommand(final Plugin plugin, final String name)
+    public PluginCommandBuilderImpl createCommand(final PluginMainClass pluginMainClass, final String name)
     {
-        return PluginCommandBuilderImpl.start(plugin, name);
+        return PluginCommandBuilderImpl.start(pluginMainClass, name);
     }
 
     @Override

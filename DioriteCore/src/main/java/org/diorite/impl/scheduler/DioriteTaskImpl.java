@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 import org.diorite.scheduler.DioriteTask;
 import org.diorite.scheduler.Synchronizable;
 
@@ -22,7 +22,7 @@ public class DioriteTaskImpl implements DioriteTask, Runnable
     private          long                          nextRun;
     private final    String                        name;
     private final    Runnable                      task;
-    private final    Plugin                        plugin;
+    private final    PluginMainClass               pluginMainClass;
     private final    boolean                       safeMode;
     private final    WeakReference<Synchronizable> synchronizable;
     private final    int                           id;
@@ -42,10 +42,10 @@ public class DioriteTaskImpl implements DioriteTask, Runnable
         this(task.getClass().getName() + "@" + System.identityHashCode(task), null, task, null, false, - 1, STATE_SINGLE);
     }
 
-    DioriteTaskImpl(final String name, final Plugin plugin, final Runnable task, final Synchronizable synchronizable, final boolean safeMode, final int id, final long period)
+    DioriteTaskImpl(final String name, final PluginMainClass pluginMainClass, final Runnable task, final Synchronizable synchronizable, final boolean safeMode, final int id, final long period)
     {
         this.name = name;
-        this.plugin = plugin;
+        this.pluginMainClass = pluginMainClass;
         this.task = task;
         this.safeMode = safeMode;
         this.synchronizable = new WeakReference<>(synchronizable);
@@ -60,9 +60,9 @@ public class DioriteTaskImpl implements DioriteTask, Runnable
     }
 
     @Override
-    public final Plugin getOwner()
+    public final PluginMainClass getOwner()
     {
-        return this.plugin;
+        return this.pluginMainClass;
     }
 
     @Override
@@ -176,7 +176,7 @@ public class DioriteTaskImpl implements DioriteTask, Runnable
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("period", this.period).append("nextRun", this.nextRun).append("task", this.task).append("plugin", this.plugin).append("synchronizable", this.synchronizable).append("id", this.id).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("period", this.period).append("nextRun", this.nextRun).append("task", this.task).append("plugin", this.pluginMainClass).append("synchronizable", this.synchronizable).append("id", this.id).toString();
     }
 }
 
