@@ -242,6 +242,12 @@ public class LeavesMat extends WoodMat
             super(enumName, id, minecraftId, maxStack, typeName, type, woodType, checkDecay, decayable);
         }
 
+        @Override
+        public LeavesMat getType(final int id)
+        {
+            return getByID(id);
+        }
+
         @SuppressWarnings("MagicNumber")
         /**
          * Returns one of Leaves sub-type based on sub-id, may return null
