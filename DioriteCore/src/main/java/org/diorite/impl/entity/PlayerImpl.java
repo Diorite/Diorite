@@ -142,8 +142,6 @@ public class PlayerImpl extends LivingEntityImpl implements Player
                 this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(ids));
             }
         }
-
-        this.aabb.setCenter(this);
     }
 
     @Override

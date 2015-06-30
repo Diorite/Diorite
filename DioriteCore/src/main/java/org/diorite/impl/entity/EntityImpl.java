@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -208,6 +207,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     public void doTick(final int tps)
     {
         this.lastTickThread = Thread.currentThread();
+        this.aabb.setCenter(this);
         // TODO
     }
 
@@ -277,13 +277,13 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         {
             for (int j = czBeginScan; j <= czEndScan; j++)
             {
-                final ChunkImpl chunk = (ChunkImpl)this.getLocation().getWorld().getChunkAt(i, j);
+                final ChunkImpl chunk = this.world.getChunkAt(i, j);
                 if (!chunk.isLoaded())
                 {
                     continue;
                 }
 
-                entities.addAll(chunk.getEntities().stream().filter(entity -> BoundingBox.intersects(bb, entity.aabb)).collect(Collectors.toList()));
+                chunk.getEntities().stream().filter(entity -> BoundingBox.intersects(bb, entity.aabb)).forEach(entities::add);
             }
         }
 
