@@ -1,6 +1,8 @@
 package org.diorite.plugin;
 
-public interface Plugin
+public @interface Plugin
 {
-    String getName();
+    String name();
+    String version();
+    String author();
 }
