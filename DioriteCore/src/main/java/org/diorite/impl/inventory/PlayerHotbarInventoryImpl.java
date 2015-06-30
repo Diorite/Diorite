@@ -17,10 +17,4 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
     {
         super(playerInventory, content);
     }
-
-    @Override
-    public int getWindowId()
-    {
-        return 0; // Unused in this inventory
-    }
 }

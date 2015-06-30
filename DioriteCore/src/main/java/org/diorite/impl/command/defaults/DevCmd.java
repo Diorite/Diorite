@@ -41,7 +41,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "en":
                 {
-                    ItemImpl item = new ItemImpl(UUID.randomUUID(), p.getServer(), EntityImpl.ENTITY_ID.getAndIncrement(), p.getLocation().addY(2));
+                    ItemImpl item = new ItemImpl(UUID.randomUUID(), p.getServer(), EntityImpl.getNextEntityID(), p.getLocation().addX(3).addY(1));
                     item.setItemStack(new ItemStack(Material.TNT));
                     p.getWorld().addEntity(item);
                     break;

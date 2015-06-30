@@ -16,10 +16,4 @@ public class PlayerEqInventoryImpl extends PlayerInventoryPartImpl implements Pl
     {
         super(playerInventory, content);
     }
-
-    @Override
-    public int getWindowId()
-    {
-        return 0; // Unused in this inventory
-    }
 }

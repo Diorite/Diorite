@@ -9,10 +9,8 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityMetadata;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnEntity;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.ImmutableLocation;
-import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Item;
-import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
@@ -67,6 +65,37 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
 
     private int timeLived = 0; // in centiseconds, 1/100 of second.
 
+    public void joinItem(final ItemImpl item)
+    {
+        //noinspection ObjectEquality
+        if (this == item)
+        {
+            throw new IllegalStateException("Can't join to itself!");
+        }
+        ItemStack oi = item.getItemStack();
+        final ItemStack i = this.getItemStack();
+        if ((oi == null) || (i == null) || ! oi.getMaterial().equals(i.getMaterial()))
+        {
+            return;
+        }
+        oi = i.combine(oi);
+        this.setItemStack(i);
+        this.timeLived = 0;
+        item.setItemStack(oi);
+        item.timeLived = 0;
+        if (oi == null)
+        {
+            item.remove(true);
+        }
+    }
+
+    @Override
+    public void onSpawn()
+    {
+        super.onSpawn();
+        this.getNearbyEntities(3, 3, 3, ItemImpl.class).forEach((item) -> item.joinItem(this));
+    }
+
     @Override
     public void doTick(final int tps)
     {
@@ -80,20 +109,6 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         {
             this.remove(true);
             return;
-        }
-
-        for (final Entity entity : this.getNearbyEntities(1, 2, 1))
-        {
-            // TODO Dobre miejsce zeby dodac laczenie sie kilku takich samych itemkow w jeden
-            if (!(entity instanceof Player))
-            {
-                continue;
-            }
-
-            if (this.pickUpItem((PlayerImpl)entity))
-            {
-                break;
-            }
         }
     }
 

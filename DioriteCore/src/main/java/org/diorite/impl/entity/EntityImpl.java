@@ -1,7 +1,8 @@
 package org.diorite.impl.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,14 +21,22 @@ import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Entity;
+import org.diorite.entity.EntityType;
+import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.BoundingBox;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
 import org.diorite.world.chunk.Chunk;
 
 public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable, Trackable
 {
-    public static final AtomicInteger ENTITY_ID     = new AtomicInteger();
-    public static final int           MAX_AIR_LEVEL = 300;
+    private static final AtomicInteger ENTITY_ID = new AtomicInteger();
+
+    public static int getNextEntityID()
+    {
+        return ENTITY_ID.getAndIncrement();
+    }
+
+    public static final int MAX_AIR_LEVEL = 300;
 
     /**
      * byte entry, with flags. {@link org.diorite.impl.entity.EntityImpl.BasicFlags}
@@ -122,7 +131,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     public boolean isOnGround()
     {
         // TODO: implement in better way
-        return (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().subtractY(1).getBlock().getType().isSolid();
+        return (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().subtractY(1).getBlock().getType().isSolid();
     }
 
     @Override
@@ -162,6 +171,11 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     public ChunkImpl getChunk()
     {
         return this.world.getChunkAt(((int) this.x) >> 4, ((int) this.z) >> 4);
+    }
+
+    public boolean hasGravity()
+    {
+        return true;
     }
 
     public boolean isAiEnabled()
@@ -208,6 +222,10 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     {
         this.lastTickThread = Thread.currentThread();
         this.aabb.setCenter(this);
+        if (this.hasGravity())
+        {
+
+        }
         // TODO
     }
 
@@ -257,33 +275,113 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     }
 
     @Override
-    public List<Entity> getNearbyEntities(final double x, final double y, final double z)
+    public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Class<? extends T> type)
     {
         final BoundingBox bb = this.aabb.grow(x, y, z);
 
-        final List<Entity> entities = new ArrayList<>(25);
-        final int chunkScanSize = 3; // TODO allow changing this
+        final Set<T> entities = new HashSet<>(25);
 
-        final int cx = this.getLocation().getChunk().getX(); // Chunk X location
-        final int cz = this.getLocation().getChunk().getZ(); // Chunk Z location
+        final int cx = this.getChunk().getX(); // Chunk X location
+        final int cz = this.getChunk().getZ(); // Chunk Z location
 
-        final int cxBeginScan = cx - chunkScanSize;
-        final int czBeginScan = cz - chunkScanSize;
 
-        final int cxEndScan = cx + chunkScanSize;
-        final int czEndScan = cz + chunkScanSize;
+        final int chunkScanSizeX = 1 + DioriteMathUtils.ceil(x / Chunk.CHUNK_SIZE);
+        final int chunkScanSizeZ = 1 + DioriteMathUtils.ceil(z / Chunk.CHUNK_SIZE);
+
+        final int cxBeginScan = cx - chunkScanSizeX;
+        final int czBeginScan = cz - chunkScanSizeZ;
+
+        final int cxEndScan = cx + chunkScanSizeX;
+        final int czEndScan = cz + chunkScanSizeZ;
 
         for (int i = cxBeginScan; i <= cxEndScan; i++)
         {
             for (int j = czBeginScan; j <= czEndScan; j++)
             {
                 final ChunkImpl chunk = this.world.getChunkAt(i, j);
-                if (!chunk.isLoaded())
+                if (! chunk.isLoaded())
                 {
                     continue;
                 }
 
-                chunk.getEntities().stream().filter(entity -> BoundingBox.intersects(bb, entity.aabb)).forEach(entities::add);
+                //noinspection unchecked,ObjectEquality
+                chunk.getEntities().stream().filter(entity -> (entity != this) && type.isAssignableFrom(entity.getClass()) && BoundingBox.intersects(bb, entity.aabb)).forEach(e -> entities.add((T) e));
+            }
+        }
+
+        return entities;
+    }
+
+    @Override
+    public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final EntityType type)
+    {
+        final BoundingBox bb = this.aabb.grow(x, y, z);
+
+        final Set<T> entities = new HashSet<>(25);
+
+        final int cx = this.getChunk().getX(); // Chunk X location
+        final int cz = this.getChunk().getZ(); // Chunk Z location
+
+
+        final int chunkScanSizeX = 1 + DioriteMathUtils.ceil(x / Chunk.CHUNK_SIZE);
+        final int chunkScanSizeZ = 1 + DioriteMathUtils.ceil(z / Chunk.CHUNK_SIZE);
+
+        final int cxBeginScan = cx - chunkScanSizeX;
+        final int czBeginScan = cz - chunkScanSizeZ;
+
+        final int cxEndScan = cx + chunkScanSizeX;
+        final int czEndScan = cz + chunkScanSizeZ;
+
+        for (int i = cxBeginScan; i <= cxEndScan; i++)
+        {
+            for (int j = czBeginScan; j <= czEndScan; j++)
+            {
+                final ChunkImpl chunk = this.world.getChunkAt(i, j);
+                if (! chunk.isLoaded())
+                {
+                    continue;
+                }
+
+                //noinspection unchecked,ObjectEquality
+                chunk.getEntities().stream().filter(entity -> (entity != this) && type.equals(entity.getType()) && BoundingBox.intersects(bb, entity.aabb)).forEach(e -> entities.add((T) e));
+            }
+        }
+
+        return entities;
+    }
+
+    @Override
+    public Collection<EntityImpl> getNearbyEntities(final double x, final double y, final double z)
+    {
+        final BoundingBox bb = this.aabb.grow(x, y, z);
+
+        final Set<EntityImpl> entities = new HashSet<>(25);
+
+        final int cx = this.getChunk().getX(); // Chunk X location
+        final int cz = this.getChunk().getZ(); // Chunk Z location
+
+
+        final int chunkScanSizeX = 1 + DioriteMathUtils.ceil(x / Chunk.CHUNK_SIZE);
+        final int chunkScanSizeZ = 1 + DioriteMathUtils.ceil(z / Chunk.CHUNK_SIZE);
+
+        final int cxBeginScan = cx - chunkScanSizeX;
+        final int czBeginScan = cz - chunkScanSizeZ;
+
+        final int cxEndScan = cx + chunkScanSizeX;
+        final int czEndScan = cz + chunkScanSizeZ;
+
+        for (int i = cxBeginScan; i <= cxEndScan; i++)
+        {
+            for (int j = czBeginScan; j <= czEndScan; j++)
+            {
+                final ChunkImpl chunk = this.world.getChunkAt(i, j);
+                if (! chunk.isLoaded())
+                {
+                    continue;
+                }
+
+                //noinspection ObjectEquality
+                chunk.getEntities().stream().filter(entity -> (entity != this) && BoundingBox.intersects(bb, entity.aabb)).forEach(entities::add);
             }
         }
 
@@ -296,6 +394,9 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         return this.server;
     }
 
+    public void onSpawn()
+    {
+    }
 
     public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
     {

@@ -3,6 +3,8 @@ package org.diorite.impl.world;
 import java.io.File;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -30,7 +32,7 @@ import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtTagCompound;
-import org.diorite.utils.concurrent.ParallelUtils;
+import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.pack.IntsToLong;
 import org.diorite.world.Biome;
@@ -163,33 +165,73 @@ public class WorldImpl implements World, Tickable
 
     public synchronized void loadBase(final int chunkRadius, final BlockLocation center)
     {
-        System.out.println("[WorldLoader] Loading spawn chunks for world: " + this.name);
+        final int toLoad = DioriteMathUtils.square((chunkRadius << 1) + 1);
+        System.out.println("[WorldLoader] Loading " + toLoad + " spawn chunks for world: " + this.name);
         final LoadInfo info = new LoadInfo();
         this.spawnLock.clear();
         if (chunkRadius > 0)
         {
-            final int toLoad = chunkRadius * chunkRadius;
-            for (int r = 0; r <= chunkRadius; r++)
+            final CountDownLatch latch = new CountDownLatch(toLoad);
+            final ForkJoinPool pool = new ForkJoinPool();
+            final int sx = center.getX() - chunkRadius;
+            final int ex = center.getX() + chunkRadius;
+            final int sz = center.getZ() - chunkRadius;
+            final int ez = center.getZ() + chunkRadius;
+            for (int x = sx; x <= ex; x++)
             {
-                final int cr = r;
-                ParallelUtils.realParallelStream(() -> forChunksParallel(cr, center.getChunkPos(), (pos) -> {
-                    this.loadChunk(pos);
-                    this.spawnLock.acquire(pos.asLong());
-                    if ((info.loadedChunks.incrementAndGet() % 10) == 0)
-                    {
-                        final long cur = System.currentTimeMillis();
-                        if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(5))
+                for (int z = sz; z <= ez; z++)
+                {
+                    final int cx = x;
+                    final int cz = z;
+                    pool.submit(() -> {
+                        final ChunkPos pos = new ChunkPos(cx, cz, this);
+                        this.loadChunk(pos);
+                        this.spawnLock.acquire(pos.asLong());
+                        final int chunkNum = info.loadedChunks.incrementAndGet();
+                        if ((chunkNum % 10) == 0)
                         {
-                            //noinspection HardcodedFileSeparator
-                            System.out.println("[ChunkLoader][" + this.name + "] Chunk: " + info.loadedChunks.get() + "/" + toLoad + " Radius " + cr + "/" + chunkRadius);
-                            info.lastTime = cur;
+                            final long cur = System.currentTimeMillis();
+                            if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(1))
+                            {
+                                //noinspection HardcodedFileSeparator
+                                info.lastTime = cur;
+                                System.out.println("[ChunkLoader][" + this.name + "] Chunk: " + chunkNum + "/" + toLoad + ", (" + latch.getCount() + " left)");
+                            }
                         }
-                    }
-                }));
-                //noinspection HardcodedFileSeparator
-                System.out.println("[ChunkLoader][" + this.name + "] Radius " + r + "/" + chunkRadius);
-                info.lastTime = System.currentTimeMillis();
+                        latch.countDown();
+                    });
+                }
             }
+            try
+            {
+                latch.await();
+            } catch (final InterruptedException e)
+            {
+                throw new RuntimeException("World loading was interrupted!", e);
+            }
+//            for (int r = 0; r <= chunkRadius; r++)
+//            {
+//                final int cr = r;
+//                ParallelUtils.realParallelStream(() -> forChunksParallel(cr, center.getChunkPos(), (pos) -> {
+//                    this.loadChunk(pos);
+//                    this.spawnLock.acquire(pos.asLong());
+//                    if ((info.loadedChunks.incrementAndGet() % 10) == 0)
+//                    {
+//                        final long cur = System.currentTimeMillis();
+//                        if ((cur - info.lastTime) >= TimeUnit.SECONDS.toMillis(5))
+//                        {
+//                            //noinspection HardcodedFileSeparator
+//                            System.out.println("[ChunkLoader][" + this.name + "] Chunk: " + info.loadedChunks.get() + "/" + toLoad + " Radius " + cr + "/" + chunkRadius);
+//                            info.lastTime = cur;
+//                        }
+//                    }
+//                }), 8);
+//                //noinspection HardcodedFileSeparator
+//                System.out.println("[ChunkLoader][" + this.name + "] Radius " + r + "/" + chunkRadius);
+//                info.lastTime = System.currentTimeMillis();
+//            }
+            //noinspection HardcodedFileSeparator
+            info.lastTime = System.currentTimeMillis();
         }
         System.out.println("[WorldLoader] Loaded " + info.loadedChunks.get() + " spawn chunks for world: " + this.name);
     }
@@ -711,6 +753,7 @@ public class WorldImpl implements World, Tickable
             this.entityTrackers.addTracked(entity);
         }
         entity.updateChunk(null, this.getChunkAt(entity.getLocation().getChunkPos()));
+        entity.onSpawn();
     }
 
     public void removeEntity(final EntityImpl entity)

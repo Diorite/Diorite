@@ -37,6 +37,18 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     }
 
     @Override
+    public int firstEmpty()
+    {
+        return this.getFullEqInventory().firstEmpty();
+    }
+
+    @Override
+    public ItemStack[] add(final ItemStack... items)
+    {
+        return this.getFullEqInventory().add(items);
+    }
+
+    @Override
     public ItemStack getCursorItem()
     {
         return this.cursorItem.get();
@@ -208,34 +220,40 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("holder", this.holder).append("content", this.content).toString();
     }
 
+    private final PlayerArmorInventoryImpl    armor    = new PlayerArmorInventoryImpl(this);
+    private final PlayerCraftingInventoryImpl crafting = new PlayerCraftingInventoryImpl(this);
+    private final PlayerFullEqInventoryImpl   fullEq   = new PlayerFullEqInventoryImpl(this);
+    private final PlayerEqInventoryImpl       eq       = new PlayerEqInventoryImpl(this);
+    private final PlayerHotbarInventoryImpl   hotbar   = new PlayerHotbarInventoryImpl(this);
+
     @Override
     public PlayerArmorInventory getArmorInventory()
     {
-        return new PlayerArmorInventoryImpl(this);
+        return this.armor;
     }
 
     @Override
     public PlayerCraftingInventory getCraftingInventory()
     {
-        return new PlayerCraftingInventoryImpl(this);
+        return this.crafting;
     }
 
     @Override
     public PlayerFullEqInventory getFullEqInventory()
     {
-        return new PlayerFullEqInventoryImpl(this);
+        return this.fullEq;
     }
 
     @Override
     public PlayerEqInventory getEqInventory()
     {
-        return new PlayerEqInventoryImpl(this);
+        return this.eq;
     }
 
     @Override
     public PlayerHotbarInventory getHotbarInventory()
     {
-        return new PlayerHotbarInventoryImpl(this);
+        return this.hotbar;
     }
 
     @Override
