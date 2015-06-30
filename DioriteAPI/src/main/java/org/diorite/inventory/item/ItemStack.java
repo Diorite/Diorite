@@ -149,8 +149,10 @@ public class ItemStack
      * Subtract the specified number of items and creates a new ItemStack with given amount of items
      *
      * @param size Number of items which should be removed from this itemstack and moved to new
+     *
      * @return ItemStack with specified amount of items
-     *         null when number of items in this ItemStack is 1
+     * null when number of items in this ItemStack is 1
+     *
      * @throws IllegalArgumentException when size is greater than amount of items in this ItemStack
      */
     public ItemStack split(final int size)
@@ -177,6 +179,7 @@ public class ItemStack
      * Adds one ItemStack to another and returns the remainder
      *
      * @param other ItemStack to add
+     *
      * @return All of which failed to add
      */
     public ItemStack combine(final ItemStack other)
@@ -186,10 +189,11 @@ public class ItemStack
             throw new IllegalArgumentException();
         }
 
-        if ((this.amount + other.getAmount()) > 64) // TODO Magic number - stack size
+        final int maxStack = this.material.getMaxStack();
+        if ((this.amount + other.getAmount()) > maxStack)
         {
-            final int pendingItems = (this.amount + other.getAmount()) - 64;
-            this.amount = 64;
+            final int pendingItems = (this.amount + other.getAmount()) - maxStack;
+            this.amount = maxStack;
 
             final ItemStack temp = new ItemStack(this);
             temp.setAmount(pendingItems);

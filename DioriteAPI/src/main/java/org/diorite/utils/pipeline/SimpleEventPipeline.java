@@ -50,7 +50,7 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
         {
             if (! this.containsKey(ep.getPipelineName()))
             {
-                this.addLast(ep.getPipelineName(), this.emptyElement);
+                this.addFirst(ep.getPipelineName(), this.emptyElement);
             }
         }
         this.exceptionPipeline.add("Unhandled", new ExceptionHandler()

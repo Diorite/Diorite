@@ -228,9 +228,9 @@ public class AtomicShortArray implements Serializable
         return array;
     }
 
-	/*
+    /**
      * The remaining methods use the above methods
-	 */
+     */
 
     /**
      * Sets an element to the given value

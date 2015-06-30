@@ -16,4 +16,10 @@ public interface PlayerInventoryPart extends Inventory
      */
     @Override
     Player getHolder();
+
+    @Override
+    default int getWindowId()
+    {
+        return this.getPlayerInventory().getWindowId();
+    }
 }

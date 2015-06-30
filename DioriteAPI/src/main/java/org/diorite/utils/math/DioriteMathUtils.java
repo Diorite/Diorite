@@ -673,6 +673,31 @@ public final class DioriteMathUtils
     }
 
     /**
+     * Simple square number, just num * num.
+     *
+     * @param num number to square
+     *
+     * @return num * num
+     */
+    public static int square(final int num)
+    {
+        return num * num;
+    }
+
+    /**
+     * Simple square number, just num * num.
+     *
+     * @param num number to square
+     *
+     * @return num * num
+     */
+    public static long square(final long num)
+    {
+        return num * num;
+    }
+
+
+    /**
      * count 1 bits in nubmer.
      * <p>
      * {@literal 10: 1010 -> 2}<br>
