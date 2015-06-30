@@ -30,7 +30,7 @@ public class BroadcastCmd extends SystemCommandImpl
             {
                 sender.getServer().sendConsoleSimpleColoredMessage(args.asText());
             }
-            sender.getServer().broadcastSimpleColoredMessage(chatPosition, ChatColor.GRAY + "[" + ChatColor.DARK_AQUA + "Server" + ChatColor.GRAY + "] " + ChatColor.WHITE + args.asText());
+            sender.getServer().broadcastSimpleColoredMessage(chatPosition, "&7[&3Server&7] &f" + args.asText());
         });
     }
 }
