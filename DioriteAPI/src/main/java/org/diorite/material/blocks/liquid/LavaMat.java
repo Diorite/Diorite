@@ -231,7 +231,7 @@ public class LavaMat extends LiquidMat
     public static void register(final LavaMat element)
     {
         byID.put(element.getFixedDataValue(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

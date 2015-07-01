@@ -182,7 +182,7 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
     public static void register(final HayBlockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

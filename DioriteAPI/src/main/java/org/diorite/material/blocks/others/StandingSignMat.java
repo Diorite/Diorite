@@ -202,7 +202,7 @@ public class StandingSignMat extends SignBlockMat
     public static void register(final StandingSignMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

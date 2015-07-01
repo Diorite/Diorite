@@ -158,7 +158,7 @@ public class PotatoesBlockMat extends CropsMat
     public static void register(final PotatoesBlockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

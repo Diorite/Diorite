@@ -305,7 +305,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
     public static void register(final IronDoorMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

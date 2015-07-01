@@ -210,7 +210,7 @@ public class LeavesMat extends WoodMat
     public static void register(final LeavesMat element)
     {
         byID.put((byte) (element.getType() + ((element instanceof Leaves2) ? 16:0)), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

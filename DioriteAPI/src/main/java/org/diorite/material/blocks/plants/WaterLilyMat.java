@@ -102,7 +102,7 @@ public class WaterLilyMat extends PlantMat
     public static void register(final WaterLilyMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

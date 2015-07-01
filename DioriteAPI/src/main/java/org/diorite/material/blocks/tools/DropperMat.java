@@ -216,7 +216,7 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
     public static void register(final DropperMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

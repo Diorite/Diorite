@@ -164,7 +164,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     public static void register(final CarpetMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

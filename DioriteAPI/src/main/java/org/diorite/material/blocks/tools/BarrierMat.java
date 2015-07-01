@@ -103,7 +103,7 @@ public class BarrierMat extends BlockMaterialData
     public static void register(final BarrierMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

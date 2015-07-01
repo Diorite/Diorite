@@ -211,7 +211,7 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
     public static void register(final HopperMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

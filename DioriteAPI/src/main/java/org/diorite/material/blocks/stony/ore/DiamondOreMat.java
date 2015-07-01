@@ -102,7 +102,7 @@ public class DiamondOreMat extends OreMat
     public static void register(final DiamondOreMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

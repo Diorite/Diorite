@@ -252,7 +252,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
     public static void register(final RedstoneComparatorMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

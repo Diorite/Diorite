@@ -104,7 +104,7 @@ public class EndPortalMat extends BlockMaterialData implements PortalMat
     public static void register(final EndPortalMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

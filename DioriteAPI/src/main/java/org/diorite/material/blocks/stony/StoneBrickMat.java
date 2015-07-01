@@ -139,7 +139,7 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
     public static void register(final StoneBrickMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

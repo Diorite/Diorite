@@ -142,7 +142,7 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
     public static void register(final QuartzBlockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

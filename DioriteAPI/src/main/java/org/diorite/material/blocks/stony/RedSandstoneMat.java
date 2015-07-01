@@ -139,7 +139,7 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
     public static void register(final RedSandstoneMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

@@ -195,7 +195,7 @@ public class SaplingMat extends WoodMat
     public static void register(final SaplingMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

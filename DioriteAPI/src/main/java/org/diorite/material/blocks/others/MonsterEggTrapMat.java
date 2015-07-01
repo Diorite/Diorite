@@ -177,7 +177,7 @@ public class MonsterEggTrapMat extends StonyMat
     public static void register(final MonsterEggTrapMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

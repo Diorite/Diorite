@@ -135,7 +135,7 @@ public class RailMat extends RailsMat
     public static void register(final RailMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

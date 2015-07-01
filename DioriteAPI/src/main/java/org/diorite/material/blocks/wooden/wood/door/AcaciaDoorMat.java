@@ -305,7 +305,7 @@ public class AcaciaDoorMat extends WoodenDoorMat
     public static void register(final AcaciaDoorMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

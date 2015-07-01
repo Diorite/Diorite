@@ -305,7 +305,7 @@ public class SpruceDoorMat extends WoodenDoorMat
     public static void register(final SpruceDoorMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

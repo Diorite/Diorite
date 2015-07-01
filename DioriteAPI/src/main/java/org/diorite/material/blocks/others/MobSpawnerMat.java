@@ -103,7 +103,7 @@ public class MobSpawnerMat extends BlockMaterialData
     public static void register(final MobSpawnerMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

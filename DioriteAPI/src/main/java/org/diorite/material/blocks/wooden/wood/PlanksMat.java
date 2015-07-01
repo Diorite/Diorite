@@ -139,7 +139,7 @@ public class PlanksMat extends WoodMat
     public static void register(final PlanksMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

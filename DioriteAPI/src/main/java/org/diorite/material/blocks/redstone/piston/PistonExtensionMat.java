@@ -158,7 +158,7 @@ public class PistonExtensionMat extends PistonBaseMat
     public static void register(final PistonExtensionMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

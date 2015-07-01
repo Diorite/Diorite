@@ -218,7 +218,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
     public static void register(final BedBlockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

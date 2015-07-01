@@ -555,6 +555,53 @@ public interface Inventory extends Iterable<ItemStack>
     }
 
     /**
+     * Returns the first slot in the inventory containing an ItemStack with
+     * the given stack. This will only match a slot if both the type and the
+     * amount of the stack match
+     *
+     * @param item       The ItemStack to match against
+     * @param startIndex index to start from.
+     *
+     * @return The slot index of the given ItemStack or -1 if not found
+     */
+    default int first(final ItemStack item, final int startIndex)
+    {
+        return this.first(item, startIndex, true);
+    }
+
+    /**
+     * Returns the first slot in the inventory containing an ItemStack with
+     * the given stack.
+     *
+     * @param item       The ItemStack to match against
+     * @param startIndex index to start from.
+     * @param withAmount if amount of item must match.
+     *
+     * @return The slot index of the given ItemStack or -1 if not found
+     */
+    default int first(final ItemStack item, final int startIndex, final boolean withAmount)
+    {
+        final ItemStackArray content = this.getContents();
+
+        if (item == null)
+        {
+            return - 1;
+        }
+        for (int i = startIndex, size = content.length(); i < size; i++)
+        {
+            final ItemStack itemStack = content.get(i);
+            if (itemStack != null)
+            {
+                if (withAmount ? item.equals(itemStack) : item.isSimilar(itemStack))
+                {
+                    return i;
+                }
+            }
+        }
+        return - 1;
+    }
+
+    /**
      * @return The first empty Slot found, or -1 if no empty slots.
      */
     default int firstEmpty()
@@ -774,9 +821,10 @@ public interface Inventory extends Iterable<ItemStack>
         for (int i = 0; i < items.length; i++)
         {
             final ItemStack item = items[i];
+            int firstPartial = - 1;
             while (true)
             {
-                final int firstPartial = this.first(item, false);
+                firstPartial = this.first(item, firstPartial + 1, false);
                 if (firstPartial == - 1)
                 {
                     final int firstFree = this.firstEmpty();

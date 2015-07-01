@@ -259,7 +259,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
     public static void register(final TripwireHookMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

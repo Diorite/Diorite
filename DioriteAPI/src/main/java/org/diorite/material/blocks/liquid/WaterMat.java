@@ -230,7 +230,7 @@ public class WaterMat extends LiquidMat
     public static void register(final WaterMat element)
     {
         byID.put(element.getFixedDataValue(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

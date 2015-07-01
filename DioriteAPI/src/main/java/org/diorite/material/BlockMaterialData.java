@@ -24,8 +24,10 @@ public abstract class BlockMaterialData extends Material
         return this.typeName;
     }
 
+    @Override
     public abstract BlockMaterialData getType(String name);
 
+    @Override
     public abstract BlockMaterialData getType(int id);
 
     // TODO: change that methods/add others when needed

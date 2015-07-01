@@ -108,7 +108,7 @@ public class RedstoneLampOffMat extends RedstoneLampMat
     public static void register(final RedstoneLampOffMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

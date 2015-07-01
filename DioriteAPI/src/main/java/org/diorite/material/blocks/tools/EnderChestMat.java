@@ -167,7 +167,7 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
     public static void register(final EnderChestMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

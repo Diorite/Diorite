@@ -102,7 +102,7 @@ public class GoldOreMat extends OreMat
     public static void register(final GoldOreMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

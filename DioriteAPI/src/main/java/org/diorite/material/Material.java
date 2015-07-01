@@ -2,6 +2,7 @@ package org.diorite.material;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -199,6 +200,7 @@ import org.diorite.material.blocks.wooden.wood.stairs.OakStairsMat;
 import org.diorite.material.blocks.wooden.wood.stairs.SpruceStairsMat;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.math.DioriteMathUtils;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -644,6 +646,24 @@ public abstract class Material implements SimpleEnum<Material>
     }
 
     /**
+     * Get subtype of material by its subid/meta.
+     *
+     * @param type subid of type to get.
+     *
+     * @return subtype or null if not exist.
+     */
+    public abstract Material getType(int type);
+
+    /**
+     * Get subtype of material by its subid/meta.
+     *
+     * @param type subid of type to get.
+     *
+     * @return subtype or null if not exist.
+     */
+    public abstract Material getType(String type);
+
+    /**
      * @return vanilla minecraft id, fro compatybility.
      */
     public String getMinecraftId()
@@ -757,7 +777,123 @@ public abstract class Material implements SimpleEnum<Material>
 
     public int getId()
     {
-        return id;
+        return this.id;
+    }
+
+    /**
+     * Method will try to find material by given name, converting it to any possible type of id: <br>
+     * <ul>
+     * <li>{numericId} -> like "1" for stone</li>
+     * <li>{enumStringId} -> like "STONE"</li>
+     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
+     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
+     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * </ul>
+     *
+     * @param string material name/id to find.
+     *
+     * @return material or null if it didn't find any.
+     *
+     * @see #matchMaterial(String, boolean)
+     */
+    public static Material matchMaterial(final String string)
+    {
+        return matchMaterial(string, false);
+    }
+
+    /**
+     * Method will try to find material by given name, converting it to any possible type of id: <br>
+     * <ul>
+     * <li>{numericId} -> like "1" for stone</li>
+     * <li>{enumStringId} -> like "STONE"</li>
+     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
+     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
+     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * </ul>
+     * With extended mode it will also scan all materials and looks for sub-material with name equals to given string
+     * multiple types may have this same sub-material name, so may not return valid material for types like that.
+     *
+     * @param string   material name/id to find.
+     * @param extended if it should use extended mode. (slower)
+     *
+     * @return material or null if it didn't find any.
+     */
+    public static Material matchMaterial(String string, final boolean extended)
+    {
+        string = StringUtils.replace(string, " ", "_");
+
+        // using simple id
+        final Integer i = DioriteMathUtils.asInt(string);
+        if (i != null)
+        {
+            return getByID(i);
+        }
+
+        // find in enum by whole string
+        Material result = getByEnumName(string);
+        if ((result != null) || (((result = getByMinecraftId(string))) != null) || (((result = getByMinecraftId("minecraft:" + string))) != null))
+        {
+            return result;
+        }
+
+        // split to [id, meta], where meta can't contains any ":"
+        final int index = string.lastIndexOf(':');
+        if (index == - 1)
+        {
+            if (! extended)
+            {
+                return string.equalsIgnoreCase("diorite") ? StoneMat.STONE_DIORITE : null;
+            }
+
+            for (final Material m : values())
+            {
+                result = m.getType(string);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            // :<
+            return null;
+        }
+        final String idPart = string.substring(0, index);
+        final String metaPart = string.substring(index + 1);
+        final Integer id = DioriteMathUtils.asInt(idPart);
+        final Integer meta = DioriteMathUtils.asInt(metaPart);
+
+        // by numeric id, and numeric or text meta.
+        if (id != null)
+        {
+            return (meta != null) ? getByID(id, meta) : getByID(id, metaPart);
+        }
+
+        if (meta != null)
+        {
+            result = getByEnumName(idPart, meta);
+            if ((result != null) || (((result = getByMinecraftId(idPart, meta))) != null) || (((result = getByMinecraftId("minecraft:" + idPart, meta))) != null))
+            {
+                return result;
+            }
+        }
+        result = getByEnumName(idPart, metaPart);
+        if ((result != null) || (((result = getByMinecraftId(idPart, metaPart))) != null) || (((result = getByMinecraftId("minecraft:" + idPart, metaPart))) != null))
+        {
+            return result;
+        }
+
+        // :<
+        return null;
     }
 
     public static Material getByID(final int id)
@@ -768,21 +904,21 @@ public abstract class Material implements SimpleEnum<Material>
     public static Material getByID(final int id, final int meta)
     {
         final Material mat = byID.get(id);
-        if (mat instanceof BlockMaterialData)
+        if (mat != null)
         {
-            return ((BlockMaterialData) mat).getType(meta);
+            return mat.getType(meta);
         }
-        return mat;
+        return null;
     }
 
     public static Material getByID(final int id, final String meta)
     {
         final Material mat = byID.get(id);
-        if (mat instanceof BlockMaterialData)
+        if (mat != null)
         {
-            return ((BlockMaterialData) mat).getType(meta);
+            return mat.getType(meta);
         }
-        return mat;
+        return null;
     }
 
     public static Material getByEnumName(final String name)
@@ -793,26 +929,46 @@ public abstract class Material implements SimpleEnum<Material>
     public static Material getByEnumName(final String name, final int meta)
     {
         final Material mat = byName.get(name);
-        if (mat instanceof BlockMaterialData)
+        if (mat != null)
         {
-            return ((BlockMaterialData) mat).getType(meta);
+            return mat.getType(meta);
         }
-        return mat;
+        return null;
     }
 
     public static Material getByEnumName(final String name, final String meta)
     {
         final Material mat = byName.get(name);
-        if (mat instanceof BlockMaterialData)
+        if (mat != null)
         {
-            return ((BlockMaterialData) mat).getType(meta);
+            return mat.getType(meta);
         }
-        return mat;
+        return null;
     }
 
     public static Material getByMinecraftId(final String name)
     {
         return byMinecraftId.get(name);
+    }
+
+    public static Material getByMinecraftId(final String name, final int meta)
+    {
+        final Material mat = byMinecraftId.get(name);
+        if (mat != null)
+        {
+            return mat.getType(meta);
+        }
+        return null;
+    }
+
+    public static Material getByMinecraftId(final String name, final String meta)
+    {
+        final Material mat = byMinecraftId.get(name);
+        if (mat != null)
+        {
+            return mat.getType(meta);
+        }
+        return null;
     }
 
     public static void register(final Material element)

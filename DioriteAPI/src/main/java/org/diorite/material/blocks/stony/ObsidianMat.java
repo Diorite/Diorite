@@ -102,7 +102,7 @@ public class ObsidianMat extends StonyMat
     public static void register(final ObsidianMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

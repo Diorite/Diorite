@@ -102,7 +102,7 @@ public class GravelMat extends LooseMat
     public static void register(final GravelMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

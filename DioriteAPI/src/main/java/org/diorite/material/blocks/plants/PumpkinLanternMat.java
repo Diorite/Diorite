@@ -131,7 +131,7 @@ public class PumpkinLanternMat extends AbstractPumpkinMat
     public static void register(final PumpkinLanternMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

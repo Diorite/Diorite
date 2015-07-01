@@ -128,7 +128,7 @@ public class DeadBushMat extends FlowerMat
     public static void register(final DeadBushMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

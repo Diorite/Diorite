@@ -102,7 +102,7 @@ public class IronOreMat extends OreMat
     public static void register(final IronOreMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

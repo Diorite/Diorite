@@ -104,7 +104,7 @@ public class IronBlockMat extends OreBlockMat
     public static void register(final IronBlockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

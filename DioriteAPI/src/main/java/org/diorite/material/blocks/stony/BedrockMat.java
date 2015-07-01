@@ -101,7 +101,7 @@ public class BedrockMat extends StonyMat
     public static void register(final BedrockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

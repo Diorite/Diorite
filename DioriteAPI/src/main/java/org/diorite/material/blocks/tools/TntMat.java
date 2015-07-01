@@ -103,7 +103,7 @@ public class TntMat extends BlockMaterialData
     public static void register(final TntMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

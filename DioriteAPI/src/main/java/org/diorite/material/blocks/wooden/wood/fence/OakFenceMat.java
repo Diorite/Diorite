@@ -103,7 +103,7 @@ public class OakFenceMat extends WoodenFenceMat
     public static void register(final OakFenceMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

@@ -149,7 +149,7 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
     public static void register(final GoldenPressurePlateMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

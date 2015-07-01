@@ -120,7 +120,7 @@ public class MossyCobblestoneMat extends StonyMat implements VariantableMat
     public static void register(final MossyCobblestoneMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

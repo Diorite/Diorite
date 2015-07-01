@@ -141,7 +141,7 @@ public class DoubleStoneSlabMat extends StonySlabMat
     public static void register(final DoubleStoneSlabMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

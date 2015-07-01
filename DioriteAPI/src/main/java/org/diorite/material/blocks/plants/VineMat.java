@@ -208,7 +208,7 @@ public class VineMat extends PlantMat
     public static void register(final VineMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

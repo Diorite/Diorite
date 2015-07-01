@@ -225,7 +225,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
     public static void register(final CocoaMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

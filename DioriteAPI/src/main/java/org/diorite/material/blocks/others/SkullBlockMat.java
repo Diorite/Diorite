@@ -204,7 +204,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
     public static void register(final SkullBlockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

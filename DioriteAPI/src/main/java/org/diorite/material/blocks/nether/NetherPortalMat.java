@@ -184,7 +184,7 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
     public static void register(final NetherPortalMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

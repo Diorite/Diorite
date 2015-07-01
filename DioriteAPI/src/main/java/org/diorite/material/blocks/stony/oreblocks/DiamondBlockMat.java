@@ -104,7 +104,7 @@ public class DiamondBlockMat extends OreBlockMat
     public static void register(final DiamondBlockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

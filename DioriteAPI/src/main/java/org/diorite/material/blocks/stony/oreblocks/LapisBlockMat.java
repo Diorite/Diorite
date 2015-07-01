@@ -104,7 +104,7 @@ public class LapisBlockMat extends OreBlockMat
     public static void register(final LapisBlockMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override

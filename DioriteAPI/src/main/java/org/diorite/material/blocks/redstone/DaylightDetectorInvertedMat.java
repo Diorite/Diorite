@@ -154,7 +154,7 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
     public static void register(final DaylightDetectorInvertedMat element)
     {
         byID.put((byte) element.getType(), element);
-        byName.put(element.name(), element);
+        byName.put(element.getTypeName(), element);
     }
 
     @Override
