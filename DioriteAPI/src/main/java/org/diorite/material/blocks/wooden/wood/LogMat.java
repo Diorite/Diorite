@@ -240,6 +240,12 @@ public class LogMat extends WoodMat implements RotatableMat
             super(enumName, id, minecraftId, maxStack, typeName, type, woodType, rotateAxis);
         }
 
+        @Override
+        public LogMat getType(final int id)
+        {
+            return getByID(id);
+        }
+
         @SuppressWarnings("MagicNumber")
         /**
          * Returns one of Log sub-type based on sub-id, may return null
