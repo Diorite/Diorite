@@ -50,6 +50,11 @@ public class JarPluginLoader implements PluginLoader
             final PluginMainClass pluginMainClass = (PluginMainClass) mainClass.newInstance();
             final Plugin pluginDescription = mainClass.getAnnotation(Plugin.class);
 
+            if (ServerImpl.getInstance().getPluginManager().getPlugin(pluginDescription.name()) != null)
+            {
+                throw new PluginException("Plugin " + pluginDescription.name() + " is arleady loaded!");
+            }
+
             pluginMainClass.init(classLoader, pluginMainClass, pluginDescription.name(), pluginDescription.version(), pluginDescription.author());
             System.out.println("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
             pluginMainClass.onLoad();
