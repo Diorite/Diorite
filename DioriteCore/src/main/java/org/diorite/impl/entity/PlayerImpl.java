@@ -42,6 +42,7 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
+import org.diorite.inventory.EntityEquipment;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.math.pack.IntsToLong;
 
@@ -464,5 +465,11 @@ public class PlayerImpl extends LivingEntityImpl implements Player
 
         this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.getName() + "&7&l left from the server!");
         this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.getName() + "&7 left from the server!");
+    }
+
+    @Override
+    public EntityEquipment getEquipment()
+    {
+        return this.inventory.getArmorInventory();
     }
 }

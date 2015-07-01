@@ -52,14 +52,20 @@ public class EntityTrackers implements Tickable
         if (trackable instanceof PlayerImpl)
         {
             final PlayerImpl player = (PlayerImpl) trackable;
-            this.trackers.valueCollection().forEach(t -> t.remove(player));
+            this.trackers.forEachValue(t -> {
+                t.remove(player);
+                return true;
+            });
         }
         return true;
     }
 
     public void updatePlayer(final PlayerImpl player)
     {
-        this.trackers.valueCollection().forEach(t -> t.updatePlayer(player));
+        this.trackers.forEachValue(t -> {
+            t.updatePlayer(player);
+            return true;
+        });
     }
 
     @Override
