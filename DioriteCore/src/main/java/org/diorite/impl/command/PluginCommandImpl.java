@@ -8,55 +8,55 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.command.PluginCommand;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 
 public class PluginCommandImpl extends MainCommandImpl implements PluginCommand
 {
-    private final Plugin plugin;
+    private final PluginMainClass pluginMainClass;
 
-    public PluginCommandImpl(final String name, final Pattern pattern, final byte priority, final Plugin plugin)
+    public PluginCommandImpl(final String name, final Pattern pattern, final byte priority, final PluginMainClass pluginMainClass)
     {
         super(name, pattern, priority);
-        this.plugin = plugin;
+        this.pluginMainClass = pluginMainClass;
     }
 
-    public PluginCommandImpl(final String name, final Pattern pattern, final Plugin plugin)
+    public PluginCommandImpl(final String name, final Pattern pattern, final PluginMainClass pluginMainClass)
     {
         super(name, pattern);
-        this.plugin = plugin;
+        this.pluginMainClass = pluginMainClass;
     }
 
-    public PluginCommandImpl(final String name, final Plugin plugin)
+    public PluginCommandImpl(final String name, final PluginMainClass pluginMainClass)
     {
         super(name);
-        this.plugin = plugin;
+        this.pluginMainClass = pluginMainClass;
     }
 
-    public PluginCommandImpl(final String name, final Collection<String> aliases, final byte priority, final Plugin plugin)
+    public PluginCommandImpl(final String name, final Collection<String> aliases, final byte priority, final PluginMainClass pluginMainClass)
     {
         super(name, aliases, priority);
-        this.plugin = plugin;
+        this.pluginMainClass = pluginMainClass;
     }
 
-    public PluginCommandImpl(final String name, final Collection<String> aliases, final Plugin plugin)
+    public PluginCommandImpl(final String name, final Collection<String> aliases, final PluginMainClass pluginMainClass)
     {
         super(name, aliases);
-        this.plugin = plugin;
+        this.pluginMainClass = pluginMainClass;
     }
 
     @Override
-    public Plugin getPlugin()
+    public PluginMainClass getPlugin()
     {
-        return this.plugin;
+        return this.pluginMainClass;
     }
 
 
     @Override
     public Matcher matcher(final String name)
     {
-        if (name.toLowerCase().startsWith(this.plugin.getName().toLowerCase() + COMMAND_PLUGIN_SEPARATOR))
+        if (name.toLowerCase().startsWith(this.pluginMainClass.getName().toLowerCase() + COMMAND_PLUGIN_SEPARATOR))
         {
-            return super.matcher(name.replace(this.plugin.getName().toLowerCase() + COMMAND_PLUGIN_SEPARATOR, ""));
+            return super.matcher(name.replace(this.pluginMainClass.getName().toLowerCase() + COMMAND_PLUGIN_SEPARATOR, ""));
         }
         else
         {
@@ -67,6 +67,6 @@ public class PluginCommandImpl extends MainCommandImpl implements PluginCommand
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugin", this.plugin).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugin", this.pluginMainClass).toString();
     }
 }

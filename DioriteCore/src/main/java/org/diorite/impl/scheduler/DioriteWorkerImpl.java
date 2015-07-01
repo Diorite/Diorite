@@ -3,7 +3,7 @@ package org.diorite.impl.scheduler;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 import org.diorite.scheduler.DioriteWorker;
 
 public class DioriteWorkerImpl implements DioriteWorker
@@ -30,7 +30,7 @@ public class DioriteWorkerImpl implements DioriteWorker
     }
 
     @Override
-    public Plugin getOwner()
+    public PluginMainClass getOwner()
     {
         return this.dioriteAsyncTask.getOwner();
     }

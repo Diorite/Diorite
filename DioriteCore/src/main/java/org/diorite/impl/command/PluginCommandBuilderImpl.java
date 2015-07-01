@@ -14,11 +14,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.command.CommandExecutor;
 import org.diorite.command.ExceptionHandler;
 import org.diorite.command.PluginCommandBuilder;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 
 public class PluginCommandBuilderImpl implements PluginCommandBuilder
 {
-    private final Plugin           plugin;
+    private final PluginMainClass  pluginMainClass;
     private final String           name;
     private       Pattern          pattern;
     private       List<String>     aliases;
@@ -26,9 +26,9 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
     private       ExceptionHandler handler;
     private       byte             priority;
 
-    private PluginCommandBuilderImpl(final Plugin plugin, final String name)
+    private PluginCommandBuilderImpl(final PluginMainClass pluginMainClass, final String name)
     {
-        this.plugin = plugin;
+        this.pluginMainClass = pluginMainClass;
         this.name = name;
     }
 
@@ -128,7 +128,7 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
         {
             this.aliases = new ArrayList<>(1);
         }
-        final PluginCommandImpl cmd = (this.pattern == null) ? new PluginCommandImpl(this.name, this.aliases, this.priority, this.plugin) : new PluginCommandImpl(this.name, this.pattern, this.priority, this.plugin);
+        final PluginCommandImpl cmd = (this.pattern == null) ? new PluginCommandImpl(this.name, this.aliases, this.priority, this.pluginMainClass) : new PluginCommandImpl(this.name, this.pattern, this.priority, this.pluginMainClass);
         if (this.executor != null)
         {
             cmd.setCommandExecutor(this.executor);
@@ -143,13 +143,13 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugin", this.plugin).append("name", this.name).append("pattern", this.pattern).append("aliases", this.aliases).append("executor", this.executor).append("handler", this.handler).append("priority", this.priority).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugin", this.pluginMainClass).append("name", this.name).append("pattern", this.pattern).append("aliases", this.aliases).append("executor", this.executor).append("handler", this.handler).append("priority", this.priority).toString();
     }
 
-    public static PluginCommandBuilderImpl start(final Plugin plugin, final String name)
+    public static PluginCommandBuilderImpl start(final PluginMainClass pluginMainClass, final String name)
     {
-        Objects.requireNonNull(plugin, "plugin can't be null.");
+        Objects.requireNonNull(pluginMainClass, "plugin can't be null.");
         Objects.requireNonNull(name, "name od command can't be null.");
-        return new PluginCommandBuilderImpl(plugin, name);
+        return new PluginCommandBuilderImpl(pluginMainClass, name);
     }
 }

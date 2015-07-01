@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 import org.diorite.scheduler.DioriteTask;
 import org.diorite.scheduler.DioriteWorker;
 import org.diorite.scheduler.Scheduler;
@@ -49,15 +49,15 @@ public class SchedulerImpl extends Scheduler
     }
 
     @Override
-    public <T> Future<T> callSyncMethod(final Plugin plugin, final Callable<T> task)
+    public <T> Future<T> callSyncMethod(final PluginMainClass pluginMainClass, final Callable<T> task)
     {
-        return this.gts.callSyncMethod(plugin, task);
+        return this.gts.callSyncMethod(pluginMainClass, task);
     }
 
     @Override
-    public <T> Future<T> callSyncMethod(final Plugin plugin, final Callable<T> task, final Synchronizable sync)
+    public <T> Future<T> callSyncMethod(final PluginMainClass pluginMainClass, final Callable<T> task, final Synchronizable sync)
     {
-        return this.gts.callSyncMethod(plugin, task, sync);
+        return this.gts.callSyncMethod(pluginMainClass, task, sync);
     }
 
     @Override
@@ -68,10 +68,10 @@ public class SchedulerImpl extends Scheduler
     }
 
     @Override
-    public void cancelTasks(final Plugin plugin)
+    public void cancelTasks(final PluginMainClass pluginMainClass)
     {
-        this.gts.cancelTasks(plugin);
-        this.rts.cancelTasks(plugin);
+        this.gts.cancelTasks(pluginMainClass);
+        this.rts.cancelTasks(pluginMainClass);
     }
 
     @Override
@@ -142,9 +142,9 @@ public class SchedulerImpl extends Scheduler
         @Override
         protected DioriteTask runTask(final TaskBuilder builder, final long startDelay) throws IllegalArgumentException
         {
-            final Plugin plugin = builder.getPlugin();
+            final PluginMainClass pluginMainClass = builder.getPlugin();
             final Runnable task = builder.getRunnable();
-            validate(plugin, task);
+            validate(pluginMainClass, task);
             if (builder.isSingle() && (startDelay != 0))
             {
                 throw new IllegalArgumentException("Single task can't have additional delay.");
@@ -166,24 +166,24 @@ public class SchedulerImpl extends Scheduler
             }
             if (builder.isAsync())
             {
-                return this.handle(new DioriteAsyncTask(builder.getName(), this.runners, plugin, task, this.nextId(), period), delay);
+                return this.handle(new DioriteAsyncTask(builder.getName(), this.runners, pluginMainClass, task, this.nextId(), period), delay);
 
             }
-            return this.handle(new DioriteTaskImpl(builder.getName(), plugin, task, builder.getSynchronizable(), builder.isSafeMode(), this.nextId(), period), delay);
+            return this.handle(new DioriteTaskImpl(builder.getName(), pluginMainClass, task, builder.getSynchronizable(), builder.isSafeMode(), this.nextId(), period), delay);
         }
 
         @Override
-        public <T> Future<T> callSyncMethod(final Plugin plugin, final Callable<T> task)
+        public <T> Future<T> callSyncMethod(final PluginMainClass pluginMainClass, final Callable<T> task)
         {
-            return this.callSyncMethod(plugin, task, Diorite.getServer());
+            return this.callSyncMethod(pluginMainClass, task, Diorite.getServer());
         }
 
         @Override
-        public <T> Future<T> callSyncMethod(final Plugin plugin, final Callable<T> task, final Synchronizable sync)
+        public <T> Future<T> callSyncMethod(final PluginMainClass pluginMainClass, final Callable<T> task, final Synchronizable sync)
         {
             Validate.notNull(sync, "Can't synchronize to null object");
-            validate(plugin, task);
-            final DioriteFuture<T> future = new DioriteFuture<>(task, plugin, sync, this.nextId());
+            validate(pluginMainClass, task);
+            final DioriteFuture<T> future = new DioriteFuture<>(task, pluginMainClass, sync, this.nextId());
             this.handle(future, 0);
             return future;
         }
@@ -246,9 +246,9 @@ public class SchedulerImpl extends Scheduler
         }
 
         @Override
-        public void cancelTasks(final Plugin plugin)
+        public void cancelTasks(final PluginMainClass pluginMainClass)
         {
-            Validate.notNull(plugin, "Cannot cancel tasks of null plugin");
+            Validate.notNull(pluginMainClass, "Cannot cancel tasks of null plugin");
             final DioriteTaskImpl task = new DioriteTaskImpl(new Runnable()
             {
                 @Override
@@ -264,7 +264,7 @@ public class SchedulerImpl extends Scheduler
                     while (tasks.hasNext())
                     {
                         final DioriteTaskImpl task = tasks.next();
-                        if (task.getOwner().equals(plugin))
+                        if (task.getOwner().equals(pluginMainClass))
                         {
                             task.forceCancel();
                             tasks.remove();
@@ -283,12 +283,12 @@ public class SchedulerImpl extends Scheduler
                 {
                     return;
                 }
-                if ((taskPending.getTaskId() != - 1) && taskPending.getOwner().equals(plugin))
+                if ((taskPending.getTaskId() != - 1) && taskPending.getOwner().equals(pluginMainClass))
                 {
                     taskPending.forceCancel();
                 }
             }
-            this.runners.values().stream().filter(runner -> runner.getOwner().equals(plugin)).forEach(DioriteTaskImpl::forceCancel);
+            this.runners.values().stream().filter(runner -> runner.getOwner().equals(pluginMainClass)).forEach(DioriteTaskImpl::forceCancel);
         }
 
         @Override
@@ -603,9 +603,9 @@ public class SchedulerImpl extends Scheduler
         }
     }
 
-    private static void validate(final Plugin plugin, final Object task)
+    private static void validate(final PluginMainClass pluginMainClass, final Object task)
     {
-        Validate.notNull(plugin, "Plugin cannot be null");
+        Validate.notNull(pluginMainClass, "Plugin cannot be null");
         Validate.notNull(task, "Task cannot be null");
         // TODO: check if plugin is enabled.
     }

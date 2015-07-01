@@ -19,7 +19,7 @@ import org.diorite.command.CommandMap;
 import org.diorite.command.MainCommand;
 import org.diorite.command.PluginCommand;
 import org.diorite.command.sender.CommandSender;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 import org.diorite.utils.DioriteStringUtils;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -39,9 +39,9 @@ public class CommandMapImpl implements CommandMap
     }
 
     @Override
-    public Set<MainCommand> getCommandsFromPlugin(final Plugin plugin)
+    public Set<MainCommand> getCommandsFromPlugin(final PluginMainClass pluginMainClass)
     {
-        return this.commandMap.values().parallelStream().filter(cmd -> (cmd instanceof PluginCommand) && ((PluginCommand) cmd).getPlugin().equals(plugin)).collect(Collectors.toSet());
+        return this.commandMap.values().parallelStream().filter(cmd -> (cmd instanceof PluginCommand) && ((PluginCommand) cmd).getPlugin().equals(pluginMainClass)).collect(Collectors.toSet());
     }
 
     @Override
@@ -57,9 +57,9 @@ public class CommandMapImpl implements CommandMap
     }
 
     @Override
-    public Optional<MainCommand> getCommand(final Plugin plugin, final String str)
+    public Optional<MainCommand> getCommand(final PluginMainClass pluginMainClass, final String str)
     {
-        MainCommand cmd = this.commandMap.get(plugin + Command.COMMAND_PLUGIN_SEPARATOR + str);
+        MainCommand cmd = this.commandMap.get(pluginMainClass + Command.COMMAND_PLUGIN_SEPARATOR + str);
         if (cmd == null)
         {
             cmd = this.commandMap.get(str);
