@@ -93,6 +93,7 @@ import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
+import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginMainClass;
 import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
@@ -299,10 +300,16 @@ public class ServerImpl implements Server
                 continue;
             }
 
-            this.pluginManager.loadPlugin(file);
+            try
+            {
+                this.pluginManager.loadPlugin(file);
+            } catch (final PluginException e)
+            {
+                e.printStackTrace();
+            }
         }
 
-        Main.debug("Loaded " + this.pluginManager.getPlugins().size() + " plugins!");
+        System.out.println("Loaded " + this.pluginManager.getPlugins().size() + " plugins!");
     }
 
     private void registerEvents()
@@ -410,8 +417,6 @@ public class ServerImpl implements Server
 
         this.serverConnection = new ServerConnection(this);
         this.serverConnection.start();
-
-        this.loadPlugins();
     }
 
     public InputThread getInputThread()
@@ -534,6 +539,10 @@ public class ServerImpl implements Server
         if (this.hasStopped)
         {
             return;
+        }
+        if (this.pluginManager != null)
+        {
+            this.pluginManager.disablePlugins();
         }
         this.hasStopped = true;
         this.isRunning = false;
@@ -735,6 +744,9 @@ public class ServerImpl implements Server
         }
         System.out.println("Starting Diorite v" + Server.getVersion() + " server...");
 
+        System.out.println("Loading plugins...");
+        this.loadPlugins();
+
         { // register default generators
             WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
             WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
@@ -744,6 +756,9 @@ public class ServerImpl implements Server
         System.out.println("Loading worlds...");
         this.worldsManager.init(this.config, this.config.getWorlds().getWorldsDir());
         System.out.println("Worlds loaded.");
+
+        System.out.println("Enabling plugins...");
+        this.pluginManager.getPlugins().stream().filter(p -> ! p.isEnabled()).forEach(p -> p.setEnabled(true));
 
         try
         {
