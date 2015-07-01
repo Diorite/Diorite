@@ -3,7 +3,6 @@ package org.diorite.impl.command.defaults;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import org.diorite.chat.ChatColor;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.chat.ChatPosition;
 import org.diorite.command.CommandPriority;
