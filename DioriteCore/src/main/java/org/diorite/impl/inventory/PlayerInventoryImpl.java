@@ -209,6 +209,12 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     }
 
     @Override
+    public Player getEquipmentHolder()
+    {
+        return this.holder;
+    }
+
+    @Override
     public Player getHolder()
     {
         return this.holder;

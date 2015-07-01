@@ -6,9 +6,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.PlayerInventory;
+import org.diorite.inventory.PlayerInventoryPart;
 import org.diorite.inventory.item.ItemStackArray;
 
-public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> implements org.diorite.inventory.PlayerInventoryPart
+public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> implements PlayerInventoryPart
 {
     protected final PlayerInventory playerInventory;
     protected final ItemStackArray  content;
