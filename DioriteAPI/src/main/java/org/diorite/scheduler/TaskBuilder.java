@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 
 /**
  * Simple builder class to build all types of tasks.
@@ -15,8 +15,8 @@ import org.diorite.plugin.Plugin;
  */
 public class TaskBuilder
 {
-    private final Plugin   plugin;
-    private final Runnable runnable;
+    private final PluginMainClass pluginMainClass;
+    private final Runnable        runnable;
     private boolean        async          = false;
     private boolean        isRealTime     = false;
     private boolean        safeMode       = true;
@@ -25,11 +25,11 @@ public class TaskBuilder
     private Synchronizable synchronizable = Diorite.getServer();
     private String name; // optional
 
-    private TaskBuilder(final Plugin plugin, final Runnable runnable)
+    private TaskBuilder(final PluginMainClass pluginMainClass, final Runnable runnable)
     {
-        Validate.notNull(plugin, "Plugin can't by null.");
+        Validate.notNull(pluginMainClass, "Plugin can't by null.");
         Validate.notNull(runnable, "Runnable can't be null.");
-        this.plugin = plugin;
+        this.pluginMainClass = pluginMainClass;
         this.runnable = runnable;
     }
 
@@ -236,7 +236,7 @@ public class TaskBuilder
     /**
      * Create new TaskBuilder with selected runnable, it can't be null.
      *
-     * @param plugin   plugin that want register task.
+     * @param pluginMainClass   plugin that want register task.
      * @param runnable runnable to use as task.
      *
      * @return new task builder.
@@ -246,9 +246,9 @@ public class TaskBuilder
      * @see #sync(Runnable, Synchronizable)
      * @see #start()
      */
-    public static TaskBuilder start(final Plugin plugin, final Runnable runnable)
+    public static TaskBuilder start(final PluginMainClass pluginMainClass, final Runnable runnable)
     {
-        return new TaskBuilder(plugin, runnable);
+        return new TaskBuilder(pluginMainClass, runnable);
     }
 
     /**
@@ -259,14 +259,14 @@ public class TaskBuilder
      * <li>{@link #start()}</li>
      * </ol>
      *
-     * @param plugin   plugin that want register task.
+     * @param pluginMainClass   plugin that want register task.
      * @param runnable runnable to use as task.
      *
      * @return finished and registered diorite task.
      */
-    public static DioriteTask sync(final Plugin plugin, final Runnable runnable)
+    public static DioriteTask sync(final PluginMainClass pluginMainClass, final Runnable runnable)
     {
-        return new TaskBuilder(plugin, runnable).start();
+        return new TaskBuilder(pluginMainClass, runnable).start();
     }
 
     /**
@@ -278,15 +278,15 @@ public class TaskBuilder
      * <li>{@link #start()}</li>
      * </ol>
      *
-     * @param plugin         plugin that want register task.
+     * @param pluginMainClass         plugin that want register task.
      * @param runnable       runnable to use as task.
      * @param synchronizable object to sync with it. (task will be executed in this same thread as object is ticked as long as object exist in memory)
      *
      * @return finished and registered diorite task.
      */
-    public static DioriteTask sync(final Plugin plugin, final Runnable runnable, final Synchronizable synchronizable)
+    public static DioriteTask sync(final PluginMainClass pluginMainClass, final Runnable runnable, final Synchronizable synchronizable)
     {
-        return new TaskBuilder(plugin, runnable).syncTo(synchronizable).start();
+        return new TaskBuilder(pluginMainClass, runnable).syncTo(synchronizable).start();
     }
 
     /**
@@ -298,14 +298,14 @@ public class TaskBuilder
      * <li>{@link #start()}</li>
      * </ol>
      *
-     * @param plugin   plugin that want register task.
+     * @param pluginMainClass   plugin that want register task.
      * @param runnable runnable to use as task.
      *
      * @return finished and registered diorite task.
      */
-    public static DioriteTask async(final Plugin plugin, final Runnable runnable)
+    public static DioriteTask async(final PluginMainClass pluginMainClass, final Runnable runnable)
     {
-        return new TaskBuilder(plugin, runnable).async().start();
+        return new TaskBuilder(pluginMainClass, runnable).async().start();
     }
 
     /**
@@ -315,9 +315,9 @@ public class TaskBuilder
     /**
      * @return plugin that wan't register this task.
      */
-    public Plugin getPlugin()
+    public PluginMainClass getPlugin()
     {
-        return this.plugin;
+        return this.pluginMainClass;
     }
 
     /**

@@ -13,7 +13,7 @@ import org.diorite.command.CommandMap;
 import org.diorite.command.PluginCommandBuilder;
 import org.diorite.command.sender.ConsoleCommandSender;
 import org.diorite.entity.Player;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.world.WorldsManager;
 
@@ -155,9 +155,9 @@ public final class Diorite
         server.broadcastMessage(position, components);
     }
 
-    public static PluginCommandBuilder createCommand(final Plugin plugin, final String name)
+    public static PluginCommandBuilder createCommand(final PluginMainClass pluginMainClass, final String name)
     {
-        return server.createCommand(plugin, name);
+        return server.createCommand(pluginMainClass, name);
     }
 
     public static void sendConsoleMessage(final String... strs)

@@ -1,6 +1,6 @@
 package org.diorite.scheduler;
 
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 
 /**
  * Represents a worker thread for the scheduler. This gives information about the Thread object for the task, owner of the task and the taskId. <br>
@@ -20,7 +20,7 @@ public interface DioriteWorker
      *
      * @return The Plugin that owns the task
      */
-    Plugin getOwner();
+    PluginMainClass getOwner();
 
     /**
      * Returns the thread for the worker.

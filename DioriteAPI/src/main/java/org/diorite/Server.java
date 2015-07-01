@@ -18,7 +18,8 @@ import org.diorite.command.CommandMap;
 import org.diorite.command.PluginCommandBuilder;
 import org.diorite.command.sender.ConsoleCommandSender;
 import org.diorite.entity.Player;
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.math.DioriteRandomUtils;
@@ -94,16 +95,17 @@ public interface Server extends Synchronizable
 
     void removeAllTitles();
 
+    PluginManager getPluginManager();
+
     CommandMap getCommandMap();
 
-    PluginCommandBuilder createCommand(Plugin plugin, String name);
+    PluginCommandBuilder createCommand(PluginMainClass pluginMainClass, String name);
 
     Collection<Player> getOnlinePlayers();
 
     Collection<Player> getOnlinePlayers(Predicate<Player> predicate);
 
     Player getPlayer(UUID uuid);
-
 
     default Player getPlayer(final String str)
     {
@@ -114,6 +116,7 @@ public interface Server extends Synchronizable
                 return player;
             }
         }
+
         for (final Player player : this.getOnlinePlayers())
         {
             if (player.getName().startsWith(str))

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 
 /**
  * Class for managing tasks and calling sync method. <br>
@@ -26,19 +26,19 @@ public abstract class Scheduler
      * </ul>
      *
      * @param <T>    The callable's return type.
-     * @param plugin Plugin that owns the task.
+     * @param pluginMainClass Plugin that owns the task.
      * @param task   Task to be executed.
      *
      * @return Future Future object related to the task
      */
-    public abstract <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task);
+    public abstract <T> Future<T> callSyncMethod(PluginMainClass pluginMainClass, Callable<T> task);
 
     /**
      * Calls a method on the main thread and returns a Future object. This
      * task will be executed by one of main server tick thread that will
      * be ticking given object. <br>
      * Using server instance as synchronizable object, will work like
-     * {@link #callSyncMethod(Plugin, Callable)}
+     * {@link #callSyncMethod(PluginMainClass, Callable)}
      * <ul>
      * <li>Note: The Future.get() methods must NOT be called from the main
      * thread.
@@ -47,13 +47,13 @@ public abstract class Scheduler
      * </ul>
      *
      * @param <T>    The callable's return type.
-     * @param plugin Plugin that owns the task.
+     * @param pluginMainClass Plugin that owns the task.
      * @param task   Task to be executed.
      * @param sync   object to synchronize with it.
      *
      * @return Future Future object related to the task
      */
-    public abstract <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Synchronizable sync);
+    public abstract <T> Future<T> callSyncMethod(PluginMainClass pluginMainClass, Callable<T> task, Synchronizable sync);
 
     /**
      * Removes task from scheduler.
@@ -66,9 +66,9 @@ public abstract class Scheduler
      * Removes all tasks associated with a particular plugin from the
      * scheduler.
      *
-     * @param plugin Owner of tasks to be removed
+     * @param pluginMainClass Owner of tasks to be removed
      */
-    public abstract void cancelTasks(Plugin plugin);
+    public abstract void cancelTasks(PluginMainClass pluginMainClass);
 
     /**
      * Removes all tasks from the scheduler.

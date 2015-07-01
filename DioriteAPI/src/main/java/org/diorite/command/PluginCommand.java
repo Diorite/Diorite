@@ -1,6 +1,6 @@
 package org.diorite.command;
 
-import org.diorite.plugin.Plugin;
+import org.diorite.plugin.PluginMainClass;
 
 public interface PluginCommand extends MainCommand
 {
@@ -10,5 +10,5 @@ public interface PluginCommand extends MainCommand
         return this.getPlugin().getName() + COMMAND_PLUGIN_SEPARATOR + this.getName();
     }
 
-    Plugin getPlugin();
+    PluginMainClass getPlugin();
 }
