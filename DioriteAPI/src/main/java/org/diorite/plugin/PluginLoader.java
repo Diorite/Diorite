@@ -4,8 +4,8 @@ import java.io.File;
 
 public interface PluginLoader
 {
-    void loadPlugin(File file);
-    void enablePlugin(String name);
-    void disablePlugin(String name);
+    PluginMainClass loadPlugin(File file) throws PluginException;
+    void enablePlugin(String name) throws PluginException;
+    void disablePlugin(String name) throws PluginException;
     String getFileExtension();
 }

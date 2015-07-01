@@ -2,7 +2,6 @@ package org.diorite.plugin;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * This class manages and redirects load/enable/disable requests to valid PluginLoaders
@@ -11,9 +10,9 @@ import java.util.List;
 public interface PluginManager
 {
     void registerPluginLoader(PluginLoader pluginLoader);
-    void loadPlugin(File file);
-    void enablePlugin(String name);
-    void disablePlugin(String name);
+    void loadPlugin(File file) throws PluginException;
+    void enablePlugin(String name) throws PluginException;
+    void disablePlugin(String name) throws PluginException;
     PluginMainClass getPlugin(String name);
     Collection<PluginMainClass> getPlugins();
     void disablePlugins();

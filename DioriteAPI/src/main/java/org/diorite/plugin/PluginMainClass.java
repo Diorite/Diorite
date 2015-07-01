@@ -5,14 +5,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public abstract class PluginMainClass
 {
+    private PluginMainClass instance;
+    private PluginClassLoader classLoader;
     private boolean initialised;
+    private boolean enabled;
     private String name;
     private String version;
     private String author;
 
-    private PluginMainClass()
+    protected PluginMainClass()
     {
-        System.out.println("Constructor!");
     }
 
     /**
@@ -29,43 +31,89 @@ public abstract class PluginMainClass
     {
     }
 
-    /**
-     * Invokes after worlds being loaded
-     */
-    public void postEnable()
-    {
-    }
-
     public void onDisable()
     {
     }
 
     public final String getName()
     {
+        this.initCheck();
         return this.name;
     }
 
     public final String getVersion()
     {
+        this.initCheck();
         return this.version;
     }
 
     public final String getAuthor()
     {
+        this.initCheck();
         return this.author;
     }
 
-    public void init(final String name, final String version, final String author)
+    protected final PluginMainClass instance()
+    {
+        this.initCheck();
+        return this.instance;
+    }
+
+    public final void init(final PluginClassLoader classLoader, final PluginMainClass instance, final String name, final String version, final String author)
     {
         if (this.initialised)
         {
             throw new RuntimeException("Internal method");
         }
 
+        this.instance = instance;
+        this.classLoader = classLoader;
         this.name = name;
         this.version = version;
         this.author = author;
         this.initialised = true;
+    }
+
+    public final void setEnabled(final boolean enabled)
+    {
+        this.initCheck();
+
+        if (enabled == this.enabled)
+        {
+            throw new IllegalArgumentException();
+        }
+
+        this.enabled = enabled;
+        if (enabled)
+        {
+            System.out.println("Enabling " + this.name);
+            this.onEnable();
+        }
+        else
+        {
+            System.out.println("Disabling " + this.name);
+            this.onDisable();
+        }
+    }
+
+    public final boolean isEnabled()
+    {
+        this.initCheck();
+        return this.enabled;
+    }
+
+    public final PluginClassLoader getClassLoader()
+    {
+        this.initCheck();
+        return this.classLoader;
+    }
+
+    private final void initCheck()
+    {
+        if (! this.initialised)
+        {
+            throw new IllegalStateException();
+        }
     }
 
     @Override
