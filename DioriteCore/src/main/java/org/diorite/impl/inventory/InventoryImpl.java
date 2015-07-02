@@ -1,24 +1,420 @@
 package org.diorite.impl.inventory;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.inventory.item.ItemStackImpl;
+import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
 import org.diorite.inventory.Inventory;
 import org.diorite.inventory.InventoryHolder;
+import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.Material;
+import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.collections.sets.ConcurrentSet;
+
+import gnu.trove.TIntCollection;
+import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.set.hash.TShortHashSet;
 
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {
-    protected final T      holder;
+    protected final T holder;
     protected final Set<Player> viewers = new ConcurrentSet<>(5, 0.2f, 6);
-    protected       String title;
+    @SuppressWarnings("MagicNumber")
+    protected final TShortHashSet   dirty   = new TShortHashSet(5, .1f, (short) - 1);
+    protected String title;
 
     protected InventoryImpl(final T holder)
     {
         this.holder = holder;
+    }
+
+    public void addDirty(final short i)
+    {
+        this.dirty.add(i);
+    }
+
+    @Override
+    public ItemStack[] getContents()
+    {
+        return this.getArray().toArray(new ItemStack[this.getArray().length()]);
+    }
+
+    /**
+     * @return Raw atomic array with contents of eq
+     */
+    public abstract ItemStackImplArray getArray();
+
+    protected ItemStackImpl wrap(final ItemStack item, final int index)
+    {
+        return ItemStackImpl.wrap(item, this, index);
+    }
+
+    public abstract void softUpdate();
+
+    /**
+     * Completely replaces the inventory's contents. Removes all existing
+     * contents and replaces it with the ItemStacks given in the array.
+     *
+     * @param items A complete replacement for the contents; the length must
+     *              be less than or equal to {@link #size()}.
+     *
+     * @throws IllegalArgumentException If the array has more items than the
+     *                                  inventory.
+     */
+    public void setContent(final ItemStackImplArray items)
+    {
+        final ItemStackImplArray content = this.getArray();
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            content.set(i, items.getOrNull(i));
+        }
+    }
+
+    public void setContent(final ItemStackImpl[] items)
+    {
+        final ItemStackImplArray content = this.getArray();
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            content.set(i, (i >= items.length) ? null : items[i]);
+        }
+    }
+
+    @Override
+    public void setContent(final ItemStack[] items)
+    {
+        final ItemStackImplArray content = this.getArray();
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            content.set(i, (i >= items.length) ? null : this.wrap(items[i], i));
+        }
+    }
+
+    @Override
+    public int remove(final ItemStack itemStack)
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        if (itemStack == null)
+        {
+            return - 1;
+        }
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            final ItemStack item = content.get(i);
+            if (Objects.equals(item, itemStack))
+            {
+                content.compareAndSet(i, this.wrap(item, i), null);
+                return i;
+            }
+        }
+        return - 1;
+    }
+
+    @Override
+    public int[] removeAll(final ItemStack itemStack)
+    {
+        final ItemStackImplArray content = this.getArray();
+        if (itemStack == null)
+        {
+            return DioriteUtils.EMPTY_INT;
+        }
+        final TIntCollection list = new TIntArrayList(10);
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            final ItemStack item = content.get(i);
+            if (Objects.equals(item, itemStack))
+            {
+                content.compareAndSet(i, this.wrap(item, i), null);
+                list.add(i);
+            }
+        }
+        if (list.isEmpty())
+        {
+            return DioriteUtils.EMPTY_INT;
+        }
+        return list.toArray();
+    }
+
+    @Override
+    public int remove(final Material material, final boolean ignoreType)
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        if (material == null)
+        {
+            return - 1;
+        }
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            final ItemStack item = content.get(i);
+            if (item == null)
+            {
+                continue;
+            }
+            final Material mat = item.getMaterial();
+            if (ignoreType)
+            {
+                if ((material.ordinal() != mat.ordinal()))
+                {
+                    continue;
+                }
+            }
+            else if (! Objects.equals(mat, material))
+            {
+                continue;
+            }
+            content.compareAndSet(i, this.wrap(item, i), null);
+            return i;
+        }
+        return - 1;
+    }
+
+    @Override
+    public int[] removeAll(final Material material, final boolean ignoreType)
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        if (material == null)
+        {
+            return DioriteUtils.EMPTY_INT;
+        }
+        final TIntCollection list = new TIntArrayList(10);
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            final ItemStack item = content.get(i);
+            if (item == null)
+            {
+                continue;
+            }
+            final Material mat = item.getMaterial();
+            if (ignoreType)
+            {
+                if ((material.ordinal() != mat.ordinal()))
+                {
+                    continue;
+                }
+            }
+            else if (! Objects.equals(mat, material))
+            {
+                continue;
+            }
+            content.compareAndSet(i, this.wrap(item, i), null);
+            list.add(i);
+        }
+        if (list.isEmpty())
+        {
+            return DioriteUtils.EMPTY_INT;
+        }
+        return list.toArray();
+    }
+
+    @Override
+    public int atomicReplace(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    {
+        ItemStackImpl.validate(excepted);
+        final ItemStackImplArray content = this.getArray();
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            if (content.compareAndSet(i, (ItemStackImpl) excepted, this.wrap(newItem, i)))
+            {
+                return i;
+            }
+        }
+        return - 1;
+    }
+
+    @Override
+    public int[] atomicReplaceAll(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    {
+        ItemStackImpl.validate(excepted);
+        final ItemStackImplArray content = this.getArray();
+        final TIntCollection list = new TIntArrayList(10);
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            if (content.compareAndSet(i, (ItemStackImpl) excepted, this.wrap(newItem, i)))
+            {
+                list.add(i);
+            }
+        }
+        if (list.isEmpty())
+        {
+            return DioriteUtils.EMPTY_INT;
+        }
+        return list.toArray();
+    }
+
+    @Override
+    public boolean atomicReplace(final int slot, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    {
+        ItemStackImpl.validate(excepted);
+        return this.getArray().compareAndSet(slot, (ItemStackImpl) excepted, this.wrap(newItem, slot));
+    }
+
+    @Override
+    public ItemStackImpl getItem(final int index)
+    {
+        return this.getArray().get(index);
+    }
+
+    @Override
+    public ItemStackImpl setItem(final int index, final ItemStack item)
+    {
+        return this.getArray().getAndSet(index, this.wrap(item, index));
+    }
+
+    @Override
+    public Map<Integer, ? extends ItemStack> all(final Material material, final boolean ignoreType)
+    {
+        final ItemStackImplArray content = this.getArray();
+        final Map<Integer, ItemStack> slots = new HashMap<>(10);
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            final ItemStack item = content.get(i);
+            if (item != null)
+            {
+                if (ignoreType)
+                {
+                    if (item.getMaterial().isThisSameID(material))
+                    {
+                        slots.put(i, item);
+                    }
+                }
+                else if (item.getMaterial().equals(material))
+                {
+                    slots.put(i, item);
+                }
+            }
+        }
+        return slots;
+
+    }
+
+    @Override
+    public HashMap<Integer, ? extends ItemStack> all(final ItemStack item)
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        final HashMap<Integer, ItemStack> slots = new HashMap<>(10);
+        if (item != null)
+        {
+            for (int i = 0, size = content.length(); i < size; i++)
+            {
+                final ItemStack itemStack = content.get(i);
+                if (item.equals(itemStack))
+                {
+                    slots.put(i, itemStack);
+                }
+            }
+        }
+        return slots;
+    }
+
+    @Override
+    public int first(final Material material)
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            final ItemStack item = content.get(i);
+            if ((item != null) && (item.getMaterial().equals(material)))
+            {
+                return i;
+            }
+        }
+        return - 1;
+    }
+
+    @Override
+    public int first(final ItemStack item, final boolean withAmount)
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        if (item == null)
+        {
+            return - 1;
+        }
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            final ItemStack itemStack = content.get(i);
+            if (itemStack != null)
+            {
+                if (withAmount ? item.equals(itemStack) : item.isSimilar(itemStack))
+                {
+                    return i;
+                }
+            }
+        }
+        return - 1;
+    }
+
+    @Override
+    public int first(final ItemStack item, final int startIndex, final boolean withAmount)
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        if (item == null)
+        {
+            return - 1;
+        }
+        for (int i = startIndex, size = content.length(); i < size; i++)
+        {
+            final ItemStack itemStack = content.get(i);
+            if (itemStack != null)
+            {
+                if (withAmount ? item.equals(itemStack) : item.isSimilar(itemStack))
+                {
+                    return i;
+                }
+            }
+        }
+        return - 1;
+    }
+
+    @Override
+    public int firstEmpty()
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            final ItemStack itemStack = content.get(i);
+            if (itemStack == null)
+            {
+                return i;
+            }
+        }
+        return - 1;
+    }
+
+    @Override
+    public void clear(final int index)
+    {
+        this.getArray().set(index, null);
+    }
+
+    @Override
+    public void clear()
+    {
+        final ItemStackImplArray content = this.getArray();
+
+        for (int i = 0, size = content.length(); i < size; i++)
+        {
+            content.set(i, null);
+        }
+    }
+
+    @Override
+    public int size()
+    {
+        return this.getArray().length();
     }
 
     @Override

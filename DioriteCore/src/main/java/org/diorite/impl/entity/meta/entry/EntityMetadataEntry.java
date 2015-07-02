@@ -4,11 +4,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.entity.meta.EntityMetadataType;
+import org.diorite.utils.others.Dirtable;
 
-public abstract class EntityMetadataEntry<T>
+public abstract class EntityMetadataEntry<T> implements Dirtable
 {
-    private final byte               index;
-    private       boolean            dirty; // if true, will be send to clients on next update tick
+    private final byte    index;
+    private       boolean dirty; // if true, will be send to clients on next update tick
 
     public EntityMetadataEntry(final byte index)
     {
@@ -31,25 +32,20 @@ public abstract class EntityMetadataEntry<T>
 
     public abstract void setData(final T data);
 
+    @Override
     public boolean isDirty()
     {
         return this.dirty;
     }
 
-    public void setDirty(final boolean dirty)
+    @Override
+    public boolean setDirty(final boolean dirty)
     {
+        final boolean b = this.dirty;
         this.dirty = dirty;
+        return b;
     }
 
-    public void setDirty()
-    {
-        this.dirty = true;
-    }
-
-    public void setClean()
-    {
-        this.dirty = false;
-    }
 
     @Override
     public boolean equals(final Object o)

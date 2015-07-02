@@ -4,17 +4,17 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.PlayerInventoryPart;
-import org.diorite.inventory.item.ItemStackArray;
 
 public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> implements PlayerInventoryPart
 {
-    protected final PlayerInventory playerInventory;
-    protected final ItemStackArray  content;
+    protected final PlayerInventoryImpl    playerInventory;
+    protected final ItemStackImplArray content;
 
-    protected PlayerInventoryPartImpl(final PlayerInventory playerInventory, final ItemStackArray content)
+    protected PlayerInventoryPartImpl(final PlayerInventoryImpl playerInventory, final ItemStackImplArray content)
     {
         super(playerInventory.getHolder());
         this.content = content;
@@ -41,7 +41,7 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     }
 
     @Override
-    public ItemStackArray getContents()
+    public ItemStackImplArray getArray()
     {
         return this.content;
     }
@@ -56,5 +56,17 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     public void update()
     {
         this.playerInventory.update();
+    }
+
+    @Override
+    public void softUpdate()
+    {
+        throw new UnsupportedOperationException("soft update should be called only for root EQ.");
+    }
+
+    @Override
+    public void addDirty(final short i)
+    {
+        this.playerInventory.addDirty(i);
     }
 }

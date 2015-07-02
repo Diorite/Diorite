@@ -58,7 +58,8 @@ public class PacketPlayInWindowClick implements PacketPlayIn
         this.clickedSlot = data.readShort();
         final byte button = data.readByte();
         this.actionNumber = data.readShort();
-        this.clickType = ClickType.get(data.readByte(), button, this.clickedSlot != SLOT_NOT_NEEDED);
+        final byte mode = data.readByte();
+        this.clickType = ClickType.get(mode, button, this.clickedSlot != SLOT_NOT_NEEDED);
         data.skipBytes(data.readableBytes());
     }
 

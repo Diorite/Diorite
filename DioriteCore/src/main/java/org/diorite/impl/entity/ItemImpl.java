@@ -51,12 +51,12 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
 
     public boolean pickUpItem(final PlayerImpl player)
     {
-        // TODO Dopracowac mechanike podnoszenia w wypadku gdy gracz ma pelne eq
-        if (player.getInventory().getFullEqInventory().add(this.getItemStack()).length != 0)
+        final ItemStack[] left = player.getInventory().getFullEqInventory().add(this.getItemStack());
+        if (left.length != 0)
         {
+            this.setItemStack(left[0]);
             return false;
         }
-        player.getInventory().update(); // TODO REMOVE!!!
 
         player.getNetworkManager().sendPacket(new PacketPlayOutCollect(this.getId(), player.getId())); // TODO Entity tracker zeby inni widzieli podnoszenie
         this.remove(true);

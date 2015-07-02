@@ -27,6 +27,7 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
+import org.diorite.impl.inventory.PlayerCraftingInventoryImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
@@ -43,6 +44,7 @@ import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.inventory.EntityEquipment;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.math.pack.IntsToLong;
 
@@ -131,6 +133,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
             return;
         }
         this.playerChunks.doTick(tps);
+        this.inventory.softUpdate();
 
 
         // send remove entity packets
@@ -471,5 +474,27 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     public EntityEquipment getEquipment()
     {
         return this.inventory.getArmorInventory();
+    }
+
+    public void closeInventory(final int id)
+    {
+        final PlayerCraftingInventoryImpl ci = this.inventory.getCraftingInventory();
+        for (int i = 0, s = ci.size(); i < s; i++)
+        {
+            final ItemStack itemStack = ci.setItem(i, null);
+            if (itemStack != null)
+            {
+                final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getServer(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                item.setItemStack(new ItemStack(itemStack.getMaterial(), itemStack.getAmount()));
+                this.getWorld().addEntity(item);
+            }
+        }
+        final ItemStack cur = this.inventory.setCursorItem(null);
+        if (cur != null)
+        {
+            final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getServer(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+            item.setItemStack(new ItemStack(cur.getMaterial(), cur.getAmount()));
+            this.getWorld().addEntity(item);
+        }
     }
 }

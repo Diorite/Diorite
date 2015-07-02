@@ -1,10 +1,14 @@
 package org.diorite.impl.pipelines.event.player;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutTransaction;
+import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
+import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
@@ -41,16 +45,16 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
     {
         final PlayerImpl player = (PlayerImpl) e.getPlayer();
         final ClickType ct = e.getClickType();
-        final ItemStack cursor = e.getCursorItem();
+        final ItemStackImpl cursor = ItemStackImpl.wrap(e.getCursorItem(), 0);
         final int slot = e.getClickedSlot();
         final PlayerInventoryImpl inv = player.getInventory();
 
-        final ItemStack clicked = e.getClickedItem();
+        final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem(), inv, slot);
         if (Objects.equals(ct, ClickType.MOUSE_LEFT))
         {
             if (cursor == null)
             {
-                if ((clicked != null) && (! inv.replace(slot, clicked, null) || ! inv.setCursorItem(null, clicked)))
+                if ((clicked != null) && (! inv.atomicReplace(slot, clicked, null) || ! inv.atomicReplaceCursorItem(null, clicked)))
                 {
                     return false; // item changed before we made own change
                 }
@@ -61,14 +65,18 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     final ItemStack newCursor = clicked.combine(cursor);
 
-                    if (! inv.setCursorItem(cursor, newCursor))
+                    if (! inv.atomicReplaceCursorItem(cursor, newCursor))
                     {
                         return false;
                     }
                 }
                 else
                 {
-                    if (! inv.replace(slot, clicked, cursor) || ! inv.setCursorItem(cursor, clicked))
+                    if (slot == 0) // result slot, TODO: slot type, finish for other clicks
+                    {
+                        return true;
+                    }
+                    if (! inv.atomicReplace(slot, clicked, cursor) || ! inv.atomicReplaceCursorItem(cursor, clicked))
                     {
                         return false; // item changed before we made own change
                     }
@@ -89,7 +97,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 if (clicked.getAmount() == 1)
                 {
                     splitted = clicked;
-                    if (! inv.replace(slot, clicked, null))
+                    if (! inv.atomicReplace(slot, clicked, null))
                     {
                         return false;
                     }
@@ -101,34 +109,34 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
                 if (splitted != null)
                 {
-                    if (! inv.setCursorItem(null, splitted))
+                    if (! inv.atomicReplaceCursorItem(null, splitted))
                     {
                         return false;
                     }
                 }
                 else
                 {
-                    if (! inv.setCursorItem(null, clicked))
+                    if (! inv.atomicReplaceCursorItem(null, clicked))
                     {
                         return false;
                     }
                 }
             }
-            else
-            { // cursor != null
+            else // cursor != null
+            {
                 if (clicked == null)
                 {
                     final ItemStack splitted = cursor.split(1);
                     if (splitted == null)
                     {
-                        if (! inv.replace(slot, null, cursor))
+                        if (! inv.atomicReplace(slot, null, cursor))
                         {
                             return false;
                         }
                     }
                     else
                     {
-                        if (! inv.replace(slot, null, splitted))
+                        if (! inv.atomicReplace(slot, null, splitted))
                         {
                             return false;
                         }
@@ -138,14 +146,14 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     if (clicked.isSimilar(cursor))
                     {
-                        if (! inv.setCursorItem(cursor, clicked.combine(cursor)))
+                        if (! inv.atomicReplaceCursorItem(cursor, clicked.combine(cursor)))
                         {
                             return false;
                         }
                     }
                     else
                     {
-                        if (! inv.replace(slot, clicked, cursor) || ! inv.setCursorItem(cursor, clicked))
+                        if (! inv.atomicReplace(slot, clicked, cursor) || ! inv.atomicReplaceCursorItem(cursor, clicked))
                         {
                             return false;
                         }
@@ -166,7 +174,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             if (slot >= HOTBAR_BEGIN_ID)
             {
                 // clicked on hotbar
-                if (! inv.replace(slot, clicked, null))
+                if (! inv.atomicReplace(slot, clicked, null))
                 {
                     return false;
                 }
@@ -175,7 +183,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             else
             {
                 // clicked on other slot
-                if (! inv.replace(slot, clicked, null))
+                if (! inv.atomicReplace(slot, clicked, null))
                 {
                     return false;
                 }
@@ -186,7 +194,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         {
             if (clicked.getAmount() == 1)
             {
-                if (! inv.replace(slot, clicked, null))
+                if (! inv.atomicReplace(slot, clicked, null))
                 {
                     return false;
                 }
@@ -200,48 +208,59 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         }
         else if (Objects.equals(ct, ClickType.CTRL_DROP_KEY))
         {
-            if (! inv.replace(slot, clicked, null))
+            if (! inv.atomicReplace(slot, clicked, null))
             {
                 return false;
             }
 
             // TODO Gdy juz beda entities to wywalic itemek na ziemie. Aktualnie po prostu znika
         }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_1))
+        else if (ct.getMode() == 2) // 2 -> hot bar action
         {
-            return this.handleNumKey(slot, inv, clicked, 1);
+            if ((ct.getButton() < 0) || (ct.getButton() > 8))
+            {
+                return false;
+            }
+            final ItemStack inHeldSlot = inv.getHotbarInventory().getItem(ct.getButton());
+            return inv.atomicReplace(slot, clicked, inHeldSlot) && inv.getHotbarInventory().atomicReplace(ct.getButton(), inHeldSlot, clicked);
         }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_2))
+        else if (Objects.equals(ct, ClickType.MOUSE_LEFT_OUTSIDE))
         {
-            return this.handleNumKey(slot, inv, clicked, 2);
+            if ((cursor == null) || (cursor.getAmount() <= 0))
+            {
+                inv.setCursorItem(null);
+                return true;
+            }
+            if (! inv.atomicReplaceCursorItem(cursor, null))
+            {
+                return false;
+            }
+            final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+            item.setItemStack(new ItemStack(cursor.getMaterial(), cursor.getAmount()));
+            player.getWorld().addEntity(item);
+            return true;
         }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_3))
+        else if (Objects.equals(ct, ClickType.MOUSE_RIGHT_OUTSIDE))
         {
-            return this.handleNumKey(slot, inv, clicked, 3);
-        }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_4))
-        {
-            return this.handleNumKey(slot, inv, clicked, 4);
-        }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_5))
-        {
-            return this.handleNumKey(slot, inv, clicked, 5);
-        }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_6))
-        {
-            return this.handleNumKey(slot, inv, clicked, 6);
-        }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_7))
-        {
-            return this.handleNumKey(slot, inv, clicked, 7);
-        }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_8))
-        {
-            return this.handleNumKey(slot, inv, clicked, 8);
-        }
-        else if (Objects.equals(ct, ClickType.NUM_KEY_9))
-        {
-            return this.handleNumKey(slot, inv, clicked, 9);
+            if ((cursor == null) || (cursor.getAmount() <= 0))
+            {
+                inv.setCursorItem(null);
+                return true;
+            }
+            final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+            item.setItemStack(new ItemStack(cursor.getMaterial(), 1));
+            if (cursor.getAmount() == 1)
+            {
+                if (! inv.atomicReplaceCursorItem(cursor, null))
+                {
+                    return false;
+                }
+                player.getWorld().addEntity(item);
+                return true;
+            }
+            cursor.setAmount(cursor.getAmount() - 1);
+            player.getWorld().addEntity(item);
+            return true;
         }
         else if (Objects.equals(ct, ClickType.MOUSE_MIDDLE))
         {
@@ -260,12 +279,5 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
     protected int getAmountToStayInHand(final int amount)
     {
         return ((amount % 2) == 0) ? (amount / 2) : ((amount / 2) + 1);
-    }
-
-    protected boolean handleNumKey(final int slot, final PlayerInventoryImpl inv, final ItemStack clicked, int id)
-    {
-        id -= 1;
-        final ItemStack inHeldSlot = inv.getHotbarInventory().getItem(id);
-        return inv.replace(slot, clicked, inHeldSlot) && inv.getHotbarInventory().replace(id, inHeldSlot, clicked);
     }
 }

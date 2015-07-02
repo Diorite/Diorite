@@ -10,28 +10,28 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
-import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.item.ItemStackArray;
+import org.diorite.impl.inventory.item.ItemStackImpl;
+import org.diorite.impl.inventory.item.ItemStackImplArray;
 
 @PacketClass(id = 0x30, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutWindowItems implements PacketPlayOut
 {
     private int             windowId;
-    private ItemStackArray  items;
+    private ItemStackImplArray  items;
 
     public PacketPlayOutWindowItems()
     {
     }
 
-    public PacketPlayOutWindowItems(final int windowId, final ItemStackArray items)
+    public PacketPlayOutWindowItems(final int windowId, final ItemStackImplArray items)
     {
         this.windowId = windowId;
         this.items = items;
     }
 
-    public PacketPlayOutWindowItems(final int windowId, final ItemStack... items)
+    public PacketPlayOutWindowItems(final int windowId, final ItemStackImpl... items)
     {
-        this.items = ItemStackArray.create(items);
+        this.items = ItemStackImplArray.create(items);
         if (this.items.length() == 0)
         {
             throw new IllegalArgumentException();
@@ -49,12 +49,12 @@ public class PacketPlayOutWindowItems implements PacketPlayOut
         this.windowId = windowId;
     }
 
-    public ItemStackArray getItems()
+    public ItemStackImplArray getItems()
     {
         return this.items;
     }
 
-    public void setItems(final ItemStackArray items)
+    public void setItems(final ItemStackImplArray items)
     {
         this.items = items;
     }

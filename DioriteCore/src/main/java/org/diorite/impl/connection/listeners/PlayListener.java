@@ -191,6 +191,9 @@ public class PlayListener implements PacketPlayInListener
     public void handle(final PacketPlayInCloseWindow packet)
     {
         Main.debug("Close windows: " + packet.getId());
+        this.server.sync(() -> {
+            this.player.closeInventory(packet.getId());
+        });
         // TODO: implement
     }
 
@@ -198,6 +201,11 @@ public class PlayListener implements PacketPlayInListener
     @Override
     public void handle(final PacketPlayInWindowClick p)
     {
+        if (p.getClickType() == null)
+        {
+            Main.debug("Unknown click type in PacketPlayInWindowClick.");
+            return;
+        }
         this.server.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType())), this.player);
     }
 

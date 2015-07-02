@@ -42,7 +42,6 @@ public class GiveCmd extends SystemCommandImpl
         }
         // TODO: nbt, or other shit
         target.getInventory().add(new ItemStack(mat, amount));
-        target.getInventory().update(); // TODO: remove
         sender.sendSimpleColoredMessage("Added &9" + amount + "x&r of &3" + mat.getMinecraftId() + "&9:&3" + mat.getType()); // TODO: change message and add it to config.
     }
 }

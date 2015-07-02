@@ -1,18 +1,17 @@
 package org.diorite.impl.inventory;
 
+import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerEqInventory;
-import org.diorite.inventory.PlayerInventory;
-import org.diorite.inventory.item.ItemStackArray;
 
 public class PlayerEqInventoryImpl extends PlayerInventoryPartImpl implements PlayerEqInventory
 {
-    public PlayerEqInventoryImpl(final PlayerInventory playerInventory)
+    public PlayerEqInventoryImpl(final PlayerInventoryImpl playerInventory)
     {
-        super(playerInventory, playerInventory.getContents().getSubArray(9, InventoryType.PLAYER_EQ.getSize()));
+        super(playerInventory, playerInventory.getArray().getSubArray(9, InventoryType.PLAYER_EQ.getSize()));
     }
 
-    public PlayerEqInventoryImpl(final PlayerInventory playerInventory, final ItemStackArray content)
+    public PlayerEqInventoryImpl(final PlayerInventoryImpl playerInventory, final ItemStackImplArray content)
     {
         super(playerInventory, content);
     }
