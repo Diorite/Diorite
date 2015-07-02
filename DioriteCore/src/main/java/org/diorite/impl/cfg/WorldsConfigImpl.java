@@ -54,6 +54,7 @@ public class WorldsConfigImpl implements WorldsConfig
         {
             final WorldConfigImpl w = template.fillDefaults(new WorldConfigImpl());
             w.name = "world_nether";
+            w.enabled = false;
             w.seed = defaultSeed();
             w.dimension = Dimension.NETHER;
             def2.add(w);
@@ -61,6 +62,7 @@ public class WorldsConfigImpl implements WorldsConfig
         {
             final WorldConfigImpl w = template.fillDefaults(new WorldConfigImpl());
             w.name = "world_end";
+            w.enabled = false;
             w.seed = defaultSeed();
             w.dimension = Dimension.END;
             def2.add(w);
