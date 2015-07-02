@@ -39,6 +39,7 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -310,7 +311,7 @@ public class Metrics
 
                     try
                     {
-                        Thread.sleep(this.nextPost - System.currentTimeMillis());
+                        Thread.sleep(Math.min(Math.max(this.nextPost - System.currentTimeMillis(), 1), TimeUnit.MINUTES.toMillis(PING_INTERVAL)));
                     } catch (final InterruptedException e)
                     {
                         e.printStackTrace();
