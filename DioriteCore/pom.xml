@@ -6,6 +6,7 @@
 
             <groupId>org.diorite</groupId>
             <artifactId>Diorite</artifactId>
+            <!--TODO: automatic versioning-->
             <version>0.1-SNAPSHOT</version>
             <packaging>jar</packaging>
             <properties>
@@ -57,6 +58,7 @@
                                     <Main-Class>org.diorite.impl.Main</Main-Class>
                                     <Implementation-Title>Diorite</Implementation-Title>
                                     <Implementation-Vendor>GotoFinal</Implementation-Vendor>
+                                    <Implementation-Version>${project.version}</Implementation-Version>
                                     <Specification-Title>DioriteAPI</Specification-Title>
                                     <Specification-Vendor>GotoFinal</Specification-Vendor>
                                     <Sealed>false</Sealed>

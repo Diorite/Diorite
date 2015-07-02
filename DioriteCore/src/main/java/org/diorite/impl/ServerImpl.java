@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.logging.Handler;
 import java.util.stream.Collectors;
@@ -46,6 +47,7 @@ import org.diorite.impl.input.InputThread;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;
+import org.diorite.impl.metrics.Metrics;
 import org.diorite.impl.pipelines.event.chunk.ChunkGeneratePipelineImpl;
 import org.diorite.impl.pipelines.event.chunk.ChunkLoadPipelineImpl;
 import org.diorite.impl.pipelines.event.chunk.ChunkPopulatePipelineImpl;
@@ -93,14 +95,14 @@ import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerChatEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginException;
-import org.diorite.plugin.PluginMainClass;
 import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.DioriteUtils;
+import org.diorite.utils.SpammyError;
 import org.diorite.world.World;
-import org.diorite.world.WorldsManager;
 import org.diorite.world.generator.WorldGenerators;
 
 import jline.console.ConsoleReader;
@@ -118,6 +120,7 @@ public class ServerImpl implements Server
     protected final InputThread inputThread;
     protected final String      hostname;
     protected final int         port;
+    private final   String      serverVersion;
     protected int    tps                = DEFAULT_TPS;
     protected int    waitTime           = DEFAULT_WAIT_TIME;
     protected int    connectionThrottle = 1000;
@@ -132,11 +135,11 @@ public class ServerImpl implements Server
     protected final int                      keepAliveTimer;
     protected       DioriteConfigImpl        config;
     protected       PluginManager            pluginManager;
-    protected       File                     pluginsDirectory = new File("plugins"); // TODO Allow to change this
-    private final              double[] recentTps  = new double[3];
-    private                    KeyPair  keyPair    = MinecraftEncryption.generateKeyPair();
-    private transient volatile boolean  isRunning  = true;
-    private transient volatile boolean  hasStopped = false;
+    protected                  File     pluginsDirectory = new File("plugins"); // TODO Allow to change this
+    private final              double[] recentTps        = new double[3];
+    private                    KeyPair  keyPair          = MinecraftEncryption.generateKeyPair();
+    private transient volatile boolean  isRunning        = true;
+    private transient volatile boolean  hasStopped       = false;
 
     public int getCompressionThreshold()
     {
@@ -226,6 +229,17 @@ public class ServerImpl implements Server
     }
 
     @Override
+    public String getVersion()
+    {
+        if (this.serverVersion == null)
+        {
+            SpammyError.err("Missing server version!", (int) TimeUnit.HOURS.toSeconds(1), "serverVersion");
+            return "Unknown" + " (MC: " + Server.getMinecraftVersion() + ")";
+        }
+        return this.serverVersion + " (MC: " + Server.getMinecraftVersion() + ")";
+    }
+
+    @Override
     public double[] getRecentTps()
     {
         final double[] result = new double[this.recentTps.length];
@@ -239,7 +253,6 @@ public class ServerImpl implements Server
     private void loadConfigFile(final File f)
     {
         final Template<DioriteConfigImpl> cfgTemp = TemplateCreator.getTemplate(DioriteConfigImpl.class);
-        boolean needWrite = true;
         if (f.exists())
         {
             try
@@ -248,10 +261,6 @@ public class ServerImpl implements Server
                 if (this.config == null)
                 {
                     this.config = cfgTemp.fillDefaults(new DioriteConfigImpl());
-                }
-                else
-                {
-                    needWrite = false;
                 }
             } catch (final IOException e)
             {
@@ -269,15 +278,12 @@ public class ServerImpl implements Server
                 throw new RuntimeException("Can't create configuration file!", e);
             }
         }
-        if (needWrite)
+        try
         {
-            try
-            {
-                cfgTemp.dump(f, this.config, false);
-            } catch (final IOException e)
-            {
-                throw new RuntimeException("Can't dump configuration file!", e);
-            }
+            cfgTemp.dump(f, this.config, false);
+        } catch (final IOException e)
+        {
+            throw new RuntimeException("Can't dump configuration file!", e);
         }
     }
 
@@ -345,6 +351,7 @@ public class ServerImpl implements Server
     {
         instance = this;
         this.mainThread = Thread.currentThread();
+        this.serverVersion = ServerImpl.class.getPackage().getImplementationVersion();
         Diorite.setServer(this);
         this.loadConfigFile((File) options.valueOf("config"));
         if (this.config == null)
@@ -441,7 +448,7 @@ public class ServerImpl implements Server
     }
 
     @Override
-    public WorldsManager getWorldsManager()
+    public WorldsManagerImpl getWorldsManager()
     {
         return this.worldsManager;
     }
@@ -623,9 +630,9 @@ public class ServerImpl implements Server
     }
 
     @Override
-    public PluginCommandBuilderImpl createCommand(final PluginMainClass pluginMainClass, final String name)
+    public PluginCommandBuilderImpl createCommand(final DioritePlugin dioritePlugin, final String name)
     {
-        return PluginCommandBuilderImpl.start(pluginMainClass, name);
+        return PluginCommandBuilderImpl.start(dioritePlugin, name);
     }
 
     @Override
@@ -708,7 +715,7 @@ public class ServerImpl implements Server
 
     public String getServerModName()
     {
-        return NANE + " v" + Server.getVersion();
+        return NANE + " v" + this.getVersion();
     }
 
     public ConsoleReader getReader()
@@ -742,7 +749,7 @@ public class ServerImpl implements Server
             System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
             System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
         }
-        System.out.println("Starting Diorite v" + Server.getVersion() + " server...");
+        System.out.println("Starting Diorite v" + this.getVersion() + " server...");
 
         System.out.println("Loading plugins...");
         this.loadPlugins();
@@ -774,7 +781,7 @@ public class ServerImpl implements Server
 
         // TODO configuration and other shit.
 
-        System.out.println("Started Diorite v" + Server.getVersion() + " server!");
+        System.out.println("Started Diorite v" + this.getVersion() + " server!");
         this.run();
     }
 
@@ -796,8 +803,8 @@ public class ServerImpl implements Server
 
     public void run()
     {
+        Metrics.start(this);
         Arrays.fill(this.recentTps, (double) DEFAULT_TPS);
-
         try
         {
             long lastTick = System.nanoTime();

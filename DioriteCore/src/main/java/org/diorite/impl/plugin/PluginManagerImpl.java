@@ -8,15 +8,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.diorite.impl.Main;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
-import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginManager;
 
 public class PluginManagerImpl implements PluginManager
 {
-    private final List<PluginMainClass>     plugins       = new ArrayList<>(20);
+    private final List<DioritePlugin>       plugins       = new ArrayList<>(20);
     private final Map<String, PluginLoader> pluginLoaders = new HashMap<>(5);
 
     @Override
@@ -45,7 +47,7 @@ public class PluginManagerImpl implements PluginManager
     }
 
     @Override
-    public PluginMainClass getPlugin(final String name)
+    public DioritePlugin getPlugin(final String name)
     {
         try
         {
@@ -58,14 +60,14 @@ public class PluginManagerImpl implements PluginManager
     }
 
     @Override
-    public Collection<PluginMainClass> getPlugins()
+    public Collection<DioritePlugin> getPlugins()
     {
-        return this.plugins;
+        return ImmutableSet.copyOf(this.plugins);
     }
 
     @Override
     public void disablePlugins()
     {
-        this.plugins.stream().filter(PluginMainClass::isEnabled).forEach(plugin -> plugin.setEnabled(false));
+        this.plugins.stream().filter(DioritePlugin::isEnabled).forEach(plugin -> plugin.setEnabled(false));
     }
 }

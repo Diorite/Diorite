@@ -10,7 +10,7 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.scheduler.Synchronizable;
 
 public class DioriteFuture<T> extends DioriteTaskImpl implements Future<T>
@@ -19,9 +19,9 @@ public class DioriteFuture<T> extends DioriteTaskImpl implements Future<T>
     private       T           value;
     private Exception exception = null;
 
-    DioriteFuture(final Callable<T> callable, final PluginMainClass pluginMainClass, final Synchronizable sync, final int id)
+    DioriteFuture(final Callable<T> callable, final DioritePlugin dioritePlugin, final Synchronizable sync, final int id)
     {
-        super(callable.getClass().getName() + "@" + System.identityHashCode(callable), pluginMainClass, null, sync, false, id, STATE_SINGLE);
+        super(callable.getClass().getName() + "@" + System.identityHashCode(callable), dioritePlugin, null, sync, false, id, STATE_SINGLE);
         this.callable = callable;
     }
 

@@ -3,13 +3,14 @@ package org.diorite.impl.world;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -83,25 +84,25 @@ public class WorldsManagerImpl implements WorldsManager
     @Override
     public Map<String, WorldImpl> getWorldsMap()
     {
-        return new HashMap<>(this.worlds);
+        return ImmutableMap.copyOf(this.worlds);
     }
 
     @Override
     public Map<String, WorldGroupImpl> getGroupsMap()
     {
-        return new HashMap<>(this.groups);
+        return ImmutableMap.copyOf(this.groups);
     }
 
     @Override
     public Collection<WorldImpl> getWorlds()
     {
-        return new HashSet<>(this.worlds.values());
+        return ImmutableSet.copyOf(this.worlds.values());
     }
 
     @Override
     public Collection<WorldGroupImpl> getGroups()
     {
-        return new HashSet<>(this.groups.values());
+        return ImmutableSet.copyOf(this.groups.values());
     }
 
     @Override

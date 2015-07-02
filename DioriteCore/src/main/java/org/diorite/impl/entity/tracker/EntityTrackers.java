@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
@@ -12,12 +13,20 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.world.WorldImpl;
 
 import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.TShortIntMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.map.hash.TShortIntHashMap;
 
 public class EntityTrackers implements Tickable
 {
     @SuppressWarnings("MagicNumber")
     private final TIntObjectMap<BaseTracker<?>> trackers = new TIntObjectHashMap<>(1000, 0.25F, - 1);
+    /**
+     * Maps entity type id and amount of entity of that type. <br>
+     * Used by statisitcs and performance commands.
+     */
+    @SuppressWarnings("MagicNumber")
+    private final TShortIntMap                  stats    = new TShortIntHashMap(50, 0.1f, (short) 0, 0); // only for stats, performance commands etc.
     private final WorldImpl world;
 
     public EntityTrackers(final WorldImpl world)
@@ -30,15 +39,57 @@ public class EntityTrackers implements Tickable
         return this.world;
     }
 
+    public TShortIntMap getStats() // not for API use, TODO: add API for that
+    {
+        return this.stats;
+    }
+
+    private void incrementStat(final EntityImpl entity)
+    {
+        try
+        {
+            final short type = (short) entity.getType().getMinecraftId();
+            this.stats.put(type, this.stats.get(type) + 1);
+        } catch (final Throwable ignored) // for sure that it will never cause any problems
+        {
+            if (Main.isEnabledDebug())
+            {
+                ignored.printStackTrace();
+            }
+        }
+    }
+
+    private void decrementStat(final EntityImpl entity)
+    {
+        try
+        {
+            final short type = (short) entity.getType().getMinecraftId();
+            this.stats.put(type, this.stats.get(type) - 1);
+        } catch (final Throwable ignored) // for sure that it will never cause any problems
+        {
+            if (Main.isEnabledDebug())
+            {
+                ignored.printStackTrace();
+            }
+        }
+    }
+
     public void addTracked(final PlayerImpl trackable)
     {
         this.trackers.put(trackable.getId(), new PlayerTracker(trackable));
         this.updatePlayer(trackable);
+        this.incrementStat(trackable);
+    }
+
+    public int size()
+    {
+        return this.trackers.size();
     }
 
     public void addTracked(final EntityImpl trackable)
     {
         this.trackers.put(trackable.getId(), new EntityTracker(trackable));
+        this.incrementStat(trackable);
     }
 
     public boolean removeTracked(final EntityImpl trackable)
@@ -57,6 +108,7 @@ public class EntityTrackers implements Tickable
                 return true;
             });
         }
+        this.decrementStat(trackable);
         return true;
     }
 

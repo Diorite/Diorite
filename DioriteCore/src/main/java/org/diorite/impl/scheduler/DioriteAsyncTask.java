@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.scheduler.DioriteWorker;
 
 @SuppressWarnings("ObjectEquality")
@@ -16,9 +16,9 @@ public class DioriteAsyncTask extends DioriteTaskImpl
     private final LinkedList<DioriteWorker> workers = new LinkedList<>();
     private final Map<Integer, DioriteTaskImpl> runners;
 
-    DioriteAsyncTask(final String name, final Map<Integer, DioriteTaskImpl> runners, final PluginMainClass pluginMainClass, final Runnable task, final int id, final long delay)
+    DioriteAsyncTask(final String name, final Map<Integer, DioriteTaskImpl> runners, final DioritePlugin dioritePlugin, final Runnable task, final int id, final long delay)
     {
-        super(name, pluginMainClass, task, null, false, id, delay);
+        super(name, dioritePlugin, task, null, false, id, delay);
         this.runners = runners;
     }
 

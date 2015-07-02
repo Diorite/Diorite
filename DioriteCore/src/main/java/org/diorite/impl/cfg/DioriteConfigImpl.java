@@ -5,6 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -106,6 +107,10 @@ public class DioriteConfigImpl implements DioriteConfig
     @CfgComment("Message of the day, used on client server list. You may use JSON message here too.")
     @CfgStringDefault("&7Welcome on &3diorite &7server&3!\n&7Join and play today&3!")
     private String motd;
+
+    @CfgComment("Metrics UUID")
+    @CfgDelegateDefault("org.diorite.impl.cfg.DioriteConfigImpl#defaultMetricsUuid")
+    private String metricsUuid;
 
     @CfgComment("Worlds configuration.")
     @CfgDelegateDefault("org.diorite.impl.cfg.DioriteConfigImpl#defaultWorlds")
@@ -327,6 +332,17 @@ public class DioriteConfigImpl implements DioriteConfig
     }
 
     @Override
+    public String getMetricsUuid()
+    {
+        return this.metricsUuid;
+    }
+
+    public void setMetricsUuid(final String metricsUuid)
+    {
+        this.metricsUuid = metricsUuid;
+    }
+
+    @Override
     public WorldsConfigImpl getWorlds()
     {
         return this.worlds;
@@ -469,6 +485,11 @@ public class DioriteConfigImpl implements DioriteConfig
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("hostname", this.hostname).append("port", this.port).append("queryPort", this.queryPort).append("rconPort", this.rconPort).append("rconPassword", this.rconPassword).append("networkCompressionThreshold", this.networkCompressionThreshold).append("onlineMode", this.onlineMode).append("maxPlayers", this.maxPlayers).append("playerIdleTimeout", this.playerIdleTimeout).append("resourcePack", this.resourcePack).append("resourcePackHash", this.resourcePackHash).append("useNativeTransport", this.useNativeTransport).append("viewDistance", this.viewDistance).append("inputThreadPoolSize", this.inputThreadPoolSize).append("administratorsFile", this.administratorsFile).append("whiteListEnabled", this.whiteListEnabled).append("whiteListFile", this.whiteListFile).append("motd", this.motd).append("worlds", this.worlds).toString();
+    }
+
+    private static String defaultMetricsUuid()
+    {
+        return UUID.randomUUID().toString();
     }
 
     private static WorldsConfigImpl defaultWorlds()

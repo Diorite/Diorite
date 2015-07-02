@@ -13,13 +13,13 @@ import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginClassLoader;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
-import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginNotFoundException;
 
 public class JarPluginLoader implements PluginLoader
 {
     @Override
-    public PluginMainClass loadPlugin(final File file) throws PluginException
+    public DioritePlugin loadPlugin(final File file) throws PluginException
     {
         try
         {
@@ -42,12 +42,12 @@ public class JarPluginLoader implements PluginLoader
 
             final Class<?> mainClass = annotated.iterator().next();
 
-            if (! PluginMainClass.class.isAssignableFrom(mainClass))
+            if (! DioritePlugin.class.isAssignableFrom(mainClass))
             {
                 throw new PluginException("Main class must extend PluginMainClass!");
             }
 
-            final PluginMainClass pluginMainClass = (PluginMainClass) mainClass.newInstance();
+            final DioritePlugin dioritePlugin = (DioritePlugin) mainClass.newInstance();
             final Plugin pluginDescription = mainClass.getAnnotation(Plugin.class);
 
             if (ServerImpl.getInstance().getPluginManager().getPlugin(pluginDescription.name()) != null)
@@ -55,11 +55,11 @@ public class JarPluginLoader implements PluginLoader
                 throw new PluginException("Plugin " + pluginDescription.name() + " is arleady loaded!");
             }
 
-            pluginMainClass.init(classLoader, pluginMainClass, pluginDescription.name(), pluginDescription.version(), pluginDescription.author());
+            dioritePlugin.init(classLoader, dioritePlugin, pluginDescription.name(), pluginDescription.version(), pluginDescription.author());
             System.out.println("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
-            pluginMainClass.onLoad();
+            dioritePlugin.onLoad();
 
-            return pluginMainClass;
+            return dioritePlugin;
         } catch (final InstantiationException | IllegalAccessException | MalformedURLException e)
         {
             throw new PluginException("Exception while loading plugin from file " + file.getName(), e);
@@ -69,7 +69,7 @@ public class JarPluginLoader implements PluginLoader
     @Override
     public void enablePlugin(final String name) throws PluginException
     {
-        final PluginMainClass plugin = ServerImpl.getInstance().getPluginManager().getPlugin(name);
+        final DioritePlugin plugin = ServerImpl.getInstance().getPluginManager().getPlugin(name);
         if (plugin == null)
         {
             throw new PluginNotFoundException();
@@ -80,7 +80,7 @@ public class JarPluginLoader implements PluginLoader
     @Override
     public void disablePlugin(final String name) throws PluginException
     {
-        final PluginMainClass plugin = ServerImpl.getInstance().getPluginManager().getPlugin(name);
+        final DioritePlugin plugin = ServerImpl.getInstance().getPluginManager().getPlugin(name);
         if (plugin == null)
         {
             throw new PluginNotFoundException();

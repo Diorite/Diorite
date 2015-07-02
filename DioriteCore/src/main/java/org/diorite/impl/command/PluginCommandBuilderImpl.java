@@ -14,11 +14,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.command.CommandExecutor;
 import org.diorite.command.ExceptionHandler;
 import org.diorite.command.PluginCommandBuilder;
-import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.DioritePlugin;
 
 public class PluginCommandBuilderImpl implements PluginCommandBuilder
 {
-    private final PluginMainClass  pluginMainClass;
+    private final DioritePlugin    dioritePlugin;
     private final String           name;
     private       Pattern          pattern;
     private       List<String>     aliases;
@@ -26,9 +26,9 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
     private       ExceptionHandler handler;
     private       byte             priority;
 
-    private PluginCommandBuilderImpl(final PluginMainClass pluginMainClass, final String name)
+    private PluginCommandBuilderImpl(final DioritePlugin dioritePlugin, final String name)
     {
-        this.pluginMainClass = pluginMainClass;
+        this.dioritePlugin = dioritePlugin;
         this.name = name;
     }
 
@@ -128,7 +128,7 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
         {
             this.aliases = new ArrayList<>(1);
         }
-        final PluginCommandImpl cmd = (this.pattern == null) ? new PluginCommandImpl(this.name, this.aliases, this.priority, this.pluginMainClass) : new PluginCommandImpl(this.name, this.pattern, this.priority, this.pluginMainClass);
+        final PluginCommandImpl cmd = (this.pattern == null) ? new PluginCommandImpl(this.name, this.aliases, this.priority, this.dioritePlugin) : new PluginCommandImpl(this.name, this.pattern, this.priority, this.dioritePlugin);
         if (this.executor != null)
         {
             cmd.setCommandExecutor(this.executor);
@@ -143,13 +143,13 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugin", this.pluginMainClass).append("name", this.name).append("pattern", this.pattern).append("aliases", this.aliases).append("executor", this.executor).append("handler", this.handler).append("priority", this.priority).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugin", this.dioritePlugin).append("name", this.name).append("pattern", this.pattern).append("aliases", this.aliases).append("executor", this.executor).append("handler", this.handler).append("priority", this.priority).toString();
     }
 
-    public static PluginCommandBuilderImpl start(final PluginMainClass pluginMainClass, final String name)
+    public static PluginCommandBuilderImpl start(final DioritePlugin dioritePlugin, final String name)
     {
-        Objects.requireNonNull(pluginMainClass, "plugin can't be null.");
+        Objects.requireNonNull(dioritePlugin, "plugin can't be null.");
         Objects.requireNonNull(name, "name od command can't be null.");
-        return new PluginCommandBuilderImpl(pluginMainClass, name);
+        return new PluginCommandBuilderImpl(dioritePlugin, name);
     }
 }
