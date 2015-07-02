@@ -4,18 +4,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Objects;
 
 import org.apache.commons.lang3.Validate;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.item.ItemStackArray;
 import org.diorite.material.Material;
 import org.diorite.utils.DioriteUtils;
-
-import gnu.trove.TIntCollection;
-import gnu.trove.list.array.TIntArrayList;
 
 /**
  * Represent inventory, contains default implementation for most of methods.
@@ -23,9 +18,10 @@ import gnu.trove.list.array.TIntArrayList;
 public interface Inventory extends Iterable<ItemStack>
 {
     /**
-     * @return An array of ItemStacks from the inventory.
+     * @return copy of array with ItemStacks from the inventory.
      */
-    ItemStackArray getContents();
+    ItemStack[] getContents();
+
 
     /**
      * Completely replaces the inventory's contents. Removes all existing
@@ -37,33 +33,7 @@ public interface Inventory extends Iterable<ItemStack>
      * @throws IllegalArgumentException If the array has more items than the
      *                                  inventory.
      */
-    default void setContent(final ItemStackArray items)
-    {
-        final ItemStackArray content = this.getContents();
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            content.set(i, items.getOrNull(i));
-        }
-    }
-
-    /**
-     * Completely replaces the inventory's contents. Removes all existing
-     * contents and replaces it with the ItemStacks given in the array.
-     *
-     * @param items A complete replacement for the contents; the length must
-     *              be less than or equal to {@link #size()}.
-     *
-     * @throws IllegalArgumentException If the array has more items than the
-     *                                  inventory.
-     */
-    default void setContent(final ItemStack[] items)
-    {
-        final ItemStackArray content = this.getContents();
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            content.set(i, (i >= items.length) ? null : items[i]);
-        }
-    }
+    void setContent(final ItemStack[] items);
 
     /**
      * Remove first found item matching given one.
@@ -72,25 +42,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return slot id of removed item, or -1 if no item was removed.
      */
-    default int remove(final ItemStack itemStack)
-    {
-        final ItemStackArray content = this.getContents();
-
-        if (itemStack == null)
-        {
-            return - 1;
-        }
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            final ItemStack item = content.get(i);
-            if (Objects.equals(item, itemStack))
-            {
-                content.compareAndSet(i, item, null);
-                return i;
-            }
-        }
-        return - 1;
-    }
+    int remove(final ItemStack itemStack);
 
     /**
      * Remove all items matching given one.
@@ -99,29 +51,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return array of slot ids of removed items, empty if no item was removed.
      */
-    default int[] removeAll(final ItemStack itemStack)
-    {
-        final ItemStackArray content = this.getContents();
-        if (itemStack == null)
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        final TIntCollection list = new TIntArrayList(10);
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            final ItemStack item = content.get(i);
-            if (Objects.equals(item, itemStack))
-            {
-                content.compareAndSet(i, item, null);
-                list.add(i);
-            }
-        }
-        if (list.isEmpty())
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        return list.toArray();
-    }
+    int[] removeAll(final ItemStack itemStack);
 
     /**
      * Remove first found item matching given material.
@@ -155,38 +85,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return slot id of removed item, or -1 if no item was removed.
      */
-    default int remove(final Material material, final boolean ignoreType)
-    {
-        final ItemStackArray content = this.getContents();
-
-        if (material == null)
-        {
-            return - 1;
-        }
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            final ItemStack item = content.get(i);
-            if (item == null)
-            {
-                continue;
-            }
-            final Material mat = item.getMaterial();
-            if (ignoreType)
-            {
-                if ((material.ordinal() != mat.ordinal()))
-                {
-                    continue;
-                }
-            }
-            else if (! Objects.equals(mat, material))
-            {
-                continue;
-            }
-            content.compareAndSet(i, item, null);
-            return i;
-        }
-        return - 1;
-    }
+    int remove(final Material material, final boolean ignoreType);
 
     /**
      * Remove all items matching given material.
@@ -196,95 +95,34 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return array of slot ids of removed items, empty if no item was removed.
      */
-    default int[] removeAll(final Material material, final boolean ignoreType)
-    {
-        final ItemStackArray content = this.getContents();
-
-        if (material == null)
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        final TIntCollection list = new TIntArrayList(10);
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            final ItemStack item = content.get(i);
-            if (item == null)
-            {
-                continue;
-            }
-            final Material mat = item.getMaterial();
-            if (ignoreType)
-            {
-                if ((material.ordinal() != mat.ordinal()))
-                {
-                    continue;
-                }
-            }
-            else if (! Objects.equals(mat, material))
-            {
-                continue;
-            }
-            content.compareAndSet(i, item, null);
-            list.add(i);
-        }
-        if (list.isEmpty())
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        return list.toArray();
-    }
+    int[] removeAll(final Material material, final boolean ignoreType);
 
     /**
-     * Replace first found item matching given one.
+     * Replace first found item matching (==) given one.
      * NOTE: replace is atomic.
      *
      * @param excepted item to replace.
      * @param newItem  replacement.
      *
      * @return slot id of replaced item, or -1 if no item was replaced.
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    default int replace(final ItemStack excepted, final ItemStack newItem)
-    {
-        final ItemStackArray content = this.getContents();
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            if (content.compareAndSet(i, excepted, newItem))
-            {
-                return i;
-            }
-        }
-        return - 1;
-    }
+    int atomicReplace(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException;
 
     /**
-     * Replace all found items matching give one.
+     * Replace all found items matching (==) give one.
      * NOTE: every replace is atomic.
      *
      * @param excepted item to replace.
      * @param newItem  replacement.
      *
      * @return array of slot ids of replaced items, empty if no item was replaced.
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    default int[] replaceAll(final ItemStack excepted, final ItemStack newItem)
-    {
-        final ItemStackArray content = this.getContents();
-        final TIntCollection list = new TIntArrayList(10);
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            if (content.compareAndSet(i, excepted, newItem))
-            {
-                list.add(i);
-            }
-        }
-        if (list.isEmpty())
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        return list.toArray();
-    }
+    int[] atomicReplaceAll(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException;
 
     /**
-     * Replace item on given slot, only if it matches given item.
+     * Replace item on given slot, only if it matches (==) given item.
      * NOTE: this is atomic operation.
      *
      * @param slot     slot to replace.
@@ -292,11 +130,9 @@ public interface Inventory extends Iterable<ItemStack>
      * @param newItem  replacement.
      *
      * @return true if item was replaced.
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    default boolean replace(final int slot, final ItemStack excepted, final ItemStack newItem)
-    {
-        return this.getContents().compareAndSet(slot, excepted, newItem);
-    }
+    boolean atomicReplace(final int slot, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException;
 
     /**
      * Try remove all items from given array,
@@ -380,10 +216,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return The ItemStack in the slot
      */
-    default ItemStack getItem(final int index)
-    {
-        return this.getContents().get(index);
-    }
+    ItemStack getItem(final int index);
 
     /**
      * Stores the ItemStack at the given index of the inventory.
@@ -393,10 +226,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return previous itemstack in this slot.
      */
-    default ItemStack setItem(final int index, final ItemStack item)
-    {
-        return this.getContents().getAndSet(index, item);
-    }
+    ItemStack setItem(final int index, final ItemStack item);
 
     /**
      * Returns a HashMap with all slots and ItemStacks in the inventory with
@@ -428,31 +258,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return A HashMap containing the slot index, ItemStack pairs
      */
-    default Map<Integer, ? extends ItemStack> all(final Material material, final boolean ignoreType)
-    {
-        final ItemStackArray content = this.getContents();
-        final Map<Integer, ItemStack> slots = new HashMap<>(10);
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            final ItemStack item = content.get(i);
-            if (item != null)
-            {
-                if (ignoreType)
-                {
-                    if (item.getMaterial().isThisSameID(material))
-                    {
-                        slots.put(i, item);
-                    }
-                }
-                else if (item.getMaterial().equals(material))
-                {
-                    slots.put(i, item);
-                }
-            }
-        }
-        return slots;
-
-    }
+    Map<Integer, ? extends ItemStack> all(final Material material, final boolean ignoreType);
 
     /**
      * Finds all slots in the inventory containing any ItemStacks with the
@@ -467,24 +273,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return A map from slot indexes to item at index
      */
-    default HashMap<Integer, ? extends ItemStack> all(final ItemStack item)
-    {
-        final ItemStackArray content = this.getContents();
-
-        final HashMap<Integer, ItemStack> slots = new HashMap<>(10);
-        if (item != null)
-        {
-            for (int i = 0, size = content.length(); i < size; i++)
-            {
-                final ItemStack itemStack = content.get(i);
-                if (item.equals(itemStack))
-                {
-                    slots.put(i, itemStack);
-                }
-            }
-        }
-        return slots;
-    }
+    HashMap<Integer, ? extends ItemStack> all(final ItemStack item);
 
     /**
      * Finds the first slot in the inventory containing an ItemStack with the
@@ -494,20 +283,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return The slot index of the given Material or -1 if not found
      */
-    default int first(final Material material)
-    {
-        final ItemStackArray content = this.getContents();
-
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            final ItemStack item = content.get(i);
-            if ((item != null) && (item.getMaterial().equals(material)))
-            {
-                return i;
-            }
-        }
-        return - 1;
-    }
+    int first(final Material material);
 
     /**
      * Returns the first slot in the inventory containing an ItemStack with
@@ -532,27 +308,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return The slot index of the given ItemStack or -1 if not found
      */
-    default int first(final ItemStack item, final boolean withAmount)
-    {
-        final ItemStackArray content = this.getContents();
-
-        if (item == null)
-        {
-            return - 1;
-        }
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            final ItemStack itemStack = content.get(i);
-            if (itemStack != null)
-            {
-                if (withAmount ? item.equals(itemStack) : item.isSimilar(itemStack))
-                {
-                    return i;
-                }
-            }
-        }
-        return - 1;
-    }
+    int first(final ItemStack item, final boolean withAmount);
 
     /**
      * Returns the first slot in the inventory containing an ItemStack with
@@ -579,45 +335,12 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return The slot index of the given ItemStack or -1 if not found
      */
-    default int first(final ItemStack item, final int startIndex, final boolean withAmount)
-    {
-        final ItemStackArray content = this.getContents();
-
-        if (item == null)
-        {
-            return - 1;
-        }
-        for (int i = startIndex, size = content.length(); i < size; i++)
-        {
-            final ItemStack itemStack = content.get(i);
-            if (itemStack != null)
-            {
-                if (withAmount ? item.equals(itemStack) : item.isSimilar(itemStack))
-                {
-                    return i;
-                }
-            }
-        }
-        return - 1;
-    }
+    int first(final ItemStack item, final int startIndex, final boolean withAmount);
 
     /**
      * @return The first empty Slot found, or -1 if no empty slots.
      */
-    default int firstEmpty()
-    {
-        final ItemStackArray content = this.getContents();
-
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            final ItemStack itemStack = content.get(i);
-            if (itemStack == null)
-            {
-                return i;
-            }
-        }
-        return - 1;
-    }
+    int firstEmpty();
 
     /**
      * Checks if the inventory contains any ItemStacks with the given
@@ -873,24 +596,12 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @param index The index to empty.
      */
-    default void clear(final int index)
-    {
-        this.getContents().set(index, null);
-
-    }
+    void clear(final int index);
 
     /**
      * Clears out the whole Inventory.
      */
-    default void clear()
-    {
-        final ItemStackArray content = this.getContents();
-
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            content.set(i, null);
-        }
-    }
+    void clear();
 
     /**
      * @return A collection of players who are viewing this Inventory.
@@ -942,10 +653,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * @return The size of the inventory
      */
-    default int size()
-    {
-        return this.getContents().length();
-    }
+    int size();
 
     @Override
     ListIterator<ItemStack> iterator();

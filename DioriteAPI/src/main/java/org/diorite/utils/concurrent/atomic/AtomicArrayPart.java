@@ -34,6 +34,11 @@ public class AtomicArrayPart<E> implements AtomicArray<E>
         return this.base;
     }
 
+    public int getOffset()
+    {
+        return this.offset;
+    }
+
     protected int addOffset(final int i)
     {
         if (i >= this.length)
@@ -119,6 +124,28 @@ public class AtomicArrayPart<E> implements AtomicArray<E>
         Validate.isTrue(offset >= 0, "offset can't be negative!");
         // base array is used, to avoid creating nested wrappers.
         return new AtomicArrayPart<>(this.base, this.offset + offset, length);
+    }
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] toArray(final T[] a)
+    {
+        final int l = Math.min(a.length, this.length);
+        for (int i = 0; i < l; i++)
+        {
+            a[i] = (T) this.get(i);
+        }
+        return a;
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        final Object[] array = new Object[this.length];
+        for (int i = 0; i < array.length; i++)
+        {
+            array[i] = this.get(i);
+        }
+        return array;
     }
 
     @Override

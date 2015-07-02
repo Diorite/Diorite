@@ -1,12 +1,9 @@
 package org.diorite.inventory.item;
 
-import java.util.Optional;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.inventory.Inventory;
 import org.diorite.material.Material;
 
 /**
@@ -15,10 +12,9 @@ import org.diorite.material.Material;
 public class ItemStack
 {
     // TODO: lore, name and other stuff
-    private Material  material;
-    private int       amount;
-    private Inventory location;
-    private ItemMeta  itemMeta;
+    protected Material  material;
+    protected int       amount;
+    protected ItemMeta  itemMeta;
 
     public ItemStack(final Material material, final int amount)
     {
@@ -88,20 +84,6 @@ public class ItemStack
     public void setAmount(final int amount)
     {
         this.amount = amount;
-    }
-
-    public Optional<Inventory> getLocation()
-    {
-        return Optional.ofNullable(this.location);
-    }
-
-    public void setLocation(final Inventory inventory)
-    {
-        if (! inventory.contains(this))
-        {
-            inventory.add(this);
-        }
-        this.location = inventory;
     }
 
     public void update()
@@ -236,7 +218,7 @@ public class ItemStack
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("material", this.material).append("amount", this.amount).append("location", this.location).append("itemMeta", this.itemMeta).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("material", this.material).append("amount", this.amount).append("itemMeta", this.itemMeta).toString();
     }
 
     static boolean isSimilar(final ItemStack a, final ItemStack b)

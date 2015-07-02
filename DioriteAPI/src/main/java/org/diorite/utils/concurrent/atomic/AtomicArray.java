@@ -181,6 +181,23 @@ public interface AtomicArray<E> extends Iterable<E>
     }
 
     /**
+     * Return all elements of atomic array as normal array.
+     *
+     * @param a   array to use.
+     * @param <T> type of array.
+     *
+     * @return array with all elements.
+     */
+    <T> T[] toArray(T[] a);
+
+    /**
+     * Return all elements of atomic array as normal array.
+     *
+     * @return array with all elements.
+     */
+    Object[] toArray();
+
+    /**
      * Returns the String representation of the current values of array.
      *
      * @return the String representation of the current values of array

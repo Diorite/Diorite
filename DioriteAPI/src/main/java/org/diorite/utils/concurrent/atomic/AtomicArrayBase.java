@@ -182,6 +182,29 @@ public class AtomicArrayBase<E> implements Serializable, AtomicArray<E>
         return new AtomicArrayPart<>(this, offset, length);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] toArray(final T[] a)
+    {
+        final int l = Math.min(a.length, this.length());
+        for (int i = 0; i < l; i++)
+        {
+            a[i] = (T) this.get(i);
+        }
+        return a;
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        final Object[] array = new Object[this.length()];
+        for (int i = 0; i < array.length; i++)
+        {
+            array[i] = this.get(i);
+        }
+        return array;
+    }
+
     @Override
     public String toString()
     {

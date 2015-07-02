@@ -2,46 +2,33 @@ package org.diorite.inventory;
 
 import org.diorite.entity.ArmoredEntity;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.item.ItemStackArray;
 
 public interface EntityEquipment
 {
     /**
      * @return An array of ItemStacks from the eq.
      */
-    ItemStackArray getContents();
+    ItemStack[] getContents();
 
     /**
      * @return The ItemStack in the helmet slot
      */
-    default ItemStack getHelmet()
-    {
-        return this.getContents().get(0);
-    }
+     ItemStack getHelmet();
 
     /**
      * @return The ItemStack in the chestplate slot
      */
-    default ItemStack getChestplate()
-    {
-        return this.getContents().get(1);
-    }
+     ItemStack getChestplate();
 
     /**
      * @return The ItemStack in the leg slot
      */
-    default ItemStack getLeggings()
-    {
-        return this.getContents().get(2);
-    }
+     ItemStack getLeggings();
 
     /**
      * @return The ItemStack in the boots slot
      */
-    default ItemStack getBoots()
-    {
-        return this.getContents().get(3);
-    }
+     ItemStack getBoots();
 
     /**
      * Put the given ItemStack into the helmet slot. This does not check if
@@ -51,10 +38,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as helmet.
      */
-    default ItemStack setHelmet(final ItemStack helmet)
-    {
-        return this.getContents().getAndSet(0, helmet);
-    }
+     ItemStack setHelmet(final ItemStack helmet);
 
     /**
      * Put the given ItemStack into the chestplate slot. This does not check
@@ -64,10 +48,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as chestplate.
      */
-    default ItemStack setChestplate(final ItemStack chestplate)
-    {
-        return this.getContents().getAndSet(1, chestplate);
-    }
+     ItemStack setChestplate(final ItemStack chestplate);
 
     /**
      * Put the given ItemStack into the leg slot. This does not check if the
@@ -77,10 +58,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as leggings.
      */
-    default ItemStack setLeggings(final ItemStack leggings)
-    {
-        return this.getContents().getAndSet(2, leggings);
-    }
+     ItemStack setLeggings(final ItemStack leggings);
 
     /**
      * Put the given ItemStack into the boots slot. This does not check if the
@@ -90,10 +68,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as boots.
      */
-    default ItemStack setBoots(final ItemStack boots)
-    {
-        return this.getContents().getAndSet(3, boots);
-    }
+     ItemStack setBoots(final ItemStack boots);
 
     /**
      * Put the given ItemStack into the helmet slot if it matches a excepted one.
@@ -103,11 +78,9 @@ public interface EntityEquipment
      * @param helmet   The ItemStack to use as helmet
      *
      * @return true if item was replaced.
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    default boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet)
-    {
-        return this.getContents().compareAndSet(0, excepted, helmet);
-    }
+     boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet)throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the chestplate slot if it matches a excepted one.
@@ -117,11 +90,9 @@ public interface EntityEquipment
      * @param chestplate The ItemStack to use as chestplate
      *
      * @return true if item was replaced.
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    default boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate)
-    {
-        return this.getContents().compareAndSet(0, excepted, chestplate);
-    }
+     boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate)throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the leggings slot if it matches a excepted one.
@@ -131,11 +102,9 @@ public interface EntityEquipment
      * @param leggings The ItemStack to use as leggings
      *
      * @return true if item was replaced.
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    default boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings)
-    {
-        return this.getContents().compareAndSet(0, excepted, leggings);
-    }
+     boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings)throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the boots slot if it matches a excepted one.
@@ -145,12 +114,9 @@ public interface EntityEquipment
      * @param boots    The ItemStack to use as boots
      *
      * @return true if item was replaced.
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    default boolean replaceBoots(final ItemStack excepted, final ItemStack boots)
-    {
-        return this.getContents().compareAndSet(0, excepted, boots);
-    }
-
+     boolean replaceBoots(final ItemStack excepted, final ItemStack boots)throws IllegalArgumentException;
 
     /**
      * Completely replaces the inventory's contents. Removes all existing
@@ -162,33 +128,7 @@ public interface EntityEquipment
      * @throws IllegalArgumentException If the array has more items than the
      *                                  inventory.
      */
-    default void setContent(final ItemStackArray items)
-    {
-        final ItemStackArray content = this.getContents();
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            content.set(i, items.getOrNull(i));
-        }
-    }
-
-    /**
-     * Completely replaces the inventory's contents. Removes all existing
-     * contents and replaces it with the ItemStacks given in the array.
-     *
-     * @param items A complete replacement for the contents; the length must
-     *              be less than or equal to {@link #size()}.
-     *
-     * @throws IllegalArgumentException If the array has more items than the
-     *                                  inventory.
-     */
-    default void setContent(final ItemStack[] items)
-    {
-        final ItemStackArray content = this.getContents();
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            content.set(i, (i >= items.length) ? null : items[i]);
-        }
-    }
+    void setContent(final ItemStack[] items);
 
     /**
      * Gets the entity belonging to this equipment.
@@ -200,9 +140,6 @@ public interface EntityEquipment
     /**
      * @return The size of the inventory
      */
-    default int size()
-    {
-        return this.getContents().length();
-    }
+    int size();
 
 }

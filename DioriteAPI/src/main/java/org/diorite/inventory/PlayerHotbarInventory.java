@@ -10,15 +10,7 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      *
      * @return The currently held ItemStack
      */
-    default ItemStack getItemInHand()
-    {
-        final Player holder = this.getHolder();
-        if (holder == null)
-        {
-            return null;
-        }
-        return this.getContents().get(holder.getHeldItemSlot());
-    }
+    ItemStack getItemInHand();
 
     /**
      * Sets the item in hand
@@ -27,15 +19,7 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      *
      * @return previous itemstack in hand.
      */
-    default ItemStack setItemInHand(final ItemStack stack)
-    {
-        final Player holder = this.getHolder();
-        if (holder == null)
-        {
-            return null;
-        }
-        return this.getContents().getAndSet(holder.getHeldItemSlot(), stack);
-    }
+    ItemStack setItemInHand(final ItemStack stack);
 
     /**
      * Replace the item in hand, if it matches a excepted one.
@@ -44,12 +28,10 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      * @param stack    Stack to set
      *
      * @return true if item was replaced.
+     *
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    default boolean replaceItemInHand(final ItemStack excepted, final ItemStack stack)
-    {
-        final Player holder = this.getHolder();
-        return (holder != null) && this.getContents().compareAndSet(holder.getHeldItemSlot(), excepted, stack);
-    }
+    boolean replaceItemInHand(final ItemStack excepted, final ItemStack stack) throws IllegalArgumentException;
 
     /**
      * Get the slot number of the currently held item
