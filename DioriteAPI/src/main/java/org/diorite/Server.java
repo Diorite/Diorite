@@ -18,7 +18,7 @@ import org.diorite.command.CommandMap;
 import org.diorite.command.PluginCommandBuilder;
 import org.diorite.command.sender.ConsoleCommandSender;
 import org.diorite.entity.Player;
-import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.scheduler.Synchronizable;
@@ -42,10 +42,12 @@ public interface Server extends Synchronizable
     int  DEFAULT_WAIT_TIME                    = NANOS_IN_SECOND / DEFAULT_TPS;
     int  MAX_NICKNAME_SIZE                    = 16;
 
-    static String getVersion()
+    static String getMinecraftVersion()
     {
-        return "0.1-SNAPSHOT";
+        return "1.8.7";
     }
+
+    String getVersion();
 
     double[] getRecentTps();
 
@@ -99,7 +101,7 @@ public interface Server extends Synchronizable
 
     CommandMap getCommandMap();
 
-    PluginCommandBuilder createCommand(PluginMainClass pluginMainClass, String name);
+    PluginCommandBuilder createCommand(DioritePlugin dioritePlugin, String name);
 
     Collection<Player> getOnlinePlayers();
 

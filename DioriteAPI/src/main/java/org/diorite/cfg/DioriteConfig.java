@@ -54,6 +54,8 @@ public interface DioriteConfig
 
     void setMotd(String motd);
 
+    String getMetricsUuid();
+
     WorldsConfig getWorlds();
 
     enum OnlineMode

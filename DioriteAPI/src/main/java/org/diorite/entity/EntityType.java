@@ -4,6 +4,7 @@ import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 @SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
 public class EntityType extends ASimpleEnum<EntityType>
@@ -13,9 +14,11 @@ public class EntityType extends ASimpleEnum<EntityType>
         init(EntityType.class, 3);
     }
 
-    public static final EntityType ITEM              = new EntityType("ITEM", Item.class, 2, "Item");
-    public static final EntityType PLAYER            = new EntityType("PLAYER", Player.class, - 1, "Player");
+    public static final EntityType ITEM   = new EntityType("ITEM", Item.class, 2, "Item");
+    public static final EntityType PLAYER = new EntityType("PLAYER", Player.class, - 1, "Player");
     // TODO
+
+    private static final TIntObjectMap<EntityType> byMcId = new TIntObjectHashMap<>(3, .1f, - 1);
 
     private final Class<? extends Entity> dioriteEntityClass;
     private final boolean                 living;
@@ -45,7 +48,7 @@ public class EntityType extends ASimpleEnum<EntityType>
         return this.mcName;
     }
 
-    public int getMcId()
+    public int getMinecraftId()
     {
         return this.mcId;
     }
@@ -68,6 +71,7 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static void register(final EntityType element)
     {
         ASimpleEnum.register(EntityType.class, element);
+        byMcId.put(element.getMinecraftId(), element);
     }
 
     /**
@@ -80,6 +84,18 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static EntityType getByEnumOrdinal(final int ordinal)
     {
         return getByEnumOrdinal(EntityType.class, ordinal);
+    }
+
+    /**
+     * Get one of {@link EntityType} entry by its mc id.
+     *
+     * @param id mc id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static EntityType getByMinecraftId(final int id)
+    {
+        return byMcId.get(id);
     }
 
     /**

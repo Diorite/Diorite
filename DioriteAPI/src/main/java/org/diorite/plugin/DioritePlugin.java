@@ -3,17 +3,17 @@ package org.diorite.plugin;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public abstract class PluginMainClass
+public abstract class DioritePlugin
 {
-    private PluginMainClass instance;
+    private DioritePlugin     instance;
     private PluginClassLoader classLoader;
-    private boolean initialised;
-    private boolean enabled;
-    private String name;
-    private String version;
-    private String author;
+    private boolean           initialised;
+    private boolean           enabled;
+    private String            name;
+    private String            version;
+    private String            author;
 
-    protected PluginMainClass()
+    protected DioritePlugin()
     {
     }
 
@@ -53,13 +53,13 @@ public abstract class PluginMainClass
         return this.author;
     }
 
-    protected final PluginMainClass instance()
+    protected final DioritePlugin instance()
     {
         this.initCheck();
         return this.instance;
     }
 
-    public final void init(final PluginClassLoader classLoader, final PluginMainClass instance, final String name, final String version, final String author)
+    public final void init(final PluginClassLoader classLoader, final DioritePlugin instance, final String name, final String version, final String author)
     {
         if (this.initialised)
         {

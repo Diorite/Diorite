@@ -39,6 +39,6 @@ public interface Entity extends GameObject, Synchronizable
 
     default int getMcId()
     {
-        return this.getType().getMcId();
+        return this.getType().getMinecraftId();
     }
 }

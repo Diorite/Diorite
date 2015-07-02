@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.diorite.command.sender.CommandSender;
-import org.diorite.plugin.PluginMainClass;
+import org.diorite.plugin.DioritePlugin;
 
 public interface CommandMap
 {
@@ -20,11 +20,11 @@ public interface CommandMap
     /**
      * Returns all commands from given plugin.
      *
-     * @param pluginMainClass plugin instance.
+     * @param dioritePlugin plugin instance.
      *
      * @return all commands from given plugin.
      */
-    Set<MainCommand> getCommandsFromPlugin(PluginMainClass pluginMainClass);
+    Set<MainCommand> getCommandsFromPlugin(DioritePlugin dioritePlugin);
 
     /**
      * Returns all commands from given plugin. (by name)
@@ -47,12 +47,12 @@ public interface CommandMap
     /**
      * Get selected command from given plugin.
      *
-     * @param pluginMainClass plugin instance.
+     * @param dioritePlugin plugin instance.
      * @param str    command name.
      *
      * @return command instance or null.
      */
-    Optional<MainCommand> getCommand(PluginMainClass pluginMainClass, String str);
+    Optional<MainCommand> getCommand(DioritePlugin dioritePlugin, String str);
 
     /**
      * Get selected command from any plugin.
