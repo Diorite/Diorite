@@ -613,7 +613,7 @@ public class ServerImpl implements Server
     @Override
     public PluginManager getPluginManager()
     {
-        return null;
+        return this.pluginManager;
     }
 
     @Override

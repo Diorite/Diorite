@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.diorite.impl.Main;
 import org.diorite.plugin.PluginException;
@@ -46,7 +47,14 @@ public class PluginManagerImpl implements PluginManager
     @Override
     public PluginMainClass getPlugin(final String name)
     {
-        return this.plugins.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().get();
+        try
+        {
+            return this.plugins.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().get();
+        }
+        catch (final NoSuchElementException ignored)
+        {
+            return null;
+        }
     }
 
     @Override
