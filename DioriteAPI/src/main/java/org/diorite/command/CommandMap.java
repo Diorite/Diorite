@@ -48,7 +48,7 @@ public interface CommandMap
      * Get selected command from given plugin.
      *
      * @param dioritePlugin plugin instance.
-     * @param str    command name.
+     * @param str           command name.
      *
      * @return command instance or null.
      */

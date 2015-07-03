@@ -38,8 +38,7 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         try
         {
             clickedItem = player.getInventory().getItem(clickedSlot);
-        }
-        catch (final IndexOutOfBoundsException ignored)
+        } catch (final IndexOutOfBoundsException ignored)
         {
             clickedItem = null;
         }

@@ -63,7 +63,6 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
                     return;
                 }
                 System.err.println("Error when executing pipeline event (" + this.getClass().getName() + " -> " + evt.getClass().getName() + ")");
-                //noinspection ThrowableResultOfMethodCallIgnored
                 evt.getThrowable().printStackTrace();
                 evt.cancel();
             }

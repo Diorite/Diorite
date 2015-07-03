@@ -2,6 +2,8 @@ package org.diorite.plugin;
 
 public class PluginException extends Exception
 {
+    private static final long serialVersionUID = 0;
+
     public PluginException()
     {
         super();

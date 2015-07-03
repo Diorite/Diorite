@@ -14,8 +14,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 @SuppressWarnings("MagicNumber")
 /**
  * Class representing block "RedstoneWire" and all its subtypes.
- */
-public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowerElementMat
+ */ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowerElementMat
 {
     /**
      * Range of valid power strength, from 0 to 15

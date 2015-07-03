@@ -25,9 +25,9 @@ public abstract class Scheduler
      * isDone() method returns true.
      * </ul>
      *
-     * @param <T>    The callable's return type.
+     * @param <T>           The callable's return type.
      * @param dioritePlugin Plugin that owns the task.
-     * @param task   Task to be executed.
+     * @param task          Task to be executed.
      *
      * @return Future Future object related to the task
      */
@@ -46,10 +46,10 @@ public abstract class Scheduler
      * isDone() method returns true.
      * </ul>
      *
-     * @param <T>    The callable's return type.
+     * @param <T>           The callable's return type.
      * @param dioritePlugin Plugin that owns the task.
-     * @param task   Task to be executed.
-     * @param sync   object to synchronize with it.
+     * @param task          Task to be executed.
+     * @param sync          object to synchronize with it.
      *
      * @return Future Future object related to the task
      */
@@ -122,7 +122,7 @@ public abstract class Scheduler
      *
      * @return Active workers
      */
-    public abstract List<? extends DioriteTask>  getPendingTasks();
+    public abstract List<? extends DioriteTask> getPendingTasks();
 
     /**
      * Create task from given builder.

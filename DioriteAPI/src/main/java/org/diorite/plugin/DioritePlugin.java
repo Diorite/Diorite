@@ -108,7 +108,7 @@ public abstract class DioritePlugin
         return this.classLoader;
     }
 
-    private final void initCheck()
+    private void initCheck()
     {
         if (! this.initialised)
         {

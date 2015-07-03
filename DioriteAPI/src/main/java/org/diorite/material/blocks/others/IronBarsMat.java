@@ -13,7 +13,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "IronBars" and all its subtypes.
  */
-public class IronBarsMat extends BlockMaterialData  implements FenceMat
+public class IronBarsMat extends BlockMaterialData implements FenceMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default

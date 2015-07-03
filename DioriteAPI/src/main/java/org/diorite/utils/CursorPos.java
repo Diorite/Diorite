@@ -165,7 +165,7 @@ public class CursorPos
         }
 
         final CursorPos cursorPos = (CursorPos) o;
-        return (this.x == cursorPos.x) && (this.y == cursorPos.y) && (this.z == cursorPos.z) && (blockFace == cursorPos.blockFace);
+        return (this.x == cursorPos.x) && (this.y == cursorPos.y) && (this.z == cursorPos.z) && (this.blockFace == cursorPos.blockFace);
 
     }
 

@@ -13,22 +13,22 @@ public interface EntityEquipment
     /**
      * @return The ItemStack in the helmet slot
      */
-     ItemStack getHelmet();
+    ItemStack getHelmet();
 
     /**
      * @return The ItemStack in the chestplate slot
      */
-     ItemStack getChestplate();
+    ItemStack getChestplate();
 
     /**
      * @return The ItemStack in the leg slot
      */
-     ItemStack getLeggings();
+    ItemStack getLeggings();
 
     /**
      * @return The ItemStack in the boots slot
      */
-     ItemStack getBoots();
+    ItemStack getBoots();
 
     /**
      * Put the given ItemStack into the helmet slot. This does not check if
@@ -38,7 +38,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as helmet.
      */
-     ItemStack setHelmet(final ItemStack helmet);
+    ItemStack setHelmet(final ItemStack helmet);
 
     /**
      * Put the given ItemStack into the chestplate slot. This does not check
@@ -48,7 +48,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as chestplate.
      */
-     ItemStack setChestplate(final ItemStack chestplate);
+    ItemStack setChestplate(final ItemStack chestplate);
 
     /**
      * Put the given ItemStack into the leg slot. This does not check if the
@@ -58,7 +58,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as leggings.
      */
-     ItemStack setLeggings(final ItemStack leggings);
+    ItemStack setLeggings(final ItemStack leggings);
 
     /**
      * Put the given ItemStack into the boots slot. This does not check if the
@@ -68,7 +68,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as boots.
      */
-     ItemStack setBoots(final ItemStack boots);
+    ItemStack setBoots(final ItemStack boots);
 
     /**
      * Put the given ItemStack into the helmet slot if it matches a excepted one.
@@ -78,9 +78,10 @@ public interface EntityEquipment
      * @param helmet   The ItemStack to use as helmet
      *
      * @return true if item was replaced.
+     *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-     boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet)throws IllegalArgumentException;
+    boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet) throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the chestplate slot if it matches a excepted one.
@@ -90,9 +91,10 @@ public interface EntityEquipment
      * @param chestplate The ItemStack to use as chestplate
      *
      * @return true if item was replaced.
+     *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-     boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate)throws IllegalArgumentException;
+    boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate) throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the leggings slot if it matches a excepted one.
@@ -102,9 +104,10 @@ public interface EntityEquipment
      * @param leggings The ItemStack to use as leggings
      *
      * @return true if item was replaced.
+     *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-     boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings)throws IllegalArgumentException;
+    boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings) throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the boots slot if it matches a excepted one.
@@ -114,9 +117,10 @@ public interface EntityEquipment
      * @param boots    The ItemStack to use as boots
      *
      * @return true if item was replaced.
+     *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-     boolean replaceBoots(final ItemStack excepted, final ItemStack boots)throws IllegalArgumentException;
+    boolean replaceBoots(final ItemStack excepted, final ItemStack boots) throws IllegalArgumentException;
 
     /**
      * Completely replaces the inventory's contents. Removes all existing

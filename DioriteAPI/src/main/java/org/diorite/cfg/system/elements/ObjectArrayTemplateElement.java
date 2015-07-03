@@ -9,6 +9,7 @@ import org.diorite.utils.collections.arrays.ObjectArrayIterator;
 /**
  * Template handler for all object arrays objects.
  * It just warp array into iterable and use {@link IterableTemplateElement}
+ *
  * @see IterableTemplateElement
  */
 @SuppressWarnings("rawtypes")

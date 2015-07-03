@@ -12,7 +12,7 @@ import java.util.Map;
 import org.diorite.cfg.system.ConfigField;
 import org.diorite.utils.SimpleEnum;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ObjectEquality"})
 public final class DioriteReflectionUtils
 {
     private DioriteReflectionUtils()
@@ -49,11 +49,11 @@ public final class DioriteReflectionUtils
         if (getter instanceof ReflectField)
         {
             final ReflectField<T> reflectField = (ReflectField<T>) getter;
-            return new ReflectElement<T>(reflectField, reflectField);
+            return new ReflectElement<>(reflectField, reflectField);
         }
         else
         {
-            return new ReflectElement<T>(getter, getReflectSetter(fieldName, clazz));
+            return new ReflectElement<>(getter, getReflectSetter(fieldName, clazz));
         }
     }
 
@@ -87,11 +87,11 @@ public final class DioriteReflectionUtils
         if (getter instanceof ReflectField)
         {
             final ReflectField<T> reflectField = (ReflectField<T>) getter;
-            return new ReflectElement<T>(reflectField, reflectField);
+            return new ReflectElement<>(reflectField, reflectField);
         }
         else
         {
-            return new ReflectElement<T>(getter, getReflectSetter(field, clazz));
+            return new ReflectElement<>(getter, getReflectSetter(field, clazz));
         }
     }
 

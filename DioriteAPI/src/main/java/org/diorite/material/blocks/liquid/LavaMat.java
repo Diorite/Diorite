@@ -268,8 +268,7 @@ public class LavaMat extends LiquidMat
          * Returns one of Lava sub-type based on sub-id, may return null
          * @param id sub-type id
          * @return sub-type of Lava or null
-         */
-        public static LavaMat getByID(final int id)
+         */ public static LavaMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

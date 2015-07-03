@@ -73,6 +73,7 @@ public class ModifierOperation extends ASimpleEnum<ModifierOperation>
     {
         ModifierValue use(ModifierValue value, double modValue);
     }
+
     public static List<ModifierOperation> getSortedByID()
     {
         return new ArrayList<>(sortedByID);

@@ -191,7 +191,7 @@ public class ShortRange
      * {@code i < min -> def}
      * {@code else -> i}
      *
-     * @param i number to validate.
+     * @param i   number to validate.
      * @param def default value.
      *
      * @return closest number in range.

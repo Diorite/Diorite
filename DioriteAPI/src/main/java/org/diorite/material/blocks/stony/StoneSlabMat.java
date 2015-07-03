@@ -173,8 +173,7 @@ public class StoneSlabMat extends StonySlabMat
          * Returns one of StoneSlab sub-type based on sub-id, may return null
          * @param id sub-type id
          * @return sub-type of StoneSlab or null
-         */
-        public static StoneSlabMat getByID(final int id)
+         */ public static StoneSlabMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

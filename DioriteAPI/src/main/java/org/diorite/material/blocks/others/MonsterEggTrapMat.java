@@ -8,8 +8,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.stony.CobblestoneMat;
-import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.material.blocks.stony.StoneBrickMat;
+import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.material.blocks.stony.StonyMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 

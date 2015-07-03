@@ -20,6 +20,7 @@ import org.diorite.utils.reflections.ReflectElement;
 
 /**
  * Template handler for all iterable-based objects.
+ *
  * @see Iterable
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -28,8 +29,8 @@ public class IterableTemplateElement extends TemplateElement<Iterable>
     /**
      * Instance of template to direct-use.
      */
-    public static final IterableTemplateElement INSTANCE = new IterableTemplateElement();
-    static final int DEFAULT_STRING_ARRAY_MULTILINE_THRESHOLD = 25;
+    public static final IterableTemplateElement INSTANCE                                 = new IterableTemplateElement();
+    static final        int                     DEFAULT_STRING_ARRAY_MULTILINE_THRESHOLD = 25;
 
     /**
      * Construct new iterable template handler.

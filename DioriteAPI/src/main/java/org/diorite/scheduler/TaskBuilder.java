@@ -236,8 +236,8 @@ public class TaskBuilder
     /**
      * Create new TaskBuilder with selected runnable, it can't be null.
      *
-     * @param dioritePlugin   plugin that want register task.
-     * @param runnable runnable to use as task.
+     * @param dioritePlugin plugin that want register task.
+     * @param runnable      runnable to use as task.
      *
      * @return new task builder.
      *
@@ -259,8 +259,8 @@ public class TaskBuilder
      * <li>{@link #start()}</li>
      * </ol>
      *
-     * @param dioritePlugin   plugin that want register task.
-     * @param runnable runnable to use as task.
+     * @param dioritePlugin plugin that want register task.
+     * @param runnable      runnable to use as task.
      *
      * @return finished and registered diorite task.
      */
@@ -278,7 +278,7 @@ public class TaskBuilder
      * <li>{@link #start()}</li>
      * </ol>
      *
-     * @param dioritePlugin         plugin that want register task.
+     * @param dioritePlugin  plugin that want register task.
      * @param runnable       runnable to use as task.
      * @param synchronizable object to sync with it. (task will be executed in this same thread as object is ticked as long as object exist in memory)
      *
@@ -298,8 +298,8 @@ public class TaskBuilder
      * <li>{@link #start()}</li>
      * </ol>
      *
-     * @param dioritePlugin   plugin that want register task.
-     * @param runnable runnable to use as task.
+     * @param dioritePlugin plugin that want register task.
+     * @param runnable      runnable to use as task.
      *
      * @return finished and registered diorite task.
      */

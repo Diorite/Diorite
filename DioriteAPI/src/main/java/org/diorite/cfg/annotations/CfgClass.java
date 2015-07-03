@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
  * option to disable using super class. (enabled by default)
  * option to disable skipping transient fields. (enabled by default)
  * option to skip selected fields. (empty by default)
+ *
  * @see CfgExclude
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -50,9 +51,10 @@ public @interface CfgClass
 
     /**
      * Fields to exclude (type name)
-     * @see CfgExclude
      *
      * @return list of field names to skip.
+     *
+     * @see CfgExclude
      */
     String[] excludeFields() default {};
 }

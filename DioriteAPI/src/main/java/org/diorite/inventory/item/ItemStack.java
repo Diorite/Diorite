@@ -12,9 +12,9 @@ import org.diorite.material.Material;
 public class ItemStack
 {
     // TODO: lore, name and other stuff
-    protected Material  material;
-    protected int       amount;
-    protected ItemMeta  itemMeta;
+    protected Material material;
+    protected int      amount;
+    protected ItemMeta itemMeta;
 
     public ItemStack(final Material material, final int amount)
     {

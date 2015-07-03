@@ -61,6 +61,6 @@ public @interface CfgCollectionStyle
          *
          * @see CfgStringArrayMultilineThreshold
          */
-        ALWAYS_NEW_LINE;
+        ALWAYS_NEW_LINE
     }
 }

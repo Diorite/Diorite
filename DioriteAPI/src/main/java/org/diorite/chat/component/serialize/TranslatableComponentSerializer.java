@@ -17,8 +17,7 @@ import org.diorite.chat.component.TranslatableComponent;
 public class TranslatableComponentSerializer extends BaseComponentSerializer implements JsonSerializer<TranslatableComponent>, JsonDeserializer<TranslatableComponent>
 {
     @Override
-    public TranslatableComponent deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
-            throws JsonParseException
+    public TranslatableComponent deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException
     {
         final TranslatableComponent component = new TranslatableComponent();
         final JsonObject object = json.getAsJsonObject();

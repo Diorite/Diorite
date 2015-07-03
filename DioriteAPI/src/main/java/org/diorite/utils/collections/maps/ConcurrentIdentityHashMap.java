@@ -67,32 +67,32 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * tree removal about conversion back to plain bins upon
      * shrinkage.
      */
-    static final int TREEIFY_THRESHOLD = 8;
+    static final         int                 TREEIFY_THRESHOLD         = 8;
     /**
      * The bin count threshold for untreeifying a (split) bin during a
      * resize operation. Should be less than TREEIFY_THRESHOLD, and at
      * most 6 to mesh with shrinkage detection under removal.
      */
-    static final int UNTREEIFY_THRESHOLD = 6;
+    static final         int                 UNTREEIFY_THRESHOLD       = 6;
     /**
      * The smallest table capacity for which bins may be treeified.
      * (Otherwise the table is resized if too many nodes in a bin.)
      * The value should be at least 4 * TREEIFY_THRESHOLD to avoid
      * conflicts between resizing and treeification thresholds.
      */
-    static final int MIN_TREEIFY_CAPACITY = 64;
+    static final         int                 MIN_TREEIFY_CAPACITY      = 64;
     /*
      * Encodings for Node hash fields. See above for explanation.
      */
-    static final int MOVED     = - 1; // hash for forwarding nodes
-    static final int TREEBIN   = - 2; // hash for roots of trees
-    static final int RESERVED  = - 3; // hash for transient reservations
-    static final int HASH_BITS = 0x7fffffff; // usable bits of normal node hash
+    static final         int                 MOVED                     = - 1; // hash for forwarding nodes
+    static final         int                 TREEBIN                   = - 2; // hash for roots of trees
+    static final         int                 RESERVED                  = - 3; // hash for transient reservations
+    static final         int                 HASH_BITS                 = 0x7fffffff; // usable bits of normal node hash
     /**
      * Number of CPUS, to place bounds on some sizings
      */
-    static final int NCPU = Runtime.getRuntime().availableProcessors();
-    private static final long serialVersionUID = 6116706708242024783L;
+    static final         int                 NCPU                      = Runtime.getRuntime().availableProcessors();
+    private static final long                serialVersionUID          = 6116706708242024783L;
     /**
      * The largest possible table capacity.  This value must be
      * exactly 1<<30 to stay within Java array allocation and indexing
@@ -100,17 +100,17 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * because the top two bits of 32bit hash fields are used for
      * control purposes.
      */
-    private static final int MAXIMUM_CAPACITY = 1 << 30;
+    private static final int                 MAXIMUM_CAPACITY          = 1 << 30;
     /**
      * The default initial table capacity.  Must be a power of 2
      * (i.e., at least 1) and at most MAXIMUM_CAPACITY.
      */
-    private static final int DEFAULT_CAPACITY = 16;
+    private static final int                 DEFAULT_CAPACITY          = 16;
     /**
      * The default concurrency level for this table. Unused but
      * defined for compatibility with previous versions of this class.
      */
-    private static final int DEFAULT_CONCURRENCY_LEVEL = 16;
+    private static final int                 DEFAULT_CONCURRENCY_LEVEL = 16;
     /**
      * The load factor for this table. Overrides of this value in
      * constructors affect only the initial table capacity.  The
@@ -118,7 +118,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * simpler to use expressions such as {@code n - (n >>> 2)} for
      * the associated resizing threshold.
      */
-    private static final float LOAD_FACTOR = 0.75f;
+    private static final float               LOAD_FACTOR               = 0.75f;
     /**
      * Minimum number of rebinnings per transfer step. Ranges are
      * subdivided to allow multiple resizer threads.  This value
@@ -126,35 +126,35 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * excessive memory contention.  The value should be at least
      * DEFAULT_CAPACITY.
      */
-    private static final int MIN_TRANSFER_STRIDE = 16;
+    private static final int                 MIN_TRANSFER_STRIDE       = 16;
     /**
      * The number of bits used for generation stamp in sizeCtl.
      * Must be at least 6 for 32bit arrays.
      */
-    private static final int RESIZE_STAMP_BITS = 16;
+    private static final int                 RESIZE_STAMP_BITS         = 16;
     /**
      * The maximum number of threads that can help resize.
      * Must fit in 32 - RESIZE_STAMP_BITS bits.
      */
-    private static final int MAX_RESIZERS = (1 << (32 - RESIZE_STAMP_BITS)) - 1;
+    private static final int                 MAX_RESIZERS              = (1 << (32 - RESIZE_STAMP_BITS)) - 1;
     /**
      * The bit shift for recording size stamp in sizeCtl.
      */
-    private static final int RESIZE_STAMP_SHIFT = 32 - RESIZE_STAMP_BITS;
+    private static final int                 RESIZE_STAMP_SHIFT        = 32 - RESIZE_STAMP_BITS;
     /**
      * For serialization compatibility.
      */
-    private static final ObjectStreamField[] serialPersistentFields = {new ObjectStreamField("segments", Segment[].class), new ObjectStreamField("segmentMask", Integer.TYPE), new ObjectStreamField("segmentShift", Integer.TYPE)};
+    private static final ObjectStreamField[] serialPersistentFields    = {new ObjectStreamField("segments", Segment[].class), new ObjectStreamField("segmentMask", Integer.TYPE), new ObjectStreamField("segmentShift", Integer.TYPE)};
 
     /* ---------------- Nodes -------------- */
     // Unsafe mechanics
     private static final sun.misc.Unsafe U;
 
     /* ---------------- Static utilities -------------- */
-    private static final long            SIZECTL;
-    private static final long            TRANSFERINDEX;
-    private static final long            BASECOUNT;
-    private static final long            CELLSBUSY;
+    private static final long SIZECTL;
+    private static final long TRANSFERINDEX;
+    private static final long BASECOUNT;
+    private static final long CELLSBUSY;
 
     /* ---------------- Table element access -------------- */
 
@@ -173,9 +173,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * full volatile semantics, but are currently coded as volatile
      * writes to be conservative.
      */
-    private static final long            CELLVALUE;
-    private static final long            ABASE;
-    private static final int             ASHIFT;
+    private static final long CELLVALUE;
+    private static final long ABASE;
+    private static final int  ASHIFT;
 
     /* ---------------- Fields -------------- */
     /**
@@ -3450,7 +3450,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
         public final int hashCode()
         {
             return this.key.hashCode() ^ this.val.hashCode();
-        }        @Override
+        }
+
+        @Override
         public final V getValue()
         {
             return this.val;
@@ -3675,7 +3677,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
                 } while (p != null);
             }
             return null;
-        }        @Override
+        }
+
+        @Override
         Node<K, V> find(final int h, final Object k)
         {
             return this.findTreeNode(h, k, null);
@@ -3817,7 +3821,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
                     LockSupport.park(this);
                 }
             }
-        }        /**
+        }
+
+        /**
          * Returns matching node or null if none. Tries to search
          * using tree comparisons from root, but continues linear
          * search when lock not available.
@@ -4697,7 +4703,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      */
     static final class MapEntry<K, V> implements Map.Entry<K, V>
     {
-        final K key; // non-null
+        final K                               key; // non-null
         final ConcurrentIdentityHashMap<K, V> map;
         V val;       // non-null
 
@@ -4789,7 +4795,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
             }
             action.accept(p.key);
             return true;
-        }        @Override
+        }
+
+        @Override
         public Spliterator<K> trySplit()
         {
             final int i;
@@ -4810,7 +4818,6 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
                 action.accept(p.key);
             }
         }
-
 
 
         @Override
@@ -4959,8 +4966,8 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      */
     abstract static class CollectionView<K, V, E> implements Collection<E>, java.io.Serializable
     {
-        private static final long serialVersionUID = 7249069246763182397L;
-        private static final String oomeMsg = "Required array size too large";
+        private static final long   serialVersionUID = 7249069246763182397L;
+        private static final String oomeMsg          = "Required array size too large";
         final ConcurrentIdentityHashMap<K, V> map;
 
         CollectionView(final ConcurrentIdentityHashMap<K, V> map)
@@ -4976,7 +4983,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
         public ConcurrentIdentityHashMap<K, V> getMap()
         {
             return this.map;
-        }        /**
+        }
+
+        /**
          * Removes all of the elements from this view, by removing all
          * the mappings from the map backing this view.
          */
@@ -5047,7 +5056,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
                 r[i++] = e;
             }
             return (i == n) ? r : Arrays.copyOf(r, i);
-        }        @Override
+        }
+
+        @Override
         public abstract boolean remove(Object o);
 
         @Override
@@ -5090,9 +5101,6 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
             }
             return (i == n) ? r : Arrays.copyOf(r, i);
         }
-
-
-
 
 
         /**
@@ -5227,7 +5235,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
             final ConcurrentIdentityHashMap<K, V> m = this.map;
             final int f = (((t = m.table)) == null) ? 0 : t.length;
             return new KeyIterator<>(t, f, 0, f, m);
-        }        /**
+        }
+
+        /**
          * @throws NullPointerException if the specified key is null
          */
         @Override
@@ -5252,7 +5262,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
                     action.accept(p.key);
                 }
             }
-        }        /**
+        }
+
+        /**
          * Removes the key from this map view, by removing the key (and its
          * corresponding value) from the backing map.  This method does
          * nothing if the key is not in the map.
@@ -5268,7 +5280,6 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
         {
             return this.map.remove(o) != null;
         }
-
 
 
         /**
@@ -6209,7 +6220,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     static final class ReduceKeysTask<K, V> extends BulkTask<K, V, K>
     {
         final BiFunction<? super K, ? super K, ? extends K> reducer;
-        final ReduceKeysTask<K, V> nextRight;
+        final ReduceKeysTask<K, V>                          nextRight;
         K                    result;
         ReduceKeysTask<K, V> rights;
 
@@ -6270,7 +6281,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     static final class ReduceValuesTask<K, V> extends BulkTask<K, V, V>
     {
         final BiFunction<? super V, ? super V, ? extends V> reducer;
-        final ReduceValuesTask<K, V> nextRight;
+        final ReduceValuesTask<K, V>                        nextRight;
         V                      result;
         ReduceValuesTask<K, V> rights;
 
@@ -6331,7 +6342,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     static final class ReduceEntriesTask<K, V> extends BulkTask<K, V, Map.Entry<K, V>>
     {
         final BiFunction<Map.Entry<K, V>, Map.Entry<K, V>, ? extends Map.Entry<K, V>> reducer;
-        final ReduceEntriesTask<K, V> nextRight;
+        final ReduceEntriesTask<K, V>                                                 nextRight;
         Map.Entry<K, V>         result;
         ReduceEntriesTask<K, V> rights;
 
@@ -6392,7 +6403,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     {
         final Function<? super K, ? extends U>              transformer;
         final BiFunction<? super U, ? super U, ? extends U> reducer;
-        final MapReduceKeysTask<K, V, U> nextRight;
+        final MapReduceKeysTask<K, V, U>                    nextRight;
         U                          result;
         MapReduceKeysTask<K, V, U> rights;
 
@@ -6459,7 +6470,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     {
         final Function<? super V, ? extends U>              transformer;
         final BiFunction<? super U, ? super U, ? extends U> reducer;
-        final MapReduceValuesTask<K, V, U> nextRight;
+        final MapReduceValuesTask<K, V, U>                  nextRight;
         U                            result;
         MapReduceValuesTask<K, V, U> rights;
 
@@ -6526,7 +6537,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     {
         final Function<Map.Entry<K, V>, ? extends U>        transformer;
         final BiFunction<? super U, ? super U, ? extends U> reducer;
-        final MapReduceEntriesTask<K, V, U> nextRight;
+        final MapReduceEntriesTask<K, V, U>                 nextRight;
         U                             result;
         MapReduceEntriesTask<K, V, U> rights;
 
@@ -6593,7 +6604,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     {
         final BiFunction<? super K, ? super V, ? extends U> transformer;
         final BiFunction<? super U, ? super U, ? extends U> reducer;
-        final MapReduceMappingsTask<K, V, U> nextRight;
+        final MapReduceMappingsTask<K, V, U>                nextRight;
         U                              result;
         MapReduceMappingsTask<K, V, U> rights;
 
@@ -6658,9 +6669,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceKeysToDoubleTask<K, V> extends BulkTask<K, V, Double>
     {
-        final ToDoubleFunction<? super K> transformer;
-        final DoubleBinaryOperator        reducer;
-        final double                      basis;
+        final ToDoubleFunction<? super K>     transformer;
+        final DoubleBinaryOperator            reducer;
+        final double                          basis;
         final MapReduceKeysToDoubleTask<K, V> nextRight;
         double                          result;
         MapReduceKeysToDoubleTask<K, V> rights;
@@ -6718,9 +6729,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceValuesToDoubleTask<K, V> extends BulkTask<K, V, Double>
     {
-        final ToDoubleFunction<? super V> transformer;
-        final DoubleBinaryOperator        reducer;
-        final double                      basis;
+        final ToDoubleFunction<? super V>       transformer;
+        final DoubleBinaryOperator              reducer;
+        final double                            basis;
         final MapReduceValuesToDoubleTask<K, V> nextRight;
         double                            result;
         MapReduceValuesToDoubleTask<K, V> rights;
@@ -6778,9 +6789,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceEntriesToDoubleTask<K, V> extends BulkTask<K, V, Double>
     {
-        final ToDoubleFunction<Map.Entry<K, V>> transformer;
-        final DoubleBinaryOperator              reducer;
-        final double                            basis;
+        final ToDoubleFunction<Map.Entry<K, V>>  transformer;
+        final DoubleBinaryOperator               reducer;
+        final double                             basis;
         final MapReduceEntriesToDoubleTask<K, V> nextRight;
         double                             result;
         MapReduceEntriesToDoubleTask<K, V> rights;
@@ -6841,7 +6852,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
         final ToDoubleBiFunction<? super K, ? super V> transformer;
         final DoubleBinaryOperator                     reducer;
         final double                                   basis;
-        final MapReduceMappingsToDoubleTask<K, V> nextRight;
+        final MapReduceMappingsToDoubleTask<K, V>      nextRight;
         double                              result;
         MapReduceMappingsToDoubleTask<K, V> rights;
 
@@ -6898,9 +6909,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceKeysToLongTask<K, V> extends BulkTask<K, V, Long>
     {
-        final ToLongFunction<? super K> transformer;
-        final LongBinaryOperator        reducer;
-        final long                      basis;
+        final ToLongFunction<? super K>     transformer;
+        final LongBinaryOperator            reducer;
+        final long                          basis;
         final MapReduceKeysToLongTask<K, V> nextRight;
         long                          result;
         MapReduceKeysToLongTask<K, V> rights;
@@ -6958,9 +6969,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceValuesToLongTask<K, V> extends BulkTask<K, V, Long>
     {
-        final ToLongFunction<? super V> transformer;
-        final LongBinaryOperator        reducer;
-        final long                      basis;
+        final ToLongFunction<? super V>       transformer;
+        final LongBinaryOperator              reducer;
+        final long                            basis;
         final MapReduceValuesToLongTask<K, V> nextRight;
         long                            result;
         MapReduceValuesToLongTask<K, V> rights;
@@ -7018,9 +7029,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceEntriesToLongTask<K, V> extends BulkTask<K, V, Long>
     {
-        final ToLongFunction<Map.Entry<K, V>> transformer;
-        final LongBinaryOperator              reducer;
-        final long                            basis;
+        final ToLongFunction<Map.Entry<K, V>>  transformer;
+        final LongBinaryOperator               reducer;
+        final long                             basis;
         final MapReduceEntriesToLongTask<K, V> nextRight;
         long                             result;
         MapReduceEntriesToLongTask<K, V> rights;
@@ -7081,7 +7092,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
         final ToLongBiFunction<? super K, ? super V> transformer;
         final LongBinaryOperator                     reducer;
         final long                                   basis;
-        final MapReduceMappingsToLongTask<K, V> nextRight;
+        final MapReduceMappingsToLongTask<K, V>      nextRight;
         long                              result;
         MapReduceMappingsToLongTask<K, V> rights;
 
@@ -7138,9 +7149,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceKeysToIntTask<K, V> extends BulkTask<K, V, Integer>
     {
-        final ToIntFunction<? super K> transformer;
-        final IntBinaryOperator        reducer;
-        final int                      basis;
+        final ToIntFunction<? super K>     transformer;
+        final IntBinaryOperator            reducer;
+        final int                          basis;
         final MapReduceKeysToIntTask<K, V> nextRight;
         int                          result;
         MapReduceKeysToIntTask<K, V> rights;
@@ -7198,9 +7209,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceValuesToIntTask<K, V> extends BulkTask<K, V, Integer>
     {
-        final ToIntFunction<? super V> transformer;
-        final IntBinaryOperator        reducer;
-        final int                      basis;
+        final ToIntFunction<? super V>       transformer;
+        final IntBinaryOperator              reducer;
+        final int                            basis;
         final MapReduceValuesToIntTask<K, V> nextRight;
         int                            result;
         MapReduceValuesToIntTask<K, V> rights;
@@ -7258,9 +7269,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings({"serial", "ClassHasNoToStringMethod"})
     static final class MapReduceEntriesToIntTask<K, V> extends BulkTask<K, V, Integer>
     {
-        final ToIntFunction<Map.Entry<K, V>> transformer;
-        final IntBinaryOperator              reducer;
-        final int                            basis;
+        final ToIntFunction<Map.Entry<K, V>>  transformer;
+        final IntBinaryOperator               reducer;
+        final int                             basis;
         final MapReduceEntriesToIntTask<K, V> nextRight;
         int                             result;
         MapReduceEntriesToIntTask<K, V> rights;
@@ -7321,7 +7332,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
         final ToIntBiFunction<? super K, ? super V> transformer;
         final IntBinaryOperator                     reducer;
         final int                                   basis;
-        final MapReduceMappingsToIntTask<K, V> nextRight;
+        final MapReduceMappingsToIntTask<K, V>      nextRight;
         int                              result;
         MapReduceMappingsToIntTask<K, V> rights;
 
@@ -8454,12 +8465,13 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
                         consumer.accept(rng.internalNextLong(o, b));
                     } while (++ i < f);
                 }
-            }            @Override
+            }
+
+            @Override
             public long estimateSize()
             {
                 return this.fence - this.index;
             }
-
 
 
             @Override
@@ -8537,12 +8549,13 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
                         consumer.accept(rng.internalNextDouble(o, b));
                     } while (++ i < f);
                 }
-            }            @Override
+            }
+
+            @Override
             public long estimateSize()
             {
                 return this.fence - this.index;
             }
-
 
 
             @Override

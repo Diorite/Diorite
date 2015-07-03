@@ -2,6 +2,8 @@ package org.diorite.plugin;
 
 public class PluginNotFoundException extends PluginException
 {
+    private static final long serialVersionUID = 0;
+
     public PluginNotFoundException()
     {
         super();

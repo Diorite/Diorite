@@ -11,6 +11,7 @@ import org.diorite.world.World;
 
 /**
  * Helper class used to initialize chunk generator for selected world, with selected options
+ *
  * @param <T> {@link WorldGenerator} to initialize
  */
 public abstract class WorldGeneratorInitializer<T extends WorldGenerator>
@@ -35,7 +36,6 @@ public abstract class WorldGeneratorInitializer<T extends WorldGenerator>
     }
 
     /**
-     *
      * @return name of this generator
      */
     public String getName()
@@ -47,8 +47,9 @@ public abstract class WorldGeneratorInitializer<T extends WorldGenerator>
      * This method must return generator for selected world, should not contains any populators.
      * All default populator will be added by {@link #init} method
      *
-     * @param world world that will be used by generator
+     * @param world   world that will be used by generator
      * @param options map of options.
+     *
      * @return generator without populators
      */
     protected abstract T baseInit(World world, Map<String, Object> options);
@@ -57,8 +58,9 @@ public abstract class WorldGeneratorInitializer<T extends WorldGenerator>
      * This method return ready to use generator, with all default populators.
      * {@link WorldGenerator} is created by {@link #baseInit} method
      *
-     * @param world world that will be used by generator
+     * @param world   world that will be used by generator
      * @param options map of options.
+     *
      * @return generator with populators
      */
     public T init(final World world, final Map<String, Object> options)

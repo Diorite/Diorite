@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class PluginClassLoader extends URLClassLoader
 {
     private static final Map<String, Class<?>> globalClasses = new HashMap<>(100); // Global classes
-    private final Map<String, Class<?>> classes = new HashMap<>(50); // Local classes
+    private final        Map<String, Class<?>> classes       = new HashMap<>(50); // Local classes
 
     public PluginClassLoader(final File jarToLoad) throws MalformedURLException
     {

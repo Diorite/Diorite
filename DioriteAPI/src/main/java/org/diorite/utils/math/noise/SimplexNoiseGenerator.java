@@ -18,21 +18,21 @@ import org.diorite.world.World;
 @SuppressWarnings("MagicNumber")
 public class SimplexNoiseGenerator extends PerlinNoiseGenerator
 {
-    protected static final double  SQRT_3  = Math.sqrt(3);
-    protected static final double  SQRT_5  = Math.sqrt(5);
-    protected static final double  F2      = 0.5 * (SQRT_3 - 1);
-    protected static final double  G2      = (3 - SQRT_3) / 6;
-    protected static final double  G22     = (G2 * 2.0) - 1;
-    protected static final double  F3      = 1.0 / 3.0;
-    protected static final double  G3      = 1.0 / 6.0;
-    protected static final double  F4      = (SQRT_5 - 1.0) / 4.0;
-    protected static final double  G4      = (5.0 - SQRT_5) / 20.0;
-    protected static final double  G42     = G4 * 2.0;
-    protected static final double  G43     = G4 * 3.0;
-    protected static final double  G44     = (G4 * 4.0) - 1.0;
-    protected static final int[][] grad4   = {{0, 1, 1, 1}, {0, 1, 1, - 1}, {0, 1, - 1, 1}, {0, 1, - 1, - 1}, {0, - 1, 1, 1}, {0, - 1, 1, - 1}, {0, - 1, - 1, 1}, {0, - 1, - 1, - 1}, {1, 0, 1, 1}, {1, 0, 1, - 1}, {1, 0, - 1, 1}, {1, 0, - 1, - 1}, {- 1, 0, 1, 1}, {- 1, 0, 1, - 1}, {- 1, 0, - 1, 1}, {- 1, 0, - 1, - 1}, {1, 1, 0, 1}, {1, 1, 0, - 1}, {1, - 1, 0, 1}, {1, - 1, 0, - 1}, {- 1, 1, 0, 1}, {- 1, 1, 0, - 1}, {- 1, - 1, 0, 1}, {- 1, - 1, 0, - 1}, {1, 1, 1, 0}, {1, 1, - 1, 0}, {1, - 1, 1, 0}, {1, - 1, - 1, 0}, {- 1, 1, 1, 0}, {- 1, 1, - 1, 0}, {- 1, - 1, 1, 0}, {- 1, - 1, - 1, 0}};
-    protected static final int[][] simplex = {{0, 1, 2, 3}, {0, 1, 3, 2}, {0, 0, 0, 0}, {0, 2, 3, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 2, 3, 0}, {0, 2, 1, 3}, {0, 0, 0, 0}, {0, 3, 1, 2}, {0, 3, 2, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 3, 2, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 2, 0, 3}, {0, 0, 0, 0}, {1, 3, 0, 2}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {2, 3, 0, 1}, {2, 3, 1, 0}, {1, 0, 2, 3}, {1, 0, 3, 2}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {2, 0, 3, 1}, {0, 0, 0, 0}, {2, 1, 3, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {2, 0, 1, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {3, 0, 1, 2}, {3, 0, 2, 1}, {0, 0, 0, 0}, {3, 1, 2, 0}, {2, 1, 0, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {3, 1, 0, 2}, {0, 0, 0, 0}, {3, 2, 0, 1}, {3, 2, 1, 0}};
-    private static final SimplexNoiseGenerator instance = new SimplexNoiseGenerator();
+    protected static final double                SQRT_3   = Math.sqrt(3);
+    protected static final double                SQRT_5   = Math.sqrt(5);
+    protected static final double                F2       = 0.5 * (SQRT_3 - 1);
+    protected static final double                G2       = (3 - SQRT_3) / 6;
+    protected static final double                G22      = (G2 * 2.0) - 1;
+    protected static final double                F3       = 1.0 / 3.0;
+    protected static final double                G3       = 1.0 / 6.0;
+    protected static final double                F4       = (SQRT_5 - 1.0) / 4.0;
+    protected static final double                G4       = (5.0 - SQRT_5) / 20.0;
+    protected static final double                G42      = G4 * 2.0;
+    protected static final double                G43      = G4 * 3.0;
+    protected static final double                G44      = (G4 * 4.0) - 1.0;
+    protected static final int[][]               grad4    = {{0, 1, 1, 1}, {0, 1, 1, - 1}, {0, 1, - 1, 1}, {0, 1, - 1, - 1}, {0, - 1, 1, 1}, {0, - 1, 1, - 1}, {0, - 1, - 1, 1}, {0, - 1, - 1, - 1}, {1, 0, 1, 1}, {1, 0, 1, - 1}, {1, 0, - 1, 1}, {1, 0, - 1, - 1}, {- 1, 0, 1, 1}, {- 1, 0, 1, - 1}, {- 1, 0, - 1, 1}, {- 1, 0, - 1, - 1}, {1, 1, 0, 1}, {1, 1, 0, - 1}, {1, - 1, 0, 1}, {1, - 1, 0, - 1}, {- 1, 1, 0, 1}, {- 1, 1, 0, - 1}, {- 1, - 1, 0, 1}, {- 1, - 1, 0, - 1}, {1, 1, 1, 0}, {1, 1, - 1, 0}, {1, - 1, 1, 0}, {1, - 1, - 1, 0}, {- 1, 1, 1, 0}, {- 1, 1, - 1, 0}, {- 1, - 1, 1, 0}, {- 1, - 1, - 1, 0}};
+    protected static final int[][]               simplex  = {{0, 1, 2, 3}, {0, 1, 3, 2}, {0, 0, 0, 0}, {0, 2, 3, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 2, 3, 0}, {0, 2, 1, 3}, {0, 0, 0, 0}, {0, 3, 1, 2}, {0, 3, 2, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 3, 2, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 2, 0, 3}, {0, 0, 0, 0}, {1, 3, 0, 2}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {2, 3, 0, 1}, {2, 3, 1, 0}, {1, 0, 2, 3}, {1, 0, 3, 2}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {2, 0, 3, 1}, {0, 0, 0, 0}, {2, 1, 3, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {2, 0, 1, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {3, 0, 1, 2}, {3, 0, 2, 1}, {0, 0, 0, 0}, {3, 1, 2, 0}, {2, 1, 0, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {3, 1, 0, 2}, {0, 0, 0, 0}, {3, 2, 0, 1}, {3, 2, 1, 0}};
+    private static final   SimplexNoiseGenerator instance = new SimplexNoiseGenerator();
     protected static double offsetW;
 
     protected SimplexNoiseGenerator()

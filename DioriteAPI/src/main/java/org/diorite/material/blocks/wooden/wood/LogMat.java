@@ -207,7 +207,7 @@ public class LogMat extends WoodMat implements RotatableMat
      */
     public static void register(final LogMat element)
     {
-        byID.put((byte) (element.getType() + ((element instanceof Log2) ? 16:0)), element);
+        byID.put((byte) (element.getType() + ((element instanceof Log2) ? 16 : 0)), element);
         byName.put(element.getTypeName(), element);
     }
 
@@ -251,8 +251,7 @@ public class LogMat extends WoodMat implements RotatableMat
          * Returns one of Log sub-type based on sub-id, may return null
          * @param id sub-type id
          * @return sub-type of Log or null
-         */
-        public static LogMat getByID(final int id)
+         */ public static LogMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

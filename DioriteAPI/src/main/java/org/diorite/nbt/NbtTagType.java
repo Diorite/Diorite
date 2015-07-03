@@ -20,10 +20,11 @@ public enum NbtTagType
     LIST(9, NbtTagList.class, NbtTagList::new),
     COMPOUND(10, NbtTagCompound.class, NbtTagCompound::new),
     INTEGER_ARRAY(11, NbtTagIntArray.class, NbtTagIntArray::new);
-    private static final Map<Byte, NbtTagType> typeMap;
-    private final byte                            typeID;
-    private final Class<? extends NbtAbstractTag> typeClass;
-    private final Supplier<NbtAbstractTag>        getInstance;
+    private static final Map<Byte, NbtTagType>           typeMap;
+    private final        byte                            typeID;
+    private final        Class<? extends NbtAbstractTag> typeClass;
+    private final        Supplier<NbtAbstractTag>        getInstance;
+
     NbtTagType(final int typeID, final Class<? extends NbtAbstractTag> type, final Supplier<NbtAbstractTag> getInstance)
     {
         this.typeID = ((byte) typeID);

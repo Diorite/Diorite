@@ -48,6 +48,6 @@ public @interface CfgCollectionType
         /**
          * Strings and/or primitives, or other nested collections/maps/arrays contains strings and/or primitives.
          */
-        STRINGS_AND_PRIMITIVES;
+        STRINGS_AND_PRIMITIVES
     }
 }

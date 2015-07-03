@@ -50,5 +50,5 @@ public enum VariantMat
     /**
      * Podzdol variant, curranlty used only by {@link org.diorite.material.blocks.earth.DirtMat}
      */
-    PODZOL;
+    PODZOL
 }

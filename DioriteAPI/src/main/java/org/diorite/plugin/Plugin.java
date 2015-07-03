@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 public @interface Plugin
 {
     String name();
+
     String version();
+
     String author();
 }

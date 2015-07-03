@@ -11,7 +11,7 @@ import gnu.trove.map.hash.TIntIntHashMap;
 public class RarePlainsMapLayer extends MapLayer
 {
     protected static final TIntIntMap RARE_PLAINS = new TIntIntHashMap(1);
-    public static final int CHANCE = 57;
+    public static final    int        CHANCE      = 57;
 
     protected final MapLayer belowLayer;
 

@@ -1,9 +1,9 @@
 package org.diorite.command.sender;
 
-import org.diorite.chat.ChatColor;
 import org.diorite.Server;
-import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.ChatColor;
 import org.diorite.chat.DioriteMarkdownParser;
+import org.diorite.chat.component.BaseComponent;
 
 public interface CommandSender
 {

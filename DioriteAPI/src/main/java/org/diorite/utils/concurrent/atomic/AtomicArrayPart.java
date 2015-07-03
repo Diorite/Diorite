@@ -125,6 +125,7 @@ public class AtomicArrayPart<E> implements AtomicArray<E>
         // base array is used, to avoid creating nested wrappers.
         return new AtomicArrayPart<>(this.base, this.offset + offset, length);
     }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(final T[] a)

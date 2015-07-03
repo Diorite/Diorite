@@ -23,15 +23,15 @@ public abstract class WorldGenerator
     /**
      * {@link World} to generate
      */
-    protected final World                  world;
+    protected final World               world;
     /**
      * Name of world generator, must be unique
      */
-    protected final String                 name;
+    protected final String              name;
     /**
      * Options for world generator.
      */
-    protected final Map<String, Object>    options;
+    protected final Map<String, Object> options;
 
     /**
      * Create new WorldGenerator for selected world

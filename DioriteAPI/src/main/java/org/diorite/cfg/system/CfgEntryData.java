@@ -8,8 +8,10 @@ public interface CfgEntryData
     /**
      * Returns value of selected {@link FieldOptions} from this config field.
      * May return null.
+     *
      * @param option option to get.
-     * @param <T> type of value.
+     * @param <T>    type of value.
+     *
      * @return value of option or null.
      */
     <T> T getOption(FieldOptions option);
@@ -18,8 +20,9 @@ public interface CfgEntryData
      * Returns value of selected {@link FieldOptions} from this config field.
      *
      * @param option option to get.
-     * @param def default value of option.
-     * @param <T> type of value.
+     * @param def    default value of option.
+     * @param <T>    type of value.
+     *
      * @return value of option or default one.
      */
     <T> T getOption(FieldOptions option, T def);

@@ -209,7 +209,7 @@ public class LeavesMat extends WoodMat
      */
     public static void register(final LeavesMat element)
     {
-        byID.put((byte) (element.getType() + ((element instanceof Leaves2) ? 16:0)), element);
+        byID.put((byte) (element.getType() + ((element instanceof Leaves2) ? 16 : 0)), element);
         byName.put(element.getTypeName(), element);
     }
 
@@ -253,8 +253,7 @@ public class LeavesMat extends WoodMat
          * Returns one of Leaves sub-type based on sub-id, may return null
          * @param id sub-type id
          * @return sub-type of Leaves or null
-         */
-        public static LeavesMat getByID(final int id)
+         */ public static LeavesMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

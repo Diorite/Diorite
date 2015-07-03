@@ -35,7 +35,7 @@ public interface ServerManager
      *
      * @throws IllegalArgumentException if event class is already registered.
      */
-    default <T extends Event, E extends EventPipeline<T>> EventType<T, E> register(Class<T> eventClass, Class<E> pipelineClass, E pipeline) throws IllegalArgumentException
+    default <T extends Event, E extends EventPipeline<T>> EventType<T, E> register(final Class<T> eventClass, final Class<E> pipelineClass, final E pipeline) throws IllegalArgumentException
     {
         return EventType.register(eventClass, pipelineClass, pipeline);
     }

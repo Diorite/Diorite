@@ -163,6 +163,7 @@ public final class WeakCollection<T> implements Collection<T>
         return this.toArray(new Object[this.size()]);
     }
 
+    @SuppressWarnings("SuspiciousToArrayCall")
     @Override
     public <U> U[] toArray(final U[] array)
     {

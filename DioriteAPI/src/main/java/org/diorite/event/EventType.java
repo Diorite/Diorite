@@ -17,7 +17,7 @@ import org.diorite.event.pipelines.EventPipeline;
  */
 public class EventType<T extends Event, E extends EventPipeline<T>>
 {
-    private static final Map<Class<? extends Event>, EventType<?, ?>>            byEventClass    = new IdentityHashMap<>(3);
+    private static final Map<Class<? extends Event>, EventType<?, ?>> byEventClass = new IdentityHashMap<>(3);
 
     private final Class<T> eventClass;
     private final Class<E> pipelineClass;

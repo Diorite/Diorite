@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * if list contains any string with more chars than this amount,
  * it will use new-line style.
  * 25 by default.
- *
+ * <p>
  * <pre>newLineStyle:
  * - first long element
  * - second long element</pre>
