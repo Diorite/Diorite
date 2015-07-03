@@ -2,18 +2,18 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.CommandPriority;
 import org.diorite.entity.Player;
-import org.diorite.impl.command.SystemCommandImpl;
 
 public class KickCmd extends SystemCommandImpl
 {
     public KickCmd()
     {
-        super("kick", (Pattern)null, CommandPriority.LOW);
+        super("kick", (Pattern) null, CommandPriority.LOW);
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            if(!args.has(1))
+            if (! args.has(1))
             {
                 sender.sendMessage("§4Invalid usage. Use: /kick <nick> <reason>");
                 return;

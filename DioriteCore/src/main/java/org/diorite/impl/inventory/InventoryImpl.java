@@ -25,9 +25,9 @@ import gnu.trove.set.hash.TShortHashSet;
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {
     protected final T holder;
-    protected final Set<Player> viewers = new ConcurrentSet<>(5, 0.2f, 6);
+    protected final Set<Player>   viewers = new ConcurrentSet<>(5, 0.2f, 6);
     @SuppressWarnings("MagicNumber")
-    protected final TShortHashSet   dirty   = new TShortHashSet(5, .1f, (short) - 1);
+    protected final TShortHashSet dirty   = new TShortHashSet(5, .1f, (short) - 1);
     protected String title;
 
     protected InventoryImpl(final T holder)

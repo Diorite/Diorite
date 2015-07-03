@@ -103,7 +103,6 @@ public class Metrics
             final MetricsGraph graph = m.createGraph("RealAuthMode");
             switch (srv.getOnlineMode())
             {
-
                 case TRUE:
                     graph.addPlotter(new SimpleMetricsPlotter("Online"));
                     break;

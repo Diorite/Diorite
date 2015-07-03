@@ -14,8 +14,7 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
     @Override
     public void reset_()
     {
-        this.addBefore(EventPriority.NORMAL, "Diorite|PlaceBlock", (evt, pipeline) ->
-        {
+        this.addBefore(EventPriority.NORMAL, "Diorite|PlaceBlock", (evt, pipeline) -> {
             if (evt.isCancelled())
             {
                 return;

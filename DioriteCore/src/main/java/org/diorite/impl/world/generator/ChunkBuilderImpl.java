@@ -16,8 +16,8 @@ import org.diorite.world.generator.maplayer.MapLayer;
 public class ChunkBuilderImpl implements ChunkBuilder
 {
     private final ChunkPartBuilder[] chunkParts = new ChunkPartBuilder[Chunk.CHUNK_PARTS]; // size of 16, parts can be null
-    private MapLayer[]  biomesInput;
-    private BiomeGrid biomeGrid;
+    private MapLayer[] biomesInput;
+    private BiomeGrid  biomeGrid;
 
     public ChunkBuilderImpl(final MapLayer[] biomesInput)
     {

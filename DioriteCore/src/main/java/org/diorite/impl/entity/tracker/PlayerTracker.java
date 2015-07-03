@@ -3,7 +3,7 @@ package org.diorite.impl.entity.tracker;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
 import org.diorite.impl.entity.PlayerImpl;
 
-@SuppressWarnings({"ObjectEquality", "MagicNumber"})
+@SuppressWarnings({"ObjectEquality"})
 public class PlayerTracker extends BaseTracker<PlayerImpl>
 {
     public PlayerTracker(final PlayerImpl entity)

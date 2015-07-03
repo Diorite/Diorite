@@ -13,8 +13,7 @@ public class ParticleCmd extends SystemCommandImpl
     public ParticleCmd()
     {
         super("particle", Pattern.compile("(particle)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
-        this.setCommandExecutor((sender, command, label, matchedPattern, args) ->
-        {
+        this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (args.length() < 10)
             {
                 sender.sendMessage("&cUsage: /particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");

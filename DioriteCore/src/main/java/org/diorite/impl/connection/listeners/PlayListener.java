@@ -191,13 +191,10 @@ public class PlayListener implements PacketPlayInListener
     public void handle(final PacketPlayInCloseWindow packet)
     {
         Main.debug("Close windows: " + packet.getId());
-        this.server.sync(() -> {
-            this.player.closeInventory(packet.getId());
-        });
+        this.server.sync(() -> this.player.closeInventory(packet.getId()));
         // TODO: implement
     }
 
-    @SuppressWarnings("ObjectEquality")
     @Override
     public void handle(final PacketPlayInWindowClick p)
     {

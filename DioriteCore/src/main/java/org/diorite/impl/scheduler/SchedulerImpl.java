@@ -446,7 +446,7 @@ public class SchedulerImpl extends Scheduler
         }
     }
 
-    private class GameTimeScheduler extends BaseScheduler
+    private static class GameTimeScheduler extends BaseScheduler
     {
         protected volatile long     currentTick = - 1;
         private final      Executor executor    = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("{DioriteTask-%1$d}").build());
@@ -516,7 +516,7 @@ public class SchedulerImpl extends Scheduler
         }
     }
 
-    private class RealTimeScheduler extends BaseScheduler
+    private static class RealTimeScheduler extends BaseScheduler
     {
         protected volatile long                     time     = System.currentTimeMillis();
         protected final    ScheduledExecutorService executor = Executors.newScheduledThreadPool(2, new ThreadFactoryBuilder().setNameFormat("{DioriteTaskRT-%1$d}").build());

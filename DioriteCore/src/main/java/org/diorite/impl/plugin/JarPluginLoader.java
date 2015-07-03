@@ -9,11 +9,11 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import org.diorite.impl.ServerImpl;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginClassLoader;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
-import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginNotFoundException;
 
 public class JarPluginLoader implements PluginLoader

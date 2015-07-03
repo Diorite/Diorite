@@ -17,7 +17,8 @@ abstract class MetricsPlotter
     /**
      * Construct a plotter with the default plot name
      */
-    MetricsPlotter() {
+    MetricsPlotter()
+    {
         this("Default");
     }
 
@@ -26,7 +27,8 @@ abstract class MetricsPlotter
      *
      * @param name the name of the plotter to use, which will show up on the website
      */
-    MetricsPlotter(final String name) {
+    MetricsPlotter(final String name)
+    {
         this.name = name;
     }
 
@@ -44,24 +46,29 @@ abstract class MetricsPlotter
      *
      * @return the plotted point's column name
      */
-    public String getColumnName() {
+    public String getColumnName()
+    {
         return this.name;
     }
 
     /**
      * Called after the website graphs have been updated
      */
-    public void reset() {
+    public void reset()
+    {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return this.name.hashCode();
     }
 
     @Override
-    public boolean equals(final Object object) {
-        if (!(object instanceof MetricsPlotter)) {
+    public boolean equals(final Object object)
+    {
+        if (! (object instanceof MetricsPlotter))
+        {
             return false;
         }
 

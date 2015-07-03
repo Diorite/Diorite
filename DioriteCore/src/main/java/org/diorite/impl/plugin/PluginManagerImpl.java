@@ -11,9 +11,9 @@ import java.util.NoSuchElementException;
 import com.google.common.collect.ImmutableSet;
 
 import org.diorite.impl.Main;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
-import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginManager;
 
 public class PluginManagerImpl implements PluginManager
@@ -52,8 +52,7 @@ public class PluginManagerImpl implements PluginManager
         try
         {
             return this.plugins.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().get();
-        }
-        catch (final NoSuchElementException ignored)
+        } catch (final NoSuchElementException ignored)
         {
             return null;
         }

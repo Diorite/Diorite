@@ -14,8 +14,8 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 @PacketClass(id = 0x32, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutTransaction implements PacketPlayOut
 {
-    private int windowId;
-    private short actionNumber;
+    private int     windowId;
+    private short   actionNumber;
     private boolean accepted;
 
     public PacketPlayOutTransaction()

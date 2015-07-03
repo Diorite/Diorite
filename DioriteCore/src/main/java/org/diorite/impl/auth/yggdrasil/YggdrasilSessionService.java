@@ -42,10 +42,10 @@ public class YggdrasilSessionService implements SessionService
 {
     public static final int CONNECT_TIMEOUT = 15000;
 
-    private static final String BASE_URL    = "https://sessionserver.mojang.com/session/minecraft/";
-    private static final URL    JOIN_URL    = DioriteURLUtils.createURL(BASE_URL + "join");
-    private static final URL    CHECK_URL   = DioriteURLUtils.createURL(BASE_URL + "hasJoined");
-  //  private static final URL    PROFILE_URL = DioriteURLUtils.createURL(BASE_URL + "profile");
+    private static final String BASE_URL  = "https://sessionserver.mojang.com/session/minecraft/";
+    private static final URL    JOIN_URL  = DioriteURLUtils.createURL(BASE_URL + "join");
+    private static final URL    CHECK_URL = DioriteURLUtils.createURL(BASE_URL + "hasJoined");
+    //  private static final URL    PROFILE_URL = DioriteURLUtils.createURL(BASE_URL + "profile");
 
     private final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new JsonUUIDAdapter(false)).registerTypeAdapter(GameProfile.class, new GameProfile.Serializer()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).registerTypeAdapter(ProfileSearchResultsResponse.class, new ProfileSearchResultsResponse.Serializer()).create();
     private final Proxy     proxy;

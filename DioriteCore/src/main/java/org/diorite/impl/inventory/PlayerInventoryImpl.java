@@ -280,7 +280,6 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
             throw new IllegalArgumentException("Player must be a viewer of inventoy.");
         }
 
-        //noinspection unchecked
         ServerImpl.getInstance().getPlayersManager().getRawPlayers().get(player.getUniqueID()).getNetworkManager().sendPacket(new PacketPlayOutWindowItems(this.windowId, this.content));
     }
 

@@ -15,7 +15,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 public class PacketPlayInResourcePackStatus implements PacketPlayIn
 {
     public static final int MAX_HASH_SIZE = 40;
-    private String hash;
+    private String             hash;
     private ResourcePackStatus status;
 
     public PacketPlayInResourcePackStatus()
@@ -64,7 +64,10 @@ public class PacketPlayInResourcePackStatus implements PacketPlayIn
 
     public enum ResourcePackStatus
     {
-        LOADED(0), DECLINED(1), FAILED_DOWNLOAD(2), ACCEPTED(3);
+        LOADED(0),
+        DECLINED(1),
+        FAILED_DOWNLOAD(2),
+        ACCEPTED(3);
 
         private final int id;
 
@@ -80,9 +83,9 @@ public class PacketPlayInResourcePackStatus implements PacketPlayIn
 
         public static ResourcePackStatus byId(final int id)
         {
-            for(final ResourcePackStatus rps : ResourcePackStatus.values())
+            for (final ResourcePackStatus rps : ResourcePackStatus.values())
             {
-                if(id == rps.getId())
+                if (id == rps.getId())
                 {
                     return rps;
                 }

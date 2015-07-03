@@ -16,8 +16,8 @@ import org.diorite.impl.inventory.item.ItemStackImplArray;
 @PacketClass(id = 0x30, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutWindowItems implements PacketPlayOut
 {
-    private int             windowId;
-    private ItemStackImplArray  items;
+    private int                windowId;
+    private ItemStackImplArray items;
 
     public PacketPlayOutWindowItems()
     {

@@ -5,6 +5,8 @@ import org.diorite.utils.concurrent.atomic.AtomicArrayBase;
 
 class ItemStackImplArrayBase extends AtomicArrayBase<ItemStackImpl> implements ItemStackImplArray
 {
+    private static final long serialVersionUID = 0;
+
     ItemStackImplArrayBase(final int length)
     {
         super(length);

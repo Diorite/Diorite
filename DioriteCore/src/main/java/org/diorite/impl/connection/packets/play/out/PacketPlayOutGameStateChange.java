@@ -96,10 +96,10 @@ public class PacketPlayOutGameStateChange implements PacketPlayOut
         public static final byte ENTER_CREDITS    = 0x04;
         /**
          * values:
-         *  0 - show popup about demo
-         *  101 - movement controls. (chat message)
-         *  102 - jump controls. (chat message)
-         *  103 - inv controls. (chat message)
+         * 0 - show popup about demo
+         * 101 - movement controls. (chat message)
+         * 102 - jump controls. (chat message)
+         * 103 - inv controls. (chat message)
          */
         public static final byte DEMO_MESSAGE     = 0x05;
         /**

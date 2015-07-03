@@ -11,8 +11,8 @@ import org.diorite.inventory.PlayerInventoryPart;
 
 public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> implements PlayerInventoryPart
 {
-    protected final PlayerInventoryImpl    playerInventory;
-    protected final ItemStackImplArray content;
+    protected final PlayerInventoryImpl playerInventory;
+    protected final ItemStackImplArray  content;
 
     protected PlayerInventoryPartImpl(final PlayerInventoryImpl playerInventory, final ItemStackImplArray content)
     {
