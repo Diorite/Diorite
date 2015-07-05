@@ -506,13 +506,13 @@ public class ServerImpl implements Server
     }
 
     @Override
-    public double getMutli()
+    public double getSpeedMutli()
     {
         return this.mutli;
     }
 
     @Override
-    public void setMutli(final double mutli)
+    public void setSpeedMutli(final double mutli)
     {
         this.mutli = mutli;
     }
@@ -546,6 +546,10 @@ public class ServerImpl implements Server
         if (this.hasStopped)
         {
             return;
+        }
+        if (this.metrics != null)
+        {
+            this.metrics.stop();
         }
         if (this.pluginManager != null)
         {
@@ -801,9 +805,11 @@ public class ServerImpl implements Server
         this.scheduler.tick(this.currentTick, withAsync);
     }
 
+    private Metrics metrics;
+
     public void run()
     {
-        Metrics.start(this);
+        this.metrics = Metrics.start(this);
         Arrays.fill(this.recentTps, (double) DEFAULT_TPS);
         try
         {

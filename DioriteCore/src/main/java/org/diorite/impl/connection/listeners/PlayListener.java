@@ -10,6 +10,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInArmAnimation;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockDig;
+import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockDig.BlockDigAction;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockPlace;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInChat;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInClientCommand;
@@ -31,6 +32,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
+import org.diorite.GameMode;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
@@ -161,7 +163,7 @@ public class PlayListener implements PacketPlayInListener
     public void handle(final PacketPlayInBlockDig packet)
     {
         this.server.sync(() -> {
-            if (packet.getAction() == PacketPlayInBlockDig.BlockDigAction.FINISH_DIG)
+            if ((packet.getAction() == BlockDigAction.FINISH_DIG) || ((packet.getAction() == BlockDigAction.START_DIG) && this.player.getGameMode().equals(GameMode.CREATIVE)))
             {
                 EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
             }

@@ -16,6 +16,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.entity.tracker.EntityTrackers;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
@@ -555,9 +556,9 @@ public class WorldImpl implements World, Tickable
     @Override
     public Block getBlock(final int x, final int y, final int z)
     {
-        if (y >= Chunk.CHUNK_FULL_HEIGHT)
+        if ((y >= Chunk.CHUNK_FULL_HEIGHT) || (y < 0))
         {
-            throw new IllegalArgumentException("Y can't be bigger than " + Chunk.CHUNK_FULL_HEIGHT);
+            throw new IllegalArgumentException("Y must be in range 0-" + (Chunk.CHUNK_FULL_HEIGHT - 1));
         }
         return this.getChunkAt(x >> 4, z >> 4).getBlock((x & CHUNK_FLAG), y, (z & CHUNK_FLAG));
     }
@@ -744,16 +745,17 @@ public class WorldImpl implements World, Tickable
 
     public void addEntity(final EntityImpl entity)
     {
+        final BaseTracker<?> tracker;
         if (entity instanceof PlayerImpl)
         {
-            this.entityTrackers.addTracked((PlayerImpl) entity);
+            tracker = this.entityTrackers.addTracked((PlayerImpl) entity);
         }
         else
         {
-            this.entityTrackers.addTracked(entity);
+            tracker = this.entityTrackers.addTracked(entity);
         }
         entity.updateChunk(null, this.getChunkAt(entity.getLocation().getChunkPos()));
-        entity.onSpawn();
+        entity.onSpawn(tracker);
     }
 
     public void removeEntity(final EntityImpl entity)

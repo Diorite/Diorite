@@ -91,7 +91,7 @@ public class Metrics
      */
     private Thread thread = null;
 
-    public static void start(final ServerImpl srv)
+    public static Metrics start(final ServerImpl srv)
     {
         /**
          * Not all graphs will be visible on metrics, and some of them may be removed in future
@@ -181,6 +181,7 @@ public class Metrics
         }
 
         m.start();
+        return m;
     }
 
     Metrics(final ServerImpl srv)
@@ -253,6 +254,13 @@ public class Metrics
         this.graphs.add(graph);
     }
 
+    public void stop()
+    {
+        final Thread t = this.thread;
+        this.thread = null;
+        t.interrupt();
+    }
+
     /**
      * Start measuring statistics. This will immediately create an async repeating task as the plugin and send the
      * initial data to the metrics backend, and then after that it will post in increments of PING_INTERVAL * 1200
@@ -284,7 +292,7 @@ public class Metrics
             @Override
             public void run()
             {
-                while (Metrics.this.server.isRunning())
+                while (Metrics.this.server.isRunning() && (Metrics.this.thread != null))
                 {
                     if ((this.nextPost == 0L) || (System.currentTimeMillis() > this.nextPost))
                     {
@@ -313,7 +321,10 @@ public class Metrics
                         Thread.sleep(Math.min(Math.max(this.nextPost - System.currentTimeMillis(), 1), TimeUnit.MINUTES.toMillis(PING_INTERVAL)));
                     } catch (final InterruptedException e)
                     {
-                        e.printStackTrace();
+                        if (Metrics.this.thread != null)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

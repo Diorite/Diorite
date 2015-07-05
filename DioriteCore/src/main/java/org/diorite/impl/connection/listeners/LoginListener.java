@@ -70,7 +70,7 @@ public class LoginListener implements PacketLoginInListener
 
     private int getTimeoutTicks()
     {
-        return (int) (this.server.getMutli() * TIMEOUT_TICKS);
+        return (int) (this.server.getSpeedMutli() * TIMEOUT_TICKS);
     }
 
     @Override

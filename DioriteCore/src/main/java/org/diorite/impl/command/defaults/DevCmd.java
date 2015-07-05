@@ -46,6 +46,14 @@ public class DevCmd extends SystemCommandImpl
                     p.getWorld().addEntity(item);
                     break;
                 }
+                case "ep":
+                {
+                    for (EntityImpl e : p.getNearbyEntities(args.asDouble(0), args.asDouble(0), args.asDouble(0)))
+                    {
+                        sender.sendSimpleColoredMessage("[" + e.getId() + "] " + e.getType() + ": " + e.getLocation());
+                    }
+                    break;
+                }
                 default:
                 {
                     sender.sendSimpleColoredMessage("&4No action...");

@@ -74,11 +74,13 @@ public class EntityTrackers implements Tickable
         }
     }
 
-    public void addTracked(final PlayerImpl trackable)
+    public PlayerTracker addTracked(final PlayerImpl trackable)
     {
-        this.trackers.put(trackable.getId(), new PlayerTracker(trackable));
+        final PlayerTracker pt = new PlayerTracker(trackable);
+        this.trackers.put(trackable.getId(), pt);
         this.updatePlayer(trackable);
         this.incrementStat(trackable);
+        return pt;
     }
 
     public int size()
@@ -86,10 +88,12 @@ public class EntityTrackers implements Tickable
         return this.trackers.size();
     }
 
-    public void addTracked(final EntityImpl trackable)
+    public EntityTracker addTracked(final EntityImpl trackable)
     {
-        this.trackers.put(trackable.getId(), new EntityTracker(trackable));
+        final EntityTracker et= new EntityTracker(trackable);
+        this.trackers.put(trackable.getId(), et);
         this.incrementStat(trackable);
+        return et;
     }
 
     public boolean removeTracked(final EntityImpl trackable)

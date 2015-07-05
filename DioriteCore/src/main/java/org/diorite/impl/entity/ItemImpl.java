@@ -8,6 +8,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutCollect;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityMetadata;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnEntity;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
+import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Item;
@@ -90,9 +91,9 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     }
 
     @Override
-    public void onSpawn()
+    public void onSpawn(final BaseTracker<?> tracker)
     {
-        super.onSpawn();
+        super.onSpawn(tracker);
         this.getNearbyEntities(3, 3, 3, ItemImpl.class).forEach((item) -> item.joinItem(this));
     }
 
@@ -110,6 +111,22 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
             this.remove(true);
             return;
         }
+    }
+
+    @Override
+    protected void doPhysics()
+    {
+        if ((this.timeLived % 100) == 0)
+        {
+            this.tracker.forceLocationUpdate();
+        }
+        super.doPhysics();
+        if (this.isOnGround())
+        {
+            return;
+        }
+        this.velY *= 0.98D;
+        this.velY -= 0.08D;
     }
 
     @Override

@@ -16,15 +16,18 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
+import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.entity.tracker.Trackable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
+import org.diorite.utils.lazy.BooleanLazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.BoundingBox;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
+import org.diorite.utils.others.Resetable;
 import org.diorite.world.chunk.Chunk;
 
 public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable, Trackable
@@ -80,23 +83,27 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         }
     }
 
+    protected final Set<Resetable> values = new HashSet<>(10);
+
     protected final    ServerImpl        server;
     protected final    WorldImpl         world;
     protected volatile Thread            lastTickThread;
     protected          EntityBoundingBox aabb;
     private            int               id;
-    private            double            x;
-    private            double            y;
-    private            double            z;
-    private            float             yaw;
-    private            float             pitch;
-    private            float             velX;
-    private            float             velY;
-    private            float             velZ;
+    protected          double            x;
+    protected          double            y;
+    protected          double            z;
+    protected          float             yaw;
+    protected          float             pitch;
+    protected          float             velX;
+    protected          float             velY;
+    protected          float             velZ;
     protected          EntityMetadata    metadata;
-
+    protected          BaseTracker<?>    tracker;
 
     protected boolean aiEnabled = true; // don't do any actions if AI is disabled
+
+    protected BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
 
     protected EntityImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
     {
@@ -130,8 +137,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 
     public boolean isOnGround()
     {
-        // TODO: implement in better way
-        return (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().subtractY(1).getBlock().getType().isSolid();
+        return this.lazyOnGround.get();
     }
 
     @Override
@@ -221,12 +227,38 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     public void doTick(final int tps)
     {
         this.lastTickThread = Thread.currentThread();
+        this.values.forEach(Resetable::reset);
         this.aabb.setCenter(this);
+
         if (this.hasGravity())
         {
-
+            this.doPhysics();
         }
         // TODO
+    }
+
+    protected void doPhysics()
+    {
+        final double multi = ServerImpl.getInstance().getSpeedMutli();
+        if (this.velX != 0)
+        {
+            this.x += (this.velX * multi);
+        }
+        if ((this.velY != 0))
+        {
+            if (this.isOnGround())
+            {
+                this.velY = 0;
+            }
+            else
+            {
+                this.y += (this.velY * multi);
+            }
+        }
+        if (this.velZ != 0)
+        {
+            this.z += (this.velZ * multi);
+        }
     }
 
     public WorldImpl getWorld()
@@ -394,8 +426,13 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         return this.server;
     }
 
-    public void onSpawn()
+    public void onSpawn(final BaseTracker<?> tracker)
     {
+        if (this.tracker != null)
+        {
+            throw new IllegalArgumentException("Entity was already spawned.");
+        }
+        this.tracker = tracker;
     }
 
     public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)

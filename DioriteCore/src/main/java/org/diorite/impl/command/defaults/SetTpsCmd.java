@@ -19,7 +19,7 @@ public class SetTpsCmd extends SystemCommandImpl
             final double multi = (temp == null) ? (((double) Server.DEFAULT_TPS) / tps) : Double.parseDouble(temp);
             sender.sendMessage("§7TPS set to: §8" + tps + "§7, and server speed to: §8" + multi);
             sender.getServer().setTps(tps);
-            sender.getServer().setMutli(multi);
+            sender.getServer().setSpeedMutli(multi);
         });
     }
 }

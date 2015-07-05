@@ -7,6 +7,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.world.WorldImpl;
+import org.diorite.GameMode;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.BlockDestroyPipeline;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
@@ -40,7 +41,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
         });*/
 
         this.addAfter(EventPriority.NORMAL, "Diorite|DropItem", (evt, pipeline) -> {
-            if (evt.isCancelled())
+            if (evt.isCancelled() || evt.getPlayer().getGameMode().equals(GameMode.CREATIVE))
             {
                 return;
             }

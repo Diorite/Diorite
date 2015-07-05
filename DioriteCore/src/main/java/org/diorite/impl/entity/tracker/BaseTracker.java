@@ -20,11 +20,15 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
     protected       double xLoc;
     protected       double yLoc;
     protected       double zLoc;
-    protected final float  yaw;
-    protected final float  pitch;
-    protected final float  headRot;
+    protected       float  yaw;
+    protected       float  pitch;
+    protected       float  headRot;
+    protected       float  velX;
+    protected       float  velY;
+    protected       float  velZ;
 
     protected boolean isMoving;
+    protected boolean forceLocationUpdate;
 
     protected final Collection<PlayerImpl> tracked = new ConcurrentSet<>(5, .3F, 3);
 
@@ -38,6 +42,9 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         this.yaw = entity.getYaw();
         this.pitch = entity.getPitch();
         this.headRot = entity.getHeadPitch();
+        this.velX = entity.getVelocityX();
+        this.velY = entity.getVelocityY();
+        this.velZ = entity.getVelocityZ();
     }
 
     public T getTracker()
@@ -50,6 +57,11 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         return this.id;
     }
 
+    public void forceLocationUpdate()
+    {
+        this.forceLocationUpdate = true;
+    }
+
     private boolean first = true;
 
     public void tick(final int tps, final Iterable<PlayerImpl> players)
@@ -60,21 +72,27 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
             this.xLoc = this.tracker.getX();
             this.yLoc = this.tracker.getY();
             this.zLoc = this.tracker.getZ();
+            this.velX = this.tracker.getVelocityX();
+            this.velY = this.tracker.getVelocityY();
+            this.velZ = this.tracker.getVelocityZ();
             this.updatePlayers(players);
             this.sendToAllExceptOwn(new PacketPlayOutEntityTeleport(this.tracker));
             return;
         }
         double deltaX = 0, deltaY = 0, deltaZ = 0;
-        this.isMoving = (this.tracker.getLocation().distanceSquared(this.xLoc, this.yLoc, this.zLoc) > 0.1);
+        this.isMoving = this.forceLocationUpdate || (this.velY != 0) || (this.velZ != 0) || (this.velX != 0);
         if (this.isMoving)
         {
+            this.forceLocationUpdate = false;
             deltaX = this.tracker.getX() - this.xLoc;
             deltaY = this.tracker.getY() - this.yLoc;
             deltaZ = this.tracker.getZ() - this.zLoc;
             this.xLoc = this.tracker.getX();
             this.yLoc = this.tracker.getY();
             this.zLoc = this.tracker.getZ();
-            this.isMoving = true;
+            this.velX = this.tracker.getVelocityX();
+            this.velY = this.tracker.getVelocityY();
+            this.velZ = this.tracker.getVelocityZ();
             this.updatePlayers(players);
         }
         if (this.tracker.getId() == - 1)
