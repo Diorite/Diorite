@@ -4,6 +4,7 @@ import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.scheduler.Synchronizable;
+import org.diorite.utils.math.geometry.BoundingBox;
 import org.diorite.world.chunk.Chunk;
 
 /**
@@ -124,4 +125,6 @@ public interface Block
     {
         return this.getChunk();
     }
+
+    BoundingBox getBoundingBox();
 }

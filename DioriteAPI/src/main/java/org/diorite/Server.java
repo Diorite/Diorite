@@ -75,9 +75,9 @@ public interface Server extends Synchronizable
 
     boolean isRunning();
 
-    double getMutli();
+    double getSpeedMutli();
 
-    void setMutli(double mutli);
+    void setSpeedMutli(double mutli);
 
     int getTps();
 

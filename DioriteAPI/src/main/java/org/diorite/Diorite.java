@@ -107,7 +107,7 @@ public final class Diorite
 
     public static double getMutli()
     {
-        return server.getMutli();
+        return server.getSpeedMutli();
     }
 
     public static void removeAllTitles()
@@ -337,7 +337,7 @@ public final class Diorite
 
     public static void setMutli(final double mutli)
     {
-        server.setMutli(mutli);
+        server.setSpeedMutli(mutli);
     }
 
     public static void sendConsoleMessage(final String str)

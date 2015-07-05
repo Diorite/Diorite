@@ -3,15 +3,15 @@ package org.diorite.utils.function;
 import java.util.Objects;
 
 /**
- * Represents an operation that accepts a single {@code short}-valued argument and
+ * Represents an operation that accepts a single {@code char}-valued argument and
  * returns no result.  This is the primitive type specialization of
- * {@link Consumer} for {@code short}.  Unlike most other functional interfaces,
- * {@code ShortConsumer} is expected to operate via side-effects.
+ * {@link Consumer} for {@code char}.  Unlike most other functional interfaces,
+ * {@code CharConsumer} is expected to operate via side-effects.
  *
  * @see Consumer
  */
 @FunctionalInterface
-public interface ShortConsumer
+public interface CharConsumer
 {
 
     /**
@@ -19,10 +19,10 @@ public interface ShortConsumer
      *
      * @param value the input argument
      */
-    void accept(short value);
+    void accept(char value);
 
     /**
-     * Returns a composed {@code ShortConsumer} that performs, in sequence, this
+     * Returns a composed {@code CharConsumer} that performs, in sequence, this
      * operation followed by the {@code after} operation. If performing either
      * operation throws an exception, it is relayed to the caller of the
      * composed operation.  If performing this operation throws an exception,
@@ -30,15 +30,15 @@ public interface ShortConsumer
      *
      * @param after the operation to perform after this operation
      *
-     * @return a composed {@code ShortConsumer} that performs in sequence this
+     * @return a composed {@code CharConsumer} that performs in sequence this
      * operation followed by the {@code after} operation
      *
      * @throws NullPointerException if {@code after} is null
      */
-    default ShortConsumer andThen(final ShortConsumer after)
+    default CharConsumer andThen(final CharConsumer after)
     {
         Objects.requireNonNull(after);
-        return (short t) -> {
+        return (char t) -> {
             this.accept(t);
             after.accept(t);
         };
