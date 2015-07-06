@@ -55,7 +55,7 @@ public class JarPluginLoader implements PluginLoader
                 throw new PluginException("Plugin " + pluginDescription.name() + " is arleady loaded!");
             }
 
-            dioritePlugin.init(classLoader, dioritePlugin, pluginDescription.name(), pluginDescription.version(), pluginDescription.author());
+            dioritePlugin.init(classLoader, dioritePlugin, pluginDescription.name(), pluginDescription.version(), pluginDescription.author(), pluginDescription.description(), pluginDescription.website());
             System.out.println("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
             dioritePlugin.onLoad();
 
