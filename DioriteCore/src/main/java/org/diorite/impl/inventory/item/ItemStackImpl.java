@@ -128,10 +128,11 @@ public class ItemStackImpl extends ItemStack implements Dirtable
     }
 
     @Override
-    public ItemStack combine(final ItemStack other)
+    public ItemStackImpl combine(final ItemStack other)
     {
         this.setDirty();
-        return this.wrapped.combine(other);
+        this.wrapped.combine(other);
+        return this;
     }
 
     @Override

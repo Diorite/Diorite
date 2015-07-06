@@ -18,11 +18,19 @@ import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 
 public class ItemImpl extends EntityImpl implements Item, EntityObject
 {
+    private static final double JOIN_DISTANCE           = 3; // TODO config.
+    private static final int    JOIN_DISTANCE_THRESHOLD = 3; // TODO config.
+
     /**
      * ItemStack entry
      */
     protected static final byte META_KEY_ITEM = 10;
     private static final   int  DESPAWN_TIME  = 30000; // 5 min, TODO: add config value for that.
+
+    // used for joining items when it moves away.
+    private int xLastJoinPos;
+    private int yLastJoinPos;
+    private int zLastJoinPos;
 
     @SuppressWarnings("MagicNumber")
     public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.25F, 0.25F);
@@ -66,6 +74,21 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
 
     private int timeLived = 0; // in centiseconds, 1/100 of second.
 
+    private void updateJoinPos()
+    {
+        this.xLastJoinPos = (int) this.x;
+        this.yLastJoinPos = (int) this.y;
+        this.zLastJoinPos = (int) this.z;
+    }
+
+    public void joinNearbyItem(final boolean force)
+    {
+        if (force || (Math.abs(this.y - this.yLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.x - this.xLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.z - this.zLastJoinPos) > JOIN_DISTANCE_THRESHOLD))
+        {
+            this.getNearbyEntities(JOIN_DISTANCE, JOIN_DISTANCE, JOIN_DISTANCE, ItemImpl.class).forEach((item) -> item.joinItem(this));
+        }
+    }
+
     public void joinItem(final ItemImpl item)
     {
         //noinspection ObjectEquality
@@ -84,9 +107,14 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         this.timeLived = 0;
         item.setItemStack(oi);
         item.timeLived = 0;
+        this.updateJoinPos();
         if (oi == null)
         {
             item.remove(true);
+        }
+        else
+        {
+            item.updateJoinPos();
         }
     }
 
@@ -94,7 +122,10 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     public void onSpawn(final BaseTracker<?> tracker)
     {
         super.onSpawn(tracker);
-        this.getNearbyEntities(3, 3, 3, ItemImpl.class).forEach((item) -> item.joinItem(this));
+        if (this.aiEnabled)
+        {
+            this.joinNearbyItem(true);
+        }
     }
 
     @Override
@@ -111,6 +142,7 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
             this.remove(true);
             return;
         }
+        this.joinNearbyItem(false);
     }
 
     @Override

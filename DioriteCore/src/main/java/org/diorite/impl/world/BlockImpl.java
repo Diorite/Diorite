@@ -48,6 +48,10 @@ public class BlockImpl implements Block
         this.y = y;
         this.z = (byte) z;
         this.chunk = chunk;
+        if (! chunk.isLoaded())
+        {
+            chunk.load();
+        }
         this.type = chunk.getBlockType(x, y, z);
         this.lazyBox = new LazyValue<>(() -> {
             int x1 = this.x + (this.chunk.getX() << 4);
