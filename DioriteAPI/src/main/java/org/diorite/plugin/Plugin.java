@@ -14,4 +14,8 @@ public @interface Plugin
     String version();
 
     String author();
+
+    String description() default "";
+
+    String website() default "";
 }
