@@ -57,6 +57,11 @@ public class PluginClassLoader extends URLClassLoader
         return result;
     }
 
+    public int loadedClasses()
+    {
+        return this.classes.size();
+    }
+
     @Override
     public String toString()
     {

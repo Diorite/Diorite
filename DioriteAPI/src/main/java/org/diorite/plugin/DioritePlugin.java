@@ -12,6 +12,8 @@ public abstract class DioritePlugin
     private String            name;
     private String            version;
     private String            author;
+    private String            description;
+    private String            website;
 
     protected DioritePlugin()
     {
@@ -53,13 +55,23 @@ public abstract class DioritePlugin
         return this.author;
     }
 
+    public String getDescription()
+    {
+        return this.description;
+    }
+
+    public String getWebsite()
+    {
+        return this.website;
+    }
+
     protected final DioritePlugin instance()
     {
         this.initCheck();
         return this.instance;
     }
 
-    public final void init(final PluginClassLoader classLoader, final DioritePlugin instance, final String name, final String version, final String author)
+    public final void init(final PluginClassLoader classLoader, final DioritePlugin instance, final String name, final String version, final String author, final String description, final String website)
     {
         if (this.initialised)
         {
@@ -71,6 +83,8 @@ public abstract class DioritePlugin
         this.name = name;
         this.version = version;
         this.author = author;
+        this.website = website.isEmpty() ? null : website;
+        this.description = description.isEmpty() ? null : description;
         this.initialised = true;
     }
 
