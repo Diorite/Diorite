@@ -10,7 +10,6 @@ public final class RegisterDefaultCommands
 
     public static void init(final CommandMapImpl cmds)
     {
-
         cmds.registerCommand(new DevCmd()); // TODO: remove
 
         cmds.registerCommand(new SayCmd());
@@ -28,5 +27,6 @@ public final class RegisterDefaultCommands
         cmds.registerCommand(new BroadcastCmd());
         cmds.registerCommand(new ColoredConsoleCmd());
         cmds.registerCommand(new PerformanceMonitorCmd());
+        cmds.registerCommand(new PluginsCmd());
     }
 }
