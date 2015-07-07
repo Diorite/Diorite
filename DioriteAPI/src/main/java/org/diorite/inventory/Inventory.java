@@ -542,6 +542,7 @@ public interface Inventory extends Iterable<ItemStack>
     default ItemStack[] add(final ItemStack... items)
     {
         Validate.noNullElements(items, "Item cannot be null");
+
         final ItemStack[] leftover = new ItemStack[items.length];
         boolean fully = true;
         for (int i = 0; i < items.length; i++)
