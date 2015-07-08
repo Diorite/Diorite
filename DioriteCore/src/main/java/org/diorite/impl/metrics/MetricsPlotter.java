@@ -15,14 +15,6 @@ abstract class MetricsPlotter
     private final String name;
 
     /**
-     * Construct a plotter with the default plot name
-     */
-    MetricsPlotter()
-    {
-        this("Default");
-    }
-
-    /**
      * Construct a plotter with a specific plot name
      *
      * @param name the name of the plotter to use, which will show up on the website

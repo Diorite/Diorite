@@ -116,7 +116,7 @@ public class Metrics
         }
         {
             final MetricsGraph graph = m.createGraph("UsedPlugins");
-            graph.addPlotter(new MetricsPlotter()
+            graph.addPlotter(new MetricsPlotter("Plugins")
             {
                 @Override
                 public int getValue()
@@ -127,7 +127,7 @@ public class Metrics
         }
         {
             final MetricsGraph graph = m.createGraph("EntitiesV1");
-            graph.addPlotter(new MetricsPlotter()
+            graph.addPlotter(new MetricsPlotter("Entities")
             {
                 @Override
                 public int getValue()
