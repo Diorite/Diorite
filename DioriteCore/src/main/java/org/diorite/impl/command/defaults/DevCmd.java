@@ -28,6 +28,12 @@ public class DevCmd extends SystemCommandImpl
             }
             switch (action.toLowerCase())
             {
+                case "inv":
+                {
+                    ((PlayerImpl)sender).getInventory().update();
+                    sender.sendMessage("Inventory updated!");
+                    break;
+                }
                 case "gs":
                 {
                     p.getNetworkManager().sendPacket(new PacketPlayOutGameStateChange(args.asInt(0), args.asFloat(1)));

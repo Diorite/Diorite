@@ -1,5 +1,8 @@
 package org.diorite.impl.pipelines.event.player;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,6 +12,7 @@ import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
+import org.diorite.GameMode;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
@@ -28,7 +32,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayOutTransaction(evt.getWindowId(), evt.getActionNumber(), false));
                 return;
             }
-            evt.getPlayer().sendMessage(evt.toString());
+            //evt.getPlayer().sendMessage(evt.toString());
             System.out.println(evt.toString());
             final boolean accepted = this.handleClick(evt);
 
@@ -47,11 +51,14 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         final ClickType ct = e.getClickType();
         final ItemStackImpl cursor = ItemStackImpl.wrap(e.getCursorItem(), 0);
         final int slot = e.getClickedSlot();
-        final PlayerInventoryImpl inv = player.getInventory();
+        final PlayerInventoryImpl inv = player.getInventory(); // TODO
 
         final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem(), inv, slot);
+        if (clicked != null)
+        clicked.setAmount(e.getClickedItem().getAmount()); // FIXME
         if (Objects.equals(ct, ClickType.MOUSE_LEFT))
         {
+            player.sendMessage("Mouse left clicked:" + clicked);
             if (cursor == null)
             {
                 if ((clicked != null) && (! inv.atomicReplace(slot, clicked, null) || ! inv.atomicReplaceCursorItem(null, clicked)))
@@ -168,7 +175,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 return true;
             }
 
-            // TODO zbroja wskakuje na pola od armoru - tylko jesli sa wolne
+            // FIXME zbroja wskakuje na pola od armoru - tylko jesli sa wolne
             // TODO dopracowac to bo ledwo dziala
 
             if (slot >= HOTBAR_BEGIN_ID)
@@ -264,13 +271,83 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         }
         else if (Objects.equals(ct, ClickType.MOUSE_MIDDLE))
         {
-            // TODO Dowiedziec sie co to robi, ale prawdopodobnie jest to sensowne tylko na creative
-            return true;
+            if (! Objects.equals(player.getGameMode(), GameMode.CREATIVE))
+            {
+                return true; // true? false?
+            }
+
+            if ((cursor != null) && (clicked != null))
+            {
+                return true;
+            }
+
+            final ItemStack newCursor = new ItemStack(clicked);
+            newCursor.setAmount(64);
+            return inv.atomicReplaceCursorItem(null, newCursor);
         }
-        // TODO all other click types, and remember about throwing item on cursor to ground when closing eq
+        else if (Objects.equals(ct, ClickType.MOUSE_LEFT_DRAG_START) || Objects.equals(ct, ClickType.MOUSE_RIGHT_DRAG_START))
+        {
+            return inv.getDragController().start(ct.getButton() == ClickType.MOUSE_RIGHT_DRAG_START.getButton());
+        }
+        else if (Objects.equals(ct, ClickType.MOUSE_LEFT_DRAG_ADD) || Objects.equals(ct, ClickType.MOUSE_RIGHT_DRAG_ADD))
+        {
+            return inv.getDragController().addSlot(ct.getButton() == ClickType.MOUSE_RIGHT_DRAG_ADD.getButton(), slot);
+        }
+        else if (Objects.equals(ct, ClickType.MOUSE_LEFT_DRAG_END) || Objects.equals(ct, ClickType.MOUSE_RIGHT_DRAG_END))
+        {
+            final boolean isRightClick = ct.getButton() == ClickType.MOUSE_RIGHT_DRAG_END.getButton();
+            final Collection<Integer> result = inv.getDragController().end(isRightClick);
+            if ((cursor == null) || (result == null))
+            {
+                return false;
+            }
+
+            ItemStack newCursor = new ItemStack(cursor); // TODO do not clone :(
+
+            final int perSlot = isRightClick ? 1 : (cursor.getAmount() / result.size());
+            //player.sendMessage("Cursor " + newCursor);
+            //player.sendMessage("Per slot "+perSlot);
+            for (final int dragSlot : result)
+            {
+                final ItemStackImpl oldItem = inv.getItem(dragSlot);
+                if ((oldItem == null) || cursor.isSimilar(oldItem))
+                {
+                    final ItemStack itemStackToCombine = new ItemStack(cursor);
+                    itemStackToCombine.setAmount(perSlot);
+
+                    int combined = 0;
+
+                    if (oldItem != null)
+                    {
+                        final int uncombined = (oldItem.combine(itemStackToCombine) == null) ? 0 : oldItem.combine(itemStackToCombine).getAmount();
+                        combined = perSlot - uncombined;
+                    }
+                    else
+                    {
+                        combined = perSlot;
+                        inv.setItem(dragSlot, new ItemStack(newCursor.getMaterial(), combined)); // FIXME item lose metadata
+                    }
+
+                    //player.sendMessage("Slot combined amount: " + combined + "slot id: " + dragSlot);
+
+                    newCursor.setAmount(newCursor.getAmount() - combined);
+                    if (newCursor.getAmount() == 0)
+                    {
+                        newCursor = null;
+                        break;
+                    }
+                }
+            }
+
+            //player.sendMessage("New cursor: " + newCursor);
+
+            return inv.atomicReplaceCursorItem(cursor, newCursor);
+        }
+        // TODO remember about throwing item on cursor to ground when closing eq
         else
         {
             return false; // Action not supported
+                          // TODO perhaps only DOUBLE_CLICK
         }
 
         return true;

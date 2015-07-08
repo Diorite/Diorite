@@ -14,6 +14,7 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
+import org.diorite.inventory.DragController;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.ItemStack;
@@ -22,6 +23,7 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
 {
     private final int    windowId;
     private final Player holder;
+    private final DragControllerImpl             drag       = new DragControllerImpl();
     private final ItemStackImplArray             content    = ItemStackImplArray.create(InventoryType.PLAYER.getSize());
     private final AtomicReference<ItemStackImpl> cursorItem = new AtomicReference<>();
 
@@ -63,6 +65,12 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     public ItemStackImpl setCursorItem(final ItemStack cursorItem)
     {
         return this.cursorItem.getAndSet(ItemStackImpl.wrap(cursorItem, 0));
+    }
+
+    @Override
+    public DragControllerImpl getDragController()
+    {
+        return this.drag;
     }
 
     @Override
