@@ -14,6 +14,7 @@ import org.diorite.command.PluginCommandBuilder;
 import org.diorite.command.sender.ConsoleCommandSender;
 import org.diorite.entity.Player;
 import org.diorite.plugin.DioritePlugin;
+import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.world.WorldsManager;
 
@@ -218,6 +219,11 @@ public final class Diorite
     public static DioriteConfig getConfig()
     {
         return server.getConfig();
+    }
+
+    public static PluginManager getPluginManager()
+    {
+        return server.getPluginManager();
     }
 
     public static int getTps()
