@@ -29,7 +29,7 @@ public class PluginsCmd extends SystemCommandImpl
             }
             else if (args.length() == 1)
             {
-                final DioritePlugin pl = Diorite.getServer().getPluginManager().getPlugin(args.asString(0));
+                final DioritePlugin pl = Diorite.getPluginManager().getPlugin(args.asString(0));
                 if (pl == null)
                 {
                     sender.sendMessage(ChatColor.RED + "Plugin not found");
