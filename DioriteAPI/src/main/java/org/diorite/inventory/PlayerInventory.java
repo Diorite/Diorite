@@ -19,6 +19,8 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
 
     ItemStack setCursorItem(ItemStack cursorItem);
 
+    DragController getDragController();
+
     boolean atomicReplaceCursorItem(ItemStack excepted, ItemStack cursorItem);
 
     /**
