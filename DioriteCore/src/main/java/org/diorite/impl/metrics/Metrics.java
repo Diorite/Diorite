@@ -110,8 +110,10 @@ public class Metrics
                     graph.addPlotter(new SimpleMetricsPlotter("Offline"));
                     break;
                 case AUTO:
-                    graph.addPlotter(new SimpleMetricsPlotter("Dual"));
+                    graph.addPlotter(new SimpleMetricsPlotter("Auto"));
                     break;
+                default:
+                    graph.addPlotter(new SimpleMetricsPlotter("Unknown"));
             }
         }
         {
