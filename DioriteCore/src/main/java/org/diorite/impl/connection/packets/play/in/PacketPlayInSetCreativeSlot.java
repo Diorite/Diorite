@@ -10,19 +10,19 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
 @PacketClass(id = 0x10, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketPlayInSetCreativeSlot implements PacketPlayIn
 {
-    private int       slot;
-    private ItemStack item;
+    private int        slot;
+    private IItemStack item;
 
     public PacketPlayInSetCreativeSlot()
     {
     }
 
-    public PacketPlayInSetCreativeSlot(final int slot, final ItemStack item)
+    public PacketPlayInSetCreativeSlot(final int slot, final IItemStack item)
     {
         this.slot = slot;
         this.item = item;
@@ -58,12 +58,12 @@ public class PacketPlayInSetCreativeSlot implements PacketPlayIn
         this.slot = slot;
     }
 
-    public ItemStack getItem()
+    public IItemStack getItem()
     {
         return this.item;
     }
 
-    public void setItem(final ItemStack item)
+    public void setItem(final IItemStack item)
     {
         this.item = item;
     }

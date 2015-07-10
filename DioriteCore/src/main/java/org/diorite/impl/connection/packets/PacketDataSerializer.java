@@ -30,6 +30,7 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
+import org.diorite.inventory.item.IItemStack;
 import org.diorite.inventory.item.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
@@ -129,9 +130,9 @@ public class PacketDataSerializer extends ByteBuf
         return EntityMetadataCodec.decode(this);
     }
 
-    public ItemStack readItemStack()
+    public IItemStack readItemStack()
     {
-        ItemStack itemstack = null;
+        IItemStack itemstack = null;
         final short id = this.readShort();
         if (id >= 0)
         {
@@ -162,7 +163,7 @@ public class PacketDataSerializer extends ByteBuf
         }
     }
 
-    public void writeItemStack(final ItemStack itemStack)
+    public void writeItemStack(final IItemStack itemStack)
     {
         if (itemStack == null)
         {

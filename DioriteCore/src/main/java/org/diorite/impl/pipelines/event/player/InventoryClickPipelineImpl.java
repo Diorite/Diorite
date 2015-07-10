@@ -14,6 +14,7 @@ import org.diorite.GameMode;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
+import org.diorite.inventory.item.IItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
@@ -66,7 +67,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 if (cursor.isSimilar(clicked))
                 {
-                    final ItemStack newCursor = clicked.combine(cursor);
+                    final IItemStack newCursor = clicked.combine(cursor);
 
                     if (! inv.atomicReplaceCursorItem(cursor, newCursor))
                     {
@@ -95,7 +96,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     return true;
                 }
 
-                final ItemStack splitted;
+                final IItemStack splitted;
 
                 if (clicked.getAmount() == 1)
                 {
@@ -129,7 +130,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 if (clicked == null)
                 {
-                    final ItemStack splitted = cursor.split(1);
+                    final IItemStack splitted = cursor.split(1);
                     if (splitted == null)
                     {
                         if (! inv.atomicReplace(slot, null, cursor))
@@ -205,7 +206,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else
             {
-                final ItemStack toDrop = clicked.split(1);
+                final IItemStack toDrop = clicked.split(1);
                 // TODO wywalic itemek toDrop na ziemie
             }
         }
@@ -224,7 +225,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 return false;
             }
-            final ItemStack inHeldSlot = inv.getHotbarInventory().getItem(ct.getButton());
+            final IItemStack inHeldSlot = inv.getHotbarInventory().getItem(ct.getButton());
             return inv.atomicReplace(slot, clicked, inHeldSlot) && inv.getHotbarInventory().atomicReplace(ct.getButton(), inHeldSlot, clicked);
         }
         else if (Objects.equals(ct, ClickType.MOUSE_LEFT_OUTSIDE))
@@ -277,7 +278,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 return true;
             }
 
-            final ItemStack newCursor = new ItemStack(clicked);
+            final IItemStack newCursor = new ItemStack(clicked);
             newCursor.setAmount(64);
             return inv.atomicReplaceCursorItem(null, newCursor);
         }
@@ -298,7 +299,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 return false;
             }
 
-            ItemStack newCursor = new ItemStack(cursor); // TODO do not clone :(
+            IItemStack newCursor = new ItemStack(cursor); // TODO do not clone :(
 
             final int perSlot = isRightClick ? 1 : (cursor.getAmount() / result.size());
             //player.sendMessage("Cursor " + newCursor);
@@ -308,7 +309,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 final ItemStackImpl oldItem = inv.getItem(dragSlot);
                 if ((oldItem == null) || cursor.isSimilar(oldItem))
                 {
-                    final ItemStack itemStackToCombine = new ItemStack(cursor);
+                    final IItemStack itemStackToCombine = new ItemStack(cursor);
                     itemStackToCombine.setAmount(perSlot);
 
                     int combined = 0;
@@ -343,7 +344,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         else
         {
             return false; // Action not supported
-                          // TODO perhaps only DOUBLE_CLICK
+            // TODO perhaps only DOUBLE_CLICK
         }
 
         return true;

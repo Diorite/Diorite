@@ -5,7 +5,7 @@ import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.BlockPlacePipeline;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
@@ -19,7 +19,7 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
             {
                 return;
             }
-            final ItemStack item = evt.getPlayer().getInventory().getItemInHand();
+            final IItemStack item = evt.getPlayer().getInventory().getItemInHand();
             if (item == null)
             {
                 evt.setCancelled(true);

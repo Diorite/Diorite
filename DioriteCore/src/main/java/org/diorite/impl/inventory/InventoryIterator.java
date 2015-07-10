@@ -7,9 +7,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.Inventory;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
-public class InventoryIterator implements ListIterator<ItemStack>
+public class InventoryIterator implements ListIterator<IItemStack>
 {
     private final Inventory inventory;
     private       int       nextIndex;
@@ -34,7 +34,7 @@ public class InventoryIterator implements ListIterator<ItemStack>
     }
 
     @Override
-    public ItemStack next()
+    public IItemStack next()
     {
         this.lastDirection = true;
         if ((this.nextIndex >= this.inventory.size()) || (this.nextIndex < 0))
@@ -51,7 +51,7 @@ public class InventoryIterator implements ListIterator<ItemStack>
     }
 
     @Override
-    public ItemStack previous()
+    public IItemStack previous()
     {
         this.lastDirection = false;
         return this.inventory.getItem(-- this.nextIndex);
@@ -76,7 +76,7 @@ public class InventoryIterator implements ListIterator<ItemStack>
     }
 
     @Override
-    public void set(final ItemStack item)
+    public void set(final IItemStack item)
     {
         if (this.lastDirection == null)
         {
@@ -87,7 +87,7 @@ public class InventoryIterator implements ListIterator<ItemStack>
     }
 
     @Override
-    public void add(final ItemStack item)
+    public void add(final IItemStack item)
     {
         throw new UnsupportedOperationException("Can't change the size of an inventory!");
     }

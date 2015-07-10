@@ -5,7 +5,7 @@ import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerHotbarInventory;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
 public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implements PlayerHotbarInventory
 {
@@ -21,7 +21,7 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
     }
 
     @Override
-    public ItemStack getItemInHand()
+    public IItemStack getItemInHand()
     {
         final Player holder = this.getHolder();
         if (holder == null)
@@ -32,7 +32,7 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
     }
 
     @Override
-    public ItemStack setItemInHand(final ItemStack stack)
+    public IItemStack setItemInHand(final IItemStack stack)
     {
         final Player holder = this.getHolder();
         if (holder == null)
@@ -43,7 +43,7 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
     }
 
     @Override
-    public boolean replaceItemInHand(final ItemStack excepted, final ItemStack stack) throws IllegalArgumentException
+    public boolean replaceItemInHand(final IItemStack excepted, final IItemStack stack) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         final Player holder = this.getHolder();
