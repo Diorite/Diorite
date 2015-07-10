@@ -54,8 +54,6 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         final PlayerInventoryImpl inv = player.getInventory(); // TODO
 
         final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem(), inv, slot);
-        if (clicked != null)
-        clicked.setAmount(e.getClickedItem().getAmount()); // FIXME
         if (Objects.equals(ct, ClickType.MOUSE_LEFT))
         {
             player.sendMessage("Mouse left clicked:" + clicked);
@@ -70,6 +68,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 if (cursor.isSimilar(clicked))
                 {
+                    @SuppressWarnings("ConstantConditions") // isSimilar do it for us
                     final ItemStack newCursor = clicked.combine(cursor);
 
                     if (! inv.atomicReplaceCursorItem(cursor, newCursor))
@@ -134,19 +133,10 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 if (clicked == null)
                 {
                     final ItemStack splitted = cursor.split(1);
-                    if (splitted == null)
+
+                    if (! inv.atomicReplace(slot, null, (splitted == null) ? cursor : splitted))
                     {
-                        if (! inv.atomicReplace(slot, null, cursor))
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (! inv.atomicReplace(slot, null, splitted))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
                 else
@@ -282,7 +272,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
 
             final ItemStack newCursor = new ItemStack(clicked);
-            newCursor.setAmount(64);
+            newCursor.setAmount(clicked.getMaterial().getMaxStack());
             return inv.atomicReplaceCursorItem(null, newCursor);
         }
         else if (Objects.equals(ct, ClickType.MOUSE_LEFT_DRAG_START) || Objects.equals(ct, ClickType.MOUSE_RIGHT_DRAG_START))
@@ -315,12 +305,12 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     final ItemStack itemStackToCombine = new ItemStack(cursor);
                     itemStackToCombine.setAmount(perSlot);
 
-                    int combined = 0;
+                    final int combined;
 
                     if (oldItem != null)
                     {
-                        final int uncombined = (oldItem.combine(itemStackToCombine) == null) ? 0 : oldItem.combine(itemStackToCombine).getAmount();
-                        combined = perSlot - uncombined;
+                        final ItemStackImpl temp = oldItem.combine(itemStackToCombine);
+                        combined = perSlot - ((temp == null) ? 0 : temp.getAmount());
                     }
                     else
                     {
