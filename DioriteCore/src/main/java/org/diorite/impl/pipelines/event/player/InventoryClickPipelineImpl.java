@@ -1,6 +1,8 @@
 package org.diorite.impl.pipelines.event.player;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -52,8 +54,6 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         final PlayerInventoryImpl inv = player.getInventory(); // TODO
 
         final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem());
-        if (clicked != null)
-        clicked.setAmount(e.getClickedItem().getAmount()); // FIXME
         if (Objects.equals(ct, ClickType.MOUSE_LEFT))
         {
             player.sendMessage("Mouse left clicked:" + clicked);
