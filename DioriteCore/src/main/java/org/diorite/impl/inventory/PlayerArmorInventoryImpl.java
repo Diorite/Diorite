@@ -45,52 +45,52 @@ public class PlayerArmorInventoryImpl extends PlayerInventoryPartImpl implements
     @Override
     public ItemStack setHelmet(final ItemStack helmet)
     {
-        return this.content.getAndSet(0, this.wrap(helmet, 0));
+        return this.content.getAndSet(0, ItemStackImpl.wrap(helmet));
     }
 
     @Override
     public ItemStack setChestplate(final ItemStack chestplate)
     {
-        return this.content.getAndSet(1, this.wrap(chestplate, 1));
+        return this.content.getAndSet(1, ItemStackImpl.wrap(chestplate));
     }
 
     @Override
     public ItemStack setLeggings(final ItemStack leggings)
     {
-        return this.content.getAndSet(2, this.wrap(leggings, 2));
+        return this.content.getAndSet(2, ItemStackImpl.wrap(leggings));
     }
 
     @Override
     public ItemStack setBoots(final ItemStack boots)
     {
-        return this.content.getAndSet(3, this.wrap(boots, 3));
+        return this.content.getAndSet(3, ItemStackImpl.wrap(boots));
     }
 
     @Override
     public boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(0, (ItemStackImpl) excepted, this.wrap(helmet, 0));
+        return this.content.compareAndSet(0, (ItemStackImpl) excepted, ItemStackImpl.wrap(helmet));
     }
 
     @Override
     public boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(1, (ItemStackImpl) excepted, this.wrap(chestplate, 1));
+        return this.content.compareAndSet(1, (ItemStackImpl) excepted, ItemStackImpl.wrap(chestplate));
     }
 
     @Override
     public boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(2, (ItemStackImpl) excepted, this.wrap(leggings, 2));
+        return this.content.compareAndSet(2, (ItemStackImpl) excepted, ItemStackImpl.wrap(leggings));
     }
 
     @Override
     public boolean replaceBoots(final ItemStack excepted, final ItemStack boots) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(3, (ItemStackImpl) excepted, this.wrap(boots, 3));
+        return this.content.compareAndSet(3, (ItemStackImpl) excepted, ItemStackImpl.wrap(boots));
     }
 }

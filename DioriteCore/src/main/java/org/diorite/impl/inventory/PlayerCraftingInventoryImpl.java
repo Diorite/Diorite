@@ -27,14 +27,14 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
     @Override
     public ItemStack setResult(final ItemStack result)
     {
-        return this.content.getAndSet(0, this.wrap(result, 0));
+        return this.content.getAndSet(0, ItemStackImpl.wrap(result));
     }
 
     @Override
     public boolean replaceResult(final ItemStack excepted, final ItemStack result)
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(0, (ItemStackImpl) excepted, this.wrap(result, 0));
+        return this.content.compareAndSet(0, (ItemStackImpl) excepted, ItemStackImpl.wrap(result));
     }
 
     @Override

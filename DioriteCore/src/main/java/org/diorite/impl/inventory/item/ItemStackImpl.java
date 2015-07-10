@@ -4,49 +4,22 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.inventory.EntityEquipmentImpl;
-import org.diorite.impl.inventory.InventoryImpl;
 import org.diorite.inventory.item.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
-import org.diorite.utils.concurrent.atomic.AtomicArrayPart;
-import org.diorite.utils.function.ShortConsumer;
 import org.diorite.utils.others.Dirtable;
 
 public class ItemStackImpl extends ItemStack implements Dirtable
 {
     private final ItemStack     wrapped;
     private       boolean       dirty;
-    private       short         slot;
-    private       ShortConsumer onDirty;
 
-    protected ItemStackImpl(final ItemStack wrapped, final short slot)
+    protected ItemStackImpl(final ItemStack wrapped)
     {
         super(wrapped.getMaterial(), wrapped.getAmount());
         Validate.isTrue(! (wrapped instanceof ItemStackImpl), "Can't wrap wrapper");
         this.wrapped = wrapped;
-        this.slot = slot;
         this.setDirty();
-    }
-
-    protected ItemStackImpl(final ItemStack wrapped, final short slot, final ShortConsumer onDirty)
-    {
-        super(wrapped.getMaterial(), wrapped.getAmount());
-        Validate.isTrue(! (wrapped instanceof ItemStackImpl), "Can't wrap wrapper");
-        this.wrapped = wrapped;
-        this.slot = slot;
-        this.onDirty = onDirty;
-        this.setDirty();
-    }
-
-    public ShortConsumer getOnDirty()
-    {
-        return this.onDirty;
-    }
-
-    public void setOnDirty(final ShortConsumer onDirty)
-    {
-        this.onDirty = onDirty;
     }
 
     public ItemStack getWrapped()
@@ -94,16 +67,6 @@ public class ItemStackImpl extends ItemStack implements Dirtable
     public Material getMaterial()
     {
         return this.wrapped.getMaterial();
-    }
-
-    public short getSlot()
-    {
-        return this.slot;
-    }
-
-    public void setSlot(final short slot)
-    {
-        this.slot = slot;
     }
 
     @Override
@@ -168,14 +131,10 @@ public class ItemStackImpl extends ItemStack implements Dirtable
     {
         final boolean b = this.dirty;
         this.dirty = dirty;
-        if (this.onDirty != null)
-        {
-            this.onDirty.accept(this.slot);
-        }
         return b;
     }
 
-    public static ItemStackImpl wrap(final ItemStack item, final InventoryImpl<?> inventory, final short slot)
+    public static ItemStackImpl wrap(final ItemStack item)
     {
         if (item == null)
         {
@@ -185,61 +144,7 @@ public class ItemStackImpl extends ItemStack implements Dirtable
         {
             return (ItemStackImpl) item;
         }
-        final short i;
-        final ItemStackImplArray arr = inventory.getArray();
-        if (arr instanceof AtomicArrayPart)
-        {
-            //noinspection rawtypes
-            i = (short) (((AtomicArrayPart) arr).getOffset() + slot);
-        }
-        else
-        {
-            i = slot;
-        }
-        return wrap(item, i, inventory::addDirty);
-    }
-
-    public static ItemStackImpl wrap(final ItemStack item, final EntityEquipmentImpl eq, final short slot)
-    {
-        return wrap(item, slot, i -> eq.setDirty());
-    }
-
-    public static ItemStackImpl wrap(final ItemStack item, final short slot)
-    {
-        return wrap(item, slot, null);
-    }
-
-    public static ItemStackImpl wrap(final ItemStack item, final short slot, final ShortConsumer onDirty)
-    {
-        if (item == null)
-        {
-            return null;
-        }
-        if (item instanceof ItemStackImpl)
-        {
-            return (ItemStackImpl) item;
-        }
-        return new ItemStackImpl(item, slot, onDirty);
-    }
-
-    public static ItemStackImpl wrap(final ItemStack item, final InventoryImpl<?> inventory, final int slot)
-    {
-        return wrap(item, inventory, (short) slot);
-    }
-
-    public static ItemStackImpl wrap(final ItemStack item, final EntityEquipmentImpl eq, final int slot)
-    {
-        return wrap(item, (short) slot, i -> eq.setDirty());
-    }
-
-    public static ItemStackImpl wrap(final ItemStack item, final int slot)
-    {
-        return wrap(item, (short) slot, null);
-    }
-
-    public static ItemStackImpl wrap(final ItemStack item, final int slot, final ShortConsumer onDirty)
-    {
-        return wrap(item, (short) slot, onDirty);
+        return new ItemStackImpl(item);
     }
 
     public static void validate(final ItemStack excepted)

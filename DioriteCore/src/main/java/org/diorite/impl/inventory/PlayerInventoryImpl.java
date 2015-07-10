@@ -1,7 +1,5 @@
 package org.diorite.impl.inventory;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,20 +12,23 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
-import org.diorite.inventory.DragController;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.ItemStack;
 
-public class PlayerInventoryImpl extends InventoryImpl<Player> implements PlayerInventory
+public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements PlayerInventory
 {
-    private final int    windowId;
-    private final Player holder;
+    private static final short CURSOR_SLOT   = - 1;
+    private static final int   CURSOR_WINDOW = - 1;
+
+    private final int        windowId;
+    private final PlayerImpl holder;
     private final DragControllerImpl             drag       = new DragControllerImpl();
     private final ItemStackImplArray             content    = ItemStackImplArray.create(InventoryType.PLAYER.getSize());
     private final AtomicReference<ItemStackImpl> cursorItem = new AtomicReference<>();
+    private boolean wasCursorNotNull; // used only by softUpdate
 
-    public PlayerInventoryImpl(final Player holder, final int windowId)
+    public PlayerInventoryImpl(final PlayerImpl holder, final int windowId)
     {
         super(holder);
         this.windowId = windowId;
@@ -64,7 +65,7 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     @Override
     public ItemStackImpl setCursorItem(final ItemStack cursorItem)
     {
-        return this.cursorItem.getAndSet(ItemStackImpl.wrap(cursorItem, 0));
+        return this.cursorItem.getAndSet(ItemStackImpl.wrap(cursorItem));
     }
 
     @Override
@@ -77,7 +78,7 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     public boolean atomicReplaceCursorItem(final ItemStack excepted, final ItemStack cursorItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.cursorItem.compareAndSet((ItemStackImpl) excepted, ItemStackImpl.wrap(cursorItem, 0));
+        return this.cursorItem.compareAndSet((ItemStackImpl) excepted, ItemStackImpl.wrap(cursorItem));
     }
 
     @Override
@@ -107,53 +108,53 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     @Override
     public ItemStack setHelmet(final ItemStack helmet)
     {
-        return this.content.getAndSet(5, this.wrap(helmet, 5));
+        return this.content.getAndSet(5, ItemStackImpl.wrap(helmet));
     }
 
     @Override
     public ItemStack setChestplate(final ItemStack chestplate)
     {
-        return this.content.getAndSet(6, this.wrap(chestplate, 6));
+        return this.content.getAndSet(6, ItemStackImpl.wrap(chestplate));
     }
 
     @Override
     public ItemStack setLeggings(final ItemStack leggings)
     {
-        return this.content.getAndSet(7, this.wrap(leggings, 7));
+        return this.content.getAndSet(7, ItemStackImpl.wrap(leggings));
     }
 
     @Override
     public ItemStack setBoots(final ItemStack boots)
     {
-        return this.content.getAndSet(8, this.wrap(boots, 8));
+        return this.content.getAndSet(8, ItemStackImpl.wrap(boots));
     }
 
     @Override
     public boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(5, (ItemStackImpl) excepted, this.wrap(helmet, 5));
+        return this.content.compareAndSet(5, (ItemStackImpl) excepted, ItemStackImpl.wrap(helmet));
     }
 
     @Override
     public boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(6, (ItemStackImpl) excepted, this.wrap(chestplate, 6));
+        return this.content.compareAndSet(6, (ItemStackImpl) excepted, ItemStackImpl.wrap(chestplate));
     }
 
     @Override
     public boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(7, (ItemStackImpl) excepted, this.wrap(leggings, 7));
+        return this.content.compareAndSet(7, (ItemStackImpl) excepted, ItemStackImpl.wrap(leggings));
     }
 
     @Override
     public boolean replaceBoots(final ItemStack excepted, final ItemStack boots) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(8, (ItemStackImpl) excepted, this.wrap(boots, 8));
+        return this.content.compareAndSet(8, (ItemStackImpl) excepted, ItemStackImpl.wrap(boots));
     }
 
     @Override
@@ -174,14 +175,14 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
             return null;
         }
         final int i = this.holder.getHeldItemSlot();
-        return this.content.getAndSet(i, this.wrap(stack, i));
+        return this.content.getAndSet(i, ItemStackImpl.wrap(stack));
     }
 
     @Override
     public boolean replaceItemInHand(final ItemStack excepted, final ItemStack stack) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return (this.holder != null) && this.content.compareAndSet(this.holder.getHeldItemSlot(), (ItemStackImpl) excepted, this.wrap(stack, this.holder.getHeldItemSlot()));
+        return (this.holder != null) && this.content.compareAndSet(this.holder.getHeldItemSlot(), (ItemStackImpl) excepted, ItemStackImpl.wrap(stack));
     }
 
     @Override
@@ -213,14 +214,14 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     @Override
     public ItemStack setResult(final ItemStack result)
     {
-        return this.content.getAndSet(0, this.wrap(result, 0));
+        return this.content.getAndSet(0, ItemStackImpl.wrap(result));
     }
 
     @Override
     public boolean replaceResult(final ItemStack excepted, final ItemStack result)
     {
         ItemStackImpl.validate(excepted);
-        return this.content.compareAndSet(0, (ItemStackImpl) excepted, this.wrap(result, 0));
+        return this.content.compareAndSet(0, (ItemStackImpl) excepted, ItemStackImpl.wrap(result));
     }
 
     @Override
@@ -236,51 +237,6 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     }
 
     @Override
-    public void softUpdate()
-    {
-        if (this.dirty.isEmpty())
-        {
-            return;
-        }
-        if (this.viewers.isEmpty())
-        {
-            final short[] cpy;
-            synchronized (this.dirty)
-            {
-                cpy = this.dirty.toArray();
-                this.dirty.clear();
-            }
-            for (final short i : cpy)
-            {
-                final ItemStackImpl item = this.getItem(i);
-                if (item != null)
-                {
-                    item.setClean();
-                }
-            }
-            return;
-        }
-        final Set<PacketPlayOutSetSlot> packets = new HashSet<>(this.dirty.size());
-        final short[] cpy;
-        synchronized (this.dirty) // TODO: maybe better way?
-        {
-            cpy = this.dirty.toArray();
-            this.dirty.clear();
-        }
-        for (final short i : cpy)
-        {
-            final ItemStackImpl item = this.getItem(i);
-            if (item != null)
-            {
-                item.setClean();
-            }
-            packets.add(new PacketPlayOutSetSlot(this.windowId, i, item));
-        }
-        final PacketPlayOutSetSlot[] packetsArray = packets.toArray(new PacketPlayOutSetSlot[packets.size()]);
-        this.viewers.forEach(p -> ((PlayerImpl) p).getNetworkManager().sendPackets(packetsArray));
-    }
-
-    @Override
     public void update(final Player player) throws IllegalArgumentException
     {
         if (! this.viewers.contains(player))
@@ -289,6 +245,17 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
         }
 
         ServerImpl.getInstance().getPlayersManager().getRawPlayers().get(player.getUniqueID()).getNetworkManager().sendPacket(new PacketPlayOutWindowItems(this.windowId, this.content));
+    }
+
+    @Override
+    public void softUpdate()
+    {
+        final ItemStackImpl cursor = this.cursorItem.get();
+        if ((this.wasCursorNotNull && (cursor == null)) || ((cursor != null) && cursor.isDirty()))
+        {
+            this.holder.getNetworkManager().sendPacket(new PacketPlayOutSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
+        }
+        super.softUpdate();
     }
 
     @Override
@@ -304,7 +271,7 @@ public class PlayerInventoryImpl extends InventoryImpl<Player> implements Player
     }
 
     @Override
-    public Player getHolder()
+    public PlayerImpl getHolder()
     {
         return this.holder;
     }

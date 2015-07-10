@@ -63,10 +63,4 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     {
         throw new UnsupportedOperationException("soft update should be called only for root EQ.");
     }
-
-    @Override
-    public void addDirty(final short i)
-    {
-        this.playerInventory.addDirty(i);
-    }
 }

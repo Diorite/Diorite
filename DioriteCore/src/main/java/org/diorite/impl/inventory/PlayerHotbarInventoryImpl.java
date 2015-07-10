@@ -39,7 +39,7 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
         {
             return null;
         }
-        return this.content.getAndSet(holder.getHeldItemSlot(), this.wrap(stack, holder.getHeldItemSlot()));
+        return this.content.getAndSet(holder.getHeldItemSlot(), ItemStackImpl.wrap(stack));
     }
 
     @Override
@@ -47,6 +47,6 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
     {
         ItemStackImpl.validate(excepted);
         final Player holder = this.getHolder();
-        return (holder != null) && this.content.compareAndSet(holder.getHeldItemSlot(), (ItemStackImpl) excepted, this.wrap(stack, holder.getHeldItemSlot()));
+        return (holder != null) && this.content.compareAndSet(holder.getHeldItemSlot(), (ItemStackImpl) excepted, ItemStackImpl.wrap(stack));
     }
 }

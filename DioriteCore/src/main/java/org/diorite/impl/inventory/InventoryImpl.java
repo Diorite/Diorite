@@ -1,6 +1,7 @@
 package org.diorite.impl.inventory;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -8,6 +9,8 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.connection.packets.play.out.PacketPlayOutSetSlot;
+import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
@@ -19,25 +22,19 @@ import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 
 import gnu.trove.TIntCollection;
+import gnu.trove.TShortCollection;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.set.hash.TShortHashSet;
 
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {
     protected final T holder;
-    protected final Set<Player>   viewers = new ConcurrentSet<>(5, 0.2f, 6);
-    @SuppressWarnings("MagicNumber")
-    protected final TShortHashSet dirty   = new TShortHashSet(5, .1f, (short) - 1);
+    protected final Set<Player> viewers = new ConcurrentSet<>(5, 0.2f, 6);
     protected String title;
 
     protected InventoryImpl(final T holder)
     {
         this.holder = holder;
-    }
-
-    public void addDirty(final short i)
-    {
-        this.dirty.add(i);
     }
 
     @Override
@@ -51,12 +48,35 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
      */
     public abstract ItemStackImplArray getArray();
 
-    protected ItemStackImpl wrap(final ItemStack item, final int index)
-    {
-        return ItemStackImpl.wrap(item, this, index);
-    }
+//    public abstract void softUpdate();
 
-    public abstract void softUpdate();
+    @SuppressWarnings("MagicNumber")
+    private final TShortCollection notNullItems = new TShortHashSet(50, .2f, Short.MIN_VALUE); // used only for updates
+
+    public void softUpdate()
+    {
+        final ItemStackImpl[] items = this.getArray().toArray(new ItemStackImpl[this.getArray().length()]);
+        final Set<PacketPlayOutSetSlot> packets = new HashSet<>(items.length);
+        for (short i = 0, itemsLength = (short) items.length; i < itemsLength; i++)
+        {
+            final ItemStackImpl item = items[i];
+
+            if (item != null)
+            {
+                this.notNullItems.add(i);
+                if (item.isDirty())
+                {
+                    packets.add(new PacketPlayOutSetSlot(this.getWindowId(), i, item));
+                }
+            }
+            else if (this.notNullItems.remove(i))
+            {
+                packets.add(new PacketPlayOutSetSlot(this.getWindowId(), i, null));
+            }
+        }
+        final PacketPlayOutSetSlot[] packetsArray = packets.toArray(new PacketPlayOutSetSlot[packets.size()]);
+        this.viewers.forEach(p -> ((PlayerImpl) p).getNetworkManager().sendPackets(packetsArray));
+    }
 
     /**
      * Completely replaces the inventory's contents. Removes all existing
@@ -92,7 +112,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         final ItemStackImplArray content = this.getArray();
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            content.set(i, (i >= items.length) ? null : this.wrap(items[i], i));
+            content.set(i, (i >= items.length) ? null : ItemStackImpl.wrap(items[i]));
         }
     }
 
@@ -110,7 +130,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
             final ItemStack item = content.get(i);
             if (Objects.equals(item, itemStack))
             {
-                content.compareAndSet(i, this.wrap(item, i), null);
+                content.compareAndSet(i, ItemStackImpl.wrap(item), null);
                 return i;
             }
         }
@@ -131,7 +151,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
             final ItemStack item = content.get(i);
             if (Objects.equals(item, itemStack))
             {
-                content.compareAndSet(i, this.wrap(item, i), null);
+                content.compareAndSet(i, ItemStackImpl.wrap(item), null);
                 list.add(i);
             }
         }
@@ -170,7 +190,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
             {
                 continue;
             }
-            content.compareAndSet(i, this.wrap(item, i), null);
+            content.compareAndSet(i, ItemStackImpl.wrap(item), null);
             return i;
         }
         return - 1;
@@ -205,7 +225,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
             {
                 continue;
             }
-            content.compareAndSet(i, this.wrap(item, i), null);
+            content.compareAndSet(i, ItemStackImpl.wrap(item), null);
             list.add(i);
         }
         if (list.isEmpty())
@@ -222,7 +242,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         final ItemStackImplArray content = this.getArray();
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            if (content.compareAndSet(i, (ItemStackImpl) excepted, this.wrap(newItem, i)))
+            if (content.compareAndSet(i, (ItemStackImpl) excepted, ItemStackImpl.wrap(newItem)))
             {
                 return i;
             }
@@ -238,7 +258,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         final TIntCollection list = new TIntArrayList(10);
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            if (content.compareAndSet(i, (ItemStackImpl) excepted, this.wrap(newItem, i)))
+            if (content.compareAndSet(i, (ItemStackImpl) excepted, ItemStackImpl.wrap(newItem)))
             {
                 list.add(i);
             }
@@ -254,7 +274,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     public boolean atomicReplace(final int slot, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.getArray().compareAndSet(slot, (ItemStackImpl) excepted, this.wrap(newItem, slot));
+        return this.getArray().compareAndSet(slot, (ItemStackImpl) excepted, ItemStackImpl.wrap(newItem));
     }
 
     @Override
@@ -266,7 +286,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     @Override
     public ItemStackImpl setItem(final int index, final ItemStack item)
     {
-        return this.getArray().getAndSet(index, this.wrap(item, index));
+        return this.getArray().getAndSet(index, ItemStackImpl.wrap(item));
     }
 
     @Override
