@@ -1,13 +1,13 @@
 package org.diorite.inventory;
 
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
 public interface CraftingInventory extends Inventory
 {
     /**
      * @return The ItemStack in the result slot
      */
-    ItemStack getResult();
+    IItemStack getResult();
 
     /**
      * Put the given ItemStack into the result slot.
@@ -16,7 +16,7 @@ public interface CraftingInventory extends Inventory
      *
      * @return previous itemstack used as result.
      */
-    ItemStack setResult(final ItemStack result);
+    IItemStack setResult(final IItemStack result);
 
     /**
      * Put the given ItemStack into the result slot if it matches a excepted one.
@@ -29,10 +29,10 @@ public interface CraftingInventory extends Inventory
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    boolean replaceResult(final ItemStack excepted, final ItemStack result) throws IllegalArgumentException;
+    boolean replaceResult(final IItemStack excepted, final IItemStack result) throws IllegalArgumentException;
 
     /**
      * @return copy of array with ItemStacks from the crafting slots.
      */
-    ItemStack[] getCraftingSlots();
+    IItemStack[] getCraftingSlots();
 }

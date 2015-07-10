@@ -1,34 +1,34 @@
 package org.diorite.inventory;
 
 import org.diorite.entity.ArmoredEntity;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
 public interface EntityEquipment
 {
     /**
      * @return An array of ItemStacks from the eq.
      */
-    ItemStack[] getContents();
+    IItemStack[] getContents();
 
     /**
      * @return The ItemStack in the helmet slot
      */
-    ItemStack getHelmet();
+    IItemStack getHelmet();
 
     /**
      * @return The ItemStack in the chestplate slot
      */
-    ItemStack getChestplate();
+    IItemStack getChestplate();
 
     /**
      * @return The ItemStack in the leg slot
      */
-    ItemStack getLeggings();
+    IItemStack getLeggings();
 
     /**
      * @return The ItemStack in the boots slot
      */
-    ItemStack getBoots();
+    IItemStack getBoots();
 
     /**
      * Put the given ItemStack into the helmet slot. This does not check if
@@ -38,7 +38,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as helmet.
      */
-    ItemStack setHelmet(final ItemStack helmet);
+    IItemStack setHelmet(final IItemStack helmet);
 
     /**
      * Put the given ItemStack into the chestplate slot. This does not check
@@ -48,7 +48,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as chestplate.
      */
-    ItemStack setChestplate(final ItemStack chestplate);
+    IItemStack setChestplate(final IItemStack chestplate);
 
     /**
      * Put the given ItemStack into the leg slot. This does not check if the
@@ -58,7 +58,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as leggings.
      */
-    ItemStack setLeggings(final ItemStack leggings);
+    IItemStack setLeggings(final IItemStack leggings);
 
     /**
      * Put the given ItemStack into the boots slot. This does not check if the
@@ -68,7 +68,7 @@ public interface EntityEquipment
      *
      * @return previous itemstack used as boots.
      */
-    ItemStack setBoots(final ItemStack boots);
+    IItemStack setBoots(final IItemStack boots);
 
     /**
      * Put the given ItemStack into the helmet slot if it matches a excepted one.
@@ -81,7 +81,7 @@ public interface EntityEquipment
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet) throws IllegalArgumentException;
+    boolean replaceHelmet(final IItemStack excepted, final IItemStack helmet) throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the chestplate slot if it matches a excepted one.
@@ -94,7 +94,7 @@ public interface EntityEquipment
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate) throws IllegalArgumentException;
+    boolean replaceChestplate(final IItemStack excepted, final IItemStack chestplate) throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the leggings slot if it matches a excepted one.
@@ -107,7 +107,7 @@ public interface EntityEquipment
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings) throws IllegalArgumentException;
+    boolean replaceLeggings(final IItemStack excepted, final IItemStack leggings) throws IllegalArgumentException;
 
     /**
      * Put the given ItemStack into the boots slot if it matches a excepted one.
@@ -120,7 +120,7 @@ public interface EntityEquipment
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
-    boolean replaceBoots(final ItemStack excepted, final ItemStack boots) throws IllegalArgumentException;
+    boolean replaceBoots(final IItemStack excepted, final IItemStack boots) throws IllegalArgumentException;
 
     /**
      * Completely replaces the inventory's contents. Removes all existing
@@ -132,7 +132,7 @@ public interface EntityEquipment
      * @throws IllegalArgumentException If the array has more items than the
      *                                  inventory.
      */
-    void setContent(final ItemStack[] items);
+    void setContent(final IItemStack[] items);
 
     /**
      * Gets the entity belonging to this equipment.

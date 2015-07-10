@@ -9,7 +9,7 @@ import org.diorite.material.Material;
 /**
  * Interface for item stack representation.
  */
-public class ItemStack
+public class ItemStack implements IItemStack
 {
     // TODO: lore, name and other stuff
     protected Material material;
@@ -28,97 +28,69 @@ public class ItemStack
         this(material, 1);
     }
 
-    public ItemStack(final ItemStack item)
+    public ItemStack(final IItemStack item)
     {
         this(item.getMaterial(), item.getAmount());
 //        this.itemMeta =  TODO: clone item meta
     }
 
-    /**
-     * @return material of itemstack.
-     */
+    @Override
     public Material getMaterial()
     {
         return this.material;
     }
 
-    /**
-     * Change material of itemstack.
-     *
-     * @param material new material.
-     */
+    @Override
     public void setMaterial(final Material material)
     {
         this.material = material;
     }
 
-    /**
-     * ItemMeta contains data like name, lore, enchantments of item.
-     *
-     * @return ItemMeta of itemstack, may be null.
-     */
+    @Override
     public ItemMeta getItemMeta()
     {
         return this.itemMeta;
     }
 
+    @Override
     public void setItemMeta(final ItemMeta itemMeta)
     {
         // TODO: add type check
         this.itemMeta = itemMeta;
     }
 
-    /**
-     * @return amout of material in itemstack.
-     */
+    @Override
     public int getAmount()
     {
         return this.amount;
     }
 
-    /**
-     * Change amout of itemstack in material.
-     *
-     * @param amount new amount.
-     */
+    @Override
     public void setAmount(final int amount)
     {
         this.amount = amount;
     }
 
+    @Override
     public void update()
     {
         // TODO
     }
 
-    /**
-     * @return true if this is air itemstack.
-     */
+    @Override
     public boolean isAir()
     {
         return this.material.equals(Material.AIR);
     }
 
-    /**
-     * Check if this itemstack have valid amout of items in it.
-     *
-     * @return true if amount is smaller or equal to max stack size of material.
-     */
+    @Override
     public boolean isValid()
     {
         return this.amount <= this.material.getMaxStack();
     }
 
-    /**
-     * Check if items are similar, items are similar if they are made from this
-     * same material and have this same item meta, but they can have different size.
-     * (amount of items in itemstack)
-     *
-     * @param b item to check.
-     *
-     * @return true if items are similar.
-     */
-    public boolean isSimilar(final ItemStack b)
+    @Override
+    public boolean isSimilar(final IItemStack b)
     {
         if (b == null)
         {
@@ -127,16 +99,7 @@ public class ItemStack
         return this.material.equals(b.getMaterial()) && ItemMeta.equals(this.itemMeta, b.getItemMeta());
     }
 
-    /**
-     * Subtract the specified number of items and creates a new ItemStack with given amount of items
-     *
-     * @param size Number of items which should be removed from this itemstack and moved to new
-     *
-     * @return ItemStack with specified amount of items
-     * null when number of items in this ItemStack is 1
-     *
-     * @throws IllegalArgumentException when size is greater than amount of items in this ItemStack
-     */
+    @Override
     public ItemStack split(final int size)
     {
         if (size > this.amount)
@@ -157,14 +120,8 @@ public class ItemStack
         return temp;
     }
 
-    /**
-     * Adds one ItemStack to another and returns the remainder
-     *
-     * @param other ItemStack to add
-     *
-     * @return All of which failed to add
-     */
-    public ItemStack combine(final ItemStack other)
+    @Override
+    public ItemStack combine(final IItemStack other)
     {
         if (! this.isSimilar(other))
         {
@@ -221,17 +178,4 @@ public class ItemStack
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("material", this.material).append("amount", this.amount).append("itemMeta", this.itemMeta).toString();
     }
 
-    static boolean isSimilar(final ItemStack a, final ItemStack b)
-    {
-        //noinspection ObjectEquality
-        if (a == b)
-        {
-            return true;
-        }
-        if (a != null)
-        {
-            return a.isSimilar(b);
-        }
-        return b.isSimilar(null);
-    }
 }

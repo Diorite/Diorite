@@ -6,15 +6,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
 import sun.misc.Unsafe;
 
 public final class DioriteUtils
 {
     private static final Unsafe unsafeInstance;
-    public static final ItemStack[] EMPTY_ITEM_STACK = new ItemStack[0];
-    public static final int[]       EMPTY_INT        = new int[0];
+    public static final IItemStack[] EMPTY_ITEM_STACK = new IItemStack[0];
+    public static final int[]        EMPTY_INT        = new int[0];
 
     private DioriteUtils()
     {
@@ -69,18 +69,18 @@ public final class DioriteUtils
      *
      * @return compacted array of items.
      */
-    public static ItemStack[] compact(final boolean respectStackSize, final ItemStack... items)
+    public static IItemStack[] compact(final boolean respectStackSize, final IItemStack... items)
     {
         for (int i = 0, itemsLength = items.length; i < itemsLength; i++)
         {
-            final ItemStack item = items[i];
+            final IItemStack item = items[i];
             if ((item == null) || item.isAir())
             {
                 continue;
             }
             for (int k = i + 1; k < itemsLength; k++)
             {
-                final ItemStack item2 = items[i];
+                final IItemStack item2 = items[i];
                 if (item.isSimilar(item2))
                 {
                     if (respectStackSize)
@@ -110,8 +110,8 @@ public final class DioriteUtils
 
             }
         }
-        final List<ItemStack> result = new ArrayList<>(items.length);
-        for (final ItemStack item : items)
+        final List<IItemStack> result = new ArrayList<>(items.length);
+        for (final IItemStack item : items)
         {
             if ((item == null) || item.isAir())
             {
@@ -119,6 +119,6 @@ public final class DioriteUtils
             }
             result.add(item);
         }
-        return result.toArray(new ItemStack[result.size()]);
+        return result.toArray(new IItemStack[result.size()]);
     }
 }

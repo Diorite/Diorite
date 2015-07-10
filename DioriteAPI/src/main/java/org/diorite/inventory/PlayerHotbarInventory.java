@@ -1,16 +1,16 @@
 package org.diorite.inventory;
 
 import org.diorite.entity.Player;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
 public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
 {
     /**
-     * Returns the ItemStack currently hold
+     * Returns the IItemStack currently hold
      *
-     * @return The currently held ItemStack
+     * @return The currently held IItemStack
      */
-    ItemStack getItemInHand();
+    IItemStack getItemInHand();
 
     /**
      * Sets the item in hand
@@ -19,7 +19,7 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      *
      * @return previous itemstack in hand.
      */
-    ItemStack setItemInHand(final ItemStack stack);
+    IItemStack setItemInHand(final IItemStack stack);
 
     /**
      * Replace the item in hand, if it matches a excepted one.
@@ -29,9 +29,9 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      *
      * @return true if item was replaced.
      *
-     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
+     * @throws IllegalArgumentException if excepted item isn't impl version of IItemStack, so it can't be == to any item from inventory.
      */
-    boolean replaceItemInHand(final ItemStack excepted, final ItemStack stack) throws IllegalArgumentException;
+    boolean replaceItemInHand(final IItemStack excepted, final IItemStack stack) throws IllegalArgumentException;
 
     /**
      * Get the slot number of the currently held item
