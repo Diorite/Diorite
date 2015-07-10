@@ -1,26 +1,7 @@
 package org.diorite.impl.connection.packets.play;
 
 import org.diorite.impl.connection.packets.PacketListener;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInArmAnimation;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockDig;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockPlace;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInChat;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInClientCommand;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInCloseWindow;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInCustomPayload;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInEntityAction;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInFlying;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInHeldItemSlot;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInKeepAlive;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInLook;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInPosition;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInPositionLook;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInResourcePackStatus;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInSetCreativeSlot;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInSettings;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInTabComplete;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInWindowClick;
+import org.diorite.impl.connection.packets.play.in.*;
 
 public interface PacketPlayInListener extends PacketListener
 {
@@ -63,4 +44,14 @@ public interface PacketPlayInListener extends PacketListener
     void handle(PacketPlayInResourcePackStatus packet);
 
     void handle(PacketPlayInSetCreativeSlot packet);
+
+    void handle(PacketPlayInSpectate packet);
+
+    void handle(PacketPlayInEnchantItem packet);
+
+    void handle(PacketPlayInSteerVehicle packet);
+
+    void handle(PacketPlayInTransaction packet);
+
+    void handle(PacketPlayInUpdateSign packet);
 }

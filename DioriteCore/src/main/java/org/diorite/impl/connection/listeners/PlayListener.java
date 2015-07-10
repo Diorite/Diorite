@@ -7,27 +7,8 @@ import org.diorite.impl.Main;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInArmAnimation;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockDig;
+import org.diorite.impl.connection.packets.play.in.*;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockDig.BlockDigAction;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInBlockPlace;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInChat;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInClientCommand;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInCloseWindow;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInCustomPayload;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInEntityAction;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInFlying;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInHeldItemSlot;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInKeepAlive;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInLook;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInPosition;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInPositionLook;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInResourcePackStatus;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInSetCreativeSlot;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInSettings;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInTabComplete;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInWindowClick;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.InputAction;
@@ -145,6 +126,36 @@ public class PlayListener implements PacketPlayInListener
     {
         Main.debug("creative slot: " + packet.getSlot() + ", item: " + packet.getItem());
         // TODO: meh.
+    }
+
+    @Override
+    public void handle(final PacketPlayInSpectate packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayInEnchantItem packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayInSteerVehicle packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayInTransaction packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayInUpdateSign packet)
+    {
+        // TODO
     }
 
     @Override
