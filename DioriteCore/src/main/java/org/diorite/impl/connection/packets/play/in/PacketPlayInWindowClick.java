@@ -11,17 +11,17 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 import org.diorite.inventory.ClickType;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
 @PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketPlayInWindowClick implements PacketPlayIn
 {
     public static final int SLOT_NOT_NEEDED = - 999;
-    private int       id; // inventory id
-    private short     clickedSlot;
-    private short     actionNumber;
-    private ClickType clickType;
-    private ItemStack clicked; // should be ignored?
+    private int        id; // inventory id
+    private short      clickedSlot;
+    private short      actionNumber;
+    private ClickType  clickType;
+    private IItemStack clicked; // should be ignored?
 
     public PacketPlayInWindowClick()
     {
@@ -42,7 +42,7 @@ public class PacketPlayInWindowClick implements PacketPlayIn
         this.clickType = clickType;
     }
 
-    public PacketPlayInWindowClick(final int id, final short clickedSlot, final short actionNumber, final ClickType clickType, final ItemStack clicked)
+    public PacketPlayInWindowClick(final int id, final short clickedSlot, final short actionNumber, final ClickType clickType, final IItemStack clicked)
     {
         this.id = id;
         this.clickedSlot = clickedSlot;
@@ -114,12 +114,12 @@ public class PacketPlayInWindowClick implements PacketPlayIn
         this.clickType = clickType;
     }
 
-    public ItemStack getClicked()
+    public IItemStack getClicked()
     {
         return this.clicked;
     }
 
-    public void setClicked(final ItemStack clicked)
+    public void setClicked(final IItemStack clicked)
     {
         this.clicked = clicked;
     }

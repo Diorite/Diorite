@@ -14,7 +14,7 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataShortEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataVector3FEntry;
 import org.diorite.BlockLocation;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 import org.diorite.utils.math.geometry.Vector3F;
 
 @SuppressWarnings({"MagicNumber", "unchecked"})
@@ -47,7 +47,7 @@ public final class EntityMetadataCodec
                 data.writeText(((EntityMetadataObjectEntry<String>) metadataObject).getData());
                 break;
             case ITEM_STACK:
-                final ItemStack itemstack = ((EntityMetadataObjectEntry<ItemStack>) metadataObject).getData();
+                final IItemStack itemstack = ((EntityMetadataObjectEntry<IItemStack>) metadataObject).getData();
                 data.writeItemStack(itemstack);
                 break;
             case LOCATION:

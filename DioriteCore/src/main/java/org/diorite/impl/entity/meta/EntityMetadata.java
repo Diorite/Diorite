@@ -17,7 +17,7 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataShortEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataVector3FEntry;
 import org.diorite.BlockLocation;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.math.geometry.Vector3F;
 
@@ -201,7 +201,7 @@ public class EntityMetadata
         entry.setDirty();
     }
 
-    public void setItemStack(final byte index, final ItemStack value)
+    public void setItemStack(final byte index, final IItemStack value)
     {
         final EntityMetadataEntry<?> entry = this.data.get(index);
         if (! (entry instanceof EntityMetadataItemStackEntry))
@@ -291,7 +291,7 @@ public class EntityMetadata
         this.setString((byte) index, value);
     }
 
-    public void setItemStack(final int index, final ItemStack value)
+    public void setItemStack(final int index, final IItemStack value)
     {
         this.setItemStack((byte) index, value);
     }
@@ -435,7 +435,7 @@ public class EntityMetadata
         return ((EntityMetadataStringEntry) entry).getData();
     }
 
-    public ItemStack getItemStack(final byte index)
+    public IItemStack getItemStack(final byte index)
     {
         final EntityMetadataEntry<?> entry = this.data.get(index);
         if (entry == null)
@@ -524,7 +524,7 @@ public class EntityMetadata
         return this.getString((byte) index);
     }
 
-    public ItemStack getItemStack(final int index)
+    public IItemStack getItemStack(final int index)
     {
         return this.getItemStack((byte) index);
     }

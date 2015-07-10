@@ -4,7 +4,7 @@ import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerArmorInventory;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 
 public class PlayerArmorInventoryImpl extends PlayerInventoryPartImpl implements PlayerArmorInventory
 {
@@ -19,76 +19,76 @@ public class PlayerArmorInventoryImpl extends PlayerInventoryPartImpl implements
     }
 
     @Override
-    public ItemStack getHelmet()
+    public IItemStack getHelmet()
     {
         return this.content.get(0);
     }
 
     @Override
-    public ItemStack getChestplate()
+    public IItemStack getChestplate()
     {
         return this.content.get(1);
     }
 
     @Override
-    public ItemStack getLeggings()
+    public IItemStack getLeggings()
     {
         return this.content.get(2);
     }
 
     @Override
-    public ItemStack getBoots()
+    public IItemStack getBoots()
     {
         return this.content.get(3);
     }
 
     @Override
-    public ItemStack setHelmet(final ItemStack helmet)
+    public IItemStack setHelmet(final IItemStack helmet)
     {
         return this.content.getAndSet(0, ItemStackImpl.wrap(helmet));
     }
 
     @Override
-    public ItemStack setChestplate(final ItemStack chestplate)
+    public IItemStack setChestplate(final IItemStack chestplate)
     {
         return this.content.getAndSet(1, ItemStackImpl.wrap(chestplate));
     }
 
     @Override
-    public ItemStack setLeggings(final ItemStack leggings)
+    public IItemStack setLeggings(final IItemStack leggings)
     {
         return this.content.getAndSet(2, ItemStackImpl.wrap(leggings));
     }
 
     @Override
-    public ItemStack setBoots(final ItemStack boots)
+    public IItemStack setBoots(final IItemStack boots)
     {
         return this.content.getAndSet(3, ItemStackImpl.wrap(boots));
     }
 
     @Override
-    public boolean replaceHelmet(final ItemStack excepted, final ItemStack helmet) throws IllegalArgumentException
+    public boolean replaceHelmet(final IItemStack excepted, final IItemStack helmet) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         return this.content.compareAndSet(0, (ItemStackImpl) excepted, ItemStackImpl.wrap(helmet));
     }
 
     @Override
-    public boolean replaceChestplate(final ItemStack excepted, final ItemStack chestplate) throws IllegalArgumentException
+    public boolean replaceChestplate(final IItemStack excepted, final IItemStack chestplate) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         return this.content.compareAndSet(1, (ItemStackImpl) excepted, ItemStackImpl.wrap(chestplate));
     }
 
     @Override
-    public boolean replaceLeggings(final ItemStack excepted, final ItemStack leggings) throws IllegalArgumentException
+    public boolean replaceLeggings(final IItemStack excepted, final IItemStack leggings) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         return this.content.compareAndSet(2, (ItemStackImpl) excepted, ItemStackImpl.wrap(leggings));
     }
 
     @Override
-    public boolean replaceBoots(final ItemStack excepted, final ItemStack boots) throws IllegalArgumentException
+    public boolean replaceBoots(final IItemStack excepted, final IItemStack boots) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         return this.content.compareAndSet(3, (ItemStackImpl) excepted, ItemStackImpl.wrap(boots));

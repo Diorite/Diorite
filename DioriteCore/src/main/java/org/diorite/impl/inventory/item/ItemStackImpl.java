@@ -4,31 +4,31 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.inventory.item.IItemStack;
 import org.diorite.inventory.item.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.others.Dirtable;
 
-public class ItemStackImpl extends ItemStack implements Dirtable
+public class ItemStackImpl implements Dirtable, IItemStack
 {
-    private final ItemStack     wrapped;
-    private       boolean       dirty;
+    private final IItemStack wrapped;
+    private       boolean    dirty;
 
-    protected ItemStackImpl(final ItemStack wrapped)
+    protected ItemStackImpl(final IItemStack wrapped)
     {
-        super(wrapped.getMaterial(), wrapped.getAmount());
         Validate.isTrue(! (wrapped instanceof ItemStackImpl), "Can't wrap wrapper");
         this.wrapped = wrapped;
         this.setDirty();
     }
 
-    public ItemStack getWrapped()
+    public IItemStack getWrapped()
     {
         return this.wrapped;
     }
 
     @Override
-    public boolean isSimilar(final ItemStack b)
+    public boolean isSimilar(final IItemStack b)
     {
         return this.wrapped.isSimilar(b);
     }
@@ -91,7 +91,7 @@ public class ItemStackImpl extends ItemStack implements Dirtable
     }
 
     @Override
-    public ItemStackImpl combine(final ItemStack other)
+    public ItemStackImpl combine(final IItemStack other)
     {
         this.setDirty();
         this.wrapped.combine(other);
@@ -106,7 +106,7 @@ public class ItemStackImpl extends ItemStack implements Dirtable
             throw new IllegalArgumentException();
         }
 
-        if (this.amount == 1)
+        if (this.getAmount() == 1)
         {
             return null;
         }
@@ -134,7 +134,7 @@ public class ItemStackImpl extends ItemStack implements Dirtable
         return b;
     }
 
-    public static ItemStackImpl wrap(final ItemStack item)
+    public static ItemStackImpl wrap(final IItemStack item)
     {
         if (item == null)
         {
@@ -147,7 +147,7 @@ public class ItemStackImpl extends ItemStack implements Dirtable
         return new ItemStackImpl(item);
     }
 
-    public static void validate(final ItemStack excepted)
+    public static void validate(final IItemStack excepted)
     {
         if ((excepted != null) && ! (excepted instanceof ItemStackImpl))
         {
@@ -158,6 +158,6 @@ public class ItemStackImpl extends ItemStack implements Dirtable
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("dirty", this.dirty).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("wrapped", this.wrapped).append("dirty", this.dirty).toString();
     }
 }

@@ -16,7 +16,7 @@ import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
 import org.diorite.inventory.Inventory;
 import org.diorite.inventory.InventoryHolder;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.IItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.collections.sets.ConcurrentSet;
@@ -38,9 +38,9 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public ItemStack[] getContents()
+    public IItemStack[] getContents()
     {
-        return this.getArray().toArray(new ItemStack[this.getArray().length()]);
+        return this.getArray().toArray(new IItemStack[this.getArray().length()]);
     }
 
     /**
@@ -80,7 +80,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
 
     /**
      * Completely replaces the inventory's contents. Removes all existing
-     * contents and replaces it with the ItemStacks given in the array.
+     * contents and replaces it with the IItemStacks given in the array.
      *
      * @param items A complete replacement for the contents; the length must
      *              be less than or equal to {@link #size()}.
@@ -107,7 +107,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public void setContent(final ItemStack[] items)
+    public void setContent(final IItemStack[] items)
     {
         final ItemStackImplArray content = this.getArray();
         for (int i = 0, size = content.length(); i < size; i++)
@@ -117,7 +117,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public int remove(final ItemStack itemStack)
+    public int remove(final IItemStack itemStack)
     {
         final ItemStackImplArray content = this.getArray();
 
@@ -127,7 +127,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         }
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            final ItemStack item = content.get(i);
+            final IItemStack item = content.get(i);
             if (Objects.equals(item, itemStack))
             {
                 content.compareAndSet(i, ItemStackImpl.wrap(item), null);
@@ -138,7 +138,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public int[] removeAll(final ItemStack itemStack)
+    public int[] removeAll(final IItemStack itemStack)
     {
         final ItemStackImplArray content = this.getArray();
         if (itemStack == null)
@@ -148,7 +148,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         final TIntCollection list = new TIntArrayList(10);
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            final ItemStack item = content.get(i);
+            final IItemStack item = content.get(i);
             if (Objects.equals(item, itemStack))
             {
                 content.compareAndSet(i, ItemStackImpl.wrap(item), null);
@@ -173,7 +173,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         }
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            final ItemStack item = content.get(i);
+            final IItemStack item = content.get(i);
             if (item == null)
             {
                 continue;
@@ -208,7 +208,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         final TIntCollection list = new TIntArrayList(10);
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            final ItemStack item = content.get(i);
+            final IItemStack item = content.get(i);
             if (item == null)
             {
                 continue;
@@ -236,7 +236,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public int atomicReplace(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    public int atomicReplace(final IItemStack excepted, final IItemStack newItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         final ItemStackImplArray content = this.getArray();
@@ -251,7 +251,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public int[] atomicReplaceAll(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    public int[] atomicReplaceAll(final IItemStack excepted, final IItemStack newItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         final ItemStackImplArray content = this.getArray();
@@ -271,7 +271,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public boolean atomicReplace(final int slot, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    public boolean atomicReplace(final int slot, final IItemStack excepted, final IItemStack newItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         return this.getArray().compareAndSet(slot, (ItemStackImpl) excepted, ItemStackImpl.wrap(newItem));
@@ -284,19 +284,19 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public ItemStackImpl setItem(final int index, final ItemStack item)
+    public ItemStackImpl setItem(final int index, final IItemStack item)
     {
         return this.getArray().getAndSet(index, ItemStackImpl.wrap(item));
     }
 
     @Override
-    public Map<Integer, ? extends ItemStack> all(final Material material, final boolean ignoreType)
+    public Map<Integer, ? extends IItemStack> all(final Material material, final boolean ignoreType)
     {
         final ItemStackImplArray content = this.getArray();
-        final Map<Integer, ItemStack> slots = new HashMap<>(10);
+        final Map<Integer, IItemStack> slots = new HashMap<>(10);
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            final ItemStack item = content.get(i);
+            final IItemStack item = content.get(i);
             if (item != null)
             {
                 if (ignoreType)
@@ -317,16 +317,16 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public HashMap<Integer, ? extends ItemStack> all(final ItemStack item)
+    public HashMap<Integer, ? extends IItemStack> all(final IItemStack item)
     {
         final ItemStackImplArray content = this.getArray();
 
-        final HashMap<Integer, ItemStack> slots = new HashMap<>(10);
+        final HashMap<Integer, IItemStack> slots = new HashMap<>(10);
         if (item != null)
         {
             for (int i = 0, size = content.length(); i < size; i++)
             {
-                final ItemStack itemStack = content.get(i);
+                final IItemStack itemStack = content.get(i);
                 if (item.equals(itemStack))
                 {
                     slots.put(i, itemStack);
@@ -343,7 +343,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
 
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            final ItemStack item = content.get(i);
+            final IItemStack item = content.get(i);
             if ((item != null) && (item.getMaterial().equals(material)))
             {
                 return i;
@@ -353,7 +353,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public int first(final ItemStack item, final boolean withAmount)
+    public int first(final IItemStack item, final boolean withAmount)
     {
         final ItemStackImplArray content = this.getArray();
 
@@ -363,7 +363,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         }
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            final ItemStack itemStack = content.get(i);
+            final IItemStack itemStack = content.get(i);
             if (itemStack != null)
             {
                 if (withAmount ? item.equals(itemStack) : item.isSimilar(itemStack))
@@ -376,7 +376,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public int first(final ItemStack item, final int startIndex, final boolean withAmount)
+    public int first(final IItemStack item, final int startIndex, final boolean withAmount)
     {
         final ItemStackImplArray content = this.getArray();
 
@@ -386,7 +386,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         }
         for (int i = startIndex, size = content.length(); i < size; i++)
         {
-            final ItemStack itemStack = content.get(i);
+            final IItemStack itemStack = content.get(i);
             if (itemStack != null)
             {
                 if (withAmount ? item.equals(itemStack) : item.isSimilar(itemStack))
@@ -405,7 +405,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
 
         for (int i = 0, size = content.length(); i < size; i++)
         {
-            final ItemStack itemStack = content.get(i);
+            final IItemStack itemStack = content.get(i);
             if (itemStack == null)
             {
                 return i;

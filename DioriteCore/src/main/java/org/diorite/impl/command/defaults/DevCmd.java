@@ -30,7 +30,7 @@ public class DevCmd extends SystemCommandImpl
             {
                 case "inv":
                 {
-                    ((PlayerImpl)sender).getInventory().update();
+                    ((PlayerImpl) sender).getInventory().update();
                     sender.sendMessage("Inventory updated!");
                     break;
                 }
