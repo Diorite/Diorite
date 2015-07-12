@@ -11,9 +11,11 @@ import org.diorite.GameMode;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.BlockDestroyPipeline;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
-import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
+import org.diorite.world.Block;
 
 public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDestroyEvent> implements BlockDestroyPipeline
 {
@@ -46,9 +48,14 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
                 return;
             }
             // TODO Drop naturally
-            ItemImpl item = new ItemImpl(UUID.randomUUID(), (ServerImpl) this.getServer(), EntityImpl.getNextEntityID(), evt.getBlock().getLocation().addY(1).toLocation());
-            item.setItemStack(new BaseItemStack(evt.getBlock().getType()));
-            ((WorldImpl) evt.getBlock().getLocation().getWorld()).addEntity(item);
+            final Block block = evt.getBlock();
+            final BlockMaterialData type = block.getType();
+            for (final ItemStack itemStack : type.getPossibleDrops().simulateDrop(evt.getPlayer().getRandom(), evt.getItemInHand(), block))
+            {
+                final ItemImpl item = new ItemImpl(UUID.randomUUID(), (ServerImpl) this.getServer(), EntityImpl.getNextEntityID(), evt.getBlock().getLocation().addY(1).toLocation());
+                item.setItemStack(itemStack);
+                ((WorldImpl) evt.getBlock().getLocation().getWorld()).addEntity(item);
+            }
         });
     }
 }

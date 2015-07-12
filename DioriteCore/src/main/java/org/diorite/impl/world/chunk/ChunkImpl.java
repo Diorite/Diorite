@@ -2,9 +2,7 @@ package org.diorite.impl.world.chunk;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
@@ -15,7 +13,6 @@ import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.pipelines.event.chunk.ChunkGeneratePipelineImpl;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
-import org.diorite.BlockLocation;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkUnloadEvent;
 import org.diorite.material.BlockMaterialData;
@@ -32,6 +29,9 @@ import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
+import gnu.trove.map.TLongObjectMap;
+import gnu.trove.map.hash.TLongObjectHashMap;
+
 public class ChunkImpl implements Chunk
 {
     protected volatile Thread   lastTickThread;
@@ -41,8 +41,9 @@ public class ChunkImpl implements Chunk
     protected byte[]          biomes;
     protected ChunkPartImpl[] chunkParts; // size of 16, parts can be null
 
-    protected final Map<BlockLocation, TileEntityImpl> tileEntities = new ConcurrentHashMap<>(10, .2f, 2);
-    protected final Set<EntityImpl>                    entities     = new ConcurrentSet<>(4, .3f, 2);
+    @SuppressWarnings("MagicNumber")
+    protected final TLongObjectMap<TileEntityImpl> tileEntities = new TLongObjectHashMap<>(10, .2f, Long.MAX_VALUE);
+    protected final Set<EntityImpl>                entities     = new ConcurrentSet<>(4, .3f, 2);
 
     @Override
     public Thread getLastTickThread()
@@ -161,7 +162,7 @@ public class ChunkImpl implements Chunk
         this.chunkParts = chunkParts;
     }
 
-    public Map<BlockLocation, TileEntityImpl> getTileEntities()
+    public TLongObjectMap<TileEntityImpl> getTileEntities()
     {
         return this.tileEntities;
     }

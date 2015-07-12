@@ -1,5 +1,7 @@
 package org.diorite.impl.world;
 
+import java.util.Optional;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,6 +12,7 @@ import org.diorite.utils.math.geometry.BoundingBox;
 import org.diorite.utils.math.geometry.Vector;
 import org.diorite.world.Biome;
 import org.diorite.world.Block;
+import org.diorite.world.TileEntity;
 import org.diorite.world.World;
 
 public class BlockImpl implements Block
@@ -92,6 +95,12 @@ public class BlockImpl implements Block
     public BlockMaterialData getType()
     {
         return this.type;
+    }
+
+    @Override
+    public Optional<TileEntity> getTileEntity()
+    {
+        return Optional.ofNullable(this.chunk.getTileEntities().get(this.getLocation().asLong()));
     }
 
     @Override

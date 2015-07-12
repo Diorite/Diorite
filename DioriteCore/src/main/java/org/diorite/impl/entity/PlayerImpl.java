@@ -44,8 +44,10 @@ import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.inventory.EntityEquipment;
-import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemStack;
+import org.diorite.utils.math.DioriteRandom;
+import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.math.pack.IntsToLong;
 
@@ -461,6 +463,14 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     public void updateInventory()
     {
         this.inventory.update(this);
+    }
+
+    protected final DioriteRandom random = DioriteRandomUtils.newRandom();
+
+    @Override
+    public DioriteRandom getRandom()
+    {
+        return this.random;
     }
 
     public void onLogout()

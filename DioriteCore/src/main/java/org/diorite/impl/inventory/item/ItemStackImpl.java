@@ -4,9 +4,9 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.item.ItemMeta;
 import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemMeta;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.others.Dirtable;
 
@@ -132,6 +132,13 @@ public class ItemStackImpl implements Dirtable, ItemStack
         final boolean b = this.dirty;
         this.dirty = dirty;
         return b;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public ItemStackImpl clone()
+    {
+        return new ItemStackImpl(this);
     }
 
     public static ItemStackImpl wrap(final ItemStack item)

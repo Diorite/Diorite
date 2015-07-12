@@ -2,7 +2,6 @@ package org.diorite.impl.world;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +33,7 @@ import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.pack.IntsToLong;
 import org.diorite.world.Biome;
@@ -77,10 +77,10 @@ public class WorldImpl implements World, Tickable
     protected       WorldGenerator generator;
     protected       long           time;
     protected final ChunkLock      spawnLock;
-    protected       boolean noUpdateMode = true;
-    protected final Random  random       = new Random();
-    protected       int     saveTimer    = DEFAULT_AUTOSAVE_TIME;
-    protected       boolean autosave     = true;
+    protected       boolean       noUpdateMode = true;
+    protected final DioriteRandom random       = DioriteRandomUtils.newRandom();
+    protected       int           saveTimer    = DEFAULT_AUTOSAVE_TIME;
+    protected       boolean       autosave     = true;
 
 
     // TODO: world border impl
@@ -387,7 +387,7 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
-    public Random getRandom()
+    public DioriteRandom getRandom()
     {
         return this.random;
     }

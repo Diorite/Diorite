@@ -348,7 +348,10 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     public void doTick(final int tps)
     {
         this.chunks.values().stream().filter(ChunkImpl::isLoaded).forEach(c -> {
-            c.getTileEntities().values().forEach(t -> t.doTick(tps));
+            c.getTileEntities().forEachValue(t -> {
+                t.doTick(tps);
+                return true;
+            });
         });
     }
 

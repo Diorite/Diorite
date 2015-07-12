@@ -26,7 +26,10 @@ public interface TickGroupImpl extends Tickable, TickGroup
     default void tickChunk(final ChunkImpl chunk, final int tps)
     {
         chunk.setLastTickThread(Thread.currentThread());
-        chunk.getTileEntities().values().forEach(t -> t.doTick(tps));
+        chunk.getTileEntities().forEachValue(t -> {
+            t.doTick(tps);
+            return true;
+        });
         chunk.getEntities().forEach(e -> e.doTick(tps));
         // TODO random block update and other shit
     }
