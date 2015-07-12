@@ -5,23 +5,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public abstract class BlockMaterialData extends Material
 {
-    protected final String typeName;
 
     protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, type);
-        this.typeName = typeName;
+        super(enumName, id, minecraftId, typeName, type);
     }
 
     protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, maxStack, type);
-        this.typeName = typeName;
-    }
-
-    public String getTypeName()
-    {
-        return this.typeName;
+        super(enumName, id, minecraftId, maxStack, typeName, type);
     }
 
     @Override
@@ -37,11 +29,14 @@ public abstract class BlockMaterialData extends Material
         return true;
     }
 
-    @Override
     public boolean isSolid()
     {
         return true;
     }
+
+    public abstract float getBlastResistance();
+
+    public abstract float getHardness();
 
 //    @Override
 //    public boolean isTransparent()
@@ -138,9 +133,7 @@ public abstract class BlockMaterialData extends Material
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("typeName", this.typeName).append("type", this.type).toString();
     }
 
-    /**
-     * @return array contains all other (including current one) sub-types of this material.
-     */
+    @Override
     public abstract BlockMaterialData[] types();
 
     public static BlockMaterialData getByID(final int id)

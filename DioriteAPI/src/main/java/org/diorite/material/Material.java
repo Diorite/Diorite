@@ -597,19 +597,21 @@ public abstract class Material implements SimpleEnum<Material>
     protected final int    id;
     protected final String minecraftId;
     protected final int    maxStack;
+    protected final String typeName;
     protected final short  type;
 
-    protected Material(final String enumName, final int id, final String minecraftId, final short type)
+    protected Material(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        this(enumName, id, minecraftId, MagicNumbers.ITEMS__DEFAULT_STACK_SIZE, type);
+        this(enumName, id, minecraftId, MagicNumbers.ITEMS__DEFAULT_STACK_SIZE, typeName, type);
     }
 
-    protected Material(final String enumName, final int id, final String minecraftId, final int maxStack, final short type)
+    protected Material(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         this.enumName = enumName;
         this.id = id;
         this.minecraftId = minecraftId;
         this.maxStack = maxStack;
+        this.typeName = typeName;
         this.type = type;
     }
 
@@ -638,11 +640,23 @@ public abstract class Material implements SimpleEnum<Material>
     }
 
     /**
-     * @return sub-id of material, for blocks is in 0-15 range, for items it use 2 bytes
+     * Returns sub-id of material, for blocks is in 0-15 range, for items it use 2 bytes.
+     *
+     * @return sub-id of material
      */
     public short getType()
     {
         return this.type;
+    }
+
+    /**
+     * Returns type name of this type of material.
+     *
+     * @return type name of this type of material.
+     */
+    public String getTypeName()
+    {
+        return this.typeName;
     }
 
     /**
@@ -684,11 +698,12 @@ public abstract class Material implements SimpleEnum<Material>
      */
     public abstract boolean isBlock();
 
-    public abstract float getBlastResistance();
-
-    public abstract float getHardness();
-
-    public abstract boolean isSolid();
+    /**
+     * Returns array contains all other (including current one) sub-types of this material.
+     *
+     * @return array of sub-types.
+     */
+    public abstract Material[] types();
 
     /*
      * ==========================================
