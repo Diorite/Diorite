@@ -1,6 +1,6 @@
 package org.diorite.inventory;
 
-import org.diorite.inventory.item.IItemStack;
+import org.diorite.inventory.item.ItemStack;
 
 public interface PlayerInventory extends Inventory, PlayerArmorInventory, PlayerCraftingInventory, PlayerFullEqInventory
 {
@@ -15,13 +15,13 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
      *
      * @return item hold in cursor by player.
      */
-    IItemStack getCursorItem();
+    ItemStack getCursorItem();
 
-    IItemStack setCursorItem(IItemStack cursorItem);
+    ItemStack setCursorItem(ItemStack cursorItem);
 
     DragController getDragController();
 
-    boolean atomicReplaceCursorItem(IItemStack excepted, IItemStack cursorItem);
+    boolean atomicReplaceCursorItem(ItemStack excepted, ItemStack cursorItem);
 
     /**
      * Returns sub-part of player inventory, contains only

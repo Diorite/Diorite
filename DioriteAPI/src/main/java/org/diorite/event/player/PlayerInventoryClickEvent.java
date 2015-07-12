@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.ClickType;
-import org.diorite.inventory.item.IItemStack;
+import org.diorite.inventory.item.ItemStack;
 
 public class PlayerInventoryClickEvent extends PlayerEvent
 {
@@ -14,8 +14,8 @@ public class PlayerInventoryClickEvent extends PlayerEvent
     protected final short     actionNumber;
     protected final ClickType clickType;
 
-    protected final IItemStack clickedItem;
-    protected final IItemStack cursorItem;
+    protected final ItemStack clickedItem;
+    protected final ItemStack cursorItem;
 
     /**
      * Construct new player event.
@@ -34,7 +34,7 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         this.actionNumber = actionNumber;
         this.clickType = clickType;
 
-        IItemStack clickedItem;
+        ItemStack clickedItem;
         try
         {
             clickedItem = player.getInventory().getItem(clickedSlot);
@@ -67,12 +67,12 @@ public class PlayerInventoryClickEvent extends PlayerEvent
         return this.clickType;
     }
 
-    public IItemStack getClickedItem()
+    public ItemStack getClickedItem()
     {
         return this.clickedItem;
     }
 
-    public IItemStack getCursorItem()
+    public ItemStack getCursorItem()
     {
         return this.cursorItem;
     }
