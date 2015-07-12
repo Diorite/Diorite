@@ -44,8 +44,8 @@ import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.inventory.EntityEquipment;
-import org.diorite.inventory.item.IItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.math.pack.IntsToLong;
 
@@ -482,19 +482,19 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         final PlayerCraftingInventoryImpl ci = this.inventory.getCraftingInventory();
         for (int i = 0, s = ci.size(); i < s; i++)
         {
-            final IItemStack itemStack = ci.setItem(i, null);
+            final ItemStack itemStack = ci.setItem(i, null);
             if (itemStack != null)
             {
                 final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getServer(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                item.setItemStack(new ItemStack(itemStack.getMaterial(), itemStack.getAmount()));
+                item.setItemStack(new BaseItemStack(itemStack.getMaterial(), itemStack.getAmount()));
                 this.getWorld().addEntity(item);
             }
         }
-        final IItemStack cur = this.inventory.setCursorItem(null);
+        final ItemStack cur = this.inventory.setCursorItem(null);
         if (cur != null)
         {
             final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getServer(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-            item.setItemStack(new ItemStack(cur.getMaterial(), cur.getAmount()));
+            item.setItemStack(new BaseItemStack(cur.getMaterial(), cur.getAmount()));
             this.getWorld().addEntity(item);
         }
     }

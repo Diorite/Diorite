@@ -11,7 +11,7 @@ import org.diorite.GameMode;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.BlockDestroyPipeline;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
@@ -47,7 +47,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
             }
             // TODO Drop naturally
             ItemImpl item = new ItemImpl(UUID.randomUUID(), (ServerImpl) this.getServer(), EntityImpl.getNextEntityID(), evt.getBlock().getLocation().addY(1).toLocation());
-            item.setItemStack(new ItemStack(evt.getBlock().getType()));
+            item.setItemStack(new BaseItemStack(evt.getBlock().getType()));
             ((WorldImpl) evt.getBlock().getLocation().getWorld()).addEntity(item);
         });
     }

@@ -4,7 +4,7 @@ import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerCraftingInventory;
-import org.diorite.inventory.item.IItemStack;
+import org.diorite.inventory.item.ItemStack;
 
 public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl implements PlayerCraftingInventory
 {
@@ -19,27 +19,27 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
     }
 
     @Override
-    public IItemStack getResult()
+    public ItemStack getResult()
     {
         return this.content.get(0);
     }
 
     @Override
-    public IItemStack setResult(final IItemStack result)
+    public ItemStack setResult(final ItemStack result)
     {
         return this.content.getAndSet(0, ItemStackImpl.wrap(result));
     }
 
     @Override
-    public boolean replaceResult(final IItemStack excepted, final IItemStack result)
+    public boolean replaceResult(final ItemStack excepted, final ItemStack result)
     {
         ItemStackImpl.validate(excepted);
         return this.content.compareAndSet(0, (ItemStackImpl) excepted, ItemStackImpl.wrap(result));
     }
 
     @Override
-    public IItemStack[] getCraftingSlots()
+    public ItemStack[] getCraftingSlots()
     {
-        return this.content.getSubArray(1).toArray(new IItemStack[this.content.length() - 1]);
+        return this.content.getSubArray(1).toArray(new ItemStack[this.content.length() - 1]);
     }
 }

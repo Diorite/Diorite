@@ -14,8 +14,8 @@ import org.diorite.GameMode;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
-import org.diorite.inventory.item.IItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
 public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInventoryClickEvent> implements InventoryClickPipeline
@@ -67,7 +67,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 if (cursor.isSimilar(clicked))
                 {
-                    final IItemStack newCursor = clicked.combine(cursor);
+                    final ItemStack newCursor = clicked.combine(cursor);
 
                     if (! inv.atomicReplaceCursorItem(cursor, newCursor))
                     {
@@ -96,7 +96,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     return true;
                 }
 
-                final IItemStack splitted;
+                final ItemStack splitted;
 
                 if (clicked.getAmount() == 1)
                 {
@@ -130,7 +130,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 if (clicked == null)
                 {
-                    final IItemStack splitted = cursor.split(1);
+                    final ItemStack splitted = cursor.split(1);
                     if (splitted == null)
                     {
                         if (! inv.atomicReplace(slot, null, cursor))
@@ -206,7 +206,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else
             {
-                final IItemStack toDrop = clicked.split(1);
+                final ItemStack toDrop = clicked.split(1);
                 // TODO wywalic itemek toDrop na ziemie
             }
         }
@@ -225,7 +225,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 return false;
             }
-            final IItemStack inHeldSlot = inv.getHotbarInventory().getItem(ct.getButton());
+            final ItemStack inHeldSlot = inv.getHotbarInventory().getItem(ct.getButton());
             return inv.atomicReplace(slot, clicked, inHeldSlot) && inv.getHotbarInventory().atomicReplace(ct.getButton(), inHeldSlot, clicked);
         }
         else if (Objects.equals(ct, ClickType.MOUSE_LEFT_OUTSIDE))
@@ -240,7 +240,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 return false;
             }
             final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-            item.setItemStack(new ItemStack(cursor.getMaterial(), cursor.getAmount()));
+            item.setItemStack(new BaseItemStack(cursor.getMaterial(), cursor.getAmount()));
             player.getWorld().addEntity(item);
             return true;
         }
@@ -252,7 +252,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 return true;
             }
             final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-            item.setItemStack(new ItemStack(cursor.getMaterial(), 1));
+            item.setItemStack(new BaseItemStack(cursor.getMaterial(), 1));
             if (cursor.getAmount() == 1)
             {
                 if (! inv.atomicReplaceCursorItem(cursor, null))
@@ -278,7 +278,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 return true;
             }
 
-            final IItemStack newCursor = new ItemStack(clicked);
+            final ItemStack newCursor = new BaseItemStack(clicked);
             newCursor.setAmount(64);
             return inv.atomicReplaceCursorItem(null, newCursor);
         }
@@ -299,7 +299,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 return false;
             }
 
-            IItemStack newCursor = new ItemStack(cursor); // TODO do not clone :(
+            ItemStack newCursor = new BaseItemStack(cursor); // TODO do not clone :(
 
             final int perSlot = isRightClick ? 1 : (cursor.getAmount() / result.size());
             //player.sendMessage("Cursor " + newCursor);
@@ -309,7 +309,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 final ItemStackImpl oldItem = inv.getItem(dragSlot);
                 if ((oldItem == null) || cursor.isSimilar(oldItem))
                 {
-                    final IItemStack itemStackToCombine = new ItemStack(cursor);
+                    final ItemStack itemStackToCombine = new BaseItemStack(cursor);
                     itemStackToCombine.setAmount(perSlot);
 
                     int combined = 0;
@@ -322,7 +322,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     else
                     {
                         combined = perSlot;
-                        inv.setItem(dragSlot, new ItemStack(newCursor.getMaterial(), combined)); // FIXME item lose metadata
+                        inv.setItem(dragSlot, new BaseItemStack(newCursor.getMaterial(), combined)); // FIXME item lose metadata
                     }
 
                     //player.sendMessage("Slot combined amount: " + combined + "slot id: " + dragSlot);

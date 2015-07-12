@@ -10,7 +10,7 @@ import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.command.CommandPriority;
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
 
 public class DevCmd extends SystemCommandImpl
@@ -48,7 +48,7 @@ public class DevCmd extends SystemCommandImpl
                 case "en":
                 {
                     ItemImpl item = new ItemImpl(UUID.randomUUID(), p.getServer(), EntityImpl.getNextEntityID(), p.getLocation().addX(3).addY(1));
-                    item.setItemStack(new ItemStack(Material.TNT));
+                    item.setItemStack(new BaseItemStack(Material.TNT));
                     p.getWorld().addEntity(item);
                     break;
                 }

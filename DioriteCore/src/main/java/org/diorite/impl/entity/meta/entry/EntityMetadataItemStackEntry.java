@@ -1,11 +1,11 @@
 package org.diorite.impl.entity.meta.entry;
 
 import org.diorite.impl.entity.meta.EntityMetadataType;
-import org.diorite.inventory.item.IItemStack;
+import org.diorite.inventory.item.ItemStack;
 
-public class EntityMetadataItemStackEntry extends EntityMetadataObjectEntry<IItemStack>
+public class EntityMetadataItemStackEntry extends EntityMetadataObjectEntry<ItemStack>
 {
-    public EntityMetadataItemStackEntry(final int index, final IItemStack data)
+    public EntityMetadataItemStackEntry(final int index, final ItemStack data)
     {
         super(index, data);
     }

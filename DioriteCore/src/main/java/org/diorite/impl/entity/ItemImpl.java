@@ -12,7 +12,7 @@ import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Item;
-import org.diorite.inventory.item.IItemStack;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 
@@ -48,19 +48,19 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM, null));
     }
 
-    public IItemStack getItemStack()
+    public ItemStack getItemStack()
     {
         return this.metadata.getItemStack(META_KEY_ITEM);
     }
 
-    public void setItemStack(final IItemStack item)
+    public void setItemStack(final ItemStack item)
     {
         this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM, item));
     }
 
     public boolean pickUpItem(final PlayerImpl player)
     {
-        final IItemStack[] left = player.getInventory().getFullEqInventory().add(this.getItemStack());
+        final ItemStack[] left = player.getInventory().getFullEqInventory().add(this.getItemStack());
         if (left.length != 0)
         {
             this.setItemStack(left[0]);
@@ -96,8 +96,8 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         {
             throw new IllegalStateException("Can't join to itself!");
         }
-        IItemStack oi = item.getItemStack();
-        final IItemStack i = this.getItemStack();
+        ItemStack oi = item.getItemStack();
+        final ItemStack i = this.getItemStack();
         if ((oi == null) || (i == null) || ! oi.getMaterial().equals(i.getMaterial()))
         {
             return;

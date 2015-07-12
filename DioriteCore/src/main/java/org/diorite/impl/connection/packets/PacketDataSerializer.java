@@ -30,9 +30,9 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
-import org.diorite.inventory.item.IItemStack;
-import org.diorite.inventory.item.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.ItemMeta;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
@@ -130,16 +130,16 @@ public class PacketDataSerializer extends ByteBuf
         return EntityMetadataCodec.decode(this);
     }
 
-    public IItemStack readItemStack()
+    public ItemStack readItemStack()
     {
-        IItemStack itemstack = null;
+        ItemStack itemstack = null;
         final short id = this.readShort();
         if (id >= 0)
         {
             final byte amount = this.readByte();
             final short damage = this.readShort();
             final Material mat = Material.getByID(id, damage);
-            itemstack = new ItemStack((mat == null) ? Material.AIR : mat, amount);
+            itemstack = new BaseItemStack((mat == null) ? Material.AIR : mat, amount);
             itemstack.getItemMeta().setRawData(this.readNbtTagCompound());
         }
         return itemstack;
@@ -163,7 +163,7 @@ public class PacketDataSerializer extends ByteBuf
         }
     }
 
-    public void writeItemStack(final IItemStack itemStack)
+    public void writeItemStack(final ItemStack itemStack)
     {
         if (itemStack == null)
         {

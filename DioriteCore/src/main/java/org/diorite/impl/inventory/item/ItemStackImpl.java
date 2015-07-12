@@ -4,31 +4,31 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.inventory.item.IItemStack;
-import org.diorite.inventory.item.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.ItemMeta;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.others.Dirtable;
 
-public class ItemStackImpl implements Dirtable, IItemStack
+public class ItemStackImpl implements Dirtable, ItemStack
 {
-    private final IItemStack wrapped;
-    private       boolean    dirty;
+    private final ItemStack wrapped;
+    private       boolean   dirty;
 
-    protected ItemStackImpl(final IItemStack wrapped)
+    protected ItemStackImpl(final ItemStack wrapped)
     {
         Validate.isTrue(! (wrapped instanceof ItemStackImpl), "Can't wrap wrapper");
         this.wrapped = wrapped;
         this.setDirty();
     }
 
-    public IItemStack getWrapped()
+    public ItemStack getWrapped()
     {
         return this.wrapped;
     }
 
     @Override
-    public boolean isSimilar(final IItemStack b)
+    public boolean isSimilar(final ItemStack b)
     {
         return this.wrapped.isSimilar(b);
     }
@@ -91,7 +91,7 @@ public class ItemStackImpl implements Dirtable, IItemStack
     }
 
     @Override
-    public ItemStackImpl combine(final IItemStack other)
+    public ItemStackImpl combine(final ItemStack other)
     {
         this.setDirty();
         this.wrapped.combine(other);
@@ -99,7 +99,7 @@ public class ItemStackImpl implements Dirtable, IItemStack
     }
 
     @Override
-    public ItemStack split(final int size)
+    public BaseItemStack split(final int size)
     {
         if (size > this.getAmount())
         {
@@ -111,7 +111,7 @@ public class ItemStackImpl implements Dirtable, IItemStack
             return null;
         }
 
-        final ItemStack temp = new ItemStack(this);
+        final BaseItemStack temp = new BaseItemStack(this);
 
         this.wrapped.setAmount(this.wrapped.getAmount() - size);
         this.setDirty();
@@ -134,7 +134,7 @@ public class ItemStackImpl implements Dirtable, IItemStack
         return b;
     }
 
-    public static ItemStackImpl wrap(final IItemStack item)
+    public static ItemStackImpl wrap(final ItemStack item)
     {
         if (item == null)
         {
@@ -147,7 +147,7 @@ public class ItemStackImpl implements Dirtable, IItemStack
         return new ItemStackImpl(item);
     }
 
-    public static void validate(final IItemStack excepted)
+    public static void validate(final ItemStack excepted)
     {
         if ((excepted != null) && ! (excepted instanceof ItemStackImpl))
         {

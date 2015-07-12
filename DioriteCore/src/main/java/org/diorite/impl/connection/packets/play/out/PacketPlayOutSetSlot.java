@@ -10,20 +10,20 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
-import org.diorite.inventory.item.IItemStack;
+import org.diorite.inventory.item.ItemStack;
 
 @PacketClass(id = 0x2F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayOutSetSlot implements PacketPlayOut
 {
-    private int        windowId;
-    private short      slotId;
-    private IItemStack item;
+    private int       windowId;
+    private short     slotId;
+    private ItemStack item;
 
     public PacketPlayOutSetSlot()
     {
     }
 
-    public PacketPlayOutSetSlot(final int windowId, final short slotId, final IItemStack item)
+    public PacketPlayOutSetSlot(final int windowId, final short slotId, final ItemStack item)
     {
         this.windowId = windowId;
         this.slotId = slotId;
@@ -72,12 +72,12 @@ public class PacketPlayOutSetSlot implements PacketPlayOut
         this.slotId = slotId;
     }
 
-    public IItemStack getItem()
+    public ItemStack getItem()
     {
         return this.item;
     }
 
-    public void setItem(final IItemStack item)
+    public void setItem(final ItemStack item)
     {
         this.item = item;
     }
