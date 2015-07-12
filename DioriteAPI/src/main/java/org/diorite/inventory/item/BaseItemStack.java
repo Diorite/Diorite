@@ -145,6 +145,13 @@ public class BaseItemStack implements ItemStack
         }
     }
 
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public BaseItemStack clone()
+    {
+        return new BaseItemStack(this);
+    }
+
     @Override
     public int hashCode()
     {

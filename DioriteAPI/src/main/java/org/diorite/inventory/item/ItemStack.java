@@ -2,7 +2,7 @@ package org.diorite.inventory.item;
 
 import org.diorite.material.Material;
 
-public interface ItemStack
+public interface ItemStack extends Cloneable
 {
     /**
      * @return material of itemstack.
@@ -87,6 +87,13 @@ public interface ItemStack
      * @return All of which failed to add
      */
     ItemStack combine(ItemStack other);
+
+    /**
+     * Clone this itemstack (deep clone).
+     *
+     * @return cloned itemstack.
+     */
+    ItemStack clone();
 
     static boolean isSimilar(final ItemStack a, final ItemStack b)
     {

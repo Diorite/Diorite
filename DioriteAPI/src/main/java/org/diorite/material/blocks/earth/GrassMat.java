@@ -3,6 +3,9 @@ package org.diorite.material.blocks.earth;
 import java.util.Map;
 
 import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.material.data.drops.PossibleDrops;
+import org.diorite.material.data.drops.PossibleFixedDrop;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -65,6 +68,12 @@ public class GrassMat extends EarthMat
     public GrassMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    protected PossibleDrops initPossibleDrops()
+    {
+        return new PossibleDrops(new PossibleFixedDrop(new BaseItemStack(DIRT)));
     }
 
     /**

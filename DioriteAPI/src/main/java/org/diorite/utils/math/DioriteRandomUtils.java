@@ -13,13 +13,13 @@ import org.apache.commons.lang3.Validate;
 
 public final class DioriteRandomUtils
 {
-    private static final Random random = new Random();
+    private static final DioriteRandom random = new DioriteRandom();
 
     private DioriteRandomUtils()
     {
     }
 
-    public static Random getRandom()
+    public static DioriteRandom getRandom()
     {
         return random;
     }
@@ -821,5 +821,15 @@ public final class DioriteRandomUtils
     public static DoubleStream doubles(final double randomNumberOrigin, final double randomNumberBound)
     {
         return random.doubles(randomNumberOrigin, randomNumberBound);
+    }
+
+    public static DioriteRandom newRandom()
+    {
+        return new DioriteRandom();
+    }
+
+    public static DioriteRandom newRandom(final long seed)
+    {
+        return new DioriteRandom(seed);
     }
 }

@@ -1,5 +1,7 @@
 package org.diorite.world;
 
+import java.util.Optional;
+
 import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
@@ -40,6 +42,13 @@ public interface Block
      * @return type (id and sub-id) of block
      */
     BlockMaterialData getType();
+
+    /**
+     * Returns tile entity of this block if exist.
+     *
+     * @return tile entity of this block.
+     */
+    Optional<TileEntity> getTileEntity();
 
     /**
      * Method to set type (id and sub-id) of block.

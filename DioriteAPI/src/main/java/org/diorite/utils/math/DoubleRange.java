@@ -1,5 +1,7 @@
 package org.diorite.utils.math;
 
+import java.util.Random;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -50,6 +52,14 @@ public class DoubleRange
     public double getRandom()
     {
         return DioriteRandomUtils.getRandDouble(this.min, this.max);
+    }
+
+    /**
+     * @return random value in range.
+     */
+    public double getRandom(final Random random)
+    {
+        return DioriteRandomUtils.getRandDouble(random, this.min, this.max);
     }
 
     /**

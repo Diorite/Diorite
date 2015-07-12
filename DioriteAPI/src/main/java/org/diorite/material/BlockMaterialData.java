@@ -3,9 +3,13 @@ package org.diorite.material;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.material.data.drops.PossibleDrops;
+import org.diorite.material.data.drops.PossibleFixedDrop;
+import org.diorite.utils.lazy.LazyValue;
+
 public abstract class BlockMaterialData extends Material
 {
-
     protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
@@ -15,6 +19,8 @@ public abstract class BlockMaterialData extends Material
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
+
+    protected final LazyValue<PossibleDrops> possibleDrops = new LazyValue<>(this::initPossibleDrops);
 
     @Override
     public abstract BlockMaterialData getType(String name);
@@ -37,6 +43,22 @@ public abstract class BlockMaterialData extends Material
     public abstract float getBlastResistance();
 
     public abstract float getHardness();
+
+    protected PossibleDrops initPossibleDrops()
+    {
+        // TODO: implement in all block that don't drop itself.
+        return new PossibleDrops(new PossibleFixedDrop(new BaseItemStack(this)));
+    }
+
+    public PossibleDrops getPossibleDrops()
+    {
+        return this.possibleDrops.get();
+    }
+
+    public void resetPossibleDrops()
+    {
+        this.possibleDrops.reset();
+    }
 
 //    @Override
 //    public boolean isTransparent()

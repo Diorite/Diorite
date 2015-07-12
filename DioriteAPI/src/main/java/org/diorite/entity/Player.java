@@ -10,6 +10,7 @@ import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.PlayerInventory;
+import org.diorite.utils.math.DioriteRandom;
 import org.diorite.world.World;
 
 public interface Player extends LivingEntity, PlayerCommandSender, InventoryHolder, OfflinePlayer, ArmoredEntity
@@ -280,4 +281,11 @@ public interface Player extends LivingEntity, PlayerCommandSender, InventoryHold
     {
         this.kick(TextComponent.join(TextComponent.fromLegacyText(reason)));
     }
+
+    /**
+     * Returns this player random instance;
+     *
+     * @return this player random instance
+     */
+    DioriteRandom getRandom();
 }

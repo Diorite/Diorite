@@ -1,5 +1,7 @@
 package org.diorite.utils.math;
 
+import java.util.Random;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -61,6 +63,14 @@ public class FloatRange
     public float getRandom()
     {
         return DioriteRandomUtils.getRandFloat(this.min, this.max);
+    }
+
+    /**
+     * @return random value in range.
+     */
+    public float getRandom(final Random random)
+    {
+        return DioriteRandomUtils.getRandFloat(random, this.min, this.max);
     }
 
     /**

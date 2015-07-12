@@ -1,5 +1,7 @@
 package org.diorite.utils.math;
 
+import java.util.Random;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -53,7 +55,15 @@ public class LongRange
      */
     public long getRandom()
     {
-        return DioriteRandomUtils.getRandLong(this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandLong(this.min, this.max);
+    }
+
+    /**
+     * @return random value in range.
+     */
+    public long getRandom(final Random random)
+    {
+        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandLong(random, this.min, this.max);
     }
 
     /**

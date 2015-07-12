@@ -3,7 +3,6 @@ package org.diorite.world;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
@@ -14,6 +13,7 @@ import org.diorite.Loc;
 import org.diorite.Particle;
 import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.utils.math.DioriteRandom;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
@@ -54,7 +54,7 @@ public interface World
 
     WorldGroup getWorldGroup();
 
-    Random getRandom();
+    DioriteRandom getRandom();
 
     Dimension getDimension();
 
