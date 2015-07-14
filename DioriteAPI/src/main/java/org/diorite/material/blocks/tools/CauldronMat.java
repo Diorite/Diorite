@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -22,16 +21,6 @@ public class CauldronMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 4;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__CAULDRON__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__CAULDRON__HARDNESS;
 
     public static final CauldronMat CAULDRON_EMPTY = new CauldronMat();
     public static final CauldronMat CAULDRON_1     = new CauldronMat("1", 0x1, 1);
@@ -46,32 +35,20 @@ public class CauldronMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected CauldronMat()
     {
-        super("CAULDRON", 118, "minecraft:cauldron", "EMPTY", (byte) 0x00);
+        super("CAULDRON", 118, "minecraft:cauldron", "EMPTY", (byte) 0x00, 2, 10);
         this.waterLevel = 0;
     }
 
     protected CauldronMat(final String enumName, final int type, final int waterLevel)
     {
-        super(CAULDRON_EMPTY.name(), CAULDRON_EMPTY.ordinal(), CAULDRON_EMPTY.getMinecraftId(), enumName, (byte) type);
+        super(CAULDRON_EMPTY.name(), CAULDRON_EMPTY.ordinal(), CAULDRON_EMPTY.getMinecraftId(), enumName, (byte) type, CAULDRON_EMPTY.getHardness(), CAULDRON_EMPTY.getBlastResistance());
         this.waterLevel = waterLevel;
     }
 
-    protected CauldronMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int waterLevel)
+    protected CauldronMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int waterLevel, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.waterLevel = waterLevel;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     /**

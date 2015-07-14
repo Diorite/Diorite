@@ -2,7 +2,6 @@ package org.diorite.material.blocks.plants;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,16 +16,6 @@ public class FlowersMat extends FlowerMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 9;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__FLOWERS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__FLOWERS__HARDNESS;
 
     public static final FlowersMat FLOWERS_POPPY        = new FlowersMat();
     public static final FlowersMat FLOWERS_BLUE_ORCHID  = new FlowersMat(0x1, FlowerTypeMat.BLUE_ORCHID);
@@ -44,29 +33,17 @@ public class FlowersMat extends FlowerMat
     @SuppressWarnings("MagicNumber")
     protected FlowersMat()
     {
-        super("FLOWERS", 38, "minecraft:red_flower", (byte) 0x00, FlowerTypeMat.POPPY);
+        super("FLOWERS", 38, "minecraft:red_flower", (byte) 0x00, FlowerTypeMat.POPPY, 0, 0);
     }
 
     protected FlowersMat(final int type, final FlowerTypeMat flowerType)
     {
-        super(FLOWERS_POPPY.name(), FLOWERS_POPPY.ordinal(), FLOWERS_POPPY.getMinecraftId(), (byte) type, flowerType);
+        super(FLOWERS_POPPY.name(), FLOWERS_POPPY.ordinal(), FLOWERS_POPPY.getMinecraftId(), (byte) type, flowerType, FLOWERS_POPPY.getHardness(), FLOWERS_POPPY.getBlastResistance());
     }
 
-    protected FlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType)
+    protected FlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, flowerType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
 
     @Override

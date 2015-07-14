@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -20,16 +19,6 @@ public class PotatoesBlockMat extends CropsMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__POTATOES_BLOCK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__POTATOES_BLOCK__HARDNESS;
 
     public static final PotatoesBlockMat POTATOES_BLOCK_0    = new PotatoesBlockMat();
     public static final PotatoesBlockMat POTATOES_BLOCK_1    = new PotatoesBlockMat("1", 0x1);
@@ -48,32 +37,20 @@ public class PotatoesBlockMat extends CropsMat
     @SuppressWarnings("MagicNumber")
     protected PotatoesBlockMat()
     {
-        super("POTATOES_BLOCK", 142, "minecraft:potatoes", "0", (byte) 0x00);
+        super("POTATOES_BLOCK", 142, "minecraft:potatoes", "0", (byte) 0x00, 0, 0);
         this.age = 0;
     }
 
     protected PotatoesBlockMat(final String enumName, final int age)
     {
-        super(POTATOES_BLOCK_0.name(), POTATOES_BLOCK_0.ordinal(), POTATOES_BLOCK_0.getMinecraftId(), enumName, (byte) age);
+        super(POTATOES_BLOCK_0.name(), POTATOES_BLOCK_0.ordinal(), POTATOES_BLOCK_0.getMinecraftId(), enumName, (byte) age, POTATOES_BLOCK_0.getHardness(), POTATOES_BLOCK_0.getBlastResistance());
         this.age = age;
     }
 
-    protected PotatoesBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age)
+    protected PotatoesBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.age = age;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.AgeableBlockMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -20,16 +19,6 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__FIRE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__FIRE__HARDNESS;
 
     public static final FireMat FIRE_0  = new FireMat();
     public static final FireMat FIRE_1  = new FireMat(0x1);
@@ -54,29 +43,17 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
     @SuppressWarnings("MagicNumber")
     protected FireMat()
     {
-        super("FIRE", 51, "minecraft:fire", "0", (byte) 0x0);
+        super("FIRE", 51, "minecraft:fire", "0", (byte) 0x0, 0, 0);
     }
 
     protected FireMat(final int age)
     {
-        super(FIRE_0.name(), FIRE_0.ordinal(), FIRE_0.getMinecraftId(), Integer.toString(age), (byte) age);
+        super(FIRE_0.name(), FIRE_0.ordinal(), FIRE_0.getMinecraftId(), Integer.toString(age), (byte) age, FIRE_0.getHardness(), FIRE_0.getBlastResistance());
     }
 
-    protected FireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected FireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override

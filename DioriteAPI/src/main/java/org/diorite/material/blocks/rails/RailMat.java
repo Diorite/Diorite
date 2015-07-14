@@ -2,7 +2,6 @@ package org.diorite.material.blocks.rails;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,16 +16,6 @@ public class RailMat extends RailsMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 10;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__RAIL__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__RAIL__HARDNESS;
 
     public static final RailMat RAIL_FLAT_NORTH_SOUTH  = new RailMat();
     public static final RailMat RAIL_FLAT_WEST_EAST    = new RailMat(RailTypeMat.FLAT_WEST_EAST);
@@ -45,29 +34,17 @@ public class RailMat extends RailsMat
     @SuppressWarnings("MagicNumber")
     protected RailMat()
     {
-        super("RAIL", 66, "minecraft:rail", "FLAT_NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00);
+        super("RAIL", 66, "minecraft:rail", "FLAT_NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00, 0.7f, 3.5f);
     }
 
     protected RailMat(final RailTypeMat type)
     {
-        super(RAIL_FLAT_NORTH_SOUTH.name(), RAIL_FLAT_NORTH_SOUTH.ordinal(), RAIL_FLAT_NORTH_SOUTH.getMinecraftId(), type.name(), type, (byte) 0x0);
+        super(RAIL_FLAT_NORTH_SOUTH.name(), RAIL_FLAT_NORTH_SOUTH.ordinal(), RAIL_FLAT_NORTH_SOUTH.getMinecraftId(), type.name(), type, (byte) 0x0, RAIL_FLAT_NORTH_SOUTH.getHardness(), RAIL_FLAT_NORTH_SOUTH.getBlastResistance());
     }
 
-    protected RailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType)
+    protected RailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, railType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, railType, hardness, blastResistance);
     }
 
     @Override

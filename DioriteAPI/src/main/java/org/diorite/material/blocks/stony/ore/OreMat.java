@@ -7,13 +7,13 @@ import org.diorite.material.blocks.stony.StonyMat;
  */
 public abstract class OreMat extends StonyMat
 {
-    protected OreMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
+    protected OreMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, typeName, type, hardness, blastResistance);
     }
 
-    protected OreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected OreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 }

@@ -3,7 +3,6 @@ package org.diorite.material.blocks.wooden.wood.fencegate;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -20,16 +19,6 @@ public class JungleFenceGateMat extends WoodenFenceGateMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__JUNGLE_FENCE_GATE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__JUNGLE_FENCE_GATE__HARDNESS;
 
     public static final JungleFenceGateMat JUNGLE_FENCE_GATE_SOUTH = new JungleFenceGateMat();
     public static final JungleFenceGateMat JUNGLE_FENCE_GATE_WEST  = new JungleFenceGateMat(BlockFace.WEST, false);
@@ -47,29 +36,17 @@ public class JungleFenceGateMat extends WoodenFenceGateMat
     @SuppressWarnings("MagicNumber")
     protected JungleFenceGateMat()
     {
-        super("JUNGLE_FENCE_GATE", 185, "minecraft:jungle_fence_gate", WoodTypeMat.JUNGLE, BlockFace.SOUTH, false);
+        super("JUNGLE_FENCE_GATE", 185, "minecraft:jungle_fence_gate", WoodTypeMat.JUNGLE, BlockFace.SOUTH, false, 2, 15);
     }
 
     protected JungleFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(JUNGLE_FENCE_GATE_SOUTH.name(), JUNGLE_FENCE_GATE_SOUTH.ordinal(), JUNGLE_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.JUNGLE, face, open);
+        super(JUNGLE_FENCE_GATE_SOUTH.name(), JUNGLE_FENCE_GATE_SOUTH.ordinal(), JUNGLE_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.JUNGLE, face, open, JUNGLE_FENCE_GATE_SOUTH.getHardness(), JUNGLE_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected JungleFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)
+    protected JungleFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }
 
     @Override

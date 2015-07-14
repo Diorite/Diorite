@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -23,16 +22,6 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 5;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SKULL_BLOCK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__SKULL_BLOCK__HARDNESS;
 
     public static final SkullBlockMat SKULL_BLOCK_FLOOR      = new SkullBlockMat();
     public static final SkullBlockMat SKULL_BLOCK_WALL_NORTH = new SkullBlockMat("WALL_NORTH", BlockFace.NORTH);
@@ -49,35 +38,23 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
     @SuppressWarnings("MagicNumber")
     protected SkullBlockMat()
     {
-        super("SKULL_BLOCK_FLOOR", 144, "minecraft:skull", "FLOOR", (byte) 0x01);
+        super("SKULL_BLOCK_FLOOR", 144, "minecraft:skull", "FLOOR", (byte) 0x01, 1, 5);
         this.face = null;
         this.onWall = false;
     }
 
     protected SkullBlockMat(final String enumName, final BlockFace face)
     {
-        super(SKULL_BLOCK_FLOOR.name(), SKULL_BLOCK_FLOOR.ordinal(), SKULL_BLOCK_FLOOR.getMinecraftId(), enumName, combine(face));
+        super(SKULL_BLOCK_FLOOR.name(), SKULL_BLOCK_FLOOR.ordinal(), SKULL_BLOCK_FLOOR.getMinecraftId(), enumName, combine(face), SKULL_BLOCK_FLOOR.getHardness(), SKULL_BLOCK_FLOOR.getBlastResistance());
         this.face = face;
         this.onWall = true;
     }
 
-    protected SkullBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean onWall)
+    protected SkullBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean onWall, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.onWall = onWall;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

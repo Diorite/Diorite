@@ -17,16 +17,6 @@ public class SandMat extends LooseMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 2;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SAND__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__SAND__HARDNESS;
 
     public static final SandMat SAND     = new SandMat();
     public static final SandMat SAND_RED = new SandMat("RED", 0x01);
@@ -37,29 +27,17 @@ public class SandMat extends LooseMat
     @SuppressWarnings("MagicNumber")
     protected SandMat()
     {
-        super("SPONGE", 12, "minecraft:sand", "SPONGE", (byte) 0x00);
+        super("SPONGE", 12, "minecraft:sand", "SPONGE", (byte) 0x00, 0.5f, 2.5f);
     }
 
     protected SandMat(final String enumName, final int type)
     {
-        super(SAND.name(), SAND.ordinal(), SAND.getMinecraftId(), enumName, (byte) type);
+        super(SAND.name(), SAND.ordinal(), SAND.getMinecraftId(), enumName, (byte) type, SAND.getHardness(), SAND.getBlastResistance());
     }
 
-    protected SandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected SandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override

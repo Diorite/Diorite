@@ -12,15 +12,15 @@ public abstract class MushroomBlockMat extends BlockMaterialData
 {
     protected final Type mushroomType;
 
-    protected MushroomBlockMat(final String enumName, final int id, final String minecraftId, final Type mushroomType)
+    protected MushroomBlockMat(final String enumName, final int id, final String minecraftId, final Type mushroomType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, mushroomType.name(), mushroomType.getFlag());
+        super(enumName, id, minecraftId, mushroomType.name(), mushroomType.getFlag(), hardness, blastResistance);
         this.mushroomType = mushroomType;
     }
 
-    protected MushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType)
+    protected MushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.mushroomType = mushroomType;
     }
 

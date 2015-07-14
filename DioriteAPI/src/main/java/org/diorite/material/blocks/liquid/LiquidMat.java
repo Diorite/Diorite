@@ -12,16 +12,16 @@ public abstract class LiquidMat extends BlockMaterialData
     protected final LiquidStageMat stage;
     protected final LiquidTypeMat  liquidType;
 
-    protected LiquidMat(final String enumName, final int id, final String minecraftId, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType)
+    protected LiquidMat(final String enumName, final int id, final String minecraftId, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, typeName, stage.getDataValue());
+        super(enumName, id, minecraftId, typeName, stage.getDataValue(), hardness, blastResistance);
         this.stage = stage;
         this.liquidType = liquidType;
     }
 
-    protected LiquidMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType)
+    protected LiquidMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, stage.getDataValue());
+        super(enumName, id, minecraftId, maxStack, typeName, stage.getDataValue(), hardness, blastResistance);
         this.stage = stage;
         this.liquidType = liquidType;
     }
@@ -115,18 +115,5 @@ public abstract class LiquidMat extends BlockMaterialData
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("stage", this.stage).append("liquidType", this.liquidType).toString();
-    }
-
-    @SuppressWarnings("MagicNumber")
-    @Override
-    public float getBlastResistance()
-    {
-        return 500;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return 100;
     }
 }

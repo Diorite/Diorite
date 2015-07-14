@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -23,16 +22,6 @@ public class LadderMat extends BlockMaterialData implements AttachableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 4;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__LADDER__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__LADDER__HARDNESS;
 
     public static final LadderMat LADDER_NORTH = new LadderMat();
     public static final LadderMat LADDER_SOUTH = new LadderMat(BlockFace.SOUTH);
@@ -47,32 +36,20 @@ public class LadderMat extends BlockMaterialData implements AttachableMat
     @SuppressWarnings("MagicNumber")
     protected LadderMat()
     {
-        super("LADDER", 65, "minecraft:ladder", "NORTH", (byte) 0x00);
+        super("LADDER", 65, "minecraft:ladder", "NORTH", (byte) 0x00, 0.4f, 2);
         this.face = BlockFace.NORTH;
     }
 
     protected LadderMat(final BlockFace face)
     {
-        super(LADDER_NORTH.name(), LADDER_NORTH.ordinal(), LADDER_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(LADDER_NORTH.name(), LADDER_NORTH.ordinal(), LADDER_NORTH.getMinecraftId(), face.name(), combine(face), LADDER_NORTH.getHardness(), LADDER_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected LadderMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)
+    protected LadderMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

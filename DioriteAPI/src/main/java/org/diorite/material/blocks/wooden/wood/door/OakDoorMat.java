@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -23,16 +22,6 @@ public class OakDoorMat extends WoodenDoorMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__OAK_DOOR__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__OAK_DOOR__HARDNESS;
 
     public static final OakDoorMat OAK_DOOR_BOTTOM_EAST       = new OakDoorMat();
     public static final OakDoorMat OAK_DOOR_BOTTOM_SOUTH      = new OakDoorMat(BlockFace.SOUTH, false);
@@ -59,7 +48,7 @@ public class OakDoorMat extends WoodenDoorMat
     @SuppressWarnings("MagicNumber")
     protected OakDoorMat()
     {
-        super("OAK_DOOR", 64, "minecraft:wooden_door", "OAK_DOOR", WoodTypeMat.OAK);
+        super("OAK_DOOR", 64, "minecraft:wooden_door", "OAK_DOOR", WoodTypeMat.OAK, 3, 15);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = false;
@@ -69,7 +58,7 @@ public class OakDoorMat extends WoodenDoorMat
 
     protected OakDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(OAK_DOOR_BOTTOM_EAST.name(), OAK_DOOR_BOTTOM_EAST.ordinal(), OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.OAK);
+        super(OAK_DOOR_BOTTOM_EAST.name(), OAK_DOOR_BOTTOM_EAST.ordinal(), OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.OAK, OAK_DOOR_BOTTOM_EAST.getHardness(), OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +68,7 @@ public class OakDoorMat extends WoodenDoorMat
 
     protected OakDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(OAK_DOOR_BOTTOM_EAST.name(), OAK_DOOR_BOTTOM_EAST.ordinal(), OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.OAK);
+        super(OAK_DOOR_BOTTOM_EAST.name(), OAK_DOOR_BOTTOM_EAST.ordinal(), OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.OAK, OAK_DOOR_BOTTOM_EAST.getHardness(), OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;
@@ -89,24 +78,12 @@ public class OakDoorMat extends WoodenDoorMat
 
     protected OakDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodTypeMat woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
-        super(enumName, id, minecraftId, typeName, type, woodType);
+        super(enumName, id, minecraftId, typeName, type, woodType, OAK_DOOR_BOTTOM_EAST.getHardness(), OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = open;
         this.topPart = topPart;
         this.blockFace = blockFace;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

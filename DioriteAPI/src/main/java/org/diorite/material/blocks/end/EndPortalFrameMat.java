@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -27,16 +26,6 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
      * Flag that determine if this is activated sub-type
      */
     public static final byte  ACTIVATE_FLAG    = 0x4;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__END_PORTAL_FRAME__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__END_PORTAL_FRAME__HARDNESS;
 
     public static final EndPortalFrameMat END_PORTAL_FRAME_SOUTH     = new EndPortalFrameMat();
     public static final EndPortalFrameMat END_PORTAL_FRAME_WEST      = new EndPortalFrameMat(BlockFace.WEST, false);
@@ -56,35 +45,23 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
     @SuppressWarnings("MagicNumber")
     protected EndPortalFrameMat()
     {
-        super("END_PORTAL_FRAME", 120, "minecraft:end_portal_frame", "SOUTH", (byte) 0x00);
+        super("END_PORTAL_FRAME", 120, "minecraft:end_portal_frame", "SOUTH", (byte) 0x00, - 1, 18_000_000);
         this.face = BlockFace.SOUTH;
         this.activated = false;
     }
 
     protected EndPortalFrameMat(final BlockFace face, final boolean activated)
     {
-        super(END_PORTAL_FRAME_SOUTH.name(), END_PORTAL_FRAME_SOUTH.ordinal(), END_PORTAL_FRAME_SOUTH.getMinecraftId(), face.name() + (activated ? "_EYE" : ""), combine(face, activated));
+        super(END_PORTAL_FRAME_SOUTH.name(), END_PORTAL_FRAME_SOUTH.ordinal(), END_PORTAL_FRAME_SOUTH.getMinecraftId(), face.name() + (activated ? "_EYE" : ""), combine(face, activated), END_PORTAL_FRAME_SOUTH.getHardness(), END_PORTAL_FRAME_SOUTH.getBlastResistance());
         this.face = face;
         this.activated = activated;
     }
 
-    protected EndPortalFrameMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean activated)
+    protected EndPortalFrameMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean activated, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.activated = activated;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

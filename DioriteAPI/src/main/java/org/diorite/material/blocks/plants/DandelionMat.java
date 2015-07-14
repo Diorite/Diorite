@@ -17,16 +17,6 @@ public class DandelionMat extends FlowerMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 1;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DANDELION__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__DANDELION__HARDNESS;
 
     public static final DandelionMat DANDELION = new DandelionMat();
 
@@ -36,24 +26,12 @@ public class DandelionMat extends FlowerMat
     @SuppressWarnings("MagicNumber")
     protected DandelionMat()
     {
-        super("DANDELION", 37, "minecraft:yellow_flower", (byte) 0x00, FlowerTypeMat.DANDELION);
+        super("DANDELION", 37, "minecraft:yellow_flower", (byte) 0x00, FlowerTypeMat.DANDELION, 0, 0);
     }
 
-    protected DandelionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType)
+    protected DandelionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, flowerType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
 
     @Override

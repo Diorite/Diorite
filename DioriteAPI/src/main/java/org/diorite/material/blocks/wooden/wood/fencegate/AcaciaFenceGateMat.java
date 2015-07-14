@@ -3,7 +3,6 @@ package org.diorite.material.blocks.wooden.wood.fencegate;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -20,16 +19,6 @@ public class AcaciaFenceGateMat extends WoodenFenceGateMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__ACACIA_FENCE_GATE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__ACACIA_FENCE_GATE__HARDNESS;
 
     public static final AcaciaFenceGateMat ACACIA_FENCE_GATE_SOUTH = new AcaciaFenceGateMat();
     public static final AcaciaFenceGateMat ACACIA_FENCE_GATE_WEST  = new AcaciaFenceGateMat(BlockFace.WEST, false);
@@ -47,29 +36,17 @@ public class AcaciaFenceGateMat extends WoodenFenceGateMat
     @SuppressWarnings("MagicNumber")
     protected AcaciaFenceGateMat()
     {
-        super("ACACIA_FENCE_GATE", 187, "minecraft:acacia_fence_gate", WoodTypeMat.ACACIA, BlockFace.SOUTH, false);
+        super("ACACIA_FENCE_GATE", 187, "minecraft:acacia_fence_gate", WoodTypeMat.ACACIA, BlockFace.SOUTH, false, 2, 15);
     }
 
     protected AcaciaFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(ACACIA_FENCE_GATE_SOUTH.name(), ACACIA_FENCE_GATE_SOUTH.ordinal(), ACACIA_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.ACACIA, face, open);
+        super(ACACIA_FENCE_GATE_SOUTH.name(), ACACIA_FENCE_GATE_SOUTH.ordinal(), ACACIA_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.ACACIA, face, open, ACACIA_FENCE_GATE_SOUTH.getHardness(), ACACIA_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected AcaciaFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)
+    protected AcaciaFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }
 
     @Override

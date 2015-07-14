@@ -20,15 +20,15 @@ public abstract class AbstractDaylightDetectorMat extends BlockMaterialData impl
 
     protected final int power;
 
-    protected AbstractDaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int power)
+    protected AbstractDaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int power, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, (power == 0) ? "OFF" : Integer.toString(power), (byte) power);
+        super(enumName, id, minecraftId, (power == 0) ? "OFF" : Integer.toString(power), (byte) power, hardness, blastResistance);
         this.power = this.type;
     }
 
-    protected AbstractDaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power)
+    protected AbstractDaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.power = power;
     }
 

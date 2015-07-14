@@ -18,16 +18,6 @@ public class SlimeBlockMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 1;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SLIME_BLOCK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__SLIME_BLOCK__HARDNESS;
 
     public static final SlimeBlockMat SLIME_BLOCK = new SlimeBlockMat();
 
@@ -37,24 +27,12 @@ public class SlimeBlockMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected SlimeBlockMat()
     {
-        super("SLIME_BLOCK", 165, "minecraft:slime", "SLIME_BLOCK", (byte) 0x00);
+        super("SLIME_BLOCK", 165, "minecraft:slime", "SLIME_BLOCK", (byte) 0x00, 0, 0);
     }
 
-    protected SlimeBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected SlimeBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override

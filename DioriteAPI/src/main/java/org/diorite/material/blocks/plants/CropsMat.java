@@ -7,13 +7,13 @@ import org.diorite.material.blocks.AgeableBlockMat;
  */
 public abstract class CropsMat extends PlantMat implements AgeableBlockMat
 {
-    protected CropsMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type)
+    protected CropsMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, typeName, type, hardness, blastResistance);
     }
 
-    protected CropsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected CropsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 }

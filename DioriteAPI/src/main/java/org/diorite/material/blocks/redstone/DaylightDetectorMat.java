@@ -2,7 +2,6 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -18,16 +17,6 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DAYLIGHT_DETECTOR__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__DAYLIGHT_DETECTOR__HARDNESS;
 
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_OFF = new DaylightDetectorMat();
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_1   = new DaylightDetectorMat(1);
@@ -52,29 +41,17 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
     @SuppressWarnings("MagicNumber")
     protected DaylightDetectorMat()
     {
-        super("DAYLIGHT_DETECTOR", 151, "minecraft:daylight_detector", 0);
+        super("DAYLIGHT_DETECTOR", 151, "minecraft:daylight_detector", 0, 0.2f, 1);
     }
 
     protected DaylightDetectorMat(final int power)
     {
-        super(DAYLIGHT_DETECTOR_OFF.name(), DAYLIGHT_DETECTOR_OFF.ordinal(), DAYLIGHT_DETECTOR_OFF.getMinecraftId(), power);
+        super(DAYLIGHT_DETECTOR_OFF.name(), DAYLIGHT_DETECTOR_OFF.ordinal(), DAYLIGHT_DETECTOR_OFF.getMinecraftId(), power, DAYLIGHT_DETECTOR_OFF.getHardness(), DAYLIGHT_DETECTOR_OFF.getBlastResistance());
     }
 
-    protected DaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power)
+    protected DaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, power);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, power, hardness, blastResistance);
     }
 
     @Override

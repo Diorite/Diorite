@@ -16,15 +16,15 @@ public abstract class RedstoneTorchMat extends BlockMaterialData implements Powe
 {
     protected final BlockFace face;
 
-    protected RedstoneTorchMat(final String enumName, final int id, final String minecraftId, final BlockFace face)
+    protected RedstoneTorchMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, face.name(), combine(face));
+        super(enumName, id, minecraftId, face.name(), combine(face), hardness, blastResistance);
         this.face = face;
     }
 
-    protected RedstoneTorchMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)
+    protected RedstoneTorchMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
     }
 

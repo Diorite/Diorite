@@ -22,16 +22,16 @@ public abstract class RedstoneRepeaterMat extends BlockMaterialData implements P
     protected final BlockFace face;
     protected final int       delay;
 
-    protected RedstoneRepeaterMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final int delay)
+    protected RedstoneRepeaterMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final int delay, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, face.name() + "_" + delay, combine(face, delay));
+        super(enumName, id, minecraftId, face.name() + "_" + delay, combine(face, delay), hardness, blastResistance);
         this.face = face;
         this.delay = delay;
     }
 
-    protected RedstoneRepeaterMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int delay)
+    protected RedstoneRepeaterMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int delay, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.delay = delay;
     }

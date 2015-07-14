@@ -2,7 +2,6 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -17,17 +16,7 @@ public class StoneSlabMat extends StonySlabMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 18;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_SLAB__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_SLAB__HARDNESS;
+    public static final byte USED_DATA_VALUES = 18;
 
     public static final StoneSlabMat STONE_SLAB_STONE         = new StoneSlabMat();
     public static final StoneSlabMat STONE_SLAB_SANDSTONE     = new StoneSlabMat("SANDSTONE", SlabTypeMat.BOTTOM, StoneSlabTypeMat.SANDSTONE);
@@ -55,30 +44,24 @@ public class StoneSlabMat extends StonySlabMat
     @SuppressWarnings("MagicNumber")
     protected StoneSlabMat()
     {
-        super("STONE_SLAB", 44, "minecraft:stone_slab", "STONE", SlabTypeMat.BOTTOM, StoneSlabTypeMat.STONE);
+        super("STONE_SLAB", 44, "minecraft:stone_slab", "STONE", SlabTypeMat.BOTTOM, StoneSlabTypeMat.STONE, 2, 30);
     }
 
     @SuppressWarnings("MagicNumber")
     protected StoneSlabMat(final String enumName, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType)
     {
-        super(STONE_SLAB_STONE.name() + (stoneType.isSecondStoneSlabID() ? "2" : ""), stoneType.isSecondStoneSlabID() ? 182 : 44, STONE_SLAB_STONE.getMinecraftId() + (stoneType.isSecondStoneSlabID() ? "2" : ""), enumName, slabType, stoneType);
+        super(STONE_SLAB_STONE.name() + (stoneType.isSecondStoneSlabID() ? "2" : ""), stoneType.isSecondStoneSlabID() ? 182 : 44, STONE_SLAB_STONE.getMinecraftId() + (stoneType.isSecondStoneSlabID() ? "2" : ""), enumName, slabType, stoneType, STONE_SLAB_STONE.getHardness(), STONE_SLAB_STONE.getBlastResistance());
     }
 
-    protected StoneSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType)
+    @SuppressWarnings("MagicNumber")
+    protected StoneSlabMat(final String enumName, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, slabType, stoneType);
+        super(STONE_SLAB_STONE.name() + (stoneType.isSecondStoneSlabID() ? "2" : ""), stoneType.isSecondStoneSlabID() ? 182 : 44, STONE_SLAB_STONE.getMinecraftId() + (stoneType.isSecondStoneSlabID() ? "2" : ""), enumName, slabType, stoneType, hardness, blastResistance);
     }
 
-    @Override
-    public float getBlastResistance()
+    protected StoneSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
     {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, slabType, stoneType, hardness, blastResistance);
     }
 
     @Override

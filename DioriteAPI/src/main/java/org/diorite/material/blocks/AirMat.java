@@ -15,30 +15,9 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 public class AirMat extends BlockMaterialData
 {
     /**
-     *  Sub-ids used by diorite/minecraft by default
-     */
-    /**
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 1;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     *  Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__AIR__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     *  Final copy of hardness from {@link MagicNumbers} class.
-     */
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__AIR__HARDNESS;
 
     public static final AirMat AIR = new AirMat();
 
@@ -47,12 +26,12 @@ public class AirMat extends BlockMaterialData
 
     protected AirMat()
     {
-        super("AIR", 0, "minecraft:air", 0, "AIR", (byte) 0x00);
+        super("AIR", 0, "minecraft:air", 0, "AIR", (byte) 0x00, 0, 0);
     }
 
-    protected AirMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected AirMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override
@@ -71,18 +50,6 @@ public class AirMat extends BlockMaterialData
     public boolean isSolid()
     {
         return false;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     /**

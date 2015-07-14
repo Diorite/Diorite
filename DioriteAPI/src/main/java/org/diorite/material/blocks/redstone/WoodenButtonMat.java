@@ -3,7 +3,6 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -18,16 +17,6 @@ public class WoodenButtonMat extends ButtonMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__WOODEN_BUTTON__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__WOODEN_BUTTON__HARDNESS;
 
     public static final WoodenButtonMat WOODEN_BUTTON_DOWN          = new WoodenButtonMat();
     public static final WoodenButtonMat WOODEN_BUTTON_EAST          = new WoodenButtonMat(BlockFace.EAST, false);
@@ -48,29 +37,17 @@ public class WoodenButtonMat extends ButtonMat
     @SuppressWarnings("MagicNumber")
     protected WoodenButtonMat()
     {
-        super("WOODEN_BUTTON", 143, "minecraft:wooden_button", BlockFace.DOWN, false);
+        super("WOODEN_BUTTON", 143, "minecraft:wooden_button", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
     protected WoodenButtonMat(final BlockFace face, final boolean powered)
     {
-        super(WOODEN_BUTTON_DOWN.name(), WOODEN_BUTTON_DOWN.ordinal(), WOODEN_BUTTON_DOWN.getMinecraftId(), face, powered);
+        super(WOODEN_BUTTON_DOWN.name(), WOODEN_BUTTON_DOWN.ordinal(), WOODEN_BUTTON_DOWN.getMinecraftId(), face, powered, WOODEN_BUTTON_DOWN.getHardness(), WOODEN_BUTTON_DOWN.getBlastResistance());
     }
 
-    protected WoodenButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered)
+    protected WoodenButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, face, powered);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, face, powered, hardness, blastResistance);
     }
 
     @Override

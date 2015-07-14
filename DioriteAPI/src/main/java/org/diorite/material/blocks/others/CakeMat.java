@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.others.MushroomBlockMat.Type;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -21,17 +20,7 @@ public class CakeMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 6;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__CAKE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__CAKE__HARDNESS;
+    public static final byte USED_DATA_VALUES = 6;
 
     public static final CakeMat CAKE_0 = new CakeMat();
     public static final CakeMat CAKE_1 = new CakeMat(0x1);
@@ -49,32 +38,20 @@ public class CakeMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected CakeMat()
     {
-        super("CAKE", 92, "minecraft:cake", 1, "0", (byte) 0x00);
+        super("CAKE", 92, "minecraft:cake", 1, "0", (byte) 0x00, 0.5f, 2.5f);
         this.piecesEaten = 0x0;
     }
 
     protected CakeMat(final int piecesEaten)
     {
-        super(CAKE_0.name(), CAKE_0.ordinal(), CAKE_0.getMinecraftId(), Integer.toString(piecesEaten), (byte) piecesEaten);
+        super(CAKE_0.name(), CAKE_0.ordinal(), CAKE_0.getMinecraftId(), Integer.toString(piecesEaten), (byte) piecesEaten, CAKE_0.getHardness(), CAKE_0.getBlastResistance());
         this.piecesEaten = (byte) piecesEaten;
     }
 
-    protected CakeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final byte piecesEaten)
+    protected CakeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final byte piecesEaten, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.piecesEaten = piecesEaten;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

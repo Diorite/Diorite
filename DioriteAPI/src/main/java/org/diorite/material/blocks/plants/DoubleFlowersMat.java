@@ -2,7 +2,6 @@ package org.diorite.material.blocks.plants;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,16 +16,6 @@ public class DoubleFlowersMat extends FlowerMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 7;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DOUBLE_FLOWERS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__DOUBLE_FLOWERS__HARDNESS;
 
     public static final DoubleFlowersMat DOUBLE_FLOWERS_SUNFLOWER  = new DoubleFlowersMat();
     public static final DoubleFlowersMat DOUBLE_FLOWERS_LILAC      = new DoubleFlowersMat(0x1, FlowerTypeMat.LILAC);
@@ -42,29 +31,17 @@ public class DoubleFlowersMat extends FlowerMat
     @SuppressWarnings("MagicNumber")
     protected DoubleFlowersMat()
     {
-        super("DOUBLE_FLOWERS", 175, "minecraft:double_plant", (byte) 0x00, FlowerTypeMat.SUNFLOWER);
+        super("DOUBLE_FLOWERS", 175, "minecraft:double_plant", (byte) 0x00, FlowerTypeMat.SUNFLOWER, 0, 0);
     }
 
     protected DoubleFlowersMat(final int type, final FlowerTypeMat flowerType)
     {
-        super(DOUBLE_FLOWERS_SUNFLOWER.name(), DOUBLE_FLOWERS_SUNFLOWER.ordinal(), DOUBLE_FLOWERS_SUNFLOWER.getMinecraftId(), (byte) type, flowerType);
+        super(DOUBLE_FLOWERS_SUNFLOWER.name(), DOUBLE_FLOWERS_SUNFLOWER.ordinal(), DOUBLE_FLOWERS_SUNFLOWER.getMinecraftId(), (byte) type, flowerType, DOUBLE_FLOWERS_SUNFLOWER.getHardness(), DOUBLE_FLOWERS_SUNFLOWER.getBlastResistance());
     }
 
-    protected DoubleFlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType)
+    protected DoubleFlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, flowerType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
 
     @Override

@@ -14,15 +14,15 @@ public abstract class WoodSlabMat extends WoodMat implements SlabMat
 {
     protected final SlabTypeMat slabType;
 
-    protected WoodSlabMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodTypeMat woodType, final SlabTypeMat slabType)
+    protected WoodSlabMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodTypeMat woodType, final SlabTypeMat slabType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, typeName, combine(woodType, slabType), woodType);
+        super(enumName, id, minecraftId, typeName, combine(woodType, slabType), woodType, hardness, blastResistance);
         this.slabType = slabType;
     }
 
-    protected WoodSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SlabTypeMat slabType)
+    protected WoodSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SlabTypeMat slabType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.slabType = slabType;
     }
 

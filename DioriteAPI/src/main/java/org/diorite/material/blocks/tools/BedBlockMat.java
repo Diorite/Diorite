@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -23,16 +22,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__BED_BLOCK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__BED_BLOCK__HARDNESS;
+
     public static final byte  OCCUPIED_FLAG    = 0x04;
     public static final byte  HEAD_PART_FLAG   = 0x08; // 1 for head, 0 for foot part
 
@@ -66,7 +56,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
     @SuppressWarnings("MagicNumber")
     protected BedBlockMat()
     {
-        super("BED_BLOCK", 26, "minecraft:bed", "FOOT_SOUTH", (byte) 0x00);
+        super("BED_BLOCK", 26, "minecraft:bed", "FOOT_SOUTH", (byte) 0x00, 0.2f, 1);
         this.blockFacing = BlockFace.SOUTH;
         this.isHeadPart = false;
         this.isOccupied = false;
@@ -74,15 +64,15 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
 
     protected BedBlockMat(final BlockFace face, final boolean isHeadPart, final boolean isOccupied)
     {
-        super(BED_FOOT_SOUTH.name(), BED_FOOT_SOUTH.ordinal(), BED_FOOT_SOUTH.getMinecraftId(), (isHeadPart ? "HEAD_" : "FOOT_") + face.name() + (isOccupied ? "_OCCUPIED" : ""), combine(face, isHeadPart, isOccupied));
+        super(BED_FOOT_SOUTH.name(), BED_FOOT_SOUTH.ordinal(), BED_FOOT_SOUTH.getMinecraftId(), (isHeadPart ? "HEAD_" : "FOOT_") + face.name() + (isOccupied ? "_OCCUPIED" : ""), combine(face, isHeadPart, isOccupied), BED_FOOT_SOUTH.getHardness(), BED_FOOT_SOUTH.getBlastResistance());
         this.blockFacing = face;
         this.isHeadPart = isHeadPart;
         this.isOccupied = isOccupied;
     }
 
-    protected BedBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace blockFacing, final boolean isHeadPart, final boolean isOccupied)
+    protected BedBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace blockFacing, final boolean isHeadPart, final boolean isOccupied, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.blockFacing = blockFacing;
         this.isHeadPart = isHeadPart;
         this.isOccupied = isOccupied;
@@ -118,18 +108,6 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
     public BedBlockMat getOccuped(final boolean isOccupied)
     {
         return getByID(combine(this.blockFacing, this.isHeadPart, isOccupied));
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

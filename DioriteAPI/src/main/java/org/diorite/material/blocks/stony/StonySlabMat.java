@@ -11,16 +11,16 @@ public abstract class StonySlabMat extends StonyMat implements SlabMat
     protected final SlabTypeMat      slabType;
     protected final StoneSlabTypeMat stoneType;
 
-    protected StonySlabMat(final String enumName, final int id, final String minecraftId, final String typeName, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType)
+    protected StonySlabMat(final String enumName, final int id, final String minecraftId, final String typeName, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, typeName, combine(slabType, stoneType));
+        super(enumName, id, minecraftId, typeName, combine(slabType, stoneType), hardness, blastResistance);
         this.slabType = slabType;
         this.stoneType = stoneType;
     }
 
-    protected StonySlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType)
+    protected StonySlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.slabType = slabType;
         this.stoneType = stoneType;
     }

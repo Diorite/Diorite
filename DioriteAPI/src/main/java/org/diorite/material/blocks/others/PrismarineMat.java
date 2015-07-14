@@ -18,16 +18,6 @@ public class PrismarineMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 3;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__PRISMARINE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__PRISMARINE__HARDNESS;
 
     public static final PrismarineMat PRISMARINE        = new PrismarineMat();
     public static final PrismarineMat PRISMARINE_BRICKS = new PrismarineMat("BRICKS", 0x1);
@@ -39,29 +29,17 @@ public class PrismarineMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected PrismarineMat()
     {
-        super("PRISMARINE", 168, "minecraft:prismarine", "PRISMARINE", (byte) 0x00);
+        super("PRISMARINE", 168, "minecraft:prismarine", "PRISMARINE", (byte) 0x00, 1.5f, 30);
     }
 
     protected PrismarineMat(final String enumName, final int type)
     {
-        super(PRISMARINE.name(), PRISMARINE.ordinal(), PRISMARINE.getMinecraftId(), enumName, (byte) type);
+        super(PRISMARINE.name(), PRISMARINE.ordinal(), PRISMARINE.getMinecraftId(), enumName, (byte) type, PRISMARINE.getHardness(), PRISMARINE.getBlastResistance());
     }
 
-    protected PrismarineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected PrismarineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.diorite.material.blocks.wooden.wood.fence;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -18,16 +17,6 @@ public class OakFenceMat extends WoodenFenceMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 1;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__OAK_FENCE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__OAK_FENCE__HARDNESS;
 
     public static final OakFenceMat OAK_FENCE = new OakFenceMat();
 
@@ -37,24 +26,12 @@ public class OakFenceMat extends WoodenFenceMat
     @SuppressWarnings("MagicNumber")
     protected OakFenceMat()
     {
-        super("OAK_FENCE", 85, "minecraft:fence", "OAK_FENCE", WoodTypeMat.OAK);
+        super("OAK_FENCE", 85, "minecraft:fence", "OAK_FENCE", WoodTypeMat.OAK, 2, 15);
     }
 
-    protected OakFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType)
+    protected OakFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
 
     @Override

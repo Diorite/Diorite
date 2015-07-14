@@ -3,7 +3,6 @@ package org.diorite.material.blocks.tools;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
@@ -21,16 +20,6 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__ANVIL__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__ANVIL__HARDNESS;
 
     public static final AnvilMat ANVIL_NORTH_SOUTH_NEW              = new AnvilMat();
     public static final AnvilMat ANVIL_EAST_WEST_NEW                = new AnvilMat(AnvilBlockDamage.NEW, RotateAxisMat.EAST_WEST, false);
@@ -55,7 +44,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
     @SuppressWarnings("MagicNumber")
     protected AnvilMat()
     {
-        super("ANVIL", 145, "minecraft:anvil", "NORTH_SOUTH_NEW", (byte) 0x00);
+        super("ANVIL", 145, "minecraft:anvil", "NORTH_SOUTH_NEW", (byte) 0x00, 5, 6_000);
         this.damage = AnvilBlockDamage.NEW;
         this.axis = RotateAxisMat.NORTH_SOUTH;
         this.rotated = false;
@@ -63,15 +52,15 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
 
     protected AnvilMat(final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated)
     {
-        super(ANVIL_NORTH_SOUTH_NEW.name(), ANVIL_NORTH_SOUTH_NEW.ordinal(), ANVIL_NORTH_SOUTH_NEW.getMinecraftId(), combineName(damage, axis, rotated), combine(damage, axis, rotated));
+        super(ANVIL_NORTH_SOUTH_NEW.name(), ANVIL_NORTH_SOUTH_NEW.ordinal(), ANVIL_NORTH_SOUTH_NEW.getMinecraftId(), combineName(damage, axis, rotated), combine(damage, axis, rotated), ANVIL_NORTH_SOUTH_NEW.getHardness(), ANVIL_NORTH_SOUTH_NEW.getBlastResistance());
         this.damage = damage;
         this.axis = axis;
         this.rotated = rotated;
     }
 
-    protected AnvilMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated)
+    protected AnvilMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.damage = damage;
         this.axis = axis;
         this.rotated = rotated;
@@ -130,18 +119,6 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
                 break;
         }
         return result;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override
@@ -348,7 +325,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         }
 
         /**
-         * @return byte-flag for this damage.Äąâ€š
+         * @return byte-flag for this damage.Ă„Ä…Ă˘â‚¬Ĺˇ
          */
         public byte getFlag()
         {

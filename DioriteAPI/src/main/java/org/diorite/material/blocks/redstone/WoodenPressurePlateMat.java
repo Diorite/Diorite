@@ -2,7 +2,6 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,16 +16,6 @@ public class WoodenPressurePlateMat extends PressurePlateMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 2;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__WOODEN_PRESSURE_PLATE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__WOODEN_PRESSURE_PLATE__HARDNESS;
 
     public static final WoodenPressurePlateMat WOODEN_PRESSURE_PLATE         = new WoodenPressurePlateMat();
     public static final WoodenPressurePlateMat WOODEN_PRESSURE_PLATE_POWERED = new WoodenPressurePlateMat(0x1, true);
@@ -37,29 +26,17 @@ public class WoodenPressurePlateMat extends PressurePlateMat
     @SuppressWarnings("MagicNumber")
     protected WoodenPressurePlateMat()
     {
-        super("WOODEN_PRESSURE_PLATE", 72, "minecraft:wooden_pressure_plate", "WOODEN_PRESSURE_PLATE", (byte) 0x00, false);
+        super("WOODEN_PRESSURE_PLATE", 72, "minecraft:wooden_pressure_plate", "WOODEN_PRESSURE_PLATE", (byte) 0x00, false, 0.5f, 2.5f);
     }
 
     protected WoodenPressurePlateMat(final int type, final boolean powered)
     {
-        super(WOODEN_PRESSURE_PLATE.name(), WOODEN_PRESSURE_PLATE.ordinal(), WOODEN_PRESSURE_PLATE.getMinecraftId(), powered ? "POWERED" : "WOODEN_PRESSURE_PLATE", (byte) type, powered);
+        super(WOODEN_PRESSURE_PLATE.name(), WOODEN_PRESSURE_PLATE.ordinal(), WOODEN_PRESSURE_PLATE.getMinecraftId(), powered ? "POWERED" : "WOODEN_PRESSURE_PLATE", (byte) type, powered, WOODEN_PRESSURE_PLATE.getHardness(), WOODEN_PRESSURE_PLATE.getBlastResistance());
     }
 
-    protected WoodenPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered)
+    protected WoodenPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, powered);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, powered, hardness, blastResistance);
     }
 
     @Override

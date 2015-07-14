@@ -3,7 +3,6 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -18,16 +17,6 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__REPEATER_OFF__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__REPEATER_OFF__HARDNESS;
 
     public static final RedstoneRepeaterOnMat REDSTONE_REPEATER_ON_NORTH_1 = new RedstoneRepeaterOnMat();
     public static final RedstoneRepeaterOnMat REDSTONE_REPEATER_ON_EAST_1  = new RedstoneRepeaterOnMat(BlockFace.EAST, 1);
@@ -55,29 +44,17 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
     @SuppressWarnings("MagicNumber")
     protected RedstoneRepeaterOnMat()
     {
-        super("REDSTONE_REPEATER_ON", 93, "minecraft:unpowered_repeater", BlockFace.NORTH, 1);
+        super("REDSTONE_REPEATER_ON", 93, "minecraft:unpowered_repeater", BlockFace.NORTH, 1, 0, 0);
     }
 
     protected RedstoneRepeaterOnMat(final BlockFace face, final int delay)
     {
-        super(REDSTONE_REPEATER_ON_NORTH_1.name(), REDSTONE_REPEATER_ON_NORTH_1.ordinal(), REDSTONE_REPEATER_ON_NORTH_1.getMinecraftId(), face, delay);
+        super(REDSTONE_REPEATER_ON_NORTH_1.name(), REDSTONE_REPEATER_ON_NORTH_1.ordinal(), REDSTONE_REPEATER_ON_NORTH_1.getMinecraftId(), face, delay, REDSTONE_REPEATER_ON_NORTH_1.getHardness(), REDSTONE_REPEATER_ON_NORTH_1.getBlastResistance());
     }
 
-    protected RedstoneRepeaterOnMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int delay)
+    protected RedstoneRepeaterOnMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int delay, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, face, delay);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, face, delay, hardness, blastResistance);
     }
 
     @Override

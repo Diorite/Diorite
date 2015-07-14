@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -21,16 +20,6 @@ public class StandingSignMat extends SignBlockMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STANDING_SIGN__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__STANDING_SIGN__HARDNESS;
 
     public static final StandingSignMat STANDING_SIGN_SOUTH            = new StandingSignMat();
     public static final StandingSignMat STANDING_SIGN_SOUTH_SOUTH_WEST = new StandingSignMat(BlockFace.SOUTH_SOUTH_WEST);
@@ -57,32 +46,20 @@ public class StandingSignMat extends SignBlockMat
     @SuppressWarnings("MagicNumber")
     protected StandingSignMat()
     {
-        super("STANDING_SIGN", 63, "minecraft:standing_sign", "SOUTH", (byte) 0x00);
+        super("STANDING_SIGN", 63, "minecraft:standing_sign", "SOUTH", (byte) 0x00, 1, 5);
         this.face = BlockFace.SOUTH;
     }
 
     protected StandingSignMat(final BlockFace face)
     {
-        super(STANDING_SIGN_SOUTH.name(), STANDING_SIGN_SOUTH.ordinal(), STANDING_SIGN_SOUTH.getMinecraftId(), face.name(), combine(face));
+        super(STANDING_SIGN_SOUTH.name(), STANDING_SIGN_SOUTH.ordinal(), STANDING_SIGN_SOUTH.getMinecraftId(), face.name(), combine(face), STANDING_SIGN_SOUTH.getHardness(), STANDING_SIGN_SOUTH.getBlastResistance());
         this.face = face;
     }
 
-    protected StandingSignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)
+    protected StandingSignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

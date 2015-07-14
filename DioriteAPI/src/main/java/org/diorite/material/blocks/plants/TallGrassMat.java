@@ -2,7 +2,6 @@ package org.diorite.material.blocks.plants;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,16 +16,6 @@ public class TallGrassMat extends FlowerMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 3;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__TALL_GRASS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__TALL_GRASS__HARDNESS;
 
     public static final TallGrassMat TALL_GRASS_SHRUB = new TallGrassMat();
     public static final TallGrassMat TALL_GRASS_GRASS = new TallGrassMat(0x1, FlowerTypeMat.GRASS);
@@ -38,29 +27,17 @@ public class TallGrassMat extends FlowerMat
     @SuppressWarnings("MagicNumber")
     protected TallGrassMat()
     {
-        super("TALL_GRASS", 31, "minecraft:tallgrass", (byte) 0x00, FlowerTypeMat.SHRUB);
+        super("TALL_GRASS", 31, "minecraft:tallgrass", (byte) 0x00, FlowerTypeMat.SHRUB, 0, 0);
     }
 
     protected TallGrassMat(final int type, final FlowerTypeMat flowerType)
     {
-        super(TALL_GRASS_SHRUB.name(), TALL_GRASS_SHRUB.ordinal(), TALL_GRASS_SHRUB.getMinecraftId(), (byte) type, flowerType);
+        super(TALL_GRASS_SHRUB.name(), TALL_GRASS_SHRUB.ordinal(), TALL_GRASS_SHRUB.getMinecraftId(), (byte) type, flowerType, TALL_GRASS_SHRUB.getHardness(), TALL_GRASS_SHRUB.getBlastResistance());
     }
 
-    protected TallGrassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType)
+    protected TallGrassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, flowerType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
 
     @Override

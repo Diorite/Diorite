@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -26,16 +25,6 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__ACTIVATOR_RAIL__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__ACTIVATOR_RAIL__HARDNESS;
 
     public static final ActivatorRailMat ACTIVATOR_RAIL_NORTH_SOUTH     = new ActivatorRailMat();
     public static final ActivatorRailMat ACTIVATOR_RAIL_WEST_EAST       = new ActivatorRailMat(RailTypeMat.FLAT_WEST_EAST, false);
@@ -59,32 +48,20 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
     @SuppressWarnings("MagicNumber")
     protected ActivatorRailMat()
     {
-        super("ACTIVATOR_RAIL", 157, "minecraft:activator_rail", "NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00);
+        super("ACTIVATOR_RAIL", 157, "minecraft:activator_rail", "NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00, 0.7f, 3.5f);
         this.powered = false;
     }
 
     protected ActivatorRailMat(final RailTypeMat type, final boolean powered)
     {
-        super(ACTIVATOR_RAIL_NORTH_SOUTH.name(), ACTIVATOR_RAIL_NORTH_SOUTH.ordinal(), ACTIVATOR_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00);
+        super(ACTIVATOR_RAIL_NORTH_SOUTH.name(), ACTIVATOR_RAIL_NORTH_SOUTH.ordinal(), ACTIVATOR_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00, ACTIVATOR_RAIL_NORTH_SOUTH.getHardness(), ACTIVATOR_RAIL_NORTH_SOUTH.getBlastResistance());
         this.powered = powered;
     }
 
-    protected ActivatorRailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final boolean powered)
+    protected ActivatorRailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, railType);
+        super(enumName, id, minecraftId, maxStack, typeName, type, railType, hardness, blastResistance);
         this.powered = powered;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -36,16 +35,6 @@ public class BrewingStandBlockMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__BREWING_STAND_BLOCK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__BREWING_STAND_BLOCK__HARDNESS;
 
     public static final BrewingStandBlockMat BREWING_STAND_BLOCK_EMPTY = new BrewingStandBlockMat();
     public static final BrewingStandBlockMat BREWING_STAND_BLOCK_F_E_E = new BrewingStandBlockMat("F_E_E", true, false, false);
@@ -64,32 +53,20 @@ public class BrewingStandBlockMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected BrewingStandBlockMat()
     {
-        super("BREWING_STAND_BLOCK", 117, "minecraft:brewing_stand", "EMPTY", (byte) 0x00);
+        super("BREWING_STAND_BLOCK", 117, "minecraft:brewing_stand", "EMPTY", (byte) 0x00, 0.5f, 2.5f);
         this.hasBottle = new boolean[3];
     }
 
     protected BrewingStandBlockMat(final String enumName, final boolean slot0, final boolean slot1, final boolean slot2)
     {
-        super(BREWING_STAND_BLOCK_EMPTY.name(), BREWING_STAND_BLOCK_EMPTY.ordinal(), BREWING_STAND_BLOCK_EMPTY.getMinecraftId(), enumName, combine(slot0, slot1, slot2));
+        super(BREWING_STAND_BLOCK_EMPTY.name(), BREWING_STAND_BLOCK_EMPTY.ordinal(), BREWING_STAND_BLOCK_EMPTY.getMinecraftId(), enumName, combine(slot0, slot1, slot2), BREWING_STAND_BLOCK_EMPTY.getHardness(), BREWING_STAND_BLOCK_EMPTY.getBlastResistance());
         this.hasBottle = new boolean[]{slot0, slot1, slot2};
     }
 
-    protected BrewingStandBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean[] hasBottle)
+    protected BrewingStandBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean[] hasBottle, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.hasBottle = hasBottle;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     /**

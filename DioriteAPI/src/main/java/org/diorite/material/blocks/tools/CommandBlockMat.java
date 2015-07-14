@@ -21,16 +21,6 @@ public class CommandBlockMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 2;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__COMMAND_BLOCK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__COMMAND_BLOCK__HARDNESS;
 
     public static final CommandBlockMat COMMAND_BLOCK           = new CommandBlockMat();
     public static final CommandBlockMat COMMAND_BLOCK_TRIGGERED = new CommandBlockMat(true);
@@ -43,32 +33,20 @@ public class CommandBlockMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected CommandBlockMat()
     {
-        super("COMMAND_BLOCK", 137, "minecraft:command_block", "COMMAND_BLOCK", (byte) 0x00);
+        super("COMMAND_BLOCK", 137, "minecraft:command_block", "COMMAND_BLOCK", (byte) 0x00, - 1, 18_000_000);
         this.triggered = false;
     }
 
     protected CommandBlockMat(final boolean triggered)
     {
-        super(COMMAND_BLOCK.name(), COMMAND_BLOCK.ordinal(), COMMAND_BLOCK.getMinecraftId(), triggered ? "TRIGGERED" : "COMMAND_BLOCK", (byte) (triggered ? 1 : 0));
+        super(COMMAND_BLOCK.name(), COMMAND_BLOCK.ordinal(), COMMAND_BLOCK.getMinecraftId(), triggered ? "TRIGGERED" : "COMMAND_BLOCK", (byte) (triggered ? 1 : 0), COMMAND_BLOCK.getHardness(), COMMAND_BLOCK.getBlastResistance());
         this.triggered = triggered;
     }
 
-    protected CommandBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean triggered)
+    protected CommandBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean triggered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.triggered = triggered;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

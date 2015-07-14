@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -22,16 +21,6 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 4;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__WALL_SIGN__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__WALL_SIGN__HARDNESS;
 
     public static final WallSignMat WALL_SIGN_NORTH = new WallSignMat();
     public static final WallSignMat WALL_SIGN_SOUTH = new WallSignMat(BlockFace.SOUTH);
@@ -46,32 +35,20 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
     @SuppressWarnings("MagicNumber")
     protected WallSignMat()
     {
-        super("WALL_SIGN", 68, "minecraft:wall_sign", "NORTH", (byte) 0x02);
+        super("WALL_SIGN", 68, "minecraft:wall_sign", "NORTH", (byte) 0x02, 1, 5);
         this.face = BlockFace.NORTH;
     }
 
     protected WallSignMat(final BlockFace face)
     {
-        super(WALL_SIGN_NORTH.name(), WALL_SIGN_NORTH.ordinal(), WALL_SIGN_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(WALL_SIGN_NORTH.name(), WALL_SIGN_NORTH.ordinal(), WALL_SIGN_NORTH.getMinecraftId(), face.name(), combine(face), WALL_SIGN_NORTH.getHardness(), WALL_SIGN_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected WallSignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)
+    protected WallSignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

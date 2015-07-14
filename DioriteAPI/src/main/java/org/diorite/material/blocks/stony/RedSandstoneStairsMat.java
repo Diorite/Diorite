@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -23,16 +22,6 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__RED_SANDSTONE_STAIRS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__RED_SANDSTONE_STAIRS__HARDNESS;
 
     public static final RedSandstoneStairsMat RED_SANDSTONE_STAIRS_EAST  = new RedSandstoneStairsMat();
     public static final RedSandstoneStairsMat RED_SANDSTONE_STAIRS_WEST  = new RedSandstoneStairsMat(BlockFace.WEST, false);
@@ -53,35 +42,23 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
     @SuppressWarnings("MagicNumber")
     protected RedSandstoneStairsMat()
     {
-        super("RED_SANDSTONE_STAIRS", 180, "minecraft:red_sandstone_stairs", "EAST", (byte) 0x00);
+        super("RED_SANDSTONE_STAIRS", 180, "minecraft:red_sandstone_stairs", "EAST", (byte) 0x00, 0.8f, 4);
         this.face = BlockFace.EAST;
         this.upsideDown = false;
     }
 
     protected RedSandstoneStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(RED_SANDSTONE_STAIRS_EAST.name(), RED_SANDSTONE_STAIRS_EAST.ordinal(), RED_SANDSTONE_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown));
+        super(RED_SANDSTONE_STAIRS_EAST.name(), RED_SANDSTONE_STAIRS_EAST.ordinal(), RED_SANDSTONE_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown), RED_SANDSTONE_STAIRS_EAST.getHardness(), RED_SANDSTONE_STAIRS_EAST.getBlastResistance());
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    protected RedSandstoneStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown)
+    protected RedSandstoneStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.upsideDown = upsideDown;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

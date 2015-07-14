@@ -2,7 +2,6 @@ package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -19,16 +18,6 @@ public class WoodenSlabMat extends WoodSlabMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__WOODEN_SLAB__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__WOODEN_SLAB__HARDNESS;
 
     public static final WoodenSlabMat WOODEN_SLAB_OAK      = new WoodenSlabMat();
     public static final WoodenSlabMat WOODEN_SLAB_SPRUCE   = new WoodenSlabMat(WoodTypeMat.SPRUCE, SlabTypeMat.BOTTOM);
@@ -50,24 +39,12 @@ public class WoodenSlabMat extends WoodSlabMat
     @SuppressWarnings("MagicNumber")
     protected WoodenSlabMat()
     {
-        super("WOODEN_SLAB", 126, "minecraft:wooden_slab", "OAK", WoodTypeMat.OAK, SlabTypeMat.BOTTOM);
+        super("WOODEN_SLAB", 126, "minecraft:wooden_slab", "OAK", WoodTypeMat.OAK, SlabTypeMat.BOTTOM, 2, 15);
     }
 
     public WoodenSlabMat(final WoodTypeMat woodType, final SlabTypeMat slabType)
     {
-        super(WOODEN_SLAB_OAK.name(), WOODEN_SLAB_OAK.ordinal(), WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(WOODEN_SLAB_OAK.name(), WOODEN_SLAB_OAK.ordinal(), WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType, WOODEN_SLAB_OAK.getHardness(), WOODEN_SLAB_OAK.getBlastResistance());
     }
 
     @Override

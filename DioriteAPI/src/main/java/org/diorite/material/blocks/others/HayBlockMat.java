@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
@@ -24,16 +23,6 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 3;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__HAY_BLOCK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__HAY_BLOCK__HARDNESS;
 
     public static final HayBlockMat HAY_BLOCK_UP_DOWN     = new HayBlockMat();
     public static final HayBlockMat HAY_BLOCK_EAST_WEST   = new HayBlockMat(RotateAxisMat.EAST_WEST);
@@ -47,32 +36,20 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
     @SuppressWarnings("MagicNumber")
     protected HayBlockMat()
     {
-        super("HAY_BLOCK", 170, "minecraft:hay_block", "UP_DOWN", (byte) 0x00);
+        super("HAY_BLOCK", 170, "minecraft:hay_block", "UP_DOWN", (byte) 0x00, 0.5f, 2.5f);
         this.rotateAxis = RotateAxisMat.UP_DOWN;
     }
 
     protected HayBlockMat(final RotateAxisMat rotateAxis)
     {
-        super(HAY_BLOCK_UP_DOWN.name(), HAY_BLOCK_UP_DOWN.ordinal(), HAY_BLOCK_UP_DOWN.getMinecraftId(), rotateAxis.name(), combine(rotateAxis));
+        super(HAY_BLOCK_UP_DOWN.name(), HAY_BLOCK_UP_DOWN.ordinal(), HAY_BLOCK_UP_DOWN.getMinecraftId(), rotateAxis.name(), combine(rotateAxis), HAY_BLOCK_UP_DOWN.getHardness(), HAY_BLOCK_UP_DOWN.getBlastResistance());
         this.rotateAxis = rotateAxis;
     }
 
-    protected HayBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RotateAxisMat rotateAxis)
+    protected HayBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

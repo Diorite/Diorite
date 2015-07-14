@@ -3,7 +3,6 @@ package org.diorite.material.blocks.others;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -18,16 +17,6 @@ public class IronTrapdoorMat extends TrapdoorMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__IRON_TRAPDOOR__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__IRON_TRAPDOOR__HARDNESS;
 
     public static final IronTrapdoorMat IRON_TRAPDOOR_WEST_BOTTOM  = new IronTrapdoorMat();
     public static final IronTrapdoorMat IRON_TRAPDOOR_SOUTH_BOTTOM = new IronTrapdoorMat(BlockFace.SOUTH, false, false);
@@ -55,29 +44,17 @@ public class IronTrapdoorMat extends TrapdoorMat
     @SuppressWarnings("MagicNumber")
     protected IronTrapdoorMat()
     {
-        super("IRON_TRAPDOOR", 167, "minecraft:iron_trapdoor", BlockFace.WEST, false, false);
+        super("IRON_TRAPDOOR", 167, "minecraft:iron_trapdoor", BlockFace.WEST, false, false, 5, 25);
     }
 
     protected IronTrapdoorMat(final BlockFace face, final boolean open, final boolean onTop)
     {
-        super(IRON_TRAPDOOR_WEST_BOTTOM.name(), IRON_TRAPDOOR_WEST_BOTTOM.ordinal(), IRON_TRAPDOOR_WEST_BOTTOM.getMinecraftId(), face, open, onTop);
+        super(IRON_TRAPDOOR_WEST_BOTTOM.name(), IRON_TRAPDOOR_WEST_BOTTOM.ordinal(), IRON_TRAPDOOR_WEST_BOTTOM.getMinecraftId(), face, open, onTop, IRON_TRAPDOOR_WEST_BOTTOM.getHardness(), IRON_TRAPDOOR_WEST_BOTTOM.getBlastResistance());
     }
 
-    protected IronTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop)
+    protected IronTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, face, open, onTop);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, face, open, onTop, hardness, blastResistance);
     }
 
     @Override

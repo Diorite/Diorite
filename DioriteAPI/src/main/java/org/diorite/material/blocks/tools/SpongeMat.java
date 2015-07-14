@@ -21,16 +21,6 @@ public class SpongeMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 2;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SPONGE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__SPONGE__HARDNESS;
 
     public static final SpongeMat SPONGE     = new SpongeMat();
     public static final SpongeMat SPONGE_WET = new SpongeMat(true);
@@ -43,32 +33,20 @@ public class SpongeMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected SpongeMat()
     {
-        super("SPONGE", 19, "minecraft:sponge", "DRY", (byte) 0x00);
+        super("SPONGE", 19, "minecraft:sponge", "DRY", (byte) 0x00, 0.6f, 3);
         this.isWet = false;
     }
 
     protected SpongeMat(final boolean isWet)
     {
-        super(SPONGE.name(), SPONGE.ordinal(), SPONGE.getMinecraftId(), isWet ? "WEY" : "DRY", (byte) (isWet ? 1 : 0));
+        super(SPONGE.name(), SPONGE.ordinal(), SPONGE.getMinecraftId(), isWet ? "WEY" : "DRY", (byte) (isWet ? 1 : 0), SPONGE.getHardness(), SPONGE.getBlastResistance());
         this.isWet = isWet;
     }
 
-    protected SpongeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean isWet)
+    protected SpongeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean isWet, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.isWet = isWet;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

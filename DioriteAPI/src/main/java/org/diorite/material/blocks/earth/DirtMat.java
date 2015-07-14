@@ -22,16 +22,6 @@ public class DirtMat extends EarthMat implements VariantableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 3;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DIRT__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__DIRT__HARDNESS;
 
     public static final DirtMat DIRT        = new DirtMat();
     public static final DirtMat DIRT_COARSE = new DirtMat(0x1, VariantMat.COARSE);
@@ -44,32 +34,20 @@ public class DirtMat extends EarthMat implements VariantableMat
 
     protected DirtMat()
     {
-        super("DIRT", 3, "minecraft:dirt", "CLASSIC", (byte) 0x00);
+        super("DIRT", 3, "minecraft:dirt", "CLASSIC", (byte) 0x00, 0.5f, 2.5f);
         this.variant = VariantMat.CLASSIC;
     }
 
     protected DirtMat(final int type, final VariantMat variant)
     {
-        super(DIRT.name(), DIRT.ordinal(), DIRT.getMinecraftId(), variant.name(), (byte) type);
+        super(DIRT.name(), DIRT.ordinal(), DIRT.getMinecraftId(), variant.name(), (byte) type, DIRT.getHardness(), DIRT.getBlastResistance());
         this.variant = variant;
     }
 
-    protected DirtMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant)
+    protected DirtMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.variant = variant;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

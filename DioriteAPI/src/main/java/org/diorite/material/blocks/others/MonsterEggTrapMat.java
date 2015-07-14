@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.stony.CobblestoneMat;
 import org.diorite.material.blocks.stony.StoneBrickMat;
@@ -25,16 +24,6 @@ public class MonsterEggTrapMat extends StonyMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 6;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__MONSTER_EGG_TRAP__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__MONSTER_EGG_TRAP__HARDNESS;
 
     public static final MonsterEggTrapMat MONSTER_EGG_TRAP_STONE                = new MonsterEggTrapMat();
     public static final MonsterEggTrapMat MONSTER_EGG_TRAP_COBBLESTONE          = new MonsterEggTrapMat("COBBLESTONE", 0x1, CobblestoneMat.COBBLESTONE);
@@ -51,32 +40,20 @@ public class MonsterEggTrapMat extends StonyMat
     @SuppressWarnings("MagicNumber")
     protected MonsterEggTrapMat()
     {
-        super("MONSTER_EGG_TRAP", 97, "minecraft:monster_egg", "STONE", (byte) 0x00);
+        super("MONSTER_EGG_TRAP", 97, "minecraft:monster_egg", "STONE", (byte) 0x00, 0.75f, 3.75f);
         this.block = StoneMat.STONE;
     }
 
     protected MonsterEggTrapMat(final String enumName, final int type, final BlockMaterialData block)
     {
-        super(MONSTER_EGG_TRAP_STONE.name(), MONSTER_EGG_TRAP_STONE.ordinal(), MONSTER_EGG_TRAP_STONE.getMinecraftId(), enumName, (byte) type);
+        super(MONSTER_EGG_TRAP_STONE.name(), MONSTER_EGG_TRAP_STONE.ordinal(), MONSTER_EGG_TRAP_STONE.getMinecraftId(), enumName, (byte) type, MONSTER_EGG_TRAP_STONE.getHardness(), MONSTER_EGG_TRAP_STONE.getBlastResistance());
         this.block = block;
     }
 
-    protected MonsterEggTrapMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockMaterialData block)
+    protected MonsterEggTrapMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockMaterialData block, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.block = block;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     /**

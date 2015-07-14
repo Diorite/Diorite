@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.material.blocks.PowerableMat;
@@ -29,16 +28,6 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__LEVER__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__LEVER__HARDNESS;
 
     public static final LeverMat LEVER_DOWN               = new LeverMat();
     public static final LeverMat LEVER_EAST               = new LeverMat(BlockFace.EAST, false, false);
@@ -67,7 +56,7 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
     @SuppressWarnings("MagicNumber")
     protected LeverMat()
     {
-        super("LEVER", 69, "minecraft:lever", "DOWN", (byte) 0x00);
+        super("LEVER", 69, "minecraft:lever", "DOWN", (byte) 0x00, 0.5f, 2.5f);
         this.face = BlockFace.DOWN;
         this.rotated = false;
         this.powered = false;
@@ -75,15 +64,15 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
 
     protected LeverMat(final BlockFace face, final boolean rotated, final boolean powered)
     {
-        super(LEVER_DOWN.name(), LEVER_DOWN.ordinal(), LEVER_DOWN.getMinecraftId(), face.name() + (rotated ? "_SOUTH" : "") + (powered ? "_POWERED" : ""), combine(face, rotated, powered));
+        super(LEVER_DOWN.name(), LEVER_DOWN.ordinal(), LEVER_DOWN.getMinecraftId(), face.name() + (rotated ? "_SOUTH" : "") + (powered ? "_POWERED" : ""), combine(face, rotated, powered), LEVER_DOWN.getHardness(), LEVER_DOWN.getBlastResistance());
         this.face = face;
         this.rotated = rotated;
         this.powered = powered;
     }
 
-    protected LeverMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean rotated, final boolean powered)
+    protected LeverMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean rotated, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.rotated = rotated;
         this.powered = powered;
@@ -132,18 +121,6 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
                 break;
         }
         return result;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

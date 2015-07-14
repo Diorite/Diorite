@@ -3,7 +3,6 @@ package org.diorite.material.blocks.wooden.wood.fencegate;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -20,16 +19,6 @@ public class DarkOakFenceGateMat extends WoodenFenceGateMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DARK_OAK_FENCE_GATE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__DARK_OAK_FENCE_GATE__HARDNESS;
 
     public static final DarkOakFenceGateMat DARK_OAK_FENCE_GATE_SOUTH = new DarkOakFenceGateMat();
     public static final DarkOakFenceGateMat DARK_OAK_FENCE_GATE_WEST  = new DarkOakFenceGateMat(BlockFace.WEST, false);
@@ -47,29 +36,17 @@ public class DarkOakFenceGateMat extends WoodenFenceGateMat
     @SuppressWarnings("MagicNumber")
     protected DarkOakFenceGateMat()
     {
-        super("DARK_OAK_FENCE_GATE", 186, "minecraft:fark_oak_fence_gate", WoodTypeMat.DARK_OAK, BlockFace.SOUTH, false);
+        super("DARK_OAK_FENCE_GATE", 186, "minecraft:fark_oak_fence_gate", WoodTypeMat.DARK_OAK, BlockFace.SOUTH, false, 2, 15);
     }
 
     protected DarkOakFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(DARK_OAK_FENCE_GATE_SOUTH.name(), DARK_OAK_FENCE_GATE_SOUTH.ordinal(), DARK_OAK_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.DARK_OAK, face, open);
+        super(DARK_OAK_FENCE_GATE_SOUTH.name(), DARK_OAK_FENCE_GATE_SOUTH.ordinal(), DARK_OAK_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.DARK_OAK, face, open, DARK_OAK_FENCE_GATE_SOUTH.getHardness(), DARK_OAK_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected DarkOakFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)
+    protected DarkOakFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }
 
     @Override

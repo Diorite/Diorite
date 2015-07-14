@@ -3,7 +3,6 @@ package org.diorite.material.blocks.wooden.wood.stairs;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -20,16 +19,6 @@ public class BirchStairsMat extends WoodenStairsMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__BIRCH_STAIRS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__BIRCH_STAIRS__HARDNESS;
 
     public static final BirchStairsMat BIRCH_STAIRS_EAST  = new BirchStairsMat();
     public static final BirchStairsMat BIRCH_STAIRS_WEST  = new BirchStairsMat(BlockFace.WEST, false);
@@ -47,29 +36,17 @@ public class BirchStairsMat extends WoodenStairsMat
     @SuppressWarnings("MagicNumber")
     protected BirchStairsMat()
     {
-        super("BIRCH_STAIRS", 135, "minecraft:birch_stairs", WoodTypeMat.BIRCH, BlockFace.EAST, false);
+        super("BIRCH_STAIRS", 135, "minecraft:birch_stairs", WoodTypeMat.BIRCH, BlockFace.EAST, false, 2, 15);
     }
 
     protected BirchStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(BIRCH_STAIRS_EAST.name(), BIRCH_STAIRS_EAST.ordinal(), BIRCH_STAIRS_EAST.getMinecraftId(), WoodTypeMat.BIRCH, face, upsideDown);
+        super(BIRCH_STAIRS_EAST.name(), BIRCH_STAIRS_EAST.ordinal(), BIRCH_STAIRS_EAST.getMinecraftId(), WoodTypeMat.BIRCH, face, upsideDown, BIRCH_STAIRS_EAST.getHardness(), BIRCH_STAIRS_EAST.getBlastResistance());
     }
 
-    protected BirchStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)
+    protected BirchStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown, hardness, blastResistance);
     }
 
     @Override

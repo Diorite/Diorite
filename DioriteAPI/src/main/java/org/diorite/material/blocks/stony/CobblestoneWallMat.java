@@ -18,16 +18,6 @@ public class CobblestoneWallMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 2;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__COBBLESTONE_WALL__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__COBBLESTONE_WALL__HARDNESS;
 
     public static final CobblestoneWallMat COBBLESTONE_WALL       = new CobblestoneWallMat();
     public static final CobblestoneWallMat COBBLESTONE_WALL_MOSSY = new CobblestoneWallMat("MOSSY", 0x1);
@@ -38,29 +28,17 @@ public class CobblestoneWallMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected CobblestoneWallMat()
     {
-        super("COBBLESTONE_WALL", 139, "minecraft:cobblestone_wall", "COBBLESTONE_WALL", (byte) 0x00);
+        super("COBBLESTONE_WALL", 139, "minecraft:cobblestone_wall", "COBBLESTONE_WALL", (byte) 0x00, 2, 30);
     }
 
     protected CobblestoneWallMat(final String enumName, final int type)
     {
-        super(COBBLESTONE_WALL.name(), COBBLESTONE_WALL.ordinal(), COBBLESTONE_WALL.getMinecraftId(), enumName, (byte) type);
+        super(COBBLESTONE_WALL.name(), COBBLESTONE_WALL.ordinal(), COBBLESTONE_WALL.getMinecraftId(), enumName, (byte) type, COBBLESTONE_WALL.getHardness(), COBBLESTONE_WALL.getBlastResistance());
     }
 
-    protected CobblestoneWallMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected CobblestoneWallMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override

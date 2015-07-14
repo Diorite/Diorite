@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -21,16 +20,6 @@ public class JukeboxMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 2;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__JUKEBOX__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__JUKEBOX__HARDNESS;
 
     public static final JukeboxMat JUKEBOX           = new JukeboxMat();
     public static final JukeboxMat JUKEBOX_WITH_DISC = new JukeboxMat("WITH_DISC", 0x1, true);
@@ -43,32 +32,20 @@ public class JukeboxMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected JukeboxMat()
     {
-        super("JUKEBOX", 84, "minecraft:jukebox", "EMPTY", (byte) 0x00);
+        super("JUKEBOX", 84, "minecraft:jukebox", "EMPTY", (byte) 0x00, 2, 30);
         this.withDisc = false;
     }
 
     protected JukeboxMat(final String enumName, final int type, final boolean withDisc)
     {
-        super(JUKEBOX.name(), JUKEBOX.ordinal(), JUKEBOX.getMinecraftId(), enumName, (byte) type);
+        super(JUKEBOX.name(), JUKEBOX.ordinal(), JUKEBOX.getMinecraftId(), enumName, (byte) type, JUKEBOX.getHardness(), JUKEBOX.getBlastResistance());
         this.withDisc = withDisc;
     }
 
-    protected JukeboxMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean withDisc)
+    protected JukeboxMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean withDisc, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.withDisc = withDisc;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     public boolean isWithDisc()

@@ -17,16 +17,6 @@ public class MushroomRedMat extends MushroomMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 1;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__RED_MUSHROOM__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__RED_MUSHROOM__HARDNESS;
 
     public static final MushroomRedMat RED_MUSHROOM = new MushroomRedMat();
 
@@ -36,24 +26,12 @@ public class MushroomRedMat extends MushroomMat
     @SuppressWarnings("MagicNumber")
     protected MushroomRedMat()
     {
-        super("RED_MUSHROOM", 40, "minecraft:red_mushroom", "RED_MUSHROOM", (byte) 0x00);
+        super("RED_MUSHROOM", 40, "minecraft:red_mushroom", "RED_MUSHROOM", (byte) 0x00, 0, 0);
     }
 
-    protected MushroomRedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected MushroomRedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override

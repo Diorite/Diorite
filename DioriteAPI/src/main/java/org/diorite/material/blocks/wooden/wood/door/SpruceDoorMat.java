@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -23,16 +22,6 @@ public class SpruceDoorMat extends WoodenDoorMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SPRUCE_DOOR__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__SPRUCE_DOOR__HARDNESS;
 
     public static final SpruceDoorMat SPRUCE_DOOR_BOTTOM_EAST       = new SpruceDoorMat();
     public static final SpruceDoorMat SPRUCE_DOOR_BOTTOM_SOUTH      = new SpruceDoorMat(BlockFace.SOUTH, false);
@@ -59,7 +48,7 @@ public class SpruceDoorMat extends WoodenDoorMat
     @SuppressWarnings("MagicNumber")
     protected SpruceDoorMat()
     {
-        super("SPRUCE_DOOR", 195, "minecraft:jungle_door", "BOTTOM_EAST", WoodTypeMat.SPRUCE);
+        super("SPRUCE_DOOR", 195, "minecraft:jungle_door", "BOTTOM_EAST", WoodTypeMat.SPRUCE, 3, 15);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = false;
@@ -69,7 +58,7 @@ public class SpruceDoorMat extends WoodenDoorMat
 
     protected SpruceDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.SPRUCE);
+        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.SPRUCE, SPRUCE_DOOR_BOTTOM_EAST.getHardness(), SPRUCE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +68,7 @@ public class SpruceDoorMat extends WoodenDoorMat
 
     protected SpruceDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.SPRUCE);
+        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.SPRUCE, SPRUCE_DOOR_BOTTOM_EAST.getHardness(), SPRUCE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;
@@ -89,24 +78,12 @@ public class SpruceDoorMat extends WoodenDoorMat
 
     protected SpruceDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodTypeMat woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
-        super(enumName, id, minecraftId, typeName, type, woodType);
+        super(enumName, id, minecraftId, typeName, type, woodType, SPRUCE_DOOR_BOTTOM_EAST.getHardness(), SPRUCE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = open;
         this.topPart = topPart;
         this.blockFace = blockFace;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

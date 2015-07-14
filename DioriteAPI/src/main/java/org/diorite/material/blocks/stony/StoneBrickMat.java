@@ -22,16 +22,6 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 4;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_BRICK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_BRICK__HARDNESS;
 
     public static final StoneBrickMat STONE_BRICK          = new StoneBrickMat();
     public static final StoneBrickMat STONE_BRICK_MOSSY    = new StoneBrickMat(0x1, VariantMat.MOSSY);
@@ -46,32 +36,20 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
     @SuppressWarnings("MagicNumber")
     protected StoneBrickMat()
     {
-        super("STONE_BRICK", 98, "minecraft:stonebrick", "CLASSIC", (byte) 0x00);
+        super("STONE_BRICK", 98, "minecraft:stonebrick", "CLASSIC", (byte) 0x00, 1.5f, 30);
         this.variant = VariantMat.CLASSIC;
     }
 
     protected StoneBrickMat(final int type, final VariantMat varaint)
     {
-        super(STONE_BRICK.name(), STONE_BRICK.ordinal(), STONE_BRICK.getMinecraftId(), varaint.name(), (byte) type);
+        super(STONE_BRICK.name(), STONE_BRICK.ordinal(), STONE_BRICK.getMinecraftId(), varaint.name(), (byte) type, STONE_BRICK.getHardness(), STONE_BRICK.getBlastResistance());
         this.variant = varaint;
     }
 
-    protected StoneBrickMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant)
+    protected StoneBrickMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.variant = variant;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

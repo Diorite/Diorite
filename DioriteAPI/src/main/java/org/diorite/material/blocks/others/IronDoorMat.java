@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -22,17 +21,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__IRON_DOOR__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__IRON_DOOR__HARDNESS;
+    public static final byte USED_DATA_VALUES = 12;
 
     public static final IronDoorMat IRON_DOOR_BOTTOM_EAST       = new IronDoorMat();
     public static final IronDoorMat IRON_DOOR_BOTTOM_SOUTH      = new IronDoorMat("BOTTOM_SOUTH", BlockFace.SOUTH, false);
@@ -59,7 +48,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
     @SuppressWarnings("MagicNumber")
     protected IronDoorMat()
     {
-        super("IRON_DOOR", 71, "minecraft:iron_door", "BOTTOM_EAST", (byte) 0x00);
+        super("IRON_DOOR", 71, "minecraft:iron_door", "BOTTOM_EAST", (byte) 0x00, 5, 25);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = false;
@@ -69,7 +58,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
 
     protected IronDoorMat(final String enumName, final boolean powered, final boolean hingeOnRightSide)
     {
-        super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.ordinal(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(powered, hingeOnRightSide));
+        super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.ordinal(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(powered, hingeOnRightSide), IRON_DOOR_BOTTOM_EAST.getHardness(), IRON_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -79,7 +68,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
 
     protected IronDoorMat(final String enumName, final BlockFace blockFace, final boolean open)
     {
-        super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.ordinal(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(blockFace, open));
+        super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.ordinal(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(blockFace, open), IRON_DOOR_BOTTOM_EAST.getHardness(), IRON_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;
@@ -87,26 +76,14 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
         this.blockFace = blockFace;
     }
 
-    protected IronDoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    protected IronDoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = open;
         this.topPart = topPart;
         this.blockFace = blockFace;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.diorite.material.blocks.cold;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -18,16 +17,6 @@ public class SnowLayerMat extends BlockMaterialData
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SNOW_LAYER__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__SNOW_LAYER__HARDNESS;
 
     public static final SnowLayerMat SNOW_LAYER_1 = new SnowLayerMat();
     public static final SnowLayerMat SNOW_LAYER_2 = new SnowLayerMat(0x01);
@@ -44,29 +33,17 @@ public class SnowLayerMat extends BlockMaterialData
     @SuppressWarnings("MagicNumber")
     protected SnowLayerMat()
     {
-        super("SNOW_LAYER_1", 78, "minecraft:snow_layer", "1", (byte) 0x00);
+        super("SNOW_LAYER_1", 78, "minecraft:snow_layer", "1", (byte) 0x00, 0.1f, 0.5f);
     }
 
     protected SnowLayerMat(final int type)
     {
-        super(SNOW_LAYER_1.name(), SNOW_LAYER_1.ordinal(), SNOW_LAYER_1.getMinecraftId(), Integer.toString(type + 1), (byte) type);
+        super(SNOW_LAYER_1.name(), SNOW_LAYER_1.ordinal(), SNOW_LAYER_1.getMinecraftId(), Integer.toString(type + 1), (byte) type, SNOW_LAYER_1.getHardness(), SNOW_LAYER_1.getBlastResistance());
     }
 
-    protected SnowLayerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected SnowLayerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override

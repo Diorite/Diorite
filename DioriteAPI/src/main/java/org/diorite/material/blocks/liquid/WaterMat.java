@@ -2,7 +2,6 @@ package org.diorite.material.blocks.liquid;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,26 +16,6 @@ public class WaterMat extends LiquidMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES       = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE       = MagicNumbers.MATERIAL__WATER__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS               = MagicNumbers.MATERIAL__WATER__HARDNESS;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE_STILL = MagicNumbers.MATERIAL__WATER_STILL__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS_STILL         = MagicNumbers.MATERIAL__WATER_STILL__HARDNESS;
 
     public static final WaterMat WATER_SOURCE  = new WaterMat(LiquidTypeMat.NORMAL);
     public static final WaterMat WATER_STAGE_1 = new WaterMat(LiquidStageMat.STAGE_1, LiquidTypeMat.NORMAL);
@@ -78,19 +57,29 @@ public class WaterMat extends LiquidMat
     private static final Map<String, WaterMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WaterMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
 
+    protected WaterMat(final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    {
+        super("WATER" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStageMat.SOURCE, liquidType, hardness, blastResistance);
+    }
+
     protected WaterMat(final LiquidTypeMat liquidType)
     {
-        super("WATER" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStageMat.SOURCE, liquidType);
+        super("WATER" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStageMat.SOURCE, liquidType, 100, 500);
+    }
+
+    protected WaterMat(final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    {
+        super(liquidType.isStill() ? WATER_SOURCE_STILL.name() : WATER_SOURCE.name(), WATER_SOURCE.ordinal() + ((liquidType == LiquidTypeMat.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType, hardness, blastResistance);
     }
 
     protected WaterMat(final LiquidStageMat stage, final LiquidTypeMat liquidType)
     {
-        super(liquidType.isStill() ? WATER_SOURCE_STILL.name() : WATER_SOURCE.name(), WATER_SOURCE.ordinal() + ((liquidType == LiquidTypeMat.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType);
+        super(liquidType.isStill() ? WATER_SOURCE_STILL.name() : WATER_SOURCE.name(), WATER_SOURCE.ordinal() + ((liquidType == LiquidTypeMat.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType, liquidType.isStill() ? WATER_SOURCE_STILL.getHardness() : WATER_SOURCE.getHardness(), liquidType.isStill() ? WATER_SOURCE_STILL.getBlastResistance() : WATER_SOURCE.getBlastResistance());
     }
 
-    public WaterMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType)
+    public WaterMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, stage, liquidType);
+        super(enumName, id, minecraftId, maxStack, typeName, stage, liquidType, hardness, blastResistance);
     }
 
     @Override
@@ -157,18 +146,6 @@ public class WaterMat extends LiquidMat
     public WaterMat source()
     {
         return (WaterMat) super.source();
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return this.isStill() ? BLAST_RESISTANCE_STILL : BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return this.isStill() ? HARDNESS_STILL : HARDNESS;
     }
 
     @Override
@@ -254,12 +231,17 @@ public class WaterMat extends LiquidMat
     {
         public WaterStill()
         {
-            super(LiquidTypeMat.STILL);
+            super(LiquidTypeMat.STILL, 100, 500);
+        }
+
+        public WaterStill(final LiquidStageMat stage, final float hardness, final float blastResistance)
+        {
+            super(stage, LiquidTypeMat.STILL, hardness, blastResistance);
         }
 
         public WaterStill(final LiquidStageMat stage)
         {
-            super(stage, LiquidTypeMat.STILL);
+            super(stage, LiquidTypeMat.STILL, WATER_SOURCE_STILL.getHardness(), WATER_SOURCE_STILL.getBlastResistance());
         }
 
         @SuppressWarnings("MagicNumber")

@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -21,17 +20,7 @@ public class SandstoneMat extends StonyMat implements VariantableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 3;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SAND_STONE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__SAND_STONE__HARDNESS;
+    public static final byte USED_DATA_VALUES = 3;
 
     public static final SandstoneMat SANDSTONE          = new SandstoneMat();
     public static final SandstoneMat SANDSTONE_CHISELED = new SandstoneMat(0x1, VariantMat.CHISELED);
@@ -45,32 +34,20 @@ public class SandstoneMat extends StonyMat implements VariantableMat
     @SuppressWarnings("MagicNumber")
     protected SandstoneMat()
     {
-        super("SANDSTONE", 24, "minecraft:sandstone", "CLASSIC", (byte) 0x00);
+        super("SANDSTONE", 24, "minecraft:sandstone", "CLASSIC", (byte) 0x00, 0.8f, 4);
         this.variant = VariantMat.CLASSIC;
     }
 
     protected SandstoneMat(final int type, final VariantMat variant)
     {
-        super(SANDSTONE.name(), SANDSTONE.ordinal(), SANDSTONE.getMinecraftId(), variant.name(), (byte) type);
+        super(SANDSTONE.name(), SANDSTONE.ordinal(), SANDSTONE.getMinecraftId(), variant.name(), (byte) type, SANDSTONE.getHardness(), SANDSTONE.getBlastResistance());
         this.variant = variant;
     }
 
-    protected SandstoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant)
+    protected SandstoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.variant = variant;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

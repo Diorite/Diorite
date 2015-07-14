@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.PortalMat;
 import org.diorite.material.blocks.RotatableMat;
@@ -25,16 +24,6 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 2;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__NETHER_PORTAL__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__NETHER_PORTAL__HARDNESS;
 
     public static final NetherPortalMat NETHER_PORTAL_EAST_WEST   = new NetherPortalMat();
     public static final NetherPortalMat NETHER_PORTAL_NORTH_SOUTH = new NetherPortalMat("NORTH_SOUTH", RotateAxisMat.NORTH_SOUTH);
@@ -47,32 +36,20 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
     @SuppressWarnings("MagicNumber")
     protected NetherPortalMat()
     {
-        super("NETHER_PORTAL", 90, "minecraft:portal", "EAST_WEST", (byte) 0x01);
+        super("NETHER_PORTAL", 90, "minecraft:portal", "EAST_WEST", (byte) 0x01, - 1, 18_000_000);
         this.rotateAxis = RotateAxisMat.EAST_WEST;
     }
 
     protected NetherPortalMat(final String enumName, final RotateAxisMat rotateAxis)
     {
-        super(NETHER_PORTAL_EAST_WEST.name(), NETHER_PORTAL_EAST_WEST.ordinal(), NETHER_PORTAL_EAST_WEST.getMinecraftId(), enumName, combine(rotateAxis));
+        super(NETHER_PORTAL_EAST_WEST.name(), NETHER_PORTAL_EAST_WEST.ordinal(), NETHER_PORTAL_EAST_WEST.getMinecraftId(), enumName, combine(rotateAxis), NETHER_PORTAL_EAST_WEST.getHardness(), NETHER_PORTAL_EAST_WEST.getBlastResistance());
         this.rotateAxis = rotateAxis;
     }
 
-    protected NetherPortalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RotateAxisMat rotateAxis)
+    protected NetherPortalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

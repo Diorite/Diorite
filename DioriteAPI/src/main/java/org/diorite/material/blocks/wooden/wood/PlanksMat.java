@@ -2,7 +2,6 @@ package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -18,16 +17,6 @@ public class PlanksMat extends WoodMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 6;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__PLANKS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__PLANKS__HARDNESS;
 
     public static final PlanksMat PLANKS_OAK      = new PlanksMat();
     public static final PlanksMat PLANKS_SPRUCE   = new PlanksMat(WoodTypeMat.SPRUCE);
@@ -41,17 +30,17 @@ public class PlanksMat extends WoodMat
 
     protected PlanksMat()
     {
-        super("PLANKS", 5, "minecraft:planks", "QAK", WoodTypeMat.OAK.getPlanksMeta(), WoodTypeMat.OAK);
+        super("PLANKS", 5, "minecraft:planks", "QAK", WoodTypeMat.OAK.getPlanksMeta(), WoodTypeMat.OAK, 2, 15);
     }
 
     protected PlanksMat(final WoodTypeMat woodType)
     {
-        super(PLANKS_OAK.name(), PLANKS_OAK.ordinal(), PLANKS_OAK.getMinecraftId(), woodType.name(), woodType.getPlanksMeta(), woodType);
+        super(PLANKS_OAK.name(), PLANKS_OAK.ordinal(), PLANKS_OAK.getMinecraftId(), woodType.name(), woodType.getPlanksMeta(), woodType, PLANKS_OAK.getHardness(), PLANKS_OAK.getBlastResistance());
     }
 
-    protected PlanksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType)
+    protected PlanksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
 
     @Override
@@ -64,18 +53,6 @@ public class PlanksMat extends WoodMat
     public PlanksMat getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

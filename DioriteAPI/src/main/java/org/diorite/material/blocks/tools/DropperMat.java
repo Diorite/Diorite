@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
 import org.diorite.material.blocks.stony.StonyMat;
@@ -29,16 +28,6 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DROPPER__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__DROPPER__HARDNESS;
 
     public static final DropperMat DROPPER_DOWN  = new DropperMat();
     public static final DropperMat DROPPER_UP    = new DropperMat(BlockFace.UP, false);
@@ -63,21 +52,21 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
     @SuppressWarnings("MagicNumber")
     protected DropperMat()
     {
-        super("DROPPER", 158, "minecraft:dropper", "DOWN", (byte) 0x00);
+        super("DROPPER", 158, "minecraft:dropper", "DOWN", (byte) 0x00, 3.5f, 17.5f);
         this.facing = BlockFace.DOWN;
         this.powered = false;
     }
 
     protected DropperMat(final BlockFace facing, final boolean powered)
     {
-        super(DROPPER_DOWN.name(), DROPPER_DOWN.ordinal(), DROPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered));
+        super(DROPPER_DOWN.name(), DROPPER_DOWN.ordinal(), DROPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered), DROPPER_DOWN.getHardness(), DROPPER_DOWN.getBlastResistance());
         this.facing = facing;
         this.powered = powered;
     }
 
-    protected DropperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered)
+    protected DropperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.facing = facing;
         this.powered = powered;
     }
@@ -109,18 +98,6 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
     public DropperMat getType(final BlockFace face, final boolean powered)
     {
         return getByID(combine(face, powered));
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

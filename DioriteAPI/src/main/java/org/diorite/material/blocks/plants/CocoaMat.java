@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.ByteRange;
@@ -27,16 +26,6 @@ public class CocoaMat extends CropsMat implements AttachableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte      USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float     BLAST_RESISTANCE = MagicNumbers.MATERIAL__COCOA__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float     HARDNESS         = MagicNumbers.MATERIAL__COCOA__HARDNESS;
 
     public static final CocoaMat COCOA_NORTH_0 = new CocoaMat();
     public static final CocoaMat COCOA_EAST_0  = new CocoaMat("EAST_0", BlockFace.EAST, 0);
@@ -62,35 +51,23 @@ public class CocoaMat extends CropsMat implements AttachableMat
     @SuppressWarnings("MagicNumber")
     protected CocoaMat()
     {
-        super("COCOA_NORTH_0", 127, "minecraft:cocoa", "NORTH_0", (byte) 0x00);
+        super("COCOA_NORTH_0", 127, "minecraft:cocoa", "NORTH_0", (byte) 0x00, 0.2f, 15);
         this.face = BlockFace.NORTH;
         this.age = 0;
     }
 
     protected CocoaMat(final String enumName, final BlockFace face, final int age)
     {
-        super(COCOA_NORTH_0.name(), COCOA_NORTH_0.ordinal(), COCOA_NORTH_0.getMinecraftId(), enumName, combine(face, age));
+        super(COCOA_NORTH_0.name(), COCOA_NORTH_0.ordinal(), COCOA_NORTH_0.getMinecraftId(), enumName, combine(face, age), COCOA_NORTH_0.getHardness(), COCOA_NORTH_0.getBlastResistance());
         this.face = face;
         this.age = age;
     }
 
-    protected CocoaMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int age)
+    protected CocoaMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int age, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.age = age;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -20,20 +19,10 @@ public class LeavesMat extends WoodMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 24;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__LEAVES__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__LEAVES__HARDNESS;
+    public static final byte USED_DATA_VALUES = 24;
 
     public static final LeavesMat LEAVES_OAK      = new LeavesMat();
-    public static final LeavesMat LEAVES_SPRUCE   = new LeavesMat("SPRUCE", WoodTypeMat.SPRUCE, false, true);
+    public static final LeavesMat LEAVES_SPRUCE   = new LeavesMat("SPRUCE", WoodTypeMat.SPRUCE, false, true, 0.2f, 1);
     public static final LeavesMat LEAVES_BIRCH    = new LeavesMat("BIRCH", WoodTypeMat.BIRCH, false, true);
     public static final LeavesMat LEAVES_JUNGLE   = new LeavesMat("JUNGLE", WoodTypeMat.JUNGLE, false, true);
     public static final LeavesMat LEAVES_ACACIA   = new Leaves2("ACACIA", WoodTypeMat.ACACIA, false, true);
@@ -69,22 +58,30 @@ public class LeavesMat extends WoodMat
     @SuppressWarnings("MagicNumber")
     protected LeavesMat()
     {
-        super("LEAVES", 18, "minecraft:leaves", "QAK", (byte) 0x00, WoodTypeMat.OAK);
+        super("LEAVES", 18, "minecraft:leaves", "QAK", (byte) 0x00, WoodTypeMat.OAK, 0.2f, 1);
         this.checkDecay = false;
         this.decayable = true;
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LeavesMat(final String enumName, final WoodTypeMat type, final boolean checkDecay, final boolean decayable)
+    protected LeavesMat(final String enumName, final WoodTypeMat type, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
     {
-        super(LEAVES_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, combine(type, checkDecay, decayable), type);
+        super(LEAVES_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, combine(type, checkDecay, decayable), type, hardness, blastResistance);
         this.checkDecay = checkDecay;
         this.decayable = decayable;
     }
 
-    protected LeavesMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final boolean checkDecay, final boolean decayable)
+    @SuppressWarnings("MagicNumber")
+    protected LeavesMat(final String enumName, final WoodTypeMat type, final boolean checkDecay, final boolean decayable)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
+        super(LEAVES_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, combine(type, checkDecay, decayable), type, LEAVES_OAK.getHardness(), LEAVES_OAK.getBlastResistance());
+        this.checkDecay = checkDecay;
+        this.decayable = decayable;
+    }
+
+    protected LeavesMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
+    {
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.checkDecay = checkDecay;
         this.decayable = decayable;
     }
@@ -109,18 +106,6 @@ public class LeavesMat extends WoodMat
     public LeavesMat getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override
@@ -237,9 +222,9 @@ public class LeavesMat extends WoodMat
             super(enumName, type, checkDecay, decayable);
         }
 
-        protected Leaves2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final boolean checkDecay, final boolean decayable)
+        protected Leaves2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
         {
-            super(enumName, id, minecraftId, maxStack, typeName, type, woodType, checkDecay, decayable);
+            super(enumName, id, minecraftId, maxStack, typeName, type, woodType, checkDecay, decayable, hardness, blastResistance);
         }
 
         @Override

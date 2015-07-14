@@ -13,15 +13,15 @@ public abstract class PressurePlateMat extends BlockMaterialData implements Powe
 {
     protected final boolean powered;
 
-    protected PressurePlateMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final boolean powered)
+    protected PressurePlateMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, typeName, type, hardness, blastResistance);
         this.powered = powered;
     }
 
-    protected PressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered)
+    protected PressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.powered = powered;
     }
 

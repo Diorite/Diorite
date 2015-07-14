@@ -39,16 +39,6 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__TRIPWIRE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__TRIPWIRE__HARDNESS;
 
     public static final TripwireMat TRIPWIRE                               = new TripwireMat();
     public static final TripwireMat TRIPWIRE_POWERED                       = new TripwireMat(true, false, false, false);
@@ -78,7 +68,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
     @SuppressWarnings("MagicNumber")
     protected TripwireMat()
     {
-        super("TRIPWIRE", 132, "minecraft:tripwire", "RAW", (byte) 0x00);
+        super("TRIPWIRE", 132, "minecraft:tripwire", "RAW", (byte) 0x00, 0, 0);
         this.powered = false;
         this.inAir = false;
         this.valid = false;
@@ -87,32 +77,20 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
 
     protected TripwireMat(final boolean powered, final boolean inAir, final boolean valid, final boolean disarmed)
     {
-        super(TRIPWIRE.name(), TRIPWIRE.ordinal(), TRIPWIRE.getMinecraftId(), combineName(powered, inAir, valid, disarmed), combine(powered, inAir, valid, disarmed));
+        super(TRIPWIRE.name(), TRIPWIRE.ordinal(), TRIPWIRE.getMinecraftId(), combineName(powered, inAir, valid, disarmed), combine(powered, inAir, valid, disarmed), TRIPWIRE.getHardness(), TRIPWIRE.getBlastResistance());
         this.powered = powered;
         this.inAir = inAir;
         this.valid = valid;
         this.disarmed = disarmed;
     }
 
-    public TripwireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final boolean inAir, final boolean valid, final boolean disarmed)
+    public TripwireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final boolean inAir, final boolean valid, final boolean disarmed, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.powered = powered;
         this.inAir = inAir;
         this.valid = valid;
         this.disarmed = disarmed;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

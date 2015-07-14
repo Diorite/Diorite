@@ -25,17 +25,17 @@ public abstract class TrapdoorMat extends BlockMaterialData implements OpenableM
     protected final boolean   open;
     protected final boolean   onTop;
 
-    protected TrapdoorMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final boolean open, final boolean onTop)
+    protected TrapdoorMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final boolean open, final boolean onTop, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, face.name() + (onTop ? "_TOP" : "_BOTTOM") + (open ? "_OPEN" : ""), combine(face, open, onTop));
+        super(enumName, id, minecraftId, face.name() + (onTop ? "_TOP" : "_BOTTOM") + (open ? "_OPEN" : ""), combine(face, open, onTop), hardness, blastResistance);
         this.face = face;
         this.open = open;
         this.onTop = onTop;
     }
 
-    protected TrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop)
+    protected TrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.open = open;
         this.onTop = onTop;

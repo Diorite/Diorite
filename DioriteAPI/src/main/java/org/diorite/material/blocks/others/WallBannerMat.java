@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -22,16 +21,6 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 4;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__WALL_BANNER__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__WALL_BANNER__HARDNESS;
 
     public static final WallBannerMat WALL_BANNER_NORTH = new WallBannerMat();
     public static final WallBannerMat WALL_BANNER_SOUTH = new WallBannerMat(BlockFace.SOUTH);
@@ -46,32 +35,20 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
     @SuppressWarnings("MagicNumber")
     protected WallBannerMat()
     {
-        super("WALL_BANNER", 177, "minecraft:wall_banner", "NORTH", (byte) 0x02);
+        super("WALL_BANNER", 177, "minecraft:wall_banner", "NORTH", (byte) 0x02, 1, 5);
         this.face = BlockFace.NORTH;
     }
 
     protected WallBannerMat(final BlockFace face)
     {
-        super(WALL_BANNER_NORTH.name(), WALL_BANNER_NORTH.ordinal(), WALL_BANNER_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(WALL_BANNER_NORTH.name(), WALL_BANNER_NORTH.ordinal(), WALL_BANNER_NORTH.getMinecraftId(), face.name(), combine(face), WALL_BANNER_NORTH.getHardness(), WALL_BANNER_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected WallBannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)
+    protected WallBannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

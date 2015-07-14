@@ -3,7 +3,6 @@ package org.diorite.material.blocks.wooden.wood.stairs;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -20,16 +19,6 @@ public class JungleStairsMat extends WoodenStairsMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__JUNGLE_STAIRS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__JUNGLE_STAIRS__HARDNESS;
 
     public static final JungleStairsMat JUNGLE_STAIRS_EAST  = new JungleStairsMat();
     public static final JungleStairsMat JUNGLE_STAIRS_WEST  = new JungleStairsMat(BlockFace.WEST, false);
@@ -47,29 +36,17 @@ public class JungleStairsMat extends WoodenStairsMat
     @SuppressWarnings("MagicNumber")
     protected JungleStairsMat()
     {
-        super("JUNGLE_STAIRS", 136, "minecraft:jungle_stairs", WoodTypeMat.JUNGLE, BlockFace.EAST, false);
+        super("JUNGLE_STAIRS", 136, "minecraft:jungle_stairs", WoodTypeMat.JUNGLE, BlockFace.EAST, false, 2, 15);
     }
 
     protected JungleStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(JUNGLE_STAIRS_EAST.name(), JUNGLE_STAIRS_EAST.ordinal(), JUNGLE_STAIRS_EAST.getMinecraftId(), WoodTypeMat.JUNGLE, face, upsideDown);
+        super(JUNGLE_STAIRS_EAST.name(), JUNGLE_STAIRS_EAST.ordinal(), JUNGLE_STAIRS_EAST.getMinecraftId(), WoodTypeMat.JUNGLE, face, upsideDown, JUNGLE_STAIRS_EAST.getHardness(), JUNGLE_STAIRS_EAST.getBlastResistance());
     }
 
-    protected JungleStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)
+    protected JungleStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown, hardness, blastResistance);
     }
 
     @Override

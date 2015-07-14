@@ -16,16 +16,16 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat
     protected final BlockFace face;
     protected final boolean   upsideDown;
 
-    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)
+    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), (byte) 0, woodType);
+        super(enumName, id, minecraftId, face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), (byte) 0, woodType, hardness, blastResistance);
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)
+    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.face = face;
         this.upsideDown = upsideDown;
     }

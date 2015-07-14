@@ -9,15 +9,15 @@ public abstract class RailsMat extends BlockMaterialData
 {
     protected final RailTypeMat railType;
 
-    protected RailsMat(final String enumName, final int id, final String minecraftId, final String typeName, final RailTypeMat railType, final byte flags)
+    protected RailsMat(final String enumName, final int id, final String minecraftId, final String typeName, final RailTypeMat railType, final byte flags, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, typeName, (byte) (railType.getFlag() | flags));
+        super(enumName, id, minecraftId, typeName, (byte) (railType.getFlag() | flags), hardness, blastResistance);
         this.railType = railType;
     }
 
-    protected RailsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType)
+    protected RailsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.railType = railType;
     }
 

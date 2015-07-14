@@ -3,7 +3,6 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -18,16 +17,6 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 5;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__REDSTONE_TORCH_ON__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__REDSTONE_TORCH_ON__HARDNESS;
 
     public static final RedstoneTorchOnMat REDSTONE_TORCH_ON_WEST  = new RedstoneTorchOnMat();
     public static final RedstoneTorchOnMat REDSTONE_TORCH_ON_EAST  = new RedstoneTorchOnMat(BlockFace.EAST);
@@ -41,29 +30,17 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
     @SuppressWarnings("MagicNumber")
     protected RedstoneTorchOnMat()
     {
-        super("REDSTONE_TORCH_ON", 76, "minecraft:redstone_torch", BlockFace.WEST);
+        super("REDSTONE_TORCH_ON", 76, "minecraft:redstone_torch", BlockFace.WEST, 0, 0);
     }
 
     protected RedstoneTorchOnMat(final BlockFace face)
     {
-        super(REDSTONE_TORCH_ON_WEST.name(), REDSTONE_TORCH_ON_WEST.ordinal(), REDSTONE_TORCH_ON_WEST.getMinecraftId(), face);
+        super(REDSTONE_TORCH_ON_WEST.name(), REDSTONE_TORCH_ON_WEST.ordinal(), REDSTONE_TORCH_ON_WEST.getMinecraftId(), face, REDSTONE_TORCH_ON_WEST.getHardness(), REDSTONE_TORCH_ON_WEST.getBlastResistance());
     }
 
-    protected RedstoneTorchOnMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)
+    protected RedstoneTorchOnMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, face);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, face, hardness, blastResistance);
     }
 
     @Override

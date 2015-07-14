@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -23,16 +22,6 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 4;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__TRAPPED_CHEST__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__TRAPPED_CHEST__HARDNESS;
 
     public static final TrappedChestMat TRAPPED_CHEST_NORTH = new TrappedChestMat();
     public static final TrappedChestMat TRAPPED_CHEST_SOUTH = new TrappedChestMat(BlockFace.SOUTH);
@@ -47,32 +36,20 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
     @SuppressWarnings("MagicNumber")
     protected TrappedChestMat()
     {
-        super("TRAPPED_CHEST", 65, "minecraft:ladder", "NORTH", (byte) 0x00);
+        super("TRAPPED_CHEST", 65, "minecraft:ladder", "NORTH", (byte) 0x00, 2.5f, 12.5f);
         this.face = BlockFace.NORTH;
     }
 
     protected TrappedChestMat(final BlockFace face)
     {
-        super(TRAPPED_CHEST_NORTH.name(), TRAPPED_CHEST_NORTH.ordinal(), TRAPPED_CHEST_NORTH.getMinecraftId(), face.name(), combine(face));
+        super(TRAPPED_CHEST_NORTH.name(), TRAPPED_CHEST_NORTH.ordinal(), TRAPPED_CHEST_NORTH.getMinecraftId(), face.name(), combine(face), TRAPPED_CHEST_NORTH.getHardness(), TRAPPED_CHEST_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected TrappedChestMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face)
+    protected TrappedChestMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

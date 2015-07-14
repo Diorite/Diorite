@@ -2,7 +2,6 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,16 +16,6 @@ public class RedMushroomBlockMat extends MushroomBlockMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 13;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__RED_MUSHROOM_BLOCK__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__RED_MUSHROOM_BLOCK__HARDNESS;
 
     public static final RedMushroomBlockMat RED_MUSHROOM_BLOCK_PORES_FULL     = new RedMushroomBlockMat();
     public static final RedMushroomBlockMat RED_MUSHROOM_BLOCK_CAP_NORTH_WEST = new RedMushroomBlockMat(Type.CAP_NORTH_WEST);
@@ -48,29 +37,17 @@ public class RedMushroomBlockMat extends MushroomBlockMat
 
     protected RedMushroomBlockMat()
     {
-        super("RED_MUSHROOM_BLOCK", 100, "minecraft:red_mushroom_block", Type.PORES_FULL);
+        super("RED_MUSHROOM_BLOCK", 100, "minecraft:red_mushroom_block", Type.PORES_FULL, 0.2f, 1);
     }
 
     protected RedMushroomBlockMat(final Type type)
     {
-        super(RED_MUSHROOM_BLOCK_PORES_FULL.name(), RED_MUSHROOM_BLOCK_PORES_FULL.ordinal(), RED_MUSHROOM_BLOCK_PORES_FULL.getMinecraftId(), type);
+        super(RED_MUSHROOM_BLOCK_PORES_FULL.name(), RED_MUSHROOM_BLOCK_PORES_FULL.ordinal(), RED_MUSHROOM_BLOCK_PORES_FULL.getMinecraftId(), type, RED_MUSHROOM_BLOCK_PORES_FULL.getHardness(), RED_MUSHROOM_BLOCK_PORES_FULL.getBlastResistance());
     }
 
-    protected RedMushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType)
+    protected RedMushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, mushroomType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, mushroomType, hardness, blastResistance);
     }
 
     @Override

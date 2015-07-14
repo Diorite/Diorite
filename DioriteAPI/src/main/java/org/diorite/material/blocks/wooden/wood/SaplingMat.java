@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -21,16 +20,6 @@ public class SaplingMat extends WoodMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__SAPLING__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__SAPLING__HARDNESS;
 
     public static final SaplingMat SAPLING_OAK      = new SaplingMat();
     public static final SaplingMat SAPLING_SPRUCE   = new SaplingMat(WoodTypeMat.SPRUCE, SaplingStage.NEW);
@@ -53,19 +42,19 @@ public class SaplingMat extends WoodMat
 
     protected SaplingMat()
     {
-        super("SAPLING", 5, "minecraft:sapling", "OAK", (byte) 0x00, WoodTypeMat.OAK);
+        super("SAPLING", 5, "minecraft:sapling", "OAK", (byte) 0x00, WoodTypeMat.OAK, 0, 0);
         this.stage = SaplingStage.NEW;
     }
 
     protected SaplingMat(final WoodTypeMat woodType, final SaplingStage stage)
     {
-        super(SAPLING_OAK.name(), SAPLING_OAK.ordinal(), SAPLING_OAK.getMinecraftId(), woodType + (stage.getFlag() == 0 ? "" : "_" + stage.name()), combine(woodType, stage), woodType);
+        super(SAPLING_OAK.name(), SAPLING_OAK.ordinal(), SAPLING_OAK.getMinecraftId(), woodType + (stage.getFlag() == 0 ? "" : "_" + stage.name()), combine(woodType, stage), woodType, SAPLING_OAK.getHardness(), SAPLING_OAK.getBlastResistance());
         this.stage = stage;
     }
 
-    protected SaplingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SaplingStage stage)
+    protected SaplingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SaplingStage stage, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.stage = stage;
     }
 
@@ -117,18 +106,6 @@ public class SaplingMat extends WoodMat
     public boolean isSolid()
     {
         return false;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     public enum SaplingStage

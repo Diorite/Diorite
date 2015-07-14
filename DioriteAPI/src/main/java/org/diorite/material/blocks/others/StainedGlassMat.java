@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.DyeColor;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.ColorableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -23,16 +22,6 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STAINED_GLASS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__STAINED_GLASS__HARDNESS;
 
     public static final StainedGlassMat STAINED_GLASS_WHITE      = new StainedGlassMat();
     public static final StainedGlassMat STAINED_GLASS_ORANGE     = new StainedGlassMat(DyeColor.ORANGE);
@@ -59,32 +48,20 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
     @SuppressWarnings("MagicNumber")
     protected StainedGlassMat()
     {
-        super("STAINED_GLASS", 95, "minecraft:stained_glass", "WHITE", (byte) 0x00);
+        super("STAINED_GLASS", 95, "minecraft:stained_glass", "WHITE", (byte) 0x00, 0.3f, 1.5f);
         this.color = DyeColor.WHITE;
     }
 
     protected StainedGlassMat(final DyeColor color)
     {
-        super(STAINED_GLASS_WHITE.name(), STAINED_GLASS_WHITE.ordinal(), STAINED_GLASS_WHITE.getMinecraftId(), color.name(), color.getBlockFlag());
+        super(STAINED_GLASS_WHITE.name(), STAINED_GLASS_WHITE.ordinal(), STAINED_GLASS_WHITE.getMinecraftId(), color.name(), color.getBlockFlag(), STAINED_GLASS_WHITE.getHardness(), STAINED_GLASS_WHITE.getBlastResistance());
         this.color = color;
     }
 
-    protected StainedGlassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color)
+    protected StainedGlassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.color = color;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

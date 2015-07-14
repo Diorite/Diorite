@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
@@ -29,16 +28,6 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 10;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__HOPPER__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__HOPPER__HARDNESS;
 
     public static final HopperMat HOPPER_DOWN  = new HopperMat();
     public static final HopperMat HOPPER_NORTH = new HopperMat(BlockFace.NORTH, false);
@@ -61,21 +50,21 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
     @SuppressWarnings("MagicNumber")
     protected HopperMat()
     {
-        super("HOPPER", 23, "minecraft:dispenser", "DOWN", (byte) 0x00);
+        super("HOPPER", 23, "minecraft:dispenser", "DOWN", (byte) 0x00, 3, 15);
         this.facing = BlockFace.DOWN;
         this.powered = false;
     }
 
     protected HopperMat(final BlockFace facing, final boolean powered)
     {
-        super(HOPPER_DOWN.name(), HOPPER_DOWN.ordinal(), HOPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered));
+        super(HOPPER_DOWN.name(), HOPPER_DOWN.ordinal(), HOPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered), HOPPER_DOWN.getHardness(), HOPPER_DOWN.getBlastResistance());
         this.facing = facing;
         this.powered = powered;
     }
 
-    protected HopperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered)
+    protected HopperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.facing = facing;
         this.powered = powered;
     }
@@ -107,18 +96,6 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
     public HopperMat getType(final BlockFace face, final boolean powered)
     {
         return getByID(combine(face, powered));
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

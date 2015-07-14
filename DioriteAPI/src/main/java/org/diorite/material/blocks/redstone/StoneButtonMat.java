@@ -3,7 +3,6 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -18,16 +17,6 @@ public class StoneButtonMat extends ButtonMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__STONE_BUTTON__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__STONE_BUTTON__HARDNESS;
 
     public static final StoneButtonMat STONE_BUTTON_DOWN          = new StoneButtonMat();
     public static final StoneButtonMat STONE_BUTTON_EAST          = new StoneButtonMat(BlockFace.EAST, false);
@@ -48,29 +37,17 @@ public class StoneButtonMat extends ButtonMat
     @SuppressWarnings("MagicNumber")
     protected StoneButtonMat()
     {
-        super("STONE_BUTTON", 143, "minecraft:wooden_button", BlockFace.DOWN, false);
+        super("STONE_BUTTON", 143, "minecraft:wooden_button", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
     protected StoneButtonMat(final BlockFace face, final boolean powered)
     {
-        super(STONE_BUTTON_DOWN.name(), STONE_BUTTON_DOWN.ordinal(), STONE_BUTTON_DOWN.getMinecraftId(), face, powered);
+        super(STONE_BUTTON_DOWN.name(), STONE_BUTTON_DOWN.ordinal(), STONE_BUTTON_DOWN.getMinecraftId(), face, powered, STONE_BUTTON_DOWN.getHardness(), STONE_BUTTON_DOWN.getBlastResistance());
     }
 
-    protected StoneButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered)
+    protected StoneButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, face, powered);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, face, powered, hardness, blastResistance);
     }
 
     @Override

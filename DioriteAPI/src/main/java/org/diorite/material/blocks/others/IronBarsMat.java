@@ -2,7 +2,6 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.FenceMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -19,16 +18,6 @@ public class IronBarsMat extends BlockMaterialData implements FenceMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 1;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__IRON_BARS__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__IRON_BARS__HARDNESS;
 
     public static final IronBarsMat IRON_BARS = new IronBarsMat();
 
@@ -38,24 +27,12 @@ public class IronBarsMat extends BlockMaterialData implements FenceMat
     @SuppressWarnings("MagicNumber")
     protected IronBarsMat()
     {
-        super("IRON_BARS", 101, "minecraft:iron_bars", "IRON_BARS", (byte) 0x00);
+        super("IRON_BARS", 101, "minecraft:iron_bars", "IRON_BARS", (byte) 0x00, 5, 30);
     }
 
-    protected IronBarsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type)
+    protected IronBarsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override

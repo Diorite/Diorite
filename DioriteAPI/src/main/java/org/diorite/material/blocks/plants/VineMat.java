@@ -39,16 +39,6 @@ public class VineMat extends PlantMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 1;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__VINE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__VINE__HARDNESS;
 
     public static final VineMat VINE                       = new VineMat();
     public static final VineMat VINE_SOUTH                 = new VineMat(BlockFace.SOUTH);
@@ -75,32 +65,20 @@ public class VineMat extends PlantMat
     @SuppressWarnings("MagicNumber")
     protected VineMat()
     {
-        super("VINE", 106, "minecraft:vine", "NONE", (byte) 0x00);
+        super("VINE", 106, "minecraft:vine", "NONE", (byte) 0x00, 0.2f, 1);
         this.faces = BlockFace.EMPTY;
     }
 
     protected VineMat(final BlockFace... faces)
     {
-        super(VINE.name(), VINE.ordinal(), VINE.getMinecraftId(), Arrays.stream(faces).map(Enum::name).reduce((a, b) -> a + "_" + b).orElse("NONE"), combine(faces));
+        super(VINE.name(), VINE.ordinal(), VINE.getMinecraftId(), Arrays.stream(faces).map(Enum::name).reduce((a, b) -> a + "_" + b).orElse("NONE"), combine(faces), VINE.getHardness(), VINE.getBlastResistance());
         this.faces = faces.clone();
     }
 
-    protected VineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace[] faces)
+    protected VineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace[] faces, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.faces = faces;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     /**

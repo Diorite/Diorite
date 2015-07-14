@@ -10,14 +10,21 @@ import org.diorite.utils.lazy.LazyValue;
 
 public abstract class BlockMaterialData extends Material
 {
-    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    protected final float hardness;
+    protected final float blastResistance;
+
+    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, typeName, type);
+        this.hardness = hardness;
+        this.blastResistance = blastResistance;
     }
 
-    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
+        this.hardness = hardness;
+        this.blastResistance = blastResistance;
     }
 
     protected final LazyValue<PossibleDrops> possibleDrops = new LazyValue<>(this::initPossibleDrops);
@@ -40,9 +47,15 @@ public abstract class BlockMaterialData extends Material
         return true;
     }
 
-    public abstract float getBlastResistance();
+    public float getBlastResistance()
+    {
+        return this.blastResistance;
+    }
 
-    public abstract float getHardness();
+    public float getHardness()
+    {
+        return this.hardness;
+    }
 
     protected PossibleDrops initPossibleDrops()
     {

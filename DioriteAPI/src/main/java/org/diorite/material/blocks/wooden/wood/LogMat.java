@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
@@ -23,20 +22,10 @@ public class LogMat extends WoodMat implements RotatableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 24;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__LOG__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__LOG__HARDNESS;
+    public static final byte USED_DATA_VALUES = 24;
 
     public static final LogMat LOG_OAK      = new LogMat();
-    public static final LogMat LOG_SPRUCE   = new LogMat(WoodTypeMat.SPRUCE, RotateAxisMat.UP_DOWN);
+    public static final LogMat LOG_SPRUCE   = new LogMat(WoodTypeMat.SPRUCE, RotateAxisMat.UP_DOWN, 2, 10);
     public static final LogMat LOG_BIRCH    = new LogMat(WoodTypeMat.BIRCH, RotateAxisMat.UP_DOWN);
     public static final LogMat LOG_JUNGLE   = new LogMat(WoodTypeMat.JUNGLE, RotateAxisMat.UP_DOWN);
     public static final LogMat LOG_ACACIA   = new Log2(WoodTypeMat.ACACIA, RotateAxisMat.UP_DOWN);
@@ -71,20 +60,27 @@ public class LogMat extends WoodMat implements RotatableMat
     @SuppressWarnings("MagicNumber")
     protected LogMat()
     {
-        super("LOG", 17, "minecraft:log", "QAK_UP_DOWN", (byte) 0x00, WoodTypeMat.OAK);
+        super("LOG", 17, "minecraft:log", "QAK_UP_DOWN", (byte) 0x00, WoodTypeMat.OAK, 2, 10);
         this.rotateAxis = RotateAxisMat.UP_DOWN;
     }
 
     @SuppressWarnings("MagicNumber")
     protected LogMat(final WoodTypeMat type, final RotateAxisMat rotateAxis)
     {
-        super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), type.name() + "_" + rotateAxis.name(), (byte) (type.getLogFlag() | rotateAxis.getFlag()), type);
+        super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), type.name() + "_" + rotateAxis.name(), (byte) (type.getLogFlag() | rotateAxis.getFlag()), type, LOG_OAK.hardness, LOG_OAK.getBlastResistance());
         this.rotateAxis = rotateAxis;
     }
 
-    protected LogMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final RotateAxisMat rotateAxis)
+    @SuppressWarnings("MagicNumber")
+    protected LogMat(final WoodTypeMat type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
+        super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), type.name() + "_" + rotateAxis.name(), (byte) (type.getLogFlag() | rotateAxis.getFlag()), type, hardness, blastResistance);
+        this.rotateAxis = rotateAxis;
+    }
+
+    protected LogMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+    {
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
     }
 
@@ -110,18 +106,6 @@ public class LogMat extends WoodMat implements RotatableMat
     public LogMat getType(final int id)
     {
         return getByID(id);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override
@@ -235,9 +219,9 @@ public class LogMat extends WoodMat implements RotatableMat
             super(type, rotateAxis);
         }
 
-        protected Log2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final RotateAxisMat rotateAxis)
+        protected Log2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
         {
-            super(enumName, id, minecraftId, maxStack, typeName, type, woodType, rotateAxis);
+            super(enumName, id, minecraftId, maxStack, typeName, type, woodType, rotateAxis, hardness, blastResistance);
         }
 
         @Override

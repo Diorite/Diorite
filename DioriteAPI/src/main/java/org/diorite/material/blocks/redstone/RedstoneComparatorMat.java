@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
@@ -34,16 +33,6 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES      = 16;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE      = MagicNumbers.MATERIAL__REDSTONE_COMPARATOR__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS              = MagicNumbers.MATERIAL__REDSTONE_COMPARATOR__HARDNESS;
 
     public static final RedstoneComparatorMat REDSTONE_COMPARATOR_NORTH = new RedstoneComparatorMat();
     public static final RedstoneComparatorMat REDSTONE_COMPARATOR_EAST  = new RedstoneComparatorMat(BlockFace.EAST, false, false);
@@ -75,7 +64,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
     @SuppressWarnings("MagicNumber")
     protected RedstoneComparatorMat()
     {
-        super("REDSTONE_COMPARATOR", 149, "minecraft:unpowered_comparator", "NORTH", (byte) 0x00);
+        super("REDSTONE_COMPARATOR", 149, "minecraft:unpowered_comparator", "NORTH", (byte) 0x00, 0, 0);
         this.face = BlockFace.NORTH;
         this.subtractionMode = false;
         this.powered = false;
@@ -83,15 +72,15 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
 
     protected RedstoneComparatorMat(final BlockFace face, final boolean subtractionMode, final boolean powered)
     {
-        super(REDSTONE_COMPARATOR_NORTH.name(), REDSTONE_COMPARATOR_NORTH.ordinal(), REDSTONE_COMPARATOR_NORTH.getMinecraftId(), face.name() + (subtractionMode ? "_SUBTRACT" : "") + (powered ? "_POWERED" : ""), combine(face, subtractionMode, powered));
+        super(REDSTONE_COMPARATOR_NORTH.name(), REDSTONE_COMPARATOR_NORTH.ordinal(), REDSTONE_COMPARATOR_NORTH.getMinecraftId(), face.name() + (subtractionMode ? "_SUBTRACT" : "") + (powered ? "_POWERED" : ""), combine(face, subtractionMode, powered), REDSTONE_COMPARATOR_NORTH.getHardness(), REDSTONE_COMPARATOR_NORTH.getBlastResistance());
         this.face = face;
         this.subtractionMode = subtractionMode;
         this.powered = powered;
     }
 
-    protected RedstoneComparatorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean subtractionMode, final boolean powered)
+    protected RedstoneComparatorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean subtractionMode, final boolean powered, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type);
+        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.subtractionMode = subtractionMode;
         this.powered = powered;
@@ -119,18 +108,6 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
             result |= POWERED_FLAG;
         }
         return result;
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
     }
 
     @Override

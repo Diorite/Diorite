@@ -3,7 +3,6 @@ package org.diorite.material.blocks.wooden.wood.fencegate;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -20,16 +19,6 @@ public class BirchFenceGateMat extends WoodenFenceGateMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 8;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__BIRCH_FENCE_GATE__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__BIRCH_FENCE_GATE__HARDNESS;
 
     public static final BirchFenceGateMat BIRCH_FENCE_GATE_SOUTH = new BirchFenceGateMat();
     public static final BirchFenceGateMat BIRCH_FENCE_GATE_WEST  = new BirchFenceGateMat(BlockFace.WEST, false);
@@ -47,29 +36,17 @@ public class BirchFenceGateMat extends WoodenFenceGateMat
     @SuppressWarnings("MagicNumber")
     protected BirchFenceGateMat()
     {
-        super("BIRCH_FENCE_GATE", 184, "minecraft:brich_fence_gate", WoodTypeMat.BIRCH, BlockFace.SOUTH, false);
+        super("BIRCH_FENCE_GATE", 184, "minecraft:brich_fence_gate", WoodTypeMat.BIRCH, BlockFace.SOUTH, false, 2, 15);
     }
 
     protected BirchFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(BIRCH_FENCE_GATE_SOUTH.name(), BIRCH_FENCE_GATE_SOUTH.ordinal(), BIRCH_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.BIRCH, face, open);
+        super(BIRCH_FENCE_GATE_SOUTH.name(), BIRCH_FENCE_GATE_SOUTH.ordinal(), BIRCH_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.BIRCH, face, open, BIRCH_FENCE_GATE_SOUTH.getHardness(), BIRCH_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected BirchFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open)
+    protected BirchFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }
 
     @Override

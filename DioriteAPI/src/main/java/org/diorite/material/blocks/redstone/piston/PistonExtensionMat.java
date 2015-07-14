@@ -3,7 +3,6 @@ package org.diorite.material.blocks.redstone.piston;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -18,16 +17,6 @@ public class PistonExtensionMat extends PistonBaseMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 12;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__PISTON_EXTENSION__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__PISTON_EXTENSION__HARDNESS;
 
     public static final PistonExtensionMat PISTON_EXTENSION_DOWN  = new PistonExtensionMat();
     public static final PistonExtensionMat PISTON_EXTENSION_UP    = new PistonExtensionMat(BlockFace.UP, false);
@@ -49,29 +38,17 @@ public class PistonExtensionMat extends PistonBaseMat
     @SuppressWarnings("MagicNumber")
     protected PistonExtensionMat()
     {
-        super("PISTON_EXTENSION", 36, "minecraft:piston_extension", BlockFace.DOWN, false);
+        super("PISTON_EXTENSION", 36, "minecraft:piston_extension", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
     protected PistonExtensionMat(final BlockFace face, final boolean extended)
     {
-        super(PISTON_EXTENSION_DOWN.name(), PISTON_EXTENSION_DOWN.ordinal(), PISTON_EXTENSION_DOWN.getMinecraftId(), face, extended);
+        super(PISTON_EXTENSION_DOWN.name(), PISTON_EXTENSION_DOWN.ordinal(), PISTON_EXTENSION_DOWN.getMinecraftId(), face, extended, PISTON_EXTENSION_DOWN.getHardness(), PISTON_EXTENSION_DOWN.getBlastResistance());
     }
 
-    protected PistonExtensionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended)
+    protected PistonExtensionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, facing, extended);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, facing, extended, hardness, blastResistance);
     }
 
     @Override

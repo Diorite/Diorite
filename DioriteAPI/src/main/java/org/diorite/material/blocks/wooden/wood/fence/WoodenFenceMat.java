@@ -9,14 +9,14 @@ import org.diorite.material.blocks.wooden.wood.WoodMat;
  */
 public abstract class WoodenFenceMat extends WoodMat implements FenceMat
 {
-    protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodTypeMat woodType)
+    protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodTypeMat woodType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, typeName, (byte) 0, woodType);
+        super(enumName, id, minecraftId, typeName, (byte) 0, woodType, hardness, blastResistance);
     }
 
-    protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType)
+    protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
 
     @Override

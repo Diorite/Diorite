@@ -2,7 +2,6 @@ package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -19,16 +18,6 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
      * Sub-ids used by diorite/minecraft by default
      */
     public static final byte  USED_DATA_VALUES = 6;
-    /**
-     * Blast resistance of block, can be changed only before server start.
-     * Final copy of blast resistance from {@link MagicNumbers} class.
-     */
-    public static final float BLAST_RESISTANCE = MagicNumbers.MATERIAL__DOUBLE_WOODEN_SLAB__BLAST_RESISTANCE;
-    /**
-     * Hardness of block, can be changed only before server start.
-     * Final copy of hardness from {@link MagicNumbers} class.
-     */
-    public static final float HARDNESS         = MagicNumbers.MATERIAL__DOUBLE_WOODEN_SLAB__HARDNESS;
 
     public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_OAK      = new DoubleWoodenSlabMat();
     public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_SPRUCE   = new DoubleWoodenSlabMat(WoodTypeMat.SPRUCE, SlabTypeMat.BOTTOM);
@@ -43,29 +32,17 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
     @SuppressWarnings("MagicNumber")
     protected DoubleWoodenSlabMat()
     {
-        super("DOUBLE_WOODEN_SLAB", 125, "minecraft:double_wooden_slab", "OAK", WoodTypeMat.OAK, SlabTypeMat.BOTTOM);
+        super("DOUBLE_WOODEN_SLAB", 125, "minecraft:double_wooden_slab", "OAK", WoodTypeMat.OAK, SlabTypeMat.BOTTOM, 2, 30);
     }
 
     protected DoubleWoodenSlabMat(final WoodTypeMat woodType, final SlabTypeMat slabType)
     {
-        super(DOUBLE_WOODEN_SLAB_OAK.name(), DOUBLE_WOODEN_SLAB_OAK.ordinal(), DOUBLE_WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType);
+        super(DOUBLE_WOODEN_SLAB_OAK.name(), DOUBLE_WOODEN_SLAB_OAK.ordinal(), DOUBLE_WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType, DOUBLE_WOODEN_SLAB_OAK.getHardness(), DOUBLE_WOODEN_SLAB_OAK.getBlastResistance());
     }
 
-    protected DoubleWoodenSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SlabTypeMat slabType)
+    protected DoubleWoodenSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SlabTypeMat slabType, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, slabType);
-    }
-
-    @Override
-    public float getBlastResistance()
-    {
-        return BLAST_RESISTANCE;
-    }
-
-    @Override
-    public float getHardness()
-    {
-        return HARDNESS;
+        super(enumName, id, minecraftId, maxStack, typeName, type, woodType, slabType, hardness, blastResistance);
     }
 
     @Override
