@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
-
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.command.CommandPriority;
@@ -15,7 +13,8 @@ import org.diorite.command.sender.CommandSender;
 
 public class PerformanceMonitorCmd extends SystemCommandImpl
 {
-    public static final int ONE_MiB = 1_048_576;
+    public static final  int     ONE_MiB    = 1_048_576;
+    private static final Pattern SPACES_PAT = Pattern.compile("(\\u0020)+");
 
     public PerformanceMonitorCmd()
     {
@@ -70,13 +69,17 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                         }
                     }
                 }
-                final StringBuilder sb = new StringBuilder(2048);
+                final String[] strings = new String[allStackTraces.size()];
+                int i = 0;
+                StringBuilder sb = new StringBuilder(2048);
                 sb.append("\n&c====== &3Thread dump &c======\n");
                 for (Entry<Thread, StackTraceElement[]> entry : allStackTraces.entrySet())
                 {
+
+                    // WARN: shit code here.
                     Thread t = entry.getKey();
                     StackTraceElement[] sts = entry.getValue();
-                    sb.append("&7[&3").append(t.getName()).append("&7]");
+                    sb.append("\n&7[&3").append(t.getName()).append("&7]");
                     for (int j = t.getName().length(); j < methodSize; j++)
                     {
                         sb.append(' ');
@@ -122,28 +125,53 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                             }
                             else
                             {
-                                sb.append(line);
-                                for (int j = Integer.toString(st.getLineNumber()).length(); j < 6; j++)
+                                // don't look at that, please.
+                                String lineStr = Integer.toString(line);
+                                if (lineStr.length() == 1)
                                 {
-                                    sb.append(' ');
+                                    sb.append("  0").append(lineStr).append("  ");
+                                }
+                                else if (lineStr.length() == 2)
+                                {
+                                    sb.append("  ").append(lineStr).append("  ");
+                                }
+                                else if (lineStr.length() == 3)
+                                {
+                                    sb.append(" 0").append(lineStr).append(" ");
+                                }
+                                else if (lineStr.length() == 4)
+                                {
+                                    sb.append(" ").append(lineStr).append(" ");
+                                }
+                                else if (lineStr.length() == 5)
+                                {
+                                    sb.append("0").append(lineStr);
+                                }
+                                else
+                                {
+                                    sb.append(lineStr);
                                 }
                             }
                         }
                         sb.append("&7]").append(" \n");
                     }
-                    sb.append(" \n");
+                    strings[i++] = sb.toString();
+                    sb = new StringBuilder(2048);
 //                    sb.append("&c=========================\n\n");
                 }
                 sb.append(" ");
                 if (sender.isConsole())
                 {
-                    sender.sendSimpleColoredMessage(sb.toString());
+                    sender.sendSimpleColoredMessage(strings);
                 }
                 else
                 {
-                    sender.getServer().sendConsoleSimpleColoredMessage(sb.toString());
-                    final String str = sb.toString().replaceAll("(\\u0020)+", " ");
-                    sender.sendSimpleColoredMessage(StringUtils.split(str, '\n'));
+                    sender.getServer().sendConsoleSimpleColoredMessage(strings);
+                    for (int i1 = 0, stringsLength = strings.length; i1 < stringsLength; i1++)
+                    {
+                        strings[i1] = SPACES_PAT.matcher(strings[i1]).replaceAll(" ");
+                    }
+                    sender.sendSimpleColoredMessage(strings);
                 }
                 return;
             }
