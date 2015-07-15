@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 @PacketClass(id = 0x0C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInSteerVehicle implements PacketPlayIn
+public class PacketPlayInSteerVehicle extends PacketPlayIn
 {
     private float sideways;
     private float forward;
@@ -83,7 +83,7 @@ public class PacketPlayInSteerVehicle implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeFloat(this.sideways);
         data.writeFloat(this.forward);

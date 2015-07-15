@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 @PacketClass(id = 0x11, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInEnchantItem implements PacketPlayIn
+public class PacketPlayInEnchantItem extends PacketPlayIn
 {
     private int windowId;
     private int enchantmentId; // Number of enchantment in window, begin from 0
@@ -55,7 +55,7 @@ public class PacketPlayInEnchantItem implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeByte(this.windowId);
         data.writeByte(this.enchantmentId);

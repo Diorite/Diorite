@@ -14,7 +14,7 @@ import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 
 @PacketClass(id = 0x30, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutWindowItems implements PacketPlayOut
+public class PacketPlayOutWindowItems extends PacketPlayOut
 {
     private int                windowId;
     private ItemStackImplArray items;
@@ -71,7 +71,7 @@ public class PacketPlayOutWindowItems implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeByte(this.windowId);
         data.writeShort(this.items.length());

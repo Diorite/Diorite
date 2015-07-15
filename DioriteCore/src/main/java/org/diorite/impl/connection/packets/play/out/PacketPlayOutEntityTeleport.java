@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.impl.entity.EntityImpl;
 
 @PacketClass(id = 0x18, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutEntityTeleport implements PacketPlayOut
+public class PacketPlayOutEntityTeleport extends PacketPlayOut
 {
     private int     entityId;
     private int     x; // WARNING! This is 'fixed-point' number
@@ -63,7 +63,7 @@ public class PacketPlayOutEntityTeleport implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.entityId);
         data.writeInt(this.x);

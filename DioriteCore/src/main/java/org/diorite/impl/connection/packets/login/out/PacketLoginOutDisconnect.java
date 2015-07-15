@@ -11,7 +11,7 @@ import org.diorite.impl.connection.packets.login.PacketLoginOutListener;
 import org.diorite.chat.component.BaseComponent;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketLoginOutDisconnect implements PacketLoginOut
+public class PacketLoginOutDisconnect extends PacketLoginOut
 {
     private BaseComponent msg;
 
@@ -31,7 +31,7 @@ public class PacketLoginOutDisconnect implements PacketLoginOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer paramPacketDataSerializer)
+    public void writeFields(final PacketDataSerializer paramPacketDataSerializer)
     {
         paramPacketDataSerializer.writeBaseComponent(this.msg);
     }

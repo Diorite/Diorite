@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 import org.diorite.BlockLocation;
 
 @PacketClass(id = 0x14, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInTabComplete implements PacketPlayIn
+public class PacketPlayInTabComplete extends PacketPlayIn
 {
     private String        content;
     private BlockLocation blockLocation;
@@ -41,7 +41,7 @@ public class PacketPlayInTabComplete implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.content);
         data.writeBoolean(this.blockLocation != null);

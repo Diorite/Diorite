@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginOutListener;
 
 @PacketClass(id = 0x03, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketLoginOutSetCompression implements PacketLoginOut
+public class PacketLoginOutSetCompression extends PacketLoginOut
 {
     private int threshold;
 
@@ -32,7 +32,7 @@ public class PacketLoginOutSetCompression implements PacketLoginOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.threshold);
     }

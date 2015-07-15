@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginOutListener;
 
 @PacketClass(id = 0x02, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketLoginOutSuccess implements PacketLoginOut
+public class PacketLoginOutSuccess extends PacketLoginOut
 {
     private GameProfile profile;
 
@@ -33,7 +33,7 @@ public class PacketLoginOutSuccess implements PacketLoginOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeGameProfile(this.profile);
     }

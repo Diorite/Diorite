@@ -14,7 +14,7 @@ import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 
 @PacketClass(id = 0x07, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInBlockDig implements PacketPlayIn
+public class PacketPlayInBlockDig extends PacketPlayIn
 {
     private BlockDigAction action;
     private BlockLocation  blockLocation;
@@ -46,7 +46,7 @@ public class PacketPlayInBlockDig implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeByte(this.action.ordinal());
         data.writeBlockLocation(this.blockLocation);

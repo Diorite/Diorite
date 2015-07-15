@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.Particle;
 
 @PacketClass(id = 0x2A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutWorldParticles implements PacketPlayOut
+public class PacketPlayOutWorldParticles extends PacketPlayOut
 {
     private Particle particle;
     private boolean  longDistance;
@@ -178,7 +178,7 @@ public class PacketPlayOutWorldParticles implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeInt(this.particle.ordinal());
         data.writeBoolean(this.longDistance);

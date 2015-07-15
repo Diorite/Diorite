@@ -18,7 +18,7 @@ import org.diorite.world.chunk.ChunkPos;
 
 @SuppressWarnings("MagicNumber")
 @PacketClass(id = 0x21, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutMapChunk implements PacketPlayOut
+public class PacketPlayOutMapChunk extends PacketPlayOut
 {
     public static final int MASK = 0xffff;
 
@@ -76,7 +76,7 @@ public class PacketPlayOutMapChunk implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeInt(this.x);
         data.writeInt(this.z);

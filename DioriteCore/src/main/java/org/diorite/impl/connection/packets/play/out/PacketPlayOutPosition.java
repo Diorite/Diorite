@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.TeleportData;
 
 @PacketClass(id = 0x08, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutPosition implements PacketPlayOut
+public class PacketPlayOutPosition extends PacketPlayOut
 {
     private TeleportData teleportData;
 
@@ -33,7 +33,7 @@ public class PacketPlayOutPosition implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeDouble(this.getX());
         data.writeDouble(this.getY());

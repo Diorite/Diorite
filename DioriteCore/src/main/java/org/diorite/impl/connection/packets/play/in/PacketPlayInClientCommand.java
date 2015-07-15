@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 @PacketClass(id = 0x16, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInClientCommand implements PacketPlayIn
+public class PacketPlayInClientCommand extends PacketPlayIn
 {
     private ClientCommand command;
 
@@ -33,7 +33,7 @@ public class PacketPlayInClientCommand implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.command.ordinal());
     }

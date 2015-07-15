@@ -18,7 +18,7 @@ import org.diorite.world.World;
 
 
 @PacketClass(id = 0x26, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutMapChunkBulk implements PacketPlayOut
+public class PacketPlayOutMapChunkBulk extends PacketPlayOut
 {
     public static final int HEADER_SIZE = 10;
     public static final int MAX_SIZE    = 0x1fff00; // 2096896
@@ -121,7 +121,7 @@ public class PacketPlayOutMapChunkBulk implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeBoolean(this.hasSkyLight);
         data.writeVarInt(this.datas.length);

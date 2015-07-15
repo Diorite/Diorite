@@ -11,7 +11,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.status.PacketStatusInListener;
 
 @PacketClass(id = 0x01, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketStatusInPing implements PacketStatusIn
+public class PacketStatusInPing extends PacketStatusIn
 {
     private long ping;
 
@@ -31,7 +31,7 @@ public class PacketStatusInPing implements PacketStatusIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data)
+    public void writeFields(final PacketDataSerializer data)
     {
         data.writeLong(this.ping);
     }

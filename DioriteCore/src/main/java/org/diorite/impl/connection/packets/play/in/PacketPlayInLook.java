@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 @PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInLook implements PacketPlayIn
+public class PacketPlayInLook extends PacketPlayIn
 {
     private float   yaw;
     private float   pitch;
@@ -38,7 +38,7 @@ public class PacketPlayInLook implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeFloat(this.yaw);
         data.writeFloat(this.pitch);

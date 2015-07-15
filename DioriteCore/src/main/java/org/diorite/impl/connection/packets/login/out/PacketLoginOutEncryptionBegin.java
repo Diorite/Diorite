@@ -14,7 +14,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginOutListener;
 
 @PacketClass(id = 0x01, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketLoginOutEncryptionBegin implements PacketLoginOut
+public class PacketLoginOutEncryptionBegin extends PacketLoginOut
 {
     public static final int SERVERID_SIZE = 20;
     private String    serverID; // empty?
@@ -41,7 +41,7 @@ public class PacketLoginOutEncryptionBegin implements PacketLoginOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.serverID);
         data.writeByteWord(this.publicKey.getEncoded());

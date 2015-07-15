@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginInListener;
 
 @PacketClass(id = 0x01, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketLoginInEncryptionBegin implements PacketLoginIn
+public class PacketLoginInEncryptionBegin extends PacketLoginIn
 {
     private byte[] sharedSecret;
     private byte[] verifyToken;
@@ -35,7 +35,7 @@ public class PacketLoginInEncryptionBegin implements PacketLoginIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeByteWord(this.sharedSecret);
         data.writeByteWord(this.verifyToken);

@@ -14,7 +14,7 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.inventory.InventoryType;
 
 @PacketClass(id = 0x2D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutOpenWindow implements PacketPlayOut
+public class PacketPlayOutOpenWindow extends PacketPlayOut
 {
     private int           windowId;
     private InventoryType inventoryType;
@@ -55,7 +55,7 @@ public class PacketPlayOutOpenWindow implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeByte(this.windowId);
         data.writeText(this.inventoryType.getMinecraftId());

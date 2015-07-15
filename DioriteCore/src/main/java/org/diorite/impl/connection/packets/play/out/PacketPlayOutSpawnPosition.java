@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.BlockLocation;
 
 @PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutSpawnPosition implements PacketPlayOut
+public class PacketPlayOutSpawnPosition extends PacketPlayOut
 {
     private BlockLocation location;
 
@@ -33,7 +33,7 @@ public class PacketPlayOutSpawnPosition implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeBlockLocation(this.location);
     }

@@ -24,7 +24,7 @@ import org.diorite.chat.component.serialize.TextComponentSerializer;
 import org.diorite.chat.component.serialize.TranslatableComponentSerializer;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketStatusOutServerInfo implements PacketStatusOut
+public class PacketStatusOutServerInfo extends PacketStatusOut
 {
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ServerPingServerData.class, new ServerPingServerData.Serializer()).registerTypeAdapter(ServerPingPlayerSample.class, new ServerPingPlayerSample.Serializer()).registerTypeAdapter(ServerPing.class, new ServerPing.Serializer()).registerTypeAdapter(BaseComponent.class, new ComponentSerializer()).registerTypeAdapter(TextComponent.class, new TextComponentSerializer()).registerTypeAdapter(TranslatableComponent.class, new TranslatableComponentSerializer()).create();
     private ServerPing serverPing;
@@ -45,7 +45,7 @@ public class PacketStatusOutServerInfo implements PacketStatusOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(GSON.toJson(this.serverPing));
     }

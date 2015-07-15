@@ -15,7 +15,7 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.entity.Entity;
 
 @PacketClass(id = 0x1C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutEntityMetadata implements PacketPlayOut
+public class PacketPlayOutEntityMetadata extends PacketPlayOut
 {
     private int                              entityId;
     private Iterable<EntityMetadataEntry<?>> metadata;
@@ -56,7 +56,7 @@ public class PacketPlayOutEntityMetadata implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.entityId);
         data.writeEntityMetadata(this.metadata);

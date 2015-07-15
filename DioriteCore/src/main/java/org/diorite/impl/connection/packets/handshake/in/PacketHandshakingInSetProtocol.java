@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.handshake.PacketHandshakingInListener
 import org.diorite.impl.connection.packets.handshake.RequestType;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.HANDSHAKING, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketHandshakingInSetProtocol implements PacketHandshakingIn
+public class PacketHandshakingInSetProtocol extends PacketHandshakingIn
 {
     private int         protocolVersion;
     private String      serverAddress;
@@ -42,7 +42,7 @@ public class PacketHandshakingInSetProtocol implements PacketHandshakingIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.protocolVersion);
         data.writeText(this.serverAddress);

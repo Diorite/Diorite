@@ -14,7 +14,7 @@ import org.diorite.DisplayedSkinParts;
 import org.diorite.chat.ChatVisibility;
 
 @PacketClass(id = 0x15, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInSettings implements PacketPlayIn
+public class PacketPlayInSettings extends PacketPlayIn
 {
     private String             locale;
     private byte               viewDistance;
@@ -46,7 +46,7 @@ public class PacketPlayInSettings implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.locale);
         data.writeByte(this.viewDistance);

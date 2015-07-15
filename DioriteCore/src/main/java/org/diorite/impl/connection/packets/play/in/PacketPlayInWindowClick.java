@@ -14,7 +14,7 @@ import org.diorite.inventory.ClickType;
 import org.diorite.inventory.item.ItemStack;
 
 @PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInWindowClick implements PacketPlayIn
+public class PacketPlayInWindowClick extends PacketPlayIn
 {
     public static final int SLOT_NOT_NEEDED = - 999;
     private int       id; // inventory id
@@ -64,7 +64,7 @@ public class PacketPlayInWindowClick implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeByte(this.id);
         data.writeShort(this.clickedSlot);

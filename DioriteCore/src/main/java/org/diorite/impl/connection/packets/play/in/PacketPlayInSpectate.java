@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 @PacketClass(id = 0x18, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInSpectate implements PacketPlayIn
+public class PacketPlayInSpectate extends PacketPlayIn
 {
     private UUID playerUuid;
 
@@ -43,7 +43,7 @@ public class PacketPlayInSpectate implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeUUID(this.playerUuid);
     }

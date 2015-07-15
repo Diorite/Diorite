@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 
 @PacketClass(id = 0x39, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutAbilities implements PacketPlayOut
+public class PacketPlayOutAbilities extends PacketPlayOut
 {
     public static final byte INVULNERABLE_FLAG    = 0x01;
     public static final byte FLYING_FLAG          = 0x02;
@@ -53,7 +53,7 @@ public class PacketPlayOutAbilities implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         byte flags = 0;
         if (this.isInvulnerable)

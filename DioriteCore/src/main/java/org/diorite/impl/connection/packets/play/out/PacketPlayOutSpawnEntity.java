@@ -14,7 +14,7 @@ import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.EntityObject;
 
 @PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutSpawnEntity implements PacketPlayOut
+public class PacketPlayOutSpawnEntity extends PacketPlayOut
 {
     private int   entityId;
     private byte  entityTypeId;
@@ -74,7 +74,7 @@ public class PacketPlayOutSpawnEntity implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
 //        System.out.println("write packet...2");
         data.writeVarInt(this.entityId);

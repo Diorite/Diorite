@@ -14,7 +14,7 @@ import org.diorite.BlockLocation;
 import org.diorite.chat.component.BaseComponent;
 
 @PacketClass(id = 0x12, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInUpdateSign implements PacketPlayIn
+public class PacketPlayInUpdateSign extends PacketPlayIn
 {
     private BlockLocation location;
     private BaseComponent[] lines;
@@ -72,7 +72,7 @@ public class PacketPlayInUpdateSign implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeBlockLocation(this.location);
         for (int i = 0; i < 4; i++)

@@ -16,7 +16,7 @@ import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
 
 @PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutLogin implements PacketPlayOut
+public class PacketPlayOutLogin extends PacketPlayOut
 {
     public static final int MAX_WORLD_NAME_SIZE = 32; // should be 16?
 
@@ -71,7 +71,7 @@ public class PacketPlayOutLogin implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeInt(this.entityID);
         int gmFlags = this.gameMode.ordinal();

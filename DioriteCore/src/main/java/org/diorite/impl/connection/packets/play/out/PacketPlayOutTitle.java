@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.chat.component.BaseComponent;
 
 @PacketClass(id = 0x45, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutTitle implements PacketPlayOut
+public class PacketPlayOutTitle extends PacketPlayOut
 {
     private TitleAction   action;
     private BaseComponent text;
@@ -71,7 +71,7 @@ public class PacketPlayOutTitle implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.action.getActionId());
         switch (this.action)

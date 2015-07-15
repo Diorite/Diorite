@@ -16,7 +16,7 @@ import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeStorage;
 
 @PacketClass(id = 0x20, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutUpdateAttributes implements PacketPlayOut
+public class PacketPlayOutUpdateAttributes extends PacketPlayOut
 {
     private int entityID;
     private Collection<AttributeProperty> attributes = new HashSet<>(2);
@@ -59,7 +59,7 @@ public class PacketPlayOutUpdateAttributes implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.entityID);
         data.writeInt(this.attributes.size());

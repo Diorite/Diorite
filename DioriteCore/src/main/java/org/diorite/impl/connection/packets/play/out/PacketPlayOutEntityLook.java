@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.impl.entity.EntityImpl;
 
 @PacketClass(id = 0x16, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutEntityLook implements PacketPlayOut
+public class PacketPlayOutEntityLook extends PacketPlayOut
 {
     private int     entityId;
     private byte    yaw;
@@ -60,7 +60,7 @@ public class PacketPlayOutEntityLook implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.entityId);
         data.writeByte(this.yaw);

@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.Difficulty;
 
 @PacketClass(id = 0x41, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutServerDifficulty implements PacketPlayOut
+public class PacketPlayOutServerDifficulty extends PacketPlayOut
 {
     private Difficulty difficulty;
 
@@ -33,7 +33,7 @@ public class PacketPlayOutServerDifficulty implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeByte(this.difficulty.getLevel());
     }

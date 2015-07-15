@@ -14,7 +14,7 @@ import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 
 @PacketClass(id = 0x23, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutBlockChange implements PacketPlayOut
+public class PacketPlayOutBlockChange extends PacketPlayOut
 {
     private BlockLocation location;
     private int           rawID;
@@ -49,7 +49,7 @@ public class PacketPlayOutBlockChange implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeBlockLocation(this.location);
         data.writeVarInt(((this.rawID << 4) | this.rawType));

@@ -15,7 +15,7 @@ import org.diorite.BlockLocation;
 import org.diorite.utils.CursorPos;
 
 @PacketClass(id = 0x08, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInBlockPlace implements PacketPlayIn
+public class PacketPlayInBlockPlace extends PacketPlayIn
 {
     private BlockLocation location;
     // private ItemStackImpl itemStack; // ignored by server, always read as null to prevent memory leaks and client ability to crash server.
@@ -50,7 +50,7 @@ public class PacketPlayInBlockPlace implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeBlockLocation(this.location);
         data.writeBlockFace(this.cursorPos.getBlockFace());

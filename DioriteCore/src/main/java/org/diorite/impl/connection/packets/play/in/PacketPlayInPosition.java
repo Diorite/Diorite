@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 @PacketClass(id = 0x04, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInPosition implements PacketPlayIn
+public class PacketPlayInPosition extends PacketPlayIn
 {
     private double  x;
     private double  y;
@@ -41,7 +41,7 @@ public class PacketPlayInPosition implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeDouble(this.x);
         data.writeDouble(this.y);

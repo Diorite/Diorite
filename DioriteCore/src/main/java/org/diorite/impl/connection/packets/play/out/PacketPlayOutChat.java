@@ -14,7 +14,7 @@ import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 
 @PacketClass(id = 0x02, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutChat implements PacketPlayOut
+public class PacketPlayOutChat extends PacketPlayOut
 {
     private BaseComponent content;
     private ChatPosition chatPosition = ChatPosition.CHAT;
@@ -42,7 +42,7 @@ public class PacketPlayOutChat implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeBaseComponent(this.content);
         data.writeByte(this.chatPosition.ordinal());

@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.status.PacketStatusOutListener;
 
 @PacketClass(id = 0x01, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketStatusOutPong implements PacketStatusOut
+public class PacketStatusOutPong extends PacketStatusOut
 {
     private long ping;
 
@@ -32,7 +32,7 @@ public class PacketStatusOutPong implements PacketStatusOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeLong(this.ping);
     }

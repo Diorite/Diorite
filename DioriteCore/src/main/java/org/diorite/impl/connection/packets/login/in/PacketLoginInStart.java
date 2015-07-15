@@ -14,7 +14,7 @@ import org.diorite.impl.connection.packets.login.PacketLoginInListener;
 import org.diorite.Server;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketLoginInStart implements PacketLoginIn
+public class PacketLoginInStart extends PacketLoginIn
 {
     private GameProfile profile;
 
@@ -34,7 +34,7 @@ public class PacketLoginInStart implements PacketLoginIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.profile.getName());
     }

@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 @PacketClass(id = 0x17, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInCustomPayload implements PacketPlayIn
+public class PacketPlayInCustomPayload extends PacketPlayIn
 {
     public static final int TAG_SIZE = 20;
     public static final int MAX_SIZE = 32767;
@@ -42,7 +42,7 @@ public class PacketPlayInCustomPayload implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.tag);
         data.writeBytes(this.dataSerializer);

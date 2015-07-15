@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 @PacketClass(id = 0x19, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketPlayInResourcePackStatus implements PacketPlayIn
+public class PacketPlayInResourcePackStatus extends PacketPlayIn
 {
     public static final int MAX_HASH_SIZE = 40;
     private String             hash;
@@ -50,7 +50,7 @@ public class PacketPlayInResourcePackStatus implements PacketPlayIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.hash);
         data.writeVarInt(this.status.getId());

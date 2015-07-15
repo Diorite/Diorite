@@ -14,7 +14,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 
 @PacketClass(id = 0x3A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutTabComplete implements PacketPlayOut
+public class PacketPlayOutTabComplete extends PacketPlayOut
 {
     private Collection<String> strings;
 
@@ -46,7 +46,7 @@ public class PacketPlayOutTabComplete implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         if ((this.strings == null) || this.strings.isEmpty())
         {

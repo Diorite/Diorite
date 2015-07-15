@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.chat.component.BaseComponent;
 
 @PacketClass(id = 0x40, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutDisconnect implements PacketPlayOut
+public class PacketPlayOutDisconnect extends PacketPlayOut
 {
     private BaseComponent content;
 
@@ -33,7 +33,7 @@ public class PacketPlayOutDisconnect implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeBaseComponent(this.content);
     }

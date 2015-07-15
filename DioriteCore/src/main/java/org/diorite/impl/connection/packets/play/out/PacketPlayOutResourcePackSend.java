@@ -13,7 +13,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayOutListener;
 import org.diorite.impl.connection.packets.play.in.PacketPlayInResourcePackStatus;
 
 @PacketClass(id = 0x48, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
-public class PacketPlayOutResourcePackSend implements PacketPlayOut
+public class PacketPlayOutResourcePackSend extends PacketPlayOut
 {
     private String url;
     private String hash;
@@ -61,7 +61,7 @@ public class PacketPlayOutResourcePackSend implements PacketPlayOut
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.url);
         data.writeText(this.hash);

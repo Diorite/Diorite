@@ -9,7 +9,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.status.PacketStatusInListener;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.SERVERBOUND)
-public class PacketStatusInStart implements PacketStatusIn
+public class PacketStatusInStart extends PacketStatusIn
 {
 
     @Override
@@ -19,7 +19,7 @@ public class PacketStatusInStart implements PacketStatusIn
     }
 
     @Override
-    public void writePacket(final PacketDataSerializer data) throws IOException
+    public void writeFields(final PacketDataSerializer data) throws IOException
     {
 
     }
