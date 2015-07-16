@@ -7,6 +7,7 @@ public abstract class DioritePlugin
 {
     private DioritePlugin     instance;
     private PluginClassLoader classLoader;
+    private PluginLoader      pluginLoader;
     private boolean           initialised;
     private boolean           enabled;
     private String            name;
@@ -65,13 +66,18 @@ public abstract class DioritePlugin
         return this.website;
     }
 
+    public PluginLoader getPluginLoader()
+    {
+        return this.pluginLoader;
+    }
+
     protected final DioritePlugin instance()
     {
         this.initCheck();
         return this.instance;
     }
 
-    public final void init(final PluginClassLoader classLoader, final DioritePlugin instance, final String name, final String version, final String author, final String description, final String website)
+    public final void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final DioritePlugin instance, final String name, final String version, final String author, final String description, final String website)
     {
         if (this.initialised)
         {
@@ -80,6 +86,7 @@ public abstract class DioritePlugin
 
         this.instance = instance;
         this.classLoader = classLoader;
+        this.pluginLoader = pluginLoader;
         this.name = name;
         this.version = version;
         this.author = author;
