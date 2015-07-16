@@ -50,6 +50,7 @@ public class PluginsCmd extends SystemCommandImpl
                 }
                 sender.sendSimpleColoredMessage("&7Stats for nerds:");
                 sender.sendSimpleColoredMessage("  &7Loaded classes: &3" + pl.getClassLoader().loadedClasses());
+                sender.sendSimpleColoredMessage("  &7Plugin loader: &3" + pl.getPluginLoader().getClass().getSimpleName());
             }
             else
             {

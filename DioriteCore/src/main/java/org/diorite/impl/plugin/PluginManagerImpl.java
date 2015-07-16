@@ -10,15 +10,21 @@ import java.util.NoSuchElementException;
 
 import com.google.common.collect.ImmutableSet;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.Main;
+import org.diorite.Diorite;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
 import org.diorite.plugin.PluginManager;
+import org.diorite.plugin.PluginNotFoundException;
 
 public class PluginManagerImpl implements PluginManager
 {
-    private final List<DioritePlugin>       plugins       = new ArrayList<>(20);
+    private final Collection<DioritePlugin> plugins       = new ArrayList<>(20);
     private final Map<String, PluginLoader> pluginLoaders = new HashMap<>(5);
 
     @Override
@@ -31,19 +37,35 @@ public class PluginManagerImpl implements PluginManager
     @Override
     public void loadPlugin(final File file) throws PluginException
     {
-        this.plugins.add(this.pluginLoaders.get("jar").loadPlugin(file)); // TODO redirect it to valid PluginLoader
+        final PluginLoader pluginLoader = this.pluginLoaders.get(FilenameUtils.getExtension(file.getAbsolutePath()));
+        if (pluginLoader == null)
+        {
+            Main.debug("Non-plugin file: " + file.getName());
+            return;
+        }
+        this.plugins.add(pluginLoader.loadPlugin(file));
     }
 
     @Override
     public void enablePlugin(final String name) throws PluginException
     {
-        this.getPlugin(name).setEnabled(true); // TODO redirect it to valid PluginLoader
+        final DioritePlugin plugin = this.getPlugin(name);
+        if (plugin == null)
+        {
+            throw new PluginNotFoundException();
+        }
+        plugin.getPluginLoader().enablePlugin(name);
     }
 
     @Override
     public void disablePlugin(final String name) throws PluginException
     {
-        this.getPlugin(name).setEnabled(false); // TODO redirect it to valid PluginLoader
+        final DioritePlugin plugin = this.getPlugin(name);
+        if (plugin == null)
+        {
+            throw new PluginNotFoundException();
+        }
+        plugin.getPluginLoader().disablePlugin(name);
     }
 
     @Override
@@ -67,6 +89,20 @@ public class PluginManagerImpl implements PluginManager
     @Override
     public void disablePlugins()
     {
-        this.plugins.stream().filter(DioritePlugin::isEnabled).forEach(plugin -> plugin.setEnabled(false));
+        this.plugins.stream().filter(DioritePlugin::isEnabled).forEach(plugin -> {
+            try
+            {
+                this.disablePlugin(plugin.getName());
+            } catch (final PluginException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugins", this.plugins).append("pluginLoaders", this.pluginLoaders).toString();
     }
 }
