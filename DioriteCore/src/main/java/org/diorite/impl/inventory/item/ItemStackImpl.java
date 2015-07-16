@@ -138,7 +138,7 @@ public class ItemStackImpl implements Dirtable, ItemStack
     @Override
     public ItemStackImpl clone()
     {
-        return new ItemStackImpl(this);
+        return new ItemStackImpl(this.wrapped.clone());
     }
 
     public static ItemStackImpl wrap(final ItemStack item)
