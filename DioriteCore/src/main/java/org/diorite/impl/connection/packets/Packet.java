@@ -1,7 +1,6 @@
 package org.diorite.impl.connection.packets;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -14,8 +13,8 @@ import io.netty.util.concurrent.GenericFutureListener;
 
 public abstract class Packet<T extends PacketListener>
 {
-    public static final int                                   INITIAL_CAPACITY = 512;
-    protected final     AtomicReference<PacketDataSerializer> data             = new AtomicReference<>();
+    public static final int INITIAL_CAPACITY = 512;
+    protected volatile PacketDataSerializer data;
 
     public Packet()
     {
@@ -23,7 +22,7 @@ public abstract class Packet<T extends PacketListener>
 
     public Packet(final PacketDataSerializer data)
     {
-        this.data.set(data);
+        this.data = data;
     }
 
     public abstract void readPacket(PacketDataSerializer data) throws IOException;
@@ -34,22 +33,22 @@ public abstract class Packet<T extends PacketListener>
 
     public synchronized PacketDataSerializer preparePacket(final boolean force) throws IOException
     {
-        if (force || ((this.data.get()) == null))
+        if (force || (this.data == null))
         {
             final PacketDataSerializer newData = new PacketDataSerializer(Unpooled.buffer(INITIAL_CAPACITY));
             this.writeFields(newData);
-            this.data.set(newData);
+            this.data = newData;
             return newData;
         }
-        return null;
+        return this.data;
     }
 
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        PacketDataSerializer tempData = this.data.get();
+        PacketDataSerializer tempData = this.data;
         if (tempData == null)
         {
-            tempData = this.preparePacket(false);
+            tempData = this.preparePacket(true);
         }
         if (tempData == null)
         {
@@ -60,12 +59,12 @@ public abstract class Packet<T extends PacketListener>
 
     public PacketDataSerializer getDataBuffer()
     {
-        return this.data.get();
+        return this.data;
     }
 
     public void setDataBuffer(final PacketDataSerializer data)
     {
-        this.data.set(data);
+        this.data = data;
     }
 
     public int getPacketID()
