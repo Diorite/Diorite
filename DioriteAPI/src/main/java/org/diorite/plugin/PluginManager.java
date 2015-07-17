@@ -14,13 +14,17 @@ public interface PluginManager
 
     void loadPlugin(File file) throws PluginException;
 
-    void enablePlugin(String name) throws PluginException;
+    void injectPlugin(FakeDioritePlugin plugin) throws PluginException;
 
-    void disablePlugin(String name) throws PluginException;
+    void enablePlugin(BasePlugin name) throws PluginException;
 
-    DioritePlugin getPlugin(String name);
+    void disablePlugin(BasePlugin name) throws PluginException;
 
-    Collection<DioritePlugin> getPlugins();
+    BasePlugin getPlugin(String name);
+
+    Collection<BasePlugin> getPlugins();
+
+    void enablePlugins();
 
     void disablePlugins();
 }
