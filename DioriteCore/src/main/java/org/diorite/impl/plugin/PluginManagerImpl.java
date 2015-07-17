@@ -1,10 +1,12 @@
 package org.diorite.impl.plugin;
 
+import static org.diorite.utils.function.FunctionUtils.not;
+
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -15,16 +17,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
-import org.diorite.Diorite;
-import org.diorite.plugin.DioritePlugin;
+import org.diorite.plugin.BasePlugin;
+import org.diorite.plugin.FakeDioritePlugin;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
 import org.diorite.plugin.PluginManager;
-import org.diorite.plugin.PluginNotFoundException;
 
 public class PluginManagerImpl implements PluginManager
 {
-    private final Collection<DioritePlugin> plugins       = new ArrayList<>(20);
+    private final Collection<BasePlugin>    plugins       = new ArrayList<>(20);
     private final Map<String, PluginLoader> pluginLoaders = new HashMap<>(5);
 
     @Override
@@ -43,33 +44,44 @@ public class PluginManagerImpl implements PluginManager
             Main.debug("Non-plugin file: " + file.getName());
             return;
         }
+        Main.debug("Loading plugin " + file.getName() + " with pluginloader: " + pluginLoader.getClass().getSimpleName());
         this.plugins.add(pluginLoader.loadPlugin(file));
     }
 
     @Override
-    public void enablePlugin(final String name) throws PluginException
+    public void injectPlugin(final FakeDioritePlugin plugin) throws PluginException
     {
-        final DioritePlugin plugin = this.getPlugin(name);
-        if (plugin == null)
+        if (this.getPlugin(plugin.getName()) != null)
         {
-            throw new PluginNotFoundException();
+            throw new PluginException("Plugin with name " + plugin.getName() + " is arleady loaded!");
         }
-        plugin.getPluginLoader().enablePlugin(name);
+        Main.debug("Injecting plugin: " + plugin.getName());
+        this.plugins.add(plugin);
+        plugin.init(null, this.pluginLoaders.get(FakePluginLoader.FAKE_PLUGIN_EXTENSION), null, null, null, null, null, null);
     }
 
     @Override
-    public void disablePlugin(final String name) throws PluginException
+    public void enablePlugin(final BasePlugin plugin) throws PluginException
     {
-        final DioritePlugin plugin = this.getPlugin(name);
         if (plugin == null)
         {
-            throw new PluginNotFoundException();
+            throw new NullPointerException("plugin can't be null!");
         }
-        plugin.getPluginLoader().disablePlugin(name);
+        plugin.getPluginLoader().enablePlugin(plugin);
     }
 
     @Override
-    public DioritePlugin getPlugin(final String name)
+    public void disablePlugin(final BasePlugin plugin) throws PluginException
+    {
+        if (plugin == null)
+        {
+            throw new NullPointerException("plugin can't be null!");
+        }
+        plugin.getPluginLoader().disablePlugin(plugin);
+    }
+
+    @Override
+    public BasePlugin getPlugin(final String name)
     {
         try
         {
@@ -81,18 +93,32 @@ public class PluginManagerImpl implements PluginManager
     }
 
     @Override
-    public Collection<DioritePlugin> getPlugins()
+    public Collection<BasePlugin> getPlugins()
     {
         return ImmutableSet.copyOf(this.plugins);
     }
 
     @Override
-    public void disablePlugins()
+    public void enablePlugins()
     {
-        this.plugins.stream().filter(DioritePlugin::isEnabled).forEach(plugin -> {
+        this.plugins.stream().filter(not(BasePlugin::isEnabled)).forEach(plugin -> {
             try
             {
-                this.disablePlugin(plugin.getName());
+                this.enablePlugin(plugin);
+            } catch (final PluginException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public void disablePlugins()
+    {
+        this.plugins.stream().filter(BasePlugin::isEnabled).forEach(plugin -> {
+            try
+            {
+                this.disablePlugin(plugin);
             } catch (final PluginException e)
             {
                 e.printStackTrace();

@@ -58,6 +58,7 @@ import org.diorite.impl.pipelines.event.player.BlockDestroyPipelineImpl;
 import org.diorite.impl.pipelines.event.player.BlockPlacePipelineImpl;
 import org.diorite.impl.pipelines.event.player.ChatPipelineImpl;
 import org.diorite.impl.pipelines.event.player.InventoryClickPipelineImpl;
+import org.diorite.impl.plugin.FakePluginLoader;
 import org.diorite.impl.plugin.JarPluginLoader;
 import org.diorite.impl.plugin.PluginManagerImpl;
 import org.diorite.impl.scheduler.SchedulerImpl;
@@ -290,6 +291,7 @@ public class ServerImpl implements Server
     private void loadPlugins()
     {
         this.pluginManager = new PluginManagerImpl();
+        this.pluginManager.registerPluginLoader(new FakePluginLoader());
         this.pluginManager.registerPluginLoader(new JarPluginLoader());
 
         Main.debug("Plugins directory is: " + this.pluginsDirectory.getAbsolutePath());

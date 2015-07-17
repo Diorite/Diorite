@@ -9,6 +9,7 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import org.diorite.impl.ServerImpl;
+import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginClassLoader;
@@ -67,9 +68,8 @@ public class JarPluginLoader implements PluginLoader
     }
 
     @Override
-    public void enablePlugin(final String name) throws PluginException
+    public void enablePlugin(final BasePlugin plugin) throws PluginException
     {
-        final DioritePlugin plugin = ServerImpl.getInstance().getPluginManager().getPlugin(name);
         if (plugin == null)
         {
             throw new PluginNotFoundException();
@@ -78,9 +78,8 @@ public class JarPluginLoader implements PluginLoader
     }
 
     @Override
-    public void disablePlugin(final String name) throws PluginException
+    public void disablePlugin(final BasePlugin plugin) throws PluginException
     {
-        final DioritePlugin plugin = ServerImpl.getInstance().getPluginManager().getPlugin(name);
         if (plugin == null)
         {
             throw new PluginNotFoundException();
