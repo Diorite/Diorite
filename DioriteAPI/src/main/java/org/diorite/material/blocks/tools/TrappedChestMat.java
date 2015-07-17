@@ -36,7 +36,7 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
     @SuppressWarnings("MagicNumber")
     protected TrappedChestMat()
     {
-        super("TRAPPED_CHEST", 65, "minecraft:ladder", "NORTH", (byte) 0x00, 2.5f, 12.5f);
+        super("TRAPPED_CHEST", 146, "minecraft:trapped_chest", "NORTH", (byte) 0x00, 2.5f, 12.5f);
         this.face = BlockFace.NORTH;
     }
 

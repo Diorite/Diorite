@@ -4,9 +4,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.StairsMat;
-import org.diorite.material.blocks.wooden.WoodTypeMat;
 import org.diorite.material.blocks.wooden.wood.WoodMat;
+import org.diorite.utils.collections.maps.SimpleEnumMap;
 
 /**
  * Abstract class for all WoodenStairs-based blocks
@@ -30,6 +31,17 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat
         this.upsideDown = upsideDown;
     }
 
+    private static final SimpleEnumMap<WoodTypeMat, WoodenStairsMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
+
+    @Override
+    public abstract WoodenStairsMat getUpsideDown(final boolean upsideDown);
+
+    @Override
+    public abstract WoodenStairsMat getType(final BlockFace face, final boolean upsideDown);
+
+    @Override
+    public abstract WoodenStairsMat getBlockFacing(final BlockFace face);
+
     @Override
     public BlockFace getBlockFacing()
     {
@@ -45,23 +57,7 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat
     @Override
     public WoodenStairsMat getWoodType(final WoodTypeMat woodType)
     {
-        switch (woodType)
-        {
-            case OAK:
-                return OAK_STAIRS;
-            case SPRUCE:
-                return SPRUCE_STAIRS;
-            case BIRCH:
-                return BIRCH_STAIRS;
-            case JUNGLE:
-                return JUNGLE_STAIRS;
-            case ACACIA:
-                return ACACIA_STAIRS;
-            case DARK_OAK:
-                return DARK_OAK_STAIRS;
-            default:
-                return null;
-        }
+        return types.get(woodType).getType(this.face, this.upsideDown);
     }
 
     @Override
@@ -79,24 +75,29 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat
      *
      * @return sub-type of {@link WoodTypeMat} WoodenStairs.
      */
-    public static WoodenStairsMat getWoodenFenceGate(final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)
+    public static WoodenStairsMat getWoodenStairs(final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)
     {
-        switch (woodType)
-        {
-            case OAK:
-                return OakStairsMat.getOakStairs(face, upsideDown);
-            case SPRUCE:
-                return SpruceStairsMat.getSpruceStairs(face, upsideDown);
-            case BIRCH:
-                return BirchStairsMat.getBirchStairs(face, upsideDown);
-            case JUNGLE:
-                return JungleStairsMat.getJungleStairs(face, upsideDown);
-            case ACACIA:
-                return AcaciaStairsMat.getAcaciaStairs(face, upsideDown);
-            case DARK_OAK:
-                return DarkOakStairsMat.getDarkOakStairs(face, upsideDown);
-            default:
-                return null;
-        }
+        return types.get(woodType).getType(face, upsideDown);
+    }
+
+    /**
+     * Register new wood type to one of stairs, like OAK to OAK_STAIRS.
+     *
+     * @param type type of wood.
+     * @param mat  stairs material.
+     */
+    public static void registerWoodType(final WoodTypeMat type, final WoodenStairsMat mat)
+    {
+        types.put(type, mat);
+    }
+
+    static
+    {
+        registerWoodType(WoodTypeMat.OAK, OAK_STAIRS);
+        registerWoodType(WoodTypeMat.SPRUCE, SPRUCE_STAIRS);
+        registerWoodType(WoodTypeMat.BIRCH, BIRCH_STAIRS);
+        registerWoodType(WoodTypeMat.JUNGLE, JUNGLE_STAIRS);
+        registerWoodType(WoodTypeMat.ACACIA, ACACIA_STAIRS);
+        registerWoodType(WoodTypeMat.DARK_OAK, DARK_OAK_STAIRS);
     }
 }

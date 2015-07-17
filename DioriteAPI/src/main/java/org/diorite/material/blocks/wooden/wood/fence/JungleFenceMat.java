@@ -2,8 +2,7 @@ package org.diorite.material.blocks.wooden.wood.fence;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;

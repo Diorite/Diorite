@@ -2,7 +2,7 @@ package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -16,7 +16,7 @@ public class PlanksMat extends WoodMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 6;
+    public static final byte USED_DATA_VALUES = 6;
 
     public static final PlanksMat PLANKS_OAK      = new PlanksMat();
     public static final PlanksMat PLANKS_SPRUCE   = new PlanksMat(WoodTypeMat.SPRUCE);
@@ -86,25 +86,23 @@ public class PlanksMat extends WoodMat
         return byName.get(name);
     }
 
+    /**
+     * Returns sub-type of {@link PlanksMat}, based on {@link WoodTypeMat}.
+     *
+     * @param woodType {@link WoodTypeMat} of Planks
+     *
+     * @return sub-type of {@link PlanksMat}.
+     */
     public static PlanksMat getPlanks(final WoodTypeMat type)
     {
-        switch (type)
+        for (final PlanksMat mat : planksTypes())
         {
-            case OAK:
-                return PLANKS_OAK;
-            case SPRUCE:
-                return PLANKS_SPRUCE;
-            case BIRCH:
-                return PLANKS_BIRCH;
-            case JUNGLE:
-                return PLANKS_JUNGLE;
-            case ACACIA:
-                return PLANKS_ACACIA;
-            case DARK_OAK:
-                return PLANKS_DARK_OAK;
-            default:
-                return PLANKS_OAK;
+            if (mat.getWoodType().ordinal() == type.ordinal())
+            {
+                return mat;
+            }
         }
+        return null;
     }
 
     /**

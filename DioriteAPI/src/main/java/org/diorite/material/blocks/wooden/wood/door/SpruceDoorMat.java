@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.blocks.DoorMat;
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -48,7 +48,7 @@ public class SpruceDoorMat extends WoodenDoorMat
     @SuppressWarnings("MagicNumber")
     protected SpruceDoorMat()
     {
-        super("SPRUCE_DOOR", 195, "minecraft:jungle_door", "BOTTOM_EAST", WoodTypeMat.SPRUCE, 3, 15);
+        super("SPRUCE_DOOR", 193, "minecraft:spruce_door", "BOTTOM_EAST", WoodTypeMat.SPRUCE, 3, 15);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = false;

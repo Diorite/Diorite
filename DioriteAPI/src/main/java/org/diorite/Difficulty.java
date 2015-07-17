@@ -61,6 +61,7 @@ public class Difficulty extends ASimpleEnum<Difficulty>
     public static void register(final Difficulty element)
     {
         ASimpleEnum.register(Difficulty.class, element);
+        byLevel.put(element.getLevel(), element);
     }
 
     /**

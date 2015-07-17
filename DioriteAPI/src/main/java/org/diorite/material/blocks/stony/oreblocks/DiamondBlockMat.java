@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.diorite.material.Material;
 import org.diorite.material.blocks.stony.ore.OreMat;
+import org.diorite.material.items.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -27,12 +28,12 @@ public class DiamondBlockMat extends OreBlockMat
     @SuppressWarnings("MagicNumber")
     protected DiamondBlockMat()
     {
-        super("DIAMOND_BLOCK", 57, "minecraft:diamond_block", "DIAMOND_BLOCK", (byte) 0x00, Material.DIAMOND_ORE, 5, 30);
+        super("DIAMOND_BLOCK", 57, "minecraft:diamond_block", "DIAMOND_BLOCK", (byte) 0x00, Material.DIAMOND_ORE, Material.DIAMOND, 5, 30);
     }
 
-    protected DiamondBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final float hardness, final float blastResistance)
+    protected DiamondBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, ore, hardness, blastResistance);
+        super(enumName, id, minecraftId, maxStack, typeName, type, ore, item, hardness, blastResistance);
     }
 
     @Override

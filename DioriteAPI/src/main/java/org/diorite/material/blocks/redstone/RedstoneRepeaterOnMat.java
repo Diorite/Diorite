@@ -44,7 +44,7 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
     @SuppressWarnings("MagicNumber")
     protected RedstoneRepeaterOnMat()
     {
-        super("REDSTONE_REPEATER_ON", 93, "minecraft:unpowered_repeater", BlockFace.NORTH, 1, 0, 0);
+        super("REDSTONE_REPEATER_ON", 94, "minecraft:powered_repeater", BlockFace.NORTH, 1, 0, 0);
     }
 
     protected RedstoneRepeaterOnMat(final BlockFace face, final int delay)

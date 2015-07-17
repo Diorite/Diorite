@@ -3,7 +3,7 @@ package org.diorite.material.blocks.wooden.wood;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.wooden.WoodenMat;
 
 /**
@@ -25,11 +25,23 @@ public abstract class WoodMat extends WoodenMat
         this.woodType = woodType;
     }
 
+    /**
+     * Returns wood type of this block.
+     *
+     * @return wood type of this block.
+     */
     public WoodTypeMat getWoodType()
     {
         return this.woodType;
     }
 
+    /**
+     * Returns block made of selected wood type related to this block. Like other doors.
+     *
+     * @param woodType type of wood.
+     *
+     * @return block made of selected wood type.
+     */
     public abstract WoodMat getWoodType(WoodTypeMat woodType);
 
     @Override

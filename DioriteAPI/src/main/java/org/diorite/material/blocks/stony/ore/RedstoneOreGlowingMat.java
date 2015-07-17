@@ -2,6 +2,9 @@ package org.diorite.material.blocks.stony.ore;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
+import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
+import org.diorite.material.items.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -25,12 +28,12 @@ public class RedstoneOreGlowingMat extends OreMat
     @SuppressWarnings("MagicNumber")
     protected RedstoneOreGlowingMat()
     {
-        super("REDSTONE_ORE_GLOWING", 74, "minecraft:lit_redstone_ore", "REDSTONE_ORE_GLOWING", (byte) 0x00, 3, 15);
+        super("REDSTONE_ORE_GLOWING", 74, "minecraft:lit_redstone_ore", "REDSTONE_ORE_GLOWING", (byte) 0x00, Material.REDSTONE, Material.REDSTONE_BLOCK, 3, 15);
     }
 
-    protected RedstoneOreGlowingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    protected RedstoneOreGlowingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+        super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
     }
 
     @Override

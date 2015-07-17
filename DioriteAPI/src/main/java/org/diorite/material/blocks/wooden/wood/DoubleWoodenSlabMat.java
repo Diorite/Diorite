@@ -3,7 +3,7 @@ package org.diorite.material.blocks.wooden.wood;
 import java.util.Map;
 
 import org.diorite.material.blocks.SlabTypeMat;
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;

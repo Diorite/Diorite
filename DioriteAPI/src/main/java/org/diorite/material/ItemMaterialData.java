@@ -1,5 +1,8 @@
 package org.diorite.material;
 
+import org.diorite.material.items.food.EdibleItemMat;
+import org.diorite.material.items.tool.ToolMat;
+
 public abstract class ItemMaterialData extends Material
 {
     protected ItemMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
@@ -15,7 +18,7 @@ public abstract class ItemMaterialData extends Material
     /**
      * Check if item is tool-based item, tool-based item is an item that
      * have some durability limit. <br>
-     * Most of them are sublcasses of {@link org.diorite.material.items.ToolMat}
+     * Most of them are sublcasses of {@link ToolMat}
      *
      * @return true if item is tool-based.
      */
@@ -36,7 +39,7 @@ public abstract class ItemMaterialData extends Material
 
     /**
      * Check if item can be eaten by player. <br>
-     * Item like that should implements {@link org.diorite.material.items.EdibleItemMat}
+     * Item like that should implements {@link EdibleItemMat}
      * @return if item can be eaten by player
      */
     public boolean isEdible()

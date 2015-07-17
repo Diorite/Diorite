@@ -47,7 +47,7 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
     @SuppressWarnings("MagicNumber")
     protected DetectorRailMat()
     {
-        super("DETECTOR_RAIL", 28, "minecraft:golden_rail", "NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00, 0.7f, 3.5f);
+        super("DETECTOR_RAIL", 28, "minecraft:detector_rail", "NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00, 0.7f, 3.5f);
         this.powered = false;
     }
 

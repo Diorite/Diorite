@@ -2,7 +2,6 @@ package org.diorite.material.items.food;
 
 import java.util.Map;
 
-import org.diorite.material.items.EdibleItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;

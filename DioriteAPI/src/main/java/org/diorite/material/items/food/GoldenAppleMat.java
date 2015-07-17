@@ -2,7 +2,6 @@ package org.diorite.material.items.food;
 
 import java.util.Map;
 
-import org.diorite.material.items.EdibleItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
@@ -29,7 +28,7 @@ public class GoldenAppleMat extends EdibleItemMat
 
     protected GoldenAppleMat(final String name, final int type)
     {
-        super("GOLDED_APPLE", 322, "minecraft:golden_apple", name, (short) type, 4, 9.6F);
+        super(GOLDED_APPLE.name(), GOLDED_APPLE.getId(), GOLDED_APPLE.getMinecraftId(), name, (short) type, 4, 9.6F);
     }
 
     protected GoldenAppleMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)

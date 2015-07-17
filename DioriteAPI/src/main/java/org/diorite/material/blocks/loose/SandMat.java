@@ -2,7 +2,6 @@ package org.diorite.material.blocks.loose;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -27,7 +26,7 @@ public class SandMat extends LooseMat
     @SuppressWarnings("MagicNumber")
     protected SandMat()
     {
-        super("SPONGE", 12, "minecraft:sand", "SPONGE", (byte) 0x00, 0.5f, 2.5f);
+        super("SAND", 12, "minecraft:sand", "SAND", (byte) 0x00, 0.5f, 2.5f);
     }
 
     protected SandMat(final String enumName, final int type)

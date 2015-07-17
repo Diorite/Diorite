@@ -37,7 +37,7 @@ public class StoneButtonMat extends ButtonMat
     @SuppressWarnings("MagicNumber")
     protected StoneButtonMat()
     {
-        super("STONE_BUTTON", 143, "minecraft:wooden_button", BlockFace.DOWN, false, 0.5f, 2.5f);
+        super("STONE_BUTTON", 77, "minecraft:stone_button", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
     protected StoneButtonMat(final BlockFace face, final boolean powered)

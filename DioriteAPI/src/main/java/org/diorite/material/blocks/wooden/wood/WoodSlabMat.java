@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.blocks.SlabMat;
 import org.diorite.material.blocks.SlabTypeMat;
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 
 /**
  * Abstract class for all WoodSlab-based blocks

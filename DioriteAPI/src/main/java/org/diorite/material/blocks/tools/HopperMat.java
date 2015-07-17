@@ -50,7 +50,7 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
     @SuppressWarnings("MagicNumber")
     protected HopperMat()
     {
-        super("HOPPER", 23, "minecraft:dispenser", "DOWN", (byte) 0x00, 3, 15);
+        super("HOPPER", 154, "minecraft:hopper", "DOWN", (byte) 0x00, 3, 15);
         this.facing = BlockFace.DOWN;
         this.powered = false;
     }

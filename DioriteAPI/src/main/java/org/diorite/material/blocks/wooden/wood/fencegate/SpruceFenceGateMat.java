@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.blocks.FenceGateMat;
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -36,7 +36,7 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
     @SuppressWarnings("MagicNumber")
     protected SpruceFenceGateMat()
     {
-        super("SPRUCE_FENCE_GATE", 187, "minecraft:acacia_fence_gate", WoodTypeMat.SPRUCE, BlockFace.SOUTH, false, 2, 15);
+        super("SPRUCE_FENCE_GATE", 183, "minecraft:spruce_fence_gate", WoodTypeMat.SPRUCE, BlockFace.SOUTH, false, 2, 15);
     }
 
     protected SpruceFenceGateMat(final BlockFace face, final boolean open)

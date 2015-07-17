@@ -5,11 +5,11 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
 import org.diorite.material.blocks.stony.ore.OreMat;
+import org.diorite.material.items.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -39,19 +39,19 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
     @SuppressWarnings("MagicNumber")
     protected QuartzBlockMat()
     {
-        super("QUARTZ_BLOCK", 155, "minecraft:quartz_block", "QUARTZ_BLOCK", (byte) 0x00, Material.QUARTZ_ORE, 0.8f, 4);
+        super("QUARTZ_BLOCK", 155, "minecraft:quartz_block", "QUARTZ_BLOCK", (byte) 0x00, Material.QUARTZ_ORE, Material.QUARTZ, 0.8f, 4);
         this.variant = VariantMat.CLASSIC;
     }
 
     protected QuartzBlockMat(final int type, final VariantMat variant)
     {
-        super(QUARTZ_BLOCK.name(), QUARTZ_BLOCK.ordinal(), QUARTZ_BLOCK.getMinecraftId(), variant.name(), (byte) type, QUARTZ_BLOCK.getOre(), QUARTZ_BLOCK.getHardness(), QUARTZ_BLOCK.getBlastResistance());
+        super(QUARTZ_BLOCK.name(), QUARTZ_BLOCK.ordinal(), QUARTZ_BLOCK.getMinecraftId(), variant.name(), (byte) type, QUARTZ_BLOCK.getOre(), QUARTZ_BLOCK.getOreItem(), QUARTZ_BLOCK.getHardness(), QUARTZ_BLOCK.getBlastResistance());
         this.variant = variant;
     }
 
-    protected QuartzBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final VariantMat variant, final float hardness, final float blastResistance)
+    protected QuartzBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final VariantMat variant, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, ore, hardness, blastResistance);
+        super(enumName, id, minecraftId, maxStack, typeName, type, ore, item, hardness, blastResistance);
         this.variant = variant;
     }
 

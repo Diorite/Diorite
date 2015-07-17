@@ -12,7 +12,7 @@ import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.RotateAxisMat;
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.wooden.wood.LeavesMat;
 import org.diorite.material.blocks.wooden.wood.LogMat;
 import org.diorite.world.chunk.ChunkPos;

@@ -36,7 +36,7 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
     @SuppressWarnings("MagicNumber")
     protected EnderChestMat()
     {
-        super("ENDER_CHEST", 65, "minecraft:ladder", "NORTH", (byte) 0x00, 22.5f, 3_000);
+        super("ENDER_CHEST", 130, "minecraft:ender_chest", "NORTH", (byte) 0x00, 22.5f, 3_000);
         this.face = BlockFace.NORTH;
     }
 

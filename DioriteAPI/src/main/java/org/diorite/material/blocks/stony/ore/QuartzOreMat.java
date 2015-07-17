@@ -2,7 +2,9 @@ package org.diorite.material.blocks.stony.ore;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.material.Material;
+import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
+import org.diorite.material.items.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -16,7 +18,7 @@ public class QuartzOreMat extends OreMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte USED_DATA_VALUES = 1;
 
     public static final QuartzOreMat QUARTZ_ORE = new QuartzOreMat();
 
@@ -26,12 +28,12 @@ public class QuartzOreMat extends OreMat
     @SuppressWarnings("MagicNumber")
     protected QuartzOreMat()
     {
-        super("QUARTZ_ORE", 153, "minecraft:quartz_ore", "QUARTZ_ORE", (byte) 0x00, 3, 15);
+        super("QUARTZ_ORE", 153, "minecraft:quartz_ore", "QUARTZ_ORE", (byte) 0x00, Material.QUARTZ, Material.QUARTZ_BLOCK, 3, 15);
     }
 
-    protected QuartzOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    protected QuartzOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+        super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
     }
 
     @Override

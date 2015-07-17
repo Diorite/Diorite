@@ -2,9 +2,9 @@ package org.diorite.material.blocks.stony.oreblocks;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.stony.ore.OreMat;
+import org.diorite.material.items.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -28,12 +28,12 @@ public class EmeraldBlockMat extends OreBlockMat
     @SuppressWarnings("MagicNumber")
     protected EmeraldBlockMat()
     {
-        super("EMERALD_BLOCK", 133, "minecraft:emerald_block", "EMERALD_BLOCK", (byte) 0x00, Material.EMERALD_ORE, 5, 30);
+        super("EMERALD_BLOCK", 133, "minecraft:emerald_block", "EMERALD_BLOCK", (byte) 0x00, Material.EMERALD_ORE, Material.EMERALD, 5, 30);
     }
 
-    protected EmeraldBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final float hardness, final float blastResistance)
+    protected EmeraldBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, ore, hardness, blastResistance);
+        super(enumName, id, minecraftId, maxStack, typeName, type, ore, item, hardness, blastResistance);
     }
 
     @Override

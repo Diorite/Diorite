@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -42,7 +42,7 @@ public class SaplingMat extends WoodMat
 
     protected SaplingMat()
     {
-        super("SAPLING", 5, "minecraft:sapling", "OAK", (byte) 0x00, WoodTypeMat.OAK, 0, 0);
+        super("SAPLING", 6, "minecraft:sapling", "OAK", (byte) 0x00, WoodTypeMat.OAK, 0, 0);
         this.stage = SaplingStage.NEW;
     }
 

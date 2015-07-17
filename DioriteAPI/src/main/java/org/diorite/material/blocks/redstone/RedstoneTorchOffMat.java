@@ -30,7 +30,7 @@ public class RedstoneTorchOffMat extends RedstoneTorchMat
     @SuppressWarnings("MagicNumber")
     protected RedstoneTorchOffMat()
     {
-        super("REDSTONE_TORCH_OFF", 76, "minecraft:redstone_torch", BlockFace.WEST, 0, 0);
+        super("REDSTONE_TORCH_OFF", 75, "minecraft:unlit_redstone_torch", BlockFace.WEST, 0, 0);
     }
 
     protected RedstoneTorchOffMat(final BlockFace face)

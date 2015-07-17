@@ -2,6 +2,9 @@ package org.diorite.material.blocks.stony.ore;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
+import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
+import org.diorite.material.items.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -15,7 +18,7 @@ public class RedstoneOreMat extends OreMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte USED_DATA_VALUES = 1;
 
     public static final RedstoneOreMat REDSTONE_ORE = new RedstoneOreMat();
 
@@ -25,12 +28,12 @@ public class RedstoneOreMat extends OreMat
     @SuppressWarnings("MagicNumber")
     protected RedstoneOreMat()
     {
-        super("REDSTONE_ORE", 73, "minecraft:redstone_ore", "REDSTONE_ORE", (byte) 0x00, 3, 15);
+        super("REDSTONE_ORE", 73, "minecraft:redstone_ore", "REDSTONE_ORE", (byte) 0x00, Material.REDSTONE, Material.REDSTONE_BLOCK, 3, 15);
     }
 
-    protected RedstoneOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    protected RedstoneOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+        super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.blocks.StairsMat;
-import org.diorite.material.blocks.wooden.WoodTypeMat;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;

@@ -36,7 +36,7 @@ public class FurnaceMat extends BlockMaterialData implements DirectionalMat
     @SuppressWarnings("MagicNumber")
     protected FurnaceMat()
     {
-        super("FURNACE", 65, "minecraft:ladder", "NORTH", (byte) 0x00, 3.5f, 17.5f);
+        super("FURNACE", 61, "minecraft:furnace", "NORTH", (byte) 0x00, 3.5f, 17.5f);
         this.face = BlockFace.NORTH;
     }
 
