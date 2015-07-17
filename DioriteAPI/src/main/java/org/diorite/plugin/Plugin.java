@@ -11,9 +11,9 @@ public @interface Plugin
 {
     String name();
 
-    String version();
+    String version() default "unknown";
 
-    String author();
+    String author() default "unknown";
 
     String description() default "";
 

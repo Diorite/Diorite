@@ -3,7 +3,7 @@ package org.diorite.plugin;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public abstract class DioritePlugin
+public abstract class DioritePlugin implements BasePlugin
 {
     private DioritePlugin     instance;
     private PluginClassLoader classLoader;
@@ -23,6 +23,7 @@ public abstract class DioritePlugin
     /**
      * Invokes very early, at end of {@link org.diorite.Server} constructor
      */
+    @Override
     public void onLoad()
     {
     }
@@ -30,43 +31,51 @@ public abstract class DioritePlugin
     /**
      * Invokes before world load
      */
+    @Override
     public void onEnable()
     {
     }
 
+    @Override
     public void onDisable()
     {
     }
 
+    @Override
     public final String getName()
     {
         this.initCheck();
         return this.name;
     }
 
+    @Override
     public final String getVersion()
     {
         this.initCheck();
         return this.version;
     }
 
+    @Override
     public final String getAuthor()
     {
         this.initCheck();
         return this.author;
     }
 
-    public String getDescription()
+    @Override
+    public final String getDescription()
     {
         return this.description;
     }
 
-    public String getWebsite()
+    @Override
+    public final String getWebsite()
     {
         return this.website;
     }
 
-    public PluginLoader getPluginLoader()
+    @Override
+    public final PluginLoader getPluginLoader()
     {
         return this.pluginLoader;
     }
@@ -77,6 +86,7 @@ public abstract class DioritePlugin
         return this.instance;
     }
 
+    @Override
     public final void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final DioritePlugin instance, final String name, final String version, final String author, final String description, final String website)
     {
         if (this.initialised)
@@ -95,6 +105,7 @@ public abstract class DioritePlugin
         this.initialised = true;
     }
 
+    @Override
     public final void setEnabled(final boolean enabled)
     {
         this.initCheck();
@@ -117,6 +128,13 @@ public abstract class DioritePlugin
         }
     }
 
+    @Override
+    public boolean isInitialised()
+    {
+        return this.initialised;
+    }
+
+    @Override
     public final boolean isEnabled()
     {
         this.initCheck();
