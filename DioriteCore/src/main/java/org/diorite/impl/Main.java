@@ -7,12 +7,15 @@ import java.net.Proxy;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.fusesource.jansi.AnsiConsole;
 
 import org.diorite.impl.connection.packets.RegisterPackets;
 import org.diorite.Server;
+import org.diorite.material.BlockMaterialData;
+import org.diorite.material.ItemMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.math.DioriteMathUtils;
 
@@ -144,7 +147,12 @@ public final class Main
                 // TODO: load "magic values"
                 // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
                 // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
-                System.out.println("Registered " + Material.values().length + " vanilla minecraft blocks and items.");
+                System.out.println("Registered " + Material.values().length + (enabledDebug ? (" (" + Stream.of(Material.values()).map(Material::types).mapToInt(t -> t.length).sum() + " with sub-types)") : "") + " vanilla minecraft blocks and items.");
+                if (enabledDebug)
+                {
+                    System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft blocks.");
+                    System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft items.");
+                }
                 new ServerImpl(Proxy.NO_PROXY, options).start(options);
             } catch (final Throwable t)
             {
