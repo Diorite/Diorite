@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -15,6 +16,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "BedBlock" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class BedBlockMat extends BlockMaterialData implements DirectionalMat
 {
@@ -76,6 +79,12 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
         this.blockFacing = blockFacing;
         this.isHeadPart = isHeadPart;
         this.isOccupied = isOccupied;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.BED;
     }
 
     public boolean isHeadPart()

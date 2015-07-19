@@ -930,6 +930,23 @@ public abstract class Material implements SimpleEnum<Material>
     }
 
     /**
+     * Some item's can't be directly added to player inventory,
+     * (they will make client crash, thanks Mojang for that). <br>
+     * This method will return other simillar item that can be added
+     * to inventory, like water bucket for water block. <br>
+     * Or will return this same instance if it already can be added. <br>
+     * <p>
+     * Overriding methods should not change type of returned value
+     * as it may change in nex updates.
+     *
+     * @return item that can be added to inventory.
+     */
+    public Material ensureValidInventoryItem()
+    {
+        return this;
+    }
+
+    /**
      * Method will try to find material by given name, converting it to any possible type of id: <br>
      * <ul>
      * <li>{numericId} -> like "1" for stone</li>
@@ -1260,6 +1277,8 @@ public abstract class Material implements SimpleEnum<Material>
         register(END_PORTAL_FRAME);
         register(END_STONE);
         register(DRAGON_EGG);
+        register(REDSTONE_LAMP_OFF);
+        register(REDSTONE_LAMP_ON);
         register(DOUBLE_WOODEN_SLAB);
         register(WOODEN_SLAB);
         register(COCOA);

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -12,6 +13,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "PotatoesBlock" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class PotatoesBlockMat extends CropsMat
 {
@@ -51,6 +54,12 @@ public class PotatoesBlockMat extends CropsMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.age = age;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.POTATO;
     }
 
     @Override

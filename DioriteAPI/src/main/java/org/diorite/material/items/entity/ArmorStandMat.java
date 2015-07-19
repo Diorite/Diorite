@@ -3,7 +3,7 @@ package org.diorite.material.items.entity;
 import java.util.Map;
 
 import org.diorite.material.ItemMaterialData;
-import org.diorite.material.items.PlaceableEntityMat;
+import org.diorite.material.PlaceableEntityMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -15,6 +16,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "SkullBlock" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class SkullBlockMat extends BlockMaterialData implements AttachableMat
 {
@@ -55,6 +58,12 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.onWall = onWall;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.AIR; // TODO: change to skull item
     }
 
     @Override

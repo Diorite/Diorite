@@ -8,7 +8,7 @@ import org.diorite.material.data.drops.PossibleDrops;
 import org.diorite.material.data.drops.PossibleFixedDrop;
 import org.diorite.utils.lazy.LazyValue;
 
-public abstract class BlockMaterialData extends Material
+public abstract class BlockMaterialData extends Material implements PlaceableMat
 {
     protected final float hardness;
     protected final float blastResistance;

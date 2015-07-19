@@ -3,6 +3,7 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -10,6 +11,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "RedstoneTorchOff" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class RedstoneTorchOffMat extends RedstoneTorchMat
 {
@@ -41,6 +44,12 @@ public class RedstoneTorchOffMat extends RedstoneTorchMat
     protected RedstoneTorchOffMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.REDSTONE_TORCH_ON;
     }
 
     @Override

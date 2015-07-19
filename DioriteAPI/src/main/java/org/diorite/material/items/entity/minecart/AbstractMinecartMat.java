@@ -1,7 +1,7 @@
 package org.diorite.material.items.entity.minecart;
 
 import org.diorite.material.ItemMaterialData;
-import org.diorite.material.items.PlaceableEntityMat;
+import org.diorite.material.PlaceableEntityMat;
 
 public abstract class AbstractMinecartMat extends ItemMaterialData implements PlaceableEntityMat
 {

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.DioriteMathUtils;
 
@@ -14,6 +15,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Cauldron" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class CauldronBlockMat extends BlockMaterialData
 {
@@ -49,6 +52,12 @@ public class CauldronBlockMat extends BlockMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.waterLevel = waterLevel;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.CAULDRON;
     }
 
     /**

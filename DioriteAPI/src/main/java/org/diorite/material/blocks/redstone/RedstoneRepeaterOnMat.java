@@ -3,6 +3,7 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -10,13 +11,15 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "RedstoneRepeaterOn" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final byte USED_DATA_VALUES = 16;
 
     public static final RedstoneRepeaterOnMat REDSTONE_REPEATER_ON_NORTH_1 = new RedstoneRepeaterOnMat();
     public static final RedstoneRepeaterOnMat REDSTONE_REPEATER_ON_EAST_1  = new RedstoneRepeaterOnMat(BlockFace.EAST, 1);
@@ -55,6 +58,12 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
     protected RedstoneRepeaterOnMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int delay, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, delay, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.REDSTONE_REPEATER_ITEM;
     }
 
     @Override

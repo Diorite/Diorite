@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -15,6 +16,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "OakDoor" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class OakDoorMat extends WoodenDoorMat
 {
@@ -84,6 +87,12 @@ public class OakDoorMat extends WoodenDoorMat
         this.open = open;
         this.topPart = topPart;
         this.blockFace = blockFace;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.OAK_DOOR_ITEM;
     }
 
     @Override

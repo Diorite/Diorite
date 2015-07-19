@@ -2,6 +2,7 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -10,6 +11,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "DoubleStoneSlab" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class DoubleStoneSlabMat extends StonySlabMat
 {
@@ -62,6 +65,12 @@ public class DoubleStoneSlabMat extends StonySlabMat
     protected DoubleStoneSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, slabType, stoneType, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.STONE_SLAB.getType(SlabTypeMat.BOTTOM, this.stoneType);
     }
 
     @Override

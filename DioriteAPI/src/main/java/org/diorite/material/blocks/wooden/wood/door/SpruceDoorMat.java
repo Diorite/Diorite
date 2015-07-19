@@ -6,8 +6,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
-import org.diorite.material.blocks.DoorMat;
+import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
+import org.diorite.material.blocks.DoorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -15,13 +16,15 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "SpruceDoor" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class SpruceDoorMat extends WoodenDoorMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final byte USED_DATA_VALUES = 12;
 
     public static final SpruceDoorMat SPRUCE_DOOR_BOTTOM_EAST       = new SpruceDoorMat();
     public static final SpruceDoorMat SPRUCE_DOOR_BOTTOM_SOUTH      = new SpruceDoorMat(BlockFace.SOUTH, false);
@@ -84,6 +87,12 @@ public class SpruceDoorMat extends WoodenDoorMat
         this.open = open;
         this.topPart = topPart;
         this.blockFace = blockFace;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.SPRUCE_DOOR_ITEM;
     }
 
     @Override

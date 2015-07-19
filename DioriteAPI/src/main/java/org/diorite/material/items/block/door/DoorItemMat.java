@@ -1,9 +1,9 @@
 package org.diorite.material.items.block.door;
 
 import org.diorite.material.ItemMaterialData;
-import org.diorite.material.items.PlaceableItemMat;
+import org.diorite.material.PlaceableMat;
 
-public abstract class DoorItemMat extends ItemMaterialData implements PlaceableItemMat
+public abstract class DoorItemMat extends ItemMaterialData implements PlaceableMat
 {
     protected DoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {

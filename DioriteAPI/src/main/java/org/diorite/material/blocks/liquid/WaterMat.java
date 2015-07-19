@@ -2,6 +2,7 @@ package org.diorite.material.blocks.liquid;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -9,13 +10,15 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Water" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class WaterMat extends LiquidMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES       = 16;
+    public static final byte USED_DATA_VALUES = 16;
 
     public static final WaterMat WATER_SOURCE  = new WaterMat(LiquidTypeMat.NORMAL);
     public static final WaterMat WATER_STAGE_1 = new WaterMat(LiquidStageMat.STAGE_1, LiquidTypeMat.NORMAL);
@@ -80,6 +83,12 @@ public class WaterMat extends LiquidMat
     public WaterMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, stage, liquidType, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.WATER_BUCKET;
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -11,6 +12,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "DoubleWoodenSlab" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class DoubleWoodenSlabMat extends WoodSlabMat
 {
@@ -43,6 +46,12 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
     protected DoubleWoodenSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SlabTypeMat slabType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, slabType, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.WOODEN_SLAB.getWoodType(this.woodType);
     }
 
     @Override

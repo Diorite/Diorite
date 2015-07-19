@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -13,6 +14,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "StandingSign" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class StandingSignMat extends SignBlockMat
 {
@@ -60,6 +63,12 @@ public class StandingSignMat extends SignBlockMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.SIGN;
     }
 
     @Override

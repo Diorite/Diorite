@@ -3,6 +3,7 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.ChangeablePowerElementMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.ByteRange;
@@ -13,7 +14,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 @SuppressWarnings("MagicNumber")
 /**
  * Class representing block "RedstoneWire" and all its subtypes.
- */ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowerElementMat
+ * <p>
+ * NOTE: Will crash game when in inventory.
+ */
+public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowerElementMat
 {
     /**
      * Range of valid power strength, from 0 to 15
@@ -58,6 +62,12 @@ import gnu.trove.map.hash.TByteObjectHashMap;
     protected RedstoneWireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.REDSTONE;
     }
 
     @Override

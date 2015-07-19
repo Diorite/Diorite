@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -16,6 +17,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "RedstoneComparator" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class RedstoneComparatorMat extends BlockMaterialData implements PowerableMat, DirectionalMat
 {
@@ -84,6 +87,12 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
         this.face = face;
         this.subtractionMode = subtractionMode;
         this.powered = powered;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.REDSTONE_COMPARATOR_ITEM;
     }
 
     private static byte combine(final BlockFace face, final boolean subtractionMode, final boolean powered)

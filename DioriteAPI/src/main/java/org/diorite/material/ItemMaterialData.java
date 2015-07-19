@@ -29,7 +29,7 @@ public abstract class ItemMaterialData extends Material
 
     /**
      * Check if item can be placed, so it will change to the block. Like doors. <br>
-     * Item like that should implements {@link org.diorite.material.items.PlaceableItemMat}
+     * Item like that should implements {@link PlaceableMat}
      * @return if item is placeable.
      */
     public boolean canBePlaced()

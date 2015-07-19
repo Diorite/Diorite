@@ -3,6 +3,7 @@ package org.diorite.material.blocks.others;
 import java.util.Map;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -10,6 +11,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "FlowerPot" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 @SuppressWarnings({"MagicNumber", "deprecation"})
 public class FlowerPotBlockMat extends BlockMaterialData
@@ -64,6 +67,12 @@ public class FlowerPotBlockMat extends BlockMaterialData
     protected FlowerPotBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.FLOWER_POT;
     }
 
     @Override

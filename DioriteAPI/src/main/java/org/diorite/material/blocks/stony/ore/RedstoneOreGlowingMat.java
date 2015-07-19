@@ -12,13 +12,15 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "RedstoneOreGlowing" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class RedstoneOreGlowingMat extends OreMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte USED_DATA_VALUES = 1;
 
     public static final RedstoneOreGlowingMat REDSTONE_ORE_GLOWING = new RedstoneOreGlowingMat();
 
@@ -34,6 +36,12 @@ public class RedstoneOreGlowingMat extends OreMat
     protected RedstoneOreGlowingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.REDSTONE_ORE;
     }
 
     @Override

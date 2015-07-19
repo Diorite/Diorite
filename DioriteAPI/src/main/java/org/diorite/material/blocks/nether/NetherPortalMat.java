@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.PortalMat;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
@@ -17,6 +18,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "NetherPortal" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class NetherPortalMat extends BlockMaterialData implements RotatableMat, PortalMat
 {
@@ -50,6 +53,12 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.NETHER_PORTAL;
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.diorite.material.blocks.liquid;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -9,6 +10,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Lava" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class LavaMat extends LiquidMat
 {
@@ -82,6 +85,12 @@ public class LavaMat extends LiquidMat
     protected LavaMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, stage, liquidType, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.LAVA_BUCKET;
     }
 
     @Override

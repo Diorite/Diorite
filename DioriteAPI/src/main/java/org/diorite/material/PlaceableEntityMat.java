@@ -1,4 +1,4 @@
-package org.diorite.material.items;
+package org.diorite.material;
 
 /**
  * Represents an item that can be placed as entity. (or thrown)

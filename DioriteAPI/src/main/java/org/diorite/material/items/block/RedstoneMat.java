@@ -6,14 +6,14 @@ import org.diorite.material.Material;
 import org.diorite.material.blocks.stony.ore.OreMat;
 import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
 import org.diorite.material.items.OreItemMat;
-import org.diorite.material.items.PlaceableItemMat;
+import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
-public class RedstoneMat extends OreItemMat implements PlaceableItemMat
+public class RedstoneMat extends OreItemMat implements PlaceableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default

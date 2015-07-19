@@ -2,6 +2,7 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -9,6 +10,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "DaylightDetectorInverted" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 @SuppressWarnings("MagicNumber")
 public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
@@ -52,6 +55,12 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
     protected DaylightDetectorInvertedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, power, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.DAYLIGHT_DETECTOR;
     }
 
     @Override

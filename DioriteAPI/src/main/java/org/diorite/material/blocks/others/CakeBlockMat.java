@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.others.MushroomBlockMat.Type;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -14,6 +15,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Cake" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class CakeBlockMat extends BlockMaterialData
 {
@@ -52,6 +55,12 @@ public class CakeBlockMat extends BlockMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.piecesEaten = piecesEaten;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.CAKE;
     }
 
     @Override

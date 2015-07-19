@@ -2,8 +2,8 @@ package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -12,6 +12,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Tripwire" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class TripwireMat extends BlockMaterialData implements PowerableMat
 {
@@ -91,6 +93,12 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
         this.inAir = inAir;
         this.valid = valid;
         this.disarmed = disarmed;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.STRING;
     }
 
     @Override

@@ -12,13 +12,15 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Farmland" and all its subtypes.
+ * <p>
+ * NOTE: This item don't have valid textures in hand.
  */
 public class FarmlandMat extends EarthMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final byte USED_DATA_VALUES = 8;
 
     public static final FarmlandMat FARMLAND_UNHYDRATED = new FarmlandMat();
     public static final FarmlandMat FARMLAND_MOISTURE_1 = new FarmlandMat("MOISTURE_1", 1);

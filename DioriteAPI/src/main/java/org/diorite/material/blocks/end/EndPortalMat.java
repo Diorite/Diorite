@@ -2,8 +2,8 @@ package org.diorite.material.blocks.end;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.PortalMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -12,13 +12,15 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "EndPortal" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class EndPortalMat extends BlockMaterialData implements PortalMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final byte USED_DATA_VALUES = 1;
 
     public static final EndPortalMat END_PORTAL = new EndPortalMat();
 
@@ -34,6 +36,12 @@ public class EndPortalMat extends BlockMaterialData implements PortalMat
     protected EndPortalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.END_PORTAL_FRAME;
     }
 
     @Override

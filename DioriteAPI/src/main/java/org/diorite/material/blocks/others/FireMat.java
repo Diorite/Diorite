@@ -3,6 +3,7 @@ package org.diorite.material.blocks.others;
 import java.util.Map;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.AgeableBlockMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -11,6 +12,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Fire" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 @SuppressWarnings("MagicNumber")
 public class FireMat extends BlockMaterialData implements AgeableBlockMat
@@ -54,6 +57,12 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
     protected FireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.FIRE_CHARGE;
     }
 
     @Override

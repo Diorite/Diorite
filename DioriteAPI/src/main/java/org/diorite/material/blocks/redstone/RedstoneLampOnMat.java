@@ -2,7 +2,7 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -10,6 +10,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "RedstoneLampOn" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class RedstoneLampOnMat extends RedstoneLampMat
 {
@@ -32,6 +34,12 @@ public class RedstoneLampOnMat extends RedstoneLampMat
     protected RedstoneLampOnMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.REDSTONE_LAMP_OFF;
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -15,6 +16,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "IronDoor" and all its subtypes.
+ * <p>
+ * NOTE: Will crash game when in inventory.
  */
 public class IronDoorMat extends BlockMaterialData implements DoorMat
 {
@@ -84,6 +87,12 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
         this.open = open;
         this.topPart = topPart;
         this.blockFace = blockFace;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.IRON_DOOR_ITEM;
     }
 
     @Override
