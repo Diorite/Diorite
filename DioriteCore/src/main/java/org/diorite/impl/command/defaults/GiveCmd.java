@@ -29,7 +29,7 @@ public class GiveCmd extends SystemCommandImpl
             return;
         }
         final Material mat;
-        if (! args.has(param) || (((mat = Material.matchMaterial(args.asString(param++), true))) == null))
+        if (! args.has(param) || ((((mat = Material.matchValidInventoryMaterial(args.asString(param++), true)))) == null))
         {
             sender.sendSimpleColoredMessage("&4No material"); // TODO: change message and add it to config.
             return;
