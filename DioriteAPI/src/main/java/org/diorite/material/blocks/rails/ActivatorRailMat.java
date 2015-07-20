@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.Material;
 import org.diorite.material.blocks.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -62,6 +63,12 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, railType, hardness, blastResistance);
         this.powered = powered;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.ACTIVATOR_RAIL;
     }
 
     @Override

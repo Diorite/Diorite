@@ -19,8 +19,8 @@ public class BaseItemStack implements ItemStack
     public BaseItemStack(final Material material, final int amount)
     {
         Validate.notNull(material, "Material can't be null.");
-        this.material = material;
-        this.amount = amount;
+        this.material = material.ensureValidInventoryItem();
+        this.amount = (this.material == null) ? 0 : amount;
     }
 
     public BaseItemStack(final Material material)
@@ -43,7 +43,12 @@ public class BaseItemStack implements ItemStack
     @Override
     public void setMaterial(final Material material)
     {
-        this.material = material;
+        this.material = material.ensureValidInventoryItem();
+        if (this.material == null)
+        {
+            this.amount = 0;
+            this.itemMeta = null;
+        }
     }
 
     @Override
@@ -80,7 +85,7 @@ public class BaseItemStack implements ItemStack
     @Override
     public boolean isAir()
     {
-        return this.material.equals(Material.AIR);
+        return (this.material == null) || this.material.simpleEquals(Material.AIR);
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -21,13 +22,14 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 5;
+    public static final byte USED_DATA_VALUES = 5;
 
     public static final TorchMat TORCH_EAST  = new TorchMat();
     public static final TorchMat TORCH_WEST  = new TorchMat(BlockFace.WEST);
     public static final TorchMat TORCH_SOUTH = new TorchMat(BlockFace.SOUTH);
     public static final TorchMat TORCH_NORTH = new TorchMat(BlockFace.NORTH);
     public static final TorchMat TORCH_UP    = new TorchMat(BlockFace.UP);
+    public static final TorchMat TORCH_ITEM  = new TorchMat(BlockFace.SELF);
 
     private static final Map<String, TorchMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<TorchMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -43,7 +45,7 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
 
     protected TorchMat(final BlockFace face)
     {
-        super(TORCH_EAST.name(), TORCH_EAST.ordinal(), TORCH_EAST.getMinecraftId(), face.name(), combine(face), TORCH_EAST.getHardness(), TORCH_EAST.getBlastResistance());
+        super(TORCH_EAST.name(), TORCH_EAST.ordinal(), TORCH_EAST.getMinecraftId(), (face == BlockFace.SELF) ? "ITEM" : face.name(), combine(face), TORCH_EAST.getHardness(), TORCH_EAST.getBlastResistance());
         this.face = face;
     }
 
@@ -51,6 +53,12 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return TORCH_ITEM;
     }
 
     @Override
@@ -101,6 +109,8 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
                 return 0x4;
             case UP:
                 return 0x5;
+            case SELF:
+                return 0x0;
             default:
                 return 0x1;
         }
@@ -177,5 +187,6 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
         TorchMat.register(TORCH_SOUTH);
         TorchMat.register(TORCH_NORTH);
         TorchMat.register(TORCH_UP);
+        TorchMat.register(TORCH_ITEM);
     }
 }

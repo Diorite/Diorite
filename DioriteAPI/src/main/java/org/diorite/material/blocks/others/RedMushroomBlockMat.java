@@ -2,6 +2,7 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -48,6 +49,12 @@ public class RedMushroomBlockMat extends MushroomBlockMat
     protected RedMushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, mushroomType, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.RED_MUSHROOM_BLOCK;
     }
 
     @Override

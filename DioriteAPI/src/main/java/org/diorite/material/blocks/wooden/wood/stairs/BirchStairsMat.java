@@ -3,6 +3,7 @@ package org.diorite.material.blocks.wooden.wood.stairs;
 import java.util.Map;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -47,6 +48,12 @@ public class BirchStairsMat extends WoodenStairsMat
     protected BirchStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.BIRCH_STAIRS;
     }
 
     @Override

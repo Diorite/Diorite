@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -22,7 +23,7 @@ public class LeavesMat extends WoodMat
     public static final byte USED_DATA_VALUES = 24;
 
     public static final LeavesMat LEAVES_OAK      = new LeavesMat();
-    public static final LeavesMat LEAVES_SPRUCE   = new LeavesMat("SPRUCE", WoodTypeMat.SPRUCE, false, true, 0.2f, 1);
+    public static final LeavesMat LEAVES_SPRUCE   = new LeavesMat("SPRUCE", WoodTypeMat.SPRUCE, false, true);
     public static final LeavesMat LEAVES_BIRCH    = new LeavesMat("BIRCH", WoodTypeMat.BIRCH, false, true);
     public static final LeavesMat LEAVES_JUNGLE   = new LeavesMat("JUNGLE", WoodTypeMat.JUNGLE, false, true);
     public static final LeavesMat LEAVES_ACACIA   = new Leaves2("ACACIA", WoodTypeMat.ACACIA, false, true);
@@ -84,6 +85,12 @@ public class LeavesMat extends WoodMat
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.checkDecay = checkDecay;
         this.decayable = decayable;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return this.getType(this.woodType, false, true);
     }
 
     public boolean isCheckDecay()

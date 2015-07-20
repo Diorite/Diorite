@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -19,7 +20,7 @@ public class SaplingMat extends WoodMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final byte USED_DATA_VALUES = 12;
 
     public static final SaplingMat SAPLING_OAK      = new SaplingMat();
     public static final SaplingMat SAPLING_SPRUCE   = new SaplingMat(WoodTypeMat.SPRUCE, SaplingStage.NEW);
@@ -28,7 +29,7 @@ public class SaplingMat extends WoodMat
     public static final SaplingMat SAPLING_ACACIA   = new SaplingMat(WoodTypeMat.ACACIA, SaplingStage.NEW);
     public static final SaplingMat SAPLING_DARK_OAK = new SaplingMat(WoodTypeMat.DARK_OAK, SaplingStage.NEW);
 
-    public static final SaplingMat SAPLING_QAK_OLDER      = new SaplingMat(WoodTypeMat.OAK, SaplingStage.OLDER);
+    public static final SaplingMat SAPLING_OAK_OLDER      = new SaplingMat(WoodTypeMat.OAK, SaplingStage.OLDER);
     public static final SaplingMat SAPLING_SPRUCE_OLDER   = new SaplingMat(WoodTypeMat.SPRUCE, SaplingStage.OLDER);
     public static final SaplingMat SAPLING_BIRCH_OLDER    = new SaplingMat(WoodTypeMat.BIRCH, SaplingStage.OLDER);
     public static final SaplingMat SAPLING_JUNGLE_OLDER   = new SaplingMat(WoodTypeMat.JUNGLE, SaplingStage.OLDER);
@@ -56,6 +57,12 @@ public class SaplingMat extends WoodMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.stage = stage;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return this.getType(this.woodType, SaplingStage.NEW);
     }
 
     public SaplingMat getOtherStage()
@@ -197,5 +204,12 @@ public class SaplingMat extends WoodMat
         SaplingMat.register(SAPLING_JUNGLE);
         SaplingMat.register(SAPLING_ACACIA);
         SaplingMat.register(SAPLING_DARK_OAK);
+
+        SaplingMat.register(SAPLING_OAK_OLDER);
+        SaplingMat.register(SAPLING_SPRUCE_OLDER);
+        SaplingMat.register(SAPLING_BIRCH_OLDER);
+        SaplingMat.register(SAPLING_JUNGLE_OLDER);
+        SaplingMat.register(SAPLING_ACACIA_OLDER);
+        SaplingMat.register(SAPLING_DARK_OAK_OLDER);
     }
 }

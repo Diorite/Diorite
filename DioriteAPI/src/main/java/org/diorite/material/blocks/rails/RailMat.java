@@ -2,6 +2,7 @@ package org.diorite.material.blocks.rails;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -45,6 +46,12 @@ public class RailMat extends RailsMat
     protected RailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, railType, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.RAIL;
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.diorite.material.blocks.cold;
 import java.util.Map;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -44,6 +45,12 @@ public class SnowLayerMat extends BlockMaterialData
     protected SnowLayerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.SNOW_LAYER;
     }
 
     @Override

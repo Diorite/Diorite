@@ -3,7 +3,7 @@ package org.diorite.material.blocks;
 /**
  * enum with some common types (variants) of blocks.
  * Block supproting variant may (and mostly it will) supprot only few of them.
- * If block don't supprot given variant, {@link CLASSIC} should be ussed instead.
+ * If block don't supprot given variant, {@link #CLASSIC} should be ussed instead.
  */
 public enum VariantMat
 {

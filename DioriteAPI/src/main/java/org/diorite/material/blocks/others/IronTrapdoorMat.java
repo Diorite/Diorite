@@ -3,6 +3,7 @@ package org.diorite.material.blocks.others;
 import java.util.Map;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -55,6 +56,12 @@ public class IronTrapdoorMat extends TrapdoorMat
     protected IronTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, open, onTop, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.IRON_TRAPDOOR;
     }
 
     @Override

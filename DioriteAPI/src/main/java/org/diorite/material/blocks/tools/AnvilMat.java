@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -64,6 +65,12 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         this.damage = damage;
         this.axis = axis;
         this.rotated = rotated;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.ANVIL;
     }
 
     private static String combineName(final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated)

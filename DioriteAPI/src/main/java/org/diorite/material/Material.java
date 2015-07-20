@@ -1062,6 +1062,102 @@ public abstract class Material implements SimpleEnum<Material>
         return null;
     }
 
+    /**
+     * Method will try to find material by given name, converting it to any possible type of id: <br>
+     * <ul>
+     * <li>{numericId} -> like "1" for stone</li>
+     * <li>{enumStringId} -> like "STONE"</li>
+     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
+     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
+     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * </ul>
+     * With extended mode it will also scan all materials and looks for sub-material with name equals to given string
+     * multiple types may have this same sub-material name, so may not return valid material for types like that.
+     *
+     * @param string                   material name/id to find.
+     * @param extended                 if it should use extended mode. (slower)
+     * @param ensureValidInventoryItem if it should use {@link #ensureValidInventoryItem()} before returing result.
+     *
+     * @return material or null if it didn't find any.
+     */
+    public static Material matchMaterial(final String string, final boolean extended, final boolean ensureValidInventoryItem)
+    {
+        Material mat = matchMaterial(string, extended);
+        if (ensureValidInventoryItem && (mat != null))
+        {
+            mat = mat.ensureValidInventoryItem();
+        }
+        return mat;
+    }
+
+    /**
+     * Method will try to find material by given name, converting it to any possible type of id: <br>
+     * <ul>
+     * <li>{numericId} -> like "1" for stone</li>
+     * <li>{enumStringId} -> like "STONE"</li>
+     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
+     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
+     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * </ul>
+     * With extended mode it will also scan all materials and looks for sub-material with name equals to given string
+     * multiple types may have this same sub-material name, so may not return valid material for types like that. <br>
+     * <p>
+     * This methos will also invoke {@link #ensureValidInventoryItem()} before returing result, so it is good for
+     * getting materials for items.
+     *
+     * @param string material name/id to find.
+     *
+     * @return material or null if it didn't find any.
+     *
+     * @see #matchMaterial(String, boolean, boolean)
+     */
+    public static Material matchValidInventoryMaterial(final String string)
+    {
+        return matchMaterial(string, false, true);
+    }
+
+    /**
+     * Method will try to find material by given name, converting it to any possible type of id: <br>
+     * <ul>
+     * <li>{numericId} -> like "1" for stone</li>
+     * <li>{enumStringId} -> like "STONE"</li>
+     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
+     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
+     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * </ul>
+     * With extended mode it will also scan all materials and looks for sub-material with name equals to given string
+     * multiple types may have this same sub-material name, so may not return valid material for types like that. <br>
+     * <p>
+     * This methos will also invoke {@link #ensureValidInventoryItem()} before returing result, so it is good for
+     * getting materials for items.
+     *
+     * @param string   material name/id to find.
+     * @param extended if it should use extended mode. (slower)
+     *
+     * @return material or null if it didn't find any.
+     *
+     * @see #matchMaterial(String, boolean, boolean)
+     */
+    public static Material matchValidInventoryMaterial(final String string, final boolean extended)
+    {
+        return matchMaterial(string, extended, true);
+    }
+
     public static Material getByID(final int id)
     {
         return byID.get(id);

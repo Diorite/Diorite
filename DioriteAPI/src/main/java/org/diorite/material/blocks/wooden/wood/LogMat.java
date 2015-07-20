@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
 import org.diorite.material.WoodTypeMat;
@@ -82,6 +83,12 @@ public class LogMat extends WoodMat implements RotatableMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return this.getType(this.woodType, RotateAxisMat.UP_DOWN);
     }
 
     @Override

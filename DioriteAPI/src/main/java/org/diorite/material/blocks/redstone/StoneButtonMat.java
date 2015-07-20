@@ -3,6 +3,7 @@ package org.diorite.material.blocks.redstone;
 import java.util.Map;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -48,6 +49,12 @@ public class StoneButtonMat extends ButtonMat
     protected StoneButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, powered, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.STONE_BUTTON;
     }
 
     @Override

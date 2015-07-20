@@ -2,8 +2,9 @@ package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
-import org.diorite.material.blocks.SlabTypeMat;
+import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
+import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -17,7 +18,7 @@ public class WoodenSlabMat extends WoodSlabMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final byte USED_DATA_VALUES = 12;
 
     public static final WoodenSlabMat WOODEN_SLAB_OAK      = new WoodenSlabMat();
     public static final WoodenSlabMat WOODEN_SLAB_SPRUCE   = new WoodenSlabMat(WoodTypeMat.SPRUCE, SlabTypeMat.BOTTOM);
@@ -45,6 +46,12 @@ public class WoodenSlabMat extends WoodSlabMat
     public WoodenSlabMat(final WoodTypeMat woodType, final SlabTypeMat slabType)
     {
         super(WOODEN_SLAB_OAK.name(), WOODEN_SLAB_OAK.ordinal(), WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType, WOODEN_SLAB_OAK.getHardness(), WOODEN_SLAB_OAK.getBlastResistance());
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return this.getType(this.woodType, SlabTypeMat.BOTTOM);
     }
 
     @Override

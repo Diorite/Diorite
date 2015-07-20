@@ -2,6 +2,7 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -37,6 +38,12 @@ public class StonePressurePlateMat extends PressurePlateMat
     protected StonePressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, powered, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.STONE_PRESSURE_PLATE;
     }
 
     @Override

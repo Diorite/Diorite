@@ -2,6 +2,7 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -62,6 +63,12 @@ public class StoneSlabMat extends StonySlabMat
     protected StoneSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, slabType, stoneType, hardness, blastResistance);
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return this.getType(SlabTypeMat.BOTTOM, this.stoneType);
     }
 
     @Override

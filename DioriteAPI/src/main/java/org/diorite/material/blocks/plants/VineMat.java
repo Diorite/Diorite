@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.diorite.BlockFace;
-import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -79,6 +79,12 @@ public class VineMat extends PlantMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.faces = faces;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.VINE;
     }
 
     /**

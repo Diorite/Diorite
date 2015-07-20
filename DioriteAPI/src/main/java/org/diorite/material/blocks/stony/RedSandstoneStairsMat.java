@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -59,6 +60,12 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
         this.upsideDown = upsideDown;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.RED_SANDSTONE_STAIRS;
     }
 
     @Override

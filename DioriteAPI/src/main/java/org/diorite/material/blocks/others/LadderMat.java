@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.AttachableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -50,6 +51,12 @@ public class LadderMat extends BlockMaterialData implements AttachableMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.LADDER;
     }
 
     @Override

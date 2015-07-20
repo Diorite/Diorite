@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.material.Material;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
 import org.diorite.material.blocks.stony.StonyMat;
@@ -69,6 +70,12 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.facing = facing;
         this.powered = powered;
+    }
+
+    @Override
+    public Material ensureValidInventoryItem()
+    {
+        return Material.DISPENSER;
     }
 
     @Override
