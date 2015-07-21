@@ -15,7 +15,7 @@ public class FlowersMat extends FlowerMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 9;
+    public static final int USED_DATA_VALUES = 9;
 
     public static final FlowersMat FLOWERS_POPPY        = new FlowersMat();
     public static final FlowersMat FLOWERS_BLUE_ORCHID  = new FlowersMat(0x1, FlowerTypeMat.BLUE_ORCHID);

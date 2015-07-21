@@ -22,7 +22,7 @@ public class StandingSignMat extends SignBlockMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final StandingSignMat STANDING_SIGN_SOUTH            = new StandingSignMat();
     public static final StandingSignMat STANDING_SIGN_SOUTH_SOUTH_WEST = new StandingSignMat(BlockFace.SOUTH_SOUTH_WEST);

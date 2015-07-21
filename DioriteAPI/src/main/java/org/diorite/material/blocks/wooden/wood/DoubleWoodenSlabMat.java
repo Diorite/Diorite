@@ -3,8 +3,8 @@ package org.diorite.material.blocks.wooden.wood;
 import java.util.Map;
 
 import org.diorite.material.Material;
-import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.material.WoodTypeMat;
+import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -20,7 +20,7 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 6;
+    public static final int USED_DATA_VALUES = 6;
 
     public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_OAK      = new DoubleWoodenSlabMat();
     public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_SPRUCE   = new DoubleWoodenSlabMat(WoodTypeMat.SPRUCE, SlabTypeMat.BOTTOM);

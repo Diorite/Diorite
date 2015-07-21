@@ -14,7 +14,7 @@ public class Record13Mat extends RecordMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final Record13Mat RECORD_13 = new Record13Mat();
 

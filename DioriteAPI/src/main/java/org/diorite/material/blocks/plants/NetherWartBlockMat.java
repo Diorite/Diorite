@@ -21,7 +21,7 @@ public class NetherWartBlockMat extends CropsMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final NetherWartBlockMat NETHER_WART_BLOCK_0    = new NetherWartBlockMat();
     public static final NetherWartBlockMat NETHER_WART_BLOCK_1    = new NetherWartBlockMat("1", 0x1);

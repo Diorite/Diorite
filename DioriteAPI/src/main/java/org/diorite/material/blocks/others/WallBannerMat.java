@@ -23,7 +23,7 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final WallBannerMat WALL_BANNER_NORTH = new WallBannerMat();
     public static final WallBannerMat WALL_BANNER_SOUTH = new WallBannerMat(BlockFace.SOUTH);

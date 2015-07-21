@@ -22,7 +22,7 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final EnderChestMat ENDER_CHEST_NORTH = new EnderChestMat();
     public static final EnderChestMat ENDER_CHEST_SOUTH = new EnderChestMat(BlockFace.SOUTH);

@@ -18,7 +18,7 @@ public class WoodenSlabMat extends WoodSlabMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final WoodenSlabMat WOODEN_SLAB_OAK      = new WoodenSlabMat();
     public static final WoodenSlabMat WOODEN_SLAB_SPRUCE   = new WoodenSlabMat(WoodTypeMat.SPRUCE, SlabTypeMat.BOTTOM);

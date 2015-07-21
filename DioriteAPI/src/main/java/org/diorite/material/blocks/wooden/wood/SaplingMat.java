@@ -20,7 +20,7 @@ public class SaplingMat extends WoodMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final SaplingMat SAPLING_OAK      = new SaplingMat();
     public static final SaplingMat SAPLING_SPRUCE   = new SaplingMat(WoodTypeMat.SPRUCE, SaplingStage.NEW);

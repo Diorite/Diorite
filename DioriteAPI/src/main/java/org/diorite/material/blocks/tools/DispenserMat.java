@@ -24,11 +24,11 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
      * Bit flag defining if Dispenser is powered.
      * If bit is set to 0, then it isn't powered
      */
-    public static final byte  POWERED_FLAG     = 0x8;
+    public static final byte POWERED_FLAG     = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int  USED_DATA_VALUES = 12;
 
     public static final DispenserMat DISPENSER_DOWN  = new DispenserMat();
     public static final DispenserMat DISPENSER_UP    = new DispenserMat(BlockFace.UP, false);

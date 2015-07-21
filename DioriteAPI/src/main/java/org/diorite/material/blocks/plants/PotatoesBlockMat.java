@@ -21,7 +21,7 @@ public class PotatoesBlockMat extends CropsMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final PotatoesBlockMat POTATOES_BLOCK_0    = new PotatoesBlockMat();
     public static final PotatoesBlockMat POTATOES_BLOCK_1    = new PotatoesBlockMat("1", 0x1);

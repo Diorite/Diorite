@@ -13,7 +13,7 @@ public class GoldenAppleMat extends EdibleItemMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final GoldenAppleMat GOLDED_APPLE           = new GoldenAppleMat();
     public static final GoldenAppleMat GOLDED_ENCHANTED_APPLE = new GoldenAppleMat("ENCHANTED", 0x01);

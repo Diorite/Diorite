@@ -24,7 +24,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final IronDoorMat IRON_DOOR_BOTTOM_EAST       = new IronDoorMat();
     public static final IronDoorMat IRON_DOOR_BOTTOM_SOUTH      = new IronDoorMat("BOTTOM_SOUTH", BlockFace.SOUTH, false);

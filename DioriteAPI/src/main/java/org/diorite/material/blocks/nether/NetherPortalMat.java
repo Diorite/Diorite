@@ -26,7 +26,7 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final NetherPortalMat NETHER_PORTAL_EAST_WEST   = new NetherPortalMat();
     public static final NetherPortalMat NETHER_PORTAL_NORTH_SOUTH = new NetherPortalMat("NORTH_SOUTH", RotateAxisMat.NORTH_SOUTH);

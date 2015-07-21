@@ -2,7 +2,6 @@ package org.diorite.material.blocks.earth;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.data.drops.PossibleDrops;
 import org.diorite.material.data.drops.PossibleFixedDrop;
@@ -19,7 +18,7 @@ public class GrassMat extends EarthMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final GrassMat GRASS = new GrassMat();
 

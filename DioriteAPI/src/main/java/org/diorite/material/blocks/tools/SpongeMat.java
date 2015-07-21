@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -20,7 +19,7 @@ public class SpongeMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final SpongeMat SPONGE     = new SpongeMat();
     public static final SpongeMat SPONGE_WET = new SpongeMat(true);

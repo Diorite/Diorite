@@ -23,21 +23,21 @@ public class BrewingStandBlockMat extends BlockMaterialData
      * Bit flag defining if slot 0 of brewing stand have potion in it
      * If bit is set to 0, then slot is empty.
      */
-    public static final byte  SLOT_0_FLAG      = 0x1;
+    public static final byte SLOT_0_FLAG      = 0x1;
     /**
      * Bit flag defining if slot 1 of brewing stand have potion in it
      * If bit is set to 0, then slot is empty.
      */
-    public static final byte  SLOT_1_FLAG      = 0x2;
+    public static final byte SLOT_1_FLAG      = 0x2;
     /**
      * Bit flag defining if slot 2 of brewing stand have potion in it
      * If bit is set to 0, then slot is empty.
      */
-    public static final byte  SLOT_2_FLAG      = 0x4;
+    public static final byte SLOT_2_FLAG      = 0x4;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int  USED_DATA_VALUES = 8;
 
     public static final BrewingStandBlockMat BREWING_STAND_BLOCK_EMPTY = new BrewingStandBlockMat();
     public static final BrewingStandBlockMat BREWING_STAND_BLOCK_F_E_E = new BrewingStandBlockMat("F_E_E", true, false, false);

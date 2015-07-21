@@ -17,7 +17,7 @@ public class PumpkinLanternMat extends AbstractPumpkinMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 5;
+    public static final int USED_DATA_VALUES = 5;
 
     public static final PumpkinLanternMat PUMPKIN_LANTERN_SOUTH = new PumpkinLanternMat();
     public static final PumpkinLanternMat PUMPKIN_LANTERN_WEST  = new PumpkinLanternMat(BlockFace.WEST);

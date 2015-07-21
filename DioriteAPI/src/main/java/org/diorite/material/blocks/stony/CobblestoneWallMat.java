@@ -2,7 +2,6 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -17,7 +16,7 @@ public class CobblestoneWallMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final CobblestoneWallMat COBBLESTONE_WALL       = new CobblestoneWallMat();
     public static final CobblestoneWallMat COBBLESTONE_WALL_MOSSY = new CobblestoneWallMat("MOSSY", 0x1);

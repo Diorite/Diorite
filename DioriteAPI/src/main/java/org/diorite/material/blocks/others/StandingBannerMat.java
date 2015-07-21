@@ -22,7 +22,7 @@ public class StandingBannerMat extends BannerBlockMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final StandingBannerMat STANDING_BANNER_SOUTH            = new StandingBannerMat();
     public static final StandingBannerMat STANDING_BANNER_SOUTH_SOUTH_WEST = new StandingBannerMat(BlockFace.SOUTH_SOUTH_WEST);

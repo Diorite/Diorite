@@ -19,7 +19,7 @@ public class PistonExtensionMat extends PistonBaseMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final PistonExtensionMat PISTON_EXTENSION_DOWN  = new PistonExtensionMat();
     public static final PistonExtensionMat PISTON_EXTENSION_UP    = new PistonExtensionMat(BlockFace.UP, false);

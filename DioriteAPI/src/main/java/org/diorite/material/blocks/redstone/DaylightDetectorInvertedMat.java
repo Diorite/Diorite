@@ -19,7 +19,7 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_OFF = new DaylightDetectorInvertedMat();
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_1   = new DaylightDetectorInvertedMat(1);

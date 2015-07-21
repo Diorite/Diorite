@@ -23,7 +23,7 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 5;
+    public static final int USED_DATA_VALUES = 5;
 
     public static final QuartzBlockMat QUARTZ_BLOCK                    = new QuartzBlockMat();
     public static final QuartzBlockMat QUARTZ_BLOCK_CHISELED           = new QuartzBlockMat(0x1, VariantMat.CHISELED);

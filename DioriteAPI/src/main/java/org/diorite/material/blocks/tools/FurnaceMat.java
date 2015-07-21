@@ -22,7 +22,7 @@ public class FurnaceMat extends BlockMaterialData implements DirectionalMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final FurnaceMat FURNACE_NORTH = new FurnaceMat();
     public static final FurnaceMat FURNACE_SOUTH = new FurnaceMat(BlockFace.SOUTH);

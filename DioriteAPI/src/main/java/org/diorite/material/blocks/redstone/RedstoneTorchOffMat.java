@@ -19,7 +19,7 @@ public class RedstoneTorchOffMat extends RedstoneTorchMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 5;
+    public static final int USED_DATA_VALUES = 5;
 
     public static final RedstoneTorchOffMat REDSTONE_TORCH_OFF_WEST  = new RedstoneTorchOffMat();
     public static final RedstoneTorchOffMat REDSTONE_TORCH_OFF_EAST  = new RedstoneTorchOffMat(BlockFace.EAST);

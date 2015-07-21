@@ -22,7 +22,7 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final RedSandstoneStairsMat RED_SANDSTONE_STAIRS_EAST  = new RedSandstoneStairsMat();
     public static final RedSandstoneStairsMat RED_SANDSTONE_STAIRS_WEST  = new RedSandstoneStairsMat(BlockFace.WEST, false);

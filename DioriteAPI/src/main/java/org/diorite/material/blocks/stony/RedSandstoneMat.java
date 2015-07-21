@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
@@ -22,7 +21,7 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 3;
+    public static final int USED_DATA_VALUES = 3;
 
     public static final RedSandstoneMat RED_SANDSTONE          = new RedSandstoneMat();
     public static final RedSandstoneMat RED_SANDSTONE_CHISELED = new RedSandstoneMat(0x1, VariantMat.CHISELED);

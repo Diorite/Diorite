@@ -16,7 +16,7 @@ public class StonePressurePlateMat extends PressurePlateMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final StonePressurePlateMat STONE_PRESSURE_PLATE         = new StonePressurePlateMat();
     public static final StonePressurePlateMat STONE_PRESSURE_PLATE_POWERED = new StonePressurePlateMat(0x1, true);

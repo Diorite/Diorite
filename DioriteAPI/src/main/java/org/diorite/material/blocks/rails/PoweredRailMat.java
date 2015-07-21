@@ -21,11 +21,11 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
      * Bit flag defining if rail is powered.
      * If bit is set to 0, then it isn't powered
      */
-    public static final byte  POWERED_FLAG     = 0x8;
+    public static final byte POWERED_FLAG     = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int  USED_DATA_VALUES = 12;
 
     public static final PoweredRailMat POWERED_RAIL_NORTH_SOUTH     = new PoweredRailMat();
     public static final PoweredRailMat POWERED_RAIL_WEST_EAST       = new PoweredRailMat(RailTypeMat.FLAT_WEST_EAST, false);

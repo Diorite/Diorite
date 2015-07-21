@@ -24,11 +24,11 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
      * Bit flag defining if Dropper is powered.
      * If bit is set to 0, then it isn't powered
      */
-    public static final byte  POWERED_FLAG     = 0x8;
+    public static final byte POWERED_FLAG     = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int  USED_DATA_VALUES = 12;
 
     public static final DropperMat DROPPER_DOWN  = new DropperMat();
     public static final DropperMat DROPPER_UP    = new DropperMat(BlockFace.UP, false);

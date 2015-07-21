@@ -15,7 +15,7 @@ public class ExperienceBottleMat extends ItemMaterialData implements PlaceableEn
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final ExperienceBottleMat EXPERIENCE_BOTTLE = new ExperienceBottleMat();
 

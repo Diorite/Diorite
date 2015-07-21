@@ -16,7 +16,7 @@ public class WoodenTrapdoorMat extends TrapdoorMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final WoodenTrapdoorMat WOODEN_TRAPDOOR_WEST_BOTTOM  = new WoodenTrapdoorMat();
     public static final WoodenTrapdoorMat WOODEN_TRAPDOOR_SOUTH_BOTTOM = new WoodenTrapdoorMat(BlockFace.SOUTH, false, false);

@@ -17,7 +17,7 @@ public class PumpkinMat extends AbstractPumpkinMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 5;
+    public static final int USED_DATA_VALUES = 5;
 
     public static final PumpkinMat PUMPKIN_SOUTH = new PumpkinMat();
     public static final PumpkinMat PUMPKIN_WEST  = new PumpkinMat(BlockFace.WEST);

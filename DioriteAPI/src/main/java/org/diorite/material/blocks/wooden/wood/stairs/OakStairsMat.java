@@ -4,8 +4,8 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.blocks.StairsMat;
 import org.diorite.material.WoodTypeMat;
+import org.diorite.material.blocks.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -19,7 +19,7 @@ public class OakStairsMat extends WoodenStairsMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final OakStairsMat OAK_STAIRS_EAST  = new OakStairsMat();
     public static final OakStairsMat OAK_STAIRS_WEST  = new OakStairsMat(BlockFace.WEST, false);

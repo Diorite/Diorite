@@ -20,7 +20,7 @@ public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final ReedsBlockMat REEDS_BLOCK_0  = new ReedsBlockMat();
     public static final ReedsBlockMat REEDS_BLOCK_1  = new ReedsBlockMat(0x1);

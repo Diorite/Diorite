@@ -17,7 +17,7 @@ public class WoodenButtonMat extends ButtonMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final WoodenButtonMat WOODEN_BUTTON_DOWN          = new WoodenButtonMat();
     public static final WoodenButtonMat WOODEN_BUTTON_EAST          = new WoodenButtonMat(BlockFace.EAST, false);

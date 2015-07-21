@@ -28,7 +28,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte      USED_DATA_VALUES = 12;
+    public static final int       USED_DATA_VALUES = 12;
 
     public static final CocoaMat COCOA_NORTH_0 = new CocoaMat();
     public static final CocoaMat COCOA_EAST_0  = new CocoaMat("EAST_0", BlockFace.EAST, 0);

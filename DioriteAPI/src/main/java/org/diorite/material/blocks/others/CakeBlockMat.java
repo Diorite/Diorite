@@ -23,7 +23,7 @@ public class CakeBlockMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 6;
+    public static final int USED_DATA_VALUES = 6;
 
     public static final CakeBlockMat CAKE_BLOCK_0 = new CakeBlockMat();
     public static final CakeBlockMat CAKE_BLOCK_1 = new CakeBlockMat(0x1);

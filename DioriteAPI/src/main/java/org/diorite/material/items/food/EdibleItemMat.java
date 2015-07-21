@@ -10,7 +10,7 @@ import org.diorite.material.ItemMaterialData;
  */
 public abstract class EdibleItemMat extends ItemMaterialData
 {
-    protected final int foodLevelIncrease;
+    protected final int   foodLevelIncrease;
     protected final float saturationIncrease;
 
     protected EdibleItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
@@ -35,7 +35,7 @@ public abstract class EdibleItemMat extends ItemMaterialData
      */
     public int getFoodLevelIncrease()
     {
-     return this.foodLevelIncrease;
+        return this.foodLevelIncrease;
     }
 
     /**

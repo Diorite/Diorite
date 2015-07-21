@@ -23,7 +23,7 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final WallSignMat WALL_SIGN_NORTH = new WallSignMat();
     public static final WallSignMat WALL_SIGN_SOUTH = new WallSignMat(BlockFace.SOUTH);

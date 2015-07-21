@@ -15,7 +15,7 @@ public class TallGrassMat extends FlowerMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 3;
+    public static final int USED_DATA_VALUES = 3;
 
     public static final TallGrassMat TALL_GRASS_SHRUB = new TallGrassMat();
     public static final TallGrassMat TALL_GRASS_GRASS = new TallGrassMat(0x1, FlowerTypeMat.GRASS);

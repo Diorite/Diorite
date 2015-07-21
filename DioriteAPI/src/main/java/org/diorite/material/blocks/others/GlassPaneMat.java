@@ -2,7 +2,6 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.FenceMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -18,7 +17,7 @@ public class GlassPaneMat extends BlockMaterialData implements FenceMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final GlassPaneMat GLASS_PANE = new GlassPaneMat();
 

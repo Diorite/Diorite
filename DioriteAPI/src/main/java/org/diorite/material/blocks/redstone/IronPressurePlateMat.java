@@ -17,7 +17,7 @@ public class IronPressurePlateMat extends WeightedPressurePlateMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_0  = new IronPressurePlateMat();
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_1  = new IronPressurePlateMat(0x1);

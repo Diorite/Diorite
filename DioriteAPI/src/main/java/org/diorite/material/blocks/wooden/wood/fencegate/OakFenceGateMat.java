@@ -4,8 +4,8 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.material.WoodTypeMat;
+import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -19,7 +19,7 @@ public class OakFenceGateMat extends WoodenFenceGateMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final OakFenceGateMat OAK_FENCE_GATE_SOUTH = new OakFenceGateMat();
     public static final OakFenceGateMat OAK_FENCE_GATE_WEST  = new OakFenceGateMat(BlockFace.WEST, false);

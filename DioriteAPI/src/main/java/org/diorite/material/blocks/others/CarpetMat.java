@@ -21,7 +21,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final CarpetMat CARPET_WHITE      = new CarpetMat();
     public static final CarpetMat CARPET_ORANGE     = new CarpetMat(DyeColor.ORANGE);

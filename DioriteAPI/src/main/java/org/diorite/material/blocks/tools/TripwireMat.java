@@ -21,26 +21,26 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
      * Bit flag defining if tripwire is powered. (an entity is intersecting its collision mask).
      * If bit is set to 0, then it isn't powered
      */
-    public static final byte  POWERED_FLAG     = 0x1;
+    public static final byte POWERED_FLAG     = 0x1;
     /**
      * Bit flag defining if tripwire is suspended in the air. (not above a solid block).
      * If bit is set to 0, then it isn't in air
      */
-    public static final byte  IN_AIR_FLAG      = 0x2;
+    public static final byte IN_AIR_FLAG      = 0x2;
     /**
      * Bit flag defining if tripwire is attached to a valid tripwire circuit.
      * If bit is set to 0, then it isn't attached to a valid tripwire circuit
      */
-    public static final byte  VALID_FLAG       = 0x4;
+    public static final byte VALID_FLAG       = 0x4;
     /**
      * Bit flag defining if tripwire is disarmed.
      * If bit is set to 0, then it isn't disarmed
      */
-    public static final byte  DISARMED_FLAG    = 0x8;
+    public static final byte DISARMED_FLAG    = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int  USED_DATA_VALUES = 16;
 
     public static final TripwireMat TRIPWIRE                               = new TripwireMat();
     public static final TripwireMat TRIPWIRE_POWERED                       = new TripwireMat(true, false, false, false);

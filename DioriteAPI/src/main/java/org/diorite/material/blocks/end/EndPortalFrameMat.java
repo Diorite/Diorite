@@ -22,11 +22,11 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int  USED_DATA_VALUES = 8;
     /**
      * Flag that determine if this is activated sub-type
      */
-    public static final byte  ACTIVATE_FLAG    = 0x4;
+    public static final byte ACTIVATE_FLAG    = 0x4;
 
     public static final EndPortalFrameMat END_PORTAL_FRAME_SOUTH     = new EndPortalFrameMat();
     public static final EndPortalFrameMat END_PORTAL_FRAME_WEST      = new EndPortalFrameMat(BlockFace.WEST, false);

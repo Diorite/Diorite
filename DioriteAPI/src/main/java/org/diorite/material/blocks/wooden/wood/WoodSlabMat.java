@@ -3,9 +3,9 @@ package org.diorite.material.blocks.wooden.wood;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.SlabMat;
 import org.diorite.material.blocks.SlabTypeMat;
-import org.diorite.material.WoodTypeMat;
 
 /**
  * Abstract class for all WoodSlab-based blocks

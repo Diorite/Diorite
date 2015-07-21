@@ -26,16 +26,16 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
      * Bit flag defining if comparator is in subtraction mode.
      * If bit is set to 0, then it isn't in subtraction mode.
      */
-    public static final byte  SUBTRACTION_MODE_FLAG = 0x8;
+    public static final byte SUBTRACTION_MODE_FLAG = 0x8;
     /**
      * Bit flag defining if comparator is powered.
      * If bit is set to 0, then it isn't powered
      */
-    public static final byte  POWERED_FLAG          = 0x8;
+    public static final byte POWERED_FLAG          = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES      = 16;
+    public static final int  USED_DATA_VALUES      = 16;
 
     public static final RedstoneComparatorMat REDSTONE_COMPARATOR_NORTH = new RedstoneComparatorMat();
     public static final RedstoneComparatorMat REDSTONE_COMPARATOR_EAST  = new RedstoneComparatorMat(BlockFace.EAST, false, false);

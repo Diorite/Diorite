@@ -24,10 +24,10 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
-    public static final byte  OCCUPIED_FLAG    = 0x04;
-    public static final byte  HEAD_PART_FLAG   = 0x08; // 1 for head, 0 for foot part
+    public static final byte OCCUPIED_FLAG  = 0x04;
+    public static final byte HEAD_PART_FLAG = 0x08; // 1 for head, 0 for foot part
 
     public static final BedBlockMat BED_FOOT_SOUTH = new BedBlockMat();
     public static final BedBlockMat BED_FOOT_WEST  = new BedBlockMat(BlockFace.WEST, false, false);

@@ -2,7 +2,6 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -16,7 +15,7 @@ public class BedrockMat extends StonyMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final BedrockMat BEDROCK = new BedrockMat();
 

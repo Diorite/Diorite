@@ -21,7 +21,7 @@ public class PumpkinStemMat extends PlantStemMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final PumpkinStemMat PUMPKIN_STEM_0     = new PumpkinStemMat();
     public static final PumpkinStemMat PUMPKIN_BLOCK_1    = new PumpkinStemMat("1", 0x1);

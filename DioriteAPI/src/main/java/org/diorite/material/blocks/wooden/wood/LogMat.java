@@ -7,9 +7,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
+import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
-import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -23,7 +23,7 @@ public class LogMat extends WoodMat implements RotatableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 24;
+    public static final int USED_DATA_VALUES = 24;
 
     public static final LogMat LOG_OAK      = new LogMat();
     public static final LogMat LOG_SPRUCE   = new LogMat(WoodTypeMat.SPRUCE, RotateAxisMat.UP_DOWN, 2, 10);

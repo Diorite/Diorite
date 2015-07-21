@@ -2,7 +2,6 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -18,7 +17,7 @@ public class StoneMat extends StonyMat implements VariantableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 7;
+    public static final int USED_DATA_VALUES = 7;
 
     public static final StoneMat STONE                   = new StoneMat();
     public static final StoneMat STONE_GRANITE           = new StoneMat("GRANITE", 0x01, VariantMat.CLASSIC);

@@ -21,7 +21,7 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final WoolMat WOOL_WHITE      = new WoolMat();
     public static final WoolMat WOOL_ORANGE     = new WoolMat(DyeColor.ORANGE);

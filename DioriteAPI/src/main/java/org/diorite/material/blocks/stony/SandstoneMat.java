@@ -20,7 +20,7 @@ public class SandstoneMat extends StonyMat implements VariantableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 3;
+    public static final int USED_DATA_VALUES = 3;
 
     public static final SandstoneMat SANDSTONE          = new SandstoneMat();
     public static final SandstoneMat SANDSTONE_CHISELED = new SandstoneMat(0x1, VariantMat.CHISELED);

@@ -21,7 +21,7 @@ public class CarrotsBlockMat extends CropsMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final CarrotsBlockMat CARROTS_BLOCK_0    = new CarrotsBlockMat();
     public static final CarrotsBlockMat CARROTS_BLOCK_1    = new CarrotsBlockMat("1", 0x1);

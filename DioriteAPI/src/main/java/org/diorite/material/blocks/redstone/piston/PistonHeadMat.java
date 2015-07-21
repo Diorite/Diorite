@@ -19,7 +19,7 @@ public class PistonHeadMat extends PistonBaseMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final PistonHeadMat PISTON_HEAD_DOWN  = new PistonHeadMat();
     public static final PistonHeadMat PISTON_HEAD_UP    = new PistonHeadMat(BlockFace.UP, false);

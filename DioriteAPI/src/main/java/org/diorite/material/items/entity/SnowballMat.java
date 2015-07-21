@@ -15,7 +15,7 @@ public class SnowballMat extends ItemMaterialData implements PlaceableEntityMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final SnowballMat SNOWBALL = new SnowballMat();
 

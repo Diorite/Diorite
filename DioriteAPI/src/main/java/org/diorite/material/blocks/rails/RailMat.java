@@ -16,7 +16,7 @@ public class RailMat extends RailsMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 10;
+    public static final int USED_DATA_VALUES = 10;
 
     public static final RailMat RAIL_FLAT_NORTH_SOUTH  = new RailMat();
     public static final RailMat RAIL_FLAT_WEST_EAST    = new RailMat(RailTypeMat.FLAT_WEST_EAST);

@@ -24,16 +24,16 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
      * Bit flag defining if tripwire is ready to trip. ("middle" position)
      * If bit is set to 0, then it isn't ready
      */
-    public static final byte  READY_FLAG       = 0x4;
+    public static final byte READY_FLAG       = 0x4;
     /**
      * Bit flag defining if tripwire is powered. ("down" position)
      * If bit is set to 0, then it isn't powered
      */
-    public static final byte  POWERED_FLAG     = 0x8;
+    public static final byte POWERED_FLAG     = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int  USED_DATA_VALUES = 16;
 
     public static final TripwireHookMat TRIPWIRE_HOOK_SOUTH = new TripwireHookMat();
     public static final TripwireHookMat TRIPWIRE_HOOK_WEST  = new TripwireHookMat(BlockFace.WEST, false, false);

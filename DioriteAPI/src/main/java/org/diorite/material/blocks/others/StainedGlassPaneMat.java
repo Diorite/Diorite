@@ -22,7 +22,7 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_WHITE      = new StainedGlassPaneMat();
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_ORANGE     = new StainedGlassPaneMat(DyeColor.ORANGE);

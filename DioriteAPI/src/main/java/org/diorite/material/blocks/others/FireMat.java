@@ -21,7 +21,7 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final FireMat FIRE_0  = new FireMat();
     public static final FireMat FIRE_1  = new FireMat(0x1);

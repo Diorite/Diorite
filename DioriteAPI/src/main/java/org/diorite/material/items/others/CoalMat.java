@@ -16,7 +16,7 @@ public class CoalMat extends OreItemMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final CoalMat COAL     = new CoalMat();
     public static final CoalMat CHARCOAL = new CoalMat("CHARCOAL", 0x01, null, COAL_BLOCK);

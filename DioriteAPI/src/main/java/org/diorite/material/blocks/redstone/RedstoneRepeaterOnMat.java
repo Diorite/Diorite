@@ -19,7 +19,7 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final RedstoneRepeaterOnMat REDSTONE_REPEATER_ON_NORTH_1 = new RedstoneRepeaterOnMat();
     public static final RedstoneRepeaterOnMat REDSTONE_REPEATER_ON_EAST_1  = new RedstoneRepeaterOnMat(BlockFace.EAST, 1);

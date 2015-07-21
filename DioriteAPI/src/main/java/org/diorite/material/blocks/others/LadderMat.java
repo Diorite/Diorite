@@ -22,7 +22,7 @@ public class LadderMat extends BlockMaterialData implements AttachableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final LadderMat LADDER_NORTH = new LadderMat();
     public static final LadderMat LADDER_SOUTH = new LadderMat(BlockFace.SOUTH);

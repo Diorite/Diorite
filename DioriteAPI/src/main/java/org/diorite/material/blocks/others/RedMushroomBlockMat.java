@@ -16,7 +16,7 @@ public class RedMushroomBlockMat extends MushroomBlockMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 13;
+    public static final int USED_DATA_VALUES = 13;
 
     public static final RedMushroomBlockMat RED_MUSHROOM_BLOCK_PORES_FULL     = new RedMushroomBlockMat();
     public static final RedMushroomBlockMat RED_MUSHROOM_BLOCK_CAP_NORTH_WEST = new RedMushroomBlockMat(Type.CAP_NORTH_WEST);

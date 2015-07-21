@@ -19,7 +19,7 @@ public class DoubleStoneSlabMat extends StonySlabMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 18;
+    public static final int USED_DATA_VALUES = 18;
 
     public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_STONE         = new DoubleStoneSlabMat();
     public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_SANDSTONE     = new DoubleStoneSlabMat("SANDSTONE", SlabTypeMat.FULL, StoneSlabTypeMat.SANDSTONE, 2, 30);

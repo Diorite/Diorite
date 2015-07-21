@@ -14,7 +14,7 @@ public class OakDoorItemMat extends WoodenDoorItemMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final OakDoorItemMat OAK_DOOR_ITEM = new OakDoorItemMat();
 

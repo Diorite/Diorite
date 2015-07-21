@@ -17,7 +17,7 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 5;
+    public static final int USED_DATA_VALUES = 5;
 
     public static final RedstoneTorchOnMat REDSTONE_TORCH_ON_WEST  = new RedstoneTorchOnMat();
     public static final RedstoneTorchOnMat REDSTONE_TORCH_ON_EAST  = new RedstoneTorchOnMat(BlockFace.EAST);
@@ -44,6 +44,7 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, hardness, blastResistance);
     }
+
     @Override
     public Material ensureValidInventoryItem()
     {

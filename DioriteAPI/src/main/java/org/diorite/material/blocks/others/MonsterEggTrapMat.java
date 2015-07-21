@@ -23,7 +23,7 @@ public class MonsterEggTrapMat extends StonyMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 6;
+    public static final int USED_DATA_VALUES = 6;
 
     public static final MonsterEggTrapMat MONSTER_EGG_TRAP_STONE                = new MonsterEggTrapMat();
     public static final MonsterEggTrapMat MONSTER_EGG_TRAP_COBBLESTONE          = new MonsterEggTrapMat("COBBLESTONE", 0x1, CobblestoneMat.COBBLESTONE);

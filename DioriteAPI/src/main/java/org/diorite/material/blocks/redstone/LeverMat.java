@@ -23,11 +23,11 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
      * Bit flag defining if level is powered/activated.
      * If bit is set to 0, then it isn't powered/activated
      */
-    public static final byte  POWERED_FLAG     = 0x8;
+    public static final byte POWERED_FLAG     = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int  USED_DATA_VALUES = 16;
 
     public static final LeverMat LEVER_DOWN               = new LeverMat();
     public static final LeverMat LEVER_EAST               = new LeverMat(BlockFace.EAST, false, false);

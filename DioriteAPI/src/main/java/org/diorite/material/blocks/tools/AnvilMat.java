@@ -20,7 +20,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final AnvilMat ANVIL_NORTH_SOUTH_NEW              = new AnvilMat();
     public static final AnvilMat ANVIL_EAST_WEST_NEW                = new AnvilMat(AnvilBlockDamage.NEW, RotateAxisMat.EAST_WEST, false);

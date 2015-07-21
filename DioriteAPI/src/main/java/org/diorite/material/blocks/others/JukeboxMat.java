@@ -20,7 +20,7 @@ public class JukeboxMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final JukeboxMat JUKEBOX           = new JukeboxMat();
     public static final JukeboxMat JUKEBOX_WITH_DISC = new JukeboxMat("WITH_DISC", 0x1, true);

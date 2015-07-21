@@ -20,9 +20,9 @@ public class FlowerPotBlockMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 14;
+    public static final int USED_DATA_VALUES = 14;
 
-    public static final FlowerPotBlockMat FLOWER_POT_BLOCK_EMPTY             = new FlowerPotBlockMat();
+    public static final FlowerPotBlockMat FLOWER_POT_BLOCK_EMPTY                   = new FlowerPotBlockMat();
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_POPPY            = new FlowerPotBlockMat("LEGACY_POPPY", 0x1);
     @Deprecated

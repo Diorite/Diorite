@@ -24,11 +24,11 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
      * Bit flag defining if Hopper is powered.
      * If bit is set to 0, then it isn't powered
      */
-    public static final byte  POWERED_FLAG     = 0x8;
+    public static final byte POWERED_FLAG     = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 10;
+    public static final int  USED_DATA_VALUES = 10;
 
     public static final HopperMat HOPPER_DOWN  = new HopperMat();
     public static final HopperMat HOPPER_NORTH = new HopperMat(BlockFace.NORTH, false);

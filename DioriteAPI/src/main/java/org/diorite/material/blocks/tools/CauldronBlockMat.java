@@ -23,7 +23,7 @@ public class CauldronBlockMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final CauldronBlockMat CAULDRON_BLOCK_EMPTY = new CauldronBlockMat();
     public static final CauldronBlockMat CAULDRON_BLOCK_1     = new CauldronBlockMat("1", 0x1, 1);

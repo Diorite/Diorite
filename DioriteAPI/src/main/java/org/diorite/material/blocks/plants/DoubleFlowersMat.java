@@ -15,7 +15,7 @@ public class DoubleFlowersMat extends FlowerMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 7;
+    public static final int USED_DATA_VALUES = 7;
 
     public static final DoubleFlowersMat DOUBLE_FLOWERS_SUNFLOWER  = new DoubleFlowersMat();
     public static final DoubleFlowersMat DOUBLE_FLOWERS_LILAC      = new DoubleFlowersMat(0x1, FlowerTypeMat.LILAC);

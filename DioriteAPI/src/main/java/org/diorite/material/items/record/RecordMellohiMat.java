@@ -14,7 +14,7 @@ public class RecordMellohiMat extends RecordMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final RecordMellohiMat RECORD_MELLOHI = new RecordMellohiMat();
 

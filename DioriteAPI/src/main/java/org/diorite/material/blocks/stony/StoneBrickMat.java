@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -21,7 +20,7 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final StoneBrickMat STONE_BRICK          = new StoneBrickMat();
     public static final StoneBrickMat STONE_BRICK_MOSSY    = new StoneBrickMat(0x1, VariantMat.MOSSY);

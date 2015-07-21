@@ -14,7 +14,7 @@ public class SpruceDoorItemMat extends WoodenDoorItemMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final SpruceDoorItemMat SPRUCE_DOOR_ITEM = new SpruceDoorItemMat();
 

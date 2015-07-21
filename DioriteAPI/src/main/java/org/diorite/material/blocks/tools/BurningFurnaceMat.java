@@ -21,7 +21,7 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final BurningFurnaceMat BURNING_FURNACE_NORTH = new BurningFurnaceMat();
     public static final BurningFurnaceMat BURNING_FURNACE_SOUTH = new BurningFurnaceMat(BlockFace.SOUTH);

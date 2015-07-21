@@ -16,7 +16,7 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_OFF = new DaylightDetectorMat();
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_1   = new DaylightDetectorMat(1);

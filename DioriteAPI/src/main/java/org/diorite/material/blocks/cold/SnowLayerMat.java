@@ -17,7 +17,7 @@ public class SnowLayerMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final SnowLayerMat SNOW_LAYER_1 = new SnowLayerMat();
     public static final SnowLayerMat SNOW_LAYER_2 = new SnowLayerMat(0x01);

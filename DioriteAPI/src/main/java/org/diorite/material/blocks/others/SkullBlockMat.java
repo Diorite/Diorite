@@ -24,7 +24,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 5;
+    public static final int USED_DATA_VALUES = 5;
 
     public static final SkullBlockMat SKULL_BLOCK_FLOOR      = new SkullBlockMat();
     public static final SkullBlockMat SKULL_BLOCK_WALL_NORTH = new SkullBlockMat("WALL_NORTH", BlockFace.NORTH);

@@ -16,7 +16,7 @@ public class WoodenPressurePlateMat extends PressurePlateMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final WoodenPressurePlateMat WOODEN_PRESSURE_PLATE         = new WoodenPressurePlateMat();
     public static final WoodenPressurePlateMat WOODEN_PRESSURE_PLATE_POWERED = new WoodenPressurePlateMat(0x1, true);

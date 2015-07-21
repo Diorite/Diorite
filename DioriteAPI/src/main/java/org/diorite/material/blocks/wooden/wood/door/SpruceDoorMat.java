@@ -24,7 +24,7 @@ public class SpruceDoorMat extends WoodenDoorMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final SpruceDoorMat SPRUCE_DOOR_BOTTOM_EAST       = new SpruceDoorMat();
     public static final SpruceDoorMat SPRUCE_DOOR_BOTTOM_SOUTH      = new SpruceDoorMat(BlockFace.SOUTH, false);

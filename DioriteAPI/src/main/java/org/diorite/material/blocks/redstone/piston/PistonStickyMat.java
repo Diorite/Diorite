@@ -16,7 +16,7 @@ public class PistonStickyMat extends PistonBaseMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final PistonStickyMat STICKY_PISTON_DOWN  = new PistonStickyMat();
     public static final PistonStickyMat STICKY_PISTON_UP    = new PistonStickyMat(BlockFace.UP, false);

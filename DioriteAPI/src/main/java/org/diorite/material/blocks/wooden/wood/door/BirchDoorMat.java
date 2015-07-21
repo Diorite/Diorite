@@ -7,8 +7,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.blocks.DoorMat;
 import org.diorite.material.WoodTypeMat;
+import org.diorite.material.blocks.DoorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -24,7 +24,7 @@ public class BirchDoorMat extends WoodenDoorMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 12;
+    public static final int USED_DATA_VALUES = 12;
 
     public static final BirchDoorMat BIRCH_DOOR_BOTTOM_EAST       = new BirchDoorMat();
     public static final BirchDoorMat BIRCH_DOOR_BOTTOM_SOUTH      = new BirchDoorMat(BlockFace.SOUTH, false);

@@ -16,8 +16,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * Class representing block "RedstoneWire" and all its subtypes.
  * <p>
  * NOTE: Will crash game when in inventory.
- */
-public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowerElementMat
+ */ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowerElementMat
 {
     /**
      * Range of valid power strength, from 0 to 15
@@ -26,7 +25,7 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte      USED_DATA_VALUES = 16;
+    public static final int       USED_DATA_VALUES = 16;
 
     public static final RedstoneWireMat REDSTONE_WIRE_OFF   = new RedstoneWireMat();
     public static final RedstoneWireMat REDSTONE_WIRE_ON_1  = new RedstoneWireMat(0x1);

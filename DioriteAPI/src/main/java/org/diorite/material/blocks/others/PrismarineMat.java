@@ -2,7 +2,6 @@ package org.diorite.material.blocks.others;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -17,7 +16,7 @@ public class PrismarineMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 3;
+    public static final int USED_DATA_VALUES = 3;
 
     public static final PrismarineMat PRISMARINE        = new PrismarineMat();
     public static final PrismarineMat PRISMARINE_BRICKS = new PrismarineMat("BRICKS", 0x1);

@@ -18,7 +18,7 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final CactusMat CACTUS_0  = new CactusMat();
     public static final CactusMat CACTUS_1  = new CactusMat(0x1);

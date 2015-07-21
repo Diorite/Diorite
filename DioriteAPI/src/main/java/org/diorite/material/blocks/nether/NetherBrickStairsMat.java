@@ -22,7 +22,7 @@ public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final NetherBrickStairsMat NETHER_BRICK_STAIRS_EAST  = new NetherBrickStairsMat();
     public static final NetherBrickStairsMat NETHER_BRICK_STAIRS_WEST  = new NetherBrickStairsMat(BlockFace.WEST, false);

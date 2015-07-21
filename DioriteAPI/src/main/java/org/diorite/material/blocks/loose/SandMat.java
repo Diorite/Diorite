@@ -15,7 +15,7 @@ public class SandMat extends LooseMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 2;
+    public static final int USED_DATA_VALUES = 2;
 
     public static final SandMat SAND     = new SandMat();
     public static final SandMat SAND_RED = new SandMat("RED", 0x01);

@@ -22,7 +22,7 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 4;
+    public static final int USED_DATA_VALUES = 4;
 
     public static final TrappedChestMat TRAPPED_CHEST_NORTH = new TrappedChestMat();
     public static final TrappedChestMat TRAPPED_CHEST_SOUTH = new TrappedChestMat(BlockFace.SOUTH);

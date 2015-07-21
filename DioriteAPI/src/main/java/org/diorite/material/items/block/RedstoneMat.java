@@ -3,10 +3,10 @@ package org.diorite.material.items.block;
 import java.util.Map;
 
 import org.diorite.material.Material;
+import org.diorite.material.PlaceableMat;
 import org.diorite.material.blocks.stony.ore.OreMat;
 import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
 import org.diorite.material.items.OreItemMat;
-import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
@@ -18,7 +18,7 @@ public class RedstoneMat extends OreItemMat implements PlaceableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final RedstoneMat REDSTONE = new RedstoneMat();
 

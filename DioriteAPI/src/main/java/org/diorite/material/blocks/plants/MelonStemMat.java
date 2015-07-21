@@ -21,7 +21,7 @@ public class MelonStemMat extends PlantStemMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 8;
+    public static final int USED_DATA_VALUES = 8;
 
     public static final MelonStemMat MELON_STEM_0     = new MelonStemMat();
     public static final MelonStemMat MELON_BLOCK_1    = new MelonStemMat("1", 0x1);

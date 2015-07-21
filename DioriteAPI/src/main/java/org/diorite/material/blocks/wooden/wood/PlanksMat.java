@@ -16,7 +16,7 @@ public class PlanksMat extends WoodMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 6;
+    public static final int USED_DATA_VALUES = 6;
 
     public static final PlanksMat PLANKS_OAK      = new PlanksMat();
     public static final PlanksMat PLANKS_SPRUCE   = new PlanksMat(WoodTypeMat.SPRUCE);

@@ -22,7 +22,7 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 5;
+    public static final int USED_DATA_VALUES = 5;
 
     public static final TorchMat TORCH_EAST  = new TorchMat();
     public static final TorchMat TORCH_WEST  = new TorchMat(BlockFace.WEST);

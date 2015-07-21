@@ -17,7 +17,7 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_0  = new GoldenPressurePlateMat();
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_1  = new GoldenPressurePlateMat(0x1);

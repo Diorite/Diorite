@@ -20,7 +20,7 @@ public class LeavesMat extends WoodMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte USED_DATA_VALUES = 24;
+    public static final int USED_DATA_VALUES = 24;
 
     public static final LeavesMat LEAVES_OAK      = new LeavesMat();
     public static final LeavesMat LEAVES_SPRUCE   = new LeavesMat("SPRUCE", WoodTypeMat.SPRUCE, false, true);

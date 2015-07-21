@@ -2,7 +2,6 @@ package org.diorite.material.blocks.nether;
 
 import java.util.Map;
 
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -17,7 +16,7 @@ public class NetherBrickMat extends BlockMaterialData
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final int USED_DATA_VALUES = 1;
 
     public static final NetherBrickMat NETHER_BRICK = new NetherBrickMat();
 

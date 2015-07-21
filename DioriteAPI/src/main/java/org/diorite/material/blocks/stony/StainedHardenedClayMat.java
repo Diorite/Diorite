@@ -21,7 +21,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 16;
+    public static final int USED_DATA_VALUES = 16;
 
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_WHITE      = new StainedHardenedClayMat();
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_ORANGE     = new StainedHardenedClayMat(DyeColor.ORANGE);

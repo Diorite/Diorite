@@ -23,7 +23,7 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 3;
+    public static final int USED_DATA_VALUES = 3;
 
     public static final HayBlockMat HAY_BLOCK_UP_DOWN     = new HayBlockMat();
     public static final HayBlockMat HAY_BLOCK_EAST_WEST   = new HayBlockMat(RotateAxisMat.EAST_WEST);

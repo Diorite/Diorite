@@ -19,26 +19,26 @@ public class VineMat extends PlantMat
      * Bit flag defining if vines are attachment to south face of block.
      * If bit is set to 0, then it's not attachment to south face of block.
      */
-    public static       byte  SOUTH_FLAG       = 0x1;
+    public static       byte SOUTH_FLAG       = 0x1;
     /**
      * Bit flag defining if vines are attachment to west face of block.
      * If bit is set to 0, then it's not attachment to west face of block.
      */
-    public static       byte  WEST_FLAG        = 0x2;
+    public static       byte WEST_FLAG        = 0x2;
     /**
      * Bit flag defining if vines are attachment to north face of block.
      * If bit is set to 0, then it's not attachment to north face of block.
      */
-    public static       byte  NORTH_FLAG       = 0x4;
+    public static       byte NORTH_FLAG       = 0x4;
     /**
      * Bit flag defining if vines are attachment to east face of block.
      * If bit is set to 0, then it's not attachment to east face of block.
      */
-    public static       byte  EAST_FLAG        = 0x8;
+    public static       byte EAST_FLAG        = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
-    public static final byte  USED_DATA_VALUES = 1;
+    public static final int  USED_DATA_VALUES = 1;
 
     public static final VineMat VINE                       = new VineMat();
     public static final VineMat VINE_SOUTH                 = new VineMat(BlockFace.SOUTH);
