@@ -20,7 +20,7 @@ public class BoatMat extends ItemMaterialData implements PlaceableEntityMat
     public static final BoatMat BOAT = new BoatMat();
 
     private static final Map<String, BoatMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BoatMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<BoatMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected BoatMat()
     {

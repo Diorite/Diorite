@@ -22,7 +22,7 @@ public class CoalMat extends OreItemMat
     public static final CoalMat CHARCOAL = new CoalMat("CHARCOAL", 0x01, null, COAL_BLOCK);
 
     private static final Map<String, CoalMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<CoalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<CoalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected CoalMat()
     {

@@ -19,7 +19,7 @@ public class ClayBallMat extends ItemMaterialData
     public static final ClayBallMat CLAY_BALL = new ClayBallMat();
 
     private static final Map<String, ClayBallMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ClayBallMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<ClayBallMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected ClayBallMat()
     {

@@ -18,7 +18,7 @@ public class AppleMat extends EdibleItemMat
     public static final AppleMat APPLE = new AppleMat();
 
     private static final Map<String, AppleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<AppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<AppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected AppleMat()
     {

@@ -19,7 +19,7 @@ public class FeatherMat extends ItemMaterialData
     public static final FeatherMat FEATHER = new FeatherMat();
 
     private static final Map<String, FeatherMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FeatherMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<FeatherMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected FeatherMat()
     {

@@ -19,7 +19,7 @@ public class RecordMallMat extends RecordMat
     public static final RecordMallMat RECORD_MALL = new RecordMallMat();
 
     private static final Map<String, RecordMallMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordMallMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RecordMallMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RecordMallMat()
     {

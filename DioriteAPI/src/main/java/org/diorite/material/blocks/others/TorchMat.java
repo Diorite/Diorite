@@ -32,7 +32,7 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
     public static final TorchMat TORCH_ITEM  = new TorchMat(BlockFace.SELF);
 
     private static final Map<String, TorchMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<TorchMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<TorchMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
 

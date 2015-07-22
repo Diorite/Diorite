@@ -19,7 +19,7 @@ public class DarkOakDoorItemMat extends WoodenDoorItemMat
     public static final DarkOakDoorItemMat DARK_OAK_DOOR_ITEM = new DarkOakDoorItemMat();
 
     private static final Map<String, DarkOakDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<DarkOakDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<DarkOakDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected DarkOakDoorItemMat()
     {

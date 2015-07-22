@@ -50,7 +50,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
     public static final BedBlockMat BED_HEAD_EAST_OCCUPIED  = new BedBlockMat(BlockFace.EAST, true, true);
 
     private static final Map<String, BedBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BedBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BedBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     private final BlockFace blockFacing;
     private final boolean   isHeadPart;

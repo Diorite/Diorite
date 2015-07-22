@@ -40,7 +40,7 @@ public class SpruceDoorMat extends WoodenDoorMat
     public static final SpruceDoorMat SPRUCE_DOOR_TOP_RIGHT_POWERED = new SpruceDoorMat(true, true);
 
     private static final Map<String, SpruceDoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SpruceDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SpruceDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean   powered;
     protected final boolean   hingeOnRightSide;

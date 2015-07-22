@@ -27,7 +27,7 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
     public static final RedstoneTorchOnMat REDSTONE_TORCH_ON_ITEM  = new RedstoneTorchOnMat(BlockFace.SELF);
 
     private static final Map<String, RedstoneTorchOnMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneTorchOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<RedstoneTorchOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected RedstoneTorchOnMat()

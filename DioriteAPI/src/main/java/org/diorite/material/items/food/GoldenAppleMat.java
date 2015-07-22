@@ -19,7 +19,7 @@ public class GoldenAppleMat extends EdibleItemMat
     public static final GoldenAppleMat GOLDED_ENCHANTED_APPLE = new GoldenAppleMat("ENCHANTED", 0x01);
 
     private static final Map<String, GoldenAppleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GoldenAppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<GoldenAppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected GoldenAppleMat()
     {

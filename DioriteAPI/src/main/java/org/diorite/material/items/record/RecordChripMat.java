@@ -19,7 +19,7 @@ public class RecordChripMat extends RecordMat
     public static final RecordChripMat RECORD_CHRIP = new RecordChripMat();
 
     private static final Map<String, RecordChripMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordChripMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RecordChripMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RecordChripMat()
     {

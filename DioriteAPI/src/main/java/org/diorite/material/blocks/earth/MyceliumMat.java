@@ -20,7 +20,7 @@ public class MyceliumMat extends EarthMat
     public static final MyceliumMat MYCELIUM = new MyceliumMat();
 
     private static final Map<String, MyceliumMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<MyceliumMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<MyceliumMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected MyceliumMat()

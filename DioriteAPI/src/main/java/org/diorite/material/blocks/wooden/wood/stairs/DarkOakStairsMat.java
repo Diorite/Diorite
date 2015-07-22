@@ -32,7 +32,7 @@ public class DarkOakStairsMat extends WoodenStairsMat
     public static final DarkOakStairsMat DARK_OAK_STAIRS_NORTH_UPSIDE_DOWN = new DarkOakStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, DarkOakStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DarkOakStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DarkOakStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected DarkOakStairsMat()

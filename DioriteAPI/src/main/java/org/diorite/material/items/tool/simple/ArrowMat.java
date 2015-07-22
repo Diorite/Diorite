@@ -19,7 +19,7 @@ public class ArrowMat extends ItemMaterialData
     public static final ArrowMat ARROW = new ArrowMat();
 
     private static final Map<String, ArrowMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ArrowMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<ArrowMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected ArrowMat()
     {

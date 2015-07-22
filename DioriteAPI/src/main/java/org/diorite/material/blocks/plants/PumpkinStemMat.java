@@ -33,7 +33,7 @@ public class PumpkinStemMat extends PlantStemMat
     public static final PumpkinStemMat PUMPKIN_BLOCK_RIPE = new PumpkinStemMat("RIPE", 0x7);
 
     private static final Map<String, PumpkinStemMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PumpkinStemMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PumpkinStemMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final int age;
 

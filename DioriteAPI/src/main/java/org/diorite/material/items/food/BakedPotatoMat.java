@@ -18,7 +18,7 @@ public class BakedPotatoMat extends EdibleItemMat
     public static final BakedPotatoMat BAKED_POTATO = new BakedPotatoMat();
 
     private static final Map<String, BakedPotatoMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BakedPotatoMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<BakedPotatoMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected BakedPotatoMat()
     {

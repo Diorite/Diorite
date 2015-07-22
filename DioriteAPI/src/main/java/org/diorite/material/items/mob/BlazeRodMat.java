@@ -19,7 +19,7 @@ public class BlazeRodMat extends ItemMaterialData
     public static final BlazeRodMat BLAZE_ROD = new BlazeRodMat();
 
     private static final Map<String, BlazeRodMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BlazeRodMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<BlazeRodMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected BlazeRodMat()
     {

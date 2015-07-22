@@ -31,7 +31,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_LIME       = new StainedHardenedClayMat(DyeColor.LIME);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_PINK       = new StainedHardenedClayMat(DyeColor.PINK);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_GRAY       = new StainedHardenedClayMat(DyeColor.GRAY);
-    public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_SILVER     = new StainedHardenedClayMat(DyeColor.SILVER);
+    public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_SILVER     = new StainedHardenedClayMat(DyeColor.LIGHT_GRAY);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_CYAN       = new StainedHardenedClayMat(DyeColor.CYAN);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_PURPLE     = new StainedHardenedClayMat(DyeColor.PURPLE);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_BLUE       = new StainedHardenedClayMat(DyeColor.BLUE);
@@ -41,7 +41,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_BLACK      = new StainedHardenedClayMat(DyeColor.BLACK);
 
     private static final Map<String, StainedHardenedClayMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<StainedHardenedClayMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<StainedHardenedClayMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final DyeColor color;
 

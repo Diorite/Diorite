@@ -49,7 +49,7 @@ public class BrewingStandBlockMat extends BlockMaterialData
     public static final BrewingStandBlockMat BREWING_STAND_BLOCK_FULL  = new BrewingStandBlockMat("FULL", true, true, true);
 
     private static final Map<String, BrewingStandBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BrewingStandBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BrewingStandBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean[] hasBottle;
 

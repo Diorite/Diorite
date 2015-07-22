@@ -19,7 +19,7 @@ public class JungleDoorItemMat extends WoodenDoorItemMat
     public static final JungleDoorItemMat JUNGLE_DOOR_ITEM = new JungleDoorItemMat();
 
     private static final Map<String, JungleDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<JungleDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<JungleDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected JungleDoorItemMat()
     {

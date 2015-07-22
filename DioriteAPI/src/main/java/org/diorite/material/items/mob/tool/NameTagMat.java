@@ -19,7 +19,7 @@ public class NameTagMat extends ItemMaterialData
     public static final NameTagMat NAME_TAG = new NameTagMat();
 
     private static final Map<String, NameTagMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<NameTagMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<NameTagMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected NameTagMat()
     {

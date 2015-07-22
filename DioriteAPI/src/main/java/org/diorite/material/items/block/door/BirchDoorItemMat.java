@@ -19,7 +19,7 @@ public class BirchDoorItemMat extends WoodenDoorItemMat
     public static final BirchDoorItemMat BIRCH_DOOR_ITEM = new BirchDoorItemMat();
 
     private static final Map<String, BirchDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BirchDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<BirchDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected BirchDoorItemMat()
     {

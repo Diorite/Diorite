@@ -18,7 +18,7 @@ public class PorkchopMat extends EdibleItemMat
     public static final PorkchopMat PORKCHOP = new PorkchopMat();
 
     private static final Map<String, PorkchopMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PorkchopMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<PorkchopMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected PorkchopMat()
     {

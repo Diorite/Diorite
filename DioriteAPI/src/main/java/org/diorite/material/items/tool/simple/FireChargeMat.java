@@ -19,7 +19,7 @@ public class FireChargeMat extends ItemMaterialData
     public static final FireChargeMat FIRE_CHARGE = new FireChargeMat();
 
     private static final Map<String, FireChargeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FireChargeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<FireChargeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected FireChargeMat()
     {

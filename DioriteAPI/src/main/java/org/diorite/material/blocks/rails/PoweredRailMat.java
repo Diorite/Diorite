@@ -42,7 +42,7 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
     public static final PoweredRailMat POWERED_RAIL_ASCENDING_SOUTH_POWERED = new PoweredRailMat(RailTypeMat.ASCENDING_SOUTH, true);
 
     private static final Map<String, PoweredRailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PoweredRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PoweredRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean powered;
 

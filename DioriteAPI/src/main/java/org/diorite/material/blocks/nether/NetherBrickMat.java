@@ -21,7 +21,7 @@ public class NetherBrickMat extends BlockMaterialData
     public static final NetherBrickMat NETHER_BRICK = new NetherBrickMat();
 
     private static final Map<String, NetherBrickMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<NetherBrickMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<NetherBrickMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected NetherBrickMat()

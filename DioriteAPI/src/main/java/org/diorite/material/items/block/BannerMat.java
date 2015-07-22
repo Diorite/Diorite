@@ -20,7 +20,7 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat
     public static final BannerMat BANNER = new BannerMat();
 
     private static final Map<String, BannerMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BannerMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<BannerMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected BannerMat()
     {

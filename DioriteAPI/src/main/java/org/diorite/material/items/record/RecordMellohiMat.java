@@ -19,7 +19,7 @@ public class RecordMellohiMat extends RecordMat
     public static final RecordMellohiMat RECORD_MELLOHI = new RecordMellohiMat();
 
     private static final Map<String, RecordMellohiMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordMellohiMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RecordMellohiMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RecordMellohiMat()
     {

@@ -20,7 +20,7 @@ public class PumpkinSeedsMat extends ItemMaterialData implements PlaceableMat
     public static final PumpkinSeedsMat PUMPKIN_SEEDS = new PumpkinSeedsMat();
 
     private static final Map<String, PumpkinSeedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PumpkinSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<PumpkinSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected PumpkinSeedsMat()
     {

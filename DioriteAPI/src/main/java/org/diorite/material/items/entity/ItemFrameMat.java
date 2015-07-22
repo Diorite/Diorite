@@ -20,7 +20,7 @@ public class ItemFrameMat extends ItemMaterialData implements PlaceableEntityMat
     public static final ItemFrameMat ITEM_FRAME = new ItemFrameMat();
 
     private static final Map<String, ItemFrameMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ItemFrameMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<ItemFrameMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected ItemFrameMat()
     {

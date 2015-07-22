@@ -23,7 +23,7 @@ public class QuartzOreMat extends OreMat
     public static final QuartzOreMat QUARTZ_ORE = new QuartzOreMat();
 
     private static final Map<String, QuartzOreMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<QuartzOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<QuartzOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected QuartzOreMat()

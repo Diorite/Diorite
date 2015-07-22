@@ -21,7 +21,7 @@ public class BookshelfMat extends BlockMaterialData
     public static final BookshelfMat BOOKSHELF = new BookshelfMat();
 
     private static final Map<String, BookshelfMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BookshelfMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BookshelfMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected BookshelfMat()

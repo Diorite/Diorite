@@ -25,7 +25,7 @@ public class SpongeMat extends BlockMaterialData
     public static final SpongeMat SPONGE_WET = new SpongeMat(true);
 
     private static final Map<String, SpongeMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SpongeMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SpongeMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean isWet;
 

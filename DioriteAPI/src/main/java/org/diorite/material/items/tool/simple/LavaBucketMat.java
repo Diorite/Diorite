@@ -19,7 +19,7 @@ public class LavaBucketMat extends ItemMaterialData
     public static final LavaBucketMat LAVA_BUCKET = new LavaBucketMat();
 
     private static final Map<String, LavaBucketMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<LavaBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<LavaBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected LavaBucketMat()
     {

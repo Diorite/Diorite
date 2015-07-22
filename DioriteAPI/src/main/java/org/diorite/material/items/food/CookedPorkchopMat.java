@@ -18,7 +18,7 @@ public class CookedPorkchopMat extends EdibleItemMat
     public static final CookedPorkchopMat COOKED_PORKCHOP = new CookedPorkchopMat();
 
     private static final Map<String, CookedPorkchopMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<CookedPorkchopMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<CookedPorkchopMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected CookedPorkchopMat()
     {

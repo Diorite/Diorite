@@ -30,7 +30,7 @@ public class ChestMat extends BlockMaterialData implements DirectionalMat
     public static final ChestMat CHEST_EAST  = new ChestMat(BlockFace.EAST);
 
     private static final Map<String, ChestMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<ChestMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<ChestMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
 

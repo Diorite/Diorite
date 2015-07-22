@@ -19,7 +19,7 @@ public class NetherStarMat extends ItemMaterialData
     public static final NetherStarMat NETHER_STAR = new NetherStarMat();
 
     private static final Map<String, NetherStarMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<NetherStarMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<NetherStarMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected NetherStarMat()
     {

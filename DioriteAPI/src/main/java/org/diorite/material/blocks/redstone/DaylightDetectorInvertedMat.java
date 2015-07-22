@@ -39,7 +39,7 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_15  = new DaylightDetectorInvertedMat(15);
 
     private static final Map<String, DaylightDetectorInvertedMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DaylightDetectorInvertedMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DaylightDetectorInvertedMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected DaylightDetectorInvertedMat()

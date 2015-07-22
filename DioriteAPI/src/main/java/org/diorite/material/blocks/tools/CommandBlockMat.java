@@ -25,7 +25,7 @@ public class CommandBlockMat extends BlockMaterialData
     public static final CommandBlockMat COMMAND_BLOCK_TRIGGERED = new CommandBlockMat(true);
 
     private static final Map<String, CommandBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CommandBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CommandBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean triggered;
 

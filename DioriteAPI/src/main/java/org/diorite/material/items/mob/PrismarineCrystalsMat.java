@@ -19,7 +19,7 @@ public class PrismarineCrystalsMat extends ItemMaterialData
     public static final PrismarineCrystalsMat PRISMARINE_CRYSTALS = new PrismarineCrystalsMat();
 
     private static final Map<String, PrismarineCrystalsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PrismarineCrystalsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<PrismarineCrystalsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected PrismarineCrystalsMat()
     {

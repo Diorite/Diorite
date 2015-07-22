@@ -26,7 +26,7 @@ public class PumpkinMat extends AbstractPumpkinMat
     public static final PumpkinMat PUMPKIN_SELF  = new PumpkinMat(BlockFace.SELF);
 
     private static final Map<String, PumpkinMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PumpkinMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PumpkinMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected PumpkinMat()

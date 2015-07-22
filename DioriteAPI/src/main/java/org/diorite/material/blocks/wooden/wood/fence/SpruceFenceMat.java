@@ -21,7 +21,7 @@ public class SpruceFenceMat extends WoodenFenceMat
     public static final SpruceFenceMat SPRUCE_FENCE = new SpruceFenceMat();
 
     private static final Map<String, SpruceFenceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SpruceFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SpruceFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected SpruceFenceMat()

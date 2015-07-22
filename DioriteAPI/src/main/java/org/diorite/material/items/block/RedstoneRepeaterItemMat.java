@@ -20,7 +20,7 @@ public class RedstoneRepeaterItemMat extends ItemMaterialData implements Placeab
     public static final RedstoneRepeaterItemMat REDSTONE_REPEATER_ITEM = new RedstoneRepeaterItemMat();
 
     private static final Map<String, RedstoneRepeaterItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RedstoneRepeaterItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RedstoneRepeaterItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RedstoneRepeaterItemMat()
     {

@@ -19,7 +19,7 @@ public class RecordStalMat extends RecordMat
     public static final RecordStalMat RECORD_STAL = new RecordStalMat();
 
     private static final Map<String, RecordStalMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordStalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RecordStalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RecordStalMat()
     {

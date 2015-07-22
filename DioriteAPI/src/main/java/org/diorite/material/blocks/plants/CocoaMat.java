@@ -46,7 +46,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
     public static final CocoaMat COCOA_WEST_RIPE  = new CocoaMat("WEST_RIPE", BlockFace.WEST, 2);
 
     private static final Map<String, CocoaMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CocoaMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CocoaMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
     protected final int       age;

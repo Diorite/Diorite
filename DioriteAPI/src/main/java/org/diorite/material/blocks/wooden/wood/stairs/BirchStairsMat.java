@@ -32,7 +32,7 @@ public class BirchStairsMat extends WoodenStairsMat
     public static final BirchStairsMat BIRCH_STAIRS_NORTH_UPSIDE_DOWN = new BirchStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, BirchStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BirchStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BirchStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected BirchStairsMat()

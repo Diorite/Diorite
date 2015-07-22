@@ -19,7 +19,7 @@ public class NetherBrickItemMat extends ItemMaterialData
     public static final NetherBrickItemMat NETHER_BRICK_ITEM = new NetherBrickItemMat();
 
     private static final Map<String, NetherBrickItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<NetherBrickItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<NetherBrickItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected NetherBrickItemMat()
     {

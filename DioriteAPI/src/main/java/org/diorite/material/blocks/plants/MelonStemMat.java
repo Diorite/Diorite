@@ -33,7 +33,7 @@ public class MelonStemMat extends PlantStemMat
     public static final MelonStemMat MELON_BLOCK_RIPE = new MelonStemMat("RIPE", 0x7);
 
     private static final Map<String, MelonStemMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<MelonStemMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<MelonStemMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final int age;
 

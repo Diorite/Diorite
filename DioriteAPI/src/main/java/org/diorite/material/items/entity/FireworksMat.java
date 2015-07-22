@@ -20,7 +20,7 @@ public class FireworksMat extends ItemMaterialData implements PlaceableEntityMat
     public static final FireworksMat FIREWORKS = new FireworksMat();
 
     private static final Map<String, FireworksMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FireworksMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<FireworksMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected FireworksMat()
     {

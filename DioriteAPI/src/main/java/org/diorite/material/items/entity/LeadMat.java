@@ -20,7 +20,7 @@ public class LeadMat extends ItemMaterialData implements PlaceableEntityMat
     public static final LeadMat LEAD = new LeadMat();
 
     private static final Map<String, LeadMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<LeadMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<LeadMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected LeadMat()
     {

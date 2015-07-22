@@ -18,7 +18,7 @@ public class IronDoorItemMat extends DoorItemMat
     public static final IronDoorItemMat IRON_DOOR_ITEM = new IronDoorItemMat();
 
     private static final Map<String, IronDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<IronDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<IronDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected IronDoorItemMat()
     {

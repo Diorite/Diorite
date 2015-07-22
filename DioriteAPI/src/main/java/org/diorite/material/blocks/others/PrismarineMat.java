@@ -23,7 +23,7 @@ public class PrismarineMat extends BlockMaterialData
     public static final PrismarineMat PRISMARINE_DARK   = new PrismarineMat("DARK", 0x2);
 
     private static final Map<String, PrismarineMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PrismarineMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PrismarineMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected PrismarineMat()

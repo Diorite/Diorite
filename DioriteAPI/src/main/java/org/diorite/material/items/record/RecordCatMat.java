@@ -19,7 +19,7 @@ public class RecordCatMat extends RecordMat
     public static final RecordCatMat RECORD_CAT = new RecordCatMat();
 
     private static final Map<String, RecordCatMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordCatMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RecordCatMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RecordCatMat()
     {

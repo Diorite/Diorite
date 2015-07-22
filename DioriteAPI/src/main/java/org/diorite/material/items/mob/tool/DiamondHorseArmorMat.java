@@ -19,7 +19,7 @@ public class DiamondHorseArmorMat extends ItemMaterialData
     public static final DiamondHorseArmorMat DIAMOND_HORSE_ARMOR = new DiamondHorseArmorMat();
 
     private static final Map<String, DiamondHorseArmorMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<DiamondHorseArmorMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<DiamondHorseArmorMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected DiamondHorseArmorMat()
     {

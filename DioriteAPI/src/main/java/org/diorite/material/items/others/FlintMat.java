@@ -19,7 +19,7 @@ public class FlintMat extends ItemMaterialData
     public static final FlintMat FLINT = new FlintMat();
 
     private static final Map<String, FlintMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FlintMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<FlintMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected FlintMat()
     {

@@ -21,7 +21,7 @@ public class BirchFenceMat extends WoodenFenceMat
     public static final BirchFenceMat BRICH_FENCE = new BirchFenceMat();
 
     private static final Map<String, BirchFenceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BirchFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BirchFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected BirchFenceMat()

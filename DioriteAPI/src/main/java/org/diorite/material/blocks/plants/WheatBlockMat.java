@@ -33,7 +33,7 @@ public class WheatBlockMat extends CropsMat
     public static final WheatBlockMat WHEAT_BLOCK_RIPE = new WheatBlockMat("RIPE", 0x7);
 
     private static final Map<String, WheatBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WheatBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<WheatBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final int age;
 

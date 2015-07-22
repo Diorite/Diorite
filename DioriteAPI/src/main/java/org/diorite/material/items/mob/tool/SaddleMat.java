@@ -19,7 +19,7 @@ public class SaddleMat extends ItemMaterialData
     public static final SaddleMat SADDLE = new SaddleMat();
 
     private static final Map<String, SaddleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SaddleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<SaddleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected SaddleMat()
     {

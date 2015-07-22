@@ -20,7 +20,7 @@ public class EnderEyeMat extends ItemMaterialData implements PlaceableEntityMat
     public static final EnderEyeMat ENDER_EYE = new EnderEyeMat();
 
     private static final Map<String, EnderEyeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<EnderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<EnderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected EnderEyeMat()
     {

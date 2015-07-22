@@ -33,7 +33,7 @@ public class BrownMushroomBlockMat extends MushroomBlockMat
     public static final BrownMushroomBlockMat BROWN_MUSHROOM_BLOCK_STEAM_FULL     = new BrownMushroomBlockMat(Type.STEAM_FULL);
 
     private static final Map<String, BrownMushroomBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BrownMushroomBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BrownMushroomBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected BrownMushroomBlockMat()

@@ -20,7 +20,7 @@ public class NoteBlockMat extends WoodenMat
     public static final NoteBlockMat NOTEBLOCK = new NoteBlockMat();
 
     private static final Map<String, NoteBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<NoteBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<NoteBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected NoteBlockMat()

@@ -45,7 +45,7 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
     public static final DropperMat DROPPER_EAST_POWERED  = new DropperMat(BlockFace.EAST, true);
 
     private static final Map<String, DropperMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DropperMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DropperMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace facing;
     protected final boolean   powered;

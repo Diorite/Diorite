@@ -40,7 +40,7 @@ public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
     public static final ReedsBlockMat REEDS_BLOCK_15 = new ReedsBlockMat(0xF);
 
     private static final Map<String, ReedsBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<ReedsBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<ReedsBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected ReedsBlockMat()

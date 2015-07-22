@@ -14,8 +14,9 @@ public class EntityType extends ASimpleEnum<EntityType>
         init(EntityType.class, 3);
     }
 
-    public static final EntityType ITEM   = new EntityType("ITEM", Item.class, 2, "Item");
-    public static final EntityType PLAYER = new EntityType("PLAYER", Player.class, - 1, "Player");
+    public static final EntityType PLAYER  = new EntityType("PLAYER", Player.class, - 1, "Player");
+    public static final EntityType ITEM    = new EntityType("ITEM", Item.class, 2, "Item");
+    public static final EntityType CREEPER = new EntityType("CREEPER", Creeper.class, 50, "Creeper");
     // TODO
 
     private static final TIntObjectMap<EntityType> byMcId = new TIntObjectHashMap<>(3, .1f, - 1);
@@ -121,7 +122,8 @@ public class EntityType extends ASimpleEnum<EntityType>
 
     static
     {
-        EntityType.register(ITEM);
         EntityType.register(PLAYER);
+        EntityType.register(ITEM);
+        EntityType.register(CREEPER);
     }
 }

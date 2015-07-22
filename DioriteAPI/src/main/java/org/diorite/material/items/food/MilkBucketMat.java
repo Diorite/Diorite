@@ -18,7 +18,7 @@ public class MilkBucketMat extends EdibleItemMat
     public static final MilkBucketMat MILK_BUCKET = new MilkBucketMat();
 
     private static final Map<String, MilkBucketMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<MilkBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<MilkBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected MilkBucketMat()
     {

@@ -21,7 +21,7 @@ public class DiamondMat extends OreItemMat
     public static final DiamondMat DIAMOND = new DiamondMat();
 
     private static final Map<String, DiamondMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<DiamondMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<DiamondMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected DiamondMat()
     {

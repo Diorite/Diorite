@@ -28,7 +28,7 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
     public static final RedSandstoneMat RED_SANDSTONE_SMOOTH   = new RedSandstoneMat(0x2, VariantMat.SMOOTH);
 
     private static final Map<String, RedSandstoneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedSandstoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<RedSandstoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final VariantMat variant;
 

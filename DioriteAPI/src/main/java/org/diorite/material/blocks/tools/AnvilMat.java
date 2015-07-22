@@ -36,7 +36,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
     public static final AnvilMat ANVIL_SOUTH_NORTH_VERY_DAMAGED     = new AnvilMat(AnvilBlockDamage.VERY_DAMAGED, RotateAxisMat.NORTH_SOUTH, true);
 
     private static final Map<String, AnvilMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<AnvilMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<AnvilMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final AnvilBlockDamage damage;
     protected final RotateAxisMat    axis;

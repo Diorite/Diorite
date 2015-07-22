@@ -18,7 +18,7 @@ public class PumpkinPieMat extends EdibleItemMat
     public static final PumpkinPieMat PUMPKIN_PIE = new PumpkinPieMat();
 
     private static final Map<String, PumpkinPieMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PumpkinPieMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<PumpkinPieMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected PumpkinPieMat()
     {

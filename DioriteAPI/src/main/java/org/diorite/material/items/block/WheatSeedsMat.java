@@ -20,7 +20,7 @@ public class WheatSeedsMat extends ItemMaterialData implements PlaceableMat
     public static final WheatSeedsMat WHEAT_SEEDS = new WheatSeedsMat();
 
     private static final Map<String, WheatSeedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<WheatSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<WheatSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected WheatSeedsMat()
     {

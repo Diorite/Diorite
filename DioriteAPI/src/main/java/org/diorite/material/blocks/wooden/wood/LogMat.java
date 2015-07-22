@@ -54,7 +54,7 @@ public class LogMat extends WoodMat implements RotatableMat
     public static final LogMat LOG_DARK_OAK_BARK = new Log2(WoodTypeMat.DARK_OAK, RotateAxisMat.NONE);
 
     private static final Map<String, LogMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<LogMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<LogMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final RotateAxisMat rotateAxis;
 

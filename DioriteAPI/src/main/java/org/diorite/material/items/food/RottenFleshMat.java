@@ -18,7 +18,7 @@ public class RottenFleshMat extends EdibleItemMat
     public static final RottenFleshMat ROTTEN_FLESH = new RottenFleshMat();
 
     private static final Map<String, RottenFleshMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RottenFleshMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RottenFleshMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RottenFleshMat()
     {

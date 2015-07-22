@@ -19,7 +19,7 @@ public class GlassBottleMat extends ItemMaterialData
     public static final GlassBottleMat GLASS_BOTTLE = new GlassBottleMat();
 
     private static final Map<String, GlassBottleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GlassBottleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<GlassBottleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected GlassBottleMat()
     {

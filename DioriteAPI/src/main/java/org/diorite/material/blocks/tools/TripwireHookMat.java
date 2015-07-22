@@ -56,7 +56,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
     public static final TripwireHookMat TRIPWIRE_HOOK_EAST_READY_POWERED  = new TripwireHookMat(BlockFace.EAST, true, true);
 
     private static final Map<String, TripwireHookMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<TripwireHookMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<TripwireHookMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
     protected final boolean   ready;

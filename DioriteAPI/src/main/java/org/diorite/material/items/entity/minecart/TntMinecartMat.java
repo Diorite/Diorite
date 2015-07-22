@@ -18,7 +18,7 @@ public class TntMinecartMat extends AbstractMinecartMat
     public static final TntMinecartMat TNT_MINECART = new TntMinecartMat();
 
     private static final Map<String, TntMinecartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<TntMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<TntMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected TntMinecartMat()
     {

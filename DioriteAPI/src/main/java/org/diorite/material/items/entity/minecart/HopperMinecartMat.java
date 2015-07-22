@@ -18,7 +18,7 @@ public class HopperMinecartMat extends AbstractMinecartMat
     public static final HopperMinecartMat HOPPER_MINECART = new HopperMinecartMat();
 
     private static final Map<String, HopperMinecartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<HopperMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<HopperMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected HopperMinecartMat()
     {

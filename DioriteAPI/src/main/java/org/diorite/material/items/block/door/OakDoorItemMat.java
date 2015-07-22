@@ -19,7 +19,7 @@ public class OakDoorItemMat extends WoodenDoorItemMat
     public static final OakDoorItemMat OAK_DOOR_ITEM = new OakDoorItemMat();
 
     private static final Map<String, OakDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<OakDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<OakDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected OakDoorItemMat()
     {

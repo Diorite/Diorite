@@ -29,7 +29,7 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
     public static final BurningFurnaceMat BURNING_FURNACE_EAST  = new BurningFurnaceMat(BlockFace.EAST);
 
     private static final Map<String, BurningFurnaceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BurningFurnaceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BurningFurnaceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
 

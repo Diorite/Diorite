@@ -22,7 +22,7 @@ public class IronIngotMat extends OreItemMat
     public static final IronIngotMat IRON_INGOT = new IronIngotMat();
 
     private static final Map<String, IronIngotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<IronIngotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<IronIngotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected IronIngotMat()
     {

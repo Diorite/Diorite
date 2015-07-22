@@ -35,7 +35,7 @@ public class BrickStairsMat extends BlockMaterialData implements StairsMat
     public static final BrickStairsMat BRICK_STAIRS_NORTH_UPSIDE_DOWN = new BrickStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, BrickStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BrickStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BrickStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
     protected final boolean   upsideDown;

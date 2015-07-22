@@ -21,7 +21,7 @@ public class GoldIngotMat extends OreItemMat
     public static final GoldIngotMat GOLD_INGOT = new GoldIngotMat();
 
     private static final Map<String, GoldIngotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GoldIngotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<GoldIngotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected GoldIngotMat()
     {

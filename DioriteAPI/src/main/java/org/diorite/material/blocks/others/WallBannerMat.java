@@ -31,7 +31,7 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
     public static final WallBannerMat WALL_BANNER_EAST  = new WallBannerMat(BlockFace.EAST);
 
     private static final Map<String, WallBannerMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WallBannerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<WallBannerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
 

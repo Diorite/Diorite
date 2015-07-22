@@ -21,7 +21,7 @@ public class DarkOakFenceMat extends WoodenFenceMat
     public static final DarkOakFenceMat DARK_OAK_FENCE = new DarkOakFenceMat();
 
     private static final Map<String, DarkOakFenceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DarkOakFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DarkOakFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected DarkOakFenceMat()

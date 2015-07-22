@@ -22,7 +22,7 @@ public class DyeColor extends ASimpleEnum<DyeColor>
     public static final DyeColor LIME       = new DyeColor("LIME", 0x5, 0xA, Color.fromRGB(0x7FCC19), Color.fromRGB(0x41CD34));
     public static final DyeColor PINK       = new DyeColor("PINK", 0x6, 0x9, Color.fromRGB(0xF27FA5), Color.fromRGB(0xD88198));
     public static final DyeColor GRAY       = new DyeColor("GRAY", 0x7, 0x8, Color.fromRGB(0x4C4C4C), Color.fromRGB(0x434343));
-    public static final DyeColor SILVER     = new DyeColor("SILVER", 0x8, 0x7, Color.fromRGB(0x999999), Color.fromRGB(0xABABAB));
+    public static final DyeColor LIGHT_GRAY = new DyeColor("LIGHT_GRAY", 0x8, 0x7, Color.fromRGB(0x999999), Color.fromRGB(0xABABAB));
     public static final DyeColor CYAN       = new DyeColor("CYAN", 0x9, 0x6, Color.fromRGB(0x4C7F99), Color.fromRGB(0x287697));
     public static final DyeColor PURPLE     = new DyeColor("PURPLE", 0xA, 0x5, Color.fromRGB(0x7F3FB2), Color.fromRGB(0x7B2FBE));
     public static final DyeColor BLUE       = new DyeColor("BLUE", 0xB, 0x4, Color.fromRGB(0x334CB2), Color.fromRGB(0x253192));
@@ -31,12 +31,12 @@ public class DyeColor extends ASimpleEnum<DyeColor>
     public static final DyeColor RED        = new DyeColor("RED", 0xE, 0x1, Color.fromRGB(0x993333), Color.fromRGB(0xB3312C));
     public static final DyeColor BLACK      = new DyeColor("BLACK", 0xF, 0x0, Color.fromRGB(0x191919), Color.fromRGB(0x1E1B1B));
 
-    private final byte  blockFlag;
-    private final short itemFlag;
+    private final int   blockFlag;
+    private final int   itemFlag;
     private final Color color;
     private final Color fireworkColor;
 
-    public DyeColor(final String enumName, final int enumId, final byte blockFlag, final short itemFlag, final Color color, final Color fireworkColor)
+    protected DyeColor(final String enumName, final int enumId, final int blockFlag, final int itemFlag, final Color color, final Color fireworkColor)
     {
         super(enumName, enumId);
         this.blockFlag = blockFlag;
@@ -45,7 +45,7 @@ public class DyeColor extends ASimpleEnum<DyeColor>
         this.fireworkColor = fireworkColor;
     }
 
-    public DyeColor(final String enumName, final int blockFlag, final int itemFlag, final Color color, final Color fireworkColor)
+    protected DyeColor(final String enumName, final int blockFlag, final int itemFlag, final Color color, final Color fireworkColor)
     {
         super(enumName);
         this.blockFlag = (byte) blockFlag;
@@ -59,12 +59,12 @@ public class DyeColor extends ASimpleEnum<DyeColor>
         return this.fireworkColor;
     }
 
-    public short getItemFlag()
+    public int getItemFlag()
     {
         return this.itemFlag;
     }
 
-    public byte getBlockFlag()
+    public int getBlockFlag()
     {
         return this.blockFlag;
     }
@@ -127,7 +127,7 @@ public class DyeColor extends ASimpleEnum<DyeColor>
         DyeColor.register(LIME);
         DyeColor.register(PINK);
         DyeColor.register(GRAY);
-        DyeColor.register(SILVER);
+        DyeColor.register(LIGHT_GRAY);
         DyeColor.register(CYAN);
         DyeColor.register(PURPLE);
         DyeColor.register(BLUE);

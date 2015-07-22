@@ -32,7 +32,7 @@ public class SpruceStairsMat extends WoodenStairsMat
     public static final SpruceStairsMat SPRUCE_STAIRS_NORTH_UPSIDE_DOWN = new SpruceStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, SpruceStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SpruceStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SpruceStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected SpruceStairsMat()

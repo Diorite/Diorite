@@ -42,7 +42,7 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
     public static final ActivatorRailMat ACTIVATOR_RAIL_ASCENDING_SOUTH_POWERED = new ActivatorRailMat(RailTypeMat.ASCENDING_SOUTH, true);
 
     private static final Map<String, ActivatorRailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<ActivatorRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<ActivatorRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean powered;
 

@@ -21,7 +21,7 @@ public class SoulSandMat extends BlockMaterialData
     public static final SoulSandMat SOUL_SAND = new SoulSandMat();
 
     private static final Map<String, SoulSandMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SoulSandMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SoulSandMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected SoulSandMat()

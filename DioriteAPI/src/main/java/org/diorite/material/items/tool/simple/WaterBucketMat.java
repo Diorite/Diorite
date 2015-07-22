@@ -19,7 +19,7 @@ public class WaterBucketMat extends ItemMaterialData
     public static final WaterBucketMat WATER_BUCKET = new WaterBucketMat();
 
     private static final Map<String, WaterBucketMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<WaterBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<WaterBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected WaterBucketMat()
     {

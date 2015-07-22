@@ -19,7 +19,7 @@ public class SpeckledMelonMat extends ItemMaterialData
     public static final SpeckledMelonMat SPECKLED_MELON = new SpeckledMelonMat();
 
     private static final Map<String, SpeckledMelonMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SpeckledMelonMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<SpeckledMelonMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected SpeckledMelonMat()
     {

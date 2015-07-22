@@ -21,7 +21,7 @@ public class MobSpawnerMat extends BlockMaterialData
     public static final MobSpawnerMat MOB_SPAWNER = new MobSpawnerMat();
 
     private static final Map<String, MobSpawnerMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<MobSpawnerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<MobSpawnerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected MobSpawnerMat()

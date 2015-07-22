@@ -19,7 +19,7 @@ public class RabbitHideMat extends ItemMaterialData
     public static final RabbitHideMat RABBIT_HIDE = new RabbitHideMat();
 
     private static final Map<String, RabbitHideMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RabbitHideMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RabbitHideMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RabbitHideMat()
     {

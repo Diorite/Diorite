@@ -18,7 +18,7 @@ public class ChestMinecartMat extends AbstractMinecartMat
     public static final ChestMinecartMat CHEST_MINECART = new ChestMinecartMat();
 
     private static final Map<String, ChestMinecartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ChestMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<ChestMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected ChestMinecartMat()
     {

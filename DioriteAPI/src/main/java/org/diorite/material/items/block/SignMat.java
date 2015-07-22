@@ -20,7 +20,7 @@ public class SignMat extends ItemMaterialData implements PlaceableMat
     public static final SignMat SIGN = new SignMat();
 
     private static final Map<String, SignMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SignMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<SignMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected SignMat()
     {

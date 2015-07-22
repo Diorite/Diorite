@@ -40,7 +40,7 @@ public class BirchDoorMat extends WoodenDoorMat
     public static final BirchDoorMat BIRCH_DOOR_TOP_RIGHT_POWERED = new BirchDoorMat(true, true);
 
     private static final Map<String, BirchDoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BirchDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<BirchDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean   powered;
     protected final boolean   hingeOnRightSide;

@@ -30,7 +30,7 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
     public static final HayBlockMat HAY_BLOCK_NORTH_SOUTH = new HayBlockMat(RotateAxisMat.NORTH_SOUTH);
 
     private static final Map<String, HayBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<HayBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<HayBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final RotateAxisMat rotateAxis;
 

@@ -20,7 +20,7 @@ public class ObsidianMat extends StonyMat
     public static final ObsidianMat OBSIDIAN = new ObsidianMat();
 
     private static final Map<String, ObsidianMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<ObsidianMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<ObsidianMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected ObsidianMat()

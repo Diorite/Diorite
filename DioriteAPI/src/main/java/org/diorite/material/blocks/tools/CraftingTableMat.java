@@ -21,7 +21,7 @@ public class CraftingTableMat extends BlockMaterialData
     public static final CraftingTableMat CRAFTING_TABLE = new CraftingTableMat();
 
     private static final Map<String, CraftingTableMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CraftingTableMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CraftingTableMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected CraftingTableMat()

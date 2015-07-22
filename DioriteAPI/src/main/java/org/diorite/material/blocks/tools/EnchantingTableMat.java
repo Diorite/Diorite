@@ -21,7 +21,7 @@ public class EnchantingTableMat extends BlockMaterialData
     public static final EnchantingTableMat ENCHANTING_TABLE = new EnchantingTableMat();
 
     private static final Map<String, EnchantingTableMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<EnchantingTableMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<EnchantingTableMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected EnchantingTableMat()

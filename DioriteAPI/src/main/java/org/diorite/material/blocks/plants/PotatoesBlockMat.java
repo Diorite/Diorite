@@ -33,7 +33,7 @@ public class PotatoesBlockMat extends CropsMat
     public static final PotatoesBlockMat POTATOES_BLOCK_RIPE = new PotatoesBlockMat("RIPE", 0x7);
 
     private static final Map<String, PotatoesBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PotatoesBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PotatoesBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final int age;
 

@@ -32,7 +32,7 @@ public class AcaciaFenceGateMat extends WoodenFenceGateMat
     public static final AcaciaFenceGateMat ACACIA_FENCE_GATE_EAST_OPEN  = new AcaciaFenceGateMat(BlockFace.EAST, true);
 
     private static final Map<String, AcaciaFenceGateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<AcaciaFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<AcaciaFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected AcaciaFenceGateMat()

@@ -23,7 +23,7 @@ public class RedstoneMat extends OreItemMat implements PlaceableMat
     public static final RedstoneMat REDSTONE = new RedstoneMat();
 
     private static final Map<String, RedstoneMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RedstoneMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RedstoneMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RedstoneMat()
     {

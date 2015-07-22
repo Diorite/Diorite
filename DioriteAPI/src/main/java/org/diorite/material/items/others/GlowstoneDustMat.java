@@ -19,7 +19,7 @@ public class GlowstoneDustMat extends ItemMaterialData
     public static final GlowstoneDustMat GLOWSTONE_DUST = new GlowstoneDustMat();
 
     private static final Map<String, GlowstoneDustMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GlowstoneDustMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<GlowstoneDustMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected GlowstoneDustMat()
     {

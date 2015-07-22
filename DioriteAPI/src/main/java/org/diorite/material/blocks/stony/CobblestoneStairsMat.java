@@ -35,7 +35,7 @@ public class CobblestoneStairsMat extends BlockMaterialData implements StairsMat
     public static final CobblestoneStairsMat COBBLESTONE_STAIRS_NORTH_UPSIDE_DOWN = new CobblestoneStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, CobblestoneStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CobblestoneStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CobblestoneStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
     protected final boolean   upsideDown;

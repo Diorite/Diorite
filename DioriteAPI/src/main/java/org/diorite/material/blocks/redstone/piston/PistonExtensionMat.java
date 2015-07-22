@@ -36,7 +36,7 @@ public class PistonExtensionMat extends PistonBaseMat
     public static final PistonExtensionMat PISTON_EXTENSION_EAST_EXTENDED  = new PistonExtensionMat(BlockFace.EAST, true);
 
     private static final Map<String, PistonExtensionMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PistonExtensionMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PistonExtensionMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected PistonExtensionMat()

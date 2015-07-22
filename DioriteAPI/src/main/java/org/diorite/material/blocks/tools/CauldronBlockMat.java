@@ -31,7 +31,7 @@ public class CauldronBlockMat extends BlockMaterialData
     public static final CauldronBlockMat CAULDRON_BLOCK_FULL  = new CauldronBlockMat("FULL", 0x3, 3);
 
     private static final Map<String, CauldronBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CauldronBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CauldronBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final int waterLevel;
 

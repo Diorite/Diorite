@@ -36,7 +36,7 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_15  = new DaylightDetectorMat(15);
 
     private static final Map<String, DaylightDetectorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DaylightDetectorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DaylightDetectorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected DaylightDetectorMat()

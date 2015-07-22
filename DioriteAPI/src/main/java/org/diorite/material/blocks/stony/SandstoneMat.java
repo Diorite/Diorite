@@ -27,7 +27,7 @@ public class SandstoneMat extends StonyMat implements VariantableMat
     public static final SandstoneMat SANDSTONE_SMOOTH   = new SandstoneMat(0x2, VariantMat.SMOOTH);
 
     private static final Map<String, SandstoneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SandstoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SandstoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final VariantMat variant;
 

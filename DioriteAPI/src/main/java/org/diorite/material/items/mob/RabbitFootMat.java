@@ -19,7 +19,7 @@ public class RabbitFootMat extends ItemMaterialData
     public static final RabbitFootMat RABBIT_FOOT = new RabbitFootMat();
 
     private static final Map<String, RabbitFootMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RabbitFootMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RabbitFootMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RabbitFootMat()
     {

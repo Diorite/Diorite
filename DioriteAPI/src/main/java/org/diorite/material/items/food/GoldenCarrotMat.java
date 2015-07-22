@@ -18,7 +18,7 @@ public class GoldenCarrotMat extends EdibleItemMat
     public static final GoldenCarrotMat GOLDEN_CARROT = new GoldenCarrotMat();
 
     private static final Map<String, GoldenCarrotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GoldenCarrotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<GoldenCarrotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected GoldenCarrotMat()
     {

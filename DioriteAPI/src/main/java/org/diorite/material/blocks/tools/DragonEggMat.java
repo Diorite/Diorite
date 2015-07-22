@@ -21,7 +21,7 @@ public class DragonEggMat extends BlockMaterialData
     public static final DragonEggMat DRAGON_EGG = new DragonEggMat();
 
     private static final Map<String, DragonEggMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DragonEggMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DragonEggMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected DragonEggMat()

@@ -18,7 +18,7 @@ public class SpiderEyeMat extends EdibleItemMat
     public static final SpiderEyeMat SPIDER_EYE = new SpiderEyeMat();
 
     private static final Map<String, SpiderEyeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SpiderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<SpiderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected SpiderEyeMat()
     {

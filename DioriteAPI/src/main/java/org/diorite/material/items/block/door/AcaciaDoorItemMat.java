@@ -19,7 +19,7 @@ public class AcaciaDoorItemMat extends WoodenDoorItemMat
     public static final AcaciaDoorItemMat ACACIA_DOOR_ITEM = new AcaciaDoorItemMat();
 
     private static final Map<String, AcaciaDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<AcaciaDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<AcaciaDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected AcaciaDoorItemMat()
     {

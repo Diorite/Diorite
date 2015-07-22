@@ -23,7 +23,7 @@ public class RedstoneBlockMat extends OreBlockMat
     public static final RedstoneBlockMat REDSTONE_BLOCK = new RedstoneBlockMat();
 
     private static final Map<String, RedstoneBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<RedstoneBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected RedstoneBlockMat()

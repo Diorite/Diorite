@@ -18,7 +18,7 @@ public class CookedMuttonMat extends EdibleItemMat
     public static final CookedMuttonMat COOKED_MUTTON = new CookedMuttonMat();
 
     private static final Map<String, CookedMuttonMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<CookedMuttonMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<CookedMuttonMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected CookedMuttonMat()
     {

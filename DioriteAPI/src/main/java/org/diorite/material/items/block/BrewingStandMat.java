@@ -20,7 +20,7 @@ public class BrewingStandMat extends ItemMaterialData implements PlaceableMat
     public static final BrewingStandMat BREWING_STAND = new BrewingStandMat();
 
     private static final Map<String, BrewingStandMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BrewingStandMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<BrewingStandMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected BrewingStandMat()
     {

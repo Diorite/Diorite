@@ -19,7 +19,7 @@ public class MagmaCreamMat extends ItemMaterialData
     public static final MagmaCreamMat MAGMA_CREAM = new MagmaCreamMat();
 
     private static final Map<String, MagmaCreamMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<MagmaCreamMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<MagmaCreamMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected MagmaCreamMat()
     {

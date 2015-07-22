@@ -19,7 +19,7 @@ public class SpruceDoorItemMat extends WoodenDoorItemMat
     public static final SpruceDoorItemMat SPRUCE_DOOR_ITEM = new SpruceDoorItemMat();
 
     private static final Map<String, SpruceDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SpruceDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<SpruceDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected SpruceDoorItemMat()
     {

@@ -22,7 +22,7 @@ public class CobblestoneMat extends StonyMat implements VariantableMat
     public static final CobblestoneMat COBBLESTONE = new CobblestoneMat();
 
     private static final Map<String, CobblestoneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CobblestoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CobblestoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected CobblestoneMat()
     {

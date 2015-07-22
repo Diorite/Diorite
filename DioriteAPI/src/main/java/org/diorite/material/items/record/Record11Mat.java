@@ -19,7 +19,7 @@ public class Record11Mat extends RecordMat
     public static final Record11Mat RECORD_11 = new Record11Mat();
 
     private static final Map<String, Record11Mat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<Record11Mat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<Record11Mat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected Record11Mat()
     {

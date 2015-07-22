@@ -20,7 +20,7 @@ public class RedstoneLampOffMat extends RedstoneLampMat
     public static final RedstoneLampOffMat REDSTONE_LAMP_OFF = new RedstoneLampOffMat();
 
     private static final Map<String, RedstoneLampOffMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneLampOffMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<RedstoneLampOffMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected RedstoneLampOffMat()

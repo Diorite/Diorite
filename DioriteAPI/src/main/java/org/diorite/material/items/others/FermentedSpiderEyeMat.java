@@ -19,7 +19,7 @@ public class FermentedSpiderEyeMat extends ItemMaterialData
     public static final FermentedSpiderEyeMat FERMENTED_SPIDER_EYE = new FermentedSpiderEyeMat();
 
     private static final Map<String, FermentedSpiderEyeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FermentedSpiderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<FermentedSpiderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected FermentedSpiderEyeMat()
     {

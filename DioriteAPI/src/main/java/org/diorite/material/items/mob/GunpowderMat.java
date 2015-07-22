@@ -19,7 +19,7 @@ public class GunpowderMat extends ItemMaterialData
     public static final GunpowderMat GUNPOWDER = new GunpowderMat();
 
     private static final Map<String, GunpowderMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GunpowderMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<GunpowderMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected GunpowderMat()
     {

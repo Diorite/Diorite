@@ -18,7 +18,7 @@ public class PoisonousPotatoMat extends EdibleItemMat
     public static final PoisonousPotatoMat POISONOUS_POTATO = new PoisonousPotatoMat();
 
     private static final Map<String, PoisonousPotatoMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PoisonousPotatoMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<PoisonousPotatoMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected PoisonousPotatoMat()
     {

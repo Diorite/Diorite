@@ -51,7 +51,7 @@ public class FlowerPotBlockMat extends BlockMaterialData
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_DARK_OAK_SAPLING = new FlowerPotBlockMat("LEGACY_DARK_OAK_SAPLING", 0xD);
 
     private static final Map<String, FlowerPotBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<FlowerPotBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<FlowerPotBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected FlowerPotBlockMat()

@@ -21,7 +21,7 @@ public class SnowBlockMat extends BlockMaterialData
     public static final SnowBlockMat SNOW_BLOCK = new SnowBlockMat();
 
     private static final Map<String, SnowBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SnowBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SnowBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected SnowBlockMat()

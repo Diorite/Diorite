@@ -18,7 +18,7 @@ public class RabbitStewMat extends EdibleItemMat
     public static final RabbitStewMat RABBIT_STEW = new RabbitStewMat();
 
     private static final Map<String, RabbitStewMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RabbitStewMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RabbitStewMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RabbitStewMat()
     {

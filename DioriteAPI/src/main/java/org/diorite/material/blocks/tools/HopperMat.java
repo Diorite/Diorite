@@ -43,7 +43,7 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
     public static final HopperMat HOPPER_EAST_POWERED  = new HopperMat(BlockFace.EAST, true);
 
     private static final Map<String, HopperMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<HopperMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<HopperMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace facing;
     protected final boolean   powered;

@@ -19,7 +19,7 @@ public class SlimeballMat extends ItemMaterialData
     public static final SlimeballMat SLIMEBALL = new SlimeballMat();
 
     private static final Map<String, SlimeballMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SlimeballMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<SlimeballMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected SlimeballMat()
     {

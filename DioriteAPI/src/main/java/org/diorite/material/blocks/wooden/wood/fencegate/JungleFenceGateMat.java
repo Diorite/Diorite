@@ -32,7 +32,7 @@ public class JungleFenceGateMat extends WoodenFenceGateMat
     public static final JungleFenceGateMat JUNGLE_FENCE_GATE_EAST_OPEN  = new JungleFenceGateMat(BlockFace.EAST, true);
 
     private static final Map<String, JungleFenceGateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<JungleFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<JungleFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected JungleFenceGateMat()

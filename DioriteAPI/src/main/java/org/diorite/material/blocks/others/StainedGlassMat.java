@@ -31,7 +31,7 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
     public static final StainedGlassMat STAINED_GLASS_LIME       = new StainedGlassMat(DyeColor.LIME);
     public static final StainedGlassMat STAINED_GLASS_PINK       = new StainedGlassMat(DyeColor.PINK);
     public static final StainedGlassMat STAINED_GLASS_GRAY       = new StainedGlassMat(DyeColor.GRAY);
-    public static final StainedGlassMat STAINED_GLASS_SILVER     = new StainedGlassMat(DyeColor.SILVER);
+    public static final StainedGlassMat STAINED_GLASS_SILVER     = new StainedGlassMat(DyeColor.LIGHT_GRAY);
     public static final StainedGlassMat STAINED_GLASS_CYAN       = new StainedGlassMat(DyeColor.CYAN);
     public static final StainedGlassMat STAINED_GLASS_PURPLE     = new StainedGlassMat(DyeColor.PURPLE);
     public static final StainedGlassMat STAINED_GLASS_BLUE       = new StainedGlassMat(DyeColor.BLUE);
@@ -41,7 +41,7 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
     public static final StainedGlassMat STAINED_GLASS_BLACK      = new StainedGlassMat(DyeColor.BLACK);
 
     private static final Map<String, StainedGlassMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<StainedGlassMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<StainedGlassMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final DyeColor color;
 

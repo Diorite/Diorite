@@ -47,7 +47,7 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
     public static final LeverMat LEVER_DOWN_SOUTH_POWERED = new LeverMat(BlockFace.DOWN, true, true);
 
     private static final Map<String, LeverMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<LeverMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<LeverMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
     protected final boolean   rotated;

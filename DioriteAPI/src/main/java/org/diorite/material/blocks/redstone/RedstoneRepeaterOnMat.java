@@ -42,7 +42,7 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
     public static final RedstoneRepeaterOnMat REDSTONE_REPEATER_ON_WEST_4  = new RedstoneRepeaterOnMat(BlockFace.WEST, 4);
 
     private static final Map<String, RedstoneRepeaterOnMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneRepeaterOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<RedstoneRepeaterOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected RedstoneRepeaterOnMat()

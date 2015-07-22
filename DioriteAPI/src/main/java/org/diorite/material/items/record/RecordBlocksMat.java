@@ -19,7 +19,7 @@ public class RecordBlocksMat extends RecordMat
     public static final RecordBlocksMat RECORD_BLOCKS = new RecordBlocksMat();
 
     private static final Map<String, RecordBlocksMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordBlocksMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RecordBlocksMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RecordBlocksMat()
     {

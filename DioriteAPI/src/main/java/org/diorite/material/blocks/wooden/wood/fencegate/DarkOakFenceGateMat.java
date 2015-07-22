@@ -32,7 +32,7 @@ public class DarkOakFenceGateMat extends WoodenFenceGateMat
     public static final DarkOakFenceGateMat DARK_OAK_FENCE_GATE_EAST_OPEN  = new DarkOakFenceGateMat(BlockFace.EAST, true);
 
     private static final Map<String, DarkOakFenceGateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DarkOakFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DarkOakFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected DarkOakFenceGateMat()

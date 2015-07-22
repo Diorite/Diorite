@@ -20,7 +20,7 @@ public class PaintingMat extends ItemMaterialData implements PlaceableEntityMat
     public static final PaintingMat PAINTING = new PaintingMat();
 
     private static final Map<String, PaintingMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PaintingMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<PaintingMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected PaintingMat()
     {

@@ -41,7 +41,7 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
     public static final DetectorRailMat DETECTOR_RAIL_ASCENDING_SOUTH_POWERED = new DetectorRailMat(RailTypeMat.ASCENDING_SOUTH, true);
 
     private static final Map<String, DetectorRailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DetectorRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DetectorRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean powered;
 

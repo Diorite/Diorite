@@ -23,7 +23,7 @@ public class EmeraldBlockMat extends OreBlockMat
     public static final EmeraldBlockMat EMERALD_BLOCK = new EmeraldBlockMat();
 
     private static final Map<String, EmeraldBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<EmeraldBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<EmeraldBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected EmeraldBlockMat()

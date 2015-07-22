@@ -21,7 +21,7 @@ public class EmeraldMat extends OreItemMat
     public static final EmeraldMat EMERALD = new EmeraldMat();
 
     private static final Map<String, EmeraldMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<EmeraldMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<EmeraldMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected EmeraldMat()
     {

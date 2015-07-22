@@ -18,7 +18,7 @@ public class MushroomStewMat extends EdibleItemMat
     public static final MushroomStewMat MUSHROOM_STEW = new MushroomStewMat();
 
     private static final Map<String, MushroomStewMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<MushroomStewMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<MushroomStewMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected MushroomStewMat()
     {

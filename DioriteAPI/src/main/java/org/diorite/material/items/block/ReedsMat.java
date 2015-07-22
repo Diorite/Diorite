@@ -20,7 +20,7 @@ public class ReedsMat extends ItemMaterialData implements PlaceableMat
     public static final ReedsMat REEDS = new ReedsMat();
 
     private static final Map<String, ReedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ReedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<ReedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected ReedsMat()
     {

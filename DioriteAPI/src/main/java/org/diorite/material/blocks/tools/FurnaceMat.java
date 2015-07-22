@@ -30,7 +30,7 @@ public class FurnaceMat extends BlockMaterialData implements DirectionalMat
     public static final FurnaceMat FURNACE_EAST  = new FurnaceMat(BlockFace.EAST);
 
     private static final Map<String, FurnaceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<FurnaceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<FurnaceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
 

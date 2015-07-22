@@ -26,7 +26,7 @@ public class PumpkinLanternMat extends AbstractPumpkinMat
     public static final PumpkinLanternMat PUMPKIN_LANTERN_SELF  = new PumpkinLanternMat(BlockFace.SELF);
 
     private static final Map<String, PumpkinLanternMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PumpkinLanternMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PumpkinLanternMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected PumpkinLanternMat()

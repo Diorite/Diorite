@@ -18,7 +18,7 @@ public class FurnaceMinecartMat extends AbstractMinecartMat
     public static final FurnaceMinecartMat FURNACE_MINECART = new FurnaceMinecartMat();
 
     private static final Map<String, FurnaceMinecartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FurnaceMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<FurnaceMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected FurnaceMinecartMat()
     {

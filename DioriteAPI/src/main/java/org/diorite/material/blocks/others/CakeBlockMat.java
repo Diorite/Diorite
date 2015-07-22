@@ -34,7 +34,7 @@ public class CakeBlockMat extends BlockMaterialData
     public static final CakeBlockMat CAKE_BLOCK_6 = new CakeBlockMat(0x6);
 
     private static final Map<String, CakeBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CakeBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CakeBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final byte piecesEaten;
 

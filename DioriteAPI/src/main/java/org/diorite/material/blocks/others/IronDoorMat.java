@@ -40,7 +40,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
     public static final IronDoorMat IRON_DOOR_TOP_RIGHT_POWERED = new IronDoorMat("TOP_RIGHT_POWERED", true, true);
 
     private static final Map<String, IronDoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<IronDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<IronDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final boolean   powered;
     protected final boolean   hingeOnRightSide;

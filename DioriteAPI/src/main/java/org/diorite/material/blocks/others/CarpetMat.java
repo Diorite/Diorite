@@ -31,7 +31,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     public static final CarpetMat CARPET_LIME       = new CarpetMat(DyeColor.LIME);
     public static final CarpetMat CARPET_PINK       = new CarpetMat(DyeColor.PINK);
     public static final CarpetMat CARPET_GRAY       = new CarpetMat(DyeColor.GRAY);
-    public static final CarpetMat CARPET_SILVER     = new CarpetMat(DyeColor.SILVER);
+    public static final CarpetMat CARPET_SILVER     = new CarpetMat(DyeColor.LIGHT_GRAY);
     public static final CarpetMat CARPET_CYAN       = new CarpetMat(DyeColor.CYAN);
     public static final CarpetMat CARPET_PURPLE     = new CarpetMat(DyeColor.PURPLE);
     public static final CarpetMat CARPET_BLUE       = new CarpetMat(DyeColor.BLUE);
@@ -41,7 +41,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     public static final CarpetMat CARPET_BLACK      = new CarpetMat(DyeColor.BLACK);
 
     private static final Map<String, CarpetMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CarpetMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CarpetMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final DyeColor color;
 

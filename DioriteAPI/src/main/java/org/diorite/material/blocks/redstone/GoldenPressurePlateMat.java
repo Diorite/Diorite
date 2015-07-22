@@ -37,7 +37,7 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_15 = new GoldenPressurePlateMat(0xF);
 
     private static final Map<String, GoldenPressurePlateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<GoldenPressurePlateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<GoldenPressurePlateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected GoldenPressurePlateMat()

@@ -31,7 +31,7 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
     public static final WoolMat WOOL_LIME       = new WoolMat(DyeColor.LIME);
     public static final WoolMat WOOL_PINK       = new WoolMat(DyeColor.PINK);
     public static final WoolMat WOOL_GRAY       = new WoolMat(DyeColor.GRAY);
-    public static final WoolMat WOOL_SILVER     = new WoolMat(DyeColor.SILVER);
+    public static final WoolMat WOOL_SILVER     = new WoolMat(DyeColor.LIGHT_GRAY);
     public static final WoolMat WOOL_CYAN       = new WoolMat(DyeColor.CYAN);
     public static final WoolMat WOOL_PURPLE     = new WoolMat(DyeColor.PURPLE);
     public static final WoolMat WOOL_BLUE       = new WoolMat(DyeColor.BLUE);
@@ -41,7 +41,7 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
     public static final WoolMat WOOL_BLACK      = new WoolMat(DyeColor.BLACK);
 
     private static final Map<String, WoolMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WoolMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<WoolMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final DyeColor color;
 

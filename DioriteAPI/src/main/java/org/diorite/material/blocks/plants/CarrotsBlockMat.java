@@ -33,7 +33,7 @@ public class CarrotsBlockMat extends CropsMat
     public static final CarrotsBlockMat CARROTS_BLOCK_RIPE = new CarrotsBlockMat("RIPE", 0x7);
 
     private static final Map<String, CarrotsBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CarrotsBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<CarrotsBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final int age;
 

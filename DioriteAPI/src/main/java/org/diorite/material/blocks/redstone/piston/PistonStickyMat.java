@@ -33,7 +33,7 @@ public class PistonStickyMat extends PistonBaseMat
     public static final PistonStickyMat STICKY_PISTON_EAST_EXTENDED  = new PistonStickyMat(BlockFace.EAST, true);
 
     private static final Map<String, PistonStickyMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PistonStickyMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PistonStickyMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected PistonStickyMat()

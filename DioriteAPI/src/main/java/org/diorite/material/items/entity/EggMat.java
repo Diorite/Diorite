@@ -20,7 +20,7 @@ public class EggMat extends ItemMaterialData implements PlaceableEntityMat
     public static final EggMat EGG = new EggMat();
 
     private static final Map<String, EggMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<EggMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<EggMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected EggMat()
     {

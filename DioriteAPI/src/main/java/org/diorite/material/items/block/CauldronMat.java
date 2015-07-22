@@ -20,7 +20,7 @@ public class CauldronMat extends ItemMaterialData implements PlaceableMat
     public static final CauldronMat CAULDRON = new CauldronMat();
 
     private static final Map<String, CauldronMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<CauldronMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<CauldronMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected CauldronMat()
     {

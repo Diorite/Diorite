@@ -19,7 +19,7 @@ public class GoldNuggetMat extends ItemMaterialData
     public static final GoldNuggetMat GOLD_NUGGET = new GoldNuggetMat();
 
     private static final Map<String, GoldNuggetMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GoldNuggetMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<GoldNuggetMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected GoldNuggetMat()
     {

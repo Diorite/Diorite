@@ -58,7 +58,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
     public static final RedstoneComparatorMat REDSTONE_COMPARATOR_WEST_SUBTRACT_POWERED  = new RedstoneComparatorMat(BlockFace.WEST, true, true);
 
     private static final Map<String, RedstoneComparatorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneComparatorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<RedstoneComparatorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
     protected final boolean   subtractionMode;

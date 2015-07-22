@@ -19,7 +19,7 @@ public class IronHorseArmorMat extends ItemMaterialData
     public static final IronHorseArmorMat IRON_HORSE_ARMOR = new IronHorseArmorMat();
 
     private static final Map<String, IronHorseArmorMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<IronHorseArmorMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<IronHorseArmorMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected IronHorseArmorMat()
     {

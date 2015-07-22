@@ -21,7 +21,7 @@ public class JungleFenceMat extends WoodenFenceMat
     public static final JungleFenceMat JUNGLE_FENCE = new JungleFenceMat();
 
     private static final Map<String, JungleFenceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<JungleFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<JungleFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected JungleFenceMat()

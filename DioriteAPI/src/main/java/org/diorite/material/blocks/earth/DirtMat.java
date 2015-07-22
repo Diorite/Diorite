@@ -27,7 +27,7 @@ public class DirtMat extends EarthMat implements VariantableMat
     public static final DirtMat DIRT_PODZOL = new DirtMat(0x2, VariantMat.PODZOL);
 
     private static final Map<String, DirtMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DirtMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<DirtMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final VariantMat variant;
 

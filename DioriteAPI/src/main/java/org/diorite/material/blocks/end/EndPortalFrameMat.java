@@ -38,7 +38,7 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
     public static final EndPortalFrameMat END_PORTAL_FRAME_EAST_EYE  = new EndPortalFrameMat(BlockFace.EAST, true);
 
     private static final Map<String, EndPortalFrameMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<EndPortalFrameMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<EndPortalFrameMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     private final BlockFace face;
     private final boolean   activated;

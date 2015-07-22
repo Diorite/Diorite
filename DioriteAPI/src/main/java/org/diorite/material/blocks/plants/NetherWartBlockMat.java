@@ -29,7 +29,7 @@ public class NetherWartBlockMat extends CropsMat
     public static final NetherWartBlockMat NETHER_WART_BLOCK_RIPE = new NetherWartBlockMat("RIPE", 0x3);
 
     private static final Map<String, NetherWartBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<NetherWartBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<NetherWartBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final int age;
 

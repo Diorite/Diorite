@@ -19,7 +19,7 @@ public class RecordWardMat extends RecordMat
     public static final RecordWardMat RECORD_WARD = new RecordWardMat();
 
     private static final Map<String, RecordWardMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordWardMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RecordWardMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RecordWardMat()
     {

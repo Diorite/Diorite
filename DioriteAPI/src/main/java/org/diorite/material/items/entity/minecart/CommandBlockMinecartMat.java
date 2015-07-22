@@ -18,7 +18,7 @@ public class CommandBlockMinecartMat extends AbstractMinecartMat
     public static final CommandBlockMinecartMat COMMAND_BLOCK_MINECART = new CommandBlockMinecartMat();
 
     private static final Map<String, CommandBlockMinecartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<CommandBlockMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<CommandBlockMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected CommandBlockMinecartMat()
     {

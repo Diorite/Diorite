@@ -39,7 +39,7 @@ public class WoodenTrapdoorMat extends TrapdoorMat
     public static final WoodenTrapdoorMat WOODEN_TRAPDOOR_NORTH_TOP_OPEN = new WoodenTrapdoorMat(BlockFace.NORTH, true, true);
 
     private static final Map<String, WoodenTrapdoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WoodenTrapdoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<WoodenTrapdoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected WoodenTrapdoorMat()

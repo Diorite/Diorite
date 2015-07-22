@@ -20,7 +20,7 @@ public class FlowerPotMat extends ItemMaterialData implements PlaceableMat
     public static final FlowerPotMat FLOWER_POT = new FlowerPotMat();
 
     private static final Map<String, FlowerPotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FlowerPotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<FlowerPotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected FlowerPotMat()
     {

@@ -20,7 +20,7 @@ public class RedstoneComparatorItemMat extends ItemMaterialData implements Place
     public static final RedstoneComparatorItemMat REDSTONE_COMPARATOR_ITEM = new RedstoneComparatorItemMat();
 
     private static final Map<String, RedstoneComparatorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RedstoneComparatorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RedstoneComparatorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RedstoneComparatorItemMat()
     {

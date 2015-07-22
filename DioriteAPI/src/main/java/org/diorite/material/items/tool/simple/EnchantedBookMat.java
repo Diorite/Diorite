@@ -19,7 +19,7 @@ public class EnchantedBookMat extends ItemMaterialData
     public static final EnchantedBookMat ENCHANTED_BOOK = new EnchantedBookMat();
 
     private static final Map<String, EnchantedBookMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<EnchantedBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<EnchantedBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected EnchantedBookMat()
     {

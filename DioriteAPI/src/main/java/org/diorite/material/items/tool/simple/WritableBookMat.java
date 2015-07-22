@@ -19,7 +19,7 @@ public class WritableBookMat extends ItemMaterialData
     public static final WritableBookMat WRITABLE_BOOK = new WritableBookMat();
 
     private static final Map<String, WritableBookMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<WritableBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<WritableBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected WritableBookMat()
     {

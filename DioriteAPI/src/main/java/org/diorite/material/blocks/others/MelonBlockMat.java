@@ -21,7 +21,7 @@ public class MelonBlockMat extends BlockMaterialData
     public static final MelonBlockMat MELON_BLOCK = new MelonBlockMat();
 
     private static final Map<String, MelonBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<MelonBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<MelonBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
     protected MelonBlockMat()

@@ -26,7 +26,7 @@ public class PlanksMat extends WoodMat
     public static final PlanksMat PLANKS_DARK_OAK = new PlanksMat(WoodTypeMat.DARK_OAK);
 
     private static final Map<String, PlanksMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PlanksMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<PlanksMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected PlanksMat()
     {

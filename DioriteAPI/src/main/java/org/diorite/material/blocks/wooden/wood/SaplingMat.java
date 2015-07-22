@@ -37,7 +37,7 @@ public class SaplingMat extends WoodMat
     public static final SaplingMat SAPLING_DARK_OAK_OLDER = new SaplingMat(WoodTypeMat.DARK_OAK, SaplingStage.OLDER);
 
     private static final Map<String, SaplingMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SaplingMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SaplingMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final SaplingStage stage;
 

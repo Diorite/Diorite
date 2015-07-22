@@ -20,7 +20,7 @@ public class MelonSeedsMat extends ItemMaterialData implements PlaceableMat
     public static final MelonSeedsMat MELON_SEEDS = new MelonSeedsMat();
 
     private static final Map<String, MelonSeedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<MelonSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<MelonSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected MelonSeedsMat()
     {

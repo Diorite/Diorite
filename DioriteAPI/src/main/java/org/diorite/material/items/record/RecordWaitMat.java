@@ -19,7 +19,7 @@ public class RecordWaitMat extends RecordMat
     public static final RecordWaitMat RECORD_WAIT = new RecordWaitMat();
 
     private static final Map<String, RecordWaitMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordWaitMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<RecordWaitMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected RecordWaitMat()
     {

@@ -21,7 +21,7 @@ public class QuartzMat extends OreItemMat
     public static final QuartzMat QUARTZ = new QuartzMat();
 
     private static final Map<String, QuartzMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<QuartzMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<QuartzMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     protected QuartzMat()
     {

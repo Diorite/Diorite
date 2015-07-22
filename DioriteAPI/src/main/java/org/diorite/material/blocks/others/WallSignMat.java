@@ -31,7 +31,7 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
     public static final WallSignMat WALL_SIGN_EAST  = new WallSignMat(BlockFace.EAST);
 
     private static final Map<String, WallSignMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WallSignMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<WallSignMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     protected final BlockFace face;
 
