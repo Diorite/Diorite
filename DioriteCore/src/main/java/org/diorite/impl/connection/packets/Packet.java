@@ -14,13 +14,13 @@ import io.netty.util.concurrent.GenericFutureListener;
 public abstract class Packet<T extends PacketListener>
 {
     public static final int INITIAL_CAPACITY = 512;
-    protected volatile PacketDataSerializer data;
+    protected volatile byte[] data;
 
     public Packet()
     {
     }
 
-    public Packet(final PacketDataSerializer data)
+    public Packet(final byte[] data)
     {
         this.data = data;
     }
@@ -31,24 +31,24 @@ public abstract class Packet<T extends PacketListener>
 
     public abstract void handle(T listener);
 
-    public synchronized PacketDataSerializer preparePacket(final boolean force) throws IOException
+    public synchronized byte[] preparePacket(final boolean force) throws IOException
     {
         if (force || (this.data == null))
         {
             final PacketDataSerializer newData = new PacketDataSerializer(Unpooled.buffer(INITIAL_CAPACITY));
             this.writeFields(newData);
-            this.data = newData;
-            return newData;
+            this.data = new byte[newData.readableBytes()];
+            System.arraycopy(newData.array(), 0, this.data, 0, newData.readableBytes());
         }
         return this.data;
     }
 
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
-        PacketDataSerializer tempData = this.data;
+        byte[] tempData = this.data;
         if (tempData == null)
         {
-            tempData = this.preparePacket(true);
+            tempData = this.preparePacket(false);
         }
         if (tempData == null)
         {
@@ -57,12 +57,12 @@ public abstract class Packet<T extends PacketListener>
         data.writeBytes(tempData);
     }
 
-    public PacketDataSerializer getDataBuffer()
+    public byte[] getCachedData()
     {
         return this.data;
     }
 
-    public void setDataBuffer(final PacketDataSerializer data)
+    public void setCachedData(final byte[] data)
     {
         this.data = data;
     }
