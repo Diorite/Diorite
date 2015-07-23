@@ -99,6 +99,13 @@ public class ItemStackImpl implements Dirtable, ItemStack
     }
 
     @Override
+    public ItemStack addFrom(final ItemStack other, final int amount)
+    {
+        this.setDirty();
+        return this.wrapped.addFrom(other, amount);
+    }
+
+    @Override
     public BaseItemStack split(final int size)
     {
         if (size > this.getAmount())
@@ -106,14 +113,14 @@ public class ItemStackImpl implements Dirtable, ItemStack
             throw new IllegalArgumentException();
         }
 
-        if (this.getAmount() == 1)
-        {
-            return null;
-        }
-
         final BaseItemStack temp = new BaseItemStack(this);
 
         this.wrapped.setAmount(this.wrapped.getAmount() - size);
+        if (this.getAmount() == 0)
+        {
+            this.wrapped.setItemMeta(null);
+            this.wrapped.setMaterial(Material.AIR);
+        }
         this.setDirty();
         temp.setAmount(size);
 

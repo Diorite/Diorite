@@ -14,6 +14,7 @@ import org.diorite.entity.Player;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.Material;
 
 public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements PlayerInventory
 {
@@ -249,15 +250,24 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     @Override
     public void softUpdate()
     {
-        final ItemStackImpl cursor = this.cursorItem.get();
+        ItemStackImpl cursor = this.cursorItem.get();
         if ((this.wasCursorNotNull && (cursor == null)) || ((cursor != null) && cursor.isDirty()))
         {
-            this.holder.getNetworkManager().sendPacket(new PacketPlayOutSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
             if (cursor != null)
             {
-                cursor.setClean();
-                this.wasCursorNotNull = true;
+                if ((cursor.getAmount() == 0) || (Material.AIR.simpleEquals(cursor.getMaterial())))
+                {
+                    this.atomicReplaceCursorItem(cursor, null);
+                    cursor = null;
+                }
+                else
+                {
+                    cursor.setClean();
+                    this.wasCursorNotNull = true;
+                }
             }
+            this.holder.getNetworkManager().sendPacket(new PacketPlayOutSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
+
         }
         super.softUpdate();
     }
