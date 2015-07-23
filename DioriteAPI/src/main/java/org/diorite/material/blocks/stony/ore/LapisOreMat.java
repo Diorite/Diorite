@@ -5,6 +5,7 @@ import java.util.Map;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
 import org.diorite.material.items.OreItemMat;
+import org.diorite.material.items.others.DyeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -28,7 +29,7 @@ public class LapisOreMat extends OreMat
     @SuppressWarnings("MagicNumber")
     protected LapisOreMat()
     {
-        super("LAPIS_ORE", 21, "minecraft:lapis_ore", "LAPIS_ORE", (byte) 0x00, null /*TODO: add*/, Material.LAPIS_BLOCK, 3, 15);
+        super("LAPIS_ORE", 21, "minecraft:lapis_ore", "LAPIS_ORE", (byte) 0x00, DyeMat.DYE_LAPIS_LAZULI, Material.LAPIS_BLOCK, 3, 15);
     }
 
     protected LapisOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)

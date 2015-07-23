@@ -63,7 +63,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
     @Override
     public Material ensureValidInventoryItem()
     {
-        return Material.AIR; // TODO: change to skull item
+        return Material.SKULL;
     }
 
     @Override

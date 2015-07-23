@@ -54,7 +54,7 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
 
     protected StainedGlassMat(final DyeColor color)
     {
-        super(STAINED_GLASS_WHITE.name(), STAINED_GLASS_WHITE.ordinal(), STAINED_GLASS_WHITE.getMinecraftId(), color.name(), color.getBlockFlag(), STAINED_GLASS_WHITE.getHardness(), STAINED_GLASS_WHITE.getBlastResistance());
+        super(STAINED_GLASS_WHITE.name(), STAINED_GLASS_WHITE.ordinal(), STAINED_GLASS_WHITE.getMinecraftId(), color.name(), (short) color.getBlockFlag(), STAINED_GLASS_WHITE.getHardness(), STAINED_GLASS_WHITE.getBlastResistance());
         this.color = color;
     }
 

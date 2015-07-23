@@ -55,7 +55,7 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
 
     protected StainedGlassPaneMat(final DyeColor color)
     {
-        super(STAINED_GLASS_PANE_WHITE.name(), STAINED_GLASS_PANE_WHITE.ordinal(), STAINED_GLASS_PANE_WHITE.getMinecraftId(), color.name(), color.getBlockFlag(), STAINED_GLASS_PANE_WHITE.getHardness(), STAINED_GLASS_PANE_WHITE.getBlastResistance());
+        super(STAINED_GLASS_PANE_WHITE.name(), STAINED_GLASS_PANE_WHITE.ordinal(), STAINED_GLASS_PANE_WHITE.getMinecraftId(), color.name(), (short) color.getBlockFlag(), STAINED_GLASS_PANE_WHITE.getHardness(), STAINED_GLASS_PANE_WHITE.getBlastResistance());
         this.color = color;
     }
 

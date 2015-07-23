@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.AttachableMat;
+import org.diorite.material.items.others.DyeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.ByteRange;
 
@@ -76,7 +77,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
     @Override
     public Material ensureValidInventoryItem()
     {
-        return Material.AIR; // TODO: change to valid item.
+        return DyeMat.COCOA;
     }
 
     @Override

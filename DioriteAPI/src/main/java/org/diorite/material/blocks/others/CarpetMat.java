@@ -48,13 +48,13 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     @SuppressWarnings("MagicNumber")
     protected CarpetMat()
     {
-        super("CARPET", 171, "minecraft:carpet", "WHITE", DyeColor.WHITE.getBlockFlag(), 0.1f, 0.5f);
+        super("CARPET", 171, "minecraft:carpet", "WHITE", (short) DyeColor.WHITE.getBlockFlag(), 0.1f, 0.5f);
         this.color = DyeColor.WHITE;
     }
 
     protected CarpetMat(final DyeColor color)
     {
-        super(CARPET_WHITE.name(), CARPET_WHITE.ordinal(), CARPET_WHITE.getMinecraftId(), color.name(), color.getBlockFlag(), CARPET_WHITE.getHardness(), CARPET_WHITE.getBlastResistance());
+        super(CARPET_WHITE.name(), CARPET_WHITE.ordinal(), CARPET_WHITE.getMinecraftId(), color.name(), (short) color.getBlockFlag(), CARPET_WHITE.getHardness(), CARPET_WHITE.getBlastResistance());
         this.color = color;
     }
 

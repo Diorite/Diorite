@@ -8,6 +8,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.DyeColor;
 import org.diorite.material.ColorableMat;
 import org.diorite.material.ItemMaterialData;
+import org.diorite.material.blocks.stony.ore.LapisOreMat;
+import org.diorite.material.blocks.stony.ore.OreMat;
+import org.diorite.material.blocks.stony.oreblocks.LapisBlockMat;
+import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
+import org.diorite.material.items.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
@@ -21,22 +26,22 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
      */
     public static final int USED_DATA_VALUES = 16;
 
-    public static final DyeMat DYE_INK_SAC      = new DyeMat();
-    public static final DyeMat DYE_RED          = new DyeMat("RED", DyeColor.RED);
-    public static final DyeMat DYE_GREEN        = new DyeMat("GREEN", DyeColor.GREEN);
-    public static final DyeMat DYE_COCOA_BEANS  = new DyeMat("COCOA_BEANS", DyeColor.BROWN);
-    public static final DyeMat DYE_LAPIS_LAZULI = new DyeMat("LAPIS_LAZULI", DyeColor.BLUE);
-    public static final DyeMat DYE_PURPLE       = new DyeMat("PURPLE", DyeColor.PURPLE);
-    public static final DyeMat DYE_CYAN         = new DyeMat("CYAN", DyeColor.CYAN);
-    public static final DyeMat DYE_LIGHT_GRAY   = new DyeMat("LIGHT_GRAY", DyeColor.LIGHT_GRAY);
-    public static final DyeMat DYE_GRAY         = new DyeMat("GRAY", DyeColor.GRAY);
-    public static final DyeMat DYE_PINK         = new DyeMat("PINK", DyeColor.PINK);
-    public static final DyeMat DYE_LIME         = new DyeMat("LIME", DyeColor.LIME);
-    public static final DyeMat DYE_YELLOW       = new DyeMat("YELLOW", DyeColor.YELLOW);
-    public static final DyeMat DYE_LIGHT_BLUE   = new DyeMat("LIGHT_BLUE", DyeColor.LIGHT_BLUE);
-    public static final DyeMat DYE_MAGENTA      = new DyeMat("MAGENTA", DyeColor.MAGENTA);
-    public static final DyeMat DYE_ORANGE       = new DyeMat("ORANGE", DyeColor.ORANGE);
-    public static final DyeMat DYE_BONE_MEAL    = new DyeMat("BONE_MEAL", DyeColor.WHITE);
+    public static final DyeMat            DYE_INK_SAC      = new DyeMat();
+    public static final DyeMat            DYE_RED          = new DyeMat("RED", DyeColor.RED);
+    public static final DyeMat            DYE_GREEN        = new DyeMat("GREEN", DyeColor.GREEN);
+    public static final DyeMat            DYE_COCOA_BEANS  = new DyeMat("COCOA_BEANS", DyeColor.BROWN);
+    public static final DyeLapisLazuliMat DYE_LAPIS_LAZULI = new DyeLapisLazuliMat();
+    public static final DyeMat            DYE_PURPLE       = new DyeMat("PURPLE", DyeColor.PURPLE);
+    public static final DyeMat            DYE_CYAN         = new DyeMat("CYAN", DyeColor.CYAN);
+    public static final DyeMat            DYE_LIGHT_GRAY   = new DyeMat("LIGHT_GRAY", DyeColor.LIGHT_GRAY);
+    public static final DyeMat            DYE_GRAY         = new DyeMat("GRAY", DyeColor.GRAY);
+    public static final DyeMat            DYE_PINK         = new DyeMat("PINK", DyeColor.PINK);
+    public static final DyeMat            DYE_LIME         = new DyeMat("LIME", DyeColor.LIME);
+    public static final DyeMat            DYE_YELLOW       = new DyeMat("YELLOW", DyeColor.YELLOW);
+    public static final DyeMat            DYE_LIGHT_BLUE   = new DyeMat("LIGHT_BLUE", DyeColor.LIGHT_BLUE);
+    public static final DyeMat            DYE_MAGENTA      = new DyeMat("MAGENTA", DyeColor.MAGENTA);
+    public static final DyeMat            DYE_ORANGE       = new DyeMat("ORANGE", DyeColor.ORANGE);
+    public static final DyeMat            DYE_BONE_MEAL    = new DyeMat("BONE_MEAL", DyeColor.WHITE);
 
     private static final Map<String, DyeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<DyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
@@ -166,6 +171,57 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
+    }
+
+    @SuppressWarnings("ClassHasNoToStringMethod")
+    protected static class DyeLapisLazuliMat extends DyeMat implements OreItemMat
+    {
+
+        protected final OreMat      blockOreType;
+        protected final OreBlockMat blockType;
+
+        protected DyeLapisLazuliMat()
+        {
+            super("LAPIS_LAZULI", DyeColor.BLUE);
+            this.blockOreType = LapisOreMat.LAPIS_ORE;
+            this.blockType = LapisBlockMat.LAPIS_BLOCK;
+        }
+
+        protected DyeLapisLazuliMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final DyeColor dyeColor, final OreMat oreType, final OreBlockMat blockType)
+        {
+            super(enumName, id, minecraftId, typeName, type, dyeColor);
+            this.blockOreType = oreType;
+            this.blockType = blockType;
+        }
+
+        protected DyeLapisLazuliMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final DyeColor dyeColor, final OreMat oreType, final OreBlockMat blockType)
+        {
+            super(enumName, id, minecraftId, maxStack, typeName, type, dyeColor);
+            this.blockOreType = oreType;
+            this.blockType = blockType;
+        }
+
+        /**
+         * Returns related {@link OreMat} for this item, may return null.
+         *
+         * @return related {@link OreMat} for this item.
+         */
+        @Override
+        public OreMat getBlockOreType()
+        {
+            return this.blockOreType;
+        }
+
+        /**
+         * Returns related {@link OreBlockMat} for this item, may return null.
+         *
+         * @return related {@link OreBlockMat} for this item.
+         */
+        @Override
+        public OreBlockMat getBlockType()
+        {
+            return this.blockType;
+        }
     }
 }
 

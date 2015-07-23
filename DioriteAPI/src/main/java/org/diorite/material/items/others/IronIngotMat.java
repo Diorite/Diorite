@@ -5,14 +5,14 @@ import java.util.Map;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.stony.ore.OreMat;
 import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
-import org.diorite.material.items.OreItemMat;
+import org.diorite.material.items.OreItemMat.OreItemMatExt;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
-public class IronIngotMat extends OreItemMat
+public class IronIngotMat extends OreItemMatExt
 {
     /**
      * Sub-ids used by diorite/minecraft by default
