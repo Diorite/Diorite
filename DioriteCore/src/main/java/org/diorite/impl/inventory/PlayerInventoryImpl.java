@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSetSlot;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutWindowItems;
 import org.diorite.impl.entity.PlayerImpl;
@@ -254,6 +253,11 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
         if ((this.wasCursorNotNull && (cursor == null)) || ((cursor != null) && cursor.isDirty()))
         {
             this.holder.getNetworkManager().sendPacket(new PacketPlayOutSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
+            if (cursor != null)
+            {
+                cursor.setClean();
+                this.wasCursorNotNull = true;
+            }
         }
         super.softUpdate();
     }

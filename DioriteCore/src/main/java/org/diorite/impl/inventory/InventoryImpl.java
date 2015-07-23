@@ -64,7 +64,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
             if (item != null)
             {
                 this.notNullItems.add(i);
-                if (item.isDirty())
+                if (item.setClean()) // returns true if item was dirty before cleaning
                 {
                     packets.add(new PacketPlayOutSetSlot(this.getWindowId(), i, item));
                 }
