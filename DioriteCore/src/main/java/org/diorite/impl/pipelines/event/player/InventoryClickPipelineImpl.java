@@ -31,7 +31,6 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayOutTransaction(evt.getWindowId(), evt.getActionNumber(), false));
                 return;
             }
-            //evt.getPlayer().sendMessage(evt.toString());
             System.out.println(evt.toString());
             final boolean accepted = this.handleClick(evt);
 
@@ -55,7 +54,6 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem());
         if (Objects.equals(ct, ClickType.MOUSE_LEFT))
         {
-            player.sendMessage("Mouse left clicked:" + clicked);
             if (cursor == null)
             {
                 if ((clicked != null) && (! inv.atomicReplace(slot, clicked, null) || ! inv.atomicReplaceCursorItem(null, clicked)))
@@ -111,19 +109,9 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     splitted = clicked.split(this.getAmountToStayInHand(clicked.getAmount()));
                 }
 
-                if (splitted != null)
+                if (! inv.atomicReplaceCursorItem(null, (splitted != null) ? splitted : clicked))
                 {
-                    if (! inv.atomicReplaceCursorItem(null, splitted))
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (! inv.atomicReplaceCursorItem(null, clicked))
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             else // cursor != null
@@ -325,11 +313,11 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
             return inv.atomicReplaceCursorItem(cursor, newCursor);
         }
+
         // TODO remember about throwing item on cursor to ground when closing eq
         else
         {
             return false; // Action not supported
-            // TODO perhaps only DOUBLE_CLICK
         }
 
         return true;
