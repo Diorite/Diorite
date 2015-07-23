@@ -130,7 +130,7 @@ public class BaseItemStack implements ItemStack
     {
         if (! this.isSimilar(other))
         {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Items must be similar to combine them.");
         }
 
         final int maxStack = this.material.getMaxStack();
@@ -146,6 +146,37 @@ public class BaseItemStack implements ItemStack
         else
         {
             this.amount += other.getAmount();
+            return null;
+        }
+    }
+
+    @Override
+    public ItemStack addFrom(final ItemStack other, final int amount)
+    {
+        if (amount > other.getAmount())
+        {
+            throw new IllegalArgumentException("amount to conbine can't be bigger than amount of items in stack.");
+        }
+        if (! this.isSimilar(other))
+        {
+            throw new IllegalArgumentException("Items must be similar to combine them.");
+        }
+
+        final int maxStack = this.material.getMaxStack();
+        if ((this.amount + amount) > maxStack)
+        {
+            final int pendingItems = (this.amount + amount) - maxStack;
+            this.amount = maxStack;
+
+            final BaseItemStack temp = new BaseItemStack(this);
+            temp.setAmount(pendingItems);
+            return temp;
+        }
+        else
+        {
+            this.amount += amount;
+
+            other.setAmount(other.getAmount() - amount);
             return null;
         }
     }

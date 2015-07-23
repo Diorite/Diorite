@@ -89,6 +89,16 @@ public interface ItemStack extends Cloneable
     ItemStack combine(ItemStack other);
 
     /**
+     * Adds part of one ItemStack to another and returns the remainder
+     *
+     * @param other  ItemStack to add
+     * @param amount amount of ItemStack to add
+     *
+     * @return All of which failed to add
+     */
+    ItemStack addFrom(ItemStack other, int amount);
+
+    /**
      * Clone this itemstack (deep clone).
      *
      * @return cloned itemstack.
