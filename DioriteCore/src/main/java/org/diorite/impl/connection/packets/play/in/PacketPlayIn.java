@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.Packet;
-import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayInListener;
 
 public abstract class PacketPlayIn extends Packet<PacketPlayInListener>
@@ -15,7 +14,7 @@ public abstract class PacketPlayIn extends Packet<PacketPlayInListener>
     {
     }
 
-    public PacketPlayIn(final PacketDataSerializer data)
+    public PacketPlayIn(final byte[] data)
     {
         super(data);
     }

@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.Packet;
-import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.handshake.PacketHandshakingInListener;
 
 public abstract class PacketHandshakingIn extends Packet<PacketHandshakingInListener>
@@ -15,7 +14,7 @@ public abstract class PacketHandshakingIn extends Packet<PacketHandshakingInList
     {
     }
 
-    public PacketHandshakingIn(final PacketDataSerializer data)
+    public PacketHandshakingIn(final byte[] data)
     {
         super(data);
     }
