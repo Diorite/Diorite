@@ -94,8 +94,8 @@ public class ItemStackImpl implements Dirtable, ItemStack
     public ItemStackImpl combine(final ItemStack other)
     {
         this.setDirty();
-        this.wrapped.combine(other);
-        return this;
+        ItemStack combined = this.wrapped.combine(other);
+        return (combined == null) ? null:new ItemStackImpl(combined);
     }
 
     @Override
