@@ -241,10 +241,10 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     {
         if (! this.viewers.contains(player))
         {
-            throw new IllegalArgumentException("Player must be a viewer of inventoy.");
+            throw new IllegalArgumentException("Player must be a viewer of inventory.");
         }
 
-        ServerImpl.getInstance().getPlayersManager().getRawPlayers().get(player.getUniqueID()).getNetworkManager().sendPacket(new PacketPlayOutWindowItems(this.windowId, this.content));
+        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayOutWindowItems(this.windowId, this.content));
     }
 
     @Override
