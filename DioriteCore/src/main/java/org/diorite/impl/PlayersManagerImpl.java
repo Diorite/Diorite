@@ -37,8 +37,6 @@ import org.diorite.TeleportData;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
-import org.diorite.inventory.item.BaseItemStack;
-import org.diorite.material.Material;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
 
@@ -91,17 +89,6 @@ public class PlayersManagerImpl implements Tickable
         player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
 
         player.getWorld().addEntity(player);
-
-        // debug code
-        player.getInventory().getFullEqInventory().add(new BaseItemStack(Material.ACACIA_FENCE));
-        player.getInventory().getFullEqInventory().add(new BaseItemStack(Material.BOOKSHELF));
-        player.getInventory().getFullEqInventory().add(new BaseItemStack(Material.BIRCH_FENCE_GATE));
-        player.getInventory().getFullEqInventory().add(new BaseItemStack(Material.BEDROCK));
-        player.getInventory().getFullEqInventory().add(new BaseItemStack(Material.ANVIL));
-        player.getInventory().getFullEqInventory().add(new BaseItemStack(Material.DROPPER));
-        player.getInventory().getFullEqInventory().add(new BaseItemStack(Material.DIAMOND_ORE));
-        player.getInventory().setItem(18, new BaseItemStack(Material.EMERALD_ORE, 7));
-        player.getInventory().update();
 
         this.server.addSync(() -> {
             PacketPlayOut[] newPackets = player.getSpawnPackets();
