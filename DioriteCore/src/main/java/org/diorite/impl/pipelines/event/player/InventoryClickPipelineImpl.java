@@ -313,7 +313,39 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
             return inv.atomicReplaceCursorItem(cursor, newCursor);
         }
+        else if (Objects.equals(ct, ClickType.DOUBLE_CLICK))
+        {
+            if (cursor == null)
+            {
+                return true;
+            }
 
+            final int slots = 44;
+
+            for (int i = 0; (i < slots) && (cursor.getAmount() < cursor.getMaterial().getMaxStack()); i++)
+            {
+                final ItemStack item = inv.getItem(i);
+                if ((item == null) || ! cursor.isSimilar(item) /* || slot type == RESULT */)
+                {
+                    continue;
+                }
+
+                final int newCursor = cursor.getAmount() +Math.min(item.getAmount(), cursor.getMaterial().getMaxStack() - cursor.getAmount());
+                final int newItem = item.getAmount() - newCursor;
+                cursor.setAmount(newCursor);
+                if (newItem <= 0)
+                {
+                    if (! inv.atomicReplace(i, item, null))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    item.setAmount(newItem);
+                }
+            }
+        }
         // TODO remember about throwing item on cursor to ground when closing eq
         else
         {
