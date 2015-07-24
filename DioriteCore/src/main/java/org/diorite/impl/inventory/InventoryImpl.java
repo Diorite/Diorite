@@ -29,7 +29,7 @@ import gnu.trove.set.hash.TShortHashSet;
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {
     protected final T holder;
-    protected final Set<Player> viewers = new ConcurrentSet<>(5, 0.2f, 6);
+    protected final Set<PlayerImpl> viewers = new ConcurrentSet<>(5, 0.2f, 6);
     protected String title;
 
     protected InventoryImpl(final T holder)
@@ -81,7 +81,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
             }
         }
         final PacketPlayOutSetSlot[] packetsArray = packets.toArray(new PacketPlayOutSetSlot[packets.size()]);
-        this.viewers.forEach(p -> ((PlayerImpl) p).getNetworkManager().sendPackets(packetsArray));
+        this.viewers.forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
     }
 
     /**
@@ -444,7 +444,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public Set<Player> getViewers()
+    public Set<? extends Player> getViewers()
     {
         return this.viewers;
     }

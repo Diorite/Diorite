@@ -8,6 +8,7 @@ import org.diorite.command.CommandPriority;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 
 public class GiveCmd extends SystemCommandImpl
@@ -41,7 +42,8 @@ public class GiveCmd extends SystemCommandImpl
             return;
         }
         // TODO: nbt, or other shit
-        target.getInventory().add(new BaseItemStack(mat, amount));
-        sender.sendSimpleColoredMessage("Added &9" + amount + "x&r of &3" + mat.getMinecraftId() + "&9:&3" + mat.getType()); // TODO: change message and add it to config.
+        final ItemStack[] notAdded = target.getInventory().add(new BaseItemStack(mat, amount));
+        final int notAddedAmount = (notAdded.length == 0) ? 0 : notAdded[0].getAmount();
+        sender.sendSimpleColoredMessage("Added &9" + (amount - notAddedAmount) + "x&r of &3" + mat.getMinecraftId() + "&9:&3" + mat.getType()); // TODO: change message and add it to config.
     }
 }

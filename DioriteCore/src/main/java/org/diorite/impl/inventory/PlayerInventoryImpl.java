@@ -2,6 +2,7 @@ package org.diorite.impl.inventory;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,8 +14,10 @@ import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerInventory;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
+import org.diorite.utils.DioriteUtils;
 
 public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements PlayerInventory
 {
@@ -42,18 +45,147 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     @Override
     public int firstEmpty()
     {
-        final int i = this.fullEq.firstEmpty();
+        int i = this.hotbar.firstEmpty();
+        int offset = this.hotbar.getSlotOffset();
         if (i == - 1)
         {
-            return - 1;
+            i = this.eq.firstEmpty();
+            if (i == - 1)
+            {
+                return - 1;
+            }
+            offset = this.eq.getSlotOffset();
         }
-        return 9 + i;
+        return offset + i;
+    }
+
+    @Override
+    public int first(final Material material)
+    {
+        int i = this.hotbar.first(material);
+        int offset = this.hotbar.getSlotOffset();
+        if (i == - 1)
+        {
+            i = this.eq.first(material);
+            if (i == - 1)
+            {
+                return - 1;
+            }
+            offset = this.eq.getSlotOffset();
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int first(final ItemStack item, final boolean withAmount)
+    {
+        int i = this.hotbar.first(item, withAmount);
+        int offset = this.hotbar.getSlotOffset();
+        if (i == - 1)
+        {
+            i = this.eq.first(item, withAmount);
+            if (i == - 1)
+            {
+                return - 1;
+            }
+            offset = this.eq.getSlotOffset();
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int first(final ItemStack item, final int startIndex, final boolean withAmount)
+    {
+        int offset = this.hotbar.getSlotOffset();
+        int start = (startIndex >= offset) ? (startIndex - offset) : startIndex;
+        int i = (start >= this.hotbar.size()) ? - 1 : this.hotbar.first(item, start, withAmount);
+        if (i == - 1)
+        {
+            offset += this.eq.getSlotOffset();
+            start = (startIndex >= offset) ? (startIndex - offset) : (startIndex);
+            i = (start >= offset) ? - 1 : this.eq.first(item, start - this.eq.getSlotOffset(), withAmount);
+            if ((i >= this.eq.size()) || (i == - 1))
+            {
+                return - 1;
+            }
+            i += this.eq.getSlotOffset();
+            return i;
+        }
+        return offset + i;
     }
 
     @Override
     public ItemStack[] add(final ItemStack... items)
     {
-        return this.fullEq.add(items);
+        Validate.noNullElements(items, "Item cannot be null");
+
+        final ItemStack[] leftover = new ItemStack[items.length];
+        boolean fully = true;
+        for (int i = 0; i < items.length; i++)
+        {
+            final ItemStack item = items[i];
+            int firstPartial = - 1;
+            while (true)
+            {
+                if (firstPartial != - 2)
+                {
+                    firstPartial = this.first(item, firstPartial + 1, false);
+                }
+                if ((firstPartial == - 1) || (firstPartial == - 2))
+                {
+                    final int firstFree = this.firstEmpty();
+                    if (firstFree == - 1)
+                    {
+                        leftover[i] = item;
+                        fully = false;
+                        break;
+                    }
+                    if (item.getAmount() > item.getMaterial().getMaxStack())
+                    {
+
+                        final ItemStack stack = new BaseItemStack(item);
+                        stack.setAmount(item.getMaterial().getMaxStack());
+                        this.setItem(firstFree, stack);
+                        item.setAmount(item.getAmount() - item.getMaterial().getMaxStack());
+                    }
+                    else
+                    {
+                        this.setItem(firstFree, item);
+                        break;
+                    }
+                }
+                else
+                {
+                    final ItemStack itemStack = this.getItem(firstPartial);
+
+                    if (itemStack.getAmount() >= itemStack.getMaterial().getMaxStack())
+                    {
+                        if (firstPartial == (this.fullEq.size() - 1))
+                        {
+                            firstPartial = - 2;
+                        }
+                        continue;
+                    }
+
+                    final int amount = item.getAmount();
+                    final int partialAmount = itemStack.getAmount();
+                    final int maxAmount = itemStack.getMaterial().getMaxStack();
+                    if ((amount + partialAmount) <= maxAmount)
+                    {
+                        itemStack.setAmount(amount + partialAmount);
+                        break;
+                    }
+                    itemStack.setAmount(maxAmount);
+                    item.setAmount((amount + partialAmount) - maxAmount);
+
+                    if (firstPartial == (this.fullEq.size() - 1))
+                    {
+                        firstPartial = - 2;
+                    }
+                }
+            }
+        }
+        return fully ? DioriteUtils.EMPTY_ITEM_STACK : leftover;
     }
 
     @Override
@@ -336,6 +468,12 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     public int getWindowId()
     {
         return this.windowId;
+    }
+
+    @Override
+    public int getSlotOffset()
+    {
+        return 0;
     }
 
 }

@@ -60,7 +60,7 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
 
     public boolean pickUpItem(final PlayerImpl player)
     {
-        final ItemStack[] left = player.getInventory().getFullEqInventory().add(this.getItemStack());
+        final ItemStack[] left = player.getInventory().add(this.getItemStack());
         if (left.length != 0)
         {
             this.setItemStack(left[0]);

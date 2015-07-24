@@ -59,6 +59,12 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     }
 
     @Override
+    public int getSlotOffset()
+    {
+        return this.content.offset();
+    }
+
+    @Override
     public void softUpdate()
     {
         throw new UnsupportedOperationException("soft update should be called only for root EQ.");

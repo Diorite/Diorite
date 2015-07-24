@@ -14,6 +14,7 @@ import org.diorite.GameMode;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
+import org.diorite.inventory.Inventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
@@ -31,7 +32,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayOutTransaction(evt.getWindowId(), evt.getActionNumber(), false));
                 return;
             }
-            System.out.println(evt.toString());
+//            System.out.println(evt.toString());
             final boolean accepted = this.handleClick(evt);
 
             ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayOutTransaction(evt.getWindowId(), evt.getActionNumber(), accepted));
@@ -57,6 +58,10 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         {
             if (Objects.equals(ct, ClickType.MOUSE_LEFT))
             {
+                if (slot == -1) // click in non-slot place, like inventory border.
+                {
+                    return true;
+                }
                 if (cursor == null)
                 {
                     if ((clicked != null) && (! inv.atomicReplace(slot, clicked, null) || ! inv.atomicReplaceCursorItem(null, clicked)))
@@ -90,6 +95,10 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else if (Objects.equals(ct, ClickType.MOUSE_RIGHT))
             {
+                if (slot == -1) // click in non-slot place, like inventory border.
+                {
+                    return true;
+                }
                 if (cursor == null)
                 {
                     if (clicked == null)
@@ -336,6 +345,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
                 final int slots = 44;
 
+                int firstFullSlot = - 1; // minecraft skip full stacks and use them only if there is no smaller ones
                 for (int i = 0; (i < slots) && (cursor.getAmount() < cursor.getMaterial().getMaxStack()); i++)
                 {
                     final ItemStack item = inv.getItem(i);
@@ -343,20 +353,25 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     {
                         continue;
                     }
-
-                    final int newCursor = cursor.getAmount() + Math.min(item.getAmount(), cursor.getMaterial().getMaxStack() - cursor.getAmount());
-                    final int newItem = item.getAmount() - newCursor;
-                    cursor.setAmount(newCursor);
-                    if (newItem <= 0)
+                    if (item.getAmount() >= item.getMaterial().getMaxStack())
                     {
-                        if (! inv.atomicReplace(i, item, null))
+                        if (firstFullSlot == - 1)
                         {
-                            return false;
+                            firstFullSlot = i;
                         }
+                        continue;
                     }
-                    else
+
+                    if (! doubleClick(inv, i, cursor))
                     {
-                        item.setAmount(newItem);
+                        return false;
+                    }
+                }
+                if ((firstFullSlot != - 1) && (cursor.getAmount() < cursor.getMaterial().getMaxStack()))
+                {
+                    if (! doubleClick(inv, firstFullSlot, cursor))
+                    {
+                        return false;
                     }
                 }
             }
@@ -377,6 +392,26 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 cursor.setClean();
             }
         }
+    }
+
+    private static boolean doubleClick(final Inventory inv, final int slot, final ItemStack cursor)
+    {
+        final ItemStack item = inv.getItem(slot);
+        final int newCursor = cursor.getAmount() + Math.min(item.getAmount(), cursor.getMaterial().getMaxStack() - cursor.getAmount());
+        final int newItem = item.getAmount() - (newCursor - cursor.getAmount());
+        cursor.setAmount(newCursor);
+        if (newItem <= 0)
+        {
+            if (! inv.atomicReplace(slot, item, null))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            item.setAmount(newItem);
+        }
+        return true;
     }
 
     protected int getAmountToStayInHand(final int amount)
