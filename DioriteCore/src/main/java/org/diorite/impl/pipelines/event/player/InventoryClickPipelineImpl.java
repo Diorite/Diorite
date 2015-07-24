@@ -272,7 +272,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 if (! Objects.equals(player.getGameMode(), GameMode.CREATIVE))
                 {
-                    return true; // true? false?
+                    return true;
                 }
 
                 if ((cursor != null) && (clicked != null))
