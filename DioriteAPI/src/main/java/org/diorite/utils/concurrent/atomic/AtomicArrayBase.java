@@ -73,6 +73,12 @@ public class AtomicArrayBase<E> implements Serializable, AtomicArray<E>
     }
 
     @Override
+    public int offset()
+    {
+        return 0;
+    }
+
+    @Override
     public E get(final int i)
     {
         return this.getRaw(this.checkedByteOffset(i));

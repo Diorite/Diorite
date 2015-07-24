@@ -8,8 +8,8 @@ import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
 import org.diorite.entity.Player;
-import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.DioriteUtils;
 
@@ -553,6 +553,7 @@ public interface Inventory extends Iterable<ItemStack>
             while (true)
             {
                 firstPartial = this.first(item, firstPartial + 1, false);
+                System.out.println(firstPartial);
                 if (firstPartial == - 1)
                 {
                     final int firstFree = this.firstEmpty();
@@ -579,6 +580,11 @@ public interface Inventory extends Iterable<ItemStack>
                 else
                 {
                     final ItemStack itemStack = this.getItem(firstPartial);
+
+                    if (itemStack.getAmount() >= itemStack.getMaterial().getMaxStack())
+                    {
+                        continue;
+                    }
 
                     final int amount = item.getAmount();
                     final int partialAmount = itemStack.getAmount();
@@ -611,7 +617,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * @return A collection of players who are viewing this Inventory.
      */
-    Collection<Player> getViewers();
+    Collection<? extends Player> getViewers();
 
     /**
      * @return A String with the title of inventory.

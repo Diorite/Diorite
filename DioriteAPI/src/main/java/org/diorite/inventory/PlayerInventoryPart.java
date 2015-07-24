@@ -22,4 +22,23 @@ public interface PlayerInventoryPart extends Inventory
     {
         return this.getPlayerInventory().getWindowId();
     }
+
+    /**
+     * Returns offset of player inventory part. <br>
+     * Always 0 for root inventory.
+     *
+     * @return Offset of player inventory part
+     */
+    int getSlotOffset();
+
+    /**
+     * Returns offset of player inventory part relative to given part. <br>
+     * May return negative number if used on part that don't contains given part.
+     *
+     * @return Offset of player inventory part relative to given part
+     */
+    default int getSlotOffset(final PlayerInventoryPart part)
+    {
+        return part.getSlotOffset() - this.getSlotOffset();
+    }
 }

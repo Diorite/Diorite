@@ -16,6 +16,14 @@ public interface AtomicArray<E> extends Iterable<E>
     int length();
 
     /**
+     * Returns the offset of the array part.
+     * It will be 0 for base(full) array.
+     *
+     * @return the offset of the array
+     */
+    int offset();
+
+    /**
      * Gets the current value at position {@code i}.
      *
      * @param i the index

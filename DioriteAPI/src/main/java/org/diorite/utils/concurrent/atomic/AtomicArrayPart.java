@@ -34,11 +34,6 @@ public class AtomicArrayPart<E> implements AtomicArray<E>
         return this.base;
     }
 
-    public int getOffset()
-    {
-        return this.offset;
-    }
-
     protected int addOffset(final int i)
     {
         if (i >= this.length)
@@ -52,6 +47,12 @@ public class AtomicArrayPart<E> implements AtomicArray<E>
     public int length()
     {
         return this.length;
+    }
+
+    @Override
+    public int offset()
+    {
+        return this.offset;
     }
 
     @Override
