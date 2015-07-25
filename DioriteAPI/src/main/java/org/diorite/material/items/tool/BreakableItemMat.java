@@ -1,7 +1,7 @@
 package org.diorite.material.items.tool;
 
 /**
- * Represents an item that have durability and can break when it go above {@link #getMaxDurability()}
+ * Represents an item that have durability and can break when it go above {@link #getBaseDurability()}
  */
 public interface BreakableItemMat
 {
@@ -11,7 +11,7 @@ public interface BreakableItemMat
      *
      * @return max durbaility for this item.
      */
-    int getMaxDurability();
+    int getBaseDurability();
 
     /**
      * Returns current level of durability, it is equals to item sub-id.
@@ -30,19 +30,19 @@ public interface BreakableItemMat
      */
     default int getLeftUses()
     {
-        return this.getMaxDurability() - this.getDurability();
+        return this.getBaseDurability() - this.getDurability();
     }
 
     /**
      * Returns if this item have valid durability so it is bigger or equals to 0,
-     * and smaller than {@link #getMaxDurability()}
+     * and smaller than {@link #getBaseDurability()}
      *
      * @return if this item have valid durability;
      */
     default boolean haveValidDurability()
     {
         final int dur = this.getDurability();
-        return (dur >= 0) && (dur < this.getMaxDurability());
+        return (dur >= 0) && (dur < this.getBaseDurability());
     }
 
     /**

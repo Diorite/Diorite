@@ -28,6 +28,16 @@ public abstract class ItemMaterialData extends Material
     }
 
     /**
+     * Check if item is an armor. <br>
+     *
+     * @return true if item is an Armor.
+     */
+    public boolean isArmor()
+    {
+        return false;
+    }
+
+    /**
      * Check if item can be placed, so it will change to the block. Like doors. <br>
      * Item like that should implements {@link PlaceableMat}
      * @return if item is placeable.

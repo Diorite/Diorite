@@ -3,7 +3,7 @@ package org.diorite.material.items.tool;
 import org.diorite.material.ItemMaterialData;
 
 /**
- * Represents a tool item that have durability and can break when it go above {@link #getMaxDurability()} <br>
+ * Represents a tool item that have durability and can break when it go above {@link #getBaseDurability()} <br>
  * Tool durability types should be cached
  */
 public abstract class ToolMat extends ItemMaterialData implements BreakableItemMat
@@ -23,5 +23,4 @@ public abstract class ToolMat extends ItemMaterialData implements BreakableItemM
     {
         return true;
     }
-
 }
