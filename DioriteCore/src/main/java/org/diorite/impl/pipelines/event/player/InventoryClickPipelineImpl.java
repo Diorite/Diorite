@@ -385,11 +385,11 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         {
             if (clicked != null)
             {
-                clicked.setClean();
+                clicked.setDirty();
             }
             if (cursor != null)
             {
-                cursor.setClean();
+                cursor.setDirty();
             }
         }
     }
