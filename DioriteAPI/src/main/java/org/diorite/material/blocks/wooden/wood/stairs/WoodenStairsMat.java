@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.material.FuelMat;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.material.blocks.wooden.wood.WoodMat;
@@ -12,7 +13,7 @@ import org.diorite.utils.collections.maps.SimpleEnumMap;
 /**
  * Abstract class for all WoodenStairs-based blocks
  */
-public abstract class WoodenStairsMat extends WoodMat implements StairsMat
+public abstract class WoodenStairsMat extends WoodMat implements StairsMat, FuelMat
 {
     protected final BlockFace face;
     protected final boolean   upsideDown;
@@ -32,6 +33,13 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat
     }
 
     private static final SimpleEnumMap<WoodTypeMat, WoodenStairsMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
+    }
 
     @Override
     public abstract WoodenStairsMat getUpsideDown(final boolean upsideDown);

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteRandom;
+import org.diorite.utils.math.IntRange;
 import org.diorite.world.Block;
 
 // TODO: add more sublcasses for easier creating drops configs.
@@ -45,6 +46,32 @@ public abstract class PossibleDrop
      * @param block    may be null! Block related to this drop simulation if exist.
      */
     public abstract void simulateDrop(DioriteRandom rand, Set<ItemStack> drops, ItemStack usedTool, Block block);
+
+    /**
+     * Implementation of this method should simulate real experience drop from block. <br>
+     * Method must handle case when block or usedTool is null.
+     *
+     * @param rand     random instance, should be used if random number is needed.
+     * @param usedTool may be null! Used tool.
+     * @param block    may be null! Block related to this drop simulation if exist.
+     */
+    public int simulateExperienceDrop(final DioriteRandom rand, final ItemStack usedTool, final Block block)
+    {
+        return 0;
+    }
+
+    /**
+     * Implementation of this method should return possible experience drop range from block. <br>
+     * Method must handle case when block or usedTool is null.
+     *
+     * @param rand     random instance, should be used if random number is needed.
+     * @param usedTool may be null! Used tool.
+     * @param block    may be null! Block related to this drop simulation if exist.
+     */
+    public IntRange getExperienceDrop(final DioriteRandom rand, final ItemStack usedTool, final Block block)
+    {
+        return IntRange.EMPTY;
+    }
 
     @Override
     public boolean equals(final Object o)

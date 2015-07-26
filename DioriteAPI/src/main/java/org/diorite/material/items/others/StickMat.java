@@ -2,6 +2,7 @@ package org.diorite.material.items.others;
 
 import java.util.Map;
 
+import org.diorite.material.FuelMat;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -9,7 +10,7 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
-public class StickMat extends ItemMaterialData
+public class StickMat extends ItemMaterialData implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -46,6 +47,12 @@ public class StickMat extends ItemMaterialData
     public StickMat getType(final String type)
     {
         return getByEnumName(type);
+    }
+
+    @Override
+    public int getFuelPower()
+    {
+        return 500;
     }
 
     /**

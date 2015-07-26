@@ -1,5 +1,6 @@
 package org.diorite.material.blocks.wooden.wood.fence;
 
+import org.diorite.material.FuelMat;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.FenceMat;
 import org.diorite.material.blocks.wooden.wood.WoodMat;
@@ -8,7 +9,7 @@ import org.diorite.utils.collections.maps.SimpleEnumMap;
 /**
  * Abstract class for all WoodenFence-based blocks
  */
-public abstract class WoodenFenceMat extends WoodMat implements FenceMat
+public abstract class WoodenFenceMat extends WoodMat implements FenceMat, FuelMat
 {
     protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodTypeMat woodType, final float hardness, final float blastResistance)
     {
@@ -21,6 +22,13 @@ public abstract class WoodenFenceMat extends WoodMat implements FenceMat
     }
 
     private static final SimpleEnumMap<WoodTypeMat, WoodenFenceMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
+    }
 
     @Override
     public WoodenFenceMat getWoodType(final WoodTypeMat woodType)

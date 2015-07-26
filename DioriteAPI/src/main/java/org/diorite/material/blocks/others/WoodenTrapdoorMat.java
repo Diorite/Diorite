@@ -3,6 +3,7 @@ package org.diorite.material.blocks.others;
 import java.util.Map;
 
 import org.diorite.BlockFace;
+import org.diorite.material.FuelMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -11,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "WoodenTrapdoor" and all its subtypes.
  */
-public class WoodenTrapdoorMat extends TrapdoorMat
+public class WoodenTrapdoorMat extends TrapdoorMat implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -97,6 +98,13 @@ public class WoodenTrapdoorMat extends TrapdoorMat
     public WoodenTrapdoorMat getAttachedFace(final BlockFace face)
     {
         return getByID(combine(face.getOppositeFace(), this.open, this.onTop));
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

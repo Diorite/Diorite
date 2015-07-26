@@ -4,11 +4,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.FuelMat;
 
 /**
  * Base abstract class for mushroom blocks.
  */
-public abstract class MushroomBlockMat extends BlockMaterialData
+public abstract class MushroomBlockMat extends BlockMaterialData implements FuelMat
 {
     protected final Type mushroomType;
 
@@ -22,6 +23,13 @@ public abstract class MushroomBlockMat extends BlockMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.mushroomType = mushroomType;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

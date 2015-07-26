@@ -2,6 +2,7 @@ package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
+import org.diorite.material.FuelMat;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -11,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Planks" and all its subtypes.
  */
-public class PlanksMat extends WoodMat
+public class PlanksMat extends WoodMat implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -59,6 +60,13 @@ public class PlanksMat extends WoodMat
     public PlanksMat getWoodType(final WoodTypeMat woodType)
     {
         return getPlanks(woodType);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

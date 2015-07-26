@@ -3,6 +3,7 @@ package org.diorite.material.blocks.wooden;
 import java.util.Map;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.FuelMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -11,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Bookshelf" and all its subtypes.
  */
-public class BookshelfMat extends BlockMaterialData
+public class BookshelfMat extends BlockMaterialData implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -44,6 +45,13 @@ public class BookshelfMat extends BlockMaterialData
     public BookshelfMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

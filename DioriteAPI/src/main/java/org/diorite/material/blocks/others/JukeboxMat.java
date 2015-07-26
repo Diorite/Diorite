@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -15,7 +16,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Jukebox" and all its subtypes.
  */
-public class JukeboxMat extends BlockMaterialData
+public class JukeboxMat extends BlockMaterialData implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -81,6 +82,13 @@ public class JukeboxMat extends BlockMaterialData
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("withDisc", this.withDisc).toString();
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

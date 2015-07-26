@@ -2,6 +2,7 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
+import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -11,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "WoodenPressurePlate" and all its subtypes.
  */
-public class WoodenPressurePlateMat extends PressurePlateMat
+public class WoodenPressurePlateMat extends PressurePlateMat implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -62,6 +63,13 @@ public class WoodenPressurePlateMat extends PressurePlateMat
     public WoodenPressurePlateMat getPowered(final boolean powered)
     {
         return getByID(powered ? 1 : 0);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -15,7 +16,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Sapling" and all its subtypes.
  */
-public class SaplingMat extends WoodMat
+public class SaplingMat extends WoodMat implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -113,6 +114,13 @@ public class SaplingMat extends WoodMat
     public boolean isSolid()
     {
         return false;
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 500;
     }
 
     public enum SaplingStage

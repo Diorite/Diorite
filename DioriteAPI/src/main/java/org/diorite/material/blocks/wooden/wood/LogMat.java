@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.RotatableMat;
@@ -18,7 +19,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Log" and all its subtypes.
  */
-public class LogMat extends WoodMat implements RotatableMat
+public class LogMat extends WoodMat implements RotatableMat, FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -157,6 +158,13 @@ public class LogMat extends WoodMat implements RotatableMat
             default:
                 return this.getRotated(RotateAxisMat.UP_DOWN);
         }
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

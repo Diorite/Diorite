@@ -2,6 +2,7 @@ package org.diorite.material.blocks.wooden;
 
 import java.util.Map;
 
+import org.diorite.material.FuelMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -10,7 +11,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "NoteBlock" and all its subtypes.
  */
-public class NoteBlockMat extends WoodenMat
+public class NoteBlockMat extends WoodenMat implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -43,6 +44,13 @@ public class NoteBlockMat extends WoodenMat
     public NoteBlockMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

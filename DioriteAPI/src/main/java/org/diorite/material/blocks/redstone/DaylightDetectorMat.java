@@ -2,6 +2,7 @@ package org.diorite.material.blocks.redstone;
 
 import java.util.Map;
 
+import org.diorite.material.FuelMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -11,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * Class representing block "DaylightDetector" and all its subtypes.
  */
 @SuppressWarnings("MagicNumber")
-public class DaylightDetectorMat extends AbstractDaylightDetectorMat
+public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -82,6 +83,12 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat
     public DaylightDetectorMat getPowered(final boolean powered)
     {
         return getByID(powered ? 15 : 0);
+    }
+
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

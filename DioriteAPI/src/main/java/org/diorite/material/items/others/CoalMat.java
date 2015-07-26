@@ -2,6 +2,7 @@ package org.diorite.material.items.others;
 
 import java.util.Map;
 
+import org.diorite.material.FuelMat;
 import org.diorite.material.blocks.stony.ore.OreMat;
 import org.diorite.material.blocks.stony.oreblocks.OreBlockMat;
 import org.diorite.material.items.OreItemMat.OreItemMatExt;
@@ -11,7 +12,7 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
-public class CoalMat extends OreItemMatExt
+public class CoalMat extends OreItemMatExt implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -54,6 +55,12 @@ public class CoalMat extends OreItemMatExt
     public CoalMat getType(final String type)
     {
         return getByEnumName(type);
+    }
+
+    @Override
+    public int getFuelPower()
+    {
+        return 8000;
     }
 
     /**

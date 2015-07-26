@@ -2,6 +2,7 @@ package org.diorite.material.items.block;
 
 import java.util.Map;
 
+import org.diorite.material.FuelMat;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -10,7 +11,7 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
-public class BannerMat extends ItemMaterialData implements PlaceableMat
+public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -47,6 +48,12 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat
     public BannerMat getType(final String type)
     {
         return getByEnumName(type);
+    }
+
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     /**

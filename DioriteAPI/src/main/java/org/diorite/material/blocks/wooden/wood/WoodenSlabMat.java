@@ -2,6 +2,7 @@ package org.diorite.material.blocks.wooden.wood;
 
 import java.util.Map;
 
+import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.SlabTypeMat;
@@ -13,7 +14,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "WoodenSlab" and all its subtypes.
  */
-public class WoodenSlabMat extends WoodSlabMat
+public class WoodenSlabMat extends WoodSlabMat implements FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -70,6 +71,13 @@ public class WoodenSlabMat extends WoodSlabMat
     public WoodenSlabMat getWoodType(final WoodTypeMat woodType)
     {
         return getByID(combine(woodType, this.slabType));
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 750;
     }
 
     /**

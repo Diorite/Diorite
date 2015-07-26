@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -17,7 +18,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 /**
  * Class representing block "Chest" and all its subtypes.
  */
-public class ChestMat extends BlockMaterialData implements DirectionalMat
+public class ChestMat extends BlockMaterialData implements DirectionalMat, FuelMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -87,6 +88,13 @@ public class ChestMat extends BlockMaterialData implements DirectionalMat
     public ChestMat getBlockFacing(final BlockFace face)
     {
         return getByID(combine(face));
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public int getFuelPower()
+    {
+        return 1500;
     }
 
     private static byte combine(final BlockFace face)
