@@ -10,7 +10,7 @@ public abstract class ToolMat extends ItemMaterialData implements BreakableItemM
 {
     protected ToolMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, 1, typeName, type);
     }
 
     protected ToolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
@@ -23,4 +23,25 @@ public abstract class ToolMat extends ItemMaterialData implements BreakableItemM
     {
         return true;
     }
+
+    @Override
+    public int getDurability()
+    {
+        return this.getType();
+    }
+
+    @Override
+    public abstract ToolMat getType(final String type);
+
+    @Override
+    public abstract ToolMat getType(final int type);
+
+    @Override
+    public abstract ToolMat increaseDurability();
+
+    @Override
+    public abstract ToolMat decreaseDurability();
+
+    @Override
+    public abstract ToolMat setDurability(final int durability);
 }

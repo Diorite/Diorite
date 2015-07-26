@@ -18,7 +18,7 @@ public class ArmorMaterial extends ASimpleEnum<ArmorMaterial>
 {
     public static final ArmorMaterial LEATHER;
     public static final ArmorMaterial IRON;
-    public static final ArmorMaterial CHAIN; // can't be crafted :<
+    public static final ArmorMaterial CHAINMAIL; // can't be crafted :<
     public static final ArmorMaterial GOLD;
     public static final ArmorMaterial DIAMOND;
 
@@ -45,12 +45,12 @@ public class ArmorMaterial extends ASimpleEnum<ArmorMaterial>
         }
         {
             final SimpleEnumMap<ArmorType, ArmorMaterialTypeData> properties = new SimpleEnumMap<>(4);
-            CHAIN = new ArmorMaterial("CHAIN", Material.FIRE, 12, properties);
-            properties.put(ArmorType.HELMET, new ArmorMaterialTypeData(CHAIN, ArmorType.HELMET, 166, 2));
-            properties.put(ArmorType.CHESTPLATE, new ArmorMaterialTypeData(CHAIN, ArmorType.CHESTPLATE, 241, 5));
-            properties.put(ArmorType.LEGGINGS, new ArmorMaterialTypeData(CHAIN, ArmorType.LEGGINGS, 226, 4));
-            properties.put(ArmorType.BOOTS, new ArmorMaterialTypeData(CHAIN, ArmorType.BOOTS, 196, 1));
-            ArmorMaterial.register(CHAIN);
+            CHAINMAIL = new ArmorMaterial("CHAINMAIL", Material.FIRE, 12, properties);
+            properties.put(ArmorType.HELMET, new ArmorMaterialTypeData(CHAINMAIL, ArmorType.HELMET, 166, 2));
+            properties.put(ArmorType.CHESTPLATE, new ArmorMaterialTypeData(CHAINMAIL, ArmorType.CHESTPLATE, 241, 5));
+            properties.put(ArmorType.LEGGINGS, new ArmorMaterialTypeData(CHAINMAIL, ArmorType.LEGGINGS, 226, 4));
+            properties.put(ArmorType.BOOTS, new ArmorMaterialTypeData(CHAINMAIL, ArmorType.BOOTS, 196, 1));
+            ArmorMaterial.register(CHAINMAIL);
         }
         {
             final SimpleEnumMap<ArmorType, ArmorMaterialTypeData> properties = new SimpleEnumMap<>(4);

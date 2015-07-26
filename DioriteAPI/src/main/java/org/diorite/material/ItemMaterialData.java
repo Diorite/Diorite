@@ -40,6 +40,7 @@ public abstract class ItemMaterialData extends Material
     /**
      * Check if item can be placed, so it will change to the block. Like doors. <br>
      * Item like that should implements {@link PlaceableMat}
+     *
      * @return if item is placeable.
      */
     public boolean canBePlaced()
@@ -50,6 +51,7 @@ public abstract class ItemMaterialData extends Material
     /**
      * Check if item can be eaten by player. <br>
      * Item like that should implements {@link EdibleItemMat}
+     *
      * @return if item can be eaten by player
      */
     public boolean isEdible()
@@ -65,4 +67,10 @@ public abstract class ItemMaterialData extends Material
 
     @Override
     public abstract ItemMaterialData[] types();
+
+    @Override
+    public abstract ItemMaterialData getType(final String type);
+
+    @Override
+    public abstract ItemMaterialData getType(final int type);
 }

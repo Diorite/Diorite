@@ -51,6 +51,7 @@ public interface BreakableItemMat
      * more broken material type than current one. <br>
      * Like if current durability is 5, this method will return material with
      * durability equals to 6, so it is weaker. <br>
+     * Should return null if item isn't in valid range. <br>
      * Implementation of this method should be faster than using {@link #setDurability(int)}
      *
      * @return sub-type of item with "increased" durability.
@@ -63,6 +64,7 @@ public interface BreakableItemMat
      * less broken material type than current one. <br>
      * Like if current durability is 5, this method will return material with
      * durability equals to 4, so it is stronger. <br>
+     * Should return null if item isn't in valid range. <br>
      * Implementation of this method should be faster than using {@link #setDurability(int)}
      *
      * @return sub-type of item with "decreased" durability.
