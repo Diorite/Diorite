@@ -10,6 +10,7 @@ import org.apache.commons.lang3.Validate;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.slot.Slot;
 import org.diorite.material.Material;
 import org.diorite.utils.DioriteUtils;
 
@@ -23,6 +24,14 @@ public interface Inventory extends Iterable<ItemStack>
      */
     ItemStack[] getContents();
 
+    /**
+     * Returns slot properties for given index.
+     *
+     * @param slot index of slot.
+     *
+     * @return Slot properties for given index.
+     */
+    Slot getSlot(int slot);
 
     /**
      * Completely replaces the inventory's contents. Removes all existing
