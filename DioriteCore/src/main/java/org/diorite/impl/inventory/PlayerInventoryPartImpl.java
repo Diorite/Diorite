@@ -8,6 +8,7 @@ import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.PlayerInventoryPart;
+import org.diorite.inventory.slot.Slot;
 
 public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> implements PlayerInventoryPart
 {
@@ -38,6 +39,12 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     public PlayerInventory getPlayerInventory()
     {
         return this.playerInventory;
+    }
+
+    @Override
+    public Slot getSlot(final int slot)
+    {
+        return this.playerInventory.getSlot(slot);
     }
 
     @Override

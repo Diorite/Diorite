@@ -44,7 +44,9 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     /**
-     * @return Raw atomic array with contents of eq
+     * Returns raw atomic array with contents of eq.
+     *
+     * @return raw atomic array with contents of eq.
      */
     public abstract ItemStackImplArray getArray();
 

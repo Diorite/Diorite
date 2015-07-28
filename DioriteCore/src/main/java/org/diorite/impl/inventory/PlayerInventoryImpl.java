@@ -1,5 +1,6 @@
 package org.diorite.impl.inventory;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.Validate;
@@ -16,6 +17,7 @@ import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.slot.Slot;
 import org.diorite.material.Material;
 import org.diorite.utils.DioriteUtils;
 
@@ -28,8 +30,21 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     private final PlayerImpl holder;
     private final DragControllerImpl             drag       = new DragControllerImpl();
     private final ItemStackImplArray             content    = ItemStackImplArray.create(InventoryType.PLAYER.getSize());
+    private final Slot[]                         slots      = new Slot[InventoryType.PLAYER.getSize()];
     private final AtomicReference<ItemStackImpl> cursorItem = new AtomicReference<>();
     private boolean wasCursorNotNull; // used only by softUpdate
+
+    {
+        int i = 0;
+        this.slots[i] = Slot.BASE_RESULT_SLOT;
+        Arrays.fill(this.slots, 1, i + InventoryType.PLAYER_CRAFTING.getSize(), Slot.BASE_CRAFTING_SLOT);
+        i += InventoryType.PLAYER_CRAFTING.getSize();
+        Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_ARMOR.getSize()) - 1, Slot.BASE_ARMOR_SLOT);
+        i += InventoryType.PLAYER_ARMOR.getSize() - 1;
+        Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_EQ.getSize()), Slot.BASE_CONTAINER_SLOT);
+        i += InventoryType.PLAYER_EQ.getSize();
+        Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_HOTBAR.getSize()), Slot.BASE_HOTBAR_SLOT);
+    }
 
     public PlayerInventoryImpl(final PlayerImpl holder, final int windowId)
     {
@@ -57,6 +72,12 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
             offset = this.eq.getSlotOffset();
         }
         return offset + i;
+    }
+
+    @Override
+    public Slot getSlot(final int slot)
+    {
+        return this.slots[slot];
     }
 
     @Override
