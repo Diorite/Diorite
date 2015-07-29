@@ -17,8 +17,10 @@ import org.diorite.inventory.ClickType;
 import org.diorite.inventory.Inventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.slot.Slot;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
+@SuppressWarnings("ObjectEquality")
 public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInventoryClickEvent> implements InventoryClickPipeline
 {
     private static final int HOTBAR_BEGIN_ID = 36;
@@ -54,11 +56,13 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         final PlayerInventoryImpl inv = player.getInventory(); // TODO
 
         final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem());
+
+        final Slot slotProp = inv.getSlot(slot);
         try
         {
             if (Objects.equals(ct, ClickType.MOUSE_LEFT))
             {
-                if (slot == -1) // click in non-slot place, like inventory border.
+                if (slot == - 1) // click in non-slot place, like inventory border.
                 {
                     return true;
                 }
@@ -82,11 +86,12 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     }
                     else
                     {
-                        if (slot == 0) // result slot, TODO: slot type, finish for other clicks
+                        final ItemStack item = slotProp.canHoldItem(cursor);
+                        if ((item == null) && (item != cursor))
                         {
                             return true;
                         }
-                        if (! inv.atomicReplace(slot, clicked, cursor) || ! inv.atomicReplaceCursorItem(cursor, clicked))
+                        else if (! inv.atomicReplace(slot, clicked, cursor) || ! inv.atomicReplaceCursorItem(cursor, clicked))
                         {
                             return false; // item changed before we made own change
                         }
@@ -95,7 +100,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else if (Objects.equals(ct, ClickType.MOUSE_RIGHT))
             {
-                if (slot == -1) // click in non-slot place, like inventory border.
+                if (slot == - 1) // click in non-slot place, like inventory border.
                 {
                     return true;
                 }
@@ -122,6 +127,11 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     if (clicked == null)
                     {
+                        final ItemStack item = slotProp.canHoldItem(cursor);
+                        if (item == null)
+                        {
+                            return true;
+                        }
                         final ItemStack splitted = cursor.split(1);
                         if (cursor.getAmount() == 0)
                         {
@@ -144,6 +154,14 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                             {
                                 return true; // no place to add more items.
                             }
+
+                            final ItemStack temp = new BaseItemStack(clicked);
+                            temp.setAmount(temp.getAmount() + 1);
+                            final ItemStack item = slotProp.canHoldItem(temp);
+                            if (temp != item) // this slot can't hold more items as canHold returned other stack than given when used bigger stack.
+                            {
+                                return true;
+                            }
                             final ItemStack rest = clicked.addFrom(cursor, 1);
                             if (cursor.getAmount() == 0)
                             {
@@ -159,7 +177,12 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                         }
                         else
                         {
-                            if (! inv.atomicReplace(slot, clicked, cursor) || ! inv.atomicReplaceCursorItem(cursor, clicked))
+                            final ItemStack item = slotProp.canHoldItem(cursor);
+                            if ((item == null) && (item != cursor))
+                            {
+                                return true;
+                            }
+                            else if (! inv.atomicReplace(slot, clicked, cursor) || ! inv.atomicReplaceCursorItem(cursor, clicked))
                             {
                                 return false;
                             }
@@ -184,7 +207,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     {
                         return false;
                     }
-                    inv.getFullEqInventory().add(clicked);
+                    inv.getEqInventory().add(clicked);
                 }
                 else
                 {
