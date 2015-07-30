@@ -227,12 +227,16 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     {
                         return false;
                     }
-                    // TODO wywalic itemek na ziemie
+                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                    item.setItemStack(new BaseItemStack(clicked));
+                    player.getWorld().addEntity(item);
                 }
                 else
                 {
                     final ItemStack toDrop = clicked.split(1);
-                    // TODO wywalic itemek toDrop na ziemie
+                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                    item.setItemStack(new BaseItemStack(toDrop));
+                    player.getWorld().addEntity(item);
                 }
             }
             else if (Objects.equals(ct, ClickType.CTRL_DROP_KEY))
@@ -241,8 +245,9 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     return false;
                 }
-
-                // TODO Gdy juz beda entities to wywalic itemek na ziemie. Aktualnie po prostu znika
+                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                item.setItemStack(new BaseItemStack(clicked));
+                player.getWorld().addEntity(item);
             }
             else if (ct.getMode() == 2) // 2 -> hot bar action
             {
@@ -265,7 +270,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     return false;
                 }
                 final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                item.setItemStack(new BaseItemStack(cursor.getMaterial(), cursor.getAmount()));
+                item.setItemStack(new BaseItemStack(cursor));
                 player.getWorld().addEntity(item);
                 return true;
             }
@@ -277,7 +282,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     return true;
                 }
                 final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                item.setItemStack(new BaseItemStack(cursor.getMaterial(), 1));
+                item.setItemStack(new BaseItemStack(cursor.getMaterial(), 1)); // TODO: itemmeta
                 if (cursor.getAmount() == 1)
                 {
                     if (! inv.atomicReplaceCursorItem(cursor, null))
