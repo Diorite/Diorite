@@ -2,6 +2,7 @@ package org.diorite.inventory;
 
 import org.diorite.entity.ArmoredEntity;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.ArmorType;
 
 public interface EntityEquipment
 {
@@ -29,6 +30,19 @@ public interface EntityEquipment
      * @return The ItemStack in the boots slot
      */
     ItemStack getBoots();
+
+    /**
+     * Put the given ItemStack into the given armor slot. This does not check if
+     * the ItemStack is a valid type for this slot.
+     *
+     * @param armor The ItemStack to use as armor.
+     *
+     * @return true if item was set.
+     */
+    default boolean setArmor(final ArmorType type, final ItemStack armor)
+    {
+        return type.setItem(this, armor);
+    }
 
     /**
      * Put the given ItemStack into the helmet slot. This does not check if

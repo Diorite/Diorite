@@ -1,6 +1,8 @@
 package org.diorite.inventory;
 
 import org.diorite.entity.Player;
+import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.ArmorType;
 
 public interface PlayerArmorInventory extends Inventory, EntityEquipment, PlayerInventoryPart
 {
@@ -15,4 +17,5 @@ public interface PlayerArmorInventory extends Inventory, EntityEquipment, Player
     {
         return this.getHolder();
     }
+
 }

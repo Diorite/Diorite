@@ -1,5 +1,7 @@
 package org.diorite.material;
 
+import org.diorite.inventory.EntityEquipment;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
@@ -9,24 +11,56 @@ import gnu.trove.map.TIntObjectMap;
  * Represent type of armor element.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class ArmorType extends ASimpleEnum<ArmorType>
+public abstract class ArmorType extends ASimpleEnum<ArmorType>
 {
     static
     {
         init(ArmorType.class, 4);
     }
 
-    public static final ArmorType HELMET     = new ArmorType("HELMET");
-    public static final ArmorType CHESTPLATE = new ArmorType("CHESTPLATE");
-    public static final ArmorType LEGGINGS   = new ArmorType("LEGGINGS");
-    public static final ArmorType BOOTS      = new ArmorType("BOOTS");
+    public static final ArmorType HELMET     = new ArmorType("HELMET")
+    {
+        @Override
+        public boolean setItem(final EntityEquipment eq, final ItemStack armor)
+        {
+            eq.setHelmet(armor);
+            return true;
+        }
+    };
+    public static final ArmorType CHESTPLATE = new ArmorType("CHESTPLATE")
+    {
+        @Override
+        public boolean setItem(final EntityEquipment eq, final ItemStack armor)
+        {
+            eq.setChestplate(armor);
+            return true;
+        }
+    };
+    public static final ArmorType LEGGINGS   = new ArmorType("LEGGINGS")
+    {
+        @Override
+        public boolean setItem(final EntityEquipment eq, final ItemStack armor)
+        {
+            eq.setLeggings(armor);
+            return true;
+        }
+    };
+    public static final ArmorType BOOTS      = new ArmorType("BOOTS")
+    {
+        @Override
+        public boolean setItem(final EntityEquipment eq, final ItemStack armor)
+        {
+            eq.setBoots(armor);
+            return true;
+        }
+    };
 
-    public ArmorType(final String enumName, final int enumId)
+    protected ArmorType(final String enumName, final int enumId)
     {
         super(enumName, enumId);
     }
 
-    public ArmorType(final String enumName)
+    protected ArmorType(final String enumName)
     {
         super(enumName);
     }
@@ -64,6 +98,16 @@ public class ArmorType extends ASimpleEnum<ArmorType>
     {
         return getByEnumName(ArmorType.class, name);
     }
+
+    /**
+     * Put the given ItemStack into the given armor slot. This does not check if
+     * the ItemStack is a valid type for this slot.
+     *
+     * @param armor The ItemStack to use as armor.
+     *
+     * @return true if item was set.
+     */
+    public abstract boolean setItem(final EntityEquipment eq, final ItemStack armor);
 
     /**
      * @return all values in array.
