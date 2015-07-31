@@ -44,7 +44,7 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     @Override
     public Slot getSlot(final int slot)
     {
-        return this.playerInventory.getSlot(slot);
+        return this.playerInventory.getSlot(this.getSlotOffset() + slot);
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.connection.packets.play.in.PacketPlayInWindowClick;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutSetSlot;
 import org.diorite.impl.connection.packets.play.out.PacketPlayOutWindowItems;
 import org.diorite.impl.entity.PlayerImpl;
@@ -77,7 +78,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     @Override
     public Slot getSlot(final int slot)
     {
-        return this.slots[slot];
+        return (slot == PacketPlayInWindowClick.SLOT_NOT_NEEDED) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
     }
 
     @Override

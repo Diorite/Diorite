@@ -18,6 +18,8 @@ import org.diorite.inventory.Inventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.slot.Slot;
+import org.diorite.inventory.slot.SlotType;
+import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
 @SuppressWarnings("ObjectEquality")
@@ -200,23 +202,32 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 // FIXME zbroja wskakuje na pola od armoru - tylko jesli sa wolne
                 // TODO dopracowac to bo ledwo dziala
 
-                if (slot >= HOTBAR_BEGIN_ID)
+                final ItemStack[] rest;
+
+                if ((slotProp.getSlotType().equals(SlotType.CONTAINER) || slotProp.getSlotType().equals(SlotType.HOTBAR)) && (clicked.getMaterial() instanceof ArmorMat))
                 {
-                    // clicked on hotbar
-                    if (! inv.atomicReplace(slot, clicked, null))
-                    {
-                        return false;
-                    }
-                    inv.getEqInventory().add(clicked);
+                    return ! ((ArmorMat) clicked.getMaterial()).getArmorType().setItem(inv, clicked) || inv.atomicReplace(slot, clicked, null);
+                }
+                if (slotProp.getSlotType().equals(SlotType.CONTAINER))
+                {
+                    // clicked on other slot
+                    rest = inv.getHotbarInventory().add(clicked);
                 }
                 else
                 {
-                    // clicked on other slot
+                    // clicked on hotbar
+                    rest = inv.getEqInventory().add(clicked);
+                }
+                if (rest.length == 0)
+                {
                     if (! inv.atomicReplace(slot, clicked, null))
                     {
                         return false;
                     }
-                    inv.getHotbarInventory().add(clicked);
+                }
+                else
+                {
+                    clicked.setAmount(rest[0].getAmount());
                 }
             }
             else if (Objects.equals(ct, ClickType.DROP_KEY))
