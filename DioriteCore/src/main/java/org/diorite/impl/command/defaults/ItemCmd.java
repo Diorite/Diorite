@@ -15,6 +15,7 @@ public class ItemCmd extends SystemCommandImpl
             if (! sender.isPlayer())
             {
                 sender.sendSimpleColoredMessage("&4Only for players!"); // TODO: change message and add it to config.
+                return;
             }
             GiveCmd.parseGiveCommand((Player) sender, sender, args, 0);
         });
