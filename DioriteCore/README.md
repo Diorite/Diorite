@@ -2,10 +2,10 @@
 
 [*Diorite-Core*](https://github.com/Diorite/Diorite-Core) | [Diorite-API](https://github.com/Diorite/Diorite-API)
 
-Minecraft Server, Implementation of Diorite-API.<br/>
+Core project for Diorite client and server, with basic implementation of DioriteAPI.<br/>
+Diorite is game based and compatible with Minecraft.<br/>
 Don't take this project too serious, I created it only to play with Netty and Multithreading.<br/>
 It may never be finished, or usable.<br/>
-Current packets and connections are based on Minecraft code, it may change later.<br/>
 
 PS: keep free to implementing anything, even if it listed for next versions.
 
