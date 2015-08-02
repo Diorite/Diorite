@@ -4,8 +4,8 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
@@ -23,7 +23,7 @@ public class DevCmd extends SystemCommandImpl
             PlayerImpl p = (PlayerImpl) sender;
             if (action == null)
             {
-                p.getNetworkManager().sendPacket(new PacketPlayOutBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
+                p.getNetworkManager().sendPacket(new PacketPlayServerBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
                 return;
             }
             switch (action.toLowerCase())
@@ -36,7 +36,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "gs":
                 {
-                    p.getNetworkManager().sendPacket(new PacketPlayOutGameStateChange(args.asInt(0), args.asFloat(1)));
+                    p.getNetworkManager().sendPacket(new PacketPlayServerGameStateChange(args.asInt(0), args.asFloat(1)));
                     sender.sendSimpleColoredMessage("&3Done.");
                     break;
                 }

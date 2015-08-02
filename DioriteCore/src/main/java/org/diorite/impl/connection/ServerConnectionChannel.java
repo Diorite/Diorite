@@ -3,7 +3,7 @@ package org.diorite.impl.connection;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.connection.listeners.HandshakeListener;
+import org.diorite.impl.connection.listeners.server.HandshakeListener;
 import org.diorite.impl.connection.packets.PacketDecoder;
 import org.diorite.impl.connection.packets.PacketEncoder;
 import org.diorite.impl.connection.packets.PacketPrepender;

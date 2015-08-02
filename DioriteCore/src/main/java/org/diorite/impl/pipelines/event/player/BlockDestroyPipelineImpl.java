@@ -3,7 +3,7 @@ package org.diorite.impl.pipelines.event.player;
 import java.util.UUID;
 
 import org.diorite.impl.ServerImpl;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutBlockChange;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.world.WorldImpl;
@@ -29,7 +29,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
                 return;
             }
             evt.getWorld().setBlock(evt.getLocation(), Material.AIR);
-            ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getWorld()), new PacketPlayOutBlockChange(evt.getLocation(), Material.AIR));
+            ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getWorld()), new PacketPlayServerBlockChange(evt.getLocation(), Material.AIR));
         });
 
         /*this.addAfter(EventPriority.NORMAL, "Diorite|AddToEq", (evt, pipeline) ->

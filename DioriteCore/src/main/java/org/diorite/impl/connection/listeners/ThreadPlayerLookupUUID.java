@@ -10,6 +10,7 @@ import org.diorite.impl.ServerImpl;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
 import org.diorite.impl.connection.MinecraftEncryption;
+import org.diorite.impl.connection.listeners.server.LoginListener;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 
 public class ThreadPlayerLookupUUID extends Thread

@@ -3,8 +3,8 @@ package org.diorite.impl.entity;
 import java.util.UUID;
 
 import org.diorite.impl.ServerImpl;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityMetadata;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
@@ -57,9 +57,9 @@ public abstract class LivingEntityImpl extends AttributableEntityImpl implements
     }
 
     @Override
-    public PacketPlayOut[] getSpawnPackets()
+    public PacketPlayServer[] getSpawnPackets()
     {
         // TODO: add other stuff, like potions
-        return new PacketPlayOut[]{this.getSpawnPacket(), new PacketPlayOutEntityMetadata(this, true)};
+        return new PacketPlayServer[]{this.getSpawnPacket(), new PacketPlayServerEntityMetadata(this, true)};
     }
 }

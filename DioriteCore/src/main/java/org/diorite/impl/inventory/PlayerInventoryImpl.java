@@ -7,9 +7,9 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.connection.packets.play.in.PacketPlayInWindowClick;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutSetSlot;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutWindowItems;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerWindowItems;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
@@ -78,7 +78,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     @Override
     public Slot getSlot(final int slot)
     {
-        return (slot == PacketPlayInWindowClick.SLOT_NOT_NEEDED) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
+        return (slot == PacketPlayClientWindowClick.SLOT_NOT_NEEDED) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
     }
 
     @Override
@@ -398,7 +398,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
             throw new IllegalArgumentException("Player must be a viewer of inventory.");
         }
 
-        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayOutWindowItems(this.windowId, this.content));
+        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayServerWindowItems(this.windowId, this.content));
     }
 
     @Override
@@ -420,7 +420,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
                     this.wasCursorNotNull = true;
                 }
             }
-            this.holder.getNetworkManager().sendPacket(new PacketPlayOutSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
+            this.holder.getNetworkManager().sendPacket(new PacketPlayServerSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
 
         }
         super.softUpdate();

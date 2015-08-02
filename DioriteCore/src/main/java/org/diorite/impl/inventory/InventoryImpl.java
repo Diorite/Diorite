@@ -9,7 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutSetSlot;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
@@ -58,7 +58,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     public void softUpdate()
     {
         final ItemStackImpl[] items = this.getArray().toArray(new ItemStackImpl[this.getArray().length()]);
-        final Set<PacketPlayOutSetSlot> packets = new HashSet<>(items.length);
+        final Set<PacketPlayServerSetSlot> packets = new HashSet<>(items.length);
         for (short i = 0, itemsLength = (short) items.length; i < itemsLength; i++)
         {
             final ItemStackImpl item = items[i];
@@ -68,21 +68,21 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
                 if ((item.getAmount() == 0) || (Material.AIR.simpleEquals(item.getMaterial())))
                 {
                     this.atomicReplace(i, item, null);
-                    packets.add(new PacketPlayOutSetSlot(this.getWindowId(), i, null));
+                    packets.add(new PacketPlayServerSetSlot(this.getWindowId(), i, null));
                     continue;
                 }
                 this.notNullItems.add(i);
                 if (item.setClean()) // returns true if item was dirty before cleaning
                 {
-                    packets.add(new PacketPlayOutSetSlot(this.getWindowId(), i, item));
+                    packets.add(new PacketPlayServerSetSlot(this.getWindowId(), i, item));
                 }
             }
             else if (this.notNullItems.remove(i))
             {
-                packets.add(new PacketPlayOutSetSlot(this.getWindowId(), i, null));
+                packets.add(new PacketPlayServerSetSlot(this.getWindowId(), i, null));
             }
         }
-        final PacketPlayOutSetSlot[] packetsArray = packets.toArray(new PacketPlayOutSetSlot[packets.size()]);
+        final PacketPlayServerSetSlot[] packetsArray = packets.toArray(new PacketPlayServerSetSlot[packets.size()]);
         this.viewers.forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
     }
 

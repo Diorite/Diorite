@@ -38,9 +38,9 @@ import org.diorite.impl.command.defaults.RegisterDefaultCommands;
 import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.ServerConnection;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerListHeaderFooter;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutTitle;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerListHeaderFooter;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.ConsoleReaderThread;
 import org.diorite.impl.input.InputThread;
@@ -113,6 +113,7 @@ public class ServerImpl implements Server
 {
     private static ServerImpl instance;
 
+    protected final boolean isClient;
     protected final CommandMapImpl                        commandMap = new CommandMapImpl();
     protected final TickGroups                            ticker     = new TickGroups(this);
     protected final SchedulerImpl                         scheduler  = new SchedulerImpl();
@@ -349,8 +350,9 @@ public class ServerImpl implements Server
         return this.playersManager.getOnlinePlayersNames();
     }
 
-    public ServerImpl(final Proxy proxy, final OptionSet options)
+    public ServerImpl(final Proxy proxy, final OptionSet options, final boolean isClient)
     {
+        this.isClient = isClient;
         instance = this;
         this.mainThread = Thread.currentThread();
         this.serverVersion = ServerImpl.class.getPackage().getImplementationVersion();
@@ -464,7 +466,7 @@ public class ServerImpl implements Server
     @Override
     public void broadcastMessage(final ChatPosition position, final BaseComponent component)
     {
-        this.playersManager.forEach(new PacketPlayOutChat(component, position));
+        this.playersManager.forEach(new PacketPlayServerChat(component, position));
         if (! Objects.equals(position, ChatPosition.ACTION))
         {
             this.sendConsoleMessage(component);
@@ -584,7 +586,7 @@ public class ServerImpl implements Server
     @Override
     public void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player)
     {
-        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayOutPlayerListHeaderFooter(header, footer));
+        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayServerPlayerListHeaderFooter(header, footer));
     }
 
     @Override
@@ -600,27 +602,27 @@ public class ServerImpl implements Server
 
         if (title != null)
         {
-            n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_TITLE, title));
+            n.sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.SET_TITLE, title));
         }
 
         if (subtitle != null)
         {
-            n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_SUBTITLE, subtitle));
+            n.sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.SET_SUBTITLE, subtitle));
         }
 
-        n.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.SET_TIMES, fadeIn, stay, fadeOut));
+        n.sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.SET_TIMES, fadeIn, stay, fadeOut));
     }
 
     @Override
     public void removeTitle(final Player player)
     {
-        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.RESET));
+        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.RESET));
     }
 
     @Override
     public void removeAllTitles()
     {
-        this.playersManager.forEach(new PacketPlayOutTitle(PacketPlayOutTitle.TitleAction.RESET));
+        this.playersManager.forEach(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.RESET));
     }
 
     @Override

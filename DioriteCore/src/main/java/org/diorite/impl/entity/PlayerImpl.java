@@ -9,19 +9,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.NetworkManager;
-import org.diorite.impl.connection.packets.play.in.PacketPlayInAbilities;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutChat;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityDestroy;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutGameStateChange.ReasonCodes;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutNamedEntitySpawn;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutResourcePackSend;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutTabComplete;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutUpdateAttributes;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutWorldParticles;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityDestroy;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange.ReasonCodes;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedEntitySpawn;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerResourcePackSend;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerTabComplete;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerUpdateAttributes;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerWorldParticles;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
@@ -96,7 +96,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     protected       GameMode            gameMode;
     protected       PlayerInventoryImpl inventory;
 
-    protected PacketPlayOutAbilities abilities = new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
+    protected PacketPlayServerAbilities abilities = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
     // TODO: add saving/loading data to/from NBT
     public PlayerImpl(final ServerImpl server, final int id, final GameProfile gameProfile, final NetworkManager networkManager, final ImmutableLocation location)
@@ -148,7 +148,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
                 ids = this.removeQueue.toArray();
                 this.removeQueue.clear();
             }
-            this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(ids));
+            this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(ids));
         }
 
         // TODO: maybe don't pickup every tick?
@@ -159,9 +159,9 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     }
 
     @Override
-    public PacketPlayOut getSpawnPacket()
+    public PacketPlayServer getSpawnPacket()
     {
-        return new PacketPlayOutNamedEntitySpawn(this);
+        return new PacketPlayServerNamedEntitySpawn(this);
     }
 
     @SuppressWarnings("ObjectEquality")
@@ -174,7 +174,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         }
         if ((e.getTracker() instanceof PlayerImpl) || (this.lastTickThread == Thread.currentThread()))
         {
-            this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(id));
+            this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(id));
         }
         else
         {
@@ -192,7 +192,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         }
         if ((e instanceof PlayerImpl) || (this.lastTickThread == Thread.currentThread()))
         {
-            this.networkManager.sendPacket(new PacketPlayOutEntityDestroy(id));
+            this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(id));
         }
         else
         {
@@ -240,8 +240,8 @@ public class PlayerImpl extends LivingEntityImpl implements Player
             return;
         }
         this.gameMode = gameMode;
-        this.server.getPlayersManager().forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayOutPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
-        this.networkManager.sendPacket(new PacketPlayOutGameStateChange(ReasonCodes.CHANGE_GAME_MODE, gameMode.ordinal()));
+        this.server.getPlayersManager().forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayServerPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
+        this.networkManager.sendPacket(new PacketPlayServerGameStateChange(ReasonCodes.CHANGE_GAME_MODE, gameMode.ordinal()));
     }
 
     @Override
@@ -259,7 +259,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     @Override
     public void sendMessage(final ChatPosition position, final BaseComponent component)
     {
-        this.networkManager.sendPacket(new PacketPlayOutChat(component, position));
+        this.networkManager.sendPacket(new PacketPlayServerChat(component, position));
     }
 
     @Override
@@ -289,7 +289,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         {
             attrib.addModifier(tempSprintMod);
         }
-        this.networkManager.sendPacket(new PacketPlayOutUpdateAttributes(0, this.attributes));
+        this.networkManager.sendPacket(new PacketPlayServerUpdateAttributes(0, this.attributes));
         this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING, isSprinting);
     }
 
@@ -333,13 +333,13 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     @Override
     public void setResourcePack(final String resourcePack)
     {
-        this.networkManager.sendPacket(new PacketPlayOutResourcePackSend(resourcePack, "DIORITE"));
+        this.networkManager.sendPacket(new PacketPlayServerResourcePackSend(resourcePack, "DIORITE"));
     }
 
     @Override
     public void setResourcePack(final String resourcePack, final String hash)
     {
-        this.networkManager.sendPacket(new PacketPlayOutResourcePackSend(resourcePack, hash));
+        this.networkManager.sendPacket(new PacketPlayServerResourcePackSend(resourcePack, hash));
     }
 
     @Override
@@ -400,20 +400,20 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     @Override
     public void showParticle(final Particle particle, final boolean isLongDistance, final float x, final float y, final float z, final float offsetX, final float offsetY, final float offsetZ, final float particleData, final int particleCount, final int... data)
     {
-        this.networkManager.sendPacket(new PacketPlayOutWorldParticles(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data));
+        this.networkManager.sendPacket(new PacketPlayServerWorldParticles(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data));
     }
 
-    public PacketPlayOutAbilities getAbilities()
+    public PacketPlayServerAbilities getAbilities()
     {
         return this.abilities;
     }
 
-    public void setAbilities(final PacketPlayOutAbilities abilities)
+    public void setAbilities(final PacketPlayServerAbilities abilities)
     {
         this.abilities = abilities;
     }
 
-    public void setAbilities(final PacketPlayInAbilities abilities)
+    public void setAbilities(final PacketPlayClientAbilities abilities)
     {
         // TOOD: I should check what player want change here (cheats)
         this.abilities.setCanFly(abilities.isCanFly());
@@ -456,7 +456,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     @Override
     public void sendTabCompletes(final List<String> strs)
     {
-        this.networkManager.sendPacket(new PacketPlayOutTabComplete(strs));
+        this.networkManager.sendPacket(new PacketPlayServerTabComplete(strs));
     }
 
     @Override

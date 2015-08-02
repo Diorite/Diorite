@@ -17,16 +17,16 @@ import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.NetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutAbilities;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutCustomPayload;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutHeldItemSlot;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutLogin;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutPosition;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutServerDifficulty;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnPosition;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerCustomPayload;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerHeldItemSlot;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerLogin;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerPosition;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerServerDifficulty;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnPosition;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.BlockLocation;
@@ -67,17 +67,17 @@ public class PlayersManagerImpl implements Tickable
     public void playerJoin(final PlayerImpl player)
     {
         this.players.put(player.getUniqueID(), player);
-        this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
-        this.server.getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
+        this.forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
+        this.server.getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
 
         // TODO: this is only test code
-        player.getNetworkManager().sendPacket(new PacketPlayOutLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
-        player.getNetworkManager().sendPacket(new PacketPlayOutCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
-        player.getNetworkManager().sendPacket(new PacketPlayOutServerDifficulty(Difficulty.EASY));
-        player.getNetworkManager().sendPacket(new PacketPlayOutSpawnPosition(new BlockLocation(2, 255, - 2)));
-        player.getNetworkManager().sendPacket(new PacketPlayOutAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
-        player.getNetworkManager().sendPacket(new PacketPlayOutHeldItemSlot(3));
-        player.getNetworkManager().sendPacket(new PacketPlayOutPosition(new TeleportData(4, 255, - 4)));
+        player.getNetworkManager().sendPacket(new PacketPlayServerLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
+        player.getNetworkManager().sendPacket(new PacketPlayServerCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
+        player.getNetworkManager().sendPacket(new PacketPlayServerServerDifficulty(Difficulty.EASY));
+        player.getNetworkManager().sendPacket(new PacketPlayServerSpawnPosition(new BlockLocation(2, 255, - 2)));
+        player.getNetworkManager().sendPacket(new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
+        player.getNetworkManager().sendPacket(new PacketPlayServerHeldItemSlot(3));
+        player.getNetworkManager().sendPacket(new PacketPlayServerPosition(new TeleportData(4, 255, - 4)));
 
         // TODO: changeable message, events, etc..
         this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!");
@@ -90,9 +90,9 @@ public class PlayersManagerImpl implements Tickable
         player.getWorld().addEntity(player);
 
         this.server.addSync(() -> {
-            PacketPlayOut[] newPackets = player.getSpawnPackets();
+            PacketPlayServer[] newPackets = player.getSpawnPackets();
             this.server.getPlayersManager().forEachExcept(player, p -> {
-                PacketPlayOut[] playerPackets = p.getSpawnPackets();
+                PacketPlayServer[] playerPackets = p.getSpawnPackets();
                 player.getNetworkManager().sendPackets(playerPackets);
                 p.getNetworkManager().sendPackets(newPackets);
             });
@@ -117,7 +117,7 @@ public class PlayersManagerImpl implements Tickable
 
     public void playerQuit(final PlayerImpl player)
     {
-        this.forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player));
+        this.forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player));
         this.players.remove(player.getUniqueID());
         player.onLogout();
     }
@@ -141,7 +141,7 @@ public class PlayersManagerImpl implements Tickable
         final long curr = System.currentTimeMillis();
         if ((curr - this.lastKeepAlive) > this.keepAliveTimer)
         {
-            this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayOutKeepAlive(p.getId())));
+            this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayServerKeepAlive(p.getId())));
             this.lastKeepAlive = curr;
         }
     }

@@ -1,6 +1,6 @@
 package org.diorite.impl.entity.tracker;
 
-import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.entity.PlayerImpl;
 
 @SuppressWarnings({"ObjectEquality"})
@@ -22,14 +22,14 @@ public class PlayerTracker extends BaseTracker<PlayerImpl>
 //    }
 
     @Override
-    public void sendToAllExceptOwn(final PacketPlayOut packet)
+    public void sendToAllExceptOwn(final PacketPlayServer packet)
     {
         this.tracked.stream().filter(p -> p != this.tracker).forEach(p -> p.getNetworkManager().sendPacket(packet));
     }
 
 
     @Override
-    public void sendToAllExceptOwn(final PacketPlayOut[] packet)
+    public void sendToAllExceptOwn(final PacketPlayServer[] packet)
     {
         this.tracked.stream().filter(p -> p != this.tracker).forEach(p -> p.getNetworkManager().sendPackets(packet));
     }

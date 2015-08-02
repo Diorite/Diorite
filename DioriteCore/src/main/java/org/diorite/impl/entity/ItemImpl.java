@@ -3,10 +3,10 @@ package org.diorite.impl.entity;
 import java.util.UUID;
 
 import org.diorite.impl.ServerImpl;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutCollect;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityMetadata;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutSpawnEntity;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
@@ -67,7 +67,7 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
             return false;
         }
 
-        player.getNetworkManager().sendPacket(new PacketPlayOutCollect(this.getId(), player.getId())); // TODO Entity tracker zeby inni widzieli podnoszenie
+        player.getNetworkManager().sendPacket(new PacketPlayServerCollect(this.getId(), player.getId())); // TODO Entity tracker zeby inni widzieli podnoszenie
         this.remove(true);
         return true;
     }
@@ -162,15 +162,15 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     }
 
     @Override
-    public PacketPlayOut getSpawnPacket()
+    public PacketPlayServer getSpawnPacket()
     {
-        return new PacketPlayOutSpawnEntity(this);
+        return new PacketPlayServerSpawnEntity(this);
     }
 
     @Override
-    public PacketPlayOut[] getSpawnPackets()
+    public PacketPlayServer[] getSpawnPackets()
     {
-        return new PacketPlayOut[]{this.getSpawnPacket(), new PacketPlayOutEntityMetadata(this, true)};
+        return new PacketPlayServer[]{this.getSpawnPacket(), new PacketPlayServerEntityMetadata(this, true)};
     }
 
     @Override

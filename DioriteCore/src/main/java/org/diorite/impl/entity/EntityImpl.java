@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.ServerImpl;
 import org.diorite.impl.Tickable;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
@@ -491,7 +491,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     /**
      * @return Packet need to spawn entity
      */
-    public abstract PacketPlayOut getSpawnPacket();
+    public abstract PacketPlayServer getSpawnPacket();
 
     /**
      * Need return array of packet in valid order needed to spawn entity with all data. <br>
@@ -499,7 +499,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
      *
      * @return array of packets.
      */
-    public abstract PacketPlayOut[] getSpawnPackets();
+    public abstract PacketPlayServer[] getSpawnPackets();
 
     @Override
     public String toString()

@@ -1,0 +1,277 @@
+package org.diorite.impl.connection.listeners.server;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.impl.Main;
+import org.diorite.impl.ServerImpl;
+import org.diorite.impl.connection.NetworkManager;
+import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientArmAnimation;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientBlockDig;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientBlockDig.BlockDigAction;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientBlockPlace;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientChat;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientClientCommand;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientCloseWindow;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientCustomPayload;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientEnchantItem;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientEntityAction;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientFlying;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientHeldItemSlot;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientKeepAlive;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientLook;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientPosition;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientPositionLook;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientResourcePackStatus;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientSetCreativeSlot;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientSettings;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientSpectate;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientSteerVehicle;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientTabComplete;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientTransaction;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientUpdateSign;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerDisconnect;
+import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.input.InputAction;
+import org.diorite.impl.input.InputActionType;
+import org.diorite.GameMode;
+import org.diorite.chat.component.BaseComponent;
+import org.diorite.event.EventType;
+import org.diorite.event.player.PlayerBlockDestroyEvent;
+import org.diorite.event.player.PlayerBlockPlaceEvent;
+import org.diorite.event.player.PlayerInventoryClickEvent;
+
+public class PlayListener implements PacketPlayClientListener
+{
+    private final ServerImpl     server;
+    private final NetworkManager networkManager;
+    private final PlayerImpl     player;
+
+    public PlayListener(final ServerImpl server, final NetworkManager networkManager, final PlayerImpl player)
+    {
+        this.server = server;
+        this.networkManager = networkManager;
+        this.player = player;
+    }
+
+
+    @Override
+    public void handle(final PacketPlayClientKeepAlive packet)
+    {
+        this.networkManager.updateKeepAlive();
+    }
+
+    @Override
+    public void handle(final PacketPlayClientSettings packet)
+    {
+//        final byte oldViewDistance = this.player.getViewDistance();
+        this.server.sync(() -> this.player.setViewDistance(packet.getViewDistance()), this.player);
+//        if (oldViewDistance != this.player.getViewDistance())
+//        {
+//            this.player.getPlayerChunks().wantUpdate();
+//        }
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayClientCustomPayload packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayClientHeldItemSlot packet)
+    {
+        this.server.sync(() -> this.player.setHeldItemSlot(packet.getSlot()), this.player);
+    }
+
+    @Override
+    public void handle(final PacketPlayClientPositionLook packet)
+    {
+        this.server.sync(() -> this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), this.player);
+    }
+
+    @Override
+    public void handle(final PacketPlayClientFlying packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayClientPosition packet)
+    {
+        this.server.sync(() -> this.player.setPosition(packet.getX(), packet.getY(), packet.getZ()), this.player);
+    }
+
+    @Override
+    public void handle(final PacketPlayClientLook packet)
+    {
+        this.server.sync(() -> this.player.setRotation(packet.getYaw(), packet.getPitch()), this.player);
+    }
+
+    @Override
+    public void handle(final PacketPlayClientChat packet)
+    {
+        final String str = packet.getContent();
+        //noinspection HardcodedFileSeparator
+        if (str.startsWith("/"))
+        {
+            this.server.getInputThread().add(new InputAction(str.substring(1), this.player, InputActionType.COMMAND));
+        }
+        else
+        {
+            this.server.getInputThread().add(new InputAction(str, this.player, InputActionType.CHAT));
+        }
+    }
+
+    @Override
+    public void handle(final PacketPlayClientTabComplete packet)
+    {
+        this.server.getInputThread().add(new InputAction(packet.getContent(), this.player, InputActionType.TAB_COMPLETE));
+    }
+
+    @Override
+    public void handle(final PacketPlayClientAbilities packet)
+    {
+        this.server.sync(() -> this.player.setAbilities(packet), this.player);
+    }
+
+    @Override
+    public void handle(final PacketPlayClientResourcePackStatus packet)
+    {
+        // TODO This is not needed? Maybe create event or something other...
+    }
+
+    @Override
+    public void handle(final PacketPlayClientSetCreativeSlot packet)
+    {
+        Main.debug("creative slot: " + packet.getSlot() + ", item: " + packet.getItem());
+        // TODO: meh.
+    }
+
+    @Override
+    public void handle(final PacketPlayClientSpectate packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayClientEnchantItem packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayClientSteerVehicle packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayClientTransaction packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayClientUpdateSign packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayClientEntityAction packet)
+    {
+        this.server.sync(() -> packet.getEntityAction().doAction(this.player, packet.getJumpBoost()), this.player);
+    }
+
+    @Override
+    public void handle(final PacketPlayClientArmAnimation packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayClientBlockDig packet)
+    {
+        this.server.sync(() -> {
+            if ((packet.getAction() == BlockDigAction.FINISH_DIG) || ((packet.getAction() == BlockDigAction.START_DIG) && this.player.getGameMode().equals(GameMode.CREATIVE)))
+            {
+                EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
+            }
+
+            // TODO: implement
+            // TODO od animacji kopania bedzie osobny event/pipeline
+        }, this.player);
+    }
+
+    @Override
+    public void handle(final PacketPlayClientBlockPlace packet)
+    {
+        if (packet.getCursorPos().getBlockFace() == null)
+        {
+            return; // prevent java.lang.IllegalArgumentException: Y can't be bigger than 256 // TODO
+        }
+        this.server.sync(() -> EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()))), this.player);
+    }
+
+    @Override
+    public void handle(final PacketPlayClientClientCommand packet)
+    {
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayClientCloseWindow packet)
+    {
+        Main.debug("Close windows: " + packet.getId());
+        this.server.sync(() -> this.player.closeInventory(packet.getId()));
+        // TODO: implement
+    }
+
+    @Override
+    public void handle(final PacketPlayClientWindowClick p)
+    {
+        if (p.getClickType() == null)
+        {
+            Main.debug("Unknown click type in PacketPlayInWindowClick.");
+            return;
+        }
+        this.server.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType())), this.player);
+    }
+
+    public NetworkManager getNetworkManager()
+    {
+        return this.networkManager;
+    }
+
+    public ServerImpl getServer()
+    {
+        return this.server;
+    }
+
+    @Override
+    public void disconnect(final BaseComponent message)
+    {
+        this.server.getPlayersManager().playerQuit(this.player);
+
+        this.networkManager.sendPacket(new PacketPlayServerDisconnect(message));
+        this.networkManager.close(message, true);
+        this.server.getServerConnection().remove(this.networkManager);
+        // TODO: implement
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).append("networkManager", this.networkManager).toString();
+    }
+
+    public PlayerImpl getPlayer()
+    {
+        return this.player;
+    }
+}

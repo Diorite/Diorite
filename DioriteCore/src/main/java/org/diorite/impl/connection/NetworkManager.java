@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.ServerImpl;
-import org.diorite.impl.connection.listeners.PlayListener;
+import org.diorite.impl.connection.listeners.server.PlayListener;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketCompressor;
 import org.diorite.impl.connection.packets.PacketDecompressor;
@@ -22,8 +22,8 @@ import org.diorite.impl.connection.packets.PacketDecrypter;
 import org.diorite.impl.connection.packets.PacketEncrypter;
 import org.diorite.impl.connection.packets.PacketListener;
 import org.diorite.impl.connection.packets.QueuedPacket;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutKeepAlive;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutPlayerInfo;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.TranslatableComponent;
@@ -69,7 +69,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
         if (this.packetListener instanceof PlayListener)
         {
             final Player player = ((PlayListener) this.packetListener).getPlayer();
-            this.server.getPlayersManager().forEach(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.PlayerInfoAction.UPDATE_LATENCY, new PacketPlayOutPlayerInfo.PlayerInfoData(player.getUniqueID(), ping)));
+            this.server.getPlayersManager().forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.UPDATE_LATENCY, new PacketPlayServerPlayerInfo.PlayerInfoData(player.getUniqueID(), ping)));
         }
     }
 
@@ -187,7 +187,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<? super P
             this.server.getServerConnection().remove(this);
             return;
         }
-        if (packet instanceof PacketPlayOutKeepAlive)
+        if (packet instanceof PacketPlayServerKeepAlive)
         {
             this.sentAlive = System.currentTimeMillis();
         }

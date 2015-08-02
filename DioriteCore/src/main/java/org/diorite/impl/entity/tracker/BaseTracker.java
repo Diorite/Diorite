@@ -3,10 +3,10 @@ package org.diorite.impl.entity.tracker;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.diorite.impl.connection.packets.play.out.PacketPlayOut;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityMetadata;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutEntityTeleport;
-import org.diorite.impl.connection.packets.play.out.PacketPlayOutRelEntityMoveLook;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityTeleport;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerRelEntityMoveLook;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
@@ -76,7 +76,7 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
             this.velY = this.tracker.getVelocityY();
             this.velZ = this.tracker.getVelocityZ();
             this.updatePlayers(players);
-            this.sendToAllExceptOwn(new PacketPlayOutEntityTeleport(this.tracker));
+            this.sendToAllExceptOwn(new PacketPlayServerEntityTeleport(this.tracker));
             return;
         }
         double deltaX = 0, deltaY = 0, deltaZ = 0;
@@ -104,11 +104,11 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         {
             if ((deltaX < 4) && (deltaX > - 4) && (deltaY < 4) && (deltaY > - 4) && (deltaZ < 4) && (deltaZ > - 4))
             {
-                this.sendToAllExceptOwn(new PacketPlayOutRelEntityMoveLook(this.tracker, deltaX, deltaY, deltaZ));
+                this.sendToAllExceptOwn(new PacketPlayServerRelEntityMoveLook(this.tracker, deltaX, deltaY, deltaZ));
             }
             else
             {
-                this.sendToAllExceptOwn(new PacketPlayOutEntityTeleport(this.tracker));
+                this.sendToAllExceptOwn(new PacketPlayServerEntityTeleport(this.tracker));
             }
         }
 
@@ -116,27 +116,27 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         final Collection<EntityMetadataEntry<?>> meta = this.tracker.getMetadata().popOutdatedEntries();
         if ((meta != null) && ! meta.isEmpty())
         {
-            this.sendToAll(new PacketPlayOutEntityMetadata(this.tracker, meta));
+            this.sendToAll(new PacketPlayServerEntityMetadata(this.tracker, meta));
         }
 
     }
 
-    public void sendToAll(final PacketPlayOut packet)
+    public void sendToAll(final PacketPlayServer packet)
     {
         this.tracked.forEach(p -> p.getNetworkManager().sendPacket(packet));
     }
 
-    public void sendToAllExceptOwn(final PacketPlayOut packet)
+    public void sendToAllExceptOwn(final PacketPlayServer packet)
     {
         this.sendToAll(packet);
     }
 
-    public void sendToAll(final PacketPlayOut[] packet)
+    public void sendToAll(final PacketPlayServer[] packet)
     {
         this.tracked.forEach(p -> p.getNetworkManager().sendPackets(packet));
     }
 
-    public void sendToAllExceptOwn(final PacketPlayOut[] packet)
+    public void sendToAllExceptOwn(final PacketPlayServer[] packet)
     {
         this.sendToAll(packet);
     }
