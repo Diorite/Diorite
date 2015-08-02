@@ -1,5 +1,6 @@
 # Diorite-API
-Minecraft server API <br>
+Diorite server and client API <br>
+Diorite is game based and compatible with Minecraft.<br/>
 API implemented by: https://github.com/GotoFinal/Diorite-Core <br><br>
 
 It may changing for long time, it isn't usable yet (or it will never be).
