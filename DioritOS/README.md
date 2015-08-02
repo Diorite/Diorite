@@ -1,6 +1,6 @@
 # ![Diorite](http://hydra-media.cursecdn.com/minecraft.gamepedia.com/0/08/Diorite.png?version=b51c48a2486c6efd87f3ba9b13c8738a) DioritOS
 
-[DioritOS](https://github.com/Diorite/DioritOS) | [*Diorite-Core*](https://github.com/Diorite/Diorite-Core) | [Diorite-API](https://github.com/Diorite/Diorite-API) | [Diorite](https://github.com/Diorite/Diorite)
+[***DioritOS***](https://github.com/Diorite/DioritOS) | [Diorite-Core](https://github.com/Diorite/Diorite-Core) | [Diorite-API](https://github.com/Diorite/Diorite-API) | [Diorite](https://github.com/Diorite/Diorite)
 
 Client implementation of Diorite-Core<br/>
 Diorite is a game based and compatible with Minecraft.<br/>
