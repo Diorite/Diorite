@@ -25,7 +25,7 @@ import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 
 import io.netty.util.ResourceLeakDetector;
 import joptsimple.OptionParser;
@@ -63,7 +63,7 @@ public class Main
                 this.loop();
                 // Release window and window callbacks
                 glfwDestroyWindow(this.window);
-                ServerImpl.getInstance().stop();
+                DioriteCore.getInstance().stop();
             } finally
             {
                 this.cleanup();
