@@ -10,9 +10,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.EnumProtocol;
-import org.diorite.impl.connection.NetworkManager;
+import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.handshake.PacketHandshakingClientListener;
 import org.diorite.impl.connection.packets.handshake.client.PacketHandshakingClientSetProtocol;
 import org.diorite.impl.connection.packets.login.server.PacketLoginServerDisconnect;
@@ -25,10 +25,10 @@ public class HandshakeListener implements PacketHandshakingClientListener
     public static final  int                    CURRENT_PROTOCOL = 47;
     private static final Map<InetAddress, Long> throttleTracker  = new ConcurrentHashMap<>(100, 0.2f, 8);
     private static       int                    throttleCounter  = 0;
-    private final ServerImpl     server;
-    private final NetworkManager networkManager;
+    private final DioriteCore        server;
+    private final CoreNetworkManager networkManager;
 
-    public HandshakeListener(final ServerImpl server, final NetworkManager networkManager)
+    public HandshakeListener(final DioriteCore server, final CoreNetworkManager networkManager)
     {
         this.server = server;
         this.networkManager = networkManager;
@@ -101,7 +101,6 @@ public class HandshakeListener implements PacketHandshakingClientListener
     {
         this.networkManager.sendPacket(new PacketLoginServerDisconnect(baseComponent));
         this.networkManager.close(baseComponent, true);
-        this.server.getServerConnection().remove(this.networkManager);
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.security.KeyPair;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
 import org.diorite.impl.connection.MinecraftEncryption;
@@ -83,8 +83,8 @@ public class ThreadPlayerLookupUUID extends Thread
         return this.loginListener;
     }
 
-    private ServerImpl getServer()
+    private DioriteCore getServer()
     {
-        return this.loginListener.getServer();
+        return this.loginListener.getCore();
     }
 }

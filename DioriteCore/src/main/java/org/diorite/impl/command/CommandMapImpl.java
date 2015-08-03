@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.command.Command;
 import org.diorite.command.CommandMap;
 import org.diorite.command.MainCommand;
@@ -118,7 +118,7 @@ public class CommandMapImpl implements CommandMap
                 final List<String> result = cmd.tabComplete(sender, command, matcher, newArgs);
                 if (result.isEmpty())
                 {
-                    return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames(args[args.length - 1]);
+                    return DioriteCore.getInstance().getPlayersManager().getOnlinePlayersNames(args[args.length - 1]);
                 }
                 else
                 {
@@ -128,11 +128,11 @@ public class CommandMapImpl implements CommandMap
         }
         if (args.length > 1)
         {
-            return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames(args[args.length - 1]);
+            return DioriteCore.getInstance().getPlayersManager().getOnlinePlayersNames(args[args.length - 1]);
         }
         if (cmdLine.endsWith(" "))
         {
-            return ServerImpl.getInstance().getPlayersManager().getOnlinePlayersNames();
+            return DioriteCore.getInstance().getPlayersManager().getOnlinePlayersNames();
         }
         final String lcCmd = command.toLowerCase();
         final List<String> result = this.commandMap.entrySet().parallelStream().filter(this.tabCompeleterFilter.apply(lcCmd)).map(e -> Command.COMMAND_PREFIX + e.getValue().getFullName()).sorted().collect(Collectors.toList());
@@ -186,7 +186,7 @@ public class CommandMapImpl implements CommandMap
         }
         if (sender.isPlayer())
         {
-            ServerImpl.getInstance().getConsoleSender().sendMessage(sender.getName() + ": " + Command.COMMAND_PREFIX + cmdLine);
+            DioriteCore.getInstance().getConsoleSender().sendMessage(sender.getName() + ": " + Command.COMMAND_PREFIX + cmdLine);
         }
         //else if (sender.isCommandBlock()) TODO
         final String command = args[0];

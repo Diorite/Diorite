@@ -2,7 +2,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.command.ColoredConsoleCommandSenderImpl;
 import org.diorite.impl.command.ConsoleCommandSenderImpl;
 import org.diorite.impl.command.SystemCommandImpl;
@@ -17,7 +17,7 @@ public class ColoredConsoleCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> sender.sendMessage("§4Invalid usage, please type /setColoredConsole <true|false>"));
         this.registredSubCommand("core", "(?<bool>(true|false))", (sender, command, label, matchedPattern, args) -> {
             final boolean bool = Boolean.parseBoolean(matchedPattern.group("bool"));
-            final ServerImpl impl = (ServerImpl) sender.getServer();
+            final DioriteCore impl = (DioriteCore) sender.getServer();
             if (bool && ! (impl.getConsoleSender() instanceof ColoredConsoleCommandSenderImpl))
             {
                 impl.setConsoleCommandSender(new ColoredConsoleCommandSenderImpl(impl));

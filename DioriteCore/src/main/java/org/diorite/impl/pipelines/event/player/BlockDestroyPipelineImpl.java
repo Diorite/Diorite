@@ -2,7 +2,7 @@ package org.diorite.impl.pipelines.event.player;
 
 import java.util.UUID;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
@@ -29,7 +29,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
                 return;
             }
             evt.getWorld().setBlock(evt.getLocation(), Material.AIR);
-            ServerImpl.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getWorld()), new PacketPlayServerBlockChange(evt.getLocation(), Material.AIR));
+            DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getWorld()), new PacketPlayServerBlockChange(evt.getLocation(), Material.AIR));
         });
 
         /*this.addAfter(EventPriority.NORMAL, "Diorite|AddToEq", (evt, pipeline) ->
@@ -52,7 +52,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
             final BlockMaterialData type = block.getType();
             for (final ItemStack itemStack : type.getPossibleDrops().simulateDrop(evt.getPlayer().getRandom(), evt.getItemInHand(), block))
             {
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), (ServerImpl) this.getServer(), EntityImpl.getNextEntityID(), evt.getBlock().getLocation().addY(1).toLocation());
+                final ItemImpl item = new ItemImpl(UUID.randomUUID(), (DioriteCore) this.getServer(), EntityImpl.getNextEntityID(), evt.getBlock().getLocation().addY(1).toLocation());
                 item.setItemStack(itemStack);
                 ((WorldImpl) evt.getBlock().getLocation().getWorld()).addEntity(item);
             }

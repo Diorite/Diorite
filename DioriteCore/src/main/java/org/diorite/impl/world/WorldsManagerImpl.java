@@ -16,7 +16,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.cfg.DioriteConfigImpl;
 import org.diorite.impl.cfg.WorldsConfigImpl;
 import org.diorite.impl.world.io.anvil.AnvilChunkIoService;
@@ -50,7 +50,7 @@ public class WorldsManagerImpl implements WorldsManager
     {
         this.worlds.put(world.getName(), world);
 
-        ServerImpl.getInstance().getTicker().getGroups().add(new WorldTickGroup(world)); // TODO: something better?
+        DioriteCore.getInstance().getTicker().getGroups().add(new WorldTickGroup(world)); // TODO: something better?
     }
 
     public void removeWorld(final String worldName)
@@ -60,7 +60,7 @@ public class WorldsManagerImpl implements WorldsManager
         {
             return;
         }
-        for (final TickGroupImpl group : ServerImpl.getInstance().getTicker().getGroups())
+        for (final TickGroupImpl group : DioriteCore.getInstance().getTicker().getGroups())
         {
             group.removeWorld(world);
         }
@@ -69,7 +69,7 @@ public class WorldsManagerImpl implements WorldsManager
     public void removeWorld(final World world)
     {
         this.worlds.remove(world.getName());
-        for (final TickGroupImpl group : ServerImpl.getInstance().getTicker().getGroups())
+        for (final TickGroupImpl group : DioriteCore.getInstance().getTicker().getGroups())
         {
             group.removeWorld(world);
         }

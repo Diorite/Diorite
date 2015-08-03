@@ -96,6 +96,15 @@ public class DioriteConfigImpl implements DioriteConfig
     @CfgStringDefault("adms.yml")
     private File administratorsFile;
 
+    @CfgComment("Path to plugins directory. Plugins will be loaded from this directory.")
+    @CfgStringDefault("plugins")
+    private File pluginsDirectory;
+
+    @CfgComment("Path to core mods directory. Core mods will be loaded from this directory.")
+    @CfgComment("Core mods are special plugins that are loaded before any other plugins or even before Diorite.")
+    @CfgStringDefault("coreMods")
+    private File coreModsDirectory;
+
     @CfgComment("If true, only players from special file can join to server.")
     @CfgBooleanDefault(false)
     private boolean whiteListEnabled;
@@ -295,6 +304,28 @@ public class DioriteConfigImpl implements DioriteConfig
     public void setAdministratorsFile(final File administratorsFile)
     {
         this.administratorsFile = administratorsFile;
+    }
+
+    @Override
+    public File getPluginsDirectory()
+    {
+        return this.pluginsDirectory;
+    }
+
+    public void setPluginsDirectory(final File pluginsDirectory)
+    {
+        this.pluginsDirectory = pluginsDirectory;
+    }
+
+    @Override
+    public File getCoreModsDirectory()
+    {
+        return this.coreModsDirectory;
+    }
+
+    public void setCoreModsDirectory(final File coreModsDirectory)
+    {
+        this.coreModsDirectory = coreModsDirectory;
     }
 
     @Override

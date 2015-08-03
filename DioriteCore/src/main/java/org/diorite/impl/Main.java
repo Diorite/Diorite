@@ -135,7 +135,7 @@ public final class Main
                     System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft blocks.");
                     System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft items.");
                 }
-                new ServerImpl(Proxy.NO_PROXY, options, client).start(options);
+                new DioriteCore(Proxy.NO_PROXY, options, client).start(options);
             } catch (final Throwable t)
             {
                 t.printStackTrace();

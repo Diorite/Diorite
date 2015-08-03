@@ -2,7 +2,7 @@ package org.diorite.impl.entity;
 
 import java.util.UUID;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
@@ -35,7 +35,7 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     @SuppressWarnings("MagicNumber")
     public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.25F, 0.25F);
 
-    public ItemImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
+    public ItemImpl(final UUID uuid, final DioriteCore server, final int id, final ImmutableLocation location)
     {
         super(uuid, server, id, location);
         this.aabb = BASE_SIZE.create(this);

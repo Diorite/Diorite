@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.event.EventType;
 import org.diorite.event.input.SenderCommandEvent;
 
@@ -15,9 +15,9 @@ import jline.console.ConsoleReader;
 
 public class ConsoleReaderThread extends Thread
 {
-    private final ServerImpl server;
+    private final DioriteCore server;
 
-    public ConsoleReaderThread(final ServerImpl server)
+    public ConsoleReaderThread(final DioriteCore server)
     {
         super("{Diorite|Console}");
         this.server = server;
@@ -57,7 +57,7 @@ public class ConsoleReaderThread extends Thread
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).toString();
     }
 
-    public static void start(final ServerImpl server)
+    public static void start(final DioriteCore server)
     {
         new ConsoleReaderThread(server).start();
     }

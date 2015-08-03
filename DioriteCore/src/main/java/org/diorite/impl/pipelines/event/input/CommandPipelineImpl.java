@@ -1,6 +1,6 @@
 package org.diorite.impl.pipelines.event.input;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.command.Command;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.event.input.SenderCommandEvent;
@@ -38,7 +38,7 @@ public class CommandPipelineImpl extends SimpleEventPipeline<SenderCommandEvent>
             }
             if (sender.isPlayer())
             {
-                ServerImpl.getInstance().getConsoleSender().sendMessage(sender.getName() + ": " + Command.COMMAND_PREFIX + evt.getMessage());
+                DioriteCore.getInstance().getConsoleSender().sendMessage(sender.getName() + ": " + Command.COMMAND_PREFIX + evt.getMessage());
             }
             //else if (sender.isCommandBlock()) TODO
             final String command = args[0];

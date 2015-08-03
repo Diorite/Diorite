@@ -2,7 +2,7 @@ package org.diorite.impl.entity;
 
 import java.util.UUID;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
@@ -38,7 +38,7 @@ public abstract class LivingEntityImpl extends AttributableEntityImpl implements
      */
     protected static final byte META_KEY_NO_AI = 15;
 
-    public LivingEntityImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
+    public LivingEntityImpl(final UUID uuid, final DioriteCore server, final int id, final ImmutableLocation location)
     {
         super(uuid, server, id, location);
     }

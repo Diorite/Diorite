@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
@@ -128,7 +128,7 @@ public class EntityTrackers implements Tickable
     public void doTick(final int tps)
     {
         //noinspection ObjectEquality
-        final Collection<PlayerImpl> players = ServerImpl.getInstance().getPlayersManager().getOnlinePlayers(p -> p.getWorld() == this.world);
+        final Collection<PlayerImpl> players = DioriteCore.getInstance().getPlayersManager().getOnlinePlayers(p -> p.getWorld() == this.world);
         this.trackers.forEachValue(t -> {
             t.tick(tps, players);
             return true;

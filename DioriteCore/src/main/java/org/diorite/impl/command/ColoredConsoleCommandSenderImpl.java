@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.fusesource.jansi.Ansi;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.chat.ChatColor;
 
 import jline.Terminal;
@@ -18,7 +18,7 @@ public class ColoredConsoleCommandSenderImpl extends ConsoleCommandSenderImpl
     private final Map<ChatColor, String> replacements = new EnumMap<>(ChatColor.class);
     private final ChatColor[]            colors       = ChatColor.values();
 
-    public ColoredConsoleCommandSenderImpl(final ServerImpl server)
+    public ColoredConsoleCommandSenderImpl(final DioriteCore server)
     {
         super(server);
         this.terminal = server.getReader().getTerminal();
@@ -78,7 +78,7 @@ public class ColoredConsoleCommandSenderImpl extends ConsoleCommandSenderImpl
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("terminal", this.terminal).append("replacements", this.replacements).append("colors", this.colors).toString();
     }
 
-    public static ConsoleCommandSenderImpl getInstance(final ServerImpl server)
+    public static ConsoleCommandSenderImpl getInstance(final DioriteCore server)
     {
         if (server.getConsoleSender() != null)
         {

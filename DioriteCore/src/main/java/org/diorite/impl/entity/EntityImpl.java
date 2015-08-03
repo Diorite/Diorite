@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.GameObjectImpl;
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.entity.meta.EntityMetadata;
@@ -85,7 +85,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 
     protected final Set<Resetable> values = new HashSet<>(10);
 
-    protected final    ServerImpl        server;
+    protected final    DioriteCore       server;
     protected final    WorldImpl         world;
     protected volatile Thread            lastTickThread;
     protected          EntityBoundingBox aabb;
@@ -105,7 +105,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 
     protected BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
 
-    protected EntityImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
+    protected EntityImpl(final UUID uuid, final DioriteCore server, final int id, final ImmutableLocation location)
     {
         super(uuid);
         this.server = server;
@@ -239,7 +239,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 
     protected void doPhysics()
     {
-        final double multi = ServerImpl.getInstance().getSpeedMutli();
+        final double multi = DioriteCore.getInstance().getSpeedMutli();
         if (this.velX != 0)
         {
             this.x += (this.velX * multi);
@@ -421,7 +421,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     }
 
     @Override
-    public ServerImpl getServer()
+    public DioriteCore getServer()
     {
         return this.server;
     }

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.command.CommandPriority;
 import org.diorite.command.sender.CommandSender;
@@ -213,7 +213,7 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
 //            sb.append("&7  == &3CPU &7==\n");
 //            sb.append("&7    Available Processors: &3").append(rt.availableProcessors()).append("\n");
             sb.append("&7  == &3Diorite &7==\n");
-            sb.append("&7    Waiting input actions: &3").append(ServerImpl.getInstance().getInputThread().getActionsSize());
+            sb.append("&7    Waiting input actions: &3").append(DioriteCore.getInstance().getInputThread().getActionsSize());
         }
         sb.append('\n');
         sender.sendSimpleColoredMessage(sb.toString());

@@ -35,9 +35,9 @@ import org.diorite.impl.command.CommandMapImpl;
 import org.diorite.impl.command.ConsoleCommandSenderImpl;
 import org.diorite.impl.command.PluginCommandBuilderImpl;
 import org.diorite.impl.command.defaults.RegisterDefaultCommands;
+import org.diorite.impl.connection.ConnectionHandler;
 import org.diorite.impl.connection.MinecraftEncryption;
-import org.diorite.impl.connection.NetworkManager;
-import org.diorite.impl.connection.ServerConnection;
+import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerListHeaderFooter;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
@@ -58,6 +58,8 @@ import org.diorite.impl.pipelines.event.player.BlockDestroyPipelineImpl;
 import org.diorite.impl.pipelines.event.player.BlockPlacePipelineImpl;
 import org.diorite.impl.pipelines.event.player.ChatPipelineImpl;
 import org.diorite.impl.pipelines.event.player.InventoryClickPipelineImpl;
+import org.diorite.impl.pipelines.system.ServerInitPipeline;
+import org.diorite.impl.pipelines.system.ServerInitPipeline.InitData;
 import org.diorite.impl.plugin.FakePluginLoader;
 import org.diorite.impl.plugin.JarPluginLoader;
 import org.diorite.impl.plugin.PluginManagerImpl;
@@ -109,39 +111,53 @@ import org.diorite.world.generator.WorldGenerators;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 
-public class ServerImpl implements Server
+public class DioriteCore implements Server
 {
-    private static ServerImpl instance;
+    private static final ServerInitPipeline initPipeline;
+    private static       DioriteCore        instance;
 
     protected final boolean isClient;
     protected final CommandMapImpl                        commandMap = new CommandMapImpl();
     protected final TickGroups                            ticker     = new TickGroups(this);
     protected final SchedulerImpl                         scheduler  = new SchedulerImpl();
     protected final ConcurrentLinkedQueue<SimpleSyncTask> syncQueue  = new ConcurrentLinkedQueue<>();
-    protected final Thread      mainThread;
-    protected final InputThread inputThread;
-    protected final String      hostname;
-    protected final int         port;
-    private final   String      serverVersion;
+    protected final Thread mainThread;
+    protected final double[] recentTps = new double[3];
+    private final String      serverVersion;
+    protected     InputThread inputThread;
+    protected String hostname           = "127.0.0.1";
+    protected int    port               = - 1;
     protected int    tps                = DEFAULT_TPS;
     protected int    waitTime           = DEFAULT_WAIT_TIME;
     protected int    connectionThrottle = 1000;
     protected double mutli              = 1; // it can be used with TPS, like make 10 TPS but change this to 2, so server will scale to new TPS.
-    protected final YggdrasilSessionService  sessionService;
-    protected final ServerConnection         serverConnection;
-    protected final PlayersManagerImpl       playersManager;
-    protected final WorldsManagerImpl        worldsManager;
-    protected       ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
-    protected       ConsoleReader            reader;
-    protected       long                     currentTick;
-    protected final int                      keepAliveTimer;
-    protected       DioriteConfigImpl        config;
-    protected       PluginManager            pluginManager;
-    protected                  File     pluginsDirectory = new File("plugins"); // TODO Allow to change this
-    private final              double[] recentTps        = new double[3];
-    private                    KeyPair  keyPair          = MinecraftEncryption.generateKeyPair();
-    private transient volatile boolean  isRunning        = true;
-    private transient volatile boolean  hasStopped       = false;
+    protected YggdrasilSessionService  sessionService;
+    protected ConnectionHandler        connectionHandler;
+    protected PlayersManagerImpl       playersManager;
+    protected WorldsManagerImpl        worldsManager;
+    protected ConsoleCommandSenderImpl consoleCommandSender; //new ConsoleCommandSenderImpl(this);
+    protected ConsoleReader            reader;
+    protected long                     currentTick;
+    protected int                      keepAliveTimer;
+    protected DioriteConfigImpl        config;
+    protected PluginManager            pluginManager;
+    protected                    KeyPair keyPair    = MinecraftEncryption.generateKeyPair();
+    protected transient volatile boolean isRunning  = true;
+    protected transient volatile boolean hasStopped = false;
+    private Metrics metrics;
+
+    public DioriteCore(final Proxy proxy, final OptionSet options, final boolean isClient)
+    {
+        this.isClient = isClient;
+        instance = this;
+        this.mainThread = Thread.currentThread();
+        this.serverVersion = DioriteCore.class.getPackage().getImplementationVersion();
+        Diorite.setServer(this);
+
+        // TODO core-plugins loading system, should load plugins before initPipeline run or even before parsing options
+
+        initPipeline.run(this, new InitData(options, proxy, isClient));
+    }
 
     public int getCompressionThreshold()
     {
@@ -151,11 +167,6 @@ public class ServerImpl implements Server
     public void setCompressionThreshold(final int compressionThreshold)
     {
         this.config.setNetworkCompressionThreshold(compressionThreshold);
-    }
-
-    private interface SimpleSyncTask extends Runnable
-    {
-        Synchronizable getSynchronizable();
     }
 
     public void sync(final Runnable runnable, final Synchronizable sync)
@@ -252,92 +263,6 @@ public class ServerImpl implements Server
         return result;
     }
 
-    private void loadConfigFile(final File f)
-    {
-        final Template<DioriteConfigImpl> cfgTemp = TemplateCreator.getTemplate(DioriteConfigImpl.class);
-        if (f.exists())
-        {
-            try
-            {
-                this.config = cfgTemp.load(f);
-                if (this.config == null)
-                {
-                    this.config = cfgTemp.fillDefaults(new DioriteConfigImpl());
-                }
-            } catch (final IOException e)
-            {
-                throw new RuntimeException("IO exception when loading config file: " + f, e);
-            }
-        }
-        else
-        {
-            this.config = cfgTemp.fillDefaults(new DioriteConfigImpl());
-            try
-            {
-                DioriteUtils.createFile(f);
-            } catch (final IOException e)
-            {
-                throw new RuntimeException("Can't create configuration file!", e);
-            }
-        }
-        try
-        {
-            cfgTemp.dump(f, this.config, false);
-        } catch (final IOException e)
-        {
-            throw new RuntimeException("Can't dump configuration file!", e);
-        }
-    }
-
-    private void loadPlugins()
-    {
-        this.pluginManager = new PluginManagerImpl();
-        this.pluginManager.registerPluginLoader(new FakePluginLoader());
-        this.pluginManager.registerPluginLoader(new JarPluginLoader());
-
-        Main.debug("Plugins directory is: " + this.pluginsDirectory.getAbsolutePath());
-        if (! this.pluginsDirectory.exists())
-        {
-            this.pluginsDirectory.mkdir();
-            Main.debug("Created plugins directory...");
-        }
-
-        for (final File file : this.pluginsDirectory.listFiles())
-        {
-            if (file.isDirectory())
-            {
-                continue;
-            }
-
-            try
-            {
-                this.pluginManager.loadPlugin(file);
-            } catch (final PluginException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("Loaded " + this.pluginManager.getPlugins().size() + " plugins!");
-    }
-
-    private void registerEvents()
-    {
-        EventType.register(SenderCommandEvent.class, CommandPipeline.class, new CommandPipelineImpl());
-        EventType.register(SenderTabCompleteEvent.class, TabCompletePipeline.class, new TabCompletePipelineImpl());
-
-        EventType.register(PlayerChatEvent.class, ChatPipeline.class, new ChatPipelineImpl());
-
-        EventType.register(PlayerBlockDestroyEvent.class, BlockDestroyPipeline.class, new BlockDestroyPipelineImpl());
-        EventType.register(PlayerBlockPlaceEvent.class, BlockPlacePipeline.class, new BlockPlacePipelineImpl());
-        EventType.register(PlayerInventoryClickEvent.class, InventoryClickPipeline.class, new InventoryClickPipelineImpl());
-
-        EventType.register(ChunkLoadEvent.class, ChunkLoadPipeline.class, new ChunkLoadPipelineImpl());
-        EventType.register(ChunkUnloadEvent.class, ChunkUnloadPipeline.class, new ChunkUnloadPipelineImpl());
-        EventType.register(ChunkGenerateEvent.class, ChunkGeneratePipeline.class, new ChunkGeneratePipelineImpl());
-        EventType.register(ChunkPopulateEvent.class, ChunkPopulatePipeline.class, new ChunkPopulatePipelineImpl());
-    }
-
     @Override
     public List<String> getOnlinePlayersNames(final String prefix)
     {
@@ -350,111 +275,26 @@ public class ServerImpl implements Server
         return this.playersManager.getOnlinePlayersNames();
     }
 
-    public ServerImpl(final Proxy proxy, final OptionSet options, final boolean isClient)
-    {
-        this.isClient = isClient;
-        instance = this;
-        this.mainThread = Thread.currentThread();
-        this.serverVersion = ServerImpl.class.getPackage().getImplementationVersion();
-        Diorite.setServer(this);
-        this.loadConfigFile((File) options.valueOf("config"));
-        if (this.config == null)
-        {
-            throw new AssertionError("Configuration instance is null after creating!");
-        }
-        this.keepAliveTimer = (int) options.valueOf("keepalivetimer");
-
-        this.hostname = options.has("hostname") ? options.valueOf("hostname").toString() : this.config.getHostname();
-        this.port = options.has("port") ? (int) options.valueOf("port") : this.config.getPort();
-
-        if (options.has("online"))
-        {
-            final OnlineMode mode = OnlineMode.valueOf(options.valueOf("online").toString().toUpperCase());
-            if (mode != null)
-            {
-                this.config.setOnlineMode(mode);
-            }
-        }
-        this.registerEvents();
-
-        if (System.console() == null)
-        {
-            System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
-            Main.useJline = false;
-        }
-        try
-        {
-
-            this.reader = new ConsoleReader(System.in, System.out);
-            this.reader.setExpandEvents(false);
-        } catch (final Throwable t)
-        {
-            t.printStackTrace();
-            try
-            {
-                System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
-                System.setProperty("user.language", "en");
-                Main.useJline = false;
-                this.reader = new ConsoleReader(System.in, System.out);
-                this.reader.setExpandEvents(false);
-            } catch (final IOException e)
-            {
-                this.consoleCommandSender = new ConsoleCommandSenderImpl(this);
-                e.printStackTrace();
-            }
-        }
-        this.consoleCommandSender = ColoredConsoleCommandSenderImpl.getInstance(this);
-
-        ConsoleReaderThread.start(this);
-
-        this.sessionService = new YggdrasilSessionService(proxy, UUID.randomUUID().toString());
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try
-            {
-                this.onStop();
-            } catch (final Exception e)
-            {
-                e.printStackTrace();
-            }
-        }));
-
-        RegisterDefaultCommands.init(this.commandMap);
-
-        this.inputThread = InputThread.start(this.config.getInputThreadPoolSize());
-
-        this.playersManager = new PlayersManagerImpl(this);
-        this.worldsManager = new WorldsManagerImpl();
-
-        this.serverConnection = new ServerConnection(this);
-        this.serverConnection.start();
-    }
-
-    public InputThread getInputThread()
-    {
-        return this.inputThread;
-    }
-
     @Override
     public DioriteConfigImpl getConfig()
     {
         return this.config;
     }
 
-    public int getKeepAliveTimer()
+    public void setConfig(final DioriteConfigImpl config)
     {
-        return this.keepAliveTimer;
-    }
-
-    public int getPlayerTimeout()
-    {
-        return this.config.getPlayerIdleTimeout();
+        this.config = config;
     }
 
     @Override
     public WorldsManagerImpl getWorldsManager()
     {
         return this.worldsManager;
+    }
+
+    public void setWorldsManager(final WorldsManagerImpl worldsManager)
+    {
+        this.worldsManager = worldsManager;
     }
 
     @Override
@@ -545,38 +385,6 @@ public class ServerImpl implements Server
         // TODO
     }
 
-    public synchronized void onStop()
-    {
-        if (this.hasStopped)
-        {
-            return;
-        }
-        if (this.metrics != null)
-        {
-            this.metrics.stop();
-        }
-        if (this.pluginManager != null)
-        {
-            this.pluginManager.disablePlugins();
-        }
-        this.hasStopped = true;
-        this.isRunning = false;
-        if (this.playersManager != null)
-        {
-            this.playersManager.forEach(p -> p.kick("§4Server closed!"));
-        }
-        if (this.worldsManager != null)
-        {
-            this.worldsManager.getWorlds().stream().forEach(World::save);
-            Main.debug("done?");
-        }
-        if (this.serverConnection != null)
-        {
-            this.serverConnection.close();
-        }
-        System.out.println("Goodbye <3");
-    }
-
     @Override
     public void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer)
     {
@@ -598,7 +406,7 @@ public class ServerImpl implements Server
     @Override
     public void sendTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut, final Player player)
     {
-        final NetworkManager n = ((PlayerImpl) player).getNetworkManager();
+        final CoreNetworkManager n = ((PlayerImpl) player).getNetworkManager();
 
         if (title != null)
         {
@@ -631,6 +439,11 @@ public class ServerImpl implements Server
         return this.pluginManager;
     }
 
+    public void setPluginManager(final PluginManager pluginManager)
+    {
+        this.pluginManager = pluginManager;
+    }
+
     @Override
     public CommandMapImpl getCommandMap()
     {
@@ -661,6 +474,179 @@ public class ServerImpl implements Server
         return this.playersManager.getRawPlayers().get(uuid);
     }
 
+    protected void loadConfigFile(final File f)
+    {
+        final Template<DioriteConfigImpl> cfgTemp = TemplateCreator.getTemplate(DioriteConfigImpl.class);
+        if (f.exists())
+        {
+            try
+            {
+                this.config = cfgTemp.load(f);
+                if (this.config == null)
+                {
+                    this.config = cfgTemp.fillDefaults(new DioriteConfigImpl());
+                }
+            } catch (final IOException e)
+            {
+                throw new RuntimeException("IO exception when loading config file: " + f, e);
+            }
+        }
+        else
+        {
+            this.config = cfgTemp.fillDefaults(new DioriteConfigImpl());
+            try
+            {
+                DioriteUtils.createFile(f);
+            } catch (final IOException e)
+            {
+                throw new RuntimeException("Can't create configuration file!", e);
+            }
+        }
+        try
+        {
+            cfgTemp.dump(f, this.config, false);
+        } catch (final IOException e)
+        {
+            throw new RuntimeException("Can't dump configuration file!", e);
+        }
+    }
+
+    private void loadPlugins()
+    {
+        this.pluginManager = new PluginManagerImpl(this.config.getPluginsDirectory());
+        this.pluginManager.registerPluginLoader(new FakePluginLoader());
+        this.pluginManager.registerPluginLoader(new JarPluginLoader());
+
+        final File dir = this.pluginManager.getDirectory();
+        if (dir.exists() && ! dir.isDirectory())
+        {
+            throw new RuntimeException("Plugin directory must be a folder!");
+        }
+        Main.debug("Plugins directory is: " + dir.getAbsolutePath());
+        if (! dir.exists())
+        {
+            dir.mkdirs();
+            Main.debug("Created plugins directory...");
+        }
+
+        final File[] files = dir.listFiles();
+        if (files == null)
+        {
+            throw new RuntimeException("Plugin directory must be a folder!");
+        }
+        for (final File file : files)
+        {
+            if (file.isDirectory())
+            {
+                continue;
+            }
+
+            try
+            {
+                this.pluginManager.loadPlugin(file);
+            } catch (final PluginException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Loaded " + this.pluginManager.getPlugins().size() + " plugins!");
+    }
+
+    private void registerEvents()
+    {
+        EventType.register(SenderCommandEvent.class, CommandPipeline.class, new CommandPipelineImpl());
+        EventType.register(SenderTabCompleteEvent.class, TabCompletePipeline.class, new TabCompletePipelineImpl());
+
+        EventType.register(PlayerChatEvent.class, ChatPipeline.class, new ChatPipelineImpl());
+
+        EventType.register(PlayerBlockDestroyEvent.class, BlockDestroyPipeline.class, new BlockDestroyPipelineImpl());
+        EventType.register(PlayerBlockPlaceEvent.class, BlockPlacePipeline.class, new BlockPlacePipelineImpl());
+        EventType.register(PlayerInventoryClickEvent.class, InventoryClickPipeline.class, new InventoryClickPipelineImpl());
+
+        EventType.register(ChunkLoadEvent.class, ChunkLoadPipeline.class, new ChunkLoadPipelineImpl());
+        EventType.register(ChunkUnloadEvent.class, ChunkUnloadPipeline.class, new ChunkUnloadPipelineImpl());
+        EventType.register(ChunkGenerateEvent.class, ChunkGeneratePipeline.class, new ChunkGeneratePipelineImpl());
+        EventType.register(ChunkPopulateEvent.class, ChunkPopulatePipeline.class, new ChunkPopulatePipelineImpl());
+    }
+
+    public InputThread getInputThread()
+    {
+        return this.inputThread;
+    }
+
+    public void setInputThread(final InputThread inputThread)
+    {
+        this.inputThread = inputThread;
+    }
+
+    public int getKeepAliveTimer()
+    {
+        return this.keepAliveTimer;
+    }
+
+    public int getPlayerTimeout()
+    {
+        return this.config.getPlayerIdleTimeout();
+    }
+
+    public boolean isClient()
+    {
+        return this.isClient;
+    }
+
+    public String getServerVersion()
+    {
+        return this.serverVersion;
+    }
+
+    public Thread getMainThread()
+    {
+        return this.mainThread;
+    }
+
+    public long getCurrentTick()
+    {
+        return this.currentTick;
+    }
+
+    public double getMutli()
+    {
+        return this.mutli;
+    }
+
+    public synchronized void onStop()
+    {
+        if (this.hasStopped)
+        {
+            return;
+        }
+        if (this.metrics != null)
+        {
+            this.metrics.stop();
+        }
+        if (this.pluginManager != null)
+        {
+            this.pluginManager.disablePlugins();
+        }
+        this.hasStopped = true;
+        this.isRunning = false;
+        if (this.playersManager != null)
+        {
+            this.playersManager.forEach(p -> p.kick("§4Server closed!"));
+        }
+        if (this.worldsManager != null)
+        {
+            this.worldsManager.getWorlds().stream().forEach(World::save);
+            Main.debug("done?");
+        }
+        if (this.connectionHandler != null)
+        {
+            this.connectionHandler.close();
+        }
+        System.out.println("Goodbye <3");
+    }
+
     public KeyPair getKeyPair()
     {
         return this.keyPair;
@@ -681,9 +667,14 @@ public class ServerImpl implements Server
         this.connectionThrottle = connectionThrottle;
     }
 
-    public ServerConnection getServerConnection()
+    public ConnectionHandler getConnectionHandler()
     {
-        return this.serverConnection;
+        return this.connectionHandler;
+    }
+
+    public void setConnectionHandler(final ConnectionHandler connectionHandler)
+    {
+        this.connectionHandler = connectionHandler;
     }
 
     public void setConsoleCommandSender(final ConsoleCommandSenderImpl consoleCommandSender)
@@ -694,6 +685,11 @@ public class ServerImpl implements Server
     public PlayersManagerImpl getPlayersManager()
     {
         return this.playersManager;
+    }
+
+    public void setPlayersManager(final PlayersManagerImpl playersManager)
+    {
+        this.playersManager = playersManager;
     }
 
     public OnlineMode getOnlineMode()
@@ -711,9 +707,19 @@ public class ServerImpl implements Server
         return this.port;
     }
 
+    public void setPort(final int port)
+    {
+        this.port = port;
+    }
+
     public String getHostname()
     {
         return this.hostname;
+    }
+
+    public void setHostname(final String hostname)
+    {
+        this.hostname = hostname;
     }
 
     public Thread getMainServerThread()
@@ -731,42 +737,49 @@ public class ServerImpl implements Server
         return this.reader;
     }
 
+    public void setReader(final ConsoleReader reader)
+    {
+        this.reader = reader;
+    }
+
     public SessionService getSessionService()
     {
         return this.sessionService;
     }
 
+    public void setSessionService(final YggdrasilSessionService sessionService)
+    {
+        this.sessionService = sessionService;
+    }
+
     void start(final OptionSet options)
     {
+        final java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
+        global.setUseParentHandlers(false);
+        for (final Handler handler : global.getHandlers())
         {
-            final java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
-            global.setUseParentHandlers(false);
-            for (final Handler handler : global.getHandlers())
-            {
-                global.removeHandler(handler);
-            }
-            global.addHandler(new ForwardLogHandler());
-
-            final Logger logger = (Logger) LogManager.getRootLogger();
-            logger.getAppenders().values().stream().filter(appender -> (appender instanceof ConsoleAppender)).forEach(logger::removeAppender);
-
-            final Thread writer = new Thread(new TerminalConsoleWriterThread(System.out));
-            writer.setDaemon(true);
-            writer.start();
-
-            System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
-            System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
+            global.removeHandler(handler);
         }
+        global.addHandler(new ForwardLogHandler());
+
+        final Logger logger = (Logger) LogManager.getRootLogger();
+        logger.getAppenders().values().stream().filter(appender -> (appender instanceof ConsoleAppender)).forEach(logger::removeAppender);
+
+        final Thread writer = new Thread(new TerminalConsoleWriterThread(System.out));
+        writer.setDaemon(true);
+        writer.start();
+
+        System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
+        System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
         System.out.println("Starting Diorite v" + this.getVersion() + " server...");
 
         System.out.println("Loading plugins...");
         this.loadPlugins();
 
-        { // register default generators
-            WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
-            WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
-            WorldGenerators.registerGenerator(TestWorldGeneratorImpl.createInitializer());
-        }
+        // register default generators
+        WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
+        WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
+        WorldGenerators.registerGenerator(TestWorldGeneratorImpl.createInitializer());
 
         System.out.println("Loading worlds...");
         this.worldsManager.init(this.config, this.config.getWorlds().getWorldsDir());
@@ -779,7 +792,7 @@ public class ServerImpl implements Server
         {
             System.setProperty("io.netty.eventLoopThreads", options.has("netty") ? options.valueOf("netty").toString() : Integer.toString(this.config.getNettyThreads()));
             System.out.println("Starting listening on " + this.hostname + ":" + this.port);
-            this.serverConnection.init(InetAddress.getByName(this.hostname), this.port, this.config.isUseNativeTransport());
+            this.connectionHandler.init(InetAddress.getByName(this.hostname), this.port, this.config.isUseNativeTransport());
 
             System.out.println("Binded to " + this.hostname + ":" + this.port);
         } catch (final UnknownHostException e)
@@ -808,8 +821,6 @@ public class ServerImpl implements Server
     {
         this.scheduler.tick(this.currentTick, withAsync);
     }
-
-    private Metrics metrics;
 
     public void run()
     {
@@ -878,13 +889,102 @@ public class ServerImpl implements Server
         return this.isRunning;
     }
 
+    private interface SimpleSyncTask extends Runnable
+    {
+        Synchronizable getSynchronizable();
+    }
+
+    public static ServerInitPipeline getInitPipeline()
+    {
+        return initPipeline;
+    }
+
     private static double calcTps(final double avg, final double exp, final double tps)
     {
         return (avg * exp) + (tps * (1.0D - exp));
     }
 
-    public static ServerImpl getInstance()
+    public static DioriteCore getInstance()
     {
         return instance;
+    }
+
+    static
+    {
+        initPipeline = new ServerInitPipeline();
+        initPipeline.addLast("DioriteCore|LoadConfig", (s, p, d) -> {
+            s.loadConfigFile((File) d.options.valueOf("config"));
+            if (s.config == null)
+            {
+                throw new AssertionError("Configuration instance is null after creating!");
+            }
+
+            s.keepAliveTimer = (int) d.options.valueOf("keepalivetimer");
+
+            if (d.options.has("online"))
+            {
+                final OnlineMode mode = OnlineMode.valueOf(d.options.valueOf("online").toString().toUpperCase());
+                if (mode != null)
+                {
+                    s.config.setOnlineMode(mode);
+                }
+            }
+        });
+        initPipeline.addLast("DioriteCore|registerEvents", (s, p, d) -> {
+            s.registerEvents();
+        });
+        initPipeline.addLast("DioriteCore|initConsole", (s, p, d) -> {
+            if (System.console() == null)
+            {
+                System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
+                Main.useJline = false;
+            }
+            try
+            {
+                s.reader = new ConsoleReader(System.in, System.out);
+                s.reader.setExpandEvents(false);
+            } catch (final Throwable t)
+            {
+                t.printStackTrace();
+                try
+                {
+                    System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
+                    System.setProperty("user.language", "en");
+                    Main.useJline = false;
+                    s.reader = new ConsoleReader(System.in, System.out);
+                    s.reader.setExpandEvents(false);
+                } catch (final IOException e)
+                {
+                    s.consoleCommandSender = new ConsoleCommandSenderImpl(s);
+                    e.printStackTrace();
+                }
+            }
+            s.consoleCommandSender = ColoredConsoleCommandSenderImpl.getInstance(s);
+            ConsoleReaderThread.start(s);
+        });
+        initPipeline.addLast("DioriteCore|initSessionService", (s, p, d) -> {
+            s.sessionService = new YggdrasilSessionService(d.proxy, UUID.randomUUID().toString());
+        });
+        initPipeline.addLast("DioriteCore|addShutdownHook", (s, p, d) -> {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try
+                {
+                    s.onStop();
+                } catch (final Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }));
+        });
+        initPipeline.addLast("DioriteCore|RegisterDefaultCommands", (s, p, d) -> {
+            RegisterDefaultCommands.init(s.commandMap);
+        });
+        initPipeline.addLast("DioriteCore|initInputThread", (s, p, d) -> {
+            s.inputThread = InputThread.start(s.config.getInputThreadPoolSize());
+        });
+        initPipeline.addLast("DioriteCore|initGame", (s, p, d) -> {
+            s.playersManager = new PlayersManagerImpl(s);
+            s.worldsManager = new WorldsManagerImpl();
+        });
     }
 }

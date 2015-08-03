@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.utils.SpammyError;
 import org.diorite.utils.collections.sets.ConcurrentSet;
@@ -19,10 +19,10 @@ public class TickGroups implements Tickable
 {
     private static final Object key = new Object(); // key to spammy messages
 
-    protected final ServerImpl server;
+    protected final DioriteCore server;
     private Collection<TickGroupImpl> groups = new ConcurrentSet<>(10);
 
-    public TickGroups(final ServerImpl server)
+    public TickGroups(final DioriteCore server)
     {
         this.server = server;
     }

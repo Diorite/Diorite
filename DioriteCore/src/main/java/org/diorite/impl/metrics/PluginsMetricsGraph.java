@@ -6,15 +6,15 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 
 class PluginsMetricsGraph extends DynamicMetricsGraph
 {
 
-    private final ServerImpl srv;
-    private final boolean    withVersions;
+    private final DioriteCore srv;
+    private final boolean     withVersions;
 
-    PluginsMetricsGraph(final String name, final ServerImpl srv, final boolean withVersions)
+    PluginsMetricsGraph(final String name, final DioriteCore srv, final boolean withVersions)
     {
         super(name);
         this.srv = srv;

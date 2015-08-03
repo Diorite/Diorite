@@ -7,8 +7,8 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.connection.ConnectionHandler;
 import org.diorite.impl.connection.EnumProtocolDirection;
-import org.diorite.impl.connection.ServerConnection;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,9 +17,9 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 public class PacketDecoder extends ByteToMessageDecoder
 {
     private final EnumProtocolDirection protocolDirection;
-    private final ServerConnection      serverConnection;
+    private final ConnectionHandler     serverConnection;
 
-    public PacketDecoder(final EnumProtocolDirection protocolDirection, final ServerConnection serverConnection)
+    public PacketDecoder(final EnumProtocolDirection protocolDirection, final ConnectionHandler serverConnection)
     {
         this.protocolDirection = protocolDirection;
         this.serverConnection = serverConnection;
@@ -34,7 +34,7 @@ public class PacketDecoder extends ByteToMessageDecoder
         }
         final PacketDataSerializer dataSerializer = new PacketDataSerializer(byteBuf);
         final int i = dataSerializer.readVarInt();
-        final Packet<?> packet = context.channel().attr(this.serverConnection.protocolKey).get().createPacket(this.protocolDirection, i);
+        final Packet<?> packet = context.channel().attr(this.serverConnection.getProtocolKey()).get().createPacket(this.protocolDirection, i);
         if (packet == null)
         {
             throw new IOException("Bad packet id " + i + " (" + Integer.toHexString(i) + ")");
@@ -43,7 +43,7 @@ public class PacketDecoder extends ByteToMessageDecoder
         if (dataSerializer.readableBytes() > 0)
         {
             //noinspection HardcodedFileSeparator
-            throw new IOException("Packet " + context.channel().attr(this.serverConnection.protocolKey).get().getStatus() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + dataSerializer.readableBytes() + " bytes extra whilst reading packet " + i);
+            throw new IOException("Packet " + context.channel().attr(this.serverConnection.getProtocolKey()).get().getStatus() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + dataSerializer.readableBytes() + " bytes extra whilst reading packet " + i);
         }
         packets.add(packet);
     }
@@ -51,6 +51,6 @@ public class PacketDecoder extends ByteToMessageDecoder
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("protocolDirection", this.protocolDirection).append("serverConnection", this.serverConnection).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("protocolDirection", this.protocolDirection).append("connectionHandler", this.serverConnection).toString();
     }
 }

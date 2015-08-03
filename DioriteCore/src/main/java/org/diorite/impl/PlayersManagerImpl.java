@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.auth.GameProfile;
-import org.diorite.impl.connection.NetworkManager;
+import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
@@ -45,18 +45,18 @@ import io.netty.buffer.Unpooled;
 public class PlayersManagerImpl implements Tickable
 {
     private final Map<UUID, PlayerImpl> players = new ConcurrentHashMap<>(100, 0.2f, 8);
-    private final ServerImpl server;
-    private final int        keepAliveTimer;
+    private final DioriteCore server;
+    private final int         keepAliveTimer;
 
     private transient long lastKeepAlive = System.currentTimeMillis();
 
-    public PlayersManagerImpl(final ServerImpl server)
+    public PlayersManagerImpl(final DioriteCore server)
     {
         this.server = server;
         this.keepAliveTimer = (int) TimeUnit.SECONDS.toMillis(this.server.getKeepAliveTimer());
     }
 
-    public PlayerImpl createPlayer(final GameProfile gameProfile, final NetworkManager networkManager)
+    public PlayerImpl createPlayer(final GameProfile gameProfile, final CoreNetworkManager networkManager)
     {// TODO: loading player
         //noinspection MagicNumber
 
@@ -218,7 +218,7 @@ public class PlayersManagerImpl implements Tickable
     }
 
 
-    public ServerImpl getServer()
+    public DioriteCore getServer()
     {
         return this.server;
     }

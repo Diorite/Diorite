@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.connection.ConnectionHandler;
 import org.diorite.impl.connection.EnumProtocolDirection;
-import org.diorite.impl.connection.ServerConnection;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,9 +15,9 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public class PacketEncoder extends MessageToByteEncoder<Packet<?>>
 {
     private final EnumProtocolDirection protocolDirection;
-    private final ServerConnection      serverConnection;
+    private final ConnectionHandler     serverConnection;
 
-    public PacketEncoder(final EnumProtocolDirection protocolDirection, final ServerConnection serverConnection)
+    public PacketEncoder(final EnumProtocolDirection protocolDirection, final ConnectionHandler serverConnection)
     {
         this.protocolDirection = protocolDirection;
         this.serverConnection = serverConnection;
@@ -26,7 +26,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>>
     @Override
     protected void encode(final ChannelHandlerContext context, final Packet<?> packet, final ByteBuf byteBuf) throws IOException
     {
-        final Integer localInteger = context.channel().attr(this.serverConnection.protocolKey).get().getPacketID(this.protocolDirection, packet);
+        final Integer localInteger = context.channel().attr(this.serverConnection.getProtocolKey()).get().getPacketID(this.protocolDirection, packet);
         if (localInteger == null)
         {
             throw new IOException("Can't serialize unregistered packet, " + packet);
@@ -45,6 +45,6 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>>
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("protocolDirection", this.protocolDirection).append("serverConnection", this.serverConnection).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("protocolDirection", this.protocolDirection).append("connectionHandler", this.serverConnection).toString();
     }
 }

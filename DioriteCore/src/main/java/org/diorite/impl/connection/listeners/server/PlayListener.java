@@ -4,8 +4,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
-import org.diorite.impl.ServerImpl;
-import org.diorite.impl.connection.NetworkManager;
+import org.diorite.impl.DioriteCore;
+import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientArmAnimation;
@@ -46,11 +46,11 @@ import org.diorite.event.player.PlayerInventoryClickEvent;
 
 public class PlayListener implements PacketPlayClientListener
 {
-    private final ServerImpl     server;
-    private final NetworkManager networkManager;
-    private final PlayerImpl     player;
+    private final DioriteCore        server;
+    private final CoreNetworkManager networkManager;
+    private final PlayerImpl         player;
 
-    public PlayListener(final ServerImpl server, final NetworkManager networkManager, final PlayerImpl player)
+    public PlayListener(final DioriteCore server, final CoreNetworkManager networkManager, final PlayerImpl player)
     {
         this.server = server;
         this.networkManager = networkManager;
@@ -243,12 +243,12 @@ public class PlayListener implements PacketPlayClientListener
         this.server.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType())), this.player);
     }
 
-    public NetworkManager getNetworkManager()
+    public CoreNetworkManager getNetworkManager()
     {
         return this.networkManager;
     }
 
-    public ServerImpl getServer()
+    public DioriteCore getServer()
     {
         return this.server;
     }
@@ -260,7 +260,6 @@ public class PlayListener implements PacketPlayClientListener
 
         this.networkManager.sendPacket(new PacketPlayServerDisconnect(message));
         this.networkManager.close(message, true);
-        this.server.getServerConnection().remove(this.networkManager);
         // TODO: implement
     }
 

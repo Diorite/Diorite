@@ -16,11 +16,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.MinecraftEncryption;
-import org.diorite.impl.connection.NetworkManager;
+import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.listeners.ThreadPlayerLookupUUID;
 import org.diorite.impl.connection.packets.login.PacketLoginClientListener;
 import org.diorite.impl.connection.packets.login.client.PacketLoginClientEncryptionBegin;
@@ -43,35 +43,35 @@ public class LoginListener implements PacketLoginClientListener
 
     private final Logger logger = LogManager.getLogger();
     private final byte[] token  = new byte[4];
-    private final ServerImpl     server;
-    private final NetworkManager networkManager;
-    private       GameProfile    gameProfile;
-    private       SecretKey      secretKey;
-    private       String         hostname;
-    private       ProtocolState  protocolState;
-    private       OnlineMode     onlineMode;
-    private       int            ticks;
+    private final DioriteCore        core;
+    private final CoreNetworkManager networkManager;
+    private       GameProfile        gameProfile;
+    private       SecretKey          secretKey;
+    private       String             hostname;
+    private       ProtocolState      protocolState;
+    private       OnlineMode         onlineMode;
+    private       int                ticks;
 
     private String serverID = ""; // unused?
 
-    public LoginListener(final ServerImpl server, final NetworkManager networkManager)
+    public LoginListener(final DioriteCore core, final CoreNetworkManager networkManager)
     {
-        this.server = server;
+        this.core = core;
         this.networkManager = networkManager;
-        this.onlineMode = server.getOnlineMode();
+        this.onlineMode = core.getOnlineMode();
         random.nextBytes(this.token);
         this.protocolState = ProtocolState.HELLO;
     }
 
-    public LoginListener(final ServerImpl server, final NetworkManager networkManager, final String hostname)
+    public LoginListener(final DioriteCore core, final CoreNetworkManager networkManager, final String hostname)
     {
-        this(server, networkManager);
+        this(core, networkManager);
         this.hostname = hostname;
     }
 
     private int getTimeoutTicks()
     {
-        return (int) (this.server.getSpeedMutli() * TIMEOUT_TICKS);
+        return (int) (this.core.getSpeedMutli() * TIMEOUT_TICKS);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class LoginListener implements PacketLoginClientListener
         if (this.onlineMode == OnlineMode.TRUE) // TODO
         {
             this.protocolState = ProtocolState.KEY;
-            this.networkManager.sendPacket(new PacketLoginServerEncryptionBegin(this.serverID, this.server.getKeyPair().getPublic(), this.token));
+            this.networkManager.sendPacket(new PacketLoginServerEncryptionBegin(this.serverID, this.core.getKeyPair().getPublic(), this.token));
         }
         else
         {
@@ -107,7 +107,7 @@ public class LoginListener implements PacketLoginClientListener
     public void handle(final PacketLoginClientEncryptionBegin packet)
     {
         Validate.validState(this.protocolState == ProtocolState.KEY, "Unexpected key packet");
-        final PrivateKey privateKey = this.server.getKeyPair().getPrivate();
+        final PrivateKey privateKey = this.core.getKeyPair().getPrivate();
         if (Arrays.equals(this.token, packet.getVerifyToken()))
         {
             throw new IllegalStateException("Invalid nonce!");
@@ -120,18 +120,18 @@ public class LoginListener implements PacketLoginClientListener
 
     public void acceptPlayer()
     {
-        if (this.server.getCompressionThreshold() >= 0)
+        if (this.core.getCompressionThreshold() >= 0)
         {
-            this.networkManager.sendPacket(new PacketLoginServerSetCompression(this.server.getCompressionThreshold()), future -> {
-                this.networkManager.setCompression(this.server.getCompressionThreshold());
+            this.networkManager.sendPacket(new PacketLoginServerSetCompression(this.core.getCompressionThreshold()), future -> {
+                this.networkManager.setCompression(this.core.getCompressionThreshold());
             });
         }
         this.networkManager.sendPacket(new PacketLoginServerSuccess(this.gameProfile), future -> {
             this.networkManager.setProtocol(EnumProtocol.PLAY);
 
-            PlayerImpl player = this.server.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);
-            this.networkManager.setPacketListener(new PlayListener(LoginListener.this.server, LoginListener.this.networkManager, player));
-            this.server.getPlayersManager().playerJoin(player);
+            PlayerImpl player = this.core.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);
+            this.networkManager.setPacketListener(new PlayListener(LoginListener.this.core, LoginListener.this.networkManager, player));
+            this.core.getPlayersManager().playerJoin(player);
         });
     }
 
@@ -160,7 +160,6 @@ public class LoginListener implements PacketLoginClientListener
             final BaseComponent tc = TextComponent.fromLegacyText(msg);
             this.networkManager.sendPacket(new PacketLoginServerDisconnect(tc));
             this.networkManager.close(tc, false);
-            this.server.getServerConnection().remove(this.networkManager);
         } catch (final Exception exception)
         {
             this.logger.error("Error whilst disconnecting player", exception);
@@ -227,14 +226,14 @@ public class LoginListener implements PacketLoginClientListener
         this.serverID = serverID;
     }
 
-    public NetworkManager getNetworkManager()
+    public CoreNetworkManager getNetworkManager()
     {
         return this.networkManager;
     }
 
-    public ServerImpl getServer()
+    public DioriteCore getCore()
     {
-        return this.server;
+        return this.core;
     }
 
     public OnlineMode getOnlineMode()

@@ -27,6 +27,12 @@ public class PluginManagerImpl implements PluginManager
 {
     private final Collection<BasePlugin>    plugins       = new ArrayList<>(20);
     private final Map<String, PluginLoader> pluginLoaders = new HashMap<>(5);
+    private final File directory;
+
+    public PluginManagerImpl(final File directory)
+    {
+        this.directory = directory;
+    }
 
     @Override
     public void registerPluginLoader(final PluginLoader pluginLoader)
@@ -124,6 +130,12 @@ public class PluginManagerImpl implements PluginManager
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public File getDirectory()
+    {
+        return this.directory;
     }
 
     @Override

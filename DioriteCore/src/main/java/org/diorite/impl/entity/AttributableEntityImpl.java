@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.attrib.AttributeStorageImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.AttributableEntity;
@@ -19,7 +19,7 @@ public abstract class AttributableEntityImpl extends EntityImpl implements Attri
 {
     protected final AttributeStorage attributes = new AttributeStorageImpl(this);
 
-    public AttributableEntityImpl(final UUID uuid, final ServerImpl server, final int id, final ImmutableLocation location)
+    public AttributableEntityImpl(final UUID uuid, final DioriteCore server, final int id, final ImmutableLocation location)
     {
         super(uuid, server, id, location);
     }

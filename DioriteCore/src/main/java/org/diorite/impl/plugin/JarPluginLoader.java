@@ -8,7 +8,7 @@ import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.Plugin;
@@ -51,7 +51,7 @@ public class JarPluginLoader implements PluginLoader
             final DioritePlugin dioritePlugin = (DioritePlugin) mainClass.newInstance();
             final Plugin pluginDescription = mainClass.getAnnotation(Plugin.class);
 
-            if (ServerImpl.getInstance().getPluginManager().getPlugin(pluginDescription.name()) != null)
+            if (DioriteCore.getInstance().getPluginManager().getPlugin(pluginDescription.name()) != null)
             {
                 throw new PluginException("Plugin " + pluginDescription.name() + " is arleady loaded!");
             }

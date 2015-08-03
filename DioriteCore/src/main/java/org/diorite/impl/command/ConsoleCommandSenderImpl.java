@@ -3,7 +3,7 @@ package org.diorite.impl.command;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.Server;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.component.BaseComponent;
@@ -11,9 +11,9 @@ import org.diorite.command.sender.ConsoleCommandSender;
 
 public class ConsoleCommandSenderImpl implements ConsoleCommandSender
 {
-    private final ServerImpl server;
+    private final DioriteCore server;
 
-    public ConsoleCommandSenderImpl(final ServerImpl server)
+    public ConsoleCommandSenderImpl(final DioriteCore server)
     {
         this.server = server;
     }

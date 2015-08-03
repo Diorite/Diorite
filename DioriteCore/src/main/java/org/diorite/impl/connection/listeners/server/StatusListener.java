@@ -3,9 +3,9 @@ package org.diorite.impl.connection.listeners.server;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.cfg.DioriteConfigImpl;
-import org.diorite.impl.connection.NetworkManager;
+import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.status.PacketStatusClientListener;
 import org.diorite.impl.connection.packets.status.client.PacketStatusClientPing;
 import org.diorite.impl.connection.packets.status.client.PacketStatusClientStart;
@@ -21,10 +21,10 @@ import org.diorite.chat.component.TextComponent;
 
 public class StatusListener implements PacketStatusClientListener
 {
-    private final ServerImpl     server;
-    private final NetworkManager networkManager;
+    private final DioriteCore        server;
+    private final CoreNetworkManager networkManager;
 
-    public StatusListener(final ServerImpl server, final NetworkManager networkManager)
+    public StatusListener(final DioriteCore server, final CoreNetworkManager networkManager)
     {
         super();
         this.server = server;
@@ -43,10 +43,10 @@ public class StatusListener implements PacketStatusClientListener
     public void handle(final PacketStatusClientStart packet)
     {
         final ServerPing ping = new ServerPing();
-        final DioriteConfigImpl cfg = ServerImpl.getInstance().getConfig();
+        final DioriteConfigImpl cfg = DioriteCore.getInstance().getConfig();
         ping.setFavicon(null);
         ping.setMotd(ChatColor.translateAlternateColorCodes(cfg.getMotd()));
-        ping.setPlayerData(new ServerPingPlayerSample(cfg.getMaxPlayers(), ServerImpl.getInstance().getOnlinePlayers().size()));
+        ping.setPlayerData(new ServerPingPlayerSample(cfg.getMaxPlayers(), DioriteCore.getInstance().getOnlinePlayers().size()));
         ping.setServerData(new ServerPingServerData(Server.NANE + " " + this.server.getVersion(), HandshakeListener.CURRENT_PROTOCOL));
         this.networkManager.sendPacket(new PacketStatusServerServerInfo(ping));
     }
@@ -57,12 +57,12 @@ public class StatusListener implements PacketStatusClientListener
         this.networkManager.close(message, true);
     }
 
-    public ServerImpl getServer()
+    public DioriteCore getServer()
     {
         return this.server;
     }
 
-    public NetworkManager getNetworkManager()
+    public CoreNetworkManager getNetworkManager()
     {
         return this.networkManager;
     }

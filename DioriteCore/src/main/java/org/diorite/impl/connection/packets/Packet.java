@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.connection.NetworkManager;
+import org.diorite.impl.connection.CoreNetworkManager;
 
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
@@ -72,13 +72,13 @@ public abstract class Packet<T extends PacketListener>
         return getPacketID(this.getClass());
     }
 
-    public void send(final NetworkManager networkManager)
+    public void send(final CoreNetworkManager networkManager)
     {
         networkManager.sendPacket(this);
     }
 
     @SuppressWarnings("unchecked")
-    public void send(final NetworkManager networkManager, final GenericFutureListener<? extends Future<? super Void>> listener, final GenericFutureListener<? extends Future<? super Void>>... listeners)
+    public void send(final CoreNetworkManager networkManager, final GenericFutureListener<? extends Future<? super Void>> listener, final GenericFutureListener<? extends Future<? super Void>>... listeners)
     {
         networkManager.sendPacket(this, listener, listeners);
     }

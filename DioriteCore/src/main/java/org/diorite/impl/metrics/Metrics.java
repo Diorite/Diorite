@@ -46,7 +46,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Main;
-import org.diorite.impl.ServerImpl;
+import org.diorite.impl.DioriteCore;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.entity.EntityType;
 
@@ -84,14 +84,14 @@ public class Metrics
     /**
      * Server instance
      */
-    protected final ServerImpl server;
+    protected final DioriteCore server;
 
     /**
      * The thread submission is running on
      */
     private Thread thread = null;
 
-    public static Metrics start(final ServerImpl srv)
+    public static Metrics start(final DioriteCore srv)
     {
         /**
          * Not all graphs will be visible on metrics, and some of them may be removed in future
@@ -186,7 +186,7 @@ public class Metrics
         return m;
     }
 
-    Metrics(final ServerImpl srv)
+    Metrics(final DioriteCore srv)
     {
         if (srv == null)
         {
@@ -203,7 +203,7 @@ public class Metrics
      */
     public String getFullServerVersion()
     {
-        return ServerImpl.getInstance().getServerModName();
+        return DioriteCore.getInstance().getServerModName();
     }
 
     /**
