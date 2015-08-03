@@ -27,4 +27,6 @@ public interface PluginManager
     void enablePlugins();
 
     void disablePlugins();
+
+    File getDirectory();
 }

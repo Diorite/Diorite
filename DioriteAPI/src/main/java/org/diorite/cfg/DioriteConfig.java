@@ -46,6 +46,10 @@ public interface DioriteConfig
 
     File getAdministratorsFile();
 
+    File getPluginsDirectory();
+
+    File getCoreModsDirectory();
+
     boolean isWhiteListEnabled();
 
     File getWhiteListFile();
