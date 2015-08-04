@@ -25,6 +25,7 @@ import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 
 import io.netty.util.ResourceLeakDetector;
@@ -73,7 +74,8 @@ public class Main
         thread.start();
         try
         {
-            org.diorite.impl.Main.init(options, true);
+            CoreMain.init(options, true);
+            // TODO: start game, etc...
         } catch (final Throwable e)
         {
             e.printStackTrace();
