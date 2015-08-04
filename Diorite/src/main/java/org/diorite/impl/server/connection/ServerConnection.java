@@ -10,7 +10,7 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.ConnectionHandler;
 import org.diorite.impl.connection.EnumProtocol;
@@ -82,13 +82,13 @@ public class ServerConnection extends Thread implements ConnectionHandler
         {
             socketChannelClass = EpollServerSocketChannel.class;
             lazyInit = this.lazyInitNioEpollEventLoopGroup;
-            Main.debug("[Netty] Using epoll channel type");
+            CoreMain.debug("[Netty] Using epoll channel type");
         }
         else
         {
             socketChannelClass = NioServerSocketChannel.class;
             lazyInit = this.lazyInitNioEventLoopGroup;
-            Main.debug("[Netty] Using default channel type");
+            CoreMain.debug("[Netty] Using default channel type");
         }
         this.channelFuture = new ServerBootstrap().channel(socketChannelClass).childHandler(new ServerConnectionChannel(this)).group(lazyInit.get()).localAddress(address, port).bind().syncUninterruptibly();
     }
