@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public abstract class DioritePlugin implements BasePlugin
 {
-    private DioritePlugin     instance;
     private PluginClassLoader classLoader;
     private PluginLoader      pluginLoader;
     private boolean           initialised;
@@ -83,18 +82,16 @@ public abstract class DioritePlugin implements BasePlugin
     protected final DioritePlugin instance()
     {
         this.initCheck();
-        return this.instance;
+        return this;
     }
 
     @Override
-    public final void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final DioritePlugin instance, final String name, final String version, final String author, final String description, final String website)
+    public final void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final String name, final String version, final String author, final String description, final String website)
     {
         if (this.initialised)
         {
             throw new RuntimeException("Internal method");
         }
-
-        this.instance = instance;
         this.classLoader = classLoader;
         this.pluginLoader = pluginLoader;
         this.name = name;

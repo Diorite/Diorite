@@ -28,10 +28,6 @@ public class PluginClassLoader extends URLClassLoader
 
     public Class<?> findClass(final String name, final boolean global) throws ClassNotFoundException
     {
-        if (name.startsWith("org.diorite."))
-        {
-            throw new ClassNotFoundException(name);
-        }
         Class<?> result = this.classes.get(name);
 
         if (result == null)

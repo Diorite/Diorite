@@ -12,6 +12,8 @@ public interface PluginManager
 {
     void registerPluginLoader(PluginLoader pluginLoader);
 
+    PluginLoader getPluginLoader(String suffix);
+
     void loadPlugin(File file) throws PluginException;
 
     void injectPlugin(FakeDioritePlugin plugin) throws PluginException;

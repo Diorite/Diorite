@@ -84,7 +84,7 @@ public final class FakeDioritePlugin implements BasePlugin
     }
 
     @Override
-    public void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final DioritePlugin instance, final String name, final String version, final String author, final String description, final String website)
+    public void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final String name, final String version, final String author, final String description, final String website)
     {
         this.loader = pluginLoader;
     }
