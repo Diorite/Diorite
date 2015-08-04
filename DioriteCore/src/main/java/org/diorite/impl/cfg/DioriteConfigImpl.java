@@ -100,11 +100,6 @@ public class DioriteConfigImpl implements DioriteConfig
     @CfgStringDefault("plugins")
     private File pluginsDirectory;
 
-    @CfgComment("Path to core mods directory. Core mods will be loaded from this directory.")
-    @CfgComment("Core mods are special plugins that are loaded before any other plugins or even before Diorite.")
-    @CfgStringDefault("coreMods")
-    private File coreModsDirectory;
-
     @CfgComment("If true, only players from special file can join to server.")
     @CfgBooleanDefault(false)
     private boolean whiteListEnabled;
@@ -315,17 +310,6 @@ public class DioriteConfigImpl implements DioriteConfig
     public void setPluginsDirectory(final File pluginsDirectory)
     {
         this.pluginsDirectory = pluginsDirectory;
-    }
-
-    @Override
-    public File getCoreModsDirectory()
-    {
-        return this.coreModsDirectory;
-    }
-
-    public void setCoreModsDirectory(final File coreModsDirectory)
-    {
-        this.coreModsDirectory = coreModsDirectory;
     }
 
     @Override

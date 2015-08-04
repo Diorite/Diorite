@@ -9,7 +9,7 @@ import org.diorite.plugin.PluginLoader;
 
 public class FakePluginLoader implements PluginLoader
 {
-    public static final String FAKE_PLUGIN_EXTENSION = "$fake";
+    public static final String FAKE_PLUGIN_SUFFIX = "$fake";
 
     @Override
     public DioritePlugin loadPlugin(final File file) throws PluginException
@@ -30,8 +30,8 @@ public class FakePluginLoader implements PluginLoader
     }
 
     @Override
-    public String getFileExtension()
+    public String getFileSuffix()
     {
-        return FAKE_PLUGIN_EXTENSION;
+        return FAKE_PLUGIN_SUFFIX;
     }
 }

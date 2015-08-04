@@ -1,7 +1,6 @@
 package org.diorite.impl.command.defaults;
 
 import java.util.Collection;
-import java.util.StringJoiner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -26,9 +25,9 @@ public class PluginsCmd extends SystemCommandImpl
                 final Collection<BasePlugin> plugins = Diorite.getServer().getPluginManager().getPlugins();
                 String msg = "&7Plugins (&3" + plugins.size() + "&7): ";
 
-                msg += plugins.stream().map(pl -> pl.isEnabled() ? (ChatColor.GREEN + pl.getName()) : (ChatColor.RED + pl.getName())).collect(Collectors.joining("&7, "));
 
                 sender.sendSimpleColoredMessage(msg);
+                msg += plugins.stream().map(pl -> pl.isEnabled() ? (pl.isCoreMod() ? (ChatColor.DARK_AQUA + pl.getName()) : (ChatColor.GREEN + pl.getName())) : (pl.isCoreMod() ? (ChatColor.DARK_RED + pl.getName()) : (ChatColor.RED + pl.getName()))).collect(Collectors.joining("&7, "));
             }
             else if (args.length() == 1)
             {
@@ -52,13 +51,13 @@ public class PluginsCmd extends SystemCommandImpl
                     sender.sendSimpleColoredMessage("  &7Support website: &3" + pl.getWebsite());
                 }
                 sender.sendSimpleColoredMessage("&7Stats for nerds:");
-                if (pl.getPluginLoader().getFileExtension().equals(FakePluginLoader.FAKE_PLUGIN_EXTENSION))
+                if (pl.getPluginLoader().getFileSuffix().equals(FakePluginLoader.FAKE_PLUGIN_SUFFIX))
                 {
-                    sender.sendSimpleColoredMessage("  &7Parent plugin: &3" + ((FakeDioritePlugin)pl).getParent().getName());
+                    sender.sendSimpleColoredMessage("  &7Parent plugin: &3" + ((FakeDioritePlugin) pl).getParent().getName());
                 }
                 else
                 {
-                    sender.sendSimpleColoredMessage("  &7Loaded classes: &3" + ((DioritePlugin)pl).getClassLoader().loadedClasses());
+                    sender.sendSimpleColoredMessage("  &7Loaded classes: &3" + ((DioritePlugin) pl).getClassLoader().loadedClasses());
                 }
                 sender.sendSimpleColoredMessage("  &7Plugin loader: &3" + pl.getPluginLoader().getClass().getSimpleName());
             }

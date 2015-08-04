@@ -2,11 +2,11 @@ package org.diorite.impl.pipelines.system;
 
 import java.net.Proxy;
 
-import org.diorite.impl.pipelines.system.ServerInitPipeline.InitData;
+import org.diorite.impl.pipelines.system.CoreInitPipeline.InitData;
 
 import joptsimple.OptionSet;
 
-public class ServerInitPipeline extends SystemPipeline<InitData>
+public class CoreInitPipeline extends SystemPipeline<InitData>
 {
     @Override
     public void reset_()

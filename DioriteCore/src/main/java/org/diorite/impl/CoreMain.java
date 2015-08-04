@@ -3,7 +3,6 @@ package org.diorite.impl;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.net.Proxy;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.regex.Pattern;
@@ -24,7 +23,7 @@ import jline.UnsupportedTerminal;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
-public final class Main
+public final class CoreMain
 {
     public static final  float   JAVA_8         = 52.0f;
     public static final  int     MB_128         = 131072; // 1024KB * 128
@@ -34,7 +33,7 @@ public final class Main
     static               boolean enabledDebug   = false;
     static               boolean client         = false;
 
-    private Main()
+    private CoreMain()
     {
     }
 
@@ -60,7 +59,7 @@ public final class Main
 
     public static boolean init(final OptionSet options, final boolean client)
     {
-        Main.client = client;
+        CoreMain.client = client;
         if (! options.has("?"))
         {
             final String path = new File(".").getAbsolutePath();
@@ -71,8 +70,8 @@ public final class Main
             }
             try
             {
-                Main.enabledDebug = options.has("debug");
-                Main.debug("===> Debug is enabled! <===");
+                CoreMain.enabledDebug = options.has("debug");
+                CoreMain.debug("===> Debug is enabled! <===");
                 try
                 {
                     final String lvl = options.valueOf("rld").toString();
@@ -90,13 +89,13 @@ public final class Main
                 }
                 final String jline_UnsupportedTerminal = new String(new char[]{'j', 'l', 'i', 'n', 'e', '.', 'U', 'n', 's', 'u', 'p', 'p', 'o', 'r', 't', 'e', 'd', 'T', 'e', 'r', 'm', 'i', 'n', 'a', 'l'});
                 final String jline_terminal = new String(new char[]{'j', 'l', 'i', 'n', 'e', '.', 't', 'e', 'r', 'm', 'i', 'n', 'a', 'l'});
-                Main.useJline = ! jline_UnsupportedTerminal.equals(System.getProperty(jline_terminal));
+                CoreMain.useJline = ! jline_UnsupportedTerminal.equals(System.getProperty(jline_terminal));
                 if (options.has("nojline"))
                 {
                     System.setProperty("user.language", "en");
-                    Main.useJline = false;
+                    CoreMain.useJline = false;
                 }
-                if (Main.useJline)
+                if (CoreMain.useJline)
                 {
                     AnsiConsole.systemInstall();
                 }
@@ -106,7 +105,7 @@ public final class Main
                 }
                 if (options.has("noconsole"))
                 {
-                    Main.consoleEnabled = false;
+                    CoreMain.consoleEnabled = false;
                 }
                 int maxPermGen = 0;
                 for (final String s : ManagementFactory.getRuntimeMXBean().getInputArguments())
@@ -135,7 +134,7 @@ public final class Main
                     System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft blocks.");
                     System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft items.");
                 }
-                new DioriteCore(Proxy.NO_PROXY, options, client).start(options);
+//                new DioriteCore(Proxy.NO_PROXY, options, client).start(options);
             } catch (final Throwable t)
             {
                 t.printStackTrace();
@@ -148,7 +147,7 @@ public final class Main
         return true;
     }
 
-    public static void main(final String[] args)
+    public static OptionSet main(final String[] args, final boolean client)
     {
         final OptionParser parser = new OptionParser()
         {
@@ -175,7 +174,7 @@ public final class Main
             e.printStackTrace();
             options = parser.parse(ArrayUtils.EMPTY_STRING_ARRAY);
         }
-        if (! init(options, false))
+        if (! init(options, client))
         {
             try
             {
@@ -184,7 +183,9 @@ public final class Main
             {
                 e.printStackTrace();
             }
+            return null;
         }
+        return options;
     }
 
     public static void debug(final Object obj)

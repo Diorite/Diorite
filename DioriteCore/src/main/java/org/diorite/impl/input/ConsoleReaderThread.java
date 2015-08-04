@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.event.EventType;
 import org.diorite.event.input.SenderCommandEvent;
@@ -27,7 +27,7 @@ public class ConsoleReaderThread extends Thread
     @Override
     public void run()
     {
-        if (! Main.isConsoleEnabled())
+        if (! CoreMain.isConsoleEnabled())
         {
             return;
         }
@@ -36,7 +36,7 @@ public class ConsoleReaderThread extends Thread
         {
             while (this.server.isRunning())
             {
-                final String line = Main.isUseJline() ? reader.readLine(">", null) : reader.readLine();
+                final String line = CoreMain.isUseJline() ? reader.readLine(">", null) : reader.readLine();
                 if ((line == null) || (line.trim().length() <= 0))
                 {
                     continue;

@@ -45,7 +45,7 @@ import java.util.zip.GZIPOutputStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.entity.EntityType;
@@ -311,7 +311,7 @@ public class Metrics
                             this.nextPost = System.currentTimeMillis() + (PING_INTERVAL * 60 * 1000);
                         } catch (final IOException e)
                         {
-                            if (Main.isEnabledDebug())
+                            if (CoreMain.isEnabledDebug())
                             {
                                 System.out.println("[Metrics] " + e.getMessage());
                             }
@@ -463,7 +463,7 @@ public class Metrics
 
         connection.setDoOutput(true);
 
-        if (Main.isEnabledDebug())
+        if (CoreMain.isEnabledDebug())
         {
             System.out.println("[Metrics] Prepared request for Diorite uncompressed=" + uncompressed.length + " compressed=" + compressed.length);
         }

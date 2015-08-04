@@ -2,7 +2,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
-import org.diorite.impl.Main;
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.CommandPriority;
@@ -14,7 +14,7 @@ public class KickCmd extends SystemCommandImpl
     {
         super("kick", (Pattern) null, CommandPriority.LOW);
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            if (Main.isEnabledDebug())
+            if (CoreMain.isEnabledDebug())
             {
                 sender.sendSimpleColoredMessage("§4Command disabled for testing. (Will be re-added with permission system)");
                 return;

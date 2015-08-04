@@ -3,7 +3,7 @@ package org.diorite.impl.connection.listeners.server;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
@@ -148,7 +148,7 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public void handle(final PacketPlayClientSetCreativeSlot packet)
     {
-        Main.debug("creative slot: " + packet.getSlot() + ", item: " + packet.getItem());
+        CoreMain.debug("creative slot: " + packet.getSlot() + ", item: " + packet.getItem());
         // TODO: meh.
     }
 
@@ -227,7 +227,7 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public void handle(final PacketPlayClientCloseWindow packet)
     {
-        Main.debug("Close windows: " + packet.getId());
+        CoreMain.debug("Close windows: " + packet.getId());
         this.server.sync(() -> this.player.closeInventory(packet.getId()));
         // TODO: implement
     }
@@ -237,7 +237,7 @@ public class PlayListener implements PacketPlayClientListener
     {
         if (p.getClickType() == null)
         {
-            Main.debug("Unknown click type in PacketPlayInWindowClick.");
+            CoreMain.debug("Unknown click type in PacketPlayInWindowClick.");
             return;
         }
         this.server.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType())), this.player);

@@ -3,9 +3,7 @@ package org.diorite.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.InetAddress;
 import java.net.Proxy;
-import java.net.UnknownHostException;
 import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,8 +34,8 @@ import org.diorite.impl.command.ConsoleCommandSenderImpl;
 import org.diorite.impl.command.PluginCommandBuilderImpl;
 import org.diorite.impl.command.defaults.RegisterDefaultCommands;
 import org.diorite.impl.connection.ConnectionHandler;
-import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerListHeaderFooter;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
@@ -58,8 +56,10 @@ import org.diorite.impl.pipelines.event.player.BlockDestroyPipelineImpl;
 import org.diorite.impl.pipelines.event.player.BlockPlacePipelineImpl;
 import org.diorite.impl.pipelines.event.player.ChatPipelineImpl;
 import org.diorite.impl.pipelines.event.player.InventoryClickPipelineImpl;
-import org.diorite.impl.pipelines.system.ServerInitPipeline;
-import org.diorite.impl.pipelines.system.ServerInitPipeline.InitData;
+import org.diorite.impl.pipelines.system.CoreInitPipeline;
+import org.diorite.impl.pipelines.system.CoreInitPipeline.InitData;
+import org.diorite.impl.pipelines.system.CoreStartPipeline;
+import org.diorite.impl.plugin.CoreJarPluginLoader;
 import org.diorite.impl.plugin.FakePluginLoader;
 import org.diorite.impl.plugin.JarPluginLoader;
 import org.diorite.impl.plugin.PluginManagerImpl;
@@ -113,8 +113,9 @@ import joptsimple.OptionSet;
 
 public class DioriteCore implements Server
 {
-    private static final ServerInitPipeline initPipeline;
-    private static       DioriteCore        instance;
+    private static final CoreInitPipeline  initPipeline;
+    private static final CoreStartPipeline startPipeline;
+    private static       DioriteCore       instance;
 
     protected final boolean isClient;
     protected final CommandMapImpl                        commandMap = new CommandMapImpl();
@@ -141,9 +142,10 @@ public class DioriteCore implements Server
     protected int                      keepAliveTimer;
     protected DioriteConfigImpl        config;
     protected PluginManager            pluginManager;
-    protected                    KeyPair keyPair    = MinecraftEncryption.generateKeyPair();
-    protected transient volatile boolean isRunning  = true;
-    protected transient volatile boolean hasStopped = false;
+    protected                    KeyPair keyPair     = MinecraftEncryption.generateKeyPair();
+    protected transient volatile boolean isRunning   = true;
+    protected transient volatile boolean hasStopped  = false;
+    protected transient volatile boolean startedCore = false;
     private Metrics metrics;
 
     public DioriteCore(final Proxy proxy, final OptionSet options, final boolean isClient)
@@ -154,9 +156,20 @@ public class DioriteCore implements Server
         this.serverVersion = DioriteCore.class.getPackage().getImplementationVersion();
         Diorite.setServer(this);
 
-        // TODO core-plugins loading system, should load plugins before initPipeline run or even before parsing options
+        this.loadConfigFile((File) options.valueOf("config"));
+        if (this.config == null)
+        {
+            throw new AssertionError("Configuration instance is null after creating!");
+        }
+        this.loadCoreMods();
+        this.startedCore = true;
 
         initPipeline.run(this, new InitData(options, proxy, isClient));
+    }
+
+    public boolean isStartedCore()
+    {
+        return this.startedCore;
     }
 
     public int getCompressionThreshold()
@@ -511,22 +524,31 @@ public class DioriteCore implements Server
         }
     }
 
-    private void loadPlugins()
+    private void checkPluginManager()
     {
-        this.pluginManager = new PluginManagerImpl(this.config.getPluginsDirectory());
+        if (this.playersManager == null)
+        {
+            this.pluginManager = new PluginManagerImpl(this.config.getPluginsDirectory());
+        }
         this.pluginManager.registerPluginLoader(new FakePluginLoader());
         this.pluginManager.registerPluginLoader(new JarPluginLoader());
+        this.pluginManager.registerPluginLoader(new CoreJarPluginLoader());
 
+    }
+
+    private void loadPlugins()
+    {
+        this.checkPluginManager();
         final File dir = this.pluginManager.getDirectory();
         if (dir.exists() && ! dir.isDirectory())
         {
             throw new RuntimeException("Plugin directory must be a folder!");
         }
-        Main.debug("Plugins directory is: " + dir.getAbsolutePath());
+        CoreMain.debug("Plugins directory is: " + dir.getAbsolutePath());
         if (! dir.exists())
         {
             dir.mkdirs();
-            Main.debug("Created plugins directory...");
+            CoreMain.debug("Created plugins directory...");
         }
 
         final File[] files = dir.listFiles();
@@ -550,7 +572,47 @@ public class DioriteCore implements Server
             }
         }
 
-        System.out.println("Loaded " + this.pluginManager.getPlugins().size() + " plugins!");
+        System.out.println("Loaded " + this.pluginManager.getPlugins().size() + " plugins and core mods!");
+    }
+
+    private void loadCoreMods()
+    {
+        this.checkPluginManager();
+
+        final File dir = this.pluginManager.getDirectory();
+        if (dir.exists() && ! dir.isDirectory())
+        {
+            throw new RuntimeException("Plugin directory must be a folder!");
+        }
+        CoreMain.debug("Plugins directory is: " + dir.getAbsolutePath());
+        if (! dir.exists())
+        {
+            dir.mkdirs();
+            CoreMain.debug("Created plugins directory...");
+        }
+
+        final File[] files = dir.listFiles();
+        if (files == null)
+        {
+            throw new RuntimeException("Plugin directory must be a folder!");
+        }
+        for (final File file : files)
+        {
+            if (file.isDirectory() || ! file.getName().toLowerCase().endsWith(CoreJarPluginLoader.CORE_JAR_SUFFIX.toLowerCase()))
+            {
+                continue;
+            }
+
+            try
+            {
+                this.pluginManager.loadPlugin(file);
+            } catch (final PluginException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Loaded " + this.pluginManager.getPlugins().size() + " core mods!");
     }
 
     private void registerEvents()
@@ -638,7 +700,7 @@ public class DioriteCore implements Server
         if (this.worldsManager != null)
         {
             this.worldsManager.getWorlds().stream().forEach(World::save);
-            Main.debug("done?");
+            CoreMain.debug("done?");
         }
         if (this.connectionHandler != null)
         {
@@ -752,58 +814,9 @@ public class DioriteCore implements Server
         this.sessionService = sessionService;
     }
 
-    void start(final OptionSet options)
+    protected void start(final OptionSet options)
     {
-        final java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
-        global.setUseParentHandlers(false);
-        for (final Handler handler : global.getHandlers())
-        {
-            global.removeHandler(handler);
-        }
-        global.addHandler(new ForwardLogHandler());
-
-        final Logger logger = (Logger) LogManager.getRootLogger();
-        logger.getAppenders().values().stream().filter(appender -> (appender instanceof ConsoleAppender)).forEach(logger::removeAppender);
-
-        final Thread writer = new Thread(new TerminalConsoleWriterThread(System.out));
-        writer.setDaemon(true);
-        writer.start();
-
-        System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
-        System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
-        System.out.println("Starting Diorite v" + this.getVersion() + " server...");
-
-        System.out.println("Loading plugins...");
-        this.loadPlugins();
-
-        // register default generators
-        WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
-        WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
-        WorldGenerators.registerGenerator(TestWorldGeneratorImpl.createInitializer());
-
-        System.out.println("Loading worlds...");
-        this.worldsManager.init(this.config, this.config.getWorlds().getWorldsDir());
-        System.out.println("Worlds loaded.");
-
-        System.out.println("Enabling plugins...");
-        this.pluginManager.getPlugins().stream().filter(p -> ! p.isEnabled()).forEach(p -> p.setEnabled(true));
-
-        try
-        {
-            System.setProperty("io.netty.eventLoopThreads", options.has("netty") ? options.valueOf("netty").toString() : Integer.toString(this.config.getNettyThreads()));
-            System.out.println("Starting listening on " + this.hostname + ":" + this.port);
-            this.connectionHandler.init(InetAddress.getByName(this.hostname), this.port, this.config.isUseNativeTransport());
-
-            System.out.println("Binded to " + this.hostname + ":" + this.port);
-        } catch (final UnknownHostException e)
-        {
-            e.printStackTrace();
-        }
-
-        // TODO configuration and other shit.
-
-        System.out.println("Started Diorite v" + this.getVersion() + " server!");
-        this.run();
+        startPipeline.run(this, options);
     }
 
     public TickGroups getTicker()
@@ -870,7 +883,7 @@ public class DioriteCore implements Server
             this.onStop();
             return;
         }
-        Main.debug("Main loop finished, stopping server. (" + this.hasStopped + ")");
+        CoreMain.debug("Main loop finished, stopping server. (" + this.hasStopped + ")");
         if (! this.hasStopped)
         {
             this.onStop();
@@ -894,9 +907,14 @@ public class DioriteCore implements Server
         Synchronizable getSynchronizable();
     }
 
-    public static ServerInitPipeline getInitPipeline()
+    public static CoreInitPipeline getInitPipeline()
     {
         return initPipeline;
+    }
+
+    public static CoreStartPipeline getStartPipeline()
+    {
+        return startPipeline;
     }
 
     private static double calcTps(final double avg, final double exp, final double tps)
@@ -911,14 +929,8 @@ public class DioriteCore implements Server
 
     static
     {
-        initPipeline = new ServerInitPipeline();
-        initPipeline.addLast("DioriteCore|LoadConfig", (s, p, d) -> {
-            s.loadConfigFile((File) d.options.valueOf("config"));
-            if (s.config == null)
-            {
-                throw new AssertionError("Configuration instance is null after creating!");
-            }
-
+        initPipeline = new CoreInitPipeline();
+        initPipeline.addLast("DioriteCore|LoadBasicSettings", (s, p, d) -> {
             s.keepAliveTimer = (int) d.options.valueOf("keepalivetimer");
 
             if (d.options.has("online"))
@@ -937,7 +949,7 @@ public class DioriteCore implements Server
             if (System.console() == null)
             {
                 System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
-                Main.useJline = false;
+                CoreMain.useJline = false;
             }
             try
             {
@@ -950,7 +962,7 @@ public class DioriteCore implements Server
                 {
                     System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
                     System.setProperty("user.language", "en");
-                    Main.useJline = false;
+                    CoreMain.useJline = false;
                     s.reader = new ConsoleReader(System.in, System.out);
                     s.reader.setExpandEvents(false);
                 } catch (final IOException e)
@@ -985,6 +997,55 @@ public class DioriteCore implements Server
         initPipeline.addLast("DioriteCore|initGame", (s, p, d) -> {
             s.playersManager = new PlayersManagerImpl(s);
             s.worldsManager = new WorldsManagerImpl();
+        });
+
+        startPipeline = new CoreStartPipeline();
+        startPipeline.addLast("DioriteCore|EnableMods", (s, pipeline, options) -> {
+            System.out.println("Enabling core mods...");
+            s.getPluginManager().getPlugins().stream().filter(p -> ! p.isEnabled() && p.isCoreMod()).forEach(p -> p.setEnabled(true));
+        });
+        startPipeline.addLast("DioriteCore|Logger", (s, p, options) -> {
+            final java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
+            global.setUseParentHandlers(false);
+            for (final Handler handler : global.getHandlers())
+            {
+                global.removeHandler(handler);
+            }
+            global.addHandler(new ForwardLogHandler());
+
+            final Logger logger = (Logger) LogManager.getRootLogger();
+            logger.getAppenders().values().stream().filter(appender -> (appender instanceof ConsoleAppender)).forEach(logger::removeAppender);
+
+            final Thread writer = new Thread(new TerminalConsoleWriterThread(System.out));
+            writer.setDaemon(true);
+            writer.start();
+
+            System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
+            System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
+            System.out.println("Starting Diorite v" + s.getVersion() + " server...");
+        });
+        startPipeline.addLast("DioriteCore|LoadPlugins", (s, p, options) -> {
+            System.out.println("Loading plugins...");
+            s.loadPlugins();
+        });
+        startPipeline.addLast("DioriteCore|DefaultGenerators", (s, p, options) -> {
+            WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
+            WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
+            WorldGenerators.registerGenerator(TestWorldGeneratorImpl.createInitializer());
+        });
+        startPipeline.addLast("DioriteCore|LoadWorlds", (s, p, options) -> {
+            System.out.println("Loading worlds...");
+            s.worldsManager.init(s.config, s.config.getWorlds().getWorldsDir());
+            System.out.println("Worlds loaded.");
+        });
+        startPipeline.addLast("DioriteCore|EnablePlugins", (s, pipeline, options) -> {
+            System.out.println("Enabling plugins...");
+            s.pluginManager.getPlugins().stream().filter(p -> ! p.isEnabled()).forEach(p -> p.setEnabled(true));
+        });
+        // TODO configuration and other shit.
+        startPipeline.addLast("DioriteCore|Run", (s, p, options) -> {
+            System.out.println("Started Diorite v" + s.getVersion() + " server!");
+            s.run();
         });
     }
 }

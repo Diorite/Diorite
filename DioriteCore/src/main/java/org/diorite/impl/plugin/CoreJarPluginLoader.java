@@ -10,20 +10,25 @@ import org.reflections.util.ConfigurationBuilder;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.plugin.BasePlugin;
-import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginClassLoader;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
 import org.diorite.plugin.PluginNotFoundException;
 
-public class JarPluginLoader implements PluginLoader
+public class CoreJarPluginLoader implements PluginLoader
 {
+    public static final String CORE_JAR_SUFFIX = ".core.jar";
+
     @Override
-    public DioritePlugin loadPlugin(final File file) throws PluginException
+    public DioriteMod loadPlugin(final File file) throws PluginException
     {
         try
         {
+            if (DioriteCore.getInstance().isStartedCore())
+            {
+                return null;
+            }
             final PluginClassLoader classLoader = new PluginClassLoader(file);
 
             final ConfigurationBuilder config = new ConfigurationBuilder();
@@ -31,43 +36,39 @@ public class JarPluginLoader implements PluginLoader
             config.setUrls(ClasspathHelper.forClassLoader(classLoader));
 
             final Reflections ref = new Reflections(config);
-            final Set<Class<?>> annotated = ref.getTypesAnnotatedWith(Plugin.class);
+            final Set<Class<?>> annotated = ref.getTypesAnnotatedWith(CoreMod.class);
             if (annotated.isEmpty())
             {
-                throw new PluginException("Plugin annotation wasn't found!");
+                throw new PluginException("Mod annotation wasn't found!");
             }
             if (annotated.size() > 1)
             {
-                throw new PluginException("Plugin has more than one main class!");
+                throw new PluginException("Mod has more than one main class!");
             }
 
             final Class<?> mainClass = annotated.iterator().next();
 
-            if (mainClass.isAnnotationPresent(CoreMod.class))
+            if (! DioriteMod.class.isAssignableFrom(mainClass) || ! mainClass.isAnnotationPresent(Plugin.class))
             {
-                return DioriteCore.getInstance().getPluginManager().getPluginLoader(CoreJarPluginLoader.CORE_JAR_SUFFIX).loadPlugin(file);
-            }
-            if (! DioritePlugin.class.isAssignableFrom(mainClass))
-            {
-                throw new PluginException("Main class must extend DioritePlugin!");
+                throw new PluginException("Main class must extend DioriteMod");
             }
 
-            final DioritePlugin dioritePlugin = (DioritePlugin) mainClass.newInstance();
+            final DioriteMod dioriteMod = (DioriteMod) mainClass.newInstance();
             final Plugin pluginDescription = mainClass.getAnnotation(Plugin.class);
 
             if (DioriteCore.getInstance().getPluginManager().getPlugin(pluginDescription.name()) != null)
             {
-                throw new PluginException("Plugin " + pluginDescription.name() + " is arleady loaded!");
+                throw new PluginException("Plugin/Mod " + pluginDescription.name() + " is arleady loaded!");
             }
 
-            dioritePlugin.init(classLoader, this, pluginDescription.name(), pluginDescription.version(), pluginDescription.author(), pluginDescription.description(), pluginDescription.website());
+            dioriteMod.init(classLoader, this, pluginDescription.name(), pluginDescription.version(), pluginDescription.author(), pluginDescription.description(), pluginDescription.website());
             System.out.println("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
-            dioritePlugin.onLoad();
+            dioriteMod.onLoad();
 
-            return dioritePlugin;
+            return dioriteMod;
         } catch (final InstantiationException | IllegalAccessException | MalformedURLException e)
         {
-            throw new PluginException("Exception while loading plugin from file " + file.getName(), e);
+            throw new PluginException("Exception while loading mod from file " + file.getName(), e);
         }
     }
 
@@ -94,6 +95,6 @@ public class JarPluginLoader implements PluginLoader
     @Override
     public String getFileSuffix()
     {
-        return ".jar";
+        return CORE_JAR_SUFFIX;
     }
 }

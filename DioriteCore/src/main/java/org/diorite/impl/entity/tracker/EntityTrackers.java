@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.Main;
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
@@ -52,7 +52,7 @@ public class EntityTrackers implements Tickable
             this.stats.put(type, this.stats.get(type) + 1);
         } catch (final Throwable ignored) // for sure that it will never cause any problems
         {
-            if (Main.isEnabledDebug())
+            if (CoreMain.isEnabledDebug())
             {
                 ignored.printStackTrace();
             }
@@ -67,7 +67,7 @@ public class EntityTrackers implements Tickable
             this.stats.put(type, this.stats.get(type) - 1);
         } catch (final Throwable ignored) // for sure that it will never cause any problems
         {
-            if (Main.isEnabledDebug())
+            if (CoreMain.isEnabledDebug())
             {
                 ignored.printStackTrace();
             }
