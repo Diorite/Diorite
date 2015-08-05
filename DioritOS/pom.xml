@@ -14,7 +14,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <lwjgl.version>3.0.0b-SNAPSHOT</lwjgl.version>
+        <lwjgl.version>3.0.0a</lwjgl.version>
     </properties>
 
     <dependencies>
