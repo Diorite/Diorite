@@ -19,7 +19,7 @@ public interface PluginCommandBuilder
 
     PluginCommandBuilder executor(CommandExecutor executor);
 
-    PluginCommandBuilder executor(ExceptionHandler handler);
+    PluginCommandBuilder exceptionHandler(ExceptionHandler handler);
 
     PluginCommandBuilder priority(byte priority);
 

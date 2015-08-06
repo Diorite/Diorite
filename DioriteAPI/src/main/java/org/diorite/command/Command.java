@@ -33,27 +33,37 @@ public interface Command
 
     void setCommandExecutor(CommandExecutor commandExecutor);
 
-    SubCommand registredSubCommand(String name, Pattern pattern);
+    default SubCommand registerSubCommand(final String name, final CommandExecutor commandExecutor)
+    {
+        return this.registerSubCommand(name, (Pattern) null, commandExecutor);
+    }
 
-    SubCommand registredSubCommand(String name, String pattern);
+    default SubCommand registerSubCommand(final String name, final CommandExecutor commandExecutor, final ExceptionHandler exceptionHandler)
+    {
+        return this.registerSubCommand(name, (Pattern) null, commandExecutor, exceptionHandler);
+    }
 
-    SubCommand registredSubCommand(String name, Collection<String> aliases);
+    SubCommand registerSubCommand(String name, Pattern pattern);
 
-    SubCommand registredSubCommand(String name, Pattern pattern, CommandExecutor commandExecutor);
+    SubCommand registerSubCommand(String name, String pattern);
 
-    SubCommand registredSubCommand(String name, String pattern, CommandExecutor commandExecutor);
+    SubCommand registerSubCommand(String name, Collection<String> aliases);
 
-    SubCommand registredSubCommand(String name, Collection<String> aliases, CommandExecutor commandExecutor);
+    SubCommand registerSubCommand(String name, Pattern pattern, CommandExecutor commandExecutor);
 
-    SubCommand registredSubCommand(String name, Pattern pattern, CommandExecutor commandExecutor, ExceptionHandler exceptionHandler);
+    SubCommand registerSubCommand(String name, String pattern, CommandExecutor commandExecutor);
 
-    SubCommand registredSubCommand(String name, String pattern, CommandExecutor commandExecutor, ExceptionHandler exceptionHandler);
+    SubCommand registerSubCommand(String name, Collection<String> aliases, CommandExecutor commandExecutor);
 
-    SubCommand registredSubCommand(String name, Collection<String> aliases, CommandExecutor commandExecutor, ExceptionHandler exceptionHandler);
+    SubCommand registerSubCommand(String name, Pattern pattern, CommandExecutor commandExecutor, ExceptionHandler exceptionHandler);
 
-    void registredSubCommand(SubCommand subCommand);
+    SubCommand registerSubCommand(String name, String pattern, CommandExecutor commandExecutor, ExceptionHandler exceptionHandler);
 
-    SubCommand unregistredSubCommand(String subCommand);
+    SubCommand registerSubCommand(String name, Collection<String> aliases, CommandExecutor commandExecutor, ExceptionHandler exceptionHandler);
+
+    void registerSubCommand(SubCommand subCommand);
+
+    SubCommand unregisterSubCommand(String subCommand);
 
     Map<String, SubCommand> getSubCommandMap();
 

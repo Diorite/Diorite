@@ -26,6 +26,8 @@ public interface PluginManager
 
     Collection<BasePlugin> getPlugins();
 
+    PluginData createPluginData(PluginDataBuilder builder);
+
     void enablePlugins();
 
     void disablePlugins();

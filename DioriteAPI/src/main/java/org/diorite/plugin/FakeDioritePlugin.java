@@ -2,79 +2,89 @@ package org.diorite.plugin;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public final class FakeDioritePlugin implements BasePlugin
+public class FakeDioritePlugin implements ChildPlugin
 {
+    private Logger logger;
+
     private final DioritePlugin parent;
     private       PluginLoader  loader;
     private       boolean       enabled;
-    private final String        name;
-    private final String        version;
-    private final String        author;
-    private final String        description;
-    private final String        website;
+    private final PluginData    pluginData;
 
-    public FakeDioritePlugin(final DioritePlugin parent, final String name, final String version, final String author, final String description, final String website)
+    public FakeDioritePlugin(final DioritePlugin parent, final PluginDataBuilder data)
     {
         this.parent = parent;
-        this.name = name;
-        this.version = version;
-        this.author = author;
-        this.description = description;
-        this.website = website;
+        data.setName(parent.getName() + "::" + data.getName());
+        this.pluginData = data.build();
     }
 
     public FakeDioritePlugin(final DioritePlugin parent, final String name, final String version, final String author)
     {
-        this(parent, name, version, author, null, null);
+        this(parent, new PluginDataBuilder(name, version, author));
     }
 
     @Override
     public void onLoad()
     {
-        // TODO allow to change this
     }
 
     @Override
     public void onEnable()
     {
-        // TODO allow to change this
     }
 
     @Override
     public void onDisable()
     {
-        // TODO allow to change this
     }
 
     @Override
-    public String getName()
+    public String getPrefix()
     {
-        return this.name;
+        return this.pluginData.getPrefix();
     }
 
     @Override
-    public String getVersion()
+    public final String getName()
     {
-        return this.version;
+        return this.pluginData.getName();
+    }
+
+    @Override
+    public final String getVersion()
+    {
+        return this.pluginData.getVersion();
     }
 
     @Override
     public String getAuthor()
     {
-        return this.author;
+        return this.pluginData.getAuthor();
     }
 
     @Override
     public String getDescription()
     {
-        return this.description;
+        return this.pluginData.getDescription();
     }
 
     @Override
     public String getWebsite()
     {
-        return this.website;
+        return this.pluginData.getWebsite();
+    }
+
+    @Override
+    public Logger getLogger()
+    {
+        if (this.logger == null)
+        {
+            this.logger = LoggerFactory.getLogger("[" + this.getPrefix() + "]");
+        }
+        return this.logger;
     }
 
     @Override
@@ -84,7 +94,7 @@ public final class FakeDioritePlugin implements BasePlugin
     }
 
     @Override
-    public void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final String name, final String version, final String author, final String description, final String website)
+    public void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder data)
     {
         this.loader = pluginLoader;
     }
@@ -100,12 +110,12 @@ public final class FakeDioritePlugin implements BasePlugin
         this.enabled = enabled;
         if (enabled)
         {
-            System.out.println("Enabling " + this.name + "(" + this.parent.getName() + ")");
+            this.getLogger().info("Enabling " + this.getFullName());
             this.onEnable();
         }
         else
         {
-            System.out.println("Disabling " + this.name + "(" + this.parent.getName() + ")");
+            this.getLogger().info("Disabling " + this.getFullName());
             this.onDisable();
         }
     }
@@ -122,7 +132,8 @@ public final class FakeDioritePlugin implements BasePlugin
         return this.enabled;
     }
 
-    public DioritePlugin getParent()
+    @Override
+    public BasePlugin getParent()
     {
         return this.parent;
     }

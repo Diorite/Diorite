@@ -2,18 +2,18 @@ package org.diorite.plugin;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class DioritePlugin implements BasePlugin
 {
+    private Logger logger;
+
     private PluginClassLoader classLoader;
     private PluginLoader      pluginLoader;
     private boolean           initialised;
     private boolean           enabled;
-    private String            name;
-    private String            version;
-    private String            author;
-    private String            description;
-    private String            website;
+    private PluginData        pluginData;
 
     protected DioritePlugin()
     {
@@ -44,33 +44,53 @@ public abstract class DioritePlugin implements BasePlugin
     public final String getName()
     {
         this.initCheck();
-        return this.name;
+        return this.pluginData.getName();
+    }
+
+    @Override
+    public String getPrefix()
+    {
+        this.initCheck();
+        return this.pluginData.getPrefix();
     }
 
     @Override
     public final String getVersion()
     {
         this.initCheck();
-        return this.version;
+        return this.pluginData.getVersion();
     }
 
     @Override
     public final String getAuthor()
     {
         this.initCheck();
-        return this.author;
+        return this.pluginData.getAuthor();
     }
 
     @Override
-    public final String getDescription()
+    public String getDescription()
     {
-        return this.description;
+        this.initCheck();
+        return this.pluginData.getDescription();
     }
 
     @Override
-    public final String getWebsite()
+    public String getWebsite()
     {
-        return this.website;
+        this.initCheck();
+        return this.pluginData.getWebsite();
+    }
+
+    @Override
+    public Logger getLogger()
+    {
+        this.initCheck();
+        if (this.logger == null)
+        {
+            this.logger = LoggerFactory.getLogger("[" + this.getPrefix() + "]");
+        }
+        return this.logger;
     }
 
     @Override
@@ -86,7 +106,7 @@ public abstract class DioritePlugin implements BasePlugin
     }
 
     @Override
-    public final void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final String name, final String version, final String author, final String description, final String website)
+    public final void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder data)
     {
         if (this.initialised)
         {
@@ -94,11 +114,7 @@ public abstract class DioritePlugin implements BasePlugin
         }
         this.classLoader = classLoader;
         this.pluginLoader = pluginLoader;
-        this.name = name;
-        this.version = version;
-        this.author = author;
-        this.website = website.isEmpty() ? null : website;
-        this.description = description.isEmpty() ? null : description;
+        this.pluginData = data.build();
         this.initialised = true;
     }
 
@@ -115,12 +131,12 @@ public abstract class DioritePlugin implements BasePlugin
         this.enabled = enabled;
         if (enabled)
         {
-            System.out.println("Enabling " + this.name);
+            this.logger.info("Enabling " + this.getFullName());
             this.onEnable();
         }
         else
         {
-            System.out.println("Disabling " + this.name);
+            this.logger.info("Disabling " + this.getFullName());
             this.onDisable();
         }
     }
@@ -155,6 +171,6 @@ public abstract class DioritePlugin implements BasePlugin
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).append("version", this.version).append("author", this.author).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.getName()).append("version", this.getVersion()).append("author", this.getAuthor()).toString();
     }
 }

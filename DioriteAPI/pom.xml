@@ -54,6 +54,11 @@
             <artifactId>snakeyaml</artifactId>
             <version>1.15</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
         <!--Need find other lib, with updated depends-->
         <!--<dependency>-->
         <!--<groupId>org.apache.velocity</groupId>-->

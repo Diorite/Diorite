@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+
 import org.diorite.cfg.DioriteConfig;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.ChatPosition;
@@ -46,6 +48,8 @@ public interface Server extends Synchronizable
     {
         return "1.8.7";
     }
+
+    Logger getLogger();
 
     String getVersion();
 

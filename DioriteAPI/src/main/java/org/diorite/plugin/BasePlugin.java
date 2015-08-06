@@ -1,5 +1,7 @@
 package org.diorite.plugin;
 
+import org.slf4j.Logger;
+
 public interface BasePlugin
 {
     /**
@@ -18,6 +20,16 @@ public interface BasePlugin
     void onDisable();
 
     /**
+     * Returns name and version of plugin and parent, can't be null.
+     *
+     * @return name and version of plugin.
+     */
+    default String getFullName()
+    {
+        return this.getName() + " v" + this.getVersion();
+    }
+
+    /**
      * Returns name of plugin, can't be null.
      *
      * @return name of plugin.
@@ -30,6 +42,13 @@ public interface BasePlugin
      * @return version of plugin.
      */
     String getVersion();
+
+    /**
+     * Returns prefix of plugin, can't be null.
+     *
+     * @return prefix of plugin.
+     */
+    String getPrefix();
 
     /**
      * Returns author/s of plugin, can't be null, may contains custom text.
@@ -53,6 +72,13 @@ public interface BasePlugin
     String getWebsite();
 
     /**
+     * Returns Logger for this plugin.
+     *
+     * @return Logger for this plugin.
+     */
+    Logger getLogger();
+
+    /**
      * Returns PluginLoaded for this plugin.
      *
      * @return PluginLoaded for this plugin.
@@ -65,12 +91,13 @@ public interface BasePlugin
      * @param classLoader  used class loader.
      * @param pluginLoader used plugin loader.
      * @param name         name of plugin.
+     * @param name         prefix used in logger.
      * @param version      version of plugin.
      * @param author       author/s of plugin.
      * @param description  description of plugin.
      * @param website      webiste of plugin.
      */
-    void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final String name, final String version, final String author, final String description, final String website);
+    void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder pluginData);
 
     /**
      * Set if plugin is enabled.
