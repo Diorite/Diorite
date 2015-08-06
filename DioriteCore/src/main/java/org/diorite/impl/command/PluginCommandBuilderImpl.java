@@ -108,7 +108,7 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
     }
 
     @Override
-    public PluginCommandBuilderImpl executor(final ExceptionHandler handler)
+    public PluginCommandBuilderImpl exceptionHandler(final ExceptionHandler handler)
     {
         this.handler = handler;
         return this;

@@ -13,6 +13,7 @@ import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginClassLoader;
+import org.diorite.plugin.PluginDataBuilder;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
 import org.diorite.plugin.PluginNotFoundException;
@@ -60,8 +61,8 @@ public class JarPluginLoader implements PluginLoader
                 throw new PluginException("Plugin " + pluginDescription.name() + " is arleady loaded!");
             }
 
-            dioritePlugin.init(classLoader, this, pluginDescription.name(), pluginDescription.version(), pluginDescription.author(), pluginDescription.description(), pluginDescription.website());
-            System.out.println("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
+            dioritePlugin.init(classLoader, this, new PluginDataBuilder(pluginDescription));
+            dioritePlugin.getLogger().info("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
             dioritePlugin.onLoad();
 
             return dioritePlugin;

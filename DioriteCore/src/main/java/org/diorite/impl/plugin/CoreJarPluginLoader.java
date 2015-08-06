@@ -12,6 +12,7 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginClassLoader;
+import org.diorite.plugin.PluginDataBuilder;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
 import org.diorite.plugin.PluginNotFoundException;
@@ -61,8 +62,8 @@ public class CoreJarPluginLoader implements PluginLoader
                 throw new PluginException("Plugin/Mod " + pluginDescription.name() + " is arleady loaded!");
             }
 
-            dioriteMod.init(classLoader, this, pluginDescription.name(), pluginDescription.version(), pluginDescription.author(), pluginDescription.description(), pluginDescription.website());
-            System.out.println("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
+            dioriteMod.init(classLoader, this, new PluginDataBuilder(pluginDescription));
+            dioriteMod.getLogger().info("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
             dioriteMod.onLoad();
 
             return dioriteMod;

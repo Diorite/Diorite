@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" packages="org.diorite.impl.log">
+<!--<Configuration status="WARN" packages="org.diorite.impl.log">-->
+<Configuration status="WARN">
     <Appenders>
         <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT"></Console>
         <Queue name="TerminalConsole">
-            <PatternLayout pattern="[%d{HH:mm:ss} %level]: %msg%n"/>
+            <PatternLayout pattern="[%d{HH:mm:ss} %level]%c: %msg%n"/>
         </Queue>
         <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
-            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n"/>
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]%c: %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <OnStartupTriggeringPolicy/>
@@ -15,12 +16,9 @@
     </Appenders>
     <Loggers>
         <Root level="info">
-            <filters>
-                <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL"/>
-            </filters>
-            <AppenderRef ref="WINDOWS_COMPAT" level="info"/>
+            <AppenderRef ref="WINDOWS_COMPAT"/>
             <AppenderRef ref="File"/>
-            <AppenderRef ref="TerminalConsole" level="info"/>
+            <AppenderRef ref="TerminalConsole"/>
         </Root>
     </Loggers>
 </Configuration>

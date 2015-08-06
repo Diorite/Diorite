@@ -15,12 +15,12 @@ import jline.console.ConsoleReader;
 
 public class ConsoleReaderThread extends Thread
 {
-    private final DioriteCore server;
+    private final DioriteCore core;
 
-    public ConsoleReaderThread(final DioriteCore server)
+    public ConsoleReaderThread(final DioriteCore core)
     {
         super("{Diorite|Console}");
-        this.server = server;
+        this.core = core;
         this.setDaemon(true);
     }
 
@@ -31,17 +31,17 @@ public class ConsoleReaderThread extends Thread
         {
             return;
         }
-        final ConsoleReader reader = this.server.getReader();
+        final ConsoleReader reader = this.core.getReader();
         try
         {
-            while (this.server.isRunning())
+            while (this.core.isRunning())
             {
                 final String line = CoreMain.isUseJline() ? reader.readLine(">", null) : reader.readLine();
                 if ((line == null) || (line.trim().length() <= 0))
                 {
                     continue;
                 }
-                EventType.callEvent(new SenderCommandEvent(this.server.getConsoleSender(), line));
+                EventType.callEvent(new SenderCommandEvent(this.core.getConsoleSender(), line));
             }
         } catch (final NoSuchElementException ignored)
         {
@@ -54,7 +54,7 @@ public class ConsoleReaderThread extends Thread
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.core).toString();
     }
 
     public static void start(final DioriteCore server)

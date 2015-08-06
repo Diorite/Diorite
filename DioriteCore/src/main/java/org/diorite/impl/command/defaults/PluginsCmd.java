@@ -24,10 +24,9 @@ public class PluginsCmd extends SystemCommandImpl
             {
                 final Collection<BasePlugin> plugins = Diorite.getServer().getPluginManager().getPlugins();
                 String msg = "&7Plugins (&3" + plugins.size() + "&7): ";
-
+                msg += plugins.stream().map(pl -> pl.isEnabled() ? (pl.isCoreMod() ? (ChatColor.DARK_AQUA + pl.getName()) : (ChatColor.GREEN + pl.getName())) : (pl.isCoreMod() ? (ChatColor.DARK_RED + pl.getName()) : (ChatColor.RED + pl.getName()))).collect(Collectors.joining("&7, "));
 
                 sender.sendSimpleColoredMessage(msg);
-                msg += plugins.stream().map(pl -> pl.isEnabled() ? (pl.isCoreMod() ? (ChatColor.DARK_AQUA + pl.getName()) : (ChatColor.GREEN + pl.getName())) : (pl.isCoreMod() ? (ChatColor.DARK_RED + pl.getName()) : (ChatColor.RED + pl.getName()))).collect(Collectors.joining("&7, "));
             }
             else if (args.length() == 1)
             {

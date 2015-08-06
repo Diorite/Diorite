@@ -24,6 +24,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.reflections.Reflections;
+import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.auth.SessionService;
 import org.diorite.impl.auth.yggdrasil.YggdrasilSessionService;
@@ -113,9 +115,88 @@ import joptsimple.OptionSet;
 
 public class DioriteCore implements Server
 {
+
     private static final CoreInitPipeline  initPipeline;
     private static final CoreStartPipeline startPipeline;
     private static       DioriteCore       instance;
+
+    private final org.slf4j.Logger coreLogger = LoggerFactory.getLogger("");
+
+    static
+    {
+        LoggerInit.init();
+    }
+
+    private static final class LoggerInit
+    {
+        private static ConsoleReader reader;
+        private static Boolean       coloredConsole;
+
+        private LoggerInit()
+        {
+        }
+
+        private static void init()
+        {
+            if (System.console() == null)
+            {
+                System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
+                CoreMain.useJline = false;
+            }
+            try
+            {
+                reader = new ConsoleReader(System.in, System.out);
+                reader.setExpandEvents(false);
+            } catch (final Throwable t)
+            {
+                t.printStackTrace();
+                try
+                {
+                    System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
+                    System.setProperty("user.language", "en");
+                    CoreMain.useJline = false;
+                    reader = new ConsoleReader(System.in, System.out);
+                    reader.setExpandEvents(false);
+                } catch (final IOException e)
+                {
+                    coloredConsole = false;
+                    e.printStackTrace();
+                }
+            }
+            if (coloredConsole == null)
+            {
+                coloredConsole = true;
+            }
+            final java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
+            global.setUseParentHandlers(false);
+            for (final Handler handler : global.getHandlers())
+            {
+                global.removeHandler(handler);
+            }
+            global.addHandler(new ForwardLogHandler());
+
+
+            final Logger logger = (Logger) LogManager.getRootLogger();
+            logger.getAppenders().values().stream().filter(appender -> (appender instanceof ConsoleAppender)).forEach(logger::removeAppender);
+
+            final Thread writer = new Thread(new TerminalConsoleWriterThread(System.out));
+            writer.setDaemon(true);
+            writer.start();
+
+            System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
+            System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
+        }
+    }
+
+    {
+        if (LoggerInit.coloredConsole == null)
+        {
+            LoggerInit.init();
+        }
+        this.reader = LoggerInit.reader;
+        this.consoleCommandSender = LoggerInit.coloredConsole ? ColoredConsoleCommandSenderImpl.getInstance(this) : new ConsoleCommandSenderImpl(this);
+        this.coreLogger.info("Starting Diorite v" + this.getVersion() + " server...");
+    }
 
     protected final boolean isClient;
     protected final CommandMapImpl                        commandMap = new CommandMapImpl();
@@ -165,6 +246,12 @@ public class DioriteCore implements Server
         this.startedCore = true;
 
         initPipeline.run(this, new InitData(options, proxy, isClient));
+    }
+
+    @Override
+    public org.slf4j.Logger getLogger()
+    {
+        return this.coreLogger;
     }
 
     public boolean isStartedCore()
@@ -929,6 +1016,7 @@ public class DioriteCore implements Server
 
     static
     {
+        Reflections.log = null;
         initPipeline = new CoreInitPipeline();
         initPipeline.addLast("DioriteCore|LoadBasicSettings", (s, p, d) -> {
             s.keepAliveTimer = (int) d.options.valueOf("keepalivetimer");
@@ -942,92 +1030,27 @@ public class DioriteCore implements Server
                 }
             }
         });
-        initPipeline.addLast("DioriteCore|registerEvents", (s, p, d) -> {
-            s.registerEvents();
-        });
-        initPipeline.addLast("DioriteCore|initConsole", (s, p, d) -> {
-            if (System.console() == null)
-            {
-                System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
-                CoreMain.useJline = false;
-            }
+        initPipeline.addLast("DioriteCore|registerEvents", (s, p, d) -> s.registerEvents());
+        initPipeline.addLast("DioriteCore|initSessionService", (s, p, d) -> s.sessionService = new YggdrasilSessionService(d.proxy, UUID.randomUUID().toString()));
+        initPipeline.addLast("DioriteCore|addShutdownHook", (s, p, d) -> Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try
             {
-                s.reader = new ConsoleReader(System.in, System.out);
-                s.reader.setExpandEvents(false);
-            } catch (final Throwable t)
+                s.onStop();
+            } catch (final Exception e)
             {
-                t.printStackTrace();
-                try
-                {
-                    System.setProperty("jline.terminal", "jline.UnsupportedTerminal");
-                    System.setProperty("user.language", "en");
-                    CoreMain.useJline = false;
-                    s.reader = new ConsoleReader(System.in, System.out);
-                    s.reader.setExpandEvents(false);
-                } catch (final IOException e)
-                {
-                    s.consoleCommandSender = new ConsoleCommandSenderImpl(s);
-                    e.printStackTrace();
-                }
+                e.printStackTrace();
             }
-            s.consoleCommandSender = ColoredConsoleCommandSenderImpl.getInstance(s);
-            ConsoleReaderThread.start(s);
-        });
-        initPipeline.addLast("DioriteCore|initSessionService", (s, p, d) -> {
-            s.sessionService = new YggdrasilSessionService(d.proxy, UUID.randomUUID().toString());
-        });
-        initPipeline.addLast("DioriteCore|addShutdownHook", (s, p, d) -> {
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try
-                {
-                    s.onStop();
-                } catch (final Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }));
-        });
-        initPipeline.addLast("DioriteCore|RegisterDefaultCommands", (s, p, d) -> {
-            RegisterDefaultCommands.init(s.commandMap);
-        });
-        initPipeline.addLast("DioriteCore|initInputThread", (s, p, d) -> {
-            s.inputThread = InputThread.start(s.config.getInputThreadPoolSize());
-        });
+        })));
+        initPipeline.addLast("DioriteCore|RegisterDefaultCommands", (s, p, d) -> RegisterDefaultCommands.init(s.commandMap));
+        initPipeline.addLast("DioriteCore|initInputThread", (s, p, d) -> s.inputThread = InputThread.start(s.config.getInputThreadPoolSize()));
         initPipeline.addLast("DioriteCore|initGame", (s, p, d) -> {
             s.playersManager = new PlayersManagerImpl(s);
             s.worldsManager = new WorldsManagerImpl();
         });
 
         startPipeline = new CoreStartPipeline();
-        startPipeline.addLast("DioriteCore|EnableMods", (s, pipeline, options) -> {
-            System.out.println("Enabling core mods...");
-            s.getPluginManager().getPlugins().stream().filter(p -> ! p.isEnabled() && p.isCoreMod()).forEach(p -> p.setEnabled(true));
-        });
-        startPipeline.addLast("DioriteCore|Logger", (s, p, options) -> {
-            final java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
-            global.setUseParentHandlers(false);
-            for (final Handler handler : global.getHandlers())
-            {
-                global.removeHandler(handler);
-            }
-            global.addHandler(new ForwardLogHandler());
-
-            final Logger logger = (Logger) LogManager.getRootLogger();
-            logger.getAppenders().values().stream().filter(appender -> (appender instanceof ConsoleAppender)).forEach(logger::removeAppender);
-
-            final Thread writer = new Thread(new TerminalConsoleWriterThread(System.out));
-            writer.setDaemon(true);
-            writer.start();
-
-            System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
-            System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
-            System.out.println("Starting Diorite v" + s.getVersion() + " server...");
-        });
-        startPipeline.addLast("DioriteCore|LoadPlugins", (s, p, options) -> {
-            System.out.println("Loading plugins...");
-            s.loadPlugins();
-        });
+        startPipeline.addLast("DioriteCore|EnableMods", (s, pipeline, options) -> s.getPluginManager().getPlugins().stream().filter(p -> ! p.isEnabled() && p.isCoreMod()).forEach(p -> p.setEnabled(true)));
+        startPipeline.addLast("DioriteCore|LoadPlugins", (s, p, options) -> s.loadPlugins());
         startPipeline.addLast("DioriteCore|DefaultGenerators", (s, p, options) -> {
             WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
             WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
@@ -1038,11 +1061,9 @@ public class DioriteCore implements Server
             s.worldsManager.init(s.config, s.config.getWorlds().getWorldsDir());
             System.out.println("Worlds loaded.");
         });
-        startPipeline.addLast("DioriteCore|EnablePlugins", (s, pipeline, options) -> {
-            System.out.println("Enabling plugins...");
-            s.pluginManager.getPlugins().stream().filter(p -> ! p.isEnabled()).forEach(p -> p.setEnabled(true));
-        });
+        startPipeline.addLast("DioriteCore|EnablePlugins", (s, pipeline, options) -> s.pluginManager.getPlugins().stream().filter(p -> ! p.isEnabled()).forEach(p -> p.setEnabled(true)));
         // TODO configuration and other shit.
+        startPipeline.addLast("DioriteCore|ConsoleReaderThreadStart", (s, p, options) -> ConsoleReaderThread.start(s));
         startPipeline.addLast("DioriteCore|Run", (s, p, options) -> {
             System.out.println("Started Diorite v" + s.getVersion() + " server!");
             s.run();

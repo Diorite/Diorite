@@ -41,7 +41,7 @@ public class LoginListener implements PacketLoginClientListener
     private static final Random        random  = new Random();
     private static final AtomicInteger counter = new AtomicInteger();
 
-    private final Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger("");
     private final byte[] token  = new byte[4];
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;

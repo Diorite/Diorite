@@ -15,6 +15,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.CoreMain;
 import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.FakeDioritePlugin;
+import org.diorite.plugin.PluginDataBuilder;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
 import org.diorite.plugin.PluginManager;
@@ -64,10 +65,10 @@ public class PluginManagerImpl implements PluginManager
         }
         if (pluginLoader == null)
         {
-            CoreMain.debug("Non-plugin file: " + file.getName());
+//            CoreMain.debug("Non-plugin file: " + file.getName());
             return;
         }
-        CoreMain.debug("Loading plugin " + file.getName() + " with pluginloader: " + pluginLoader.getClass().getSimpleName());
+//        CoreMain.debug("Loading plugin " + file.getName() + " with pluginloader: " + pluginLoader.getClass().getSimpleName());
         final BasePlugin plugin = pluginLoader.loadPlugin(file);
         if (plugin != null)
         {
@@ -82,9 +83,9 @@ public class PluginManagerImpl implements PluginManager
         {
             throw new PluginException("Plugin with name " + plugin.getName() + " is arleady loaded!");
         }
-        CoreMain.debug("Injecting plugin: " + plugin.getName());
+//        CoreMain.debug("Injecting plugin: " + plugin.getName());
         this.plugins.add(plugin);
-        plugin.init(null, this.pluginLoaders.get(FakePluginLoader.FAKE_PLUGIN_SUFFIX), null, null, null, null, null);
+        plugin.init(null, this.pluginLoaders.get(FakePluginLoader.FAKE_PLUGIN_SUFFIX), null);
     }
 
     @Override
@@ -131,6 +132,12 @@ public class PluginManagerImpl implements PluginManager
     public Collection<BasePlugin> getPlugins()
     {
         return ImmutableSet.copyOf(this.plugins);
+    }
+
+    @Override
+    public PluginDataImpl createPluginData(final PluginDataBuilder builder)
+    {
+        return new PluginDataImpl(builder);
     }
 
     @Override

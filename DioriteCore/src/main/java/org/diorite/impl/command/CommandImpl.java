@@ -108,95 +108,95 @@ public abstract class CommandImpl implements Command
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final Pattern pattern)
+    public SubCommand registerSubCommand(final String name, final Pattern pattern)
     {
         final SubCommand subCmd = new SubCommandImpl(name, pattern, this);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final String pattern)
+    public SubCommand registerSubCommand(final String name, final String pattern)
     {
         final SubCommand subCmd = new SubCommandImpl(name, Pattern.compile(pattern, Pattern.CASE_INSENSITIVE), this);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final Collection<String> aliases)
+    public SubCommand registerSubCommand(final String name, final Collection<String> aliases)
     {
         final SubCommand subCmd = new SubCommandImpl(name, aliases, this);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final Pattern pattern, final CommandExecutor commandExecutor)
+    public SubCommand registerSubCommand(final String name, final Pattern pattern, final CommandExecutor commandExecutor)
     {
         final SubCommand subCmd = new SubCommandImpl(name, pattern, this);
         subCmd.setCommandExecutor(commandExecutor);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final String pattern, final CommandExecutor commandExecutor)
+    public SubCommand registerSubCommand(final String name, final String pattern, final CommandExecutor commandExecutor)
     {
         final SubCommand subCmd = new SubCommandImpl(name, Pattern.compile(pattern, Pattern.CASE_INSENSITIVE), this);
         subCmd.setCommandExecutor(commandExecutor);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final Collection<String> aliases, final CommandExecutor commandExecutor)
+    public SubCommand registerSubCommand(final String name, final Collection<String> aliases, final CommandExecutor commandExecutor)
     {
         final SubCommand subCmd = new SubCommandImpl(name, aliases, this);
         subCmd.setCommandExecutor(commandExecutor);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final Pattern pattern, final CommandExecutor commandExecutor, final ExceptionHandler exceptionHandler)
+    public SubCommand registerSubCommand(final String name, final Pattern pattern, final CommandExecutor commandExecutor, final ExceptionHandler exceptionHandler)
     {
         final SubCommand subCmd = new SubCommandImpl(name, pattern, this);
         subCmd.setCommandExecutor(commandExecutor);
         subCmd.setExceptionHandler(exceptionHandler);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final String pattern, final CommandExecutor commandExecutor, final ExceptionHandler exceptionHandler)
+    public SubCommand registerSubCommand(final String name, final String pattern, final CommandExecutor commandExecutor, final ExceptionHandler exceptionHandler)
     {
         final SubCommand subCmd = new SubCommandImpl(name, Pattern.compile(pattern, Pattern.CASE_INSENSITIVE), this);
         subCmd.setCommandExecutor(commandExecutor);
         subCmd.setExceptionHandler(exceptionHandler);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public SubCommand registredSubCommand(final String name, final Collection<String> aliases, final CommandExecutor commandExecutor, final ExceptionHandler exceptionHandler)
+    public SubCommand registerSubCommand(final String name, final Collection<String> aliases, final CommandExecutor commandExecutor, final ExceptionHandler exceptionHandler)
     {
         final SubCommand subCmd = new SubCommandImpl(name, aliases, this);
         subCmd.setCommandExecutor(commandExecutor);
         subCmd.setExceptionHandler(exceptionHandler);
-        this.registredSubCommand(subCmd);
+        this.registerSubCommand(subCmd);
         return subCmd;
     }
 
     @Override
-    public void registredSubCommand(final SubCommand subCommand)
+    public void registerSubCommand(final SubCommand subCommand)
     {
         this.checkSubCommandsMap();
         this.subCommandMap.put(subCommand.getName(), subCommand);
     }
 
     @Override
-    public SubCommand unregistredSubCommand(final String subCommand)
+    public SubCommand unregisterSubCommand(final String subCommand)
     {
         if (this.subCommandMap == null)
         {
