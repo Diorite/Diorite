@@ -8,9 +8,9 @@ import org.diorite.entity.Player;
 
 public class NetworkManager extends CoreNetworkManager
 {
-    public NetworkManager(final DioriteCore server)
+    public NetworkManager(final DioriteCore core)
     {
-        super(server);
+        super(core);
     }
 
     @Override
