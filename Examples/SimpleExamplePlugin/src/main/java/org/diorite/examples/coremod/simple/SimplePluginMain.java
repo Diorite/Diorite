@@ -45,7 +45,7 @@ public class SimplePluginMain extends DioritePlugin
 
     private void registerCommand()
     {
-        Diorite.getCommandMap().registerCommand(Diorite.getServer().createCommand(this, "helloworld").alias("hello").executor((sender, command, label, matchedPattern, args) -> {
+        Diorite.getCommandMap().registerCommand(Diorite.getCore().createCommand(this, "helloworld").alias("hello").executor((sender, command, label, matchedPattern, args) -> {
             sender.sendSimpleColoredMessage("&cHello world!", "&a#OnlyDiorite");
         }).build());
 
