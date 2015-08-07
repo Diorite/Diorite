@@ -45,22 +45,22 @@ import io.netty.buffer.Unpooled;
 public class PlayersManagerImpl implements Tickable
 {
     private final Map<UUID, PlayerImpl> players = new ConcurrentHashMap<>(100, 0.2f, 8);
-    private final DioriteCore server;
+    private final DioriteCore core;
     private final int         keepAliveTimer;
 
     private transient long lastKeepAlive = System.currentTimeMillis();
 
-    public PlayersManagerImpl(final DioriteCore server)
+    public PlayersManagerImpl(final DioriteCore core)
     {
-        this.server = server;
-        this.keepAliveTimer = (int) TimeUnit.SECONDS.toMillis(this.server.getKeepAliveTimer());
+        this.core = core;
+        this.keepAliveTimer = (int) TimeUnit.SECONDS.toMillis(this.core.getKeepAliveTimer());
     }
 
     public PlayerImpl createPlayer(final GameProfile gameProfile, final CoreNetworkManager networkManager)
     {// TODO: loading player
         //noinspection MagicNumber
 
-        return new PlayerImpl(this.server, EntityImpl.getNextEntityID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.server.getWorldsManager().getDefaultWorld()));
+        return new PlayerImpl(this.core, EntityImpl.getNextEntityID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.core.getWorldsManager().getDefaultWorld()));
     }
 
     @SuppressWarnings("MagicNumber")
@@ -68,11 +68,11 @@ public class PlayersManagerImpl implements Tickable
     {
         this.players.put(player.getUniqueID(), player);
         this.forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
-        this.server.getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
+        this.core.getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
 
         // TODO: this is only test code
         player.getNetworkManager().sendPacket(new PacketPlayServerLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
-        player.getNetworkManager().sendPacket(new PacketPlayServerCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.server.getServerModName())));
+        player.getNetworkManager().sendPacket(new PacketPlayServerCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.core.getServerModName())));
         player.getNetworkManager().sendPacket(new PacketPlayServerServerDifficulty(Difficulty.EASY));
         player.getNetworkManager().sendPacket(new PacketPlayServerSpawnPosition(new BlockLocation(2, 255, - 2)));
         player.getNetworkManager().sendPacket(new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
@@ -80,18 +80,18 @@ public class PlayersManagerImpl implements Tickable
         player.getNetworkManager().sendPacket(new PacketPlayServerPosition(new TeleportData(4, 255, - 4)));
 
         // TODO: changeable message, events, etc..
-        this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!");
-        this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
+        this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!");
+        this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
 //        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
 
-        this.server.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
+        this.core.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
         player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
 
         player.getWorld().addEntity(player);
 
-        this.server.addSync(() -> {
+        this.core.addSync(() -> {
             PacketPlayServer[] newPackets = player.getSpawnPackets();
-            this.server.getPlayersManager().forEachExcept(player, p -> {
+            this.core.getPlayersManager().forEachExcept(player, p -> {
                 PacketPlayServer[] playerPackets = p.getSpawnPackets();
                 player.getNetworkManager().sendPackets(playerPackets);
                 p.getNetworkManager().sendPackets(newPackets);
@@ -218,14 +218,14 @@ public class PlayersManagerImpl implements Tickable
     }
 
 
-    public DioriteCore getServer()
+    public DioriteCore getCore()
     {
-        return this.server;
+        return this.core;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("players", this.players).append("server", this.server).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("players", this.players).append("server", this.core).toString();
     }
 }

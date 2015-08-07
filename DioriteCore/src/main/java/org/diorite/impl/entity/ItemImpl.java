@@ -35,9 +35,9 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     @SuppressWarnings("MagicNumber")
     public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.25F, 0.25F);
 
-    public ItemImpl(final UUID uuid, final DioriteCore server, final int id, final ImmutableLocation location)
+    public ItemImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
-        super(uuid, server, id, location);
+        super(uuid, core, id, location);
         this.aabb = BASE_SIZE.create(this);
     }
 

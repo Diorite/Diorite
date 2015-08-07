@@ -5,13 +5,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.diorite.impl.command.SystemCommandImpl;
-import org.diorite.impl.plugin.FakePluginLoader;
 import org.diorite.Diorite;
 import org.diorite.chat.ChatColor;
 import org.diorite.command.CommandPriority;
 import org.diorite.plugin.BasePlugin;
+import org.diorite.plugin.ChildPlugin;
 import org.diorite.plugin.DioritePlugin;
-import org.diorite.plugin.FakeDioritePlugin;
 
 public class PluginsCmd extends SystemCommandImpl
 {
@@ -22,7 +21,7 @@ public class PluginsCmd extends SystemCommandImpl
             // TODO check permissions
             if (args.length() == 0)
             {
-                final Collection<BasePlugin> plugins = Diorite.getServer().getPluginManager().getPlugins();
+                final Collection<BasePlugin> plugins = Diorite.getCore().getPluginManager().getPlugins();
                 String msg = "&7Plugins (&3" + plugins.size() + "&7): ";
                 msg += plugins.stream().map(pl -> pl.isEnabled() ? (pl.isCoreMod() ? (ChatColor.DARK_AQUA + pl.getName()) : (ChatColor.GREEN + pl.getName())) : (pl.isCoreMod() ? (ChatColor.DARK_RED + pl.getName()) : (ChatColor.RED + pl.getName()))).collect(Collectors.joining("&7, "));
 
@@ -50,9 +49,9 @@ public class PluginsCmd extends SystemCommandImpl
                     sender.sendSimpleColoredMessage("  &7Support website: &3" + pl.getWebsite());
                 }
                 sender.sendSimpleColoredMessage("&7Stats for nerds:");
-                if (pl.getPluginLoader().getFileSuffix().equals(FakePluginLoader.FAKE_PLUGIN_SUFFIX))
+                if (pl instanceof ChildPlugin)
                 {
-                    sender.sendSimpleColoredMessage("  &7Parent plugin: &3" + ((FakeDioritePlugin) pl).getParent().getName());
+                    sender.sendSimpleColoredMessage("  &7Parent plugin: &3" + ((ChildPlugin) pl).getParent().getName());
                 }
                 else
                 {

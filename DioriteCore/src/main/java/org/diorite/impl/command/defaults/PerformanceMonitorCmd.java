@@ -166,7 +166,7 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                 }
                 else
                 {
-                    sender.getServer().sendConsoleSimpleColoredMessage(strings);
+                    sender.getCore().sendConsoleSimpleColoredMessage(strings);
                     for (int i1 = 0, stringsLength = strings.length; i1 < stringsLength; i1++)
                     {
                         strings[i1] = SPACES_PAT.matcher(strings[i1]).replaceAll(" ");

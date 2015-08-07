@@ -37,7 +37,7 @@ public class KickCmd extends SystemCommandImpl
 
             target.kick(TextComponent.fromLegacyText(reason));
 
-            sender.getServer().broadcastMessage(target.getName() + " has been kicked by " + sender.getName()); //TODO: Send only to ops
+            sender.getCore().broadcastMessage(target.getName() + " has been kicked by " + sender.getName()); //TODO: Send only to ops
         });
     }
 }

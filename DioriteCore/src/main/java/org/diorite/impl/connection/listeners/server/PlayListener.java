@@ -46,13 +46,13 @@ import org.diorite.event.player.PlayerInventoryClickEvent;
 
 public class PlayListener implements PacketPlayClientListener
 {
-    private final DioriteCore        server;
+    private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
     private final PlayerImpl         player;
 
-    public PlayListener(final DioriteCore server, final CoreNetworkManager networkManager, final PlayerImpl player)
+    public PlayListener(final DioriteCore core, final CoreNetworkManager networkManager, final PlayerImpl player)
     {
-        this.server = server;
+        this.core = core;
         this.networkManager = networkManager;
         this.player = player;
     }
@@ -68,7 +68,7 @@ public class PlayListener implements PacketPlayClientListener
     public void handle(final PacketPlayClientSettings packet)
     {
 //        final byte oldViewDistance = this.player.getViewDistance();
-        this.server.sync(() -> this.player.setViewDistance(packet.getViewDistance()), this.player);
+        this.core.sync(() -> this.player.setViewDistance(packet.getViewDistance()), this.player);
 //        if (oldViewDistance != this.player.getViewDistance())
 //        {
 //            this.player.getPlayerChunks().wantUpdate();
@@ -85,13 +85,13 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public void handle(final PacketPlayClientHeldItemSlot packet)
     {
-        this.server.sync(() -> this.player.setHeldItemSlot(packet.getSlot()), this.player);
+        this.core.sync(() -> this.player.setHeldItemSlot(packet.getSlot()), this.player);
     }
 
     @Override
     public void handle(final PacketPlayClientPositionLook packet)
     {
-        this.server.sync(() -> this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), this.player);
+        this.core.sync(() -> this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), this.player);
     }
 
     @Override
@@ -103,13 +103,13 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public void handle(final PacketPlayClientPosition packet)
     {
-        this.server.sync(() -> this.player.setPosition(packet.getX(), packet.getY(), packet.getZ()), this.player);
+        this.core.sync(() -> this.player.setPosition(packet.getX(), packet.getY(), packet.getZ()), this.player);
     }
 
     @Override
     public void handle(final PacketPlayClientLook packet)
     {
-        this.server.sync(() -> this.player.setRotation(packet.getYaw(), packet.getPitch()), this.player);
+        this.core.sync(() -> this.player.setRotation(packet.getYaw(), packet.getPitch()), this.player);
     }
 
     @Override
@@ -119,24 +119,24 @@ public class PlayListener implements PacketPlayClientListener
         //noinspection HardcodedFileSeparator
         if (str.startsWith("/"))
         {
-            this.server.getInputThread().add(new InputAction(str.substring(1), this.player, InputActionType.COMMAND));
+            this.core.getInputThread().add(new InputAction(str.substring(1), this.player, InputActionType.COMMAND));
         }
         else
         {
-            this.server.getInputThread().add(new InputAction(str, this.player, InputActionType.CHAT));
+            this.core.getInputThread().add(new InputAction(str, this.player, InputActionType.CHAT));
         }
     }
 
     @Override
     public void handle(final PacketPlayClientTabComplete packet)
     {
-        this.server.getInputThread().add(new InputAction(packet.getContent(), this.player, InputActionType.TAB_COMPLETE));
+        this.core.getInputThread().add(new InputAction(packet.getContent(), this.player, InputActionType.TAB_COMPLETE));
     }
 
     @Override
     public void handle(final PacketPlayClientAbilities packet)
     {
-        this.server.sync(() -> this.player.setAbilities(packet), this.player);
+        this.core.sync(() -> this.player.setAbilities(packet), this.player);
     }
 
     @Override
@@ -185,7 +185,7 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public void handle(final PacketPlayClientEntityAction packet)
     {
-        this.server.sync(() -> packet.getEntityAction().doAction(this.player, packet.getJumpBoost()), this.player);
+        this.core.sync(() -> packet.getEntityAction().doAction(this.player, packet.getJumpBoost()), this.player);
     }
 
     @Override
@@ -197,7 +197,7 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public void handle(final PacketPlayClientBlockDig packet)
     {
-        this.server.sync(() -> {
+        this.core.sync(() -> {
             if ((packet.getAction() == BlockDigAction.FINISH_DIG) || ((packet.getAction() == BlockDigAction.START_DIG) && this.player.getGameMode().equals(GameMode.CREATIVE)))
             {
                 EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
@@ -215,7 +215,7 @@ public class PlayListener implements PacketPlayClientListener
         {
             return; // prevent java.lang.IllegalArgumentException: Y can't be bigger than 256 // TODO
         }
-        this.server.sync(() -> EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()))), this.player);
+        this.core.sync(() -> EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()))), this.player);
     }
 
     @Override
@@ -228,7 +228,7 @@ public class PlayListener implements PacketPlayClientListener
     public void handle(final PacketPlayClientCloseWindow packet)
     {
         CoreMain.debug("Close windows: " + packet.getId());
-        this.server.sync(() -> this.player.closeInventory(packet.getId()));
+        this.core.sync(() -> this.player.closeInventory(packet.getId()));
         // TODO: implement
     }
 
@@ -240,7 +240,7 @@ public class PlayListener implements PacketPlayClientListener
             CoreMain.debug("Unknown click type in PacketPlayInWindowClick.");
             return;
         }
-        this.server.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType())), this.player);
+        this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, p.getActionNumber(), p.getId(), p.getClickedSlot(), p.getClickType())), this.player);
     }
 
     public CoreNetworkManager getNetworkManager()
@@ -248,15 +248,15 @@ public class PlayListener implements PacketPlayClientListener
         return this.networkManager;
     }
 
-    public DioriteCore getServer()
+    public DioriteCore getCore()
     {
-        return this.server;
+        return this.core;
     }
 
     @Override
     public void disconnect(final BaseComponent message)
     {
-        this.server.getPlayersManager().playerQuit(this.player);
+        this.core.getPlayersManager().playerQuit(this.player);
 
         this.networkManager.sendPacket(new PacketPlayServerDisconnect(message));
         this.networkManager.close(message, true);
@@ -266,7 +266,7 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).append("networkManager", this.networkManager).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.core).append("networkManager", this.networkManager).toString();
     }
 
     public PlayerImpl getPlayer()

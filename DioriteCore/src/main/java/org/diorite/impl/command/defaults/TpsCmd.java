@@ -11,6 +11,6 @@ public class TpsCmd extends SystemCommandImpl
     public TpsCmd()
     {
         super("tps", (Pattern) null, CommandPriority.LOW);
-        this.setCommandExecutor((sender, command, label, matchedPattern, args) -> sender.sendMessage("§aAverage tps (1,5,15 min): §9" + Arrays.toString(sender.getServer().getRecentTps()) + ", TPS limit: " + sender.getServer().getTps() + ", Server speed multi: " + sender.getServer().getSpeedMutli()));
+        this.setCommandExecutor((sender, command, label, matchedPattern, args) -> sender.sendMessage("§aAverage tps (1,5,15 min): §9" + Arrays.toString(sender.getCore().getRecentTps()) + ", TPS limit: " + sender.getCore().getTps() + ", Server speed multi: " + sender.getCore().getSpeedMutli()));
     }
 }

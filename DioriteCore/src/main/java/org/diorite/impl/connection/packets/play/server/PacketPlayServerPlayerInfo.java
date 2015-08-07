@@ -51,7 +51,7 @@ public class PacketPlayServerPlayerInfo extends PacketPlayServer
         this.players = new ArrayList<>(players.size());
         for (final GameProfile gp : players)
         {
-            final Player p = Diorite.getServer().getPlayer(gp.getId());
+            final Player p = Diorite.getCore().getPlayer(gp.getId());
             this.players.add(new PlayerInfoData(gp, p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
         }
     }
@@ -62,7 +62,7 @@ public class PacketPlayServerPlayerInfo extends PacketPlayServer
         this.players = new ArrayList<>(players.length);
         for (final GameProfile gp : players)
         {
-            final Player p = Diorite.getServer().getPlayer(gp.getId());
+            final Player p = Diorite.getCore().getPlayer(gp.getId());
             this.players.add(new PlayerInfoData(gp, p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
         }
     }

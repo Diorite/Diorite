@@ -25,12 +25,12 @@ public class HandshakeListener implements PacketHandshakingClientListener
     public static final  int                    CURRENT_PROTOCOL = 47;
     private static final Map<InetAddress, Long> throttleTracker  = new ConcurrentHashMap<>(100, 0.2f, 8);
     private static       int                    throttleCounter  = 0;
-    private final DioriteCore        server;
+    private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
 
-    public HandshakeListener(final DioriteCore server, final CoreNetworkManager networkManager)
+    public HandshakeListener(final DioriteCore core, final CoreNetworkManager networkManager)
     {
-        this.server = server;
+        this.core = core;
         this.networkManager = networkManager;
     }
 
@@ -45,7 +45,7 @@ public class HandshakeListener implements PacketHandshakingClientListener
                 try
                 {
                     final long currentTime = System.currentTimeMillis();
-                    final long connectionThrottle = this.server.getConnectionThrottle();
+                    final long connectionThrottle = this.core.getConnectionThrottle();
                     final InetAddress address = ((InetSocketAddress) this.networkManager.getSocketAddress()).getAddress();
 
                     if ((throttleTracker.containsKey(address)) && (! "127.0.0.1".equals(address.getHostAddress())) && ((currentTime - throttleTracker.get(address)) < connectionThrottle))
@@ -84,12 +84,12 @@ public class HandshakeListener implements PacketHandshakingClientListener
                 }
                 else
                 {
-                    this.networkManager.setPacketListener(new LoginListener(this.server, this.networkManager, packet.getServerAddress() + ":" + packet.getServerPort()));
+                    this.networkManager.setPacketListener(new LoginListener(this.core, this.networkManager, packet.getServerAddress() + ":" + packet.getServerPort()));
                 }
                 break;
             case STATUS:
                 this.networkManager.setProtocol(EnumProtocol.STATUS);
-                this.networkManager.setPacketListener(new StatusListener(this.server, this.networkManager));
+                this.networkManager.setPacketListener(new StatusListener(this.core, this.networkManager));
                 break;
             default:
                 throw new UnsupportedOperationException("Invalid intention " + packet.getRequestType());
@@ -106,6 +106,6 @@ public class HandshakeListener implements PacketHandshakingClientListener
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).append("networkManager", this.networkManager).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.core).append("networkManager", this.networkManager).toString();
     }
 }

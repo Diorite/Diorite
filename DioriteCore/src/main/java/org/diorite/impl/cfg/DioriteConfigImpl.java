@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.cfg.DioriteConfig;
 import org.diorite.cfg.annotations.CfgClass;
 import org.diorite.cfg.annotations.CfgComment;
@@ -37,7 +37,7 @@ public class DioriteConfigImpl implements DioriteConfig
     private String hostname;
 
     @CfgComment("Port to listen on.")
-    @CfgIntDefault(Server.DEFAULT_PORT)
+    @CfgIntDefault(Core.DEFAULT_PORT)
     private int port;
 
     @CfgComment("Enables GameSpy4 protocol server listener. Used to get information about server. Set to -1 to disable.")
@@ -53,7 +53,7 @@ public class DioriteConfigImpl implements DioriteConfig
     private String rconPassword;
 
     @CfgComment("By default it allows packets that are n-1 bytes big to go normally, but a packet that n bytes or more will be compressed down. 0 -> compress everything, -1 -> disabled")
-    @CfgIntDefault(Server.DEFAULT_PACKET_COMPRESSION_THRESHOLD)
+    @CfgIntDefault(Core.DEFAULT_PACKET_COMPRESSION_THRESHOLD)
     private int networkCompressionThreshold;
 
     @CfgComment("Amount of netty event loop threads.")

@@ -85,7 +85,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 
     protected final Set<Resetable> values = new HashSet<>(10);
 
-    protected final    DioriteCore       server;
+    protected final    DioriteCore       core;
     protected final    WorldImpl         world;
     protected volatile Thread            lastTickThread;
     protected          EntityBoundingBox aabb;
@@ -105,10 +105,10 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 
     protected BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
 
-    protected EntityImpl(final UUID uuid, final DioriteCore server, final int id, final ImmutableLocation location)
+    protected EntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid);
-        this.server = server;
+        this.core = core;
         this.id = id;
         this.x = location.getX();
         this.y = location.getY();
@@ -421,9 +421,9 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     }
 
     @Override
-    public DioriteCore getServer()
+    public DioriteCore getCore()
     {
-        return this.server;
+        return this.core;
     }
 
     public void onSpawn(final BaseTracker<?> tracker)

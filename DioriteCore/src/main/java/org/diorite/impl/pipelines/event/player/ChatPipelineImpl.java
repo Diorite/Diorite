@@ -25,7 +25,7 @@ public class ChatPipelineImpl extends SimpleEventPipeline<PlayerChatEvent> imple
             {
                 return;
             }
-            this.server.broadcastMessage(ChatPosition.CHAT, evt.getMessage());
+            this.core.broadcastMessage(ChatPosition.CHAT, evt.getMessage());
 //            this.server.getConsoleSender().sendMessage(evt.getMessage());
         });
     }

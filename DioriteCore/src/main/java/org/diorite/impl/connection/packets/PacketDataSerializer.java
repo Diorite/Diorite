@@ -23,7 +23,7 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.entity.attrib.AttributeModifier;
@@ -378,7 +378,7 @@ public class PacketDataSerializer extends ByteBuf
     {
         //noinspection MagicNumber
         final String uuidStr = this.readText(36);
-        final String name = this.readText(Server.MAX_NICKNAME_SIZE);
+        final String name = this.readText(Core.MAX_NICKNAME_SIZE);
         final UUID uuid = uuidStr.isEmpty() ? null : UUID.fromString(uuidStr);
         return new GameProfile(uuid, name);
     }

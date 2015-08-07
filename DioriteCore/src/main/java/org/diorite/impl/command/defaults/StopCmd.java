@@ -14,7 +14,7 @@ public class StopCmd extends SystemCommandImpl
             if (sender.isConsole()) // TODO: temp
             {
                 sender.sendSimpleColoredMessage("&4Stopping... ");
-                sender.getServer().stop();
+                sender.getCore().stop();
                 return;
             }
             sender.sendSimpleColoredMessage("&4No permissions...");

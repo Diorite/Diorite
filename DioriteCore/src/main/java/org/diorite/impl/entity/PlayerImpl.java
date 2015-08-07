@@ -99,13 +99,13 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     protected PacketPlayServerAbilities abilities = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
     // TODO: add saving/loading data to/from NBT
-    public PlayerImpl(final DioriteCore server, final int id, final GameProfile gameProfile, final CoreNetworkManager networkManager, final ImmutableLocation location)
+    public PlayerImpl(final DioriteCore core, final int id, final GameProfile gameProfile, final CoreNetworkManager networkManager, final ImmutableLocation location)
     {
-        super(gameProfile.getId(), server, id, location);
+        super(gameProfile.getId(), core, id, location);
         this.aabb = BASE_SIZE.create(this);
         this.gameProfile = gameProfile;
         this.networkManager = networkManager;
-        this.renderDistance = server.getRenderDistance();
+        this.renderDistance = core.getRenderDistance();
         this.gameMode = this.world.getDefaultGameMode();
         this.playerChunks = new PlayerChunksImpl(this);
         this.inventory = new PlayerInventoryImpl(this, 0); // 0 because this is owner of this inventory, and we need this to update
@@ -240,7 +240,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
             return;
         }
         this.gameMode = gameMode;
-        this.server.getPlayersManager().forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayServerPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
+        this.core.getPlayersManager().forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayServerPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
         this.networkManager.sendPacket(new PacketPlayServerGameStateChange(ReasonCodes.CHANGE_GAME_MODE, gameMode.ordinal()));
     }
 
@@ -253,7 +253,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     @Override
     public void kick(final BaseComponent s)
     {
-        this.server.sync(() -> this.networkManager.close(s, false));
+        this.core.sync(() -> this.networkManager.close(s, false));
     }
 
     @Override
@@ -477,8 +477,8 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     {
         this.remove(true);
 
-        this.server.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.getName() + "&7&l left from the server!");
-        this.server.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.getName() + "&7 left from the server!");
+        this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.getName() + "&7&l left from the server!");
+        this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.getName() + "&7 left from the server!");
     }
 
     @Override
@@ -495,7 +495,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
             final ItemStack itemStack = ci.setItem(i, null);
             if (itemStack != null)
             {
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getServer(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getCore(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
                 item.setItemStack(new BaseItemStack(itemStack.getMaterial(), itemStack.getAmount()));
                 this.getWorld().addEntity(item);
             }
@@ -503,7 +503,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         final ItemStack cur = this.inventory.setCursorItem(null);
         if (cur != null)
         {
-            final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getServer(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+            final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getCore(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
             item.setItemStack(new BaseItemStack(cur.getMaterial(), cur.getAmount()));
             this.getWorld().addEntity(item);
         }

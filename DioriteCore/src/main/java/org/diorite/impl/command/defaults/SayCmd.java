@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.chat.ChatPosition;
 import org.diorite.command.CommandPriority;
 
@@ -28,9 +28,9 @@ public class SayCmd extends SystemCommandImpl
             }
             if (Objects.equals(chatPosition, ChatPosition.ACTION))
             {
-                sender.getServer().sendConsoleSimpleColoredMessage(Server.PREFIX_MSG + args.asText());
+                sender.getCore().sendConsoleSimpleColoredMessage(Core.PREFIX_MSG + args.asText());
             }
-            sender.getServer().broadcastSimpleColoredMessage(chatPosition, Server.PREFIX_MSG + args.asText());
+            sender.getCore().broadcastSimpleColoredMessage(chatPosition, Core.PREFIX_MSG + args.asText());
         });
     }
 }

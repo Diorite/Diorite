@@ -175,7 +175,7 @@ public class SchedulerImpl extends Scheduler
         @Override
         public <T> Future<T> callSyncMethod(final DioritePlugin dioritePlugin, final Callable<T> task)
         {
-            return this.callSyncMethod(dioritePlugin, task, Diorite.getServer());
+            return this.callSyncMethod(dioritePlugin, task, Diorite.getCore());
         }
 
         @Override

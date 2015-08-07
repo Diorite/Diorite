@@ -22,11 +22,11 @@ public class TabCompletePipelineImpl extends SimpleEventPipeline<SenderTabComple
             final String msg = evt.getMessage();
             if (evt.isCommand())
             {
-                evt.setCompletes(this.server.getCommandMap().tabComplete(sender, msg.substring(1)));
+                evt.setCompletes(this.core.getCommandMap().tabComplete(sender, msg.substring(1)));
             }
             else
             {
-                evt.setCompletes((msg.isEmpty()) ? this.server.getOnlinePlayersNames() : this.server.getOnlinePlayersNames(msg));
+                evt.setCompletes((msg.isEmpty()) ? this.core.getOnlinePlayersNames() : this.core.getOnlinePlayersNames(msg));
             }
         });
         this.addLast("Diorite|Send", (evt, pipeline) -> {

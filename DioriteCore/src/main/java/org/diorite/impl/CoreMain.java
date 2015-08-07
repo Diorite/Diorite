@@ -12,7 +12,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.fusesource.jansi.AnsiConsole;
 
 import org.diorite.impl.connection.packets.RegisterPackets;
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.Material;
@@ -155,7 +155,7 @@ public final class CoreMain
                 this.acceptsAll(Collections.singletonList("?"), "Print help");
                 this.acceptsAll(Collections.singletonList("debug"), "Enable debug mode");
                 this.acceptsAll(Arrays.asList("resourceleakdetector", "rld"), "ResourceLeakDetector level, disabled by default").withRequiredArg().ofType(String.class).describedAs("rld").defaultsTo(ResourceLeakDetector.Level.DISABLED.name());
-                this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port").defaultsTo(Server.DEFAULT_PORT);
+                this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port").defaultsTo(Core.DEFAULT_PORT);
                 this.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname").defaultsTo("localhost");
                 this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "is server should be in online-mode").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
                 this.acceptsAll(Collections.singletonList("config"), "Configuration file to use.").withRequiredArg().ofType(File.class).describedAs("config").defaultsTo(new File("diorite.yml"));

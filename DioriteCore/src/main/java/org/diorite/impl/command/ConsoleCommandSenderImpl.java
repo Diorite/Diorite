@@ -4,18 +4,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.command.sender.ConsoleCommandSender;
 
 public class ConsoleCommandSenderImpl implements ConsoleCommandSender
 {
-    private final DioriteCore server;
+    private final DioriteCore core;
 
-    public ConsoleCommandSenderImpl(final DioriteCore server)
+    public ConsoleCommandSenderImpl(final DioriteCore core)
     {
-        this.server = server;
+        this.core = core;
     }
 
     @Override
@@ -31,14 +31,14 @@ public class ConsoleCommandSenderImpl implements ConsoleCommandSender
     }
 
     @Override
-    public Server getServer()
+    public Core getCore()
     {
-        return this.server;
+        return this.core;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.core).toString();
     }
 }

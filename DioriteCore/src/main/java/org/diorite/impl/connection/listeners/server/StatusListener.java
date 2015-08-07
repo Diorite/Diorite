@@ -14,20 +14,20 @@ import org.diorite.impl.connection.packets.status.server.PacketStatusServerServe
 import org.diorite.impl.connection.ping.ServerPing;
 import org.diorite.impl.connection.ping.ServerPingPlayerSample;
 import org.diorite.impl.connection.ping.ServerPingServerData;
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
 public class StatusListener implements PacketStatusClientListener
 {
-    private final DioriteCore        server;
+    private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
 
-    public StatusListener(final DioriteCore server, final CoreNetworkManager networkManager)
+    public StatusListener(final DioriteCore core, final CoreNetworkManager networkManager)
     {
         super();
-        this.server = server;
+        this.core = core;
         this.networkManager = networkManager;
     }
 
@@ -47,7 +47,7 @@ public class StatusListener implements PacketStatusClientListener
         ping.setFavicon(null);
         ping.setMotd(ChatColor.translateAlternateColorCodes(cfg.getMotd()));
         ping.setPlayerData(new ServerPingPlayerSample(cfg.getMaxPlayers(), DioriteCore.getInstance().getOnlinePlayers().size()));
-        ping.setServerData(new ServerPingServerData(Server.NANE + " " + this.server.getVersion(), HandshakeListener.CURRENT_PROTOCOL));
+        ping.setServerData(new ServerPingServerData(Core.NANE + " " + this.core.getVersion(), HandshakeListener.CURRENT_PROTOCOL));
         this.networkManager.sendPacket(new PacketStatusServerServerInfo(ping));
     }
 
@@ -57,9 +57,9 @@ public class StatusListener implements PacketStatusClientListener
         this.networkManager.close(message, true);
     }
 
-    public DioriteCore getServer()
+    public DioriteCore getCore()
     {
-        return this.server;
+        return this.core;
     }
 
     public CoreNetworkManager getNetworkManager()
@@ -70,6 +70,6 @@ public class StatusListener implements PacketStatusClientListener
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.server).append("networkManager", this.networkManager).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.core).append("networkManager", this.networkManager).toString();
     }
 }

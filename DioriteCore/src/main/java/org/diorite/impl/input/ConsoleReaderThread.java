@@ -57,8 +57,8 @@ public class ConsoleReaderThread extends Thread
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.core).toString();
     }
 
-    public static void start(final DioriteCore server)
+    public static void start(final DioriteCore core)
     {
-        new ConsoleReaderThread(server).start();
+        new ConsoleReaderThread(core).start();
     }
 }

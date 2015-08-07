@@ -11,13 +11,13 @@ import org.diorite.impl.DioriteCore;
 class PluginsMetricsGraph extends DynamicMetricsGraph
 {
 
-    private final DioriteCore srv;
+    private final DioriteCore core;
     private final boolean     withVersions;
 
-    PluginsMetricsGraph(final String name, final DioriteCore srv, final boolean withVersions)
+    PluginsMetricsGraph(final String name, final DioriteCore core, final boolean withVersions)
     {
         super(name);
-        this.srv = srv;
+        this.core = core;
         this.withVersions = withVersions;
     }
 
@@ -32,9 +32,9 @@ class PluginsMetricsGraph extends DynamicMetricsGraph
     {
         if (this.withVersions)
         {
-            return this.srv.getPluginManager().getPlugins().stream().map(p -> new SimpleMetricsPlotter(p.getName() + Metrics.GRAPH_SEPARATOR + p.getVersion())).collect(Collectors.toSet());
+            return this.core.getPluginManager().getPlugins().stream().map(p -> new SimpleMetricsPlotter(p.getName() + Metrics.GRAPH_SEPARATOR + p.getVersion())).collect(Collectors.toSet());
         }
-        return this.srv.getPluginManager().getPlugins().stream().map(p -> new SimpleMetricsPlotter(p.getName())).collect(Collectors.toSet());
+        return this.core.getPluginManager().getPlugins().stream().map(p -> new SimpleMetricsPlotter(p.getName())).collect(Collectors.toSet());
     }
 
     @Override

@@ -84,24 +84,24 @@ public class Metrics
     /**
      * Server instance
      */
-    protected final DioriteCore server;
+    protected final DioriteCore core;
 
     /**
      * The thread submission is running on
      */
     private Thread thread = null;
 
-    public static Metrics start(final DioriteCore srv)
+    public static Metrics start(final DioriteCore core)
     {
         /**
          * Not all graphs will be visible on metrics, and some of them may be removed in future
          */
 
-        final Metrics m = new Metrics(srv);
+        final Metrics m = new Metrics(core);
 
         {
             final MetricsGraph graph = m.createGraph("RealAuthMode");
-            switch (srv.getOnlineMode())
+            switch (core.getOnlineMode())
             {
                 case TRUE:
                     graph.addPlotter(new SimpleMetricsPlotter("Online"));
@@ -123,7 +123,7 @@ public class Metrics
                 @Override
                 public int getValue()
                 {
-                    return srv.getPluginManager().getPlugins().size();
+                    return core.getPluginManager().getPlugins().size();
                 }
             });
         }
@@ -134,7 +134,7 @@ public class Metrics
                 @Override
                 public int getValue()
                 {
-                    return srv.getWorldsManager().getWorlds().stream().mapToInt(w -> w.getEntityTrackers().size()).sum();
+                    return core.getWorldsManager().getWorlds().stream().mapToInt(w -> w.getEntityTrackers().size()).sum();
                 }
             });
         }
@@ -147,7 +147,7 @@ public class Metrics
                     final Set<MetricsPlotter> result = new HashSet<>(20);
                     //noinspection MagicNumber
                     final TShortIntMap map = new TShortIntHashMap(20, .1f, (short) 0, 0);
-                    srv.getWorldsManager().getWorlds().forEach(w -> w.getEntityTrackers().getStats().forEachEntry((id, amount) -> {
+                    core.getWorldsManager().getWorlds().forEach(w -> w.getEntityTrackers().getStats().forEachEntry((id, amount) -> {
                         map.put(id, map.get(id) + amount);
                         return true;
                     }));
@@ -178,22 +178,22 @@ public class Metrics
          * Seems to be stupid idea, but, whatever.
          */
         {
-            m.addGraph(new PluginsMetricsGraph("UsedPluginsV2", srv, false));
-            m.addGraph(new PluginsMetricsGraph("UsedPluginsV3", srv, true));
+            m.addGraph(new PluginsMetricsGraph("UsedPluginsV2", core, false));
+            m.addGraph(new PluginsMetricsGraph("UsedPluginsV3", core, true));
         }
 
         m.start();
         return m;
     }
 
-    Metrics(final DioriteCore srv)
+    Metrics(final DioriteCore core)
     {
-        if (srv == null)
+        if (core == null)
         {
             throw new IllegalArgumentException("Server cannot be null");
         }
 
-        this.server = srv;
+        this.core = core;
     }
 
     /**
@@ -213,7 +213,7 @@ public class Metrics
      */
     public int getPlayersOnline()
     {
-        return this.server.getPlayersManager().getRawPlayers().size();
+        return this.core.getPlayersManager().getRawPlayers().size();
     }
 
     /**
@@ -294,7 +294,7 @@ public class Metrics
             @Override
             public void run()
             {
-                while (Metrics.this.server.isRunning() && (Metrics.this.thread != null))
+                while (Metrics.this.core.isRunning() && (Metrics.this.thread != null))
                 {
                     if ((this.nextPost == 0L) || (System.currentTimeMillis() > this.nextPost))
                     {
@@ -348,7 +348,7 @@ public class Metrics
 
     public String getUUID()
     {
-        return this.server.getConfig().getMetricsUuid();
+        return this.core.getConfig().getMetricsUuid();
     }
 
     /**
@@ -367,7 +367,7 @@ public class Metrics
 
         // The plugin's description file containg all of the plugin data such as name, version, author, etc
         appendJSONPair(json, "guid", this.getUUID());
-        appendJSONPair(json, "plugin_version", this.server.getVersion());
+        appendJSONPair(json, "plugin_version", this.core.getVersion());
         appendJSONPair(json, "server_version", serverVersion);
         appendJSONPair(json, "players_online", Integer.toString(playersOnline));
 
@@ -388,7 +388,7 @@ public class Metrics
         appendJSONPair(json, "osarch", osarch);
         appendJSONPair(json, "osversion", osversion);
         appendJSONPair(json, "cores", Integer.toString(coreCount));
-        appendJSONPair(json, "auth_mode", (this.server.getOnlineMode() == OnlineMode.FALSE) ? "0" : "1");
+        appendJSONPair(json, "auth_mode", (this.core.getOnlineMode() == OnlineMode.FALSE) ? "0" : "1");
         appendJSONPair(json, "java_version", java_version);
 
         // If we're pinging, append it
@@ -642,7 +642,7 @@ public class Metrics
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("graphs", this.graphs).append("server", this.server).append("thread", this.thread).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("graphs", this.graphs).append("server", this.core).append("thread", this.thread).toString();
     }
 
 }

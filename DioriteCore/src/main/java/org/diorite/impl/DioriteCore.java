@@ -72,7 +72,7 @@ import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
 import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
 import org.diorite.impl.world.tick.TickGroups;
 import org.diorite.Diorite;
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
@@ -113,7 +113,7 @@ import org.diorite.world.generator.WorldGenerators;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 
-public class DioriteCore implements Server
+public class DioriteCore implements Core
 {
 
     private static final CoreInitPipeline  initPipeline;
@@ -235,7 +235,7 @@ public class DioriteCore implements Server
         instance = this;
         this.mainThread = Thread.currentThread();
         this.serverVersion = DioriteCore.class.getPackage().getImplementationVersion();
-        Diorite.setServer(this);
+        Diorite.setCore(this);
 
         this.loadConfigFile((File) options.valueOf("config"));
         if (this.config == null)
@@ -347,9 +347,9 @@ public class DioriteCore implements Server
         if (this.serverVersion == null)
         {
             SpammyError.err("Missing server version!", (int) TimeUnit.HOURS.toSeconds(1), "serverVersion");
-            return "Unknown" + " (MC: " + Server.getMinecraftVersion() + ")";
+            return "Unknown" + " (MC: " + Core.getMinecraftVersion() + ")";
         }
-        return this.serverVersion + " (MC: " + Server.getMinecraftVersion() + ")";
+        return this.serverVersion + " (MC: " + Core.getMinecraftVersion() + ")";
     }
 
     @Override

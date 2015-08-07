@@ -38,9 +38,9 @@ public abstract class LivingEntityImpl extends AttributableEntityImpl implements
      */
     protected static final byte META_KEY_NO_AI = 15;
 
-    public LivingEntityImpl(final UUID uuid, final DioriteCore server, final int id, final ImmutableLocation location)
+    public LivingEntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
-        super(uuid, server, id, location);
+        super(uuid, core, id, location);
     }
 
     @Override

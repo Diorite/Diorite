@@ -18,7 +18,7 @@ public class CommandPipelineImpl extends SimpleEventPipeline<SenderCommandEvent>
             {
                 return;
             }
-            evt.setCommand(this.server.getCommandMap().findCommand(evt.getMessage()));
+            evt.setCommand(this.core.getCommandMap().findCommand(evt.getMessage()));
         });
         this.addLast("Diorite|Exec", (evt, pipeline) -> {
             if (evt.isCancelled())

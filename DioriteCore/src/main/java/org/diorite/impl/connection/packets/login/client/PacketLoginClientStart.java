@@ -11,7 +11,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginClientListener;
-import org.diorite.Server;
+import org.diorite.Core;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.SERVERBOUND)
 public class PacketLoginClientStart extends PacketLoginClient
@@ -30,7 +30,7 @@ public class PacketLoginClientStart extends PacketLoginClient
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.profile = new GameProfile(null, data.readText(Server.MAX_NICKNAME_SIZE));
+        this.profile = new GameProfile(null, data.readText(Core.MAX_NICKNAME_SIZE));
     }
 
     @Override

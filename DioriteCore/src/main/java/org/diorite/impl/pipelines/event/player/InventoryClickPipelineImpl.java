@@ -238,14 +238,14 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     {
                         return false;
                     }
-                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
                     item.setItemStack(new BaseItemStack(clicked));
                     player.getWorld().addEntity(item);
                 }
                 else
                 {
                     final ItemStack toDrop = clicked.split(1);
-                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
                     item.setItemStack(new BaseItemStack(toDrop));
                     player.getWorld().addEntity(item);
                 }
@@ -256,7 +256,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     return false;
                 }
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
                 item.setItemStack(new BaseItemStack(clicked));
                 player.getWorld().addEntity(item);
             }
@@ -280,7 +280,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     return false;
                 }
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
                 item.setItemStack(new BaseItemStack(cursor));
                 player.getWorld().addEntity(item);
                 return true;
@@ -292,7 +292,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     inv.setCursorItem(null);
                     return true;
                 }
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getServer(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
                 item.setItemStack(new BaseItemStack(cursor.getMaterial(), 1)); // TODO: itemmeta
                 if (cursor.getAmount() == 1)
                 {

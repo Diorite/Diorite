@@ -19,12 +19,12 @@ public class TickGroups implements Tickable
 {
     private static final Object key = new Object(); // key to spammy messages
 
-    protected final DioriteCore server;
+    protected final DioriteCore core;
     private Collection<TickGroupImpl> groups = new ConcurrentSet<>(10);
 
-    public TickGroups(final DioriteCore server)
+    public TickGroups(final DioriteCore core)
     {
-        this.server = server;
+        this.core = core;
     }
 
     public Collection<TickGroupImpl> getGroups()
@@ -84,8 +84,8 @@ public class TickGroups implements Tickable
                 try
                 {
                     tickGroup.doTick(tps);
-                    this.server.runScheduler(false);
-                    this.server.runSync();
+                    this.core.runScheduler(false);
+                    this.core.runSync();
                 } finally
                 {
                     latch.countDown();

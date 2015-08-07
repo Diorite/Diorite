@@ -18,10 +18,10 @@ public class ColoredConsoleCommandSenderImpl extends ConsoleCommandSenderImpl
     private final Map<ChatColor, String> replacements = new EnumMap<>(ChatColor.class);
     private final ChatColor[]            colors       = ChatColor.values();
 
-    public ColoredConsoleCommandSenderImpl(final DioriteCore server)
+    public ColoredConsoleCommandSenderImpl(final DioriteCore core)
     {
-        super(server);
-        this.terminal = server.getReader().getTerminal();
+        super(core);
+        this.terminal = core.getReader().getTerminal();
 
         this.replacements.put(ChatColor.BLACK, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
         this.replacements.put(ChatColor.DARK_BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).boldOff().toString());
@@ -78,12 +78,12 @@ public class ColoredConsoleCommandSenderImpl extends ConsoleCommandSenderImpl
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("terminal", this.terminal).append("replacements", this.replacements).append("colors", this.colors).toString();
     }
 
-    public static ConsoleCommandSenderImpl getInstance(final DioriteCore server)
+    public static ConsoleCommandSenderImpl getInstance(final DioriteCore core)
     {
-        if (server.getConsoleSender() != null)
+        if (core.getConsoleSender() != null)
         {
-            return server.getConsoleSender();
+            return core.getConsoleSender();
         }
-        return new ColoredConsoleCommandSenderImpl(server);
+        return new ColoredConsoleCommandSenderImpl(core);
     }
 }
