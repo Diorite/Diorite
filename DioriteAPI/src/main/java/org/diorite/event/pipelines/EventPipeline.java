@@ -2,7 +2,7 @@ package org.diorite.event.pipelines;
 
 import java.util.NoSuchElementException;
 
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.event.Event;
 import org.diorite.event.EventPriority;
 import org.diorite.utils.pipeline.BasePipeline;
@@ -21,7 +21,7 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * @return server instance.
      */
-    Server getServer();
+    Core getCore();
 
     /**
      * Run event pipeline on given data.

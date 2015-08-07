@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.diorite.Core;
+
 public abstract class DioritePlugin implements BasePlugin
 {
     private Logger logger;
@@ -20,7 +22,7 @@ public abstract class DioritePlugin implements BasePlugin
     }
 
     /**
-     * Invokes very early, at end of {@link org.diorite.Server} constructor
+     * Invokes very early, at end of {@link Core} constructor
      */
     @Override
     public void onLoad()

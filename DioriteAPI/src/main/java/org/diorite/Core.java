@@ -27,7 +27,7 @@ import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.world.WorldsManager;
 
-public interface Server extends Synchronizable
+public interface Core extends Synchronizable
 {
     String PREFIX     = ChatColor.GRAY.toString() + "[" + ChatColor.DARK_AQUA.toString() + "Diorite" + ChatColor.GRAY.toString() + "]";
     String PREFIX_RAW = "[Diorite]";

@@ -2,6 +2,7 @@ package org.diorite.entity;
 
 import java.util.List;
 
+import org.diorite.Core;
 import org.diorite.GameMode;
 import org.diorite.OfflinePlayer;
 import org.diorite.Particle;
@@ -28,7 +29,7 @@ public interface Player extends LivingEntity, PlayerCommandSender, InventoryHold
     @Override
     default boolean isOnline()
     {
-        return this.getServer().getPlayer(this.getUniqueID()) != null;
+        return this.getCore().getPlayer(this.getUniqueID()) != null;
     }
 
     @Override
@@ -242,12 +243,12 @@ public interface Player extends LivingEntity, PlayerCommandSender, InventoryHold
      * @param header Text which should be displayed in TAB header, shouldn't be null
      * @param footer Text which should be displayed in TAB footer, shouldn't be null
      *
-     * @see org.diorite.Server#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent)
-     * @see org.diorite.Server#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent, Player)
+     * @see Core#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent)
+     * @see Core#updatePlayerListHeaderAndFooter(BaseComponent, BaseComponent, Player)
      */
     default void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer)
     {
-        this.getServer().updatePlayerListHeaderAndFooter(header, footer, this);
+        this.getCore().updatePlayerListHeaderAndFooter(header, footer, this);
     }
 
     /**
@@ -261,7 +262,7 @@ public interface Player extends LivingEntity, PlayerCommandSender, InventoryHold
      */
     default void sendTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut)
     {
-        this.getServer().sendTitle(title, subtitle, fadeIn, stay, fadeOut, this);
+        this.getCore().sendTitle(title, subtitle, fadeIn, stay, fadeOut, this);
     }
 
     /**
@@ -269,7 +270,7 @@ public interface Player extends LivingEntity, PlayerCommandSender, InventoryHold
      */
     default void removeTitle()
     {
-        this.getServer().removeTitle(this);
+        this.getCore().removeTitle(this);
     }
 
     /**

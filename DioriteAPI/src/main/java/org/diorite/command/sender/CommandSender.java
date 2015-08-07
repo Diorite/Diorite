@@ -1,6 +1,6 @@
 package org.diorite.command.sender;
 
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.DioriteMarkdownParser;
 import org.diorite.chat.component.BaseComponent;
@@ -21,7 +21,7 @@ public interface CommandSender
 
     void sendMessage(BaseComponent component);
 
-    Server getServer();
+    Core getCore();
 
 
     default void sendRawMessage(final String... strs)

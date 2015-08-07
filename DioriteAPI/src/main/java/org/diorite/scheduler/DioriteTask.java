@@ -1,5 +1,6 @@
 package org.diorite.scheduler;
 
+import org.diorite.Core;
 import org.diorite.Diorite;
 import org.diorite.plugin.DioritePlugin;
 
@@ -44,15 +45,15 @@ public interface DioriteTask
     boolean isSynchronizedTo(Class<? extends Synchronizable> obj);
 
     /**
-     * Check if task is synchronized with {@link org.diorite.Server}.
+     * Check if task is synchronized with {@link Core}.
      *
-     * @return true if task is synchronized with {@link org.diorite.Server}.
+     * @return true if task is synchronized with {@link Core}.
      *
      * @see #isSynchronizedTo(Synchronizable)
      */
     default boolean isSynchronizdWithServer()
     {
-        return this.isSynchronizedTo(Diorite.getServer());
+        return this.isSynchronizedTo(Diorite.getCore());
     }
 
     Synchronizable getSynchronizable();

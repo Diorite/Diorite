@@ -20,339 +20,339 @@ import org.diorite.world.WorldsManager;
 
 public final class Diorite
 {
-    private static Server server;
+    private static Core core;
 
     //TODO: make sure that it contains all metohds
     private Diorite()
     {
     }
 
-    public static void setServer(final Server server)
+    public static void setCore(final Core core)
     {
-        if (Diorite.server != null)
+        if (Diorite.core != null)
         {
             throw new RuntimeException("Server instance can't be changed at runtime");
         }
-        Diorite.server = server;
+        Diorite.core = core;
     }
 
-    public static Server getServer()
+    public static Core getCore()
     {
-        return server;
+        return core;
     }
 
     public static String getVersion()
     {
-        return server.getVersion();
+        return core.getVersion();
     }
 
     public static void sendConsoleMessage(final BaseComponent component)
     {
-        server.sendConsoleMessage(component);
+        core.sendConsoleMessage(component);
     }
 
     public static void broadcastSimpleColoredMessage(final String str)
     {
-        server.broadcastSimpleColoredMessage(str);
+        core.broadcastSimpleColoredMessage(str);
     }
 
     public static Collection<Player> matchPlayer(final Pattern pattern)
     {
-        return server.matchPlayer(pattern);
+        return core.matchPlayer(pattern);
     }
 
     public static void broadcastMessage(final ChatPosition position, final BaseComponent component)
     {
-        server.broadcastMessage(position, component);
+        core.broadcastMessage(position, component);
     }
 
     public static void broadcastTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut)
     {
-        server.broadcastTitle(title, subtitle, fadeIn, stay, fadeOut);
+        core.broadcastTitle(title, subtitle, fadeIn, stay, fadeOut);
     }
 
     public static WorldsManager getWorldsManager()
     {
-        return server.getWorldsManager();
+        return core.getWorldsManager();
     }
 
     public static void broadcastMessage(final ChatPosition position, final String str)
     {
-        server.broadcastMessage(position, str);
+        core.broadcastMessage(position, str);
     }
 
     public static void setRenderDistance(final byte renderDistance)
     {
-        server.setRenderDistance(renderDistance);
+        core.setRenderDistance(renderDistance);
     }
 
     public static ConsoleCommandSender getConsoleSender()
     {
-        return server.getConsoleSender();
+        return core.getConsoleSender();
     }
 
     public static Collection<Player> matchPlayer(final String str)
     {
-        return server.matchPlayer(str);
+        return core.matchPlayer(str);
     }
 
     public static List<String> getOnlinePlayersNames()
     {
-        return server.getOnlinePlayersNames();
+        return core.getOnlinePlayersNames();
     }
 
     public static void broadcastSimpleColoredMessage(final ChatPosition position, final String... strs)
     {
-        server.broadcastSimpleColoredMessage(position, strs);
+        core.broadcastSimpleColoredMessage(position, strs);
     }
 
     public static double getMutli()
     {
-        return server.getSpeedMutli();
+        return core.getSpeedMutli();
     }
 
     public static void removeAllTitles()
     {
-        server.removeAllTitles();
+        core.removeAllTitles();
     }
 
     public static void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer)
     {
-        server.updatePlayerListHeaderAndFooter(header, footer);
+        core.updatePlayerListHeaderAndFooter(header, footer);
     }
 
     public static void broadcastSimpleColoredMessage(final ChatPosition position, final String str)
     {
-        server.broadcastSimpleColoredMessage(position, str);
+        core.broadcastSimpleColoredMessage(position, str);
     }
 
     public static Collection<Player> getOnlinePlayers()
     {
-        return server.getOnlinePlayers();
+        return core.getOnlinePlayers();
     }
 
     public static void sendTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut, final Player player)
     {
-        server.sendTitle(title, subtitle, fadeIn, stay, fadeOut, player);
+        core.sendTitle(title, subtitle, fadeIn, stay, fadeOut, player);
     }
 
     public static void broadcastDioriteMessage(final ChatPosition position, final String... strs)
     {
-        server.broadcastDioriteMessage(position, strs);
+        core.broadcastDioriteMessage(position, strs);
     }
 
     public static void sendConsoleDioriteMessage(final String str)
     {
-        server.sendConsoleDioriteMessage(str);
+        core.sendConsoleDioriteMessage(str);
     }
 
     public static <E extends Collection<Player>> E matchPlayer(final Pattern pattern, final E target)
     {
-        return server.matchPlayer(pattern, target);
+        return core.matchPlayer(pattern, target);
     }
 
     public static void broadcastMessage(final ChatPosition position, final BaseComponent... components)
     {
-        server.broadcastMessage(position, components);
+        core.broadcastMessage(position, components);
     }
 
     public static PluginCommandBuilder createCommand(final DioritePlugin dioritePlugin, final String name)
     {
-        return server.createCommand(dioritePlugin, name);
+        return core.createCommand(dioritePlugin, name);
     }
 
     public static void sendConsoleMessage(final String... strs)
     {
-        server.sendConsoleMessage(strs);
+        core.sendConsoleMessage(strs);
     }
 
     public static void broadcastDioriteMessage(final String str)
     {
-        server.broadcastDioriteMessage(str);
+        core.broadcastDioriteMessage(str);
     }
 
     public static List<String> getOnlinePlayersNames(final String prefix)
     {
-        return server.getOnlinePlayersNames(prefix);
+        return core.getOnlinePlayersNames(prefix);
     }
 
     public static void broadcastRawMessage(final ChatPosition position, final String str)
     {
-        server.broadcastRawMessage(position, str);
+        core.broadcastRawMessage(position, str);
     }
 
     public static void broadcastMessage(final String... strs)
     {
-        server.broadcastMessage(strs);
+        core.broadcastMessage(strs);
     }
 
     public static <E extends Collection<Player>> E matchPlayer(final String str, final E target)
     {
-        return server.matchPlayer(str, target);
+        return core.matchPlayer(str, target);
     }
 
     public static void broadcastMessage(final BaseComponent component)
     {
-        server.broadcastMessage(component);
+        core.broadcastMessage(component);
     }
 
     public static void broadcastSimpleColoredMessage(final String... strs)
     {
-        server.broadcastSimpleColoredMessage(strs);
+        core.broadcastSimpleColoredMessage(strs);
     }
 
     public static void sendConsoleMessage(final BaseComponent... components)
     {
-        server.sendConsoleMessage(components);
+        core.sendConsoleMessage(components);
     }
 
     public static Player getPlayer(final UUID uuid)
     {
-        return server.getPlayer(uuid);
+        return core.getPlayer(uuid);
     }
 
     public static void broadcastDioriteMessage(final ChatPosition position, final String str)
     {
-        server.broadcastDioriteMessage(position, str);
+        core.broadcastDioriteMessage(position, str);
     }
 
     public static DioriteConfig getConfig()
     {
-        return server.getConfig();
+        return core.getConfig();
     }
 
     public static PluginManager getPluginManager()
     {
-        return server.getPluginManager();
+        return core.getPluginManager();
     }
 
     public static int getTps()
     {
-        return server.getTps();
+        return core.getTps();
     }
 
     public static <E extends Collection<Player>> E getRandomPlayers(final int num, final E target)
     {
-        return server.getRandomPlayers(num, target);
+        return core.getRandomPlayers(num, target);
     }
 
     public static Player getRandomPlayer()
     {
-        return server.getRandomPlayer();
+        return core.getRandomPlayer();
     }
 
     public static CommandMap getCommandMap()
     {
-        return server.getCommandMap();
+        return core.getCommandMap();
     }
 
     public static Player getPlayer(final String str)
     {
-        return server.getPlayer(str);
+        return core.getPlayer(str);
     }
 
     public static Collection<Player> getRandomPlayers(final int num)
     {
-        return server.getRandomPlayers(num);
+        return core.getRandomPlayers(num);
     }
 
     public static double[] getRecentTps()
     {
-        return server.getRecentTps();
+        return core.getRecentTps();
     }
 
     public static boolean isRunning()
     {
-        return server.isRunning();
+        return core.isRunning();
     }
 
     public static void setTps(final int tps)
     {
-        server.setTps(tps);
+        core.setTps(tps);
     }
 
     public static void removeTitle(final Player player)
     {
-        server.removeTitle(player);
+        core.removeTitle(player);
     }
 
     public static Collection<Player> getOnlinePlayers(final Predicate<Player> predicate)
     {
-        return server.getOnlinePlayers(predicate);
+        return core.getOnlinePlayers(predicate);
     }
 
     public static void stop()
     {
-        server.stop();
+        core.stop();
     }
 
     public static void sendConsoleSimpleColoredMessage(final String str)
     {
-        server.sendConsoleSimpleColoredMessage(str);
+        core.sendConsoleSimpleColoredMessage(str);
     }
 
     public static Scheduler getScheduler()
     {
-        return server.getScheduler();
+        return core.getScheduler();
     }
 
     public static void sendConsoleDioriteMessage(final String... strs)
     {
-        server.sendConsoleDioriteMessage(strs);
+        core.sendConsoleDioriteMessage(strs);
     }
 
     public static void sendConsoleSimpleColoredMessage(final String... strs)
     {
-        server.sendConsoleSimpleColoredMessage(strs);
+        core.sendConsoleSimpleColoredMessage(strs);
     }
 
     public static void broadcastMessage(final String str)
     {
-        server.broadcastMessage(str);
+        core.broadcastMessage(str);
     }
 
     public static void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player)
     {
-        server.updatePlayerListHeaderAndFooter(header, footer, player);
+        core.updatePlayerListHeaderAndFooter(header, footer, player);
     }
 
     public static void broadcastDioriteMessage(final String... strs)
     {
-        server.broadcastDioriteMessage(strs);
+        core.broadcastDioriteMessage(strs);
     }
 
     public static void broadcastMessage(final BaseComponent... components)
     {
-        server.broadcastMessage(components);
+        core.broadcastMessage(components);
     }
 
     public static Player getPlayerExact(final String str)
     {
-        return server.getPlayerExact(str);
+        return core.getPlayerExact(str);
     }
 
     public static void broadcastRawMessage(final ChatPosition position, final String... strs)
     {
-        server.broadcastRawMessage(position, strs);
+        core.broadcastRawMessage(position, strs);
     }
 
     public static byte getRenderDistance()
     {
-        return server.getRenderDistance();
+        return core.getRenderDistance();
     }
 
     public static void setMutli(final double mutli)
     {
-        server.setSpeedMutli(mutli);
+        core.setSpeedMutli(mutli);
     }
 
     public static void sendConsoleMessage(final String str)
     {
-        server.sendConsoleMessage(str);
+        core.sendConsoleMessage(str);
     }
 
     public static void broadcastMessage(final ChatPosition position, final String... strs)
     {
-        server.broadcastMessage(position, strs);
+        core.broadcastMessage(position, strs);
     }
 }

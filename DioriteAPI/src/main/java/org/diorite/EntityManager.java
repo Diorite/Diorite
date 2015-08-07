@@ -16,5 +16,5 @@ public interface EntityManager
 
     int getCurrentID();
 
-    Server getServer();
+    Core getServer();
 }

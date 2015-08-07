@@ -208,7 +208,7 @@ public class Arguments implements Iterable<String>
      */
     public Player asPlayer(final int index) throws NoSuchElementException
     {
-        return Diorite.getServer().getPlayer(this.asString(index));
+        return Diorite.getCore().getPlayer(this.asString(index));
     } // TODO: add asOfflinePlayer
 
     /**

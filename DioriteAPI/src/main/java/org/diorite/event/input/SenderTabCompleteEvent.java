@@ -34,7 +34,7 @@ public class SenderTabCompleteEvent extends SenderEvent
         this.isCommand = (! message.isEmpty()) && (message.charAt(0) == '/');
         if (this.isCommand)
         {
-            this.command = sender.getServer().getCommandMap().findCommand(message);
+            this.command = sender.getCore().getCommandMap().findCommand(message);
         }
     }
 

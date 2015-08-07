@@ -1,5 +1,6 @@
 package org.diorite.scheduler;
 
+import org.diorite.Core;
 import org.diorite.world.Block;
 
 /**
@@ -10,7 +11,7 @@ import org.diorite.world.Block;
  * Object supported by default: <br>
  * - {@link org.diorite.entity.Entity} <br>
  * - {@link org.diorite.world.chunk.Chunk} <br>
- * - {@link org.diorite.Server} (default value, task will be executed before world ticking) <br>
+ * - {@link Core} (default value, task will be executed before world ticking) <br>
  * Also {@link org.diorite.world.Block} is partially supproted by scheduler, but {@link Block#getChunk()} is used.
  */
 public interface Synchronizable

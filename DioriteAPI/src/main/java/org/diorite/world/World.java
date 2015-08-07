@@ -127,8 +127,8 @@ public interface World
     default Collection<Player> getPlayersInWorld()
     {
         // TODO: improve
-        final Collection<Player> temp = new ArrayList<>(Diorite.getServer().getOnlinePlayers().size());
-        Diorite.getServer().getOnlinePlayers().forEach(player -> {
+        final Collection<Player> temp = new ArrayList<>(Diorite.getCore().getOnlinePlayers().size());
+        Diorite.getCore().getOnlinePlayers().forEach(player -> {
             if (player.getWorld().equals(this))
             {
                 temp.add(player);

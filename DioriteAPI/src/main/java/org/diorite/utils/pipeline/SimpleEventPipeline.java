@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
-import org.diorite.Server;
+import org.diorite.Core;
 import org.diorite.event.Event;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.EventPipeline;
@@ -34,12 +34,12 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
             return true;
         }
     };
-    protected final           Server                  server       = Diorite.getServer();
+    protected final           Core                    core         = Diorite.getCore();
 
     @Override
-    public Server getServer()
+    public Core getCore()
     {
-        return this.server;
+        return this.core;
     }
 
     private synchronized void init()

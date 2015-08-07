@@ -22,7 +22,7 @@ public class TaskBuilder
     private boolean        safeMode       = true;
     private long           delay          = 0;
     private TaskType       type           = TaskType.SINGLE;
-    private Synchronizable synchronizable = Diorite.getServer();
+    private Synchronizable synchronizable = Diorite.getCore();
     private String name; // optional
 
     private TaskBuilder(final DioritePlugin dioritePlugin, final Runnable runnable)
