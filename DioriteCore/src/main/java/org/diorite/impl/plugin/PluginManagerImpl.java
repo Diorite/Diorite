@@ -39,12 +39,31 @@ public class PluginManagerImpl implements PluginManager
 
     public static String getCachedClass(final String file)
     {
-        return mainClassCache.get(file);
+        try
+        {
+            return mainClassCache.get(file);
+        } catch (final Exception e)
+        {
+            if (CoreMain.isEnabledDebug())
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
-    public static String setCachedClass(final String file, final Class<?> clazz)
+    public static void setCachedClass(final String file, final Class<?> clazz)
     {
-        return mainClassCache.put(file, clazz.getName());
+        try
+        {
+            mainClassCache.put(file, clazz.getName());
+        } catch (final Exception e)
+        {
+            if (CoreMain.isEnabledDebug())
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void saveCache()
@@ -52,7 +71,7 @@ public class PluginManagerImpl implements PluginManager
         try
         {
             Files.write(new File("pluginsCache.txt").toPath(), mainClassCache.entrySet().stream().map(e -> e.getValue() + CACHE_PATTERN_SEP + e.getKey()).collect(Collectors.toList()), StandardCharsets.UTF_8, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-        } catch (final IOException e)
+        } catch (final Exception e)
         {
             if (CoreMain.isEnabledDebug())
             {
@@ -65,30 +84,59 @@ public class PluginManagerImpl implements PluginManager
     {
         this.directory = directory;
         final File cache = new File("pluginsCache.txt");
-        if (cache.exists())
+        try
         {
-            try
+            if (cache.exists())
             {
-                Files.readAllLines(cache.toPath(), StandardCharsets.UTF_8).forEach(s -> {
-                    final String[] parts = CACHE_PATTERN.split(s, 2);
-                    if ((parts != null) && (parts.length == 2))
-                    {
-                        mainClassCache.put(parts[1], parts[0]);
-                    }
-                });
-            } catch (final IOException e)
-            {
-                e.printStackTrace();
+                try
+                {
+                    Files.readAllLines(cache.toPath(), StandardCharsets.UTF_8).forEach(s -> {
+                        try
+                        {
+                            final String[] parts = CACHE_PATTERN.split(s, 2);
+                            if ((parts != null) && (parts.length == 2))
+                            {
+                                mainClassCache.put(parts[1], parts[0]);
+                            }
+                        } catch (final Exception e)
+                        {
+                            if (CoreMain.isEnabledDebug())
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (final IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
-        }
-        else
+            else
+            {
+                try
+                {
+                    cache.createNewFile();
+                } catch (final IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        } catch (final Exception t)
         {
+            System.err.println("Error when loading plugin main classes cache: " + t.getClass().getName() + ", " + t.getMessage());
+            if (CoreMain.isEnabledDebug())
+            {
+                t.printStackTrace();
+            }
             try
             {
-                cache.createNewFile();
-            } catch (final IOException e)
+                cache.delete();
+            } catch (final Exception e)
             {
-                e.printStackTrace();
+                if (CoreMain.isEnabledDebug())
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
