@@ -1,11 +1,18 @@
 package org.diorite.impl.plugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -23,13 +30,67 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 public class PluginManagerImpl implements PluginManager
 {
-    private final Collection<BasePlugin>    plugins       = new ArrayList<>(20);
-    private final Map<String, PluginLoader> pluginLoaders = new CaseInsensitiveMap<>(5);
+    private static final String                    CACHE_PATTERN_SEP = " == ";
+    private static final Pattern                   CACHE_PATTERN     = Pattern.compile(CACHE_PATTERN_SEP);
+    private final        Collection<BasePlugin>    plugins           = new ArrayList<>(20);
+    private final        Map<String, PluginLoader> pluginLoaders     = new CaseInsensitiveMap<>(5);
     private final File directory;
+    private static final Map<String, String> mainClassCache = new HashMap<>(20);
+
+    public static String getCachedClass(final String file)
+    {
+        return mainClassCache.get(file);
+    }
+
+    public static String setCachedClass(final String file, final Class<?> clazz)
+    {
+        return mainClassCache.put(file, clazz.getName());
+    }
+
+    public static void saveCache()
+    {
+        try
+        {
+            Files.write(new File("pluginsCache.txt").toPath(), mainClassCache.entrySet().stream().map(e -> e.getValue() + CACHE_PATTERN_SEP + e.getKey()).collect(Collectors.toList()), StandardCharsets.UTF_8, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+        } catch (final IOException e)
+        {
+            if (CoreMain.isEnabledDebug())
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public PluginManagerImpl(final File directory)
     {
         this.directory = directory;
+        final File cache = new File("pluginsCache.txt");
+        if (cache.exists())
+        {
+            try
+            {
+                Files.readAllLines(cache.toPath(), StandardCharsets.UTF_8).forEach(s -> {
+                    final String[] parts = CACHE_PATTERN.split(s, 2);
+                    if ((parts != null) && (parts.length == 2))
+                    {
+                        mainClassCache.put(parts[1], parts[0]);
+                    }
+                });
+            } catch (final IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            try
+            {
+                cache.createNewFile();
+            } catch (final IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

@@ -8,8 +8,10 @@ import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.plugin.BasePlugin;
+import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginClassLoader;
 import org.diorite.plugin.PluginDataBuilder;
@@ -32,26 +34,55 @@ public class CoreJarPluginLoader implements PluginLoader
             }
             final PluginClassLoader classLoader = new PluginClassLoader(file);
 
-            final ConfigurationBuilder config = new ConfigurationBuilder();
-            config.setClassLoaders(new PluginClassLoader[]{classLoader});
-            config.setUrls(ClasspathHelper.forClassLoader(classLoader));
-
-            final Reflections ref = new Reflections(config);
-            final Set<Class<?>> annotated = ref.getTypesAnnotatedWith(CoreMod.class);
-            if (annotated.isEmpty())
+            Class<?> mainClass = null;
+            try
             {
-                throw new PluginException("Mod annotation wasn't found!");
+                final String className = PluginManagerImpl.getCachedClass("corejar|" + file.getName());
+                if (className != null)
+                {
+                    mainClass = classLoader.findClass(className, false);
+                    if (! DioritePlugin.class.isAssignableFrom(mainClass) || ! mainClass.isAnnotationPresent(Plugin.class) || ! mainClass.isAnnotationPresent(CoreMod.class))
+                    {
+                        mainClass = null;
+                        CoreMain.debug("Cached main class for plugin: " + file.getPath() + " is invalid[2].");
+                    }
+                    else
+                    {
+                        CoreMain.debug("Cached main class for plugin: " + file.getPath() + " is " + mainClass.getName());
+                    }
+                }
+                else
+                {
+                    CoreMain.debug("Can't find cached main class for plugin: " + file.getPath());
+                }
+            } catch (final ClassNotFoundException e)
+            {
+                CoreMain.debug("Cached main class for plugin: " + file.getPath() + " is invalid.");
             }
-            if (annotated.size() > 1)
-            {
-                throw new PluginException("Mod has more than one main class!");
-            }
 
-            final Class<?> mainClass = annotated.iterator().next();
-
-            if (! DioriteMod.class.isAssignableFrom(mainClass) || ! mainClass.isAnnotationPresent(Plugin.class))
+            if (mainClass == null)
             {
-                throw new PluginException("Main class must extend DioriteMod");
+                final ConfigurationBuilder config = new ConfigurationBuilder();
+                config.setClassLoaders(new PluginClassLoader[]{classLoader});
+                config.setUrls(ClasspathHelper.forClassLoader(classLoader));
+
+                final Reflections ref = new Reflections(config);
+                final Set<Class<?>> annotated = ref.getTypesAnnotatedWith(CoreMod.class);
+                if (annotated.isEmpty())
+                {
+                    throw new PluginException("Mod annotation wasn't found!");
+                }
+                if (annotated.size() > 1)
+                {
+                    throw new PluginException("Mod has more than one main class!");
+                }
+
+                mainClass = annotated.iterator().next();
+
+                if (! DioriteMod.class.isAssignableFrom(mainClass) || ! mainClass.isAnnotationPresent(Plugin.class))
+                {
+                    throw new PluginException("Main class must extend DioriteMod");
+                }
             }
 
             final DioriteMod dioriteMod = (DioriteMod) mainClass.newInstance();
@@ -66,6 +97,7 @@ public class CoreJarPluginLoader implements PluginLoader
             dioriteMod.getLogger().info("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
             dioriteMod.onLoad();
 
+            PluginManagerImpl.setCachedClass("corejar|" + file.getName(), mainClass);
             return dioriteMod;
         } catch (final InstantiationException | IllegalAccessException | MalformedURLException e)
         {

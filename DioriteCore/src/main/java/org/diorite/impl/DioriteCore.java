@@ -71,8 +71,8 @@ import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
 import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
 import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
 import org.diorite.impl.world.tick.TickGroups;
-import org.diorite.Diorite;
 import org.diorite.Core;
+import org.diorite.Diorite;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
@@ -770,6 +770,7 @@ public class DioriteCore implements Core
         {
             return;
         }
+        PluginManagerImpl.saveCache();
         if (this.metrics != null)
         {
             this.metrics.stop();
@@ -924,6 +925,7 @@ public class DioriteCore implements Core
 
     public void run()
     {
+        PluginManagerImpl.saveCache();
         this.metrics = Metrics.start(this);
         Arrays.fill(this.recentTps, (double) DEFAULT_TPS);
         try

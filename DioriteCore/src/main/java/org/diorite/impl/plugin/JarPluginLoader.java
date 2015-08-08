@@ -8,6 +8,7 @@ import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.DioritePlugin;
@@ -27,31 +28,61 @@ public class JarPluginLoader implements PluginLoader
         {
             final PluginClassLoader classLoader = new PluginClassLoader(file);
 
-            final ConfigurationBuilder config = new ConfigurationBuilder();
-            config.setClassLoaders(new PluginClassLoader[]{classLoader});
-            config.setUrls(ClasspathHelper.forClassLoader(classLoader));
+            Class<?> mainClass = null;
+            try
+            {
+                final String className = PluginManagerImpl.getCachedClass("jar|" + file.getName());
+                if (className != null)
+                {
+                    mainClass = classLoader.findClass(className, false);
+                    if (! DioritePlugin.class.isAssignableFrom(mainClass) || ! mainClass.isAnnotationPresent(Plugin.class))
+                    {
+                        mainClass = null;
+                        CoreMain.debug("Cached main class for plugin: " + file.getPath() + " is invalid[2].");
+                    }
+                    else
+                    {
+                        CoreMain.debug("Cached main class for plugin: " + file.getPath() + " is " + mainClass.getName());
+                    }
+                }
+                else
+                {
+                    CoreMain.debug("Can't find cached main class for plugin: " + file.getPath());
+                }
+            } catch (final ClassNotFoundException e)
+            {
+                CoreMain.debug("Cached main class for plugin: " + file.getPath() + " is invalid.");
+            }
 
-            final Reflections ref = new Reflections(config);
-            final Set<Class<?>> annotated = ref.getTypesAnnotatedWith(Plugin.class);
-            if (annotated.isEmpty())
+            if (mainClass == null)
             {
-                throw new PluginException("Plugin annotation wasn't found!");
-            }
-            if (annotated.size() > 1)
-            {
-                throw new PluginException("Plugin has more than one main class!");
-            }
+                final ConfigurationBuilder config = new ConfigurationBuilder();
+                config.setClassLoaders(new PluginClassLoader[]{classLoader});
+                config.setUrls(ClasspathHelper.forClassLoader(classLoader));
 
-            final Class<?> mainClass = annotated.iterator().next();
+                final Reflections ref = new Reflections(config);
+                final Set<Class<?>> annotated = ref.getTypesAnnotatedWith(Plugin.class);
+                if (annotated.isEmpty())
+                {
+                    throw new PluginException("Plugin annotation wasn't found!");
+                }
+                if (annotated.size() > 1)
+                {
+                    throw new PluginException("Plugin has more than one main class!");
+                }
 
-            if (mainClass.isAnnotationPresent(CoreMod.class))
-            {
-                return DioriteCore.getInstance().getPluginManager().getPluginLoader(CoreJarPluginLoader.CORE_JAR_SUFFIX).loadPlugin(file);
+                mainClass = annotated.iterator().next();
+
+                if (! DioritePlugin.class.isAssignableFrom(mainClass))
+                {
+                    throw new PluginException("Main class must extend DioritePlugin!");
+                }
             }
-            if (! DioritePlugin.class.isAssignableFrom(mainClass))
-            {
-                throw new PluginException("Main class must extend DioritePlugin!");
-            }
+//            if (mainClass.isAnnotationPresent(CoreMod.class))
+//            {
+//                return DioriteCore.getInstance().getPluginManager().getPluginLoader(CoreJarPluginLoader.CORE_JAR_SUFFIX).loadPlugin(file);
+//            }
+
 
             final DioritePlugin dioritePlugin = (DioritePlugin) mainClass.newInstance();
             final Plugin pluginDescription = mainClass.getAnnotation(Plugin.class);
@@ -65,6 +96,7 @@ public class JarPluginLoader implements PluginLoader
             dioritePlugin.getLogger().info("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
             dioritePlugin.onLoad();
 
+            PluginManagerImpl.setCachedClass("jar|" + file.getName(), mainClass);
             return dioritePlugin;
         } catch (final InstantiationException | IllegalAccessException | MalformedURLException e)
         {
