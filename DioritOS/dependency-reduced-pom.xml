@@ -1,68 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>DioriteMaster</artifactId>
+    <groupId>org.diorite</groupId>
+    <version>0.1</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.diorite</groupId>
   <artifactId>DioritOS</artifactId>
-  <version>0.1</version>
   <build>
     <defaultGoal>clean install</defaultGoal>
     <plugins>
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Main-Class>org.diorite.impl.client.Main</Main-Class>
-              <Implementation-Title>DioritOS</Implementation-Title>
-              <Built-By>Diorite</Built-By>
-              <Implementation-Vendor>GotoFinal</Implementation-Vendor>
-              <Implementation-Version>${project.version}</Implementation-Version>
-              <Specification-Title>DioriteCore</Specification-Title>
-              <Specification-Vendor>GotoFinal</Specification-Vendor>
-              <Sealed>false</Sealed>
-            </manifestEntries>
-            <manifestSections>
-              <manifestSection>
-                <name>org/diorite/</name>
-                <manifestEntries>
-                  <Sealed>false</Sealed>
-                </manifestEntries>
-              </manifestSection>
-            </manifestSections>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-compiler-eclipse</artifactId>
-            <version>2.5</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <compilerId>eclipse</compilerId>
-          <source>1.8</source>
-          <target>1.8</target>
-          <optimize>true</optimize>
-          <showWarnings>true</showWarnings>
-          <showDeprecation>true</showDeprecation>
-        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -76,11 +25,19 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
-  <properties>
-    <lwjgl.version>3.0.0b-SNAPSHOT</lwjgl.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>hamcrest-core</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
 </project>
 
