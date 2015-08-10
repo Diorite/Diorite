@@ -2,12 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>Examples</artifactId>
         <groupId>org.diorite</groupId>
         <version>1.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ExampleCoreMod</artifactId>
     <packaging>jar</packaging>
@@ -16,7 +17,7 @@
         <dependency>
             <groupId>org.diorite</groupId>
             <artifactId>DioriteCore</artifactId>
-            <version>LATEST</version>
+            <version>${diorite.version}</version>
         </dependency>
     </dependencies>
 
@@ -29,6 +30,26 @@
                 <configuration>
                     <finalName>${project.name}-${project.version}.core</finalName>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>install</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <copy todir="${basedir}/../../../out" flatten="true">
+                                    <fileset dir="${basedir}/../../../plugins" includes="*.jar"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
