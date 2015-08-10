@@ -41,7 +41,7 @@ public class Arguments implements Iterable<String>
     /**
      * @return raw, editable, wrapped String[]
      */
-    public String[] geRawArgs()
+    public String[] getRawArgs()
     {
         return this.args;
     }
