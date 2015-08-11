@@ -1,0 +1,27 @@
+package org.diorite.impl.connection.packets.status.client;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.impl.connection.EnumProtocol;
+import org.diorite.impl.connection.EnumProtocolDirection;
+import org.diorite.impl.connection.packets.Packet;
+import org.diorite.impl.connection.packets.status.PacketStatusClientListener;
+
+public abstract class PacketStatusClient extends Packet<PacketStatusClientListener>
+{
+    public PacketStatusClient()
+    {
+    }
+
+    public PacketStatusClient(final byte[] data)
+    {
+        super(data);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("TYPE", EnumProtocolDirection.SERVERBOUND + "|" + EnumProtocol.STATUS).toString();
+    }
+}
