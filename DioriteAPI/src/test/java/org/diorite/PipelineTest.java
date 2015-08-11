@@ -65,4 +65,5 @@ public class PipelineTest extends TestCase
             i++;
         }
     }
+     // test change
 }
