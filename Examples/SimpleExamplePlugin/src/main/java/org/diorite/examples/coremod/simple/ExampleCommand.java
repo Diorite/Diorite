@@ -8,7 +8,7 @@ import org.diorite.command.CommandExecutor;
 import org.diorite.command.sender.CommandSender;
 
 public class ExampleCommand implements CommandExecutor
-{// test
+{
     @Override
     public void runCommand(final CommandSender sender, final Command command, final String label, final Matcher matchedPattern, final Arguments args)
     {
