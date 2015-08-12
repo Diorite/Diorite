@@ -20,6 +20,7 @@ public class BaseItemStack implements ItemStack
     {
         Validate.notNull(material, "Material can't be null.");
         this.material = material.ensureValidInventoryItem();
+        Validate.notNull(material, "Material can't be null.");
         this.amount = (this.material == null) ? 0 : amount;
     }
 

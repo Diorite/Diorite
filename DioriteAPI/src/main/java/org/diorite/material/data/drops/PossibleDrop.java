@@ -3,7 +3,6 @@ package org.diorite.material.data.drops;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,7 +18,6 @@ public abstract class PossibleDrop
 
     protected PossibleDrop(final ItemStack itemStack)
     {
-        Validate.notNull(itemStack, "Drop item can't be null");
         this.itemStack = itemStack;
     }
 
@@ -27,13 +25,13 @@ public abstract class PossibleDrop
      * Returns raw ItemStack of this possible drop. <br>
      * This item may be modified by different subclasses before real drop.
      *
-     * @return raw ItemStack of this possible drop.
+     * @return raw ItemStack of this possible drop or null.
      *
      * @see #simulateDrop(Random)
      */
     public ItemStack getItemStack()
     {
-        return this.itemStack.clone();
+        return (this.itemStack == null) ? null : this.itemStack.clone();
     }
 
     /**

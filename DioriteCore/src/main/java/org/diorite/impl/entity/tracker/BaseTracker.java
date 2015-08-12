@@ -81,7 +81,7 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         }
         double deltaX = 0, deltaY = 0, deltaZ = 0;
         this.isMoving = this.forceLocationUpdate || (this.velY != 0) || (this.velZ != 0) || (this.velX != 0);
-        if (this.isMoving)
+//        if (this.isMoving) TODO: readd
         {
             this.forceLocationUpdate = false;
             deltaX = this.tracker.getX() - this.xLoc;
@@ -100,7 +100,7 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
             this.tracked.forEach(p -> p.removeEntityFromView(this));
         }
 
-        if (this.isMoving && ! this.tracked.isEmpty())
+//        if (this.isMoving && ! this.tracked.isEmpty()) TODO: readd
         {
             if ((deltaX < 4) && (deltaX > - 4) && (deltaY < 4) && (deltaY > - 4) && (deltaZ < 4) && (deltaZ > - 4))
             {
