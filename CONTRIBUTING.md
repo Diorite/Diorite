@@ -2,6 +2,8 @@
 If you want contribute to Diorite, you must follow instruction in this file.
 You need use us code style and inspections, if you are using Intellij, you can import it from `DioriteIntellijSettings.zip` file located in root directory of repo. If you are using other IDE, there is small description of code style below.
 
+To start you only need fork and download (clone) project, and then you can just import it to your IDE as maven project.
+Just select this pom file: [**pom.xml**](https://github.com/Diorite/Diorite/blob/master/pom.xml) all other project should be added automaticlly as they are sub-modules of DioriteMaster project.
 
 ## Code style
 Just few rules:
@@ -34,15 +36,13 @@ Just few rules:
 
 ## Implementing new packets
 If you want implement new packet to diorite: (that exist in vanilla Minecraft)
-* Keep packet name from minecraft decompiled code. **(and only name)**
-  * So names should be like in Bukkit project.
 * Every packet class must have PacketClass annotation.
-* You should implement read/write packet and handle methods, even if some of them aren't needed.
+* Remember that there will be client and server so all packets need works in both ways.
 * All fields should have getters and setters.
 * Every packet MUST have empty, public constructor, but you can add other constructors
 
 ## Others
-* Try not to use enums where possible, create classes like this: [**Difficulty.java**](https://github.com/Diorite/Diorite-API/blob/master/src/main/java/org/diorite/Difficulty.java)
+* Try not to use enums where possible, create classes like this: [**Difficulty.java**](https://github.com/Diorite/Diorite/blob/master/DioriteAPI/src/main/java/org/diorite/Difficulty.java)
   * To keep modding simple.
 * Add TODO comments where something needs to be implemented later.
 * Don't add any Minecraft decompiled source code
