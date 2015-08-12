@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.fusesource.jansi.AnsiConsole;
 
 import org.diorite.impl.connection.packets.RegisterPackets;
 import org.diorite.Core;
@@ -19,7 +18,6 @@ import org.diorite.material.Material;
 import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.util.ResourceLeakDetector;
-import jline.UnsupportedTerminal;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
@@ -87,22 +85,6 @@ public final class CoreMain
                 {
                     e.printStackTrace();
                 }
-                final String jline_UnsupportedTerminal = new String(new char[]{'j', 'l', 'i', 'n', 'e', '.', 'U', 'n', 's', 'u', 'p', 'p', 'o', 'r', 't', 'e', 'd', 'T', 'e', 'r', 'm', 'i', 'n', 'a', 'l'});
-                final String jline_terminal = new String(new char[]{'j', 'l', 'i', 'n', 'e', '.', 't', 'e', 'r', 'm', 'i', 'n', 'a', 'l'});
-                CoreMain.useJline = ! jline_UnsupportedTerminal.equals(System.getProperty(jline_terminal));
-                if (options.has("nojline"))
-                {
-                    System.setProperty("user.language", "en");
-                    CoreMain.useJline = false;
-                }
-                if (CoreMain.useJline)
-                {
-                    AnsiConsole.systemInstall();
-                }
-                else
-                {
-                    System.setProperty("jline.terminal", UnsupportedTerminal.class.getName());
-                }
                 if (options.has("noconsole"))
                 {
                     CoreMain.consoleEnabled = false;
@@ -161,7 +143,6 @@ public final class CoreMain
                 this.acceptsAll(Collections.singletonList("config"), "Configuration file to use.").withRequiredArg().ofType(File.class).describedAs("config").defaultsTo(new File("diorite.yml"));
                 this.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds server will send keep alive packet to players").withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(10);
                 this.acceptsAll(Arrays.asList("netty", "netty-threads"), "Amount of netty event loop threads.").withRequiredArg().ofType(Integer.class).describedAs("netty").defaultsTo(4);
-                this.acceptsAll(Collections.singletonList("nojline"), "Disables jline and emulates the vanilla console");
                 this.acceptsAll(Collections.singletonList("noconsole"), "Disables the console");
             }
         };

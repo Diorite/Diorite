@@ -2,11 +2,11 @@ package org.diorite.impl.log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"ClassHasNoToStringMethod", "ObjectEquality"})
 public class LoggerOutputStream extends ByteArrayOutputStream
 {
     private final String separator = System.getProperty("line.separator");
@@ -29,7 +29,14 @@ public class LoggerOutputStream extends ByteArrayOutputStream
             super.reset();
             if ((! record.isEmpty()) && (! record.equals(this.separator)))
             {
-                this.logger.log(this.level, record);
+                if (this.level == Level.INFO)
+                {
+                    this.logger.info(record.endsWith(this.separator) ? record.substring(0, record.length() - this.separator.length()) : record);
+                }
+                else if (this.level == Level.WARNING)
+                {
+                    this.logger.warn(record.endsWith(this.separator) ? record.substring(0, record.length() - this.separator.length()) : record);
+                }
             }
         }
     }

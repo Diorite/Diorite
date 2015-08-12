@@ -16,14 +16,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.fusesource.jansi.AnsiConsole;
 import org.reflections.Reflections;
 import org.slf4j.LoggerFactory;
 
@@ -110,6 +111,7 @@ import org.diorite.utils.SpammyError;
 import org.diorite.world.World;
 import org.diorite.world.generator.WorldGenerators;
 
+import jline.UnsupportedTerminal;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 
@@ -120,7 +122,7 @@ public class DioriteCore implements Core
     private static final CoreStartPipeline startPipeline;
     private static       DioriteCore       instance;
 
-    private final org.slf4j.Logger coreLogger = LoggerFactory.getLogger("");
+    private static final org.slf4j.Logger coreLogger = LoggerFactory.getLogger("");
 
     static
     {
@@ -167,6 +169,22 @@ public class DioriteCore implements Core
             {
                 coloredConsole = true;
             }
+
+
+
+            final String jline_UnsupportedTerminal = new String(new char[]{'j', 'l', 'i', 'n', 'e', '.', 'U', 'n', 's', 'u', 'p', 'p', 'o', 'r', 't', 'e', 'd', 'T', 'e', 'r', 'm', 'i', 'n', 'a', 'l'});
+            final String jline_terminal = new String(new char[]{'j', 'l', 'i', 'n', 'e', '.', 't', 'e', 'r', 'm', 'i', 'n', 'a', 'l'});
+            CoreMain.useJline = ! jline_UnsupportedTerminal.equals(System.getProperty(jline_terminal));
+            if (CoreMain.useJline)
+            {
+                AnsiConsole.systemInstall();
+            }
+            else
+            {
+                System.setProperty("jline.terminal", UnsupportedTerminal.class.getName());
+            }
+
+
             final java.util.logging.Logger global = java.util.logging.Logger.getLogger("");
             global.setUseParentHandlers(false);
             for (final Handler handler : global.getHandlers())
@@ -183,8 +201,8 @@ public class DioriteCore implements Core
             writer.setDaemon(true);
             writer.start();
 
-            System.setOut(new PrintStream(new LoggerOutputStream(logger, Level.INFO), true));
-            System.setErr(new PrintStream(new LoggerOutputStream(logger, Level.WARN), true));
+            System.setOut(new PrintStream(new LoggerOutputStream(coreLogger, Level.INFO), true));
+            System.setErr(new PrintStream(new LoggerOutputStream(coreLogger, Level.WARNING), true));
         }
     }
 
@@ -195,7 +213,7 @@ public class DioriteCore implements Core
         }
         this.reader = LoggerInit.reader;
         this.consoleCommandSender = LoggerInit.coloredConsole ? ColoredConsoleCommandSenderImpl.getInstance(this) : new ConsoleCommandSenderImpl(this);
-        this.coreLogger.info("Starting Diorite v" + this.getVersion() + " server...");
+        coreLogger.info("Starting Diorite v" + this.getVersion() + " server...");
     }
 
     protected final boolean isClient;
@@ -251,7 +269,7 @@ public class DioriteCore implements Core
     @Override
     public org.slf4j.Logger getLogger()
     {
-        return this.coreLogger;
+        return coreLogger;
     }
 
     public boolean isStartedCore()
