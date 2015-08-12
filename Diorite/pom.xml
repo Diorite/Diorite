@@ -27,6 +27,32 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Main-Class>org.diorite.impl.server.Main</Main-Class>
+                            <Implementation-Title>Diorite</Implementation-Title>
+                            <Built-By>Diorite</Built-By>
+                            <Implementation-Vendor>GotoFinal</Implementation-Vendor>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Specification-Title>DioriteCore</Specification-Title>
+                            <Specification-Vendor>GotoFinal</Specification-Vendor>
+                            <Sealed>false</Sealed>
+                        </manifestEntries>
+                        <manifestSections>
+                            <manifestSection>
+                                <name>org/diorite/</name>
+                                <manifestEntries>
+                                    <Sealed>false</Sealed>
+                                </manifestEntries>
+                            </manifestSection>
+                        </manifestSections>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
             </plugin>
         </plugins>
