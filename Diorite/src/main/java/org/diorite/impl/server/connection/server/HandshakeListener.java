@@ -1,4 +1,4 @@
-package org.diorite.impl.connection.listeners.server;
+package org.diorite.impl.server.connection.server;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -9,10 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.packets.handshake.PacketHandshakingClientListener;
 import org.diorite.impl.connection.packets.handshake.client.PacketHandshakingClientSetProtocol;
 import org.diorite.impl.connection.packets.login.server.PacketLoginServerDisconnect;
@@ -101,6 +102,18 @@ public class HandshakeListener implements PacketHandshakingClientListener
     {
         this.networkManager.sendPacket(new PacketLoginServerDisconnect(baseComponent));
         this.networkManager.close(baseComponent, true);
+    }
+
+    @Override
+    public Logger getLogger()
+    {
+        return this.core.getLogger();
+    }
+
+    @Override
+    public DioriteCore getCore()
+    {
+        return this.core;
     }
 
     @Override

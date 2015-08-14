@@ -1,4 +1,4 @@
-package org.diorite.impl.connection.listeners.server;
+package org.diorite.impl.server.connection.server;
 
 import javax.crypto.SecretKey;
 
@@ -8,20 +8,17 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.common.base.Charsets;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.MinecraftEncryption;
-import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.connection.listeners.ThreadPlayerLookupUUID;
+import org.diorite.impl.server.connection.ThreadPlayerLookupUUID;
 import org.diorite.impl.connection.packets.login.PacketLoginClientListener;
 import org.diorite.impl.connection.packets.login.client.PacketLoginClientEncryptionBegin;
 import org.diorite.impl.connection.packets.login.client.PacketLoginClientStart;
@@ -30,6 +27,7 @@ import org.diorite.impl.connection.packets.login.server.PacketLoginServerEncrypt
 import org.diorite.impl.connection.packets.login.server.PacketLoginServerSetCompression;
 import org.diorite.impl.connection.packets.login.server.PacketLoginServerSuccess;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.server.connection.NetworkManager;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
@@ -41,8 +39,8 @@ public class LoginListener implements PacketLoginClientListener
     private static final Random        random  = new Random();
     private static final AtomicInteger counter = new AtomicInteger();
 
-    private final Logger logger = LogManager.getLogger("");
-    private final byte[] token  = new byte[4];
+    private final Logger logger;
+    private final byte[] token = new byte[4];
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
     private       GameProfile        gameProfile;
@@ -61,6 +59,7 @@ public class LoginListener implements PacketLoginClientListener
         this.onlineMode = core.getOnlineMode();
         random.nextBytes(this.token);
         this.protocolState = ProtocolState.HELLO;
+        this.logger = core.getLogger();
     }
 
     public LoginListener(final DioriteCore core, final CoreNetworkManager networkManager, final String hostname)
@@ -147,9 +146,10 @@ public class LoginListener implements PacketLoginClientListener
         this.logger.info(this.playerInfo() + " disconnected from server: " + message.toLegacyText());
     }
 
-    public void setCrackedUUID()
+    @Override
+    public void setUUID(final UUID uuid)
     {
-        this.gameProfile.setId(UUID.nameUUIDFromBytes(("OfflinePlayer:" + this.gameProfile.getName()).getBytes(Charsets.UTF_8)));
+        this.gameProfile.setId(uuid);
     }
 
     public void disconnect(final String msg)
@@ -166,6 +166,7 @@ public class LoginListener implements PacketLoginClientListener
         }
     }
 
+    @Override
     public Logger getLogger()
     {
         return this.logger;
@@ -176,6 +177,7 @@ public class LoginListener implements PacketLoginClientListener
         return this.protocolState;
     }
 
+    @Override
     public void setProtocolState(final ProtocolState protocolState)
     {
         this.protocolState = protocolState;
@@ -206,11 +208,13 @@ public class LoginListener implements PacketLoginClientListener
         this.hostname = hostname;
     }
 
+    @Override
     public GameProfile getGameProfile()
     {
         return this.gameProfile;
     }
 
+    @Override
     public void setGameProfile(final GameProfile gameProfile)
     {
         this.gameProfile = gameProfile;
@@ -226,16 +230,19 @@ public class LoginListener implements PacketLoginClientListener
         this.serverID = serverID;
     }
 
-    public CoreNetworkManager getNetworkManager()
+    @Override
+    public NetworkManager getNetworkManager()
     {
-        return this.networkManager;
+        return (NetworkManager) this.networkManager;
     }
 
+    @Override
     public DioriteCore getCore()
     {
         return this.core;
     }
 
+    @Override
     public OnlineMode getOnlineMode()
     {
         return this.onlineMode;
@@ -250,14 +257,5 @@ public class LoginListener implements PacketLoginClientListener
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("networkManager", this.networkManager).append("gameProfile", this.gameProfile).append("secretKey", this.secretKey).append("hostname", this.hostname).append("protocolState", this.protocolState).append("onlineMode", this.onlineMode).append("serverID", this.serverID).append("token", this.token).append("ticks", this.ticks).toString();
-    }
-
-    public enum ProtocolState
-    {
-        HELLO,
-        KEY,
-        AUTHENTICATING,
-        READY_TO_ACCEPT,
-        ACCEPTED
     }
 }

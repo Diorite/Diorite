@@ -4,8 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.EnumProtocolDirection;
-import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.connection.listeners.server.HandshakeListener;
+import org.diorite.impl.server.connection.server.HandshakeListener;
 import org.diorite.impl.connection.packets.PacketDecoder;
 import org.diorite.impl.connection.packets.PacketEncoder;
 import org.diorite.impl.connection.packets.PacketPrepender;

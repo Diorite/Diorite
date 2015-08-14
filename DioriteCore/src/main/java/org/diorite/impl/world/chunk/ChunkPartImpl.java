@@ -69,6 +69,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
         {
             return old;
         }
+        // TODO: check this
         if (this.blocks.compareAndSet(toArrayIndex(x, y, z), (short) ((old.ordinal() << 4) | old.getType()), (short) ((id << 4) | meta)))
         {
             if (old.getType() != 0)

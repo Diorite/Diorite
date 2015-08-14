@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.listeners.server.PlayListener;
+import org.diorite.impl.connection.listeners.PacketPlayListener;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketCompressor;
 import org.diorite.impl.connection.packets.PacketDecompressor;
@@ -431,9 +431,9 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
             this.packetQueue.clear();
             if (! wasSafe)
             {
-                if (this.packetListener instanceof PlayListener)
+                if (this.packetListener instanceof PacketPlayListener)
                 {
-                    final PlayListener listener = (PlayListener) this.packetListener;
+                    final PacketPlayListener listener = (PacketPlayListener) this.packetListener;
                     if (this.core.getPlayersManager().getRawPlayers().containsValue(listener.getPlayer()))
                     {
                         listener.disconnect(baseComponent);

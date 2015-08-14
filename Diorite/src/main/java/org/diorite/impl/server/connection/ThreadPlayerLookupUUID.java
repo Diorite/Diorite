@@ -1,7 +1,9 @@
-package org.diorite.impl.connection.listeners;
+package org.diorite.impl.server.connection;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
+import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -10,7 +12,7 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
 import org.diorite.impl.connection.MinecraftEncryption;
-import org.diorite.impl.connection.listeners.server.LoginListener;
+import org.diorite.impl.server.connection.server.LoginListener;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 
 public class ThreadPlayerLookupUUID extends Thread
@@ -33,7 +35,7 @@ public class ThreadPlayerLookupUUID extends Thread
         {
             if (this.loginListener.getOnlineMode() != OnlineMode.TRUE) // TODO
             {
-                this.loginListener.setCrackedUUID();
+                this.loginListener.setUUID(UUID.nameUUIDFromBytes(("OfflinePlayer:" + oldProfile.getName()).getBytes(StandardCharsets.UTF_8)));
                 this.allow();
                 return;
             }

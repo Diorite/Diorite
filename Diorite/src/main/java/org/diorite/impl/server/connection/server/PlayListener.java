@@ -1,7 +1,8 @@
-package org.diorite.impl.connection.listeners.server;
+package org.diorite.impl.server.connection.server;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
 
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
@@ -248,6 +249,7 @@ public class PlayListener implements PacketPlayClientListener
         return this.networkManager;
     }
 
+    @Override
     public DioriteCore getCore()
     {
         return this.core;
@@ -264,11 +266,18 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
+    public Logger getLogger()
+    {
+        return this.core.getLogger();
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.core).append("networkManager", this.networkManager).toString();
     }
 
+    @Override
     public PlayerImpl getPlayer()
     {
         return this.player;

@@ -1,7 +1,8 @@
-package org.diorite.impl.connection.listeners.server;
+package org.diorite.impl.server.connection.server;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.cfg.DioriteConfigImpl;
@@ -57,6 +58,13 @@ public class StatusListener implements PacketStatusClientListener
         this.networkManager.close(message, true);
     }
 
+    @Override
+    public Logger getLogger()
+    {
+        return this.core.getLogger();
+    }
+
+    @Override
     public DioriteCore getCore()
     {
         return this.core;

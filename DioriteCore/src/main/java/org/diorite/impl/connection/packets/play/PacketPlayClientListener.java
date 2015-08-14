@@ -1,6 +1,6 @@
 package org.diorite.impl.connection.packets.play;
 
-import org.diorite.impl.connection.packets.PacketListener;
+import org.diorite.impl.connection.listeners.PacketPlayListener;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientArmAnimation;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientBlockDig;
@@ -27,7 +27,7 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientTransacti
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUpdateSign;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
 
-public interface PacketPlayClientListener extends PacketListener
+public interface PacketPlayClientListener extends PacketPlayListener
 {
     void handle(PacketPlayClientKeepAlive packet);
 
