@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.Diorite</groupId>
+        <groupId>org.diorite</groupId>
         <artifactId>DioriteMaster</artifactId>
         <version>0.1</version>
     </parent>
