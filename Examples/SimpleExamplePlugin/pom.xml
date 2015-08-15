@@ -8,6 +8,7 @@
         <artifactId>Examples</artifactId>
         <groupId>org.diorite</groupId>
         <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>SimpleExamplePlugin</artifactId>

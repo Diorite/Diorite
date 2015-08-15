@@ -8,6 +8,7 @@
         <groupId>org.diorite</groupId>
         <artifactId>DioriteMaster</artifactId>
         <version>0.1</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>DioriteCore</artifactId>
