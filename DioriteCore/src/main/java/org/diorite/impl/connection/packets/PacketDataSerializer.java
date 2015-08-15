@@ -8,12 +8,11 @@ import java.nio.ByteOrder;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-
-import com.google.common.base.Charsets;
 
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
@@ -30,9 +29,9 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
-import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.item.ItemMeta;
 import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemMeta;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
@@ -463,7 +462,7 @@ public class PacketDataSerializer extends ByteBuf
         {
             throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
         }
-        final String s = new String(this.readBytes(j).array(), Charsets.UTF_8);
+        final String s = new String(this.readBytes(j).array(), StandardCharsets.UTF_8);
         if (s.length() > i)
         {
             throw new DecoderException("The received string length is longer than maximum allowed (" + j + " > " + i + ")");
@@ -473,7 +472,7 @@ public class PacketDataSerializer extends ByteBuf
 
     public PacketDataSerializer writeText(final String s)
     {
-        final byte[] abyte = s.getBytes(Charsets.UTF_8);
+        final byte[] abyte = s.getBytes(StandardCharsets.UTF_8);
         if (abyte.length > Short.MAX_VALUE)
         {
             throw new EncoderException("String too big (was " + s.length() + " bytes encoded, max " + Short.MAX_VALUE + ")");

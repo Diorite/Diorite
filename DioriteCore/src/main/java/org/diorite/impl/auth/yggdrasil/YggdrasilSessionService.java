@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.KeySpec;
@@ -18,7 +19,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -138,7 +138,7 @@ public class YggdrasilSessionService implements SessionService
     public String performPostRequest(final URL url, final String post, final String contentType) throws IOException
     {
         final HttpURLConnection connection = this.createUrlConnection(url);
-        final byte[] bytes = post.getBytes(Charsets.UTF_8);
+        final byte[] bytes = post.getBytes(StandardCharsets.UTF_8);
         connection.setRequestProperty("Content-Type", contentType + "; charset=utf-8");
         connection.setRequestProperty("Content-Length", "" + bytes.length);
         connection.setDoOutput(true);
@@ -148,7 +148,7 @@ public class YggdrasilSessionService implements SessionService
         }
         try (InputStream inputStream = connection.getInputStream())
         {
-            return IOUtils.toString(inputStream, Charsets.UTF_8);
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         }
     }
 
@@ -156,7 +156,7 @@ public class YggdrasilSessionService implements SessionService
     {
         try (final InputStream inputStream = this.createUrlConnection(url).getInputStream())
         {
-            return IOUtils.toString(inputStream, Charsets.UTF_8);
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         }
     }
 
