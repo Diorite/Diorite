@@ -19,7 +19,7 @@
               <Implementation-Title>Diorite</Implementation-Title>
               <Built-By>Diorite</Built-By>
               <Implementation-Vendor>GotoFinal</Implementation-Vendor>
-              <Implementation-Version>${project.version}</Implementation-Version>
+              <Implementation-Version>${buildNumber}</Implementation-Version>
               <Specification-Title>DioriteCore</Specification-Title>
               <Specification-Vendor>GotoFinal</Specification-Vendor>
               <Sealed>false</Sealed>
