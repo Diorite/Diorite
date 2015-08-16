@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.diorite</groupId>
         <artifactId>DioriteMaster</artifactId>
-        <version>0.1</version>
+        <version>indev-0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -18,6 +18,22 @@
         <defaultGoal>clean install</defaultGoal>
 
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Title>DioriteAPI</Implementation-Title>
+                            <Implementation-Version>${buildNumber}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

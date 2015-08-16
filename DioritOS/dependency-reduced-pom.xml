@@ -3,13 +3,30 @@
   <parent>
     <artifactId>DioriteMaster</artifactId>
     <groupId>org.diorite</groupId>
-    <version>0.1</version>
+    <version>indev-0.0.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>DioritOS</artifactId>
   <build>
     <defaultGoal>clean install</defaultGoal>
     <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Main-Class>org.diorite.impl.client.Main</Main-Class>
+              <Implementation-Title>DioritOS</Implementation-Title>
+              <Implementation-Version>${buildNumber}</Implementation-Version>
+              <Specification-Title>DioriteCore</Specification-Title>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
       </plugin>

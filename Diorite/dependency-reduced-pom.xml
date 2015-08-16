@@ -3,7 +3,7 @@
   <parent>
     <artifactId>DioriteMaster</artifactId>
     <groupId>org.diorite</groupId>
-    <version>0.1</version>
+    <version>indev-0.0.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>Diorite</artifactId>
@@ -11,27 +11,19 @@
     <defaultGoal>clean install</defaultGoal>
     <plugins>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
             <manifestEntries>
               <Main-Class>org.diorite.impl.server.Main</Main-Class>
               <Implementation-Title>Diorite</Implementation-Title>
-              <Built-By>Diorite</Built-By>
-              <Implementation-Vendor>GotoFinal</Implementation-Vendor>
               <Implementation-Version>${buildNumber}</Implementation-Version>
               <Specification-Title>DioriteCore</Specification-Title>
-              <Specification-Vendor>GotoFinal</Specification-Vendor>
-              <Sealed>false</Sealed>
             </manifestEntries>
-            <manifestSections>
-              <manifestSection>
-                <name>org/diorite/</name>
-                <manifestEntries>
-                  <Sealed>false</Sealed>
-                </manifestEntries>
-              </manifestSection>
-            </manifestSections>
           </archive>
         </configuration>
       </plugin>

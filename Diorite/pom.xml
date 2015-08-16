@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.diorite</groupId>
         <artifactId>DioriteMaster</artifactId>
-        <version>0.1</version>
+        <version>indev-0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -27,6 +27,10 @@
 
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
@@ -34,22 +38,9 @@
                         <manifestEntries>
                             <Main-Class>org.diorite.impl.server.Main</Main-Class>
                             <Implementation-Title>Diorite</Implementation-Title>
-                            <Built-By>Diorite</Built-By>
-                            <Created-By>GotoFinal</Created-By>
-                            <Implementation-Vendor>Diorite</Implementation-Vendor>
                             <Implementation-Version>${buildNumber}</Implementation-Version>
                             <Specification-Title>DioriteCore</Specification-Title>
-                            <Specification-Vendor>Diorite</Specification-Vendor>
-                            <Sealed>false</Sealed>
                         </manifestEntries>
-                        <manifestSections>
-                            <manifestSection>
-                                <name>org/diorite/</name>
-                                <manifestEntries>
-                                    <Sealed>false</Sealed>
-                                </manifestEntries>
-                            </manifestSection>
-                        </manifestSections>
                     </archive>
                 </configuration>
             </plugin>
