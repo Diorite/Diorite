@@ -40,6 +40,7 @@ import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagType;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.utils.math.geometry.Vector3F;
 import org.diorite.world.chunk.Chunk;
 
 import io.netty.buffer.ByteBuf;
@@ -416,6 +417,18 @@ public class PacketDataSerializer extends ByteBuf
             }
         } while ((b0 & 0x80) == 128);
         return i;
+    }
+
+    public Vector3F readVector3F()
+    {
+        return new Vector3F(this.readFloat(), this.readFloat(), this.readFloat());
+    }
+
+    public void writeVector3F(final Vector3F vec)
+    {
+        this.writeFloat(vec.getX());
+        this.writeFloat(vec.getY());
+        this.writeFloat(vec.getZ());
     }
 
     public void writeUUID(final UUID uuid)

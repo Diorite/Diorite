@@ -25,6 +25,7 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientSteerVehi
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTabComplete;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTransaction;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUpdateSign;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseEntity;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
 
 public interface PacketPlayClientListener extends PacketPlayListener
@@ -78,4 +79,6 @@ public interface PacketPlayClientListener extends PacketPlayListener
     void handle(PacketPlayClientTransaction packet);
 
     void handle(PacketPlayClientUpdateSign packet);
+
+    void handle(PacketPlayClientUseEntity packet);
 }

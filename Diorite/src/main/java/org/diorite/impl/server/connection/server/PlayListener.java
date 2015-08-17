@@ -33,6 +33,7 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientSteerVehi
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTabComplete;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTransaction;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUpdateSign;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseEntity;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerDisconnect;
 import org.diorite.impl.entity.PlayerImpl;
@@ -179,6 +180,12 @@ public class PlayListener implements PacketPlayClientListener
 
     @Override
     public void handle(final PacketPlayClientUpdateSign packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayClientUseEntity packet)
     {
         // TODO
     }
