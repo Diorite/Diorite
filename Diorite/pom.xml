@@ -18,7 +18,6 @@
         <dependency>
             <groupId>org.diorite</groupId>
             <artifactId>DioriteCore</artifactId>
-            <version>${diorite.version}</version>
         </dependency>
     </dependencies>
 
