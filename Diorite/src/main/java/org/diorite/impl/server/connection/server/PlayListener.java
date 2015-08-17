@@ -45,6 +45,7 @@ import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
+import org.diorite.inventory.ClickType;
 
 public class PlayListener implements PacketPlayClientListener
 {
@@ -209,6 +210,16 @@ public class PlayListener implements PacketPlayClientListener
             if ((packet.getAction() == BlockDigAction.FINISH_DIG) || ((packet.getAction() == BlockDigAction.START_DIG) && this.player.getGameMode().equals(GameMode.CREATIVE)))
             {
                 EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
+            }
+
+            if (packet.getAction() == BlockDigAction.DROP_ITEM)
+            {
+                this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.DROP_KEY)), this.player);
+            }
+
+            if (packet.getAction() == BlockDigAction.DROP_ITEM_STACK)
+            {
+                this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, -1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.CTRL_DROP_KEY)), this.player);
             }
 
             // TODO: implement

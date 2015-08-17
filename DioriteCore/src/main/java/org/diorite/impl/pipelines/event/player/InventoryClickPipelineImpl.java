@@ -232,6 +232,10 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else if (Objects.equals(ct, ClickType.DROP_KEY))
             {
+                if (clicked == null)
+                {
+                    return true;
+                }
                 if (clicked.getAmount() == 1)
                 {
                     if (! inv.atomicReplace(slot, clicked, null))
