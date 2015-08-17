@@ -33,6 +33,7 @@ Thumbs.db
 
 # Others
 /build/
+*buildNumber.properties
 
 # =========================
 # Operating System Files
