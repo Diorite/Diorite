@@ -12,7 +12,6 @@
     </parent>
 
     <artifactId>DioriteCore</artifactId>
-    <version>${diorite.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
