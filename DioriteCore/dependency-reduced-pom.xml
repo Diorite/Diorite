@@ -7,7 +7,6 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>DioriteCore</artifactId>
-  <version>${diorite.version}</version>
   <build>
     <defaultGoal>clean install</defaultGoal>
     <plugins>
