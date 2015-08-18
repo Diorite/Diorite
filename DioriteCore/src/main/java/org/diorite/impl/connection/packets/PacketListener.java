@@ -13,10 +13,13 @@ public interface PacketListener
 
     default void disconnect(final String message)
     {
-        disconnect(TextComponent.fromLegacyText(message));
+        this.disconnect(TextComponent.fromLegacyText(message));
     }
 
-    Logger getLogger();
+    default Logger getLogger()
+    {
+        return this.getCore().getLogger();
+    }
 
     DioriteCore getCore();
 }

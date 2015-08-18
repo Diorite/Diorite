@@ -1,4 +1,4 @@
-package org.diorite.impl.server.connection.server;
+package org.diorite.impl.server.connection.listeners;
 
 import javax.crypto.SecretKey;
 

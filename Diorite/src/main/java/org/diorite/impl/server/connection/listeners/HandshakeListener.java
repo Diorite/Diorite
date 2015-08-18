@@ -1,4 +1,4 @@
-package org.diorite.impl.server.connection.server;
+package org.diorite.impl.server.connection.listeners;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -119,6 +119,6 @@ public class HandshakeListener implements PacketHandshakingClientListener
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("server", this.core).append("networkManager", this.networkManager).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("core", this.core).append("networkManager", this.networkManager).toString();
     }
 }
