@@ -11,12 +11,12 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 
-import java.io.File;
+import java.net.InetAddress;
+import java.net.Proxy;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Collections;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.Sys;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -27,9 +27,8 @@ import org.lwjgl.opengl.GLContext;
 
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
+import org.diorite.impl.client.connection.ClientConnection;
 
-import io.netty.util.ResourceLeakDetector;
-import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
 public class Main
@@ -74,8 +73,7 @@ public class Main
         thread.start();
         try
         {
-            CoreMain.init(options, true);
-            // TODO: start game, etc...
+            new DioriteClient(Proxy.NO_PROXY, options).start(options);
         } catch (final Throwable e)
         {
             e.printStackTrace();
@@ -120,17 +118,7 @@ public class Main
         glfwSetWindowSizeCallback(this.window, this.resizeCallback);
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(this.window, this.keyCallback = new GLFWKeyCallback()
-        {
-            @Override
-            public void invoke(final long window, final int key, final int scancode, final int action, final int mods)
-            {
-                if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_RELEASE))
-                {
-                    glfwSetWindowShouldClose(window, GL_TRUE); // We will detect this in our rendering loop
-                }
-            }
-        });
+        glfwSetKeyCallback(this.window, this.keyCallback = new MyGLFWResizeKeyCallback());
 
         // Get the resolution of the primary monitor
         final ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -185,29 +173,48 @@ public class Main
 
     public static void main(final String[] args)
     {
-        final OptionParser parser = new OptionParser()
-        {
+        DioriteCore.getInitPipeline().addLast("Diorite|initConnection", (s, p, data) -> {
+            s.setHostname(data.options.has("hostname") ? data.options.valueOf("hostname").toString() : s.getConfig().getHostname());
+            s.setPort(data.options.has("port") ? (int) data.options.valueOf("port") : s.getConfig().getPort());
+            s.setConnectionHandler(new ClientConnection(s));
+            s.getConnectionHandler().start();
+        });
+        DioriteCore.getStartPipeline().addLast("DioriteCore|Run", (s, p, options) -> {
+            System.out.println("Started Diorite v" + s.getVersion() + " core!");
+            s.run();
+        });
+
+        // TODO: remove that, client should be able to select server.
+        DioriteCore.getStartPipeline().addBefore("DioriteCore|Run", "Diorite|bindConnection", (s, p, options) -> {
+            try
             {
-                this.acceptsAll(Collections.singletonList("?"), "Print help");
-                this.acceptsAll(Collections.singletonList("debug"), "Enable debug mode");
-                this.acceptsAll(Arrays.asList("resourceleakdetector", "rld"), "ResourceLeakDetector level, disabled by default").withRequiredArg().ofType(String.class).describedAs("rld").defaultsTo(ResourceLeakDetector.Level.DISABLED.name());
-                this.acceptsAll(Arrays.asList("online-mode", "online", "o"), "if player should be auth with Mojang").withRequiredArg().ofType(Boolean.class).describedAs("online").defaultsTo(true);
-                this.acceptsAll(Collections.singletonList("config"), "Configuration file to use.").withRequiredArg().ofType(File.class).describedAs("config").defaultsTo(new File("dioritOS.yml"));
-                this.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds client will send keep alive packet to server").withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(10);
-                this.acceptsAll(Collections.singletonList("width"), "width of screen").withRequiredArg().ofType(int.class).describedAs("width").defaultsTo(854);
-                this.acceptsAll(Collections.singletonList("height"), "height of screen").withRequiredArg().ofType(int.class).describedAs("width").defaultsTo(480);
+                System.setProperty("io.netty.eventLoopThreads", options.has("netty") ? options.valueOf("netty").toString() : Integer.toString(s.getConfig().getNettyThreads()));
+                System.out.println("Starting connecting on " + s.getHostname() + ":" + s.getPort());
+                s.getConnectionHandler().init(InetAddress.getByName(s.getHostname()), s.getPort(), s.getConfig().isUseNativeTransport());
+
+                System.out.println("Connected to " + s.getHostname() + ":" + s.getPort());
+            } catch (final UnknownHostException e)
+            {
+                e.printStackTrace();
             }
-        };
-        OptionSet options;
-        try
-        {
-            options = parser.parse(args);
-        } catch (final Exception e)
-        {
-            e.printStackTrace();
-            options = parser.parse(ArrayUtils.EMPTY_STRING_ARRAY);
-        }
+        });
+
+        final OptionSet options = CoreMain.main(args, false, p -> {
+            p.acceptsAll(Collections.singletonList("width"), "width of screen").withRequiredArg().ofType(int.class).describedAs("width").defaultsTo(854);
+            p.acceptsAll(Collections.singletonList("height"), "height of screen").withRequiredArg().ofType(int.class).describedAs("width").defaultsTo(480);
+        });
         new Main().run(options);
     }
 
+    private static class MyGLFWResizeKeyCallback extends GLFWKeyCallback
+    {
+        @Override
+        public void invoke(final long window, final int key, final int scancode, final int action, final int mods)
+        {
+            if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_RELEASE))
+            {
+                glfwSetWindowShouldClose(window, GL_TRUE); // We will detect this in our rendering loop
+            }
+        }
+    }
 }

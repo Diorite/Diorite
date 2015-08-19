@@ -6,11 +6,28 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.CorruptedFrameException;
 
-public class PacketSplitter extends ByteToMessageDecoder
+public class PacketSplitter extends ByteToMessageCodec<ByteBuf>
 {
+    @Override
+    protected void encode(final ChannelHandlerContext context, final ByteBuf srcByteBuf, final ByteBuf byteBuf)
+    {
+        final int readableBytes = srcByteBuf.readableBytes();
+        final int neededBytes = PacketDataSerializer.neededBytes(readableBytes);
+        if (neededBytes > 3)
+        {
+            throw new IllegalArgumentException("unable to fit " + readableBytes + " into " + 3);
+        }
+        final PacketDataSerializer dataSerializer = new PacketDataSerializer(byteBuf);
+
+        dataSerializer.ensureWritable(neededBytes + readableBytes);
+
+        dataSerializer.writeVarInt(readableBytes);
+        dataSerializer.writeBytes(srcByteBuf, srcByteBuf.readerIndex(), readableBytes);
+    }
+
     @Override
     protected void decode(final ChannelHandlerContext context, final ByteBuf byteBuf, final List<Object> objects)
     {

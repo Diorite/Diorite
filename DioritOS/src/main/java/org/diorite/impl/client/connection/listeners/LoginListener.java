@@ -26,25 +26,25 @@ public class LoginListener implements PacketLoginServerListener
     @Override
     public void handle(final PacketLoginServerEncryptionBegin packet)
     {
-
+        System.out.println(packet);
     }
 
     @Override
     public void handle(final PacketLoginServerSuccess packet)
     {
-
+        System.out.println(packet);
     }
 
     @Override
     public void handle(final PacketLoginServerDisconnect packet)
     {
-
+        System.out.println(packet);
     }
 
     @Override
     public void handle(final PacketLoginServerSetCompression packet)
     {
-
+        System.out.println(packet);
     }
 
     @Override

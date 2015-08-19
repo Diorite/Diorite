@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.utils.SpammyError;
@@ -42,7 +43,10 @@ public class TickGroups implements Tickable
     {
         if (this.groups.isEmpty())
         {
-            SpammyError.err("There is no tick groups, server don't have anything to do. Did you have any worlds?", 10, key);
+            if (! CoreMain.isClient())
+            {
+                SpammyError.err("There is no tick groups, server don't have anything to do. Do you have any worlds?", 10, key);
+            }
             return;
         }
         if (this.groups.size() == 1)

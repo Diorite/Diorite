@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -129,7 +130,7 @@ public final class CoreMain
         return true;
     }
 
-    public static OptionSet main(final String[] args, final boolean client)
+    public static OptionSet main(final String[] args, final boolean client, final Consumer<OptionParser> addon)
     {
         final OptionParser parser = new OptionParser()
         {
@@ -146,6 +147,10 @@ public final class CoreMain
                 this.acceptsAll(Collections.singletonList("noconsole"), "Disables the console");
             }
         };
+        if (addon != null)
+        {
+            addon.accept(parser);
+        }
         OptionSet options;
         try
         {

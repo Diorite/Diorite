@@ -68,9 +68,6 @@ import org.diorite.impl.plugin.JarPluginLoader;
 import org.diorite.impl.plugin.PluginManagerImpl;
 import org.diorite.impl.scheduler.SchedulerImpl;
 import org.diorite.impl.world.WorldsManagerImpl;
-import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
-import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
-import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
 import org.diorite.impl.world.tick.TickGroups;
 import org.diorite.Core;
 import org.diorite.Diorite;
@@ -109,7 +106,6 @@ import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.SpammyError;
 import org.diorite.world.World;
-import org.diorite.world.generator.WorldGenerators;
 
 import jline.UnsupportedTerminal;
 import jline.console.ConsoleReader;
@@ -213,7 +209,7 @@ public class DioriteCore implements Core
         }
         this.reader = LoggerInit.reader;
         this.consoleCommandSender = LoggerInit.coloredConsole ? ColoredConsoleCommandSenderImpl.getInstance(this) : new ConsoleCommandSenderImpl(this);
-        coreLogger.info("Starting Diorite v" + this.getVersion() + " server...");
+        coreLogger.info("Starting Diorite v" + this.getVersion() + " core...");
     }
 
     protected final boolean isClient;
@@ -1071,22 +1067,9 @@ public class DioriteCore implements Core
         startPipeline = new CoreStartPipeline();
         startPipeline.addLast("DioriteCore|EnableMods", (s, pipeline, options) -> s.getPluginManager().getPlugins().stream().filter(p -> ! p.isEnabled() && p.isCoreMod()).forEach(p -> p.setEnabled(true)));
         startPipeline.addLast("DioriteCore|LoadPlugins", (s, p, options) -> s.loadPlugins());
-        startPipeline.addLast("DioriteCore|DefaultGenerators", (s, p, options) -> {
-            WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
-            WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
-            WorldGenerators.registerGenerator(TestWorldGeneratorImpl.createInitializer());
-        });
-        startPipeline.addLast("DioriteCore|LoadWorlds", (s, p, options) -> {
-            System.out.println("Loading worlds...");
-            s.worldsManager.init(s.config, s.config.getWorlds().getWorldsDir());
-            System.out.println("Worlds loaded.");
-        });
+
         startPipeline.addLast("DioriteCore|EnablePlugins", (s, pipeline, options) -> s.pluginManager.getPlugins().stream().filter(p -> ! p.isEnabled()).forEach(p -> p.setEnabled(true)));
         // TODO configuration and other shit.
         startPipeline.addLast("DioriteCore|ConsoleReaderThreadStart", (s, p, options) -> ConsoleReaderThread.start(s));
-        startPipeline.addLast("DioriteCore|Run", (s, p, options) -> {
-            System.out.println("Started Diorite v" + s.getVersion() + " server!");
-            s.run();
-        });
     }
 }

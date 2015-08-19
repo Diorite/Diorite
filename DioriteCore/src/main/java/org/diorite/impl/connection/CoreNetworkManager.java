@@ -16,12 +16,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.listeners.PacketPlayListener;
 import org.diorite.impl.connection.packets.Packet;
-import org.diorite.impl.connection.packets.PacketCompressor;
-import org.diorite.impl.connection.packets.PacketDecompressor;
-import org.diorite.impl.connection.packets.PacketDecrypter;
-import org.diorite.impl.connection.packets.PacketEncrypter;
+import org.diorite.impl.connection.packets.PacketCompression;
+import org.diorite.impl.connection.packets.PacketEncryptor;
 import org.diorite.impl.connection.packets.PacketListener;
 import org.diorite.impl.connection.packets.QueuedPacket;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientKeepAlive;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
@@ -182,7 +181,7 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
             this.handleClosed();
             return;
         }
-        if (packet instanceof PacketPlayServerKeepAlive)
+        if ((packet instanceof PacketPlayServerKeepAlive) || (packet instanceof PacketPlayClientKeepAlive))
         {
             this.sentAlive = System.currentTimeMillis();
         }
@@ -247,8 +246,7 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
             this.handleClosed();
             return;
         }
-        this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(MinecraftEncryption.getCipher(2, secretkey)));
-        this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(MinecraftEncryption.getCipher(1, secretkey)));
+        this.channel.pipeline().addBefore("sizer", "encryption", new PacketEncryptor(MinecraftEncryption.getCipher(1, secretkey), MinecraftEncryption.getCipher(2, secretkey)));
     }
 
     @Override
@@ -379,32 +377,20 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
         }
         if (i >= 0)
         {
-            if ((this.channel.pipeline().get("decompress") instanceof PacketDecompressor))
+            if ((this.channel.pipeline().get("compression") instanceof PacketCompression))
             {
-                ((PacketDecompressor) this.channel.pipeline().get("decompress")).setThreshold(i);
+                ((PacketCompression) this.channel.pipeline().get("compression")).setThreshold(i);
             }
             else
             {
-                this.channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(i));
-            }
-            if ((this.channel.pipeline().get("compress") instanceof PacketCompressor))
-            {
-                ((PacketCompressor) this.channel.pipeline().get("decompress")).a(i);
-            }
-            else
-            {
-                this.channel.pipeline().addBefore("encoder", "compress", new PacketCompressor(i));
+                this.channel.pipeline().addBefore("codec", "compression", new PacketCompression(i));
             }
         }
         else
         {
-            if ((this.channel.pipeline().get("decompress") instanceof PacketDecompressor))
+            if ((this.channel.pipeline().get("compression") instanceof PacketCompression))
             {
-                this.channel.pipeline().remove("decompress");
-            }
-            if ((this.channel.pipeline().get("compress") instanceof PacketCompressor))
-            {
-                this.channel.pipeline().remove("compress");
+                this.channel.pipeline().remove("compression");
             }
         }
     }

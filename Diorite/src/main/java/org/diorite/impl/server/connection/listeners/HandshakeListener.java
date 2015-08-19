@@ -23,7 +23,6 @@ import org.diorite.chat.component.TextComponent;
 public class HandshakeListener implements PacketHandshakingClientListener
 {
     public static final  int                    CLEANUP_THROTTLE = 200;
-    public static final  int                    CURRENT_PROTOCOL = 47;
     private static final Map<InetAddress, Long> throttleTracker  = new ConcurrentHashMap<>(100, 0.2f, 8);
     private static       int                    throttleCounter  = 0;
     private final DioriteCore        core;

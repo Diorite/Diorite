@@ -3,8 +3,10 @@ package org.diorite.utils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.diorite.inventory.item.ItemStack;
 
@@ -58,6 +60,11 @@ public final class DioriteUtils
         }
         file.getAbsoluteFile().getParentFile().mkdirs();
         file.createNewFile();
+    }
+
+    public static UUID getCrackedUuid(final String nick)
+    {
+        return UUID.nameUUIDFromBytes(("OfflinePlayer:" + nick).getBytes(StandardCharsets.UTF_8));
     }
 
     /**

@@ -7,6 +7,10 @@ import java.net.UnknownHostException;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.server.connection.ServerConnection;
+import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
+import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
+import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
+import org.diorite.world.generator.WorldGenerators;
 
 import joptsimple.OptionSet;
 
@@ -24,6 +28,10 @@ public final class Main
             s.setConnectionHandler(new ServerConnection(s));
             s.getConnectionHandler().start();
         });
+        DioriteCore.getStartPipeline().addLast("DioriteCore|Run", (s, p, options) -> {
+            System.out.println("Started Diorite v" + s.getVersion() + " core!");
+            s.run();
+        });
         DioriteCore.getStartPipeline().addBefore("DioriteCore|Run", "Diorite|bindConnection", (s, p, options) -> {
             try
             {
@@ -37,8 +45,18 @@ public final class Main
                 e.printStackTrace();
             }
         });
+        DioriteCore.getStartPipeline().addAfter("DioriteCore|LoadPlugins", "DioriteCore|DefaultGenerators", (s, p, options) -> {
+            WorldGenerators.registerGenerator(FlatWorldGeneratorImpl.createInitializer());
+            WorldGenerators.registerGenerator(VoidWorldGeneratorImpl.createInitializer());
+            WorldGenerators.registerGenerator(TestWorldGeneratorImpl.createInitializer());
+        });
+        DioriteCore.getStartPipeline().addAfter("DioriteCore|DefaultGenerators", "DioriteCore|LoadWorlds", (s, p, options) -> {
+            System.out.println("Loading worlds...");
+            s.getWorldsManager().init(s.getConfig(), s.getConfig().getWorlds().getWorldsDir());
+            System.out.println("Worlds loaded.");
+        });
 
-        final OptionSet options = CoreMain.main(args, false);
+        final OptionSet options = CoreMain.main(args, false, null);
         if (options != null)
         {
             new DioriteServer(Proxy.NO_PROXY, options).start(options);
