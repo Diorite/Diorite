@@ -26,6 +26,11 @@ public class TeleportData
     {
     }
 
+    public TeleportData(final Loc location)
+    {
+        this(location.getX(), location.getY(), location.getZ());
+    }
+
     public TeleportData(final double x, final double y, final double z)
     {
         this.x = x;
