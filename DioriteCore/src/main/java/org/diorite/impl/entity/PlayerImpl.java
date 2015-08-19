@@ -43,6 +43,8 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
+import org.diorite.event.EventType;
+import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.EntityEquipment;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
@@ -477,8 +479,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     {
         this.remove(true);
 
-        this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + this.getName() + "&7&l left from the server!");
-        this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + this.getName() + "&7 left from the server!");
+        EventType.callEvent(new PlayerQuitEvent(this));
     }
 
     @Override

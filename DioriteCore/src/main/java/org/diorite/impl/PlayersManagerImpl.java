@@ -16,31 +16,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.Packet;
-import org.diorite.impl.connection.packets.PacketDataSerializer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerCustomPayload;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerHeldItemSlot;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerLogin;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPosition;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerServerDifficulty;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnPosition;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.BlockLocation;
-import org.diorite.Difficulty;
-import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
-import org.diorite.TeleportData;
-import org.diorite.chat.ChatPosition;
-import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
-import org.diorite.world.Dimension;
-import org.diorite.world.WorldType;
-
-import io.netty.buffer.Unpooled;
+import org.diorite.event.EventType;
+import org.diorite.event.player.PlayerJoinEvent;
 
 public class PlayersManagerImpl implements Tickable
 {
@@ -63,40 +46,10 @@ public class PlayersManagerImpl implements Tickable
         return new PlayerImpl(this.core, EntityImpl.getNextEntityID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.core.getWorldsManager().getDefaultWorld()));
     }
 
-    @SuppressWarnings("MagicNumber")
     public void playerJoin(final PlayerImpl player)
     {
         this.players.put(player.getUniqueID(), player);
-        this.forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
-        this.core.getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
-
-        // TODO: this is only test code
-        player.getNetworkManager().sendPacket(new PacketPlayServerLogin(player.getId(), GameMode.SURVIVAL, false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
-        player.getNetworkManager().sendPacket(new PacketPlayServerCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(this.core.getServerModName())));
-        player.getNetworkManager().sendPacket(new PacketPlayServerServerDifficulty(Difficulty.EASY));
-        player.getNetworkManager().sendPacket(new PacketPlayServerSpawnPosition(new BlockLocation(2, 255, - 2)));
-        player.getNetworkManager().sendPacket(new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
-        player.getNetworkManager().sendPacket(new PacketPlayServerHeldItemSlot(3));
-        player.getNetworkManager().sendPacket(new PacketPlayServerPosition(new TeleportData(4, 255, - 4)));
-
-        // TODO: changeable message, events, etc..
-        this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!");
-        this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
-//        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
-
-        this.core.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
-        player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
-
-        player.getWorld().addEntity(player);
-
-        this.core.addSync(() -> {
-            PacketPlayServer[] newPackets = player.getSpawnPackets();
-            this.core.getPlayersManager().forEachExcept(player, p -> {
-                PacketPlayServer[] playerPackets = p.getSpawnPackets();
-                player.getNetworkManager().sendPackets(playerPackets);
-                p.getNetworkManager().sendPackets(newPackets);
-            });
-        });
+        EventType.callEvent(new PlayerJoinEvent(player));
     }
 
     public List<String> getOnlinePlayersNames()

@@ -12,6 +12,8 @@ import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.world.WorldImpl;
 
+import org.diorite.entity.Entity;
+
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.TShortIntMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -37,6 +39,11 @@ public class EntityTrackers implements Tickable
     public WorldImpl getWorld()
     {
         return this.world;
+    }
+
+    public BaseTracker<?> getTracker(final Entity entity)
+    {
+        return this.trackers.get(entity.getId());
     }
 
     public TShortIntMap getStats() // not for API use, TODO: add API for that

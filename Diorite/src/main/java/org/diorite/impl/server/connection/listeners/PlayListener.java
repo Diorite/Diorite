@@ -219,11 +219,10 @@ public class PlayListener implements PacketPlayClientListener
 
             if (packet.getAction() == BlockDigAction.DROP_ITEM_STACK)
             {
-                this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, -1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.CTRL_DROP_KEY)), this.player);
+                this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.CTRL_DROP_KEY)), this.player);
             }
 
             // TODO: implement
-            // TODO od animacji kopania bedzie osobny event/pipeline
         }, this.player);
     }
 
@@ -232,7 +231,7 @@ public class PlayListener implements PacketPlayClientListener
     {
         if (packet.getCursorPos().getBlockFace() == null)
         {
-            return; // prevent java.lang.IllegalArgumentException: Y can't be bigger than 256 // TODO
+            return; // prevent java.lang.IllegalArgumentException: Y can't be bigger than 256
         }
         this.core.sync(() -> EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()))), this.player);
     }

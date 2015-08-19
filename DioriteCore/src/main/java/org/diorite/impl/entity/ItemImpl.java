@@ -67,7 +67,8 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
             return false;
         }
 
-        player.getNetworkManager().sendPacket(new PacketPlayServerCollect(this.getId(), player.getId())); // TODO Entity tracker zeby inni widzieli podnoszenie
+        player.getNetworkManager().sendPacket(new PacketPlayServerCollect(this.getId(), player.getId()));
+        this.getWorld().getEntityTrackers().getTracker(player).sendToAll(new PacketPlayServerCollect(this.getId(), player.getId()));
         this.remove(true);
         return true;
     }

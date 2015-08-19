@@ -74,7 +74,7 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.targetEntity = data.readVarInt();
-        this.action = EntityUseAction.read(data.readVarInt());
+        this.action = EntityUseAction.values()[data.readVarInt()];
         if (this.action == EntityUseAction.INTERACTAT)
         {
             this.interactAtLocation = data.readVector3F();
@@ -85,7 +85,7 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.targetEntity);
-        data.writeVarInt(this.action.getId());
+        data.writeVarInt(this.action.ordinal());
         if (this.action == EntityUseAction.INTERACTAT)
         {
             data.writeVector3F(this.interactAtLocation);
@@ -100,33 +100,9 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
 
     public enum EntityUseAction
     {
-        INTERACT(0),
-        ATTACK(1),
-        INTERACTAT(2);
-
-        private final int id;
-
-        EntityUseAction(final int id)
-        {
-            this.id = id;
-        }
-
-        public int getId()
-        {
-            return this.id;
-        }
-
-        public static EntityUseAction read(final int id)
-        {
-            for (final EntityUseAction eua : EntityUseAction.values())
-            {
-                if (eua.getId() == id)
-                {
-                    return eua;
-                }
-            }
-            return null;
-        }
+        INTERACT,
+        ATTACK,
+        INTERACTAT;
     }
 
     @Override
