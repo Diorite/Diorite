@@ -9,7 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.CorruptedFrameException;
 
-public class PacketSplitter extends ByteToMessageCodec<ByteBuf>
+public class PacketSizer extends ByteToMessageCodec<ByteBuf>
 {
     @Override
     protected void encode(final ChannelHandlerContext context, final ByteBuf srcByteBuf, final ByteBuf byteBuf)

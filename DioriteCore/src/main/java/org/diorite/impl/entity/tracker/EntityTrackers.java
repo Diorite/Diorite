@@ -11,7 +11,6 @@ import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.world.WorldImpl;
-
 import org.diorite.entity.Entity;
 
 import gnu.trove.map.TIntObjectMap;

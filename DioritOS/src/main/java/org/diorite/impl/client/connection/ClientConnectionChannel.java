@@ -4,10 +4,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.client.connection.listeners.HandshakeListener;
-import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.packets.PacketCodec;
-import org.diorite.impl.connection.packets.PacketSplitter;
-import org.diorite.impl.connection.packets.handshake.RequestType;
+import org.diorite.impl.connection.packets.PacketSizer;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -41,15 +39,12 @@ public class ClientConnectionChannel extends ChannelInitializer<Channel>
         } catch (final ChannelException ignored)
         {
         }
-        channel.pipeline().addLast("timeout", new ReadTimeoutHandler(TIMEOUT_SECONDS)).addLast("sizer", new PacketSplitter()).addLast("codec", new PacketCodec(this.clientConnection));
-        final NetworkManager networkmanager = new NetworkManager(this.clientConnection.getCore(), channel);
-        networkmanager.setProtocol(EnumProtocol.HANDSHAKING);
+        channel.pipeline().addLast("timeout", new ReadTimeoutHandler(TIMEOUT_SECONDS)).addLast("sizer", new PacketSizer()).addLast("codec", new PacketCodec(this.clientConnection));
+        final NetworkManager networkmanager = new NetworkManager(this.clientConnection.getCore());
         this.clientConnection.setConnection(networkmanager);
 
         channel.pipeline().addLast("packet_handler", networkmanager);
-        final HandshakeListener hl = new HandshakeListener(this.clientConnection.getCore(), networkmanager);
-        networkmanager.setPacketListener(hl);
-        hl.startConnection(RequestType.LOGIN);
+        networkmanager.setPacketListener(new HandshakeListener(this.clientConnection.getCore(), networkmanager));
     }
 
     @Override

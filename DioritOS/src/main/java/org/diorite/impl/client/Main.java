@@ -2,12 +2,7 @@ package org.diorite.impl.client;
 
 import static org.lwjgl.glfw.Callbacks.errorCallbackPrint;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_FALSE;
-import static org.lwjgl.opengl.GL11.GL_TRUE;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 
@@ -28,6 +23,7 @@ import org.lwjgl.opengl.GLContext;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.client.connection.ClientConnection;
+import org.diorite.utils.math.DioriteRandomUtils;
 
 import joptsimple.OptionSet;
 
@@ -150,7 +146,7 @@ public class Main
         GLContext.createFromCurrent();
 
         // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
@@ -158,6 +154,11 @@ public class Main
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
+            // useless code, deal with it.
+            for (int i = 0, k = DioriteRandomUtils.nextInt(50); i < k; i++)
+            {
+                rect(DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(0,5));
+            }
             glfwSwapBuffers(this.window); // swap the color buffers
 
             // Poll for window events. The key callback above will only be
@@ -168,8 +169,32 @@ public class Main
                 glfwSetWindowShouldClose(this.window, GL_TRUE);
                 break;
             }
+            try
+            {
+                Thread.sleep(300);
+            } catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+
         }
     }
+
+    public static void rect(double x, double y, double width, double height, double r)
+    {
+        glPushMatrix();
+        glTranslated(x, y, 0);
+        glRotated(r, 0, 0, 1);
+        glColor4f(DioriteRandomUtils.nextFloat(), DioriteRandomUtils.nextFloat(), DioriteRandomUtils.nextFloat(), DioriteRandomUtils.nextFloat());
+        glBegin(GL_QUADS);
+        glVertex2d(0, 0);
+        glVertex2d(0, height);
+        glVertex2d(width, height);
+        glVertex2d(width, 0);
+        glEnd();
+        glPopMatrix();
+    }
+
 
     public static void main(final String[] args)
     {
@@ -183,8 +208,8 @@ public class Main
             System.out.println("Started Diorite v" + s.getVersion() + " core!");
             s.run();
         });
-
-        // TODO: remove that, client should be able to select server.
+//
+//        // TODO: remove that, client should be able to select server.
         DioriteCore.getStartPipeline().addBefore("DioriteCore|Run", "Diorite|bindConnection", (s, p, options) -> {
             try
             {

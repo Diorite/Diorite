@@ -3,8 +3,8 @@ package org.diorite.utils.pipeline;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.Diorite;
 import org.diorite.Core;
+import org.diorite.Diorite;
 import org.diorite.event.Event;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.EventPipeline;

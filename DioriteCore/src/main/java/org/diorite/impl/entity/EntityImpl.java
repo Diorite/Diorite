@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.DioriteCore;
+import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.entity.meta.EntityMetadata;

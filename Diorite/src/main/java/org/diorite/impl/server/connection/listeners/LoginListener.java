@@ -18,7 +18,6 @@ import org.diorite.impl.auth.GameProfile;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.MinecraftEncryption;
-import org.diorite.impl.server.connection.ThreadPlayerLookupUUID;
 import org.diorite.impl.connection.packets.login.PacketLoginClientListener;
 import org.diorite.impl.connection.packets.login.client.PacketLoginClientEncryptionBegin;
 import org.diorite.impl.connection.packets.login.client.PacketLoginClientStart;
@@ -28,6 +27,7 @@ import org.diorite.impl.connection.packets.login.server.PacketLoginServerSetComp
 import org.diorite.impl.connection.packets.login.server.PacketLoginServerSuccess;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.server.connection.NetworkManager;
+import org.diorite.impl.server.connection.ThreadPlayerLookupUUID;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;

@@ -2,8 +2,8 @@ package org.diorite.impl.server.connection;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.server.connection.listeners.PlayListener;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
+import org.diorite.impl.server.connection.listeners.PlayListener;
 import org.diorite.entity.Player;
 
 public class NetworkManager extends CoreNetworkManager

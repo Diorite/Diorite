@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.packets.PacketCodec;
-import org.diorite.impl.connection.packets.PacketSplitter;
+import org.diorite.impl.connection.packets.PacketSizer;
 import org.diorite.impl.server.connection.listeners.HandshakeListener;
 
 import io.netty.channel.Channel;
@@ -39,7 +39,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel>
         } catch (final ChannelException ignored)
         {
         }
-        channel.pipeline().addLast("timeout", new ReadTimeoutHandler(TIMEOUT_SECONDS)).addLast("sizer", new PacketSplitter()).addLast("codec", new PacketCodec(this.serverConnection)); //.addLast("legacy_query", new LegacyPingHandler(this.connectionHandler)).addLast("splitter", new PacketSplitter()).addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND)).addLast("prepender", new PacketPrepender()).addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
+        channel.pipeline().addLast("timeout", new ReadTimeoutHandler(TIMEOUT_SECONDS)).addLast("sizer", new PacketSizer()).addLast("codec", new PacketCodec(this.serverConnection)); //.addLast("legacy_query", new LegacyPingHandler(this.connectionHandler)).addLast("splitter", new PacketSplitter()).addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND)).addLast("prepender", new PacketPrepender()).addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
         final NetworkManager networkmanager = new NetworkManager(this.serverConnection.getCore());
 
         this.serverConnection.getConnections().add(networkmanager);

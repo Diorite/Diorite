@@ -2,9 +2,9 @@ package org.diorite.entity;
 
 import java.util.Collection;
 
+import org.diorite.Core;
 import org.diorite.GameObject;
 import org.diorite.ImmutableLocation;
-import org.diorite.Core;
 import org.diorite.scheduler.Synchronizable;
 
 public interface Entity extends GameObject, Synchronizable

@@ -13,8 +13,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.ConnectionHandler;
-import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.utils.LazyInitVar;
 
 import io.netty.bootstrap.ServerBootstrap;
