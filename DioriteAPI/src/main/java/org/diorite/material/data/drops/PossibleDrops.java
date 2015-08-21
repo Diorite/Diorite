@@ -11,6 +11,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.entity.Entity;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
@@ -101,16 +102,17 @@ public class PossibleDrops implements Iterable<PossibleDrop>
 
     /**
      * Implementation of this method should simulate real drop from block. <br>
-     * Method must handle case when block or usedTool is null.
+     * Method must handle case when block or usedTool or entity is null.
      *
+     * @param entity   may be null! Entity related to drop.
      * @param rand     random instance, should be used if random number is needed.
      * @param usedTool may be null! Used tool.
-     * @param block    can be null! Block related to this drop simulation if exist.
+     * @param block    may be null! Block related to this drop simulation if exist.
      */
-    public Set<ItemStack> simulateDrop(final DioriteRandom rand, final ItemStack usedTool, final Block block)
+    public Set<ItemStack> simulateDrop(final Entity entity, final DioriteRandom rand, final ItemStack usedTool, final Block block)
     {
         final Set<ItemStack> drops = new HashSet<>(this.possibleDrops.size() + 3);
-        this.possibleDrops.stream().forEach(d -> d.simulateDrop(rand, drops, usedTool, block));
+        this.possibleDrops.stream().forEach(d -> d.simulateDrop(entity, rand, drops, usedTool, block));
         return drops;
     }
 

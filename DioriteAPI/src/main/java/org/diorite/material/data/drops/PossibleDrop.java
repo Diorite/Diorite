@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.entity.Entity;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.IntRange;
@@ -16,9 +17,14 @@ public abstract class PossibleDrop
 {
     protected final ItemStack itemStack;
 
-    protected PossibleDrop(final ItemStack itemStack)
+    public PossibleDrop(final ItemStack itemStack)
     {
         this.itemStack = itemStack;
+    }
+
+    public PossibleDrop()
+    {
+        this.itemStack = null;
     }
 
     /**
@@ -38,22 +44,24 @@ public abstract class PossibleDrop
      * Implementation of this method should simulate real drop from block. <br>
      * Method must handle case when block or usedTool is null.
      *
+     * @param entity   may be null! Entity related to drop.
      * @param rand     random instance, should be used if random number is needed.
      * @param drops    drops list, now drops should be add here.
      * @param usedTool may be null! Used tool.
      * @param block    may be null! Block related to this drop simulation if exist.
      */
-    public abstract void simulateDrop(DioriteRandom rand, Set<ItemStack> drops, ItemStack usedTool, Block block);
+    public abstract void simulateDrop(Entity entity, DioriteRandom rand, Set<ItemStack> drops, ItemStack usedTool, Block block);
 
     /**
      * Implementation of this method should simulate real experience drop from block. <br>
      * Method must handle case when block or usedTool is null.
      *
+     * @param entity   may be null! Entity related to drop.
      * @param rand     random instance, should be used if random number is needed.
      * @param usedTool may be null! Used tool.
      * @param block    may be null! Block related to this drop simulation if exist.
      */
-    public int simulateExperienceDrop(final DioriteRandom rand, final ItemStack usedTool, final Block block)
+    public int simulateExperienceDrop(final Entity entity, final DioriteRandom rand, final ItemStack usedTool, final Block block)
     {
         return 0;
     }
@@ -62,11 +70,12 @@ public abstract class PossibleDrop
      * Implementation of this method should return possible experience drop range from block. <br>
      * Method must handle case when block or usedTool is null.
      *
+     * @param entity   may be null! Entity related to drop.
      * @param rand     random instance, should be used if random number is needed.
      * @param usedTool may be null! Used tool.
      * @param block    may be null! Block related to this drop simulation if exist.
      */
-    public IntRange getExperienceDrop(final DioriteRandom rand, final ItemStack usedTool, final Block block)
+    public IntRange getExperienceDrop(final Entity entity, final DioriteRandom rand, final ItemStack usedTool, final Block block)
     {
         return IntRange.EMPTY;
     }

@@ -50,7 +50,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
             // TODO Drop naturally
             final Block block = evt.getBlock();
             final BlockMaterialData type = block.getType();
-            for (final ItemStack itemStack : type.getPossibleDrops().simulateDrop(evt.getPlayer().getRandom(), evt.getItemInHand(), block))
+            for (final ItemStack itemStack : type.getPossibleDrops().simulateDrop(evt.getPlayer(), evt.getPlayer().getRandom(), evt.getItemInHand(), block))
             {
                 final ItemImpl item = new ItemImpl(UUID.randomUUID(), (DioriteCore) this.getCore(), EntityImpl.getNextEntityID(), evt.getBlock().getLocation().addY(1).toLocation());
                 item.setItemStack(itemStack);

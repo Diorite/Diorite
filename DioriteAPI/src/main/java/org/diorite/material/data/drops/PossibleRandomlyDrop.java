@@ -5,6 +5,7 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.entity.Entity;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.IntRange;
@@ -44,7 +45,7 @@ public class PossibleRandomlyDrop extends PossibleDrop
     }
 
     @Override
-    public void simulateDrop(final DioriteRandom rand, final Set<ItemStack> drops, final ItemStack usedTool, final Block block)
+    public void simulateDrop(final Entity entity, final DioriteRandom rand, final Set<ItemStack> drops, final ItemStack usedTool, final Block block)
     {
         final int amount = this.amount.getRandom();
         if (amount == 0)
