@@ -21,6 +21,7 @@ import org.diorite.cfg.annotations.defaults.CfgBooleanDefault;
 import org.diorite.cfg.annotations.defaults.CfgByteDefault;
 import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
+import org.diorite.cfg.annotations.defaults.CfgDelegateImport;
 import org.diorite.cfg.annotations.defaults.CfgIntDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
 import org.diorite.cfg.system.Template;
@@ -33,8 +34,8 @@ import org.diorite.world.WorldType;
 @SuppressWarnings({"SimplifiableIfStatement"})
 public class WorldsConfigImpl implements WorldsConfig
 {
-    private static final List<WorldConfigImpl>      def2;
-    private static final List<WorldGroupConfigImpl> def1;
+    static final List<WorldConfigImpl>      def2;
+    static final List<WorldGroupConfigImpl> def1;
 
     @Override
     public String toString()
@@ -48,14 +49,14 @@ public class WorldsConfigImpl implements WorldsConfig
         def2 = new ArrayList<>(3);
         {
             final WorldConfigImpl w = template.fillDefaults(new WorldConfigImpl());
-            w.seed = defaultSeed();
+            w.seed = DioriteRandomUtils.nextLong();
             def2.add(w);
         }
         {
             final WorldConfigImpl w = template.fillDefaults(new WorldConfigImpl());
             w.name = "world_nether";
             w.enabled = false;
-            w.seed = defaultSeed();
+            w.seed = DioriteRandomUtils.nextLong();
             w.dimension = Dimension.NETHER;
             def2.add(w);
         }
@@ -63,7 +64,7 @@ public class WorldsConfigImpl implements WorldsConfig
             final WorldConfigImpl w = template.fillDefaults(new WorldConfigImpl());
             w.name = "world_end";
             w.enabled = false;
-            w.seed = defaultSeed();
+            w.seed = DioriteRandomUtils.nextLong();
             w.dimension = Dimension.END;
             def2.add(w);
         }
@@ -71,42 +72,6 @@ public class WorldsConfigImpl implements WorldsConfig
         final WorldGroupConfigImpl g = def1.get(0);
         g.name = "default";
         g.worlds = new ArrayList<>(def2);
-    }
-
-
-    private static List<WorldGroupConfigImpl> defaultGroupConfig()
-    {
-        return def1;
-    }
-
-    private static List<WorldConfigImpl> defaultWorldsConfig()
-    {
-        return new ArrayList<>(def2);
-    }
-
-    private static GameMode defaultGamemode()
-    {
-        return GameMode.SURVIVAL;
-    }
-
-    private static Dimension defaultDimension()
-    {
-        return Dimension.OVERWORLD;
-    }
-
-    private static WorldType defaultWorldType()
-    {
-        return WorldType.NORMAL;
-    }
-
-    private static Difficulty defaultDifficulty()
-    {
-        return Difficulty.NORMAL;
-    }
-
-    private static long defaultSeed()
-    {
-        return DioriteRandomUtils.getRandom().nextLong();
     }
 
     @CfgComment("Default world where players are logged in.")
@@ -118,7 +83,7 @@ public class WorldsConfigImpl implements WorldsConfig
     private File worldsDir;
 
     @CfgComment("All groups, every group have separate players data. (EQ, level etc..)")
-    @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultGroupConfig")
+    @CfgDelegateDefault("WorldsConfigImpl.def1")
     private List<WorldGroupConfigImpl> groups;
 
     @Override
@@ -163,7 +128,7 @@ public class WorldsConfigImpl implements WorldsConfig
         private String name = "default";
 
         @CfgComment("All worlds for this group.")
-        @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultWorldsConfig")
+        @CfgDelegateDefault("new ArrayList<>(WorldsConfigImpl.def2)")
         private List<WorldConfigImpl> worlds = new ArrayList<>(def2);
 
         @Override
@@ -237,7 +202,8 @@ public class WorldsConfigImpl implements WorldsConfig
         private boolean enabled;
 
         @CfgComment("Default gamemode for new players.")
-        @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultGamemode")
+        @CfgDelegateImport("org.diorite")
+        @CfgDelegateDefault("GameMode.SURVIVAL")
         private GameMode gamemode;
 
         @CfgComment("If true, then gamemode will be always changed on join to default one.")
@@ -245,7 +211,8 @@ public class WorldsConfigImpl implements WorldsConfig
         private boolean forceGamemode;
 
         @CfgComment("Difficulty for world.")
-        @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultDifficulty")
+        @CfgDelegateImport("org.diorite")
+        @CfgDelegateDefault("Difficulty.NORMAL")
         private Difficulty difficulty;
 
         @CfgComment("Enable PvP on the server. Players shooting themselves with arrows will only receive damage if PvP is enabled.")
@@ -281,15 +248,18 @@ public class WorldsConfigImpl implements WorldsConfig
         private float spawnPitch;
 
         @CfgComment("Seed of world.")
-        @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultSeed")
+        @CfgDelegateImport("org.diorite.utils")
+        @CfgDelegateDefault("DioriteRandomUtils.nextLong()")
         private long seed;
 
         @CfgComment("Dimension of world.")
-        @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultDimension")
+        @CfgDelegateImport("org.diorite.world")
+        @CfgDelegateDefault("Dimension.OVERWORLD")
         private Dimension dimension;
 
         @CfgComment("Type of world.")
-        @CfgDelegateDefault("org.diorite.impl.cfg.WorldsConfigImpl#defaultWorldType")
+        @CfgDelegateImport("org.diorite.world")
+        @CfgDelegateDefault("WorldType.NORMAL")
         private WorldType worldType;
 
         @CfgComment("Generator for world.")

@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,8 +27,15 @@ import org.diorite.cfg.annotations.CfgField;
 import org.diorite.cfg.annotations.CfgFooterComment;
 import org.diorite.cfg.annotations.CfgFooterComments;
 import org.diorite.cfg.annotations.CfgFooterCommentsArray;
+import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
+import org.diorite.cfg.annotations.defaults.CfgDelegateImport;
+import org.diorite.cfg.annotations.defaults.CfgDelegateImportArray;
+import org.diorite.cfg.annotations.defaults.CfgDelegateImports;
 import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
+
+import javassist.CannotCompileException;
+import javassist.NotFoundException;
 
 /**
  * Class for generating config templates, with simple cache system.
@@ -127,6 +135,53 @@ public final class TemplateCreator
                 return null;
             }
         }
+        Supplier<T> def = null;
+        {
+
+            final CfgDelegateDefault annotation = clazz.getAnnotation(CfgDelegateDefault.class);
+            final Collection<String> imports = new HashSet<>(5);
+            imports.add(clazz.getPackage().getName());
+            {
+                {
+                    final CfgDelegateImportArray a = clazz.getAnnotation(CfgDelegateImportArray.class);
+                    if (a != null)
+                    {
+                        for (final CfgDelegateImport di : a.value())
+                        {
+                            imports.add(di.value());
+                        }
+                    }
+                }
+                {
+                    final CfgDelegateImports a = clazz.getAnnotation(CfgDelegateImports.class);
+                    if (a != null)
+                    {
+                        Collections.addAll(imports, a.value());
+                    }
+                }
+            }
+
+            if (annotation != null)
+            {
+                final String path = annotation.value();
+                switch (path)
+                {
+                    case "{<init>}":
+                        def = () -> (T) DioriteReflectionUtils.getConstructor(clazz).invoke();
+                        break;
+                    default:
+                        try
+                        {
+                            def = path.startsWith("adv|") ? ConfigField.parseMethodAdv(path.substring(4), clazz, imports.toArray(new String[imports.size()])) : ConfigField.parseMethod(path, clazz, imports.toArray(new String[imports.size()]));
+                        } catch (CannotCompileException | IllegalAccessException | InstantiationException | NotFoundException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            }
+        }
+
         final boolean allFields;
 //        final boolean superFields;
         final boolean ignoreTransient;
@@ -188,7 +243,7 @@ public final class TemplateCreator
                 }
             }
         }
-        final Template<T> template = new BaseTemplate<>(name, clazz, header, footer, fields);
+        final Template<T> template = new BaseTemplate<>(name, clazz, header, footer, fields, def);
         if (cache)
         {
             templateMap.put(clazz, template);

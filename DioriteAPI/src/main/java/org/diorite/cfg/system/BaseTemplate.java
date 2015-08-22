@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -37,6 +38,7 @@ public class BaseTemplate<T> implements Template<T>
     private final Map<ConfigField, ReflectElement<?>> fields;
     private final Map<String, ConfigField>            nameFields;
     private final ClassLoader                         defaultClassLoader;
+    private final Supplier<T>                         def;
 
 
     /**
@@ -70,6 +72,36 @@ public class BaseTemplate<T> implements Template<T>
     /**
      * Construct new template for given class and fields.
      *
+     * @param name   name of template/object, should be class name.
+     * @param type   type of object/template.
+     * @param header header comment, may be null.
+     * @param footer footer comment, may be null.
+     * @param fields collection of fields data.
+     * @param def    default config object.
+     */
+    public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Collection<ConfigField> fields, final Supplier<T> def)
+    {
+        this(name, type, header, footer, fields, BaseTemplate.class.getClassLoader(), def);
+    }
+
+    /**
+     * Construct new template for given class and fields.
+     *
+     * @param name   name of template/object, should be class name.
+     * @param type   type of object/template.
+     * @param header header comment, may be null.
+     * @param footer footer comment, may be null.
+     * @param fields map of fields data and {@link ReflectElement} for that fields.
+     * @param def    default config object.
+     */
+    public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Map<ConfigField, ReflectElement<?>> fields, final Supplier<T> def)
+    {
+        this(name, type, header, footer, fields, BaseTemplate.class.getClassLoader(), def);
+    }
+
+    /**
+     * Construct new template for given class and fields.
+     *
      * @param name        name of template/object, should be class name.
      * @param type        type of object/template.
      * @param header      header comment, may be null.
@@ -78,6 +110,22 @@ public class BaseTemplate<T> implements Template<T>
      * @param classLoader default class loader to use when creating objects.
      */
     public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Collection<ConfigField> fields, final ClassLoader classLoader)
+    {
+        this(name, type, header, footer, fields, classLoader, null);
+    }
+
+    /**
+     * Construct new template for given class and fields.
+     *
+     * @param name        name of template/object, should be class name.
+     * @param type        type of object/template.
+     * @param header      header comment, may be null.
+     * @param footer      footer comment, may be null.
+     * @param fields      collection of fields data.
+     * @param classLoader default class loader to use when creating objects.
+     * @param def         default config object.
+     */
+    public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Collection<ConfigField> fields, final ClassLoader classLoader, final Supplier<T> def)
     {
         Validate.notNull(type, "Class can't be null!");
         this.name = (name == null) ? type.getSimpleName() : name;
@@ -95,6 +143,7 @@ public class BaseTemplate<T> implements Template<T>
             this.nameFields.put(cf.getName(), cf);
         }
         this.defaultClassLoader = classLoader;
+        this.def = def;
     }
 
     /**
@@ -109,6 +158,22 @@ public class BaseTemplate<T> implements Template<T>
      */
     public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Map<ConfigField, ReflectElement<?>> fields, final ClassLoader classLoader)
     {
+        this(name, type, header, footer, fields, classLoader, null);
+    }
+
+    /**
+     * Construct new template for given class and fields.
+     *
+     * @param name        name of template/object, should be class name.
+     * @param type        type of object/template.
+     * @param header      header comment, may be null.
+     * @param footer      footer comment, may be null.
+     * @param fields      map of fields data and {@link ReflectElement} for that fields.
+     * @param classLoader default class loader to use when creating objects.
+     * @param def         default config object.
+     */
+    public BaseTemplate(final String name, final Class<T> type, final String header, final String footer, final Map<ConfigField, ReflectElement<?>> fields, final ClassLoader classLoader, final Supplier<T> def)
+    {
         Validate.notNull(type, "Class can't be null!");
         this.name = (name == null) ? type.getSimpleName() : name;
         this.type = type;
@@ -121,6 +186,7 @@ public class BaseTemplate<T> implements Template<T>
             this.nameFields.put(cf.getName(), cf);
         }
         this.defaultClassLoader = classLoader;
+        this.def = def;
     }
 
     @Override
@@ -234,6 +300,10 @@ public class BaseTemplate<T> implements Template<T>
     @Override
     public T fillDefaults(final T obj)
     {
+        if (obj == null)
+        {
+            return (this.def == null) ? null : this.def.get();
+        }
         for (final Entry<ConfigField, ReflectElement<?>> entry : this.fields.entrySet())
         {
             final ConfigField field = entry.getKey();

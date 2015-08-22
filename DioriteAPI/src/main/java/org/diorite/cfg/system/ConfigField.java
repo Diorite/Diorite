@@ -8,14 +8,16 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -29,6 +31,9 @@ import org.diorite.cfg.annotations.defaults.CfgCharArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgCharDefault;
 import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
+import org.diorite.cfg.annotations.defaults.CfgDelegateImport;
+import org.diorite.cfg.annotations.defaults.CfgDelegateImportArray;
+import org.diorite.cfg.annotations.defaults.CfgDelegateImports;
 import org.diorite.cfg.annotations.defaults.CfgDoubleArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgDoubleDefault;
 import org.diorite.cfg.annotations.defaults.CfgFloatArrayDefault;
@@ -44,8 +49,16 @@ import org.diorite.cfg.annotations.defaults.CfgStringDefault;
 import org.diorite.cfg.system.elements.TemplateElement;
 import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.utils.collections.comparators.AlphanumComparator;
+import org.diorite.utils.function.Evaluator;
+import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.MethodInvoker;
+
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtNewMethod;
+import javassist.NotFoundException;
 
 /**
  * Main implementation of {@link CfgEntryData} contains all information
@@ -53,6 +66,7 @@ import org.diorite.utils.reflections.MethodInvoker;
  */
 public class ConfigField implements Comparable<ConfigField>, CfgEntryData
 {
+    private static final Pattern VALID_JAVA_NAME = Pattern.compile("[^a-zA-Z0-9_]");
     private final Field            field;
     private final int              index;
     private final String           name;
@@ -264,6 +278,31 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             }
         }
         final CfgDelegateDefault annotation = field.getAnnotation(CfgDelegateDefault.class);
+        final Collection<String> imports = new HashSet<>(5);
+        final Package pack = field.getType().getPackage();
+        if ((pack != null) && (pack.getName() != null))
+        {
+            imports.add(pack.getName());
+        }
+        {
+            {
+                final CfgDelegateImportArray a = field.getAnnotation(CfgDelegateImportArray.class);
+                if (a != null)
+                {
+                    for (final CfgDelegateImport di : a.value())
+                    {
+                        imports.add(di.value());
+                    }
+                }
+            }
+            {
+                final CfgDelegateImports a = field.getAnnotation(CfgDelegateImports.class);
+                if (a != null)
+                {
+                    Collections.addAll(imports, a.value());
+                }
+            }
+        }
         if (annotation != null)
         {
             final String path = annotation.value();
@@ -278,22 +317,41 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                 case "{emptySet}":
                     def = () -> new HashSet<>(1);
                     break;
+                case "{<init>}":
+                    def = () -> DioriteReflectionUtils.getConstructor(field.getType()).invoke();
+                    break;
                 default:
-                    final String[] parts = StringUtils.split(path, '#');
-                    if (parts.length == 1)
+                    try
                     {
-                        this.invoker = DioriteReflectionUtils.getMethod(field.getDeclaringClass(), parts[0]);
-                        def = () -> this.invoker.invoke(null);
-                    }
-                    else if (parts.length == 2)
+                        def = path.startsWith("adv|") ? ConfigField.parseMethodAdv(path.substring(4), field.getType(), imports.toArray(new String[imports.size()])) : parseMethod(path, field.getType(), imports.toArray(new String[imports.size()]));
+                    } catch (CannotCompileException | IllegalAccessException | InstantiationException | NotFoundException e)
                     {
-                        this.invoker = DioriteReflectionUtils.getMethod(parts[0], parts[1]);
-                        def = () -> this.invoker.invoke(null);
+                        e.printStackTrace();
                     }
                     break;
             }
         }
         this.def = def;
+    }
+
+    static <T> Supplier<T> parseMethod(final String str, final Class<?> field, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
+    {
+        return parseMethodAdv("return " + str + ";", field, imports);
+    }
+
+    static <T> Supplier<T> parseMethodAdv(final String str, final Class<?> field, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
+    {
+        final ClassPool pool = ClassPool.getDefault();
+        for (final String impor : imports)
+        {
+            pool.importPackage(impor);
+        }
+        final CtClass init = pool.makeClass(field.getName() + "." + VALID_JAVA_NAME.matcher(field.getName()).replaceAll("_") + DioriteRandomUtils.nextLong());
+        init.setInterfaces(new CtClass[]{pool.get("org.diorite.utils.function.Evaluator")});
+        init.addMethod(CtNewMethod.make(pool.get("java.lang.Object"), "eval", new CtClass[0], new CtClass[]{pool.get("java.lang.Exception")}, "{\n" + str + "\n}", init));
+        final Class<?> clazz = init.toClass();
+        final Evaluator<T> o = (Evaluator<T>) clazz.newInstance();
+        return o::eval;
     }
 
     public static void getAllPossibleTypes(final Set<Class<?>> classes, final Set<Type> checkedTypes, final Type rawType)

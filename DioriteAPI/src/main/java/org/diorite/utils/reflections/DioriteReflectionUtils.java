@@ -922,4 +922,22 @@ public final class DioriteReflectionUtils
             throw new IllegalArgumentException("Cannot find " + canonicalName, e);
         }
     }
+
+    /**
+     * Return class for given name or null.
+     *
+     * @param canonicalName name of class to find.
+     *
+     * @return class for given name or null.
+     */
+    public static Class<?> tryGetCanonicalClass(final String canonicalName)
+    {
+        try
+        {
+            return Class.forName(canonicalName);
+        } catch (final ClassNotFoundException e)
+        {
+            return null;
+        }
+    }
 }

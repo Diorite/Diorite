@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * {@literal {emptySet} -> new HashSet<>(1);}
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.TYPE})
 public @interface CfgDelegateDefault
 {
     /**

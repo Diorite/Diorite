@@ -5,7 +5,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -20,10 +19,9 @@ import org.diorite.cfg.annotations.defaults.CfgBooleanDefault;
 import org.diorite.cfg.annotations.defaults.CfgByteDefault;
 import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
+import org.diorite.cfg.annotations.defaults.CfgDelegateImport;
 import org.diorite.cfg.annotations.defaults.CfgIntDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
-import org.diorite.cfg.system.Template;
-import org.diorite.cfg.system.TemplateCreator;
 
 @SuppressWarnings({"HardcodedFileSeparator", "SimplifiableIfStatement"})
 @CfgClass(name = "DioriteConfig")
@@ -113,11 +111,13 @@ public class DioriteConfigImpl implements DioriteConfig
     private String motd;
 
     @CfgComment("Metrics UUID")
-    @CfgDelegateDefault("org.diorite.impl.cfg.DioriteConfigImpl#defaultMetricsUuid")
+    @CfgDelegateImport("java.util")
+    @CfgDelegateDefault("UUID.randomUUID().toString()")
     private String metricsUuid;
 
     @CfgComment("Worlds configuration.")
-    @CfgDelegateDefault("org.diorite.impl.cfg.DioriteConfigImpl#defaultWorlds")
+    @CfgDelegateImport("org.diorite.cfg")
+    @CfgDelegateDefault("adv|final Template template = TemplateCreator.getTemplate(WorldsConfigImpl.class, true);return template.fillDefaults(new WorldsConfigImpl());")
     private WorldsConfigImpl worlds;
 
     @Override
@@ -500,16 +500,5 @@ public class DioriteConfigImpl implements DioriteConfig
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("hostname", this.hostname).append("port", this.port).append("queryPort", this.queryPort).append("rconPort", this.rconPort).append("rconPassword", this.rconPassword).append("networkCompressionThreshold", this.networkCompressionThreshold).append("onlineMode", this.onlineMode).append("maxPlayers", this.maxPlayers).append("playerIdleTimeout", this.playerIdleTimeout).append("resourcePack", this.resourcePack).append("resourcePackHash", this.resourcePackHash).append("useNativeTransport", this.useNativeTransport).append("viewDistance", this.viewDistance).append("inputThreadPoolSize", this.inputThreadPoolSize).append("administratorsFile", this.administratorsFile).append("whiteListEnabled", this.whiteListEnabled).append("whiteListFile", this.whiteListFile).append("motd", this.motd).append("worlds", this.worlds).toString();
-    }
-
-    private static String defaultMetricsUuid()
-    {
-        return UUID.randomUUID().toString();
-    }
-
-    private static WorldsConfigImpl defaultWorlds()
-    {
-        final Template<WorldsConfigImpl> template = TemplateCreator.getTemplate(WorldsConfigImpl.class, true);
-        return template.fillDefaults(new WorldsConfigImpl());
     }
 }
