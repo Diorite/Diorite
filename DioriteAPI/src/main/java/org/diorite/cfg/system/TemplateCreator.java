@@ -243,7 +243,7 @@ public final class TemplateCreator
                 }
             }
         }
-        final Template<T> template = new BaseTemplate<>(name, clazz, header, footer, fields, def);
+        final Template<T> template = new BaseTemplate<>(name, clazz, header, footer, fields, clazz.getClassLoader(), def);
         if (cache)
         {
             templateMap.put(clazz, template);

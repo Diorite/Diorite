@@ -1,4 +1,4 @@
-package org.diorite.examples.coremod.simple;
+package org.diorite.examples.coremod;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.plugin.CoreMod;

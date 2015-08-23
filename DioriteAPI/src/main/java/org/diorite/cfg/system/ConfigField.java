@@ -359,6 +359,8 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
     static Supplier parseMethodAdv(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
     {
         final ClassPool pool = ClassPool.getDefault();
+
+        pool.clearImportedPackages();
         for (final String impor : imports)
         {
             pool.importPackage(impor);
@@ -513,7 +515,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         }
         init.setInterfaces(new CtClass[]{interfaceType});
         init.addMethod(CtNewMethod.make(returnType, "eval", new CtClass[0], new CtClass[]{pool.get("java.lang.Exception")}, "{\n" + str + "\n}", init));
-        return func.apply(init.toClass());
+        return func.apply(init.toClass(clazz.getClassLoader()));
     }
 
     public static void getAllPossibleTypes(final Set<Class<?>> classes, final Set<Type> checkedTypes, final Type rawType)

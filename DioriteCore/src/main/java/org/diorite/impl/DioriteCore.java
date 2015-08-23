@@ -113,6 +113,8 @@ import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.SpammyError;
 import org.diorite.world.World;
 
+import javassist.ClassPool;
+import javassist.LoaderClassPath;
 import jline.UnsupportedTerminal;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
@@ -128,6 +130,7 @@ public class DioriteCore implements Core
 
     static
     {
+        ClassPool.getDefault().appendClassPath(new LoaderClassPath(DioriteCore.class.getClassLoader()));
         LoggerInit.init();
     }
 

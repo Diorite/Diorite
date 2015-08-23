@@ -10,6 +10,9 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javassist.ClassPool;
+import javassist.LoaderClassPath;
+
 public class PluginClassLoader extends URLClassLoader
 {
     private static final Map<String, Class<?>> globalClasses = new HashMap<>(100); // Global classes
@@ -18,6 +21,7 @@ public class PluginClassLoader extends URLClassLoader
     public PluginClassLoader(final File jarToLoad) throws MalformedURLException
     {
         super(new URL[]{jarToLoad.toURI().toURL()});
+        ClassPool.getDefault().appendClassPath(new LoaderClassPath(this));
     }
 
     @Override

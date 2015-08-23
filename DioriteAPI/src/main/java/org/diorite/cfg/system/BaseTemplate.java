@@ -298,11 +298,11 @@ public class BaseTemplate<T> implements Template<T>
     }
 
     @Override
-    public T fillDefaults(final T obj)
+    public T fillDefaults(T obj)
     {
         if (obj == null)
         {
-            return (this.def == null) ? null : this.def.get();
+            obj = (this.def == null) ? null : this.def.get();
         }
         for (final Entry<ConfigField, ReflectElement<?>> entry : this.fields.entrySet())
         {

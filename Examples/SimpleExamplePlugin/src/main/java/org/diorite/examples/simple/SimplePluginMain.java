@@ -1,12 +1,15 @@
-package org.diorite.examples.coremod.simple;
+package org.diorite.examples.simple;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import org.diorite.Diorite;
+import org.diorite.cfg.Configuration;
 import org.diorite.command.PluginCommand;
 import org.diorite.command.PluginCommandBuilder;
 import org.diorite.command.SubCommand;
-import org.diorite.examples.coremod.simple.ExampleCommand.ExampleSubCmdCommand;
+import org.diorite.examples.simple.ExampleCommand.ExampleSubCmdCommand;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.FakeDioritePlugin;
 import org.diorite.plugin.Plugin;
@@ -16,6 +19,7 @@ import org.diorite.plugin.PluginException;
 public class SimplePluginMain extends DioritePlugin
 {
     private static SimplePluginMain instance;
+    private static MyCfg            cfg;
 
     @Override
     public void onLoad()
@@ -29,13 +33,32 @@ public class SimplePluginMain extends DioritePlugin
     public void onEnable()
     {
         this.getLogger().info("Hello world in onEnable!");
+        // TODO: change to plugin folder method
+        try
+        {
+            cfg = Configuration.loadConfigFile(new File("plugins/SimpleExamplePlugin/cfg.yml"), MyCfg.class);
+        } catch (final IOException e)
+        {
+            this.getLogger().warn("Can't load config file.");
+            e.printStackTrace();
+        }
         this.registerCommand();
+
+        this.getLogger().info("Loaded config file: " + cfg);
     }
 
     @Override
     public void onDisable()
     {
         this.getLogger().info("Hello world in onDisable!");
+        try
+        {
+            Configuration.saveConfigFile(new File("plugins/SimpleExamplePlugin/cfg.yml"), MyCfg.class, cfg);
+        } catch (final IOException e)
+        {
+            this.getLogger().warn("Can't save config file.");
+            e.printStackTrace();
+        }
     }
 
     public static SimplePluginMain getInstance()

@@ -83,7 +83,7 @@ public class WorldsConfigImpl implements WorldsConfig
     private File worldsDir;
 
     @CfgComment("All groups, every group have separate players data. (EQ, level etc..)")
-    @CfgDelegateDefault("WorldsConfigImpl.def1")
+    @CfgDelegateDefault("adv| return org.diorite.impl.cfg.WorldsConfigImpl.def1;")
     private List<WorldGroupConfigImpl> groups;
 
     @Override
@@ -128,7 +128,7 @@ public class WorldsConfigImpl implements WorldsConfig
         private String name = "default";
 
         @CfgComment("All worlds for this group.")
-        @CfgDelegateDefault("new ArrayList(WorldsConfigImpl.def2)")
+        @CfgDelegateDefault("new ArrayList(org.diorite.impl.cfg.WorldsConfigImpl.def2)")
         private List<WorldConfigImpl> worlds = new ArrayList<>(def2);
 
         @Override

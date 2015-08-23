@@ -1,4 +1,4 @@
-package org.diorite.examples.coremod.simple;
+package org.diorite.examples.simple;
 
 import java.util.regex.Matcher;
 
