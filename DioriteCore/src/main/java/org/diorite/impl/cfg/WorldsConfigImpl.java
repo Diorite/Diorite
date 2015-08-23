@@ -128,7 +128,7 @@ public class WorldsConfigImpl implements WorldsConfig
         private String name = "default";
 
         @CfgComment("All worlds for this group.")
-        @CfgDelegateDefault("new ArrayList<>(WorldsConfigImpl.def2)")
+        @CfgDelegateDefault("new ArrayList(WorldsConfigImpl.def2)")
         private List<WorldConfigImpl> worlds = new ArrayList<>(def2);
 
         @Override
@@ -248,7 +248,7 @@ public class WorldsConfigImpl implements WorldsConfig
         private float spawnPitch;
 
         @CfgComment("Seed of world.")
-        @CfgDelegateImport("org.diorite.utils")
+        @CfgDelegateImport("org.diorite.utils.math")
         @CfgDelegateDefault("DioriteRandomUtils.nextLong()")
         private long seed;
 

@@ -28,6 +28,7 @@ import org.diorite.cfg.annotations.defaults.CfgStringDefault;
 @CfgComments({"Welcome in Diorite configuration file, in this file you will", "find every option needed to configure your server."})
 @CfgFooterComment("End of configuration!")
 @CfgFooterComment("=====================")
+@CfgDelegateDefault("new DioriteConfigImpl()")
 public class DioriteConfigImpl implements DioriteConfig
 {
     @CfgComment("Hostname to listen on.")
@@ -116,7 +117,7 @@ public class DioriteConfigImpl implements DioriteConfig
     private String metricsUuid;
 
     @CfgComment("Worlds configuration.")
-    @CfgDelegateImport("org.diorite.cfg")
+    @CfgDelegateImport("org.diorite.cfg.system")
     @CfgDelegateDefault("adv|final Template template = TemplateCreator.getTemplate(WorldsConfigImpl.class, true);return template.fillDefaults(new WorldsConfigImpl());")
     private WorldsConfigImpl worlds;
 

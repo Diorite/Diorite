@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -49,7 +50,15 @@ import org.diorite.cfg.annotations.defaults.CfgStringDefault;
 import org.diorite.cfg.system.elements.TemplateElement;
 import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.utils.collections.comparators.AlphanumComparator;
-import org.diorite.utils.function.Evaluator;
+import org.diorite.utils.function.eval.BooleanEvaluator;
+import org.diorite.utils.function.eval.ByteEvaluator;
+import org.diorite.utils.function.eval.CharEvaluator;
+import org.diorite.utils.function.eval.DoubleEvaluator;
+import org.diorite.utils.function.eval.FloatEvaluator;
+import org.diorite.utils.function.eval.IntEvaluator;
+import org.diorite.utils.function.eval.LongEvaluator;
+import org.diorite.utils.function.eval.ObjectEvaluator;
+import org.diorite.utils.function.eval.ShortEvaluator;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.MethodInvoker;
@@ -64,6 +73,7 @@ import javassist.NotFoundException;
  * Main implementation of {@link CfgEntryData} contains all information
  * about config field.
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ConfigField implements Comparable<ConfigField>, CfgEntryData
 {
     private static final Pattern VALID_JAVA_NAME = Pattern.compile("[^a-zA-Z0-9_]");
@@ -280,7 +290,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         final CfgDelegateDefault annotation = field.getAnnotation(CfgDelegateDefault.class);
         final Collection<String> imports = new HashSet<>(5);
         final Package pack = field.getType().getPackage();
-        if ((pack != null) && (pack.getName() != null))
+        if ((pack != null) && (pack.getName() != null) && ! pack.getName().equals("java.lang"))
         {
             imports.add(pack.getName());
         }
@@ -300,6 +310,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                 if (a != null)
                 {
                     Collections.addAll(imports, a.value());
+                }
+            }
+            {
+                final CfgDelegateImport a = field.getAnnotation(CfgDelegateImport.class);
+                if (a != null)
+                {
+                    imports.add(a.value());
                 }
             }
         }
@@ -323,7 +340,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                 default:
                     try
                     {
-                        def = path.startsWith("adv|") ? ConfigField.parseMethodAdv(path.substring(4), field.getType(), imports.toArray(new String[imports.size()])) : parseMethod(path, field.getType(), imports.toArray(new String[imports.size()]));
+                        def = path.startsWith("adv|") ? ConfigField.parseMethodAdv(path.substring(4), field.getDeclaringClass(), field.getType(), imports.toArray(new String[imports.size()])) : parseMethod(path, field.getDeclaringClass(), field.getType(), imports.toArray(new String[imports.size()]));
                     } catch (CannotCompileException | IllegalAccessException | InstantiationException | NotFoundException e)
                     {
                         e.printStackTrace();
@@ -334,24 +351,169 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         this.def = def;
     }
 
-    static <T> Supplier<T> parseMethod(final String str, final Class<?> field, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
+    static Supplier parseMethod(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
     {
-        return parseMethodAdv("return " + str + ";", field, imports);
+        return parseMethodAdv("return " + str + ";", clazz, returnClass, imports);
     }
 
-    static <T> Supplier<T> parseMethodAdv(final String str, final Class<?> field, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
+    static Supplier parseMethodAdv(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
     {
         final ClassPool pool = ClassPool.getDefault();
         for (final String impor : imports)
         {
             pool.importPackage(impor);
         }
-        final CtClass init = pool.makeClass(field.getName() + "." + VALID_JAVA_NAME.matcher(field.getName()).replaceAll("_") + DioriteRandomUtils.nextLong());
-        init.setInterfaces(new CtClass[]{pool.get("org.diorite.utils.function.Evaluator")});
-        init.addMethod(CtNewMethod.make(pool.get("java.lang.Object"), "eval", new CtClass[0], new CtClass[]{pool.get("java.lang.Exception")}, "{\n" + str + "\n}", init));
-        final Class<?> clazz = init.toClass();
-        final Evaluator<T> o = (Evaluator<T>) clazz.newInstance();
-        return o::eval;
+
+        final CtClass init = pool.makeClass((clazz.getName().startsWith("java") ? "org.diorite.cfg.system" : clazz.getPackage().getName()) + "." + VALID_JAVA_NAME.matcher(clazz.getName() + DioriteRandomUtils.nextLong()).replaceAll("_"));
+
+        final CtClass returnType;
+        final CtClass interfaceType;
+        final Function<Class<?>, Supplier<Object>> func;
+        if (returnClass.isPrimitive())
+        {
+            if (returnClass.equals(boolean.class))
+            {
+                returnType = CtClass.booleanType;
+                interfaceType = pool.get("org.diorite.utils.function.eval.BooleanEvaluator");
+                func = c -> {
+                    try
+                    {
+                        BooleanEvaluator e = (BooleanEvaluator) c.newInstance();
+                        return e::eval;
+                    } catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                };
+            }
+            else if (returnClass.equals(byte.class))
+            {
+                returnType = CtClass.byteType;
+                interfaceType = pool.get("org.diorite.utils.function.eval.ByteEvaluator");
+                func = c -> {
+                    try
+                    {
+                        ByteEvaluator e = (ByteEvaluator) c.newInstance();
+                        return e::eval;
+                    } catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                };
+            }
+            else if (returnClass.equals(char.class))
+            {
+                returnType = CtClass.charType;
+                interfaceType = pool.get("org.diorite.utils.function.eval.CharEvaluator");
+                func = c -> {
+                    try
+                    {
+                        CharEvaluator e = (CharEvaluator) c.newInstance();
+                        return e::eval;
+                    } catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                };
+            }
+            else if (returnClass.equals(short.class))
+            {
+                returnType = CtClass.shortType;
+                interfaceType = pool.get("org.diorite.utils.function.eval.ShortEvaluator");
+                func = c -> {
+                    try
+                    {
+                        ShortEvaluator e = (ShortEvaluator) c.newInstance();
+                        return e::eval;
+                    } catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                };
+            }
+            else if (returnClass.equals(int.class))
+            {
+                returnType = CtClass.intType;
+                interfaceType = pool.get("org.diorite.utils.function.eval.IntEvaluator");
+                func = c -> {
+                    try
+                    {
+                        IntEvaluator e = (IntEvaluator) c.newInstance();
+                        return e::eval;
+                    } catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                };
+            }
+            else if (returnClass.equals(long.class))
+            {
+                returnType = CtClass.longType;
+                interfaceType = pool.get("org.diorite.utils.function.eval.LongEvaluator");
+                func = c -> {
+                    try
+                    {
+                        LongEvaluator e = (LongEvaluator) c.newInstance();
+                        return e::eval;
+                    } catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                };
+            }
+            else if (returnClass.equals(float.class))
+            {
+                returnType = CtClass.floatType;
+                interfaceType = pool.get("org.diorite.utils.function.eval.FloatEvaluator");
+                func = c -> {
+                    try
+                    {
+                        FloatEvaluator e = (FloatEvaluator) c.newInstance();
+                        return e::eval;
+                    } catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                };
+            }
+            else if (returnClass.equals(double.class))
+            {
+                returnType = CtClass.doubleType;
+                interfaceType = pool.get("org.diorite.utils.function.eval.DoubleEvaluator");
+                func = c -> {
+                    try
+                    {
+                        DoubleEvaluator e = (DoubleEvaluator) c.newInstance();
+                        return e::eval;
+                    } catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                };
+            }
+            else
+            {
+                throw new AssertionError("Unknown primitive type.");
+            }
+        }
+        else
+        {
+            returnType = pool.get("java.lang.Object");
+            interfaceType = pool.get("org.diorite.utils.function.eval.ObjectEvaluator");
+            func = c -> {
+                try
+                {
+                    ObjectEvaluator e = (ObjectEvaluator) c.newInstance();
+                    return e::eval;
+                } catch (Exception e)
+                {
+                    throw new RuntimeException(e);
+                }
+            };
+        }
+        init.setInterfaces(new CtClass[]{interfaceType});
+        init.addMethod(CtNewMethod.make(returnType, "eval", new CtClass[0], new CtClass[]{pool.get("java.lang.Exception")}, "{\n" + str + "\n}", init));
+        return func.apply(init.toClass());
     }
 
     public static void getAllPossibleTypes(final Set<Class<?>> classes, final Set<Type> checkedTypes, final Type rawType)

@@ -1,4 +1,4 @@
-package org.diorite.utils.function;
+package org.diorite.utils.function.eval;
 
 @FunctionalInterface
 public interface Evaluator<T>
