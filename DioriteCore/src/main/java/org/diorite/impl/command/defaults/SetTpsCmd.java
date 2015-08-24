@@ -20,6 +20,7 @@ public class SetTpsCmd extends SystemCommandImpl
             sender.sendMessage("§7TPS set to: §8" + tps + "§7, and server speed to: §8" + multi);
             sender.getCore().setTps(tps);
             sender.getCore().setSpeedMutli(multi);
+            sender.getCore().resetRecentTps();
         });
     }
 }

@@ -85,6 +85,8 @@ public interface Core extends Synchronizable
 
     int getTps();
 
+    void resetRecentTps();
+
     void setTps(int tps);
 
     void stop();

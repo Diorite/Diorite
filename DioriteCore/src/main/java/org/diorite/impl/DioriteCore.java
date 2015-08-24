@@ -176,7 +176,6 @@ public class DioriteCore implements Core
             }
 
 
-
             final String jline_UnsupportedTerminal = new String(new char[]{'j', 'l', 'i', 'n', 'e', '.', 'U', 'n', 's', 'u', 'p', 'p', 'o', 'r', 't', 'e', 'd', 'T', 'e', 'r', 'm', 'i', 'n', 'a', 'l'});
             final String jline_terminal = new String(new char[]{'j', 'l', 'i', 'n', 'e', '.', 't', 'e', 'r', 'm', 'i', 'n', 'a', 'l'});
             CoreMain.useJline = ! jline_UnsupportedTerminal.equals(System.getProperty(jline_terminal));
@@ -488,6 +487,12 @@ public class DioriteCore implements Core
     public int getTps()
     {
         return this.tps;
+    }
+
+    @Override
+    public void resetRecentTps()
+    {
+        Arrays.fill(this.recentTps, this.tps);
     }
 
     @Override

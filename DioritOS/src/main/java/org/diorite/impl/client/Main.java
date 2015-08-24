@@ -111,7 +111,6 @@ public class Main
             throw new RuntimeException("Failed to create the GLFW window");
         }
         this.resizeCallback = GLFWWindowSizeCallback(this::handleResize);
-        glfwSetWindowSizeCallback(this.window, this.resizeCallback);
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(this.window, this.keyCallback = new MyGLFWResizeKeyCallback());
@@ -128,12 +127,24 @@ public class Main
 
         // Make the window visible
         glfwShowWindow(this.window);
+
+        glfwSetWindowSizeCallback(this.window, this.resizeCallback);
     }
 
     private void handleResize(final long window, final int width, final int height)
     {
-        Main.this.width = width;
-        Main.this.height = height;
+        if ((width != this.width) || (height != this.height))
+        {
+            Main.this.width = width;
+            Main.this.height = height;
+
+            // Get the resolution of the primary monitor
+            final ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+            // Center our window
+            glfwSetWindowPos(this.window, (GLFWvidmode.width(vidmode) - this.width) / 2, (GLFWvidmode.height(vidmode) - this.height) / 2);
+
+            glViewport(0, 0, width, height);
+        }
     }
 
     private void loop()
@@ -157,7 +168,7 @@ public class Main
             // useless code, deal with it.
             for (int i = 0, k = DioriteRandomUtils.nextInt(50); i < k; i++)
             {
-                rect(DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(0,5));
+                rect(DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(0, 5));
             }
             glfwSwapBuffers(this.window); // swap the color buffers
 
