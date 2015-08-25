@@ -28,5 +28,6 @@ public final class RegisterDefaultCommands
         cmds.registerCommand(new ColoredConsoleCmd());
         cmds.registerCommand(new PerformanceMonitorCmd());
         cmds.registerCommand(new PluginsCmd());
+        cmds.registerCommand(new VersionCmd());
     }
 }
