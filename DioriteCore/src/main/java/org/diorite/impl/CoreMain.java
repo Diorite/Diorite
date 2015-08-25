@@ -56,78 +56,87 @@ public final class CoreMain
         return consoleEnabled;
     }
 
-    public static boolean init(final OptionSet options, final boolean client)
+    public enum InitResult
+    {
+        RUN,
+        HELP,
+        VERSION,
+        STOP;
+    }
+
+    public static InitResult init(final OptionSet options, final boolean client)
     {
         CoreMain.client = client;
-        if (! options.has("?"))
+        if (options.has("version"))
         {
-            final String path = new File(".").getAbsolutePath();
-            if (path.contains("!") || path.contains("+"))
-            {
-                System.err.println("Cannot run server in a directory with ! or + in the pathname. Please rename the affected folders and try again.");
-                return true;
-            }
+            return InitResult.VERSION;
+        }
+        if (options.has("?"))
+        {
+            return InitResult.HELP;
+        }
+        final String path = new File(".").getAbsolutePath();
+        if (path.contains("!") || path.contains("+"))
+        {
+            System.err.println("Cannot run server in a directory with ! or + in the pathname. Please rename the affected folders and try again.");
+            return InitResult.STOP;
+        }
+        try
+        {
+            CoreMain.enabledDebug = options.has("debug");
+            CoreMain.debug("===> Debug is enabled! <===");
             try
             {
-                CoreMain.enabledDebug = options.has("debug");
-                CoreMain.debug("===> Debug is enabled! <===");
-                try
+                final String lvl = options.valueOf("rld").toString();
+                if (lvl.length() == 1)
                 {
-                    final String lvl = options.valueOf("rld").toString();
-                    if (lvl.length() == 1)
-                    {
-                        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.values()[DioriteMathUtils.asInt(lvl, 0)]);
-                    }
-                    else
-                    {
-                        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.valueOf(lvl));
-                    }
-                } catch (final Exception e)
-                {
-                    e.printStackTrace();
+                    ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.values()[DioriteMathUtils.asInt(lvl, 0)]);
                 }
-                if (options.has("noconsole"))
+                else
                 {
-                    CoreMain.consoleEnabled = false;
+                    ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.valueOf(lvl));
                 }
-                int maxPermGen = 0;
-                for (final String s : ManagementFactory.getRuntimeMXBean().getInputArguments())
-                {
-                    if (s.startsWith("-XX:MaxPermSize"))
-                    {
-                        maxPermGen = DioriteMathUtils.asInt(PERM_GEN_PAT.matcher(s).replaceAll(""), 0);
-                        maxPermGen <<= 10 * "kmg".indexOf(Character.toLowerCase(s.charAt(s.length() - 1)));
-                    }
-                }
-                if ((Float.parseFloat(System.getProperty("java.class.version")) < JAVA_8) && (maxPermGen < MB_128))
-                {
-                    System.out.println("Warning, your max perm gen size is not set or less than 128mb. It is recommended you restart Java with the following argument: -XX:MaxPermSize=128M");
-                }
-                System.out.println("Starting server, please wait...");
-
-                // register all packet classes.
-                RegisterPackets.init();
-
-                // TODO: load "magic values"
-                // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
-                // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
-                System.out.println("Registered " + Material.values().length + (enabledDebug ? (" (" + Stream.of(Material.values()).map(Material::types).mapToInt(t -> t.length).sum() + " with sub-types)") : "") + " vanilla minecraft blocks and items.");
-                if (enabledDebug)
-                {
-                    System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft blocks.");
-                    System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft items.");
-                }
-//                new DioriteCore(Proxy.NO_PROXY, options, client).start(options);
-            } catch (final Throwable t)
+            } catch (final Exception e)
             {
-                t.printStackTrace();
+                e.printStackTrace();
             }
-        }
-        else
+            if (options.has("noconsole"))
+            {
+                CoreMain.consoleEnabled = false;
+            }
+            int maxPermGen = 0;
+            for (final String s : ManagementFactory.getRuntimeMXBean().getInputArguments())
+            {
+                if (s.startsWith("-XX:MaxPermSize"))
+                {
+                    maxPermGen = DioriteMathUtils.asInt(PERM_GEN_PAT.matcher(s).replaceAll(""), 0);
+                    maxPermGen <<= 10 * "kmg".indexOf(Character.toLowerCase(s.charAt(s.length() - 1)));
+                }
+            }
+            if ((Float.parseFloat(System.getProperty("java.class.version")) < JAVA_8) && (maxPermGen < MB_128))
+            {
+                System.out.println("Warning, your max perm gen size is not set or less than 128mb. It is recommended you restart Java with the following argument: -XX:MaxPermSize=128M");
+            }
+            System.out.println("Starting server, please wait...");
+
+            // register all packet classes.
+            RegisterPackets.init();
+
+            // TODO: load "magic values"
+            // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
+            // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
+            System.out.println("Registered " + Material.values().length + (enabledDebug ? (" (" + Stream.of(Material.values()).map(Material::types).mapToInt(t -> t.length).sum() + " with sub-types)") : "") + " vanilla minecraft blocks and items.");
+            if (enabledDebug)
+            {
+                System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft blocks.");
+                System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft items.");
+            }
+//                new DioriteCore(Proxy.NO_PROXY, options, client).start(options);
+        } catch (final Throwable t)
         {
-            return false;
+            t.printStackTrace();
         }
-        return true;
+        return InitResult.RUN;
     }
 
     public static OptionSet main(final String[] args, final boolean client, final Consumer<OptionParser> addon)
@@ -136,6 +145,7 @@ public final class CoreMain
         {
             {
                 this.acceptsAll(Collections.singletonList("?"), "Print help");
+                this.acceptsAll(Arrays.asList("v", "version"), "Print version");
                 this.acceptsAll(Collections.singletonList("debug"), "Enable debug mode");
                 this.acceptsAll(Arrays.asList("resourceleakdetector", "rld"), "ResourceLeakDetector level, disabled by default").withRequiredArg().ofType(String.class).describedAs("rld").defaultsTo(ResourceLeakDetector.Level.DISABLED.name());
                 this.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port").defaultsTo(Core.DEFAULT_PORT);
@@ -160,18 +170,26 @@ public final class CoreMain
             e.printStackTrace();
             options = parser.parse(ArrayUtils.EMPTY_STRING_ARRAY);
         }
-        if (! init(options, client))
+        final InitResult result = init(options, client);
+        switch (result)
         {
-            try
-            {
-                parser.printHelpOn(System.out);
-            } catch (final IOException e)
-            {
-                e.printStackTrace();
-            }
-            return null;
+            case HELP:
+                try
+                {
+                    parser.printHelpOn(System.out);
+                } catch (final IOException e)
+                {
+                    e.printStackTrace();
+                }
+                return null;
+            case VERSION:
+                System.out.println("Diorite version: " + DioriteCore.class.getPackage().getImplementationVersion() + " (MC: " + Core.getMinecraftVersion() + ")");
+                return null;
+            case RUN:
+                return options;
+            default:
+                return null;
         }
-        return options;
     }
 
     public static void debug(final Object obj)

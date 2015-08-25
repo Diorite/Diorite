@@ -211,6 +211,7 @@ public class DioriteCore implements Core
     }
 
     {
+        this.serverVersion = DioriteCore.class.getPackage().getImplementationVersion();
         if (LoggerInit.coloredConsole == null)
         {
             LoggerInit.init();
@@ -256,7 +257,6 @@ public class DioriteCore implements Core
         this.isClient = isClient;
         instance = this;
         this.mainThread = Thread.currentThread();
-        this.serverVersion = DioriteCore.class.getPackage().getImplementationVersion();
         Diorite.setCore(this);
 
         this.loadConfigFile((File) options.valueOf("config"));
