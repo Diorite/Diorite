@@ -16,7 +16,7 @@ public class SaveCmd extends SystemCommandImpl
             sender.getCore().broadcastSimpleColoredMessage(Core.PREFIX_MSG + "&7Saving all worlds...");
             ForkJoinPool.commonPool().submit(() -> {
                 sender.getCore().getWorldsManager().getWorlds().parallelStream().forEach(w -> w.save(args.has(0) && args.asBoolean(0)));
-                sender.getCore().broadcastSimpleColoredMessage(Core.PREFIX_MSG + "77All worlds saved!");
+                sender.getCore().broadcastSimpleColoredMessage(Core.PREFIX_MSG + "&7All worlds saved!");
             });
         });
     }

@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.*;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.PlayerImpl;
@@ -21,13 +22,6 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIoService;
-import org.diorite.BlockLocation;
-import org.diorite.Difficulty;
-import org.diorite.GameMode;
-import org.diorite.ImmutableLocation;
-import org.diorite.Loc;
-import org.diorite.Location;
-import org.diorite.Particle;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
@@ -53,7 +47,7 @@ import gnu.trove.set.hash.TLongHashSet;
 public class WorldImpl implements World, Tickable
 {
     private static final int CHUNK_FLAG            = (Chunk.CHUNK_SIZE - 1);
-    public static final  int DEFAULT_AUTOSAVE_TIME = 20 * 60 * 5; // 5 min, TODO: load it from config
+    public static final  int DEFAULT_AUTOSAVE_TIME = 20 * Diorite.getConfig().getAutosaveDelay();
 
     protected final String           name;
     protected final WorldGroupImpl   worldGroup;
