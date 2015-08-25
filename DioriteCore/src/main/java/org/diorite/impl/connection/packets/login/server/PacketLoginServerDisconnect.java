@@ -13,7 +13,7 @@ import org.diorite.chat.component.BaseComponent;
 @PacketClass(id = 0x00, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketLoginServerDisconnect extends PacketLoginServer
 {
-    private BaseComponent msg;
+    private BaseComponent msg; // ~256-512 bytes for larger disconnect message
 
     public PacketLoginServerDisconnect()
     {

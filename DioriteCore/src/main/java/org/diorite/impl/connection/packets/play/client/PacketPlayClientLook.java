@@ -11,12 +11,12 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
-@PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 9)
 public class PacketPlayClientLook extends PacketPlayClient
 {
-    private float   yaw;
-    private float   pitch;
-    private boolean onGround;
+    private float   yaw; // 4 bytes
+    private float   pitch; // 4 bytes
+    private boolean onGround; // 1 byte
 
     public PacketPlayClientLook()
     {

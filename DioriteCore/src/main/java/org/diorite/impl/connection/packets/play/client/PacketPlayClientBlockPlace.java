@@ -14,12 +14,12 @@ import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 import org.diorite.utils.CursorPos;
 
-@PacketClass(id = 0x08, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x08, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 50)
 public class PacketPlayClientBlockPlace extends PacketPlayClient
 {
-    private BlockLocation location;
-    // private ItemStackImpl itemStack; // ignored by server, always read as null to prevent memory leaks and client ability to crash server.
-    private CursorPos     cursorPos;
+    private BlockLocation location; // 8 bytes
+    // private ItemStackImpl itemStack; // 2 bytes if null, 7 if simple item. ~40 // ignored by server, always read as null to prevent memory leaks and client ability to crash server.
+    private CursorPos     cursorPos; // 4 bytes
 
     public PacketPlayClientBlockPlace()
     {

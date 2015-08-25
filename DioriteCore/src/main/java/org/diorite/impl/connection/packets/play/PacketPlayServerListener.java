@@ -17,6 +17,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameState
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerHeldItemSlot;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerLogin;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunk;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunkBulk;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedEntitySpawn;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerOpenWindow;
@@ -111,4 +112,6 @@ public interface PacketPlayServerListener extends PacketListener
     void handle(PacketPlayServerRelEntityMoveLook packet);
 
     void handle(PacketPlayServerEntityTeleport packet);
+
+    void handle(PacketPlayServerMapChunk packet);
 }

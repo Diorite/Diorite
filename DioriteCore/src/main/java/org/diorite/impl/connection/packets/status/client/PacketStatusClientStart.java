@@ -8,7 +8,7 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.status.PacketStatusClientListener;
 
-@PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.SERVERBOUND, size = 0)
 public class PacketStatusClientStart extends PacketStatusClient
 {
 

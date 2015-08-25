@@ -11,11 +11,11 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
-@PacketClass(id = 0x11, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x11, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 2)
 public class PacketPlayClientEnchantItem extends PacketPlayClient
 {
-    private int windowId;
-    private int enchantmentId; // Number of enchantment in window, begin from 0
+    private int windowId; // 1 byte
+    private int enchantmentId; // 1 byte, Number of enchantment in window, begin from 0
 
     public PacketPlayClientEnchantItem()
     {

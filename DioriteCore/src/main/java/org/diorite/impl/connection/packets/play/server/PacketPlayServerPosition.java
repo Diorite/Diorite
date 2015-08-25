@@ -12,10 +12,10 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.TeleportData;
 
-@PacketClass(id = 0x08, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x08, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 33)
 public class PacketPlayServerPosition extends PacketPlayServer
 {
-    private TeleportData teleportData;
+    private TeleportData teleportData; // 33 bytes
 
     public PacketPlayServerPosition()
     {

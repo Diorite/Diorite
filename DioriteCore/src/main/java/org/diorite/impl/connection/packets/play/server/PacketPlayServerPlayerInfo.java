@@ -23,11 +23,11 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 
-@PacketClass(id = 0x38, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x38, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
 public class PacketPlayServerPlayerInfo extends PacketPlayServer
 {
-    private PlayerInfoAction           action;
-    private Collection<PlayerInfoData> players;
+    private PlayerInfoAction           action; // ~5 bytes
+    private Collection<PlayerInfoData> players; // ~depending on action.
 
     public PacketPlayServerPlayerInfo()
     {

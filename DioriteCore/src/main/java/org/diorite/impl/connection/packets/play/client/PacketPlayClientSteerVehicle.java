@@ -11,13 +11,13 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
-@PacketClass(id = 0x0C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x0C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 9)
 public class PacketPlayClientSteerVehicle extends PacketPlayClient
 {
-    private float sideways;
-    private float forward;
-    private boolean jump;
-    private boolean unMount;
+    private float sideways; // 4 bytes
+    private float forward; // 4 bytes
+    private boolean jump; // 1/4 byte
+    private boolean unMount; // 1/4 byte
 
     public PacketPlayClientSteerVehicle()
     {

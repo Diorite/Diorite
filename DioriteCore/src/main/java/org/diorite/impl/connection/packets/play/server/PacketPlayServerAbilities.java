@@ -11,7 +11,7 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 
-@PacketClass(id = 0x39, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x39, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 9)
 public class PacketPlayServerAbilities extends PacketPlayServer
 {
     public static final byte INVULNERABLE_FLAG    = 0x01;
@@ -19,12 +19,12 @@ public class PacketPlayServerAbilities extends PacketPlayServer
     public static final byte FLY_FLAG             = 0x04;
     public static final byte INSTANTLY_BUILD_FLAG = 0x08;
 
-    private boolean isInvulnerable;
-    private boolean isFlying;
-    private boolean canFly;
-    private boolean canInstantlyBuild;
-    private float   flyingSpeed;
-    private float   walkingSpeed;
+    private boolean isInvulnerable; // 1/4 byte
+    private boolean isFlying; // 1/4 byte
+    private boolean canFly; // 1/4 byte
+    private boolean canInstantlyBuild; // 1/4 byte
+    private float   flyingSpeed; // 4 bytes
+    private float   walkingSpeed; // 4 bytes
 
     public PacketPlayServerAbilities()
     {

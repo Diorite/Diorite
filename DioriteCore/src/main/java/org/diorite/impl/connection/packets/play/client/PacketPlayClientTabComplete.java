@@ -12,11 +12,11 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.BlockLocation;
 
-@PacketClass(id = 0x14, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x14, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 140)
 public class PacketPlayClientTabComplete extends PacketPlayClient
 {
-    private String        content;
-    private BlockLocation blockLocation;
+    private String        content; // ~128 bytes
+    private BlockLocation blockLocation; // 8 bytes + bool
 
     public PacketPlayClientTabComplete()
     {

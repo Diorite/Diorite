@@ -14,11 +14,11 @@ import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.entity.Entity;
 
-@PacketClass(id = 0x1C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x1C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 140)
 public class PacketPlayServerEntityMetadata extends PacketPlayServer
 {
-    private int                              entityId;
-    private Iterable<EntityMetadataEntry<?>> metadata;
+    private int                              entityId; // ~5 bytes
+    private Iterable<EntityMetadataEntry<?>> metadata; // ~should be not more than 128
 
     public PacketPlayServerEntityMetadata()
     {

@@ -23,7 +23,7 @@ import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.chat.component.serialize.TextComponentSerializer;
 import org.diorite.chat.component.serialize.TranslatableComponentSerializer;
 
-@PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x00, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
 public class PacketStatusServerServerInfo extends PacketStatusServer
 {
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ServerPingServerData.class, new ServerPingServerData.Serializer()).registerTypeAdapter(ServerPingPlayerSample.class, new ServerPingPlayerSample.Serializer()).registerTypeAdapter(ServerPing.class, new ServerPing.Serializer()).registerTypeAdapter(BaseComponent.class, new ComponentSerializer()).registerTypeAdapter(TextComponent.class, new TextComponentSerializer()).registerTypeAdapter(TranslatableComponent.class, new TranslatableComponentSerializer()).create();

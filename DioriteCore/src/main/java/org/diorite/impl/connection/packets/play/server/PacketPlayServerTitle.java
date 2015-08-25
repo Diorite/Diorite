@@ -12,14 +12,14 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.chat.component.BaseComponent;
 
-@PacketClass(id = 0x45, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x45, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 100)
 public class PacketPlayServerTitle extends PacketPlayServer
 {
-    private TitleAction   action;
-    private BaseComponent text;
-    private int           fadeIn;
-    private int           stay;
-    private int           fadeOut;
+    private TitleAction   action; // ~1 byte
+    private BaseComponent text; // ~64 bytes
+    private int           fadeIn; // ~5 bytes
+    private int           stay; // ~5 bytes
+    private int           fadeOut; // ~5 bytes
 
     public PacketPlayServerTitle()
     {

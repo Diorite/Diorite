@@ -12,16 +12,16 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.EntityImpl;
 
-@PacketClass(id = 0x18, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x18, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 20)
 public class PacketPlayServerEntityTeleport extends PacketPlayServer
 {
-    private int     entityId;
-    private int     x; // WARNING! This is 'fixed-point' number
-    private int     y; // WARNING! This is 'fixed-point' number
-    private int     z; // WARNING! This is 'fixed-point' number
-    private byte    yaw;
-    private byte    pitch;
-    private boolean onGround;
+    private int     entityId; // ~5 bytes
+    private int     x; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int     y; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int     z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private byte    yaw; // 1 byte
+    private byte    pitch; // 1 byte
+    private boolean onGround; // 1 byte
 
     public PacketPlayServerEntityTeleport()
     {

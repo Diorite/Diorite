@@ -13,21 +13,21 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 
-@PacketClass(id = 0x0F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x0F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 150)
 public class PacketPlayServerSpawnEntityLiving extends PacketPlayServer
 {
-    private int                              entityId;
-    private byte                             entityTypeId;
-    private int                              x; // WARNING! This is 'fixed-point' number
-    private int                              y; // WARNING! This is 'fixed-point' number
-    private int                              z; // WARNING! This is 'fixed-point' number
-    private byte                             yaw;
-    private byte                             pitch;
-    private byte                             headPitch;
-    private short                            movX;
-    private short                            movY;
-    private short                            movZ;
-    private Iterable<EntityMetadataEntry<?>> metadata;
+    private int                              entityId; // ~5 bytes
+    private byte                             entityTypeId; // 1 byte
+    private int                              x; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int                              y; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int                              z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private byte                             yaw; // 1 byte
+    private byte                             pitch; // 1 byte
+    private byte                             headPitch; // 1 byte
+    private short                            movX; // 2 bytes
+    private short                            movY; // 2 bytes
+    private short                            movZ; // 2 bytes
+    private Iterable<EntityMetadataEntry<?>> metadata; // ~not more than 128 bytes
 
     public PacketPlayServerSpawnEntityLiving()
     {

@@ -13,15 +13,15 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.inventory.ClickType;
 import org.diorite.inventory.item.ItemStack;
 
-@PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 50)
 public class PacketPlayClientWindowClick extends PacketPlayClient
 {
     public static final int SLOT_NOT_NEEDED = - 999;
-    private int       id; // inventory id
-    private short     clickedSlot;
-    private short     actionNumber;
-    private ClickType clickType;
-    private ItemStack clicked; // should be ignored?
+    private int       id; // 1 byte, inventory id
+    private short     clickedSlot; // 2 bytes
+    private short     actionNumber; // 2 bytes
+    private ClickType clickType; // 2 bytes
+    private ItemStack clicked; // 1 byte if null, 5 for simple item. should be ignored?
 
     public PacketPlayClientWindowClick()
     {

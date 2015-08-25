@@ -12,11 +12,11 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.inventory.item.ItemStack;
 
-@PacketClass(id = 0x10, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x10, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 128)
 public class PacketPlayClientSetCreativeSlot extends PacketPlayClient
 {
-    private int       slot;
-    private ItemStack item;
+    private int       slot; // 2 bytes
+    private ItemStack item; // ~5 bytes or more
 
     public PacketPlayClientSetCreativeSlot()
     {

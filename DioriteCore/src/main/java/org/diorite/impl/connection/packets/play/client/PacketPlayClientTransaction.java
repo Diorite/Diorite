@@ -11,12 +11,12 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
-@PacketClass(id = 0x0F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x0F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 4)
 public class PacketPlayClientTransaction extends PacketPlayClient
 {
-    private int     windowId;
-    private short   actionNumber;
-    private boolean accepted;
+    private int     windowId; // 1 byte
+    private short   actionNumber; // 2 bytes
+    private boolean accepted;// 1 byte
 
     public PacketPlayClientTransaction()
     {
@@ -34,7 +34,7 @@ public class PacketPlayClientTransaction extends PacketPlayClient
     {
         this.windowId = data.readUnsignedByte();
         this.actionNumber = data.readShort();
-        this.accepted = data.readByte() != 0;
+        this.accepted = data.readBoolean();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PacketPlayClientTransaction extends PacketPlayClient
     {
         data.writeByte(this.windowId);
         data.writeShort(this.actionNumber);
-        data.writeByte(this.accepted ? 1 : 0);
+        data.writeBoolean(this.accepted);
     }
 
     @Override

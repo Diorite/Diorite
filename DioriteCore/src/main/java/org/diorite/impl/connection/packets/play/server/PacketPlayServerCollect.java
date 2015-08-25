@@ -11,11 +11,11 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 
-@PacketClass(id = 0x0D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x0D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 10)
 public class PacketPlayServerCollect extends PacketPlayServer
 {
-    private int collectedEntityId;
-    private int collecterEntityId;
+    private int collectedEntityId; // ~5 bytes
+    private int collecterEntityId; // ~5 bytes
 
     public PacketPlayServerCollect()
     {

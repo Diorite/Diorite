@@ -11,10 +11,10 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginServerListener;
 
-@PacketClass(id = 0x03, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x03, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND, size = 2)
 public class PacketLoginServerSetCompression extends PacketLoginServer
 {
-    private int threshold;
+    private int threshold; // ~1-2 bytes
 
     public PacketLoginServerSetCompression()
     {

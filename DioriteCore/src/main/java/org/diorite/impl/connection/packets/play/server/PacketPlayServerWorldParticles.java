@@ -12,20 +12,20 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.Particle;
 
-@PacketClass(id = 0x2A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x2A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 50)
 public class PacketPlayServerWorldParticles extends PacketPlayServer
 {
-    private Particle particle;
-    private boolean  longDistance;
-    private float    x;
-    private float    y;
-    private float    z;
-    private float    offsetX;
-    private float    offsetY;
-    private float    offsetZ;
-    private float    particleData;
-    private int      particleCount;
-    private int[]    data;
+    private Particle particle;  // 4 bytes
+    private boolean  longDistance; // 1 byte
+    private float    x; // 4 bytes
+    private float    y; // 4 bytes
+    private float    z; // 4 bytes
+    private float    offsetX; // 4 bytes
+    private float    offsetY; // 4 bytes
+    private float    offsetZ; // 4 bytes
+    private float    particleData; // 4 bytes
+    private int      particleCount; // 4 bytes
+    private int[]    data; // ~5 bytes
 
     public PacketPlayServerWorldParticles()
     {

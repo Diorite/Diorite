@@ -11,14 +11,14 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 
-@PacketClass(id = 0x15, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x15, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 9)
 public class PacketPlayServerRelEntityMove extends PacketPlayServer
 {
-    private int     entityId;
-    private byte    deltaX;
-    private byte    deltaY;
-    private byte    deltaZ;
-    private boolean onGround;
+    private int     entityId; // ~5 bytes
+    private byte    deltaX; // 1 byte
+    private byte    deltaY; // 1 byte
+    private byte    deltaZ; // 1 byte
+    private boolean onGround; // 1 byte
 
     public PacketPlayServerRelEntityMove()
     {

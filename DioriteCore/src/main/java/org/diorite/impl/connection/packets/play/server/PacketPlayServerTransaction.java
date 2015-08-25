@@ -11,12 +11,12 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 
-@PacketClass(id = 0x32, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x32, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 4)
 public class PacketPlayServerTransaction extends PacketPlayServer
 {
-    private int     windowId;
-    private short   actionNumber;
-    private boolean accepted;
+    private int     windowId; // 1 byte
+    private short   actionNumber; // 2 bytes
+    private boolean accepted; // 1 byte
 
     public PacketPlayServerTransaction()
     {

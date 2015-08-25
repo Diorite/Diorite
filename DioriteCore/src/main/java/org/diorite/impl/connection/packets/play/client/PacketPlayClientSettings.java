@@ -13,14 +13,14 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.DisplayedSkinParts;
 import org.diorite.chat.ChatVisibility;
 
-@PacketClass(id = 0x15, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x15, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 12)
 public class PacketPlayClientSettings extends PacketPlayClient
 {
-    private String             locale;
-    private byte               viewDistance;
-    private ChatVisibility     chatVisibility;
-    private boolean            colorsEnabled;
-    private DisplayedSkinParts displayedSkinParts;
+    private String             locale; // ~8 bytes
+    private byte               viewDistance; // 1 byte
+    private ChatVisibility     chatVisibility; // 1 byte
+    private boolean            colorsEnabled; // 1 byte
+    private DisplayedSkinParts displayedSkinParts; // 1 byte
 
     public PacketPlayClientSettings()
     {

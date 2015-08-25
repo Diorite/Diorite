@@ -15,10 +15,10 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeStorage;
 
-@PacketClass(id = 0x20, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x20, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
 public class PacketPlayServerUpdateAttributes extends PacketPlayServer
 {
-    private int entityID;
+    private int entityID; // ~5 bytes
     private Collection<AttributeProperty> attributes = new HashSet<>(2);
 
     public PacketPlayServerUpdateAttributes()

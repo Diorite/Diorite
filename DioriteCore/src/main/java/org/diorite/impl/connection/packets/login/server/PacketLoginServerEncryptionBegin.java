@@ -13,13 +13,13 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginServerListener;
 
-@PacketClass(id = 0x01, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x01, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND, size = 170)
 public class PacketLoginServerEncryptionBegin extends PacketLoginServer
 {
     public static final int SERVERID_SIZE = 20;
-    private String    serverID; // empty?
-    private PublicKey publicKey;
-    private byte[]    verifyToken;
+    private String    serverID; // empty? 1 byte for 0 size.
+    private PublicKey publicKey; // 162 bytes + 2 bytes size
+    private byte[]    verifyToken; // 4 bytes + 1 byte size
 
     public PacketLoginServerEncryptionBegin()
     {

@@ -13,14 +13,14 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.inventory.InventoryType;
 
-@PacketClass(id = 0x2D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x2D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 200)
 public class PacketPlayServerOpenWindow extends PacketPlayServer
 {
-    private int           windowId;
-    private InventoryType inventoryType;
-    private BaseComponent name;
-    private int           size;
-    private int           entityId; // Only for EntityHorse
+    private int           windowId; // 1 byte
+    private InventoryType inventoryType; // ~65 bytes
+    private BaseComponent name; // ~128 bytes
+    private int           size; // 1 byte
+    private int           entityId; // ~5 bytes, Only for EntityHorse
 
     public PacketPlayServerOpenWindow()
     {

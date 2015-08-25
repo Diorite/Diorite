@@ -12,13 +12,13 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.EntityImpl;
 
-@PacketClass(id = 0x16, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x16, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 8)
 public class PacketPlayServerEntityLook extends PacketPlayServer
 {
-    private int     entityId;
-    private byte    yaw;
-    private byte    pitch;
-    private boolean onGround;
+    private int     entityId; // ~5 bytes
+    private byte    yaw; // 1 byte
+    private byte    pitch; // 1 byte
+    private boolean onGround; // 1 byte
 
     public PacketPlayServerEntityLook()
     {

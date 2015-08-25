@@ -12,10 +12,10 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.BlockLocation;
 
-@PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 8)
 public class PacketPlayServerSpawnPosition extends PacketPlayServer
 {
-    private BlockLocation location;
+    private BlockLocation location; // 8 bytes
 
     public PacketPlayServerSpawnPosition()
     {

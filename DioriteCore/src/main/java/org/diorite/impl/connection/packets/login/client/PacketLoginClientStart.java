@@ -13,10 +13,10 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginClientListener;
 import org.diorite.Core;
 
-@PacketClass(id = 0x00, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x00, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.SERVERBOUND, size = 17)
 public class PacketLoginClientStart extends PacketLoginClient
 {
-    private GameProfile profile;
+    private GameProfile profile; // ~16 bytes + 1 byte for size
 
     public PacketLoginClientStart()
     {

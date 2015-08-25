@@ -6,14 +6,14 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.connection.ByteToMessageCodec.PacketByteToMessageCodec;
 import org.diorite.impl.connection.ConnectionHandler;
 import org.diorite.impl.connection.EnumProtocolDirection;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageCodec;
 
-public class PacketCodec extends ByteToMessageCodec<Packet<?>>
+public class PacketCodec extends PacketByteToMessageCodec
 {
     private final ConnectionHandler connectionHandler;
 

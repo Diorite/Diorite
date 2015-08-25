@@ -12,10 +12,10 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
-@PacketClass(id = 0x16, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x16, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 1)
 public class PacketPlayClientClientCommand extends PacketPlayClient
 {
-    private ClientCommand command;
+    private ClientCommand command; // 1 byte
 
     public PacketPlayClientClientCommand()
     {

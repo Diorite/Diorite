@@ -3,13 +3,14 @@ package org.diorite.impl.connection.packets;
 
 import java.util.List;
 
+import org.diorite.impl.connection.ByteToMessageCodec.PacketByteBufByteToMessageCodec;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.CorruptedFrameException;
 
-public class PacketSizer extends ByteToMessageCodec<ByteBuf>
+public class PacketSizer extends PacketByteBufByteToMessageCodec
 {
     @Override
     protected void encode(final ChannelHandlerContext context, final ByteBuf srcByteBuf, final ByteBuf byteBuf)

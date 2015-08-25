@@ -17,15 +17,15 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
-@PacketClass(id = 0x13, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x13, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 9)
 public class PacketPlayClientAbilities extends PacketPlayClient
 {
-    private boolean isInvulnerable;
-    private boolean isFlying;
-    private boolean canFly;
-    private boolean canInstantlyBuild;
-    private float   flyingSpeed;
-    private float   walkingSpeed;
+    private boolean isInvulnerable; // 1/4 byte
+    private boolean isFlying; // 1/4 byte
+    private boolean canFly; // 1/4 byte
+    private boolean canInstantlyBuild; // 1/4 byte
+    private float   flyingSpeed; // 4 bytes
+    private float   walkingSpeed; // 4 bytes
 
     public PacketPlayClientAbilities()
     {

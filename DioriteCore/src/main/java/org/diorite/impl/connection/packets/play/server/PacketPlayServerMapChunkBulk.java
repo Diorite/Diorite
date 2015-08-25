@@ -17,7 +17,7 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.world.World;
 
 
-@PacketClass(id = 0x26, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x26, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 500000)
 public class PacketPlayServerMapChunkBulk extends PacketPlayServer
 {
     public static final int HEADER_SIZE = 10;

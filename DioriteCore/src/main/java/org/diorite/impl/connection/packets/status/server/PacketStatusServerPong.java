@@ -11,10 +11,10 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.status.PacketStatusServerListener;
 
-@PacketClass(id = 0x01, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x01, protocol = EnumProtocol.STATUS, direction = EnumProtocolDirection.CLIENTBOUND, size = 8)
 public class PacketStatusServerPong extends PacketStatusServer
 {
-    private long ping;
+    private long ping; // 8 bytes
 
     public PacketStatusServerPong()
     {

@@ -12,7 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.chat.component.BaseComponent;
 
-@PacketClass(id = 0x40, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x40, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 256)
 public class PacketPlayServerDisconnect extends PacketPlayServer
 {
     private BaseComponent content;

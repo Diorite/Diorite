@@ -11,11 +11,11 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginClientListener;
 
-@PacketClass(id = 0x01, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x01, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.SERVERBOUND, size = 260)
 public class PacketLoginClientEncryptionBegin extends PacketLoginClient
 {
-    private byte[] sharedSecret;
-    private byte[] verifyToken;
+    private byte[] sharedSecret; // 128 bytes + 2 bytes size
+    private byte[] verifyToken; // 128 bytes + 2 bytes size
 
     public PacketLoginClientEncryptionBegin()
     {

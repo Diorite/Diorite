@@ -52,6 +52,7 @@ public class DioriteConfigImpl implements DioriteConfig
     private String rconPassword;
 
     @CfgComment("By default it allows packets that are n-1 bytes big to go normally, but a packet that n bytes or more will be compressed down. 0 -> compress everything, -1 -> disabled")
+    @CfgComment("Many packets below 128 bytes may be even larger after compression!")
     @CfgIntDefault(Core.DEFAULT_PACKET_COMPRESSION_THRESHOLD)
     private int networkCompressionThreshold;
 

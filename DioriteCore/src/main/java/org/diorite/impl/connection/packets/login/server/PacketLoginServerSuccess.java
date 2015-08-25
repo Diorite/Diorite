@@ -12,13 +12,18 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.login.PacketLoginServerListener;
 
-@PacketClass(id = 0x02, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x02, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND, size = 54)
 public class PacketLoginServerSuccess extends PacketLoginServer
 {
-    private GameProfile profile;
+    private GameProfile profile; // 54 bytes
 
     public PacketLoginServerSuccess()
     {
+    }
+
+    public static void main(String[] args)
+    {
+
     }
 
     public PacketLoginServerSuccess(final GameProfile profile)

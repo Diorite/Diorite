@@ -13,12 +13,12 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 
-@PacketClass(id = 0x23, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x23, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 13)
 public class PacketPlayServerBlockChange extends PacketPlayServer
 {
-    private BlockLocation location;
-    private int           rawID;
-    private byte          rawType;
+    private BlockLocation location; // 8 bytes
+    private int           rawID; // ~5 bytes with rawType.
+    private byte          rawType; // ~5 bytes with rawID.
 
     public PacketPlayServerBlockChange()
     {

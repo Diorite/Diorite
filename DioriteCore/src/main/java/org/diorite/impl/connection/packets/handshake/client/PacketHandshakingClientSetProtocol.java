@@ -1,6 +1,7 @@
 package org.diorite.impl.connection.packets.handshake.client;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -12,16 +13,21 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.handshake.PacketHandshakingClientListener;
 import org.diorite.impl.connection.packets.handshake.RequestType;
 
-@PacketClass(id = 0x00, protocol = EnumProtocol.HANDSHAKING, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x00, protocol = EnumProtocol.HANDSHAKING, direction = EnumProtocolDirection.SERVERBOUND, size = 50)
 public class PacketHandshakingClientSetProtocol extends PacketHandshakingClient
 {
-    private int         protocolVersion;
-    private String      serverAddress;
-    private int         serverPort;
-    private RequestType requestType;
+    private int         protocolVersion; // ~2 bytes
+    private String      serverAddress; // ~40 bytes
+    private int         serverPort; // 2 bytes
+    private RequestType requestType; // 2 bytes
 
     public PacketHandshakingClientSetProtocol()
     {
+    }
+
+    public static void main(String[] args)
+    {
+        System.out.println("diorite.org.se.f.d.f.geefr.frgdrdfvs".getBytes(StandardCharsets.UTF_8).length);
     }
 
     public PacketHandshakingClientSetProtocol(final int protocolVersion, final RequestType requestType, final int serverPort, final String serverAddress)

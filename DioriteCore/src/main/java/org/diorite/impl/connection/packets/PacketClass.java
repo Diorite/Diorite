@@ -13,7 +13,9 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PacketClass
 {
-    byte id();
+    int id();
+
+    int size() default Packet.INITIAL_CAPACITY; // estimated size of packet, default to 512
 
     EnumProtocol protocol() default EnumProtocol.PLAY;
 

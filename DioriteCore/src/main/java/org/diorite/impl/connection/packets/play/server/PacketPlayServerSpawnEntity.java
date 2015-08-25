@@ -13,20 +13,20 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.EntityObject;
 
-@PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 30)
 public class PacketPlayServerSpawnEntity extends PacketPlayServer
 {
-    private int   entityId;
-    private byte  entityTypeId;
-    private int   x; // WARNING! This is 'fixed-point' number
-    private int   y; // WARNING! This is 'fixed-point' number
-    private int   z; // WARNING! This is 'fixed-point' number
-    private byte  pitch;
-    private byte  yaw;
-    private int   objectData;
-    private short movX;
-    private short movY;
-    private short movZ;
+    private int   entityId; // ~5 bytes
+    private byte  entityTypeId; // 1 byte
+    private int   x; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int   y; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int   z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private byte  pitch; // 1 byte
+    private byte  yaw; // 1 byte
+    private int   objectData; // 4 bytes
+    private short movX; // 2 bytes
+    private short movY; // 2 bytes
+    private short movZ; // 2 bytes
 
     public PacketPlayServerSpawnEntity()
     {

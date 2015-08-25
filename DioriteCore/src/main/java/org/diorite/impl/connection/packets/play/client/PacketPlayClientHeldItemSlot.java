@@ -11,10 +11,10 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
-@PacketClass(id = 0x09, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND)
+@PacketClass(id = 0x09, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 2)
 public class PacketPlayClientHeldItemSlot extends PacketPlayClient
 {
-    private int slot;
+    private int slot; // 2 bytes
 
     public PacketPlayClientHeldItemSlot()
     {

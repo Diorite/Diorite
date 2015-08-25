@@ -15,19 +15,19 @@ import org.diorite.GameMode;
 import org.diorite.world.Dimension;
 import org.diorite.world.WorldType;
 
-@PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 45)
 public class PacketPlayServerLogin extends PacketPlayServer
 {
     public static final int MAX_WORLD_NAME_SIZE = 32; // should be 16?
 
-    private int        entityID;
-    private GameMode   gameMode;
-    private boolean    hardcore;
-    private Dimension  dimension;
-    private Difficulty difficulty;
-    private int        maxPlayers;
-    private WorldType  worldType;
-    private boolean    debug;
+    private int        entityID; // 4 bytes
+    private GameMode   gameMode; // 1/2 byte
+    private boolean    hardcore; // 1/2 byte
+    private Dimension  dimension; // 1 byte
+    private Difficulty difficulty; // 1 byte
+    private int        maxPlayers; // 1 byte
+    private WorldType  worldType; // ~34 bytes
+    private boolean    debug; // 1 byte
 
     public PacketPlayServerLogin()
     {

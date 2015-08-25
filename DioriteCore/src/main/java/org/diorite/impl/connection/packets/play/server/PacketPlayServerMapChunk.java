@@ -17,16 +17,16 @@ import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.world.chunk.ChunkPos;
 
 @SuppressWarnings("MagicNumber")
-@PacketClass(id = 0x21, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x21, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 90000)
 public class PacketPlayServerMapChunk extends PacketPlayServer
 {
     public static final int MASK = 0xffff;
 
-    private int             x;
-    private int             z;
-    private ChunkPacketData data;
-    private boolean         fullChunk;
-    private boolean         unload;
+    private int             x; // 4 bytes
+    private int             z; // 4 bytes
+    private ChunkPacketData data; // ~many bytes
+    private boolean         fullChunk; // 1 byte
+    private boolean         unload; // 1 byte
 
     public PacketPlayServerMapChunk()
     {
@@ -96,7 +96,7 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
     @Override
     public void handle(final PacketPlayServerListener listener)
     {
-
+        listener.handle(this);
     }
 
     public int getX()
