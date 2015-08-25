@@ -16,12 +16,12 @@ public class KickCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (CoreMain.isEnabledDebug())
             {
-                sender.sendSimpleColoredMessage("§4Command disabled for testing. (Will be re-added with permission system)");
+                sender.sendSimpleColoredMessage("&4Command disabled for testing. (Will be re-added with permission system)");
                 return;
             }
             if (! args.has(1))
             {
-                sender.sendSimpleColoredMessage("§4Invalid usage. Use: /kick <nick> <reason>");
+                sender.sendSimpleColoredMessage("&4Invalid usage. Use: /kick <nick> <reason>");
                 return;
             }
 
