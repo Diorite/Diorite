@@ -11,7 +11,7 @@ import org.diorite.command.CommandPriority;
 
 public class TpsCmd extends SystemCommandImpl
 {
-    private static final NumberFormat format;
+    static final NumberFormat format;
 
     static
     {
@@ -43,7 +43,7 @@ public class TpsCmd extends SystemCommandImpl
                 }
             }
             sb.append("&8]");
-            sender.sendSimpleColoredMessage("&aAverage tps (1,5,15 min): " + sb.toString() + "&7, TPS limit: &3" + sender.getCore().getTps() + "&7, Server speed multi: &3" + format.format(sender.getCore().getSpeedMutli()));
+            sender.sendSimpleColoredMessage("&7Average tps (1,5,15 min): " + sb.toString() + "&7, TPS limit: &3" + sender.getCore().getTps() + "&7, Server speed multi: &3" + format.format(sender.getCore().getSpeedMutli()));
         });
     }
 }

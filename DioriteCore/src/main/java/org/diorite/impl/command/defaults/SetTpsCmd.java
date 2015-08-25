@@ -17,7 +17,7 @@ public class SetTpsCmd extends SystemCommandImpl
             final int tps = Integer.parseInt(matchedPattern.group("tps"));
             final String temp = matchedPattern.group("multi");
             final double multi = (temp == null) ? (((double) Core.DEFAULT_TPS) / tps) : Double.parseDouble(temp);
-            sender.sendMessage("§7TPS set to: §8" + tps + "§7, and server speed to: §8" + multi);
+            sender.sendMessage("§7TPS set to: §8" + tps + "§7, and server speed to: §8" + TpsCmd.format.format(multi));
             sender.getCore().setTps(tps);
             sender.getCore().setSpeedMutli(multi);
             sender.getCore().resetRecentTps();
