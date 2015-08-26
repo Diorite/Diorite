@@ -16,7 +16,7 @@ public class VersionCmd extends SystemCommandImpl
     {
         super("version", (Pattern) null, CommandPriority.LOW);
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            if (args.length() == 1)
+            if (args.length() == 0)
             {
                 sender.sendSimpleColoredMessage("This server is running Diorite " + Diorite.getVersion());
             }
