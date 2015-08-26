@@ -4407,7 +4407,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
         {
             try
             {
-                U = sun.misc.Unsafe.getUnsafe();
+                U = DioriteUtils.getUnsafe();
                 final Class<?> k = TreeBin.class;
                 LOCKSTATE = U.objectFieldOffset(k.getDeclaredField("lockState"));
             } catch (final Exception e)

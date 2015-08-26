@@ -16,6 +16,7 @@ import org.diorite.entity.Player;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
+import org.diorite.utils.timings.TimingsManager;
 import org.diorite.world.WorldsManager;
 
 public final class Diorite
@@ -294,6 +295,11 @@ public final class Diorite
     public static Scheduler getScheduler()
     {
         return core.getScheduler();
+    }
+
+    public static TimingsManager getTimings()
+    {
+        return core.getTimings();
     }
 
     public static void sendConsoleDioriteMessage(final String... strs)

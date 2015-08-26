@@ -1,5 +1,6 @@
 package org.diorite.event.pipelines;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.diorite.Core;
@@ -7,6 +8,7 @@ import org.diorite.event.Event;
 import org.diorite.event.EventPriority;
 import org.diorite.utils.pipeline.BasePipeline;
 import org.diorite.utils.pipeline.Pipeline;
+import org.diorite.utils.timings.TimingsContainer;
 
 /**
  * Event pipeline, it pipeline that use special {@link EventPipelineHandler} as values,
@@ -41,6 +43,11 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
      * Reset pipeline, clear all elements and re-add default diorite handlers.
      */
     void reset();
+
+    /**
+     * @return stored timings data
+     */
+    Map<EventPipelineHandler<T>, TimingsContainer> getTimings();
 
     /**
      * Method will look for event priority pipeline element from {@code before} param,

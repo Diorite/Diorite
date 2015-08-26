@@ -1,5 +1,9 @@
 package org.diorite.utils.pipeline;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -12,10 +16,12 @@ import org.diorite.event.pipelines.EventPipelineHandler;
 import org.diorite.event.pipelines.ExceptionEvent;
 import org.diorite.event.pipelines.ExceptionHandler;
 import org.diorite.event.pipelines.ExceptionPipeline;
+import org.diorite.utils.timings.TimingsContainer;
 
 public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<EventPipelineHandler<T>> implements EventPipeline<T>
 {
-    protected final ExceptionPipeline exceptionPipeline = new SimpleExceptionPipeline();
+    private final   Map<EventPipelineHandler<T>, TimingsContainer> timings           = new HashMap<>(5);
+    protected final ExceptionPipeline                              exceptionPipeline = new SimpleExceptionPipeline();
 
     /**
      * used by priority "handlers"
@@ -40,6 +46,12 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
     public Core getCore()
     {
         return this.core;
+    }
+
+    @Override
+    public Map<EventPipelineHandler<T>, TimingsContainer> getTimings()
+    {
+        return this.timings;
     }
 
     private synchronized void init()
@@ -72,8 +84,11 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
     @Override
     public void run(final T evt)
     {
-        for (final EventPipelineHandler<T> handler : this)
+        final Iterator<Map.Entry<String, EventPipelineHandler<T>>> entries = this.entriesIterator();
+        while (entries.hasNext())
         {
+            final Map.Entry<String, EventPipelineHandler<T>> entry = entries.next();
+            final EventPipelineHandler<T> handler = entry.getValue();
             //noinspection ObjectEquality
             if (handler == this.emptyElement)
             {
@@ -83,6 +98,8 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
             {
                 continue;
             }
+
+            final long start = System.currentTimeMillis();
             try
             {
                 handler.handle(evt, this);
@@ -92,6 +109,20 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
 
                 break;
             }
+
+            if (! Diorite.getTimings().isCollecting())
+            {
+                continue;
+            }
+
+            final long end = System.currentTimeMillis() - start;
+            TimingsContainer timings = this.timings.get(handler);
+            if (timings == null)
+            {
+                timings = new TimingsContainer(entry.getKey());
+                this.timings.put(handler, timings);
+            }
+            timings.recordTiming(end);
         }
     }
 

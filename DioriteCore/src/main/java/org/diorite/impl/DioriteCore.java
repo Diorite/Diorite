@@ -111,6 +111,7 @@ import org.diorite.scheduler.Scheduler;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.SpammyError;
+import org.diorite.utils.timings.TimingsManager;
 import org.diorite.world.World;
 
 import javassist.ClassPool;
@@ -246,6 +247,7 @@ public class DioriteCore implements Core
     protected int                      keepAliveTimer;
     protected DioriteConfigImpl        config;
     protected PluginManager            pluginManager;
+    protected TimingsManager           timings;
     protected                    KeyPair keyPair     = MinecraftEncryption.generateKeyPair();
     protected transient volatile boolean isRunning   = true;
     protected transient volatile boolean hasStopped  = false;
@@ -423,6 +425,12 @@ public class DioriteCore implements Core
     public Scheduler getScheduler()
     {
         return this.scheduler;
+    }
+
+    @Override
+    public TimingsManager getTimings()
+    {
+        return this.timings;
     }
 
     @Override
@@ -1079,6 +1087,7 @@ public class DioriteCore implements Core
             s.playersManager = new PlayersManagerImpl(s);
             s.worldsManager = new WorldsManagerImpl();
         });
+        initPipeline.addLast("DioriteCore|initTimings", (s, p, d) -> s.timings = new TimingsManagerImpl());
 
         startPipeline = new CoreStartPipeline();
         startPipeline.addLast("DioriteCore|EnableMods", (s, pipeline, options) -> s.getPluginManager().getPlugins().stream().filter(p -> ! p.isEnabled() && p.isCoreMod()).forEach(p -> p.setEnabled(true)));

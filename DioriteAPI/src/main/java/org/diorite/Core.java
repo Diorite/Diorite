@@ -25,6 +25,7 @@ import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.math.DioriteRandomUtils;
+import org.diorite.utils.timings.TimingsManager;
 import org.diorite.world.WorldsManager;
 
 public interface Core extends Synchronizable
@@ -64,6 +65,8 @@ public interface Core extends Synchronizable
     WorldsManager getWorldsManager();
 
     Scheduler getScheduler();
+
+    TimingsManager getTimings();
 
     void broadcastMessage(ChatPosition position, BaseComponent component);
 
