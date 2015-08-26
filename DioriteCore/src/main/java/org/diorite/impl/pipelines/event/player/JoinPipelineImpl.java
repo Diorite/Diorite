@@ -59,10 +59,14 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
         }));
 
         this.addAfter("Diorite|EntityStuff", "Diorite|PlayerListStuff", ((evt, pipeline) -> {
+            long s = System.currentTimeMillis();
             final PlayerImpl player = (PlayerImpl) evt.getPlayer();
 
             DioriteCore.getInstance().getPlayersManager().forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
             DioriteCore.getInstance().getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
+
+            long e = System.currentTimeMillis();
+            System.out.println(e-s);
         }));
 
         this.addAfter(EventPriority.NORMAL, "Diorite|JoinMessage", ((evt, pipeline) -> {

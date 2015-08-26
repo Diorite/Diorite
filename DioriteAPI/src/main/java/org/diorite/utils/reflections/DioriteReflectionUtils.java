@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.diorite.cfg.system.ConfigField;
@@ -364,7 +364,7 @@ public final class DioriteReflectionUtils
         return getSimpleEnumValueSafe(name, id, def.getClass(), def);
     }
 
-    private static final Map<Class<?>, Method> simpleEnumMethods = new IdentityHashMap<>(40);
+    private static final Map<Class<?>, Method> simpleEnumMethods = new HashMap<>(40);
 
     private static <T extends SimpleEnum<T>> T getSimpleEnumValueSafe(final String name, final int id, Class<?> enumClass, final Object def)
     {

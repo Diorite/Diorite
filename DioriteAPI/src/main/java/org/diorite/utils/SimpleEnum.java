@@ -1,7 +1,7 @@
 package org.diorite.utils;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -144,9 +144,9 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
     @SuppressWarnings("unchecked")
     abstract class ASimpleEnum<T extends SimpleEnum<T>> implements SimpleEnum<T>
     {
-        private static final Map<Class<?>, AtomicInteger>                ids       = new IdentityHashMap<>(40);
-        private static final Map<Class<?>, Map<String, SimpleEnum<?>>>   byName    = new IdentityHashMap<>(40);
-        private static final Map<Class<?>, TIntObjectMap<SimpleEnum<?>>> byOrdinal = new IdentityHashMap<>(40);
+        private static final Map<Class<?>, AtomicInteger>                ids       = new HashMap<>(40);
+        private static final Map<Class<?>, Map<String, SimpleEnum<?>>>   byName    = new HashMap<>(40);
+        private static final Map<Class<?>, TIntObjectMap<SimpleEnum<?>>> byOrdinal = new HashMap<>(40);
 
         protected final String enumName;
         protected final int    ordinal;

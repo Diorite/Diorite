@@ -1,7 +1,7 @@
 package org.diorite.impl.connection.packets;
 
 import java.io.IOException;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -88,7 +88,7 @@ public abstract class Packet<T extends PacketListener>
         networkManager.sendPacket(this, listener, listeners);
     }
 
-    private static final Map<String, PacketClass> map = new IdentityHashMap<>(200);
+    private static final Map<String, PacketClass> map = new HashMap<>(200);
 
     public static PacketClass getPacketData(@SuppressWarnings("rawtypes") final Class<? extends Packet> clazz)
     {
