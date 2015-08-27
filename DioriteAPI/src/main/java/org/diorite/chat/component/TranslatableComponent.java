@@ -15,10 +15,10 @@ import org.diorite.chat.ChatColor;
 
 public class TranslatableComponent extends BaseComponent
 {
-    private final ResourceBundle locales = ResourceBundle.getBundle("mojang-translations/en_US");
-    private final Pattern        format  = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
-    private String              translate;
-    private List<BaseComponent> with;
+    protected final ResourceBundle locales = ResourceBundle.getBundle("mojang-translations/en_US");
+    protected final Pattern        format  = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
+    protected String              translate;
+    protected List<BaseComponent> with;
 
     public TranslatableComponent(final TranslatableComponent original)
     {
@@ -47,6 +47,33 @@ public class TranslatableComponent extends BaseComponent
 
     public TranslatableComponent()
     {
+    }
+
+    @Override
+    public int replace_(final String text, final BaseComponent component, int limit)
+    {
+        final int startIndex = this.translate.indexOf(text);
+        if (startIndex != - 1)
+        {
+            final int endIndex = startIndex + text.length();
+            this.translate = this.translate.substring(0, startIndex) + component.toLegacyText() + this.translate.substring(endIndex);
+            if (-- limit == 0)
+            {
+                return 0;
+            }
+        }
+        if (this.with != null)
+        {
+            for (final BaseComponent w : this.with)
+            {
+                limit = w.replace_(text, component, limit);
+                if (limit == 0)
+                {
+                    return 0;
+                }
+            }
+        }
+        return super.replace_(text, component, limit);
     }
 
     public ResourceBundle getLocales()

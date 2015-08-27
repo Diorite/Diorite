@@ -2,6 +2,7 @@ package org.diorite.chat.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -10,16 +11,16 @@ import org.diorite.chat.ChatColor;
 
 public abstract class BaseComponent
 {
-    private BaseComponent       parent;
-    private ChatColor           color;
-    private Boolean             bold;
-    private Boolean             italic;
-    private Boolean             underlined;
-    private Boolean             strikethrough;
-    private Boolean             obfuscated;
-    private List<BaseComponent> extra;
-    private ClickEvent          clickEvent;
-    private HoverEvent          hoverEvent;
+    protected BaseComponent       parent;
+    protected ChatColor           color;
+    protected Boolean             bold;
+    protected Boolean             italic;
+    protected Boolean             underlined;
+    protected Boolean             strikethrough;
+    protected Boolean             obfuscated;
+    protected List<BaseComponent> extra;
+    protected ClickEvent          clickEvent;
+    protected HoverEvent          hoverEvent;
 
     BaseComponent(final BaseComponent old)
     {
@@ -29,19 +30,65 @@ public abstract class BaseComponent
         this.underlined = old.isUnderlinedRaw();
         this.strikethrough = old.isStrikethroughRaw();
         this.obfuscated = old.isObfuscatedRaw();
-        this.clickEvent = old.getClickEvent();
-        this.hoverEvent = old.getHoverEvent();
-        if (this.extra != null)
+        this.clickEvent = (old.clickEvent == null) ? null : old.clickEvent.duplicate();
+        this.hoverEvent = (old.hoverEvent == null) ? null : old.hoverEvent.duplicate();
+        if (old.extra != null)
         {
-            for (final BaseComponent component : this.extra)
-            {
-                this.addExtra(component.duplicate());
-            }
+            this.extra = new ArrayList<>(old.extra.size());
+            this.extra.addAll(old.extra.stream().map(BaseComponent::duplicate).collect(Collectors.toList()));
         }
     }
 
     public BaseComponent()
     {
+    }
+
+
+    public void replace(final String text, final BaseComponent component, final int limit)
+    {
+        this.replace_(text, component, limit);
+    }
+
+    protected int replace_(final String text, final BaseComponent component, int limit)
+    {
+        if (this.extra != null)
+        {
+            for (final BaseComponent bs : this.extra)
+            {
+                limit = bs.replace_(text, component, limit);
+                if (limit == 0)
+                {
+                    return 0;
+                }
+            }
+        }
+        if (this.hoverEvent != null)
+        {
+            limit = this.hoverEvent.replace_(text, component, limit);
+            if (limit == 0)
+            {
+                return 0;
+            }
+        }
+        if (this.clickEvent != null)
+        {
+            limit = this.clickEvent.replace_(text, component, limit);
+            if (limit == 0)
+            {
+                return 0;
+            }
+        }
+        return limit;
+    }
+
+    public void replace(final String text, final BaseComponent component)
+    {
+        this.replace(text, component, - 1);
+    }
+
+    public void replaceOnce(final String text, final BaseComponent component)
+    {
+        this.replace(text, component, 1);
     }
 
     public BaseComponent getParent()

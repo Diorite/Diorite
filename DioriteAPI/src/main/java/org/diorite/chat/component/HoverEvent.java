@@ -3,15 +3,46 @@ package org.diorite.chat.component;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public final class HoverEvent
+public class HoverEvent
 {
-    private final Action          action;
-    private final BaseComponent[] value;
+    protected final Action          action;
+    protected final BaseComponent[] value;
 
     public HoverEvent(final Action action, final BaseComponent[] value)
     {
         this.action = action;
         this.value = value;
+    }
+
+    public void replace(final String text, final BaseComponent component, final int limit)
+    {
+        this.replace_(text, component, limit);
+    }
+
+    protected int replace_(final String text, final BaseComponent component, int limit)
+    {
+        if (this.value != null)
+        {
+            for (final BaseComponent bs : this.value)
+            {
+                limit = bs.replace_(text, component, limit);
+                if (limit == 0)
+                {
+                    return 0;
+                }
+            }
+        }
+        return limit;
+    }
+
+    public void replace(final String text, final BaseComponent component)
+    {
+        this.replace(text, component, - 1);
+    }
+
+    public void replaceOnce(final String text, final BaseComponent component)
+    {
+        this.replace(text, component, 1);
     }
 
     public Action getAction()
@@ -22,6 +53,20 @@ public final class HoverEvent
     public BaseComponent[] getValue()
     {
         return this.value;
+    }
+
+    public HoverEvent duplicate()
+    {
+        if (this.value == null)
+        {
+            return new HoverEvent(this.action, null);
+        }
+        final BaseComponent[] valueCpy = new BaseComponent[this.value.length];
+        for (int i = 0; i < this.value.length; i++)
+        {
+            valueCpy[i] = this.value[i].duplicate();
+        }
+        return new HoverEvent(this.action, valueCpy);
     }
 
     @Override

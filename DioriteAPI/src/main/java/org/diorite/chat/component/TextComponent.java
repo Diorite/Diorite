@@ -1,5 +1,6 @@
 package org.diorite.chat.component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +44,34 @@ public class TextComponent extends BaseComponent
     public void setText(final String text)
     {
         this.text = text;
+    }
+
+    @Override
+    public int replace_(final String text, final BaseComponent component, int limit)
+    {
+        final int startIndex = this.text.indexOf(text);
+        if (startIndex != - 1)
+        {
+            final int endIndex = startIndex + text.length();
+            final String pre = this.text.substring(0, startIndex);
+            final String post = this.text.substring(endIndex);
+            this.text = pre;
+            if (this.extra != null)
+            {
+                this.extra.addAll(0, Arrays.asList(component.duplicate(), new TextComponent(post)));
+            }
+            else
+            {
+                this.extra = new ArrayList<>(2);
+                this.extra.add(component.duplicate());
+                this.extra.add(new TextComponent(post));
+            }
+            if (-- limit == 0)
+            {
+                return 0;
+            }
+        }
+        return super.replace_(text, component, limit);
     }
 
     @Override
