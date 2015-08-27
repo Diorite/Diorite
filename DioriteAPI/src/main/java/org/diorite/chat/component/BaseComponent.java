@@ -91,6 +91,53 @@ public abstract class BaseComponent
         this.replace(text, component, 1);
     }
 
+    public void replace(final String text, final String repl, final int limit)
+    {
+        this.replace_(text, repl, limit);
+    }
+
+    protected int replace_(final String text, final String repl, int limit)
+    {
+        if (this.extra != null)
+        {
+            for (final BaseComponent bs : this.extra)
+            {
+                limit = bs.replace_(text, repl, limit);
+                if (limit == 0)
+                {
+                    return 0;
+                }
+            }
+        }
+        if (this.hoverEvent != null)
+        {
+            limit = this.hoverEvent.replace_(text, repl, limit);
+            if (limit == 0)
+            {
+                return 0;
+            }
+        }
+        if (this.clickEvent != null)
+        {
+            limit = this.clickEvent.replace_(text, repl, limit);
+            if (limit == 0)
+            {
+                return 0;
+            }
+        }
+        return limit;
+    }
+
+    public void replace(final String text, final String repl)
+    {
+        this.replace(text, repl, - 1);
+    }
+
+    public void replaceOnce(final String text, final String repl)
+    {
+        this.replace(text, repl, 1);
+    }
+
     public BaseComponent getParent()
     {
         return this.parent;

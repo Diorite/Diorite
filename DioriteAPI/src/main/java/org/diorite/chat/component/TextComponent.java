@@ -75,6 +75,22 @@ public class TextComponent extends BaseComponent
     }
 
     @Override
+    public int replace_(final String text, final String repl, int limit)
+    {
+        final int startIndex = this.text.indexOf(text);
+        if (startIndex != - 1)
+        {
+            final int endIndex = startIndex + text.length();
+            this.text = this.text.substring(0, startIndex) + repl + this.text.substring(endIndex);
+            if (-- limit == 0)
+            {
+                return 0;
+            }
+        }
+        return super.replace_(text, repl, limit);
+    }
+
+    @Override
     protected void toPlainText(final StringBuilder builder)
     {
         builder.append(this.text);

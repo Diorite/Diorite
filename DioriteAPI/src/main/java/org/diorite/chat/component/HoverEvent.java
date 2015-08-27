@@ -45,6 +45,37 @@ public class HoverEvent
         this.replace(text, component, 1);
     }
 
+    public void replace(final String text, final String repl, final int limit)
+    {
+        this.replace_(text, repl, limit);
+    }
+
+    protected int replace_(final String text, final String repl, int limit)
+    {
+        if (this.value != null)
+        {
+            for (final BaseComponent bs : this.value)
+            {
+                limit = bs.replace_(text, repl, limit);
+                if (limit == 0)
+                {
+                    return 0;
+                }
+            }
+        }
+        return limit;
+    }
+
+    public void replace(final String text, final String repl)
+    {
+        this.replace(text, repl, - 1);
+    }
+
+    public void replaceOnce(final String text, final String repl)
+    {
+        this.replace(text, repl, 1);
+    }
+
     public Action getAction()
     {
         return this.action;

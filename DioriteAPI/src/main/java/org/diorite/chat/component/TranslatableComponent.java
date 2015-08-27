@@ -76,6 +76,33 @@ public class TranslatableComponent extends BaseComponent
         return super.replace_(text, component, limit);
     }
 
+    @Override
+    public int replace_(final String text, final String repl, int limit)
+    {
+        final int startIndex = this.translate.indexOf(text);
+        if (startIndex != - 1)
+        {
+            final int endIndex = startIndex + text.length();
+            this.translate = this.translate.substring(0, startIndex) + repl + this.translate.substring(endIndex);
+            if (-- limit == 0)
+            {
+                return 0;
+            }
+        }
+        if (this.with != null)
+        {
+            for (final BaseComponent w : this.with)
+            {
+                limit = w.replace_(text, repl, limit);
+                if (limit == 0)
+                {
+                    return 0;
+                }
+            }
+        }
+        return super.replace_(text, repl, limit);
+    }
+
     public ResourceBundle getLocales()
     {
         return this.locales;
