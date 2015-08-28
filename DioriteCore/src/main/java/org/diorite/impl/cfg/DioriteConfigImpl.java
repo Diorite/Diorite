@@ -5,6 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Locale;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,6 +22,7 @@ import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateImport;
 import org.diorite.cfg.annotations.defaults.CfgIntDefault;
+import org.diorite.cfg.annotations.defaults.CfgStringArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
 
 @SuppressWarnings({"HardcodedFileSeparator", "SimplifiableIfStatement"})
@@ -111,6 +113,10 @@ public class DioriteConfigImpl implements DioriteConfig
     @CfgComment("Message of the day, used on client server list. You may use JSON message here too.")
     @CfgStringDefault("&7Welcome on &3diorite &7server&3!\n&7Join and play today&3!")
     private String motd;
+
+    @CfgComment("Languages to load, by enabling more languages you may allow players to select own one.")
+    @CfgStringArrayDefault(value = "en-US")
+    private Locale[] languages;
 
     @CfgComment("Metrics UUID")
     @CfgDelegateImport("java.util")
@@ -346,6 +352,17 @@ public class DioriteConfigImpl implements DioriteConfig
     public void setMotd(final String motd)
     {
         this.motd = motd;
+    }
+
+    @Override
+    public Locale[] getLanguages()
+    {
+        return this.languages;
+    }
+
+    public void setLanguages(final Locale[] languages)
+    {
+        this.languages = languages;
     }
 
     @Override

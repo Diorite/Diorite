@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
@@ -170,6 +171,8 @@ public final class TemplateElements
         elements.addLast(URL.class.getName(), URLTemplateElement.INSTANCE);
         elements.addLast(File.class.getName(), FileTemplateElement.INSTANCE);
         elements.addLast(Path.class.getName(), PathTemplateElement.INSTANCE);
+
+        elements.addLast(Locale.class.getName(), LocaleTemplateElement.INSTANCE);
 
         elements.addLast(Map.class.getName(), MapTemplateElement.INSTANCE);
         elements.addLast(Iterable.class.getName(), IterableTemplateElement.INSTANCE);

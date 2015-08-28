@@ -1,6 +1,7 @@
 package org.diorite.cfg;
 
 import java.io.File;
+import java.util.Locale;
 
 public interface DioriteConfig
 {
@@ -55,6 +56,8 @@ public interface DioriteConfig
     String getMotd();
 
     void setMotd(String motd);
+
+    Locale[] getLanguages();
 
     String getMetricsUuid();
 
