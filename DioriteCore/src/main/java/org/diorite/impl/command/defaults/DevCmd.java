@@ -44,7 +44,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "msg":
                 {
-                    MessageLoader.getMasterNode().getMessage("player", "join").broadcastMessage(null, MessageData.e("player", p));
+                    MessageLoader.getMasterNode().getMessage("player", "join").broadcastMessage(MessageData.e("player", p));
                     break;
                 }
                 case "tc":
