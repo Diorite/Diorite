@@ -59,7 +59,12 @@ public class LocaleTemplateElement extends TemplateElement<Locale>
     protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
         final Locale element = (elementRaw instanceof Locale) ? ((Locale) elementRaw) : this.validateType(elementRaw);
-        StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(element.toString()), level, elementPlace);
+        String str = element.toLanguageTag();
+        if (str.equals("und"))
+        {
+            str = element.getDisplayName();
+        }
+        StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(str), level, elementPlace);
     }
 
 }

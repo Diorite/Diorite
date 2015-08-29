@@ -86,7 +86,7 @@ public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
     protected T convertDefault0(final Object def, final Class<?> fieldType)
     {
         final Class<?> c = def.getClass();
-        if (this.fieldType.isAssignableFrom(c))
+        if (fieldType.isAssignableFrom(c))
         {
             return (T) def;
         }
@@ -111,11 +111,22 @@ public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
         {
             throw new UnsupportedOperationException("Can't convert default value (" + c.getName() + "): " + def);
         }
-        final T array = (T) Array.newInstance(this.fieldType.getComponentType(), size);
+        final T array = (T) Array.newInstance(fieldType.getComponentType(), size);
         int i = 0;
         while (it.hasNext())
         {
-            Array.set(array, i++, it.next());
+            final Object obj = it.next();
+            if (obj == null)
+            {
+                Array.set(array, i++, null);
+                continue;
+            }
+            if (fieldType.getComponentType().isAssignableFrom(obj.getClass()))
+            {
+                Array.set(array, i++, obj);
+                continue;
+            }
+            Array.set(array, i++, TemplateElements.getElement(fieldType.getComponentType()).convertDefault(obj, fieldType.getComponentType()));
         }
         return array;
     }
