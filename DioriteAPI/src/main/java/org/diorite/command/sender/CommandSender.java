@@ -1,5 +1,7 @@
 package org.diorite.command.sender;
 
+import java.util.Locale;
+
 import org.diorite.Core;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.DioriteMarkdownParser;
@@ -23,6 +25,15 @@ public interface CommandSender
 
     Core getCore();
 
+    /**
+     * Returns prefered locale for this sender, may return null.
+     *
+     * @return prefered locale for this sender, may return null.
+     */
+    default Locale getPreferedLocale()
+    {
+        return null;
+    }
 
     default void sendRawMessage(final String... strs)
     {

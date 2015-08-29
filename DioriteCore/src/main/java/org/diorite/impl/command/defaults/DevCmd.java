@@ -9,6 +9,14 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameState
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.cfg.messages.Message.MessageData;
+import org.diorite.cfg.messages.MessageLoader;
+import org.diorite.chat.ChatColor;
+import org.diorite.chat.component.ClickEvent;
+import org.diorite.chat.component.ClickEvent.Action;
+import org.diorite.chat.component.ComponentBuilder;
+import org.diorite.chat.component.TextComponent;
+import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.command.CommandPriority;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
@@ -28,6 +36,37 @@ public class DevCmd extends SystemCommandImpl
             }
             switch (action.toLowerCase())
             {
+                case "msgr":
+                {
+                    MessageLoader.reloadDioriteMessages();
+                    System.out.println("Done");
+                    break;
+                }
+                case "msg":
+                {
+                    MessageLoader.getMasterNode().getMessage("player", "join").broadcastMessage(null, MessageData.e("player", p));
+                    break;
+                }
+                case "tc":
+                {
+                    TextComponent tc = ComponentBuilder.start("test <r> ing").color(ChatColor.RED).event(new ClickEvent(Action.OPEN_URL, "www.diorite.org:<port>")).appendLegacy("§2 costam costam §8<r> dbdjs fdd").create();
+                    sender.sendMessage(tc);
+                    System.out.println(tc.toLegacyText());
+                    System.out.println(ComponentSerializer.toString(tc));
+                    sender.sendMessage(tc.duplicate());
+                    System.out.println(tc.duplicate().toLegacyText());
+                    System.out.println(ComponentSerializer.toString(tc.duplicate()));
+                    break;
+                }
+                case "rep":
+                {
+                    TextComponent tc = ComponentBuilder.start("test <r> ing").color(ChatColor.RED).event(new ClickEvent(Action.OPEN_URL, "www.diorite.org:<port>")).appendLegacy("§2 costam costam §8<r> dbdjs fdd").create();
+                    sender.sendMessage(tc.duplicate());
+                    tc.replace("<r>", ComponentBuilder.start("Replaced clickable text").event(new ClickEvent(Action.SUGGEST_COMMAND, "YeY")).create());
+                    tc.replace("<port>", new TextComponent("8081"));
+                    sender.sendMessage(tc);
+                    break;
+                }
                 case "inv":
                 {
                     ((PlayerImpl) sender).getInventory().update();

@@ -1,6 +1,7 @@
 package org.diorite.chat.placeholder;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -10,23 +11,88 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.command.sender.CommandSender;
+import org.diorite.entity.Entity;
+import org.diorite.entity.Player;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
+/**
+ * Represent type of placeholder, like {@link Player} for player.name. <br>
+ * <p/>
+ * Class contains also public static instances of basic types.
+ *
+ * @param <T> type of placeholder object.
+ */
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class PlaceholderType<T>
 {
+    private static final Map<String, PlaceholderType<?>> types = new HashMap<>(5, .1f);
+
+    /**
+     * {@link CommandSender} placeholder type.
+     */
+    public static final PlaceholderType<CommandSender> SENDER = create("sender", CommandSender.class);
+    /**
+     * {@link Entity} placeholder type.
+     */
+    public static final PlaceholderType<Entity>        ENTITY = create("entity", Entity.class);
+    /**
+     * {@link Player} placeholder type, it use sender and entity placeholders too.
+     */
+    public static final PlaceholderType<Player>        PLAYER = create("player", Player.class, SENDER, ENTITY);
+
+    static
+    {
+        SENDER.registerItem(new PlaceholderItem<>(SENDER, "name", CommandSender::getName));
+    }
+
+    @SafeVarargs
+    private static <T> PlaceholderType<T> create(final String id, final Class<T> clazz, final PlaceholderType<? super T>... superTypes)
+    {
+        final PlaceholderType<T> type = new PlaceholderType<T>(id, clazz, superTypes);
+        types.put(type.getId(), type);
+        return type;
+    }
+
+    /**
+     * Get placeholder by id, note: this don't check any types.
+     *
+     * @param id  id of placeholder type.
+     * @param <T> type of placeholder object.
+     *
+     * @return placeholder type or null.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> PlaceholderType<? super T> get(final String id)
+    {
+        return (PlaceholderType<? super T>) types.get(id);
+    }
+
     private final String   id;
     private final Class<T> type;
     private final Map<String, PlaceholderItem<T>> items = new CaseInsensitiveMap<>(5, .3f);
     private final Set<PlaceholderType<? super T>> superTypes;
 
+    /**
+     * Construct new placeholder type for given id and class without any super types.
+     *
+     * @param id   id of placeholder.
+     * @param type type of placeholder object.
+     */
     public PlaceholderType(final String id, final Class<T> type)
     {
         this.id = id;
         this.type = type;
-        this.superTypes = new HashSet<>(10);
+        this.superTypes = new HashSet<>(3);
     }
 
+    /**
+     * Construct new placeholder type for given id and class with possible super types
+     *
+     * @param id         id of placeholder.
+     * @param type       type of placeholder object.
+     * @param superTypes super types of placeholder, this placeholder may use placeholder items from this types.
+     */
     public PlaceholderType(final String id, final Class<T> type, final Collection<PlaceholderType<? super T>> superTypes)
     {
         this.id = id;
@@ -34,6 +100,13 @@ public class PlaceholderType<T>
         this.superTypes = new HashSet<>(superTypes);
     }
 
+    /**
+     * Construct new placeholder type for given id and class with possible super types
+     *
+     * @param id         id of placeholder.
+     * @param type       type of placeholder object.
+     * @param superTypes super types of placeholder, this placeholder may use placeholder items from this types.
+     */
     @SafeVarargs
     public PlaceholderType(final String id, final Class<T> type, final PlaceholderType<? super T>... superTypes)
     {
@@ -42,11 +115,25 @@ public class PlaceholderType<T>
         this.superTypes = Sets.newHashSet(superTypes);
     }
 
+    /**
+     * Register new placeholder item to this placeholder type.
+     *
+     * @param item item to register.
+     */
     public void registerItem(final PlaceholderItem<T> item)
     {
         this.items.put(item.getId(), item);
     }
 
+    /**
+     * Returns item for given id, or null if there isn't any item with maching name. <br>
+     * If there is no maching item in this types, method will try get maching item from one
+     * of super types.
+     *
+     * @param id id of item, like "name" for player.name.
+     *
+     * @return placeholder item or null.
+     */
     public PlaceholderItem<? super T> getItem(final String id)
     {
         PlaceholderItem<? super T> item = this.items.get(id);
@@ -64,11 +151,21 @@ public class PlaceholderType<T>
         return item;
     }
 
+    /**
+     * Returns id of this type, like "player" for player.name.
+     *
+     * @return id of this type.
+     */
     public String getId()
     {
         return this.id;
     }
 
+    /**
+     * Returns class type of this type, like {@link Player} for player.name.
+     *
+     * @return class type of this type.
+     */
     public Class<T> getType()
     {
         return this.type;

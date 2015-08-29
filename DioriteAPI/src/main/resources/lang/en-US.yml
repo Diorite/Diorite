@@ -1,0 +1,2 @@
+player:
+  join: "&3 $<player.name>&7 joined the server!"

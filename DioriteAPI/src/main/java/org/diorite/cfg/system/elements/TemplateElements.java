@@ -19,6 +19,7 @@ import org.diorite.cfg.system.elements.primitives.FloatTemplateElement;
 import org.diorite.cfg.system.elements.primitives.IntTemplateElement;
 import org.diorite.cfg.system.elements.primitives.LongTemplateElement;
 import org.diorite.cfg.system.elements.primitives.ShortTemplateElement;
+import org.diorite.chat.component.BaseComponent;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.pipeline.BasePipeline;
 import org.diorite.utils.pipeline.Pipeline;
@@ -173,6 +174,7 @@ public final class TemplateElements
         elements.addLast(Path.class.getName(), PathTemplateElement.INSTANCE);
 
         elements.addLast(Locale.class.getName(), LocaleTemplateElement.INSTANCE);
+        elements.addLast(BaseComponent.class.getName(), BaseComponentTemplateElement.INSTANCE);
 
         elements.addLast(Map.class.getName(), MapTemplateElement.INSTANCE);
         elements.addLast(Iterable.class.getName(), IterableTemplateElement.INSTANCE);
