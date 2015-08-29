@@ -35,6 +35,10 @@ public interface DioriteConfig
 
     String getResourcePackHash();
 
+    void setAutosaveDelay(int delay);
+
+    int getAutosaveDelay();
+
     void setResourcePackHash(String resourcePackHash);
 
     boolean isUseNativeTransport();

@@ -23,6 +23,7 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIoService;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
+import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.Loc;
@@ -53,7 +54,7 @@ import gnu.trove.set.hash.TLongHashSet;
 public class WorldImpl implements World, Tickable
 {
     private static final int CHUNK_FLAG            = (Chunk.CHUNK_SIZE - 1);
-    public static final  int DEFAULT_AUTOSAVE_TIME = 20 * 60 * 5; // 5 min, TODO: load it from config
+    public static final  int DEFAULT_AUTOSAVE_TIME = 20 * Diorite.getConfig().getAutosaveDelay();
 
     protected final String           name;
     protected final WorldGroupImpl   worldGroup;

@@ -128,6 +128,10 @@ public class DioriteConfigImpl implements DioriteConfig
     @CfgDelegateDefault("adv|final Template template = TemplateCreator.getTemplate(WorldsConfigImpl.class, true);return template.fillDefaults(new WorldsConfigImpl());")
     private WorldsConfigImpl worlds;
 
+    @CfgComment("Autosave delay.")
+    @CfgDelegateDefault("600")
+    private int autosaveDelay;
+
     @Override
     public String getHostname()
     {
@@ -256,6 +260,18 @@ public class DioriteConfigImpl implements DioriteConfig
     public String getResourcePackHash()
     {
         return this.resourcePackHash;
+    }
+
+    @Override
+    public void setAutosaveDelay(final int delay)
+    {
+        this.autosaveDelay = delay;
+    }
+
+    @Override
+    public int getAutosaveDelay()
+    {
+        return this.autosaveDelay;
     }
 
     @Override
