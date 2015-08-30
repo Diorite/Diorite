@@ -1,11 +1,14 @@
 package org.diorite.plugin;
 
+import java.io.File;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.diorite.Core;
+import org.diorite.Diorite;
 
 public abstract class DioritePlugin implements BasePlugin
 {
@@ -16,6 +19,7 @@ public abstract class DioritePlugin implements BasePlugin
     private boolean           initialised;
     private boolean           enabled;
     private PluginData        pluginData;
+    private File              dataFolder;
 
     protected DioritePlugin()
     {
@@ -101,11 +105,21 @@ public abstract class DioritePlugin implements BasePlugin
         return this.pluginLoader;
     }
 
-    protected final DioritePlugin instance()
+    @Override
+    public File getDataFolder()
     {
-        this.initCheck();
-        return this;
+        if (this.dataFolder == null)
+        {
+            this.dataFolder = new File(Diorite.getPluginManager().getDirectory(), this.getName());
+        }
+        return this.dataFolder;
     }
+
+//    protected final DioritePlugin instance() // poor method made by NorthPL, so useful, so powerful, much wow.
+//    {
+//        this.initCheck();
+//        return this;
+//    }
 
     @Override
     public final void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder data)
@@ -156,6 +170,13 @@ public abstract class DioritePlugin implements BasePlugin
         return this.enabled;
     }
 
+    /**
+     * Returns plugin class loader.
+     *
+     * @return plugin class loader.
+     *
+     * @see PluginClassLoader
+     */
     public final PluginClassLoader getClassLoader()
     {
         this.initCheck();

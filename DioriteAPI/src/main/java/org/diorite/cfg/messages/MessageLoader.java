@@ -3,9 +3,6 @@ package org.diorite.cfg.messages;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -17,7 +14,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.yaml.snakeyaml.Yaml;
 
-import org.diorite.Core;
 import org.diorite.Diorite;
 import org.diorite.cfg.messages.Messages.MessagePack;
 
@@ -30,60 +26,6 @@ public final class MessageLoader
 
     private MessageLoader()
     {
-    }
-
-    /**
-     * Returns main instance of {@link Messages} used to store all diorite and many diorite plugins messages.
-     *
-     * @return main instance of {@link Messages}
-     */
-    public static Messages getMasterNode()
-    {
-        return masterNode;
-    }
-
-    /**
-     * Reloads diorite message files (including plugin ones)
-     */
-    public static void reloadDioriteMessages()
-    {
-        final File langFolder = new File("lang");
-        langFolder.mkdirs();
-        final File[] files = new File[Diorite.getConfig().getLanguages().length];
-        final Locale[] languages = Diorite.getConfig().getLanguages();
-        for (int i = 0; i < languages.length; i++)
-        {
-            final Locale loc = languages[i];
-            String name = loc.toLanguageTag();
-            if (name.equals("und"))
-            {
-                name = loc.getDisplayName();
-            }
-            final File file = new File(langFolder, "lang_" + name + ".yml");
-            if (! file.exists())
-            {
-                try (final InputStream is = Core.class.getClassLoader().getResourceAsStream("lang/" + name + ".yml"))
-                {
-                    if (is == null)
-                    {
-                        try (final InputStream defIs = Core.class.getClassLoader().getResourceAsStream("lang/en-US.yml"))
-                        {
-                            Files.copy(defIs, file.toPath());
-                        }
-                    }
-                    else
-                    {
-                        Files.copy(is, file.toPath());
-                    }
-                } catch (final IOException e)
-                {
-                    e.printStackTrace();
-                }
-
-            }
-            files[i] = file;
-        }
-        masterNode = loadMessages("lang_", files);
     }
 
     /**
@@ -191,7 +133,7 @@ public final class MessageLoader
         return locale;
     }
 
-    private static String findPrefix(int i, final File... files)
+    static String findPrefix(int i, final File... files)
     {
         if (files.length == 0)
         {

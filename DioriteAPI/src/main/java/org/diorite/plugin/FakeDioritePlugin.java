@@ -1,5 +1,7 @@
 package org.diorite.plugin;
 
+import java.io.File;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -13,11 +15,12 @@ public class FakeDioritePlugin implements ChildPlugin
     private       PluginLoader  loader;
     private       boolean       enabled;
     private final PluginData    pluginData;
+    private       File          dataFolder;
 
     public FakeDioritePlugin(final DioritePlugin parent, final PluginDataBuilder data)
     {
         this.parent = parent;
-        data.setName(parent.getName() + "::" + data.getName());
+        data.setName(parent.getName() + CHILD_SEPARATOR + data.getName());
         this.pluginData = data.build();
     }
 
@@ -91,6 +94,16 @@ public class FakeDioritePlugin implements ChildPlugin
     public PluginLoader getPluginLoader()
     {
         return this.loader;
+    }
+
+    @Override
+    public File getDataFolder()
+    {
+        if (this.dataFolder == null)
+        {
+            this.dataFolder = new File(this.getParent().getDataFolder(), this.getSimpleName());
+        }
+        return this.dataFolder;
     }
 
     @Override

@@ -1,6 +1,10 @@
 package org.diorite.plugin;
 
+import java.io.File;
+
 import org.slf4j.Logger;
+
+import org.diorite.Diorite;
 
 public interface BasePlugin
 {
@@ -84,6 +88,26 @@ public interface BasePlugin
      * @return PluginLoaded for this plugin.
      */
     PluginLoader getPluginLoader();
+
+    /**
+     * Returns folder where plugin should store all data. With default settings this is /plugins/{pluginName} folder.
+     *
+     * @return folder where plugin should store all data.
+     */
+    default File getDataFolder()
+    {
+        return new File(Diorite.getPluginManager().getDirectory(), this.getName());
+    }
+
+    /**
+     * Returns folder where plugin should store all languages files, with default settings this is /lang/{pluginName} folder.
+     *
+     * @return folder where plugin should store all languages files.
+     */
+    default File getLanguageFolder()
+    {
+        return new File(this.getDataFolder(), "lang");
+    }
 
     /**
      * Method invoked on plugin init, do not override.

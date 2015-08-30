@@ -1,7 +1,11 @@
 package org.diorite.plugin;
 
+import java.io.File;
+
 public interface ChildPlugin extends BasePlugin
 {
+    String CHILD_SEPARATOR = "::";
+
     BasePlugin getParent();
 
     /**
@@ -11,12 +15,18 @@ public interface ChildPlugin extends BasePlugin
      */
     default String getSimpleName()
     {
-        final int i = this.getName().lastIndexOf("::");
+        final int i = this.getName().lastIndexOf(CHILD_SEPARATOR);
         if (i == - 1)
         {
             return this.getName();
         }
         return this.getName().substring(i + 2);
+    }
+
+    @Override
+    default File getDataFolder()
+    {
+        return new File(this.getParent().getDataFolder(), this.getSimpleName());
     }
 
     @Override

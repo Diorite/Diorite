@@ -220,7 +220,7 @@ public abstract class Message
      *
      * @return true if message was send.
      */
-    public boolean sendMessage(final CommandSender target, Locale lang, final MessageData... data)
+    public boolean sendMessage(final CommandSender target, final Locale lang, final MessageData... data)
     {
         final BaseComponent msg = this.get(lang, data);
         if (msg == null)

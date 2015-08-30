@@ -8,19 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.Diorite;
 import org.diorite.cfg.messages.Message.MessageData;
-import org.diorite.chat.component.BaseComponent;
 import org.diorite.command.sender.CommandSender;
 
 public class Messages
 {
-    public static final String KEY_PLAYER    = "player";
-    public static final String KEY_ENTITY    = "entity";
-    public static final String KEY_JOIN      = "join";
-    public static final String KEY_QUIT      = "quit";
-    public static final String KEY_KILLED_BY = "killedby";
-
     private final char nodeSeparator; // '.' by default
 
     private final Messages              parentNode;
@@ -243,124 +235,110 @@ public class Messages
     }
 
     /**
-     * Try send message to given {@link CommandSender}, if message don't exist or is disabled method will just return false.
+     * Try broadcast this message to selected comamnd senders in target sender language if possible, if message is disabled method will just return false.
      *
-     * @param target target of message.
-     * @param lang   language to use if possible.
      * @param path   path to message.
-     * @param data   placeholder objects to use.
-     *
-     * @return true if message was send.
-     */
-    public boolean sendMessage(final CommandSender target, final Locale lang, final String[] path, final MessageData... data)
-    {
-        final Message message = this.getMessage(path);
-        if (message == null)
-        {
-            return false;
-        }
-        final BaseComponent msg = message.get(lang, data);
-        if (msg == null)
-        {
-            return false;
-        }
-        target.sendMessage(msg);
-        return true;
-    }
-
-    /**
-     * Try broadcast message (to all players), if message don't exist or is disabled method will just return false.
-     *
-     * @param lang language to use if possible.
-     * @param path path to message.
-     * @param data placeholder objects to use.
-     *
-     * @return true if message was send.
-     */
-    public boolean broadcastMessage(final Locale lang, final String[] path, final MessageData... data)
-    {
-        final Message message = this.getMessage(path);
-        if (message == null)
-        {
-            return false;
-        }
-        final BaseComponent msg = message.get(lang, data);
-        if (msg == null)
-        {
-            return false;
-        }
-        Diorite.broadcastMessage(msg);
-        return true;
-    }
-
-    /**
-     * Try broadcast message to selected comamnd senders, if message don't exist or is disabled method will just return false.
-     *
      * @param targets targets of message.
-     * @param lang    language to use if possible.
-     * @param path    path to message.
      * @param data    placeholder objects to use.
      *
      * @return true if message was send.
      */
-    public boolean broadcastMessage(final Iterable<? extends CommandSender> targets, final Locale lang, final String[] path, final MessageData... data)
+    public boolean broadcastMessage(final String path, final Iterable<? extends CommandSender> targets, final MessageData... data)
     {
         final Message message = this.getMessage(path);
-        if (message == null)
-        {
-            return false;
-        }
-        final BaseComponent msg = message.get(lang, data);
-        if (msg == null)
-        {
-            return false;
-        }
-        targets.forEach(s -> s.sendMessage(msg));
-        return true;
+        return (message != null) && message.broadcastMessage(targets, data);
     }
 
     /**
-     * Try send message to given {@link CommandSender}, if message don't exist or is disabled method will just return false.
+     * Try broadcast this message (to all players) in target player language if possible, if message is disabled method will just return false.
      *
+     * @param path   path to message.
+     * @param data placeholder objects to use.
+     *
+     * @return true if message was send.
+     */
+    public boolean broadcastMessage(final String path, final MessageData... data)
+    {
+        final Message message = this.getMessage(path);
+        return (message != null) && message.broadcastMessage(data);
+    }
+
+    /**
+     * Try broadcast this message to selected comamnd senders in target sender language if possible, if message is disabled method will just return false.
+     *
+     * @param path   path to message.
+     * @param targets targets of message.
+     * @param lang    default language to use if target don't have any.
+     * @param data    placeholder objects to use.
+     *
+     * @return true if message was send.
+     */
+    public boolean broadcastMessage(final String path, final Iterable<? extends CommandSender> targets, final Locale lang, final MessageData... data)
+    {
+        final Message message = this.getMessage(path);
+        return (message != null) && message.broadcastMessage(targets, lang, data);
+    }
+
+    /**
+     * Try broadcast this message (to all players) in target player language if possible, if message is disabled method will just return false.
+     *
+     * @param path   path to message.
+     * @param lang default language to use if target don't have any.
+     * @param data placeholder objects to use.
+     *
+     * @return true if message was send.
+     */
+    public boolean broadcastMessage(final String path, final Locale lang, final MessageData... data)
+    {
+        final Message message = this.getMessage(path);
+        return (message != null) && message.broadcastMessage(lang, data);
+    }
+
+    /**
+     * Try broadcast this message to selected comamnd senders, if message is disabled method will just return false.
+     *
+     * @param path   path to message.
+     * @param targets targets of message.
+     * @param lang    language to use if possible.
+     * @param data    placeholder objects to use.
+     *
+     * @return true if message was send.
+     */
+    public boolean broadcastStaticMessage(final String path, final Iterable<? extends CommandSender> targets, final Locale lang, final MessageData... data)
+    {
+        final Message message = this.getMessage(path);
+        return (message != null) && message.broadcastStaticMessage(targets, lang, data);
+    }
+
+    /**
+     * Try broadcast this message (to all players), if message is disabled method will just return false.
+     *
+     * @param path   path to message.
+     * @param lang language to use if possible.
+     * @param data placeholder objects to use.
+     *
+     * @return true if message was send.
+     */
+    public boolean broadcastStaticMessage(final String path, final Locale lang, final MessageData... data)
+    {
+        final Message message = this.getMessage(path);
+        return (message != null) && message.broadcastStaticMessage(lang, data);
+    }
+
+    /**
+     * Try send this message to given {@link CommandSender}, if message is disabled method will just return false.
+     *
+     * @param path   path to message.
      * @param target target of message.
      * @param lang   language to use if possible.
-     * @param path   path to message, you may use '.' (by default) as path node separator. {@link #getNodeSeparator()}
      * @param data   placeholder objects to use.
      *
      * @return true if message was send.
      */
-    public boolean sendMessage(final CommandSender target, final Locale lang, final String path, final MessageData... data)
+    public boolean sendMessage(final String path, final CommandSender target, final Locale lang, final MessageData... data)
     {
-        return this.sendMessage(target, lang, StringUtils.split(path, this.nodeSeparator), data);
-    }
-
-    /**
-     * Try broadcast message (to all players), if message don't exist or is disabled method will just return false.
-     *
-     * @param lang language to use if possible.
-     * @param path path to message, you may use '.' (by default) as path node separator. {@link #getNodeSeparator()}
-     * @param data placeholder objects to use.
-     *
-     * @return true if message was send.
-     */
-    public boolean broadcastMessage(final Locale lang, final String path, final MessageData... data)
-    {
-        return this.broadcastMessage(lang, StringUtils.split(path, this.nodeSeparator), data);
-    }
-
-    /**
-     * Try broadcast message to selected comamnd senders, if message don't exist or is disabled method will just return false.
-     *
-     * @param targets targets of message.
-     * @param lang    language to use if possible.
-     * @param path    path to message, you may use '.' (by default) as path node separator. {@link #getNodeSeparator()}
-     * @param data    placeholder objects to use.
-     *
-     * @return true if message was send.
-     */
-    public boolean broadcastMessage(final Iterable<? extends CommandSender> targets, final Locale lang, final String path, final MessageData... data)
-    {
-        return this.broadcastMessage(targets, lang, StringUtils.split(path, this.nodeSeparator), data);
+        final Message message = this.getMessage(path);
+        return (message != null) && message.sendMessage(target, lang, data);
     }
 
     /**
