@@ -9,8 +9,8 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameState
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
-import org.diorite.cfg.messages.MessageLoader;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.component.ClickEvent;
 import org.diorite.chat.component.ClickEvent.Action;
@@ -38,13 +38,13 @@ public class DevCmd extends SystemCommandImpl
             {
                 case "msgr":
                 {
-                    MessageLoader.reloadDioriteMessages();
+                    DioriteMesssges.reload();
                     System.out.println("Done");
                     break;
                 }
                 case "msg":
                 {
-                    MessageLoader.getMasterNode().getMessage("player", "join").broadcastMessage(MessageData.e("player", p));
+                    DioriteMesssges.broadcastMessage(args.asText(), MessageData.e("player", p));
                     break;
                 }
                 case "tc":
