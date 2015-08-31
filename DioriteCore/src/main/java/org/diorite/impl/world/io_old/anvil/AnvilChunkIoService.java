@@ -1,5 +1,6 @@
-package org.diorite.impl.world.io.anvil;
+package org.diorite.impl.world.io_old.anvil;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -7,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.world.chunk.ChunkImpl;
-import org.diorite.impl.world.io.ChunkIoService;
+import org.diorite.impl.world.io_old.ChunkIoService;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtOutputStream;
@@ -75,7 +76,14 @@ public final class AnvilChunkIoService implements ChunkIoService
         final NbtTagCompound levelOut = new NbtTagCompound();
         levelOut.addTag(levelTag);
 
-        NbtOutputStream.write(levelOut, region.getChunkDataOutputStream(regionX, regionZ));
+        try (final DataOutputStream data = region.getChunkDataOutputStream(regionX, regionZ))
+        {
+            try (final NbtOutputStream out = NbtOutputStream.write(levelOut, data))
+            {
+                out.flush();
+                out.close();
+            }
+        }
     }
 
     @Override

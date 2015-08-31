@@ -383,6 +383,7 @@ public class ChunkImpl implements Chunk
             }
             sections[y] = new ChunkPartImpl(new AtomicShortArray(types), skyLight, blockLight, y);
         }
+        this.chunkParts = new ChunkPartImpl[16];
         System.arraycopy(sections, 0, this.chunkParts, 0, sections.length);
 
         this.populated.set(tag.getBoolean("TerrainPopulated"));

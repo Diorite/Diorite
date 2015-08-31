@@ -19,7 +19,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.cfg.DioriteConfigImpl;
 import org.diorite.impl.cfg.WorldsConfigImpl;
-import org.diorite.impl.world.io.anvil.AnvilChunkIoService;
+import org.diorite.impl.world.io_old.anvil.AnvilChunkIoService;
 import org.diorite.impl.world.tick.TickGroupImpl;
 import org.diorite.impl.world.tick.WorldTickGroup;
 import org.diorite.cfg.WorldsConfig.WorldConfig;

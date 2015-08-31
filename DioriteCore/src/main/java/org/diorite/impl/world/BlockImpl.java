@@ -138,6 +138,33 @@ public class BlockImpl implements Block
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof BlockImpl))
+        {
+            return false;
+        }
+
+        final BlockImpl block = (BlockImpl) o;
+
+        return (this.x == block.x) && (this.y == block.y) && (this.z == block.z) && ! ((this.chunk != null) ? ! this.chunk.equals(block.chunk) : (block.chunk != null)) && ! ((this.type != null) ? ! this.type.equals(block.type) : (block.type != null));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = (int) this.x;
+        result = (31 * result) + this.y;
+        result = (31 * result) + (int) this.z;
+        result = (31 * result) + ((this.chunk != null) ? this.chunk.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.getX()).append("y", this.y).append("z", this.getZ()).append("type", this.type.name() + ":" + this.type.getTypeName()).toString();

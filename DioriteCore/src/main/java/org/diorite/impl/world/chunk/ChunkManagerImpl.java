@@ -17,7 +17,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.generator.ChunkBuilderImpl;
-import org.diorite.impl.world.io.ChunkIoService;
+import org.diorite.impl.world.io_old.ChunkIoService;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkGenerateEvent;
 import org.diorite.event.chunk.ChunkLoadEvent;

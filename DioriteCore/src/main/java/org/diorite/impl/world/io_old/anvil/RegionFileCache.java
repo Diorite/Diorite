@@ -1,4 +1,4 @@
-package org.diorite.impl.world.io.anvil;
+package org.diorite.impl.world.io_old.anvil;
 
 /*
  ** 2011 January 5

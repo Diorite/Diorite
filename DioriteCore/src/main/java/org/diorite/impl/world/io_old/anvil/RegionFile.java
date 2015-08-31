@@ -1,4 +1,4 @@
-package org.diorite.impl.world.io.anvil;
+package org.diorite.impl.world.io_old.anvil;
 
 /*
  ** 2011 January 5
@@ -283,7 +283,7 @@ public class RegionFile
     public DataOutputStream getChunkDataOutputStream(final int x, final int z)
     {
         this.checkBounds(x, z);
-        return new DataOutputStream(new DeflaterOutputStream(new ChunkBuffer(x, z), new Deflater(Deflater.BEST_SPEED)));
+        return new DataOutputStream(/*new BufferedOutputStream(*/new DeflaterOutputStream(new ChunkBuffer(x, z), new Deflater(Deflater.BEST_SPEED))/*)*/);
     }
 
     /*
