@@ -1,5 +1,7 @@
 package org.diorite.impl.world.io;
 
+import java.util.function.IntConsumer;
+
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.io.requests.ChunkDeleteRequest;
 import org.diorite.impl.world.io.requests.ChunkLoadRequest;
@@ -8,6 +10,8 @@ import org.diorite.impl.world.io.requests.Request;
 
 public interface ChunkIOService
 {
+    int DEFAULT_REST_TIMER = 2000;
+
     default ChunkLoadRequest queueChunkLoad(final int chunkX, final int chunkZ, final int priority)
     {
         return this.queue(new ChunkLoadRequest(priority, chunkX, chunkZ));
@@ -68,5 +72,21 @@ public interface ChunkIOService
 
     <OUT, T extends Request<OUT>> T queue(T request);
 
-    ChunkIO getImplementation();
+    default void await()
+    {
+        this.await(null);
+    }
+
+    default void await(final IntConsumer rest)
+    {
+        this.await(rest, DEFAULT_REST_TIMER);
+    }
+
+    /**
+     * Await for all requests.
+     *
+     * @param rest  invoked every few seconds with current amount of left requests.
+     * @param timer delay between rest consumer runs.
+     */
+    void await(IntConsumer rest, int timer);
 }

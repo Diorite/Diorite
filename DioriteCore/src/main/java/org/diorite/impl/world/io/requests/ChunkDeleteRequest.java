@@ -3,6 +3,8 @@ package org.diorite.impl.world.io.requests;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.io.ChunkIO;
+
 public class ChunkDeleteRequest extends Request<Void>
 {
     private final int x;
@@ -15,11 +17,19 @@ public class ChunkDeleteRequest extends Request<Void>
         this.z = z;
     }
 
+    @Override
+    public void run(final ChunkIO io)
+    {
+        io.deleteChunk(this.x, this.z);
+    }
+
+    @Override
     public int getX()
     {
         return this.x;
     }
 
+    @Override
     public int getZ()
     {
         return this.z;

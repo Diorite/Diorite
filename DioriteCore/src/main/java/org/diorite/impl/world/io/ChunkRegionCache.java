@@ -1,7 +1,6 @@
 package org.diorite.impl.world.io;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
@@ -29,7 +28,7 @@ public class ChunkRegionCache
         this.maxCacheSize = maxCacheSize;
     }
 
-    public ChunkRegion getChunkRegion(final int regionX, final int regionZ) throws IOException
+    public ChunkRegion getChunkRegion(final int regionX, final int regionZ)
     {
         final long key = IntsToLong.pack(regionX, regionZ);
         final File file = new File(this.regionDir, "r." + regionX + "." + regionZ + this.extension);
@@ -51,12 +50,12 @@ public class ChunkRegionCache
             this.clear();
         }
 
-        final ChunkRegion reg = new ChunkRegion(file);
+        final ChunkRegion reg = new ChunkRegion(file, regionX, regionZ);
         this.cache.put(key, new SoftReference<>(reg));
         return reg;
     }
 
-    public void clear() throws IOException
+    public void clear()
     {
         final TLongObjectIterator<Reference<ChunkRegion>> it = this.cache.iterator();
         while (it.hasNext())

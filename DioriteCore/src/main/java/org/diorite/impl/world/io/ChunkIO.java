@@ -9,7 +9,7 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 
 public abstract class ChunkIO
 {
-    private final ChunkRegionCache cache;
+    protected final ChunkRegionCache cache;
 
     public ChunkIO(final File basePath, final String extension, final int maxCacheSize)
     {
@@ -26,6 +26,8 @@ public abstract class ChunkIO
     public abstract void deleteChunk(int x, int z);
 
     public abstract void saveChunk(ChunkImpl chunk);
+
+    protected abstract ChunkRegion getChunkRegion(final int chunkX, final int chunkZ);
 
     @Override
     public String toString()

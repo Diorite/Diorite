@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.impl.world.io.ChunkIO;
 
 public class ChunkSaveRequest extends Request<Void>
 {
@@ -18,6 +19,24 @@ public class ChunkSaveRequest extends Request<Void>
     public ChunkImpl getData()
     {
         return this.data;
+    }
+
+    @Override
+    public void run(final ChunkIO io)
+    {
+        io.saveChunk(this.data);
+    }
+
+    @Override
+    public int getX()
+    {
+        return this.data.getX();
+    }
+
+    @Override
+    public int getZ()
+    {
+        return this.data.getZ();
     }
 
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")

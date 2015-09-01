@@ -3,6 +3,8 @@ package org.diorite.impl.world.io.requests;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.io.ChunkIO;
+
 public abstract class Request<OUT> implements Comparable<Request<?>>
 {
     protected final Object lock = new Object();
@@ -25,6 +27,11 @@ public abstract class Request<OUT> implements Comparable<Request<?>>
             this.lock.notifyAll();
         }
     }
+
+    public abstract void run(ChunkIO io);
+
+    public abstract int getX();
+    public abstract int getZ();
 
     public OUT await()
     {

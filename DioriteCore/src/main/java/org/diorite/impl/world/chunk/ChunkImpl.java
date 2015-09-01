@@ -411,33 +411,6 @@ public class ChunkImpl implements Chunk
         this.init();
 //        tag.getBoolean("LightPopulated"); // TODO
 //        tag.getLong("InhabitedTime"); // TODO
-//
-//        final List<NbtTagCompound> sectionsList = tag.getList("Sections", NbtTagCompound.class);
-//        final boolean hasSkyLight = this.getWorld().getDimension().hasSkyLight();
-//        for (final NbtTagCompound sectionNBT : sectionsList)
-//        {
-//            final byte posY = sectionNBT.getByte("Y");
-//            final ChunkPartImpl chunkPart = new ChunkPartImpl(this, posY, hasSkyLight);
-//            final byte[] blocksIDs = sectionNBT.getByteArray("Blocks");
-//            final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray(sectionNBT.getByteArray("Data"));
-//            final org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = Optional.ofNullable(sectionNBT.getByteArray("Add")).map(org.diorite.impl.world.chunk.ChunkNibbleArray::new).orElse(null);
-//            final short[] blocks = new short[blocksIDs.length];
-//            for (int i = 0; i < blocks.length; ++ i)
-//            {
-//                final int blockDataPos = (i >> 8) & 0xf;
-//                final int blockIDPos = (i >> 4) & 0xf;
-//                final int blockMetaPos = i & 0xf;
-//                blocks[i] = (short) ((((additionalData != null) ? additionalData.get(blockMetaPos, blockDataPos, blockIDPos) : 0) << 12) | ((blocksIDs[i] & 0xff) << 4) | (blocksMetaData.get(blockMetaPos, (blockDataPos), (blockIDPos))));
-//            }
-//            chunkPart.setBlocks(new AtomicShortArray(blocks));
-//            chunkPart.setBlockLight(new NibbleArray(sectionNBT.getByteArray("BlockLight")));
-//            if (hasSkyLight)
-//            {
-//                chunkPart.setSkyLight(new NibbleArray(sectionNBT.getByteArray("SkyLight")));
-//            }
-//            chunkPart.recalculateBlockCount();
-//            this.chunkParts[posY] = chunkPart;
-//        }
     }
 
     @SuppressWarnings("MagicNumber")

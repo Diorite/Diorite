@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.impl.world.io.ChunkIO;
 
 public class ChunkLoadRequest extends Request<ChunkImpl>
 {
@@ -17,11 +18,19 @@ public class ChunkLoadRequest extends Request<ChunkImpl>
         this.z = z;
     }
 
+    @Override
+    public void run(final ChunkIO io)
+    {
+        io.loadChunk(this.x, this.z);
+    }
+
+    @Override
     public int getX()
     {
         return this.x;
     }
 
+    @Override
     public int getZ()
     {
         return this.z;
