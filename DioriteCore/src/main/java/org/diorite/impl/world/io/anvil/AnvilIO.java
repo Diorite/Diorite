@@ -1,4 +1,4 @@
-package org.diorite.impl.world.io.serial.anvil;
+package org.diorite.impl.world.io.anvil;
 
 import java.io.File;
 
@@ -16,9 +16,9 @@ public class AnvilIO extends ChunkIO
 
     private final int regionSize;
 
-    AnvilIO(final File basePath, final String extension, final int maxCacheSize, final int regionSize)
+    protected AnvilIO(final File basePath, final String extension, final int maxCacheSize, final int regionSize)
     {
-        super(basePath, extension, maxCacheSize);
+        super(new AnvilRegionCache(basePath, extension, maxCacheSize));
         this.regionSize = regionSize;
     }
 

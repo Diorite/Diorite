@@ -1,7 +1,5 @@
 package org.diorite.impl.world.io;
 
-import java.io.File;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,11 +8,6 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 public abstract class ChunkIO
 {
     protected final ChunkRegionCache cache;
-
-    public ChunkIO(final File basePath, final String extension, final int maxCacheSize)
-    {
-        this.cache = new ChunkRegionCache(basePath, extension, maxCacheSize);
-    }
 
     public ChunkIO(final ChunkRegionCache cache)
     {

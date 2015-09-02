@@ -13,13 +13,13 @@ import gnu.trove.iterator.TLongObjectIterator;
 import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongObjectHashMap;
 
-public class ChunkRegionCache
+public abstract class ChunkRegionCache
 {
-    private final TLongObjectMap<Reference<ChunkRegion>> cache = new TLongObjectHashMap<>(50);
+    protected final TLongObjectMap<Reference<ChunkRegion>> cache = new TLongObjectHashMap<>(50);
 
-    private final String extension;
-    private final File   regionDir;
-    private final int    maxCacheSize;
+    protected final String extension;
+    protected final File   regionDir;
+    protected final int    maxCacheSize;
 
     public ChunkRegionCache(final File basePath, final String extension, final int maxCacheSize)
     {
@@ -50,24 +50,32 @@ public class ChunkRegionCache
             this.clear();
         }
 
-        final ChunkRegion reg = new ChunkRegion(file, regionX, regionZ);
-        this.cache.put(key, new SoftReference<>(reg));
+        final ChunkRegion reg = this.createNewRegion(file, regionX, regionZ);
+        synchronized (this.cache)
+        {
+            this.cache.put(key, new SoftReference<>(reg));
+        }
         return reg;
     }
 
-    public void clear()
+    public abstract ChunkRegion createNewRegion(final File file, final int regionX, final int regionZ);
+
+    public synchronized void clear()
     {
-        final TLongObjectIterator<Reference<ChunkRegion>> it = this.cache.iterator();
-        while (it.hasNext())
+        synchronized (this.cache)
         {
-            it.advance();
-            final ChunkRegion value = it.value().get();
-            if (value != null)
+            final TLongObjectIterator<Reference<ChunkRegion>> it = this.cache.iterator();
+            while (it.hasNext())
             {
-                value.close();
+                it.advance();
+                final ChunkRegion value = it.value().get();
+                if (value != null)
+                {
+                    value.close();
+                }
             }
+            this.cache.clear();
         }
-        this.cache.clear();
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.nbt.NbtTagCompound;
 
-public class ChunkRegion
+public abstract class ChunkRegion
 {
     protected final int  x;
     protected final int  z;
@@ -31,23 +31,13 @@ public class ChunkRegion
         return this.z;
     }
 
-    public void close()
-    {
-    }
+    public abstract void close();
 
-    public ChunkImpl loadChunk(final int x, final int z) // local cords, like from 0 to 31 on default anvil
-    {
-        return null;
-    }
+    public abstract ChunkImpl loadChunk(final int x, final int z); // local cords, like from 0 to 31 on default anvil
 
-    public void deleteChunk(final int x, final int z)
-    {
-    }
+    public abstract void deleteChunk(final int x, final int z);
 
-    public void saveChunk(final int x, final int z, final NbtTagCompound data)
-    {
-
-    }
+    public abstract void saveChunk(final int x, final int z, final NbtTagCompound data);
 
     @Override
     public String toString()

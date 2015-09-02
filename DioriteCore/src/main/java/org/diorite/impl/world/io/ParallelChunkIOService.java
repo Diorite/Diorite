@@ -1,6 +1,4 @@
-package org.diorite.impl.world.io.parallel;
-
-import org.diorite.impl.world.io.ChunkIOService;
+package org.diorite.impl.world.io;
 
 public interface ParallelChunkIOService extends ChunkIOService
 {

@@ -1,4 +1,4 @@
-package org.diorite.impl.world.io.serial.anvil;
+package org.diorite.impl.world.io.anvil.serial;
 
 import java.io.File;
 import java.util.PriorityQueue;
@@ -7,23 +7,24 @@ import java.util.function.IntConsumer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.io.SerialChunkIOService;
+import org.diorite.impl.world.io.anvil.AnvilIO;
 import org.diorite.impl.world.io.requests.Request;
-import org.diorite.impl.world.io.serial.SerialChunkIOService;
 
-public class AnvilIOService extends Thread implements SerialChunkIOService
+public class AnvilSerialIOService extends Thread implements SerialChunkIOService
 {
 
     private final PriorityQueue<Request<?>> queue = new PriorityQueue<>(20);
     private final AnvilIO io;
 
-    public AnvilIOService(final File basePath, final String extension, final int maxCacheSize, final int regionSize)
+    public AnvilSerialIOService(final File basePath, final String extension, final int maxCacheSize, final int regionSize)
     {
-        this.io = new AnvilIO(basePath, extension, maxCacheSize, regionSize);
+        this.io = new AnvilSerialIO(basePath, extension, maxCacheSize, regionSize);
     }
 
-    public AnvilIOService(final File basePath, final String extension, final int maxCacheSize)
+    public AnvilSerialIOService(final File basePath, final String extension, final int maxCacheSize)
     {
-        this.io = new AnvilIO(basePath, extension, maxCacheSize, AnvilIO.DEFAULT_REGION_SIZE);
+        this.io = new AnvilSerialIO(basePath, extension, maxCacheSize, AnvilIO.DEFAULT_REGION_SIZE);
     }
 
     @Override
