@@ -14,13 +14,13 @@ public abstract class ChunkIO
         this.cache = cache;
     }
 
-    public abstract ChunkImpl loadChunk(int x, int z);
+    public abstract ChunkImpl loadChunk(int x, int z, ChunkImpl chunk);
 
-    public abstract void deleteChunk(int x, int z);
+    public abstract boolean deleteChunk(int x, int z);
 
     public abstract void saveChunk(ChunkImpl chunk);
 
-    protected abstract ChunkRegion getChunkRegion(final int chunkX, final int chunkZ);
+    protected abstract ChunkRegion getChunkRegion(int chunkX, int chunkZ);
 
     @Override
     public String toString()

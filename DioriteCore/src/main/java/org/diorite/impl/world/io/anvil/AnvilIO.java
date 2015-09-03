@@ -12,40 +12,32 @@ import org.diorite.nbt.NbtTagCompound;
 
 public class AnvilIO extends ChunkIO
 {
-    public static final int DEFAULT_REGION_SIZE = 32;
+    public static final int REGION_SIZE = 32;
 
-    private final int regionSize;
-
-    protected AnvilIO(final File basePath, final String extension, final int maxCacheSize, final int regionSize)
+    protected AnvilIO(final File basePath, final String extension, final int maxCacheSize)
     {
         super(new AnvilRegionCache(basePath, extension, maxCacheSize));
-        this.regionSize = regionSize;
-    }
-
-    public int getRegionSize()
-    {
-        return this.regionSize;
     }
 
     @Override
-    public ChunkImpl loadChunk(final int x, final int z)
+    public ChunkImpl loadChunk(final int x, final int z, final ChunkImpl chunk)
     {
         final ChunkRegion region = this.getChunkRegion(x, z);
-        return region.loadChunk(this.getLocalFromRegion(region.getX()), this.getLocalFromRegion(region.getZ()));
+        return region.loadChunk(this.getLocalFromRegion(region.getX()), this.getLocalFromRegion(region.getZ()), chunk);
     }
 
     @Override
-    public void deleteChunk(final int x, final int z)
+    public boolean deleteChunk(final int x, final int z)
     {
         final ChunkRegion region = this.getChunkRegion(x, z);
-        region.deleteChunk(x, z);
+        return region.deleteChunk(x, z);
     }
 
     @Override
     public void saveChunk(final ChunkImpl chunk)
     {
         final ChunkRegion region = this.getChunkRegion(chunk.getX(), chunk.getZ());
-        region.saveChunk(this.getLocalFromRegion(region.getX()), this.getLocalFromRegion(region.getZ()), chunk.writeTo(new NbtTagCompound("Level"))); // TODO, not sure about nbt tag
+        region.saveChunk(this.getLocalFromRegion(chunk.getX()), this.getLocalFromRegion(chunk.getZ()), chunk.writeTo(new NbtTagCompound("Level"))); // TODO, not sure about nbt tag
     }
 
     @Override
@@ -58,12 +50,12 @@ public class AnvilIO extends ChunkIO
 
     protected int getLocalFromRegion(final int cord)
     {
-        return cord & (this.regionSize - 1);
+        return cord & (REGION_SIZE - 1);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("regionSize", this.regionSize).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
     }
 }

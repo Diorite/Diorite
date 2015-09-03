@@ -24,7 +24,7 @@ public class AnvilSerialIOService extends Thread implements SerialChunkIOService
 
     public AnvilSerialIOService(final File basePath, final String extension, final int maxCacheSize)
     {
-        this.io = new AnvilSerialIO(basePath, extension, maxCacheSize, AnvilIO.DEFAULT_REGION_SIZE);
+        this.io = new AnvilSerialIO(basePath, extension, maxCacheSize, AnvilIO.REGION_SIZE);
     }
 
     @Override

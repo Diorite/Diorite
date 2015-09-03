@@ -33,9 +33,9 @@ public abstract class ChunkRegion
 
     public abstract void close();
 
-    public abstract ChunkImpl loadChunk(final int x, final int z); // local cords, like from 0 to 31 on default anvil
+    public abstract ChunkImpl loadChunk(final int x, final int z, final ChunkImpl chunk); // local cords, like from 0 to 31 on default anvil
 
-    public abstract void deleteChunk(final int x, final int z);
+    public abstract boolean deleteChunk(final int x, final int z);
 
     public abstract void saveChunk(final int x, final int z, final NbtTagCompound data);
 

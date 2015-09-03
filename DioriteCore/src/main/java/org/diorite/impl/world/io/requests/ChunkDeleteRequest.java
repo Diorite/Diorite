@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.world.io.ChunkIO;
 
-public class ChunkDeleteRequest extends Request<Void>
+public class ChunkDeleteRequest extends Request<Boolean>
 {
     private final int x;
     private final int z;
@@ -20,7 +20,7 @@ public class ChunkDeleteRequest extends Request<Void>
     @Override
     public void run(final ChunkIO io)
     {
-        io.deleteChunk(this.x, this.z);
+        this.setResult(io.deleteChunk(this.x, this.z));
     }
 
     @Override

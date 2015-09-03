@@ -8,12 +8,14 @@ import org.diorite.impl.world.io.ChunkIO;
 
 public class ChunkLoadRequest extends Request<ChunkImpl>
 {
-    private final int x;
-    private final int z;
+    private final ChunkImpl unloadedChunk;
+    private final int       x;
+    private final int       z;
 
-    public ChunkLoadRequest(final int priority, final int x, final int z)
+    public ChunkLoadRequest(final int priority, final ChunkImpl unloadedChunk, final int x, final int z)
     {
         super(priority);
+        this.unloadedChunk = unloadedChunk;
         this.x = x;
         this.z = z;
     }
@@ -21,7 +23,7 @@ public class ChunkLoadRequest extends Request<ChunkImpl>
     @Override
     public void run(final ChunkIO io)
     {
-        io.loadChunk(this.x, this.z);
+        this.setResult(io.loadChunk(this.x, this.z, this.unloadedChunk));
     }
 
     @Override

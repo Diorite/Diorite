@@ -25,6 +25,7 @@ public class ChunkSaveRequest extends Request<Void>
     public void run(final ChunkIO io)
     {
         io.saveChunk(this.data);
+        this.setResult(null);
     }
 
     @Override
