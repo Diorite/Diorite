@@ -381,10 +381,11 @@ public class ChunkImpl implements Chunk
             {
                 types[i] = (short) ((((extTypes == null) ? 0 : extTypes.get(i)) << 12) | ((rawTypes[i] & 0xff) << 4) | data.get(i));
             }
-            sections[y] = new ChunkPartImpl(new AtomicShortArray(types), skyLight, blockLight, y);
+            final ChunkPartImpl part = new ChunkPartImpl(new AtomicShortArray(types), skyLight, blockLight, y);
+            part.recalculateBlockCount();
+            sections[y] = part;
         }
-        this.chunkParts = new ChunkPartImpl[16];
-        System.arraycopy(sections, 0, this.chunkParts, 0, sections.length);
+        this.chunkParts = sections;
 
         this.populated.set(tag.getBoolean("TerrainPopulated"));
         // TODO: load tile entites and other entities

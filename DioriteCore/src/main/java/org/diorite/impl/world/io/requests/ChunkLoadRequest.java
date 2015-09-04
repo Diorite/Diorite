@@ -26,6 +26,11 @@ public class ChunkLoadRequest extends Request<ChunkImpl>
         this.setResult(io.loadChunk(this.x, this.z, this.unloadedChunk));
     }
 
+    public ChunkImpl getChunk()
+    {
+        return this.unloadedChunk;
+    }
+
     @Override
     public int getX()
     {

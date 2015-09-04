@@ -1,5 +1,6 @@
 package org.diorite.impl.world.io;
 
+import java.io.File;
 import java.util.function.IntConsumer;
 
 import org.diorite.impl.world.chunk.ChunkImpl;
@@ -11,20 +12,24 @@ import org.diorite.impl.world.io.requests.Request;
 public interface ChunkIOService
 {
     int DEFAULT_REST_TIMER = 2000;
+    int LOW_PRIORITY       = 100;
+    int MEDIUM_PRIORITY    = 500;
+    int HIGH_PRIORITY      = 1000;
+    int INSTANT_PRIORITY   = Integer.MAX_VALUE;
 
-    default ChunkLoadRequest queueChunkLoad(final int chunkX, final int chunkZ, final int priority)
+    default ChunkLoadRequest queueChunkLoad(final ChunkImpl chunk, final int priority)
     {
-        return this.queue(new ChunkLoadRequest(priority, chunkX, chunkZ));
+        return this.queue(new ChunkLoadRequest(priority, chunk, chunk.getX(), chunk.getZ()));
     }
 
-    default ChunkLoadRequest queueChunkLoadAndAwait(final int chunkX, final int chunkZ, final int priority)
+    default ChunkLoadRequest queueChunkLoadAndAwait(final ChunkImpl chunk, final int priority)
     {
-        return this.queueAndAwait(new ChunkLoadRequest(priority, chunkX, chunkZ));
+        return this.queueAndAwait(new ChunkLoadRequest(priority, chunk, chunk.getX(), chunk.getZ()));
     }
 
-    default ChunkImpl queueChunkLoadAndGet(final int chunkX, final int chunkZ, final int priority)
+    default ChunkImpl queueChunkLoadAndGet(final ChunkImpl chunk, final int priority)
     {
-        return this.queueAndGet(new ChunkLoadRequest(priority, chunkX, chunkZ));
+        return this.queueAndGet(new ChunkLoadRequest(priority, chunk, chunk.getX(), chunk.getZ()));
     }
 
     default ChunkSaveRequest queueChunkSave(final ChunkImpl chunk, final int priority)
@@ -55,6 +60,11 @@ public interface ChunkIOService
     default ChunkDeleteRequest queueChunkDeleteAndAwait(final ChunkImpl chunk, final int priority)
     {
         return this.queueAndAwait(new ChunkDeleteRequest(priority, chunk.getX(), chunk.getZ()));
+    }
+
+    default boolean queueChunkDeleteAndGet(final ChunkImpl chunk, final int priority)
+    {
+        return this.queueAndGet(new ChunkDeleteRequest(priority, chunk.getX(), chunk.getZ()));
     }
 
     default <OUT, T extends Request<OUT>> T queueAndAwait(T request)
@@ -89,4 +99,6 @@ public interface ChunkIOService
      * @param timer delay between rest consumer runs.
      */
     void await(IntConsumer rest, int timer);
+
+    File getWorldDataFolder();
 }

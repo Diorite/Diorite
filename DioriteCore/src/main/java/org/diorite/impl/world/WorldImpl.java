@@ -18,7 +18,7 @@ import org.diorite.impl.entity.tracker.EntityTrackers;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
-import org.diorite.impl.world.io_old.ChunkIoService;
+import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -84,7 +84,7 @@ public class WorldImpl implements World, Tickable
     // TODO: world border impl
     // TODO: add some method allowing to set multiple blocks without calling getChunk so often
 
-    public WorldImpl(final ChunkIoService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator, final Map<String, Object> generatorOptions)
+    public WorldImpl(final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator, final Map<String, Object> generatorOptions)
     {
         this.name = name;
         this.worldGroup = group;
@@ -97,7 +97,7 @@ public class WorldImpl implements World, Tickable
         this.entityTrackers = new EntityTrackers(this);
     }
 
-    public WorldImpl(final ChunkIoService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator)
+    public WorldImpl(final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator)
     {
         this(chunkIO, name, group, dimension, worldType, generator, null);
     }
@@ -356,7 +356,7 @@ public class WorldImpl implements World, Tickable
     @Override
     public File getWorldFile()
     {
-        return this.chunkManager.getService().getWorldFile();
+        return this.chunkManager.getService().getWorldDataFolder();
     }
 
     @Override

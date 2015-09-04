@@ -1,5 +1,6 @@
 package org.diorite.impl.world.io.anvil.parallel;
 
+import java.io.File;
 import java.util.function.IntConsumer;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -34,6 +35,12 @@ public class AnvilParallelIOService implements ParallelChunkIOService
     public void await(final IntConsumer rest, final int timer)
     {
         // TODO
+    }
+
+    @Override
+    public File getWorldDataFolder()
+    {
+        return null;
     }
 
     @Override

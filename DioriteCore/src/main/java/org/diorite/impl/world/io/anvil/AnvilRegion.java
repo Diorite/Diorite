@@ -1,13 +1,31 @@
 package org.diorite.impl.world.io.anvil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
 
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.io.ChunkRegion;
+import org.diorite.nbt.NbtInputStream;
+import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtTagCompound;
 
+/**
+ * Every region contains up to 32x32 chunks, up to 1024 chunks per fire.<br>
+ * Every file is divided into sectors, each sector have 4096 bytes (4KiB)<br>
+ * Every file have at least two sectors:<br>
+ * <ol>
+ * <li>Contains chunk location, 4 bytes per chunk, indexed like (x + (z * 32)). <br>
+ * First 3 bytes are for offset (in sectors), and last byte is for size. (also in sectors)<br>
+ * Chunks will be always less than 1 MiB in size.</li>
+ * <li>Contains chunk last modyfication timestamps, 4 bytes per chunk, indexed like ((x + (z * 32)) * 4).</li>
+ * </ol>
+ * Data of every chunks is stored in comppressed (mode=1 for GZip, mode=2 for Zlib, minecraft use only mode=2) NBT. <br>
+ * Every chunk data starts with 5 byte header, first 4 bytes for length (in bytes + 1 byte for compression mode), and last byte for compression mode. <br>
+ */
 class AnvilRegion extends ChunkRegion
 {
     private static final int    SECTOR_BYTES    = 4096;
@@ -16,7 +34,7 @@ class AnvilRegion extends ChunkRegion
     private static final int    VERSION_DEFLATE = 2;
     private static final byte[] emptySector     = new byte[SECTOR_BYTES];
 
-    private final int[] offsets    = new int[SECTOR_INTS];
+    private final int[] locations  = new int[SECTOR_INTS];
     private final int[] timestamps = new int[SECTOR_INTS];
 
     protected final RandomAccessFile raf;
@@ -51,26 +69,26 @@ class AnvilRegion extends ChunkRegion
             this.freeSectors.set(1, false);
 
 
-            // read offsets from offset table
+            // read locations from offset table
             this.raf.seek(0);
             for (int i = 0; i < SECTOR_INTS; ++ i)
             {
-                final int offset = this.raf.readInt();
-                this.offsets[i] = offset;
+                final int location = this.raf.readInt();
+                this.locations[i] = location;
 
-                final int startSector = (offset >> 8);
-                final int numSectors = (offset & 0xff);
+                final int offset = (location >> 8);
+                final int size = (location & 0xff);
 
-                if ((offset != 0) && (startSector >= 0) && ((startSector + numSectors) <= this.freeSectors.getLargestIndex()))
+                if ((location != 0) && (offset >= 0) && ((offset + size) <= this.freeSectors.getLargestIndex()))
                 {
-                    for (int sectorNum = 0; sectorNum < numSectors; ++ sectorNum)
+                    for (int sectorNum = 0; sectorNum < size; ++ sectorNum)
                     {
-                        this.freeSectors.set(startSector + sectorNum, false);
+                        this.freeSectors.set(offset + sectorNum, false);
                     }
                 }
-                else if (offset != 0)
+                else if (location != 0)
                 {
-                    System.err.println("[ChunkIO] Region \"" + file.getPath() + "\": offsets[" + i + "] = " + offset + " -> " + startSector + "," + numSectors + " does not fit");
+                    System.err.println("[ChunkIO] Region \"" + file.getPath() + "\": locations[" + i + "] = " + location + " -> " + offset + ", " + size + " does not fit");
                 }
             }
             // read timestamps from timestamp table
@@ -100,8 +118,52 @@ class AnvilRegion extends ChunkRegion
     @Override
     public ChunkImpl loadChunk(final int x, final int z, final ChunkImpl chunk)
     {
+        try
+        {
+            final int location = this.getLocation(x, z);
+            if (location == 0)
+            {
+                return null;
+            }
+            final int offset = location >> 8;
+            final int size = location & 0xFF;
+            if ((offset + size) > this.freeSectors.getLargestIndex())
+            {
+                throw new RuntimeException("Invalid sector: " + offset + "+" + size + " > " + this.freeSectors.getLargestIndex());
+            }
+            this.raf.seek(offset * SECTOR_BYTES);
+            final int length = this.raf.readInt();
+            if (length > (SECTOR_BYTES * size))
+            {
+                throw new RuntimeException("Invalid length: " + length + " > " + (SECTOR_BYTES * size));
+            }
+            try (final NbtInputStream stream = this.getStream(length, this.raf.readByte()))
+            {
+                chunk.loadFrom(((NbtTagCompound) stream.readTag(NbtLimiter.getUnlimited())).getCompound("Level"));
+            }
+            return chunk;
+        } catch (final IOException e)
+        {
+            System.err.println("[ChunkIO] Region \"" + this.file.getPath() + "\": can't be loaded. region(" + this.x + ", " + this.z + "), local chunk(" + x + ", " + z + "), map chunk(" + ((this.x << 5) + x) + ", " + ((this.z << 5) + z) + ")");
+            return null;
+        }
+    }
 
-        return chunk;
+    private NbtInputStream getStream(final int length, final byte version) throws IOException
+    {
+        if (version == VERSION_GZIP)
+        {
+            final byte[] data = new byte[length - 1];
+            this.raf.read(data);
+            return new NbtInputStream(new GZIPInputStream(new ByteArrayInputStream(data)));
+        }
+        if (version == VERSION_DEFLATE)
+        {
+            final byte[] data = new byte[length - 1];
+            this.raf.read(data);
+            return new NbtInputStream(new InflaterInputStream(new ByteArrayInputStream(data)));
+        }
+        throw new RuntimeException("Unknown version: " + version);
     }
 
     @Override
@@ -130,35 +192,35 @@ class AnvilRegion extends ChunkRegion
         }
     }
 
-    private int getOffset(final int x, final int z)
+    private int getLocation(final int x, final int z)
     {
-        return this.offsets[(x + (z << 5))];
+        return this.locations[(x + (z << 5))];
     }
 
     public boolean hasChunk(final int x, final int z)
     {
-        return this.getOffset(x, z) != 0;
+        return this.getLocation(x, z) != 0;
     }
 
     public boolean removeChunk(final int x, final int z) throws IOException
     {
         final int key = (x + (z << 5));
-        if (this.offsets[key] == 0)
+        if (this.locations[key] == 0)
         {
             return false;
         }
-        this.offsets[(x + (z << 5))] = 0;
+        this.locations[(x + (z << 5))] = 0;
         this.raf.seek(key >> 1);
         this.raf.writeInt(0);
         return true;
     }
 
-    private void setOffset(final int x, final int z, final int offset) throws IOException
+    private void setOffset(final int x, final int z, final int location) throws IOException
     {
         final int key = (x + (z << 5));
-        this.offsets[key] = offset;
+        this.locations[key] = location;
         this.raf.seek(key >> 1);
-        this.raf.writeInt(offset);
+        this.raf.writeInt(location);
     }
 
     private void setTimestamp(final int x, final int z, final int value) throws IOException

@@ -1,6 +1,5 @@
 package org.diorite.impl.world.chunk;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,7 +16,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.generator.ChunkBuilderImpl;
-import org.diorite.impl.world.io_old.ChunkIoService;
+import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkGenerateEvent;
 import org.diorite.event.chunk.ChunkLoadEvent;
@@ -41,7 +40,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
      * The chunk I/O service used to read chunks from the disk and write them to
      * the disk.
      */
-    private final ChunkIoService service;
+    private final ChunkIOService service;
 
     /**
      * The chunk generator used to generate new chunks.
@@ -63,7 +62,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
      */
     private final ConcurrentMap<Long, Set<ChunkLock>> locks = new ConcurrentHashMap<>(1000, .25f, 8);
 
-    public ChunkManagerImpl(final WorldImpl world, final ChunkIoService service, final WorldGenerator generator)
+    public ChunkManagerImpl(final WorldImpl world, final ChunkIOService service, final WorldGenerator generator)
     {
         this.world = world;
         this.service = service;
@@ -79,7 +78,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         return this.generator;
     }
 
-    public ChunkIoService getService()
+    public ChunkIOService getService()
     {
         return this.service;
     }
@@ -100,15 +99,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         return this.getChunk(pos.getX(), pos.getZ());
     }
 
-    /**
-     * Gets a chunk object representing the specified coordinates, which might
-     * not yet be loaded.
-     *
-     * @param x The X coordinate.
-     * @param z The Z coordinate.
-     *
-     * @return The chunk.
-     */
     @Override
     public ChunkImpl getChunk(final int x, final int z)
     {
@@ -127,14 +117,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         }
     }
 
-    /**
-     * Checks if the Chunk at the specified coordinates is loaded.
-     *
-     * @param x The X coordinate.
-     * @param z The Z coordinate.
-     *
-     * @return true if the chunk is loaded, otherwise false.
-     */
     @Override
     public boolean isChunkLoaded(final int x, final int z)
     {
@@ -143,14 +125,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         return (chunk != null) && chunk.isLoaded();
     }
 
-    /**
-     * Check whether a chunk has locks on it preventing it from being unloaded.
-     *
-     * @param x The X coordinate.
-     * @param z The Z coordinate.
-     *
-     * @return Whether the chunk is in use.
-     */
     @Override
     public boolean isChunkInUse(final int x, final int z)
     {
@@ -159,15 +133,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         return (lockSet != null) && ! lockSet.isEmpty();
     }
 
-    /**
-     * Call the ChunkIoService to load a chunk, optionally generating the chunk.
-     *
-     * @param x        The X coordinate of the chunk to load.
-     * @param z        The Y coordinate of the chunk to load.
-     * @param generate Whether to generate the chunk if needed.
-     *
-     * @return True on success, false on failure.
-     */
     @Override
     public boolean loadChunk(final int x, final int z, final boolean generate)
     {
@@ -195,9 +160,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         return ! genEvt.isCancelled();
     }
 
-    /**
-     * Unload chunks with no locks on them.
-     */
     @Override
     public void unloadOldChunks()
     {
@@ -220,9 +182,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         }
     }
 
-    /**
-     * Populate a single chunk if needed.
-     */
     @Override
     public void populateChunk(final int x, final int z, final boolean force)
     {
@@ -231,13 +190,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         EventType.callEvent(popEvt);
     }
 
-    /**
-     * Force a chunk to be populated by loading the chunks in an area around it. Used when streaming chunks to players
-     * so that they do not have to watch chunks being populated.
-     *
-     * @param x The X coordinate.
-     * @param z The Z coordinate.
-     */
     @Override
     public void forcePopulation(final int x, final int z)
     {
@@ -253,9 +205,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         }
     }
 
-    /**
-     * Initialize a single chunk from the chunk generator.
-     */
     @Override
     public void generateChunk(final Chunk chunk, final int x, final int z)
     {
@@ -263,14 +212,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         this.generator.generate(this.generator.generateBiomes(new ChunkBuilderImpl(this.biomeGrid), pos), pos).init(chunk);
     }
 
-    /**
-     * Forces generation of the given chunk.
-     *
-     * @param x The X coordinate.
-     * @param z The Z coordinate.
-     *
-     * @return Whether the chunk was successfully regenerated.
-     */
     @Override
     public boolean forceRegeneration(final int x, final int z)
     {
@@ -304,37 +245,30 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         return true;
     }
 
-    /**
-     * Gets a list of loaded chunks.
-     *
-     * @return The currently loaded chunks.
-     */
     @Override
     public List<ChunkImpl> getLoadedChunks()
     {
         return this.chunks.values().stream().filter(ChunkImpl::isLoaded).collect(Collectors.toList());
     }
 
-    /**
-     * Performs the save for the given chunk using the storage provider.
-     *
-     * @param chunk The chunk to save.
-     */
     @Override
     public boolean save(final Chunk chunk)
     {
         if (chunk.isLoaded())
         {
-            try
-            {
-                this.service.write((ChunkImpl) chunk);
-                return true;
-            } catch (final IOException e)
-            {
-                System.err.println("[ChunkIO] Error while saving " + chunk);
-                e.printStackTrace();
-                return false;
-            }
+            this.service.queueChunkSave((ChunkImpl) chunk, ChunkIOService.MEDIUM_PRIORITY);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean save(final Chunk chunk, final int priority)
+    {
+        if (chunk.isLoaded())
+        {
+            this.service.queueChunkSave((ChunkImpl) chunk, priority);
+            return true;
         }
         return false;
     }

@@ -19,7 +19,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.cfg.DioriteConfigImpl;
 import org.diorite.impl.cfg.WorldsConfigImpl;
-import org.diorite.impl.world.io_old.anvil.AnvilChunkIoService;
+import org.diorite.impl.world.io.anvil.serial.AnvilSerialIOService;
 import org.diorite.impl.world.tick.TickGroupImpl;
 import org.diorite.impl.world.tick.WorldTickGroup;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
@@ -156,7 +156,7 @@ public class WorldsManagerImpl implements WorldsManager
             this.groups.put(wgc.getName(), wgImpl);
             loaders.addAll(wgc.getWorlds().stream().filter(WorldConfig::isEnabled).map(wc -> (Runnable) () -> {
                 final File wFile = new File(wgImpl.getDataFolder(), wc.getName());
-                final WorldImpl wImpl = new WorldImpl(new AnvilChunkIoService(wFile), wc.getName(), wgImpl, wc.getDimension(), wc.getWorldType(), wc.getGenerator(), wc.getGeneratorSettings());
+                final WorldImpl wImpl = new WorldImpl(new AnvilSerialIOService(wFile), wc.getName(), wgImpl, wc.getDimension(), wc.getWorldType(), wc.getGenerator(), wc.getGeneratorSettings());
                 this.loadWorld(wImpl, wc);
                 wgImpl.addWorld(wImpl);
             }).collect(Collectors.toList()));

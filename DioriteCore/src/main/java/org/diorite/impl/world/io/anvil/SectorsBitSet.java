@@ -17,9 +17,9 @@ public class SectorsBitSet extends BitSet
 
     private void checkLargest(final int index)
     {
-        if (index > this.largestIndex)
+        if (index >= this.largestIndex)
         {
-            this.largestIndex = index;
+            this.largestIndex = index + 1;
         }
     }
 

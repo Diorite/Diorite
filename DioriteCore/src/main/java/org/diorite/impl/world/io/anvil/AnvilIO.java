@@ -19,11 +19,21 @@ public class AnvilIO extends ChunkIO
         super(new AnvilRegionCache(basePath, extension, maxCacheSize));
     }
 
+    protected AnvilIO(final File basePath)
+    {
+        super(new AnvilRegionCache(basePath));
+    }
+
+    public File getWorldDataFolder()
+    {
+        return this.cache.getRegionDir();
+    }
+
     @Override
     public ChunkImpl loadChunk(final int x, final int z, final ChunkImpl chunk)
     {
         final ChunkRegion region = this.getChunkRegion(x, z);
-        return region.loadChunk(this.getLocalFromRegion(region.getX()), this.getLocalFromRegion(region.getZ()), chunk);
+        return region.loadChunk(this.getLocalFromRegion(x), this.getLocalFromRegion(z), chunk);
     }
 
     @Override

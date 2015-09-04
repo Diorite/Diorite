@@ -10,21 +10,25 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.world.io.SerialChunkIOService;
 import org.diorite.impl.world.io.anvil.AnvilIO;
 import org.diorite.impl.world.io.requests.Request;
+import org.diorite.Diorite;
 
 public class AnvilSerialIOService extends Thread implements SerialChunkIOService
 {
-
     private final PriorityQueue<Request<?>> queue = new PriorityQueue<>(20);
     private final AnvilIO io;
 
-    public AnvilSerialIOService(final File basePath, final String extension, final int maxCacheSize, final int regionSize)
-    {
-        this.io = new AnvilSerialIO(basePath, extension, maxCacheSize, regionSize);
-    }
-
     public AnvilSerialIOService(final File basePath, final String extension, final int maxCacheSize)
     {
-        this.io = new AnvilSerialIO(basePath, extension, maxCacheSize, AnvilIO.REGION_SIZE);
+        super("AnvilSerialIO");
+        this.io = new AnvilSerialIO(basePath, extension, maxCacheSize);
+        this.start();
+    }
+
+    public AnvilSerialIOService(final File basePath)
+    {
+        super("AnvilSerialIO");
+        this.io = new AnvilSerialIO(basePath);
+        this.start();
     }
 
     @Override
@@ -53,6 +57,12 @@ public class AnvilSerialIOService extends Thread implements SerialChunkIOService
         }
     }
 
+    @Override
+    public File getWorldDataFolder()
+    {
+        return this.io.getWorldDataFolder();
+    }
+
     private boolean await_(final IntConsumer rest, final int timer) throws InterruptedException
     {
         if (this.queue.isEmpty())
@@ -74,17 +84,23 @@ public class AnvilSerialIOService extends Thread implements SerialChunkIOService
     @Override
     public void run()
     {
-        final Request<?> r = this.queue.poll();
-        if (r != null)
+        while (Diorite.isRunning())
         {
-            r.run(this.io);
-            return;
-        }
-        try
-        {
-            this.queue.wait();
-        } catch (final InterruptedException ignored)
-        {
+            final Request<?> r = this.queue.poll();
+            if (r != null)
+            {
+                r.run(this.io);
+                continue;
+            }
+            try
+            {
+                synchronized (this.queue)
+                {
+                    this.queue.wait();
+                }
+            } catch (final InterruptedException ignored)
+            {
+            }
         }
     }
 

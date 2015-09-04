@@ -43,7 +43,10 @@ public abstract class Request<OUT> implements Comparable<Request<?>>
         {
             try
             {
-                this.lock.wait();
+                synchronized (this.lock)
+                {
+                    this.lock.wait();
+                }
             } catch (final InterruptedException e)
             {
                 e.printStackTrace();

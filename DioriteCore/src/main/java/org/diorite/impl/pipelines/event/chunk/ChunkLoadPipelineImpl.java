@@ -1,9 +1,8 @@
 package org.diorite.impl.pipelines.event.chunk;
 
-import java.io.IOException;
-
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.event.chunk.ChunkLoadEvent;
 import org.diorite.event.pipelines.event.chunk.ChunkLoadPipeline;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
@@ -24,8 +23,8 @@ public class ChunkLoadPipelineImpl extends SimpleEventPipeline<ChunkLoadEvent> i
             final ChunkImpl chunk = impl.getChunkManager().getChunk(x, z);
             try
             {
-                evt.setNeedBeGenerated(! impl.getChunkManager().getService().read(chunk));
-            } catch (IOException e)
+                evt.setNeedBeGenerated(impl.getChunkManager().getService().queueChunkLoadAndGet(chunk, ChunkIOService.INSTANT_PRIORITY) == null);
+            } catch (Exception e)
             {
                 System.err.println("[ChunkIO] Error while loading chunk (" + x + "," + z + ")");
                 e.printStackTrace();

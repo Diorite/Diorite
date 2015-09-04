@@ -28,6 +28,11 @@ public abstract class ChunkRegionCache
         this.maxCacheSize = maxCacheSize;
     }
 
+    public File getRegionDir()
+    {
+        return this.regionDir;
+    }
+
     public ChunkRegion getChunkRegion(final int regionX, final int regionZ)
     {
         final long key = IntsToLong.pack(regionX, regionZ);

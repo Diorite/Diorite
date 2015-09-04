@@ -10,4 +10,9 @@ public class AnvilSerialIO extends AnvilIO
     {
         super(basePath, extension, maxCacheSize);
     }
+
+    AnvilSerialIO(final File basePath)
+    {
+        super(basePath);
+    }
 }
