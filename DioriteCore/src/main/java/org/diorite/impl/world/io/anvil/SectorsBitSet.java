@@ -2,15 +2,18 @@ package org.diorite.impl.world.io.anvil;
 
 import java.util.BitSet;
 
-public class SectorsBitSet extends BitSet
+@SuppressWarnings("ClassHasNoToStringMethod")
+class SectorsBitSet extends BitSet
 {
+    private static final long serialVersionUID = 0L;
+
     private int largestIndex;
 
-    public SectorsBitSet()
+    SectorsBitSet()
     {
     }
 
-    public SectorsBitSet(final int nbits)
+    SectorsBitSet(final int nbits)
     {
         super(nbits);
     }

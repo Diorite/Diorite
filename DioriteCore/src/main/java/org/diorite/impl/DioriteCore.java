@@ -112,7 +112,6 @@ import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.SpammyError;
 import org.diorite.utils.timings.TimingsManager;
-import org.diorite.world.World;
 
 import javassist.ClassPool;
 import javassist.LoaderClassPath;
@@ -823,14 +822,17 @@ public class DioriteCore implements Core
         {
             this.playersManager.forEach(p -> p.kick("§4Server closed!"));
         }
-        if (this.worldsManager != null)
-        {
-            this.worldsManager.getWorlds().stream().forEach(World::save);
-            CoreMain.debug("done?");
-        }
         if (this.connectionHandler != null)
         {
             this.connectionHandler.close();
+        }
+        if (this.worldsManager != null)
+        {
+            this.worldsManager.getWorlds().stream().forEach(w -> {
+                w.save(true);
+                w.getChunkManager().getService().await(i -> coreLogger.info("[" + w.getName() + "] Queue: " + i + " left."));
+            });
+            CoreMain.debug("done?");
         }
         System.out.println("Goodbye <3");
     }

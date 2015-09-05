@@ -47,7 +47,11 @@ public class AnvilIO extends ChunkIO
     public void saveChunk(final ChunkImpl chunk)
     {
         final ChunkRegion region = this.getChunkRegion(chunk.getX(), chunk.getZ());
-        region.saveChunk(this.getLocalFromRegion(chunk.getX()), this.getLocalFromRegion(chunk.getZ()), chunk.writeTo(new NbtTagCompound("Level"))); // TODO, not sure about nbt tag
+        final NbtTagCompound lvl = new NbtTagCompound("Level");
+        final NbtTagCompound top = new NbtTagCompound();
+        chunk.writeTo(lvl);
+        top.addTag(lvl);
+        region.saveChunk(this.getLocalFromRegion(chunk.getX()), this.getLocalFromRegion(chunk.getZ()), top); // TODO, not sure about nbt tag
     }
 
     @Override

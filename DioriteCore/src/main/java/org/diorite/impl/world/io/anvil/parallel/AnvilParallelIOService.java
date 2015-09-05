@@ -44,6 +44,12 @@ public class AnvilParallelIOService implements ParallelChunkIOService
     }
 
     @Override
+    public void close(final IntConsumer rest)
+    {
+
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("maxThreads", this.maxThreads).toString();

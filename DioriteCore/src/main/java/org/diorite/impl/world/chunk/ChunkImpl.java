@@ -21,7 +21,6 @@ import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.utils.collections.sets.ConcurrentSet;
-import org.diorite.utils.concurrent.ParallelUtils;
 import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.Biome;
 import org.diorite.world.Block;
@@ -212,21 +211,19 @@ public class ChunkImpl implements Chunk
     @Override
     public void initHeightMap()
     {
-        ParallelUtils.realParallelStream(() -> {
-            IntStream.range(0, CHUNK_SIZE * CHUNK_SIZE).parallel().forEach(xz -> {
-                final int x = xz / CHUNK_SIZE;
-                final int z = xz % CHUNK_SIZE;
-                this.heightMap[((z << 4) | x)] = - 1;
-                for (int y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
+        IntStream.range(0, CHUNK_SIZE * CHUNK_SIZE).forEach(xz -> {
+            final int x = xz / CHUNK_SIZE;
+            final int z = xz % CHUNK_SIZE;
+            this.heightMap[((z << 4) | x)] = - 1;
+            for (int y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
+            {
+                if (this.getBlockType(x, y, z).isSolid())
                 {
-                    if (this.getBlockType(x, y, z).isSolid())
-                    {
-                        this.heightMap[((z << 4) | x)] = y;
-                        return;
-                    }
+                    this.heightMap[((z << 4) | x)] = y;
+                    return;
                 }
-            });
-        }, "[" + this.pos.getX() + "," + this.pos.getZ() + "]initHeightMap");
+            }
+        });
     }
 
     public BlockMaterialData setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)

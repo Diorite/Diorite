@@ -22,9 +22,15 @@ public abstract class ChunkIO
 
     protected abstract ChunkRegion getChunkRegion(int chunkX, int chunkZ);
 
+    public void close()
+    {
+        this.cache.clear();
+    }
+
     @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("cache", this.cache).toString();
     }
+
 }

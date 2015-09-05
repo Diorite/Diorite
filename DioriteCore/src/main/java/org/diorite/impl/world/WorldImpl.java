@@ -19,6 +19,7 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIOService;
+import org.diorite.impl.world.io.requests.Request;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -714,11 +715,21 @@ public class WorldImpl implements World, Tickable
         //TODO do it right...
         if (async) // temp code
         {
-            new Thread(() -> this.chunkManager.getLoadedChunks().forEach(this.chunkManager::save)).start();
+            this.chunkManager.getLoadedChunks().forEach(c -> this.chunkManager.save(c, ChunkIOService.HIGH_PRIORITY - 1));
         }
         else
         {
-            this.chunkManager.getLoadedChunks().forEach(this.chunkManager::save);
+            int p = ChunkIOService.HIGH_PRIORITY - 1;
+            final ChunkIOService io = this.chunkManager.getService();
+            Request<Void> request = null;
+            for (final ChunkImpl chunk : this.chunkManager.getLoadedChunks())
+            {
+                request = io.queueChunkSave(chunk, p--);
+            }
+            if (request != null)
+            {
+                request.await();
+            }
         }
     }
 
