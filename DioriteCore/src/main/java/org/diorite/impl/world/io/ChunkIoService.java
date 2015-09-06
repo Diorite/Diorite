@@ -12,9 +12,9 @@ import org.diorite.impl.world.io.requests.Request;
 public interface ChunkIOService
 {
     int DEFAULT_REST_TIMER = 2000;
-    int LOW_PRIORITY       = 100;
-    int MEDIUM_PRIORITY    = 500;
-    int HIGH_PRIORITY      = 1000;
+    int LOW_PRIORITY       = 1_000_000;
+    int MEDIUM_PRIORITY    = 5_000_000;
+    int HIGH_PRIORITY      = 10_000_000;
     int INSTANT_PRIORITY   = Integer.MAX_VALUE;
 
     default ChunkLoadRequest queueChunkLoad(final ChunkImpl chunk, final int priority)
@@ -101,4 +101,6 @@ public interface ChunkIOService
     void await(IntConsumer rest, int timer);
 
     File getWorldDataFolder();
+
+    void close(final IntConsumer rest);
 }

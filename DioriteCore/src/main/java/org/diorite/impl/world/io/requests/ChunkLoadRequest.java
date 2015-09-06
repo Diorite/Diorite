@@ -23,7 +23,14 @@ public class ChunkLoadRequest extends Request<ChunkImpl>
     @Override
     public void run(final ChunkIO io)
     {
-        this.setResult(io.loadChunk(this.x, this.z, this.unloadedChunk));
+        if (! this.unloadedChunk.isLoaded())
+        {
+            this.setResult(io.loadChunk(this.x, this.z, this.unloadedChunk));
+        }
+        else
+        {
+            this.setResult(this.unloadedChunk);
+        }
     }
 
     public ChunkImpl getChunk()
