@@ -96,6 +96,8 @@ public class WorldImpl implements World, Tickable
 
         this.spawnLock = this.createLock("spawn loader");
         this.entityTrackers = new EntityTrackers(this);
+
+        chunkIO.start(this);
     }
 
     public WorldImpl(final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator)

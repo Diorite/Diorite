@@ -7,34 +7,50 @@ import java.util.function.IntConsumer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.WorldImpl;
+import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.SerialChunkIOService;
 import org.diorite.impl.world.io.anvil.AnvilIO;
+import org.diorite.impl.world.io.requests.ChunkSaveRequest;
 import org.diorite.impl.world.io.requests.Request;
 
 public class AnvilSerialIOService extends Thread implements SerialChunkIOService
 {
     private final PriorityBlockingQueue<Request<?>> queue = new PriorityBlockingQueue<>(20);
-    private final AnvilIO io;
+    private final AnvilIO   io;
+    private       ChunkLock lock;
 
-    public AnvilSerialIOService(final File basePath, final String extension, final int maxCacheSize)
+    public AnvilSerialIOService(final File basePath, final String worldName, final String extension, final int maxCacheSize)
     {
-        super("AnvilSerialIO");
+        super("ChunkIO-" + worldName);
         this.setDaemon(true);
         this.io = new AnvilSerialIO(basePath, extension, maxCacheSize);
-        this.start();
     }
 
-    public AnvilSerialIOService(final File basePath)
+    public AnvilSerialIOService(final File basePath, final String worldName)
     {
-        super("AnvilSerialIO");
+        super("ChunkIO-" + worldName);
         this.setDaemon(true);
         this.io = new AnvilSerialIO(basePath);
+    }
+
+    @Override
+    public void start(final WorldImpl world)
+    {
+        this.lock = world.createLock("ChunkIO");
         this.start();
     }
 
     @Override
     public <OUT, T extends Request<OUT>> T queue(final T request)
     {
+        if (request instanceof ChunkSaveRequest)
+        {
+            final ChunkSaveRequest req = (ChunkSaveRequest) request;
+            final long key = req.getData().getPos().asLong();
+            this.lock.acquire(key);
+            req.addOnEnd(r -> this.lock.release(key));
+        }
         this.queue.add(request);
         synchronized (this.queue)
         {

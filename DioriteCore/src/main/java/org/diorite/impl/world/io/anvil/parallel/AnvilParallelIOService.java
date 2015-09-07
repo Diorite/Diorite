@@ -6,6 +6,7 @@ import java.util.function.IntConsumer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.io.ParallelChunkIOService;
 import org.diorite.impl.world.io.requests.Request;
 
@@ -23,6 +24,12 @@ public class AnvilParallelIOService implements ParallelChunkIOService
     public void setMaxThreads(final int threads)
     {
         this.maxThreads = threads;
+    }
+
+    @Override
+    public void start(final WorldImpl world)
+    {
+
     }
 
     @Override

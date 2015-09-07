@@ -3,6 +3,7 @@ package org.diorite.impl.world.io;
 import java.io.File;
 import java.util.function.IntConsumer;
 
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.io.requests.ChunkDeleteRequest;
 import org.diorite.impl.world.io.requests.ChunkLoadRequest;
@@ -79,6 +80,8 @@ public interface ChunkIOService
         request = this.queue(request);
         return request.await();
     }
+
+    void start(WorldImpl world);
 
     <OUT, T extends Request<OUT>> T queue(T request);
 
