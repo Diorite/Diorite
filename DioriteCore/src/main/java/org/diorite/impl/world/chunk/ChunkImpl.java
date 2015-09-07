@@ -414,6 +414,10 @@ public class ChunkImpl implements Chunk
     @SuppressWarnings("MagicNumber")
     public NbtTagCompound writeTo(final NbtTagCompound tag)
     {
+        if (! this.isLoaded())
+        {
+            return null;
+        }
         tag.setByte("V", 1);
         tag.setInt("xPos", this.getX());
         tag.setInt("zPos", this.getZ());
