@@ -33,6 +33,8 @@ import gnu.trove.map.hash.TLongObjectHashMap;
 
 public class ChunkImpl implements Chunk
 {
+    private final Object lock = new Object();
+
     protected volatile Thread   lastTickThread;
     protected final    ChunkPos pos;
     protected final    int[]    heightMap;
@@ -142,23 +144,32 @@ public class ChunkImpl implements Chunk
     @Override
     public boolean unload(final boolean save, final boolean safe)
     {
-        if (! this.isLoaded())
+        synchronized (this.lock)
         {
-            return true;
+            if (! this.isLoaded())
+            {
+                return true;
+            }
+            final ChunkUnloadEvent unloadEvt = new ChunkUnloadEvent(this, safe);
+            EventType.callEvent(unloadEvt);
+            return ! unloadEvt.isCancelled();
         }
-        final ChunkUnloadEvent unloadEvt = new ChunkUnloadEvent(this, safe);
-        EventType.callEvent(unloadEvt);
-        return ! unloadEvt.isCancelled();
     }
 
     public void setBiomes(final byte[] biomes)
     {
-        this.biomes = biomes;
+        synchronized (this.lock)
+        {
+            this.biomes = biomes;
+        }
     }
 
     public void setChunkParts(final ChunkPartImpl[] chunkParts)
     {
-        this.chunkParts = chunkParts;
+        synchronized (this.lock)
+        {
+            this.chunkParts = chunkParts;
+        }
     }
 
     public TLongObjectMap<TileEntityImpl> getTileEntities()
@@ -195,35 +206,41 @@ public class ChunkImpl implements Chunk
     @Override
     public synchronized boolean populate()
     {
-        if (! this.populated.get())
+        synchronized (this.lock)
         {
-            if (this.populated.compareAndSet(false, true))
+            if (! this.populated.get())
             {
-                ChunkGeneratePipelineImpl.addPops(this.pos);
-                this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
-                return true;
+                if (this.populated.compareAndSet(false, true))
+                {
+                    ChunkGeneratePipelineImpl.addPops(this.pos);
+                    this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
+                    return true;
+                }
+                return false;
             }
-            return false;
+            return true;
         }
-        return true;
     }
 
     @Override
     public void initHeightMap()
     {
-        IntStream.range(0, CHUNK_SIZE * CHUNK_SIZE).forEach(xz -> {
-            final int x = xz / CHUNK_SIZE;
-            final int z = xz % CHUNK_SIZE;
-            this.heightMap[((z << 4) | x)] = - 1;
-            for (int y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
-            {
-                if (this.getBlockType(x, y, z).isSolid())
+        synchronized (this.lock)
+        {
+            IntStream.range(0, CHUNK_SIZE * CHUNK_SIZE).forEach(xz -> {
+                final int x = xz / CHUNK_SIZE;
+                final int z = xz % CHUNK_SIZE;
+                this.heightMap[((z << 4) | x)] = - 1;
+                for (int y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
                 {
-                    this.heightMap[((z << 4) | x)] = y;
-                    return;
+                    if (this.getBlockType(x, y, z).isSolid())
+                    {
+                        this.heightMap[((z << 4) | x)] = y;
+                        return;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public BlockMaterialData setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
@@ -414,70 +431,76 @@ public class ChunkImpl implements Chunk
     @SuppressWarnings("MagicNumber")
     public NbtTagCompound writeTo(final NbtTagCompound tag)
     {
-        if (! this.isLoaded())
+        synchronized (this.lock)
         {
-            return null;
-        }
-        tag.setByte("V", 1);
-        tag.setInt("xPos", this.getX());
-        tag.setInt("zPos", this.getZ());
-        tag.setLong("LastUpdate", this.getWorld().getTime());
-        tag.setIntArray("HeightMap", this.heightMap);
-        tag.setBoolean("TerrainPopulated", this.populated.get());
-        tag.setBoolean("LightPopulated", false); // TODO
-        tag.setLong("InhabitedTime", 0); // TODO: value used to set local difficulty based on play time
-        final List<NbtTag> sections = new ArrayList<>(16);
-        final boolean hasSkyLight = this.getWorld().getDimension().hasSkyLight();
-        for (final ChunkPartImpl chunkPart : this.chunkParts)
-        {
-            if (chunkPart == null)
+            if (! this.isLoaded())
             {
-                continue;
+                return null;
             }
-            final NbtTagCompound sectionNBT = new NbtTagCompound();
-            sectionNBT.setByte("Y", chunkPart.getYPos());
-            final byte[] blocksIDs = new byte[chunkPart.getBlocks().length()];
-            final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray();
-            org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = null;
-            for (int i = 0; i < chunkPart.getBlocks().length(); ++ i)
+            tag.setByte("V", 1);
+            tag.setInt("xPos", this.getX());
+            tag.setInt("zPos", this.getZ());
+            tag.setLong("LastUpdate", this.getWorld().getTime());
+            tag.setIntArray("HeightMap", this.heightMap);
+            tag.setBoolean("TerrainPopulated", this.populated.get());
+            tag.setBoolean("LightPopulated", false); // TODO
+            tag.setLong("InhabitedTime", 0); // TODO: value used to set local difficulty based on play time
+            final List<NbtTag> sections = new ArrayList<>(16);
+            final boolean hasSkyLight = this.getWorld().getDimension().hasSkyLight();
+            for (final ChunkPartImpl chunkPart : this.chunkParts)
             {
-                final short block = chunkPart.getBlocks().get(i);
-                final int blockMeta = i & 15;
-                final int blockData = (i >> 8) & 15;
-                final int blockID = (i >> 4) & 15;
-                if ((block >> 12) != 0)
+                if (chunkPart == null)
                 {
-                    if (additionalData == null)
-                    {
-                        additionalData = new ChunkNibbleArray();
-                    }
-                    additionalData.set(blockMeta, blockData, blockID, block >> 12);
+                    continue;
                 }
-                blocksIDs[i] = (byte) ((block >> 4) & 255);
-                blocksMetaData.set(blockMeta, blockData, blockID, block & 15);
+                final NbtTagCompound sectionNBT = new NbtTagCompound();
+                sectionNBT.setByte("Y", chunkPart.getYPos());
+                final byte[] blocksIDs = new byte[chunkPart.getBlocks().length()];
+                final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray();
+                org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = null;
+                for (int i = 0; i < chunkPart.getBlocks().length(); ++ i)
+                {
+                    final short block = chunkPart.getBlocks().get(i);
+                    final int blockMeta = i & 15;
+                    final int blockData = (i >> 8) & 15;
+                    final int blockID = (i >> 4) & 15;
+                    if ((block >> 12) != 0)
+                    {
+                        if (additionalData == null)
+                        {
+                            additionalData = new ChunkNibbleArray();
+                        }
+                        additionalData.set(blockMeta, blockData, blockID, block >> 12);
+                    }
+                    blocksIDs[i] = (byte) ((block >> 4) & 255);
+                    blocksMetaData.set(blockMeta, blockData, blockID, block & 15);
+                }
+                sectionNBT.setByteArray("Blocks", blocksIDs);
+                sectionNBT.setByteArray("Data", blocksMetaData.getRawData());
+                if (additionalData != null)
+                {
+                    sectionNBT.setByteArray("Add", additionalData.getRawData());
+                }
+                sectionNBT.setByteArray("BlockLight", chunkPart.getBlockLight().getRawData());
+                if (hasSkyLight)
+                {
+                    sectionNBT.setByteArray("SkyLight", chunkPart.getSkyLight().getRawData());
+                }
+                else
+                {
+                    sectionNBT.setByteArray("SkyLight", new byte[chunkPart.getBlockLight().getRawData().length]);
+                }
+                sections.add(sectionNBT);
             }
-            sectionNBT.setByteArray("Blocks", blocksIDs);
-            sectionNBT.setByteArray("Data", blocksMetaData.getRawData());
-            if (additionalData != null)
+            tag.setList("Sections", sections);
+            if (this.biomes != null)
             {
-                sectionNBT.setByteArray("Add", additionalData.getRawData());
+                tag.setByteArray("Biomes", this.biomes);
             }
-            sectionNBT.setByteArray("BlockLight", chunkPart.getBlockLight().getRawData());
-            if (hasSkyLight)
-            {
-                sectionNBT.setByteArray("SkyLight", chunkPart.getSkyLight().getRawData());
-            }
-            else
-            {
-                sectionNBT.setByteArray("SkyLight", new byte[chunkPart.getBlockLight().getRawData().length]);
-            }
-            sections.add(sectionNBT);
+            tag.setList("Entities", new ArrayList<>(1));
+            tag.setList("TileEntities", new ArrayList<>(1));
+            return tag;
         }
-        tag.setList("Sections", sections);
-        tag.setByteArray("Biomes", this.biomes);
-        tag.setList("Entities", new ArrayList<>(1));
-        tag.setList("TileEntities", new ArrayList<>(1));
-        return tag;
     }
 
     public byte[] getBiomes()
