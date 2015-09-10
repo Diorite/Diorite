@@ -2,7 +2,6 @@ package org.diorite.impl.pipelines.event.player;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
-import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.BlockPlacePipeline;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.inventory.item.ItemStack;
@@ -14,7 +13,7 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
     @Override
     public void reset_()
     {
-        this.addBefore(EventPriority.NORMAL, "Diorite|PlaceBlock", (evt, pipeline) -> {
+        this.addLast("Diorite|PlaceBlock", (evt, pipeline) -> {
             if (evt.isCancelled())
             {
                 return;
