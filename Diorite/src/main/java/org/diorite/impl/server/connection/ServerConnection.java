@@ -31,25 +31,11 @@ import io.netty.util.concurrent.DefaultExecutorServiceFactory;
 
 public class ServerConnection extends Thread implements ConnectionHandler
 {
-    public static final int                              MILLIS                         = 500;
-    public final        LazyInitVar<NioEventLoopGroup>   lazyInitNioEventLoopGroup      = new LazyInitVar<NioEventLoopGroup>()
-    {
-        @Override
-        protected NioEventLoopGroup init()
-        {
-            return new NioEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Client"));
-        }
-    };
-    public final        LazyInitVar<EpollEventLoopGroup> lazyInitNioEpollEventLoopGroup = new LazyInitVar<EpollEventLoopGroup>()
-    {
-        @Override
-        protected EpollEventLoopGroup init()
-        {
-            return new EpollEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Epoll Client"));
-        }
-    };
+    public static final int MILLIS = 500;
+    public final LazyInitVar<NioEventLoopGroup>   lazyInitNioEventLoopGroup;
+    public final LazyInitVar<EpollEventLoopGroup> lazyInitNioEpollEventLoopGroup;
 
-    private final AttributeKey<EnumProtocol>     protocolKey = AttributeKey.valueOf("protocol");
+    private final AttributeKey<EnumProtocol> protocolKey = AttributeKey.valueOf("protocol");
     private final Collection<NetworkManager> connections = Collections.synchronizedSet(Sets.newConcurrentHashSet());
     private final DioriteCore   core;
     private       ChannelFuture channelFuture;
@@ -59,6 +45,9 @@ public class ServerConnection extends Thread implements ConnectionHandler
         this.core = core;
         this.setDaemon(true);
         this.setName("{Diorite|SrvCon}");
+        final int threads = core.getConfig().getNettyThreads();
+        this.lazyInitNioEventLoopGroup = new NioEventLoopGroupLazyInitVar(threads);
+        this.lazyInitNioEpollEventLoopGroup = new EpollEventLoopGroupLazyInitVar(threads);
     }
 
     @Override
@@ -171,5 +160,49 @@ public class ServerConnection extends Thread implements ConnectionHandler
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("protocolKey", this.protocolKey).append("connections", this.connections).append("channelFuture", this.channelFuture).append("server", this.core).toString();
+    }
+
+    private static class NioEventLoopGroupLazyInitVar extends LazyInitVar<NioEventLoopGroup>
+    {
+        private final int threads;
+
+        private NioEventLoopGroupLazyInitVar(final int threads)
+        {
+            this.threads = threads;
+        }
+
+        @Override
+        protected NioEventLoopGroup init()
+        {
+            return new NioEventLoopGroup(this.threads, new DefaultExecutorServiceFactory("Netty Client"));
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this).append("threads", this.threads).toString();
+        }
+    }
+
+    private static class EpollEventLoopGroupLazyInitVar extends LazyInitVar<EpollEventLoopGroup>
+    {
+        private final int threads;
+
+        private EpollEventLoopGroupLazyInitVar(final int threads)
+        {
+            this.threads = threads;
+        }
+
+        @Override
+        protected EpollEventLoopGroup init()
+        {
+            return new EpollEventLoopGroup(this.threads, new DefaultExecutorServiceFactory("Netty Epoll Client"));
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this).append("threads", this.threads).toString();
+        }
     }
 }
