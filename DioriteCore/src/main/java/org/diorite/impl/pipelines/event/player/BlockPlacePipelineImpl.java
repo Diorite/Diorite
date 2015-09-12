@@ -35,6 +35,11 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
                 item.setAmount(item.getAmount() - 1);
             }
 
+            if (!(item.getMaterial() instanceof BlockMaterialData)) // TODO check if material can be placed
+            {
+                return;
+            }
+
             evt.getBlock().setType((BlockMaterialData) item.getMaterial());
             DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getBlock().getWorld()), new PacketPlayServerBlockChange(evt.getBlock().getLocation(), evt.getBlock().getType()));
         });

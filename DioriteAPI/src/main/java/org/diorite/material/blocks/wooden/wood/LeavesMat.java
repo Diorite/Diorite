@@ -5,8 +5,11 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
+import org.diorite.material.data.drops.PossibleDrops;
+import org.diorite.material.data.drops.PossibleRandomlyDrop;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -119,6 +122,12 @@ public class LeavesMat extends WoodMat
     public LeavesMat getWoodType(final WoodTypeMat woodType)
     {
         return getLeaves(woodType, this.checkDecay, this.decayable);
+    }
+
+    @Override
+    protected PossibleDrops initPossibleDrops()
+    {
+        return new PossibleDrops(new PossibleRandomlyDrop(new BaseItemStack(Material.APPLE), 0, 1)); // TODO correct chance for drop
     }
 
     @Override
