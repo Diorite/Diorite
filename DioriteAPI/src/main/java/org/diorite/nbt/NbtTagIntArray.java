@@ -2,6 +2,7 @@ package org.diorite.nbt;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -25,6 +26,7 @@ public class NbtTagIntArray extends NbtAbstractTag
     public NbtTagIntArray(final String name, final int[] value)
     {
         super(name);
+        Validate.notNull(value, "array can't be null.");
         this.value = value;
     }
 
@@ -35,6 +37,7 @@ public class NbtTagIntArray extends NbtAbstractTag
 
     public void setValue(final int[] i)
     {
+        Validate.notNull(i, "array can't be null.");
         this.value = i;
     }
 
