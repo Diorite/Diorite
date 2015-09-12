@@ -26,6 +26,11 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
                 return;
             }
 
+            if (!(item.getMaterial() instanceof BlockMaterialData)) // TODO check if material can be placed
+            {
+                return;
+            }
+
             if (item.getAmount() == 1)
             {
                 evt.getPlayer().getInventory().getHotbarInventory().atomicReplace(evt.getPlayer().getHeldItemSlot(), item, null);
@@ -33,11 +38,6 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
             else
             {
                 item.setAmount(item.getAmount() - 1);
-            }
-
-            if (!(item.getMaterial() instanceof BlockMaterialData)) // TODO check if material can be placed
-            {
-                return;
             }
 
             evt.getBlock().setType((BlockMaterialData) item.getMaterial());
