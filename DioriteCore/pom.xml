@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.diorite</groupId>
         <artifactId>DioriteMaster</artifactId>
-        <version>indev-0.0.1</version>
+        <version>indev-0.0.1-b${diorite.build}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -52,7 +52,7 @@
                     <archive>
                         <manifestEntries>
                             <Implementation-Title>DioriteCore</Implementation-Title>
-                            <Implementation-Version>${buildNumber}</Implementation-Version>
+                            <Implementation-Version>${diorite.version}</Implementation-Version>
                             <Specification-Title>DioriteAPI</Specification-Title>
                         </manifestEntries>
                     </archive>
