@@ -46,6 +46,7 @@ import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
+import org.diorite.world.chunk.Chunk;
 
 public class PlayListener implements PacketPlayClientListener
 {
@@ -231,7 +232,12 @@ public class PlayListener implements PacketPlayClientListener
     {
         if (packet.getCursorPos().getBlockFace() == null)
         {
-            return; // prevent java.lang.IllegalArgumentException: Y can't be bigger than 256
+            return;
+        }
+        final int y = packet.getLocation().getY();
+        if ((y >= Chunk.CHUNK_FULL_HEIGHT) || (y < 0))
+        {
+            return; // TODO: some kind of event for that maybe? or edit PlayerBlockPlaceEvent
         }
         this.core.sync(() -> EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()))), this.player);
     }

@@ -139,10 +139,6 @@ public class DioriteCore implements Core
         private static ConsoleReader reader;
         private static Boolean       coloredConsole;
 
-        private LoggerInit()
-        {
-        }
-
         private static void init()
         {
             if (System.console() == null)
