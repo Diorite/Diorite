@@ -47,9 +47,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.ByteBufProcessor;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+import io.netty.util.ByteProcessor;
 
 public class PacketDataSerializer extends ByteBuf
 {
@@ -1180,25 +1180,25 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
-    public int forEachByte(final ByteBufProcessor bytebufprocessor)
+    public int forEachByte(final ByteProcessor bytebufprocessor)
     {
         return this.byteBuf.forEachByte(bytebufprocessor);
     }
 
     @Override
-    public int forEachByte(final int i, final int j, final ByteBufProcessor bytebufprocessor)
+    public int forEachByte(final int i, final int j, final ByteProcessor bytebufprocessor)
     {
         return this.byteBuf.forEachByte(i, j, bytebufprocessor);
     }
 
     @Override
-    public int forEachByteDesc(final ByteBufProcessor bytebufprocessor)
+    public int forEachByteDesc(final ByteProcessor bytebufprocessor)
     {
         return this.byteBuf.forEachByteDesc(bytebufprocessor);
     }
 
     @Override
-    public int forEachByteDesc(final int i, final int j, final ByteBufProcessor bytebufprocessor)
+    public int forEachByteDesc(final int i, final int j, final ByteProcessor bytebufprocessor)
     {
         return this.byteBuf.forEachByteDesc(i, j, bytebufprocessor);
     }
