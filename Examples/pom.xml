@@ -36,6 +36,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
+                    <finalName>${project.name}-${project.version}</finalName>
                     <outputDirectory>${basedir}/../../../plugins</outputDirectory>
                 </configuration>
             </plugin>
