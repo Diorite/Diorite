@@ -1,4 +1,5 @@
 # ![Diorite](http://hydra-media.cursecdn.com/minecraft.gamepedia.com/0/08/Diorite.png?version=b51c48a2486c6efd87f3ba9b13c8738a) Diorite Project
+<a href="http://dl.diorite.org">Download Diorite</a>
 
 Diorite is currently in very early stage of development, most of features still not work or they are buggy.
 
