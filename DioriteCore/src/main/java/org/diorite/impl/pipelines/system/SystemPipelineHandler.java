@@ -14,6 +14,7 @@ public interface SystemPipelineHandler<T>
      *
      * @param core     core object.
      * @param pipeline pipeline reference.
+     * @param data     data of event.
      */
     void handle(DioriteCore core, SystemPipeline<T> pipeline, T data);
 }

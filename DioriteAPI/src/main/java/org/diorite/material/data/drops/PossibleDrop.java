@@ -1,6 +1,5 @@
 package org.diorite.material.data.drops;
 
-import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,7 +32,7 @@ public abstract class PossibleDrop
      *
      * @return raw ItemStack of this possible drop or null.
      *
-     * @see #simulateDrop(Random)
+     * @see #simulateDrop(Entity, DioriteRandom, Set, ItemStack, Block)
      */
     public ItemStack getItemStack()
     {
@@ -60,6 +59,8 @@ public abstract class PossibleDrop
      * @param rand     random instance, should be used if random number is needed.
      * @param usedTool may be null! Used tool.
      * @param block    may be null! Block related to this drop simulation if exist.
+     *
+     * @return simulated exp drop.
      */
     public int simulateExperienceDrop(final Entity entity, final DioriteRandom rand, final ItemStack usedTool, final Block block)
     {
@@ -74,6 +75,8 @@ public abstract class PossibleDrop
      * @param rand     random instance, should be used if random number is needed.
      * @param usedTool may be null! Used tool.
      * @param block    may be null! Block related to this drop simulation if exist.
+     *
+     * @return possible range of exp drop.
      */
     public IntRange getExperienceDrop(final Entity entity, final DioriteRandom rand, final ItemStack usedTool, final Block block)
     {

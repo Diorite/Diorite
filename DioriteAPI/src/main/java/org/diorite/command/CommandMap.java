@@ -95,6 +95,9 @@ public interface CommandMap
      *
      * @param sender sender od command
      * @param args   command line.
+     *
+     * @return return true if command was found and executed, and
+     * returns false if command wasn't found.
      */
     boolean dispatch(CommandSender sender, String args);
 }

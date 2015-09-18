@@ -66,7 +66,7 @@ public class TaskBuilder
      * Using other object (entity or chunk) will cause that task will be always executed in this same
      * thread as object is ticked. <br>
      * NOTE: Task store weak reference to object, if weak reference will be free, task will be canceled.
-     * <p>
+     * <p/>
      * This will alse set async mode back to false if needed.
      *
      * @param synchronizable object to sync with it. (task will be executed in this same thread as object is ticked)
@@ -241,9 +241,9 @@ public class TaskBuilder
      *
      * @return new task builder.
      *
-     * @see #async(Runnable)
-     * @see #sync(Runnable)
-     * @see #sync(Runnable, Synchronizable)
+     * @see #async(DioritePlugin, Runnable)
+     * @see #sync(DioritePlugin, Runnable)
+     * @see #sync(DioritePlugin, Runnable, Synchronizable)
      * @see #start()
      */
     public static TaskBuilder start(final DioritePlugin dioritePlugin, final Runnable runnable)
@@ -255,7 +255,7 @@ public class TaskBuilder
      * Simple method to create new sync task and run it. <br>
      * Equal to: <br>
      * <ol>
-     * <li>{@link #start(Runnable)}</li>
+     * <li>{@link #start(DioritePlugin, Runnable)}</li>
      * <li>{@link #start()}</li>
      * </ol>
      *
@@ -273,7 +273,7 @@ public class TaskBuilder
      * Simple method to create new sync task and run it. <br>
      * Equal to: <br>
      * <ol>
-     * <li>{@link #start(Runnable)}</li>
+     * <li>{@link #start(DioritePlugin, Runnable)}</li>
      * <li>{@link #syncTo(Synchronizable)}</li>
      * <li>{@link #start()}</li>
      * </ol>
@@ -293,7 +293,7 @@ public class TaskBuilder
      * Simple method to create new async task and run it. <br>
      * Equal to: <br>
      * <ol>
-     * <li>{@link #start(Runnable)}</li>
+     * <li>{@link #start(DioritePlugin, Runnable)}</li>
      * <li>{@link #async()}</li>
      * <li>{@link #start()}</li>
      * </ol>
@@ -401,7 +401,7 @@ public class TaskBuilder
     /**
      * Delay can be in milliseconds if real-time is used, or in game
      * ticks, if game time is used. <br>
-     * <p>
+     * <p/>
      * If task is single, this is dealy before run. <br>
      * If task is repeated, this is delay between runs.
      *

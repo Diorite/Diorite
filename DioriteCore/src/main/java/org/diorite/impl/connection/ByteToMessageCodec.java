@@ -19,13 +19,13 @@ import io.netty.util.internal.TypeParameterMatcher;
 
 /**
  * Diorite edited copy of {@link io.netty.handler.codec.ByteToMessageCodec}
- * <p/>
+ * <br>
  * A Codec for on-the-fly encoding/decoding of bytes to messages and vise-versa.
- * <p/>
+ * <br>
  * This can be thought of as a combination of {@link ByteToMessageDecoder} and {@link MessageToByteEncoder}.
- * <p/>
+ * <br>
  * Be aware that sub-classes of {@link ByteToMessageCodec} <strong>MUST NOT</strong>
- * annotated with {@link @Sharable}.
+ * annotated with {@link io.netty.channel.ChannelHandler.Sharable}.
  */
 public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
 {
@@ -144,7 +144,7 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
     };
 
     /**
-     * @see {@link #ByteToMessageCodec(boolean)} with {@code true} as boolean parameter.
+     * @see #ByteToMessageCodec(boolean) with {@code true} as boolean parameter.
      */
     protected ByteToMessageCodec()
     {
@@ -152,7 +152,9 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
     }
 
     /**
-     * @see {@link #ByteToMessageCodec(Class, boolean)} with {@code true} as boolean value.
+     * @param outboundMessageType type of message.
+     *
+     * @see #ByteToMessageCodec(Class, boolean) with {@code true} as boolean value.
      */
     protected ByteToMessageCodec(final Class<? extends I> outboundMessageType)
     {
@@ -209,17 +211,39 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
     }
 
     /**
-     * @see MessageToByteEncoder#encode(ChannelHandlerContext, Object, ByteBuf)
+     * Encode a message into a {@link ByteBuf}. This method will be called for each written message that can be handled
+     * by this encoder.
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link MessageToByteEncoder} belongs to
+     * @param msg the message to encode
+     * @param out the {@link ByteBuf} into which the encoded message will be written
+     *
+     * @throws Exception is thrown if an error accour
      */
     protected abstract void encode(ChannelHandlerContext ctx, I msg, ByteBuf out) throws Exception;
 
     /**
-     * @see ByteToMessageDecoder#decode(ChannelHandlerContext, ByteBuf, List)
+     * Decode the from one {@link ByteBuf} to an other. This method will be called till either the input
+     * {@link ByteBuf} has nothing to read when return from this method or till nothing was read from the input
+     * {@link ByteBuf}.
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
+     * @param in  the {@link ByteBuf} from which to read data
+     * @param out the {@link List} to which decoded messages should be added
+     *
+     * @throws Exception is thrown if an error accour
      */
     protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception;
 
     /**
-     * @see MessageToByteEncoder#allocateBuffer(ChannelHandlerContext, Object, boolean)
+     * Allocate a {@link ByteBuf} which will be used as argument of {@link #encode(ChannelHandlerContext, I, ByteBuf)}.
+     * Sub-classes may override this method to returna {@link ByteBuf} with a perfect matching {@code initialCapacity}.
+     *
+     * @param ctx          the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
+     * @param msg          the message to encode
+     * @param preferDirect if it should prefer direct buffer.
+     *
+     * @return created ByteBuf.
      */
     protected ByteBuf allocateBuffer(final ChannelHandlerContext ctx, final I msg, final boolean preferDirect) throws Exception
     {
@@ -234,7 +258,15 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
     }
 
     /**
-     * @see ByteToMessageDecoder#decodeLast(ChannelHandlerContext, ByteBuf, List)
+     * Is called one last time when the {@link ChannelHandlerContext} goes in-active. Which means the
+     * {@link #channelInactive(ChannelHandlerContext)} was triggered.
+     * <br>
+     * By default this will just call {@link #decode(ChannelHandlerContext, ByteBuf, List)} but sub-classes may
+     * override this for some special cleanup operation.
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
+     * @param in  the {@link ByteBuf} from which to read data
+     * @param out the {@link List} to which decoded messages should be added
      */
     protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
     {

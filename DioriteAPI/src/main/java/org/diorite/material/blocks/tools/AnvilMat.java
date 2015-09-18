@@ -332,7 +332,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         }
 
         /**
-         * @return byte-flag for this damage.Ă„Ä…Ă˘â‚¬Ĺˇ
+         * @return byte-flag for this damage.
          */
         public byte getFlag()
         {

@@ -18,7 +18,7 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 /**
  * Represent type of placeholder, like {@link Player} for player.name. <br>
- * <p/>
+ * <br>
  * Class contains also public static instances of basic types.
  *
  * @param <T> type of placeholder object.

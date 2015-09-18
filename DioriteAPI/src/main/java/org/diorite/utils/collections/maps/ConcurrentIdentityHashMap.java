@@ -390,7 +390,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     /**
      * Returns the value to which the specified key is mapped,
      * or {@code null} if this map contains no mapping for the key.
-     * <p>
+     * <br>
      * <p>More formally, if this map contains a mapping from a key
      * {@code k} to a value {@code v} such that {@code key.equals(k)},
      * then this method returns {@code v}; otherwise it returns
@@ -436,7 +436,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     /**
      * Maps the specified key to the specified value in this table.
      * Neither the key nor the value can be null.
-     * <p>
+     * <br>
      * <p>The value can be retrieved by calling the {@code get} method
      * with a key that is equal to the original key.
      *
@@ -542,10 +542,10 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * {@code removeAll}, {@code retainAll}, and {@code clear}
      * operations.  It does not support the {@code add} or
      * {@code addAll} operations.
-     * <p>
+     * <br>
      * <p>The view's iterators and spliterators are
      * <a href="package-summary.html#Weakly"><i>weakly consistent</i></a>.
-     * <p>
+     * <br>
      * <p>The view's {@code spliterator} reports {@link Spliterator#CONCURRENT},
      * {@link Spliterator#DISTINCT}, and {@link Spliterator#NONNULL}.
      *
@@ -567,10 +567,10 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * {@code Collection.remove}, {@code removeAll},
      * {@code retainAll}, and {@code clear} operations.  It does not
      * support the {@code add} or {@code addAll} operations.
-     * <p>
+     * <br>
      * <p>The view's iterators and spliterators are
      * <a href="package-summary.html#Weakly"><i>weakly consistent</i></a>.
-     * <p>
+     * <br>
      * <p>The view's {@code spliterator} reports {@link Spliterator#CONCURRENT}
      * and {@link Spliterator#NONNULL}.
      *
@@ -591,10 +591,10 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * via the {@code Iterator.remove}, {@code Set.remove},
      * {@code removeAll}, {@code retainAll}, and {@code clear}
      * operations.
-     * <p>
+     * <br>
      * <p>The view's iterators and spliterators are
      * <a href="package-summary.html#Weakly"><i>weakly consistent</i></a>.
-     * <p>
+     * <br>
      * <p>The view's {@code spliterator} reports {@link Spliterator#CONCURRENT},
      * {@link Spliterator#DISTINCT}, and {@link Spliterator#NONNULL}.
      *
@@ -4436,7 +4436,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     /**
      * Encapsulates traversal for methods such as containsValue; also
      * serves as a base class for other iterators and spliterators.
-     * <p>
+     * <p/>
      * Method advance visits once each still-valid node that was
      * reachable upon iterator construction. It might miss some that
      * were added to a bin after the bin was visited, which is OK wrt
@@ -4445,7 +4445,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * bookkeeping state that is difficult to optimize away amidst
      * volatile accesses.  Even so, traversal maintains reasonable
      * throughput.
-     * <p>
+     * <p/>
      * Normally, iteration proceeds bin-by-bin traversing lists.
      * However, if the table has been resized, then all future steps
      * must traverse both the bin at the current index as well as at
@@ -5015,7 +5015,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
 
         /**
          * Returns an iterator over the elements in this collection.
-         * <p>
+         * <br>
          * <p>The returned iterator is
          * <a href="package-summary.html#Weakly"><i>weakly consistent</i></a>.
          *
@@ -7660,9 +7660,10 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * values.
          *
          * @return a stream of pseudorandom {@code int} values
-         *
-         * @implNote This method is implemented to be equivalent to {@code
+         * <p/>
+         * This method is implemented to be equivalent to {@code
          * ints(Long.MAX_VALUE)}.
+         *
          * @since 1.8
          */
         @Override
@@ -7715,8 +7716,8 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          *
          * @throws IllegalArgumentException if {@code randomNumberOrigin}
          *                                  is greater than or equal to {@code randomNumberBound}
-         * @implNote This method is implemented to be equivalent to {@code
-         * ints(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
+         *                                  This method is implemented to be equivalent to {@code
+         *                                  ints(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
          * @since 1.8
          */
         @Override
@@ -7756,9 +7757,10 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * values.
          *
          * @return a stream of pseudorandom {@code long} values
-         *
-         * @implNote This method is implemented to be equivalent to {@code
+         * <p/>
+         * This method is implemented to be equivalent to {@code
          * longs(Long.MAX_VALUE)}.
+         *
          * @since 1.8
          */
         @Override
@@ -7811,8 +7813,8 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          *
          * @throws IllegalArgumentException if {@code randomNumberOrigin}
          *                                  is greater than or equal to {@code randomNumberBound}
-         * @implNote This method is implemented to be equivalent to {@code
-         * longs(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
+         *                                  This method is implemented to be equivalent to {@code
+         *                                  longs(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
          * @since 1.8
          */
         @Override
@@ -7857,9 +7859,10 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * (exclusive).
          *
          * @return a stream of pseudorandom {@code double} values
-         *
-         * @implNote This method is implemented to be equivalent to {@code
+         * <p/>
+         * This method is implemented to be equivalent to {@code
          * doubles(Long.MAX_VALUE)}.
+         *
          * @since 1.8
          */
         @Override
@@ -7913,8 +7916,8 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          *
          * @throws IllegalArgumentException if {@code randomNumberOrigin}
          *                                  is greater than or equal to {@code randomNumberBound}
-         * @implNote This method is implemented to be equivalent to {@code
-         * doubles(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
+         *                                  This method is implemented to be equivalent to {@code
+         *                                  doubles(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
          * @since 1.8
          */
         @Override
@@ -8268,6 +8271,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * Returns the probe value for the current thread without forcing
          * initialization. Note that invoking DioriteThreadLocalRandom.current()
          * can be used to force initialization on zero return.
+         *
+         * @return probe value for the current thread without forcing
+         * initialization.
          */
         public static int getProbe()
         {
@@ -8277,6 +8283,8 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
         /**
          * Pseudo-randomly advances and records the given probe value for the
          * given thread.
+         *
+         * @return probe value.
          */
         public static int advanceProbe(int probe)
         {
@@ -8289,6 +8297,8 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
 
         /**
          * Returns the pseudo-randomly initialized or updated secondary seed.
+         *
+         * @return the pseudo-randomly initialized or updated secondary seed.
          */
         public static int nextSecondarySeed()
         {

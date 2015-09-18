@@ -21,6 +21,8 @@ import org.diorite.world.generator.WorldGenerator;
 
 public interface World
 {
+    boolean isVanillaCompatible();
+
     void loadChunk(Chunk chunk);
 
     void loadChunk(int x, int z);

@@ -201,6 +201,10 @@ public class WorldsConfigImpl implements WorldsConfig
         @CfgBooleanDefault(true)
         private boolean enabled;
 
+        @CfgComment("If world should vanilla compatible, if false, world may not load on vanilla clients/servers")
+        @CfgBooleanDefault(false)
+        private boolean vanillaCompatible;
+
         @CfgComment("Default gamemode for new players.")
         @CfgDelegateImport("org.diorite")
         @CfgDelegateDefault("GameMode.SURVIVAL")
@@ -290,6 +294,12 @@ public class WorldsConfigImpl implements WorldsConfig
         public void setEnabled(final boolean enabled)
         {
             this.enabled = enabled;
+        }
+
+        @Override
+        public boolean isVanillaCompatible()
+        {
+            return this.vanillaCompatible;
         }
 
         @Override

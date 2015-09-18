@@ -14,6 +14,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent
      * Construct new player event.
      *
      * @param player player related to event, can't be null.
+     * @param block  block that player wan't place.
      */
     public PlayerBlockPlaceEvent(final Player player, final Block block)
     {

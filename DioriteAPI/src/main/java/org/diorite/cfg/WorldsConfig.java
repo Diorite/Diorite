@@ -31,6 +31,8 @@ public interface WorldsConfig
 
         boolean isEnabled();
 
+        boolean isVanillaCompatible();
+
         GameMode getGamemode();
 
         boolean isForceGamemode();

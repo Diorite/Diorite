@@ -63,6 +63,10 @@ public interface ChunkManager
 
     /**
      * Populate a single chunk if needed.
+     *
+     * @param x     x cords of chunk.
+     * @param z     z cords of chunk.
+     * @param force if chunk should be force-populated.
      */
     void populateChunk(int x, int z, boolean force);
 
@@ -80,7 +84,7 @@ public interface ChunkManager
      *
      * @param chunk chunk to generate.
      * @param x     chunk x.
-     * @param x     chunk z.
+     * @param z     chunk z.
      */
     void generateChunk(Chunk chunk, int x, int z);
 

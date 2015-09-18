@@ -103,6 +103,7 @@ public abstract class ArmorType extends ASimpleEnum<ArmorType>
      * Put the given ItemStack into the given armor slot. This does not check if
      * the ItemStack is a valid type for this slot.
      *
+     * @param eq    entity equipment to use.
      * @param armor The ItemStack to use as armor.
      *
      * @return true if item was set.

@@ -77,6 +77,8 @@ public class SharedLibraryLoader
 
     /**
      * Extracts the LWJGL native libraries from the classpath and sets the "org.lwjgl.librarypath" system property.
+     *
+     * @param disableOpenAL if true, openAL will be disabled.
      */
     public static synchronized void load(final boolean disableOpenAL)
     {
@@ -121,26 +123,30 @@ public class SharedLibraryLoader
         load = false;
     }
 
-    private static final HashSet<String> loadedLibraries = new HashSet<String>();
+    private static final HashSet<String> loadedLibraries = new HashSet<>();
 
     private String nativesJar;
 
-    public SharedLibraryLoader()
-    {
-    }
-
-    /**
-     * Fetches the natives from the given natives jar file. Used for testing a shared lib on the fly.
-     *
-     * @param nativesJar
-     */
-    public SharedLibraryLoader(final String nativesJar)
-    {
-        this.nativesJar = nativesJar;
-    }
+//    public SharedLibraryLoader()
+//    {
+//    }
+//
+//    /**
+//     * Fetches the natives from the given natives jar file. Used for testing a shared lib on the fly.
+//     *
+//     * @param nativesJar
+//     */
+//    public SharedLibraryLoader(final String nativesJar)
+//    {
+//        this.nativesJar = nativesJar;
+//    }
 
     /**
      * Returns a CRC of the remaining bytes in the stream.
+     *
+     * @param input input stream to get crc.
+     *
+     * @return CRC of the remaining bytes in the stream.
      */
     public String crc(final InputStream input)
     {
@@ -175,6 +181,10 @@ public class SharedLibraryLoader
 
     /**
      * Maps a platform independent library name to a platform dependent name.
+     *
+     * @param libraryName name of library to map.
+     *
+     * @return name of library, this same as given.
      */
     public String mapLibraryName(final String libraryName)
     {
@@ -277,6 +287,8 @@ public class SharedLibraryLoader
      * @param dirName    The name of the subdirectory where the file will be extracted. If null, the file's CRC will be used.
      *
      * @return The extracted file.
+     *
+     * @throws IOException if any file operation will throw it.
      */
     public File extractFile(final String sourcePath, String dirName) throws IOException
     {
@@ -304,6 +316,13 @@ public class SharedLibraryLoader
 
     /**
      * Returns a path to a file that can be written. Tries multiple locations and verifies writing succeeds.
+     *
+     * @param dirName  The name of the subdirectory where the file will be extracted. If null, the file's CRC will be used.
+     * @param fileName file in that directory.
+     *
+     * @return The extracted file.
+     *
+     * @throws IOException if any file operation will throw it.
      */
     private File getExtractedFile(final String dirName, final String fileName)
     {

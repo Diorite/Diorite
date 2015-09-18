@@ -108,6 +108,8 @@ public class PossibleDrops implements Iterable<PossibleDrop>
      * @param rand     random instance, should be used if random number is needed.
      * @param usedTool may be null! Used tool.
      * @param block    may be null! Block related to this drop simulation if exist.
+     *
+     * @return simulated drops for this block.
      */
     public Set<ItemStack> simulateDrop(final Entity entity, final DioriteRandom rand, final ItemStack usedTool, final Block block)
     {

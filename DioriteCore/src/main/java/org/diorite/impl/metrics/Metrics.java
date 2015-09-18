@@ -199,7 +199,7 @@ public class Metrics
     /**
      * Get the full server version
      *
-     * @return
+     * @return full server version
      */
     public String getFullServerVersion()
     {
@@ -209,7 +209,7 @@ public class Metrics
     /**
      * Get the amount of players online
      *
-     * @return
+     * @return amount of players online
      */
     public int getPlayersOnline()
     {
@@ -507,11 +507,11 @@ public class Metrics
     }
 
     /**
-     * GZip compress a string of bytes
+     * GZip compress a string of bytes.
      *
-     * @param input
+     * @param input string to compress.
      *
-     * @return
+     * @return compressed a string of bytes.
      */
     public static byte[] gzip(final String input)
     {

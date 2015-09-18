@@ -36,10 +36,11 @@ public class PacketCompression extends PacketByteBufByteToMessageCodec
     }
 
 
-    private static final TIntIntMap sizes = new TIntIntHashMap(650, .1f, - 1, - 1);
+    private static final TIntIntMap sizes;
 
     static
     {
+        sizes = new TIntIntHashMap(641, .1f, - 1, - 1);
         for (int k = 100; k <= 1_000_000_000; k *= 10)
         {
             for (int i = k, to = (k * 10), add = (k / 10); i < to; i += add)
