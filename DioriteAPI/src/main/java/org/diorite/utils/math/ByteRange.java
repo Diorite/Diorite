@@ -70,6 +70,10 @@ public class ByteRange
     }
 
     /**
+     * Returns random value in range.
+     *
+     * @param random random instance to use.
+     *
      * @return random value in range.
      */
     public byte getRandom(final Random random)

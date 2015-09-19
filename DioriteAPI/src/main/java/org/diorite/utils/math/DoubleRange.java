@@ -55,6 +55,10 @@ public class DoubleRange
     }
 
     /**
+     * Returns random value in range.
+     *
+     * @param random random instance to use.
+     *
      * @return random value in range.
      */
     public double getRandom(final Random random)

@@ -59,6 +59,10 @@ public class LongRange
     }
 
     /**
+     * Returns random value in range.
+     *
+     * @param random random instance to use.
+     *
      * @return random value in range.
      */
     public long getRandom(final Random random)

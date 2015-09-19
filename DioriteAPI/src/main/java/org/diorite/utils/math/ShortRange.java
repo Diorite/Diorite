@@ -70,6 +70,10 @@ public class ShortRange
     }
 
     /**
+     * Returns random value in range.
+     *
+     * @param random random instance to use.
+     *
      * @return random value in range.
      */
     public short getRandom(final Random random)

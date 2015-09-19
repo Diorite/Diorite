@@ -66,6 +66,10 @@ public class FloatRange
     }
 
     /**
+     * Returns random value in range.
+     *
+     * @param random random instance to use.
+     *
      * @return random value in range.
      */
     public float getRandom(final Random random)

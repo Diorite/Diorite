@@ -247,7 +247,7 @@ public final class DioriteRandomUtils
      * Generates random bytes and places them into a user-supplied
      * byte array.  The number of random bytes produced is equal to
      * the length of the byte array.
-     * <p>
+     * <br>
      * <p>The method {@code nextBytes} is implemented by class {@code Random}
      * as if by:
      * <pre> {@code
@@ -273,7 +273,7 @@ public final class DioriteRandomUtils
      * contract of {@code nextInt} is that one {@code int} value is
      * pseudorandomly generated and returned. All 2<sup>32</sup> possible
      * {@code int} values are produced with (approximately) equal probability.
-     * <p>
+     * <br>
      * <p>The method {@code nextInt} is implemented by class {@code Random}
      * as if by:
      * <pre> {@code
@@ -302,10 +302,10 @@ public final class DioriteRandomUtils
      * public int nextInt(int bound) {
      *   if (bound <= 0)
      *     throw new IllegalArgumentException("bound must be positive");
-     * <p>
+     * <p/>
      *   if ((bound & -bound) == bound)  // i.e., bound is a power of 2
      *     return (int)((bound * (long)next(31)) >> 31);
-     * <p>
+     * <p/>
      *   int bits, val;
      *   do {
      *       bits = next(31);
@@ -313,19 +313,19 @@ public final class DioriteRandomUtils
      *   } while (bits - val + (bound-1) < 0);
      *   return val;
      * }}</pre>
-     * <p>
+     * <br>
      * <p>The hedge "approximately" is used in the foregoing description only
      * because the next method is only approximately an unbiased source of
      * independently chosen bits.  If it were a perfect source of randomly
      * chosen bits, then the algorithm shown would choose {@code int}
      * values from the stated range with perfect uniformity.
-     * <p>
+     * <p/>
      * The algorithm is slightly tricky.  It rejects values that would result
      * in an uneven distribution (due to the fact that 2^31 is not divisible
      * by n). The probability of a value being rejected depends on n.  The
      * worst case is n=2^30+1, for which the probability of a reject is 1/2,
      * and the expected number of iterations before the loop terminates is 2.
-     * <p>
+     * <p/>
      * The algorithm treats the case where n is a power of two specially: it
      * returns the correct number of high-order bits from the underlying
      * pseudo-random number generator.  In the absence of special treatment,
@@ -354,14 +354,14 @@ public final class DioriteRandomUtils
      * value from this random number generator's sequence. The general
      * contract of {@code nextLong} is that one {@code long} value is
      * pseudorandomly generated and returned.
-     * <p>
+     * <br>
      * <p>The method {@code nextLong} is implemented by class {@code Random}
      * as if by:
      * <pre> {@code
      * public long nextLong() {
      *   return ((long)next(32) << 32) + next(32);
      * }}</pre>
-     * <p>
+     * <p/>
      * Because class {@code Random} uses a seed with only 48 bits,
      * this algorithm will not return all possible {@code long} values.
      *
@@ -380,7 +380,7 @@ public final class DioriteRandomUtils
      * {@code boolean} value is pseudorandomly generated and returned.  The
      * values {@code true} and {@code false} are produced with
      * (approximately) equal probability.
-     * <p>
+     * <br>
      * <p>The method {@code nextBoolean} is implemented by class {@code Random}
      * as if by:
      * <pre> {@code
@@ -401,7 +401,7 @@ public final class DioriteRandomUtils
      * Returns the next pseudorandom, uniformly distributed {@code float}
      * value between {@code 0.0} and {@code 1.0} from this random
      * number generator's sequence.
-     * <p>
+     * <br>
      * <p>The general contract of {@code nextFloat} is that one
      * {@code float} value, chosen (approximately) uniformly from the
      * range {@code 0.0f} (inclusive) to {@code 1.0f} (exclusive), is
@@ -409,14 +409,14 @@ public final class DioriteRandomUtils
      * {@code float} values of the form <i>m&nbsp;x&nbsp;</i>2<sup>-24</sup>,
      * where <i>m</i> is a positive integer less than 2<sup>24</sup>, are
      * produced with (approximately) equal probability.
-     * <p>
+     * <br>
      * <p>The method {@code nextFloat} is implemented by class {@code Random}
      * as if by:
      * <pre> {@code
      * public float nextFloat() {
      *   return next(24) / ((float)(1 << 24));
      * }}</pre>
-     * <p>
+     * <br>
      * <p>The hedge "approximately" is used in the foregoing description only
      * because the next method is only approximately an unbiased source of
      * independently chosen bits. If it were a perfect source of randomly
@@ -443,12 +443,12 @@ public final class DioriteRandomUtils
      * Returns the next pseudorandom, uniformly distributed
      * {@code double} value between {@code 0.0} and
      * {@code 1.0} from this random number generator's sequence.
-     * <p>
+     * <br>
      * <p>The general contract of {@code nextDouble} is that one
      * {@code double} value, chosen (approximately) uniformly from the
      * range {@code 0.0d} (inclusive) to {@code 1.0d} (exclusive), is
      * pseudorandomly generated and returned.
-     * <p>
+     * <br>
      * <p>The method {@code nextDouble} is implemented by class {@code Random}
      * as if by:
      * <pre> {@code
@@ -456,7 +456,7 @@ public final class DioriteRandomUtils
      *   return (((long)next(26) << 27) + next(27))
      *     / (double)(1L << 53);
      * }}</pre>
-     * <p>
+     * <br>
      * <p>The hedge "approximately" is used in the foregoing description only
      * because the {@code next} method is only approximately an unbiased
      * source of independently chosen bits. If it were a perfect source of
@@ -489,7 +489,7 @@ public final class DioriteRandomUtils
     /**
      * Returns a stream producing the given {@code streamSize} number of
      * pseudorandom {@code int} values.
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code int} value is generated as if it's the result of
      * calling the method {@link #nextInt()}.
      *
@@ -508,13 +508,13 @@ public final class DioriteRandomUtils
     /**
      * Returns an effectively unlimited stream of pseudorandom {@code int}
      * values.
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code int} value is generated as if it's the result of
      * calling the method {@link #nextInt()}.
      *
      * @return a stream of pseudorandom {@code int} values
-     *
-     * @implNote This method is implemented to be equivalent to {@code
+     * <p/>
+     * This method is implemented to be equivalent to {@code
      * ints(Long.MAX_VALUE)}.
      */
     public static IntStream ints()
@@ -526,7 +526,7 @@ public final class DioriteRandomUtils
      * Returns a stream producing the given {@code streamSize} number
      * of pseudorandom {@code int} values, each conforming to the given
      * origin (inclusive) and bound (exclusive).
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code int} value is generated as if it's the result of
      * calling the following method with the origin and bound:
      * <pre> {@code
@@ -564,7 +564,7 @@ public final class DioriteRandomUtils
      * Returns an effectively unlimited stream of pseudorandom {@code
      * int} values, each conforming to the given origin (inclusive) and bound
      * (exclusive).
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code int} value is generated as if it's the result of
      * calling the following method with the origin and bound:
      * <pre> {@code
@@ -590,8 +590,8 @@ public final class DioriteRandomUtils
      *
      * @throws IllegalArgumentException if {@code randomNumberOrigin}
      *                                  is greater than or equal to {@code randomNumberBound}
-     * @implNote This method is implemented to be equivalent to {@code
-     * ints(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
+     *                                  This method is implemented to be equivalent to {@code
+     *                                  ints(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
      */
     public static IntStream ints(final int randomNumberOrigin, final int randomNumberBound)
     {
@@ -601,7 +601,7 @@ public final class DioriteRandomUtils
     /**
      * Returns a stream producing the given {@code streamSize} number of
      * pseudorandom {@code long} values.
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code long} value is generated as if it's the result
      * of calling the method {@link #nextLong()}.
      *
@@ -620,13 +620,13 @@ public final class DioriteRandomUtils
     /**
      * Returns an effectively unlimited stream of pseudorandom {@code long}
      * values.
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code long} value is generated as if it's the result
      * of calling the method {@link #nextLong()}.
      *
      * @return a stream of pseudorandom {@code long} values
-     *
-     * @implNote This method is implemented to be equivalent to {@code
+     * <p/>
+     * This method is implemented to be equivalent to {@code
      * longs(Long.MAX_VALUE)}.
      */
     public static LongStream longs()
@@ -638,7 +638,7 @@ public final class DioriteRandomUtils
      * Returns a stream producing the given {@code streamSize} number of
      * pseudorandom {@code long}, each conforming to the given origin
      * (inclusive) and bound (exclusive).
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code long} value is generated as if it's the result
      * of calling the following method with the origin and bound:
      * <pre> {@code
@@ -681,7 +681,7 @@ public final class DioriteRandomUtils
      * Returns an effectively unlimited stream of pseudorandom {@code
      * long} values, each conforming to the given origin (inclusive) and bound
      * (exclusive).
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code long} value is generated as if it's the result
      * of calling the following method with the origin and bound:
      * <pre> {@code
@@ -712,8 +712,8 @@ public final class DioriteRandomUtils
      *
      * @throws IllegalArgumentException if {@code randomNumberOrigin}
      *                                  is greater than or equal to {@code randomNumberBound}
-     * @implNote This method is implemented to be equivalent to {@code
-     * longs(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
+     *                                  This method is implemented to be equivalent to {@code
+     *                                  longs(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
      */
     public static LongStream longs(final long randomNumberOrigin, final long randomNumberBound)
     {
@@ -724,7 +724,7 @@ public final class DioriteRandomUtils
      * Returns a stream producing the given {@code streamSize} number of
      * pseudorandom {@code double} values, each between zero
      * (inclusive) and one (exclusive).
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code double} value is generated as if it's the result
      * of calling the method {@link #nextDouble()}.
      *
@@ -744,13 +744,13 @@ public final class DioriteRandomUtils
      * Returns an effectively unlimited stream of pseudorandom {@code
      * double} values, each between zero (inclusive) and one
      * (exclusive).
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code double} value is generated as if it's the result
      * of calling the method {@link #nextDouble()}.
      *
      * @return a stream of pseudorandom {@code double} values
-     *
-     * @implNote This method is implemented to be equivalent to {@code
+     * <p/>
+     * This method is implemented to be equivalent to {@code
      * doubles(Long.MAX_VALUE)}.
      */
     public static DoubleStream doubles()
@@ -762,7 +762,7 @@ public final class DioriteRandomUtils
      * Returns a stream producing the given {@code streamSize} number of
      * pseudorandom {@code double} values, each conforming to the given origin
      * (inclusive) and bound (exclusive).
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code double} value is generated as if it's the result
      * of calling the following method with the origin and bound:
      * <pre> {@code
@@ -795,7 +795,7 @@ public final class DioriteRandomUtils
      * Returns an effectively unlimited stream of pseudorandom {@code
      * double} values, each conforming to the given origin (inclusive) and bound
      * (exclusive).
-     * <p>
+     * <br>
      * <p>A pseudorandom {@code double} value is generated as if it's the result
      * of calling the following method with the origin and bound:
      * <pre> {@code
@@ -815,8 +815,8 @@ public final class DioriteRandomUtils
      *
      * @throws IllegalArgumentException if {@code randomNumberOrigin}
      *                                  is greater than or equal to {@code randomNumberBound}
-     * @implNote This method is implemented to be equivalent to {@code
-     * doubles(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
+     *                                  This method is implemented to be equivalent to {@code
+     *                                  doubles(Long.MAX_VALUE, randomNumberOrigin, randomNumberBound)}.
      */
     public static DoubleStream doubles(final double randomNumberOrigin, final double randomNumberBound)
     {
