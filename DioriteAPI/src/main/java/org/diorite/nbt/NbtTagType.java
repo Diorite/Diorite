@@ -19,7 +19,13 @@ public enum NbtTagType
     STRING(8, NbtTagString.class, NbtTagString::new),
     LIST(9, NbtTagList.class, NbtTagList::new),
     COMPOUND(10, NbtTagCompound.class, NbtTagCompound::new),
-    INTEGER_ARRAY(11, NbtTagIntArray.class, NbtTagIntArray::new);
+    INTEGER_ARRAY(11, NbtTagIntArray.class, NbtTagIntArray::new),
+    // elements added by diorite, they break minecraft compatybility, use with caution.
+    SHORT_ARRAY(127, NbtTagShortArray.class, NbtTagShortArray::new),
+    LONG_ARRAY(126, NbtTagLongArray.class, NbtTagLongArray::new),
+    FLOAT_ARRAY(125, NbtTagFloatArray.class, NbtTagFloatArray::new),
+    DOUBLE_ARRAY(124, NbtTagDoubleArray.class, NbtTagDoubleArray::new),
+    STRING_ARRAY(123, NbtTagStringArray.class, NbtTagStringArray::new);
     private static final Map<Byte, NbtTagType>           typeMap;
     private final        byte                            typeID;
     private final        Class<? extends NbtAbstractTag> typeClass;

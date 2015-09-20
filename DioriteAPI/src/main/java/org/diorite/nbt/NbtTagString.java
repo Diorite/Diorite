@@ -44,6 +44,11 @@ public class NbtTagString extends NbtAbstractTag
     public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
     {
         super.write(outputStream, anonymous);
+        if (this.value == null)
+        {
+            outputStream.writeShort(- 1);
+            return;
+        }
         final byte[] outputBytes = this.value.getBytes(NbtTag.STRING_CHARSET);
         outputStream.writeShort(outputBytes.length);
         outputStream.write(outputBytes);
@@ -56,9 +61,14 @@ public class NbtTagString extends NbtAbstractTag
         limiter.incrementElementsCount(1);
 
         final int size = inputStream.readShort();
+        if (size == -1)
+        {
+            this.value = null;
+            return;
+        }
         final byte[] data = new byte[size];
         inputStream.readFully(data);
-        this.value = new String(data, NbtTag.STRING_CHARSET);
+        this.value = new String(data, NbtTag.STRING_CHARSET).intern();
     }
 
     @Override

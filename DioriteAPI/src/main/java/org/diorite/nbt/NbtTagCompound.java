@@ -142,6 +142,22 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         return this.getTag(name, NbtTagCompound.class);
     }
 
+    public NbtTagCompound getOrCreateCompound(final String name)
+    {
+        NbtTagCompound nbt = this.getTag(name, NbtTagCompound.class);
+        if (nbt != null)
+        {
+            return nbt;
+        }
+        final int index = name.indexOf('.');
+        if (index == - 1)
+        {
+            this.addTag(nbt = new NbtTagCompound(name));
+            return nbt;
+        }
+        return this.getOrCreateCompound(name.substring(0, index)).getOrCreateCompound(name.substring(index + 1));
+    }
+
     public int getInt(final String name)
     {
         return this.getTag(name, NbtTagInt.class, new NbtTagInt(name, 0)).getValue();
@@ -214,9 +230,19 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         return this.getTag(name, NbtTagList.class).getTags(itemClass);
     }
 
+    public long[] getLongArray(final String name)
+    {
+        return Optional.ofNullable(this.getTag(name, NbtTagLongArray.class)).map(NbtTagLongArray::getValue).orElse(null);
+    }
+
     public int[] getIntArray(final String name)
     {
         return Optional.ofNullable(this.getTag(name, NbtTagIntArray.class)).map(NbtTagIntArray::getValue).orElse(null);
+    }
+
+    public short[] getShortArray(final String name)
+    {
+        return Optional.ofNullable(this.getTag(name, NbtTagShortArray.class)).map(NbtTagShortArray::getValue).orElse(null);
     }
 
     public byte[] getByteArray(final String name)
@@ -224,63 +250,19 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         return Optional.ofNullable(this.getTag(name, NbtTagByteArray.class)).map(NbtTagByteArray::getValue).orElse(null);
     }
 
-    /*
-     * Get list helper methods
-     */
-
-    public String[] getStringArray(final String name)
+    public float[] getFloatArray(final String name)
     {
-        final List<NbtTagString> tags = this.getList(name, NbtTagString.class);
-        final String[] array = new String[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
+        return Optional.ofNullable(this.getTag(name, NbtTagFloatArray.class)).map(NbtTagFloatArray::getValue).orElse(null);
     }
 
     public double[] getDoubleArray(final String name)
     {
-        final List<NbtTagDouble> tags = this.getList(name, NbtTagDouble.class);
-        final double[] array = new double[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
+        return Optional.ofNullable(this.getTag(name, NbtTagDoubleArray.class)).map(NbtTagDoubleArray::getValue).orElse(null);
     }
 
-    public float[] getFloatArray(final String name)
+    public String[] getStringArray(final String name)
     {
-        final List<NbtTagFloat> tags = this.getList(name, NbtTagFloat.class);
-        final float[] array = new float[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
-    }
-
-    public long[] getLongArray(final String name)
-    {
-        final List<NbtTagLong> tags = this.getList(name, NbtTagLong.class);
-        final long[] array = new long[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
-    }
-
-    public short[] getShortArray(final String name)
-    {
-        final List<NbtTagShort> tags = this.getList(name, NbtTagShort.class);
-        final short[] array = new short[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
+        return Optional.ofNullable(this.getTag(name, NbtTagStringArray.class)).map(NbtTagStringArray::getValue).orElse(null);
     }
 
     /*
@@ -332,14 +314,39 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         return this.getTag(name, NbtTagList.class, def).getTags(itemClass);
     }
 
+    public long[] getLongArray(final String name, final NbtTagLongArray def)
+    {
+        return this.getTag(name, NbtTagLongArray.class, def).getValue();
+    }
+
     public int[] getIntArray(final String name, final NbtTagIntArray def)
     {
         return this.getTag(name, NbtTagIntArray.class, def).getValue();
     }
 
+    public short[] getShortArray(final String name, final NbtTagShortArray def)
+    {
+        return this.getTag(name, NbtTagShortArray.class, def).getValue();
+    }
+
     public byte[] getByteArray(final String name, final NbtTagByteArray def)
     {
         return this.getTag(name, NbtTagByteArray.class, def).getValue();
+    }
+
+    public float[] getFloatArray(final String name, final NbtTagFloatArray def)
+    {
+        return this.getTag(name, NbtTagFloatArray.class, def).getValue();
+    }
+
+    public double[] getDoubleArray(final String name, final NbtTagDoubleArray def)
+    {
+        return this.getTag(name, NbtTagDoubleArray.class, def).getValue();
+    }
+
+    public String[] getStringArray(final String name, final NbtTagStringArray def)
+    {
+        return this.getTag(name, NbtTagStringArray.class, def).getValue();
     }
 
     /*
@@ -386,9 +393,19 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         return this.getTag(name, NbtTagList.class, new NbtTagList(name, def)).getTags(itemClass);
     }
 
+    public long[] getLongArray(final String name, final long[] def)
+    {
+        return this.getTag(name, NbtTagLongArray.class, new NbtTagLongArray(name, def)).getValue();
+    }
+
     public int[] getIntArray(final String name, final int[] def)
     {
         return this.getTag(name, NbtTagIntArray.class, new NbtTagIntArray(name, def)).getValue();
+    }
+
+    public short[] getShortArray(final String name, final short[] def)
+    {
+        return this.getTag(name, NbtTagShortArray.class, new NbtTagShortArray(name, def)).getValue();
     }
 
     public byte[] getByteArray(final String name, final byte[] def)
@@ -396,89 +413,21 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         return this.getTag(name, NbtTagByteArray.class, new NbtTagByteArray(name, def)).getValue();
     }
 
-    /*
-     * Get list helper methods with default
-     */
-
-    public String[] getStringArray(final String name, final String[] def)
+    public float[] getFloatArray(final String name, final float[] def)
     {
-        final NbtTagList tagsList = this.getTag(name, NbtTagList.class);
-        if (tagsList == null)
-        {
-            return def;
-        }
-        final List<NbtTagString> tags = tagsList.getTags(NbtTagString.class);
-        final String[] array = new String[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
+        return this.getTag(name, NbtTagFloatArray.class, new NbtTagFloatArray(name, def)).getValue();
     }
 
     public double[] getDoubleArray(final String name, final double[] def)
     {
-        final NbtTagList tagsList = this.getTag(name, NbtTagList.class);
-        if (tagsList == null)
-        {
-            return def;
-        }
-        final List<NbtTagDouble> tags = tagsList.getTags(NbtTagDouble.class);
-        final double[] array = new double[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
+        return this.getTag(name, NbtTagDoubleArray.class, new NbtTagDoubleArray(name, def)).getValue();
     }
 
-    public float[] getFloatArray(final String name, final float[] def)
+    public String[] getStringArray(final String name, final String[] def)
     {
-        final NbtTagList tagsList = this.getTag(name, NbtTagList.class);
-        if (tagsList == null)
-        {
-            return def;
-        }
-        final List<NbtTagFloat> tags = tagsList.getTags(NbtTagFloat.class);
-        final float[] array = new float[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
+        return this.getTag(name, NbtTagStringArray.class, new NbtTagStringArray(name, def)).getValue();
     }
 
-    public long[] getLongArray(final String name, final long[] def)
-    {
-        final NbtTagList tagsList = this.getTag(name, NbtTagList.class);
-        if (tagsList == null)
-        {
-            return def;
-        }
-        final List<NbtTagLong> tags = tagsList.getTags(NbtTagLong.class);
-        final long[] array = new long[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
-    }
-
-    public short[] getShortArray(final String name, final short[] def)
-    {
-        final NbtTagList tagsList = this.getTag(name, NbtTagList.class);
-        if (tagsList == null)
-        {
-            return def;
-        }
-        final List<NbtTagShort> tags = tagsList.getTags(NbtTagShort.class);
-        final short[] array = new short[tags.size()];
-        for (int i = 0; i < tags.size(); i++)
-        {
-            array[i] = tags.get(i).getValue();
-        }
-        return array;
-    }
 
     /*
      * Boolean methods.
@@ -511,7 +460,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagList(path, value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setList(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setList(path.substring(index + 1), value);
     }
 
     public void setByteArray(final String path, final byte[] value)
@@ -522,7 +471,18 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagByteArray(path, value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setByteArray(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setByteArray(path.substring(index + 1), value);
+    }
+
+    public void setLongArray(final String path, final long[] value)
+    {
+        final int index = path.indexOf('.');
+        if (index == - 1)
+        {
+            this.addTag(new NbtTagLongArray(path, value));
+            return;
+        }
+        this.getOrCreateCompound(path.substring(0, index)).setLongArray(path.substring(index + 1), value);
     }
 
     public void setIntArray(final String path, final int[] value)
@@ -533,7 +493,51 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagIntArray(path, value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setIntArray(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setIntArray(path.substring(index + 1), value);
+    }
+
+    public void setShortArray(final String path, final short[] value)
+    {
+        final int index = path.indexOf('.');
+        if (index == - 1)
+        {
+            this.addTag(new NbtTagShortArray(path, value));
+            return;
+        }
+        this.getOrCreateCompound(path.substring(0, index)).setShortArray(path.substring(index + 1), value);
+    }
+
+    public void setFloatArray(final String path, final float[] value)
+    {
+        final int index = path.indexOf('.');
+        if (index == - 1)
+        {
+            this.addTag(new NbtTagFloatArray(path, value));
+            return;
+        }
+        this.getOrCreateCompound(path.substring(0, index)).setFloatArray(path.substring(index + 1), value);
+    }
+
+    public void setDoubleArray(final String path, final double[] value)
+    {
+        final int index = path.indexOf('.');
+        if (index == - 1)
+        {
+            this.addTag(new NbtTagDoubleArray(path, value));
+            return;
+        }
+        this.getOrCreateCompound(path.substring(0, index)).setDoubleArray(path.substring(index + 1), value);
+    }
+
+    public void setStringArray(final String path, final String[] value)
+    {
+        final int index = path.indexOf('.');
+        if (index == - 1)
+        {
+            this.addTag(new NbtTagStringArray(path, value));
+            return;
+        }
+        this.getOrCreateCompound(path.substring(0, index)).setStringArray(path.substring(index + 1), value);
     }
 
     public void setString(final String path, final String value)
@@ -544,7 +548,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagString(path, value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setString(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setString(path.substring(index + 1), value);
     }
 
     public void setShort(final String path, final int value)
@@ -555,7 +559,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagShort(path, (short) value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setShort(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setShort(path.substring(index + 1), value);
     }
 
     public void setDouble(final String path, final double value)
@@ -566,7 +570,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagDouble(path, value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setDouble(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setDouble(path.substring(index + 1), value);
     }
 
     public void setFloat(final String path, final double value)
@@ -577,7 +581,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagFloat(path, (float) value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setFloat(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setFloat(path.substring(index + 1), value);
     }
 
     public void setLong(final String path, final long value)
@@ -588,7 +592,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagLong(path, value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setLong(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setLong(path.substring(index + 1), value);
     }
 
     public void setByte(final String path, final int value)
@@ -599,7 +603,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagByte(path, (byte) value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setByte(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setByte(path.substring(index + 1), value);
     }
 
     public void setInt(final String path, final int value)
@@ -610,7 +614,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
             this.addTag(new NbtTagInt(path, value));
             return;
         }
-        this.getCompound(path.substring(0, index)).setInt(path.substring(index + 1), value);
+        this.getOrCreateCompound(path.substring(0, index)).setInt(path.substring(index + 1), value);
     }
 
 
