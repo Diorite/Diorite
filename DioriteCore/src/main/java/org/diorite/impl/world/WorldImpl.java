@@ -60,6 +60,7 @@ public class WorldImpl implements World, Tickable
     protected final Dimension        dimension;
     protected final WorldType        worldType;
     protected final EntityTrackers   entityTrackers;
+    protected     boolean          vanillaCompatible = false;
     protected     Difficulty       difficulty        = Difficulty.NORMAL;
     protected     HardcoreSettings hardcore          = new HardcoreSettings(false);
     protected     GameMode         defaultGameMode   = GameMode.SURVIVAL;
@@ -251,6 +252,7 @@ public class WorldImpl implements World, Tickable
         this.seed = cfg.getSeed();
         this.random.setSeed(this.seed);
         this.time = tag.getLong("Time", 0);
+        this.vanillaCompatible = cfg.isVanillaCompatible();
 
         this.hardcore = new HardcoreSettings(cfg.isHardcore(), cfg.getHardcoreAction());
         this.forceLoadedRadius = cfg.getForceLoadedRadius();
@@ -260,6 +262,12 @@ public class WorldImpl implements World, Tickable
     public WorldType getWorldType()
     {
         return this.worldType;
+    }
+
+    @Override
+    public boolean isVanillaCompatible()
+    {
+        return this.vanillaCompatible;
     }
 
     @Override

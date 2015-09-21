@@ -37,13 +37,13 @@ public class ChunkImpl implements Chunk
 
     protected volatile Thread   lastTickThread;
     protected final    ChunkPos pos;
-    protected final    int[]    heightMap;
+    protected final    short[]  heightMap;
     protected final AtomicBoolean populated = new AtomicBoolean(false);
     protected byte[]          biomes;
     protected ChunkPartImpl[] chunkParts; // size of 16, parts can be null
 
     @SuppressWarnings("MagicNumber")
-    protected final TLongObjectMap<TileEntityImpl> tileEntities = new TLongObjectHashMap<>(10, .2f, Long.MAX_VALUE);
+    protected final TLongObjectMap<TileEntityImpl> tileEntities = new TLongObjectHashMap<>(1, .2f, Long.MAX_VALUE);
     protected final Set<EntityImpl>                entities     = new ConcurrentSet<>(4, .3f, 2);
 
     @Override
@@ -63,7 +63,7 @@ public class ChunkImpl implements Chunk
         this.lastTickThread = lastTickThread;
     }
 
-    public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts, final int[] heightMap)
+    public ChunkImpl(final ChunkPos pos, final byte[] biomes, final ChunkPartImpl[] chunkParts, final short[] heightMap)
     {
         this.pos = pos;
         this.biomes = biomes;
@@ -75,20 +75,20 @@ public class ChunkImpl implements Chunk
     {
         this.pos = pos;
         this.biomes = biomes;
-        this.heightMap = new int[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
+        this.heightMap = new short[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
     }
 
     public ChunkImpl(final ChunkPos pos, final ChunkPartImpl[] chunkParts)
     {
         this.pos = pos;
         this.chunkParts = chunkParts;
-        this.heightMap = new int[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
+        this.heightMap = new short[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
     }
 
     public ChunkImpl(final ChunkPos pos)
     {
         this.pos = pos;
-        this.heightMap = new int[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
+        this.heightMap = new short[Chunk.CHUNK_SIZE * Chunk.CHUNK_SIZE];
     }
 
     @Override
@@ -231,7 +231,7 @@ public class ChunkImpl implements Chunk
                 final int x = xz / CHUNK_SIZE;
                 final int z = xz % CHUNK_SIZE;
                 this.heightMap[((z << 4) | x)] = - 1;
-                for (int y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
+                for (short y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
                 {
                     if (this.getBlockType(x, y, z).isSolid())
                     {
@@ -245,19 +245,21 @@ public class ChunkImpl implements Chunk
 
     public BlockMaterialData setBlock(final int x, final int y, final int z, final BlockMaterialData materialData)
     {
-        final ChunkPartImpl chunkPart = this.getPart(y);
-        final BlockMaterialData prev = chunkPart.setBlock(x, y % Chunk.CHUNK_PART_HEIGHT, z, materialData);
+        final short sy = (short) y;
 
-        final int hy = this.heightMap[((z << 4) | x)];
-        if (y >= hy)
+        final ChunkPartImpl chunkPart = this.getPart(sy);
+        final BlockMaterialData prev = chunkPart.setBlock(x, sy % Chunk.CHUNK_PART_HEIGHT, z, materialData);
+
+        final short hy = this.heightMap[((z << 4) | x)];
+        if (sy >= hy)
         {
             if (materialData.isSolid())
             {
-                this.heightMap[((z << 4) | x)] = y;
+                this.heightMap[((z << 4) | x)] = sy;
             }
             else
             {
-                for (int i = y - 1; i >= 0; i--)
+                for (short i = (short) (sy - 1); i >= 0; i--)
                 {
                     if (this.getBlockType(x, i, z).isSolid())
                     {
@@ -379,6 +381,8 @@ public class ChunkImpl implements Chunk
     @SuppressWarnings("MagicNumber")
     public void loadFrom(final NbtTagCompound tag)
     {
+        final boolean vc = this.getWorld().isVanillaCompatible();
+
         final List<NbtTagCompound> sectionList = tag.getList("Sections", NbtTagCompound.class);
         final ChunkPartImpl[] sections = new ChunkPartImpl[16];
         for (final NbtTagCompound sectionTag : sectionList)
@@ -413,14 +417,25 @@ public class ChunkImpl implements Chunk
         {
             this.biomes = new byte[CHUNK_BIOMES_SIZE];
         }
-        final int[] heightMap = tag.getIntArray("HeightMap");
-        if (heightMap != null)
+        final short[] heightMap = tag.getShortArray("Diorite.HeightMap");
+        if (vc || (heightMap == null))
         {
-            System.arraycopy(tag.getIntArray("HeightMap"), 0, this.heightMap, 0, this.heightMap.length);
+            final int[] array = tag.getIntArray("HeightMap");
+            if (array != null)
+            {
+                for (int i = 0; i < this.heightMap.length; i++)
+                {
+                    this.heightMap[i] = (short) array[i];
+                }
+            }
+            else
+            {
+                this.initHeightMap();
+            }
         }
         else
         {
-            this.initHeightMap();
+            System.arraycopy(heightMap, 0, this.heightMap, 0, this.heightMap.length);
         }
 
         this.init();
@@ -437,11 +452,28 @@ public class ChunkImpl implements Chunk
             {
                 return null;
             }
+            final boolean vc = this.getWorld().isVanillaCompatible();
+
             tag.setByte("V", 1);
             tag.setInt("xPos", this.getX());
             tag.setInt("zPos", this.getZ());
             tag.setLong("LastUpdate", this.getWorld().getTime());
-            tag.setIntArray("HeightMap", this.heightMap);
+
+            // TODO: add converter command/util, to convert worlds to diorite/vanilla type.
+            if (vc)
+            {
+                final int[] array = new int[this.heightMap.length];
+                for (int i = 0; i < this.heightMap.length; i++)
+                {
+                    array[i] = this.heightMap[i];
+                }
+                tag.setIntArray("HeightMap", array);
+            }
+            else
+            {
+                tag.setShortArray("Diorite.HeightMap", this.heightMap);
+            }
+
             tag.setBoolean("TerrainPopulated", this.populated.get());
             tag.setBoolean("LightPopulated", false); // TODO
             tag.setLong("InhabitedTime", 0); // TODO: value used to set local difficulty based on play time

@@ -2,7 +2,6 @@ package org.diorite.impl.world.chunk;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +26,9 @@ import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
 import org.diorite.world.generator.maplayer.MapLayer;
+
+import gnu.trove.TLongCollection;
+import gnu.trove.set.hash.TLongHashSet;
 
 public class ChunkManagerImpl implements ChunkManager, Tickable
 {
@@ -70,9 +72,6 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         this.biomeGrid = MapLayer.initialize(world.getSeed(), world.getDimension(), world.getWorldType());
     }
 
-    /**
-     * Get the chunk generator.
-     */
     public WorldGenerator getGenerator()
     {
         return this.generator;
@@ -315,11 +314,11 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     /**
      * A group of locks on chunks to prevent them from being unloaded while in use.
      */
-    public static class ChunkLock implements Iterable<Long>
+    public static class ChunkLock
     {
         private final ChunkManagerImpl cm;
         private final String           desc;
-        private final Collection<Long> keys = new HashSet<>(5);
+        private final TLongCollection keys = new TLongHashSet(3);
 
         public ChunkLock(final ChunkManagerImpl cm, final String desc)
         {
@@ -327,7 +326,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
             this.desc = desc;
         }
 
-        public void acquire(final Long key)
+        public synchronized void acquire(final long key)
         {
             if (this.keys.contains(key))
             {
@@ -337,7 +336,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
             this.cm.getLockSet(key).add(this);
         }
 
-        public void release(final Long key)
+        public synchronized void release(final long key)
         {
             if (! this.keys.contains(key))
             {
@@ -347,20 +346,19 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
             this.cm.getLockSet(key).remove(this);
         }
 
-        public void clear()
+        public synchronized void clear()
         {
-            for (final Long key : this.keys)
-            {
+            this.keys.forEach(key -> {
                 this.cm.getLockSet(key).remove(this);
-            }
+                return true;
+            });
             this.keys.clear();
         }
 
-        @Override
-        public Iterator<Long> iterator()
-        {
-            return this.keys.iterator();
-        }
+//        public TLongIterator iterator()
+//        {
+//            return this.keys.iterator();
+//        }
 
         @Override
         public String toString()

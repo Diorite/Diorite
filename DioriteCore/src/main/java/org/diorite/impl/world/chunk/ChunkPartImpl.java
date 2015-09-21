@@ -56,6 +56,8 @@ public class ChunkPartImpl // part of chunk 16x16x16
 
     /**
      * Take a snapshot of this section which will not reflect future changes.
+     *
+     * @return snapshot of this section which will not reflect future changes.
      */
     public ChunkPartImpl snapshot()
     {

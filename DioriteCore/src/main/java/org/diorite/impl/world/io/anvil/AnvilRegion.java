@@ -152,6 +152,7 @@ class AnvilRegion extends ChunkRegion
         } catch (final IOException e)
         {
             System.err.println("[ChunkIO] Region \"" + this.file.getPath() + "\": can't be loaded. region(" + this.x + ", " + this.z + "), local chunk(" + x + ", " + z + "), map chunk(" + ((this.x << 5) + x) + ", " + ((this.z << 5) + z) + ")");
+            e.printStackTrace();
             return null;
         }
     }
