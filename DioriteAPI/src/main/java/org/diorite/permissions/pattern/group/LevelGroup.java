@@ -41,6 +41,31 @@ public class LevelGroup extends SpecialGroup<Long>
     }
 
     @Override
+    public boolean isValid(final String string)
+    {
+        int endIndex = 0;
+        final char[] charArray = string.toCharArray();
+        for (final int charArrayLength = charArray.length; endIndex < charArrayLength; endIndex++)
+        {
+            final char c = charArray[endIndex];
+            if ((c < '0') || (c > '9'))
+            {
+                break;
+            }
+        }
+        if (endIndex == 0)
+        {
+            return false;
+        }
+        final Long i = DioriteMathUtils.asLong(string.substring(0, endIndex));
+        if (i == null)// should never be true, only if someone use number that don't fit into long.
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public GroupResult parse(final String string, final Long data)
     {
         int endIndex = 0;

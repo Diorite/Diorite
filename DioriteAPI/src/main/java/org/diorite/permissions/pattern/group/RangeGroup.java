@@ -25,6 +25,12 @@ public class RangeGroup extends SpecialGroup<Long>
     }
 
     @Override
+    public boolean isValid(final String string)
+    {
+        return false;
+    }
+
+    @Override
     public GroupResult parse(String string, final Long data)
     {
         int endIndex = 0;

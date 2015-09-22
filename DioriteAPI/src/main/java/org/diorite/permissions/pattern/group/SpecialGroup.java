@@ -34,6 +34,8 @@ public abstract class SpecialGroup<R>
         return this.index;
     }
 
+    public abstract boolean isValid(String string);
+
     /**
      * This method should parse given string, check if it is valid, and check if given data is in range, so hasPermission should return true. <br>
      * Given string ALWAYS must start with pattern data to parse, but may contains additional chars at the end,
