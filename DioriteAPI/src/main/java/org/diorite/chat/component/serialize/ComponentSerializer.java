@@ -76,7 +76,7 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
     /**
      * Parse given array of jsons to array {@link BaseComponent}.(if any json is a list, then it may be more than one element, and then only first element will be used)
      *
-     * @param json json array to parse.
+     * @param jsons json arrays to parse.
      *
      * @return parsed base components.
      */
@@ -139,7 +139,7 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
      * Parse given array of jsons to array {@link BaseComponent}.(if any json is a list, then it may be more than one element, and then only first element will be used)
      * If json isn't valid json, {@link TextComponent} with given string will be returned. {@link TextComponent#fromLegacyText(String)}
      *
-     * @param json      json array to parse.
+     * @param jsons     json arrays to parse.
      * @param colorChar {@link org.diorite.chat.ChatColor#translateAlternateColorCodes(char, String)}, use null to skip.
      *
      * @return parsed base component.
@@ -187,7 +187,9 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
 
     /**
      * Returns json representation of given {@link BaseComponent}
+     *
      * @param component component to deserialize.
+     *
      * @return json representation of given {@link BaseComponent}
      */
     public static String toString(final BaseComponent component)
@@ -197,7 +199,9 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
 
     /**
      * Returns json representation of given array of {@link BaseComponent}
+     *
      * @param components components to deserialize.
+     *
      * @return json representation of given array of {@link BaseComponent}
      */
     public static String toString(final BaseComponent... components)

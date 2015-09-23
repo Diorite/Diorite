@@ -60,11 +60,10 @@ public class FieldOptions extends ASimpleEnum<FieldOptions>
     /**
      * Construct new field option with given name/id, annotation class and function.
      *
-     * @param enumName        name of option.
-     * @param id              id of option, must be unique.
-     * @param annotationClass used annotation class.
-     * @param func            function to get value of option.
-     * @param <T>             type of annotation.
+     * @param enumName name of option.
+     * @param enumId   id of option, must be unique.
+     * @param clazz    used annotation class.
+     * @param func     function to get value of option.
      */
     public FieldOptions(final String enumName, final int enumId, final Class<? extends Annotation> clazz, final BiFunction<ConfigField, Annotation, Object> func)
     {

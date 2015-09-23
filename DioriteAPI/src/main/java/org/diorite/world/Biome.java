@@ -166,7 +166,7 @@ public class Biome extends ASimpleEnum<Biome>
 
     /**
      * Check if biome is wet on selected block. (cords are ignroed by all default biomes) <br>
-     * Location is wet when humidity is < {@link #WET_THRESHOLD}
+     * Location is wet when humidity is {@literal <} {@link #WET_THRESHOLD}
      *
      * @param x x coordinate of location. (ignored by all default biomes.)
      * @param y y coordinate of location. (ignored by all default biomes.)
@@ -181,7 +181,7 @@ public class Biome extends ASimpleEnum<Biome>
 
     /**
      * Check if biome is cold on selected block. (x/z cords are ignroed by all default biomes) <br>
-     * Location is cold when temperature is < {@link #COLD_THRESHOLD}
+     * Location is cold when temperature is {@literal <} {@link #COLD_THRESHOLD}
      *
      * @param x x coordinate of location. (ignored by all default biomes.)
      * @param y y coordinate of location.

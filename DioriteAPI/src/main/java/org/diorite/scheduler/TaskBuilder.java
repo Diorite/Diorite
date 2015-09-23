@@ -66,7 +66,7 @@ public class TaskBuilder
      * Using other object (entity or chunk) will cause that task will be always executed in this same
      * thread as object is ticked. <br>
      * NOTE: Task store weak reference to object, if weak reference will be free, task will be canceled.
-     * <p/>
+     * <br>
      * This will alse set async mode back to false if needed.
      *
      * @param synchronizable object to sync with it. (task will be executed in this same thread as object is ticked)
@@ -401,7 +401,7 @@ public class TaskBuilder
     /**
      * Delay can be in milliseconds if real-time is used, or in game
      * ticks, if game time is used. <br>
-     * <p/>
+     * <br>
      * If task is single, this is dealy before run. <br>
      * If task is repeated, this is delay between runs.
      *

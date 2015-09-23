@@ -49,7 +49,7 @@ public interface Template<T>
     Map<ConfigField, ReflectElement<?>> getFields();
 
     /**
-     * @return copy of map with mapping key->field.
+     * @return copy of map with mapping key{@literal ->}field.
      */
     Map<String, ConfigField> getFieldsNameMap();
 

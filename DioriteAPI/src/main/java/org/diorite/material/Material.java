@@ -959,7 +959,7 @@ public abstract class Material implements SimpleEnum<Material>
      * This method will return other simillar item that can be added
      * to inventory, like water bucket for water block. <br>
      * Or will return this same instance if it already can be added. <br>
-     * <p>
+     * <br>
      * Overriding methods should not change type of returned value
      * as it may change in nex updates.
      *
@@ -973,16 +973,16 @@ public abstract class Material implements SimpleEnum<Material>
     /**
      * Method will try to find material by given name, converting it to any possible type of id: <br>
      * <ul>
-     * <li>{numericId} -> like "1" for stone</li>
-     * <li>{enumStringId} -> like "STONE"</li>
-     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
-     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
-     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
-     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
-     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
-     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
-     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
-     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * <li>{numericId} {@literal ->} like "1" for stone</li>
+     * <li>{enumStringId} {@literal ->} like "STONE"</li>
+     * <li>{minecraftStringId} {@literal ->} like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} {@literal ->} like "stone"</li>
+     * <li>{numericId}:{numericMeta} {@literal ->} like "1:0"</li>
+     * <li>{numericId}:{stringMeta} {@literal ->} like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} {@literal ->} like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} {@literal ->} like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} {@literal ->} like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} {@literal ->} like "stone:diorite"</li>
      * </ul>
      *
      * @param string material name/id to find.
@@ -999,16 +999,16 @@ public abstract class Material implements SimpleEnum<Material>
     /**
      * Method will try to find material by given name, converting it to any possible type of id: <br>
      * <ul>
-     * <li>{numericId} -> like "1" for stone</li>
-     * <li>{enumStringId} -> like "STONE"</li>
-     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
-     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
-     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
-     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
-     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
-     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
-     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
-     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * <li>{numericId} {@literal ->} like "1" for stone</li>
+     * <li>{enumStringId} {@literal ->} like "STONE"</li>
+     * <li>{minecraftStringId} {@literal ->} like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} {@literal ->} like "stone"</li>
+     * <li>{numericId}:{numericMeta} {@literal ->} like "1:0"</li>
+     * <li>{numericId}:{stringMeta} {@literal ->} like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} {@literal ->} like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} {@literal ->} like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} {@literal ->} like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} {@literal ->} like "stone:diorite"</li>
      * </ul>
      * With extended mode it will also scan all materials and looks for sub-material with name equals to given string
      * multiple types may have this same sub-material name, so may not return valid material for types like that.
@@ -1089,16 +1089,16 @@ public abstract class Material implements SimpleEnum<Material>
     /**
      * Method will try to find material by given name, converting it to any possible type of id: <br>
      * <ul>
-     * <li>{numericId} -> like "1" for stone</li>
-     * <li>{enumStringId} -> like "STONE"</li>
-     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
-     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
-     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
-     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
-     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
-     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
-     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
-     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * <li>{numericId} {@literal ->} like "1" for stone</li>
+     * <li>{enumStringId} {@literal ->} like "STONE"</li>
+     * <li>{minecraftStringId} {@literal ->} like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} {@literal ->} like "stone"</li>
+     * <li>{numericId}:{numericMeta} {@literal ->} like "1:0"</li>
+     * <li>{numericId}:{stringMeta} {@literal ->} like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} {@literal ->} like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} {@literal ->} like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} {@literal ->} like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} {@literal ->} like "stone:diorite"</li>
      * </ul>
      * With extended mode it will also scan all materials and looks for sub-material with name equals to given string
      * multiple types may have this same sub-material name, so may not return valid material for types like that.
@@ -1122,20 +1122,20 @@ public abstract class Material implements SimpleEnum<Material>
     /**
      * Method will try to find material by given name, converting it to any possible type of id: <br>
      * <ul>
-     * <li>{numericId} -> like "1" for stone</li>
-     * <li>{enumStringId} -> like "STONE"</li>
-     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
-     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
-     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
-     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
-     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
-     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
-     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
-     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * <li>{numericId} {@literal ->} like "1" for stone</li>
+     * <li>{enumStringId} {@literal ->} like "STONE"</li>
+     * <li>{minecraftStringId} {@literal ->} like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} {@literal ->} like "stone"</li>
+     * <li>{numericId}:{numericMeta} {@literal ->} like "1:0"</li>
+     * <li>{numericId}:{stringMeta} {@literal ->} like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} {@literal ->} like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} {@literal ->} like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} {@literal ->} like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} {@literal ->} like "stone:diorite"</li>
      * </ul>
      * With extended mode it will also scan all materials and looks for sub-material with name equals to given string
      * multiple types may have this same sub-material name, so may not return valid material for types like that. <br>
-     * <p>
+     * <br>
      * This methos will also invoke {@link #ensureValidInventoryItem()} before returing result, so it is good for
      * getting materials for items.
      *
@@ -1153,20 +1153,20 @@ public abstract class Material implements SimpleEnum<Material>
     /**
      * Method will try to find material by given name, converting it to any possible type of id: <br>
      * <ul>
-     * <li>{numericId} -> like "1" for stone</li>
-     * <li>{enumStringId} -> like "STONE"</li>
-     * <li>{minecraftStringId} -> like "minecraft:stone"</li>
-     * <li>minecraft:{shortMinecraftStringId} -> like "stone"</li>
-     * <li>{numericId}:{numericMeta} -> like "1:0"</li>
-     * <li>{numericId}:{stringMeta} -> like "1:diorite"</li>
-     * <li>{enumStringId}:{numericMeta} -> like "STONE:0"</li>
-     * <li>{enumStringId}:{stringMeta} -> like "STONE:diorite"</li>
-     * <li>{minecraftStringId}:{numericMeta} -> like "minecraft:stone:diorite"</li>
-     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} -> like "stone:diorite"</li>
+     * <li>{numericId} {@literal ->} like "1" for stone</li>
+     * <li>{enumStringId} {@literal ->} like "STONE"</li>
+     * <li>{minecraftStringId} {@literal ->} like "minecraft:stone"</li>
+     * <li>minecraft:{shortMinecraftStringId} {@literal ->} like "stone"</li>
+     * <li>{numericId}:{numericMeta} {@literal ->} like "1:0"</li>
+     * <li>{numericId}:{stringMeta} {@literal ->} like "1:diorite"</li>
+     * <li>{enumStringId}:{numericMeta} {@literal ->} like "STONE:0"</li>
+     * <li>{enumStringId}:{stringMeta} {@literal ->} like "STONE:diorite"</li>
+     * <li>{minecraftStringId}:{numericMeta} {@literal ->} like "minecraft:stone:diorite"</li>
+     * <li>minecraft:{shortMinecraftStringId}:{numericMeta} {@literal ->} like "stone:diorite"</li>
      * </ul>
      * With extended mode it will also scan all materials and looks for sub-material with name equals to given string
      * multiple types may have this same sub-material name, so may not return valid material for types like that. <br>
-     * <p>
+     * <br>
      * This methos will also invoke {@link #ensureValidInventoryItem()} before returing result, so it is good for
      * getting materials for items.
      *

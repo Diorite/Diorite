@@ -192,6 +192,10 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
      * Returns {@code true} if and only if the specified message can be encoded by this codec.
      *
      * @param msg the message
+     *
+     * @return {@code true} if and only if the specified message can be encoded by this codec.
+     *
+     * @throws Exception if any element of codec throw exception.
      */
     public boolean acceptOutboundMessage(final Object msg) throws Exception
     {
@@ -236,7 +240,7 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
     protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception;
 
     /**
-     * Allocate a {@link ByteBuf} which will be used as argument of {@link #encode(ChannelHandlerContext, I, ByteBuf)}.
+     * Allocate a {@link ByteBuf} which will be used as argument of {@link #encode(ChannelHandlerContext, Object, ByteBuf)}.
      * Sub-classes may override this method to returna {@link ByteBuf} with a perfect matching {@code initialCapacity}.
      *
      * @param ctx          the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
@@ -244,6 +248,8 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
      * @param preferDirect if it should prefer direct buffer.
      *
      * @return created ByteBuf.
+     *
+     * @throws Exception if allocating buffer fail.
      */
     protected ByteBuf allocateBuffer(final ChannelHandlerContext ctx, final I msg, final boolean preferDirect) throws Exception
     {
@@ -267,6 +273,8 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
      * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
      * @param in  the {@link ByteBuf} from which to read data
      * @param out the {@link List} to which decoded messages should be added
+     *
+     * @throws Exception if decode fail.
      */
     protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
     {

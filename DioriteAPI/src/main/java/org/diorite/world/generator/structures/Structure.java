@@ -98,6 +98,8 @@ public interface Structure
      * @param y     blocks to move from center in y coords.
      * @param z     blocks to move from center in z coords.
      * @param block new material to set.
+     *
+     * @return true if black was set.
      */
     default boolean setBlock(final BlockLocation loc, final int x, final int y, final int z, final BlockMaterialData block)
     {
@@ -117,6 +119,8 @@ public interface Structure
      * @param loc   center location.
      * @param rel   blocks to move from center.
      * @param block new material to set.
+     *
+     * @return true if black was set.
      */
     default boolean setBlock(final BlockLocation loc, final BlockLocation rel, final BlockMaterialData block)
     {
@@ -135,6 +139,8 @@ public interface Structure
      *
      * @param loc   center location.
      * @param block new material to set.
+     *
+     * @return true if black was set.
      */
     default boolean setBlock(final BlockLocation loc, final BlockMaterialData block)
     {

@@ -8,8 +8,8 @@ import org.diorite.utils.math.DioriteMathUtils;
  * Ranged special group, it use {$-$} pattern. <br>
  * If we have "foo.{$-$}" pattern, we can use it in 2 ways: <br>
  * <ol>
- * <li>If player have "foo.10-20" permissions, and we check if he have "foo.15" it will return true as 15 >= 10 and 15 <= 20.</li>
- * <li>If player have "foo.[10-20,30-40]" permissions, and we check if he have "foo.30" it will return true as 30 >= 30 and 30 <= 40, it use multiple ranges.</li>
+ * <li>If player have "foo.10-20" permissions, and we check if he have "foo.15" it will return true as 15 {@literal >=} 10 and 15 {@literal <=} 20.</li>
+ * <li>If player have "foo.[10-20,30-40]" permissions, and we check if he have "foo.30" it will return true as 30 {@literal >=} 30 and 30 {@literal <=} 40, it use multiple ranges.</li>
  * </ol>
  */
 public class RangeGroup extends SpecialGroup<Long>

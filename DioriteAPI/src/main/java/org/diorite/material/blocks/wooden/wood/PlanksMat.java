@@ -97,7 +97,7 @@ public class PlanksMat extends WoodMat implements FuelMat
     /**
      * Returns sub-type of {@link PlanksMat}, based on {@link WoodTypeMat}.
      *
-     * @param woodType {@link WoodTypeMat} of Planks
+     * @param type {@link WoodTypeMat} of Planks
      *
      * @return sub-type of {@link PlanksMat}.
      */

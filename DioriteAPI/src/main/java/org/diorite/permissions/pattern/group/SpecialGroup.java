@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public abstract class SpecialGroup<R>
 {
     /**
-     * index of basePermission where data should be, like in "foo.{$++}.bar.{$--}" -> "foo..bar." it will be 3 and 8
+     * index of basePermission where data should be, like in "foo.{$++}.bar.{$--}" {@literal ->} "foo..bar." it will be 3 and 8
      */
     protected final int index;
 
@@ -25,7 +25,7 @@ public abstract class SpecialGroup<R>
     }
 
     /**
-     * Returns index of basePermission where data should be stored, like in "foo.{$++}.bar.{$--}" -> "foo..bar." it will be 3 and 8;
+     * Returns index of basePermission where data should be stored, like in "foo.{$++}.bar.{$--}" {@literal ->} "foo..bar." it will be 3 and 8;
      *
      * @return index of basePermission where data should be stored.
      */
@@ -40,7 +40,7 @@ public abstract class SpecialGroup<R>
      * This method should parse given string, check if it is valid, and check if given data is in range, so hasPermission should return true. <br>
      * Given string ALWAYS must start with pattern data to parse, but may contains additional chars at the end,
      * like when parsing "foo.15.bar" with data 10 for pattern "foo.{$++}.bar", given string should be "15.bar", and it should return that
-     * string is valid, (as it contains valid number where excepted), and it is matching LevelGroup 10 <= 15,
+     * string is valid, (as it contains valid number where excepted), and it is matching LevelGroup 10 {@literal <=} 15,
      * and end index of 2 as pattern data is only one 2 digit number, 2 chars.
      *
      * @param string given string to parse.

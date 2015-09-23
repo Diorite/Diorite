@@ -302,10 +302,8 @@ public final class DioriteRandomUtils
      * public int nextInt(int bound) {
      *   if (bound <= 0)
      *     throw new IllegalArgumentException("bound must be positive");
-     * <p/>
      *   if ((bound & -bound) == bound)  // i.e., bound is a power of 2
      *     return (int)((bound * (long)next(31)) >> 31);
-     * <p/>
      *   int bits, val;
      *   do {
      *       bits = next(31);
@@ -314,18 +312,18 @@ public final class DioriteRandomUtils
      *   return val;
      * }}</pre>
      * <br>
-     * <p>The hedge "approximately" is used in the foregoing description only
+     * The hedge "approximately" is used in the foregoing description only
      * because the next method is only approximately an unbiased source of
      * independently chosen bits.  If it were a perfect source of randomly
      * chosen bits, then the algorithm shown would choose {@code int}
      * values from the stated range with perfect uniformity.
-     * <p/>
+     * <br>
      * The algorithm is slightly tricky.  It rejects values that would result
      * in an uneven distribution (due to the fact that 2^31 is not divisible
      * by n). The probability of a value being rejected depends on n.  The
      * worst case is n=2^30+1, for which the probability of a reject is 1/2,
      * and the expected number of iterations before the loop terminates is 2.
-     * <p/>
+     * <br>
      * The algorithm treats the case where n is a power of two specially: it
      * returns the correct number of high-order bits from the underlying
      * pseudo-random number generator.  In the absence of special treatment,
@@ -361,7 +359,7 @@ public final class DioriteRandomUtils
      * public long nextLong() {
      *   return ((long)next(32) << 32) + next(32);
      * }}</pre>
-     * <p/>
+     * <br>
      * Because class {@code Random} uses a seed with only 48 bits,
      * this algorithm will not return all possible {@code long} values.
      *
@@ -513,7 +511,7 @@ public final class DioriteRandomUtils
      * calling the method {@link #nextInt()}.
      *
      * @return a stream of pseudorandom {@code int} values
-     * <p/>
+     * </p>
      * This method is implemented to be equivalent to {@code
      * ints(Long.MAX_VALUE)}.
      */
@@ -625,7 +623,7 @@ public final class DioriteRandomUtils
      * of calling the method {@link #nextLong()}.
      *
      * @return a stream of pseudorandom {@code long} values
-     * <p/>
+     * </p>
      * This method is implemented to be equivalent to {@code
      * longs(Long.MAX_VALUE)}.
      */
@@ -749,7 +747,7 @@ public final class DioriteRandomUtils
      * of calling the method {@link #nextDouble()}.
      *
      * @return a stream of pseudorandom {@code double} values
-     * <p/>
+     * </p>
      * This method is implemented to be equivalent to {@code
      * doubles(Long.MAX_VALUE)}.
      */

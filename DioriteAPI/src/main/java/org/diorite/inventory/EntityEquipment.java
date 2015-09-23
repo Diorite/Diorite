@@ -35,6 +35,7 @@ public interface EntityEquipment
      * Put the given ItemStack into the given armor slot. This does not check if
      * the ItemStack is a valid type for this slot.
      *
+     * @param type  type of armor to find slot.
      * @param armor The ItemStack to use as armor.
      *
      * @return true if item was set.

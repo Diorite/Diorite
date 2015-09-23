@@ -105,6 +105,8 @@ public class PluginDataBuilder implements AnyPluginData
      * Set name of plugin, can't be null.
      *
      * @param name name of plugin.
+     *
+     * @return builder itself.
      */
     public PluginDataBuilder setName(final String name)
     {
@@ -117,6 +119,8 @@ public class PluginDataBuilder implements AnyPluginData
      * Set version of plugin.
      *
      * @param version version of plugin.
+     *
+     * @return builder itself.
      */
     public PluginDataBuilder setVersion(final String version)
     {
@@ -128,6 +132,8 @@ public class PluginDataBuilder implements AnyPluginData
      * Set prefix of plugin.
      *
      * @param prefix prefix of plugin.
+     *
+     * @return builder itself.
      */
     public PluginDataBuilder setPrefix(final String prefix)
     {
@@ -139,6 +145,8 @@ public class PluginDataBuilder implements AnyPluginData
      * Set author of plugin.
      *
      * @param author author of plugin.
+     *
+     * @return builder itself.
      */
     public PluginDataBuilder setAuthor(final String author)
     {
@@ -150,6 +158,8 @@ public class PluginDataBuilder implements AnyPluginData
      * Set description of plugin.
      *
      * @param description description of plugin.
+     *
+     * @return builder itself.
      */
     public PluginDataBuilder setDescription(final String description)
     {
@@ -161,6 +171,8 @@ public class PluginDataBuilder implements AnyPluginData
      * Set website of plugin.
      *
      * @param website website of plugin.
+     *
+     * @return builder itself.
      */
     public PluginDataBuilder setWebsite(final String website)
     {

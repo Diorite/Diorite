@@ -114,12 +114,7 @@ public interface BasePlugin
      *
      * @param classLoader  used class loader.
      * @param pluginLoader used plugin loader.
-     * @param name         name of plugin.
-     * @param name         prefix used in logger.
-     * @param version      version of plugin.
-     * @param author       author/s of plugin.
-     * @param description  description of plugin.
-     * @param website      webiste of plugin.
+     * @param pluginData   other data of plugin. (like name, version, author etc.)
      */
     void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder pluginData);
 

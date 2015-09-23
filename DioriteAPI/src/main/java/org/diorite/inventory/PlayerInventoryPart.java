@@ -35,6 +35,8 @@ public interface PlayerInventoryPart extends Inventory
      * Returns offset of player inventory part relative to given part. <br>
      * May return negative number if used on part that don't contains given part.
      *
+     * @param part part to get offset.
+     *
      * @return Offset of player inventory part relative to given part
      */
     default int getSlotOffset(final PlayerInventoryPart part)

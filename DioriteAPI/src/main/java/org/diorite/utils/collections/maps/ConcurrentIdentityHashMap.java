@@ -4436,7 +4436,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     /**
      * Encapsulates traversal for methods such as containsValue; also
      * serves as a base class for other iterators and spliterators.
-     * <p/>
+     * <br>
      * Method advance visits once each still-valid node that was
      * reachable upon iterator construction. It might miss some that
      * were added to a bin after the bin was visited, which is OK wrt
@@ -4445,7 +4445,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * bookkeeping state that is difficult to optimize away amidst
      * volatile accesses.  Even so, traversal maintains reasonable
      * throughput.
-     * <p/>
+     * <br>
      * Normally, iteration proceeds bin-by-bin traversing lists.
      * However, if the table has been resized, then all future steps
      * must traverse both the bin at the current index as well as at
@@ -7660,7 +7660,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * values.
          *
          * @return a stream of pseudorandom {@code int} values
-         * <p/>
+         * <br>
          * This method is implemented to be equivalent to {@code
          * ints(Long.MAX_VALUE)}.
          *
@@ -7757,7 +7757,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * values.
          *
          * @return a stream of pseudorandom {@code long} values
-         * <p/>
+         * <br>
          * This method is implemented to be equivalent to {@code
          * longs(Long.MAX_VALUE)}.
          *
@@ -7859,7 +7859,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * (exclusive).
          *
          * @return a stream of pseudorandom {@code double} values
-         * <p/>
+         * <br>
          * This method is implemented to be equivalent to {@code
          * doubles(Long.MAX_VALUE)}.
          *
@@ -8284,7 +8284,9 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * Pseudo-randomly advances and records the given probe value for the
          * given thread.
          *
-         * @return probe value.
+         * @param probe probe value to advance.
+         *
+         * @return advanced probe value.
          */
         public static int advanceProbe(int probe)
         {

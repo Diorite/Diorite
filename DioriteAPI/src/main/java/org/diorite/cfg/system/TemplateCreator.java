@@ -71,7 +71,7 @@ public final class TemplateCreator
      * Create new template for given class if it is unknown type.
      * (not map/array/iterable etc..)
      *
-     * @param c class to check
+     * @param type type/class to check
      */
     @SuppressWarnings("ObjectEquality")
     public static void checkTemplate(final Type type)

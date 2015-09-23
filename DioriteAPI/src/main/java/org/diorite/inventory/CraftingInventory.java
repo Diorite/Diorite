@@ -12,7 +12,7 @@ public interface CraftingInventory extends Inventory
     /**
      * Put the given ItemStack into the result slot.
      *
-     * @param boots The ItemStack to use as result
+     * @param result The ItemStack to use as result
      *
      * @return previous itemstack used as result.
      */
@@ -22,8 +22,8 @@ public interface CraftingInventory extends Inventory
      * Put the given ItemStack into the result slot if it matches a excepted one.
      * NOTE: this is atomic operation.
      *
-     * @param excepted   excepted item to replace.
-     * @param chestplate The ItemStack to use as result
+     * @param excepted excepted item to replace.
+     * @param result   The ItemStack to use as result
      *
      * @return true if item was replaced.
      *

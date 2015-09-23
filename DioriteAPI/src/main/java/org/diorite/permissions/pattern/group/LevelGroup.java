@@ -8,9 +8,9 @@ import org.diorite.utils.math.DioriteMathUtils;
  * Level special group, it use {$++} and {$--} patterns. <br>
  * If we have "foo.{$++}" or "foo.{$--}" pattern: <br>
  * <ol>
- * <li>{$++} is ascending type of level group, if player have permission "foo.5" and plugin will check for "foo.2" it will return true, as 2 <= 5.<br>
+ * <li>{$++} is ascending type of level group, if player have permission "foo.5" and plugin will check for "foo.2" it will return true, as 2 {@literal <=} 5.<br>
  * So bigger permission level means more permissions, so it is ascending type.</li>
- * <li>{$--} is descending type of level group, if player have permission "foo.5" and plugin will check for "foo.7" it will return true, as 7 >= 5.<br>
+ * <li>{$--} is descending type of level group, if player have permission "foo.5" and plugin will check for "foo.7" it will return true, as 7 {@literal >=} 5.<br>
  * So bigger permission level means less permissions, so it is descending type.</li>
  * </ol>
  */
