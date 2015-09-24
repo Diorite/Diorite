@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ByValueComparator<U extends Comparable<U>, T extends Comparable<T>> implements Comparator<U>, Serializable
 {
-    private static final long serialVersionUID = - 1388731513596719175L;
+    private static final long serialVersionUID = 0;
     protected final boolean   ascend;
     protected final Map<U, T> map;
 

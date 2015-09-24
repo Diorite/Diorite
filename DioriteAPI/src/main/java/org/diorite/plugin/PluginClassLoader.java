@@ -65,6 +65,6 @@ public class PluginClassLoader extends URLClassLoader
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("classes", this.classes).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("classes", this.classes).toString();
     }
 }

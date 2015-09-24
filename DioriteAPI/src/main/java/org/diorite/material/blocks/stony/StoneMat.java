@@ -2,6 +2,9 @@ package org.diorite.material.blocks.stony;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.material.blocks.VariantMat;
 import org.diorite.material.blocks.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -32,6 +35,7 @@ public class StoneMat extends StonyMat implements VariantableMat
 
     protected final VariantMat variant;
 
+    @SuppressWarnings("MagicNumber")
     protected StoneMat()
     {
         super("STONE", 1, "minecraft:stone", "STONE", (byte) 0x00, 1.5f, 30);
@@ -173,5 +177,11 @@ public class StoneMat extends StonyMat implements VariantableMat
         StoneMat.register(STONE_POLISHED_DIORITE);
         StoneMat.register(STONE_ANDESITE);
         StoneMat.register(STONE_POLISHED_ANDESITE);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("variant", this.variant).toString();
     }
 }

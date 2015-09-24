@@ -27,6 +27,7 @@ import org.diorite.utils.math.DioriteRandomUtils;
 
 import joptsimple.OptionSet;
 
+@SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
 public class Main
 {
     static
@@ -183,7 +184,7 @@ public class Main
             try
             {
                 Thread.sleep(300);
-            } catch (InterruptedException e)
+            } catch (final InterruptedException e)
             {
                 e.printStackTrace();
             }
@@ -191,7 +192,7 @@ public class Main
         }
     }
 
-    public static void rect(double x, double y, double width, double height, double r)
+    public static void rect(final double x, final double y, final double width, final double height, final double r)
     {
         glPushMatrix();
         glTranslated(x, y, 0);

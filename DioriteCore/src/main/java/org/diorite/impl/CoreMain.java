@@ -61,7 +61,7 @@ public final class CoreMain
         RUN,
         HELP,
         VERSION,
-        STOP;
+        STOP
     }
 
     public static InitResult init(final OptionSet options, final boolean client)

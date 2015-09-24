@@ -8,7 +8,7 @@ import gnu.trove.map.hash.TCustomHashMap;
 
 public class SimpleEnumMap<K extends SimpleEnum<K>, V> extends TCustomHashMap<K, V>
 {
-    private static final long serialVersionUID = - 6633372376405702411L;
+    private static final long serialVersionUID = 0;
 
     public SimpleEnumMap()
     {

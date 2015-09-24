@@ -26,22 +26,8 @@ import io.netty.util.concurrent.DefaultExecutorServiceFactory;
 public class ClientConnection extends Thread implements ConnectionHandler
 {
     public static final int                              MILLIS                         = 500;
-    public final        LazyInitVar<NioEventLoopGroup>   lazyInitNioEventLoopGroup      = new LazyInitVar<NioEventLoopGroup>()
-    {
-        @Override
-        protected NioEventLoopGroup init()
-        {
-            return new NioEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Client"));
-        }
-    };
-    public final        LazyInitVar<EpollEventLoopGroup> lazyInitNioEpollEventLoopGroup = new LazyInitVar<EpollEventLoopGroup>()
-    {
-        @Override
-        protected EpollEventLoopGroup init()
-        {
-            return new EpollEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Epoll Client"));
-        }
-    };
+    public final        LazyInitVar<NioEventLoopGroup>   lazyInitNioEventLoopGroup      = new NioEventLoopGroupLazyInitVar();
+    public final        LazyInitVar<EpollEventLoopGroup> lazyInitNioEpollEventLoopGroup = new EpollEventLoopGroupLazyInitVar();
 
     private final AttributeKey<EnumProtocol> protocolKey = AttributeKey.valueOf("protocol");
     private       NetworkManager connection;
@@ -123,5 +109,23 @@ public class ClientConnection extends Thread implements ConnectionHandler
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("protocolKey", this.protocolKey).append("connection", this.connection).append("channelFuture", this.channelFuture).append("server", this.core).toString();
+    }
+
+    private static class NioEventLoopGroupLazyInitVar extends LazyInitVar<NioEventLoopGroup>
+    {
+        @Override
+        protected NioEventLoopGroup init()
+        {
+            return new NioEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Client"));
+        }
+    }
+
+    private static class EpollEventLoopGroupLazyInitVar extends LazyInitVar<EpollEventLoopGroup>
+    {
+        @Override
+        protected EpollEventLoopGroup init()
+        {
+            return new EpollEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Epoll Client"));
+        }
     }
 }

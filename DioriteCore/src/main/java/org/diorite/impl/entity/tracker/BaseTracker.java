@@ -3,6 +3,9 @@ package org.diorite.impl.entity.tracker;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityTeleport;
@@ -79,7 +82,9 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
             this.sendToAllExceptOwn(new PacketPlayServerEntityTeleport(this.tracker));
             return;
         }
-        double deltaX = 0, deltaY = 0, deltaZ = 0;
+        final double deltaX;
+        final double deltaY;
+        final double deltaZ;
         this.isMoving = this.forceLocationUpdate || (this.velY != 0) || (this.velZ != 0) || (this.velX != 0);
 //        if (this.isMoving) TODO: readd
         {
@@ -218,4 +223,9 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         return this.tracker.hashCode();
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tracker", this.tracker).append("id", this.id).toString();
+    }
 }

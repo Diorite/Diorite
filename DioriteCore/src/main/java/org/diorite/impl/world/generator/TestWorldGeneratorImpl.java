@@ -6,7 +6,6 @@ import java.util.Random;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.pipelines.event.chunk.ChunkGeneratePipelineImpl;
 import org.diorite.material.Material;
 import org.diorite.material.WoodTypeMat;
 import org.diorite.material.blocks.stony.StoneMat;
@@ -38,7 +37,6 @@ public class TestWorldGeneratorImpl extends WorldGenerator
     @SuppressWarnings("MagicNumber")
     public ChunkBuilder generate(final ChunkBuilder builder, final ChunkPos pos)
     {
-        ChunkGeneratePipelineImpl.addGen(pos);
 //        if (true)
 //        {
 //            return this.flat.generate(builder, pos);

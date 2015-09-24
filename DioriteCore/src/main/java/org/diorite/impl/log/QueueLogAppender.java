@@ -26,7 +26,7 @@ public class QueueLogAppender extends AbstractAppender
     private static final int                                MAX_CAPACITY     = 250;
     private static final Map<String, BlockingQueue<String>> QUEUES           = new HashMap<>(10);
     private static final ReadWriteLock                      QUEUE_LOCK       = new ReentrantReadWriteLock();
-    private static final long                               serialVersionUID = - 8838474774333943040L;
+    private static final long                               serialVersionUID = 0;
     private final BlockingQueue<String> queue;
 
     public QueueLogAppender(final String name, final Filter filter, final Layout<? extends Serializable> layout, final boolean ignoreExceptions, final BlockingQueue<String> queue)

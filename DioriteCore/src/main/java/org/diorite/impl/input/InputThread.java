@@ -41,7 +41,7 @@ public class InputThread
 
     public static class InputWorkerThread extends ForkJoinWorkerThread
     {
-        static AtomicInteger i = new AtomicInteger();
+        static final AtomicInteger i = new AtomicInteger();
 
         public InputWorkerThread(final ForkJoinPool pool)
         {

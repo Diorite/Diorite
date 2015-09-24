@@ -36,6 +36,7 @@ public class RedMushroomBlockMat extends MushroomBlockMat
     private static final Map<String, RedMushroomBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedMushroomBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected RedMushroomBlockMat()
     {
         super("RED_MUSHROOM_BLOCK", 100, "minecraft:red_mushroom_block", Type.PORES_FULL, 0.2f, 1);

@@ -38,9 +38,7 @@ public class TimingsCommand extends SystemCommandImpl
         for (final EventType<?, ?> event : EventType.values())
         {
             s.sendSimpleColoredMessage("&7" + event.getEventClass().getSimpleName());
-            event.getPipeline().getTimings().forEach((eventPipelineHandler, timingsContainer) -> {
-                s.sendSimpleColoredMessage("&7  " + timingsContainer.getName() + " &3[" + timingsContainer.getLatestTime() + "/" + timingsContainer.getAvarageTime() + "]");
-            });
+            event.getPipeline().getTimings().forEach((eventPipelineHandler, timingsContainer) -> s.sendSimpleColoredMessage("&7  " + timingsContainer.getName() + " &3[" + timingsContainer.getLatestTime() + "/" + timingsContainer.getAvarageTime() + "]"));
         }
     }
 }

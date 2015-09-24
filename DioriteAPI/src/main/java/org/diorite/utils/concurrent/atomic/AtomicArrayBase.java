@@ -24,7 +24,7 @@ import sun.misc.Unsafe;
  */
 public class AtomicArrayBase<E> implements Serializable, AtomicArray<E>
 {
-    private static final long   serialVersionUID = - 6209656149925076980L;
+    private static final long   serialVersionUID = 0;
     private static final Unsafe unsafe           = DioriteUtils.getUnsafe();
 
     private static final int      base;

@@ -6,7 +6,6 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
-@SuppressWarnings("InterfaceMayBeAnnotatedFunctional")
 public interface PacketListener
 {
     void disconnect(BaseComponent message);

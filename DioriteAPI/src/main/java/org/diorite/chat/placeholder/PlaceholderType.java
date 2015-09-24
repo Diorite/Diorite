@@ -23,7 +23,6 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
  *
  * @param <T> type of placeholder object.
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
 public class PlaceholderType<T>
 {
     private static final Map<String, PlaceholderType<?>> types = new HashMap<>(5, .1f);
@@ -49,7 +48,7 @@ public class PlaceholderType<T>
     @SafeVarargs
     private static <T> PlaceholderType<T> create(final String id, final Class<T> clazz, final PlaceholderType<? super T>... superTypes)
     {
-        final PlaceholderType<T> type = new PlaceholderType<T>(id, clazz, superTypes);
+        final PlaceholderType<T> type = new PlaceholderType<>(id, clazz, superTypes);
         types.put(type.getId(), type);
         return type;
     }

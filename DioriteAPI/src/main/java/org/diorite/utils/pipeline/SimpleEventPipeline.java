@@ -65,20 +65,7 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
                 this.addFirst(ep.getPipelineName(), this.emptyElement);
             }
         }
-        this.exceptionPipeline.add("Unhandled", new ExceptionHandler()
-        {
-            @Override
-            public void tryCatch(final ExceptionEvent evt)
-            {
-                if (evt.isCancelled())
-                {
-                    return;
-                }
-                System.err.println("Error when executing pipeline event (" + this.getClass().getName() + " -> " + evt.getClass().getName() + ")");
-                evt.getThrowable().printStackTrace();
-                evt.cancel();
-            }
-        });
+        this.exceptionPipeline.add("Unhandled", new EventExceptionHandler());
     }
 
     @Override
@@ -145,6 +132,21 @@ public abstract class SimpleEventPipeline<T extends Event> extends BasePipeline<
     public synchronized void clear()
     {
         this.init();
+    }
+
+    private static class EventExceptionHandler implements ExceptionHandler
+    {
+        @Override
+        public void tryCatch(final ExceptionEvent evt)
+        {
+            if (evt.isCancelled())
+            {
+                return;
+            }
+            System.err.println("Error when executing pipeline event (" + this.getClass().getName() + " -> " + evt.getClass().getName() + ")");
+            evt.getThrowable().printStackTrace();
+            evt.cancel();
+        }
     }
 
     {

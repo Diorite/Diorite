@@ -204,6 +204,7 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
      *
      * @param element sub-type to register
      */
+    @SuppressWarnings("MagicNumber")
     public static void register(final LogMat element)
     {
         byID.put((byte) (element.getType() + ((element instanceof Log2) ? 16 : 0)), element);

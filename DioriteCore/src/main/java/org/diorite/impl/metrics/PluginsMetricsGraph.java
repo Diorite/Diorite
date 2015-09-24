@@ -32,9 +32,9 @@ class PluginsMetricsGraph extends DynamicMetricsGraph
     {
         if (this.withVersions)
         {
-            return this.core.getPluginManager().getPlugins().stream().map(p -> new SimpleMetricsPlotter(p.getName() + Metrics.GRAPH_SEPARATOR + p.getVersion())).collect(Collectors.toSet());
+            return this.core.getPluginManager().getPlugins().stream().map(p -> new BooleanMetricsPlotter(p.getName() + Metrics.GRAPH_SEPARATOR + p.getVersion())).collect(Collectors.toSet());
         }
-        return this.core.getPluginManager().getPlugins().stream().map(p -> new SimpleMetricsPlotter(p.getName())).collect(Collectors.toSet());
+        return this.core.getPluginManager().getPlugins().stream().map(p -> new BooleanMetricsPlotter(p.getName())).collect(Collectors.toSet());
     }
 
     @Override

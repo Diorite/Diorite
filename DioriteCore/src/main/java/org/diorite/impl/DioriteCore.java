@@ -128,6 +128,34 @@ public class DioriteCore implements Core
 
     private static final org.slf4j.Logger coreLogger = LoggerFactory.getLogger("");
 
+    private static class SimpleSyncTask
+    {
+        private final Synchronizable sync;
+        private final Runnable       runnable;
+
+        private SimpleSyncTask(final Synchronizable sync, final Runnable runnable)
+        {
+            this.sync = sync;
+            this.runnable = runnable;
+        }
+
+        public Synchronizable getSynchronizable()
+        {
+            return this.sync;
+        }
+
+        public void run()
+        {
+            this.runnable.run();
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("sync", this.sync).append("runnable", this.runnable).toString();
+        }
+    }
+
     static
     {
         ClassPool.getDefault().appendClassPath(new LoaderClassPath(DioriteCore.class.getClassLoader()));
@@ -296,20 +324,7 @@ public class DioriteCore implements Core
             runnable.run();
             return;
         }
-        this.syncQueue.add(new SimpleSyncTask()
-        {
-            @Override
-            public Synchronizable getSynchronizable()
-            {
-                return sync;
-            }
-
-            @Override
-            public void run()
-            {
-                runnable.run();
-            }
-        });
+        this.syncQueue.add(new SimpleSyncTask(sync, runnable));
     }
 
     public void sync(final Runnable runnable)
@@ -325,20 +340,7 @@ public class DioriteCore implements Core
 
     public void addSync(final Runnable runnable, final Synchronizable sync)
     {
-        this.syncQueue.add(new SimpleSyncTask()
-        {
-            @Override
-            public Synchronizable getSynchronizable()
-            {
-                return sync;
-            }
-
-            @Override
-            public void run()
-            {
-                runnable.run();
-            }
-        });
+        this.syncQueue.add(new SimpleSyncTask(sync, runnable));
     }
 
     public void addSync(final Runnable runnable)
@@ -1025,11 +1027,6 @@ public class DioriteCore implements Core
     public boolean isValidSynchronizable()
     {
         return this.isRunning;
-    }
-
-    private interface SimpleSyncTask extends Runnable
-    {
-        Synchronizable getSynchronizable();
     }
 
     public static CoreInitPipeline getInitPipeline()

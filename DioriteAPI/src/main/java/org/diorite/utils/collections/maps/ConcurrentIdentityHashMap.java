@@ -92,7 +92,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      * Number of CPUS, to place bounds on some sizings
      */
     static final         int                 NCPU                      = Runtime.getRuntime().availableProcessors();
-    private static final long                serialVersionUID          = 6116706708242024783L;
+    private static final long                serialVersionUID          = 0;
     /**
      * The largest possible table capacity.  This value must be
      * exactly 1<<30 to stay within Java array allocation and indexing
@@ -3510,7 +3510,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
     @SuppressWarnings("ClassHasNoToStringMethod")
     static class Segment<K, V> extends ReentrantLock implements Serializable
     {
-        private static final long serialVersionUID = 2249069246763182397L;
+        private static final long serialVersionUID = 0;
         final float loadFactor;
 
         Segment(final float lf)
@@ -4966,7 +4966,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      */
     abstract static class CollectionView<K, V, E> implements Collection<E>, java.io.Serializable
     {
-        private static final long   serialVersionUID = 7249069246763182397L;
+        private static final long   serialVersionUID = 0;
         private static final String oomeMsg          = "Required array size too large";
         final ConcurrentIdentityHashMap<K, V> map;
 
@@ -5204,7 +5204,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      */
     public static class KeySetView<K, V> extends CollectionView<K, V, K> implements Set<K>, java.io.Serializable
     {
-        private static final long serialVersionUID = 7249069246763182397L;
+        private static final long serialVersionUID = 0;
         private final V value;
 
         KeySetView(final ConcurrentIdentityHashMap<K, V> map, final V value)
@@ -5373,7 +5373,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      */
     static final class ValuesView<K, V> extends CollectionView<K, V, V> implements Collection<V>, java.io.Serializable
     {
-        private static final long serialVersionUID = 2249069246763182397L;
+        private static final long serialVersionUID = 0;
 
         ValuesView(final ConcurrentIdentityHashMap<K, V> map)
         {
@@ -5460,7 +5460,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
      */
     static final class EntrySetView<K, V> extends CollectionView<K, V, Map.Entry<K, V>> implements Set<Map.Entry<K, V>>, java.io.Serializable
     {
-        private static final long serialVersionUID = 2249069246763182397L;
+        private static final long serialVersionUID = 0;
 
         EntrySetView(final ConcurrentIdentityHashMap<K, V> map)
         {
@@ -7469,7 +7469,7 @@ public class ConcurrentIdentityHashMap<K, V> extends AbstractMap<K, V> implement
          * Rarely-used holder for the second of a pair of Gaussians
          */
         private static final ThreadLocal<Double>      nextLocalGaussian      = new ThreadLocal<>();
-        private static final long                     serialVersionUID       = - 5851777807851030925L;
+        private static final long                     serialVersionUID       = 0;
         /**
          * @serialField rnd long
          * seed for random computations

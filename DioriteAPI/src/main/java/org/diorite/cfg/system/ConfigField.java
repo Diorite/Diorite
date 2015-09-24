@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -76,7 +75,10 @@ import javassist.NotFoundException;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ConfigField implements Comparable<ConfigField>, CfgEntryData
 {
+    public static final CtClass[] EMPTY_CLASSES = new CtClass[0];
+
     private static final Pattern VALID_JAVA_NAME = Pattern.compile("[^a-zA-Z0-9_]");
+
     private final Field            field;
     private final int              index;
     private final String           name;
@@ -126,7 +128,6 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         Supplier<Object> def = null;
         annotation:
         {
-            final boolean isCollection = Object[].class.isAssignableFrom(type) || Iterable.class.isAssignableFrom(type) || Iterator.class.isAssignableFrom(type);
             {
                 final CfgBooleanDefault annotation = field.getAnnotation(CfgBooleanDefault.class);
                 if (annotation != null)
@@ -341,7 +342,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
                     try
                     {
                         def = path.startsWith("adv|") ? ConfigField.parseMethodAdv(path.substring(4), field.getDeclaringClass(), field.getType(), imports.toArray(new String[imports.size()])) : parseMethod(path, field.getDeclaringClass(), field.getType(), imports.toArray(new String[imports.size()]));
-                    } catch (CannotCompileException | IllegalAccessException | InstantiationException | NotFoundException e)
+                    } catch (CannotCompileException | NotFoundException e)
                     {
                         e.printStackTrace();
                     }
@@ -351,12 +352,12 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         this.def = def;
     }
 
-    static Supplier parseMethod(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
+    static Supplier parseMethod(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, NotFoundException
     {
         return parseMethodAdv("return " + str + ";", clazz, returnClass, imports);
     }
 
-    static Supplier parseMethodAdv(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException
+    static Supplier parseMethodAdv(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, NotFoundException
     {
         final ClassPool pool = ClassPool.getDefault();
 
@@ -514,7 +515,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             };
         }
         init.setInterfaces(new CtClass[]{interfaceType});
-        init.addMethod(CtNewMethod.make(returnType, "eval", new CtClass[0], new CtClass[]{pool.get("java.lang.Exception")}, "{\n" + str + "\n}", init));
+        init.addMethod(CtNewMethod.make(returnType, "eval", EMPTY_CLASSES, new CtClass[]{pool.get("java.lang.Exception")}, "{\n" + str + "\n}", init));
         return func.apply(init.toClass(clazz.getClassLoader()));
     }
 

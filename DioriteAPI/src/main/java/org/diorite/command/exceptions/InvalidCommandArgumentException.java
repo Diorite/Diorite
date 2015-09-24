@@ -2,7 +2,7 @@ package org.diorite.command.exceptions;
 
 public class InvalidCommandArgumentException extends CommandException
 {
-    private static final long serialVersionUID = 6131409074456680451L;
+    private static final long serialVersionUID = 0;
 
     public InvalidCommandArgumentException()
     {

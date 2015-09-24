@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.zip.CRC32;
@@ -20,6 +21,7 @@ import java.util.zip.ZipFile;
  * @author mzechner
  * @author Nathan Sweet
  */
+@SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
 public class SharedLibraryLoader
 {
     public static boolean isWindows = System.getProperty("os.name").contains("Windows");
@@ -31,7 +33,7 @@ public class SharedLibraryLoader
     public static boolean is64Bit   = System.getProperty("os.arch").equals("amd64") || System.getProperty("os.arch").equals("x86_64");
 
     // JDK 8 only.
-    public static String abi = ((System.getProperty("sun.arch.abi") != null) ? System.getProperty("sun.arch.abi") : "");
+    public static final String abi = ((System.getProperty("sun.arch.abi") != null) ? System.getProperty("sun.arch.abi") : "");
 
     static
     {
@@ -119,11 +121,11 @@ public class SharedLibraryLoader
         {
             throw new RuntimeException("Unable to extract LWJGL natives.", ex);
         }
-        System.setProperty("org.lwjgl.librarypath", nativesDir.getAbsolutePath());
+        System.setProperty("org.lwjgl.librarypath", (nativesDir != null) ? nativesDir.getAbsolutePath() : "");
         load = false;
     }
 
-    private static final HashSet<String> loadedLibraries = new HashSet<>();
+    private static final Collection<String> loadedLibraries = new HashSet<>(10);
 
     private String nativesJar;
 
@@ -172,7 +174,7 @@ public class SharedLibraryLoader
             try
             {
                 input.close();
-            } catch (final IOException e)
+            } catch (final IOException ignored)
             {
             }
         }
@@ -251,11 +253,8 @@ public class SharedLibraryLoader
             return input;
         }
 
-        // Read from JAR.
-        ZipFile file = null;
-        try
+        try (ZipFile file = new ZipFile(this.nativesJar))
         {
-            file = new ZipFile(this.nativesJar);
             final ZipEntry entry = file.getEntry(path);
             if (entry == null)
             {
@@ -265,17 +264,6 @@ public class SharedLibraryLoader
         } catch (final IOException ex)
         {
             throw new RuntimeException("Error reading '" + path + "' in JAR: " + this.nativesJar, ex);
-        } finally
-        {
-            if (file != null)
-            {
-                try
-                {
-                    file.close();
-                } catch (final IOException e)
-                {
-                }
-            }
         }
     }
 
@@ -287,10 +275,8 @@ public class SharedLibraryLoader
      * @param dirName    The name of the subdirectory where the file will be extracted. If null, the file's CRC will be used.
      *
      * @return The extracted file.
-     *
-     * @throws IOException if any file operation will throw it.
      */
-    public File extractFile(final String sourcePath, String dirName) throws IOException
+    public File extractFile(final String sourcePath, String dirName)
     {
         try
         {
@@ -393,7 +379,10 @@ public class SharedLibraryLoader
         }
         try
         {
-            new FileOutputStream(testFile).close();
+            try (final FileOutputStream s = new FileOutputStream(testFile))
+            {
+                s.close();
+            }
             return this.canExecute(testFile);
         } catch (final Throwable ex)
         {
@@ -424,7 +413,7 @@ public class SharedLibraryLoader
         return false;
     }
 
-    private File extractFile(final String sourcePath, final String sourceCrc, final File extractedFile) throws IOException
+    private File extractFile(final String sourcePath, final String sourceCrc, final File extractedFile)
     {
         String extractedCrc = null;
         if (extractedFile.exists())
@@ -442,21 +431,20 @@ public class SharedLibraryLoader
         {
             try
             {
-                final InputStream input = this.readFile(sourcePath);
                 extractedFile.getParentFile().mkdirs();
-                final FileOutputStream output = new FileOutputStream(extractedFile);
-                final byte[] buffer = new byte[4096];
-                while (true)
+                try (final InputStream input = this.readFile(sourcePath); final FileOutputStream output = new FileOutputStream(extractedFile))
                 {
-                    final int length = input.read(buffer);
-                    if (length == - 1)
+                    final byte[] buffer = new byte[4096];
+                    while (true)
                     {
-                        break;
+                        final int length = input.read(buffer);
+                        if (length == - 1)
+                        {
+                            break;
+                        }
+                        output.write(buffer, 0, length);
                     }
-                    output.write(buffer, 0, length);
                 }
-                input.close();
-                output.close();
             } catch (final IOException ex)
             {
                 throw new RuntimeException("Error extracting file: " + sourcePath + "\nTo: " + extractedFile.getAbsolutePath(), ex);
@@ -470,6 +458,7 @@ public class SharedLibraryLoader
      * Extracts the source file and calls System.load. Attemps to extract and load from multiple locations. Throws runtime
      * exception if all fail.
      */
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     private void loadFile(final String sourcePath)
     {
         final String sourceCrc = this.crc(this.readFile(sourcePath));

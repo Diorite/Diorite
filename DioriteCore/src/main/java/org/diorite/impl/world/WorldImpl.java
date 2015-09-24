@@ -46,7 +46,7 @@ import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
 import org.diorite.world.generator.WorldGenerators;
 
-import gnu.trove.set.TLongSet;
+import gnu.trove.TLongCollection;
 import gnu.trove.set.hash.TLongHashSet;
 
 public class WorldImpl implements World, Tickable
@@ -66,7 +66,7 @@ public class WorldImpl implements World, Tickable
     protected     GameMode         defaultGameMode   = GameMode.SURVIVAL;
     protected     int              maxHeight         = Chunk.CHUNK_FULL_HEIGHT - 1;
     protected     byte             forceLoadedRadius = 5;
-    private final TLongSet         activeChunks      = new TLongHashSet(1000);
+    private final TLongCollection  activeChunks      = new TLongHashSet(1000);
     protected       long           seed;
     protected       boolean        raining;
     protected       boolean        thundering;
@@ -332,17 +332,17 @@ public class WorldImpl implements World, Tickable
     @Override
     public boolean refreshChunk(final int x, final int z)
     {
-        if (! this.isChunkLoaded(x, z))
-        {
-            return false;
-        }
+//        if (! this.isChunkLoaded(x, z))
+//        {
+//            return false;
+//        }
 
-        final long key = IntsToLong.pack(x, z);
-        final boolean result = false;
+//        final long key = IntsToLong.pack(x, z);
+//        final boolean result = false;
 
         // TODO: re-send chunk
 
-        return result;
+        return false;
     }
 
 

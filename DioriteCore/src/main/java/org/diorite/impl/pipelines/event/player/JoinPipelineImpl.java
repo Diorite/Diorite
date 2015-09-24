@@ -29,6 +29,7 @@ import io.netty.buffer.Unpooled;
 
 public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> implements JoinPipeline
 {
+    @SuppressWarnings("MagicNumber")
     @Override
     public void reset_()
     {

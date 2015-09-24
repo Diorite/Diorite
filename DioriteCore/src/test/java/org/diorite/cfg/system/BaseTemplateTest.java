@@ -12,6 +12,7 @@ import org.diorite.cfg.yaml.DioriteYaml;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("UnusedAssignment")
 public class BaseTemplateTest extends TestCase
 {
     private static final boolean PRINT_RESULT = true;

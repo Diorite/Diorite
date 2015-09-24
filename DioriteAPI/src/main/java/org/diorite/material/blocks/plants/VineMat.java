@@ -3,6 +3,9 @@ package org.diorite.material.blocks.plants;
 import java.util.Arrays;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -19,22 +22,22 @@ public class VineMat extends PlantMat
      * Bit flag defining if vines are attachment to south face of block.
      * If bit is set to 0, then it's not attachment to south face of block.
      */
-    public static       byte SOUTH_FLAG       = 0x1;
+    public static final byte SOUTH_FLAG       = 0x1;
     /**
      * Bit flag defining if vines are attachment to west face of block.
      * If bit is set to 0, then it's not attachment to west face of block.
      */
-    public static       byte WEST_FLAG        = 0x2;
+    public static final byte WEST_FLAG        = 0x2;
     /**
      * Bit flag defining if vines are attachment to north face of block.
      * If bit is set to 0, then it's not attachment to north face of block.
      */
-    public static       byte NORTH_FLAG       = 0x4;
+    public static final byte NORTH_FLAG       = 0x4;
     /**
      * Bit flag defining if vines are attachment to east face of block.
      * If bit is set to 0, then it's not attachment to east face of block.
      */
-    public static       byte EAST_FLAG        = 0x8;
+    public static final byte EAST_FLAG        = 0x8;
     /**
      * Sub-ids used by diorite/minecraft by default
      */
@@ -227,5 +230,11 @@ public class VineMat extends PlantMat
         VineMat.register(VINE_EAST_NORTH_SOUTH);
         VineMat.register(VINE_EAST_NORTH_WEST);
         VineMat.register(VINE_EAST_NORTH_WEST_SOUTH);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("faces", this.faces).toString();
     }
 }

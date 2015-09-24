@@ -29,6 +29,7 @@ public class PlanksMat extends WoodMat implements FuelMat
     private static final Map<String, PlanksMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PlanksMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected PlanksMat()
     {
         super("PLANKS", 5, "minecraft:planks", "QAK", WoodTypeMat.OAK.getPlanksMeta(), WoodTypeMat.OAK, 2, 15);

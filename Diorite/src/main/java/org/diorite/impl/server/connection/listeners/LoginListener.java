@@ -152,6 +152,7 @@ public class LoginListener implements PacketLoginClientListener
         this.gameProfile.setId(uuid);
     }
 
+    @Override
     public void disconnect(final String msg)
     {
         try

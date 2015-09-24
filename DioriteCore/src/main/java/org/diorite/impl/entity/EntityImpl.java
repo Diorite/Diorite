@@ -32,6 +32,9 @@ import org.diorite.world.chunk.Chunk;
 
 public abstract class EntityImpl extends GameObjectImpl implements Entity, Tickable, Trackable
 {
+    protected static final double PHYSIC_GRAVITY_CONST_1 = 0.98D;
+    protected static final double PHYSIC_GRAVITY_CONST_2 = 0.08D;
+
     private static final AtomicInteger ENTITY_ID = new AtomicInteger();
 
     public static int getNextEntityID()
@@ -103,7 +106,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
 
     protected boolean aiEnabled = true; // don't do any actions if AI is disabled
 
-    protected BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
+    protected final BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
 
     protected EntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
@@ -143,6 +146,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     @Override
     public int getTrackRange()
     {
+        //noinspection MagicNumber temp
         return 64;
     }
 

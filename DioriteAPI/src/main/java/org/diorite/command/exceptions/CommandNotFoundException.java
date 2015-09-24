@@ -2,7 +2,7 @@ package org.diorite.command.exceptions;
 
 public class CommandNotFoundException extends CommandException
 {
-    private static final long serialVersionUID = - 4644586618826521597L;
+    private static final long serialVersionUID = 0;
 
     public CommandNotFoundException()
     {

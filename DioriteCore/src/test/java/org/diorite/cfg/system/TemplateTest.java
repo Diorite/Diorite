@@ -21,6 +21,7 @@ import org.diorite.cfg.annotations.defaults.CfgIntArrayDefault;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("MagicNumber")
 public class TemplateTest extends TestCase
 {
     private static final boolean PRINT_TEMPLATE = false;

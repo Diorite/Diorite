@@ -96,7 +96,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     protected       byte                viewDistance;
     protected       byte                renderDistance;
     protected       GameMode            gameMode;
-    protected       PlayerInventoryImpl inventory;
+    protected final PlayerInventoryImpl inventory;
 
     protected PacketPlayServerAbilities abilities = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 

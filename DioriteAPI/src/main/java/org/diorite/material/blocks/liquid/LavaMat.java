@@ -234,6 +234,7 @@ public class LavaMat extends LiquidMat
      */
     public static class LavaStill extends LavaMat
     {
+        @SuppressWarnings("MagicNumber")
         public LavaStill()
         {
             super(LiquidTypeMat.STILL, 100, 500);

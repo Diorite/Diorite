@@ -6,6 +6,7 @@ import org.diorite.utils.pipeline.BasePipeline;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("MagicNumber")
 public class PipelineTest extends TestCase
 {
     @org.junit.Test

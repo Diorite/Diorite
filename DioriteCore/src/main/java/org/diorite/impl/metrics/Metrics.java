@@ -104,16 +104,16 @@ public class Metrics
             switch (core.getOnlineMode())
             {
                 case TRUE:
-                    graph.addPlotter(new SimpleMetricsPlotter("Online"));
+                    graph.addPlotter(new BooleanMetricsPlotter("Online"));
                     break;
                 case FALSE:
-                    graph.addPlotter(new SimpleMetricsPlotter("Offline"));
+                    graph.addPlotter(new BooleanMetricsPlotter("Offline"));
                     break;
                 case AUTO:
-                    graph.addPlotter(new SimpleMetricsPlotter("Auto"));
+                    graph.addPlotter(new BooleanMetricsPlotter("Auto"));
                     break;
                 default:
-                    graph.addPlotter(new SimpleMetricsPlotter("Unknown"));
+                    graph.addPlotter(new BooleanMetricsPlotter("Unknown"));
             }
         }
         {
@@ -157,15 +157,7 @@ public class Metrics
                         final EntityType type = EntityType.getByMinecraftId(it.key());
                         if (type != null)
                         {
-                            final int value = it.value();
-                            result.add(new MetricsPlotter(type.getMcName())
-                            {
-                                @Override
-                                public int getValue()
-                                {
-                                    return value;
-                                }
-                            });
+                            result.add(new SimpleMetricsPlotter(type.getMcName(), it.value()));
                         }
                     }
                     return result;
@@ -308,7 +300,7 @@ public class Metrics
                             // After the first post we set firstPost to false
                             // Each post thereafter will be a ping
                             this.firstPost = false;
-                            this.nextPost = System.currentTimeMillis() + (PING_INTERVAL * 60 * 1000);
+                            this.nextPost = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(PING_INTERVAL);
                         } catch (final IOException e)
                         {
                             if (CoreMain.isEnabledDebug())
@@ -531,16 +523,7 @@ public class Metrics
         }
     }
 
-    /**
-     * Appends a json encoded key/value pair to the given string builder.
-     *
-     * @param json
-     * @param key
-     * @param value
-     *
-     * @throws UnsupportedEncodingException
-     */
-    private static void appendJSONPair(final StringBuilder json, final String key, final String value) throws UnsupportedEncodingException
+    private static void appendJSONPair(final StringBuilder json, final String key, final String value)
     {
         boolean isValueNumeric = false;
 

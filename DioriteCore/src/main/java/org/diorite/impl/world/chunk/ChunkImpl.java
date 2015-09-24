@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.pipelines.event.chunk.ChunkGeneratePipelineImpl;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.event.EventType;
@@ -212,7 +211,6 @@ public class ChunkImpl implements Chunk
             {
                 if (this.populated.compareAndSet(false, true))
                 {
-                    ChunkGeneratePipelineImpl.addPops(this.pos);
                     this.getWorld().getGenerator().getPopulators().forEach(pop -> pop.populate(this));
                     return true;
                 }

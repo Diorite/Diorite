@@ -27,6 +27,7 @@ import org.diorite.cfg.WorldsConfig.WorldGroupConfig;
 import org.diorite.entity.Player;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
+import org.diorite.nbt.NbtNamedTagContainer;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.DioriteUtils;
@@ -200,7 +201,7 @@ public class WorldsManagerImpl implements WorldsManager
                 {
                     final NbtTagCompound nbt = new NbtTagCompound();
                     world.writeTo(nbt);
-                    final NbtTagCompound nbtData = new NbtTagCompound();
+                    final NbtNamedTagContainer nbtData = new NbtTagCompound();
                     nbtData.setTag("data", nbt);
                     os.write(nbtData);
                     os.flush();

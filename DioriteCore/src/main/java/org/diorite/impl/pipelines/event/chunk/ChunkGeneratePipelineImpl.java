@@ -4,29 +4,9 @@ import org.diorite.impl.world.WorldImpl;
 import org.diorite.event.chunk.ChunkGenerateEvent;
 import org.diorite.event.pipelines.event.chunk.ChunkGeneratePipeline;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
-import org.diorite.world.chunk.ChunkPos;
 
 public class ChunkGeneratePipelineImpl extends SimpleEventPipeline<ChunkGenerateEvent> implements ChunkGeneratePipeline
 {
-//    static Set<ChunkPos> gens = new ConcurrentSet<>();
-//    static Set<ChunkPos> pops = new ConcurrentSet<>();
-
-    public static void addGen(final ChunkPos pos)
-    {
-//        if (Main.isEnabledDebug() && ! gens.add(pos))
-//        {
-//            Main.debug("[CHUNK_ERROR] Chunk generated second time: " + pos);
-//        }
-    }
-
-    public static void addPops(final ChunkPos pos)
-    {
-//        if (Main.isEnabledDebug() && ! pops.add(pos))
-//        {
-//            Main.debug("[CHUNK_ERROR] Chunk populated second time: " + pos);
-//        }
-    }
-
     @Override
     public void reset_()
     {

@@ -169,7 +169,7 @@ public class BaseItemStack implements ItemStack
             final int pendingItems = (this.amount + amount) - maxStack;
             this.amount = maxStack;
 
-            final BaseItemStack temp = new BaseItemStack(this);
+            final ItemStack temp = new BaseItemStack(this);
             temp.setAmount(pendingItems);
             return temp;
         }

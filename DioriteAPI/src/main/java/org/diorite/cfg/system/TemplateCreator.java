@@ -173,7 +173,7 @@ public final class TemplateCreator
                         try
                         {
                             def = path.startsWith("adv|") ? ConfigField.parseMethodAdv(path.substring(4), clazz, clazz, imports.toArray(new String[imports.size()])) : ConfigField.parseMethod(path, clazz, clazz, imports.toArray(new String[imports.size()]));
-                        } catch (CannotCompileException | IllegalAccessException | InstantiationException | NotFoundException e)
+                        } catch (CannotCompileException | NotFoundException e)
                         {
                             e.printStackTrace();
                         }

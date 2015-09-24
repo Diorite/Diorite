@@ -18,7 +18,7 @@ import org.diorite.plugin.ChildPlugin;
 /**
  * Static bindings for message methods related with Diorite.
  */
-public class DioriteMesssges
+public final class DioriteMesssges
 {
     /**
      * Helper variable to prevent a typo. Separator used in path.
@@ -46,6 +46,10 @@ public class DioriteMesssges
     public static final String KEY_KILLED_BY = "killedby";
 
     private static Messages msgs;
+
+    private DioriteMesssges()
+    {
+    }
 
     /**
      * Returns main instance of {@link Messages} used to store all diorite and many diorite plugins messages.<br>

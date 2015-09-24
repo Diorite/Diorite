@@ -2,6 +2,9 @@ package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
@@ -338,5 +341,11 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         {
             return this.flag;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("damage", this.damage).append("axis", this.axis).append("rotated", this.rotated).toString();
     }
 }

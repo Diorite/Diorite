@@ -63,7 +63,7 @@ public class PacketPlayServerWindowItems extends PacketPlayServer
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.windowId = data.readUnsignedByte();
-        final short count = data.readShort();
+//        final short count = data.readShort();
         //for (int i = 0; count < i; i++)
         //{
         //    this.items.add(data.readItemStack());

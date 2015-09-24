@@ -7,7 +7,7 @@ import org.diorite.utils.collections.comparators.ByValueComparator;
 
 public class ByValueSortingConcurrentSkipListMap<K extends Comparable<K>, V extends Comparable<V>> extends ConcurrentSkipListMap<K, V>
 {
-    private static final long serialVersionUID = 3704089208531137243L;
+    private static final long serialVersionUID = 0;
     protected final ByValueComparator<K, V> comparator;
 
     public ByValueSortingConcurrentSkipListMap(final ByValueComparator<K, V> comparator)

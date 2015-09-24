@@ -22,6 +22,12 @@ public class PacketPlayClientResourcePackStatus extends PacketPlayClient
     {
     }
 
+    public PacketPlayClientResourcePackStatus(final String hash, final ResourcePackStatus status)
+    {
+        this.hash = hash;
+        this.status = status;
+    }
+
     public String getHash()
     {
         return this.hash;

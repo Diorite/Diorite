@@ -5,7 +5,7 @@ import java.util.BitSet;
 @SuppressWarnings("ClassHasNoToStringMethod")
 class SectorsBitSet extends BitSet
 {
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0;
 
     private int largestIndex;
 

@@ -58,11 +58,7 @@ public class LevelGroup extends SpecialGroup<Long>
             return false;
         }
         final Long i = DioriteMathUtils.asLong(string.substring(0, endIndex));
-        if (i == null)// should never be true, only if someone use number that don't fit into long.
-        {
-            return false;
-        }
-        return true;
+        return i != null; // should never be null, only if someone use number that don't fit into long.
     }
 
     @Override

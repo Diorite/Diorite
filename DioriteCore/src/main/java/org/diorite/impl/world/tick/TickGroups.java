@@ -58,12 +58,7 @@ public class TickGroups implements Tickable
             return;
         }
         final AtomicInteger i = new AtomicInteger(0);
-        final ForkJoinPool pool = new ForkJoinPool(this.groups.size(), p -> new ForkJoinWorkerThread(p)
-        {
-            {
-                this.setName("[WorldTick@" + i.getAndIncrement() + "]");
-            }
-        }, (t, e) -> {
+        final ForkJoinPool pool = new ForkJoinPool(this.groups.size(), p -> new NamedForkJoinWorkerThread(p, i.getAndIncrement()), (t, e) -> {
             // TODO: maybe add some pretty error priting
             System.err.println("Error in tick thread: " + t.getName());
             e.printStackTrace();
@@ -109,5 +104,14 @@ public class TickGroups implements Tickable
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("groups", this.groups).toString();
+    }
+
+    private static class NamedForkJoinWorkerThread extends ForkJoinWorkerThread
+    {
+        private NamedForkJoinWorkerThread(final ForkJoinPool p, final int i)
+        {
+            super(p);
+            this.setName("[WorldTick@" + i + "]");
+        }
     }
 }

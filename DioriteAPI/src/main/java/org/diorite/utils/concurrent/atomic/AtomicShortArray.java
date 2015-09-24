@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicIntegerArray;
 @SuppressWarnings("MagicNumber")
 public class AtomicShortArray implements Serializable
 {
-    private static final long serialVersionUID = 12344553523475L;
+    private static final long serialVersionUID = 0;
     private final int                length;
     private final int                backingArraySize;
     private final AtomicIntegerArray backingArray;

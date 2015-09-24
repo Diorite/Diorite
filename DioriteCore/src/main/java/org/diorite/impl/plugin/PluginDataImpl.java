@@ -78,7 +78,6 @@ public class PluginDataImpl implements PluginData
         this.version = (version == null) ? "unknown" : version;
         this.author = (author == null) ? "unknown" : author;
         this.prefix = (prefix == null) ? (this.name + " v" + this.version) : StringUtils.replaceEach(prefix, new String[]{"%name%", "%version%"}, new String[]{this.name, this.version});
-        ;
         this.description = (description == null) ? "" : description;
         this.website = (website == null) ? "" : website;
     }

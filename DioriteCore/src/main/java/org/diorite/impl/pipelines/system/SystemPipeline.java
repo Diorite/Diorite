@@ -7,6 +7,7 @@ import org.diorite.event.pipelines.ExceptionPipeline;
 import org.diorite.utils.pipeline.BasePipeline;
 import org.diorite.utils.pipeline.SimpleExceptionPipeline;
 
+@SuppressWarnings("ClassHasNoToStringMethod")
 public abstract class SystemPipeline<T> extends BasePipeline<SystemPipelineHandler<T>>
 {
     protected final ExceptionPipeline exceptionPipeline = new SimpleExceptionPipeline();
@@ -15,20 +16,7 @@ public abstract class SystemPipeline<T> extends BasePipeline<SystemPipelineHandl
     {
         super.clear();
         this.exceptionPipeline.clear();
-        this.exceptionPipeline.add("Unhandled", new ExceptionHandler()
-        {
-            @Override
-            public void tryCatch(final ExceptionEvent evt)
-            {
-                if (evt.isCancelled())
-                {
-                    return;
-                }
-                System.err.println("Error when executing core-level pipeline (" + this.getClass().getName() + " -> " + evt.getClass().getName() + ")");
-                evt.getThrowable().printStackTrace();
-                evt.cancel();
-            }
-        });
+        this.exceptionPipeline.add("Unhandled", new SystemExceptionHandler());
     }
 
     public void run(final DioriteCore core, final T data)
@@ -64,6 +52,21 @@ public abstract class SystemPipeline<T> extends BasePipeline<SystemPipelineHandl
     public synchronized void clear()
     {
         this.init();
+    }
+
+    private static class SystemExceptionHandler implements ExceptionHandler
+    {
+        @Override
+        public void tryCatch(final ExceptionEvent evt)
+        {
+            if (evt.isCancelled())
+            {
+                return;
+            }
+            System.err.println("Error when executing core-level pipeline (" + this.getClass().getName() + " -> " + evt.getClass().getName() + ")");
+            evt.getThrowable().printStackTrace();
+            evt.cancel();
+        }
     }
 
     {

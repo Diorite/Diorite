@@ -1,17 +1,14 @@
 package org.diorite.impl.permissions;
 
-import java.io.PrintStream;
-import java.util.Random;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public abstract class PermissionContainerImpl
 {
     private PermissionContainerImpl parent;
 
-    PrintStream out = System.out;
-
     public PermissionContainerImpl()
     {
-        final Random rand = new Random();
     }
 
     public PermissionContainerImpl(final PermissionContainerImpl parent)
@@ -34,5 +31,11 @@ public abstract class PermissionContainerImpl
     {
         // TODO;
         return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("parent", this.parent).toString();
     }
 }

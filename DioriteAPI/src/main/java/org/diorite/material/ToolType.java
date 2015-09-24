@@ -8,7 +8,6 @@ import gnu.trove.map.TIntObjectMap;
 /**
  * Represent type of tool.
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
 public class ToolType extends ASimpleEnum<ToolType>
 {
     static

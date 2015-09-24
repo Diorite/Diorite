@@ -7,7 +7,7 @@ import gnu.trove.strategy.HashingStrategy;
 @SuppressWarnings("rawtypes")
 class SimpleEnumHashingStrategy implements HashingStrategy<SimpleEnum>
 {
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0;
 
     static final SimpleEnumHashingStrategy INSTANCE = new SimpleEnumHashingStrategy();
 

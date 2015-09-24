@@ -102,7 +102,7 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
     {
         INTERACT,
         ATTACK,
-        INTERACTAT;
+        INTERACTAT
     }
 
     @Override

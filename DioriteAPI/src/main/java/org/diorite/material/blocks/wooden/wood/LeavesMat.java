@@ -208,6 +208,7 @@ public class LeavesMat extends WoodMat
      *
      * @param element sub-type to register
      */
+    @SuppressWarnings("MagicNumber")
     public static void register(final LeavesMat element)
     {
         byID.put((byte) (element.getType() + ((element instanceof Leaves2) ? 16 : 0)), element);

@@ -28,7 +28,7 @@ public class FilledMapMat extends ItemMaterialData
 
     protected FilledMapMat(final short type)
     {
-        super(FILLED_MAP.name(), FILLED_MAP.getId(), FILLED_MAP.getMinecraftId(), Integer.toString(type), (short) type);
+        super(FILLED_MAP.name(), FILLED_MAP.getId(), FILLED_MAP.getMinecraftId(), Integer.toString(type), type);
     }
 
     protected FilledMapMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)

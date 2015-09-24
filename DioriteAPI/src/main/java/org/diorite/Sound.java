@@ -13,6 +13,7 @@ public class Sound extends ASimpleEnum<Sound>
 {
     static
     {
+        //noinspection MagicNumber
         init(Sound.class, 12);
     }
 

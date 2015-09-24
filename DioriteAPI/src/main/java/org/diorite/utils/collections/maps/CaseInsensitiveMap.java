@@ -6,7 +6,7 @@ import gnu.trove.map.hash.TCustomHashMap;
 
 public class CaseInsensitiveMap<V> extends TCustomHashMap<String, V>
 {
-    private static final long serialVersionUID = - 6633372376405702411L;
+    private static final long serialVersionUID = 0;
 
     public CaseInsensitiveMap()
     {

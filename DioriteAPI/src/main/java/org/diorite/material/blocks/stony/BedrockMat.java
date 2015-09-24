@@ -22,6 +22,7 @@ public class BedrockMat extends StonyMat
     private static final Map<String, BedrockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<BedrockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BedrockMat()
     {
         super("BEDROCK", 7, "minecraft:bedrock", "BEDROCK", (byte) 0x00, - 1, 18_000_000);

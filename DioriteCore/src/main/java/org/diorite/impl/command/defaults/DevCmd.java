@@ -18,6 +18,7 @@ import org.diorite.chat.component.ComponentBuilder;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.command.CommandPriority;
+import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
 
@@ -69,7 +70,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "inv":
                 {
-                    ((PlayerImpl) sender).getInventory().update();
+                    ((InventoryHolder) sender).getInventory().update();
                     sender.sendMessage("Inventory updated!");
                     break;
                 }

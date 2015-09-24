@@ -5,7 +5,6 @@ import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
 public class SlotType extends ASimpleEnum<SlotType>
 {
     static

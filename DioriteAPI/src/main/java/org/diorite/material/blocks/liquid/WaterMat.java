@@ -65,6 +65,7 @@ public class WaterMat extends LiquidMat
         super("WATER" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStageMat.SOURCE, liquidType, hardness, blastResistance);
     }
 
+    @SuppressWarnings("MagicNumber")
     protected WaterMat(final LiquidTypeMat liquidType)
     {
         super("WATER" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStageMat.SOURCE, liquidType, 100, 500);
@@ -238,6 +239,7 @@ public class WaterMat extends LiquidMat
      */
     public static class WaterStill extends WaterMat
     {
+        @SuppressWarnings("MagicNumber")
         public WaterStill()
         {
             super(LiquidTypeMat.STILL, 100, 500);

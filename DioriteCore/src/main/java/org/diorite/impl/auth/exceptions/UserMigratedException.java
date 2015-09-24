@@ -2,7 +2,7 @@ package org.diorite.impl.auth.exceptions;
 
 public class UserMigratedException extends InvalidCredentialsException
 {
-    private static final long serialVersionUID = - 5766112398532555784L;
+    private static final long serialVersionUID = 0;
 
     public UserMigratedException()
     {

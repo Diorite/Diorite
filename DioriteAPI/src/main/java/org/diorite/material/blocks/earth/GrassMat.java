@@ -25,6 +25,7 @@ public class GrassMat extends EarthMat
     private static final Map<String, GrassMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<GrassMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected GrassMat()
     {
         super("GRASS", 2, "minecraft:grass", "GRASS", (byte) 0x00, 0.6f, 3);

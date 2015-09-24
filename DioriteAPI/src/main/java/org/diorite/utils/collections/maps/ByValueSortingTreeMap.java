@@ -7,7 +7,7 @@ import org.diorite.utils.collections.comparators.ByValueComparator;
 
 public class ByValueSortingTreeMap<K extends Comparable<K>, V extends Comparable<V>> extends TreeMap<K, V>
 {
-    private static final long serialVersionUID = - 369909181602623038L;
+    private static final long serialVersionUID = 0;
     protected final ByValueComparator<K, V> comparator;
 
     public ByValueSortingTreeMap(final ByValueComparator<K, V> comparator)

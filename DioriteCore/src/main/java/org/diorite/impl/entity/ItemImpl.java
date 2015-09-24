@@ -2,6 +2,9 @@ package org.diorite.impl.entity;
 
 import java.util.UUID;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
@@ -158,8 +161,8 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         {
             return;
         }
-        this.velY *= 0.98D;
-        this.velY -= 0.08D;
+        this.velY *= PHYSIC_GRAVITY_CONST_1;
+        this.velY -= PHYSIC_GRAVITY_CONST_2;
     }
 
     @Override
@@ -191,5 +194,11 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     public int getEntityObjectData()
     {
         return 1;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("item", this.getItemStack()).toString();
     }
 }

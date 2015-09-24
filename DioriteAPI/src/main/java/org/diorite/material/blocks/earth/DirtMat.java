@@ -31,6 +31,7 @@ public class DirtMat extends EarthMat implements VariantableMat
 
     protected final VariantMat variant;
 
+    @SuppressWarnings("MagicNumber")
     protected DirtMat()
     {
         super("DIRT", 3, "minecraft:dirt", "CLASSIC", (byte) 0x00, 0.5f, 2.5f);

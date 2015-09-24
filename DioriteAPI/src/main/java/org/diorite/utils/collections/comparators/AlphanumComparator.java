@@ -26,7 +26,7 @@ import java.util.Comparator;
  */
 public class AlphanumComparator implements Comparator<String>, Serializable
 {
-    private static final long serialVersionUID = - 6791054430669282740L;
+    private static final long serialVersionUID = 0;
 
     private static boolean isDigit(final char ch)
     {
@@ -36,7 +36,7 @@ public class AlphanumComparator implements Comparator<String>, Serializable
     /**
      * Length of string is passed in for improved efficiency (only need to calculate it once) *
      */
-    private static String getChunk(final String s, final int slength, int marker)
+    private static String getChunk(final CharSequence s, final int slength, int marker)
     {
         final StringBuilder chunk = new StringBuilder();
         char c = s.charAt(marker);
@@ -93,7 +93,7 @@ public class AlphanumComparator implements Comparator<String>, Serializable
             thatMarker += thatChunk.length();
 
             // If both chunks contain numeric characters, sort them numerically
-            int result = 0;
+            int result;
             if (isDigit(thisChunk.charAt(0)) && isDigit(thatChunk.charAt(0)))
             {
                 // Simple chunk comparison by length.

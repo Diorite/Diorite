@@ -1,5 +1,6 @@
 package org.diorite.impl.world.generator.structures.tree;
 
+import java.util.Objects;
 import java.util.Random;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -26,13 +27,13 @@ public class SmallTreeStructure extends TreeStructure
     public SmallTreeStructure(final LogMat logMat, final BlockMaterialData leavesMat)
     {
         super(logMat, leavesMat);
-        this.extraBlock = logMat.getWoodType() == WoodTypeMat.BIRCH;
+        this.extraBlock = Objects.equals(logMat.getWoodType(), WoodTypeMat.BIRCH);
     }
 
     public SmallTreeStructure(final WoodTypeMat woodType)
     {
         super(woodType);
-        this.extraBlock = woodType == WoodTypeMat.BIRCH;
+        this.extraBlock = Objects.equals(woodType, WoodTypeMat.BIRCH);
     }
 
     public SmallTreeStructure(final WoodTypeMat woodType, final boolean extraBlock)

@@ -2,7 +2,7 @@ package org.diorite.impl.auth.exceptions;
 
 public class AuthenticationUnavailableException extends AuthenticationException
 {
-    private static final long serialVersionUID = 3994464911577032887L;
+    private static final long serialVersionUID = 0;
 
     public AuthenticationUnavailableException()
     {

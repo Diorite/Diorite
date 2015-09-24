@@ -22,7 +22,7 @@ public class DoubleStoneSlabMat extends StonySlabMat
     public static final int USED_DATA_VALUES = 18;
 
     public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_STONE         = new DoubleStoneSlabMat();
-    public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_SANDSTONE     = new DoubleStoneSlabMat("SANDSTONE", SlabTypeMat.FULL, StoneSlabTypeMat.SANDSTONE, 2, 30);
+    public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_SANDSTONE     = new DoubleStoneSlabMat("SANDSTONE", SlabTypeMat.FULL, StoneSlabTypeMat.SANDSTONE);
     public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_WOODEN        = new DoubleStoneSlabMat("WOODEN", SlabTypeMat.FULL, StoneSlabTypeMat.WOODEN);
     public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_COBBLESTONE   = new DoubleStoneSlabMat("COBBLESTONE", SlabTypeMat.FULL, StoneSlabTypeMat.COBBLESTONE);
     public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_BRICKS        = new DoubleStoneSlabMat("BRICKS", SlabTypeMat.FULL, StoneSlabTypeMat.BRICKS);

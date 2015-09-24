@@ -29,7 +29,7 @@ public class JukeboxMat extends BlockMaterialData implements FuelMat
     private static final Map<String, JukeboxMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<JukeboxMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
-    protected boolean withDisc;
+    protected final boolean withDisc;
 
     @SuppressWarnings("MagicNumber")
     protected JukeboxMat()

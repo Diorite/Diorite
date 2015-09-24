@@ -4,7 +4,7 @@ import gnu.trove.strategy.HashingStrategy;
 
 class CaseInsensitiveHashingStrategy implements HashingStrategy<String>
 {
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0;
 
     static final CaseInsensitiveHashingStrategy INSTANCE = new CaseInsensitiveHashingStrategy();
 

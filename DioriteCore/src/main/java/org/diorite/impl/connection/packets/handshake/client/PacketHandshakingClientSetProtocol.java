@@ -25,7 +25,7 @@ public class PacketHandshakingClientSetProtocol extends PacketHandshakingClient
     {
     }
 
-    public static void main(String[] args)
+    public static void main(final String[] args)
     {
         System.out.println("diorite.org.se.f.d.f.geefr.frgdrdfvs".getBytes(StandardCharsets.UTF_8).length);
     }

@@ -10,7 +10,6 @@ import gnu.trove.map.TIntObjectMap;
 /**
  * Represent type of armor element.
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
 public abstract class ArmorType extends ASimpleEnum<ArmorType>
 {
     static

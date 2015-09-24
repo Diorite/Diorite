@@ -8,6 +8,7 @@ import org.diorite.material.Material;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.structures.Structure;
 
+@SuppressWarnings("MagicNumber")
 public class TestStructure implements Structure
 {
     @Override

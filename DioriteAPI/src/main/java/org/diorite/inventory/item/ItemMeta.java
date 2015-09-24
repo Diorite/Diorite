@@ -44,6 +44,6 @@ public interface ItemMeta
         {
             return a.equals(b);
         }
-        return b.equals(a);
+        return b.equals(null);
     }
 }

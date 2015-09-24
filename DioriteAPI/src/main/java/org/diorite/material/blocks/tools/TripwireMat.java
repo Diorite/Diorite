@@ -2,6 +2,9 @@ package org.diorite.material.blocks.tools;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.PowerableMat;
@@ -358,5 +361,11 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
         TripwireMat.register(TRIPWIRE_POWERED_VALID_DISARMED);
         TripwireMat.register(TRIPWIRE_IN_AIR_VALID_DISARMED);
         TripwireMat.register(TRIPWIRE_POWERED_IN_AIR_VALID_DISARMED);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("powered", this.powered).append("inAir", this.inAir).append("valid", this.valid).append("disarmed", this.disarmed).toString();
     }
 }

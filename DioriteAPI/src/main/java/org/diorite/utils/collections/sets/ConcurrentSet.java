@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class ConcurrentSet<E> extends AbstractSet<E> implements Serializable
 {
-    private static final long serialVersionUID = - 6761513279741915432L;
+    private static final long serialVersionUID = 0;
 
     private final ConcurrentMap<E, Boolean> map;
 

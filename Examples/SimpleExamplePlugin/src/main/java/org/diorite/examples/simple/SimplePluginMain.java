@@ -84,6 +84,7 @@ public class SimplePluginMain extends DioritePlugin
 
     private void registerFakePlugin()
     {
+        //noinspection AnonymousInnerClassMayBeStatic
         final FakeDioritePlugin fake = new FakeDioritePlugin(this, "My-sub-plugin", "0.1", "NorthPL93")
         {
             @Override

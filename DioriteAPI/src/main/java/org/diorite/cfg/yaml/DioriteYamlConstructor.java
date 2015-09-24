@@ -351,7 +351,7 @@ public class DioriteYamlConstructor extends Constructor
 
     public static class ConstructorException extends org.yaml.snakeyaml.constructor.ConstructorException
     {
-        private static final long serialVersionUID = - 8268925155640731920L;
+        private static final long serialVersionUID = 0;
 
         protected ConstructorException(final String context, final Mark contextMark, final String problem, final Mark problemMark, final Throwable cause)
         {

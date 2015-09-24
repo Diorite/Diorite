@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
@@ -46,8 +47,9 @@ class AnvilRegion extends ChunkRegion
 
     private final int[] locations = new int[SECTOR_INTS];
 
-    protected final RandomAccessFile raf;
-    private final   SectorsBitSet    freeSectors;
+    protected final   RandomAccessFile raf;
+    private final     SectorsBitSet    freeSectors;
+    private transient FileChannel      channel;
 
     AnvilRegion(final File file, final int x, final int z)
     {
@@ -371,7 +373,11 @@ class AnvilRegion extends ChunkRegion
             }
         }
         this.setTimestamp(x, z, (int) (System.currentTimeMillis() / 1000));
-        this.raf.getChannel().force(true);
+        if (this.channel == null)
+        {
+            this.channel = this.raf.getChannel();
+        }
+        this.channel.force(true);
     }
 
     private void write(final int offset, final byte[] data, final int length) throws IOException

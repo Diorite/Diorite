@@ -15,7 +15,7 @@ import gnu.trove.map.hash.TLongObjectHashMap;
 
 public abstract class ChunkRegionCache
 {
-    protected final TLongObjectMap<Reference<ChunkRegion>> cache = new TLongObjectHashMap<>(50);
+    protected final TLongObjectMap<Reference<ChunkRegion>> cache = new TLongObjectHashMap<>(100);
 
     protected final String extension;
     protected final File   regionDir;

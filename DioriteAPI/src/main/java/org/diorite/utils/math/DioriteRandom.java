@@ -10,6 +10,8 @@ import org.apache.commons.lang3.Validate;
 
 public class DioriteRandom extends Random
 {
+    private static final long serialVersionUID = 0;
+
     protected DioriteRandom()
     {
     }
