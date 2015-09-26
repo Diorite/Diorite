@@ -17,12 +17,12 @@
         <lwjgl.version>3.0.0a</lwjgl.version>
         <diorite.build>unspecified</diorite.build>
         <diorite.version.raw>indev-0.0.1</diorite.version.raw>
-        <diorite.version>${diorite.version.raw}-b${diorite.build}</diorite.version>
+        <diorite.version>${diorite.version.raw}-b${diorite.build}-SNAPSHOT</diorite.version>
     </properties>
 
     <groupId>org.diorite</groupId>
     <artifactId>DioriteMaster</artifactId>
-    <version>indev-0.0.1-b${diorite.build}</version>
+    <version>indev-0.0.1-b${diorite.build}-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:https://github.com/Diorite/Diorite.git</connection>
@@ -222,30 +222,14 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>buildnumber-maven-plugin</artifactId>-->
-                <!--<version>1.3</version>-->
-                <!--<executions>-->
-                <!--<execution>-->
-                <!--<phase>validate</phase>-->
-                <!--<goals>-->
-                <!--<goal>create</goal>-->
-                <!--</goals>-->
-                <!--</execution>-->
-                <!--</executions>-->
-                <!--<configuration>-->
-                <!--<shortRevisionLength>8</shortRevisionLength>-->
-                <!--<getRevisionOnlyOnce>true</getRevisionOnlyOnce>-->
-                <!--<format>${project.version}-b{0}</format>-->
-                <!--<items>-->
-                <!--<item>buildNumber</item>-->
-                <!--</items>-->
-                <!--</configuration>-->
-                <!--</plugin>-->
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.2</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

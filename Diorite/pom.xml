@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.diorite</groupId>
         <artifactId>DioriteMaster</artifactId>
-        <version>indev-0.0.1-b${diorite.build}</version>
+        <version>indev-0.0.1-b${diorite.build}-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -25,10 +25,6 @@
         <defaultGoal>clean install</defaultGoal>
 
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
