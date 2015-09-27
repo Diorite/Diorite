@@ -18,12 +18,12 @@
         <lwjgl.version>3.0.0a</lwjgl.version>
         <diorite.build>unspecified</diorite.build>
         <diorite.version.raw>indev-0.0.1</diorite.version.raw>
-        <diorite.version>${diorite.version.raw}-b${diorite.build}-SNAPSHOT</diorite.version>
+        <diorite.version>${diorite.version.raw}-b${diorite.build}</diorite.version>
     </properties>
 
     <groupId>org.diorite</groupId>
     <artifactId>DioriteMaster</artifactId>
-    <version>indev-0.0.1-b${diorite.build}-SNAPSHOT</version>
+    <version>indev-0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:https://github.com/Diorite/Diorite.git</connection>
@@ -54,12 +54,12 @@
             <dependency>
                 <groupId>org.diorite</groupId>
                 <artifactId>DioriteCore</artifactId>
-                <version>${diorite.version}</version>
+                <version>${diorite.version.raw}-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.diorite</groupId>
                 <artifactId>DioriteAPI</artifactId>
-                <version>${diorite.version}</version>
+                <version>${diorite.version.raw}-SNAPSHOT</version>
             </dependency>
 
             <dependency>
