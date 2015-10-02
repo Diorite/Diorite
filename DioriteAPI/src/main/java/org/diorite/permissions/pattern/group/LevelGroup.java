@@ -14,19 +14,17 @@ import org.diorite.utils.math.DioriteMathUtils;
  * So bigger permission level means less permissions, so it is descending type.</li>
  * </ol>
  */
-public class LevelGroup extends SpecialGroup<Long>
+public class LevelGroup implements SpecialNumberGroup
 {
     protected final boolean ascending; // {$++} if true, for pattern "foo.{$++}" permission "foo.3" will return true for player with "foo.5", as 3 <= 5.
 
     /**
-     * Construct new level group on given index and with given type.
+     * Construct new level group with given type.
      *
-     * @param index     index of basePermission where data should be stored.
      * @param ascending type of group.
      */
-    public LevelGroup(final int index, final boolean ascending)
+    public LevelGroup(final boolean ascending)
     {
-        super(index);
         this.ascending = ascending;
     }
 
@@ -38,27 +36,6 @@ public class LevelGroup extends SpecialGroup<Long>
     public boolean isAscending()
     {
         return this.ascending;
-    }
-
-    @Override
-    public boolean isValid(final String string)
-    {
-        int endIndex = 0;
-        final char[] charArray = string.toCharArray();
-        for (final int charArrayLength = charArray.length; endIndex < charArrayLength; endIndex++)
-        {
-            final char c = charArray[endIndex];
-            if ((c < '0') || (c > '9'))
-            {
-                break;
-            }
-        }
-        if (endIndex == 0)
-        {
-            return false;
-        }
-        final Long i = DioriteMathUtils.asLong(string.substring(0, endIndex));
-        return i != null; // should never be null, only if someone use number that don't fit into long.
     }
 
     @Override
@@ -84,6 +61,12 @@ public class LevelGroup extends SpecialGroup<Long>
             return new GroupResult(false, false, 0);
         }
         return new GroupResult(true, this.ascending ? (i <= data) : (i >= data), endIndex);
+    }
+
+    @Override
+    public Long parseData(final String data)
+    {
+        return null;
     }
 
     @Override
