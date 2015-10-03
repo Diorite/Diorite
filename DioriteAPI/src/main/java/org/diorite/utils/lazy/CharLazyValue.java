@@ -2,52 +2,50 @@ package org.diorite.utils.lazy;
 
 import java.util.Collection;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.Validate;
 
 import org.diorite.utils.function.CharSupplier;
-import org.diorite.utils.others.Resetable;
 
-public class CharLazyValue implements Resetable
+/**
+ * Class to represent lazy init char values that use {@link CharSupplier} passed in constructor to initialize value in {@link #init()} method. <br>
+ * Class is extending {@link CharLazyValueAbstract}
+ *
+ * @see CharLazyValueAbstract
+ */
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class CharLazyValue extends CharLazyValueAbstract
 {
-    private final CharSupplier supplier;
-    private       char         cached;
-    private       boolean      updated;
+    /**
+     * supplier used by {@link #init()} method.
+     */
+    protected final CharSupplier supplier;
 
+    /**
+     * Construct new CharLazyValue with given supplier for value.
+     *
+     * @param supplier supplier used to initialize value in {@link #init()} method.
+     */
     public CharLazyValue(final CharSupplier supplier)
     {
+        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 
+    /**
+     * Construct new CharLazyValue with given supplier for value.
+     *
+     * @param collection created instance will be added to this list.
+     * @param supplier   supplier used to initialize value in {@link #init()} method.
+     */
     public CharLazyValue(final Collection<? super CharLazyValue> collection, final CharSupplier supplier)
     {
         this.supplier = supplier;
         collection.add(this);
     }
 
-    public char get()
-    {
-        if (this.updated)
-        {
-            return this.cached;
-        }
-        else
-        {
-            this.cached = this.supplier.getAsChar();
-            this.updated = true;
-            return this.cached;
-        }
-    }
-
     @Override
-    public void reset()
+    protected char init()
     {
-        this.updated = false;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("supplier", this.supplier).append("cached", this.cached).toString();
+        return this.supplier.getAsChar();
     }
 }

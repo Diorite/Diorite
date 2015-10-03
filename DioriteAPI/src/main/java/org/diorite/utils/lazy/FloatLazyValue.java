@@ -2,52 +2,50 @@ package org.diorite.utils.lazy;
 
 import java.util.Collection;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.Validate;
 
 import org.diorite.utils.function.FloatSupplier;
-import org.diorite.utils.others.Resetable;
 
-public class FloatLazyValue implements Resetable
+/**
+ * Class to represent lazy init float values that use {@link FloatSupplier} passed in constructor to initialize value in {@link #init()} method. <br>
+ * Class is extending {@link FloatLazyValueAbstract}
+ *
+ * @see FloatLazyValueAbstract
+ */
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class FloatLazyValue extends FloatLazyValueAbstract
 {
-    private final FloatSupplier supplier;
-    private       float         cached;
-    private       boolean       updated;
+    /**
+     * supplier used by {@link #init()} method.
+     */
+    protected final FloatSupplier supplier;
 
+    /**
+     * Construct new FloatLazyValue with given supplier for value.
+     *
+     * @param supplier supplier used to initialize value in {@link #init()} method.
+     */
     public FloatLazyValue(final FloatSupplier supplier)
     {
+        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 
+    /**
+     * Construct new FloatLazyValue with given supplier for value.
+     *
+     * @param collection created instance will be added to this list.
+     * @param supplier   supplier used to initialize value in {@link #init()} method.
+     */
     public FloatLazyValue(final Collection<? super FloatLazyValue> collection, final FloatSupplier supplier)
     {
         this.supplier = supplier;
         collection.add(this);
     }
 
-    public float get()
-    {
-        if (this.updated)
-        {
-            return this.cached;
-        }
-        else
-        {
-            this.cached = this.supplier.getAsFloat();
-            this.updated = true;
-            return this.cached;
-        }
-    }
-
     @Override
-    public void reset()
+    protected float init()
     {
-        this.updated = false;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("supplier", this.supplier).append("cached", this.cached).toString();
+        return this.supplier.getAsFloat();
     }
 }

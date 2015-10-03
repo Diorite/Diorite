@@ -3,41 +3,50 @@ package org.diorite.utils.lazy;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.Validate;
 
-import org.diorite.utils.others.Resetable;
-
-public class LazyValue<T> implements Resetable
+/**
+ * Class to represent lazy init object values that use {@link Supplier} passed in constructor to initialize value in {@link #init()} method. <br>
+ * Class is extending {@link LazyValueAbstract}
+ *
+ * @param T type of lazy init object.
+ *
+ * @see LazyValueAbstract
+ */
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class LazyValue<T> extends LazyValueAbstract<T>
 {
-    private final Supplier<T> supplier;
-    private       T           cached;
+    /**
+     * supplier used by {@link #init()} method.
+     */
+    protected final Supplier<T> supplier;
 
+    /**
+     * Construct new LazyValue with given supplier for value.
+     *
+     * @param supplier supplier used to initialize value in {@link #init()} method.
+     */
     public LazyValue(final Supplier<T> supplier)
     {
+        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 
+    /**
+     * Construct new ByteLazyValue with given supplier for value.
+     *
+     * @param collection created instance will be added to this list.
+     * @param supplier   supplier used to initialize value in {@link #init()} method.
+     */
     public LazyValue(final Collection<? super LazyValue<T>> collection, final Supplier<T> supplier)
     {
         this.supplier = supplier;
         collection.add(this);
     }
 
-    public T get()
-    {
-        return (this.cached != null) ? this.cached : ((this.cached = this.supplier.get()));
-    }
-
     @Override
-    public void reset()
+    protected T init()
     {
-        this.cached = null;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("supplier", this.supplier).append("cached", this.cached).toString();
+        return this.supplier.get();
     }
 }

@@ -3,51 +3,48 @@ package org.diorite.utils.lazy;
 import java.util.Collection;
 import java.util.function.IntSupplier;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.Validate;
 
-import org.diorite.utils.others.Resetable;
-
-public class IntLazyValue implements Resetable
+/**
+ * Class to represent lazy init int values that use {@link IntSupplier} passed in constructor to initialize value in {@link #init()} method. <br>
+ * Class is extending {@link IntLazyValueAbstract}
+ *
+ * @see IntLazyValueAbstract
+ */
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class IntLazyValue extends IntLazyValueAbstract
 {
-    private final IntSupplier supplier;
-    private       int         cached;
-    private       boolean     updated;
+    /**
+     * supplier used by {@link #init()} method.
+     */
+    protected final IntSupplier supplier;
 
+    /**
+     * Construct new IntLazyValue with given supplier for value.
+     *
+     * @param supplier supplier used to initialize value in {@link #init()} method.
+     */
     public IntLazyValue(final IntSupplier supplier)
     {
+        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 
+    /**
+     * Construct new IntLazyValue with given supplier for value.
+     *
+     * @param collection created instance will be added to this list.
+     * @param supplier   supplier used to initialize value in {@link #init()} method.
+     */
     public IntLazyValue(final Collection<? super IntLazyValue> collection, final IntSupplier supplier)
     {
         this.supplier = supplier;
         collection.add(this);
     }
 
-    public int get()
-    {
-        if (this.updated)
-        {
-            return this.cached;
-        }
-        else
-        {
-            this.cached = this.supplier.getAsInt();
-            this.updated = true;
-            return this.cached;
-        }
-    }
-
     @Override
-    public void reset()
+    protected int init()
     {
-        this.updated = false;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("supplier", this.supplier).append("cached", this.cached).toString();
+        return this.supplier.getAsInt();
     }
 }

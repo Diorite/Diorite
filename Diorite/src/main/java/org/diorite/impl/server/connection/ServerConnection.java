@@ -15,7 +15,7 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.ConnectionHandler;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
-import org.diorite.utils.LazyInitVar;
+import org.diorite.utils.lazy.LazyValue;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -32,22 +32,23 @@ import io.netty.util.concurrent.DefaultExecutorServiceFactory;
 public class ServerConnection extends Thread implements ConnectionHandler
 {
     public static final int MILLIS = 500;
-    public final LazyInitVar<NioEventLoopGroup>   lazyInitNioEventLoopGroup;
-    public final LazyInitVar<EpollEventLoopGroup> lazyInitNioEpollEventLoopGroup;
+    public final LazyValue<NioEventLoopGroup>   nioEventLoopGroupLazyValue;
+    public final LazyValue<EpollEventLoopGroup> epollEventLoopGroupLazyValue;
 
     private final AttributeKey<EnumProtocol> protocolKey = AttributeKey.valueOf("protocol");
     private final Collection<NetworkManager> connections = Collections.synchronizedSet(Sets.newConcurrentHashSet());
     private final DioriteCore   core;
     private       ChannelFuture channelFuture;
 
+    @SuppressWarnings("resource")
     public ServerConnection(final DioriteCore core)
     {
         this.core = core;
         this.setDaemon(true);
         this.setName("{Diorite|SrvCon}");
         final int threads = core.getConfig().getNettyThreads();
-        this.lazyInitNioEventLoopGroup = new NioEventLoopGroupLazyInitVar(threads);
-        this.lazyInitNioEpollEventLoopGroup = new EpollEventLoopGroupLazyInitVar(threads);
+        this.nioEventLoopGroupLazyValue = new LazyValue<>(() -> new NioEventLoopGroup(threads, new DefaultExecutorServiceFactory("Netty Client")));
+        this.epollEventLoopGroupLazyValue = new LazyValue<>(() -> new EpollEventLoopGroup(threads, new DefaultExecutorServiceFactory("Netty Epoll Client")));
     }
 
     @Override
@@ -66,17 +67,17 @@ public class ServerConnection extends Thread implements ConnectionHandler
     public void init(final InetAddress address, final int port, final boolean useEpoll)
     {
         final Class<? extends ServerSocketChannel> socketChannelClass;
-        final LazyInitVar<? extends EventLoopGroup> lazyInit;
+        final LazyValue<? extends EventLoopGroup> lazyInit;
         if ((Epoll.isAvailable()) && useEpoll)
         {
             socketChannelClass = EpollServerSocketChannel.class;
-            lazyInit = this.lazyInitNioEpollEventLoopGroup;
+            lazyInit = this.epollEventLoopGroupLazyValue;
             CoreMain.debug("[Netty] Using epoll channel type");
         }
         else
         {
             socketChannelClass = NioServerSocketChannel.class;
-            lazyInit = this.lazyInitNioEventLoopGroup;
+            lazyInit = this.nioEventLoopGroupLazyValue;
             CoreMain.debug("[Netty] Using default channel type");
         }
         this.channelFuture = new ServerBootstrap().channel(socketChannelClass).childHandler(new ServerConnectionChannel(this)).group(lazyInit.get()).localAddress(address, port).bind().syncUninterruptibly();
@@ -160,49 +161,5 @@ public class ServerConnection extends Thread implements ConnectionHandler
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("protocolKey", this.protocolKey).append("connections", this.connections).append("channelFuture", this.channelFuture).append("server", this.core).toString();
-    }
-
-    private static class NioEventLoopGroupLazyInitVar extends LazyInitVar<NioEventLoopGroup>
-    {
-        private final int threads;
-
-        private NioEventLoopGroupLazyInitVar(final int threads)
-        {
-            this.threads = threads;
-        }
-
-        @Override
-        protected NioEventLoopGroup init()
-        {
-            return new NioEventLoopGroup(this.threads, new DefaultExecutorServiceFactory("Netty Client"));
-        }
-
-        @Override
-        public String toString()
-        {
-            return new ToStringBuilder(this).append("threads", this.threads).toString();
-        }
-    }
-
-    private static class EpollEventLoopGroupLazyInitVar extends LazyInitVar<EpollEventLoopGroup>
-    {
-        private final int threads;
-
-        private EpollEventLoopGroupLazyInitVar(final int threads)
-        {
-            this.threads = threads;
-        }
-
-        @Override
-        protected EpollEventLoopGroup init()
-        {
-            return new EpollEventLoopGroup(this.threads, new DefaultExecutorServiceFactory("Netty Epoll Client"));
-        }
-
-        @Override
-        public String toString()
-        {
-            return new ToStringBuilder(this).append("threads", this.threads).toString();
-        }
     }
 }
