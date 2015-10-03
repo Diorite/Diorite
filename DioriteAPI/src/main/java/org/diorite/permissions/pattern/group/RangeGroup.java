@@ -12,22 +12,15 @@ import org.diorite.utils.math.DioriteMathUtils;
  * <li>If player have "foo.[10-20,30-40]" permissions, and we check if he have "foo.30" it will return true as 30 {@literal >=} 30 and 30 {@literal <=} 40, it use multiple ranges.</li>
  * </ol>
  */
-public class RangeGroup extends SpecialGroup<Long>
+public class RangeGroup implements SpecialNumberGroup
 {
     /**
-     * Construct new range group on given index.
-     *
-     * @param index index of basePermission where data should be stored.
+     * Construct new range group.
      */
-    public RangeGroup(final int index)
+    @SuppressWarnings("RedundantNoArgConstructor")
+    public RangeGroup()
     {
-        super(index);
-    }
-
-    @Override
-    public boolean isValid(final String string)
-    {
-        return false;
+        super();
     }
 
     @Override
