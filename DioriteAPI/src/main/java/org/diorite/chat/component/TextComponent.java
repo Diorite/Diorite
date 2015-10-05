@@ -100,7 +100,11 @@ public class TextComponent extends BaseComponent
     @Override
     protected void toLegacyText(final StringBuilder builder)
     {
-        builder.append(this.getColor());
+        final ChatColor color = this.getColor();
+        if (color != null)
+        {
+            builder.append(color);
+        }
         if (this.isBold())
         {
             builder.append(ChatColor.BOLD);
@@ -121,7 +125,10 @@ public class TextComponent extends BaseComponent
         {
             builder.append(ChatColor.MAGIC);
         }
-        builder.append(this.text);
+        if (this.text != null)
+        {
+            builder.append(this.text);
+        }
         super.toLegacyText(builder);
     }
 

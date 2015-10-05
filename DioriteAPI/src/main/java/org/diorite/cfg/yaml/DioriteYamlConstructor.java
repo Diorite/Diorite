@@ -29,6 +29,9 @@ import org.diorite.cfg.system.elements.TemplateElement;
 import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.utils.reflections.ReflectElement;
 
+/**
+ * Diorite extension of {@link Constructor} with more public methods.
+ */
 public class DioriteYamlConstructor extends Constructor
 {
     {
@@ -37,40 +40,80 @@ public class DioriteYamlConstructor extends Constructor
         this.yamlClassConstructors.put(NodeId.mapping, new DioriteConstructMapping());
     }
 
+    /**
+     * Construct new instance with default settings.
+     */
     public DioriteYamlConstructor()
     {
     }
 
+    /**
+     * Create Constructor for the specified class as the root.
+     *
+     * @param theRoot - the class (usually JavaBean) to be constructed
+     */
     public DioriteYamlConstructor(final Class<?> theRoot)
     {
         super(theRoot);
     }
 
+    /**
+     * Create Constructor for the specified class as the root.
+     *
+     * @param theRoot - the class (usually JavaBean) to be constructed
+     */
     public DioriteYamlConstructor(final TypeDescription theRoot)
     {
         super(theRoot);
     }
 
+    /**
+     * Create Constructor for the specified class as the root.
+     *
+     * @param theRoot - the class (usually JavaBean) to be constructed
+     *
+     * @throws ClassNotFoundException if there is no class with given name.
+     */
     public DioriteYamlConstructor(final String theRoot) throws ClassNotFoundException
     {
         super(theRoot);
     }
 
+    /**
+     * Returns type definitions of this yaml constructor instance.
+     *
+     * @return type definitions of this yaml constructor instance.
+     */
     public Map<Class<?>, TypeDescription> getTypeDefinitions()
     {
         return this.typeDefinitions;
     }
 
+    /**
+     * Returns yaml class constructor map of this yaml constructor instance.
+     *
+     * @return yaml class constructor map of this yaml constructor instance.
+     */
     public Map<NodeId, Construct> getYamlClassConstructors()
     {
         return this.yamlClassConstructors;
     }
 
+    /**
+     * Returns yaml constructors map of this yaml constructor instance.
+     *
+     * @return yaml constructors map of this yaml constructor instance.
+     */
     public Map<Tag, Construct> getYamlConstructors()
     {
         return this.yamlConstructors;
     }
 
+    /**
+     * Returns yaml multi constructors of this yaml constructor instance.
+     *
+     * @return yaml multi constructors of this yaml constructor instance.
+     */
     public Map<String, Construct> getYamlMultiConstructors()
     {
         return this.yamlMultiConstructors;
@@ -293,6 +336,11 @@ public class DioriteYamlConstructor extends Constructor
         }
     }
 
+    /**
+     * Diorite yaml constructor to support template-based files.
+     *
+     * @see Template
+     */
     protected class DioriteConstructMapping extends ConstructMapping
     {
         @Override
@@ -349,6 +397,9 @@ public class DioriteYamlConstructor extends Constructor
     };
 
 
+    /**
+     * Diorite wrapper for yaml {@link org.yaml.snakeyaml.constructor.ConstructorException} as it have protected access.
+     */
     public static class ConstructorException extends org.yaml.snakeyaml.constructor.ConstructorException
     {
         private static final long serialVersionUID = 0;

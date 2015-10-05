@@ -17,40 +17,121 @@ import java.nio.charset.StandardCharsets;
 import org.diorite.cfg.simple.ConfigurationSection;
 import org.diorite.cfg.yaml.DioriteYaml;
 
+/**
+ * Config manager for fast using template config system.
+ */
 public interface ConfigManager
 {
-    default <T> T load(final File file) throws IOException
+    /**
+     * Load given file as object using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param file file to load.
+     * @param <T>  type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any file-related operation fail.
+     * @throws InvalidConfigurationException if config file is invalid.
+     */
+    default <T> T load(final File file) throws IOException, InvalidConfigurationException
     {
         return this.load(file, StandardCharsets.UTF_8);
     }
 
-    default <T> T load(final Class<T> clazz, final File file) throws IOException
+    /**
+     * Load given file as object using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param clazz type of object to load.
+     * @param file  file to load.
+     * @param <T>   type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any file-related operation fail.
+     * @throws InvalidConfigurationException if config file is invalid.
+     */
+    default <T> T load(final Class<T> clazz, final File file) throws IOException, InvalidConfigurationException
     {
         return this.load(clazz, file, StandardCharsets.UTF_8);
     }
 
-    default ConfigurationSection loadToSection(final File file) throws IOException
+    /**
+     * Load given file as {@link ConfigurationSection} (key-value map). <br>
+     * This method will use UTF-8 as default encoding and {@link ConfigurationSection#DEFAULT_SEPARATOR} for key separator.
+     *
+     * @param file file to load.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any file-related operation fail.
+     * @throws InvalidConfigurationException if config file is invalid.
+     */
+    default ConfigurationSection loadToSection(final File file) throws IOException, InvalidConfigurationException
     {
         return this.loadToSection(file, StandardCharsets.UTF_8, ConfigurationSection.DEFAULT_SEPARATOR);
     }
 
-    default ConfigurationSection loadToSection(final File file, final char pathSeparator) throws IOException
+    /**
+     * Load given file as {@link ConfigurationSection} (key-value map). <br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param file          file to load.
+     * @param pathSeparator {@link ConfigurationSection} key separator.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any file-related operation fail.
+     * @throws InvalidConfigurationException if config file is invalid.
+     */
+    default ConfigurationSection loadToSection(final File file, final char pathSeparator) throws IOException, InvalidConfigurationException
     {
         return this.loadToSection(file, StandardCharsets.UTF_8, pathSeparator);
     }
 
-    default void save(final File file, final Object object) throws IOException
+    /**
+     * Save given object to given file using {@link org.diorite.cfg.system.Template} configuration system.<br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param file   file to use, file will be created if it don't exist yet. (including directory)
+     * @param object object to save using templates, template will be created if it don't exist yet.
+     *
+     * @throws IOException if any file-related operation fail.
+     */
+    default void save(final File file, final Object object) throws IOException, InvalidConfigurationException
     {
         this.save(file, object, StandardCharsets.UTF_8);
     }
 
-    default void saveFromSection(final File file, final ConfigurationSection section) throws IOException
+    /**
+     * Save given {@link ConfigurationSection} to given file.<br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param file    file to use, file will be created if it don't exist yet. (including directory)
+     * @param section {@link ConfigurationSection} to save.
+     *
+     * @throws IOException if any file-related operation fail.
+     */
+    default void saveToSection(final File file, final ConfigurationSection section) throws IOException, InvalidConfigurationException
     {
-        this.saveFromSection(file, section, StandardCharsets.UTF_8);
+        this.saveToSection(file, section, StandardCharsets.UTF_8);
     }
 
 
-    default <T> T load(final File file, final Charset charset) throws IOException
+    /**
+     * Load given file as object using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     *
+     * @param file    file to load.
+     * @param charset charset to use.
+     * @param <T>     type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any file-related operation fail.
+     * @throws InvalidConfigurationException if config file is invalid.
+     */
+    default <T> T load(final File file, final Charset charset) throws IOException, InvalidConfigurationException
     {
         if (! file.exists())
         {
@@ -65,7 +146,20 @@ public interface ConfigManager
         }
     }
 
-    default <T> T load(final Class<T> clazz, final File file, final Charset charset) throws IOException
+    /**
+     * Load given file as object using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     *
+     * @param clazz   type of object to load.
+     * @param file    file to load.
+     * @param charset charset to use.
+     * @param <T>     type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any file-related operation fail.
+     * @throws InvalidConfigurationException if config file is invalid.
+     */
+    default <T> T load(final Class<T> clazz, final File file, final Charset charset) throws IOException, InvalidConfigurationException
     {
         if (! file.exists())
         {
@@ -80,7 +174,19 @@ public interface ConfigManager
         }
     }
 
-    default ConfigurationSection loadToSection(final File file, final Charset charset) throws IOException
+    /**
+     * Load given file as {@link ConfigurationSection} (key-value map). <br>
+     * This method will use {@link ConfigurationSection#DEFAULT_SEPARATOR} for key separator.
+     *
+     * @param file    file to load.
+     * @param charset charset to use.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any file-related operation fail.
+     * @throws InvalidConfigurationException if config file is invalid.
+     */
+    default ConfigurationSection loadToSection(final File file, final Charset charset) throws IOException, InvalidConfigurationException
     {
         if (! file.exists())
         {
@@ -95,7 +201,19 @@ public interface ConfigManager
         }
     }
 
-    default ConfigurationSection loadToSection(final File file, final Charset charset, final char pathSeparator) throws IOException
+    /**
+     * Load given file as {@link ConfigurationSection} (key-value map). <br>
+     *
+     * @param file          file to load.
+     * @param charset       charset to use.
+     * @param pathSeparator {@link ConfigurationSection} key separator.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any file-related operation fail.
+     * @throws InvalidConfigurationException if config file is invalid.
+     */
+    default ConfigurationSection loadToSection(final File file, final Charset charset, final char pathSeparator) throws IOException, InvalidConfigurationException
     {
         if (! file.exists())
         {
@@ -110,7 +228,16 @@ public interface ConfigManager
         }
     }
 
-    default void save(final File file, final Object object, final Charset charset) throws IOException
+    /**
+     * Save given object to given file using {@link org.diorite.cfg.system.Template} configuration system.<br>
+     *
+     * @param file    file to use, file will be created if it don't exist yet. (including directory)
+     * @param object  object to save using templates, template will be created if it don't exist yet.
+     * @param charset charset to use.
+     *
+     * @throws IOException if any file-related operation fail.
+     */
+    default void save(final File file, final Object object, final Charset charset) throws IOException, InvalidConfigurationException
     {
         if (! file.exists())
         {
@@ -120,7 +247,7 @@ public interface ConfigManager
                 file.createNewFile();
             } catch (final IOException e)
             {
-                throw new RuntimeException("Can't create file: \"" + file.getAbsolutePath() + "\"", e);
+                throw new IOException("Can't create file: \"" + file.getAbsolutePath() + "\"", e);
             }
         }
         try (final FileOutputStream output = new FileOutputStream(file))
@@ -132,7 +259,16 @@ public interface ConfigManager
         }
     }
 
-    default void saveFromSection(final File file, final ConfigurationSection section, final Charset charset) throws IOException
+    /**
+     * Save given {@link ConfigurationSection} to given file.<br>
+     *
+     * @param file    file to use, file will be created if it don't exist yet. (including directory)
+     * @param charset charset to use.
+     * @param section {@link ConfigurationSection} to save.
+     *
+     * @throws IOException if any file-related operation fail.
+     */
+    default void saveToSection(final File file, final ConfigurationSection section, final Charset charset) throws IOException, InvalidConfigurationException
     {
         if (! file.exists())
         {
@@ -142,12 +278,12 @@ public interface ConfigManager
                 file.createNewFile();
             } catch (final IOException e)
             {
-                throw new RuntimeException("Can't create file: \"" + file.getAbsolutePath() + "\"", e);
+                throw new IOException("Can't create file: \"" + file.getAbsolutePath() + "\"", e);
             }
         }
         try (final FileOutputStream output = new FileOutputStream(file))
         {
-            this.saveFromSection(output, section, charset);
+            this.saveToSection(output, section, charset);
         } catch (final FileNotFoundException ignored)
         {
             throw new RuntimeException("Impossible exception.", ignored);
@@ -155,82 +291,281 @@ public interface ConfigManager
     }
 
 
-    default <T> T load(final InputStream input, final Charset charset) throws IOException
+    /**
+     * Load object from given {@link InputStream} using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     *
+     * @param input   {@link InputStream} to load.
+     * @param charset charset to use.
+     * @param <T>     type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any stream-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default <T> T load(final InputStream input, final Charset charset) throws IOException, InvalidConfigurationException
     {
         return this.load(new InputStreamReader(input, charset));
     }
 
-    default <T> T load(final Class<T> clazz, final InputStream input, final Charset charset) throws IOException
+    /**
+     * Load object from given {@link InputStream} using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     *
+     * @param clazz   type of object to load.
+     * @param input   {@link InputStream} to load.
+     * @param charset charset to use.
+     * @param <T>     type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any stream-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default <T> T load(final Class<T> clazz, final InputStream input, final Charset charset) throws IOException, InvalidConfigurationException
     {
         return this.load(clazz, new InputStreamReader(input, charset));
     }
 
-    default ConfigurationSection loadToSection(final InputStream input, final Charset charset) throws IOException
+    /**
+     * Load given {@link InputStream} as {@link ConfigurationSection} (key-value map). <br>
+     * This method will use {@link ConfigurationSection#DEFAULT_SEPARATOR} for key separator.
+     *
+     * @param input   {@link InputStream} to load.
+     * @param charset charset to use.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any stream-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default ConfigurationSection loadToSection(final InputStream input, final Charset charset) throws IOException, InvalidConfigurationException
     {
         return this.loadToSection(new InputStreamReader(input, charset), ConfigurationSection.DEFAULT_SEPARATOR);
     }
 
-    default ConfigurationSection loadToSection(final InputStream input, final Charset charset, final char pathSeparator) throws IOException
+    /**
+     * Load given {@link InputStream} as {@link ConfigurationSection} (key-value map). <br>
+     *
+     * @param input         {@link InputStream} to load.
+     * @param charset       charset to use.
+     * @param pathSeparator {@link ConfigurationSection} key separator.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any stream-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default ConfigurationSection loadToSection(final InputStream input, final Charset charset, final char pathSeparator) throws IOException, InvalidConfigurationException
     {
         return this.loadToSection(new InputStreamReader(input, charset), pathSeparator);
     }
 
+    /**
+     * Save given object to given {@link OutputStream} using {@link org.diorite.cfg.system.Template} configuration system.<br>
+     *
+     * @param output  output stream to use.
+     * @param object  object to save using templates, template will be created if it don't exist yet.
+     * @param charset charset to use.
+     *
+     * @throws IOException if any stream-related operation fail.
+     */
     default void save(final OutputStream output, final Object object, final Charset charset) throws IOException
     {
         this.save(new OutputStreamWriter(output, charset), object);
     }
 
-    default void saveFromSection(final OutputStream output, final ConfigurationSection section, final Charset charset) throws IOException
+    /**
+     * Save given {@link ConfigurationSection} to given {@link OutputStream}.<br>
+     *
+     * @param output  output stream to use.
+     * @param section {@link ConfigurationSection} to save.
+     * @param charset charset to use.
+     *
+     * @throws IOException if any stream-related operation fail.
+     */
+    default void saveToSection(final OutputStream output, final ConfigurationSection section, final Charset charset) throws IOException
     {
-        this.saveFromSection(new OutputStreamWriter(output, charset), section);
+        this.saveToSection(new OutputStreamWriter(output, charset), section);
     }
 
 
-    default <T> T load(final InputStream input) throws IOException
+    /**
+     * Load object from given {@link InputStream} using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param input {@link InputStream} to load.
+     * @param <T>   type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any stream-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default <T> T load(final InputStream input) throws IOException, InvalidConfigurationException
     {
         return this.load(new InputStreamReader(input, StandardCharsets.UTF_8));
     }
 
-    default <T> T load(final Class<T> clazz, final InputStream input) throws IOException
+    /**
+     * Load object from given {@link InputStream} using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param clazz type of object to load.
+     * @param input {@link InputStream} to load.
+     * @param <T>   type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any stream-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default <T> T load(final Class<T> clazz, final InputStream input) throws IOException, InvalidConfigurationException
     {
         return this.load(clazz, new InputStreamReader(input, StandardCharsets.UTF_8));
     }
 
-    default ConfigurationSection loadToSection(final InputStream input) throws IOException
+    /**
+     * Load given {@link InputStream} as {@link ConfigurationSection} (key-value map). <br>
+     * This method will use UTF-8 as default encoding and {@link ConfigurationSection#DEFAULT_SEPARATOR} for key separator.
+     *
+     * @param input {@link InputStream} to load.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any stream-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default ConfigurationSection loadToSection(final InputStream input) throws IOException, InvalidConfigurationException
     {
         return this.loadToSection(new InputStreamReader(input, StandardCharsets.UTF_8), ConfigurationSection.DEFAULT_SEPARATOR);
     }
 
-    default ConfigurationSection loadToSection(final InputStream input, final char pathSeparator) throws IOException
+    /**
+     * Load given {@link InputStream} as {@link ConfigurationSection} (key-value map). <br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param input         {@link InputStream} to load.
+     * @param pathSeparator {@link ConfigurationSection} key separator.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any stream-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default ConfigurationSection loadToSection(final InputStream input, final char pathSeparator) throws IOException, InvalidConfigurationException
     {
         return this.loadToSection(new InputStreamReader(input, StandardCharsets.UTF_8), pathSeparator);
     }
 
+    /**
+     * Save given object to given {@link OutputStream} using {@link org.diorite.cfg.system.Template} configuration system.<br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param output output stream to use.
+     * @param object object to save using templates, template will be created if it don't exist yet.
+     *
+     * @throws IOException if any stream-related operation fail.
+     */
     default void save(final OutputStream output, final Object object) throws IOException
     {
         this.save(new OutputStreamWriter(output, StandardCharsets.UTF_8), object);
     }
 
-    default void saveFromSection(final OutputStream output, final ConfigurationSection section) throws IOException
+    /**
+     * Save given {@link ConfigurationSection} to given {@link OutputStream}.<br>
+     * This method will use UTF-8 as default encoding.
+     *
+     * @param output  output stream to use.
+     * @param section {@link ConfigurationSection} to save.
+     *
+     * @throws IOException if any stream-related operation fail.
+     */
+    default void saveToSection(final OutputStream output, final ConfigurationSection section) throws IOException
     {
-        this.saveFromSection(new OutputStreamWriter(output, StandardCharsets.UTF_8), section);
+        this.saveToSection(new OutputStreamWriter(output, StandardCharsets.UTF_8), section);
     }
 
 
+    /**
+     * Returns yaml instance used by this config manager.
+     *
+     * @return yaml instance used by this config manager.
+     */
     DioriteYaml getYaml();
 
-    <T> T load(Reader reader) throws IOException;
+    /**
+     * Load object from given {@link Reader} using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     *
+     * @param reader {@link Reader} to use.
+     * @param <T>    type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any reader-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    <T> T load(Reader reader) throws IOException, InvalidConfigurationException;
 
-    <T> T load(Class<T> clazz, Reader reader) throws IOException;
+    /**
+     * Load object from given {@link Reader} using {@link org.diorite.cfg.system.Template} configuration system. <br>
+     *
+     * @param clazz  type of object to load.
+     * @param reader {@link Reader} to use.
+     * @param <T>    type of returned object.
+     *
+     * @return loaded object.
+     *
+     * @throws IOException                   if any reader-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    <T> T load(Class<T> clazz, Reader reader) throws IOException, InvalidConfigurationException;
 
-    default ConfigurationSection loadToSection(final Reader reader) throws IOException
+    /**
+     * Load given {@link Reader} as {@link ConfigurationSection} (key-value map). <br>
+     * This method will use {@link ConfigurationSection#DEFAULT_SEPARATOR} for key separator.
+     *
+     * @param reader {@link Reader} to use.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any reader-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    default ConfigurationSection loadToSection(final Reader reader) throws IOException, InvalidConfigurationException
     {
         return this.loadToSection(reader, ConfigurationSection.DEFAULT_SEPARATOR);
     }
 
-    ConfigurationSection loadToSection(Reader reader, char pathSeparator) throws IOException;
+    /**
+     * Load given {@link Reader} as {@link ConfigurationSection} (key-value map). <br>
+     *
+     * @param reader        {@link Reader} to use.
+     * @param pathSeparator {@link ConfigurationSection} key separator.
+     *
+     * @return loaded {@link ConfigurationSection}.
+     *
+     * @throws IOException                   if any reader-related operation fail.
+     * @throws InvalidConfigurationException if config is invalid.
+     */
+    ConfigurationSection loadToSection(Reader reader, char pathSeparator) throws IOException, InvalidConfigurationException;
 
-    void save(Writer reader, Object object) throws IOException;
+    /**
+     * Save given object to given {@link Writer} using {@link org.diorite.cfg.system.Template} configuration system.<br>
+     *
+     * @param writer {@link Writer} to use.
+     * @param object object to save using templates, template will be created if it don't exist yet.
+     *
+     * @throws IOException if any writer-related operation fail.
+     */
+    void save(Writer writer, Object object) throws IOException;
 
-    void saveFromSection(Writer reader, ConfigurationSection section) throws IOException;
+    /**
+     * Save given {@link ConfigurationSection} to given {@link Writer}.<br>
+     *
+     * @param writer  {@link Writer} to use.
+     * @param section {@link ConfigurationSection} to save.
+     *
+     * @throws IOException if any writer-related operation fail.
+     */
+    void saveToSection(Writer writer, ConfigurationSection section) throws IOException;
 }

@@ -54,13 +54,13 @@ public class ConfigManagerImpl implements ConfigManager
     }
 
     @Override
-    public void save(final Writer reader, final Object object) throws IOException
+    public void save(final Writer writer, final Object object) throws IOException
     {
-        this.yaml.dump(object, reader);
+        this.yaml.dump(object, writer);
     }
 
     @Override
-    public void saveFromSection(final Writer reader, final ConfigurationSection section) throws IOException
+    public void saveToSection(final Writer writer, final ConfigurationSection section) throws IOException
     {
         this.yaml.dump(section.getValues(true));
     }

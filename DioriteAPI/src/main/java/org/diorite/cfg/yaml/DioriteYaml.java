@@ -2,6 +2,9 @@ package org.diorite.cfg.yaml;
 
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * Diorite extension of {@link Yaml} with more public methods.
+ */
 public class DioriteYaml extends Yaml
 {
     /**
@@ -96,36 +99,71 @@ public class DioriteYaml extends Yaml
         super(constructor, representer, dumperOptions, resolver);
     }
 
+    /**
+     * Returns dumper options of this yaml instance.
+     *
+     * @return dumper options of this yaml instance.
+     */
     public DioriteYamlDumperOptions getDumperOptions()
     {
         return (DioriteYamlDumperOptions) this.dumperOptions;
     }
 
+    /**
+     * Set dumper options of this yaml instance.
+     *
+     * @param dumperOptions new dumper options.
+     */
     public void setDumperOptions(final DioriteYamlDumperOptions dumperOptions)
     {
         this.dumperOptions = dumperOptions;
     }
 
+    /**
+     * Returns object representer of this yaml instance.
+     *
+     * @return object representer of this yaml instance.
+     */
     public DioriteYamlRepresenter getRepresenter()
     {
         return (DioriteYamlRepresenter) this.representer;
     }
 
+    /**
+     * Set object representer of this yaml instance.
+     *
+     * @param representer new object representer.
+     */
     public void setRepresenter(final DioriteYamlRepresenter representer)
     {
         this.representer = representer;
     }
 
+    /**
+     * Returns constructor handler of this yaml instance.
+     *
+     * @return constructor handler of this yaml instance.
+     */
     public DioriteYamlConstructor getConstructor()
     {
         return (DioriteYamlConstructor) this.constructor;
     }
 
+    /**
+     * Set constructor handler of this yaml instance.
+     *
+     * @param constructor new constructor handler.
+     */
     public void setConstructor(final DioriteYamlConstructor constructor)
     {
         this.constructor = constructor;
     }
 
+    /**
+     * Returns object resolver of this yaml instance.
+     *
+     * @return object resolver of this yaml instance.
+     */
     public DioriteYamlResolver getResolver()
     {
         return (DioriteYamlResolver) this.resolver;
