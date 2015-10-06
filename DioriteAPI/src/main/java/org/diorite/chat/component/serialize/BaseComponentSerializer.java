@@ -13,9 +13,19 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.ClickEvent;
 import org.diorite.chat.component.HoverEvent;
 
-public class BaseComponentSerializer
+/**
+ * Class used by other chat component serializers to serialize {@link BaseComponent} to json or deserialize from json to base component.
+ */
+public interface BaseComponentSerializer
 {
-    public void deserialize(final JsonObject object, final BaseComponent component, final JsonDeserializationContext context)
+    /**
+     * Deserialize basic attributes of {@link BaseComponent} from json object.
+     *
+     * @param object    json contains all data.
+     * @param component base component to use.
+     * @param context   json context object, used to deserialize other objects.
+     */
+    default void deserialize(final JsonObject object, final BaseComponent component, final JsonDeserializationContext context)
     {
         if (object.has("color"))
         {
@@ -67,7 +77,14 @@ public class BaseComponentSerializer
         }
     }
 
-    public void serialize(final JsonObject object, final BaseComponent component, final JsonSerializationContext context)
+    /**
+     * Serialize basic attributes of {@link BaseComponent} to given json object.
+     *
+     * @param object    json to use.
+     * @param component base component to use.
+     * @param context   json context object, used to serialize other objects.
+     */
+    default void serialize(final JsonObject object, final BaseComponent component, final JsonSerializationContext context)
     {
         boolean first = false;
         if (ComponentSerializer.serializedComponents.get() == null)

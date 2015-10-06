@@ -5,22 +5,42 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.chat.ChatColor;
 
+/**
+ * Builder class for easier building chat messages.
+ */
 public class ComponentBuilder
 {
     private final TextComponent parts = new TextComponent("");
     private BaseComponent current;
 
-    public ComponentBuilder(final ComponentBuilder original)
+    /**
+     * Construct new ComponentBuilder as copy of old one.
+     *
+     * @param original ComponentBuilder to copy.
+     */
+    protected ComponentBuilder(final ComponentBuilder original)
     {
         this.current = new TextComponent(original.current);
         original.parts.getExtra().stream().map(BaseComponent::duplicate).forEach(this.parts::addExtra);
     }
 
-    public ComponentBuilder(final String text)
+    /**
+     * Construct new ComponentBuilder strating from given string ({@link TextComponent}).
+     *
+     * @param text first element of message.
+     */
+    protected ComponentBuilder(final String text)
     {
         this.current = new TextComponent(text);
     }
 
+    /**
+     * Add previously edited component to other parts, and set given component as current one.
+     *
+     * @param component new component to edit and add.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
     public ComponentBuilder append(final BaseComponent component)
     {
         this.parts.addExtra(this.current);
@@ -28,6 +48,13 @@ public class ComponentBuilder
         return this;
     }
 
+    /**
+     * Add previously edited component to other parts, and set given component as current one.
+     *
+     * @param text new component to edit and add as legacy string. {@link TextComponent#fromLegacyText(String)}
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
     public ComponentBuilder appendLegacy(final String text)
     {
         this.parts.addExtra(this.current);
@@ -35,6 +62,13 @@ public class ComponentBuilder
         return this;
     }
 
+    /**
+     * Add previously edited component to other parts, and set given component as current one.
+     *
+     * @param text new component to edit and add as string.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
     public ComponentBuilder append(final String text)
     {
         this.parts.addExtra(this.current);
@@ -42,65 +76,140 @@ public class ComponentBuilder
         return this;
     }
 
+    /**
+     * Set color of current element to given one, may be null.
+     *
+     * @param color color to use, may be null.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
     public ComponentBuilder color(final ChatColor color)
     {
         this.current.setColor(color);
         return this;
     }
 
-    public ComponentBuilder bold(final boolean bold)
+    /**
+     * Set bold style flag of current element to given one, may be null.
+     *
+     * @param bold bold style flag to use, may be null.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
+    public ComponentBuilder bold(final Boolean bold)
     {
         this.current.setBold(bold);
         return this;
     }
 
-    public ComponentBuilder italic(final boolean italic)
+    /**
+     * Set italic style flag of current element to given one, may be null.
+     *
+     * @param italic italic style flag to use, may be null.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
+    public ComponentBuilder italic(final Boolean italic)
     {
         this.current.setItalic(italic);
         return this;
     }
 
-    public ComponentBuilder underlined(final boolean underlined)
+    /**
+     * Set underlined style flag of current element to given one, may be null.
+     *
+     * @param underlined underlined style flag to use, may be null.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
+    public ComponentBuilder underlined(final Boolean underlined)
     {
         this.current.setUnderlined(underlined);
         return this;
     }
 
-    public ComponentBuilder strikethrough(final boolean strikethrough)
+    /**
+     * Set strikethrough style flag of current element to given one, may be null.
+     *
+     * @param strikethrough strikethrough style flag to use, may be null.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
+    public ComponentBuilder strikethrough(final Boolean strikethrough)
     {
         this.current.setStrikethrough(strikethrough);
         return this;
     }
 
-    public ComponentBuilder obfuscated(final boolean obfuscated)
+    /**
+     * Set obfuscated style flag of current element to given one, may be null.
+     *
+     * @param obfuscated obfuscated style flag to use, may be null.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
+    public ComponentBuilder obfuscated(final Boolean obfuscated)
     {
         this.current.setObfuscated(obfuscated);
         return this;
     }
 
+    /**
+     * Set click event of current element to given one, may be null.
+     *
+     * @param clickEvent click event to use, may be null.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
     public ComponentBuilder event(final ClickEvent clickEvent)
     {
         this.current.setClickEvent(clickEvent);
         return this;
     }
 
+    /**
+     * Set hover event of current element to given one, may be null.
+     *
+     * @param hoverEvent hover event to use, may be null.
+     *
+     * @return this same ComponentBuilder for method chains.
+     */
     public ComponentBuilder event(final HoverEvent hoverEvent)
     {
         this.current.setHoverEvent(hoverEvent);
         return this;
     }
 
+    /**
+     * Finish builder, and create {@link TextComponent} with all created parts.
+     *
+     * @return builded {@link TextComponent}.
+     */
     public TextComponent create()
     {
         this.parts.addExtra(this.current);
         return this.parts;
     }
 
+    /**
+     * Construct new ComponentBuilder strating from given string ({@link TextComponent}).
+     *
+     * @param text first element of message.
+     *
+     * @return new ComponentBuilder instance.
+     */
     public static ComponentBuilder start(final String text)
     {
         return new ComponentBuilder(text);
     }
 
+    /**
+     * Construct new ComponentBuilder as copy of old one.
+     *
+     * @param original ComponentBuilder to copy.
+     *
+     * @return new ComponentBuilder instance.
+     */
     public static ComponentBuilder start(final ComponentBuilder original)
     {
         return new ComponentBuilder(original);

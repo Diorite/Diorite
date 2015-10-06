@@ -3,22 +3,33 @@ package org.diorite.chat.component;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class HoverEvent
+/**
+ * Represent hover event in Chat component API.
+ */
+public class HoverEvent extends ReplacableComponent
 {
+    /**
+     * Action on hover.
+     */
     protected final Action          action;
+    /**
+     * Value of action, array of base components.
+     */
     protected final BaseComponent[] value;
 
+    /**
+     * Construct new hover event with given action.
+     *
+     * @param action action on click.
+     * @param value  value of action.
+     */
     public HoverEvent(final Action action, final BaseComponent[] value)
     {
         this.action = action;
         this.value = value;
     }
 
-    public void replace(final String text, final BaseComponent component, final int limit)
-    {
-        this.replace_(text, component, limit);
-    }
-
+    @Override
     protected int replace_(final String text, final BaseComponent component, int limit)
     {
         if (this.value != null)
@@ -35,21 +46,7 @@ public class HoverEvent
         return limit;
     }
 
-    public void replace(final String text, final BaseComponent component)
-    {
-        this.replace(text, component, - 1);
-    }
-
-    public void replaceOnce(final String text, final BaseComponent component)
-    {
-        this.replace(text, component, 1);
-    }
-
-    public void replace(final String text, final String repl, final int limit)
-    {
-        this.replace_(text, repl, limit);
-    }
-
+    @Override
     protected int replace_(final String text, final String repl, int limit)
     {
         if (this.value != null)
@@ -66,26 +63,27 @@ public class HoverEvent
         return limit;
     }
 
-    public void replace(final String text, final String repl)
-    {
-        this.replace(text, repl, - 1);
-    }
-
-    public void replaceOnce(final String text, final String repl)
-    {
-        this.replace(text, repl, 1);
-    }
-
+    /**
+     * Returns click action of this event.
+     *
+     * @return click action of this event.
+     */
     public Action getAction()
     {
         return this.action;
     }
 
+    /**
+     * Returns value of this event.
+     *
+     * @return value of this event.
+     */
     public BaseComponent[] getValue()
     {
         return this.value;
     }
 
+    @Override
     public HoverEvent duplicate()
     {
         if (this.value == null)
@@ -103,13 +101,25 @@ public class HoverEvent
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("action", this.action).append("value", this.value).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("action", this.action).append("value", this.value).toString();
     }
 
+    /**
+     * Enum of possible actions.
+     */
     public enum Action
     {
+        /**
+         * Show text in special box when hovered.
+         */
         SHOW_TEXT,
+        /**
+         * Show achievment-like box when hovered.
+         */
         SHOW_ACHIEVEMENT,
+        /**
+         * Show special box with item in it when hovered.
+         */
         SHOW_ITEM;
 
         Action()

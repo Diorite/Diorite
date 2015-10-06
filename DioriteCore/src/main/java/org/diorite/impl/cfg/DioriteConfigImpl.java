@@ -5,6 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.net.URI;
 import java.util.Locale;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -76,7 +77,7 @@ public class DioriteConfigImpl implements DioriteConfig
 
     @CfgComment("Optional URI to a resource pack. The player may choose to use it. Set to empty to disable.")
     @CfgStringDefault("")
-    private String resourcePack;
+    private URI resourcePack;
 
     @CfgComment("Optional SHA-1 digest of the resource pack, in lowercase hexadecimal. It's recommended to specify this. This is not yet used to verify the integrity of the resource pack, but improves the effectiveness and reliability of caching.")
     @CfgStringDefault("")
@@ -241,13 +242,13 @@ public class DioriteConfigImpl implements DioriteConfig
     }
 
     @Override
-    public String getResourcePack()
+    public URI getResourcePack()
     {
         return this.resourcePack;
     }
 
     @Override
-    public void setResourcePack(final String resourcePack)
+    public void setResourcePack(final URI resourcePack)
     {
         this.resourcePack = resourcePack;
     }

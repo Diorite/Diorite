@@ -16,9 +16,14 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.TranslatableComponent;
 
+/**
+ * Basic class for chat component (de)/serializer.
+ *
+ * @see com.google.gson.JsonDeserializer
+ */
 public class ComponentSerializer implements JsonDeserializer<BaseComponent>
 {
-    public static final  ThreadLocal<HashSet<BaseComponent>> serializedComponents = new ThreadLocal<>();
+    static final         ThreadLocal<HashSet<BaseComponent>> serializedComponents = new ThreadLocal<>();
     private static final Gson                                gson                 = new GsonBuilder().registerTypeAdapter(BaseComponent.class, new ComponentSerializer()).registerTypeAdapter(TextComponent.class, new TextComponentSerializer()).registerTypeAdapter(TranslatableComponent.class, new TranslatableComponentSerializer()).create();
 
     @Override

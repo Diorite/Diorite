@@ -9,19 +9,54 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.chat.ChatColor;
 
-public abstract class BaseComponent
+public abstract class BaseComponent extends ReplacableComponent
 {
+    /**
+     * parent node of this node.
+     */
     protected BaseComponent       parent;
+    /**
+     * color of component, var may be null.
+     */
     protected ChatColor           color;
+    /**
+     * if component use bold style, may be null.
+     */
     protected Boolean             bold;
+    /**
+     * if component use italic style, may be null.
+     */
     protected Boolean             italic;
+    /**
+     * if component use underlined style, may be null.
+     */
     protected Boolean             underlined;
+    /**
+     * if component use strikethrough style, may be null.
+     */
     protected Boolean             strikethrough;
+    /**
+     * if component use obfuscated style, may be null.
+     */
     protected Boolean             obfuscated;
+    /**
+     * extra/next elements appended after this element.
+     */
     protected List<BaseComponent> extra;
+    /**
+     * Click event for this component, may be null.
+     */
     protected ClickEvent          clickEvent;
+    /**
+     * Hover event for this component, may be null.
+     */
     protected HoverEvent          hoverEvent;
 
+    /**
+     * Construct new BaseComponent as copy of old one.
+     *
+     * @param old component to copy.
+     */
     BaseComponent(final BaseComponent old)
     {
         this.color = old.getColorRaw();
@@ -39,16 +74,14 @@ public abstract class BaseComponent
         }
     }
 
+    /**
+     * Construct new empty base component.
+     */
     public BaseComponent()
     {
     }
 
-
-    public void replace(final String text, final BaseComponent component, final int limit)
-    {
-        this.replace_(text, component, limit);
-    }
-
+    @Override
     protected int replace_(final String text, final BaseComponent component, int limit)
     {
         if (this.extra != null)
@@ -81,21 +114,7 @@ public abstract class BaseComponent
         return limit;
     }
 
-    public void replace(final String text, final BaseComponent component)
-    {
-        this.replace(text, component, - 1);
-    }
-
-    public void replaceOnce(final String text, final BaseComponent component)
-    {
-        this.replace(text, component, 1);
-    }
-
-    public void replace(final String text, final String repl, final int limit)
-    {
-        this.replace_(text, repl, limit);
-    }
-
+    @Override
     protected int replace_(final String text, final String repl, int limit)
     {
         if (this.extra != null)
@@ -128,31 +147,41 @@ public abstract class BaseComponent
         return limit;
     }
 
-    public void replace(final String text, final String repl)
-    {
-        this.replace(text, repl, - 1);
-    }
-
-    public void replaceOnce(final String text, final String repl)
-    {
-        this.replace(text, repl, 1);
-    }
-
+    /**
+     * Returns parent node for this chat node, may be null.
+     *
+     * @return parent node for this chat node, may be null.
+     */
     public BaseComponent getParent()
     {
         return this.parent;
     }
 
+    /**
+     * Set parent node for this chat node, may be null.
+     *
+     * @param parent new parent node for this chat node, may be null.
+     */
     public void setParent(final BaseComponent parent)
     {
         this.parent = parent;
     }
 
+    /**
+     * Returns list of extra/next elements appended after this one.
+     *
+     * @return list of extra/next elements appended after this one.
+     */
     public List<BaseComponent> getExtra()
     {
         return this.extra;
     }
 
+    /**
+     * Set list of extra/next elements appended after this one.
+     *
+     * @param components new list of extra/next elements.
+     */
     public void setExtra(final List<BaseComponent> components)
     {
         for (final BaseComponent component : components)
@@ -162,26 +191,52 @@ public abstract class BaseComponent
         this.extra = new ArrayList<>(components);
     }
 
+    /**
+     * Returns click event for this node, may be null.
+     *
+     * @return click event for this node, may be null.
+     */
     public ClickEvent getClickEvent()
     {
         return this.clickEvent;
     }
 
+    /**
+     * Set click event for this node, may be null.
+     *
+     * @param clickEvent click event for this node, may be null.
+     */
     public void setClickEvent(final ClickEvent clickEvent)
     {
         this.clickEvent = clickEvent;
     }
 
+    /**
+     * Returns hover event for this node, may be null.
+     *
+     * @return hover event for this node, may be null.
+     */
     public HoverEvent getHoverEvent()
     {
         return this.hoverEvent;
     }
 
+    /**
+     * Set hover event for this node, may be null.
+     *
+     * @param hoverEvent new hover event for this node, may be null.
+     */
     public void setHoverEvent(final HoverEvent hoverEvent)
     {
         this.hoverEvent = hoverEvent;
     }
 
+    /**
+     * Returns color of this node, if color of this node is null it will return color of parent node,
+     * if it is also null it will return default, {@link ChatColor#WHITE} color.
+     *
+     * @return color of this node.
+     */
     public ChatColor getColor()
     {
         if (this.color == null)
@@ -195,16 +250,34 @@ public abstract class BaseComponent
         return this.color;
     }
 
+    /**
+     * Set color of this node.
+     *
+     * @param color new color of this node.
+     */
     public void setColor(final ChatColor color)
     {
         this.color = color;
     }
 
+    /**
+     * Returns raw color of this node, may be null. <br>
+     * Even if this method return null node can still be colored as it may inherit color from parent.
+     *
+     * @return color of this node, may be null.
+     *
+     * @see #getColor()
+     */
     public ChatColor getColorRaw()
     {
         return this.color;
     }
 
+    /**
+     * Check if this node use bold style, it will check value of this node and parent nodes.
+     *
+     * @return true if this node use bold style.
+     */
     public boolean isBold()
     {
         if (this.bold == null)
@@ -214,16 +287,32 @@ public abstract class BaseComponent
         return this.bold;
     }
 
+    /**
+     * Set bold flag of this node, may be null.
+     *
+     * @param bold new bold flag of this node, may be null.
+     */
     public void setBold(final Boolean bold)
     {
         this.bold = bold;
     }
 
+    /**
+     * Returns bold flag of this node, may be null. <br>
+     * Even if this method return null node can still be bold as it may inherit style from parent.
+     *
+     * @return bold flag of this node, may be null.
+     */
     public Boolean isBoldRaw()
     {
         return this.bold;
     }
 
+    /**
+     * Check if this node use italic style, it will check value of this node and parent nodes.
+     *
+     * @return true if this node use italic style.
+     */
     public boolean isItalic()
     {
         if (this.italic == null)
@@ -233,16 +322,32 @@ public abstract class BaseComponent
         return this.italic;
     }
 
+    /**
+     * Set italic flag of this node, may be null.
+     *
+     * @param italic new italic flag of this node, may be null.
+     */
     public void setItalic(final Boolean italic)
     {
         this.italic = italic;
     }
 
+    /**
+     * Returns italic flag of this node, may be null. <br>
+     * Even if this method return null node can still be italic as it may inherit style from parent.
+     *
+     * @return italic flag of this node, may be null.
+     */
     public Boolean isItalicRaw()
     {
         return this.italic;
     }
 
+    /**
+     * Check if this node use underlined style, it will check value of this node and parent nodes.
+     *
+     * @return true if this node use underlined style.
+     */
     public boolean isUnderlined()
     {
         if (this.underlined == null)
@@ -252,16 +357,32 @@ public abstract class BaseComponent
         return this.underlined;
     }
 
+    /**
+     * Set underlined flag of this node, may be null.
+     *
+     * @param underlined new underlined flag of this node, may be null.
+     */
     public void setUnderlined(final Boolean underlined)
     {
         this.underlined = underlined;
     }
 
+    /**
+     * Returns underlined flag of this node, may be null. <br>
+     * Even if this method return null node can still be underlined as it may inherit style from parent.
+     *
+     * @return underlined flag of this node, may be null.
+     */
     public Boolean isUnderlinedRaw()
     {
         return this.underlined;
     }
 
+    /**
+     * Check if this node use strikethrough style, it will check value of this node and parent nodes.
+     *
+     * @return true if this node use strikethrough style.
+     */
     public boolean isStrikethrough()
     {
         if (this.strikethrough == null)
@@ -271,16 +392,32 @@ public abstract class BaseComponent
         return this.strikethrough;
     }
 
+    /**
+     * Set strikethrough flag of this node, may be null.
+     *
+     * @param strikethrough new strikethrough flag of this node, may be null.
+     */
     public void setStrikethrough(final Boolean strikethrough)
     {
         this.strikethrough = strikethrough;
     }
 
+    /**
+     * Returns strikethrough flag of this node, may be null. <br>
+     * Even if this method return null node can still be strikethrough as it may inherit style from parent.
+     *
+     * @return strikethrough flag of this node, may be null.
+     */
     public Boolean isStrikethroughRaw()
     {
         return this.strikethrough;
     }
 
+    /**
+     * Check if this node use obfuscated style, it will check value of this node and parent nodes.
+     *
+     * @return true if this node use obfuscated style.
+     */
     public boolean isObfuscated()
     {
         if (this.obfuscated == null)
@@ -290,21 +427,42 @@ public abstract class BaseComponent
         return this.obfuscated;
     }
 
+    /**
+     * Set obfuscated flag of this node, may be null.
+     *
+     * @param obfuscated new obfuscated flag of this node, may be null.
+     */
     public void setObfuscated(final Boolean obfuscated)
     {
         this.obfuscated = obfuscated;
     }
 
+    /**
+     * Returns obfuscated flag of this node, may be null. <br>
+     * Even if this method return null node can still be obfuscated as it may inherit style from parent.
+     *
+     * @return obfuscated flag of this node, may be null.
+     */
     public Boolean isObfuscatedRaw()
     {
         return this.obfuscated;
     }
 
+    /**
+     * Add new {@link TextComponent} to this node.
+     *
+     * @param text new string to add.
+     */
     public void addExtra(final String text)
     {
         this.addExtra(new TextComponent(text));
     }
 
+    /**
+     * Add new {@link BaseComponent} to this node.
+     *
+     * @param component new component to add.
+     */
     public void addExtra(final BaseComponent component)
     {
         if (this.extra == null)
@@ -315,11 +473,21 @@ public abstract class BaseComponent
         this.extra.add(component);
     }
 
+    /**
+     * Returns true if this node have any formatting settings.
+     *
+     * @return true if this node have any formatting settings.
+     */
     public boolean hasFormatting()
     {
         return (this.color != null) || (this.bold != null) || (this.italic != null) || (this.underlined != null) || (this.strikethrough != null) || (this.obfuscated != null) || (this.hoverEvent != null) || (this.clickEvent != null);
     }
 
+    /**
+     * Returns string contains this component as plain text. (without style)
+     *
+     * @return string contains this component as plain text. (without style)
+     */
     public String toPlainText()
     {
         final StringBuilder builder = new StringBuilder();
@@ -338,6 +506,11 @@ public abstract class BaseComponent
         }
     }
 
+    /**
+     * Returns string contains this component as legacy text. (without events etc, but with colors)
+     *
+     * @return string contains this component as legacy text. (without events etc, but with colors)
+     */
     public String toLegacyText()
     {
         final StringBuilder builder = new StringBuilder();
@@ -356,6 +529,7 @@ public abstract class BaseComponent
         }
     }
 
+    @Override
     public abstract BaseComponent duplicate();
 
     @Override
@@ -364,6 +538,13 @@ public abstract class BaseComponent
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("parent", this.parent).append("color", this.color).append("bold", this.bold).append("italic", this.italic).append("underlined", this.underlined).append("strikethrough", this.strikethrough).append("obfuscated", this.obfuscated).append("extra", this.extra).append("clickEvent", this.clickEvent).append("hoverEvent", this.hoverEvent).toString();
     }
 
+    /**
+     * Returns string contains given components as legacy text. (without events etc, but with colors)
+     *
+     * @param components components to convert to legacy text.
+     *
+     * @return string contains given components as legacy text. (without events etc, but with colors)
+     */
     public static String toLegacyText(final BaseComponent... components)
     {
         final StringBuilder builder = new StringBuilder();
@@ -374,6 +555,13 @@ public abstract class BaseComponent
         return builder.toString();
     }
 
+    /**
+     * Returns string contains given components as plain text. (without style)
+     *
+     * @param components components to convert to plain text.
+     *
+     * @return string contains given components as plain text. (without style)
+     */
     public static String toPlainText(final BaseComponent... components)
     {
         final StringBuilder builder = new StringBuilder();

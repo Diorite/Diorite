@@ -15,7 +15,10 @@ import com.google.gson.JsonSerializer;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
-public class TextComponentSerializer extends BaseComponentSerializer implements JsonSerializer<TextComponent>, JsonDeserializer<TextComponent>
+/**
+ * {@link JsonSerializer} and {@link JsonDeserializer} for {@link TextComponent}
+ */
+public class TextComponentSerializer implements JsonSerializer<TextComponent>, JsonDeserializer<TextComponent>, BaseComponentSerializer
 {
     @Override
     public TextComponent deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException

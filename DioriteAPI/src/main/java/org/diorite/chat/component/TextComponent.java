@@ -10,37 +10,80 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.chat.ChatColor;
 
+/**
+ * Represent simple text chat component.
+ */
 public class TextComponent extends BaseComponent
 {
     private static final Pattern url = Pattern.compile("^(?:(https?)://)?([-\\w_\\.]{2,}\\.[a-z]{2,4})(/\\S*)?$");
     private String text;
 
+    /**
+     * Construct new TextComponent with given string.
+     *
+     * @param text string to use.
+     */
     public TextComponent(final String text)
     {
         this.text = text;
     }
 
+    /**
+     * Construct new TextComponent as copy of given one.
+     *
+     * @param textComponent component to copy.
+     */
     public TextComponent(final TextComponent textComponent)
     {
         super(textComponent);
         this.text = textComponent.getText();
     }
 
+    /**
+     * Construct new TextComponent with given extra components and text set to empty string.
+     *
+     * @param extras extra components to use.
+     */
     public TextComponent(final BaseComponent... extras)
     {
         this.text = "";
         this.setExtra(Arrays.asList(extras));
     }
 
+    /**
+     * Construct new TextComponent with given string and extra components.
+     *
+     * @param text   string to use.
+     * @param extras extra components to use.
+     */
+    public TextComponent(final String text, final BaseComponent... extras)
+    {
+        this.text = text;
+        this.setExtra(Arrays.asList(extras));
+    }
+
+    /**
+     * Construct new empty TextComponent.
+     */
     public TextComponent()
     {
     }
 
+    /**
+     * Returns text of this component.
+     *
+     * @return text of this component.
+     */
     public String getText()
     {
         return this.text;
     }
 
+    /**
+     * Set text of this component.
+     *
+     * @param text new text of this component.
+     */
     public void setText(final String text)
     {
         this.text = text;
@@ -144,6 +187,13 @@ public class TextComponent extends BaseComponent
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("text", this.text).toString();
     }
 
+    /**
+     * Join given array of components into one big {@link TextComponent}
+     *
+     * @param components array of components to join.
+     *
+     * @return one big {@link TextComponent} containing all given elements.
+     */
     public static TextComponent join(final BaseComponent... components)
     {
         if ((components == null) || (components.length == 0))
@@ -175,6 +225,13 @@ public class TextComponent extends BaseComponent
         return base;
     }
 
+    /**
+     * Create new BaseComponent from legacy minecraft chat message.
+     *
+     * @param message legacy message.
+     *
+     * @return equals BaseComponent for given message.
+     */
     public static BaseComponent fromLegacyText(final String message)
     {
         final TextComponent base = new TextComponent("");

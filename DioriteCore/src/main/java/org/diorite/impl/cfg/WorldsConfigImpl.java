@@ -236,14 +236,14 @@ public class WorldsConfigImpl implements WorldsConfig
         private byte forceLoadedRadius;
 
         @CfgComment("X coordinates of spawn location.")
-        private int spawnX;
+        private double spawnX;
 
         @CfgComment("Y coordinates of spawn location, -1 means that diorite should find highest block.")
         @CfgIntDefault(- 1)
-        private int spawnY;
+        private double spawnY;
 
         @CfgComment("Z coordinates of spawn location.")
-        private int spawnZ;
+        private double spawnZ;
 
         @CfgComment("Yaw roation coordinates of spawn location.")
         private float spawnYaw;
@@ -435,34 +435,34 @@ public class WorldsConfigImpl implements WorldsConfig
         }
 
         @Override
-        public int getSpawnX()
+        public double getSpawnX()
         {
             return this.spawnX;
         }
 
-        public void setSpawnX(final int spawnX)
+        public void setSpawnX(final double spawnX)
         {
             this.spawnX = spawnX;
         }
 
         @Override
-        public int getSpawnY()
+        public double getSpawnY()
         {
             return this.spawnY;
         }
 
-        public void setSpawnY(final int spawnY)
+        public void setSpawnY(final double spawnY)
         {
             this.spawnY = spawnY;
         }
 
         @Override
-        public int getSpawnZ()
+        public double getSpawnZ()
         {
             return this.spawnZ;
         }
 
-        public void setSpawnZ(final int spawnZ)
+        public void setSpawnZ(final double spawnZ)
         {
             this.spawnZ = spawnZ;
         }
@@ -584,22 +584,29 @@ public class WorldsConfigImpl implements WorldsConfig
         @Override
         public int hashCode()
         {
-            int result = (this.name != null) ? this.name.hashCode() : 0;
+            int result;
+            long temp;
+            result = this.name.hashCode();
             result = (31 * result) + (this.enabled ? 1 : 0);
-            result = (31 * result) + ((this.gamemode != null) ? this.gamemode.hashCode() : 0);
+            result = (31 * result) + (this.vanillaCompatible ? 1 : 0);
+            result = (31 * result) + this.gamemode.hashCode();
             result = (31 * result) + (this.forceGamemode ? 1 : 0);
-            result = (31 * result) + ((this.difficulty != null) ? this.difficulty.hashCode() : 0);
+            result = (31 * result) + this.difficulty.hashCode();
             result = (31 * result) + (this.pvp ? 1 : 0);
             result = (31 * result) + (this.hardcore ? 1 : 0);
-            result = (31 * result) + ((this.hardcoreAction != null) ? this.hardcoreAction.hashCode() : 0);
+            result = (31 * result) + this.hardcoreAction.hashCode();
             result = (31 * result) + (int) this.forceLoadedRadius;
-            result = (31 * result) + this.spawnX;
-            result = (31 * result) + this.spawnY;
-            result = (31 * result) + this.spawnZ;
+            temp = Double.doubleToLongBits(this.spawnX);
+            result = (31 * result) + (int) (temp ^ (temp >>> 32));
+            temp = Double.doubleToLongBits(this.spawnY);
+            result = (31 * result) + (int) (temp ^ (temp >>> 32));
+            temp = Double.doubleToLongBits(this.spawnZ);
+            result = (31 * result) + (int) (temp ^ (temp >>> 32));
             result = (31 * result) + ((this.spawnYaw != + 0.0f) ? Float.floatToIntBits(this.spawnYaw) : 0);
             result = (31 * result) + ((this.spawnPitch != + 0.0f) ? Float.floatToIntBits(this.spawnPitch) : 0);
             result = (31 * result) + (int) (this.seed ^ (this.seed >>> 32));
-            result = (31 * result) + ((this.dimension != null) ? this.dimension.hashCode() : 0);
+            result = (31 * result) + this.dimension.hashCode();
+            result = (31 * result) + this.worldType.hashCode();
             result = (31 * result) + ((this.generator != null) ? this.generator.hashCode() : 0);
             result = (31 * result) + ((this.generatorSettings != null) ? this.generatorSettings.hashCode() : 0);
             return result;

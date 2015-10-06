@@ -13,13 +13,27 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.chat.ChatColor;
 
+/**
+ * Represents text components containing translatable string, so every client can see it in own language. (string must be supported by client)
+ */
 public class TranslatableComponent extends BaseComponent
 {
-    protected final ResourceBundle locales = ResourceBundle.getBundle("mojang-translations/en_US");
-    protected final Pattern        format  = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
+    private static final ResourceBundle locales = ResourceBundle.getBundle("mojang-translations/en_US");
+    private static final Pattern        format  = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
+    /**
+     * String key for this message.
+     */
     protected String              translate;
+    /**
+     * Arguments of this message.
+     */
     protected List<BaseComponent> with;
 
+    /**
+     * Construct new TranslatableComponent as copy of old one.
+     *
+     * @param original component to copy.
+     */
     public TranslatableComponent(final TranslatableComponent original)
     {
         super(original);
@@ -27,6 +41,12 @@ public class TranslatableComponent extends BaseComponent
         this.with.addAll(original.getWith().stream().map(BaseComponent::duplicate).collect(Collectors.toList()));
     }
 
+    /**
+     * Construct new TranslatableComponent for given key and arguments.
+     *
+     * @param translate key for this message.
+     * @param with      arguments for this message.
+     */
     public TranslatableComponent(final String translate, final Object... with)
     {
         this.translate = translate;
@@ -45,6 +65,9 @@ public class TranslatableComponent extends BaseComponent
         this.setWith(temp);
     }
 
+    /**
+     * Construct new empty TranslatableComponent.
+     */
     public TranslatableComponent()
     {
     }
@@ -103,31 +126,61 @@ public class TranslatableComponent extends BaseComponent
         return super.replace_(text, repl, limit);
     }
 
+    /**
+     * Returns locales used to represent this component as legacy/plain text.
+     *
+     * @return locales used to represent this component as legacy/plain text.
+     */
     public ResourceBundle getLocales()
     {
-        return this.locales;
+        return locales;
     }
 
+    /**
+     * Returns Reg-ex pattern for keys.
+     *
+     * @return Reg-ex pattern for keys.
+     */
     public Pattern getFormat()
     {
-        return this.format;
+        return format;
     }
 
+    /**
+     * Returns string key for this message.
+     *
+     * @return string key for this message.
+     */
     public String getTranslate()
     {
         return this.translate;
     }
 
+    /**
+     * Set string key for this message.
+     *
+     * @param translate new string key for this message.
+     */
     public void setTranslate(final String translate)
     {
         this.translate = translate;
     }
 
+    /**
+     * Returns arguments of this message.
+     *
+     * @return arguments of this message.
+     */
     public List<BaseComponent> getWith()
     {
         return this.with;
     }
 
+    /**
+     * Set arguments of this message.
+     *
+     * @param components new arguments of this message.
+     */
     public void setWith(final List<BaseComponent> components)
     {
         for (final BaseComponent component : components)
@@ -137,11 +190,21 @@ public class TranslatableComponent extends BaseComponent
         this.with = components;
     }
 
+    /**
+     * Add new string argument for this message.
+     *
+     * @param text new string argument.
+     */
     public void addWith(final String text)
     {
         this.addWith(new TextComponent(text));
     }
 
+    /**
+     * Add new {@link BaseComponent} argument for this message.
+     *
+     * @param component new argument.
+     */
     public void addWith(final BaseComponent component)
     {
         if (this.with == null)
@@ -182,8 +245,8 @@ public class TranslatableComponent extends BaseComponent
     {
         try
         {
-            final String trans = this.locales.getString(this.translate);
-            final Matcher matcher = this.format.matcher(trans);
+            final String trans = locales.getString(this.translate);
+            final Matcher matcher = format.matcher(trans);
             int position = 0;
             int i = 0;
             while (matcher.find(position))
@@ -225,8 +288,8 @@ public class TranslatableComponent extends BaseComponent
     {
         try
         {
-            final String trans = this.locales.getString(this.translate);
-            final Matcher matcher = this.format.matcher(trans);
+            final String trans = locales.getString(this.translate);
+            final Matcher matcher = format.matcher(trans);
             int position = 0;
             int i = 0;
             while (matcher.find(position))
@@ -276,6 +339,6 @@ public class TranslatableComponent extends BaseComponent
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("locales", this.locales).append("format", this.format).append("translate", this.translate).append("with", this.with).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("locales", locales).append("format", format).append("translate", this.translate).append("with", this.with).toString();
     }
 }
