@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -37,15 +37,15 @@ public class AcaciaStairsMat extends WoodenStairsMat
     @SuppressWarnings("MagicNumber")
     protected AcaciaStairsMat()
     {
-        super("ACACIA_STAIRS", 163, "minecraft:acacia_stairs", WoodTypeMat.ACACIA, BlockFace.EAST, false, 2, 15);
+        super("ACACIA_STAIRS", 163, "minecraft:acacia_stairs", WoodType.ACACIA, BlockFace.EAST, false, 2, 15);
     }
 
     protected AcaciaStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(ACACIA_STAIRS_EAST.name(), ACACIA_STAIRS_EAST.ordinal(), ACACIA_STAIRS_EAST.getMinecraftId(), WoodTypeMat.ACACIA, face, upsideDown, ACACIA_STAIRS_EAST.getHardness(), ACACIA_STAIRS_EAST.getBlastResistance());
+        super(ACACIA_STAIRS_EAST.name(), ACACIA_STAIRS_EAST.ordinal(), ACACIA_STAIRS_EAST.getMinecraftId(), WoodType.ACACIA, face, upsideDown, ACACIA_STAIRS_EAST.getHardness(), ACACIA_STAIRS_EAST.getBlastResistance());
     }
 
-    protected AcaciaStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    protected AcaciaStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown, hardness, blastResistance);
     }

@@ -14,4 +14,13 @@ public abstract class DoorItemMat extends ItemMaterialData implements PlaceableM
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
+
+    @Override
+    public abstract DoorItemMat getType(final int type);
+
+    @Override
+    public abstract DoorItemMat getType(final String type);
+
+    @Override
+    public abstract DoorItemMat[] types();
 }

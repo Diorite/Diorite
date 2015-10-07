@@ -39,6 +39,15 @@ public abstract class RailsMat extends BlockMaterialData
     public abstract RailsMat getRailType(RailTypeMat railType);
 
     @Override
+    public abstract RailsMat getType(final int type);
+
+    @Override
+    public abstract RailsMat getType(final String type);
+
+    @Override
+    public abstract RailsMat[] types();
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("railType", this.railType).toString();

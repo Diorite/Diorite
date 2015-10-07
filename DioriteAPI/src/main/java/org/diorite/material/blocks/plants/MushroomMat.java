@@ -11,4 +11,13 @@ public abstract class MushroomMat extends PlantMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
+
+    @Override
+    public abstract MushroomMat getType(final int type);
+
+    @Override
+    public abstract MushroomMat getType(final String type);
+
+    @Override
+    public abstract MushroomMat[] types();
 }

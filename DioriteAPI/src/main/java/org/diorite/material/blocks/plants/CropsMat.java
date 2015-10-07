@@ -16,4 +16,16 @@ public abstract class CropsMat extends PlantMat implements AgeableBlockMat
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
+
+    @Override
+    public abstract CropsMat getType(final int type);
+
+    @Override
+    public abstract CropsMat getType(final String type);
+
+    @Override
+    public abstract CropsMat[] types();
+
+    @Override
+    public abstract CropsMat getAge(final int age);
 }

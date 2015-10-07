@@ -38,13 +38,13 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
     @SuppressWarnings("MagicNumber")
     protected WallBannerMat()
     {
-        super("WALL_BANNER", 177, "minecraft:wall_banner", "NORTH", (byte) 0x02, 1, 5);
+        super("WALL_BANNER", 177, "minecraft:wall_banner", 16, "NORTH", (byte) 0x02, 1, 5);
         this.face = BlockFace.NORTH;
     }
 
     protected WallBannerMat(final BlockFace face)
     {
-        super(WALL_BANNER_NORTH.name(), WALL_BANNER_NORTH.ordinal(), WALL_BANNER_NORTH.getMinecraftId(), face.name(), combine(face), WALL_BANNER_NORTH.getHardness(), WALL_BANNER_NORTH.getBlastResistance());
+        super(WALL_BANNER_NORTH.name(), WALL_BANNER_NORTH.ordinal(), WALL_BANNER_NORTH.getMinecraftId(), WALL_BANNER_NORTH.getMaxStack(), face.name(), combine(face), WALL_BANNER_NORTH.getHardness(), WALL_BANNER_NORTH.getBlastResistance());
         this.face = face;
     }
 

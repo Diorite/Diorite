@@ -222,7 +222,7 @@ import org.diorite.material.items.block.door.JungleDoorItemMat;
 import org.diorite.material.items.block.door.OakDoorItemMat;
 import org.diorite.material.items.block.door.SpruceDoorItemMat;
 import org.diorite.material.items.entity.ArmorStandMat;
-import org.diorite.material.items.entity.BoatMat;
+import org.diorite.material.items.entity.boat.BoatMat;
 import org.diorite.material.items.entity.EggMat;
 import org.diorite.material.items.entity.EnderEyeMat;
 import org.diorite.material.items.entity.EnderPearlMat;

@@ -23,12 +23,12 @@ public class EnchantedBookMat extends ItemMaterialData
 
     protected EnchantedBookMat()
     {
-        super("ENCHANTED_BOOK", 403, "minecraft:enchanted_book", "ENCHANTED_BOOK", (short) 0x00);
+        super("ENCHANTED_BOOK", 403, "minecraft:enchanted_book", 1, "ENCHANTED_BOOK", (short) 0x00);
     }
 
     protected EnchantedBookMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, ENCHANTED_BOOK.getMaxStack(), typeName, type);
     }
 
     protected EnchantedBookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

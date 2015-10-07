@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -51,7 +51,7 @@ public class BirchDoorMat extends WoodenDoorMat
     @SuppressWarnings("MagicNumber")
     protected BirchDoorMat()
     {
-        super("BIRCH_DOOR", 194, "minecraft:birch_door", "BOTTOM_EAST", WoodTypeMat.BIRCH, 3, 15);
+        super("BIRCH_DOOR", 194, "minecraft:birch_door", "BOTTOM_EAST", WoodType.BIRCH, 3, 15);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = false;
@@ -61,7 +61,7 @@ public class BirchDoorMat extends WoodenDoorMat
 
     protected BirchDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.ordinal(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.BIRCH, BIRCH_DOOR_BOTTOM_EAST.getHardness(), BIRCH_DOOR_BOTTOM_EAST.getBlastResistance());
+        super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.ordinal(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodType.BIRCH, BIRCH_DOOR_BOTTOM_EAST.getHardness(), BIRCH_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -71,7 +71,7 @@ public class BirchDoorMat extends WoodenDoorMat
 
     protected BirchDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.ordinal(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.BIRCH, BIRCH_DOOR_BOTTOM_EAST.getHardness(), BIRCH_DOOR_BOTTOM_EAST.getBlastResistance());
+        super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.ordinal(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodType.BIRCH, BIRCH_DOOR_BOTTOM_EAST.getHardness(), BIRCH_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;
@@ -79,7 +79,7 @@ public class BirchDoorMat extends WoodenDoorMat
         this.blockFace = blockFace;
     }
 
-    protected BirchDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodTypeMat woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    protected BirchDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, BIRCH_DOOR_BOTTOM_EAST.getHardness(), BIRCH_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;

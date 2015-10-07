@@ -50,6 +50,15 @@ public abstract class MushroomBlockMat extends BlockMaterialData implements Fuel
     public abstract MushroomBlockMat getMushroomType(Type mushroomType);
 
     @Override
+    public abstract MushroomBlockMat getType(final int type);
+
+    @Override
+    public abstract MushroomBlockMat getType(final String type);
+
+    @Override
+    public abstract MushroomBlockMat[] types();
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("mushroomType", this.mushroomType).toString();

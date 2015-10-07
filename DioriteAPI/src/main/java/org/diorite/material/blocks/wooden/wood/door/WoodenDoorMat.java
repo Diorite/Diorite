@@ -1,7 +1,7 @@
 package org.diorite.material.blocks.wooden.wood.door;
 
 import org.diorite.BlockFace;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.material.blocks.wooden.wood.WoodMat;
 import org.diorite.utils.collections.maps.SimpleEnumMap;
@@ -11,17 +11,17 @@ import org.diorite.utils.collections.maps.SimpleEnumMap;
  */
 public abstract class WoodenDoorMat extends WoodMat implements DoorMat
 {
-    protected WoodenDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodTypeMat woodType, final float hardness, final float blastResistance)
+    protected WoodenDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, typeName, (byte) 0, woodType, hardness, blastResistance);
     }
 
-    protected WoodenDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodTypeMat woodType, final float hardness, final float blastResistance)
+    protected WoodenDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, hardness, blastResistance);
     }
 
-    private static final SimpleEnumMap<WoodTypeMat, WoodenDoorMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
+    private static final SimpleEnumMap<WoodType, WoodenDoorMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
 
     @Override
     public abstract WoodenDoorMat getType(final boolean isPowered, final boolean hingeOnRightSide);
@@ -45,22 +45,31 @@ public abstract class WoodenDoorMat extends WoodMat implements DoorMat
     public abstract WoodenDoorMat getHingeOnRightSide(final boolean onRightSide) throws RuntimeException;
 
     @Override
-    public WoodenDoorMat getWoodType(final WoodTypeMat woodType)
+    public WoodenDoorMat getWoodType(final WoodType woodType)
     {
         return types.get(woodType);
     }
+
+    @Override
+    public abstract WoodenDoorMat getType(final int type);
+
+    @Override
+    public abstract WoodenDoorMat getType(final String type);
+
+    @Override
+    public abstract WoodenDoorMat[] types();
 
     /**
      * Returns one of WoodenDoor sub-type based on powered state.
      * It will never return null, and always return top part of door.
      *
-     * @param woodType         {@link WoodTypeMat} of WoodenDoor
+     * @param woodType         {@link WoodType} of WoodenDoor
      * @param powered          if door should be powered.
      * @param hingeOnRightSide if door should have hinge on right side.
      *
      * @return sub-type of WoodenDoor
      */
-    public static WoodenDoorMat getWoodenDoor(final WoodTypeMat woodType, final boolean powered, final boolean hingeOnRightSide)
+    public static WoodenDoorMat getWoodenDoor(final WoodType woodType, final boolean powered, final boolean hingeOnRightSide)
     {
         return types.get(woodType).getType(powered, hingeOnRightSide);
     }
@@ -69,13 +78,13 @@ public abstract class WoodenDoorMat extends WoodMat implements DoorMat
      * Returns one of WoodenDoor sub-type based on facing direction and open state.
      * It will never return null, and always return bottom part of door.
      *
-     * @param woodType  {@link WoodTypeMat} of WoodenDoor
+     * @param woodType  {@link WoodType} of WoodenDoor
      * @param blockFace facing direction of door.
      * @param open      if door should be open.
      *
      * @return sub-type of WoodenDoor
      */
-    public static WoodenDoorMat getWoodenDoor(final WoodTypeMat woodType, final BlockFace blockFace, final boolean open)
+    public static WoodenDoorMat getWoodenDoor(final WoodType woodType, final BlockFace blockFace, final boolean open)
     {
         return types.get(woodType).getType(blockFace, open);
     }
@@ -86,18 +95,18 @@ public abstract class WoodenDoorMat extends WoodMat implements DoorMat
      * @param type type of wood.
      * @param mat  door material.
      */
-    public static void registerWoodType(final WoodTypeMat type, final WoodenDoorMat mat)
+    public static void registerWoodType(final WoodType type, final WoodenDoorMat mat)
     {
         types.put(type, mat);
     }
 
     static
     {
-        registerWoodType(WoodTypeMat.OAK, OAK_DOOR);
-        registerWoodType(WoodTypeMat.SPRUCE, SPRUCE_DOOR);
-        registerWoodType(WoodTypeMat.BIRCH, BIRCH_DOOR);
-        registerWoodType(WoodTypeMat.JUNGLE, JUNGLE_DOOR);
-        registerWoodType(WoodTypeMat.ACACIA, ACACIA_DOOR);
-        registerWoodType(WoodTypeMat.DARK_OAK, DARK_OAK_DOOR);
+        registerWoodType(WoodType.OAK, OAK_DOOR);
+        registerWoodType(WoodType.SPRUCE, SPRUCE_DOOR);
+        registerWoodType(WoodType.BIRCH, BIRCH_DOOR);
+        registerWoodType(WoodType.JUNGLE, JUNGLE_DOOR);
+        registerWoodType(WoodType.ACACIA, ACACIA_DOOR);
+        registerWoodType(WoodType.DARK_OAK, DARK_OAK_DOOR);
     }
 }

@@ -12,13 +12,13 @@ public abstract class RecordMat extends ItemMaterialData
 
     protected RecordMat(final String recordName, final int id)
     {
-        super("RECORD_" + recordName.toUpperCase(), id, "minecraft:record_" + recordName.toLowerCase(), recordName.toUpperCase(), (short) 0x00);
+        super("RECORD_" + recordName.toUpperCase(), id, "minecraft:record_" + recordName.toLowerCase(), 1, recordName.toUpperCase(), (short) 0x00);
         this.sound = Sound.getByEnumName("RECORD_" + recordName.toUpperCase());
     }
 
     protected RecordMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, 1, typeName, type);
         this.sound = sound;
     }
 
@@ -32,6 +32,15 @@ public abstract class RecordMat extends ItemMaterialData
     {
         return this.sound;
     }
+
+    @Override
+    public abstract RecordMat getType(final int type);
+
+    @Override
+    public abstract RecordMat getType(final String type);
+
+    @Override
+    public abstract RecordMat[] types();
 
     @Override
     public String toString()

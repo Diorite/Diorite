@@ -2,7 +2,7 @@ package org.diorite.material.blocks.wooden.wood.fence;
 
 import java.util.Map;
 
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -26,10 +26,10 @@ public class OakFenceMat extends WoodenFenceMat
     @SuppressWarnings("MagicNumber")
     protected OakFenceMat()
     {
-        super("OAK_FENCE", 85, "minecraft:fence", "OAK_FENCE", WoodTypeMat.OAK, 2, 15);
+        super("OAK_FENCE", 85, "minecraft:fence", "OAK_FENCE", WoodType.OAK, 2, 15);
     }
 
-    protected OakFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final float hardness, final float blastResistance)
+    protected OakFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }

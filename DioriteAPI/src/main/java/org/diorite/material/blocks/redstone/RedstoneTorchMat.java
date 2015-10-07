@@ -29,7 +29,7 @@ public abstract class RedstoneTorchMat extends BlockMaterialData implements Powe
     }
 
     @Override
-    public PowerableMat getPowered(final boolean powered)
+    public RedstoneTorchMat getPowered(final boolean powered)
     {
         return getRedstoneTorch(powered);
     }
@@ -39,6 +39,21 @@ public abstract class RedstoneTorchMat extends BlockMaterialData implements Powe
     {
         return this.face;
     }
+
+    @Override
+    public abstract RedstoneTorchMat getType(final int type);
+
+    @Override
+    public abstract RedstoneTorchMat getType(final String type);
+
+    @Override
+    public abstract RedstoneTorchMat[] types();
+
+    @Override
+    public abstract RedstoneTorchMat getAttachedFace(final BlockFace face);
+
+    @Override
+    public abstract RedstoneTorchMat getBlockFacing(final BlockFace face);
 
     @Override
     public String toString()

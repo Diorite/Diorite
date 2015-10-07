@@ -1,5 +1,6 @@
 package org.diorite.material.blocks.others;
 
+import org.diorite.BlockFace;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 
@@ -17,4 +18,16 @@ public abstract class BannerBlockMat extends BlockMaterialData implements Direct
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
+
+    @Override
+    public abstract BannerBlockMat getType(final int type);
+
+    @Override
+    public abstract BannerBlockMat getType(final String type);
+
+    @Override
+    public abstract BannerBlockMat[] types();
+
+    @Override
+    public abstract BannerBlockMat getBlockFacing(final BlockFace face);
 }

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -51,7 +51,7 @@ public class SpruceDoorMat extends WoodenDoorMat
     @SuppressWarnings("MagicNumber")
     protected SpruceDoorMat()
     {
-        super("SPRUCE_DOOR", 193, "minecraft:spruce_door", "BOTTOM_EAST", WoodTypeMat.SPRUCE, 3, 15);
+        super("SPRUCE_DOOR", 193, "minecraft:spruce_door", "BOTTOM_EAST", WoodType.SPRUCE, 3, 15);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = false;
@@ -61,7 +61,7 @@ public class SpruceDoorMat extends WoodenDoorMat
 
     protected SpruceDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.SPRUCE, SPRUCE_DOOR_BOTTOM_EAST.getHardness(), SPRUCE_DOOR_BOTTOM_EAST.getBlastResistance());
+        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodType.SPRUCE, SPRUCE_DOOR_BOTTOM_EAST.getHardness(), SPRUCE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -71,7 +71,7 @@ public class SpruceDoorMat extends WoodenDoorMat
 
     protected SpruceDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.SPRUCE, SPRUCE_DOOR_BOTTOM_EAST.getHardness(), SPRUCE_DOOR_BOTTOM_EAST.getBlastResistance());
+        super(SPRUCE_DOOR_BOTTOM_EAST.name(), SPRUCE_DOOR_BOTTOM_EAST.ordinal(), SPRUCE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodType.SPRUCE, SPRUCE_DOOR_BOTTOM_EAST.getHardness(), SPRUCE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;
@@ -79,7 +79,7 @@ public class SpruceDoorMat extends WoodenDoorMat
         this.blockFace = blockFace;
     }
 
-    protected SpruceDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodTypeMat woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    protected SpruceDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, SPRUCE_DOOR_BOTTOM_EAST.getHardness(), SPRUCE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;

@@ -49,13 +49,13 @@ public class StandingSignMat extends SignBlockMat
     @SuppressWarnings("MagicNumber")
     protected StandingSignMat()
     {
-        super("STANDING_SIGN", 63, "minecraft:standing_sign", "SOUTH", (byte) 0x00, 1, 5);
+        super("STANDING_SIGN", 63, "minecraft:standing_sign", 16, "SOUTH", (byte) 0x00, 1, 5);
         this.face = BlockFace.SOUTH;
     }
 
     protected StandingSignMat(final BlockFace face)
     {
-        super(STANDING_SIGN_SOUTH.name(), STANDING_SIGN_SOUTH.ordinal(), STANDING_SIGN_SOUTH.getMinecraftId(), face.name(), combine(face), STANDING_SIGN_SOUTH.getHardness(), STANDING_SIGN_SOUTH.getBlastResistance());
+        super(STANDING_SIGN_SOUTH.name(), STANDING_SIGN_SOUTH.ordinal(), STANDING_SIGN_SOUTH.getMinecraftId(), STANDING_SIGN_SOUTH.getMaxStack(), face.name(), combine(face), STANDING_SIGN_SOUTH.getHardness(), STANDING_SIGN_SOUTH.getBlastResistance());
         this.face = face;
     }
 

@@ -9,6 +9,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.chat.ChatColor;
 
+/**
+ * Base class for all chat component API elements.
+ */
 public abstract class BaseComponent extends ReplacableComponent
 {
     /**

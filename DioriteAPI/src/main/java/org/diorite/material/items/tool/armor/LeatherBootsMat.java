@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents leather boots.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class LeatherBootsMat extends ArmorMat
+public class LeatherBootsMat extends BootsMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class LeatherBootsMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected LeatherBootsMat()
     {
-        super("LEATHER_BOOTS", 301, "minecraft:leather_boots", "NEW", (short) 0, ArmorMaterial.LEATHER, ArmorType.BOOTS);
+        super("LEATHER_BOOTS", 301, "minecraft:leather_boots", "NEW", (short) 0, ArmorMaterial.LEATHER);
     }
 
     protected LeatherBootsMat(final int durability)
     {
-        super(LEATHER_BOOTS.name(), LEATHER_BOOTS.getId(), LEATHER_BOOTS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.LEATHER, ArmorType.BOOTS);
+        super(LEATHER_BOOTS.name(), LEATHER_BOOTS.getId(), LEATHER_BOOTS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.LEATHER);
     }
 
     protected LeatherBootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

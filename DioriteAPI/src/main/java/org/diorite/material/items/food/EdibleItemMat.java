@@ -57,6 +57,16 @@ public abstract class EdibleItemMat extends ItemMaterialData
 //     */
 //     Set<PossiblePotionEffect> getPossibleEffects();
 
+
+    @Override
+    public abstract EdibleItemMat getType(final int type);
+
+    @Override
+    public abstract EdibleItemMat getType(final String type);
+
+    @Override
+    public abstract EdibleItemMat[] types();
+
     @Override
     public String toString()
     {

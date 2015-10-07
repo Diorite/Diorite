@@ -32,6 +32,18 @@ public abstract class PressurePlateMat extends BlockMaterialData implements Powe
     }
 
     @Override
+    public abstract PressurePlateMat getType(final int type);
+
+    @Override
+    public abstract PressurePlateMat getType(final String type);
+
+    @Override
+    public abstract PressurePlateMat[] types();
+
+    @Override
+    public abstract PressurePlateMat getPowered(final boolean powered);
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("powered", this.powered).toString();

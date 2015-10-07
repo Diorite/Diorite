@@ -3,7 +3,7 @@ package org.diorite.material.blocks.wooden.wood;
 import java.util.Map;
 
 import org.diorite.material.FuelMat;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -20,11 +20,11 @@ public class PlanksMat extends WoodMat implements FuelMat
     public static final int USED_DATA_VALUES = 6;
 
     public static final PlanksMat PLANKS_OAK      = new PlanksMat();
-    public static final PlanksMat PLANKS_SPRUCE   = new PlanksMat(WoodTypeMat.SPRUCE);
-    public static final PlanksMat PLANKS_BIRCH    = new PlanksMat(WoodTypeMat.BIRCH);
-    public static final PlanksMat PLANKS_JUNGLE   = new PlanksMat(WoodTypeMat.JUNGLE);
-    public static final PlanksMat PLANKS_ACACIA   = new PlanksMat(WoodTypeMat.ACACIA);
-    public static final PlanksMat PLANKS_DARK_OAK = new PlanksMat(WoodTypeMat.DARK_OAK);
+    public static final PlanksMat PLANKS_SPRUCE   = new PlanksMat(WoodType.SPRUCE);
+    public static final PlanksMat PLANKS_BIRCH    = new PlanksMat(WoodType.BIRCH);
+    public static final PlanksMat PLANKS_JUNGLE   = new PlanksMat(WoodType.JUNGLE);
+    public static final PlanksMat PLANKS_ACACIA   = new PlanksMat(WoodType.ACACIA);
+    public static final PlanksMat PLANKS_DARK_OAK = new PlanksMat(WoodType.DARK_OAK);
 
     private static final Map<String, PlanksMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PlanksMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
@@ -32,15 +32,15 @@ public class PlanksMat extends WoodMat implements FuelMat
     @SuppressWarnings("MagicNumber")
     protected PlanksMat()
     {
-        super("PLANKS", 5, "minecraft:planks", "QAK", WoodTypeMat.OAK.getPlanksMeta(), WoodTypeMat.OAK, 2, 15);
+        super("PLANKS", 5, "minecraft:planks", "QAK", WoodType.OAK.getPlanksMeta(), WoodType.OAK, 2, 15);
     }
 
-    protected PlanksMat(final WoodTypeMat woodType)
+    protected PlanksMat(final WoodType woodType)
     {
         super(PLANKS_OAK.name(), PLANKS_OAK.ordinal(), PLANKS_OAK.getMinecraftId(), woodType.name(), woodType.getPlanksMeta(), woodType, PLANKS_OAK.getHardness(), PLANKS_OAK.getBlastResistance());
     }
 
-    protected PlanksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final float hardness, final float blastResistance)
+    protected PlanksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
@@ -58,7 +58,7 @@ public class PlanksMat extends WoodMat implements FuelMat
     }
 
     @Override
-    public PlanksMat getWoodType(final WoodTypeMat woodType)
+    public PlanksMat getWoodType(final WoodType woodType)
     {
         return getPlanks(woodType);
     }
@@ -96,13 +96,13 @@ public class PlanksMat extends WoodMat implements FuelMat
     }
 
     /**
-     * Returns sub-type of {@link PlanksMat}, based on {@link WoodTypeMat}.
+     * Returns sub-type of {@link PlanksMat}, based on {@link WoodType}.
      *
-     * @param type {@link WoodTypeMat} of Planks
+     * @param type {@link WoodType} of Planks
      *
      * @return sub-type of {@link PlanksMat}.
      */
-    public static PlanksMat getPlanks(final WoodTypeMat type)
+    public static PlanksMat getPlanks(final WoodType type)
     {
         for (final PlanksMat mat : planksTypes())
         {

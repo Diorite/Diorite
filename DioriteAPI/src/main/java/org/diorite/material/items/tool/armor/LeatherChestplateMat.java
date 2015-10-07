@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents leather chestplate.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class LeatherChestplateMat extends ArmorMat
+public class LeatherChestplateMat extends ChestplateMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class LeatherChestplateMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected LeatherChestplateMat()
     {
-        super("LEATHER_CHESTPLATE", 299, "minecraft:leather_chestplate", "NEW", (short) 0, ArmorMaterial.LEATHER, ArmorType.CHESTPLATE);
+        super("LEATHER_CHESTPLATE", 299, "minecraft:leather_chestplate", "NEW", (short) 0, ArmorMaterial.LEATHER);
     }
 
     protected LeatherChestplateMat(final int durability)
     {
-        super(LEATHER_CHESTPLATE.name(), LEATHER_CHESTPLATE.getId(), LEATHER_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.LEATHER, ArmorType.CHESTPLATE);
+        super(LEATHER_CHESTPLATE.name(), LEATHER_CHESTPLATE.getId(), LEATHER_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.LEATHER);
     }
 
     protected LeatherChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

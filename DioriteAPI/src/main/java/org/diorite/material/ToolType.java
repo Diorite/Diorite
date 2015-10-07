@@ -19,7 +19,6 @@ public class ToolType extends ASimpleEnum<ToolType>
     public static final ToolType SHOVEL  = new ToolType("SHOVEL");
     public static final ToolType AXE     = new ToolType("AXE");
     public static final ToolType HOE     = new ToolType("HOE");
-    public static final ToolType UNIQUE  = new ToolType("UNIQUE"); // for tools that don't have any other types, like flint and steel.
 
     public ToolType(final String enumName, final int enumId)
     {
@@ -80,6 +79,5 @@ public class ToolType extends ASimpleEnum<ToolType>
         ToolType.register(SHOVEL);
         ToolType.register(AXE);
         ToolType.register(HOE);
-        ToolType.register(UNIQUE);
     }
 }

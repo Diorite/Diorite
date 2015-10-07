@@ -81,6 +81,39 @@ public abstract class StonySlabMat extends StonyMat implements SlabMat
         }
     }
 
+    @Override
+    public abstract StonySlabMat getType(final int type);
+
+    @Override
+    public abstract StonySlabMat getType(final String type);
+
+    @Override
+    public abstract StonySlabMat[] types();
+
+    @Override
+    public StonySlabMat getUpperPart()
+    {
+        return this.getSlab(SlabTypeMat.UPPER);
+    }
+
+    @Override
+    public StonySlabMat getBottomPart()
+    {
+        return this.getSlab(SlabTypeMat.BOTTOM);
+    }
+
+    @Override
+    public StonySlabMat getFullSlab()
+    {
+        return this.getSlab(SlabTypeMat.FULL);
+    }
+
+    @Override
+    public StonySlabMat getFullSmoothSlab()
+    {
+        return this.getSlab(SlabTypeMat.SMOOTH_FULL);
+    }
+
     /**
      * Return one of StonySlab sub-type, based on {@link SlabTypeMat} and {@link StoneSlabTypeMat}.
      * It will never return null.

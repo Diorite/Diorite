@@ -23,12 +23,12 @@ public class WritableBookMat extends ItemMaterialData
 
     protected WritableBookMat()
     {
-        super("WRITABLE_BOOK", 386, "minecraft:writable_book", "WRITABLE_BOOK", (short) 0x00);
+        super("WRITABLE_BOOK", 386, "minecraft:writable_book", 1, "WRITABLE_BOOK", (short) 0x00);
     }
 
     protected WritableBookMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, WRITABLE_BOOK.getMaxStack(), typeName, type);
     }
 
     protected WritableBookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

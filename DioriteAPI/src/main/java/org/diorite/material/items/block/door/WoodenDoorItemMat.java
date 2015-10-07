@@ -1,33 +1,33 @@
 package org.diorite.material.items.block.door;
 
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.SimpleEnumMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public abstract class WoodenDoorItemMat extends DoorItemMat
 {
-    protected final WoodTypeMat woodType;
+    protected final WoodType woodType;
 
-    protected WoodenDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodTypeMat woodType)
+    protected WoodenDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, typeName, type);
         this.woodType = woodType;
     }
 
-    protected WoodenDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodTypeMat woodType)
+    protected WoodenDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.woodType = woodType;
     }
 
-    private static final SimpleEnumMap<WoodTypeMat, WoodenDoorItemMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
+    private static final SimpleEnumMap<WoodType, WoodenDoorItemMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
 
     /**
      * Returns wood type of this door.
      *
      * @return wood type of this door.
      */
-    public WoodTypeMat getWoodType()
+    public WoodType getWoodType()
     {
         return this.woodType;
     }
@@ -39,19 +39,28 @@ public abstract class WoodenDoorItemMat extends DoorItemMat
      *
      * @return doors made of selected wood type.
      */
-    public WoodenDoorItemMat getWoodType(final WoodTypeMat woodType)
+    public WoodenDoorItemMat getWoodType(final WoodType woodType)
     {
         return types.get(woodType);
     }
 
+    @Override
+    public abstract WoodenDoorItemMat getType(final int type);
+
+    @Override
+    public abstract WoodenDoorItemMat getType(final String type);
+
+    @Override
+    public abstract WoodenDoorItemMat[] types();
+
     /**
-     * Returns sub-type of {@link WoodenDoorItemMat}, based on {@link WoodTypeMat}.
+     * Returns sub-type of {@link WoodenDoorItemMat}, based on {@link WoodType}.
      *
-     * @param woodType {@link WoodTypeMat} of WoodenFence
+     * @param woodType {@link WoodType} of WoodenFence
      *
      * @return sub-type of {@link WoodenDoorItemMat}.
      */
-    public static WoodenDoorItemMat getWoodenDoorItem(final WoodTypeMat woodType)
+    public static WoodenDoorItemMat getWoodenDoorItem(final WoodType woodType)
     {
         return types.get(woodType);
     }
@@ -62,18 +71,18 @@ public abstract class WoodenDoorItemMat extends DoorItemMat
      * @param type type of wood.
      * @param mat  fence material.
      */
-    public static void registerWoodType(final WoodTypeMat type, final WoodenDoorItemMat mat)
+    public static void registerWoodType(final WoodType type, final WoodenDoorItemMat mat)
     {
         types.put(type, mat);
     }
 
     static
     {
-        registerWoodType(WoodTypeMat.OAK, OAK_DOOR_ITEM);
-        registerWoodType(WoodTypeMat.SPRUCE, SPRUCE_DOOR_ITEM);
-        registerWoodType(WoodTypeMat.BIRCH, BIRCH_DOOR_ITEM);
-        registerWoodType(WoodTypeMat.JUNGLE, JUNGLE_DOOR_ITEM);
-        registerWoodType(WoodTypeMat.ACACIA, ACACIA_DOOR_ITEM);
-        registerWoodType(WoodTypeMat.DARK_OAK, DARK_OAK_DOOR_ITEM);
+        registerWoodType(WoodType.OAK, OAK_DOOR_ITEM);
+        registerWoodType(WoodType.SPRUCE, SPRUCE_DOOR_ITEM);
+        registerWoodType(WoodType.BIRCH, BIRCH_DOOR_ITEM);
+        registerWoodType(WoodType.JUNGLE, JUNGLE_DOOR_ITEM);
+        registerWoodType(WoodType.ACACIA, ACACIA_DOOR_ITEM);
+        registerWoodType(WoodType.DARK_OAK, DARK_OAK_DOOR_ITEM);
     }
 }

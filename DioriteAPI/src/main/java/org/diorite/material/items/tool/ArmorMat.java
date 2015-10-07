@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.ArmorMaterial;
-import org.diorite.material.ArmorMaterial.ArmorMaterialTypeData;
+import org.diorite.material.ArmorData;
 import org.diorite.material.ArmorType;
 import org.diorite.material.ItemMaterialData;
 
@@ -32,7 +32,7 @@ public abstract class ArmorMat extends ItemMaterialData implements BreakableItem
     }
 
     /**
-     * Get {@link ArmorMaterial} defined by this item.
+     * Retruns {@link ArmorMaterial} defined by this item.
      *
      * @return {@link ArmorMaterial} defined by this item.
      */
@@ -42,7 +42,7 @@ public abstract class ArmorMat extends ItemMaterialData implements BreakableItem
     }
 
     /**
-     * Get {@link ArmorType} defined by this item.
+     * Retruns {@link ArmorType} defined by this item.
      *
      * @return {@link ArmorType} defined by this item.
      */
@@ -56,7 +56,7 @@ public abstract class ArmorMat extends ItemMaterialData implements BreakableItem
      *
      * @return properties of this armor.
      */
-    public ArmorMaterialTypeData getProperties()
+    public ArmorData getProperties()
     {
         return this.armorMaterial.getProperties(this.armorType);
     }

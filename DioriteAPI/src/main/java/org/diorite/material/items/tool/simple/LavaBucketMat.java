@@ -24,12 +24,12 @@ public class LavaBucketMat extends ItemMaterialData implements FuelMat
 
     protected LavaBucketMat()
     {
-        super("LAVA_BUCKET", 327, "minecraft:lava_bucket", "LAVA_BUCKET", (short) 0x00);
+        super("LAVA_BUCKET", 327, "minecraft:lava_bucket", 1, "LAVA_BUCKET", (short) 0x00);
     }
 
     protected LavaBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, LAVA_BUCKET.getMaxStack(), typeName, type);
     }
 
     protected LavaBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

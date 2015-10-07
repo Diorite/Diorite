@@ -1,16 +1,14 @@
-package org.diorite.material.items.entity;
+package org.diorite.material.items.entity.boat;
 
 import java.util.Map;
 
-import org.diorite.material.ItemMaterialData;
-import org.diorite.material.PlaceableEntityMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
-public class BoatMat extends ItemMaterialData implements PlaceableEntityMat
+public class BoatMat extends AbstractBoatMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default

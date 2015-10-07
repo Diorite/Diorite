@@ -13,4 +13,13 @@ public abstract class EarthMat extends BlockMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
+
+    @Override
+    public abstract EarthMat getType(final int type);
+
+    @Override
+    public abstract EarthMat getType(final String type);
+
+    @Override
+    public abstract EarthMat[] types();
 }

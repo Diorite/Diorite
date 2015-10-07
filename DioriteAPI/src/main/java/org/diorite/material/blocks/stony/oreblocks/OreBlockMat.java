@@ -40,6 +40,15 @@ public abstract class OreBlockMat extends StonyMat
     }
 
     @Override
+    public abstract OreBlockMat getType(final int type);
+
+    @Override
+    public abstract OreBlockMat getType(final String type);
+
+    @Override
+    public abstract OreBlockMat[] types();
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("ore", this.ore).toString();

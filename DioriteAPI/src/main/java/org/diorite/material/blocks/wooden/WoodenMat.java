@@ -16,4 +16,13 @@ public abstract class WoodenMat extends BlockMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
+
+    @Override
+    public abstract WoodenMat getType(final int type);
+
+    @Override
+    public abstract WoodenMat getType(final String type);
+
+    @Override
+    public abstract WoodenMat[] types();
 }

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -37,15 +37,15 @@ public class JungleFenceGateMat extends WoodenFenceGateMat
     @SuppressWarnings("MagicNumber")
     protected JungleFenceGateMat()
     {
-        super("JUNGLE_FENCE_GATE", 185, "minecraft:jungle_fence_gate", WoodTypeMat.JUNGLE, BlockFace.SOUTH, false, 2, 15);
+        super("JUNGLE_FENCE_GATE", 185, "minecraft:jungle_fence_gate", WoodType.JUNGLE, BlockFace.SOUTH, false, 2, 15);
     }
 
     protected JungleFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(JUNGLE_FENCE_GATE_SOUTH.name(), JUNGLE_FENCE_GATE_SOUTH.ordinal(), JUNGLE_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.JUNGLE, face, open, JUNGLE_FENCE_GATE_SOUTH.getHardness(), JUNGLE_FENCE_GATE_SOUTH.getBlastResistance());
+        super(JUNGLE_FENCE_GATE_SOUTH.name(), JUNGLE_FENCE_GATE_SOUTH.ordinal(), JUNGLE_FENCE_GATE_SOUTH.getMinecraftId(), WoodType.JUNGLE, face, open, JUNGLE_FENCE_GATE_SOUTH.getHardness(), JUNGLE_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected JungleFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
+    protected JungleFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.data.drops.PossibleDrops;
 import org.diorite.material.data.drops.PossibleRandomlyDrop;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -26,32 +26,32 @@ public class LeavesMat extends WoodMat
     public static final int USED_DATA_VALUES = 24;
 
     public static final LeavesMat LEAVES_OAK      = new LeavesMat();
-    public static final LeavesMat LEAVES_SPRUCE   = new LeavesMat("SPRUCE", WoodTypeMat.SPRUCE, false, true);
-    public static final LeavesMat LEAVES_BIRCH    = new LeavesMat("BIRCH", WoodTypeMat.BIRCH, false, true);
-    public static final LeavesMat LEAVES_JUNGLE   = new LeavesMat("JUNGLE", WoodTypeMat.JUNGLE, false, true);
-    public static final LeavesMat LEAVES_ACACIA   = new Leaves2("ACACIA", WoodTypeMat.ACACIA, false, true);
-    public static final LeavesMat LEAVES_DARK_OAK = new Leaves2("DARK_OAK", WoodTypeMat.DARK_OAK, false, true);
+    public static final LeavesMat LEAVES_SPRUCE   = new LeavesMat("SPRUCE", WoodType.SPRUCE, false, true);
+    public static final LeavesMat LEAVES_BIRCH    = new LeavesMat("BIRCH", WoodType.BIRCH, false, true);
+    public static final LeavesMat LEAVES_JUNGLE   = new LeavesMat("JUNGLE", WoodType.JUNGLE, false, true);
+    public static final LeavesMat LEAVES_ACACIA   = new Leaves2("ACACIA", WoodType.ACACIA, false, true);
+    public static final LeavesMat LEAVES_DARK_OAK = new Leaves2("DARK_OAK", WoodType.DARK_OAK, false, true);
 
-    public static final LeavesMat LEAVES_OAK_NO_DECAY      = new LeavesMat("OAK_NO_DECAY", WoodTypeMat.OAK, false, false);
-    public static final LeavesMat LEAVES_SPRUCE_NO_DECAY   = new LeavesMat("SPRUCE_NO_DECAY", WoodTypeMat.SPRUCE, false, false);
-    public static final LeavesMat LEAVES_BIRCH_NO_DECAY    = new LeavesMat("BIRCH_NO_DECAY", WoodTypeMat.BIRCH, false, false);
-    public static final LeavesMat LEAVES_JUNGLE_NO_DECAY   = new LeavesMat("JUNGLE_NO_DECAY", WoodTypeMat.JUNGLE, false, false);
-    public static final LeavesMat LEAVES_ACACIA_NO_DECAY   = new Leaves2("ACACIA_NO_DECAY", WoodTypeMat.ACACIA, false, false);
-    public static final LeavesMat LEAVES_DARK_OAK_NO_DECAY = new Leaves2("DARK_OAK_NO_DECAY", WoodTypeMat.DARK_OAK, false, false);
+    public static final LeavesMat LEAVES_OAK_NO_DECAY      = new LeavesMat("OAK_NO_DECAY", WoodType.OAK, false, false);
+    public static final LeavesMat LEAVES_SPRUCE_NO_DECAY   = new LeavesMat("SPRUCE_NO_DECAY", WoodType.SPRUCE, false, false);
+    public static final LeavesMat LEAVES_BIRCH_NO_DECAY    = new LeavesMat("BIRCH_NO_DECAY", WoodType.BIRCH, false, false);
+    public static final LeavesMat LEAVES_JUNGLE_NO_DECAY   = new LeavesMat("JUNGLE_NO_DECAY", WoodType.JUNGLE, false, false);
+    public static final LeavesMat LEAVES_ACACIA_NO_DECAY   = new Leaves2("ACACIA_NO_DECAY", WoodType.ACACIA, false, false);
+    public static final LeavesMat LEAVES_DARK_OAK_NO_DECAY = new Leaves2("DARK_OAK_NO_DECAY", WoodType.DARK_OAK, false, false);
 
-    public static final LeavesMat LEAVES_OAK_CHECK_DECAY      = new LeavesMat("OAK_CHECK_DECAY", WoodTypeMat.OAK, true, true);
-    public static final LeavesMat LEAVES_SPRUCE_CHECK_DECAY   = new LeavesMat("SPRUCE_CHECK_DECAY", WoodTypeMat.SPRUCE, true, true);
-    public static final LeavesMat LEAVES_BIRCH_CHECK_DECAY    = new LeavesMat("BIRCH_CHECK_DECAY", WoodTypeMat.BIRCH, true, true);
-    public static final LeavesMat LEAVES_JUNGLE_CHECK_DECAY   = new LeavesMat("JUNGLE_CHECK_DECAY", WoodTypeMat.JUNGLE, true, true);
-    public static final LeavesMat LEAVES_ACACIA_CHECK_DECAY   = new Leaves2("ACACIA_CHECK_DECAY", WoodTypeMat.ACACIA, true, true);
-    public static final LeavesMat LEAVES_DARK_OAK_CHECK_DECAY = new Leaves2("DARK_OAK_CHECK_DECAY", WoodTypeMat.DARK_OAK, true, true);
+    public static final LeavesMat LEAVES_OAK_CHECK_DECAY      = new LeavesMat("OAK_CHECK_DECAY", WoodType.OAK, true, true);
+    public static final LeavesMat LEAVES_SPRUCE_CHECK_DECAY   = new LeavesMat("SPRUCE_CHECK_DECAY", WoodType.SPRUCE, true, true);
+    public static final LeavesMat LEAVES_BIRCH_CHECK_DECAY    = new LeavesMat("BIRCH_CHECK_DECAY", WoodType.BIRCH, true, true);
+    public static final LeavesMat LEAVES_JUNGLE_CHECK_DECAY   = new LeavesMat("JUNGLE_CHECK_DECAY", WoodType.JUNGLE, true, true);
+    public static final LeavesMat LEAVES_ACACIA_CHECK_DECAY   = new Leaves2("ACACIA_CHECK_DECAY", WoodType.ACACIA, true, true);
+    public static final LeavesMat LEAVES_DARK_OAK_CHECK_DECAY = new Leaves2("DARK_OAK_CHECK_DECAY", WoodType.DARK_OAK, true, true);
 
-    public static final LeavesMat LEAVES_OAK_NO_DECAY_AND_CHECK      = new LeavesMat("OAK_NO_DECAY_AND_CHECK", WoodTypeMat.OAK, true, false);
-    public static final LeavesMat LEAVES_SPRUCE_NO_DECAY_AND_CHECK   = new LeavesMat("SPRUCE_NO_DECAY_AND_CHECK", WoodTypeMat.SPRUCE, true, false);
-    public static final LeavesMat LEAVES_BIRCH_NO_DECAY_AND_CHECK    = new LeavesMat("BIRCH_NO_DECAY_AND_CHECK", WoodTypeMat.BIRCH, true, false);
-    public static final LeavesMat LEAVES_JUNGLE_NO_DECAY_AND_CHECK   = new LeavesMat("JUNGLE_NO_DECAY_AND_CHECK", WoodTypeMat.JUNGLE, true, false);
-    public static final LeavesMat LEAVES_ACACIA_NO_DECAY_AND_CHECK   = new Leaves2("ACACIA_NO_DECAY_AND_CHECK", WoodTypeMat.ACACIA, true, false);
-    public static final LeavesMat LEAVES_DARK_OAK_NO_DECAY_AND_CHECK = new Leaves2("DARK_OAK_NO_DECAY_AND_CHECK", WoodTypeMat.DARK_OAK, true, false);
+    public static final LeavesMat LEAVES_OAK_NO_DECAY_AND_CHECK      = new LeavesMat("OAK_NO_DECAY_AND_CHECK", WoodType.OAK, true, false);
+    public static final LeavesMat LEAVES_SPRUCE_NO_DECAY_AND_CHECK   = new LeavesMat("SPRUCE_NO_DECAY_AND_CHECK", WoodType.SPRUCE, true, false);
+    public static final LeavesMat LEAVES_BIRCH_NO_DECAY_AND_CHECK    = new LeavesMat("BIRCH_NO_DECAY_AND_CHECK", WoodType.BIRCH, true, false);
+    public static final LeavesMat LEAVES_JUNGLE_NO_DECAY_AND_CHECK   = new LeavesMat("JUNGLE_NO_DECAY_AND_CHECK", WoodType.JUNGLE, true, false);
+    public static final LeavesMat LEAVES_ACACIA_NO_DECAY_AND_CHECK   = new Leaves2("ACACIA_NO_DECAY_AND_CHECK", WoodType.ACACIA, true, false);
+    public static final LeavesMat LEAVES_DARK_OAK_NO_DECAY_AND_CHECK = new Leaves2("DARK_OAK_NO_DECAY_AND_CHECK", WoodType.DARK_OAK, true, false);
 
     private static final Map<String, LeavesMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<LeavesMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
@@ -62,13 +62,13 @@ public class LeavesMat extends WoodMat
     @SuppressWarnings("MagicNumber")
     protected LeavesMat()
     {
-        super("LEAVES", 18, "minecraft:leaves", "QAK", (byte) 0x00, WoodTypeMat.OAK, 0.2f, 1);
+        super("LEAVES", 18, "minecraft:leaves", "QAK", (byte) 0x00, WoodType.OAK, 0.2f, 1);
         this.checkDecay = false;
         this.decayable = true;
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LeavesMat(final String enumName, final WoodTypeMat type, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
+    protected LeavesMat(final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
     {
         super(LEAVES_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, combine(type, checkDecay, decayable), type, hardness, blastResistance);
         this.checkDecay = checkDecay;
@@ -76,14 +76,14 @@ public class LeavesMat extends WoodMat
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LeavesMat(final String enumName, final WoodTypeMat type, final boolean checkDecay, final boolean decayable)
+    protected LeavesMat(final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
     {
         super(LEAVES_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 161 : 18, LEAVES_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), enumName, combine(type, checkDecay, decayable), type, LEAVES_OAK.getHardness(), LEAVES_OAK.getBlastResistance());
         this.checkDecay = checkDecay;
         this.decayable = decayable;
     }
 
-    protected LeavesMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
+    protected LeavesMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.checkDecay = checkDecay;
@@ -119,7 +119,7 @@ public class LeavesMat extends WoodMat
     }
 
     @Override
-    public LeavesMat getWoodType(final WoodTypeMat woodType)
+    public LeavesMat getWoodType(final WoodType woodType)
     {
         return getLeaves(woodType, this.checkDecay, this.decayable);
     }
@@ -146,7 +146,7 @@ public class LeavesMat extends WoodMat
         return getLeaves(this.woodType, this.checkDecay, decayable);
     }
 
-    public LeavesMat getType(final WoodTypeMat woodType, final boolean checkDecay, final boolean decayable)
+    public LeavesMat getType(final WoodType woodType, final boolean checkDecay, final boolean decayable)
     {
         return getLeaves(woodType, checkDecay, decayable);
     }
@@ -157,7 +157,7 @@ public class LeavesMat extends WoodMat
         return (byte) (this.getType() + ((this.getWoodType().isSecondLogID()) ? 16 : 0));
     }
 
-    private static byte combine(final WoodTypeMat type, final boolean checkDecay, final boolean decayable)
+    private static byte combine(final WoodType type, final boolean checkDecay, final boolean decayable)
     {
         byte result = type.getLogFlag();
         if (! decayable)
@@ -197,7 +197,7 @@ public class LeavesMat extends WoodMat
     }
 
     @SuppressWarnings("MagicNumber")
-    public static LeavesMat getLeaves(final WoodTypeMat type, final boolean checkDecay, final boolean decayable)
+    public static LeavesMat getLeaves(final WoodType type, final boolean checkDecay, final boolean decayable)
     {
         return getByID(combine(type, checkDecay, decayable) + (type.isSecondLogID() ? 16 : 0));
     }
@@ -234,12 +234,12 @@ public class LeavesMat extends WoodMat
      */
     public static class Leaves2 extends LeavesMat
     {
-        protected Leaves2(final String enumName, final WoodTypeMat type, final boolean checkDecay, final boolean decayable)
+        protected Leaves2(final String enumName, final WoodType type, final boolean checkDecay, final boolean decayable)
         {
             super(enumName, type, checkDecay, decayable);
         }
 
-        protected Leaves2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
+        protected Leaves2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final boolean checkDecay, final boolean decayable, final float hardness, final float blastResistance)
         {
             super(enumName, id, minecraftId, maxStack, typeName, type, woodType, checkDecay, decayable, hardness, blastResistance);
         }

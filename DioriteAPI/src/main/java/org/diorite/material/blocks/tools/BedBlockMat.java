@@ -59,7 +59,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
     @SuppressWarnings("MagicNumber")
     protected BedBlockMat()
     {
-        super("BED_BLOCK", 26, "minecraft:bed", "FOOT_SOUTH", (byte) 0x00, 0.2f, 1);
+        super("BED_BLOCK", 26, "minecraft:bed", 1, "FOOT_SOUTH", (byte) 0x00, 0.2f, 1);
         this.blockFacing = BlockFace.SOUTH;
         this.isHeadPart = false;
         this.isOccupied = false;
@@ -67,7 +67,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
 
     protected BedBlockMat(final BlockFace face, final boolean isHeadPart, final boolean isOccupied)
     {
-        super(BED_FOOT_SOUTH.name(), BED_FOOT_SOUTH.ordinal(), BED_FOOT_SOUTH.getMinecraftId(), (isHeadPart ? "HEAD_" : "FOOT_") + face.name() + (isOccupied ? "_OCCUPIED" : ""), combine(face, isHeadPart, isOccupied), BED_FOOT_SOUTH.getHardness(), BED_FOOT_SOUTH.getBlastResistance());
+        super(BED_FOOT_SOUTH.name(), BED_FOOT_SOUTH.ordinal(), BED_FOOT_SOUTH.getMinecraftId(), BED_FOOT_SOUTH.getMaxStack(), (isHeadPart ? "HEAD_" : "FOOT_") + face.name() + (isOccupied ? "_OCCUPIED" : ""), combine(face, isHeadPart, isOccupied), BED_FOOT_SOUTH.getHardness(), BED_FOOT_SOUTH.getBlastResistance());
         this.blockFacing = face;
         this.isHeadPart = isHeadPart;
         this.isOccupied = isOccupied;

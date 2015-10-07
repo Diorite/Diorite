@@ -13,4 +13,13 @@ public abstract class LooseMat extends BlockMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
+
+    @Override
+    public abstract LooseMat getType(final int type);
+
+    @Override
+    public abstract LooseMat getType(final String type);
+
+    @Override
+    public abstract LooseMat[] types();
 }

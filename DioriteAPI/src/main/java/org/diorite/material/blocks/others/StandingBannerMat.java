@@ -14,7 +14,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "StandingBanner" and all its subtypes.
- * <p>
+ * <br>
  * NOTE: Will crash game when in inventory.
  */
 public class StandingBannerMat extends BannerBlockMat
@@ -49,13 +49,13 @@ public class StandingBannerMat extends BannerBlockMat
     @SuppressWarnings("MagicNumber")
     protected StandingBannerMat()
     {
-        super("STANDING_BANNER_SOUTH", 176, "minecraft:standing_banner", "SOUTH", (byte) 0x00, 1, 5);
+        super("STANDING_BANNER_SOUTH", 176, "minecraft:standing_banner", 16, "SOUTH", (byte) 0x00, 1, 5);
         this.face = BlockFace.SOUTH;
     }
 
     protected StandingBannerMat(final BlockFace face)
     {
-        super(STANDING_BANNER_SOUTH.name(), STANDING_BANNER_SOUTH.ordinal(), STANDING_BANNER_SOUTH.getMinecraftId(), face.name(), combine(face), STANDING_BANNER_SOUTH.getHardness(), STANDING_BANNER_SOUTH.getBlastResistance());
+        super(STANDING_BANNER_SOUTH.name(), STANDING_BANNER_SOUTH.ordinal(), STANDING_BANNER_SOUTH.getMinecraftId(), STANDING_BANNER_SOUTH.getMaxStack(), face.name(), combine(face), STANDING_BANNER_SOUTH.getHardness(), STANDING_BANNER_SOUTH.getBlastResistance());
         this.face = face;
     }
 

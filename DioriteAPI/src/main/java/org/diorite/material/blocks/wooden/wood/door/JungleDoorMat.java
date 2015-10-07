@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -51,7 +51,7 @@ public class JungleDoorMat extends WoodenDoorMat
     @SuppressWarnings("MagicNumber")
     protected JungleDoorMat()
     {
-        super("JUNGLE_DOOR", 195, "minecraft:jungle_door", "BOTTOM_EAST", WoodTypeMat.JUNGLE, 3, 15);
+        super("JUNGLE_DOOR", 195, "minecraft:jungle_door", "BOTTOM_EAST", WoodType.JUNGLE, 3, 15);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = false;
@@ -61,7 +61,7 @@ public class JungleDoorMat extends WoodenDoorMat
 
     protected JungleDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.ordinal(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.JUNGLE, JUNGLE_DOOR_BOTTOM_EAST.getHardness(), JUNGLE_DOOR_BOTTOM_EAST.getBlastResistance());
+        super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.ordinal(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodType.JUNGLE, JUNGLE_DOOR_BOTTOM_EAST.getHardness(), JUNGLE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -71,7 +71,7 @@ public class JungleDoorMat extends WoodenDoorMat
 
     protected JungleDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.ordinal(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.JUNGLE, JUNGLE_DOOR_BOTTOM_EAST.getHardness(), JUNGLE_DOOR_BOTTOM_EAST.getBlastResistance());
+        super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.ordinal(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodType.JUNGLE, JUNGLE_DOOR_BOTTOM_EAST.getHardness(), JUNGLE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;
@@ -79,7 +79,7 @@ public class JungleDoorMat extends WoodenDoorMat
         this.blockFace = blockFace;
     }
 
-    protected JungleDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodTypeMat woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    protected JungleDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, JUNGLE_DOOR_BOTTOM_EAST.getHardness(), JUNGLE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;

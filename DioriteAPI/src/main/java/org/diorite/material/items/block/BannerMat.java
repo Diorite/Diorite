@@ -25,12 +25,12 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
 
     protected BannerMat()
     {
-        super("BANNER", 425, "minecraft:banner", "BANNER", (short) 0x00);
+        super("BANNER", 425, "minecraft:banner", 16, "BANNER", (short) 0x00);
     }
 
     protected BannerMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, BANNER.getMaxStack(), typeName, type);
     }
 
     protected BannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

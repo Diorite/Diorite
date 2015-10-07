@@ -23,12 +23,12 @@ public class SaddleMat extends ItemMaterialData
 
     protected SaddleMat()
     {
-        super("SADDLE", 329, "minecraft:saddle", "SADDLE", (short) 0x00);
+        super("SADDLE", 329, "minecraft:saddle", 1, "SADDLE", (short) 0x00);
     }
 
     protected SaddleMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, SADDLE.getMaxStack(), typeName, type);
     }
 
     protected SaddleMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

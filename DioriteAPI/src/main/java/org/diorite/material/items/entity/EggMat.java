@@ -24,12 +24,12 @@ public class EggMat extends ItemMaterialData implements PlaceableEntityMat
 
     protected EggMat()
     {
-        super("EGG", 344, "minecraft:egg", "EGG", (short) 0x00);
+        super("EGG", 344, "minecraft:egg", 16, "EGG", (short) 0x00);
     }
 
     protected EggMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, EGG.getMaxStack(), typeName, type);
     }
 
     protected EggMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockFace;
 import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.RotatableMat;
 import org.diorite.material.blocks.RotateAxisMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -27,32 +27,32 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
     public static final int USED_DATA_VALUES = 24;
 
     public static final LogMat LOG_OAK      = new LogMat();
-    public static final LogMat LOG_SPRUCE   = new LogMat(WoodTypeMat.SPRUCE, RotateAxisMat.UP_DOWN, 2, 10);
-    public static final LogMat LOG_BIRCH    = new LogMat(WoodTypeMat.BIRCH, RotateAxisMat.UP_DOWN);
-    public static final LogMat LOG_JUNGLE   = new LogMat(WoodTypeMat.JUNGLE, RotateAxisMat.UP_DOWN);
-    public static final LogMat LOG_ACACIA   = new Log2(WoodTypeMat.ACACIA, RotateAxisMat.UP_DOWN);
-    public static final LogMat LOG_DARK_OAK = new Log2(WoodTypeMat.DARK_OAK, RotateAxisMat.UP_DOWN);
+    public static final LogMat LOG_SPRUCE   = new LogMat(WoodType.SPRUCE, RotateAxisMat.UP_DOWN, 2, 10);
+    public static final LogMat LOG_BIRCH    = new LogMat(WoodType.BIRCH, RotateAxisMat.UP_DOWN);
+    public static final LogMat LOG_JUNGLE   = new LogMat(WoodType.JUNGLE, RotateAxisMat.UP_DOWN);
+    public static final LogMat LOG_ACACIA   = new Log2(WoodType.ACACIA, RotateAxisMat.UP_DOWN);
+    public static final LogMat LOG_DARK_OAK = new Log2(WoodType.DARK_OAK, RotateAxisMat.UP_DOWN);
 
-    public static final LogMat LOG_OAK_EAST_WEST      = new LogMat(WoodTypeMat.OAK, RotateAxisMat.EAST_WEST);
-    public static final LogMat LOG_SPRUCE_EAST_WEST   = new LogMat(WoodTypeMat.SPRUCE, RotateAxisMat.EAST_WEST);
-    public static final LogMat LOG_BIRCH_EAST_WEST    = new LogMat(WoodTypeMat.BIRCH, RotateAxisMat.EAST_WEST);
-    public static final LogMat LOG_JUNGLE_EAST_WEST   = new LogMat(WoodTypeMat.JUNGLE, RotateAxisMat.EAST_WEST);
-    public static final LogMat LOG_ACACIA_EAST_WEST   = new Log2(WoodTypeMat.ACACIA, RotateAxisMat.EAST_WEST);
-    public static final LogMat LOG_DARK_OAK_EAST_WEST = new Log2(WoodTypeMat.DARK_OAK, RotateAxisMat.EAST_WEST);
+    public static final LogMat LOG_OAK_EAST_WEST      = new LogMat(WoodType.OAK, RotateAxisMat.EAST_WEST);
+    public static final LogMat LOG_SPRUCE_EAST_WEST   = new LogMat(WoodType.SPRUCE, RotateAxisMat.EAST_WEST);
+    public static final LogMat LOG_BIRCH_EAST_WEST    = new LogMat(WoodType.BIRCH, RotateAxisMat.EAST_WEST);
+    public static final LogMat LOG_JUNGLE_EAST_WEST   = new LogMat(WoodType.JUNGLE, RotateAxisMat.EAST_WEST);
+    public static final LogMat LOG_ACACIA_EAST_WEST   = new Log2(WoodType.ACACIA, RotateAxisMat.EAST_WEST);
+    public static final LogMat LOG_DARK_OAK_EAST_WEST = new Log2(WoodType.DARK_OAK, RotateAxisMat.EAST_WEST);
 
-    public static final LogMat LOG_OAK_NORTH_SOUTH      = new LogMat(WoodTypeMat.OAK, RotateAxisMat.NORTH_SOUTH);
-    public static final LogMat LOG_SPRUCE_NORTH_SOUTH   = new LogMat(WoodTypeMat.SPRUCE, RotateAxisMat.NORTH_SOUTH);
-    public static final LogMat LOG_BIRCH_NORTH_SOUTH    = new LogMat(WoodTypeMat.BIRCH, RotateAxisMat.NORTH_SOUTH);
-    public static final LogMat LOG_JUNGLE_NORTH_SOUTH   = new LogMat(WoodTypeMat.JUNGLE, RotateAxisMat.NORTH_SOUTH);
-    public static final LogMat LOG_ACACIA_NORTH_SOUTH   = new Log2(WoodTypeMat.ACACIA, RotateAxisMat.NORTH_SOUTH);
-    public static final LogMat LOG_DARK_OAK_NORTH_SOUTH = new Log2(WoodTypeMat.DARK_OAK, RotateAxisMat.NORTH_SOUTH);
+    public static final LogMat LOG_OAK_NORTH_SOUTH      = new LogMat(WoodType.OAK, RotateAxisMat.NORTH_SOUTH);
+    public static final LogMat LOG_SPRUCE_NORTH_SOUTH   = new LogMat(WoodType.SPRUCE, RotateAxisMat.NORTH_SOUTH);
+    public static final LogMat LOG_BIRCH_NORTH_SOUTH    = new LogMat(WoodType.BIRCH, RotateAxisMat.NORTH_SOUTH);
+    public static final LogMat LOG_JUNGLE_NORTH_SOUTH   = new LogMat(WoodType.JUNGLE, RotateAxisMat.NORTH_SOUTH);
+    public static final LogMat LOG_ACACIA_NORTH_SOUTH   = new Log2(WoodType.ACACIA, RotateAxisMat.NORTH_SOUTH);
+    public static final LogMat LOG_DARK_OAK_NORTH_SOUTH = new Log2(WoodType.DARK_OAK, RotateAxisMat.NORTH_SOUTH);
 
-    public static final LogMat LOG_OAK_BARK      = new LogMat(WoodTypeMat.OAK, RotateAxisMat.NONE);
-    public static final LogMat LOG_SPRUCE_BARK   = new LogMat(WoodTypeMat.SPRUCE, RotateAxisMat.NONE);
-    public static final LogMat LOG_BIRCH_BARK    = new LogMat(WoodTypeMat.BIRCH, RotateAxisMat.NONE);
-    public static final LogMat LOG_JUNGLE_BARK   = new LogMat(WoodTypeMat.JUNGLE, RotateAxisMat.NONE);
-    public static final LogMat LOG_ACACIA_BARK   = new Log2(WoodTypeMat.ACACIA, RotateAxisMat.NONE);
-    public static final LogMat LOG_DARK_OAK_BARK = new Log2(WoodTypeMat.DARK_OAK, RotateAxisMat.NONE);
+    public static final LogMat LOG_OAK_BARK      = new LogMat(WoodType.OAK, RotateAxisMat.NONE);
+    public static final LogMat LOG_SPRUCE_BARK   = new LogMat(WoodType.SPRUCE, RotateAxisMat.NONE);
+    public static final LogMat LOG_BIRCH_BARK    = new LogMat(WoodType.BIRCH, RotateAxisMat.NONE);
+    public static final LogMat LOG_JUNGLE_BARK   = new LogMat(WoodType.JUNGLE, RotateAxisMat.NONE);
+    public static final LogMat LOG_ACACIA_BARK   = new Log2(WoodType.ACACIA, RotateAxisMat.NONE);
+    public static final LogMat LOG_DARK_OAK_BARK = new Log2(WoodType.DARK_OAK, RotateAxisMat.NONE);
 
     private static final Map<String, LogMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<LogMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
@@ -62,25 +62,25 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
     @SuppressWarnings("MagicNumber")
     protected LogMat()
     {
-        super("LOG", 17, "minecraft:log", "QAK_UP_DOWN", (byte) 0x00, WoodTypeMat.OAK, 2, 10);
+        super("LOG", 17, "minecraft:log", "QAK_UP_DOWN", (byte) 0x00, WoodType.OAK, 2, 10);
         this.rotateAxis = RotateAxisMat.UP_DOWN;
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LogMat(final WoodTypeMat type, final RotateAxisMat rotateAxis)
+    protected LogMat(final WoodType type, final RotateAxisMat rotateAxis)
     {
         super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), type.name() + "_" + rotateAxis.name(), (byte) (type.getLogFlag() | rotateAxis.getFlag()), type, LOG_OAK.hardness, LOG_OAK.getBlastResistance());
         this.rotateAxis = rotateAxis;
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LogMat(final WoodTypeMat type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+    protected LogMat(final WoodType type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
         super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), type.name() + "_" + rotateAxis.name(), (byte) (type.getLogFlag() | rotateAxis.getFlag()), type, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
     }
 
-    protected LogMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+    protected LogMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
@@ -117,7 +117,7 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
     }
 
     @Override
-    public LogMat getWoodType(final WoodTypeMat woodType)
+    public LogMat getWoodType(final WoodType woodType)
     {
         return getLog(woodType, this.rotateAxis);
     }
@@ -128,7 +128,7 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("rotateAxis", this.rotateAxis).toString();
     }
 
-    public LogMat getType(final WoodTypeMat woodType, final RotateAxisMat facing)
+    public LogMat getType(final WoodType woodType, final RotateAxisMat facing)
     {
         return getLog(woodType, facing);
     }
@@ -193,7 +193,7 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
     }
 
     @SuppressWarnings("MagicNumber")
-    public static LogMat getLog(final WoodTypeMat type, final RotateAxisMat facing)
+    public static LogMat getLog(final WoodType type, final RotateAxisMat facing)
     {
         return getByID((type.getLogFlag() | facing.getFlag()) + (type.isSecondLogID() ? 16 : 0));
     }
@@ -230,12 +230,12 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
      */
     public static class Log2 extends LogMat
     {
-        protected Log2(final WoodTypeMat type, final RotateAxisMat rotateAxis)
+        protected Log2(final WoodType type, final RotateAxisMat rotateAxis)
         {
             super(type, rotateAxis);
         }
 
-        protected Log2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+        protected Log2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
         {
             super(enumName, id, minecraftId, maxStack, typeName, type, woodType, rotateAxis, hardness, blastResistance);
         }

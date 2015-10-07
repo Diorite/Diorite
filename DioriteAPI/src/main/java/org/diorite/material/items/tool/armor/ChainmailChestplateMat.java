@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents chain chestplate.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class ChainmailChestplateMat extends ArmorMat
+public class ChainmailChestplateMat extends ChestplateMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class ChainmailChestplateMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected ChainmailChestplateMat()
     {
-        super("CHAINMAIL_CHESTPLATE", 303, "minecraft:chainmail_chestplate", "NEW", (short) 0, ArmorMaterial.CHAINMAIL, ArmorType.CHESTPLATE);
+        super("CHAINMAIL_CHESTPLATE", 303, "minecraft:chainmail_chestplate", "NEW", (short) 0, ArmorMaterial.CHAINMAIL);
     }
 
     protected ChainmailChestplateMat(final int durability)
     {
-        super(CHAINMAIL_CHESTPLATE.name(), CHAINMAIL_CHESTPLATE.getId(), CHAINMAIL_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.CHAINMAIL, ArmorType.CHESTPLATE);
+        super(CHAINMAIL_CHESTPLATE.name(), CHAINMAIL_CHESTPLATE.getId(), CHAINMAIL_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.CHAINMAIL);
     }
 
     protected ChainmailChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

@@ -60,6 +60,24 @@ public abstract class ButtonMat extends BlockMaterialData implements PowerableMa
     public abstract ButtonMat getType(BlockFace face, boolean powered);
 
     @Override
+    public abstract ButtonMat getType(final int type);
+
+    @Override
+    public abstract ButtonMat getType(final String type);
+
+    @Override
+    public abstract ButtonMat[] types();
+
+    @Override
+    public abstract ButtonMat getBlockFacing(final BlockFace face);
+
+    @Override
+    public abstract ButtonMat getPowered(final boolean powered);
+
+    @Override
+    public abstract ButtonMat getAttachedFace(final BlockFace face);
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("powered", this.powered).toString();

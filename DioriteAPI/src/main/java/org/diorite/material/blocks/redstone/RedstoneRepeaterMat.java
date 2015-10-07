@@ -75,6 +75,18 @@ public abstract class RedstoneRepeaterMat extends BlockMaterialData implements P
         return getRedstoneRepeater(powered, this.face, this.delay);
     }
 
+    @Override
+    public abstract RedstoneRepeaterMat getType(final int type);
+
+    @Override
+    public abstract RedstoneRepeaterMat getType(final String type);
+
+    @Override
+    public abstract RedstoneRepeaterMat[] types();
+
+    @Override
+    public abstract RedstoneRepeaterMat getBlockFacing(final BlockFace face);
+
     protected static byte combine(final BlockFace face, final int delay)
     {
         byte result;

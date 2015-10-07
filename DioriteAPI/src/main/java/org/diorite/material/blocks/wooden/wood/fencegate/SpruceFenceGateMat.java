@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -37,15 +37,15 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
     @SuppressWarnings("MagicNumber")
     protected SpruceFenceGateMat()
     {
-        super("SPRUCE_FENCE_GATE", 183, "minecraft:spruce_fence_gate", WoodTypeMat.SPRUCE, BlockFace.SOUTH, false, 2, 15);
+        super("SPRUCE_FENCE_GATE", 183, "minecraft:spruce_fence_gate", WoodType.SPRUCE, BlockFace.SOUTH, false, 2, 15);
     }
 
     protected SpruceFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(SPRUCE_FENCE_GATE_SOUTH.name(), SPRUCE_FENCE_GATE_SOUTH.ordinal(), SPRUCE_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.SPRUCE, face, open, SPRUCE_FENCE_GATE_SOUTH.getHardness(), SPRUCE_FENCE_GATE_SOUTH.getBlastResistance());
+        super(SPRUCE_FENCE_GATE_SOUTH.name(), SPRUCE_FENCE_GATE_SOUTH.ordinal(), SPRUCE_FENCE_GATE_SOUTH.getMinecraftId(), WoodType.SPRUCE, face, open, SPRUCE_FENCE_GATE_SOUTH.getHardness(), SPRUCE_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected SpruceFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
+    protected SpruceFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }

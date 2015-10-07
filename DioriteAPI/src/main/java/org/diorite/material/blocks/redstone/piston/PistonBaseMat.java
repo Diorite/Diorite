@@ -94,6 +94,15 @@ public abstract class PistonBaseMat extends BlockMaterialData implements Directi
         return this.getType(combine(face, this.extended));
     }
 
+    @Override
+    public abstract PistonBaseMat getType(final String type);
+
+    @Override
+    public abstract PistonBaseMat[] types();
+
+    @Override
+    public abstract PistonBaseMat getPowered(final boolean powered);
+
     protected static byte combine(final BlockFace facing, final boolean extended)
     {
         byte result = extended ? EXTENDED_FLAG : 0x00;

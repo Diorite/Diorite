@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -22,18 +22,18 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
     public static final int USED_DATA_VALUES = 12;
 
     public static final WoodenSlabMat WOODEN_SLAB_OAK      = new WoodenSlabMat();
-    public static final WoodenSlabMat WOODEN_SLAB_SPRUCE   = new WoodenSlabMat(WoodTypeMat.SPRUCE, SlabTypeMat.BOTTOM);
-    public static final WoodenSlabMat WOODEN_SLAB_BIRCH    = new WoodenSlabMat(WoodTypeMat.BIRCH, SlabTypeMat.BOTTOM);
-    public static final WoodenSlabMat WOODEN_SLAB_JUNGLE   = new WoodenSlabMat(WoodTypeMat.JUNGLE, SlabTypeMat.BOTTOM);
-    public static final WoodenSlabMat WOODEN_SLAB_DARK_OAK = new WoodenSlabMat(WoodTypeMat.DARK_OAK, SlabTypeMat.BOTTOM);
-    public static final WoodenSlabMat WOODEN_SLAB_ACACIA   = new WoodenSlabMat(WoodTypeMat.ACACIA, SlabTypeMat.BOTTOM);
+    public static final WoodenSlabMat WOODEN_SLAB_SPRUCE   = new WoodenSlabMat(WoodType.SPRUCE, SlabTypeMat.BOTTOM);
+    public static final WoodenSlabMat WOODEN_SLAB_BIRCH    = new WoodenSlabMat(WoodType.BIRCH, SlabTypeMat.BOTTOM);
+    public static final WoodenSlabMat WOODEN_SLAB_JUNGLE   = new WoodenSlabMat(WoodType.JUNGLE, SlabTypeMat.BOTTOM);
+    public static final WoodenSlabMat WOODEN_SLAB_DARK_OAK = new WoodenSlabMat(WoodType.DARK_OAK, SlabTypeMat.BOTTOM);
+    public static final WoodenSlabMat WOODEN_SLAB_ACACIA   = new WoodenSlabMat(WoodType.ACACIA, SlabTypeMat.BOTTOM);
 
-    public static final WoodenSlabMat WOODEN_SLAB_OAK_UPPER      = new WoodenSlabMat(WoodTypeMat.OAK, SlabTypeMat.UPPER);
-    public static final WoodenSlabMat WOODEN_SLAB_SPRUCE_UPPER   = new WoodenSlabMat(WoodTypeMat.SPRUCE, SlabTypeMat.UPPER);
-    public static final WoodenSlabMat WOODEN_SLAB_BIRCH_UPPER    = new WoodenSlabMat(WoodTypeMat.BIRCH, SlabTypeMat.UPPER);
-    public static final WoodenSlabMat WOODEN_SLAB_JUNGLE_UPPER   = new WoodenSlabMat(WoodTypeMat.JUNGLE, SlabTypeMat.UPPER);
-    public static final WoodenSlabMat WOODEN_SLAB_DARK_OAK_UPPER = new WoodenSlabMat(WoodTypeMat.DARK_OAK, SlabTypeMat.UPPER);
-    public static final WoodenSlabMat WOODEN_SLAB_ACACIA_UPPER   = new WoodenSlabMat(WoodTypeMat.ACACIA, SlabTypeMat.UPPER);
+    public static final WoodenSlabMat WOODEN_SLAB_OAK_UPPER      = new WoodenSlabMat(WoodType.OAK, SlabTypeMat.UPPER);
+    public static final WoodenSlabMat WOODEN_SLAB_SPRUCE_UPPER   = new WoodenSlabMat(WoodType.SPRUCE, SlabTypeMat.UPPER);
+    public static final WoodenSlabMat WOODEN_SLAB_BIRCH_UPPER    = new WoodenSlabMat(WoodType.BIRCH, SlabTypeMat.UPPER);
+    public static final WoodenSlabMat WOODEN_SLAB_JUNGLE_UPPER   = new WoodenSlabMat(WoodType.JUNGLE, SlabTypeMat.UPPER);
+    public static final WoodenSlabMat WOODEN_SLAB_DARK_OAK_UPPER = new WoodenSlabMat(WoodType.DARK_OAK, SlabTypeMat.UPPER);
+    public static final WoodenSlabMat WOODEN_SLAB_ACACIA_UPPER   = new WoodenSlabMat(WoodType.ACACIA, SlabTypeMat.UPPER);
 
     private static final Map<String, WoodenSlabMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WoodenSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
@@ -41,10 +41,10 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
     @SuppressWarnings("MagicNumber")
     protected WoodenSlabMat()
     {
-        super("WOODEN_SLAB", 126, "minecraft:wooden_slab", "OAK", WoodTypeMat.OAK, SlabTypeMat.BOTTOM, 2, 15);
+        super("WOODEN_SLAB", 126, "minecraft:wooden_slab", "OAK", WoodType.OAK, SlabTypeMat.BOTTOM, 2, 15);
     }
 
-    public WoodenSlabMat(final WoodTypeMat woodType, final SlabTypeMat slabType)
+    public WoodenSlabMat(final WoodType woodType, final SlabTypeMat slabType)
     {
         super(WOODEN_SLAB_OAK.name(), WOODEN_SLAB_OAK.ordinal(), WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType, WOODEN_SLAB_OAK.getHardness(), WOODEN_SLAB_OAK.getBlastResistance());
     }
@@ -68,7 +68,7 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
     }
 
     @Override
-    public WoodenSlabMat getWoodType(final WoodTypeMat woodType)
+    public WoodenSlabMat getWoodType(final WoodType woodType)
     {
         return getByID(combine(woodType, this.slabType));
     }
@@ -106,7 +106,7 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
     }
 
     /**
-     * Returns one of WoodenSlab sub-type based on {@link WoodTypeMat} and {@link SlabTypeMat}
+     * Returns one of WoodenSlab sub-type based on {@link WoodType} and {@link SlabTypeMat}
      * It will never return null.
      *
      * @param woodType type of wood.
@@ -114,7 +114,7 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
      *
      * @return sub-type of WoodenSlab
      */
-    public static WoodenSlabMat getWoodenSlab(final WoodTypeMat woodType, final SlabTypeMat slabType)
+    public static WoodenSlabMat getWoodenSlab(final WoodType woodType, final SlabTypeMat slabType)
     {
         return getByID(combine(woodType, slabType));
     }

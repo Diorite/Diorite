@@ -29,6 +29,18 @@ public abstract class AbstractPumpkinMat extends PlantMat implements Directional
     }
 
     @Override
+    public abstract AbstractPumpkinMat getType(final int type);
+
+    @Override
+    public abstract AbstractPumpkinMat getType(final String type);
+
+    @Override
+    public abstract AbstractPumpkinMat[] types();
+
+    @Override
+    public abstract AbstractPumpkinMat getBlockFacing(final BlockFace face);
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).toString();

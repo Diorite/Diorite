@@ -16,4 +16,13 @@ public abstract class StonyMat extends BlockMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
+
+    @Override
+    public abstract StonyMat getType(final int type);
+
+    @Override
+    public abstract StonyMat getType(final String type);
+
+    @Override
+    public abstract StonyMat[] types();
 }

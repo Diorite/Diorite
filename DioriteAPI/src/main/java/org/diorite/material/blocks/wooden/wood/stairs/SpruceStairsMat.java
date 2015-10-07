@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -37,15 +37,15 @@ public class SpruceStairsMat extends WoodenStairsMat
     @SuppressWarnings("MagicNumber")
     protected SpruceStairsMat()
     {
-        super("SPRUCE_STAIRS", 134, "minecraft:spruce_stairs", WoodTypeMat.SPRUCE, BlockFace.EAST, false, 2, 15);
+        super("SPRUCE_STAIRS", 134, "minecraft:spruce_stairs", WoodType.SPRUCE, BlockFace.EAST, false, 2, 15);
     }
 
     protected SpruceStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(SPRUCE_STAIRS_EAST.name(), SPRUCE_STAIRS_EAST.ordinal(), SPRUCE_STAIRS_EAST.getMinecraftId(), WoodTypeMat.SPRUCE, face, upsideDown, SPRUCE_STAIRS_EAST.getHardness(), SPRUCE_STAIRS_EAST.getBlastResistance());
+        super(SPRUCE_STAIRS_EAST.name(), SPRUCE_STAIRS_EAST.ordinal(), SPRUCE_STAIRS_EAST.getMinecraftId(), WoodType.SPRUCE, face, upsideDown, SPRUCE_STAIRS_EAST.getHardness(), SPRUCE_STAIRS_EAST.getBlastResistance());
     }
 
-    protected SpruceStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    protected SpruceStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown, hardness, blastResistance);
     }

@@ -40,6 +40,15 @@ public abstract class FlowerMat extends PlantMat
      */
     public abstract FlowerMat getFlowerType(final FlowerTypeMat flowerType);
 
+    @Override
+    public abstract FlowerMat getType(final int type);
+
+    @Override
+    public abstract FlowerMat getType(final String type);
+
+    @Override
+    public abstract FlowerMat[] types();
+
     /**
      * Returns one of flower, based on {@link FlowerTypeMat}
      * It will never return null.

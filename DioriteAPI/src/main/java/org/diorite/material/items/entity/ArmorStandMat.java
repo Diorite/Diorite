@@ -24,12 +24,12 @@ public class ArmorStandMat extends ItemMaterialData implements PlaceableEntityMa
 
     protected ArmorStandMat()
     {
-        super("ARMOR_STAND", 416, "minecraft:armor_stand", "ARMOR_STAND", (short) 0x00);
+        super("ARMOR_STAND", 416, "minecraft:armor_stand", 16, "ARMOR_STAND", (short) 0x00);
     }
 
     protected ArmorStandMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, ARMOR_STAND.getMaxStack(), typeName, type);
     }
 
     protected ArmorStandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

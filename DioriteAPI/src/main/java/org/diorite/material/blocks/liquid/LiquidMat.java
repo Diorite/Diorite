@@ -112,6 +112,15 @@ public abstract class LiquidMat extends BlockMaterialData
     }
 
     @Override
+    public abstract LiquidMat getType(final int type);
+
+    @Override
+    public abstract LiquidMat getType(final String type);
+
+    @Override
+    public abstract LiquidMat[] types();
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("stage", this.stage).append("liquidType", this.liquidType).toString();

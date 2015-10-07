@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents chain boots.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class ChainmailBootsMat extends ArmorMat
+public class ChainmailBootsMat extends BootsMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class ChainmailBootsMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected ChainmailBootsMat()
     {
-        super("CHAINMAIL_BOOTS", 305, "minecraft:chainmail_boots", "NEW", (short) 0, ArmorMaterial.CHAINMAIL, ArmorType.BOOTS);
+        super("CHAINMAIL_BOOTS", 305, "minecraft:chainmail_boots", "NEW", (short) 0, ArmorMaterial.CHAINMAIL);
     }
 
     protected ChainmailBootsMat(final int durability)
     {
-        super(CHAINMAIL_BOOTS.name(), CHAINMAIL_BOOTS.getId(), CHAINMAIL_BOOTS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.CHAINMAIL, ArmorType.BOOTS);
+        super(CHAINMAIL_BOOTS.name(), CHAINMAIL_BOOTS.getId(), CHAINMAIL_BOOTS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.CHAINMAIL);
     }
 
     protected ChainmailBootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

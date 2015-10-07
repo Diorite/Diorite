@@ -3,7 +3,7 @@ package org.diorite.material.blocks.wooden.wood;
 import java.util.Map;
 
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.SlabTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -23,11 +23,11 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
     public static final int USED_DATA_VALUES = 6;
 
     public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_OAK      = new DoubleWoodenSlabMat();
-    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_SPRUCE   = new DoubleWoodenSlabMat(WoodTypeMat.SPRUCE, SlabTypeMat.BOTTOM);
-    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_BIRCH    = new DoubleWoodenSlabMat(WoodTypeMat.BIRCH, SlabTypeMat.BOTTOM);
-    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_JUNGLE   = new DoubleWoodenSlabMat(WoodTypeMat.JUNGLE, SlabTypeMat.BOTTOM);
-    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_DARK_OAK = new DoubleWoodenSlabMat(WoodTypeMat.DARK_OAK, SlabTypeMat.BOTTOM);
-    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_ACACIA   = new DoubleWoodenSlabMat(WoodTypeMat.ACACIA, SlabTypeMat.BOTTOM);
+    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_SPRUCE   = new DoubleWoodenSlabMat(WoodType.SPRUCE, SlabTypeMat.BOTTOM);
+    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_BIRCH    = new DoubleWoodenSlabMat(WoodType.BIRCH, SlabTypeMat.BOTTOM);
+    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_JUNGLE   = new DoubleWoodenSlabMat(WoodType.JUNGLE, SlabTypeMat.BOTTOM);
+    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_DARK_OAK = new DoubleWoodenSlabMat(WoodType.DARK_OAK, SlabTypeMat.BOTTOM);
+    public static final DoubleWoodenSlabMat DOUBLE_WOODEN_SLAB_ACACIA   = new DoubleWoodenSlabMat(WoodType.ACACIA, SlabTypeMat.BOTTOM);
 
     private static final Map<String, DoubleWoodenSlabMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<DoubleWoodenSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
@@ -35,15 +35,15 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
     @SuppressWarnings("MagicNumber")
     protected DoubleWoodenSlabMat()
     {
-        super("DOUBLE_WOODEN_SLAB", 125, "minecraft:double_wooden_slab", "OAK", WoodTypeMat.OAK, SlabTypeMat.BOTTOM, 2, 30);
+        super("DOUBLE_WOODEN_SLAB", 125, "minecraft:double_wooden_slab", "OAK", WoodType.OAK, SlabTypeMat.BOTTOM, 2, 30);
     }
 
-    protected DoubleWoodenSlabMat(final WoodTypeMat woodType, final SlabTypeMat slabType)
+    protected DoubleWoodenSlabMat(final WoodType woodType, final SlabTypeMat slabType)
     {
         super(DOUBLE_WOODEN_SLAB_OAK.name(), DOUBLE_WOODEN_SLAB_OAK.ordinal(), DOUBLE_WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType, DOUBLE_WOODEN_SLAB_OAK.getHardness(), DOUBLE_WOODEN_SLAB_OAK.getBlastResistance());
     }
 
-    protected DoubleWoodenSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SlabTypeMat slabType, final float hardness, final float blastResistance)
+    protected DoubleWoodenSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final SlabTypeMat slabType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, slabType, hardness, blastResistance);
     }
@@ -67,7 +67,7 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
     }
 
     @Override
-    public DoubleWoodenSlabMat getWoodType(final WoodTypeMat woodType)
+    public DoubleWoodenSlabMat getWoodType(final WoodType woodType)
     {
         return getByID(combine(woodType, this.slabType));
     }
@@ -98,7 +98,7 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
     }
 
     /**
-     * Returns one of DoubleWoodenSlab sub-type based on {@link WoodTypeMat} and {@link SlabTypeMat}
+     * Returns one of DoubleWoodenSlab sub-type based on {@link WoodType} and {@link SlabTypeMat}
      * It will never return null.
      *
      * @param woodType type of wood.
@@ -106,7 +106,7 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
      *
      * @return sub-type of DoubleWoodenSlab
      */
-    public static DoubleWoodenSlabMat getDoubleWoodenSlab(final WoodTypeMat woodType, final SlabTypeMat slabType)
+    public static DoubleWoodenSlabMat getDoubleWoodenSlab(final WoodType woodType, final SlabTypeMat slabType)
     {
         return getByID(combine(woodType, slabType));
     }

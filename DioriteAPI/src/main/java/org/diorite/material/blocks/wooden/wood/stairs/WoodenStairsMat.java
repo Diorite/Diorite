@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.FuelMat;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.material.blocks.wooden.wood.WoodMat;
 import org.diorite.utils.collections.maps.SimpleEnumMap;
@@ -18,21 +18,21 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat, Fuel
     protected final BlockFace face;
     protected final boolean   upsideDown;
 
-    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), (byte) 0, woodType, hardness, blastResistance);
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    private static final SimpleEnumMap<WoodTypeMat, WoodenStairsMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
+    private static final SimpleEnumMap<WoodType, WoodenStairsMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     @Override
@@ -63,10 +63,19 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat, Fuel
     }
 
     @Override
-    public WoodenStairsMat getWoodType(final WoodTypeMat woodType)
+    public WoodenStairsMat getWoodType(final WoodType woodType)
     {
         return types.get(woodType).getType(this.face, this.upsideDown);
     }
+
+    @Override
+    public abstract WoodenStairsMat getType(final int type);
+
+    @Override
+    public abstract WoodenStairsMat getType(final String type);
+
+    @Override
+    public abstract WoodenStairsMat[] types();
 
     @Override
     public String toString()
@@ -75,15 +84,15 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat, Fuel
     }
 
     /**
-     * Returns sub-type of {@link WoodTypeMat} WoodenStairs, based on {@link BlockFace} and upside-down state.
+     * Returns sub-type of {@link WoodType} WoodenStairs, based on {@link BlockFace} and upside-down state.
      *
-     * @param woodType   {@link WoodTypeMat} of WoodenStairs
+     * @param woodType   {@link WoodType} of WoodenStairs
      * @param face       facing direction of WoodenStairs
      * @param upsideDown if stairs should be upside-down.
      *
-     * @return sub-type of {@link WoodTypeMat} WoodenStairs.
+     * @return sub-type of {@link WoodType} WoodenStairs.
      */
-    public static WoodenStairsMat getWoodenStairs(final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown)
+    public static WoodenStairsMat getWoodenStairs(final WoodType woodType, final BlockFace face, final boolean upsideDown)
     {
         return types.get(woodType).getType(face, upsideDown);
     }
@@ -94,18 +103,18 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat, Fuel
      * @param type type of wood.
      * @param mat  stairs material.
      */
-    public static void registerWoodType(final WoodTypeMat type, final WoodenStairsMat mat)
+    public static void registerWoodType(final WoodType type, final WoodenStairsMat mat)
     {
         types.put(type, mat);
     }
 
     static
     {
-        registerWoodType(WoodTypeMat.OAK, OAK_STAIRS);
-        registerWoodType(WoodTypeMat.SPRUCE, SPRUCE_STAIRS);
-        registerWoodType(WoodTypeMat.BIRCH, BIRCH_STAIRS);
-        registerWoodType(WoodTypeMat.JUNGLE, JUNGLE_STAIRS);
-        registerWoodType(WoodTypeMat.ACACIA, ACACIA_STAIRS);
-        registerWoodType(WoodTypeMat.DARK_OAK, DARK_OAK_STAIRS);
+        registerWoodType(WoodType.OAK, OAK_STAIRS);
+        registerWoodType(WoodType.SPRUCE, SPRUCE_STAIRS);
+        registerWoodType(WoodType.BIRCH, BIRCH_STAIRS);
+        registerWoodType(WoodType.JUNGLE, JUNGLE_STAIRS);
+        registerWoodType(WoodType.ACACIA, ACACIA_STAIRS);
+        registerWoodType(WoodType.DARK_OAK, DARK_OAK_STAIRS);
     }
 }

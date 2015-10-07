@@ -23,12 +23,12 @@ public class WaterBucketMat extends ItemMaterialData
 
     protected WaterBucketMat()
     {
-        super("WATER_BUCKET", 326, "minecraft:water_bucket", "WATER_BUCKET", (short) 0x00);
+        super("WATER_BUCKET", 326, "minecraft:water_bucket", 1, "WATER_BUCKET", (short) 0x00);
     }
 
     protected WaterBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, WATER_BUCKET.getMaxStack(), typeName, type);
     }
 
     protected WaterBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

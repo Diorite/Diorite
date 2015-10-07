@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.wooden.wood.LogMat;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.world.chunk.ChunkPos;
@@ -27,16 +27,16 @@ public class SmallTreeStructure extends TreeStructure
     public SmallTreeStructure(final LogMat logMat, final BlockMaterialData leavesMat)
     {
         super(logMat, leavesMat);
-        this.extraBlock = Objects.equals(logMat.getWoodType(), WoodTypeMat.BIRCH);
+        this.extraBlock = Objects.equals(logMat.getWoodType(), WoodType.BIRCH);
     }
 
-    public SmallTreeStructure(final WoodTypeMat woodType)
+    public SmallTreeStructure(final WoodType woodType)
     {
         super(woodType);
-        this.extraBlock = Objects.equals(woodType, WoodTypeMat.BIRCH);
+        this.extraBlock = Objects.equals(woodType, WoodType.BIRCH);
     }
 
-    public SmallTreeStructure(final WoodTypeMat woodType, final boolean extraBlock)
+    public SmallTreeStructure(final WoodType woodType, final boolean extraBlock)
     {
         super(woodType);
         this.extraBlock = extraBlock;

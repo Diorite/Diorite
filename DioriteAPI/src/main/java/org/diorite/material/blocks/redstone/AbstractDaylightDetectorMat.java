@@ -39,9 +39,26 @@ public abstract class AbstractDaylightDetectorMat extends BlockMaterialData impl
     }
 
     /**
+     * Returns inverted version of current Daylight Detector
+     *
      * @return inverted version of current Daylight Detector
      */
     public abstract AbstractDaylightDetectorMat getInverted();
+
+    @Override
+    public abstract AbstractDaylightDetectorMat getType(final int type);
+
+    @Override
+    public abstract AbstractDaylightDetectorMat getType(final String type);
+
+    @Override
+    public abstract AbstractDaylightDetectorMat[] types();
+
+    @Override
+    public abstract AbstractDaylightDetectorMat getPowerStrength(final int strength);
+
+    @Override
+    public abstract AbstractDaylightDetectorMat getPowered(final boolean powered);
 
     @Override
     public String toString()

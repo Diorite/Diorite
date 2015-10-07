@@ -31,6 +31,21 @@ public abstract class WeightedPressurePlateMat extends PressurePlateMat implemen
     }
 
     @Override
+    public abstract WeightedPressurePlateMat getType(final int type);
+
+    @Override
+    public abstract WeightedPressurePlateMat getType(final String type);
+
+    @Override
+    public abstract WeightedPressurePlateMat[] types();
+
+    @Override
+    public abstract WeightedPressurePlateMat getPowered(final boolean powered);
+
+    @Override
+    public abstract WeightedPressurePlateMat getPowerStrength(final int strength);
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("power", this.power).toString();

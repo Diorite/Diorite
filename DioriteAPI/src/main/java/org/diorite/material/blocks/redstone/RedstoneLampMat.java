@@ -25,6 +25,15 @@ public abstract class RedstoneLampMat extends BlockMaterialData implements Power
         return getRedstoneLamp(powered);
     }
 
+    @Override
+    public abstract RedstoneLampMat getType(final int type);
+
+    @Override
+    public abstract RedstoneLampMat getType(final String type);
+
+    @Override
+    public abstract RedstoneLampMat[] types();
+
     public static RedstoneLampMat getRedstoneLamp(final boolean powered)
     {
         if (powered)

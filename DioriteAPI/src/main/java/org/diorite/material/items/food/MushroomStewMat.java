@@ -22,12 +22,12 @@ public class MushroomStewMat extends EdibleItemMat
 
     protected MushroomStewMat()
     {
-        super("MUSHROOM_STEW", 282, "minecraft:mushroom_stew", "MUSHROOM_STEW", (short) 0x00, 6, 7.2F);
+        super("MUSHROOM_STEW", 282, "minecraft:mushroom_stew", 1, "MUSHROOM_STEW", (short) 0x00, 6, 7.2F);
     }
 
     protected MushroomStewMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
-        super(enumName, id, minecraftId, typeName, type, foodLevelIncrease, saturationIncrease);
+        super(enumName, id, minecraftId, MUSHROOM_STEW.getMaxStack(), typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
     protected MushroomStewMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)

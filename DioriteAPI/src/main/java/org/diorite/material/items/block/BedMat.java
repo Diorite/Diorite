@@ -24,12 +24,12 @@ public class BedMat extends ItemMaterialData implements PlaceableMat
 
     protected BedMat()
     {
-        super("BED", 355, "minecraft:bed", "BED", (short) 0x00);
+        super("BED", 355, "minecraft:bed", 1, "BED", (short) 0x00);
     }
 
     protected BedMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, BED.getMaxStack(), typeName, type);
     }
 
     protected BedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

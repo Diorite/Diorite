@@ -24,12 +24,12 @@ public class CakeMat extends ItemMaterialData implements PlaceableMat
 
     protected CakeMat()
     {
-        super("CAKE", 354, "minecraft:cake", "CAKE", (short) 0x00);
+        super("CAKE", 354, "minecraft:cake", 1, "CAKE", (short) 0x00);
     }
 
     protected CakeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, CAKE.getMaxStack(), typeName, type);
     }
 
     protected CakeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

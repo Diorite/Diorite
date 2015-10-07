@@ -26,4 +26,13 @@ public abstract class OreMat extends StonyMat
         this.item = item;
         this.block = block;
     }
+
+    @Override
+    public abstract OreMat getType(final int type);
+
+    @Override
+    public abstract OreMat getType(final String type);
+
+    @Override
+    public abstract OreMat[] types();
 }

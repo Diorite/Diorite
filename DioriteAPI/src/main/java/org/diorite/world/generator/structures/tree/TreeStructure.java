@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.RotateAxisMat;
 import org.diorite.material.blocks.wooden.wood.LeavesMat;
 import org.diorite.material.blocks.wooden.wood.LogMat;
@@ -25,7 +25,7 @@ public abstract class TreeStructure implements Structure
     protected final BlockMaterialData logMat;
     protected final BlockMaterialData leavesMat;
 
-    public TreeStructure(final WoodTypeMat type)
+    public TreeStructure(final WoodType type)
     {
         this(LogMat.getLog(type, RotateAxisMat.UP_DOWN), LeavesMat.getLeaves(type, false, true));
     }

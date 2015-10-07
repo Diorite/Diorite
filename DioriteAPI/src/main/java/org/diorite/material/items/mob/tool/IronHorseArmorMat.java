@@ -2,14 +2,13 @@ package org.diorite.material.items.mob.tool;
 
 import java.util.Map;
 
-import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
-public class IronHorseArmorMat extends ItemMaterialData
+public class IronHorseArmorMat extends AbstractHorseArmor
 {
     /**
      * Sub-ids used by diorite/minecraft by default

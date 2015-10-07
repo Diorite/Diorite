@@ -16,4 +16,13 @@ public abstract class PlantMat extends BlockMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
+
+    @Override
+    public abstract PlantMat getType(final int type);
+
+    @Override
+    public abstract PlantMat getType(final String type);
+
+    @Override
+    public abstract PlantMat[] types();
 }

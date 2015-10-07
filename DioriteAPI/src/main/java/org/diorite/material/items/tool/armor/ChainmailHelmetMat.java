@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents chain helmet.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class ChainmailHelmetMat extends ArmorMat
+public class ChainmailHelmetMat extends HelmetMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class ChainmailHelmetMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected ChainmailHelmetMat()
     {
-        super("CHAINMAIL_HELMET", 302, "minecraft:chainmail_helmet", "NEW", (short) 0, ArmorMaterial.CHAINMAIL, ArmorType.HELMET);
+        super("CHAINMAIL_HELMET", 302, "minecraft:chainmail_helmet", "NEW", (short) 0, ArmorMaterial.CHAINMAIL);
     }
 
     protected ChainmailHelmetMat(final int durability)
     {
-        super(CHAINMAIL_HELMET.name(), CHAINMAIL_HELMET.getId(), CHAINMAIL_HELMET.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.CHAINMAIL, ArmorType.HELMET);
+        super(CHAINMAIL_HELMET.name(), CHAINMAIL_HELMET.getId(), CHAINMAIL_HELMET.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.CHAINMAIL);
     }
 
     protected ChainmailHelmetMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

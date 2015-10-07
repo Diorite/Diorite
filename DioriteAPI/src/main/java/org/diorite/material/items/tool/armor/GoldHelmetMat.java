@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents gold helmet.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class GoldHelmetMat extends ArmorMat
+public class GoldHelmetMat extends HelmetMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class GoldHelmetMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected GoldHelmetMat()
     {
-        super("GOLD_HELMET", 314, "minecraft:gold_helmet", "NEW", (short) 0, ArmorMaterial.GOLD, ArmorType.HELMET);
+        super("GOLD_HELMET", 314, "minecraft:gold_helmet", "NEW", (short) 0, ArmorMaterial.GOLD);
     }
 
     protected GoldHelmetMat(final int durability)
     {
-        super(GOLD_HELMET.name(), GOLD_HELMET.getId(), GOLD_HELMET.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.GOLD, ArmorType.HELMET);
+        super(GOLD_HELMET.name(), GOLD_HELMET.getId(), GOLD_HELMET.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.GOLD);
     }
 
     protected GoldHelmetMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

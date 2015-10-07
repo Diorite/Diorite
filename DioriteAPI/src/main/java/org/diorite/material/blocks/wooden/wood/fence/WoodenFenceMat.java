@@ -1,7 +1,7 @@
 package org.diorite.material.blocks.wooden.wood.fence;
 
 import org.diorite.material.FuelMat;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.FenceMat;
 import org.diorite.material.blocks.wooden.wood.WoodMat;
 import org.diorite.utils.collections.maps.SimpleEnumMap;
@@ -11,17 +11,17 @@ import org.diorite.utils.collections.maps.SimpleEnumMap;
  */
 public abstract class WoodenFenceMat extends WoodMat implements FenceMat, FuelMat
 {
-    protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodTypeMat woodType, final float hardness, final float blastResistance)
+    protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, typeName, (byte) 0, woodType, hardness, blastResistance);
     }
 
-    protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final float hardness, final float blastResistance)
+    protected WoodenFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
 
-    private static final SimpleEnumMap<WoodTypeMat, WoodenFenceMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
+    private static final SimpleEnumMap<WoodType, WoodenFenceMat> types = new SimpleEnumMap<>(6, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     @Override
@@ -31,19 +31,28 @@ public abstract class WoodenFenceMat extends WoodMat implements FenceMat, FuelMa
     }
 
     @Override
-    public WoodenFenceMat getWoodType(final WoodTypeMat woodType)
+    public WoodenFenceMat getWoodType(final WoodType woodType)
     {
         return types.get(woodType);
     }
 
+    @Override
+    public abstract WoodenFenceMat getType(final int type);
+
+    @Override
+    public abstract WoodenFenceMat getType(final String type);
+
+    @Override
+    public abstract WoodenFenceMat[] types();
+
     /**
-     * Returns sub-type of {@link WoodenFenceMat}, based on {@link WoodTypeMat}.
+     * Returns sub-type of {@link WoodenFenceMat}, based on {@link WoodType}.
      *
-     * @param woodType {@link WoodTypeMat} of WoodenFence
+     * @param woodType {@link WoodType} of WoodenFence
      *
      * @return sub-type of {@link WoodenFenceMat}.
      */
-    public static WoodenFenceMat getWoodenFence(final WoodTypeMat woodType)
+    public static WoodenFenceMat getWoodenFence(final WoodType woodType)
     {
         return types.get(woodType);
     }
@@ -54,18 +63,18 @@ public abstract class WoodenFenceMat extends WoodMat implements FenceMat, FuelMa
      * @param type type of wood.
      * @param mat  fence material.
      */
-    public static void registerWoodType(final WoodTypeMat type, final WoodenFenceMat mat)
+    public static void registerWoodType(final WoodType type, final WoodenFenceMat mat)
     {
         types.put(type, mat);
     }
 
     static
     {
-        registerWoodType(WoodTypeMat.OAK, OAK_FENCE);
-        registerWoodType(WoodTypeMat.SPRUCE, SPRUCE_FENCE);
-        registerWoodType(WoodTypeMat.BIRCH, BIRCH_FENCE);
-        registerWoodType(WoodTypeMat.JUNGLE, JUNGLE_FENCE);
-        registerWoodType(WoodTypeMat.ACACIA, ACACIA_FENCE);
-        registerWoodType(WoodTypeMat.DARK_OAK, DARK_OAK_FENCE);
+        registerWoodType(WoodType.OAK, OAK_FENCE);
+        registerWoodType(WoodType.SPRUCE, SPRUCE_FENCE);
+        registerWoodType(WoodType.BIRCH, BIRCH_FENCE);
+        registerWoodType(WoodType.JUNGLE, JUNGLE_FENCE);
+        registerWoodType(WoodType.ACACIA, ACACIA_FENCE);
+        registerWoodType(WoodType.DARK_OAK, DARK_OAK_FENCE);
     }
 }

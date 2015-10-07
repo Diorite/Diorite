@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.FenceGateMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -37,15 +37,15 @@ public class AcaciaFenceGateMat extends WoodenFenceGateMat
     @SuppressWarnings("MagicNumber")
     protected AcaciaFenceGateMat()
     {
-        super("ACACIA_FENCE_GATE", 187, "minecraft:acacia_fence_gate", WoodTypeMat.ACACIA, BlockFace.SOUTH, false, 2, 15);
+        super("ACACIA_FENCE_GATE", 187, "minecraft:acacia_fence_gate", WoodType.ACACIA, BlockFace.SOUTH, false, 2, 15);
     }
 
     protected AcaciaFenceGateMat(final BlockFace face, final boolean open)
     {
-        super(ACACIA_FENCE_GATE_SOUTH.name(), ACACIA_FENCE_GATE_SOUTH.ordinal(), ACACIA_FENCE_GATE_SOUTH.getMinecraftId(), WoodTypeMat.ACACIA, face, open, ACACIA_FENCE_GATE_SOUTH.getHardness(), ACACIA_FENCE_GATE_SOUTH.getBlastResistance());
+        super(ACACIA_FENCE_GATE_SOUTH.name(), ACACIA_FENCE_GATE_SOUTH.ordinal(), ACACIA_FENCE_GATE_SOUTH.getMinecraftId(), WoodType.ACACIA, face, open, ACACIA_FENCE_GATE_SOUTH.getHardness(), ACACIA_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected AcaciaFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
+    protected AcaciaFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }

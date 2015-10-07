@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents diamond chestplate.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class DiamondChestplateMat extends ArmorMat
+public class DiamondChestplateMat extends ChestplateMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class DiamondChestplateMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected DiamondChestplateMat()
     {
-        super("DIAMOND_CHESTPLATE", 311, "minecraft:diamond_chestplate", "NEW", (short) 0, ArmorMaterial.DIAMOND, ArmorType.CHESTPLATE);
+        super("DIAMOND_CHESTPLATE", 311, "minecraft:diamond_chestplate", "NEW", (short) 0, ArmorMaterial.DIAMOND);
     }
 
     protected DiamondChestplateMat(final int durability)
     {
-        super(DIAMOND_CHESTPLATE.name(), DIAMOND_CHESTPLATE.getId(), DIAMOND_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.DIAMOND, ArmorType.CHESTPLATE);
+        super(DIAMOND_CHESTPLATE.name(), DIAMOND_CHESTPLATE.getId(), DIAMOND_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.DIAMOND);
     }
 
     protected DiamondChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

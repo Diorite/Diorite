@@ -24,12 +24,12 @@ public class EnderPearlMat extends ItemMaterialData implements PlaceableEntityMa
 
     protected EnderPearlMat()
     {
-        super("ENDER_PEARL", 368, "minecraft:ender_pearl", "ENDER_PEARL", (short) 0x00);
+        super("ENDER_PEARL", 368, "minecraft:ender_pearl", 16, "ENDER_PEARL", (short) 0x00);
     }
 
     protected EnderPearlMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, ENDER_PEARL.getMaxStack(), typeName, type);
     }
 
     protected EnderPearlMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

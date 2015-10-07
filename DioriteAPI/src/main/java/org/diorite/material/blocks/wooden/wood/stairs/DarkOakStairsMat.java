@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -37,15 +37,15 @@ public class DarkOakStairsMat extends WoodenStairsMat
     @SuppressWarnings("MagicNumber")
     protected DarkOakStairsMat()
     {
-        super("DARK_OAK_STAIRS", 164, "minecraft:dark_oak_stairs", WoodTypeMat.DARK_OAK, BlockFace.EAST, false, 2, 15);
+        super("DARK_OAK_STAIRS", 164, "minecraft:dark_oak_stairs", WoodType.DARK_OAK, BlockFace.EAST, false, 2, 15);
     }
 
     protected DarkOakStairsMat(final BlockFace face, final boolean upsideDown)
     {
-        super(DARK_OAK_STAIRS_EAST.name(), DARK_OAK_STAIRS_EAST.ordinal(), DARK_OAK_STAIRS_EAST.getMinecraftId(), WoodTypeMat.DARK_OAK, face, upsideDown, DARK_OAK_STAIRS_EAST.getHardness(), DARK_OAK_STAIRS_EAST.getBlastResistance());
+        super(DARK_OAK_STAIRS_EAST.name(), DARK_OAK_STAIRS_EAST.ordinal(), DARK_OAK_STAIRS_EAST.getMinecraftId(), WoodType.DARK_OAK, face, upsideDown, DARK_OAK_STAIRS_EAST.getHardness(), DARK_OAK_STAIRS_EAST.getBlastResistance());
     }
 
-    protected DarkOakStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    protected DarkOakStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown, hardness, blastResistance);
     }

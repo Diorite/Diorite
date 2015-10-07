@@ -22,12 +22,12 @@ public class MilkBucketMat extends EdibleItemMat
 
     protected MilkBucketMat()
     {
-        super("MILK_BUCKET", 335, "minecraft:milk_bucket", "MILK_BUCKET", (short) 0x00, 0, 0);
+        super("MILK_BUCKET", 335, "minecraft:milk_bucket", 1, "MILK_BUCKET", (short) 0x00, 0, 0);
     }
 
     protected MilkBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
-        super(enumName, id, minecraftId, typeName, type, foodLevelIncrease, saturationIncrease);
+        super(enumName, id, minecraftId, MILK_BUCKET.getMaxStack(), typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
     protected MilkBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)

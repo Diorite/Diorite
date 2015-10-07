@@ -24,12 +24,12 @@ public class SignMat extends ItemMaterialData implements PlaceableMat
 
     protected SignMat()
     {
-        super("SIGN", 323, "minecraft:sign", "SIGN", (short) 0x00);
+        super("SIGN", 323, "minecraft:sign", 16, "SIGN", (short) 0x00);
     }
 
     protected SignMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, SIGN.getMaxStack(), typeName, type);
     }
 
     protected SignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

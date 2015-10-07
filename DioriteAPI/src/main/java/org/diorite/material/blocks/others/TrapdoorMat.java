@@ -83,6 +83,24 @@ public abstract class TrapdoorMat extends BlockMaterialData implements OpenableM
     public abstract TrapdoorMat getType(BlockFace face, boolean open, boolean onTop);
 
     @Override
+    public abstract TrapdoorMat getType(final int type);
+
+    @Override
+    public abstract TrapdoorMat getType(final String type);
+
+    @Override
+    public abstract TrapdoorMat[] types();
+
+    @Override
+    public abstract TrapdoorMat getAttachedFace(final BlockFace face);
+
+    @Override
+    public abstract TrapdoorMat getBlockFacing(final BlockFace face);
+
+    @Override
+    public abstract TrapdoorMat getOpen(final boolean open);
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("face", this.face).append("open", this.open).append("onTop", this.onTop).toString();

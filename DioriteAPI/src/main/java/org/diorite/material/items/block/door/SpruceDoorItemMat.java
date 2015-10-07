@@ -2,7 +2,7 @@ package org.diorite.material.items.block.door;
 
 import java.util.Map;
 
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
@@ -23,15 +23,15 @@ public class SpruceDoorItemMat extends WoodenDoorItemMat
 
     protected SpruceDoorItemMat()
     {
-        super("SPRUCE_DOOR_ITEM", 427, "minecraft:spruce_door", "SPRUCE_DOOR_ITEM", (short) 0x00, WoodTypeMat.SPRUCE);
+        super("SPRUCE_DOOR_ITEM", 427, "minecraft:spruce_door", "SPRUCE_DOOR_ITEM", (short) 0x00, WoodType.SPRUCE);
     }
 
-    protected SpruceDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodTypeMat woodType)
+    protected SpruceDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, typeName, type, woodType);
     }
 
-    protected SpruceDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodTypeMat woodType)
+    protected SpruceDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
     }

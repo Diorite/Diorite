@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TByteObjectMap;
@@ -24,18 +24,18 @@ public class SaplingMat extends WoodMat implements FuelMat
     public static final int USED_DATA_VALUES = 12;
 
     public static final SaplingMat SAPLING_OAK      = new SaplingMat();
-    public static final SaplingMat SAPLING_SPRUCE   = new SaplingMat(WoodTypeMat.SPRUCE, SaplingStage.NEW);
-    public static final SaplingMat SAPLING_BIRCH    = new SaplingMat(WoodTypeMat.BIRCH, SaplingStage.NEW);
-    public static final SaplingMat SAPLING_JUNGLE   = new SaplingMat(WoodTypeMat.JUNGLE, SaplingStage.NEW);
-    public static final SaplingMat SAPLING_ACACIA   = new SaplingMat(WoodTypeMat.ACACIA, SaplingStage.NEW);
-    public static final SaplingMat SAPLING_DARK_OAK = new SaplingMat(WoodTypeMat.DARK_OAK, SaplingStage.NEW);
+    public static final SaplingMat SAPLING_SPRUCE   = new SaplingMat(WoodType.SPRUCE, SaplingStage.NEW);
+    public static final SaplingMat SAPLING_BIRCH    = new SaplingMat(WoodType.BIRCH, SaplingStage.NEW);
+    public static final SaplingMat SAPLING_JUNGLE   = new SaplingMat(WoodType.JUNGLE, SaplingStage.NEW);
+    public static final SaplingMat SAPLING_ACACIA   = new SaplingMat(WoodType.ACACIA, SaplingStage.NEW);
+    public static final SaplingMat SAPLING_DARK_OAK = new SaplingMat(WoodType.DARK_OAK, SaplingStage.NEW);
 
-    public static final SaplingMat SAPLING_OAK_OLDER      = new SaplingMat(WoodTypeMat.OAK, SaplingStage.OLDER);
-    public static final SaplingMat SAPLING_SPRUCE_OLDER   = new SaplingMat(WoodTypeMat.SPRUCE, SaplingStage.OLDER);
-    public static final SaplingMat SAPLING_BIRCH_OLDER    = new SaplingMat(WoodTypeMat.BIRCH, SaplingStage.OLDER);
-    public static final SaplingMat SAPLING_JUNGLE_OLDER   = new SaplingMat(WoodTypeMat.JUNGLE, SaplingStage.OLDER);
-    public static final SaplingMat SAPLING_ACACIA_OLDER   = new SaplingMat(WoodTypeMat.ACACIA, SaplingStage.OLDER);
-    public static final SaplingMat SAPLING_DARK_OAK_OLDER = new SaplingMat(WoodTypeMat.DARK_OAK, SaplingStage.OLDER);
+    public static final SaplingMat SAPLING_OAK_OLDER      = new SaplingMat(WoodType.OAK, SaplingStage.OLDER);
+    public static final SaplingMat SAPLING_SPRUCE_OLDER   = new SaplingMat(WoodType.SPRUCE, SaplingStage.OLDER);
+    public static final SaplingMat SAPLING_BIRCH_OLDER    = new SaplingMat(WoodType.BIRCH, SaplingStage.OLDER);
+    public static final SaplingMat SAPLING_JUNGLE_OLDER   = new SaplingMat(WoodType.JUNGLE, SaplingStage.OLDER);
+    public static final SaplingMat SAPLING_ACACIA_OLDER   = new SaplingMat(WoodType.ACACIA, SaplingStage.OLDER);
+    public static final SaplingMat SAPLING_DARK_OAK_OLDER = new SaplingMat(WoodType.DARK_OAK, SaplingStage.OLDER);
 
     private static final Map<String, SaplingMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<SaplingMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
@@ -44,17 +44,17 @@ public class SaplingMat extends WoodMat implements FuelMat
 
     protected SaplingMat()
     {
-        super("SAPLING", 6, "minecraft:sapling", "OAK", (byte) 0x00, WoodTypeMat.OAK, 0, 0);
+        super("SAPLING", 6, "minecraft:sapling", "OAK", (byte) 0x00, WoodType.OAK, 0, 0);
         this.stage = SaplingStage.NEW;
     }
 
-    protected SaplingMat(final WoodTypeMat woodType, final SaplingStage stage)
+    protected SaplingMat(final WoodType woodType, final SaplingStage stage)
     {
         super(SAPLING_OAK.name(), SAPLING_OAK.ordinal(), SAPLING_OAK.getMinecraftId(), woodType + (stage.getFlag() == 0 ? "" : "_" + stage.name()), combine(woodType, stage), woodType, SAPLING_OAK.getHardness(), SAPLING_OAK.getBlastResistance());
         this.stage = stage;
     }
 
-    protected SaplingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodTypeMat woodType, final SaplingStage stage, final float hardness, final float blastResistance)
+    protected SaplingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final SaplingStage stage, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.stage = stage;
@@ -81,13 +81,13 @@ public class SaplingMat extends WoodMat implements FuelMat
         return this.stage;
     }
 
-    public SaplingMat getType(final WoodTypeMat woodType, final SaplingStage stage)
+    public SaplingMat getType(final WoodType woodType, final SaplingStage stage)
     {
         return getByID(combine(woodType, stage));
     }
 
     @Override
-    public WoodMat getWoodType(final WoodTypeMat woodType)
+    public WoodMat getWoodType(final WoodType woodType)
     {
         return getByID(combine(woodType, this.stage));
     }
@@ -141,7 +141,7 @@ public class SaplingMat extends WoodMat implements FuelMat
         }
     }
 
-    private static byte combine(final WoodTypeMat woodType, final SaplingStage stage)
+    private static byte combine(final WoodType woodType, final SaplingStage stage)
     {
         byte result = woodType.getPlanksMeta();
         result |= stage.getFlag();
@@ -173,7 +173,7 @@ public class SaplingMat extends WoodMat implements FuelMat
         return byName.get(name);
     }
 
-    public static SaplingMat getSapling(final WoodTypeMat woodType, final SaplingStage stage)
+    public static SaplingMat getSapling(final WoodType woodType, final SaplingStage stage)
     {
         return getByID(combine(woodType, stage));
     }

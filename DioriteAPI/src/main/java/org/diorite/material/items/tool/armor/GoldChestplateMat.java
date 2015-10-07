@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents gold chestplate.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class GoldChestplateMat extends ArmorMat
+public class GoldChestplateMat extends ChestplateMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class GoldChestplateMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected GoldChestplateMat()
     {
-        super("GOLD_CHESTPLATE", 315, "minecraft:gold_chestplate", "NEW", (short) 0, ArmorMaterial.GOLD, ArmorType.CHESTPLATE);
+        super("GOLD_CHESTPLATE", 315, "minecraft:gold_chestplate", "NEW", (short) 0, ArmorMaterial.GOLD);
     }
 
     protected GoldChestplateMat(final int durability)
     {
-        super(GOLD_CHESTPLATE.name(), GOLD_CHESTPLATE.getId(), GOLD_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.GOLD, ArmorType.CHESTPLATE);
+        super(GOLD_CHESTPLATE.name(), GOLD_CHESTPLATE.getId(), GOLD_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.GOLD);
     }
 
     protected GoldChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

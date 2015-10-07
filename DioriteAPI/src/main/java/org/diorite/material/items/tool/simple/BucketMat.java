@@ -23,12 +23,12 @@ public class BucketMat extends ItemMaterialData
 
     protected BucketMat()
     {
-        super("BUCKET", 325, "minecraft:bucket", "BUCKET", (short) 0x00);
+        super("BUCKET", 325, "minecraft:bucket", 16, "BUCKET", (short) 0x00);
     }
 
     protected BucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
-        super(enumName, id, minecraftId, typeName, type);
+        super(enumName, id, minecraftId, BUCKET.getMaxStack(), typeName, type);
     }
 
     protected BucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)

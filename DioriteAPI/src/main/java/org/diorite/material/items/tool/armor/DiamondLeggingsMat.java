@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
-import org.diorite.material.items.tool.ArmorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -16,7 +15,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Represents diamond leggings.
  */
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class DiamondLeggingsMat extends ArmorMat
+public class DiamondLeggingsMat extends LeggingsMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -34,12 +33,12 @@ public class DiamondLeggingsMat extends ArmorMat
     @SuppressWarnings("MagicNumber")
     protected DiamondLeggingsMat()
     {
-        super("DIAMOND_LEGGINGS", 312, "minecraft:diamond_leggings", "NEW", (short) 0, ArmorMaterial.DIAMOND, ArmorType.LEGGINGS);
+        super("DIAMOND_LEGGINGS", 312, "minecraft:diamond_leggings", "NEW", (short) 0, ArmorMaterial.DIAMOND);
     }
 
     protected DiamondLeggingsMat(final int durability)
     {
-        super(DIAMOND_LEGGINGS.name(), DIAMOND_LEGGINGS.getId(), DIAMOND_LEGGINGS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.DIAMOND, ArmorType.LEGGINGS);
+        super(DIAMOND_LEGGINGS.name(), DIAMOND_LEGGINGS.getId(), DIAMOND_LEGGINGS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.DIAMOND);
     }
 
     protected DiamondLeggingsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)

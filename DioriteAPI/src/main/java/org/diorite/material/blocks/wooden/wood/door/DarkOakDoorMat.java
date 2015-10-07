@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.DoorMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -51,7 +51,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
     @SuppressWarnings("MagicNumber")
     protected DarkOakDoorMat()
     {
-        super("DARK_OAK_DOOR", 197, "minecraft:dark_oak_door", "BOTTOM_EAST", WoodTypeMat.DARK_OAK, 3, 15);
+        super("DARK_OAK_DOOR", 197, "minecraft:dark_oak_door", "BOTTOM_EAST", WoodType.DARK_OAK, 3, 15);
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = false;
@@ -61,7 +61,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
 
     protected DarkOakDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
-        super(DARK_OAK_DOOR_BOTTOM_EAST.name(), DARK_OAK_DOOR_BOTTOM_EAST.ordinal(), DARK_OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodTypeMat.DARK_OAK, DARK_OAK_DOOR_BOTTOM_EAST.getHardness(), DARK_OAK_DOOR_BOTTOM_EAST.getBlastResistance());
+        super(DARK_OAK_DOOR_BOTTOM_EAST.name(), DARK_OAK_DOOR_BOTTOM_EAST.ordinal(), DARK_OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodType.DARK_OAK, DARK_OAK_DOOR_BOTTOM_EAST.getHardness(), DARK_OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
         this.hingeOnRightSide = hingeOnRightSide;
         this.open = false;
@@ -71,7 +71,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
 
     protected DarkOakDoorMat(final BlockFace blockFace, final boolean open)
     {
-        super(DARK_OAK_DOOR_BOTTOM_EAST.name(), DARK_OAK_DOOR_BOTTOM_EAST.ordinal(), DARK_OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodTypeMat.DARK_OAK, DARK_OAK_DOOR_BOTTOM_EAST.getHardness(), DARK_OAK_DOOR_BOTTOM_EAST.getBlastResistance());
+        super(DARK_OAK_DOOR_BOTTOM_EAST.name(), DARK_OAK_DOOR_BOTTOM_EAST.ordinal(), DARK_OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodType.DARK_OAK, DARK_OAK_DOOR_BOTTOM_EAST.getHardness(), DARK_OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
         this.hingeOnRightSide = false;
         this.open = open;
@@ -79,7 +79,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
         this.blockFace = blockFace;
     }
 
-    protected DarkOakDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodTypeMat woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    protected DarkOakDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, DARK_OAK_DOOR_BOTTOM_EAST.getHardness(), DARK_OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;

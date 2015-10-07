@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.Material;
-import org.diorite.material.WoodTypeMat;
+import org.diorite.material.WoodType;
 import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.noise.NoiseGenerator;
@@ -130,7 +130,7 @@ public class TestWorldGeneratorImpl extends WorldGenerator
             {
                 this.populators.add(chunk -> {
                     final World world = chunk.getWorld();
-                    final Structure s = new org.diorite.impl.world.generator.structures.tree.SmallTreeStructure(WoodTypeMat.OAK);
+                    final Structure s = new org.diorite.impl.world.generator.structures.tree.SmallTreeStructure(WoodType.OAK);
                     final Random random = new Random(chunk.getPos().asLong() + world.getSeed());
 //                    s.generate(chunk.getPos(), random, (chunk.getX() * 16), chunk.getHighestBlockY(5, 5) + 1, (chunk.getZ() * 16));
                     for (int i = 0; i < 4; i++)

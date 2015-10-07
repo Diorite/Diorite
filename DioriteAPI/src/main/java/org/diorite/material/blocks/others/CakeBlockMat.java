@@ -15,7 +15,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Cake" and all its subtypes.
- * <p>
+ * <br>
  * NOTE: Will crash game when in inventory.
  */
 public class CakeBlockMat extends BlockMaterialData
@@ -47,7 +47,7 @@ public class CakeBlockMat extends BlockMaterialData
 
     protected CakeBlockMat(final int piecesEaten)
     {
-        super(CAKE_BLOCK_0.name(), CAKE_BLOCK_0.ordinal(), CAKE_BLOCK_0.getMinecraftId(), Integer.toString(piecesEaten), (byte) piecesEaten, CAKE_BLOCK_0.getHardness(), CAKE_BLOCK_0.getBlastResistance());
+        super(CAKE_BLOCK_0.name(), CAKE_BLOCK_0.ordinal(), CAKE_BLOCK_0.getMinecraftId(), CAKE_BLOCK_0.getMaxStack(), Integer.toString(piecesEaten), (byte) piecesEaten, CAKE_BLOCK_0.getHardness(), CAKE_BLOCK_0.getBlastResistance());
         this.piecesEaten = (byte) piecesEaten;
     }
 
