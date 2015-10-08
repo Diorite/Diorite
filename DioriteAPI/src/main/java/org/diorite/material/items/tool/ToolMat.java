@@ -1,5 +1,7 @@
 package org.diorite.material.items.tool;
 
+import org.diorite.material.EnchantableMat;
+import org.diorite.material.ItemMaterialData;
 import org.diorite.material.ToolMaterial;
 import org.diorite.material.ToolType;
 
@@ -7,7 +9,7 @@ import org.diorite.material.ToolType;
  * Represents a tool item that have durability and can break when it go above {@link #getBaseDurability()} <br>
  * Tool durability types should be cached
  */
-public abstract class ToolMat extends BasicToolMat
+public abstract class ToolMat extends ItemMaterialData implements BreakableItemMat, EnchantableMat
 {
     protected final ToolMaterial toolMaterial;
     protected final ToolType     toolType;
@@ -44,6 +46,24 @@ public abstract class ToolMat extends BasicToolMat
     public ToolType getToolType()
     {
         return this.toolType;
+    }
+
+    @Override
+    public int getDurability()
+    {
+        return this.getType();
+    }
+
+    @Override
+    public int getBaseDurability()
+    {
+        return this.toolMaterial.getBaseDurability();
+    }
+
+    @Override
+    public int getEnchantability()
+    {
+        return this.toolMaterial.getEnchantability();
     }
 
     @Override

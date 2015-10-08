@@ -19,6 +19,7 @@ public class ToolType extends ASimpleEnum<ToolType>
     public static final ToolType SHOVEL  = new ToolType("SHOVEL");
     public static final ToolType AXE     = new ToolType("AXE");
     public static final ToolType HOE     = new ToolType("HOE");
+    public static final ToolType SWORD   = new ToolType("SWORD");
 
     public ToolType(final String enumName, final int enumId)
     {
@@ -79,5 +80,6 @@ public class ToolType extends ASimpleEnum<ToolType>
         ToolType.register(SHOVEL);
         ToolType.register(AXE);
         ToolType.register(HOE);
+        ToolType.register(SWORD);
     }
 }

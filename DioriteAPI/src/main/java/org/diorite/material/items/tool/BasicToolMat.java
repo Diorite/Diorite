@@ -1,21 +1,35 @@
 package org.diorite.material.items.tool;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.material.BasicToolData;
+import org.diorite.material.EnchantableMat;
 import org.diorite.material.ItemMaterialData;
 
 /**
  * Represents a tool item that have durability and can break when it go above {@link #getBaseDurability()} <br>
  * Tool durability types should be cached
  */
-public abstract class BasicToolMat extends ItemMaterialData implements BreakableItemMat
+public abstract class BasicToolMat extends ItemMaterialData implements BreakableItemMat, EnchantableMat
 {
-    protected BasicToolMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    protected final BasicToolData toolData;
+
+    protected BasicToolMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final BasicToolData toolData)
     {
         super(enumName, id, minecraftId, 1, typeName, type);
+        this.toolData = toolData;
     }
 
-    protected BasicToolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    protected BasicToolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final BasicToolData toolData)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
+        this.toolData = toolData;
+    }
+
+    public BasicToolData getToolData()
+    {
+        return this.toolData;
     }
 
     @Override
@@ -28,6 +42,18 @@ public abstract class BasicToolMat extends ItemMaterialData implements Breakable
     public int getDurability()
     {
         return this.getType();
+    }
+
+    @Override
+    public int getBaseDurability()
+    {
+        return this.toolData.getBaseDurability();
+    }
+
+    @Override
+    public int getEnchantability()
+    {
+        return this.toolData.getEnchantability();
     }
 
     @Override
@@ -47,4 +73,10 @@ public abstract class BasicToolMat extends ItemMaterialData implements Breakable
 
     @Override
     public abstract BasicToolMat[] types();
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("toolData", this.toolData).toString();
+    }
 }

@@ -12,6 +12,7 @@ public class ToolData
     protected final ToolMaterial toolMaterial;
     protected final ToolType     toolType;
     protected final float        damage;
+    protected final float        attackSpeed;
 
     /**
      * Construct new tool properties.
@@ -19,14 +20,16 @@ public class ToolData
      * @param toolMaterial material of tool.
      * @param toolType     type of tool.
      * @param damage       damage of tool.
+     * @param attackSpeed  attack speed of tool.
      */
-    public ToolData(final ToolMaterial toolMaterial, final ToolType toolType, final float damage)
+    public ToolData(final ToolMaterial toolMaterial, final ToolType toolType, final double damage, final double attackSpeed)
     {
         Validate.notNull(toolMaterial, "Tool material can't be null.");
         Validate.notNull(toolType, "Tool type can't be null.");
         this.toolMaterial = toolMaterial;
         this.toolType = toolType;
-        this.damage = damage;
+        this.damage = (float) damage;
+        this.attackSpeed = (float) attackSpeed;
     }
 
     /**
@@ -34,9 +37,19 @@ public class ToolData
      *
      * @return attack damage of this tool.
      */
-    public float getDamage()
+    public double getDamage()
     {
         return this.damage;
+    }
+
+    /**
+     * Returns attack speed of this tool.
+     *
+     * @return attack speed of this tool.
+     */
+    public double getAttackSpeed()
+    {
+        return this.attackSpeed;
     }
 
     /**
@@ -73,16 +86,16 @@ public class ToolData
 
         final ToolData toolData = (ToolData) o;
 
-        return (Float.compare(toolData.damage, this.damage) == 0) && this.toolMaterial.equals(toolData.toolMaterial) && toolType.equals(toolData.toolType);
-
+        return (Float.compare(toolData.damage, this.damage) == 0) && (Float.compare(toolData.attackSpeed, this.attackSpeed) == 0) && this.toolMaterial.equals(toolData.toolMaterial) && this.toolType.equals(toolData.toolType);
     }
 
     @Override
     public int hashCode()
     {
         int result = this.toolMaterial.hashCode();
-        result = 31 * result + this.toolType.hashCode();
-        result = 31 * result + (this.damage != + 0.0f ? Float.floatToIntBits(this.damage) : 0);
+        result = (31 * result) + this.toolType.hashCode();
+        result = (31 * result) + ((this.damage != + 0.0f) ? Float.floatToIntBits(this.damage) : 0);
+        result = (31 * result) + ((this.attackSpeed != + 0.0f) ? Float.floatToIntBits(this.attackSpeed) : 0);
         return result;
     }
 

@@ -2,6 +2,7 @@ package org.diorite.material.items.tool.simple;
 
 import java.util.Map;
 
+import org.diorite.material.EnchantableMat;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -9,7 +10,7 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 @SuppressWarnings("MagicNumber")
-public class EnchantedBookMat extends ItemMaterialData
+public class EnchantedBookMat extends ItemMaterialData implements EnchantableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -46,6 +47,12 @@ public class EnchantedBookMat extends ItemMaterialData
     public EnchantedBookMat getType(final String type)
     {
         return getByEnumName(type);
+    }
+
+    @Override
+    public int getEnchantability()
+    {
+        return 1;
     }
 
     /**
