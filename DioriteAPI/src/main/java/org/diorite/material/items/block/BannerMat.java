@@ -70,7 +70,7 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
 
     /**
      * Returns one of Banner sub-type based on name (selected by diorite team), may return null
-     * If block contains only one type, sub-name of it will be this same as name of material.
+     * If item contains only one type, sub-name of it will be this same as name of material.
      *
      * @param name name of sub-type
      *
@@ -100,7 +100,7 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
     }
 
     /**
-     * @return array that contains all sub-types of this block.
+     * @return array that contains all sub-types of this item.
      */
     public static BannerMat[] bannerTypes()
     {

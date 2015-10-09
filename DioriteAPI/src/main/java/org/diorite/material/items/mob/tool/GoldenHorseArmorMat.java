@@ -61,7 +61,7 @@ public class GoldenHorseArmorMat extends AbstractHorseArmor
 
     /**
      * Returns one of GoldenHorseArmor sub-type based on name (selected by diorite team), may return null
-     * If block contains only one type, sub-name of it will be this same as name of material.
+     * If item contains only one type, sub-name of it will be this same as name of material.
      *
      * @param name name of sub-type
      *
@@ -91,7 +91,7 @@ public class GoldenHorseArmorMat extends AbstractHorseArmor
     }
 
     /**
-     * @return array that contains all sub-types of this block.
+     * @return array that contains all sub-types of this item.
      */
     public static GoldenHorseArmorMat[] goldenHorseArmorTypes()
     {

@@ -82,7 +82,7 @@ public class SpawnEggMat extends ItemMaterialData
 
     /**
      * Returns one of SpawnEgg sub-type based on name (selected by diorite team), may return null
-     * If block contains only one type, sub-name of it will be this same as name of material.
+     * If item contains only one type, sub-name of it will be this same as name of material.
      *
      * @param name name of sub-type
      *
@@ -112,7 +112,7 @@ public class SpawnEggMat extends ItemMaterialData
     }
 
     /**
-     * @return array that contains all sub-types of this block.
+     * @return array that contains all sub-types of this item.
      */
     public static SpawnEggMat[] spawnEggTypes()
     {

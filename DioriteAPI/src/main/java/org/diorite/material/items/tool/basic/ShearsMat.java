@@ -119,7 +119,7 @@ public class ShearsMat extends BasicToolMat
 
     /**
      * Returns one of Shears-type based on name (selected by diorite team).
-     * If block contains only one type, sub-name of it will be this same as name of material.<br>
+     * If item contains only one type, sub-name of it will be this same as name of material.<br>
      * Returns null if name can't be parsed to int and it isn't "NEW" one.
      *
      * @param name name of sub-type
