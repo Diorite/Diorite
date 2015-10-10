@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Snowball' item material in minecraft. <br>
+ * ID of material: 332 <br>
+ * String ID of material: minecraft:snowball <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class SnowballMat extends ItemMaterialData implements PlaceableEntityMat
 {
     /**
@@ -22,6 +28,7 @@ public class SnowballMat extends ItemMaterialData implements PlaceableEntityMat
     private static final Map<String, SnowballMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<SnowballMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected SnowballMat()
     {
         super("SNOWBALL", 332, "minecraft:snowball", "SNOWBALL", (short) 0x00);

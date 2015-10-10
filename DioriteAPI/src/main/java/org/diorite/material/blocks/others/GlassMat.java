@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Glass" and all its subtypes.
+ * Class representing 'Glass' block material in minecraft. <br>
+ * ID of block: 20 <br>
+ * String ID of block: minecraft:glass <br>
+ * Hardness: 0,3 <br>
+ * Blast Resistance 1,5
  */
+@SuppressWarnings("JavaDoc")
 public class GlassMat extends BlockMaterialData
 {
     /**

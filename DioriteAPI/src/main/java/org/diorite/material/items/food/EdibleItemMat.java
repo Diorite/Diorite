@@ -8,9 +8,16 @@ import org.diorite.material.ItemMaterialData;
 /**
  * Represents an item that can be eaten by player.
  */
+@SuppressWarnings("JavaDoc")
 public abstract class EdibleItemMat extends ItemMaterialData
 {
+    /**
+     * How much hunger bar should be restored by eating this food.
+     */
     protected final int   foodLevelIncrease;
+    /**
+     * How much saturation should increase by eating this food.
+     */
     protected final float saturationIncrease;
 
     protected EdibleItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)

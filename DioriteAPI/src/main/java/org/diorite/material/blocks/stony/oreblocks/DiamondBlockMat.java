@@ -11,8 +11,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DiamondBlock" and all its subtypes.
+ * Class representing 'Diamond Block' block material in minecraft. <br>
+ * ID of block: 57 <br>
+ * String ID of block: minecraft:diamond_block <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class DiamondBlockMat extends OreBlockMat
 {
     /**

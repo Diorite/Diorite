@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "BrickBlock" and all its subtypes.
+ * Class representing 'Brick Block' block material in minecraft. <br>
+ * ID of block: 45 <br>
+ * String ID of block: minecraft:brick_block <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class BrickBlockMat extends StonyMat
 {
     /**

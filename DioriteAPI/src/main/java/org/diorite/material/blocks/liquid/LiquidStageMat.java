@@ -3,6 +3,9 @@ package org.diorite.material.blocks.liquid;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
+/**
+ * Possible stages of liquid, liquid can be in two stages: normal and falling, each stage can have 7 levels and source level of liquid in it.
+ */
 public enum LiquidStageMat
 {
     SOURCE(0x00),

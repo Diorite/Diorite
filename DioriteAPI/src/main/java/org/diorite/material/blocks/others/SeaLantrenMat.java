@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "SeaLantren" and all its subtypes.
+ * Class representing 'Sea Lantren' block material in minecraft. <br>
+ * ID of block: 169 <br>
+ * String ID of block: minecraft:sea_lantren <br>
+ * Hardness: 0,3 <br>
+ * Blast Resistance 1,5
  */
+@SuppressWarnings("JavaDoc")
 public class SeaLantrenMat extends BlockMaterialData
 {
     /**

@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "MushroomRed" and all its subtypes.
+ * Class representing 'Red Mushroom' block material in minecraft. <br>
+ * ID of block: 40 <br>
+ * String ID of block: minecraft:red_mushroom <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0
  */
+@SuppressWarnings("JavaDoc")
 public class MushroomRedMat extends MushroomMat
 {
     /**

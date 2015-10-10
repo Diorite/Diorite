@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Mycelium" and all its subtypes.
+ * Class representing 'Mycelium' block material in minecraft. <br>
+ * ID of block: 110 <br>
+ * String ID of block: minecraft:mycelium <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 2,5
  */
+@SuppressWarnings("JavaDoc")
 public class MyceliumMat extends EarthMat
 {
     /**

@@ -18,7 +18,113 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Dye' item material in minecraft. <br>
+ * ID of material: 351 <br>
+ * String ID of material: minecraft:dye <br>
+ * Max item stack size: 64 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol> 
+ * <li>
+ *     BONE_MEAL:
+ *     Type name: 'Bone Meal' <br>
+ *     SubID: 15 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     ORANGE:
+ *     Type name: 'Orange' <br>
+ *     SubID: 14 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     MAGENTA:
+ *     Type name: 'Magenta' <br>
+ *     SubID: 13 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     LIGHT_BLUE:
+ *     Type name: 'Light Blue' <br>
+ *     SubID: 12 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     YELLOW:
+ *     Type name: 'Yellow' <br>
+ *     SubID: 11 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     LIME:
+ *     Type name: 'Lime' <br>
+ *     SubID: 10 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     PINK:
+ *     Type name: 'Pink' <br>
+ *     SubID: 9 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     GRAY:
+ *     Type name: 'Gray' <br>
+ *     SubID: 8 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     LIGHT_GRAY:
+ *     Type name: 'Light Gray' <br>
+ *     SubID: 7 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     CYAN:
+ *     Type name: 'Cyan' <br>
+ *     SubID: 6 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     PURPLE:
+ *     Type name: 'Purple' <br>
+ *     SubID: 5 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     LAPIS_LAZULI:
+ *     Type name: 'Lapis Lazuli' <br>
+ *     SubID: 4 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     COCOA_BEANS:
+ *     Type name: 'Cocoa Beans' <br>
+ *     SubID: 3 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     GREEN:
+ *     Type name: 'Green' <br>
+ *     SubID: 2 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     RED:
+ *     Type name: 'Red' <br>
+ *     SubID: 1 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     INK_SAC:
+ *     Type name: 'Ink Sac' <br>
+ *     SubID: 0 <br>
+ *     Max item stack size: 64
+ * </li>
+ * </ol>
+ */
+@SuppressWarnings("JavaDoc")
 public class DyeMat extends ItemMaterialData implements ColorableMat
 {
     /**
@@ -48,6 +154,7 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
 
     protected final DyeColor color;
 
+    @SuppressWarnings("MagicNumber")
     protected DyeMat()
     {
         super("DYE", 351, "minecraft:dye", "INK_SAC", (short) 0x00);
@@ -173,10 +280,8 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("color", this.color).toString();
     }
 
-    @SuppressWarnings("ClassHasNoToStringMethod")
     protected static class DyeLapisLazuliMat extends DyeMat implements OreItemMat
     {
-
         protected final OreMat      blockOreType;
         protected final OreBlockMat blockType;
 
@@ -221,6 +326,12 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
         public OreBlockMat getBlockType()
         {
             return this.blockType;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("blockOreType", this.blockOreType).append("blockType", this.blockType).toString();
         }
     }
 }

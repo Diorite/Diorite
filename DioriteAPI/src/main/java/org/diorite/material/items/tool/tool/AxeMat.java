@@ -4,6 +4,10 @@ import org.diorite.material.ToolMaterial;
 import org.diorite.material.ToolType;
 import org.diorite.material.items.tool.ToolMat;
 
+/**
+ * Abstract class for all axe-based tools
+ */
+@SuppressWarnings("JavaDoc")
 public abstract class AxeMat extends ToolMat
 {
     protected AxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial)

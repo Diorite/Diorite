@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "EndStone" and all its subtypes.
+ * Class representing 'End Stone' block material in minecraft. <br>
+ * ID of block: 121 <br>
+ * String ID of block: minecraft:end_stone <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 45
  */
+@SuppressWarnings("JavaDoc")
 public class EndStoneMat extends StonyMat
 {
     /**

@@ -16,8 +16,45 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "TrappedChest" and all its subtypes.
+ * Class representing 'Trapped Chest' block material in minecraft. <br>
+ * ID of block: 146 <br>
+ * String ID of block: minecraft:trapped_chest <br>
+ * Hardness: 2,5 <br>
+ * Blast Resistance 12,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 5 <br>
+ * Hardness: 2,5 <br>
+ * Blast Resistance 12,5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 2,5 <br>
+ * Blast Resistance 12,5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 2,5 <br>
+ * Blast Resistance 12,5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 0 <br>
+ * Hardness: 2,5 <br>
+ * Blast Resistance 12,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class TrappedChestMat extends BlockMaterialData implements DirectionalMat, FuelMat
 {
     /**

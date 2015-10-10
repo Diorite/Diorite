@@ -11,8 +11,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Grass" and all its subtypes.
+ * Class representing 'Grass' block material in minecraft. <br>
+ * ID of block: 2 <br>
+ * String ID of block: minecraft:grass <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3
  */
+@SuppressWarnings("JavaDoc")
 public class GrassMat extends EarthMat
 {
     /**

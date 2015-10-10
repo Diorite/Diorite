@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Nether Wart' item material in minecraft. <br>
+ * ID of material: 372 <br>
+ * String ID of material: minecraft:nether_wart <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class NetherWartMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class NetherWartMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, NetherWartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<NetherWartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected NetherWartMat()
     {
         super("NETHER_WART", 372, "minecraft:nether_wart", "NETHER_WART", (short) 0x00);

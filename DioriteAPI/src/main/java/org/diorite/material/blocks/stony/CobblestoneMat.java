@@ -10,8 +10,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Cobblestone" and all its subtypes.
+ * Class representing 'Cobblestone' block material in minecraft. <br>
+ * ID of block: 4 <br>
+ * String ID of block: minecraft:cobblestone <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class CobblestoneMat extends StonyMat implements VariantableMat
 {
     /**

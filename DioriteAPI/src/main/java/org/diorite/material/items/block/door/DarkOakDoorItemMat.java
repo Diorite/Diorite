@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Dark Oak Door Item' item material in minecraft. <br>
+ * ID of material: 431 <br>
+ * String ID of material: minecraft:dark_oak_door <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class DarkOakDoorItemMat extends WoodenDoorItemMat
 {
     /**
@@ -21,6 +27,7 @@ public class DarkOakDoorItemMat extends WoodenDoorItemMat
     private static final Map<String, DarkOakDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<DarkOakDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected DarkOakDoorItemMat()
     {
         super("DARK_OAK_DOOR_ITEM", 431, "minecraft:dark_oak_door", "DARK_OAK_DOOR_ITEM", (short) 0x00, WoodType.DARK_OAK);

@@ -15,8 +15,73 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "NetherBrickStairs" and all its subtypes.
+ * Class representing 'Nether Brick Stairs' block material in minecraft. <br>
+ * ID of block: 114 <br>
+ * String ID of block: minecraft:nether_brick_stairs <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * NORTH_UPSIDE_DOWN:
+ * Type name: 'North Upside Down' <br>
+ * SubID: 7 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * SOUTH_UPSIDE_DOWN:
+ * Type name: 'South Upside Down' <br>
+ * SubID: 6 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * WEST_UPSIDE_DOWN:
+ * Type name: 'West Upside Down' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * EAST_UPSIDE_DOWN:
+ * Type name: 'East Upside Down' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
 {
     /**

@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Clock' item material in minecraft. <br>
+ * ID of material: 347 <br>
+ * String ID of material: minecraft:clock <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class ClockMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class ClockMat extends ItemMaterialData
     private static final Map<String, ClockMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<ClockMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected ClockMat()
     {
         super("CLOCK", 347, "minecraft:clock", "CLOCK", (short) 0x00);

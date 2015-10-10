@@ -12,8 +12,31 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Sponge" and all its subtypes.
+ * Class representing 'Sponge' block material in minecraft. <br>
+ * ID of block: 19 <br>
+ * String ID of block: minecraft:sponge <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * WEY:
+ * Type name: 'Wey' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * <li>
+ * DRY:
+ * Type name: 'Dry' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class SpongeMat extends BlockMaterialData
 {
     /**

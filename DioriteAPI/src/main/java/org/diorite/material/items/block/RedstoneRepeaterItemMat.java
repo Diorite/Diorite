@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Redstone Repeater Item' item material in minecraft. <br>
+ * ID of material: 356 <br>
+ * String ID of material: minecraft:repeater <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class RedstoneRepeaterItemMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class RedstoneRepeaterItemMat extends ItemMaterialData implements Placeab
     private static final Map<String, RedstoneRepeaterItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RedstoneRepeaterItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected RedstoneRepeaterItemMat()
     {
         super("REDSTONE_REPEATER_ITEM", 356, "minecraft:repeater", "REDSTONE_REPEATER_ITEM", (short) 0x00);

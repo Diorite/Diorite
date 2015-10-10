@@ -10,11 +10,130 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Reeds" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Reeds Block' block material in minecraft. <br>
+ * ID of block: 83 <br>
+ * String ID of block: minecraft:reeds <br>
+ * This block can't be used in inventory, valid material for this block: 'Reeds' (minecraft:reeds(338):0) <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * 15:
+ * Type name: '15' <br>
+ * SubID: 15 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 14:
+ * Type name: '14' <br>
+ * SubID: 14 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 13:
+ * Type name: '13' <br>
+ * SubID: 13 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 12:
+ * Type name: '12' <br>
+ * SubID: 12 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 11:
+ * Type name: '11' <br>
+ * SubID: 11 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 10:
+ * Type name: '10' <br>
+ * SubID: 10 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 9:
+ * Type name: '9' <br>
+ * SubID: 9 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 8:
+ * Type name: '8' <br>
+ * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 7:
+ * Type name: '7' <br>
+ * SubID: 7 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 6:
+ * Type name: '6' <br>
+ * SubID: 6 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 5:
+ * Type name: '5' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 4:
+ * Type name: '4' <br>
+ * SubID: 4 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 3:
+ * Type name: '3' <br>
+ * SubID: 3 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 2:
+ * Type name: '2' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 1:
+ * Type name: '1' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * 0:
+ * Type name: '0' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
-@SuppressWarnings("MagicNumber")
+@SuppressWarnings("JavaDoc")
 public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
 {
     /**
@@ -33,10 +152,15 @@ public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
     public static final ReedsBlockMat REEDS_BLOCK_8  = new ReedsBlockMat(0x8);
     public static final ReedsBlockMat REEDS_BLOCK_9  = new ReedsBlockMat(0x9);
     public static final ReedsBlockMat REEDS_BLOCK_10 = new ReedsBlockMat(0xA);
+    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_11 = new ReedsBlockMat(0xB);
+    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_12 = new ReedsBlockMat(0xC);
+    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_13 = new ReedsBlockMat(0xD);
+    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_14 = new ReedsBlockMat(0xE);
+    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_15 = new ReedsBlockMat(0xF);
 
     private static final Map<String, ReedsBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

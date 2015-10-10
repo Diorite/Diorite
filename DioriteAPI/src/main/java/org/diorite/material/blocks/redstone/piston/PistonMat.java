@@ -9,8 +9,101 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Piston" and all its subtypes.
+ * Class representing 'Piston' block material in minecraft. <br>
+ * ID of block: 33 <br>
+ * String ID of block: minecraft:piston <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST_EXTENDED:
+ * Type name: 'East Extended' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * WEST_EXTENDED:
+ * Type name: 'West Extended' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * SOUTH_EXTENDED:
+ * Type name: 'South Extended' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * NORTH_EXTENDED:
+ * Type name: 'North Extended' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * UP_EXTENDED:
+ * Type name: 'Up Extended' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * DOWN_EXTENDED:
+ * Type name: 'Down Extended' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * UP:
+ * Type name: 'Up' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * DOWN:
+ * Type name: 'Down' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class PistonMat extends PistonBaseMat
 {
     /**

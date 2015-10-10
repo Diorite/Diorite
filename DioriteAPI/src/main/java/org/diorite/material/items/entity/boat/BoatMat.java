@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Boat' item material in minecraft. <br>
+ * ID of material: 333 <br>
+ * String ID of material: minecraft:boat <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class BoatMat extends AbstractBoatMat
 {
     /**
@@ -20,6 +26,7 @@ public class BoatMat extends AbstractBoatMat
     private static final Map<String, BoatMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BoatMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BoatMat()
     {
         super("BOAT", 333, "minecraft:boat", "BOAT", (short) 0x00);

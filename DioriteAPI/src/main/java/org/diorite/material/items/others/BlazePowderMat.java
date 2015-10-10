@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Blaze Powder' item material in minecraft. <br>
+ * ID of material: 377 <br>
+ * String ID of material: minecraft:blaze_powder <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class BlazePowderMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class BlazePowderMat extends ItemMaterialData
     private static final Map<String, BlazePowderMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BlazePowderMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BlazePowderMat()
     {
         super("BLAZE_POWDER", 377, "minecraft:blaze_powder", "BLAZE_POWDER", (short) 0x00);

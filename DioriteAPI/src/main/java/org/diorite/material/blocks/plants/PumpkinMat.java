@@ -10,8 +10,52 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Pumpkin" and all its subtypes.
+ * Class representing 'Pumpkin' block material in minecraft. <br>
+ * ID of block: 86 <br>
+ * String ID of block: minecraft:pumpkin <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * SELF:
+ * Type name: 'Self' <br>
+ * SubID: 4 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 3 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 2 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 1 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 0 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class PumpkinMat extends AbstractPumpkinMat
 {
     /**

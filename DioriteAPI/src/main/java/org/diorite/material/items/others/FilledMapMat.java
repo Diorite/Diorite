@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Filled Map' item material in minecraft. <br>
+ * ID of material: 358 <br>
+ * String ID of material: minecraft:filled_map <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class FilledMapMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class FilledMapMat extends ItemMaterialData
     private static final Map<String, FilledMapMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<FilledMapMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected FilledMapMat()
     {
         super("FILLED_MAP", 358, "minecraft:filled_map", "0", (short) 0x00);

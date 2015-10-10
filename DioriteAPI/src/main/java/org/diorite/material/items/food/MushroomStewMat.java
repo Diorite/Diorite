@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Mushroom Stew' item material in minecraft. <br>
+ * ID of material: 282 <br>
+ * String ID of material: minecraft:mushroom_stew <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class MushroomStewMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class MushroomStewMat extends EdibleItemMat
     private static final Map<String, MushroomStewMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<MushroomStewMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected MushroomStewMat()
     {
         super("MUSHROOM_STEW", 282, "minecraft:mushroom_stew", 1, "MUSHROOM_STEW", (short) 0x00, 6, 7.2F);

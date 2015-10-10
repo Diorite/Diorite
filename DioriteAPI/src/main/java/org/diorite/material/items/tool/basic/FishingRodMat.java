@@ -11,7 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+/**
+ * Class representing 'Fishing Rod' item material in minecraft. <br>
+ * ID of material: 346 <br>
+ * String ID of material: minecraft:fishing_rod <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class FishingRodMat extends BasicToolMat
 {
     /**

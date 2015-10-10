@@ -10,11 +10,116 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "FlowerPot" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Flower Pot Block' block material in minecraft. <br>
+ * ID of block: 140 <br>
+ * String ID of block: minecraft:flower_pot <br>
+ * This block can't be used in inventory, valid material for this block: 'Flower Pot' (minecraft:flower_pot(390):0) <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * LEGACY_DARK_OAK_SAPLING:
+ * Type name: 'Legacy Dark Oak Sapling' <br>
+ * SubID: 13 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_ACACIA_SAPLING:
+ * Type name: 'Legacy Acacia Sapling' <br>
+ * SubID: 12 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_FERN:
+ * Type name: 'Legacy Fern' <br>
+ * SubID: 11 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_DEAD_BUSH:
+ * Type name: 'Legacy Dead Bush' <br>
+ * SubID: 10 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_CACTUS:
+ * Type name: 'Legacy Cactus' <br>
+ * SubID: 9 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_BROWN_MUSHROOM:
+ * Type name: 'Legacy Brown Mushroom' <br>
+ * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_RED_MUSHROOM:
+ * Type name: 'Legacy Red Mushroom' <br>
+ * SubID: 7 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_JUNGLE_SAPLING:
+ * Type name: 'Legacy Jungle Sapling' <br>
+ * SubID: 6 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_BIRCH_SAPLING:
+ * Type name: 'Legacy Birch Sapling' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_SPRUCE_SAPLING:
+ * Type name: 'Legacy Spruce Sapling' <br>
+ * SubID: 4 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_OAK_SAPLING:
+ * Type name: 'Legacy Oak Sapling' <br>
+ * SubID: 3 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_DANDELION:
+ * Type name: 'Legacy Dandelion' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LEGACY_POPPY:
+ * Type name: 'Legacy Poppy' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EMPTY:
+ * Type name: 'Empty' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
-@SuppressWarnings({"MagicNumber", "deprecation"})
+@SuppressWarnings("JavaDoc")
 public class FlowerPotBlockMat extends BlockMaterialData
 {
     /**
@@ -43,10 +148,13 @@ public class FlowerPotBlockMat extends BlockMaterialData
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_CACTUS           = new FlowerPotBlockMat("LEGACY_CACTUS", 0x9);
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_DEAD_BUSH        = new FlowerPotBlockMat("LEGACY_DEAD_BUSH", 0xA);
+    @SuppressWarnings("MagicNumber")
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_FERN             = new FlowerPotBlockMat("LEGACY_FERN", 0xB);
+    @SuppressWarnings("MagicNumber")
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_ACACIA_SAPLING   = new FlowerPotBlockMat("LEGACY_ACACIA_SAPLING", 0xC);
+    @SuppressWarnings("MagicNumber")
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_DARK_OAK_SAPLING = new FlowerPotBlockMat("LEGACY_DARK_OAK_SAPLING", 0xD);
 

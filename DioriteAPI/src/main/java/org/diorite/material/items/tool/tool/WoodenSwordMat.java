@@ -11,7 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+/**
+ * Class representing 'Wooden Sword' item material in minecraft. <br>
+ * ID of material: 268 <br>
+ * String ID of material: minecraft:wooden_Sword <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class WoodenSwordMat extends SwordMat
 {
     /**

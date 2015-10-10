@@ -11,7 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+/**
+ * Class representing 'Golden Axe' item material in minecraft. <br>
+ * ID of material: 286 <br>
+ * String ID of material: minecraft:golden_Axe <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class GoldenAxeMat extends AxeMat
 {
     /**

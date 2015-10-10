@@ -9,8 +9,31 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "StonePressurePlate" and all its subtypes.
+ * Class representing 'Stone Pressure Plate' block material in minecraft. <br>
+ * ID of block: 70 <br>
+ * String ID of block: minecraft:stone_pressure_plate <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * POWERED:
+ * Type name: 'Powered' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * STONE_PRESSURE_PLATE:
+ * Type name: 'Stone Pressure Plate' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class StonePressurePlateMat extends PressurePlateMat
 {
     /**

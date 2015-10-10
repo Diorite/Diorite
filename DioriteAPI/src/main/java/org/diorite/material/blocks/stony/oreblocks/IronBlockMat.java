@@ -11,8 +11,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "IronBlock" and all its subtypes.
+ * Class representing 'Iron Block' block material in minecraft. <br>
+ * ID of block: 42 <br>
+ * String ID of block: minecraft:iron_block <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class IronBlockMat extends OreBlockMat
 {
     /**

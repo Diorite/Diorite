@@ -8,8 +8,31 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Sand" and all its subtypes.
+ * Class representing 'Sand' block material in minecraft. <br>
+ * ID of block: 12 <br>
+ * String ID of block: minecraft:sand <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * RED:
+ * Type name: 'Red' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * SAND:
+ * Type name: 'Sand' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class SandMat extends LooseMat
 {
     /**

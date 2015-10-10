@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Blaze Rod' item material in minecraft. <br>
+ * ID of material: 369 <br>
+ * String ID of material: minecraft:blaze_rod <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class BlazeRodMat extends ItemMaterialData implements FuelMat
 {
     /**
@@ -22,6 +28,7 @@ public class BlazeRodMat extends ItemMaterialData implements FuelMat
     private static final Map<String, BlazeRodMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BlazeRodMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BlazeRodMat()
     {
         super("BLAZE_ROD", 369, "minecraft:blaze_rod", "BLAZE_ROD", (short) 0x00);
@@ -49,6 +56,7 @@ public class BlazeRodMat extends ItemMaterialData implements FuelMat
         return getByEnumName(type);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public int getFuelPower()
     {

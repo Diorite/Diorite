@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Obsidian" and all its subtypes.
+ * Class representing 'Obsidian' block material in minecraft. <br>
+ * ID of block: 49 <br>
+ * String ID of block: minecraft:obsidian <br>
+ * Hardness: 50 <br>
+ * Blast Resistance 6000
  */
+@SuppressWarnings("JavaDoc")
 public class ObsidianMat extends StonyMat
 {
     /**

@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Apple' item material in minecraft. <br>
+ * ID of material: 260 <br>
+ * String ID of material: minecraft:apple <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class AppleMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class AppleMat extends EdibleItemMat
     private static final Map<String, AppleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<AppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected AppleMat()
     {
         super("APPLE", 260, "minecraft:apple", "APPLE", (short) 0x00, 4, 2.4F);

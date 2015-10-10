@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Bread' item material in minecraft. <br>
+ * ID of material: 297 <br>
+ * String ID of material: minecraft:bread <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class BreadMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class BreadMat extends EdibleItemMat
     private static final Map<String, BreadMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BreadMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BreadMat()
     {
         super("BREAD", 297, "minecraft:bread", "BREAD", (short) 0x00, 5, 6);

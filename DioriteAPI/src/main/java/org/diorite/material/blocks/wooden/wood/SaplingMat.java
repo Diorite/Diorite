@@ -14,8 +14,101 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Sapling" and all its subtypes.
+ * Class representing 'Sapling' block material in minecraft. <br>
+ * ID of block: 6 <br>
+ * String ID of block: minecraft:sapling <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DARK_OAK_OLDER:
+ * Type name: 'Dark Oak Older' <br>
+ * SubID: 13 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * ACACIA_OLDER:
+ * Type name: 'Acacia Older' <br>
+ * SubID: 12 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * JUNGLE_OLDER:
+ * Type name: 'Jungle Older' <br>
+ * SubID: 11 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * BIRCH_OLDER:
+ * Type name: 'Birch Older' <br>
+ * SubID: 10 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SPRUCE_OLDER:
+ * Type name: 'Spruce Older' <br>
+ * SubID: 9 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * OAK_OLDER:
+ * Type name: 'Oak Older' <br>
+ * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * DARK_OAK:
+ * Type name: 'Dark Oak' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * ACACIA:
+ * Type name: 'Acacia' <br>
+ * SubID: 4 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * JUNGLE:
+ * Type name: 'Jungle' <br>
+ * SubID: 3 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * BIRCH:
+ * Type name: 'Birch' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SPRUCE:
+ * Type name: 'Spruce' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * OAK:
+ * Type name: 'Oak' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class SaplingMat extends WoodMat implements FuelMat
 {
     /**

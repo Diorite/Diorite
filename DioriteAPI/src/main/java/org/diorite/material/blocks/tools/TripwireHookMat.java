@@ -16,8 +16,129 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "TripwireHook" and all its subtypes.
+ * Class representing 'Tripwire Hook' block material in minecraft. <br>
+ * ID of block: 131 <br>
+ * String ID of block: minecraft:tripwire_hook <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST_READY_POWERED:
+ * Type name: 'East Ready Powered' <br>
+ * SubID: 15 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_READY_POWERED:
+ * Type name: 'North Ready Powered' <br>
+ * SubID: 14 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST_READY_POWERED:
+ * Type name: 'West Ready Powered' <br>
+ * SubID: 13 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_READY_POWERED:
+ * Type name: 'South Ready Powered' <br>
+ * SubID: 12 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST_POWERED:
+ * Type name: 'East Powered' <br>
+ * SubID: 11 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_POWERED:
+ * Type name: 'North Powered' <br>
+ * SubID: 10 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST_POWERED:
+ * Type name: 'West Powered' <br>
+ * SubID: 9 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_POWERED:
+ * Type name: 'South Powered' <br>
+ * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST_READY:
+ * Type name: 'East Ready' <br>
+ * SubID: 7 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_READY:
+ * Type name: 'North Ready' <br>
+ * SubID: 6 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST_READY:
+ * Type name: 'West Ready' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_READY:
+ * Type name: 'South Ready' <br>
+ * SubID: 4 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 3 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class TripwireHookMat extends BlockMaterialData implements PowerableMat, AttachableMat
 {
     /**

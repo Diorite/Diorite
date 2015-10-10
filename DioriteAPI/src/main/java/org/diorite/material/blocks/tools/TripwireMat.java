@@ -14,10 +14,130 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Tripwire" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Tripwire' block material in minecraft. <br>
+ * ID of block: 132 <br>
+ * String ID of block: minecraft:tripwire <br>
+ * This block can't be used in inventory, valid material for this block: 'String' (minecraft:string(287):0) <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * POWERED___:
+ * Type name: 'Powered   ' <br>
+ * SubID: 15 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * IN_AIR__:
+ * Type name: 'In Air  ' <br>
+ * SubID: 14 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * POWERED__:
+ * Type name: 'Powered  ' <br>
+ * SubID: 13 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * VALID_:
+ * Type name: 'Valid ' <br>
+ * SubID: 12 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * POWERED__:
+ * Type name: 'Powered  ' <br>
+ * SubID: 11 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * IN_AIR_:
+ * Type name: 'In Air ' <br>
+ * SubID: 10 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * POWERED_:
+ * Type name: 'Powered ' <br>
+ * SubID: 9 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * DISARMED:
+ * Type name: 'Disarmed' <br>
+ * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * POWERED__:
+ * Type name: 'Powered  ' <br>
+ * SubID: 7 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * IN_AIR_:
+ * Type name: 'In Air ' <br>
+ * SubID: 6 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * POWERED_:
+ * Type name: 'Powered ' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * VALID:
+ * Type name: 'Valid' <br>
+ * SubID: 4 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * POWERED_:
+ * Type name: 'Powered ' <br>
+ * SubID: 3 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * IN_AIR:
+ * Type name: 'In Air' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * POWERED:
+ * Type name: 'Powered' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * RAW:
+ * Type name: 'Raw' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class TripwireMat extends BlockMaterialData implements PowerableMat
 {
     /**

@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "MobSpawner" and all its subtypes.
+ * Class representing 'Mob Spawner' block material in minecraft. <br>
+ * ID of block: 52 <br>
+ * String ID of block: minecraft:mob_spawner <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 25
  */
+@SuppressWarnings("JavaDoc")
 public class MobSpawnerMat extends BlockMaterialData
 {
     /**

@@ -11,7 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+/**
+ * Class representing 'Wooden Shovel' item material in minecraft. <br>
+ * ID of material: 269 <br>
+ * String ID of material: minecraft:wooden_Shovel <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class WoodenShovelMat extends ShovelMat
 {
     /**

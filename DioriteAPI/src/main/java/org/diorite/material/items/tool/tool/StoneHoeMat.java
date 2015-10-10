@@ -11,7 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+/**
+ * Class representing 'Stone Hoe' item material in minecraft. <br>
+ * ID of material: 291 <br>
+ * String ID of material: minecraft:stone_Hoe <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class StoneHoeMat extends HoeMat
 {
     /**

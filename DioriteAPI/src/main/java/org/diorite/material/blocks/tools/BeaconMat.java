@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Beacon" and all its subtypes.
+ * Class representing 'Beacon' block material in minecraft. <br>
+ * ID of block: 138 <br>
+ * String ID of block: minecraft:beacon <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class BeaconMat extends BlockMaterialData
 {
     /**

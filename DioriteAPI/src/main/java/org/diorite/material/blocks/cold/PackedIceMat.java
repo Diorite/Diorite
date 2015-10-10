@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "PackedIce" and all its subtypes.
+ * Class representing 'Packed Ice' block material in minecraft. <br>
+ * ID of block: 174 <br>
+ * String ID of block: minecraft:packet_ice <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5
  */
+@SuppressWarnings("JavaDoc")
 public class PackedIceMat extends BlockMaterialData
 {
     /**

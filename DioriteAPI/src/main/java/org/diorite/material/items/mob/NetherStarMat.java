@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Nether Star' item material in minecraft. <br>
+ * ID of material: 399 <br>
+ * String ID of material: minecraft:nether_star <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class NetherStarMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class NetherStarMat extends ItemMaterialData
     private static final Map<String, NetherStarMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<NetherStarMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected NetherStarMat()
     {
         super("NETHER_STAR", 399, "minecraft:nether_star", "NETHER_STAR", (short) 0x00);

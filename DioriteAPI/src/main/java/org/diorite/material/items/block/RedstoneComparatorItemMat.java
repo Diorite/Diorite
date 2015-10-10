@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Redstone Comparator Item' item material in minecraft. <br>
+ * ID of material: 404 <br>
+ * String ID of material: minecraft:comparator <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class RedstoneComparatorItemMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class RedstoneComparatorItemMat extends ItemMaterialData implements Place
     private static final Map<String, RedstoneComparatorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RedstoneComparatorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected RedstoneComparatorItemMat()
     {
         super("REDSTONE_COMPARATOR_ITEM", 404, "minecraft:comparator", "REDSTONE_COMPARATOR_ITEM", (short) 0x00);

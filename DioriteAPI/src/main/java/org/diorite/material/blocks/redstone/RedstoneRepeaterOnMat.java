@@ -10,10 +10,130 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "RedstoneRepeaterOn" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Redstone Repeater On' block material in minecraft. <br>
+ * ID of block: 94 <br>
+ * String ID of block: minecraft:powered_repeater <br>
+ * This block can't be used in inventory, valid material for this block: 'Redstone Repeater Item' (minecraft:repeater(356):0) <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * WEST_4:
+ * Type name: 'West 4' <br>
+ * SubID: 15 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_4:
+ * Type name: 'South 4' <br>
+ * SubID: 14 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST_4:
+ * Type name: 'East 4' <br>
+ * SubID: 13 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_4:
+ * Type name: 'North 4' <br>
+ * SubID: 12 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST_3:
+ * Type name: 'West 3' <br>
+ * SubID: 11 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_3:
+ * Type name: 'South 3' <br>
+ * SubID: 10 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST_3:
+ * Type name: 'East 3' <br>
+ * SubID: 9 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_3:
+ * Type name: 'North 3' <br>
+ * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST_2:
+ * Type name: 'West 2' <br>
+ * SubID: 7 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_2:
+ * Type name: 'South 2' <br>
+ * SubID: 6 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST_2:
+ * Type name: 'East 2' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_2:
+ * Type name: 'North 2' <br>
+ * SubID: 4 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST_1:
+ * Type name: 'West 1' <br>
+ * SubID: 3 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_1:
+ * Type name: 'South 1' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST_1:
+ * Type name: 'East 1' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_1:
+ * Type name: 'North 1' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
 {
     /**

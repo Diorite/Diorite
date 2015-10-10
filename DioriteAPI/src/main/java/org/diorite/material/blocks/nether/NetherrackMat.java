@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Netherrack" and all its subtypes.
+ * Class representing 'Netherrack' block material in minecraft. <br>
+ * ID of block: 87 <br>
+ * String ID of block: minecraft:netherrack <br>
+ * Hardness: 0,4 <br>
+ * Blast Resistance 2
  */
+@SuppressWarnings("JavaDoc")
 public class NetherrackMat extends BlockMaterialData
 {
     /**

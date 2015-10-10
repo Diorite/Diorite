@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Iron Door Item' item material in minecraft. <br>
+ * ID of material: 330 <br>
+ * String ID of material: minecraft:iron_door <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class IronDoorItemMat extends DoorItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class IronDoorItemMat extends DoorItemMat
     private static final Map<String, IronDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<IronDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected IronDoorItemMat()
     {
         super("IRON_DOOR_ITEM", 330, "minecraft:iron_door", "IRON_DOOR_ITEM", (short) 0x00);

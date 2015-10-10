@@ -12,8 +12,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "CoalBlock" and all its subtypes.
+ * Class representing 'Coal Block' block material in minecraft. <br>
+ * ID of block: 173 <br>
+ * String ID of block: minecraft:coal_block <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class CoalBlockMat extends OreBlockMat implements FuelMat
 {
     /**

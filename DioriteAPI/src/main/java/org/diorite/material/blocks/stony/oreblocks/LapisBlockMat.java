@@ -12,8 +12,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "LapisBlock" and all its subtypes.
+ * Class representing 'Lapis Block' block material in minecraft. <br>
+ * ID of block: 22 <br>
+ * String ID of block: minecraft:lapis_block <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class LapisBlockMat extends OreBlockMat
 {
     /**

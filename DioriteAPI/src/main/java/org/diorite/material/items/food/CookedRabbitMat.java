@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Cooked Rabbit' item material in minecraft. <br>
+ * ID of material: 412 <br>
+ * String ID of material: minecraft:cooked_rabbit <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class CookedRabbitMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class CookedRabbitMat extends EdibleItemMat
     private static final Map<String, CookedRabbitMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<CookedRabbitMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected CookedRabbitMat()
     {
         super("COOKED_RABBIT", 412, "minecraft:cooked_rabbit", "COOKED_RABBIT", (short) 0x00, 5, 6);

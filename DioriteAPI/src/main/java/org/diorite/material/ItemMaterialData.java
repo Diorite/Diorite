@@ -3,6 +3,10 @@ package org.diorite.material;
 import org.diorite.material.items.food.EdibleItemMat;
 import org.diorite.material.items.tool.ToolMat;
 
+/**
+ * Abstract class for all items.
+ */
+@SuppressWarnings("JavaDoc")
 public abstract class ItemMaterialData extends Material
 {
     protected ItemMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final short type)

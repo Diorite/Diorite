@@ -3,6 +3,10 @@ package org.diorite.material.items.entity.boat;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableEntityMat;
 
+/**
+ * Abstract class for all boat-based items.
+ */
+@SuppressWarnings("JavaDoc")
 public abstract class AbstractBoatMat extends ItemMaterialData implements PlaceableEntityMat
 {
     protected AbstractBoatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)

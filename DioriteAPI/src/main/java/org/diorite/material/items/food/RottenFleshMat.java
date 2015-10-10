@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Rotten Flesh' item material in minecraft. <br>
+ * ID of material: 367 <br>
+ * String ID of material: minecraft:rotten_flesh <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class RottenFleshMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class RottenFleshMat extends EdibleItemMat
     private static final Map<String, RottenFleshMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RottenFleshMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected RottenFleshMat()
     {
         super("ROTTEN_FLESH", 367, "minecraft:rotten_flesh", "ROTTEN_FLESH", (short) 0x00, 4, 0.8F);

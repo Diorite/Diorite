@@ -11,6 +11,9 @@ import org.diorite.material.FuelMat;
  */
 public abstract class MushroomBlockMat extends BlockMaterialData implements FuelMat
 {
+    /**
+     * Type of mushroom block.
+     */
     protected final Type mushroomType;
 
     protected MushroomBlockMat(final String enumName, final int id, final String minecraftId, final Type mushroomType, final float hardness, final float blastResistance)

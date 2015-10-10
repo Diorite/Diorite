@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Ender Pearl' item material in minecraft. <br>
+ * ID of material: 368 <br>
+ * String ID of material: minecraft:ender_pearl <br>
+ * Max item stack size: 16
+ */
+@SuppressWarnings("JavaDoc")
 public class EnderPearlMat extends ItemMaterialData implements PlaceableEntityMat
 {
     /**
@@ -22,6 +28,7 @@ public class EnderPearlMat extends ItemMaterialData implements PlaceableEntityMa
     private static final Map<String, EnderPearlMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<EnderPearlMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected EnderPearlMat()
     {
         super("ENDER_PEARL", 368, "minecraft:ender_pearl", 16, "ENDER_PEARL", (short) 0x00);

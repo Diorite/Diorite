@@ -9,8 +9,38 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Prismarine" and all its subtypes.
+ * Class representing 'Prismarine' block material in minecraft. <br>
+ * ID of block: 168 <br>
+ * String ID of block: minecraft:prismarine <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DARK:
+ * Type name: 'Dark' <br>
+ * SubID: 2 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * BRICKS:
+ * Type name: 'Bricks' <br>
+ * SubID: 1 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * PRISMARINE:
+ * Type name: 'Prismarine' <br>
+ * SubID: 0 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class PrismarineMat extends BlockMaterialData
 {
     /**

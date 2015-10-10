@@ -5,6 +5,7 @@ import org.diorite.material.blocks.AgeableBlockMat;
 /**
  * Base abstract class for crops-based blocks
  */
+@SuppressWarnings("JavaDoc")
 public abstract class CropsMat extends PlantMat implements AgeableBlockMat
 {
     protected CropsMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final float hardness, final float blastResistance)

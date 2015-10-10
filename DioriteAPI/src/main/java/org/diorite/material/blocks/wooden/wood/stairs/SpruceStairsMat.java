@@ -12,8 +12,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "SpruceStairs" and all its subtypes.
+ * Class representing 'Spruce Stairs' block material in minecraft. <br>
+ * ID of block: 134 <br>
+ * String ID of block: minecraft:spruce_stairs <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class SpruceStairsMat extends WoodenStairsMat
 {
     /**

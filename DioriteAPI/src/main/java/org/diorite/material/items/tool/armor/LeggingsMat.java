@@ -4,6 +4,9 @@ import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
 import org.diorite.material.items.tool.ArmorMat;
 
+/**
+ * Abstract class for all leggings-based armors.
+ */
 public abstract class LeggingsMat extends ArmorMat
 {
     protected LeggingsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial)

@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Sign' item material in minecraft. <br>
+ * ID of material: 323 <br>
+ * String ID of material: minecraft:sign <br>
+ * Max item stack size: 16
+ */
+@SuppressWarnings("JavaDoc")
 public class SignMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class SignMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, SignMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<SignMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected SignMat()
     {
         super("SIGN", 323, "minecraft:sign", 16, "SIGN", (short) 0x00);

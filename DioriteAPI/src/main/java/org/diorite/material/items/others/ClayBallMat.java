@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Clay Ball' item material in minecraft. <br>
+ * ID of material: 337 <br>
+ * String ID of material: minecraft:clay_ball <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class ClayBallMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class ClayBallMat extends ItemMaterialData
     private static final Map<String, ClayBallMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<ClayBallMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected ClayBallMat()
     {
         super("CLAY_BALL", 337, "minecraft:clay_ball", "CLAY_BALL", (short) 0x00);

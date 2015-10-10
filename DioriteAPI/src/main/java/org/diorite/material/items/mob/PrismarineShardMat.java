@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Prismarine Shard' item material in minecraft. <br>
+ * ID of material: 409 <br>
+ * String ID of material: minecraft:prismarine_shard <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class PrismarineShardMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class PrismarineShardMat extends ItemMaterialData
     private static final Map<String, PrismarineShardMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<PrismarineShardMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected PrismarineShardMat()
     {
         super("PRISMARINE_SHARD", 409, "minecraft:prismarine_shard", "PRISMARINE_SHARD", (short) 0x00);

@@ -11,12 +11,132 @@ import org.diorite.utils.math.ByteRange;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
 /**
- * Class representing block "RedstoneWire" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
- */ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowerElementMat
+ * Class representing 'Redstone Wire' block material in minecraft. <br>
+ * ID of block: 55 <br>
+ * String ID of block: minecraft:redstone_wire <br>
+ * This block can't be used in inventory, valid material for this block: 'Redstone' (minecraft:redstone(331):0) <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol> 
+ * <li>
+ *     ON_15:
+ *     Type name: 'On 15' <br>
+ *     SubID: 15 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_14:
+ *     Type name: 'On 14' <br>
+ *     SubID: 14 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_13:
+ *     Type name: 'On 13' <br>
+ *     SubID: 13 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_12:
+ *     Type name: 'On 12' <br>
+ *     SubID: 12 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_11:
+ *     Type name: 'On 11' <br>
+ *     SubID: 11 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_10:
+ *     Type name: 'On 10' <br>
+ *     SubID: 10 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_9:
+ *     Type name: 'On 9' <br>
+ *     SubID: 9 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_8:
+ *     Type name: 'On 8' <br>
+ *     SubID: 8 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_7:
+ *     Type name: 'On 7' <br>
+ *     SubID: 7 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_6:
+ *     Type name: 'On 6' <br>
+ *     SubID: 6 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_5:
+ *     Type name: 'On 5' <br>
+ *     SubID: 5 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_4:
+ *     Type name: 'On 4' <br>
+ *     SubID: 4 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_3:
+ *     Type name: 'On 3' <br>
+ *     SubID: 3 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_2:
+ *     Type name: 'On 2' <br>
+ *     SubID: 2 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     ON_1:
+ *     Type name: 'On 1' <br>
+ *     SubID: 1 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ *     OFF:
+ *     Type name: 'Off' <br>
+ *     SubID: 0 <br>
+ *     Hardness: 0 <br>
+ *     Blast Resistance 0 <br>
+ * </li>
+ * </ol>
+ */
+@SuppressWarnings({"JavaDoc", "MagicNumber"})
+public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowerElementMat
 {
     /**
      * Range of valid power strength, from 0 to 15
@@ -47,7 +167,6 @@ import gnu.trove.map.hash.TByteObjectHashMap;
     private static final Map<String, RedstoneWireMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneWireMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
-    @SuppressWarnings("MagicNumber")
     protected RedstoneWireMat()
     {
         super("REDSTONE_WIRE", 55, "minecraft:redstone_wire", "OFF", (byte) 0x00, 0, 0);

@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Bed' item material in minecraft. <br>
+ * ID of material: 355 <br>
+ * String ID of material: minecraft:bed <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class BedMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class BedMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, BedMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BedMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BedMat()
     {
         super("BED", 355, "minecraft:bed", 1, "BED", (short) 0x00);

@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "SoulSand" and all its subtypes.
+ * Class representing 'Soul Sand' block material in minecraft. <br>
+ * ID of block: 88 <br>
+ * String ID of block: minecraft:soul_sand <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5
  */
+@SuppressWarnings("JavaDoc")
 public class SoulSandMat extends BlockMaterialData
 {
     /**

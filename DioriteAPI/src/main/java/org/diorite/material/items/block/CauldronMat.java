@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Cauldron' item material in minecraft. <br>
+ * ID of material: 380 <br>
+ * String ID of material: minecraft:cauldron <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class CauldronMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class CauldronMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, CauldronMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<CauldronMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected CauldronMat()
     {
         super("CAULDRON", 380, "minecraft:cauldron", "CAULDRON", (short) 0x00);

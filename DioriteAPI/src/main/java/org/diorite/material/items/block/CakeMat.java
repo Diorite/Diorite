@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Cake' item material in minecraft. <br>
+ * ID of material: 354 <br>
+ * String ID of material: minecraft:cake <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class CakeMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class CakeMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, CakeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<CakeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected CakeMat()
     {
         super("CAKE", 354, "minecraft:cake", 1, "CAKE", (short) 0x00);

@@ -4,6 +4,7 @@ import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
 import org.diorite.material.items.tool.ArmorMat;
 
+@SuppressWarnings("JavaDoc")
 public abstract class BootsMat extends ArmorMat
 {
     protected BootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial)

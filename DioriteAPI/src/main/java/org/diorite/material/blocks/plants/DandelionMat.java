@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Dandelion" and all its subtypes.
+ * Class representing 'Dandelion' block material in minecraft. <br>
+ * ID of block: 37 <br>
+ * String ID of block: minecraft:yellow_flower <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0
  */
+@SuppressWarnings("JavaDoc")
 public class DandelionMat extends FlowerMat
 {
     /**

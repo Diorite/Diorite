@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DeadBush" and all its subtypes.
+ * Class representing 'Dead Bush' block material in minecraft. <br>
+ * ID of block: 32 <br>
+ * String ID of block: minecraft:deadbush <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0
  */
+@SuppressWarnings("JavaDoc")
 public class DeadBushMat extends FlowerMat
 {
     /**

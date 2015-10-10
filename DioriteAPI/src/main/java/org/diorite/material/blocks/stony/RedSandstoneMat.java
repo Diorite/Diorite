@@ -14,8 +14,38 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "RedSandstone" and all its subtypes.
+ * Class representing 'Red Sandstone' block material in minecraft. <br>
+ * ID of block: 179 <br>
+ * String ID of block: minecraft:red_sandstone <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * SMOOTH:
+ * Type name: 'Smooth' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * </li>
+ * <li>
+ * CHISELED:
+ * Type name: 'Chiseled' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * </li>
+ * <li>
+ * CLASSIC:
+ * Type name: 'Classic' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
 {
     /**

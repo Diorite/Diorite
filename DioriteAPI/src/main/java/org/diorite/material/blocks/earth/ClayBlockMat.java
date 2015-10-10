@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "ClayBlock" and all its subtypes.
+ * Class representing 'Clay Block' block material in minecraft. <br>
+ * ID of block: 82 <br>
+ * String ID of block: minecraft:clay <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3
  */
+@SuppressWarnings("JavaDoc")
 public class ClayBlockMat extends EarthMat
 {
     /**

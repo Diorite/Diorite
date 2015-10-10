@@ -42,7 +42,7 @@ public class ToolMaterial extends ASimpleEnum<ToolMaterial>
             properties.put(ToolType.SHOVEL, new ToolData(STONE, ToolType.SHOVEL, 3.5, 1.0 /*-4.0*/));
             properties.put(ToolType.AXE, new ToolData(STONE, ToolType.AXE, 9, 0.8 /*-4.0*/));
             properties.put(ToolType.HOE, new ToolData(STONE, ToolType.HOE, 1, 2.0 /*-4.0*/));
-            properties.put(ToolType.SWORD, new ToolData(STONE, ToolType.SWORD, 5,1.6 /*-4.0*/));
+            properties.put(ToolType.SWORD, new ToolData(STONE, ToolType.SWORD, 5, 1.6 /*-4.0*/));
         }
         {
             final SimpleEnumMap<ToolType, ToolData> properties = new SimpleEnumMap<>(4);
@@ -139,6 +139,18 @@ public class ToolMaterial extends ASimpleEnum<ToolMaterial>
     public int getEnchantability()
     {
         return this.enchantability;
+    }
+
+    /**
+     * Returns properties of tool for given tool element type.
+     *
+     * @param toolType type of tool element.
+     *
+     * @return properties of tool.
+     */
+    public ToolData getProperties(final ToolType toolType)
+    {
+        return this.properties.get(toolType);
     }
 
     /**

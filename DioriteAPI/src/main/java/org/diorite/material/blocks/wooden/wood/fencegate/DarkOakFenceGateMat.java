@@ -12,8 +12,73 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DarkOakFenceGate" and all its subtypes.
+ * Class representing 'Dark Oak Fence Gate' block material in minecraft. <br>
+ * ID of block: 186 <br>
+ * String ID of block: minecraft:fark_oak_fence_gate <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST_OPEN:
+ * Type name: 'East Open' <br>
+ * SubID: 7 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH_OPEN:
+ * Type name: 'North Open' <br>
+ * SubID: 6 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_OPEN:
+ * Type name: 'West Open' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_OPEN:
+ * Type name: 'South Open' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class DarkOakFenceGateMat extends WoodenFenceGateMat
 {
     /**

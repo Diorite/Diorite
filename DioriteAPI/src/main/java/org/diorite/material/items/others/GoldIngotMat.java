@@ -10,7 +10,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Gold Ingot' item material in minecraft. <br>
+ * ID of material: 266 <br>
+ * String ID of material: minecraft:gold_ingot <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class GoldIngotMat extends OreItemMatExt
 {
     /**
@@ -23,6 +29,7 @@ public class GoldIngotMat extends OreItemMatExt
     private static final Map<String, GoldIngotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<GoldIngotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected GoldIngotMat()
     {
         super("GOLD_INGOT", 266, "minecraft:gold_ingot", "GOLD_INGOT", (short) 0x00, GOLD_ORE, GOLD_BLOCK);

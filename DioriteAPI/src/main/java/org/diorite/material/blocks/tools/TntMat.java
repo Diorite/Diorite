@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Tnt" and all its subtypes.
+ * Class representing 'Tnt' block material in minecraft. <br>
+ * ID of block: 46 <br>
+ * String ID of block: minecraft:tnt <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0
  */
+@SuppressWarnings("JavaDoc")
 public class TntMat extends BlockMaterialData
 {
     /**

@@ -9,13 +9,29 @@ import gnu.trove.map.TIntObjectMap;
 /**
  * Represent material of armor.
  */
-@SuppressWarnings({"ClassHasNoToStringMethod", "MagicNumber"})
+@SuppressWarnings({"ClassHasNoToStringMethod", "MagicNumber", "JavaDoc"})
 public class ArmorMaterial extends ASimpleEnum<ArmorMaterial>
 {
+    /**
+     * Armor made from {@link Material#LEATHER}
+     */
     public static final ArmorMaterial LEATHER;
+    /**
+     * Armor made from {@link Material#IRON_INGOT}
+     */
     public static final ArmorMaterial IRON;
+    /**
+     * Armor made from {@link Material#FIRE} <br>
+     * Can't be crafted.
+     */
     public static final ArmorMaterial CHAINMAIL; // can't be crafted :<
+    /**
+     * Armor made from {@link Material#GOLD_INGOT}
+     */
     public static final ArmorMaterial GOLD;
+    /**
+     * Armor made from {@link Material#DIAMOND}
+     */
     public static final ArmorMaterial DIAMOND;
 
     static
@@ -68,8 +84,17 @@ public class ArmorMaterial extends ASimpleEnum<ArmorMaterial>
         }
     }
 
+    /**
+     * Basic material used in this armor material.
+     */
     protected final Material                            material;
+    /**
+     * Enchantability level, used when enchanting.
+     */
     protected final int                                 enchantability;
+    /**
+     * Properties for each {@link ArmorType}.
+     */
     protected final SimpleEnumMap<ArmorType, ArmorData> properties;
 
     protected ArmorMaterial(final String enumName, final int enumId, final Material material, final int enchantability, final SimpleEnumMap<ArmorType, ArmorData> properties)

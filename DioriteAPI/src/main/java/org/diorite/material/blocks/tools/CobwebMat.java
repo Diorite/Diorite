@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Cobweb" and all its subtypes.
+ * Class representing 'Cobweb' block material in minecraft. <br>
+ * ID of block: 30 <br>
+ * String ID of block: minecraft:web <br>
+ * Hardness: 4 <br>
+ * Blast Resistance 20
  */
+@SuppressWarnings("JavaDoc")
 public class CobwebMat extends BlockMaterialData
 {
     /**

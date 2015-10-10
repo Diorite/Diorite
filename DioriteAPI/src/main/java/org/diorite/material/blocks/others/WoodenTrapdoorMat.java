@@ -10,8 +10,129 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "WoodenTrapdoor" and all its subtypes.
+ * Class representing 'Wooden Trapdoor' block material in minecraft. <br>
+ * ID of block: 96 <br>
+ * String ID of block: minecraft:trapdoor <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * NORTH_TOP_OPEN:
+ * Type name: 'North Top Open' <br>
+ * SubID: 15 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_TOP_OPEN:
+ * Type name: 'East Top Open' <br>
+ * SubID: 14 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_TOP_OPEN:
+ * Type name: 'South Top Open' <br>
+ * SubID: 13 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_TOP_OPEN:
+ * Type name: 'West Top Open' <br>
+ * SubID: 12 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH_TOP:
+ * Type name: 'North Top' <br>
+ * SubID: 11 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_TOP:
+ * Type name: 'East Top' <br>
+ * SubID: 10 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_TOP:
+ * Type name: 'South Top' <br>
+ * SubID: 9 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_TOP:
+ * Type name: 'West Top' <br>
+ * SubID: 8 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH_BOTTOM_OPEN:
+ * Type name: 'North Bottom Open' <br>
+ * SubID: 7 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_BOTTOM_OPEN:
+ * Type name: 'East Bottom Open' <br>
+ * SubID: 6 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_BOTTOM_OPEN:
+ * Type name: 'South Bottom Open' <br>
+ * SubID: 5 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_BOTTOM_OPEN:
+ * Type name: 'West Bottom Open' <br>
+ * SubID: 4 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH_BOTTOM:
+ * Type name: 'North Bottom' <br>
+ * SubID: 3 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_BOTTOM:
+ * Type name: 'East Bottom' <br>
+ * SubID: 2 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_BOTTOM:
+ * Type name: 'South Bottom' <br>
+ * SubID: 1 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_BOTTOM:
+ * Type name: 'West Bottom' <br>
+ * SubID: 0 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class WoodenTrapdoorMat extends TrapdoorMat implements FuelMat
 {
     /**

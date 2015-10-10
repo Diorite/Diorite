@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Magma Cream' item material in minecraft. <br>
+ * ID of material: 378 <br>
+ * String ID of material: minecraft:magma_cream <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class MagmaCreamMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class MagmaCreamMat extends ItemMaterialData
     private static final Map<String, MagmaCreamMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<MagmaCreamMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected MagmaCreamMat()
     {
         super("MAGMA_CREAM", 378, "minecraft:magma_cream", "MAGMA_CREAM", (short) 0x00);

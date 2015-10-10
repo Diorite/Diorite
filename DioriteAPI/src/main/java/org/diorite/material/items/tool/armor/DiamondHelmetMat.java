@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents diamond helmet.
+ * Class representing 'Diamond Helmet' item material in minecraft. <br>
+ * ID of material: 310 <br>
+ * String ID of material: minecraft:diamond_helmet <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class DiamondHelmetMat extends HelmetMat
 {
     /**

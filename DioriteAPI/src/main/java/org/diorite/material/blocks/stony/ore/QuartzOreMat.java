@@ -11,8 +11,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "QuartzOre" and all its subtypes.
+ * Class representing 'Quartz Ore' block material in minecraft. <br>
+ * ID of block: 153 <br>
+ * String ID of block: minecraft:quartz_ore <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class QuartzOreMat extends OreMat
 {
     /**

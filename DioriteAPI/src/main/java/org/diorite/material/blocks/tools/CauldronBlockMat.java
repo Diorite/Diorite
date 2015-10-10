@@ -14,10 +14,46 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Cauldron" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Cauldron Block' block material in minecraft. <br>
+ * ID of block: 118 <br>
+ * String ID of block: minecraft:cauldron <br>
+ * This block can't be used in inventory, valid material for this block: 'Cauldron' (minecraft:cauldron(380):0) <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * FULL:
+ * Type name: 'Full' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * 2:
+ * Type name: '2' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * 1:
+ * Type name: '1' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * EMPTY:
+ * Type name: 'Empty' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class CauldronBlockMat extends BlockMaterialData
 {
     /**

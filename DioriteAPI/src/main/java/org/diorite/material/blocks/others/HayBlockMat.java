@@ -16,8 +16,38 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "HayBlock" and all its subtypes.
+ * Class representing 'Hay Block' block material in minecraft. <br>
+ * ID of block: 170 <br>
+ * String ID of block: minecraft:hay_block <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * NORTH_SOUTH:
+ * Type name: 'North South' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * EAST_WEST:
+ * Type name: 'East West' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * UP_DOWN:
+ * Type name: 'Up Down' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class HayBlockMat extends BlockMaterialData implements RotatableMat
 {
     /**

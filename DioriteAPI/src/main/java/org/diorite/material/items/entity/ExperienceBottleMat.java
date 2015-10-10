@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Experience Bottle' item material in minecraft. <br>
+ * ID of material: 384 <br>
+ * String ID of material: minecraft:experience_bottle <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class ExperienceBottleMat extends ItemMaterialData implements PlaceableEntityMat
 {
     /**
@@ -22,6 +28,7 @@ public class ExperienceBottleMat extends ItemMaterialData implements PlaceableEn
     private static final Map<String, ExperienceBottleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<ExperienceBottleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected ExperienceBottleMat()
     {
         super("EXPERIENCE_BOTTLE", 384, "minecraft:experience_bottle", "EXPERIENCE_BOTTLE", (short) 0x00);

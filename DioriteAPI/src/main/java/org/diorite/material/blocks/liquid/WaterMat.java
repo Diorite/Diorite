@@ -10,7 +10,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Water" and all its subtypes.
- * <p>
+ * <br>
  * NOTE: Will crash game when in inventory.
  */
 public class WaterMat extends LiquidMat

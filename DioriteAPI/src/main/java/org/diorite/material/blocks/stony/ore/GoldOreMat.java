@@ -11,8 +11,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "GoldOre" and all its subtypes.
+ * Class representing 'Gold Ore' block material in minecraft. <br>
+ * ID of block: 14 <br>
+ * String ID of block: minecraft:gold_ore <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class GoldOreMat extends OreMat
 {
     /**

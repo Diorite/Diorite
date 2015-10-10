@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DragonEgg" and all its subtypes.
+ * Class representing 'Dragon Egg' block material in minecraft. <br>
+ * ID of block: 122 <br>
+ * String ID of block: minecraft:dragon_egg <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 45
  */
+@SuppressWarnings("JavaDoc")
 public class DragonEggMat extends BlockMaterialData
 {
     /**

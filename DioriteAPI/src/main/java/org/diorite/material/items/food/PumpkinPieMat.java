@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Pumpkin Pie' item material in minecraft. <br>
+ * ID of material: 400 <br>
+ * String ID of material: minecraft:pumpkin_pie <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class PumpkinPieMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class PumpkinPieMat extends EdibleItemMat
     private static final Map<String, PumpkinPieMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<PumpkinPieMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected PumpkinPieMat()
     {
         super("PUMPKIN_PIE", 400, "minecraft:pumpkin_pie", "PUMPKIN_PIE", (short) 0x00, 8, 4.8F);

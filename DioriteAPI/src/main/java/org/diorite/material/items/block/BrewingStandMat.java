@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Brewing Stand' item material in minecraft. <br>
+ * ID of material: 379 <br>
+ * String ID of material: minecraft:brewing_stand <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class BrewingStandMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class BrewingStandMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, BrewingStandMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BrewingStandMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BrewingStandMat()
     {
         super("BREWING_STAND", 379, "minecraft:brewing_stand", "BREWING_STAND", (short) 0x00);

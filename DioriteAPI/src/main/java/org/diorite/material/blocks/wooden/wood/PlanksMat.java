@@ -10,8 +10,59 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Planks" and all its subtypes.
+ * Class representing 'Planks' block material in minecraft. <br>
+ * ID of block: 5 <br>
+ * String ID of block: minecraft:planks <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DARK_OAK:
+ * Type name: 'Dark Oak' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * ACACIA:
+ * Type name: 'Acacia' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * JUNGLE:
+ * Type name: 'Jungle' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BIRCH:
+ * Type name: 'Birch' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SPRUCE:
+ * Type name: 'Spruce' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * QAK:
+ * Type name: 'Qak' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class PlanksMat extends WoodMat implements FuelMat
 {
     /**

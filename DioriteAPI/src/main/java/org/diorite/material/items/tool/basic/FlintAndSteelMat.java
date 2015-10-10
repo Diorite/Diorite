@@ -11,7 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+/**
+ * Class representing 'Flint And Steel' item material in minecraft. <br>
+ * ID of material: 259 <br>
+ * String ID of material: minecraft:flint_and_steel <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class FlintAndSteelMat extends BasicToolMat
 {
     /**

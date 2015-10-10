@@ -4,6 +4,10 @@ import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
 import org.diorite.material.items.tool.ArmorMat;
 
+/**
+ * Abstract class for all helmet-based armors.
+ */
+@SuppressWarnings("JavaDoc")
 public abstract class HelmetMat extends ArmorMat
 {
     protected HelmetMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial)

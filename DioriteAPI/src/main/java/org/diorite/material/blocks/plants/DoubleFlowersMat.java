@@ -8,8 +8,66 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DoubleFlowers" and all its subtypes.
+ * Class representing 'Double Flowers' block material in minecraft. <br>
+ * ID of block: 175 <br>
+ * String ID of block: minecraft:double_plant <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DOUBLE_TOP:
+ * Type name: 'Double Top' <br>
+ * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * PEONY:
+ * Type name: 'Peony' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * ROSE_BUSH:
+ * Type name: 'Rose Bush' <br>
+ * SubID: 4 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * TALL_FERN:
+ * Type name: 'Tall Fern' <br>
+ * SubID: 3 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * TALL_GRASS:
+ * Type name: 'Tall Grass' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * LILAC:
+ * Type name: 'Lilac' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SUNFLOWER:
+ * Type name: 'Sunflower' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class DoubleFlowersMat extends FlowerMat
 {
     /**

@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents iron helmet.
+ * Class representing 'Iron Helmet' item material in minecraft. <br>
+ * ID of material: 306 <br>
+ * String ID of material: minecraft:iron_helmet <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class IronHelmetMat extends HelmetMat
 {
     /**

@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "MelonBlock" and all its subtypes.
+ * Class representing 'Melon Block' block material in minecraft. <br>
+ * ID of block: 103 <br>
+ * String ID of block: minecraft:melon_block <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5
  */
+@SuppressWarnings("JavaDoc")
 public class MelonBlockMat extends BlockMaterialData
 {
     /**

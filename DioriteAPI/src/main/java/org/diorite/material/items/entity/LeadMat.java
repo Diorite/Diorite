@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Lead' item material in minecraft. <br>
+ * ID of material: 420 <br>
+ * String ID of material: minecraft:lead <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class LeadMat extends ItemMaterialData implements PlaceableEntityMat
 {
     /**
@@ -22,6 +28,7 @@ public class LeadMat extends ItemMaterialData implements PlaceableEntityMat
     private static final Map<String, LeadMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<LeadMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected LeadMat()
     {
         super("LEAD", 420, "minecraft:lead", "LEAD", (short) 0x00);

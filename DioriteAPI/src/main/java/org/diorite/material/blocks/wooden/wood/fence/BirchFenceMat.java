@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "BirchFence" and all its subtypes.
+ * Class representing 'Birch Fence' block material in minecraft. <br>
+ * ID of block: 189 <br>
+ * String ID of block: minecraft:birch_fence <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class BirchFenceMat extends WoodenFenceMat
 {
     /**

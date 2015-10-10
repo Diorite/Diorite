@@ -14,8 +14,129 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "StainedHardenedClay" and all its subtypes.
+ * Class representing 'Stained Hardened Clay' block material in minecraft. <br>
+ * ID of block: 159 <br>
+ * String ID of block: minecraft:stained_hardened_clay <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * BLACK:
+ * Type name: 'Black' <br>
+ * SubID: 15 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * RED:
+ * Type name: 'Red' <br>
+ * SubID: 14 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * GREEN:
+ * Type name: 'Green' <br>
+ * SubID: 13 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * BROWN:
+ * Type name: 'Brown' <br>
+ * SubID: 12 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * BLUE:
+ * Type name: 'Blue' <br>
+ * SubID: 11 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * PURPLE:
+ * Type name: 'Purple' <br>
+ * SubID: 10 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * CYAN:
+ * Type name: 'Cyan' <br>
+ * SubID: 9 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * LIGHT_GRAY:
+ * Type name: 'Light Gray' <br>
+ * SubID: 8 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * GRAY:
+ * Type name: 'Gray' <br>
+ * SubID: 7 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * PINK:
+ * Type name: 'Pink' <br>
+ * SubID: 6 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * LIME:
+ * Type name: 'Lime' <br>
+ * SubID: 5 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * YELLOW:
+ * Type name: 'Yellow' <br>
+ * SubID: 4 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * LIGHT_BLUE:
+ * Type name: 'Light Blue' <br>
+ * SubID: 3 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * MAGENTA:
+ * Type name: 'Magenta' <br>
+ * SubID: 2 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * ORANGE:
+ * Type name: 'Orange' <br>
+ * SubID: 1 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * WHITE:
+ * Type name: 'White' <br>
+ * SubID: 0 <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class StainedHardenedClayMat extends BlockMaterialData implements ColorableMat
 {
     /**

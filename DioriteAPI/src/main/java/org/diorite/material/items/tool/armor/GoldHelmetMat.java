@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents gold helmet.
+ * Class representing 'Gold Helmet' item material in minecraft. <br>
+ * ID of material: 314 <br>
+ * String ID of material: minecraft:gold_helmet <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class GoldHelmetMat extends HelmetMat
 {
     /**

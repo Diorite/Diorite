@@ -9,9 +9,129 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DaylightDetector" and all its subtypes.
+ * Class representing 'Daylight Detector' block material in minecraft. <br>
+ * ID of block: 151 <br>
+ * String ID of block: minecraft:daylight_detector <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * 15:
+ * Type name: '15' <br>
+ * SubID: 15 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 14:
+ * Type name: '14' <br>
+ * SubID: 14 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 13:
+ * Type name: '13' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 12:
+ * Type name: '12' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 11:
+ * Type name: '11' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 10:
+ * Type name: '10' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 9:
+ * Type name: '9' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 8:
+ * Type name: '8' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 7:
+ * Type name: '7' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 6:
+ * Type name: '6' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 5:
+ * Type name: '5' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 4:
+ * Type name: '4' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 3:
+ * Type name: '3' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 2:
+ * Type name: '2' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 1:
+ * Type name: '1' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * OFF:
+ * Type name: 'Off' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * </ol>
  */
-@SuppressWarnings("MagicNumber")
+@SuppressWarnings("JavaDoc")
 public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements FuelMat
 {
     /**
@@ -30,10 +150,15 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements 
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_8   = new DaylightDetectorMat(8);
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_9   = new DaylightDetectorMat(9);
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_10  = new DaylightDetectorMat(10);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_11  = new DaylightDetectorMat(11);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_12  = new DaylightDetectorMat(12);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_13  = new DaylightDetectorMat(13);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_14  = new DaylightDetectorMat(14);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_15  = new DaylightDetectorMat(15);
 
     private static final Map<String, DaylightDetectorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -79,12 +204,14 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements 
         return DaylightDetectorMat.getDaylightDetector(this.power);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public DaylightDetectorMat getPowered(final boolean powered)
     {
         return getByID(powered ? 15 : 0);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public int getFuelPower()
     {

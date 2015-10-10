@@ -12,8 +12,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "JungleStairs" and all its subtypes.
+ * Class representing 'Jungle Stairs' block material in minecraft. <br>
+ * ID of block: 136 <br>
+ * String ID of block: minecraft:jungle_stairs <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class JungleStairsMat extends WoodenStairsMat
 {
     /**

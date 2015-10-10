@@ -13,7 +13,47 @@ import org.diorite.utils.collections.maps.SimpleEnumMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Skull' item material in minecraft. <br>
+ * ID of material: 397 <br>
+ * String ID of material: minecraft:skull <br>
+ * Max item stack size: 64 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol> 
+ * <li>
+ *     CREEPER:
+ *     Type name: 'Creeper' <br>
+ *     SubID: 4 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     PLAYER:
+ *     Type name: 'Player' <br>
+ *     SubID: 3 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     ZOMBIE:
+ *     Type name: 'Zombie' <br>
+ *     SubID: 2 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     WITHER_SKELETON:
+ *     Type name: 'Wither Skeleton' <br>
+ *     SubID: 1 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     SKELETON:
+ *     Type name: 'Skeleton' <br>
+ *     SubID: 0 <br>
+ *     Max item stack size: 64
+ * </li>
+ * </ol>
+ */
+@SuppressWarnings("JavaDoc")
 public class SkullMat extends ItemMaterialData
 {
     /**
@@ -34,6 +74,7 @@ public class SkullMat extends ItemMaterialData
 
     protected final SkullType skullType;
 
+    @SuppressWarnings("MagicNumber")
     protected SkullMat()
     {
         super("SKULL", 397, "minecraft:skull", SkullType.SKELETON.name(), (short) 0x00);

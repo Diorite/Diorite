@@ -16,8 +16,101 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Anvil" and all its subtypes.
+ * Class representing 'Anvil' block material in minecraft. <br>
+ * ID of block: 145 <br>
+ * String ID of block: minecraft:anvil <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * SOUTH_NORTH_VERY_DAMAGED:
+ * Type name: 'South North Very Damaged' <br>
+ * SubID: 11 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * WEST_EAST_VERY_DAMAGED:
+ * Type name: 'West East Very Damaged' <br>
+ * SubID: 10 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * EAST_WEST_VERY_DAMAGED:
+ * Type name: 'East West Very Damaged' <br>
+ * SubID: 9 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * NORTH_SOUTH_VERY_DAMAGED:
+ * Type name: 'North South Very Damaged' <br>
+ * SubID: 8 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * SOUTH_NORTH_SLIGHTLY_DAMAGED:
+ * Type name: 'South North Slightly Damaged' <br>
+ * SubID: 7 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * WEST_EAST_SLIGHTLY_DAMAGED:
+ * Type name: 'West East Slightly Damaged' <br>
+ * SubID: 6 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * EAST_WEST_SLIGHTLY_DAMAGED:
+ * Type name: 'East West Slightly Damaged' <br>
+ * SubID: 5 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * NORTH_SOUTH_SLIGHTLY_DAMAGED:
+ * Type name: 'North South Slightly Damaged' <br>
+ * SubID: 4 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * SOUTH_NORTH_NEW:
+ * Type name: 'South North New' <br>
+ * SubID: 3 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * WEST_EAST_NEW:
+ * Type name: 'West East New' <br>
+ * SubID: 2 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * EAST_WEST_NEW:
+ * Type name: 'East West New' <br>
+ * SubID: 1 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * <li>
+ * NORTH_SOUTH_NEW:
+ * Type name: 'North South New' <br>
+ * SubID: 0 <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class AnvilMat extends BlockMaterialData implements RotatableMat
 {
     /**

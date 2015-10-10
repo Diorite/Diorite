@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Pumpkin Seeds' item material in minecraft. <br>
+ * ID of material: 361 <br>
+ * String ID of material: minecraft:pumpkin_seeds <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class PumpkinSeedsMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class PumpkinSeedsMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, PumpkinSeedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<PumpkinSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected PumpkinSeedsMat()
     {
         super("PUMPKIN_SEEDS", 361, "minecraft:pumpkin_seeds", "PUMPKIN_SEEDS", (short) 0x00);

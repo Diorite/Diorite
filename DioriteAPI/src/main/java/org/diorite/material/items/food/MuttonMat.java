@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Mutton' item material in minecraft. <br>
+ * ID of material: 423 <br>
+ * String ID of material: minecraft:mutton <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class MuttonMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class MuttonMat extends EdibleItemMat
     private static final Map<String, MuttonMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<MuttonMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected MuttonMat()
     {
         super("MUTTON", 423, "minecraft:mutton", "MUTTON", (short) 0x00, 2, 1.2F);

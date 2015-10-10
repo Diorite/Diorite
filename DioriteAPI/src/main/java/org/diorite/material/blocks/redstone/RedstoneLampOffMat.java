@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "RedstoneLampOff" and all its subtypes.
+ * Class representing 'Redstone Lamp Off' block material in minecraft. <br>
+ * ID of block: 123 <br>
+ * String ID of block: minecraft:redstone_lamp <br>
+ * Hardness: 0,3 <br>
+ * Blast Resistance 1,5
  */
+@SuppressWarnings("JavaDoc")
 public class RedstoneLampOffMat extends RedstoneLampMat
 {
     /**

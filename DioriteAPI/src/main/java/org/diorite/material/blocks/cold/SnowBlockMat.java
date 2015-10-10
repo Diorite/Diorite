@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "SnowBlock" and all its subtypes.
+ * Class representing 'Snow Block' block material in minecraft. <br>
+ * ID of block: 80 <br>
+ * String ID of block: minecraft:snow <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1
  */
+@SuppressWarnings("JavaDoc")
 public class SnowBlockMat extends BlockMaterialData
 {
     /**

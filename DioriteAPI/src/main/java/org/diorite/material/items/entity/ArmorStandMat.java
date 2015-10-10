@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Armor Stand' item material in minecraft. <br>
+ * ID of material: 416 <br>
+ * String ID of material: minecraft:armor_stand <br>
+ * Max item stack size: 16
+ */
+@SuppressWarnings("JavaDoc")
 public class ArmorStandMat extends ItemMaterialData implements PlaceableEntityMat
 {
     /**
@@ -22,6 +28,7 @@ public class ArmorStandMat extends ItemMaterialData implements PlaceableEntityMa
     private static final Map<String, ArmorStandMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<ArmorStandMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected ArmorStandMat()
     {
         super("ARMOR_STAND", 416, "minecraft:armor_stand", 16, "ARMOR_STAND", (short) 0x00);

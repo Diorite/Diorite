@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Flower Pot' item material in minecraft. <br>
+ * ID of material: 390 <br>
+ * String ID of material: minecraft:flower_pot <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class FlowerPotMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class FlowerPotMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, FlowerPotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<FlowerPotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected FlowerPotMat()
     {
         super("FLOWER_POT", 390, "minecraft:flower_pot", "FLOWER_POT", (short) 0x00);

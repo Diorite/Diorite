@@ -11,6 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
+/**
+ * Class representing 'Wooden Axe' item material in minecraft. <br>
+ * ID of material: 271 <br>
+ * String ID of material: minecraft:wooden_axe <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class WoodenAxeMat extends AxeMat
 {
     /**

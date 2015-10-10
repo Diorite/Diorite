@@ -11,8 +11,12 @@ import org.diorite.material.ItemMaterialData;
  * Represents a tool item that have durability and can break when it go above {@link #getBaseDurability()} <br>
  * Tool durability types should be cached
  */
+@SuppressWarnings("JavaDoc")
 public abstract class BasicToolMat extends ItemMaterialData implements BreakableItemMat, EnchantableMat
 {
+    /**
+     * Instance of {@link BasicToolData} that contains all basic parameters of this tool.
+     */
     protected final BasicToolData toolData;
 
     protected BasicToolMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final BasicToolData toolData)
@@ -27,6 +31,11 @@ public abstract class BasicToolMat extends ItemMaterialData implements Breakable
         this.toolData = toolData;
     }
 
+    /**
+     * Returns instance of {@link BasicToolData} that contains all basic parameters of this tool.
+     *
+     * @return instance of {@link BasicToolData} that contains all basic parameters of this tool.
+     */
     public BasicToolData getToolData()
     {
         return this.toolData;

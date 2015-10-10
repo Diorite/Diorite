@@ -1,5 +1,8 @@
 package org.diorite.material.blocks.plants;
 
+/**
+ * Abstract class for all mushroom-based blocks.
+ */
 public abstract class MushroomMat extends PlantMat
 {
     protected MushroomMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final float hardness, final float blastResistance)

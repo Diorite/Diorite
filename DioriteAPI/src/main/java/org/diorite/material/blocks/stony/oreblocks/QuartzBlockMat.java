@@ -16,8 +16,52 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "QuartzBlock" and all its subtypes.
+ * Class representing 'Quartz Block' block material in minecraft. <br>
+ * ID of block: 155 <br>
+ * String ID of block: minecraft:quartz_block <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * PILLAR_EAST_WEST:
+ * Type name: 'Pillar East West' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * </li>
+ * <li>
+ * PILLAR_NORTH_SOUTH:
+ * Type name: 'Pillar North South' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * </li>
+ * <li>
+ * PILLAR_VERTICAL:
+ * Type name: 'Pillar Vertical' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * </li>
+ * <li>
+ * CHISELED:
+ * Type name: 'Chiseled' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * </li>
+ * <li>
+ * QUARTZ_BLOCK:
+ * Type name: 'Quartz Block' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class QuartzBlockMat extends OreBlockMat implements VariantableMat
 {
     /**

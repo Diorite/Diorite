@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Melon' item material in minecraft. <br>
+ * ID of material: 360 <br>
+ * String ID of material: minecraft:melon <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class MelonMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class MelonMat extends EdibleItemMat
     private static final Map<String, MelonMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<MelonMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected MelonMat()
     {
         super("MELON", 360, "minecraft:melon", "MELON", (short) 0x00, 2, 1.2F);

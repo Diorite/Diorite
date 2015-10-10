@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Bucket' item material in minecraft. <br>
+ * ID of material: 325 <br>
+ * String ID of material: minecraft:bucket <br>
+ * Max item stack size: 16
+ */
+@SuppressWarnings("JavaDoc")
 public class BucketMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class BucketMat extends ItemMaterialData
     private static final Map<String, BucketMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BucketMat()
     {
         super("BUCKET", 325, "minecraft:bucket", 16, "BUCKET", (short) 0x00);

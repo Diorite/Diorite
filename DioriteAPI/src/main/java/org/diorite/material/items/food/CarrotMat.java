@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Carrot' item material in minecraft. <br>
+ * ID of material: 391 <br>
+ * String ID of material: minecraft:carrot <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class CarrotMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class CarrotMat extends EdibleItemMat
     private static final Map<String, CarrotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<CarrotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected CarrotMat()
     {
         super("CARROT", 391, "minecraft:carrot", "CARROT", (short) 0x00, 3, 3.6F);

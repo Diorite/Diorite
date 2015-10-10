@@ -10,7 +10,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Quartz' item material in minecraft. <br>
+ * ID of material: 406 <br>
+ * String ID of material: minecraft:quartz <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class QuartzMat extends OreItemMatExt
 {
     /**
@@ -23,6 +29,7 @@ public class QuartzMat extends OreItemMatExt
     private static final Map<String, QuartzMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<QuartzMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected QuartzMat()
     {
         super("QUARTZ", 406, "minecraft:quartz", "QUARTZ", (short) 0x00, QUARTZ_ORE, QUARTZ_BLOCK);

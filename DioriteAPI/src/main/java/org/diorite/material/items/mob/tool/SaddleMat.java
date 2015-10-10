@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Saddle' item material in minecraft. <br>
+ * ID of material: 329 <br>
+ * String ID of material: minecraft:saddle <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class SaddleMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class SaddleMat extends ItemMaterialData
     private static final Map<String, SaddleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<SaddleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected SaddleMat()
     {
         super("SADDLE", 329, "minecraft:saddle", 1, "SADDLE", (short) 0x00);

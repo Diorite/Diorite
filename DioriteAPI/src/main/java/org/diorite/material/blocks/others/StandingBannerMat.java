@@ -13,10 +13,130 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "StandingBanner" and all its subtypes.
+ * Class representing 'Standing Banner South' block material in minecraft. <br>
+ * ID of block: 176 <br>
+ * String ID of block: minecraft:standing_banner <br>
+ * This block can't be used in inventory, valid material for this block: 'Banner' (minecraft:banner(425):0) <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
  * <br>
- * NOTE: Will crash game when in inventory.
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * SOUTH_SOUTH_EAST:
+ * Type name: 'South South East' <br>
+ * SubID: 15 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * SOUTH_EAST:
+ * Type name: 'South East' <br>
+ * SubID: 14 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * EAST_SOUTH_EAST:
+ * Type name: 'East South East' <br>
+ * SubID: 13 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 12 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * EAST_NORTH_EAST:
+ * Type name: 'East North East' <br>
+ * SubID: 11 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * NORTH_EAST:
+ * Type name: 'North East' <br>
+ * SubID: 10 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * NORTH_NORTH_EAST:
+ * Type name: 'North North East' <br>
+ * SubID: 9 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 8 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * NORTH_NORTH_WEST:
+ * Type name: 'North North West' <br>
+ * SubID: 7 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * NORTH_WEST:
+ * Type name: 'North West' <br>
+ * SubID: 6 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WEST_NORTH_WEST:
+ * Type name: 'West North West' <br>
+ * SubID: 5 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WEST_SOUTH_WEST:
+ * Type name: 'West South West' <br>
+ * SubID: 3 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * SOUTH_WEST:
+ * Type name: 'South West' <br>
+ * SubID: 2 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * SOUTH_SOUTH_WEST:
+ * Type name: 'South South West' <br>
+ * SubID: 1 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 0 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class StandingBannerMat extends BannerBlockMat
 {
     /**

@@ -16,10 +16,101 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Cocoa" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Cocoa North 0' block material in minecraft. <br>
+ * ID of block: 127 <br>
+ * String ID of block: minecraft:cocoa <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * WEST_RIPE:
+ * Type name: 'West Ripe' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_RIPE:
+ * Type name: 'South Ripe' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_RIPE:
+ * Type name: 'East Ripe' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH_RIPE:
+ * Type name: 'North Ripe' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_1:
+ * Type name: 'West 1' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_1:
+ * Type name: 'South 1' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_1:
+ * Type name: 'East 1' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH_1:
+ * Type name: 'North 1' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_0:
+ * Type name: 'West 0' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_0:
+ * Type name: 'South 0' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_0:
+ * Type name: 'East 0' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH_0:
+ * Type name: 'North 0' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class CocoaMat extends CropsMat implements AttachableMat
 {
     /**

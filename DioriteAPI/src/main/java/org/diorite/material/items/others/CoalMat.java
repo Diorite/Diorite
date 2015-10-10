@@ -11,7 +11,29 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Coal' item material in minecraft. <br>
+ * ID of material: 263 <br>
+ * String ID of material: minecraft:coal <br>
+ * Max item stack size: 64 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol> 
+ * <li>
+ *     CHARCOAL:
+ *     Type name: 'Charcoal' <br>
+ *     SubID: 1 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     COAL:
+ *     Type name: 'Coal' <br>
+ *     SubID: 0 <br>
+ *     Max item stack size: 64
+ * </li>
+ * </ol>
+ */
+@SuppressWarnings("JavaDoc")
 public class CoalMat extends OreItemMatExt implements FuelMat
 {
     /**
@@ -25,6 +47,7 @@ public class CoalMat extends OreItemMatExt implements FuelMat
     private static final Map<String, CoalMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<CoalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected CoalMat()
     {
         super("COAL", 263, "minecraft:coal", "COAL", (short) 0x00, COAL_ORE, COAL_BLOCK);
@@ -57,6 +80,7 @@ public class CoalMat extends OreItemMatExt implements FuelMat
         return getByEnumName(type);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public int getFuelPower()
     {

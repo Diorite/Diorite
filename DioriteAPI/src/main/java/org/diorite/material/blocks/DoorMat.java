@@ -153,6 +153,7 @@ public interface DoorMat extends PowerableMat, DirectionalMat, OpenableMat
     DoorMat getHingeOnRightSide(boolean onRightSide) throws RuntimeException;
 
 
+    @SuppressWarnings("JavaDoc")
     static byte combine(final boolean isPowered, final boolean hingeOnRightSide)
     {
         byte result = HALF_FLAG;
@@ -167,6 +168,7 @@ public interface DoorMat extends PowerableMat, DirectionalMat, OpenableMat
         return result;
     }
 
+    @SuppressWarnings("JavaDoc")
     static byte combine(final BlockFace face, final boolean isOpen)
     {
         byte result = isOpen ? OPEN_FLAG : 0x0;

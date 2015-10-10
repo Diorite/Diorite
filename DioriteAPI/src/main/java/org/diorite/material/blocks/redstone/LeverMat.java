@@ -15,8 +15,129 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Lever" and all its subtypes.
+ * Class representing 'Lever' block material in minecraft. <br>
+ * ID of block: 69 <br>
+ * String ID of block: minecraft:lever <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DOWN_SOUTH_POWERED:
+ * Type name: 'Down South Powered' <br>
+ * SubID: 15 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * UP_POWERED:
+ * Type name: 'Up Powered' <br>
+ * SubID: 14 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * UP_SOUTH_POWERED:
+ * Type name: 'Up South Powered' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * NORTH_POWERED:
+ * Type name: 'North Powered' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * SOUTH_POWERED:
+ * Type name: 'South Powered' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * WEST_POWERED:
+ * Type name: 'West Powered' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * EAST_POWERED:
+ * Type name: 'East Powered' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * DOWN_POWERED:
+ * Type name: 'Down Powered' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * DOWN_SOUTH:
+ * Type name: 'Down South' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * UP:
+ * Type name: 'Up' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * UP_SOUTH:
+ * Type name: 'Up South' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * DOWN:
+ * Type name: 'Down' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class LeverMat extends BlockMaterialData implements PowerableMat, AttachableMat
 {
     /**

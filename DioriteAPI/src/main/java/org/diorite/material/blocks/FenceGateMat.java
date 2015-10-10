@@ -5,8 +5,12 @@ import org.diorite.BlockFace;
 /**
  * Representing fence gate blocks.
  */
+@SuppressWarnings("JavaDoc")
 public interface FenceGateMat extends DirectionalMat, OpenableMat
 {
+    /**
+     * bit flag for open gate state.
+     */
     byte OPEN_FLAG = 0x4;
 
     /**

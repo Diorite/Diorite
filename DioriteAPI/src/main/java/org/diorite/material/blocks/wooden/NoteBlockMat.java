@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "NoteBlock" and all its subtypes.
+ * Class representing 'Noteblock' block material in minecraft. <br>
+ * ID of block: 25 <br>
+ * String ID of block: minecraft:noteblock <br>
+ * Hardness: 0,8 <br>
+ * Blast Resistance 4
  */
+@SuppressWarnings("JavaDoc")
 public class NoteBlockMat extends WoodenMat implements FuelMat
 {
     /**

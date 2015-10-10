@@ -12,8 +12,14 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Air" and all its subtypes.
+ * Class representing 'Air' block material in minecraft. <br>
+ * ID of block: 0 <br>
+ * String ID of block: minecraft:air <br>
+ * This block can't be used in inventory, valid material for this block: There isn't valid material for this material. <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0
  */
+@SuppressWarnings("JavaDoc")
 public class AirMat extends BlockMaterialData
 {
     /**

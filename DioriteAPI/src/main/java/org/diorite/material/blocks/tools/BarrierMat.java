@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Barrier" and all its subtypes.
+ * Class representing 'Barrier' block material in minecraft. <br>
+ * ID of block: 166 <br>
+ * String ID of block: minecraft:barrier <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000004
  */
+@SuppressWarnings("JavaDoc")
 public class BarrierMat extends BlockMaterialData
 {
     /**

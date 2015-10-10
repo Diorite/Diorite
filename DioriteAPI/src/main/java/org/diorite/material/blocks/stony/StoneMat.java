@@ -13,8 +13,66 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Stone" and all its subtypes.
+ * Class representing 'Stone' block material in minecraft. <br>
+ * ID of block: 1 <br>
+ * String ID of block: minecraft:stone <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * POLISHED_ANDESITE:
+ * Type name: 'Polished Andesite' <br>
+ * SubID: 6 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * ANDESITE:
+ * Type name: 'Andesite' <br>
+ * SubID: 5 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * POLISHED_DIORITE:
+ * Type name: 'Polished Diorite' <br>
+ * SubID: 4 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * DIORITE:
+ * Type name: 'Diorite' <br>
+ * SubID: 3 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * POLISHED_GRANITE:
+ * Type name: 'Polished Granite' <br>
+ * SubID: 2 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * GRANITE:
+ * Type name: 'Granite' <br>
+ * SubID: 1 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE:
+ * Type name: 'Stone' <br>
+ * SubID: 0 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class StoneMat extends StonyMat implements VariantableMat
 {
     /**

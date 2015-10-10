@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Book' item material in minecraft. <br>
+ * ID of material: 340 <br>
+ * String ID of material: minecraft:book <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class BookMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class BookMat extends ItemMaterialData
     private static final Map<String, BookMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BookMat()
     {
         super("BOOK", 340, "minecraft:book", "BOOK", (short) 0x00);

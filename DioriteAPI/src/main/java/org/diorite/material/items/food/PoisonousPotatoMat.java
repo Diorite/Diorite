@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Poisonous Potato' item material in minecraft. <br>
+ * ID of material: 394 <br>
+ * String ID of material: minecraft:poisounous_potato <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class PoisonousPotatoMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class PoisonousPotatoMat extends EdibleItemMat
     private static final Map<String, PoisonousPotatoMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<PoisonousPotatoMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected PoisonousPotatoMat()
     {
         super("POISONOUS_POTATO", 394, "minecraft:poisounous_potato", "POISONOUS_POTATO", (short) 0x00, 2, 1.2F);

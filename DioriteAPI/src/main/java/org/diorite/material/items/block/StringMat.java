@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'String' item material in minecraft. <br>
+ * ID of material: 287 <br>
+ * String ID of material: minecraft:string <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class StringMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class StringMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, StringMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<StringMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected StringMat()
     {
         super("STRING", 287, "minecraft:string", "STRING", (short) 0x00);

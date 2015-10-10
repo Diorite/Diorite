@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Sugar' item material in minecraft. <br>
+ * ID of material: 353 <br>
+ * String ID of material: minecraft:sugar <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class SugarMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class SugarMat extends ItemMaterialData
     private static final Map<String, SugarMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<SugarMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected SugarMat()
     {
         super("SUGAR", 353, "minecraft:sugar", "SUGAR", (short) 0x00);

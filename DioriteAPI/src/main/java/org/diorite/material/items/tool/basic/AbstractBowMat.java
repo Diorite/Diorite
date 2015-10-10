@@ -3,6 +3,10 @@ package org.diorite.material.items.tool.basic;
 import org.diorite.material.BasicToolData;
 import org.diorite.material.items.tool.BasicToolMat;
 
+/**
+ * Abstract class for all bow-based tools.
+ */
+@SuppressWarnings("JavaDoc")
 public abstract class AbstractBowMat extends BasicToolMat
 {
     protected AbstractBowMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final BasicToolData toolData)

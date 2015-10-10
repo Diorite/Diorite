@@ -16,8 +16,101 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Dispenser" and all its subtypes.
+ * Class representing 'Dispenser' block material in minecraft. <br>
+ * ID of block: 23 <br>
+ * String ID of block: minecraft:dispenser <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST_POWERED:
+ * Type name: 'East Powered' <br>
+ * SubID: 13 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * WEST_POWERED:
+ * Type name: 'West Powered' <br>
+ * SubID: 12 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * SOUTH_POWERED:
+ * Type name: 'South Powered' <br>
+ * SubID: 11 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * NORTH_POWERED:
+ * Type name: 'North Powered' <br>
+ * SubID: 10 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * UP_POWERED:
+ * Type name: 'Up Powered' <br>
+ * SubID: 9 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * DOWN_POWERED:
+ * Type name: 'Down Powered' <br>
+ * SubID: 8 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 5 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 2 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * UP:
+ * Type name: 'Up' <br>
+ * SubID: 1 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * DOWN:
+ * Type name: 'Down' <br>
+ * SubID: 0 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class DispenserMat extends StonyMat implements DirectionalMat, PowerableMat
 {
     /**

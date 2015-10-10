@@ -11,10 +11,73 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Farmland" and all its subtypes.
- * <p>
- * NOTE: This item don't have valid textures in hand.
+ * Class representing 'Farmland' block material in minecraft. <br>
+ * ID of block: 60 <br>
+ * String ID of block: minecraft:farmland <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * HYDRATED:
+ * Type name: 'Hydrated' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * <li>
+ * MOISTURE_6:
+ * Type name: 'Moisture 6' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * <li>
+ * MOISTURE_5:
+ * Type name: 'Moisture 5' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * <li>
+ * MOISTURE_4:
+ * Type name: 'Moisture 4' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * <li>
+ * MOISTURE_3:
+ * Type name: 'Moisture 3' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * <li>
+ * MOISTURE_2:
+ * Type name: 'Moisture 2' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * <li>
+ * MOISTURE_1:
+ * Type name: 'Moisture 1' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * <li>
+ * UNHYDRATED:
+ * Type name: 'Unhydrated' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 3 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class FarmlandMat extends EarthMat
 {
     /**

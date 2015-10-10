@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents gold chestplate.
+ * Class representing 'Gold Chestplate' item material in minecraft. <br>
+ * ID of material: 315 <br>
+ * String ID of material: minecraft:gold_chestplate <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class GoldChestplateMat extends ChestplateMat
 {
     /**

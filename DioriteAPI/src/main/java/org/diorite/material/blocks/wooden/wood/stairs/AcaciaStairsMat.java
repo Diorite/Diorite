@@ -12,8 +12,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "AcaciaStairs" and all its subtypes.
+ * Class representing 'Acacia Stairs' block material in minecraft. <br>
+ * ID of block: 163 <br>
+ * String ID of block: minecraft:acacia_stairs <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class AcaciaStairsMat extends WoodenStairsMat
 {
     /**

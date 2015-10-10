@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Jungle Door Item' item material in minecraft. <br>
+ * ID of material: 429 <br>
+ * String ID of material: minecraft:jungle_door <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class JungleDoorItemMat extends WoodenDoorItemMat
 {
     /**
@@ -21,6 +27,7 @@ public class JungleDoorItemMat extends WoodenDoorItemMat
     private static final Map<String, JungleDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<JungleDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected JungleDoorItemMat()
     {
         super("JUNGLE_DOOR_ITEM", 429, "minecraft:jungle_door", "JUNGLE_DOOR_ITEM", (short) 0x00, WoodType.JUNGLE);

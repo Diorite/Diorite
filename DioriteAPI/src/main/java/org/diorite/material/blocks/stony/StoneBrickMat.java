@@ -13,8 +13,45 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "StoneBrick" and all its subtypes.
+ * Class representing 'Stone Brick' block material in minecraft. <br>
+ * ID of block: 98 <br>
+ * String ID of block: minecraft:stonebrick <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * CHISELED:
+ * Type name: 'Chiseled' <br>
+ * SubID: 3 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * CRACKED:
+ * Type name: 'Cracked' <br>
+ * SubID: 2 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * MOSSY:
+ * Type name: 'Mossy' <br>
+ * SubID: 1 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * CLASSIC:
+ * Type name: 'Classic' <br>
+ * SubID: 0 <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class StoneBrickMat extends StonyMat implements VariantableMat
 {
     /**

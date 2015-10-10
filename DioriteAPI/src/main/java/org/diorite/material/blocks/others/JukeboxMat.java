@@ -14,8 +14,31 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Jukebox" and all its subtypes.
+ * Class representing 'Jukebox' block material in minecraft. <br>
+ * ID of block: 84 <br>
+ * String ID of block: minecraft:jukebox <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * WITH_DISC:
+ * Type name: 'With Disc' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * EMPTY:
+ * Type name: 'Empty' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class JukeboxMat extends BlockMaterialData implements FuelMat
 {
     /**

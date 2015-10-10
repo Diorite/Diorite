@@ -3,8 +3,8 @@ package org.diorite.material.items.tool;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorData;
+import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
 import org.diorite.material.ItemMaterialData;
 
@@ -12,9 +12,16 @@ import org.diorite.material.ItemMaterialData;
  * Represents an armor item that have durability and can break when it go above {@link #getBaseDurability()} <br>
  * Armor durability types should be cached.
  */
+@SuppressWarnings("JavaDoc")
 public abstract class ArmorMat extends ItemMaterialData implements BreakableItemMat
 {
+    /**
+     * Material of armor.
+     */
     protected final ArmorMaterial armorMaterial;
+    /**
+     * Type of armor.
+     */
     protected final ArmorType     armorType;
 
     protected ArmorMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
@@ -52,7 +59,7 @@ public abstract class ArmorMat extends ItemMaterialData implements BreakableItem
     }
 
     /**
-     * Returns properties of armor by this item.
+     * Returns properties of armor defined by this item.
      *
      * @return properties of this armor.
      */

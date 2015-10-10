@@ -32,7 +32,7 @@ public enum SlabTypeMat
     }
 
     /**
-     * @return if this is one of full block types. {@link FULL} {@link SMOOTH_FULL}
+     * @return if this is one of full block types. {@link #FULL} {@link #SMOOTH_FULL}
      */
     public boolean isFullBlock()
     {

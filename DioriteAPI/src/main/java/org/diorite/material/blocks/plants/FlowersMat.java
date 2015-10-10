@@ -8,8 +8,80 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Flowers" and all its subtypes.
+ * Class representing 'Flowers' block material in minecraft. <br>
+ * ID of block: 38 <br>
+ * String ID of block: minecraft:red_flower <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * OXEYE_DAISY:
+ * Type name: 'Oxeye Daisy' <br>
+ * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * PINK_TULIP:
+ * Type name: 'Pink Tulip' <br>
+ * SubID: 7 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WHITE_TULIP:
+ * Type name: 'White Tulip' <br>
+ * SubID: 6 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * ORANGE_TULIP:
+ * Type name: 'Orange Tulip' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * RED_TULIP:
+ * Type name: 'Red Tulip' <br>
+ * SubID: 4 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * AZURE_BLUET:
+ * Type name: 'Azure Bluet' <br>
+ * SubID: 3 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * ALLIUM:
+ * Type name: 'Allium' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * BLUE_ORCHID:
+ * Type name: 'Blue Orchid' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * POPPY:
+ * Type name: 'Poppy' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class FlowersMat extends FlowerMat
 {
     /**

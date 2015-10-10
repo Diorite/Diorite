@@ -3,6 +3,9 @@ package org.diorite.material.items.entity.minecart;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableEntityMat;
 
+/**
+ * Abstract class for all minecart-based items.
+ */
 public abstract class AbstractMinecartMat extends ItemMaterialData implements PlaceableEntityMat
 {
     protected AbstractMinecartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)

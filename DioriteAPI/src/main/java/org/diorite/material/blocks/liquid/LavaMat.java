@@ -10,9 +10,10 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
  * Class representing block "Lava" and all its subtypes.
- * <p>
+ * <br>
  * NOTE: Will crash game when in inventory.
  */
+@SuppressWarnings("JavaDoc")
 public class LavaMat extends LiquidMat
 {
     /**
@@ -166,12 +167,25 @@ public class LavaMat extends LiquidMat
         return this.isStill() ? byID.get((byte) (id + 16)) : byID.get((byte) id);
     }
 
+    /**
+     * Returns unique data value for flowing and still lava. Used by map.
+     *
+     * @return unique data value for flowing and still lava.
+     */
     @SuppressWarnings("MagicNumber")
     protected byte getFixedDataValue()
     {
         return (byte) (this.getType() + ((this.liquidType.isStill()) ? 16 : 0));
     }
 
+    /**
+     * Returns one of Lava sub-type based on type and stage.
+     *
+     * @param type  type of liquid.
+     * @param stage stage of liquid.
+     *
+     * @return sub-type of Lava or null.
+     */
     @SuppressWarnings("MagicNumber")
     public static LavaMat get(final LiquidTypeMat type, final LiquidStageMat stage)
     {
@@ -232,30 +246,34 @@ public class LavaMat extends LiquidMat
     /**
      * Helper class for second lava (lava still) ID
      */
+    @SuppressWarnings("JavaDoc")
     public static class LavaStill extends LavaMat
     {
         @SuppressWarnings("MagicNumber")
-        public LavaStill()
+        protected LavaStill()
         {
             super(LiquidTypeMat.STILL, 100, 500);
         }
 
-        public LavaStill(final LiquidStageMat stage)
+        protected LavaStill(final LiquidStageMat stage)
         {
             super(stage, LiquidTypeMat.STILL, LAVA_SOURCE_STILL.getHardness(), LAVA_SOURCE_STILL.getBlastResistance());
         }
 
-        public LavaStill(final LiquidStageMat stage, final float hardness, final float blastResistance)
+        protected LavaStill(final LiquidStageMat stage, final float hardness, final float blastResistance)
         {
             super(stage, LiquidTypeMat.STILL, hardness, blastResistance);
         }
 
-        @SuppressWarnings("MagicNumber")
         /**
          * Returns one of Lava sub-type based on sub-id, may return null
+         *
          * @param id sub-type id
+         *
          * @return sub-type of Lava or null
-         */ public static LavaMat getByID(final int id)
+         */
+        @SuppressWarnings("MagicNumber")
+        public static LavaMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

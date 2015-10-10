@@ -8,9 +8,18 @@ import org.diorite.material.data.drops.PossibleDrops;
 import org.diorite.material.data.drops.PossibleFixedDrop;
 import org.diorite.utils.lazy.LazyValue;
 
+/**
+ * Abstract class for all block-based materials.
+ */
 public abstract class BlockMaterialData extends Material implements PlaceableMat
 {
+    /**
+     * Hardness of block, used to get time needed to destroy block by player.
+     */
     protected final float hardness;
+    /**
+     * Blast resistance of block, block with low resistance can be easly destroyed by explosions.
+     */
     protected final float blastResistance;
 
     protected BlockMaterialData(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final float hardness, final float blastResistance)
@@ -27,6 +36,9 @@ public abstract class BlockMaterialData extends Material implements PlaceableMat
         this.blastResistance = blastResistance;
     }
 
+    /**
+     * Lazy value containing possible drops for this blocks.
+     */
     protected final LazyValue<PossibleDrops> possibleDrops = new LazyValue<>(this::initPossibleDrops);
 
     @Override
@@ -42,32 +54,63 @@ public abstract class BlockMaterialData extends Material implements PlaceableMat
         return true;
     }
 
+    /**
+     * Returns if block is solid. <br>
+     * Block is solid if entities can walk on them. (collisions)
+     * And they aren't soild if entitites can walk in them.
+     *
+     * @return if block is solid.
+     */
     public boolean isSolid()
     {
         return true;
     }
 
+    /**
+     * Returns blast resistance of block, block with low resistance can be easly destroyed by explosions.
+     *
+     * @return blast resistance of block.
+     */
     public float getBlastResistance()
     {
         return this.blastResistance;
     }
 
+    /**
+     * Returns hardness of block, used to get time needed to destroy block by player.
+     *
+     * @return hardness of block.
+     */
     public float getHardness()
     {
         return this.hardness;
     }
 
+    /**
+     * This method is invoked by material on first use of {@link #getPossibleDrops()} to get basic/default possible drops for material. <br>
+     * Drops can be changed later.
+     *
+     * @return created defaults drops.
+     */
     protected PossibleDrops initPossibleDrops()
     {
         // TODO: implement in all block that don't drop itself.
         return new PossibleDrops(new PossibleFixedDrop(new BaseItemStack(this)));
     }
 
+    /**
+     * Returns possible drops for this blocks.
+     *
+     * @return possible drops for this blocks.
+     */
     public PossibleDrops getPossibleDrops()
     {
         return this.possibleDrops.get();
     }
 
+    /**
+     * Reset state of lazy value, so new instance of {@link PossibleDrops} will be created on next invoke of {@link #getPossibleDrops()} from {@link #initPossibleDrops()}
+     */
     public void resetPossibleDrops()
     {
         this.possibleDrops.reset();
@@ -170,74 +213,4 @@ public abstract class BlockMaterialData extends Material implements PlaceableMat
 
     @Override
     public abstract BlockMaterialData[] types();
-
-    public static BlockMaterialData getByID(final int id)
-    {
-        final Material mat = Material.getByID(id);
-        if (mat instanceof BlockMaterialData)
-        {
-            return (BlockMaterialData) mat;
-        }
-        return null;
-    }
-
-    public static BlockMaterialData getByID(final int id, final int meta)
-    {
-        final Material mat = Material.getByID(id, meta);
-        if (mat instanceof BlockMaterialData)
-        {
-            return (BlockMaterialData) mat;
-        }
-        return null;
-    }
-
-    public static BlockMaterialData getByID(final int id, final String meta)
-    {
-        final Material mat = Material.getByID(id);
-        if (mat instanceof BlockMaterialData)
-        {
-            return (BlockMaterialData) mat;
-        }
-        return null;
-    }
-
-    public static BlockMaterialData getByEnumName(final String name)
-    {
-        final Material mat = Material.getByEnumName(name);
-        if (mat instanceof BlockMaterialData)
-        {
-            return (BlockMaterialData) mat;
-        }
-        return null;
-    }
-
-    public static BlockMaterialData getByEnumName(final String name, final int meta)
-    {
-        final Material mat = Material.getByEnumName(name, meta);
-        if (mat instanceof BlockMaterialData)
-        {
-            return (BlockMaterialData) mat;
-        }
-        return null;
-    }
-
-    public static BlockMaterialData getByEnumName(final String name, final String meta)
-    {
-        final Material mat = Material.getByEnumName(name, meta);
-        if (mat instanceof BlockMaterialData)
-        {
-            return (BlockMaterialData) mat;
-        }
-        return null;
-    }
-
-    public static BlockMaterialData getByMinecraftId(final String name)
-    {
-        final Material mat = Material.getByMinecraftId(name);
-        if (mat instanceof BlockMaterialData)
-        {
-            return (BlockMaterialData) mat;
-        }
-        return null;
-    }
 }

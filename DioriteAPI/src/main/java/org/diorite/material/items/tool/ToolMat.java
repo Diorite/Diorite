@@ -1,7 +1,11 @@
 package org.diorite.material.items.tool;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.material.EnchantableMat;
 import org.diorite.material.ItemMaterialData;
+import org.diorite.material.ToolData;
 import org.diorite.material.ToolMaterial;
 import org.diorite.material.ToolType;
 
@@ -48,6 +52,16 @@ public abstract class ToolMat extends ItemMaterialData implements BreakableItemM
         return this.toolType;
     }
 
+    /**
+     * Returns properties of tool defined by this item.
+     *
+     * @return properties of this tool.
+     */
+    public ToolData getProperties()
+    {
+        return this.toolMaterial.getProperties(this.toolType);
+    }
+
     @Override
     public int getDurability()
     {
@@ -83,4 +97,10 @@ public abstract class ToolMat extends ItemMaterialData implements BreakableItemM
 
     @Override
     public abstract ToolMat[] types();
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("properties", this.getProperties()).toString();
+    }
 }

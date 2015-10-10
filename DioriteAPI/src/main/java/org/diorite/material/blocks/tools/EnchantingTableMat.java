@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "EnchantingTable" and all its subtypes.
+ * Class representing 'Enchanting Table' block material in minecraft. <br>
+ * ID of block: 116 <br>
+ * String ID of block: minecraft:enchanting_table <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 6000
  */
+@SuppressWarnings("JavaDoc")
 public class EnchantingTableMat extends BlockMaterialData
 {
     /**

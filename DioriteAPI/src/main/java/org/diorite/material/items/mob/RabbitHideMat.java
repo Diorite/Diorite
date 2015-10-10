@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Rabbit Hide' item material in minecraft. <br>
+ * ID of material: 415 <br>
+ * String ID of material: minecraft:rabbit_hide <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class RabbitHideMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class RabbitHideMat extends ItemMaterialData
     private static final Map<String, RabbitHideMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RabbitHideMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected RabbitHideMat()
     {
         super("RABBIT_HIDE", 415, "minecraft:rabbit_hide", "RABBIT_HIDE", (short) 0x00);

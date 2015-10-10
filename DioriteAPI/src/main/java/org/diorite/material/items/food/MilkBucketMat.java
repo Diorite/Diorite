@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Milk Bucket' item material in minecraft. <br>
+ * ID of material: 335 <br>
+ * String ID of material: minecraft:milk_bucket <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class MilkBucketMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class MilkBucketMat extends EdibleItemMat
     private static final Map<String, MilkBucketMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<MilkBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected MilkBucketMat()
     {
         super("MILK_BUCKET", 335, "minecraft:milk_bucket", 1, "MILK_BUCKET", (short) 0x00, 0, 0);

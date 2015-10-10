@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Slimeball' item material in minecraft. <br>
+ * ID of material: 341 <br>
+ * String ID of material: minecraft:slime_ball <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class SlimeballMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class SlimeballMat extends ItemMaterialData
     private static final Map<String, SlimeballMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<SlimeballMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected SlimeballMat()
     {
         super("SLIMEBALL", 341, "minecraft:slime_ball", "SLIMEBALL", (short) 0x00);

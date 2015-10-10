@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Cookie' item material in minecraft. <br>
+ * ID of material: 357 <br>
+ * String ID of material: minecraft:cookie <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class CookieMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class CookieMat extends EdibleItemMat
     private static final Map<String, CookieMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<CookieMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected CookieMat()
     {
         super("COOKIE", 357, "minecraft:cookie", "COOKIE", (short) 0x00, 2, 0.5F);

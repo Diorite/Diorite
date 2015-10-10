@@ -9,8 +9,31 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "CobblestoneWall" and all its subtypes.
+ * Class representing 'Cobblestone Wall' block material in minecraft. <br>
+ * ID of block: 139 <br>
+ * String ID of block: minecraft:cobblestone_wall <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * MOSSY:
+ * Type name: 'Mossy' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * COBBLESTONE_WALL:
+ * Type name: 'Cobblestone Wall' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class CobblestoneWallMat extends BlockMaterialData
 {
     /**

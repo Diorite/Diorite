@@ -8,8 +8,38 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "TallGrass" and all its subtypes.
+ * Class representing 'Tall Grass' block material in minecraft. <br>
+ * ID of block: 31 <br>
+ * String ID of block: minecraft:tallgrass <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * FERN:
+ * Type name: 'Fern' <br>
+ * SubID: 2 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * GRASS:
+ * Type name: 'Grass' <br>
+ * SubID: 1 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SHRUB:
+ * Type name: 'Shrub' <br>
+ * SubID: 0 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class TallGrassMat extends FlowerMat
 {
     /**

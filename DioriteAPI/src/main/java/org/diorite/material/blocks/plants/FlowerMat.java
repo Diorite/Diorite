@@ -6,8 +6,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * Abstract class for flower-based blocks
  */
+@SuppressWarnings("JavaDoc")
 public abstract class FlowerMat extends PlantMat
 {
+    /**
+     * Type of flower.
+     */
     protected final FlowerTypeMat flowerType;
 
     protected FlowerMat(final String enumName, final int id, final String minecraftId, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)

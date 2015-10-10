@@ -11,15 +11,22 @@ import org.diorite.material.blocks.PowerableMat;
 /**
  * Abstract class for all button-type blocks.
  */
+@SuppressWarnings("JavaDoc")
 public abstract class ButtonMat extends BlockMaterialData implements PowerableMat, AttachableMat
 {
     /**
-     * Bit flag defining if rail is powered.
+     * Bit flag defining if button is powered.
      * If bit is set to 0, then it isn't powered
      */
     public static final byte POWERED_FLAG = 0x08;
 
+    /**
+     * Face direction of this button.
+     */
     protected final BlockFace face;
+    /**
+     * If button is powered. (clicked)
+     */
     protected final boolean   powered;
 
     protected ButtonMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)

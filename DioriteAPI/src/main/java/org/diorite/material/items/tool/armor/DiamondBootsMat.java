@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents diamond boots.
+ * Class representing 'Diamond Boots' item material in minecraft. <br>
+ * ID of material: 313 <br>
+ * String ID of material: minecraft:diamond_boots <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class DiamondBootsMat extends BootsMat
 {
     /**

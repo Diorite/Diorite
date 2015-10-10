@@ -8,6 +8,9 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.blocks.DirectionalMat;
 import org.diorite.material.blocks.PowerableMat;
 
+/**
+ * Abstract class for all piston-based blocks.
+ */
 public abstract class PistonBaseMat extends BlockMaterialData implements DirectionalMat, PowerableMat
 {
     /**
@@ -40,6 +43,8 @@ public abstract class PistonBaseMat extends BlockMaterialData implements Directi
     }
 
     /**
+     * Returns true if this is extended sub-type.
+     *
      * @return true if this is extended sub-type.
      */
     public boolean isExtended()

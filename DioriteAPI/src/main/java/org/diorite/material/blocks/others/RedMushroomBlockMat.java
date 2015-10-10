@@ -9,8 +9,108 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "RedMushroomBlock" and all its subtypes.
+ * Class representing 'Red Mushroom Block' block material in minecraft. <br>
+ * ID of block: 100 <br>
+ * String ID of block: minecraft:red_mushroom_block <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * STEAM_FULL:
+ * Type name: 'Steam Full' <br>
+ * SubID: 15 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_FULL:
+ * Type name: 'Cap Full' <br>
+ * SubID: 14 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * STEAM:
+ * Type name: 'Steam' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_SOUTH_EAST:
+ * Type name: 'Cap South East' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_SOUTH:
+ * Type name: 'Cap South' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_SOUTH_WEST:
+ * Type name: 'Cap South West' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_EAST:
+ * Type name: 'Cap East' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP:
+ * Type name: 'Cap' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_WEST:
+ * Type name: 'Cap West' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_NORTH_EAST:
+ * Type name: 'Cap North East' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_NORTH:
+ * Type name: 'Cap North' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * CAP_NORTH_WEST:
+ * Type name: 'Cap North West' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * PORES_FULL:
+ * Type name: 'Pores Full' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class RedMushroomBlockMat extends MushroomBlockMat
 {
     /**

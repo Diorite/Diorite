@@ -9,8 +9,87 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Rail" and all its subtypes.
+ * Class representing 'Rail' block material in minecraft. <br>
+ * ID of block: 66 <br>
+ * String ID of block: minecraft:rail <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * CURVED_NORTH_EAST:
+ * Type name: 'Curved North East' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * CURVED_NORTH_WEST:
+ * Type name: 'Curved North West' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * CURVED_SOUTH_WEST:
+ * Type name: 'Curved South West' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * CURVED_SOUTH_EAST:
+ * Type name: 'Curved South East' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_SOUTH:
+ * Type name: 'Ascending South' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_NORTH:
+ * Type name: 'Ascending North' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_WEST:
+ * Type name: 'Ascending West' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_EAST:
+ * Type name: 'Ascending East' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * FLAT_WEST_EAST:
+ * Type name: 'Flat West East' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * FLAT_NORTH_SOUTH:
+ * Type name: 'Flat North South' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class RailMat extends RailsMat
 {
     /**

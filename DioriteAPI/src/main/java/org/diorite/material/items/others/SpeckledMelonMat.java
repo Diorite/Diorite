@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Speckled Melon' item material in minecraft. <br>
+ * ID of material: 382 <br>
+ * String ID of material: minecraft:speckled_melon <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class SpeckledMelonMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class SpeckledMelonMat extends ItemMaterialData
     private static final Map<String, SpeckledMelonMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<SpeckledMelonMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected SpeckledMelonMat()
     {
         super("SPECKLED_MELON", 382, "minecraft:speckled_melon", "SPECKLED_MELON", (short) 0x00);

@@ -10,8 +10,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Bookshelf" and all its subtypes.
+ * Class representing 'Bookshelf' block material in minecraft. <br>
+ * ID of block: 47 <br>
+ * String ID of block: minecraft:bookshelf <br>
+ * Hardness: 1,5 <br>
+ * Blast Resistance 7,5
  */
+@SuppressWarnings("JavaDoc")
 public class BookshelfMat extends BlockMaterialData implements FuelMat
 {
     /**

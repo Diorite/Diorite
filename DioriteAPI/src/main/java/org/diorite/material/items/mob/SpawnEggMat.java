@@ -13,7 +13,13 @@ import org.diorite.utils.collections.maps.SimpleEnumMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Spawn Egg Creeper' item material in minecraft. <br>
+ * ID of material: 383 <br>
+ * String ID of material: minecraft:spawn_egg <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class SpawnEggMat extends ItemMaterialData
 {
     /**
@@ -32,6 +38,7 @@ public class SpawnEggMat extends ItemMaterialData
 
     protected final EntityType entityType;
 
+    @SuppressWarnings("MagicNumber")
     protected SpawnEggMat()
     {
         super("SPAWN_EGG_CREEPER", 383, "minecraft:spawn_egg", "CREEPER", (short) 0x50);

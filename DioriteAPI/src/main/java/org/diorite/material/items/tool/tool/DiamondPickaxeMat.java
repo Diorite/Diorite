@@ -11,7 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+/**
+ * Class representing 'Diamond Pickaxe' item material in minecraft. <br>
+ * ID of material: 278 <br>
+ * String ID of material: minecraft:diamond_Pickaxe <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class DiamondPickaxeMat extends PickaxeMat
 {
     /**

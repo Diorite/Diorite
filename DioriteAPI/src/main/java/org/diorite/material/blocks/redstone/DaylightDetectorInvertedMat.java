@@ -9,11 +9,130 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DaylightDetectorInverted" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Daylight Detector Inverted' block material in minecraft. <br>
+ * ID of block: 178 <br>
+ * String ID of block: minecraft:daylight_detector_inverted <br>
+ * This block can't be used in inventory, valid material for this block: 'Daylight Detector'/'Off' (minecraft:daylight_detector(151):0) <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * 15:
+ * Type name: '15' <br>
+ * SubID: 15 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 14:
+ * Type name: '14' <br>
+ * SubID: 14 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 13:
+ * Type name: '13' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 12:
+ * Type name: '12' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 11:
+ * Type name: '11' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 10:
+ * Type name: '10' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 9:
+ * Type name: '9' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 8:
+ * Type name: '8' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 7:
+ * Type name: '7' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 6:
+ * Type name: '6' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 5:
+ * Type name: '5' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 4:
+ * Type name: '4' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 3:
+ * Type name: '3' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 2:
+ * Type name: '2' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * 1:
+ * Type name: '1' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * OFF:
+ * Type name: 'Off' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * </ol>
  */
-@SuppressWarnings("MagicNumber")
+@SuppressWarnings("JavaDoc")
 public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
 {
     /**
@@ -32,10 +151,15 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_8   = new DaylightDetectorInvertedMat(8);
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_9   = new DaylightDetectorInvertedMat(9);
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_10  = new DaylightDetectorInvertedMat(10);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_11  = new DaylightDetectorInvertedMat(11);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_12  = new DaylightDetectorInvertedMat(12);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_13  = new DaylightDetectorInvertedMat(13);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_14  = new DaylightDetectorInvertedMat(14);
+    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_15  = new DaylightDetectorInvertedMat(15);
 
     private static final Map<String, DaylightDetectorInvertedMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -87,6 +211,7 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
         return getByID(POWER_RANGE.getIn(strength));
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public DaylightDetectorInvertedMat getPowered(final boolean powered)
     {

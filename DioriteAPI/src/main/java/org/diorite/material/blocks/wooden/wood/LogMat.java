@@ -17,8 +17,185 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Log" and all its subtypes.
+ * Class representing 'Log' block material in minecraft. <br>
+ * ID of block: 17 <br>
+ * String ID of block: minecraft:log <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DARK_OAK_NONE:
+ * Type name: 'Dark Oak None' <br>
+ * SubID: 13 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * ACACIA_NONE:
+ * Type name: 'Acacia None' <br>
+ * SubID: 12 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * DARK_OAK_NORTH_SOUTH:
+ * Type name: 'Dark Oak North South' <br>
+ * SubID: 9 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * ACACIA_NORTH_SOUTH:
+ * Type name: 'Acacia North South' <br>
+ * SubID: 8 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * DARK_OAK_EAST_WEST:
+ * Type name: 'Dark Oak East West' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * ACACIA_EAST_WEST:
+ * Type name: 'Acacia East West' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * DARK_OAK_UP_DOWN:
+ * Type name: 'Dark Oak Up Down' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * ACACIA_UP_DOWN:
+ * Type name: 'Acacia Up Down' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * JUNGLE_NONE:
+ * Type name: 'Jungle None' <br>
+ * SubID: 15 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * BIRCH_NONE:
+ * Type name: 'Birch None' <br>
+ * SubID: 14 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * SPRUCE_NONE:
+ * Type name: 'Spruce None' <br>
+ * SubID: 13 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * OAK_NONE:
+ * Type name: 'Oak None' <br>
+ * SubID: 12 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * JUNGLE_NORTH_SOUTH:
+ * Type name: 'Jungle North South' <br>
+ * SubID: 11 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * BIRCH_NORTH_SOUTH:
+ * Type name: 'Birch North South' <br>
+ * SubID: 10 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * SPRUCE_NORTH_SOUTH:
+ * Type name: 'Spruce North South' <br>
+ * SubID: 9 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * OAK_NORTH_SOUTH:
+ * Type name: 'Oak North South' <br>
+ * SubID: 8 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * JUNGLE_EAST_WEST:
+ * Type name: 'Jungle East West' <br>
+ * SubID: 7 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * BIRCH_EAST_WEST:
+ * Type name: 'Birch East West' <br>
+ * SubID: 6 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * SPRUCE_EAST_WEST:
+ * Type name: 'Spruce East West' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * OAK_EAST_WEST:
+ * Type name: 'Oak East West' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * JUNGLE_UP_DOWN:
+ * Type name: 'Jungle Up Down' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * BIRCH_UP_DOWN:
+ * Type name: 'Birch Up Down' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * SPRUCE_UP_DOWN:
+ * Type name: 'Spruce Up Down' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * <li>
+ * QAK_UP_DOWN:
+ * Type name: 'Qak Up Down' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 10 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class LogMat extends WoodMat implements RotatableMat, FuelMat
 {
     /**
@@ -246,12 +423,12 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
             return getByID(id);
         }
 
-        @SuppressWarnings("MagicNumber")
         /**
          * Returns one of Log sub-type based on sub-id, may return null
          * @param id sub-type id
          * @return sub-type of Log or null
-         */ public static LogMat getByID(final int id)
+         */ @SuppressWarnings("MagicNumber")
+        public static LogMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

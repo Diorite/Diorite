@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents chain chestplate.
+ * Class representing 'Chainmail Chestplate' item material in minecraft. <br>
+ * ID of material: 303 <br>
+ * String ID of material: minecraft:chainmail_chestplate <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class ChainmailChestplateMat extends ChestplateMat
 {
     /**

@@ -9,9 +9,129 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "GoldenPressurePlate" and all its subtypes.
+ * Class representing 'Golden Pressure Plate' block material in minecraft. <br>
+ * ID of block: 147 <br>
+ * String ID of block: minecraft:light_weighted_pressure_plate <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * 15:
+ * Type name: '15' <br>
+ * SubID: 15 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 14:
+ * Type name: '14' <br>
+ * SubID: 14 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 13:
+ * Type name: '13' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 12:
+ * Type name: '12' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 11:
+ * Type name: '11' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 10:
+ * Type name: '10' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 9:
+ * Type name: '9' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 8:
+ * Type name: '8' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 7:
+ * Type name: '7' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 6:
+ * Type name: '6' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 5:
+ * Type name: '5' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 4:
+ * Type name: '4' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 3:
+ * Type name: '3' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 2:
+ * Type name: '2' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 1:
+ * Type name: '1' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * 0:
+ * Type name: '0' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * </ol>
  */
-@SuppressWarnings("MagicNumber")
+@SuppressWarnings("JavaDoc")
 public class GoldenPressurePlateMat extends WeightedPressurePlateMat
 {
     /**
@@ -30,10 +150,15 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_8  = new GoldenPressurePlateMat(0x8);
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_9  = new GoldenPressurePlateMat(0x9);
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_10 = new GoldenPressurePlateMat(0xA);
+    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_11 = new GoldenPressurePlateMat(0xB);
+    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_12 = new GoldenPressurePlateMat(0xC);
+    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_13 = new GoldenPressurePlateMat(0xD);
+    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_14 = new GoldenPressurePlateMat(0xE);
+    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_15 = new GoldenPressurePlateMat(0xF);
 
     private static final Map<String, GoldenPressurePlateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
@@ -67,12 +192,14 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
         return getByID(id);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public GoldenPressurePlateMat getPowerStrength(final int strength)
     {
         return getByID(DioriteMathUtils.getInRange(strength, 0, 15));
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public GoldenPressurePlateMat getPowered(final boolean powered)
     {
@@ -112,6 +239,7 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
      *
      * @return sub-type of GoldenPressurePlate
      */
+    @SuppressWarnings("MagicNumber")
     public static GoldenPressurePlateMat getGoldenPressurePlate(final int power)
     {
         return getByID(DioriteMathUtils.getInRange(power, 0, 15));

@@ -16,8 +16,59 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "MonsterEggTrap" and all its subtypes.
+ * Class representing 'Monster Egg Trap' block material in minecraft. <br>
+ * ID of block: 97 <br>
+ * String ID of block: minecraft:monster_egg <br>
+ * Hardness: 0,75 <br>
+ * Blast Resistance 3,75 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * STONE_BRICK_CHISELED:
+ * Type name: 'Stone Brick Chiseled' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,75 <br>
+ * Blast Resistance 3,75 <br>
+ * </li>
+ * <li>
+ * STONE_BRICK_CRACKED:
+ * Type name: 'Stone Brick Cracked' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,75 <br>
+ * Blast Resistance 3,75 <br>
+ * </li>
+ * <li>
+ * STONE_BRICK_MOSSY:
+ * Type name: 'Stone Brick Mossy' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,75 <br>
+ * Blast Resistance 3,75 <br>
+ * </li>
+ * <li>
+ * STONE_BRICK:
+ * Type name: 'Stone Brick' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,75 <br>
+ * Blast Resistance 3,75 <br>
+ * </li>
+ * <li>
+ * COBBLESTONE:
+ * Type name: 'Cobblestone' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,75 <br>
+ * Blast Resistance 3,75 <br>
+ * </li>
+ * <li>
+ * STONE:
+ * Type name: 'Stone' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,75 <br>
+ * Blast Resistance 3,75 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class MonsterEggTrapMat extends StonyMat
 {
     /**

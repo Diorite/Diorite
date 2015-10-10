@@ -7,7 +7,29 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Golded Apple' item material in minecraft. <br>
+ * ID of material: 322 <br>
+ * String ID of material: minecraft:golden_apple <br>
+ * Max item stack size: 64 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol> 
+ * <li>
+ *     ENCHANTED:
+ *     Type name: 'Enchanted' <br>
+ *     SubID: 1 <br>
+ *     Max item stack size: 64
+ * </li>
+ * <li>
+ *     GOLDED_APPLE:
+ *     Type name: 'Golded Apple' <br>
+ *     SubID: 0 <br>
+ *     Max item stack size: 64
+ * </li>
+ * </ol>
+ */
+@SuppressWarnings("JavaDoc")
 public class GoldenAppleMat extends EdibleItemMat
 {
     /**
@@ -21,11 +43,13 @@ public class GoldenAppleMat extends EdibleItemMat
     private static final Map<String, GoldenAppleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<GoldenAppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected GoldenAppleMat()
     {
         super("GOLDED_APPLE", 322, "minecraft:golden_apple", "GOLDED_APPLE", (short) 0x00, 4, 9.6F);
     }
 
+    @SuppressWarnings("MagicNumber")
     protected GoldenAppleMat(final String name, final int type)
     {
         super(GOLDED_APPLE.name(), GOLDED_APPLE.getId(), GOLDED_APPLE.getMinecraftId(), name, (short) type, 4, 9.6F);

@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Bowl' item material in minecraft. <br>
+ * ID of material: 281 <br>
+ * String ID of material: minecraft:bowl <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class BowlMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class BowlMat extends ItemMaterialData
     private static final Map<String, BowlMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BowlMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BowlMat()
     {
         super("BOWL", 281, "minecraft:bowl", "BOWL", (short) 0x00);

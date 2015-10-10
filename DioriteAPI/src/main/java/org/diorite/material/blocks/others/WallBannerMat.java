@@ -14,10 +14,46 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "WallBanner" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Wall Banner' block material in minecraft. <br>
+ * ID of block: 177 <br>
+ * String ID of block: minecraft:wall_banner <br>
+ * This block can't be used in inventory, valid material for this block: 'Banner' (minecraft:banner(425):0) <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 5 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 2 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class WallBannerMat extends BannerBlockMat implements AttachableMat
 {
     /**

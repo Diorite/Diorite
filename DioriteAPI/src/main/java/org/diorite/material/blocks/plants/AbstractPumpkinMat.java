@@ -6,8 +6,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockFace;
 import org.diorite.material.blocks.DirectionalMat;
 
+/**
+ * Abstract class for all pumpkin-based items.
+ */
+@SuppressWarnings("JavaDoc")
 public abstract class AbstractPumpkinMat extends PlantMat implements DirectionalMat
 {
+    /**
+     * facing direction of pumpkin.
+     */
     protected final BlockFace face;
 
     protected AbstractPumpkinMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final float hardness, final float blastResistance)

@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents leather helmet.
+ * Class representing 'Leather Helmet' item material in minecraft. <br>
+ * ID of material: 298 <br>
+ * String ID of material: minecraft:leather_helmet <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class LeatherHelmetMat extends HelmetMat
 {
     /**

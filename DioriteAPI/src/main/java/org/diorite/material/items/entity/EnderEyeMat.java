@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Ender Eye' item material in minecraft. <br>
+ * ID of material: 381 <br>
+ * String ID of material: minecraft:ender_eye <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class EnderEyeMat extends ItemMaterialData implements PlaceableEntityMat
 {
     /**
@@ -22,6 +28,7 @@ public class EnderEyeMat extends ItemMaterialData implements PlaceableEntityMat
     private static final Map<String, EnderEyeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<EnderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected EnderEyeMat()
     {
         super("ENDER_EYE", 381, "minecraft:ender_eye", "ENDER_EYE", (short) 0x00);

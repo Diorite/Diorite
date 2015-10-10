@@ -10,6 +10,7 @@ import org.diorite.utils.math.ByteRange;
 /**
  * Abstract class for all DaylightDetector-based blocks
  */
+@SuppressWarnings("JavaDoc")
 public abstract class AbstractDaylightDetectorMat extends BlockMaterialData implements ChangeablePowerElementMat
 {
     /**
@@ -18,6 +19,9 @@ public abstract class AbstractDaylightDetectorMat extends BlockMaterialData impl
     @SuppressWarnings("MagicNumber")
     public static final ByteRange POWER_RANGE = new ByteRange(0, 15);
 
+    /**
+     * redstone power strength gived by this detector.
+     */
     protected final int power;
 
     protected AbstractDaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int power, final float hardness, final float blastResistance)

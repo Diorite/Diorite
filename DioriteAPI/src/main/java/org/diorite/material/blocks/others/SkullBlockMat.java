@@ -15,10 +15,53 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "SkullBlock" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Skull Block Floor' block material in minecraft. <br>
+ * ID of block: 144 <br>
+ * String ID of block: minecraft:skull <br>
+ * This block can't be used in inventory, valid material for this block: 'Skull'/'Skeleton' (minecraft:skull(397):0) <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * WALL_WEST:
+ * Type name: 'Wall West' <br>
+ * SubID: 5 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WALL_EAST:
+ * Type name: 'Wall East' <br>
+ * SubID: 4 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WALL_SOUTH:
+ * Type name: 'Wall South' <br>
+ * SubID: 3 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WALL_NORTH:
+ * Type name: 'Wall North' <br>
+ * SubID: 2 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * FLOOR:
+ * Type name: 'Floor' <br>
+ * SubID: 1 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class SkullBlockMat extends BlockMaterialData implements AttachableMat
 {
     /**

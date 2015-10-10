@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Stick' item material in minecraft. <br>
+ * ID of material: 280 <br>
+ * String ID of material: minecraft:stick <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class StickMat extends ItemMaterialData implements FuelMat
 {
     /**
@@ -22,6 +28,7 @@ public class StickMat extends ItemMaterialData implements FuelMat
     private static final Map<String, StickMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<StickMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected StickMat()
     {
         super("STICK", 280, "minecraft:stick", "STICK", (short) 0x00);
@@ -49,6 +56,7 @@ public class StickMat extends ItemMaterialData implements FuelMat
         return getByEnumName(type);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public int getFuelPower()
     {

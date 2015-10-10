@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Melon Seeds' item material in minecraft. <br>
+ * ID of material: 362 <br>
+ * String ID of material: minecraft:melon_seeds <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class MelonSeedsMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class MelonSeedsMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, MelonSeedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<MelonSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected MelonSeedsMat()
     {
         super("MELON_SEEDS", 362, "minecraft:melon_seeds", "MELON_SEEDS", (short) 0x00);

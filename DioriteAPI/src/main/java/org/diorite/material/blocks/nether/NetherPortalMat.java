@@ -17,10 +17,31 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "NetherPortal" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Nether Portal' block material in minecraft. <br>
+ * ID of block: 90 <br>
+ * String ID of block: minecraft:portal <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000000 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * NORTH_SOUTH:
+ * Type name: 'North South' <br>
+ * SubID: 2 <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000000 <br>
+ * </li>
+ * <li>
+ * EAST_WEST:
+ * Type name: 'East West' <br>
+ * SubID: 1 <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000000 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class NetherPortalMat extends BlockMaterialData implements RotatableMat, PortalMat
 {
     /**

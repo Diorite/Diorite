@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Enchanted Book' item material in minecraft. <br>
+ * ID of material: 403 <br>
+ * String ID of material: minecraft:enchanted_book <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class EnchantedBookMat extends ItemMaterialData implements EnchantableMat
 {
     /**
@@ -22,6 +28,7 @@ public class EnchantedBookMat extends ItemMaterialData implements EnchantableMat
     private static final Map<String, EnchantedBookMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<EnchantedBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected EnchantedBookMat()
     {
         super("ENCHANTED_BOOK", 403, "minecraft:enchanted_book", 1, "ENCHANTED_BOOK", (short) 0x00);

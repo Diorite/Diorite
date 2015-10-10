@@ -13,8 +13,94 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DetectorRail" and all its subtypes.
+ * Class representing 'Detector Rail' block material in minecraft. <br>
+ * ID of block: 28 <br>
+ * String ID of block: minecraft:detector_rail <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * ASCENDING_SOUTH_POWERED:
+ * Type name: 'Ascending South Powered' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_NORTH_POWERED:
+ * Type name: 'Ascending North Powered' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_WEST_POWERED:
+ * Type name: 'Ascending West Powered' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_EAST_POWERED:
+ * Type name: 'Ascending East Powered' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * FLAT_WEST_EAST_POWERED:
+ * Type name: 'Flat West East Powered' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_SOUTH:
+ * Type name: 'Ascending South' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_NORTH:
+ * Type name: 'Ascending North' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_WEST:
+ * Type name: 'Ascending West' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * ASCENDING_EAST:
+ * Type name: 'Ascending East' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * FLAT_WEST_EAST:
+ * Type name: 'Flat West East' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * <li>
+ * NORTH_SOUTH:
+ * Type name: 'North South' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,7 <br>
+ * Blast Resistance 3,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class DetectorRailMat extends RailsMat implements PowerableMat
 {
     /**

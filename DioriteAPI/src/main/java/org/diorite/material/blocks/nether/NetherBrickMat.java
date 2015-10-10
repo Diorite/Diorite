@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "NetherBrick" and all its subtypes.
+ * Class representing 'Nether Brick' block material in minecraft. <br>
+ * ID of block: 112 <br>
+ * String ID of block: minecraft:nether_brick <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class NetherBrickMat extends BlockMaterialData
 {
     /**

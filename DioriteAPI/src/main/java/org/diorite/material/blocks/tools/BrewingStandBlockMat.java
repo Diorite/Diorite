@@ -13,10 +13,74 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "BrewingStandBlock" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Brewing Stand Block' block material in minecraft. <br>
+ * ID of block: 117 <br>
+ * String ID of block: minecraft:brewing_stand <br>
+ * This block can't be used in inventory, valid material for this block: 'Brewing Stand' (minecraft:brewing_stand(379):0) <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * FULL:
+ * Type name: 'Full' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * E_F_F:
+ * Type name: 'E F F' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * F_E_F:
+ * Type name: 'F E F' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * E_E_F:
+ * Type name: 'E E F' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * F_F_E:
+ * Type name: 'F F E' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * E_F_E:
+ * Type name: 'E F E' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * F_E_E:
+ * Type name: 'F E E' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * EMPTY:
+ * Type name: 'Empty' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class BrewingStandBlockMat extends BlockMaterialData
 {
     /**

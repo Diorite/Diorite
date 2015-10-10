@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents chain leggings.
+ * Class representing 'Chainmail Leggings' item material in minecraft. <br>
+ * ID of material: 304 <br>
+ * String ID of material: minecraft:chainmail_leggings <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class ChainmailLeggingsMat extends LeggingsMat
 {
     /**

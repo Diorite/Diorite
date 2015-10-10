@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Arrow' item material in minecraft. <br>
+ * ID of material: 262 <br>
+ * String ID of material: minecraft:arrow <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class ArrowMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class ArrowMat extends ItemMaterialData
     private static final Map<String, ArrowMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<ArrowMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected ArrowMat()
     {
         super("ARROW", 262, "minecraft:arrow", "ARROW", (short) 0x00);

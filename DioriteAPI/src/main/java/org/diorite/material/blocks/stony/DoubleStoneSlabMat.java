@@ -10,10 +10,144 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DoubleStoneSlab" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Double Stone Slab' block material in minecraft. <br>
+ * ID of block: 43 <br>
+ * String ID of block: minecraft:double_stone_slab <br>
+ * This block can't be used in inventory, valid material for this block: 'Stone Slab'/'Stone' (minecraft:stone_slab(44):0) <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * RED_SANDSTONE_SMOOTH:
+ * Type name: 'Red Sandstone Smooth' <br>
+ * SubID: 24 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * RED_SANDSTONE:
+ * Type name: 'Red Sandstone' <br>
+ * SubID: 16 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * QUARTZ_SMOOTH:
+ * Type name: 'Quartz Smooth' <br>
+ * SubID: 15 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * NETHER_BRICKS_SMOOTH:
+ * Type name: 'Nether Bricks Smooth' <br>
+ * SubID: 14 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE_BRICKS_SMOOTH:
+ * Type name: 'Stone Bricks Smooth' <br>
+ * SubID: 13 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * BRICKS_SMOOTH:
+ * Type name: 'Bricks Smooth' <br>
+ * SubID: 12 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * COBBLESTONE_SMOOTH:
+ * Type name: 'Cobblestone Smooth' <br>
+ * SubID: 11 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * WOODEN_SMOOTH:
+ * Type name: 'Wooden Smooth' <br>
+ * SubID: 10 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * SANDSTONE_SMOOTH:
+ * Type name: 'Sandstone Smooth' <br>
+ * SubID: 9 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE_SMOOTH:
+ * Type name: 'Stone Smooth' <br>
+ * SubID: 8 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * QUARTZ:
+ * Type name: 'Quartz' <br>
+ * SubID: 7 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * NETHER_BRICKS:
+ * Type name: 'Nether Bricks' <br>
+ * SubID: 6 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE_BRICKS:
+ * Type name: 'Stone Bricks' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * BRICKS:
+ * Type name: 'Bricks' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * COBBLESTONE:
+ * Type name: 'Cobblestone' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * WOODEN:
+ * Type name: 'Wooden' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * SANDSTONE:
+ * Type name: 'Sandstone' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE:
+ * Type name: 'Stone' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class DoubleStoneSlabMat extends StonySlabMat
 {
     /**
@@ -161,12 +295,12 @@ public class DoubleStoneSlabMat extends StonySlabMat
             super(enumName, slabType, stoneType);
         }
 
-        @SuppressWarnings("MagicNumber")
         /**
          * Returns one of DoubleStoneSlab sub-type based on sub-id, may return null
          * @param id sub-type id
          * @return sub-type of DoubleStoneSlab or null
-         */ public static DoubleStoneSlabMat getByID(final int id)
+         */ @SuppressWarnings("MagicNumber")
+        public static DoubleStoneSlabMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

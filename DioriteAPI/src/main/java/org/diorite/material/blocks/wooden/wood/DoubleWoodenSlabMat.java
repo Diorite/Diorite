@@ -11,10 +11,60 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DoubleWoodenSlab" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Double Wooden Slab' block material in minecraft. <br>
+ * ID of block: 125 <br>
+ * String ID of block: minecraft:double_wooden_slab <br>
+ * This block can't be used in inventory, valid material for this block: 'Wooden Slab'/'Oak' (minecraft:wooden_slab(126):0) <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DARK_OAK:
+ * Type name: 'Dark Oak' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * ACACIA:
+ * Type name: 'Acacia' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * JUNGLE:
+ * Type name: 'Jungle' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * BIRCH:
+ * Type name: 'Birch' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * SPRUCE:
+ * Type name: 'Spruce' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * OAK:
+ * Type name: 'Oak' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class DoubleWoodenSlabMat extends WoodSlabMat
 {
     /**

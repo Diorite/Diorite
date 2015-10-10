@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Painting' item material in minecraft. <br>
+ * ID of material: 321 <br>
+ * String ID of material: minecraft:painting <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class PaintingMat extends ItemMaterialData implements PlaceableEntityMat
 {
     /**
@@ -22,6 +28,7 @@ public class PaintingMat extends ItemMaterialData implements PlaceableEntityMat
     private static final Map<String, PaintingMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<PaintingMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected PaintingMat()
     {
         super("PAINTING", 321, "minecraft:painting", "PAINTING", (short) 0x00);

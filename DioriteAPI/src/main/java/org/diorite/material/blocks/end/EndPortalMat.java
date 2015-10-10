@@ -11,10 +11,14 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "EndPortal" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'End Portal' block material in minecraft. <br>
+ * ID of block: 119 <br>
+ * String ID of block: minecraft:end_portal <br>
+ * This block can't be used in inventory, valid material for this block: 'End Portal Frame'/'South' (minecraft:end_portal_frame(120):0) <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000000
  */
+@SuppressWarnings("JavaDoc")
 public class EndPortalMat extends BlockMaterialData implements PortalMat
 {
     /**

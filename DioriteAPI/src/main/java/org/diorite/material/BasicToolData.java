@@ -8,7 +8,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class BasicToolData
 {
+    /**
+     * Durability of this tool.
+     */
     protected final int baseDurability;
+    /**
+     * Enchantability level of this tool, used when enchanting.
+     */
     protected final int enchantability;
 
     /**

@@ -11,8 +11,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "CoalOre" and all its subtypes.
+ * Class representing 'Coal Ore' block material in minecraft. <br>
+ * ID of block: 16 <br>
+ * String ID of block: minecraft:coal_ore <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class CoalOreMat extends OreMat
 {
     /**

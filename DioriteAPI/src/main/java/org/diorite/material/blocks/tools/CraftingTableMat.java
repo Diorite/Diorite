@@ -10,8 +10,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "CraftingTable" and all its subtypes.
+ * Class representing 'Crafting Table' block material in minecraft. <br>
+ * ID of block: 58 <br>
+ * String ID of block: minecraft:crafting_table <br>
+ * Hardness: 2,5 <br>
+ * Blast Resistance 12,5
  */
+@SuppressWarnings("JavaDoc")
 public class CraftingTableMat extends BlockMaterialData implements FuelMat
 {
     /**

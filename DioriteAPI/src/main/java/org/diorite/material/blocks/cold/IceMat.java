@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Ice" and all its subtypes.
+ * Class representing 'Ice' block material in minecraft. <br>
+ * ID of block: 79 <br>
+ * String ID of block: minecraft:ice <br>
+ * Hardness: 0,5 <br>
+ * Blast Resistance 2,5
  */
+@SuppressWarnings("JavaDoc")
 public class IceMat extends BlockMaterialData
 {
     /**

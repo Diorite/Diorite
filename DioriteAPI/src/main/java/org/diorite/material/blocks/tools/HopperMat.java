@@ -16,8 +16,87 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Hopper" and all its subtypes.
+ * Class representing 'Hopper' block material in minecraft. <br>
+ * ID of block: 154 <br>
+ * String ID of block: minecraft:hopper <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST_POWERED:
+ * Type name: 'East Powered' <br>
+ * SubID: 13 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_POWERED:
+ * Type name: 'West Powered' <br>
+ * SubID: 12 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_POWERED:
+ * Type name: 'South Powered' <br>
+ * SubID: 11 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH_POWERED:
+ * Type name: 'North Powered' <br>
+ * SubID: 10 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * DOWN_POWERED:
+ * Type name: 'Down Powered' <br>
+ * SubID: 8 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 5 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 2 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * DOWN:
+ * Type name: 'Down' <br>
+ * SubID: 0 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class HopperMat extends BlockMaterialData implements DirectionalMat, PowerableMat
 {
     /**

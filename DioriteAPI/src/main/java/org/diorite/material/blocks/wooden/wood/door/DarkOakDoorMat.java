@@ -15,10 +15,102 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DarkOakDoor" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Dark Oak Door' block material in minecraft. <br>
+ * ID of block: 197 <br>
+ * String ID of block: minecraft:dark_oak_door <br>
+ * This block can't be used in inventory, valid material for this block: 'Dark Oak Door Item' (minecraft:dark_oak_door(431):0) <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * TOP_RIGHT_POWERED:
+ * Type name: 'Top Right Powered' <br>
+ * SubID: 11 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * TOP_LEFT_POWERED:
+ * Type name: 'Top Left Powered' <br>
+ * SubID: 10 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * TOP_RIGHT:
+ * Type name: 'Top Right' <br>
+ * SubID: 9 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * TOP_LEFT:
+ * Type name: 'Top Left' <br>
+ * SubID: 8 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BOTTOM_OPEN_NORTH:
+ * Type name: 'Bottom Open North' <br>
+ * SubID: 7 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BOTTOM_OPEN_WEST:
+ * Type name: 'Bottom Open West' <br>
+ * SubID: 6 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BOTTOM_OPEN_SOUTH:
+ * Type name: 'Bottom Open South' <br>
+ * SubID: 5 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BOTTOM_OPEN_EAST:
+ * Type name: 'Bottom Open East' <br>
+ * SubID: 4 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BOTTOM_NORTH:
+ * Type name: 'Bottom North' <br>
+ * SubID: 3 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BOTTOM_WEST:
+ * Type name: 'Bottom West' <br>
+ * SubID: 2 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BOTTOM_SOUTH:
+ * Type name: 'Bottom South' <br>
+ * SubID: 1 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BOTTOM_EAST:
+ * Type name: 'Bottom East' <br>
+ * SubID: 0 <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class DarkOakDoorMat extends WoodenDoorMat
 {
     /**

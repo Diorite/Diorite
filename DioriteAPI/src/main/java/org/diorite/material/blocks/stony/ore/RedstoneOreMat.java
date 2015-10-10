@@ -11,8 +11,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "RedstoneOre" and all its subtypes.
+ * Class representing 'Redstone Ore' block material in minecraft. <br>
+ * ID of block: 73 <br>
+ * String ID of block: minecraft:redstone_ore <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class RedstoneOreMat extends OreMat
 {
     /**

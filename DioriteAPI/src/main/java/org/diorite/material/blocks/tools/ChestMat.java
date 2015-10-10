@@ -16,8 +16,45 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Chest" and all its subtypes.
+ * Class representing 'Chest' block material in minecraft. <br>
+ * ID of block: 54 <br>
+ * String ID of block: minecraft:chest <br>
+ * Hardness: 12,5 <br>
+ * Blast Resistance 2,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 5 <br>
+ * Hardness: 12,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 12,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 12,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 0 <br>
+ * Hardness: 12,5 <br>
+ * Blast Resistance 2,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class ChestMat extends BlockMaterialData implements DirectionalMat, FuelMat
 {
     /**

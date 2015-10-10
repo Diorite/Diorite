@@ -10,8 +10,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "IronBars" and all its subtypes.
+ * Class representing 'Iron Bars' block material in minecraft. <br>
+ * ID of block: 101 <br>
+ * String ID of block: minecraft:iron_bars <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class IronBarsMat extends BlockMaterialData implements FenceMat
 {
     /**

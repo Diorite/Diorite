@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Beef' item material in minecraft. <br>
+ * ID of material: 363 <br>
+ * String ID of material: minecraft:beef <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class BeefMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class BeefMat extends EdibleItemMat
     private static final Map<String, BeefMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BeefMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BeefMat()
     {
         super("BEEF", 363, "minecraft:beef", "BEEF", (short) 0x00, 3, 1.8F);

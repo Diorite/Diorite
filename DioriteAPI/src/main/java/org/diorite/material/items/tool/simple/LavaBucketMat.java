@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Lava Bucket' item material in minecraft. <br>
+ * ID of material: 327 <br>
+ * String ID of material: minecraft:lava_bucket <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class LavaBucketMat extends ItemMaterialData implements FuelMat
 {
     /**
@@ -22,6 +28,7 @@ public class LavaBucketMat extends ItemMaterialData implements FuelMat
     private static final Map<String, LavaBucketMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<LavaBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected LavaBucketMat()
     {
         super("LAVA_BUCKET", 327, "minecraft:lava_bucket", 1, "LAVA_BUCKET", (short) 0x00);
@@ -49,6 +56,7 @@ public class LavaBucketMat extends ItemMaterialData implements FuelMat
         return getByEnumName(type);
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public int getFuelPower()
     {

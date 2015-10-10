@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Fermented Spider Eye' item material in minecraft. <br>
+ * ID of material: 376 <br>
+ * String ID of material: minecraft:fermented_spider_eye <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class FermentedSpiderEyeMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class FermentedSpiderEyeMat extends ItemMaterialData
     private static final Map<String, FermentedSpiderEyeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<FermentedSpiderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected FermentedSpiderEyeMat()
     {
         super("FERMENTED_SPIDER_EYE", 376, "minecraft:fermented_spider_eye", "FERMENTED_SPIDER_EYE", (short) 0x00);

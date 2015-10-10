@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DarkOakFence" and all its subtypes.
+ * Class representing 'Dark Oak Fence' block material in minecraft. <br>
+ * ID of block: 191 <br>
+ * String ID of block: minecraft:dark_oak_fence <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class DarkOakFenceMat extends WoodenFenceMat
 {
     /**

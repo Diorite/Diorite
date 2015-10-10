@@ -12,8 +12,31 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "CommandBlock" and all its subtypes.
+ * Class representing 'Command Block' block material in minecraft. <br>
+ * ID of block: 137 <br>
+ * String ID of block: minecraft:command_block <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000000 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * TRIGGERED:
+ * Type name: 'Triggered' <br>
+ * SubID: 1 <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000000 <br>
+ * </li>
+ * <li>
+ * COMMAND_BLOCK:
+ * Type name: 'Command Block' <br>
+ * SubID: 0 <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000000 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class CommandBlockMat extends BlockMaterialData
 {
     /**

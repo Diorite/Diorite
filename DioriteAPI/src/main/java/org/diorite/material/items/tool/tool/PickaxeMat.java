@@ -4,6 +4,10 @@ import org.diorite.material.ToolMaterial;
 import org.diorite.material.ToolType;
 import org.diorite.material.items.tool.ToolMat;
 
+/**
+ * Abstract class for all pickaxe-based tools.
+ */
+@SuppressWarnings("JavaDoc")
 public abstract class PickaxeMat extends ToolMat
 {
     protected PickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial)

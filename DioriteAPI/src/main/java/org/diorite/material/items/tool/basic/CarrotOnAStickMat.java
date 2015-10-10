@@ -11,7 +11,13 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+/**
+ * Class representing 'Carrot On A Stick' item material in minecraft. <br>
+ * ID of material: 398 <br>
+ * String ID of material: minecraft:carrot_on_a_stick <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class CarrotOnAStickMat extends BasicToolMat
 {
     /**

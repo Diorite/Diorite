@@ -12,8 +12,101 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "WoodenSlab" and all its subtypes.
+ * Class representing 'Wooden Slab' block material in minecraft. <br>
+ * ID of block: 126 <br>
+ * String ID of block: minecraft:wooden_slab <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DARK_OAKUPPER:
+ * Type name: 'Dark Oakupper' <br>
+ * SubID: 13 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * ACACIAUPPER:
+ * Type name: 'Acaciaupper' <br>
+ * SubID: 12 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * JUNGLEUPPER:
+ * Type name: 'Jungleupper' <br>
+ * SubID: 11 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BIRCHUPPER:
+ * Type name: 'Birchupper' <br>
+ * SubID: 10 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SPRUCEUPPER:
+ * Type name: 'Spruceupper' <br>
+ * SubID: 9 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * OAKUPPER:
+ * Type name: 'Oakupper' <br>
+ * SubID: 8 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * DARK_OAK:
+ * Type name: 'Dark Oak' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * ACACIA:
+ * Type name: 'Acacia' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * JUNGLE:
+ * Type name: 'Jungle' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * BIRCH:
+ * Type name: 'Birch' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SPRUCE:
+ * Type name: 'Spruce' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * OAK:
+ * Type name: 'Oak' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class WoodenSlabMat extends WoodSlabMat implements FuelMat
 {
     /**

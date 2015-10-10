@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Golden Horse Armor' item material in minecraft. <br>
+ * ID of material: 418 <br>
+ * String ID of material: minecraft:golden_horse_armor <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class GoldenHorseArmorMat extends AbstractHorseArmor
 {
     /**
@@ -20,6 +26,7 @@ public class GoldenHorseArmorMat extends AbstractHorseArmor
     private static final Map<String, GoldenHorseArmorMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<GoldenHorseArmorMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected GoldenHorseArmorMat()
     {
         super("GOLDEN_HORSE_ARMOR", 418, "minecraft:golden_horse_armor", "GOLDEN_HORSE_ARMOR", (short) 0x00);

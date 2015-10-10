@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Compass' item material in minecraft. <br>
+ * ID of material: 345 <br>
+ * String ID of material: minecraft:compass <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class CompassMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class CompassMat extends ItemMaterialData
     private static final Map<String, CompassMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<CompassMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected CompassMat()
     {
         super("COMPASS", 345, "minecraft:compass", "COMPASS", (short) 0x00);

@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "WaterLily" and all its subtypes.
+ * Class representing 'Water Lily' block material in minecraft. <br>
+ * ID of block: 111 <br>
+ * String ID of block: minecraft:waterlily <br>
+ * Hardness: 0,6 <br>
+ * Blast Resistance 0
  */
+@SuppressWarnings("JavaDoc")
 public class WaterLilyMat extends PlantMat
 {
     /**

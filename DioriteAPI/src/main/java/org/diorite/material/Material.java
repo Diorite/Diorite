@@ -391,6 +391,7 @@ import org.diorite.utils.math.DioriteMathUtils;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
+@SuppressWarnings("JavaDoc")
 public abstract class Material implements SimpleEnum<Material>
 {
     public static final int MATERIALS_SIZE = 385;
@@ -927,11 +928,25 @@ public abstract class Material implements SimpleEnum<Material>
 
     // TODO: drop pipeline?
 
+    /**
+     * Check if given material have this same id as this.
+     *
+     * @param mat material to check.
+     *
+     * @return true if this materials use this same id;
+     */
     public boolean isThisSameID(final Material mat)
     {
-        return this.enumName.equals(mat.enumName);
+        return this.id == (mat.getId());
     }
 
+    /**
+     * Simple equals for material, it only check enumname without checking sub-type.
+     *
+     * @param o object to check.
+     *
+     * @return true if given object is material with this same enum name.
+     */
     public final boolean simpleEquals(final Object o)
     {
         //noinspection ObjectEquality
@@ -978,6 +993,11 @@ public abstract class Material implements SimpleEnum<Material>
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("id", this.id).append("maxStack", this.maxStack).toString();
     }
 
+    /**
+     * Returns id of material.
+     *
+     * @return id of material.
+     */
     public int getId()
     {
         return this.id;
@@ -1212,11 +1232,26 @@ public abstract class Material implements SimpleEnum<Material>
         return matchMaterial(string, extended, true);
     }
 
+    /**
+     * Returns one of material based on id, may return null
+     *
+     * @param id id of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByID(final int id)
     {
         return byID.get(id);
     }
 
+    /**
+     * Returns one of material sub-type based on id and meta, may return null
+     *
+     * @param id   id of material.
+     * @param meta sub-id of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByID(final int id, final int meta)
     {
         final Material mat = byID.get(id);
@@ -1227,6 +1262,14 @@ public abstract class Material implements SimpleEnum<Material>
         return null;
     }
 
+    /**
+     * Returns one of material sub-type based on id and meta, may return null
+     *
+     * @param id   id of material.
+     * @param meta sub-type name of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByID(final int id, final String meta)
     {
         final Material mat = byID.get(id);
@@ -1237,11 +1280,26 @@ public abstract class Material implements SimpleEnum<Material>
         return null;
     }
 
+    /**
+     * Returns one of material based on enum name, may return null
+     *
+     * @param name enum name of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByEnumName(final String name)
     {
         return byName.get(name);
     }
 
+    /**
+     * Returns one of material sub-type based on enum name and meta, may return null
+     *
+     * @param name enum name of material.
+     * @param meta sub-id of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByEnumName(final String name, final int meta)
     {
         final Material mat = byName.get(name);
@@ -1252,6 +1310,14 @@ public abstract class Material implements SimpleEnum<Material>
         return null;
     }
 
+    /**
+     * Returns one of material sub-type based on enum name and meta, may return null
+     *
+     * @param name enum name of material.
+     * @param meta sub-type name of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByEnumName(final String name, final String meta)
     {
         final Material mat = byName.get(name);
@@ -1262,11 +1328,26 @@ public abstract class Material implements SimpleEnum<Material>
         return null;
     }
 
+    /**
+     * Returns one of material based on minecraft id, may return null
+     *
+     * @param name minecraft id of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByMinecraftId(final String name)
     {
         return byMinecraftId.get(name);
     }
 
+    /**
+     * Returns one of material based on minecraft id and meta, may return null
+     *
+     * @param name minecraft id of material.
+     * @param meta sub-id of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByMinecraftId(final String name, final int meta)
     {
         final Material mat = byMinecraftId.get(name);
@@ -1277,6 +1358,14 @@ public abstract class Material implements SimpleEnum<Material>
         return null;
     }
 
+    /**
+     * Returns one of material based on minecraft id and meta, may return null
+     *
+     * @param name minecraft id of material.
+     * @param meta sub-name of material.
+     *
+     * @return one of material or null
+     */
     public static Material getByMinecraftId(final String name, final String meta)
     {
         final Material mat = byMinecraftId.get(name);
@@ -1287,6 +1376,11 @@ public abstract class Material implements SimpleEnum<Material>
         return null;
     }
 
+    /**
+     * Register new material to diorite.
+     *
+     * @param element element to register.
+     */
     public static void register(final Material element)
     {
         byID.put(element.ordinal(), element);

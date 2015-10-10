@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "SlimeBlock" and all its subtypes.
+ * Class representing 'Slime Block' block material in minecraft. <br>
+ * ID of block: 165 <br>
+ * String ID of block: minecraft:slime <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0
  */
+@SuppressWarnings("JavaDoc")
 public class SlimeBlockMat extends BlockMaterialData
 {
     /**

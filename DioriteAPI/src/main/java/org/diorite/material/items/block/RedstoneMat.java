@@ -12,7 +12,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Redstone' item material in minecraft. <br>
+ * ID of material: 331 <br>
+ * String ID of material: minecraft:redstone <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class RedstoneMat extends OreItemMatExt implements PlaceableMat
 {
     /**
@@ -25,6 +31,7 @@ public class RedstoneMat extends OreItemMatExt implements PlaceableMat
     private static final Map<String, RedstoneMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RedstoneMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected RedstoneMat()
     {
         super("REDSTONE", 331, "minecraft:redstone", "REDSTONE", (short) 0x00, Material.REDSTONE_ORE, Material.REDSTONE_BLOCK);

@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Paper' item material in minecraft. <br>
+ * ID of material: 339 <br>
+ * String ID of material: minecraft:paper <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class PaperMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class PaperMat extends ItemMaterialData
     private static final Map<String, PaperMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<PaperMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected PaperMat()
     {
         super("PAPER", 339, "minecraft:paper", "PAPER", (short) 0x00);

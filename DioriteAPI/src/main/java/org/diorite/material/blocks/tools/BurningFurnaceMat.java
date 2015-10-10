@@ -14,8 +14,45 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "BurningFurnace" and all its subtypes.
+ * Class representing 'Burning Furnace' block material in minecraft. <br>
+ * ID of block: 62 <br>
+ * String ID of block: minecraft:lit_furnace <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 5 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 0 <br>
+ * Hardness: 3,5 <br>
+ * Blast Resistance 17,5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class BurningFurnaceMat extends BlockMaterialData implements DirectionalMat
 {
     /**

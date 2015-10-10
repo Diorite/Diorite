@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Glowstone" and all its subtypes.
+ * Class representing 'Glowstone' block material in minecraft. <br>
+ * ID of block: 89 <br>
+ * String ID of block: minecraft:glowstone <br>
+ * Hardness: 0,3 <br>
+ * Blast Resistance 1,5
  */
+@SuppressWarnings("JavaDoc")
 public class GlowstoneMat extends BlockMaterialData
 {
     /**

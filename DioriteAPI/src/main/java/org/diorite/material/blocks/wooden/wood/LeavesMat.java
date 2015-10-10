@@ -16,8 +16,185 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Leaves" and all its subtypes.
+ * Class representing 'Leaves' block material in minecraft. <br>
+ * ID of block: 18 <br>
+ * String ID of block: minecraft:leaves <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * DARK_OAK_NO_DECAY_AND_CHECK:
+ * Type name: 'Dark Oak No Decay And Check' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * ACACIA_NO_DECAY_AND_CHECK:
+ * Type name: 'Acacia No Decay And Check' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * DARK_OAK_CHECK_DECAY:
+ * Type name: 'Dark Oak Check Decay' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * ACACIA_CHECK_DECAY:
+ * Type name: 'Acacia Check Decay' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * DARK_OAK_NO_DECAY:
+ * Type name: 'Dark Oak No Decay' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * ACACIA_NO_DECAY:
+ * Type name: 'Acacia No Decay' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * DARK_OAK:
+ * Type name: 'Dark Oak' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * ACACIA:
+ * Type name: 'Acacia' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * JUNGLE_NO_DECAY_AND_CHECK:
+ * Type name: 'Jungle No Decay And Check' <br>
+ * SubID: 15 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * BIRCH_NO_DECAY_AND_CHECK:
+ * Type name: 'Birch No Decay And Check' <br>
+ * SubID: 14 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * SPRUCE_NO_DECAY_AND_CHECK:
+ * Type name: 'Spruce No Decay And Check' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * OAK_NO_DECAY_AND_CHECK:
+ * Type name: 'Oak No Decay And Check' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * JUNGLE_CHECK_DECAY:
+ * Type name: 'Jungle Check Decay' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * BIRCH_CHECK_DECAY:
+ * Type name: 'Birch Check Decay' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * SPRUCE_CHECK_DECAY:
+ * Type name: 'Spruce Check Decay' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * OAK_CHECK_DECAY:
+ * Type name: 'Oak Check Decay' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * JUNGLE_NO_DECAY:
+ * Type name: 'Jungle No Decay' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * BIRCH_NO_DECAY:
+ * Type name: 'Birch No Decay' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * SPRUCE_NO_DECAY:
+ * Type name: 'Spruce No Decay' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * OAK_NO_DECAY:
+ * Type name: 'Oak No Decay' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * JUNGLE:
+ * Type name: 'Jungle' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * BIRCH:
+ * Type name: 'Birch' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * SPRUCE:
+ * Type name: 'Spruce' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * QAK:
+ * Type name: 'Qak' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class LeavesMat extends WoodMat
 {
     /**
@@ -250,12 +427,12 @@ public class LeavesMat extends WoodMat
             return getByID(id);
         }
 
-        @SuppressWarnings("MagicNumber")
         /**
          * Returns one of Leaves sub-type based on sub-id, may return null
          * @param id sub-type id
          * @return sub-type of Leaves or null
-         */ public static LeavesMat getByID(final int id)
+         */ @SuppressWarnings("MagicNumber")
+        public static LeavesMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

@@ -4,6 +4,10 @@ import org.diorite.material.ToolMaterial;
 import org.diorite.material.ToolType;
 import org.diorite.material.items.tool.ToolMat;
 
+/**
+ * Abstract class for all hoe-based tools.
+ */
+@SuppressWarnings("JavaDoc")
 public abstract class HoeMat extends ToolMat
 {
     protected HoeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial)

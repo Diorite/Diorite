@@ -15,10 +15,130 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "BedBlock" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Bed Block' block material in minecraft. <br>
+ * ID of block: 26 <br>
+ * String ID of block: minecraft:bed <br>
+ * This block can't be used in inventory, valid material for this block: 'Bed' (minecraft:bed(355):0) <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * HEAD_EAST_OCCUPIED:
+ * Type name: 'Head East Occupied' <br>
+ * SubID: 15 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * HEAD_NORTH_OCCUPIED:
+ * Type name: 'Head North Occupied' <br>
+ * SubID: 14 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * HEAD_WEST_OCCUPIED:
+ * Type name: 'Head West Occupied' <br>
+ * SubID: 13 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * HEAD_SOUTH_OCCUPIED:
+ * Type name: 'Head South Occupied' <br>
+ * SubID: 12 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * HEAD_EAST:
+ * Type name: 'Head East' <br>
+ * SubID: 11 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * HEAD_NORTH:
+ * Type name: 'Head North' <br>
+ * SubID: 10 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * HEAD_WEST:
+ * Type name: 'Head West' <br>
+ * SubID: 9 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * HEAD_SOUTH:
+ * Type name: 'Head South' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * FOOT_EAST_OCCUPIED:
+ * Type name: 'Foot East Occupied' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * FOOT_NORTH_OCCUPIED:
+ * Type name: 'Foot North Occupied' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * FOOT_WEST_OCCUPIED:
+ * Type name: 'Foot West Occupied' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * FOOT_SOUTH_OCCUPIED:
+ * Type name: 'Foot South Occupied' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * FOOT_EAST:
+ * Type name: 'Foot East' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * FOOT_NORTH:
+ * Type name: 'Foot North' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * FOOT_WEST:
+ * Type name: 'Foot West' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * FOOT_SOUTH:
+ * Type name: 'Foot South' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class BedBlockMat extends BlockMaterialData implements DirectionalMat
 {
     /**

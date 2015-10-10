@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Command Block Minecart' item material in minecraft. <br>
+ * ID of material: 422 <br>
+ * String ID of material: minecraft:command_block_minecart <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class CommandBlockMinecartMat extends AbstractMinecartMat
 {
     /**
@@ -20,6 +26,7 @@ public class CommandBlockMinecartMat extends AbstractMinecartMat
     private static final Map<String, CommandBlockMinecartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<CommandBlockMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected CommandBlockMinecartMat()
     {
         super("COMMAND_BLOCK_MINECART", 422, "minecraft:command_block_minecart", "COMMAND_BLOCK_MINECART", (short) 0x00);

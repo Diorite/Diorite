@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Written Book' item material in minecraft. <br>
+ * ID of material: 387 <br>
+ * String ID of material: minecraft:written_book <br>
+ * Max item stack size: 16
+ */
+@SuppressWarnings("JavaDoc")
 public class WrittenBookMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class WrittenBookMat extends ItemMaterialData
     private static final Map<String, WrittenBookMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<WrittenBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected WrittenBookMat()
     {
         super("WRITTEN_BOOK", 387, "minecraft:written_book", 16, "WRITTEN_BOOK", (short) 0x00);

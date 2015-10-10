@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Ghast Tear' item material in minecraft. <br>
+ * ID of material: 370 <br>
+ * String ID of material: minecraft:ghast_tear <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class GhastTearMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class GhastTearMat extends ItemMaterialData
     private static final Map<String, GhastTearMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<GhastTearMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected GhastTearMat()
     {
         super("GHAST_TEAR", 370, "minecraft:ghast_tear", "GHAST_TEAR", (short) 0x00);

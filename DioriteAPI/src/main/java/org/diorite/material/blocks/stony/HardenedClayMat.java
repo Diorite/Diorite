@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "HardenedClay" and all its subtypes.
+ * Class representing 'Hardened Clay' block material in minecraft. <br>
+ * ID of block: 172 <br>
+ * String ID of block: minecraft:hardened_clay <br>
+ * Hardness: 1,25 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class HardenedClayMat extends StonyMat
 {
     /**

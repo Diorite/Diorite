@@ -11,10 +11,14 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "RedstoneOreGlowing" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Redstone Ore Glowing' block material in minecraft. <br>
+ * ID of block: 74 <br>
+ * String ID of block: minecraft:lit_redstone_ore <br>
+ * This block can't be used in inventory, valid material for this block: 'Redstone Ore' (minecraft:redstone_ore(73):0) <br>
+ * Hardness: 3 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class RedstoneOreGlowingMat extends OreMat
 {
     /**

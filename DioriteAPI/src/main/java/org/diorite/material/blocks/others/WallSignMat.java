@@ -14,10 +14,46 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "WallSign" and all its subtypes.
- * <p>
- * NOTE: Will crash game when in inventory.
+ * Class representing 'Wall Sign' block material in minecraft. <br>
+ * ID of block: 68 <br>
+ * String ID of block: minecraft:wall_sign <br>
+ * This block can't be used in inventory, valid material for this block: 'Sign' (minecraft:sign(323):0) <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 5 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 4 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 3 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 2 <br>
+ * Hardness: 1 <br>
+ * Blast Resistance 5 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class WallSignMat extends SignBlockMat implements AttachableMat
 {
     /**

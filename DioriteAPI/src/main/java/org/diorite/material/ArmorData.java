@@ -9,9 +9,21 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class ArmorData
 {
+    /**
+     * material of armor.
+     */
     protected final ArmorMaterial armorMaterial;
+    /**
+     * type of armor.
+     */
     protected final ArmorType     armorType;
+    /**
+     * base durability of armor.
+     */
     protected final int           baseDurability;
+    /**
+     * defence points of armor.
+     */
     protected final int           defense;
 
     /**

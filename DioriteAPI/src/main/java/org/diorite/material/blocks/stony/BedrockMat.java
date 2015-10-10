@@ -8,8 +8,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Bedrock" and all its subtypes.
+ * Class representing 'Bedrock' block material in minecraft. <br>
+ * ID of block: 7 <br>
+ * String ID of block: minecraft:bedrock <br>
+ * Hardness: -1 <br>
+ * Blast Resistance 18000000
  */
+@SuppressWarnings("JavaDoc")
 public class BedrockMat extends StonyMat
 {
     /**

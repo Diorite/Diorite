@@ -10,6 +10,7 @@ import gnu.trove.map.TIntObjectMap;
 /**
  * Represent type of armor element.
  */
+@SuppressWarnings("JavaDoc")
 public abstract class ArmorType extends ASimpleEnum<ArmorType>
 {
     static

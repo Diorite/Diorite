@@ -12,9 +12,12 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
 /**
- * Represents chain helmet.
+ * Class representing 'Chainmail Helmet' item material in minecraft. <br>
+ * ID of material: 302 <br>
+ * String ID of material: minecraft:chainmail_helmet <br>
+ * Max item stack size: 1
  */
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"JavaDoc", "ClassHasNoToStringMethod"})
 public class ChainmailHelmetMat extends HelmetMat
 {
     /**

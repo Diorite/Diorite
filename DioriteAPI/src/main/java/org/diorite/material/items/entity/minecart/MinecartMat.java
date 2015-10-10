@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Minecart' item material in minecraft. <br>
+ * ID of material: 328 <br>
+ * String ID of material: minecraft:minecraft <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class MinecartMat extends AbstractMinecartMat
 {
     /**
@@ -20,6 +26,7 @@ public class MinecartMat extends AbstractMinecartMat
     private static final Map<String, MinecartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<MinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected MinecartMat()
     {
         super("MINECART", 328, "minecraft:minecraft", "MINECART", (short) 0x00);

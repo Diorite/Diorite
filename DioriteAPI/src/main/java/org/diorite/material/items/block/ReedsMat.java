@@ -9,7 +9,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Reeds' item material in minecraft. <br>
+ * ID of material: 338 <br>
+ * String ID of material: minecraft:reeds <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class ReedsMat extends ItemMaterialData implements PlaceableMat
 {
     /**
@@ -22,6 +28,7 @@ public class ReedsMat extends ItemMaterialData implements PlaceableMat
     private static final Map<String, ReedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<ReedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected ReedsMat()
     {
         super("REEDS", 338, "minecraft:reeds", "REEDS", (short) 0x00);

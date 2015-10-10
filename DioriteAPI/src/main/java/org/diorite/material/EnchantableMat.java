@@ -1,5 +1,8 @@
 package org.diorite.material;
 
+/**
+ * Represent item that can be enchanted.
+ */
 public interface EnchantableMat
 {
     /**

@@ -14,8 +14,73 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "Vine" and all its subtypes.
+ * Class representing 'Vine' block material in minecraft. <br>
+ * ID of block: 106 <br>
+ * String ID of block: minecraft:vine <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * EAST_NORTH_WEST_SOUTH:
+ * Type name: 'East North West South' <br>
+ * SubID: 22 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * EAST_NORTH_WEST:
+ * Type name: 'East North West' <br>
+ * SubID: 20 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * EAST_NORTH_SOUTH:
+ * Type name: 'East North South' <br>
+ * SubID: 18 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * EAST_NORTH:
+ * Type name: 'East North' <br>
+ * SubID: 16 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * EAST_WEST_SOUTH:
+ * Type name: 'East West South' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * EAST_WEST:
+ * Type name: 'East West' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * EAST_SOUTH:
+ * Type name: 'East South' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 0 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class VineMat extends PlantMat
 {
     /**

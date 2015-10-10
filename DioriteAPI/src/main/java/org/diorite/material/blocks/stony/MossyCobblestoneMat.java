@@ -10,8 +10,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "MossyCobblestone" and all its subtypes.
+ * Class representing 'Mossy Cobblestone' block material in minecraft. <br>
+ * ID of block: 48 <br>
+ * String ID of block: minecraft:mossy_cobblestone <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class MossyCobblestoneMat extends StonyMat implements VariantableMat
 {
     /**

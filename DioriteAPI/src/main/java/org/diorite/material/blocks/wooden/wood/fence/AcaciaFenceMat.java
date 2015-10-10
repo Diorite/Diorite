@@ -9,8 +9,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "AcaciaFence" and all its subtypes.
+ * Class representing 'Acacia Fence' block material in minecraft. <br>
+ * ID of block: 192 <br>
+ * String ID of block: minecraft:acacia_fence <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class AcaciaFenceMat extends WoodenFenceMat
 {
     /**

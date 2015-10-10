@@ -7,7 +7,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Baked Potato' item material in minecraft. <br>
+ * ID of material: 393 <br>
+ * String ID of material: minecraft:baked_potato <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class BakedPotatoMat extends EdibleItemMat
 {
     /**
@@ -20,6 +26,7 @@ public class BakedPotatoMat extends EdibleItemMat
     private static final Map<String, BakedPotatoMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<BakedPotatoMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected BakedPotatoMat()
     {
         super("BAKED_POTATO", 393, "minecraft:baked_potato", "BAKED_POTATO", (short) 0x00, 5, 6);

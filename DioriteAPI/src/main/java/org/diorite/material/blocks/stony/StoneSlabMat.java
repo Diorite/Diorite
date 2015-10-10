@@ -10,8 +10,143 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "StoneSlab" and all its subtypes.
+ * Class representing 'Stone Slab' block material in minecraft. <br>
+ * ID of block: 44 <br>
+ * String ID of block: minecraft:stone_slab <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * RED_SANDSTONE_UPPER:
+ * Type name: 'Red Sandstone Upper' <br>
+ * SubID: 24 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * RED_SANDSTONE:
+ * Type name: 'Red Sandstone' <br>
+ * SubID: 16 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * QUARTZ_UPPER:
+ * Type name: 'Quartz Upper' <br>
+ * SubID: 15 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * NETHER_BRICKS_UPPER:
+ * Type name: 'Nether Bricks Upper' <br>
+ * SubID: 14 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE_BRICKS_UPPER:
+ * Type name: 'Stone Bricks Upper' <br>
+ * SubID: 13 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * BRICKS_UPPER:
+ * Type name: 'Bricks Upper' <br>
+ * SubID: 12 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * COBBLESTONE_UPPER:
+ * Type name: 'Cobblestone Upper' <br>
+ * SubID: 11 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * WOODEN_UPPER:
+ * Type name: 'Wooden Upper' <br>
+ * SubID: 10 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * SANDSTONE_UPPER:
+ * Type name: 'Sandstone Upper' <br>
+ * SubID: 9 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE_UPPER:
+ * Type name: 'Stone Upper' <br>
+ * SubID: 8 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * QUARTZ:
+ * Type name: 'Quartz' <br>
+ * SubID: 7 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * NETHER_BRICKS:
+ * Type name: 'Nether Bricks' <br>
+ * SubID: 6 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE_BRICKS:
+ * Type name: 'Stone Bricks' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * BRICKS:
+ * Type name: 'Bricks' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * COBBLESTONE:
+ * Type name: 'Cobblestone' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * WOODEN:
+ * Type name: 'Wooden' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * SANDSTONE:
+ * Type name: 'Sandstone' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * <li>
+ * STONE:
+ * Type name: 'Stone' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 30 <br>
+ * </li>
+ * </ol>
  */
+@SuppressWarnings("JavaDoc")
 public class StoneSlabMat extends StonySlabMat
 {
     /**
@@ -158,12 +293,12 @@ public class StoneSlabMat extends StonySlabMat
             super(enumName, slabType, stoneType);
         }
 
-        @SuppressWarnings("MagicNumber")
         /**
          * Returns one of StoneSlab sub-type based on sub-id, may return null
          * @param id sub-type id
          * @return sub-type of StoneSlab or null
-         */ public static StoneSlabMat getByID(final int id)
+         */ @SuppressWarnings("MagicNumber")
+        public static StoneSlabMat getByID(final int id)
         {
             return byID.get((byte) (id + 16));
         }

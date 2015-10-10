@@ -11,8 +11,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "EmeraldBlock" and all its subtypes.
+ * Class representing 'Emerald Block' block material in minecraft. <br>
+ * ID of block: 133 <br>
+ * String ID of block: minecraft:emerald_block <br>
+ * Hardness: 5 <br>
+ * Blast Resistance 30
  */
+@SuppressWarnings("JavaDoc")
 public class EmeraldBlockMat extends OreBlockMat
 {
     /**

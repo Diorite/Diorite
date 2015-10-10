@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Leather' item material in minecraft. <br>
+ * ID of material: 334 <br>
+ * String ID of material: minecraft:leather <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class LeatherMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class LeatherMat extends ItemMaterialData
     private static final Map<String, LeatherMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<LeatherMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected LeatherMat()
     {
         super("LEATHER", 334, "minecraft:leather", "LEATHER", (short) 0x00);

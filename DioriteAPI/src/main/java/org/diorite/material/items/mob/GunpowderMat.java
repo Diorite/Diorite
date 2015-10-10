@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Gunpowder' item material in minecraft. <br>
+ * ID of material: 289 <br>
+ * String ID of material: minecraft:gunpowder <br>
+ * Max item stack size: 64
+ */
+@SuppressWarnings("JavaDoc")
 public class GunpowderMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class GunpowderMat extends ItemMaterialData
     private static final Map<String, GunpowderMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<GunpowderMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected GunpowderMat()
     {
         super("GUNPOWDER", 289, "minecraft:gunpowder", "GUNPOWDER", (short) 0x00);

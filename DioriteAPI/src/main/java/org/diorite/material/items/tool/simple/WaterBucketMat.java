@@ -8,7 +8,13 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
-@SuppressWarnings("MagicNumber")
+/**
+ * Class representing 'Water Bucket' item material in minecraft. <br>
+ * ID of material: 326 <br>
+ * String ID of material: minecraft:water_bucket <br>
+ * Max item stack size: 1
+ */
+@SuppressWarnings("JavaDoc")
 public class WaterBucketMat extends ItemMaterialData
 {
     /**
@@ -21,6 +27,7 @@ public class WaterBucketMat extends ItemMaterialData
     private static final Map<String, WaterBucketMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<WaterBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
+    @SuppressWarnings("MagicNumber")
     protected WaterBucketMat()
     {
         super("WATER_BUCKET", 326, "minecraft:water_bucket", 1, "WATER_BUCKET", (short) 0x00);

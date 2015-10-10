@@ -12,8 +12,13 @@ import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 
 /**
- * Class representing block "DarkDarkOakStairs" and all its subtypes.
+ * Class representing 'Dark Oak Stairs' block material in minecraft. <br>
+ * ID of block: 164 <br>
+ * String ID of block: minecraft:dark_oak_stairs <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15
  */
+@SuppressWarnings("JavaDoc")
 public class DarkOakStairsMat extends WoodenStairsMat
 {
     /**
