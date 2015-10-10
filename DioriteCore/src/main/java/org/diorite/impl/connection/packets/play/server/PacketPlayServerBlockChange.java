@@ -12,6 +12,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 
 @PacketClass(id = 0x23, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 13)
 public class PacketPlayServerBlockChange extends PacketPlayServer
@@ -67,7 +68,8 @@ public class PacketPlayServerBlockChange extends PacketPlayServer
 
     public BlockMaterialData getMaterial()
     {
-        return BlockMaterialData.getByID(this.rawID, this.rawType);
+        final Material mat = Material.getByID(this.rawID, this.rawType);
+        return (mat instanceof BlockMaterialData) ? (BlockMaterialData) mat : null;
     }
 
     public void setMaterial(final BlockMaterialData material)

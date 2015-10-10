@@ -275,7 +275,7 @@ public class ChunkImpl implements Chunk
 
     public BlockMaterialData setBlock(final int x, final int y, final int z, final int id, final int meta)
     {
-        return this.setBlock(x, y, z, BlockMaterialData.getByID(id, meta));
+        return this.setBlock(x, y, z, (BlockMaterialData) Material.getByID(id, meta));
     }
 
     @Override
