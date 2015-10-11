@@ -44,6 +44,8 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
+import org.diorite.event.player.PlayerInteractEvent;
+import org.diorite.event.player.PlayerInteractEvent.Action;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
 import org.diorite.world.chunk.Chunk;
@@ -213,6 +215,11 @@ public class PlayListener implements PacketPlayClientListener
                 EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
             }
 
+            if(packet.getAction() == BlockDigAction.START_DIG)
+            {
+                this.core.sync(() -> EventType.callEvent(new PlayerInteractEvent(this.player, Action.LEFT_CLICK_ON_BLOCK, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock())));
+            }
+
             if (packet.getAction() == BlockDigAction.DROP_ITEM)
             {
                 this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.DROP_KEY)), this.player);
@@ -230,10 +237,13 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public void handle(final PacketPlayClientBlockPlace packet)
     {
+        System.out.println(packet);
         if (packet.getCursorPos().getBlockFace() == null)
         {
             return;
         }
+        this.core.sync(() -> EventType.callEvent(new PlayerInteractEvent(this.player, Action.RIGHT_CLICK_ON_BLOCK, packet.getLocation().setWorld(this.player.getWorld()).getBlock())));
+
         final int y = packet.getLocation().getY();
         if ((y >= Chunk.CHUNK_FULL_HEIGHT) || (y < 0))
         {
