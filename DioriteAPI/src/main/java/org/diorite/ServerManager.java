@@ -3,6 +3,7 @@ package org.diorite;
 import org.diorite.event.Event;
 import org.diorite.event.EventType;
 import org.diorite.event.pipelines.EventPipeline;
+import org.diorite.permissions.PermissionsManager;
 
 /**
  * Interface used to manage all event pipelines, other pipelines, plugins and more.
@@ -39,4 +40,20 @@ public interface ServerManager
     {
         return EventType.register(eventClass, pipelineClass, pipeline);
     }
+
+    /**
+     * Returns current permission manager, returned value should not be cached. (only to local variables)
+     *
+     * @return current permission manager.
+     */
+    PermissionsManager getPermissionsManager();
+
+    /**
+     * Change {@link PermissionsManager} used by this server. <br>
+     * PermissionsManager is center point of permission system where all permissions/groups are stored,
+     * data is loaded etc...
+     *
+     * @param permissionsManager new permissions manager for server.
+     */
+    void setPermissionsManager(PermissionsManager permissionsManager);
 }

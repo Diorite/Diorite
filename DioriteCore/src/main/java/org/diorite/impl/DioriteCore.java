@@ -74,6 +74,7 @@ import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.tick.TickGroups;
 import org.diorite.Core;
 import org.diorite.Diorite;
+import org.diorite.ServerManager;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
@@ -274,6 +275,7 @@ public class DioriteCore implements Core
     protected DioriteConfigImpl        config;
     protected PluginManager            pluginManager;
     protected TimingsManager           timings;
+    protected ServerManager            serverManager;
     protected                    KeyPair keyPair     = MinecraftEncryption.generateKeyPair();
     protected transient volatile boolean isRunning   = true;
     protected transient volatile boolean hasStopped  = false;
@@ -884,6 +886,17 @@ public class DioriteCore implements Core
         this.playersManager = playersManager;
     }
 
+    @Override
+    public ServerManager getServerManager()
+    {
+        return this.serverManager;
+    }
+
+    public void setServerManager(final ServerManager serverManager)
+    {
+        this.serverManager = serverManager;
+    }
+
     public OnlineMode getOnlineMode()
     {
         return this.config.getOnlineMode();
@@ -1083,6 +1096,7 @@ public class DioriteCore implements Core
         initPipeline.addLast("DioriteCore|RegisterDefaultCommands", (s, p, d) -> RegisterDefaultCommands.init(s.commandMap));
         initPipeline.addLast("DioriteCore|initInputThread", (s, p, d) -> s.inputThread = InputThread.start(s.config.getInputThreadPoolSize()));
         initPipeline.addLast("DioriteCore|initGame", (s, p, d) -> {
+            s.serverManager = new ServerManagerImpl(s);
             s.playersManager = new PlayersManagerImpl(s);
             s.worldsManager = new WorldsManagerImpl();
         });

@@ -9,6 +9,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameState
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.Diorite;
 import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
 import org.diorite.chat.ChatColor;
@@ -21,6 +22,9 @@ import org.diorite.command.CommandPriority;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
+import org.diorite.permissions.PermissionLevel;
+import org.diorite.permissions.PermissionsGroup;
+import org.diorite.permissions.PermissionsManager;
 
 public class DevCmd extends SystemCommandImpl
 {
@@ -35,8 +39,77 @@ public class DevCmd extends SystemCommandImpl
                 p.getNetworkManager().sendPacket(new PacketPlayServerBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
                 return;
             }
+            final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "pex":
+                {
+                    if (sender.hasPermission(args.asString(0)))
+                    {
+                        sender.sendMessage("You have " + args.asString(0) + " permission!");
+                    }
+                    else
+                    {
+                        sender.sendMessage("You don't have " + args.asString(0) + " permission!");
+                    }
+                    break;
+                }
+                case "pexaddg":
+                {
+                    PermissionsGroup group = mag.getGroup(args.asString(0));
+                    if (group == null)
+                    {
+                        sender.sendMessage("No group, " + args.asString(0));
+                        return;
+                    }
+                    mag.setPermission(group, args.asString(1), args.asString(2).equalsIgnoreCase("null") ? null : PermissionLevel.valueOf(args.asString(2).toUpperCase()));
+                    sender.sendMessage("Set permission " + args.asString(1) + ":" + (args.asString(2).equalsIgnoreCase("null") ? null : PermissionLevel.valueOf(args.asString(2).toUpperCase())) + " to group " + group.getName());
+                    break;
+                }
+                case "pexadd":
+                {
+                    mag.setPermission(sender, args.asString(0), args.asString(1).equalsIgnoreCase("null") ? null : PermissionLevel.valueOf(args.asString(1).toUpperCase()));
+                    sender.sendMessage("Set permission " + args.asString(0) + ":" + (args.asString(1).equalsIgnoreCase("null") ? null : PermissionLevel.valueOf(args.asString(1).toUpperCase())) + " to you");
+                    break;
+                }
+                case "pexaddu":
+                {
+                    boolean added = mag.addPermissibleToGroup(sender, args.asString(0), args.asInt(1));
+                    sender.sendMessage("Added you to " + args.asString(0) + " group: " + added);
+                    break;
+                }
+                case "pexreg":
+                {
+                    mag.registerPermission(mag.createPermission(args.asString(0), args.asString(0), PermissionLevel.valueOf(args.asString(1).toUpperCase())));
+                    sender.sendMessage("Register permission " + args.asString(0) + ":" + PermissionLevel.valueOf(args.asString(1).toUpperCase()) + " to manager");
+                    break;
+                }
+                case "op":
+                {
+                    if (p.isOp())
+                    {
+                        p.setOp(false);
+                        sender.sendMessage("You are not op anymore...");
+                    }
+                    else
+                    {
+                        p.setOp(true);
+                        sender.sendMessage("You are now op!");
+                    }
+                    break;
+                }
+                case "pexrg":
+                {
+                    PermissionsGroup group = mag.removeGroup(args.asString(0));
+                    sender.sendMessage("Removed group: " + group);
+                    break;
+                }
+                case "pexcg":
+                {
+                    PermissionsGroup group = mag.createGroup(args.asString(0));
+                    sender.sendMessage("Created group: " + group);
+                    break;
+                }
                 case "msgr":
                 {
                     DioriteMesssges.reload();

@@ -49,6 +49,7 @@ import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.entity.EntityType;
+import org.diorite.utils.SpammyError;
 
 import gnu.trove.iterator.TShortIntIterator;
 import gnu.trove.map.TShortIntMap;
@@ -305,7 +306,7 @@ public class Metrics
                         {
                             if (CoreMain.isEnabledDebug())
                             {
-                                System.out.println("[Metrics] " + e.getMessage());
+                                SpammyError.out("[Metrics] " + e.getMessage(), (int) TimeUnit.MINUTES.toSeconds(5), this.hashCode() + 2);
                             }
                         }
                     }
@@ -457,7 +458,7 @@ public class Metrics
 
         if (CoreMain.isEnabledDebug())
         {
-            System.out.println("[Metrics] Prepared request for Diorite uncompressed=" + uncompressed.length + " compressed=" + compressed.length);
+            SpammyError.out("[Metrics] Prepared request for Diorite uncompressed=" + uncompressed.length + " compressed=" + compressed.length, (int) TimeUnit.MINUTES.toSeconds(5), this.hashCode() + 1);
         }
 
         // Write the data

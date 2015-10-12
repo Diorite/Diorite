@@ -45,6 +45,8 @@ public interface Core extends Synchronizable
     int  DEFAULT_WAIT_TIME                    = NANOS_IN_SECOND / DEFAULT_TPS;
     int  MAX_NICKNAME_SIZE                    = 16;
 
+    ServerManager getServerManager();
+
     static String getMinecraftVersion()
     {
         return "1.8.7";

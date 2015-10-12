@@ -1,0 +1,283 @@
+package org.diorite.impl.permissions;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang3.Validate;
+
+import org.diorite.Diorite;
+import org.diorite.entity.Player;
+import org.diorite.permissions.GroupEntry;
+import org.diorite.permissions.GroupablePermissionsContainer;
+import org.diorite.permissions.Permissible;
+import org.diorite.permissions.Permission;
+import org.diorite.permissions.PermissionLevel;
+import org.diorite.permissions.PermissionsContainer;
+import org.diorite.permissions.PermissionsGroup;
+import org.diorite.permissions.PermissionsManager;
+import org.diorite.permissions.PlayerPermissionsContainer;
+import org.diorite.permissions.SimplePermission;
+import org.diorite.permissions.pattern.AdvancedPermissionPattern;
+import org.diorite.permissions.pattern.PermissionPattern;
+import org.diorite.permissions.pattern.SimplePermissionPattern;
+import org.diorite.plugin.DioritePlugin;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+
+@SuppressWarnings("ClassHasNoToStringMethod")
+public class DioritePermissionsManager implements PermissionsManager
+{
+    private final Map<String, Permission>            permissionMap    = new CaseInsensitiveMap<>(200, .5f);
+    private final Map<PermissionPattern, Permission> permissionPatMap = new HashMap<>(200, .5f);
+    private final Set<PermissionPattern>             patterns         = new HashSet<>(50, .4f);
+    private final Map<String, PermissionsGroup>      groups           = new CaseInsensitiveMap<>(10, .3f);
+
+    @Override
+    public DioritePlugin getImplementingPlugin()
+    {
+        return null;
+    }
+
+    @Override
+    public PermissionsContainer createContainer(final Permissible permissible)
+    {
+        return new PermissionsContainerImpl();
+    }
+
+    @Override
+    public PlayerPermissionsContainer createPlayerContainer(final Player permissible)
+    {
+        return new PlayerPermissionsContainerImpl(false, permissible);
+    }
+
+    @Override
+    public GroupablePermissionsContainer createGroupableContainer(final Permissible permissible)
+    {
+        return new GroupablePermissionsContainerImpl();
+    }
+
+    @Override
+    public Permission getPermission(final String permissionPattern)
+    {
+        Validate.notNull(permissionPattern, "permissionPattern can't be null.");
+        return this.permissionMap.get(permissionPattern);
+    }
+
+    @Override
+    public Permission getPermission(final PermissionPattern permissionPattern)
+    {
+        Validate.notNull(permissionPattern, "permissionPattern can't be null.");
+        return this.permissionPatMap.get(permissionPattern);
+    }
+
+    @Override
+    public PermissionPattern getPermissionPattern(final String permissionPattern)
+    {
+        Validate.notNull(permissionPattern, "permissionPattern can't be null.");
+        final Permission perm = this.permissionMap.get(permissionPattern);
+        if (perm != null)
+        {
+            return perm.getPattern();
+        }
+        for (final PermissionPattern pattern : this.patterns)
+        {
+            if (pattern.getValue().equalsIgnoreCase(permissionPattern))
+            {
+                return pattern;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public PermissionPattern getPatternByPermission(final String permission)
+    {
+        Validate.notNull(permission, "permission can't be null.");
+        final Permission perm = this.permissionMap.get(permission);
+        if (perm != null)
+        {
+            return perm.getPattern();
+        }
+        for (final PermissionPattern p : this.patterns)
+        {
+            if (p.isValid(permission))
+            {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void registerPermission(final Permission permission)
+    {
+        Validate.notNull(permission, "permission can't be null.");
+        final PermissionPattern pat = permission.getPattern();
+        this.permissionMap.put(pat.getValue().intern(), permission);
+        this.permissionPatMap.put(pat, permission);
+        this.patterns.add(pat);
+    }
+
+    @Override
+    public boolean unregisterPermission(final PermissionPattern pat)
+    {
+        final Permission perm = this.permissionPatMap.remove(pat);
+        if (perm == null)
+        {
+            return false;
+        }
+        this.permissionMap.remove(pat.getValue().intern());
+        this.patterns.remove(pat);
+        return true;
+    }
+
+    @Override
+    public boolean isRegisteredPermission(final Permission permission)
+    {
+        Validate.notNull(permission, "permission can't be null.");
+        return permission.equals(this.permissionPatMap.get(permission.getPattern()));
+    }
+
+    @Override
+    public PermissionPattern createPattern(final String permissionPattern)
+    {
+        Validate.notNull(permissionPattern, "permissionPattern can't be null.");
+        final PermissionPattern result = this.getPermissionPattern(permissionPattern);
+        if (result != null)
+        {
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public Permission createPermission(final String permission, final PermissionLevel defaultLevel)
+    {
+        final PermissionPattern pat = this.getPatternByPermission(permission);
+        if (pat == null)
+        {
+            return this.createPermission(permission, permission, defaultLevel);
+        }
+        return this.createPermission(pat, permission, defaultLevel);
+    }
+
+    @Override
+    public Permission createPermission(final String permissionPattern, final String permission, final PermissionLevel defaultLevel)
+    {
+        Validate.notNull(permission, "permission can't be null.");
+        Validate.notNull(defaultLevel, "defaultLevel can't be null.");
+        return this.createPermission(this.createPattern(permissionPattern), permission, defaultLevel);
+    }
+
+    @Override
+    public Permission createPermission(final PermissionPattern permissionPattern, final String permission, final PermissionLevel defaultLevel)
+    {
+        Validate.notNull(permissionPattern, "permissionPattern can't be null.");
+        Validate.notNull(permission, "permission can't be null.");
+        Validate.notNull(defaultLevel, "defaultLevel can't be null.");
+        if (permissionPattern instanceof SimplePermissionPattern)
+        {
+            return new SimplePermission(defaultLevel, (SimplePermissionPattern) permissionPattern);
+        }
+        if (permissionPattern instanceof AdvancedPermissionPattern)
+        {
+//            return new Adva
+        }
+        // TODO: supprot for special permissions
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public PermissionsGroup createGroup(final String name)
+    {
+        Validate.notNull(name, "name of group can't be null.");
+        PermissionsGroup group = this.groups.get(name);
+        if (group != null)
+        {
+            return group;
+        }
+        group = new PermissionsGroupImpl(name);
+        this.groups.put(name, group);
+        return group;
+    }
+
+    @Override
+    public void addGroup(final PermissionsGroup group)
+    {
+        Validate.notNull(group, "group can't be null.");
+
+        final PermissionsGroup oldGroup = this.groups.get(group.getName());
+        if (oldGroup == null)
+        {
+            this.groups.put(group.getName(), group);
+            return;
+        }
+        Diorite.getOnlinePlayers().stream().map(Player::getPermissionsContainer).forEach(p -> {
+            GroupEntry entry = p.removeGroup(oldGroup);
+            if (entry != null)
+            {
+                p.addGroup(new GroupEntry(group, entry.getPriotity()));
+            }
+        });
+    }
+
+    @Override
+    public PermissionsGroup getGroup(final String name)
+    {
+        Validate.notNull(name, "name of group can't be null.");
+        return this.groups.get(name);
+    }
+
+    @Override
+    public boolean containsGroup(final String name)
+    {
+        Validate.notNull(name, "name of group can't be null.");
+        return this.groups.containsKey(name);
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    @Override
+    public boolean containsGroup(final PermissionsGroup group)
+    {
+        Validate.notNull(group, "group can't be null.");
+        return this.groups.get(group.getName()) == group;
+    }
+
+    @Override
+    public PermissionsGroup removeGroup(final String name)
+    {
+        Validate.notNull(name, "name of group can't be null.");
+        final PermissionsGroup group = this.groups.remove(name);
+        if (group != null)
+        {
+            Diorite.getOnlinePlayers().forEach(p -> p.getPermissionsContainer().removeGroup(group));
+        }
+        return group;
+    }
+
+    @Override
+    public boolean addPermissibleToGroup(final Permissible permissible, final GroupEntry groupEntry)
+    {
+        Validate.notNull(permissible, "permissible can't be null.");
+        Validate.notNull(groupEntry, "groupEntry can't be null.");
+        final PermissionsContainer container = permissible.getPermissionsContainer();
+        if (! (container instanceof GroupablePermissionsContainer))
+        {
+            return false;
+        }
+        final GroupablePermissionsContainer groupableContainer = (GroupablePermissionsContainer) container;
+        groupableContainer.removeGroup(groupEntry.getGroup());
+        groupableContainer.addGroup(groupEntry);
+        return true;
+    }
+
+    @Override
+    public void setPermission(final Permissible permissible, final Permission permission, final PermissionLevel level)
+    {
+        Validate.notNull(permissible, "permissible can't be null.");
+        Validate.notNull(permission, "permission can't be null.");
+        final PermissionsContainer container = permissible.getPermissionsContainer();
+        container.setPermission(permission, level);
+    }
+}

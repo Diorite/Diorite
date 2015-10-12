@@ -227,6 +227,11 @@ public final class Diorite
         return core.getPluginManager();
     }
 
+    public static ServerManager getServerManager()
+    {
+        return core.getServerManager();
+    }
+
     public static int getTps()
     {
         return core.getTps();

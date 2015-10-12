@@ -11,6 +11,7 @@ import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.PlayerInventory;
+import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.world.World;
 
@@ -289,4 +290,7 @@ public interface Player extends LivingEntity, PlayerCommandSender, InventoryHold
      * @return this player random instance
      */
     DioriteRandom getRandom();
+
+    @Override
+    GroupablePermissionsContainer getPermissionsContainer();
 }

@@ -5,7 +5,7 @@ public interface ConsoleCommandSender extends CommandSender
     @Override
     default String getName()
     {
-        return "-Diorite-";
+        return "[DioriteConsole]";
     }
 
     @Override
@@ -30,5 +30,17 @@ public interface ConsoleCommandSender extends CommandSender
     default void sendRawMessage(final String str)
     {
         this.sendMessage(str);
+    }
+
+    @Override
+    default boolean setOp(final boolean op)
+    {
+        return false; // can't change op state of console
+    }
+
+    @Override
+    default boolean isOp()
+    {
+        return true;
     }
 }

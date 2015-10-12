@@ -15,6 +15,11 @@ import org.diorite.utils.math.DioriteMathUtils;
 public class RangeGroup implements SpecialNumberGroup
 {
     /**
+     * Pattern value of this group.
+     */
+    protected static final String PAT = "{$-$}";
+
+    /**
      * Construct new range group.
      */
     @SuppressWarnings("RedundantNoArgConstructor")
@@ -54,13 +59,70 @@ public class RangeGroup implements SpecialNumberGroup
         }
     }
 
+    @Override
+    public String getGroupPattern()
+    {
+        return PAT;
+    }
+
+    @Override
+    public boolean isValid(String string)
+    {
+        if (string.length() < 3) // smallest range is 3 chars, "1-2"
+        {
+            return false;
+        }
+        if ((string.charAt(0) == '[') && (string.charAt(string.length() - 1) == ']'))
+        {
+            if (string.length() < 5) // smallest multi-range is 5 chars, "[1-2]"
+            {
+                return false;
+            }
+            string = string.substring(1, string.length() - 1);
+            final String[] ranges = StringUtils.split(string, ',');
+            for (final String str : ranges)
+            {
+                if (! checkIfValidRange(str))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return checkIfValidRange(string);
+    }
+
+    private static boolean checkIfValidRange(final String string)
+    {
+        final int index = string.lastIndexOf('-');
+        if (index == - 1)
+        {
+            return false;
+        }
+        final int index2 = string.lastIndexOf('-', index - 1); // to handle negative values in ranges
+        if ((index2 == 0) || (index2 == - 1))
+        {
+            return (DioriteMathUtils.asLong(string.substring(0, index)) != null) && (DioriteMathUtils.asLong(string.substring(index + 1)) != null);
+        }
+        return (DioriteMathUtils.asLong(string.substring(0, index2)) != null) && (DioriteMathUtils.asLong(string.substring(index2 + 1)) != null);
+    }
+
     private static GroupResult checkRange(final String string, final char[] charArray, int endIndex, final long data)
     {
         final Long min, max;
         {
+            boolean sign = true;
             for (final int charArrayLength = charArray.length; endIndex < charArrayLength; endIndex++)
             {
                 final char c = charArray[endIndex];
+                if (sign)
+                {
+                    sign = false;
+                    if ((c == '+') || (c == '-'))
+                    {
+                        continue;
+                    }
+                }
                 if ((c < '0') || (c > '9'))
                 {
                     break;
@@ -71,7 +133,7 @@ public class RangeGroup implements SpecialNumberGroup
                 return new GroupResult(false, false, 0);
             }
             min = DioriteMathUtils.asLong(string.substring(0, endIndex));
-            if (min == null)// should never be true, only if someone use number that don't fit into long.
+            if (min == null)
             {
                 return new GroupResult(false, false, 0);
             }
@@ -82,9 +144,18 @@ public class RangeGroup implements SpecialNumberGroup
         }
         final int start = endIndex;
         {
+            boolean sign = true;
             for (final int charArrayLength = charArray.length; endIndex < charArrayLength; endIndex++)
             {
                 final char c = charArray[endIndex];
+                if (sign)
+                {
+                    sign = false;
+                    if ((c == '+') || (c == '-'))
+                    {
+                        continue;
+                    }
+                }
                 if ((c < '0') || (c > '9'))
                 {
                     break;
@@ -95,7 +166,7 @@ public class RangeGroup implements SpecialNumberGroup
                 return new GroupResult(false, false, 0);
             }
             max = DioriteMathUtils.asLong(string.substring(start, endIndex));
-            if (max == null)// should never be true, only if someone use number that don't fit into long.
+            if (max == null)
             {
                 return new GroupResult(false, false, 0);
             }

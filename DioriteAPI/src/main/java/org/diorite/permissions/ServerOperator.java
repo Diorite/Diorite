@@ -3,7 +3,7 @@ package org.diorite.permissions;
 /**
  * Represent <strong>possible</strong> server operator (Op) that should have most of permissions by default.
  */
-public interface ServerOperator
+public interface ServerOperator extends Permissible
 {
     /**
      * Check if this is representing server operator.
@@ -20,4 +20,12 @@ public interface ServerOperator
      * @return true if state was changed.
      */
     boolean setOp(boolean op);
+
+    @Override
+    default boolean hasPermission(final Permission permission)
+    {
+        final PermissionsContainer pc = this.getPermissionsContainer();
+        final PermissionLevel level = pc.getPermissionLevel(permission);
+        return level.getValue(this.isOp());
+    }
 }

@@ -16,6 +16,15 @@ import org.diorite.utils.math.DioriteMathUtils;
  */
 public class LevelGroup implements SpecialNumberGroup
 {
+    /**
+     * Pattern value if group is ascending.
+     */
+    protected static final String ASC_PAT  = "{$++}";
+    /**
+     * Pattern value if group is descending.
+     */
+    protected static final String DESC_PAT = "{$--}";
+
     protected final boolean ascending; // {$++} if true, for pattern "foo.{$++}" permission "foo.3" will return true for player with "foo.5", as 3 <= 5.
 
     /**
@@ -43,9 +52,18 @@ public class LevelGroup implements SpecialNumberGroup
     {
         int endIndex = 0;
         final char[] charArray = string.toCharArray();
+        boolean sign = true;
         for (final int charArrayLength = charArray.length; endIndex < charArrayLength; endIndex++)
         {
             final char c = charArray[endIndex];
+            if (sign)
+            {
+                sign = false;
+                if ((c == '+') || (c == '-'))
+                {
+                    continue;
+                }
+            }
             if ((c < '0') || (c > '9'))
             {
                 break;
@@ -64,9 +82,15 @@ public class LevelGroup implements SpecialNumberGroup
     }
 
     @Override
-    public Long parseData(final String data)
+    public String getGroupPattern()
     {
-        return null;
+        return this.ascending ? ASC_PAT : DESC_PAT;
+    }
+
+    @Override
+    public boolean isValid(final String string)
+    {
+        return DioriteMathUtils.asLong(string) != null;
     }
 
     @Override

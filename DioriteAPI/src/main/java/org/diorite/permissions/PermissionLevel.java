@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-public enum PermissionDefaultLevel
+public enum PermissionLevel
 {
     TRUE("true")
             {
@@ -41,16 +41,16 @@ public enum PermissionDefaultLevel
 
     private static final Pattern INVALID_CHARS = Pattern.compile("[^a-zA-Z!]");
     private final String[] names;
-    private static final CaseInsensitiveMap<PermissionDefaultLevel> lookup = new CaseInsensitiveMap<>(15, .1f);
+    private static final CaseInsensitiveMap<PermissionLevel> lookup = new CaseInsensitiveMap<>(15, .1f);
 
-    PermissionDefaultLevel(final String... names)
+    PermissionLevel(final String... names)
     {
         this.names = names;
     }
 
     public abstract boolean getValue(boolean op);
 
-    public static PermissionDefaultLevel getByName(final CharSequence name)
+    public static PermissionLevel getByName(final CharSequence name)
     {
         return lookup.get(INVALID_CHARS.matcher(name).replaceAll(""));
     }
@@ -62,7 +62,7 @@ public enum PermissionDefaultLevel
 
     static
     {
-        for (final PermissionDefaultLevel value : values())
+        for (final PermissionLevel value : values())
         {
             for (final String name : value.names)
             {

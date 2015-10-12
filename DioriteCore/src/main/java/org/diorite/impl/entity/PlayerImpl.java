@@ -30,6 +30,7 @@ import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.inventory.PlayerCraftingInventoryImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
+import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.Particle;
@@ -48,6 +49,7 @@ import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.EntityEquipment;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.permissions.PlayerPermissionsContainer;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
@@ -90,13 +92,14 @@ public class PlayerImpl extends LivingEntityImpl implements Player
 
     protected final TIntCollection removeQueue = new TIntArrayList(5, - 1);
 
-    protected final GameProfile         gameProfile;
-    protected final CoreNetworkManager  networkManager;
-    protected final PlayerChunksImpl    playerChunks;
-    protected       byte                viewDistance;
-    protected       byte                renderDistance;
-    protected       GameMode            gameMode;
-    protected final PlayerInventoryImpl inventory;
+    protected final GameProfile                gameProfile;
+    protected final CoreNetworkManager         networkManager;
+    protected final PlayerChunksImpl           playerChunks;
+    protected       byte                       viewDistance;
+    protected       byte                       renderDistance;
+    protected       GameMode                   gameMode;
+    protected final PlayerInventoryImpl        inventory;
+    protected       PlayerPermissionsContainer permissionContainer;
 
     protected PacketPlayServerAbilities abilities = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
@@ -104,6 +107,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     public PlayerImpl(final DioriteCore core, final int id, final GameProfile gameProfile, final CoreNetworkManager networkManager, final ImmutableLocation location)
     {
         super(gameProfile.getId(), core, id, location);
+        this.permissionContainer = Diorite.getServerManager().getPermissionsManager().createPlayerContainer(this);
         this.aabb = BASE_SIZE.create(this);
         this.gameProfile = gameProfile;
         this.networkManager = networkManager;
@@ -508,5 +512,23 @@ public class PlayerImpl extends LivingEntityImpl implements Player
             item.setItemStack(new BaseItemStack(cur.getMaterial(), cur.getAmount()));
             this.getWorld().addEntity(item);
         }
+    }
+
+    @Override
+    public boolean isOp()
+    {
+        return this.permissionContainer.isOp();
+    }
+
+    @Override
+    public boolean setOp(final boolean op)
+    {
+        return this.permissionContainer.setOp(op);
+    }
+
+    @Override
+    public PlayerPermissionsContainer getPermissionsContainer()
+    {
+        return this.permissionContainer;
     }
 }

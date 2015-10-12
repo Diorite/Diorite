@@ -16,24 +16,20 @@ public final class GroupsManager
 
     static
     {
-        register(new LevelGroup(true), "{$++}");
-        register(new LevelGroup(false), "{$--}");
-        register(new RangeGroup(), "{$-$}");
+        register(new LevelGroup(true));
+        register(new LevelGroup(false));
+        register(new RangeGroup());
     }
 
     /**
-     * Register new or replace existing special group for given patterns. <br>
-     * like {$-$} for {@link RangeGroup}.
+     * Register new or replace existing special group. <br>
+     * Like {$-$} for {@link RangeGroup}.
      *
-     * @param group    special group to register.
-     * @param patterns patterns for this group.
+     * @param group special group to register.
      */
-    public static void register(final SpecialGroup<?> group, final String... patterns)
+    public static void register(final SpecialGroup<?> group)
     {
-        for (final String pattern : patterns)
-        {
-            groups.put(pattern, group);
-        }
+        groups.put(group.getGroupPattern(), group);
     }
 
     /**
