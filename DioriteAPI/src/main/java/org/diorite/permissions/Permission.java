@@ -1,5 +1,7 @@
 package org.diorite.permissions;
 
+import java.util.Map;
+
 import org.diorite.permissions.pattern.PermissionPattern;
 
 /**
@@ -36,16 +38,24 @@ public interface Permission
     void setDefaultLevel(PermissionLevel defaultLevel);
 
     /**
-     * Check if given permission is compatible with this one. <br>
-     * This method must return true when checking permissions to make check return true too. <br>
+     * Returns children permissions for pattern of this permission. <br>
+     * If you edit this map you will need call {@link Permissible#recalculatePermissions()}
      *
-     * @param permission permissions to true.
-     *
-     * @return true if given permission is compatible with this one.
+     * @return children permissions for pattern of this permission.
      */
-    default boolean isMatching(final Permission permission)
+    default Map<Permission, PermissionLevel> getPermissions()
     {
-        return true;
+        return this.getPattern().getPermissions();
+    }
+
+    /**
+     * Returns true if this permissions contains any child permissions.
+     *
+     * @return true if this permissions contains any child permissions.
+     */
+    default boolean containsPermissions()
+    {
+        return this.getPattern().containsPermissions();
     }
 
     /**

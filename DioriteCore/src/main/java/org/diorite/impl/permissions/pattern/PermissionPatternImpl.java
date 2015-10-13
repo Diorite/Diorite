@@ -1,12 +1,14 @@
-package org.diorite.permissions.pattern;
+package org.diorite.impl.permissions.pattern;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class SimplePermissionPattern implements PermissionPattern
+import org.diorite.permissions.pattern.PermissionPattern;
+
+public class PermissionPatternImpl extends AbstractPermissionPattern
 {
     private final String permission;
 
-    public SimplePermissionPattern(String permission)
+    public PermissionPatternImpl(String permission)
     {
         permission = permission.intern();
         this.permission = permission;
@@ -31,12 +33,12 @@ public class SimplePermissionPattern implements PermissionPattern
         {
             return true;
         }
-        if (! (o instanceof SimplePermissionPattern))
+        if (! (o instanceof PermissionPattern))
         {
             return false;
         }
 
-        final SimplePermissionPattern that = (SimplePermissionPattern) o;
+        final PermissionPatternImpl that = (PermissionPatternImpl) o;
         return this.permission.equals(that.permission);
     }
 

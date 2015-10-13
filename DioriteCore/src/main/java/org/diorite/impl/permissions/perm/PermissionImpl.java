@@ -1,36 +1,38 @@
-package org.diorite.permissions;
+package org.diorite.impl.permissions.perm;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.permissions.pattern.PermissionPatternImpl;
+import org.diorite.permissions.BasicPermission;
+import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.pattern.PermissionPattern;
-import org.diorite.permissions.pattern.SimplePermissionPattern;
 
-public class SimplePermission extends BasicPermission
+public class PermissionImpl extends BasicPermission
 {
-    private final SimplePermissionPattern pattern;
+    private final PermissionPattern pattern;
 
-    public SimplePermission(final PermissionLevel defaultLevel, final SimplePermissionPattern pattern)
+    public PermissionImpl(final PermissionLevel defaultLevel, final PermissionPattern pattern)
     {
         super(defaultLevel);
         Validate.notNull(pattern, "Pattern can't be null.");
         this.pattern = pattern;
     }
 
-    public SimplePermission(final SimplePermissionPattern pattern)
+    public PermissionImpl(final PermissionPattern pattern)
     {
         this(PermissionLevel.OP, pattern);
     }
 
-    public SimplePermission(final PermissionLevel defaultLevel, final String permission)
+    public PermissionImpl(final PermissionLevel defaultLevel, final String permission)
     {
-        this(defaultLevel, new SimplePermissionPattern(permission));
+        this(defaultLevel, new PermissionPatternImpl(permission));
     }
 
-    public SimplePermission(final String permission)
+    public PermissionImpl(final String permission)
     {
-        this(PermissionLevel.OP, new SimplePermissionPattern(permission));
+        this(PermissionLevel.OP, new PermissionPatternImpl(permission));
     }
 
     @Override
@@ -52,12 +54,12 @@ public class SimplePermission extends BasicPermission
         {
             return true;
         }
-        if (! (o instanceof SimplePermission))
+        if (! (o instanceof PermissionImpl))
         {
             return false;
         }
 
-        final SimplePermission that = (SimplePermission) o;
+        final PermissionImpl that = (PermissionImpl) o;
 
         return this.pattern.equals(that.pattern);
     }

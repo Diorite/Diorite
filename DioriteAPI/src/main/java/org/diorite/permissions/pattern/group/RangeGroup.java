@@ -3,6 +3,7 @@ package org.diorite.permissions.pattern.group;
 import org.apache.commons.lang3.StringUtils;
 
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.utils.math.LongRange;
 
 /**
  * Ranged special group, it use {$-$} pattern. <br>
@@ -12,7 +13,7 @@ import org.diorite.utils.math.DioriteMathUtils;
  * <li>If player have "foo.[10-20,30-40]" permissions, and we check if he have "foo.30" it will return true as 30 {@literal >=} 30 and 30 {@literal <=} 40, it use multiple ranges.</li>
  * </ol>
  */
-public class RangeGroup implements SpecialNumberGroup
+public class RangeGroup implements SpecialGroup<Long, LongRange[]>
 {
     /**
      * Pattern value of this group.
@@ -26,6 +27,70 @@ public class RangeGroup implements SpecialNumberGroup
     public RangeGroup()
     {
         super();
+    }
+
+    @Override
+    public Long parseValueData(final String data)
+    {
+        if (data == null)
+        {
+            return null;
+        }
+        return DioriteMathUtils.asLong(data);
+    }
+
+    @Override
+    public LongRange[] parsePatternData(String data)
+    {
+        if (data == null)
+        {
+            return null;
+        }
+
+        if (data.length() < 3) // smallest range is 3 chars, "1-2"
+        {
+            return null;
+        }
+        if ((data.charAt(0) == '[') && (data.charAt(data.length() - 1) == ']'))
+        {
+            if (data.length() < 5) // smallest multi-range is 5 chars, "[1-2]"
+            {
+                return null;
+            }
+            data = data.substring(1, data.length() - 1);
+            final String[] ranges = StringUtils.split(data, ',');
+            final LongRange[] result = new LongRange[ranges.length];
+            for (int i = 0, rangesLength = ranges.length; i < rangesLength; i++)
+            {
+                final String str = ranges[i];
+                final LongRange range = parseSingleRange(str);
+                if (range == null)
+                {
+                    return null;
+                }
+                result[i] = range;
+            }
+            return result;
+        }
+        final LongRange range = parseSingleRange(data);
+        if (range == null)
+        {
+            return null;
+        }
+        return new LongRange[]{range};
+    }
+
+    @Override
+    public boolean isMatching(final LongRange[] validData, final Long userData)
+    {
+        for (final LongRange longRange : validData)
+        {
+            if (longRange.isIn(userData))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -66,7 +131,7 @@ public class RangeGroup implements SpecialNumberGroup
     }
 
     @Override
-    public boolean isValid(String string)
+    public boolean isValidPattern(String string)
     {
         if (string.length() < 3) // smallest range is 3 chars, "1-2"
         {
@@ -90,6 +155,39 @@ public class RangeGroup implements SpecialNumberGroup
             return true;
         }
         return checkIfValidRange(string);
+    }
+
+    @Override
+    public boolean isValidValue(final String string)
+    {
+        return DioriteMathUtils.asLong(string) != null;
+    }
+
+    private static LongRange parseSingleRange(final String string)
+    {
+        final int index = string.lastIndexOf('-');
+        if (index == - 1)
+        {
+            return null;
+        }
+        final int index2 = string.lastIndexOf('-', index - 1); // to handle negative values in ranges
+        final Long a;
+        final Long b;
+        if ((index2 == 0) || (index2 == - 1))
+        {
+            a = DioriteMathUtils.asLong(string.substring(0, index));
+            b = DioriteMathUtils.asLong(string.substring(index + 1));
+        }
+        else
+        {
+            a = DioriteMathUtils.asLong(string.substring(0, index2));
+            b = DioriteMathUtils.asLong(string.substring(index2 + 1));
+        }
+        if ((a == null) || (b == null))
+        {
+            return null;
+        }
+        return new LongRange(a, b);
     }
 
     private static boolean checkIfValidRange(final String string)

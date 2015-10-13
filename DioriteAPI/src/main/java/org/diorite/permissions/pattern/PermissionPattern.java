@@ -1,5 +1,11 @@
 package org.diorite.permissions.pattern;
 
+import java.util.Map;
+
+import org.diorite.permissions.Permissible;
+import org.diorite.permissions.Permission;
+import org.diorite.permissions.PermissionLevel;
+
 public interface PermissionPattern
 {
     /**
@@ -18,4 +24,19 @@ public interface PermissionPattern
      * @return string representation of this pattern.
      */
     String getValue();
+
+    /**
+     * Returns children permissions for this permission pattern. <br>
+     * If you edit this map you will need call {@link Permissible#recalculatePermissions()}
+     *
+     * @return children permissions for this permission pattern.
+     */
+    Map<Permission, PermissionLevel> getPermissions();
+
+    /**
+     * Returns true if this permissions contains any child permissions.
+     *
+     * @return true if this permissions contains any child permissions.
+     */
+    boolean containsPermissions();
 }

@@ -33,4 +33,7 @@ public interface PermissionsContainer extends Permissible
      * @param permission permission to remove.
      */
     void removePermission(Permission permission);
+
+    @Override
+    void recalculatePermissions(); // overrided to force different implementation
 }

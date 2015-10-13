@@ -4,10 +4,21 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Abstract permission class with implemented default level
+ */
 public abstract class BasicPermission implements Permission
 {
+    /**
+     * Default level of permission.
+     */
     protected PermissionLevel defaultLevel;
 
+    /**
+     * Create new instance of basic permission class.
+     *
+     * @param defaultLevel default level of permission.
+     */
     protected BasicPermission(final PermissionLevel defaultLevel)
     {
         this.defaultLevel = defaultLevel;

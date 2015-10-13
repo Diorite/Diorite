@@ -25,7 +25,6 @@ public interface ServerOperator extends Permissible
     default boolean hasPermission(final Permission permission)
     {
         final PermissionsContainer pc = this.getPermissionsContainer();
-        final PermissionLevel level = pc.getPermissionLevel(permission);
-        return level.getValue(this.isOp());
+        return (pc == null) ? permission.getDefaultLevel().getValue(this.isOp()) : pc.hasPermission(permission);
     }
 }

@@ -14,7 +14,7 @@ import org.diorite.utils.math.DioriteMathUtils;
  * So bigger permission level means less permissions, so it is descending type.</li>
  * </ol>
  */
-public class LevelGroup implements SpecialNumberGroup
+public class LevelGroup implements SpecialGroup<Long, Long>
 {
     /**
      * Pattern value if group is ascending.
@@ -82,13 +82,45 @@ public class LevelGroup implements SpecialNumberGroup
     }
 
     @Override
+    public Long parseValueData(final String data)
+    {
+        if (data == null)
+        {
+            return null;
+        }
+        return DioriteMathUtils.asLong(data);
+    }
+
+    @Override
+    public Long parsePatternData(final String data)
+    {
+        if (data == null)
+        {
+            return null;
+        }
+        return DioriteMathUtils.asLong(data);
+    }
+
+    @Override
+    public boolean isMatching(final Long validData, final Long userData)
+    {
+        return this.ascending ? (validData >= userData) : (validData <= userData);
+    }
+
+    @Override
     public String getGroupPattern()
     {
         return this.ascending ? ASC_PAT : DESC_PAT;
     }
 
     @Override
-    public boolean isValid(final String string)
+    public boolean isValidPattern(final String string)
+    {
+        return DioriteMathUtils.asLong(string) != null;
+    }
+
+    @Override
+    public boolean isValidValue(final String string)
     {
         return DioriteMathUtils.asLong(string) != null;
     }

@@ -1,12 +1,19 @@
 package org.diorite.impl.permissions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import org.diorite.impl.permissions.pattern.ExtendedPermissionPatternImpl;
+import org.diorite.impl.permissions.pattern.PermissionPatternImpl;
+import org.diorite.impl.permissions.perm.PermissionImpl;
+import org.diorite.impl.permissions.perm.AdvancedPermissionImpl;
 import org.diorite.Diorite;
 import org.diorite.entity.Player;
 import org.diorite.permissions.GroupEntry;
@@ -18,10 +25,10 @@ import org.diorite.permissions.PermissionsContainer;
 import org.diorite.permissions.PermissionsGroup;
 import org.diorite.permissions.PermissionsManager;
 import org.diorite.permissions.PlayerPermissionsContainer;
-import org.diorite.permissions.SimplePermission;
-import org.diorite.permissions.pattern.AdvancedPermissionPattern;
+import org.diorite.permissions.pattern.ExtendedPermissionPattern;
 import org.diorite.permissions.pattern.PermissionPattern;
-import org.diorite.permissions.pattern.SimplePermissionPattern;
+import org.diorite.permissions.pattern.group.SpecialGroup;
+import org.diorite.permissions.pattern.group.SpecialGroupsManager;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -82,9 +89,16 @@ public class DioritePermissionsManager implements PermissionsManager
         }
         for (final PermissionPattern pattern : this.patterns)
         {
-            if (pattern.getValue().equalsIgnoreCase(permissionPattern))
+            if (pattern.isValid(permissionPattern))
             {
                 return pattern;
+            }
+            if (pattern instanceof ExtendedPermissionPattern)
+            {
+                if (((ExtendedPermissionPattern) pattern).isValidValue(permissionPattern))
+                {
+                    return pattern;
+                }
             }
         }
         return null;
@@ -148,7 +162,21 @@ public class DioritePermissionsManager implements PermissionsManager
         {
             return result;
         }
-        return null;
+        final String[] parts = StringUtils.split(permissionPattern, '.');
+        final List<SpecialGroup<?, ?>> groups = new ArrayList<>(parts.length);
+        for (final String part : parts)
+        {
+            final SpecialGroup<?, ?> group = SpecialGroupsManager.get(part);
+            if (group != null)
+            {
+                groups.add(group);
+            }
+        }
+        if (groups.isEmpty())
+        {
+            return new PermissionPatternImpl(permissionPattern);
+        }
+        return new ExtendedPermissionPatternImpl(permissionPattern, groups.toArray(new SpecialGroup<?, ?>[groups.size()]));
     }
 
     @Override
@@ -176,13 +204,13 @@ public class DioritePermissionsManager implements PermissionsManager
         Validate.notNull(permissionPattern, "permissionPattern can't be null.");
         Validate.notNull(permission, "permission can't be null.");
         Validate.notNull(defaultLevel, "defaultLevel can't be null.");
-        if (permissionPattern instanceof SimplePermissionPattern)
+        if (permissionPattern instanceof PermissionPattern)
         {
-            return new SimplePermission(defaultLevel, (SimplePermissionPattern) permissionPattern);
+            return new PermissionImpl(defaultLevel, permissionPattern);
         }
-        if (permissionPattern instanceof AdvancedPermissionPattern)
+        if (permissionPattern instanceof ExtendedPermissionPattern)
         {
-//            return new Adva
+            return new AdvancedPermissionImpl((ExtendedPermissionPattern) permissionPattern, defaultLevel, permission);
         }
         // TODO: supprot for special permissions
         throw new UnsupportedOperationException();

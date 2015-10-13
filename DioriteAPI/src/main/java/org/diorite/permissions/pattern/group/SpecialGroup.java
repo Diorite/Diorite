@@ -4,8 +4,9 @@ package org.diorite.permissions.pattern.group;
  * Base abstract class for special permission pattern groups, like permissions that can use number ranges. {@link RangeGroup}
  *
  * @param <R> type of input data when checking string.
+ * @param <T> type of input from {@link org.diorite.permissions.pattern.ExtendedPermissionPattern}
  */
-public interface SpecialGroup<R>
+public interface SpecialGroup<R, T>
 {
     /**
      * This method will parse given string, check if it is valid, and check if given data is in range, so hasPermission should return true. <br>
@@ -22,7 +23,7 @@ public interface SpecialGroup<R>
     GroupResult parse(final String string, final R data);
 
     /**
-     * This method will convert given string to valid group data, like in pattern "foo.{$++}.bar" for "foo.56.bar" and R type of {@link Long}
+     * This method will convert given string to valid group data, like in pattern "foo.{$-$}.bar" for "foo.56.bar" in {@link RangeGroup}
      * this method will parse "56" string to Long value. <br>
      * Or return null if it is not possible.
      *
@@ -30,7 +31,29 @@ public interface SpecialGroup<R>
      *
      * @return parsed data or null.
      */
-    R parseData(final String data);
+    R parseValueData(final String data);
+
+    /**
+     * This method will convert given string to valid group pattern data, like in pattern "foo.{$-$}.bar" for "foo.13-24.bar" in {@link RangeGroup}
+     * this method will parse "13-24" string to 1 element array of {@link org.diorite.utils.math.LongRange}. <br>
+     * Or return null if it is not possible.
+     *
+     * @param data data to parse in string from permission.
+     *
+     * @return parsed data or null.
+     */
+    T parsePatternData(final String data);
+
+    /**
+     * This method will check if given value is valid for this group,
+     * may be used by implementation of permission system.
+     *
+     * @param validData valid data for this pattern.
+     * @param userData  data to check.
+     *
+     * @return true is data is valid.
+     */
+    boolean isMatching(final T validData, final R userData);
 
     /**
      * Returns pattern value for this group, like "{$++}". <br>
@@ -54,7 +77,7 @@ public interface SpecialGroup<R>
      */
     default GroupResult parse(final String string, final String data)
     {
-        final R parsedData = this.parseData(data);
+        final R parsedData = this.parseValueData(data);
         if (parsedData == null)
         {
             return new GroupResult(false, false, 0);
@@ -63,11 +86,20 @@ public interface SpecialGroup<R>
     }
 
     /**
-     * Check if given string can be value of special group, like "5" for "{$++}"
+     * Check if given string can be a pattern value of special group, like "5-10" for "{$-$}"
+     *
+     * @param string string to check.
+     *
+     * @return true if given string can be a pattern value of this group.
+     */
+    boolean isValidPattern(final String string);
+
+    /**
+     * Check if given string can be a value of special group, like "5" for "{$-$}"
      *
      * @param string string to check.
      *
      * @return true if given string can be value of this group.
      */
-    boolean isValid(final String string);
+    boolean isValidValue(final String string);
 }

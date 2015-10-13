@@ -1,39 +1,48 @@
 package org.diorite.impl.permissions;
 
 import java.lang.ref.WeakReference;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.permissions.perm.CheckExtendedPermission;
+import org.diorite.impl.permissions.perm.AdvancedPermissionEntry;
+import org.diorite.impl.permissions.perm.PermissionEntry;
+import org.diorite.impl.permissions.perm.PermissionImpl;
+import org.diorite.impl.permissions.perm.PermissionImplEntry;
 import org.diorite.Diorite;
 import org.diorite.permissions.AdvancedPermission;
+import org.diorite.permissions.CyclicPermissionsException;
 import org.diorite.permissions.Permissible;
 import org.diorite.permissions.Permission;
 import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.PermissionsContainer;
 import org.diorite.permissions.PermissionsManager;
-import org.diorite.permissions.SimplePermission;
+import org.diorite.permissions.ServerOperator;
+import org.diorite.permissions.pattern.ExtendedPermissionPattern;
 import org.diorite.permissions.pattern.PermissionPattern;
+import org.diorite.permissions.pattern.group.SpecialGroup;
 
 public class PermissionsContainerImpl implements PermissionsContainer
 {
     /**
      * Parent for this container, can be null.
      */
-    protected PermissionsContainer                                               parent;
+    protected PermissionsContainer                                    parent;
     /**
      * Map with permissions for this container, can be null to save memory.
      */
-    protected Map<Permission, PermissionLevel>                                   permissions;
+    protected Map<Permission, PermissionImplEntry>                    permissions;
     /**
      * Map with advanced permissions for this container, can be null to save memory.
      */
-    protected Map<PermissionPattern, Entry<AdvancedPermission, PermissionLevel>> advancedPermissions;
-    protected WeakReference<Permissible>                                         permissible;
+    protected Map<ExtendedPermissionPattern, AdvancedPermissionEntry> advancedPermissions;
+    protected WeakReference<Permissible>                              permissible;
 
     protected PermissionsContainerImpl()
     {
@@ -44,20 +53,9 @@ public class PermissionsContainerImpl implements PermissionsContainer
         this.permissible = new WeakReference<>(permissible);
     }
 
-    protected PermissionsContainerImpl(final Map<Permission, PermissionLevel> permissions)
-    {
-        this.permissions = new HashMap<>(permissions);
-    }
-
     protected PermissionsContainerImpl(final PermissionsContainerImpl parent)
     {
         this.parent = parent;
-    }
-
-    protected PermissionsContainerImpl(final PermissionsContainer parent, final Map<Permission, PermissionLevel> permissions)
-    {
-        this.parent = parent;
-        this.permissions = new HashMap<>(permissions);
     }
 
     public void setParent(final PermissionsContainerImpl parent)
@@ -65,32 +63,62 @@ public class PermissionsContainerImpl implements PermissionsContainer
         this.parent = parent;
     }
 
-    @Override
-    public PermissionLevel getPermissionLevel(final Permission permission)
+    private synchronized void addChilds(final Permission permission, final Set<PermissionPattern> cyclic)
     {
-
-        final PermissionLevel level;
-        if (permission instanceof SimplePermission)
+        if (permission.containsPermissions())
         {
-            level = (this.permissions == null) ? null : this.permissions.get(permission);
+            this.addChilds(permission.getPattern(), cyclic);
         }
-        else if (permission instanceof AdvancedPermission)
+    }
+
+    private synchronized void addChilds(final PermissionPattern pat, final Set<PermissionPattern> cyclic)
+    {
+        if (! pat.containsPermissions())
         {
-            if (this.advancedPermissions == null)
+            return;
+        }
+        for (final Entry<Permission, PermissionLevel> entry : pat.getPermissions().entrySet())
+        {
+            final Permission permission = entry.getKey();
+            final PermissionPattern pattern = permission.getPattern();
+            if (permission instanceof PermissionImpl)
             {
-                level = null;
+                this.permissions.put(permission, new PermissionImplEntry(permission, entry.getValue(), true));
+            }
+            else if (permission instanceof AdvancedPermission)
+            {
+                this.advancedPermissions.put((ExtendedPermissionPattern) pattern, new AdvancedPermissionEntry((AdvancedPermission) permission, entry.getValue(), true));
             }
             else
             {
-                final Entry<AdvancedPermission, PermissionLevel> entry = this.advancedPermissions.get(permission.getPattern());
-                level = entry.getValue();
+                throw new UnsupportedOperationException("Unknown type of permission!");
             }
+            if (! cyclic.add(pattern))
+            {
+                throw new CyclicPermissionsException(pattern);
+            }
+            this.addChilds(pattern, cyclic);
+        }
+    }
+
+    @Override
+    public PermissionLevel getPermissionLevel(final Permission permission)
+    {
+        final PermissionEntry<?> entry;
+        if (permission instanceof PermissionImpl)
+        {
+            entry = (this.permissions == null) ? null : this.permissions.get(permission);
+        }
+        else if ((permission instanceof CheckExtendedPermission) || (permission instanceof AdvancedPermission))
+        {
+            entry = (this.advancedPermissions == null) ? null : this.advancedPermissions.get(permission.getPattern());
         }
         else
         {
-            throw new UnsupportedOperationException("unknown type of permission.");
+            throw new UnsupportedOperationException("Unknown type of permission!");
         }
-        if (level == null)
+
+        if ((entry == null) || ((permission instanceof CheckExtendedPermission) && (entry.getPermission() instanceof AdvancedPermission) && ! isMatching((AdvancedPermission) entry.getPermission(), (CheckExtendedPermission) permission)))
         {
             if (this.parent != null)
             {
@@ -98,18 +126,49 @@ public class PermissionsContainerImpl implements PermissionsContainer
             }
             return permission.getDefaultLevel();
         }
-        return level;
+        validateType(entry.getPermission());
+        return entry.getLevel();
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static boolean isMatching(final AdvancedPermission userPermission, final CheckExtendedPermission checkPermission)
+    {
+        final Object[] user = userPermission.getData();
+        final Object[] check = checkPermission.getData();
+        final SpecialGroup[] groups = userPermission.getPattern().getGroups();
+        if ((user.length == groups.length) && (check.length == groups.length))
+        {
+            return false;
+        }
+        for (int i = 0, groups1Length = groups.length; i < groups1Length; i++)
+        {
+            final SpecialGroup s = groups[i];
+            if (! s.isMatching(user[i], check[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static void validateType(final Permission perm)
+    {
+        if (perm instanceof CheckExtendedPermission)
+        {
+            throw new RuntimeException("You can't use this type of permission.");
+        }
     }
 
     @Override
     public synchronized void setPermission(final Permission permission, final PermissionLevel level)
     {
+        validateType(permission);
         final PermissionsManager mag = getManager();
         if (! mag.isRegisteredPermission(permission))
         {
             mag.registerPermission(permission);
         }
-        if (permission instanceof SimplePermission)
+        if (permission instanceof PermissionImpl)
         {
             if (this.permissions == null)
             {
@@ -119,12 +178,23 @@ public class PermissionsContainerImpl implements PermissionsContainer
                 }
                 this.permissions = new HashMap<>(32, .5f);
             }
-            if ((level == null) && (this.permissions.remove(permission) != null) && this.permissions.isEmpty()) // remove permission and check if map is empty
+            if (level == null)
             {
-                this.permissions = null;
+                final PermissionImplEntry entry = this.permissions.get(permission);
+                if (! entry.isFromParent())
+                {
+                    if ((this.permissions.remove(permission) != null) && this.permissions.isEmpty())
+                    {
+                        this.permissions = null;
+                    }
+                }
                 return;
             }
-            this.permissions.put(permission, level);
+            final PermissionPattern pattern = permission.getPattern();
+            final Set<PermissionPattern> cyclic = new HashSet<>(50, .7f);
+            cyclic.add(pattern);
+            this.addChilds(pattern, cyclic);
+            this.permissions.put(permission, new PermissionImplEntry(permission, level, false));
             return;
         }
         if (permission instanceof AdvancedPermission)
@@ -137,21 +207,81 @@ public class PermissionsContainerImpl implements PermissionsContainer
                 }
                 this.advancedPermissions = new HashMap<>(16, .5f);
             }
-            if ((level == null) && (this.advancedPermissions.remove(permission.getPattern()) != null) && this.advancedPermissions.isEmpty()) // remove permission and check if map is empty
+            final ExtendedPermissionPattern pattern = (ExtendedPermissionPattern) permission.getPattern();
+            if (level == null)
             {
-                this.advancedPermissions = null;
+                final AdvancedPermissionEntry entry = this.advancedPermissions.get(pattern);
+                if (! entry.isFromParent())
+                {
+                    if ((this.advancedPermissions.remove(pattern) != null) && this.advancedPermissions.isEmpty())
+                    {
+                        this.advancedPermissions = null;
+                    }
+                }
                 return;
             }
-            this.advancedPermissions.put(permission.getPattern(), new SimpleEntry<>((AdvancedPermission) permission, level));
+            final Set<PermissionPattern> cyclic = new HashSet<>(50, .7f);
+            cyclic.add(pattern);
+            this.addChilds(pattern, cyclic);
+            this.advancedPermissions.put(pattern, new AdvancedPermissionEntry((AdvancedPermission) permission, level, false));
             return;
         }
-        throw new UnsupportedOperationException("unknown type of permission.");
+        throw new UnsupportedOperationException("Unknown type of permission!");
     }
 
     @Override
     public synchronized void removePermission(final Permission permission)
     {
         this.setPermission(permission, null);
+    }
+
+    @Override
+    public synchronized void recalculatePermissions()
+    {
+        if (this.permissions != null)
+        {
+            final Map<Permission, PermissionImplEntry> tempPerms = this.permissions;
+            this.permissions = new HashMap<>(tempPerms.size(), .5f);
+            final Map<Permission, PermissionImplEntry> tempMap = new HashMap<>(tempPerms.size());
+            for (final Entry<Permission, PermissionImplEntry> entry : tempPerms.entrySet())
+            {
+                final PermissionImplEntry permissionEntry = entry.getValue();
+                final Permission permission = entry.getKey();
+                if (permission instanceof CheckExtendedPermission)
+                {
+                    continue;
+                }
+                if (permissionEntry.isFromParent())
+                {
+                    continue;
+                }
+                tempMap.put(permission, permissionEntry);
+                final Set<PermissionPattern> cyclic = new HashSet<>(50, .7f);
+                cyclic.add(permission.getPattern());
+                this.addChilds(permission, cyclic);
+            }
+            this.permissions.putAll(tempMap);
+        }
+        if (this.advancedPermissions != null)
+        {
+            final Map<ExtendedPermissionPattern, AdvancedPermissionEntry> tempPerms = this.advancedPermissions;
+            this.advancedPermissions = new HashMap<>(tempPerms.size(), .4f);
+            final Map<ExtendedPermissionPattern, AdvancedPermissionEntry> tempMap = new HashMap<>(tempPerms.size());
+            for (final Entry<ExtendedPermissionPattern, AdvancedPermissionEntry> entry : tempPerms.entrySet())
+            {
+                final AdvancedPermissionEntry permissionEntry = entry.getValue();
+                if (permissionEntry.isFromParent())
+                {
+                    continue;
+                }
+                final ExtendedPermissionPattern pattern = entry.getKey();
+                tempMap.put(pattern, permissionEntry);
+                final Set<PermissionPattern> cyclic = new HashSet<>(50, .7f);
+                cyclic.add(pattern);
+                this.addChilds(pattern, cyclic);
+            }
+            this.advancedPermissions.putAll(tempMap);
+        }
     }
 
     protected static PermissionsManager getManager()
@@ -165,7 +295,11 @@ public class PermissionsContainerImpl implements PermissionsContainer
         final PermissionsManager mag = getManager();
         if (checkAdvanced)
         {
-            return this.hasPermission(mag.getPatternByPermission(permission), permission);
+            final PermissionPattern pat = mag.getPatternByPermission(permission);
+            if (pat != null)
+            {
+                return this.hasPermission(pat, permission);
+            }
         }
         Permission perm = mag.getPermission(permission);
         if (perm == null)
@@ -179,22 +313,31 @@ public class PermissionsContainerImpl implements PermissionsContainer
     public boolean hasPermission(final String pattern, final String permission)
     {
         final PermissionsManager mag = getManager();
-        Permission perm = mag.getPermission(pattern);
-        if (perm == null)
+        final Permission perm = mag.getPermission(pattern);
+        if (perm != null)
         {
-            perm = mag.createPermission(pattern, permission, PermissionLevel.OP);
+            return this.hasPermission(perm.getPattern(), permission);
         }
-        return this.hasPermission(perm);
+        return this.hasPermission(mag.createPermission(pattern, permission, PermissionLevel.OP));
     }
+
 
     @Override
     public boolean hasPermission(final PermissionPattern pattern, final String permission)
     {
         final PermissionsManager mag = getManager();
-        Permission perm = mag.getPermission(pattern);
-        if (perm == null)
+        Permission perm;
+        if (pattern instanceof ExtendedPermissionPattern)
         {
-            perm = mag.createPermission(pattern, permission, PermissionLevel.OP);
+            perm = new CheckExtendedPermission(PermissionLevel.OP, (ExtendedPermissionPattern) pattern, permission);
+        }
+        else
+        {
+            perm = mag.getPermission(pattern);
+            if (perm == null)
+            {
+                perm = mag.createPermission(pattern, permission, PermissionLevel.OP);
+            }
         }
         return this.hasPermission(perm);
     }
@@ -204,13 +347,13 @@ public class PermissionsContainerImpl implements PermissionsContainer
     {
         final PermissionsManager mag = getManager();
         final Permissible permissible = this.getPermissible();
-        if (permissible != null)
+        boolean op = false;
+        if ((permissible instanceof ServerOperator))
         {
-            return permissible.hasPermission(permission);
+            op = ((ServerOperator) permissible).isOp();
         }
         final PermissionLevel level = mag.onPermissionCheck(null, permission, this.getPermissionLevel(permission));
-
-        return level.getValue(false);
+        return level.getValue(op);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.diorite.impl.permissions;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -11,9 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.permissions.GroupEntry;
 import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.permissions.Permissible;
-import org.diorite.permissions.Permission;
-import org.diorite.permissions.PermissionLevel;
-import org.diorite.permissions.PermissionsContainer;
 import org.diorite.permissions.PermissionsGroup;
 
 public class GroupablePermissionsContainerImpl extends PermissionsContainerImpl implements GroupablePermissionsContainer
@@ -29,19 +25,9 @@ public class GroupablePermissionsContainerImpl extends PermissionsContainerImpl 
         super(permissible);
     }
 
-    protected GroupablePermissionsContainerImpl(final Map<Permission, PermissionLevel> permissions)
-    {
-        super(permissions);
-    }
-
     protected GroupablePermissionsContainerImpl(final PermissionsContainerImpl parent)
     {
         super(parent);
-    }
-
-    protected GroupablePermissionsContainerImpl(final PermissionsContainer parent, final Map<Permission, PermissionLevel> permissions)
-    {
-        super(parent, permissions);
     }
 
     @Override

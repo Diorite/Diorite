@@ -81,7 +81,7 @@ public interface PermissionsManager
     PermissionPattern getPermissionPattern(String permissionPattern);
 
     /**
-     * Find {@link PermissionPattern} by permission, like "foo.5.bar" may return "foo.{$++}.bar" pattern.<br>
+     * Find {@link PermissionPattern} by permission, like "foo.5.bar" or "foo.5-10.bar" may return "foo.{$-$}.bar" pattern.<br>
      * Method should use {@link PermissionPattern#isValid(String)} using given permission to find good pattern,
      * but it may use some cache too.
      *

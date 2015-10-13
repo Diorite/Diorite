@@ -1,6 +1,5 @@
 package org.diorite.permissions;
 
-import org.diorite.Diorite;
 import org.diorite.permissions.pattern.PermissionPattern;
 
 /**
@@ -80,8 +79,7 @@ public interface Permissible
     default boolean hasPermission(final Permission permission)
     {
         final PermissionsContainer pc = this.getPermissionsContainer();
-        final PermissionLevel level = Diorite.getServerManager().getPermissionsManager().onPermissionCheck(this, permission, pc.getPermissionLevel(permission));
-        return level.getValue(false);
+        return (pc == null) ? permission.getDefaultLevel().getValue(false) : pc.hasPermission(permission);
     }
 
     /**
@@ -90,4 +88,12 @@ public interface Permissible
      * @return object containing all permissions for this permissible.
      */
     PermissionsContainer getPermissionsContainer();
+
+    /**
+     * Update permissions status, check for cyclic references etc.
+     */
+    default void recalculatePermissions()
+    {
+        this.getPermissionsContainer().recalculatePermissions();
+    }
 }

@@ -6,11 +6,11 @@ import java.util.Map;
 /**
  * Manager for all special groups, plugins can add or edit special permission groups here.
  */
-public final class GroupsManager
+public final class SpecialGroupsManager
 {
-    private static final Map<String, SpecialGroup<?>> groups = new HashMap<>(5, .25F);
+    private static final Map<String, SpecialGroup<?, ?>> groups = new HashMap<>(5, .25F);
 
-    private GroupsManager()
+    private SpecialGroupsManager()
     {
     }
 
@@ -27,7 +27,7 @@ public final class GroupsManager
      *
      * @param group special group to register.
      */
-    public static void register(final SpecialGroup<?> group)
+    public static void register(final SpecialGroup<?, ?> group)
     {
         groups.put(group.getGroupPattern(), group);
     }
@@ -39,7 +39,7 @@ public final class GroupsManager
      *
      * @return special group or null if there is no group for given pattern.
      */
-    public static SpecialGroup<?> get(final String pat)
+    public static SpecialGroup<?, ?> get(final String pat)
     {
         return groups.get(pat);
     }
