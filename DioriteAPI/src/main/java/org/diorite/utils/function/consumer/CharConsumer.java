@@ -1,4 +1,4 @@
-package org.diorite.utils.function;
+package org.diorite.utils.function.consumer;
 
 import java.util.Objects;
 

@@ -7,12 +7,33 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Represent part of {@link AtomicArrayBase} or other {@link AtomicArray}.
+ *
+ * @param <E> type of array.
+ */
 public class AtomicArrayPart<E> implements AtomicArray<E>
 {
+    /**
+     * Reference to base array.
+     */
     protected final AtomicArray<E> base;
+    /**
+     * Offset between this array and base array.
+     */
     protected final int            offset;
+    /**
+     * Length of this array.
+     */
     protected final int            length;
 
+    /**
+     * Construct new atomic array part for given base array, offset and length.
+     *
+     * @param base   reference to base array.
+     * @param offset offset between this array and base array.
+     * @param length length of this array.
+     */
     protected AtomicArrayPart(final AtomicArray<E> base, final int offset, final int length)
     {
         Validate.isTrue(offset >= 0, "offset can't be negative!");
@@ -24,16 +45,34 @@ public class AtomicArrayPart<E> implements AtomicArray<E>
         this.length = length;
     }
 
+    /**
+     * Construct new atomic array part for given base array and offset, length will be set to maximum possible value.
+     *
+     * @param base   reference to base array.
+     * @param offset offset between this array and base array.
+     */
     protected AtomicArrayPart(final AtomicArray<E> base, final int offset)
     {
         this(base, offset, base.length() - offset);
     }
 
+    /**
+     * Returns base array for this part of array.
+     *
+     * @return base array for this part of array.
+     */
     protected AtomicArray<E> getBase()
     {
         return this.base;
     }
 
+    /**
+     * Returns index of element in base array.
+     *
+     * @param i index to add offset to.
+     *
+     * @return index of element in base array.
+     */
     protected int addOffset(final int i)
     {
         if (i >= this.length)

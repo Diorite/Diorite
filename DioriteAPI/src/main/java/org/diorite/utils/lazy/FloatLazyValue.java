@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.Validate;
 
-import org.diorite.utils.function.FloatSupplier;
+import org.diorite.utils.function.supplier.FloatSupplier;
 
 /**
  * Class to represent lazy init float values that use {@link FloatSupplier} passed in constructor to initialize value in {@link #init()} method. <br>

@@ -1,17 +1,17 @@
-package org.diorite.utils.function;
+package org.diorite.utils.function.consumer;
 
 import java.util.Objects;
 
 /**
- * Represents an operation that accepts a single {@code short}-valued argument and
+ * Represents an operation that accepts a single {@code byte}-valued argument and
  * returns no result.  This is the primitive type specialization of
- * {@link java.util.function.Consumer} for {@code short}.  Unlike most other functional interfaces,
- * {@code ShortConsumer} is expected to operate via side-effects.
+ * {@link java.util.function.Consumer} for {@code byte}.  Unlike most other functional interfaces,
+ * {@code ByteConsumer} is expected to operate via side-effects.
  *
  * @see java.util.function.Consumer
  */
 @FunctionalInterface
-public interface ShortConsumer
+public interface ByteConsumer
 {
 
     /**
@@ -19,10 +19,10 @@ public interface ShortConsumer
      *
      * @param value the input argument
      */
-    void accept(short value);
+    void accept(byte value);
 
     /**
-     * Returns a composed {@code ShortConsumer} that performs, in sequence, this
+     * Returns a composed {@code ByteConsumer} that performs, in sequence, this
      * operation followed by the {@code after} operation. If performing either
      * operation throws an exception, it is relayed to the caller of the
      * composed operation.  If performing this operation throws an exception,
@@ -30,15 +30,15 @@ public interface ShortConsumer
      *
      * @param after the operation to perform after this operation
      *
-     * @return a composed {@code ShortConsumer} that performs in sequence this
+     * @return a composed {@code ByteConsumer} that performs in sequence this
      * operation followed by the {@code after} operation
      *
      * @throws NullPointerException if {@code after} is null
      */
-    default ShortConsumer andThen(final ShortConsumer after)
+    default ByteConsumer andThen(final ByteConsumer after)
     {
         Objects.requireNonNull(after);
-        return (short t) -> {
+        return (byte t) -> {
             this.accept(t);
             after.accept(t);
         };

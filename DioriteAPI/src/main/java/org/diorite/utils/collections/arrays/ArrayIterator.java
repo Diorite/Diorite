@@ -5,11 +5,21 @@ import java.util.Iterator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Iterator implementation for array.
+ *
+ * @param <T> type of array
+ */
 public class ArrayIterator<T> implements Iterator<T>, Iterable<T>
 {
     private final T[] array;
     private int currentIndex = 0;
 
+    /**
+     * Construct new array iterator for given object.
+     *
+     * @param array array to use in iterator.
+     */
     public ArrayIterator(final T[] array)
     {
         this.array = array;

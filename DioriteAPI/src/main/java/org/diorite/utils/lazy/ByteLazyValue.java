@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.Validate;
 
-import org.diorite.utils.function.ByteSupplier;
+import org.diorite.utils.function.supplier.ByteSupplier;
 
 /**
  * Class to represent lazy init byte values that use {@link ByteSupplier} passed in constructor to initialize value in {@link #init()} method. <br>

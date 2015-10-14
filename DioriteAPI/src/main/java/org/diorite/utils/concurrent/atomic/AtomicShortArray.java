@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
+/**
+ * Atomic array with short elements.
+ */
 @SuppressWarnings("MagicNumber")
 public class AtomicShortArray implements Serializable
 {

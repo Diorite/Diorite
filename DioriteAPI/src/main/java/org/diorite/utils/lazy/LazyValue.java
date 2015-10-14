@@ -9,7 +9,7 @@ import org.apache.commons.lang3.Validate;
  * Class to represent lazy init object values that use {@link Supplier} passed in constructor to initialize value in {@link #init()} method. <br>
  * Class is extending {@link LazyValueAbstract}
  *
- * @param T type of lazy init object.
+ * @param <T> type of lazy init object.
  *
  * @see LazyValueAbstract
  */

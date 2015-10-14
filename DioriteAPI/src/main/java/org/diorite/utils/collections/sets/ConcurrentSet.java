@@ -9,27 +9,55 @@ import java.util.concurrent.ConcurrentMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Concurrent set implemented as wrapper for ConcurrentHashMap.
+ *
+ * @param <E> elements type.
+ *
+ * @see ConcurrentHashMap
+ */
 public class ConcurrentSet<E> extends AbstractSet<E> implements Serializable
 {
     private static final long serialVersionUID = 0;
 
     private final ConcurrentMap<E, Boolean> map;
 
+    /**
+     * Construct new ConcurrentSet.
+     */
     public ConcurrentSet()
     {
         this.map = new ConcurrentHashMap<>(10);
     }
 
+    /**
+     * Construct new ConcurrentSet.
+     *
+     * @param size initial capacity of set.
+     */
     public ConcurrentSet(final int size)
     {
         this.map = new ConcurrentHashMap<>(size);
     }
 
+    /**
+     * Construct new ConcurrentSet.
+     *
+     * @param size       initial capacity of set.
+     * @param loadFactor load factor of set.
+     */
     public ConcurrentSet(final int size, final float loadFactor)
     {
         this.map = new ConcurrentHashMap<>(size, loadFactor);
     }
 
+    /**
+     * Construct new ConcurrentSet.
+     *
+     * @param size             initial capacity of set.
+     * @param loadFactor       load factor of set.
+     * @param concurrencyLevel concurrency level of set.
+     */
     public ConcurrentSet(final int size, final float loadFactor, final int concurrencyLevel)
     {
         this.map = new ConcurrentHashMap<>(size, loadFactor, concurrencyLevel);

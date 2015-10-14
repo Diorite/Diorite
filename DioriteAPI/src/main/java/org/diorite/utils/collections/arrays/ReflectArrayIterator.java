@@ -6,11 +6,21 @@ import java.util.Iterator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Iterator implementation for array based on reflections, perfect if you don't know type of array and it can be a primitive type.
+ *
+ * @see Array
+ */
 public class ReflectArrayIterator implements Iterator<Object>, Iterable<Object>
 {
     private final Object array;
     private int currentIndex = 0;
 
+    /**
+     * Construct new iterator for given array object, if object isn't array {@link IllegalArgumentException} will be thrown.
+     *
+     * @param array array to use in iterator.
+     */
     public ReflectArrayIterator(final Object array)
     {
         if (! array.getClass().isArray())

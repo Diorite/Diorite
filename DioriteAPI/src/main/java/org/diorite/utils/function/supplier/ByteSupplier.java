@@ -1,4 +1,4 @@
-package org.diorite.utils.function;
+package org.diorite.utils.function.supplier;
 
 import java.util.function.Supplier;
 

@@ -3,7 +3,6 @@ package org.diorite.utils.function;
 @FunctionalInterface
 public interface ObjIntFunction<R, V>
 {
-
     /**
      * Applies this function to the given argument.
      *

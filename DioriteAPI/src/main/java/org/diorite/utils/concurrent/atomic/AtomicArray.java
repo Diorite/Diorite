@@ -4,6 +4,11 @@ import java.util.Iterator;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
+/**
+ * Represent atomic array of given type.
+ *
+ * @param <E> type of array.
+ */
 public interface AtomicArray<E> extends Iterable<E>
 {
     int SHIFT_BASE = 31;
@@ -45,8 +50,6 @@ public interface AtomicArray<E> extends Iterable<E>
      *
      * @param i        the index
      * @param newValue the new value
-     *
-     * @since 1.6
      */
     void lazySet(int i, E newValue);
 
@@ -100,8 +103,6 @@ public interface AtomicArray<E> extends Iterable<E>
      * @param updateFunction a side-effect-free function
      *
      * @return the previous value
-     *
-     * @since 1.8
      */
     E getAndUpdate(int i, UnaryOperator<E> updateFunction);
 
@@ -115,8 +116,6 @@ public interface AtomicArray<E> extends Iterable<E>
      * @param updateFunction a side-effect-free function
      *
      * @return the updated value
-     *
-     * @since 1.8
      */
     E updateAndGet(int i, UnaryOperator<E> updateFunction);
 
@@ -134,8 +133,6 @@ public interface AtomicArray<E> extends Iterable<E>
      * @param accumulatorFunction a side-effect-free function of two arguments
      *
      * @return the previous value
-     *
-     * @since 1.8
      */
     E getAndAccumulate(int i, E x, BinaryOperator<E> accumulatorFunction);
 
@@ -153,15 +150,13 @@ public interface AtomicArray<E> extends Iterable<E>
      * @param accumulatorFunction a side-effect-free function of two arguments
      *
      * @return the updated value
-     *
-     * @since 1.8
      */
     E accumulateAndGet(int i, E x, BinaryOperator<E> accumulatorFunction);
 
     /**
      * Get sub-array of this array, elements of sub-array are indexed,
      * from 0, like in new array.
-     * <p>
+     * <br>
      * sub-array is only wrapper for this array, so all changes are made,
      * in this object, but offset is added to every index used in sub array.
      *
@@ -175,7 +170,7 @@ public interface AtomicArray<E> extends Iterable<E>
     /**
      * Get sub-array of this array, elements of sub-array are indexed,
      * from 0, like in new array.
-     * <p>
+     * <br>
      * sub-array is only wrapper for this array, so all changes are made,
      * in this object, but offset is added to every index used in sub array.
      *

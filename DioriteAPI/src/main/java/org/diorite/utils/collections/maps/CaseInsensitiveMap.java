@@ -2,6 +2,8 @@ package org.diorite.utils.collections.maps;
 
 import java.util.Map;
 
+import org.diorite.utils.collections.hash.CaseInsensitiveHashingStrategy;
+
 import gnu.trove.map.hash.TCustomHashMap;
 
 public class CaseInsensitiveMap<V> extends TCustomHashMap<String, V>

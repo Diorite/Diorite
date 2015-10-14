@@ -1,17 +1,17 @@
-package org.diorite.utils.function;
+package org.diorite.utils.function.consumer;
 
 import java.util.Objects;
 
 /**
- * Represents an operation that accepts a single {@code byte}-valued argument and
+ * Represents an operation that accepts a single {@code float}-valued argument and
  * returns no result.  This is the primitive type specialization of
- * {@link java.util.function.Consumer} for {@code byte}.  Unlike most other functional interfaces,
- * {@code ByteConsumer} is expected to operate via side-effects.
+ * {@link java.util.function.Consumer} for {@code float}.  Unlike most other functional interfaces,
+ * {@code FloatConsumer} is expected to operate via side-effects.
  *
  * @see java.util.function.Consumer
  */
 @FunctionalInterface
-public interface ByteConsumer
+public interface FloatConsumer
 {
 
     /**
@@ -19,10 +19,10 @@ public interface ByteConsumer
      *
      * @param value the input argument
      */
-    void accept(byte value);
+    void accept(float value);
 
     /**
-     * Returns a composed {@code ByteConsumer} that performs, in sequence, this
+     * Returns a composed {@code FloatConsumer} that performs, in sequence, this
      * operation followed by the {@code after} operation. If performing either
      * operation throws an exception, it is relayed to the caller of the
      * composed operation.  If performing this operation throws an exception,
@@ -30,15 +30,15 @@ public interface ByteConsumer
      *
      * @param after the operation to perform after this operation
      *
-     * @return a composed {@code ByteConsumer} that performs in sequence this
+     * @return a composed {@code FloatConsumer} that performs in sequence this
      * operation followed by the {@code after} operation
      *
      * @throws NullPointerException if {@code after} is null
      */
-    default ByteConsumer andThen(final ByteConsumer after)
+    default FloatConsumer andThen(final FloatConsumer after)
     {
         Objects.requireNonNull(after);
-        return (byte t) -> {
+        return (float t) -> {
             this.accept(t);
             after.accept(t);
         };

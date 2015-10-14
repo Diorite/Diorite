@@ -1,10 +1,10 @@
-package org.diorite.utils.function;
+package org.diorite.utils.function.supplier;
 
 import java.util.function.Supplier;
 
 /**
- * Represents a supplier of {@code char}-valued results.  This is the
- * {@code char}-producing primitive specialization of {@link Supplier}.
+ * Represents a supplier of {@code short}-valued results.  This is the
+ * {@code short}-producing primitive specialization of {@link Supplier}.
  * <br>
  * <p>There is no requirement that a new or distinct result be returned each
  * time the supplier is invoked.
@@ -12,13 +12,12 @@ import java.util.function.Supplier;
  * @see Supplier
  */
 @FunctionalInterface
-public interface CharSupplier
+public interface ShortSupplier
 {
-
     /**
      * Gets a result.
      *
      * @return a result
      */
-    char getAsChar();
+    short getAsShort();
 }

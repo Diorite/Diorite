@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.Validate;
 
-import org.diorite.utils.function.CharSupplier;
+import org.diorite.utils.function.supplier.CharSupplier;
 
 /**
  * Class to represent lazy init char values that use {@link CharSupplier} passed in constructor to initialize value in {@link #init()} method. <br>

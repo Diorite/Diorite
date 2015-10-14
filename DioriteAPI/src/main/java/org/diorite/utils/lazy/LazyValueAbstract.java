@@ -9,7 +9,7 @@ import org.diorite.utils.others.Resetable;
  * Class to represent lazy init object values, lazy value is initialized on first {@link #get()} invoke by {@link #init()} method. <br>
  * Class also implements {@link Resetable} so cached value can be reset and new value will be created on next {@link #get()} method invoke.
  *
- * @param T type of lazy init object.
+ * @param <T> type of lazy init object.
  */
 public abstract class LazyValueAbstract<T> implements Resetable
 {
