@@ -2,6 +2,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
@@ -42,6 +43,59 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "pextest":
+                {
+                    sender.setOp(false);
+                    mag.getPermissibleGroups(sender).forEach(g -> mag.removePermissibleFromGroup(sender, g));
+                    sender.sendMessage("Testing permissions: ");
+                    sender.sendMessage("foo.bar: " + sender.hasPermission("foo.bar")); // false
+                    sender.sendMessage("Your groups: " + mag.getPermissibleGroups(sender).stream().map(f -> f.getGroup().getName()).collect(Collectors.toList())); // empty
+                    PermissionsGroup group = mag.createGroup("test");
+                    sender.sendMessage("Adding to group (" + group.getName() + "): " + mag.addPermissibleToGroup(sender, group, 1)); // true
+                    sender.sendMessage("Your groups: " + mag.getPermissibleGroups(sender).stream().map(f -> f.getGroup().getName()).collect(Collectors.toList())); // test
+                    mag.setPermission(group, "foo.bar", PermissionLevel.TRUE);
+                    sender.sendMessage("foo.bar: " + sender.hasPermission("foo.bar")); // true
+                    mag.removePermissibleFromGroup(sender, "test");
+                    sender.sendMessage("Your groups: " + mag.getPermissibleGroups(sender).stream().map(f -> f.getGroup().getName()).collect(Collectors.toList())); // empty
+                    sender.sendMessage("foo.bar: " + sender.hasPermission("foo.bar")); // false
+                    sender.sendMessage("Adding to group (" + group.getName() + "): " + mag.addPermissibleToGroup(sender, group, 1)); // true
+                    mag.setPermission(group, "foo.bar", PermissionLevel.OP);
+                    sender.sendMessage("foo.bar: " + sender.hasPermission("foo.bar")); // false
+                    sender.setOp(true);
+                    sender.sendMessage("foo.bar: " + sender.hasPermission("foo.bar")); // true
+                    sender.setOp(false);
+                    mag.setPermission(group, "foo.{$-$}", "foo.[-100--10,25-30]", PermissionLevel.TRUE); // from -100 to -10
+                    sender.sendMessage("foo.5: " + sender.hasPermission("foo.5")); // false
+                    sender.sendMessage("foo.-10: " + sender.hasPermission("foo.-10")); // true
+                    sender.sendMessage("foo.-25: " + sender.hasPermission("foo.-25")); // true
+                    sender.sendMessage("foo.25: " + sender.hasPermission("foo.25")); // true
+                    mag.removePermissibleFromGroup(sender, "test");
+                    sender.sendMessage("Your groups: " + mag.getPermissibleGroups(sender).stream().map(f -> f.getGroup().getName()).collect(Collectors.toList())); // empty
+                    sender.sendMessage("foo.5: " + sender.hasPermission("foo.5")); // false
+                    sender.sendMessage("foo.-10: " + sender.hasPermission("foo.-10")); // false
+                    sender.sendMessage("foo.-25: " + sender.hasPermission("foo.-25")); // false
+                    sender.sendMessage("foo.25: " + sender.hasPermission("foo.25")); // false
+                    sender.setOp(true);
+                    sender.sendMessage("foo.5: " + sender.hasPermission("foo.5")); // true
+                    sender.sendMessage("foo.-10: " + sender.hasPermission("foo.-10")); // true
+                    sender.sendMessage("foo.-25: " + sender.hasPermission("foo.-25")); // true
+                    sender.sendMessage("foo.25: " + sender.hasPermission("foo.25")); // true
+
+                    mag.addPermissibleToGroup(sender, mag.createGroup("test"), 1);
+                    mag.addPermissibleToGroup(sender, mag.createGroup("a1"), 2);
+                    mag.addPermissibleToGroup(sender, mag.createGroup("a2"), 3);
+                    mag.addPermissibleToGroup(sender, mag.createGroup("a3"), 4);
+                    sender.sendMessage("Your groups: " + mag.getPermissibleGroups(sender).stream().map(f -> f.getGroup().getName()).collect(Collectors.toList())); // test, a1, a2, a3
+                    mag.setPermission(mag.getGroup("test"), "test.test", PermissionLevel.FALSE);
+                    mag.setPermission(mag.getGroup("a3"), "test.test", PermissionLevel.TRUE);
+                    sender.sendMessage("test.test: " + sender.hasPermission("test.test")); // true
+                    mag.setPermission(sender, "test.test", PermissionLevel.NOT_OP);
+                    sender.sendMessage("test.test: " + sender.hasPermission("test.test")); // false
+                    mag.setPermission(mag.getGroup("a2"), "test.test2", PermissionLevel.FALSE);
+                    mag.setPermission(mag.getGroup("a1"), "test.test2", PermissionLevel.TRUE);
+                    sender.sendMessage("test.test2: " + sender.hasPermission("test.test2")); // false
+                    break;
+                }
                 case "pex":
                 {
                     if (sender.hasPermission(args.asString(0)))

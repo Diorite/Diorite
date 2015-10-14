@@ -32,8 +32,10 @@ public interface GroupablePermissionsContainer extends PermissionsContainer
      * Remove single group entry from this container.
      *
      * @param group group entry to remove.
+     *
+     * @return true if group was removed.
      */
-    void removeGroup(GroupEntry group);
+    boolean removeGroup(GroupEntry group);
 
     /**
      * Returns true if this container is in given group.

@@ -6,14 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import org.diorite.impl.permissions.pattern.ExtendedPermissionPatternImpl;
 import org.diorite.impl.permissions.pattern.PermissionPatternImpl;
-import org.diorite.impl.permissions.perm.PermissionImpl;
 import org.diorite.impl.permissions.perm.AdvancedPermissionImpl;
+import org.diorite.impl.permissions.perm.PermissionImpl;
 import org.diorite.Diorite;
 import org.diorite.entity.Player;
 import org.diorite.permissions.GroupEntry;
@@ -49,6 +51,10 @@ public class DioritePermissionsManager implements PermissionsManager
     @Override
     public PermissionsContainer createContainer(final Permissible permissible)
     {
+        if (permissible instanceof PermissionsGroup)
+        {
+            return new GroupPermissionsContainerImpl((PermissionsGroup) permissible);
+        }
         return new PermissionsContainerImpl();
     }
 
@@ -204,7 +210,7 @@ public class DioritePermissionsManager implements PermissionsManager
         Validate.notNull(permissionPattern, "permissionPattern can't be null.");
         Validate.notNull(permission, "permission can't be null.");
         Validate.notNull(defaultLevel, "defaultLevel can't be null.");
-        if (permissionPattern instanceof PermissionPattern)
+        if (permissionPattern instanceof PermissionPatternImpl)
         {
             return new PermissionImpl(defaultLevel, permissionPattern);
         }
@@ -285,6 +291,18 @@ public class DioritePermissionsManager implements PermissionsManager
     }
 
     @Override
+    public SortedSet<GroupEntry> getPermissibleGroups(final Permissible permissible)
+    {
+        Validate.notNull(permissible, "permissible can't be null.");
+        final PermissionsContainer container = permissible.getPermissionsContainer();
+        if (! (container instanceof GroupablePermissionsContainer))
+        {
+            return new TreeSet<>();
+        }
+        return ((GroupablePermissionsContainer) container).getGroups();
+    }
+
+    @Override
     public boolean addPermissibleToGroup(final Permissible permissible, final GroupEntry groupEntry)
     {
         Validate.notNull(permissible, "permissible can't be null.");
@@ -298,6 +316,34 @@ public class DioritePermissionsManager implements PermissionsManager
         groupableContainer.removeGroup(groupEntry.getGroup());
         groupableContainer.addGroup(groupEntry);
         return true;
+    }
+
+    @Override
+    public boolean removePermissibleFromGroup(final Permissible permissible, final PermissionsGroup group)
+    {
+        Validate.notNull(permissible, "permissible can't be null.");
+        Validate.notNull(group, "group can't be null.");
+        final PermissionsContainer container = permissible.getPermissionsContainer();
+        if (! (container instanceof GroupablePermissionsContainer))
+        {
+            return true;
+        }
+        final GroupablePermissionsContainer groupableContainer = (GroupablePermissionsContainer) container;
+        return groupableContainer.removeGroup(group) != null;
+    }
+
+    @Override
+    public boolean removePermissibleFromGroup(final Permissible permissible, final GroupEntry groupEntry)
+    {
+        Validate.notNull(permissible, "permissible can't be null.");
+        Validate.notNull(groupEntry, "groupEntry can't be null.");
+        final PermissionsContainer container = permissible.getPermissionsContainer();
+        if (! (container instanceof GroupablePermissionsContainer))
+        {
+            return true;
+        }
+        final GroupablePermissionsContainer groupableContainer = (GroupablePermissionsContainer) container;
+        return groupableContainer.removeGroup(groupEntry);
     }
 
     @Override

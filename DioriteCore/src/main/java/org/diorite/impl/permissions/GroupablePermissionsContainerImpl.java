@@ -7,9 +7,15 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.permissions.perm.CheckExtendedPermission;
+import org.diorite.impl.permissions.perm.PermissionEntry;
+import org.diorite.impl.permissions.perm.PermissionImpl;
+import org.diorite.permissions.AdvancedPermission;
 import org.diorite.permissions.GroupEntry;
 import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.permissions.Permissible;
+import org.diorite.permissions.Permission;
+import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.PermissionsGroup;
 
 public class GroupablePermissionsContainerImpl extends PermissionsContainerImpl implements GroupablePermissionsContainer
@@ -34,6 +40,45 @@ public class GroupablePermissionsContainerImpl extends PermissionsContainerImpl 
     public void addGroup(final GroupEntry group)
     {
         this.groups.add(group);
+    }
+
+    public PermissionLevel getPermissionLevel(final Permission permission)
+    {
+        final PermissionEntry<?> entry;
+        if (permission instanceof PermissionImpl)
+        {
+            entry = (this.permissions == null) ? null : this.permissions.get(permission);
+        }
+        else if ((permission instanceof CheckExtendedPermission) || (permission instanceof AdvancedPermission))
+        {
+            entry = (this.advancedPermissions == null) ? null : this.advancedPermissions.get(permission.getPattern());
+        }
+        else
+        {
+            throw new UnsupportedOperationException("Unknown type of permission!");
+        }
+
+        if ((entry == null) || ((permission instanceof CheckExtendedPermission) && (entry.getPermission() instanceof AdvancedPermission) && ! isMatching((AdvancedPermission) entry.getPermission(), (CheckExtendedPermission) permission)))
+        {
+            if ((this.groups != null) && ! this.groups.isEmpty())
+            {
+                for (final GroupEntry group : this.groups)
+                {
+                    final PermissionLevel level = group.getGroup().getPermissionsContainer().getPermissionLevel(permission);
+                    if (level != null)
+                    {
+                        return level;
+                    }
+                }
+            }
+            if (this.parent != null)
+            {
+                return this.parent.getPermissionLevel(permission);
+            }
+            return null;
+        }
+        validateType(entry.getPermission());
+        return entry.getLevel();
     }
 
     @Override
@@ -62,9 +107,9 @@ public class GroupablePermissionsContainerImpl extends PermissionsContainerImpl 
     }
 
     @Override
-    public void removeGroup(final GroupEntry group)
+    public boolean removeGroup(final GroupEntry group)
     {
-        this.groups.remove(group);
+        return this.groups.remove(group);
     }
 
     @Override

@@ -10,8 +10,8 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.permissions.perm.CheckExtendedPermission;
 import org.diorite.impl.permissions.perm.AdvancedPermissionEntry;
+import org.diorite.impl.permissions.perm.CheckExtendedPermission;
 import org.diorite.impl.permissions.perm.PermissionEntry;
 import org.diorite.impl.permissions.perm.PermissionImpl;
 import org.diorite.impl.permissions.perm.PermissionImplEntry;
@@ -124,19 +124,19 @@ public class PermissionsContainerImpl implements PermissionsContainer
             {
                 return this.parent.getPermissionLevel(permission);
             }
-            return permission.getDefaultLevel();
+            return null;
         }
         validateType(entry.getPermission());
         return entry.getLevel();
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static boolean isMatching(final AdvancedPermission userPermission, final CheckExtendedPermission checkPermission)
+    protected static boolean isMatching(final AdvancedPermission userPermission, final CheckExtendedPermission checkPermission)
     {
         final Object[] user = userPermission.getData();
         final Object[] check = checkPermission.getData();
         final SpecialGroup[] groups = userPermission.getPattern().getGroups();
-        if ((user.length == groups.length) && (check.length == groups.length))
+        if ((user.length != groups.length) || (check.length != groups.length))
         {
             return false;
         }
@@ -151,7 +151,7 @@ public class PermissionsContainerImpl implements PermissionsContainer
         return true;
     }
 
-    private static void validateType(final Permission perm)
+    protected static void validateType(final Permission perm)
     {
         if (perm instanceof CheckExtendedPermission)
         {
@@ -290,21 +290,22 @@ public class PermissionsContainerImpl implements PermissionsContainer
     }
 
     @Override
-    public boolean hasPermission(final String permission, final boolean checkAdvanced)
+    public boolean hasPermission(final String permission)
     {
         final PermissionsManager mag = getManager();
-        if (checkAdvanced)
+        final PermissionPattern pat = mag.getPatternByPermission(permission);
+        if (pat != null)
         {
-            final PermissionPattern pat = mag.getPatternByPermission(permission);
-            if (pat != null)
-            {
-                return this.hasPermission(pat, permission);
-            }
+            return this.hasPermission(pat, permission);
         }
         Permission perm = mag.getPermission(permission);
         if (perm == null)
         {
             perm = mag.createPermission(permission, permission, PermissionLevel.OP);
+            if ((perm instanceof AdvancedPermission) && (((AdvancedPermission) perm).getData() == null))
+            {
+                perm = new CheckExtendedPermission(perm.getDefaultLevel(), (ExtendedPermissionPattern) perm.getPattern(), perm.getValue());
+            }
         }
         return this.hasPermission(perm);
     }

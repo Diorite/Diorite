@@ -23,7 +23,7 @@ public abstract class AbstractPermissionPattern implements PermissionPattern
     protected Map<Permission, PermissionLevel> permissions;
 
     @Override
-    public Map<Permission, PermissionLevel> getPermissions()
+    public synchronized Map<Permission, PermissionLevel> getPermissions()
     {
         if (this.permissions == null)
         {
@@ -33,7 +33,27 @@ public abstract class AbstractPermissionPattern implements PermissionPattern
     }
 
     @Override
-    public boolean containsPermissions()
+    public synchronized void setPermission(final Permission permission, final PermissionLevel level)
+    {
+        if ((level == null) && (this.permissions == null))
+        {
+            return;
+        }
+        final Map<Permission, PermissionLevel> map = this.getPermissions();
+        if (level == null)
+        {
+            this.permissions.remove(permission);
+            if (this.permissions.isEmpty())
+            {
+                this.permissions = null;
+            }
+            return;
+        }
+        map.put(permission, level);
+    }
+
+    @Override
+    public synchronized boolean containsPermissions()
     {
         return (this.permissions != null) && ! this.permissions.isEmpty();
     }

@@ -9,8 +9,6 @@ public interface Permissible
 {
     /**
      * Returns true if this object have given permission. <br>
-     * This method will not try to find advanced permissions,
-     * so it should be fast.
      *
      * @param permission permission to check.
      *
@@ -18,27 +16,12 @@ public interface Permissible
      */
     default boolean hasPermission(final String permission)
     {
-        return this.hasPermission(permission, false);
-    }
-
-    /**
-     * Returns true if this object have given permission.
-     *
-     * @param permission    permission to check.
-     * @param checkAdvanced if method should check advanced permissions too,
-     *                      it may slowdown method as it will need check every
-     *                      pattern for given permission.
-     *
-     * @return true if this object have given permission.
-     */
-    default boolean hasPermission(final String permission, final boolean checkAdvanced)
-    {
-        return this.getPermissionsContainer().hasPermission(permission, checkAdvanced);
+        return this.getPermissionsContainer().hasPermission(permission);
     }
 
     /**
      * Returns true if this object have given permission. <br>
-     * This method should be much faster than {@link #hasPermission(String, boolean)},
+     * This method should be much faster than {@link #hasPermission(String)},
      * as you need pass pattern too, it can be even faster if there is registred
      * permissions pattern with this value.
      *
@@ -54,7 +37,7 @@ public interface Permissible
 
     /**
      * Returns true if this object have given permission. <br>
-     * This method should be much faster than {@link #hasPermission(String, boolean)},
+     * This method should be much faster than {@link #hasPermission(String)},
      * as you need pass pattern too, it can be even faster if there is registred
      * permissions pattern with this value.
      *

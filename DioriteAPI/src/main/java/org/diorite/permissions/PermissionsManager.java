@@ -1,5 +1,7 @@
 package org.diorite.permissions;
 
+import java.util.SortedSet;
+
 import org.diorite.Diorite;
 import org.diorite.ServerManager;
 import org.diorite.entity.Player;
@@ -285,6 +287,16 @@ public interface PermissionsManager
     }
 
     /**
+     * Returns copy of permissible groups. <br>
+     * If permissible can't have groups method will return empty set.
+     *
+     * @param permissible permissible to check
+     *
+     * @return copy of permissible groups.
+     */
+    SortedSet<GroupEntry> getPermissibleGroups(Permissible permissible);
+
+    /**
      * Method will add given permissible to given group with given priority,
      * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return false. <br>
      * If permissible is already in this group only priority will be updated.
@@ -297,6 +309,43 @@ public interface PermissionsManager
     boolean addPermissibleToGroup(final Permissible permissible, final GroupEntry groupEntry);
 
     /**
+     * Method will remove given permissible from given group.
+     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return true. <br>
+     *
+     * @param permissible permissible to remove from a group.
+     * @param group       group of permissible.
+     *
+     * @return true if permissible was removed from group.
+     */
+    default boolean removePermissibleFromGroup(final Permissible permissible, final String group)
+    {
+        final PermissionsGroup permissionsGroup = this.getGroup(group);
+        return (group != null) && this.removePermissibleFromGroup(permissible, permissionsGroup);
+    }
+
+    /**
+     * Method will remove given permissible from given group.
+     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return true. <br>
+     *
+     * @param permissible permissible to remove from a group.
+     * @param group       group of permissible.
+     *
+     * @return true if permissible was removed from group.
+     */
+    boolean removePermissibleFromGroup(final Permissible permissible, final PermissionsGroup group);
+
+    /**
+     * Method will remove given permissible from given group only if priority matches.
+     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return true. <br>
+     *
+     * @param permissible permissible to remove from a group.
+     * @param groupEntry  group of permissible.
+     *
+     * @return true if permissible was removed from group.
+     */
+    boolean removePermissibleFromGroup(final Permissible permissible, final GroupEntry groupEntry);
+
+    /**
      * Adds given permission to given permissible (player, group etc...). <br>
      * Permission will be added to manager if it isn't already registered.
      *
@@ -306,32 +355,13 @@ public interface PermissionsManager
      */
     default void setPermission(final Permissible permissible, final String permission, final PermissionLevel level)
     {
-        this.setPermission(permissible, permission, false, level);
-    }
-
-    /**
-     * Adds given permission to given permissible (player, group etc...). <br>
-     * Permission will be added to manager if it isn't already registered.
-     *
-     * @param permissible   permissible to add new permission.
-     * @param permission    permission to add.
-     * @param checkAdvanced if method should check advanced permissions too,
-     *                      it may slowdown method as it will need check every
-     *                      pattern for given permission.
-     * @param level         level of given permission, use null to remove permission.
-     */
-    default void setPermission(final Permissible permissible, final String permission, final boolean checkAdvanced, final PermissionLevel level)
-    {
         Permission perm = this.getPermission(permission);
         if (perm == null)
         {
-            if (checkAdvanced)
+            final PermissionPattern pattern = this.getPatternByPermission(permission);
+            if (pattern != null)
             {
-                final PermissionPattern pattern = this.getPatternByPermission(permission);
-                if (pattern != null)
-                {
-                    perm = this.getPermission(pattern);
-                }
+                perm = this.getPermission(pattern);
             }
         }
         if (perm == null)
@@ -397,21 +427,7 @@ public interface PermissionsManager
      */
     default void removePermission(final Permissible permissible, final String permission)
     {
-        this.setPermission(permissible, permission, false, null);
-    }
-
-    /**
-     * Remove given permission from given permissible.
-     *
-     * @param permissible   permissible to remove a permission.
-     * @param permission    permission to remove.
-     * @param checkAdvanced if method should check advanced permissions too,
-     *                      it may slowdown method as it will need check every
-     *                      pattern for given permission.
-     */
-    default void removePermission(final Permissible permissible, final String permission, final boolean checkAdvanced)
-    {
-        this.setPermission(permissible, permission, checkAdvanced, null);
+        this.setPermission(permissible, permission, null);
     }
 
     /**
@@ -461,6 +477,6 @@ public interface PermissionsManager
      */
     default PermissionLevel onPermissionCheck(final Permissible permissible, final Permission permission, final PermissionLevel level)
     {
-        return level;
+        return (level == null) ? permission.getDefaultLevel() : level;
     }
 }

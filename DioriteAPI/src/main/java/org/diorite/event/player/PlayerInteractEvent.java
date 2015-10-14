@@ -2,6 +2,7 @@ package org.diorite.event.player;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.entity.Player;
 import org.diorite.world.Block;
 
@@ -11,14 +12,14 @@ import org.diorite.world.Block;
 public class PlayerInteractEvent extends PlayerEvent
 {
     protected final Action action;
-    protected final Block block;
+    protected final Block  block;
 
     /**
      * Construct new player interact event.
      *
      * @param player player related to event, can't be null.
      * @param action action that has been done
-     * @param block block that has been clicked or null if the block is air
+     * @param block  block that has been clicked or null if the block is air
      */
     public PlayerInteractEvent(final Player player, final Action action, final Block block)
     {
@@ -34,7 +35,7 @@ public class PlayerInteractEvent extends PlayerEvent
      */
     public Action getAction()
     {
-        return action;
+        return this.action;
     }
 
     /**
@@ -42,7 +43,7 @@ public class PlayerInteractEvent extends PlayerEvent
      */
     public Block getBlock()
     {
-        return block;
+        return this.block;
     }
 
     @Override

@@ -34,6 +34,24 @@ public interface PermissionPattern
     Map<Permission, PermissionLevel> getPermissions();
 
     /**
+     * Add child permissions to this pattern, use null level to remove permission from pattern.
+     *
+     * @param permission permission to set.
+     * @param level      level of given permission.
+     */
+    void setPermission(final Permission permission, final PermissionLevel level);
+
+    /**
+     * Remove permissions from this pattern, works like using null for level in {@link #setPermission(Permission, PermissionLevel)}
+     *
+     * @param permission permission to remove.
+     */
+    default void removePermissions(final Permission permission)
+    {
+        this.setPermission(permission, null);
+    }
+
+    /**
      * Returns true if this permissions contains any child permissions.
      *
      * @return true if this permissions contains any child permissions.

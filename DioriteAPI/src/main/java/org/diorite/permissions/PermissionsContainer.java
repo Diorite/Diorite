@@ -11,7 +11,7 @@ public interface PermissionsContainer extends Permissible
 {
     /**
      * Returns {@link PermissionLevel} for given permission, if container or parent containers don't contains
-     * this permissions, {@link Permission#getDefaultLevel()} will be returned instead.
+     * this permissions, null will be returned instead.
      *
      * @param permission permission to check.
      *
