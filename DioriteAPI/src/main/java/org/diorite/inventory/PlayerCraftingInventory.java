@@ -7,4 +7,16 @@ public interface PlayerCraftingInventory extends Inventory, PlayerInventoryPart,
     {
         return InventoryType.PLAYER_CRAFTING;
     }
+
+    @Override
+    default int getRows()
+    {
+        return 2;
+    }
+
+    @Override
+    default int getColumns()
+    {
+        return 2;
+    }
 }

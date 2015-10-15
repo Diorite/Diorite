@@ -2,7 +2,7 @@ package org.diorite.inventory;
 
 import org.diorite.inventory.item.ItemStack;
 
-public interface CraftingInventory extends Inventory
+public interface CraftingInventory extends GridInventory
 {
     /**
      * @return The ItemStack in the result slot

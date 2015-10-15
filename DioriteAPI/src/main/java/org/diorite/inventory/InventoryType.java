@@ -27,7 +27,7 @@ public class InventoryType extends ASimpleEnum<InventoryType>
     public static final InventoryType DISPENSER         = new InventoryType("DISPENSER", "minecraft:dispenser", "Dispenser", 9);
     public static final InventoryType DROPPER           = new InventoryType("DROPPER", "minecraft:dropper", "Dropper", 9);
     public static final InventoryType FURNACE           = new InventoryType("FURNACE", "minecraft:furnace", "Furnace", 3);
-    public static final InventoryType WORKBENCH         = new InventoryType("WORKBENCH", "minecraft:crafting_table", "Crafting", 10);
+    public static final InventoryType CRAFTING          = new InventoryType("CRAFTING", "minecraft:crafting_table", "Crafting", 10);
     public static final InventoryType ENCHANTING        = new InventoryType("ENCHANTING", "minecraft:enchanting_table", "Enchanting", 2);
     public static final InventoryType BREWING           = new InventoryType("BREWING", "minecraft:brewing_stand", "Brewing", 4);
     public static final InventoryType MERCHANT          = new InventoryType("MERCHANT", "minecraft:villager", "Villager", 3);
@@ -182,7 +182,7 @@ public class InventoryType extends ASimpleEnum<InventoryType>
         InventoryType.register(DISPENSER);
         InventoryType.register(DROPPER);
         InventoryType.register(FURNACE);
-        InventoryType.register(WORKBENCH);
+        InventoryType.register(CRAFTING);
         InventoryType.register(ENCHANTING);
         InventoryType.register(BREWING);
         InventoryType.register(MERCHANT);

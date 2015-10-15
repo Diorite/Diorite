@@ -1,6 +1,6 @@
 package org.diorite.inventory;
 
-public interface PlayerFullEqInventory extends Inventory, PlayerEqInventory, PlayerHotbarInventory, PlayerInventoryPart
+public interface PlayerFullEqInventory extends GridInventory, PlayerEqInventory, PlayerHotbarInventory, PlayerInventoryPart
 {
     /**
      * Returns sub-part of player inventory, contains only
@@ -28,5 +28,17 @@ public interface PlayerFullEqInventory extends Inventory, PlayerEqInventory, Pla
     default InventoryType getType()
     {
         return InventoryType.PLAYER_FULL_EQ;
+    }
+
+    @Override
+    default int getRows()
+    {
+        return 4;
+    }
+
+    @Override
+    default int getColumns()
+    {
+        return 9;
     }
 }

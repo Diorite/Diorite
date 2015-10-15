@@ -17,7 +17,7 @@ import org.diorite.plugin.DioritePlugin;
  */
 public interface PermissionsManager
 {
-    // TODO unregister permission method, simpler register
+    // TODO registring permissions (with childs) from file.
 
     /**
      * Method to get plugin that is managing permission system,

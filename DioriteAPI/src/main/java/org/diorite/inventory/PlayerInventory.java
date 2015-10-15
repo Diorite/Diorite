@@ -52,4 +52,16 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
     {
         return InventoryType.PLAYER;
     }
+
+    @Override
+    default int getRows()
+    {
+        return 4;
+    }
+
+    @Override
+    default int getColumns()
+    {
+        return 9;
+    }
 }

@@ -43,7 +43,7 @@ public interface Inventory extends Iterable<ItemStack>
      * @throws IllegalArgumentException If the array has more items than the
      *                                  inventory.
      */
-    void setContent(final ItemStack[] items);
+    void setContent(ItemStack[] items);
 
     /**
      * Remove first found item matching given one.
@@ -52,7 +52,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return slot id of removed item, or -1 if no item was removed.
      */
-    int remove(final ItemStack itemStack);
+    int remove(ItemStack itemStack);
 
     /**
      * Remove all items matching given one.
@@ -61,7 +61,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return array of slot ids of removed items, empty if no item was removed.
      */
-    int[] removeAll(final ItemStack itemStack);
+    int[] removeAll(ItemStack itemStack);
 
     /**
      * Remove first found item matching given material.
@@ -95,7 +95,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return slot id of removed item, or -1 if no item was removed.
      */
-    int remove(final Material material, final boolean ignoreType);
+    int remove(Material material, boolean ignoreType);
 
     /**
      * Remove all items matching given material.
@@ -105,7 +105,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return array of slot ids of removed items, empty if no item was removed.
      */
-    int[] removeAll(final Material material, final boolean ignoreType);
+    int[] removeAll(Material material, boolean ignoreType);
 
     /**
      * Replace first found item matching (==) given one.
@@ -118,7 +118,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of IItemStack, so it can't be == to any item from inventory.
      */
-    int atomicReplace(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException;
+    int atomicReplace(ItemStack excepted, ItemStack newItem) throws IllegalArgumentException;
 
     /**
      * Replace all found items matching (==) give one.
@@ -131,7 +131,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of IItemStack, so it can't be == to any item from inventory.
      */
-    int[] atomicReplaceAll(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException;
+    int[] atomicReplaceAll(ItemStack excepted, ItemStack newItem) throws IllegalArgumentException;
 
     /**
      * Replace item on given slot, only if it matches (==) given item.
@@ -145,13 +145,13 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of IItemStack, so it can't be == to any item from inventory.
      */
-    boolean atomicReplace(final int slot, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException;
+    boolean atomicReplace(int slot, ItemStack excepted, ItemStack newItem) throws IllegalArgumentException;
 
     /**
      * Try remove all items from given array,
      * if {@code ifContains} is true, items will be removed only
      * if inventory contains them all, and then empty array (of size 0) will be returned.
-     * <p>
+     * <p/>
      * if {@code ifContains} is false, method will try remove as many items as it can,
      * if it will remove all items, then empty array (of size 0) will be returned, but
      * if any item wasn't removed, method will return array of this same size as given,
@@ -225,26 +225,38 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Returns the IItemStack found in the slot at the given index
      *
-     * @param index The index of the Slot's IItemStack to return
+     * @param index The index of the Slot's ItemStack to return
      *
      * @return The IItemStack in the slot
      */
-    ItemStack getItem(final int index);
+    ItemStack getItem(int index);
 
     /**
      * Stores the IItemStack at the given index of the inventory.
      *
-     * @param index The index where to put the IItemStack
+     * @param index The index where to put the ItemStack
      * @param item  The IItemStack to set
      *
      * @return previous itemstack in this slot.
      */
-    ItemStack setItem(final int index, final ItemStack item);
+    ItemStack setItem(int index, ItemStack item);
+
+    /**
+     * Get and remove the stack at the supplied position in this Inventory.
+     *
+     * @param index The index of the ItemStack to poll.
+     *
+     * @return ItemStack at the specified position or null if the slot is empty or out of bounds
+     */
+    default ItemStack poll(final int index)
+    {
+        return this.setItem(index, null);
+    }
 
     /**
      * Returns a HashMap with all slots and IItemStacks in the inventory with
      * the given Material.
-     * <p>
+     * <p/>
      * The HashMap contains entries where, the key is the slot index, and the
      * value is the IItemStack in that slot. If no matching IItemStack with the
      * given Material is found, an empty map is returned.
@@ -261,7 +273,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Returns a HashMap with all slots and IItemStacks in the inventory with
      * the given Material.
-     * <p>
+     * <p/>
      * The HashMap contains entries where, the key is the slot index, and the
      * value is the IItemStack in that slot. If no matching IItemStack with the
      * given Material is found, an empty map is returned.
@@ -271,13 +283,13 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return A HashMap containing the slot index, IItemStack pairs
      */
-    Map<Integer, ? extends ItemStack> all(final Material material, final boolean ignoreType);
+    Map<Integer, ? extends ItemStack> all(Material material, boolean ignoreType);
 
     /**
      * Finds all slots in the inventory containing any IItemStacks with the
      * given IItemStack. This will only match slots if both the type and the
      * amount of the stack match
-     * <p>
+     * <p/>
      * The HashMap contains entries where, the key is the slot index, and the
      * value is the IItemStack in that slot. If no matching IItemStack with the
      * given Material is found, an empty map is returned.
@@ -286,7 +298,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return A map from slot indexes to item at index
      */
-    HashMap<Integer, ? extends ItemStack> all(final ItemStack item);
+    HashMap<Integer, ? extends ItemStack> all(ItemStack item);
 
     /**
      * Finds the first slot in the inventory containing an IItemStack with the
@@ -296,7 +308,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return The slot index of the given Material or -1 if not found
      */
-    int first(final Material material);
+    int first(Material material);
 
     /**
      * Returns the first slot in the inventory containing an IItemStack with
@@ -321,7 +333,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return The slot index of the given IItemStack or -1 if not found
      */
-    int first(final ItemStack item, final boolean withAmount);
+    int first(ItemStack item, boolean withAmount);
 
     /**
      * Returns the first slot in the inventory containing an IItemStack with
@@ -348,7 +360,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @return The slot index of the given IItemStack or -1 if not found
      */
-    int first(final ItemStack item, final int startIndex, final boolean withAmount);
+    int first(ItemStack item, int startIndex, boolean withAmount);
 
     /**
      * @return The first empty Slot found, or -1 if no empty slots.
@@ -402,7 +414,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Checks if the inventory contains any IItemStacks matching the given
      * IItemStack.
-     * <p>
+     * <p/>
      * This will only return true if both the type and the amount of the stack
      * match.
      *
@@ -456,7 +468,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Checks if the inventory contains at least the minimum amount specified
      * of exactly matching IItemStacks.
-     * <p>
+     * <p/>
      * An IItemStack only counts if both the type and the amount of the stack
      * match.
      *
@@ -539,7 +551,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Stores the given IItemStacks in the inventory. This will try to fill
      * existing stacks and empty slots as well as it can.
-     * <p>
+     * <p/>
      * The returned array contains what it couldn't store, if all items fit
      * to the inventory, then returned array is empty (size 0), otherwise
      * it will be array of this same size as given one, contains IItemStacks that
@@ -616,7 +628,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @param index The index to empty.
      */
-    void clear(final int index);
+    void clear(int index);
 
     /**
      * Clears out the whole Inventory.
@@ -639,7 +651,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @param str new title.
      */
-    void setTitle(final String str);
+    void setTitle(String str);
 
     /**
      * Force re-send inventory contents to given player.
@@ -668,9 +680,16 @@ public interface Inventory extends Iterable<ItemStack>
      */
     InventoryHolder getHolder();
 
+    /**
+     * Returns id of this inventory window.
+     *
+     * @return id of this inventory window.
+     */
     int getWindowId();
 
     /**
+     * Returns size of this inventory.
+     *
      * @return The size of the inventory
      */
     int size();
