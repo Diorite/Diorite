@@ -91,7 +91,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
             {
                 if ((item.getAmount() == 0) || (Material.AIR.simpleEquals(item.getMaterial())))
                 {
-                    this.atomicReplace(i, item, null);
+                    this.replace(i, item, null);
                     packets.add(new PacketPlayServerSetSlot(this.getWindowId(), i, null));
                     continue;
                 }
@@ -268,7 +268,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public int atomicReplace(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    public int replace(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         final ItemStackImplArray content = this.getArray();
@@ -283,27 +283,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public int[] atomicReplaceAll(final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
-    {
-        ItemStackImpl.validate(excepted);
-        final ItemStackImplArray content = this.getArray();
-        final TIntCollection list = new TIntArrayList(10);
-        for (int i = 0, size = content.length(); i < size; i++)
-        {
-            if (content.compareAndSet(i, (ItemStackImpl) excepted, ItemStackImpl.wrap(newItem)))
-            {
-                list.add(i);
-            }
-        }
-        if (list.isEmpty())
-        {
-            return DioriteUtils.EMPTY_INT;
-        }
-        return list.toArray();
-    }
-
-    @Override
-    public boolean atomicReplace(final int slot, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    public boolean replace(final int slot, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         return this.getArray().compareAndSet(slot, (ItemStackImpl) excepted, ItemStackImpl.wrap(newItem));

@@ -253,7 +253,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     }
 
     @Override
-    public boolean atomicReplaceCursorItem(final ItemStack excepted, final ItemStack cursorItem) throws IllegalArgumentException
+    public boolean replaceCursorItem(final ItemStack excepted, final ItemStack cursorItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
         return this.cursorItem.compareAndSet((ItemStackImpl) excepted, ItemStackImpl.wrap(cursorItem));
@@ -435,7 +435,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
             {
                 if ((cursor.getAmount() == 0) || (Material.AIR.simpleEquals(cursor.getMaterial())))
                 {
-                    this.atomicReplaceCursorItem(cursor, null);
+                    this.replaceCursorItem(cursor, null);
                     cursor = null;
                 }
                 else

@@ -38,6 +38,7 @@ public class SimpleRecipeItem implements RecipeItem
      * Pattern item of this recipe.
      */
     protected final ItemStack item;
+    protected final boolean   ignoreData;
 
     /**
      * Construct new recipe item with given item as pattern.
@@ -46,14 +47,30 @@ public class SimpleRecipeItem implements RecipeItem
      */
     public SimpleRecipeItem(final ItemStack item)
     {
+        this(item, false);
+    }
+
+    /**
+     * Construct new recipe item with given item as pattern.
+     *
+     * @param item       pattern item.
+     * @param ignoreData if pattern item should ignore subtype of material
+     */
+    public SimpleRecipeItem(final ItemStack item, final boolean ignoreData)
+    {
         this.item = item.clone();
+        this.ignoreData = ignoreData;
     }
 
     @Override
     public boolean isValid(final ItemStack item)
     {
+        if (item == null)
+        {
+            return false;
+        }
         // TODO check other data
-        return this.item.getMaterial().equals(item.getMaterial()) && (this.item.getAmount() <= item.getAmount());
+        return (this.ignoreData ? this.item.getMaterial().isThisSameID(item.getMaterial()) : this.item.getMaterial().equals(item.getMaterial())) && (this.item.getAmount() <= item.getAmount());
     }
 
     @Override

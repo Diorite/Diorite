@@ -94,7 +94,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 }
                 if (cursor == null)
                 {
-                    if ((clicked != null) && (! inv.atomicReplace(slot, clicked, null) || ! inv.atomicReplaceCursorItem(null, clicked)))
+                    if ((clicked != null) && (! inv.replace(slot, clicked, null) || ! inv.replaceCursorItem(null, clicked)))
                     {
                         return false; // item changed before we made own change
                     }
@@ -105,7 +105,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     {
                         final ItemStack newCursor = clicked.combine(cursor);
 
-                        if (! inv.atomicReplaceCursorItem(cursor, newCursor))
+                        if (! inv.replaceCursorItem(cursor, newCursor))
                         {
                             return false;
                         }
@@ -117,7 +117,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                         {
                             return true;
                         }
-                        else if (! inv.atomicReplace(slot, clicked, cursor) || ! inv.atomicReplaceCursorItem(cursor, clicked))
+                        else if (! inv.replace(slot, clicked, cursor) || ! inv.replaceCursorItem(cursor, clicked))
                         {
                             return false; // item changed before we made own change
                         }
@@ -139,12 +139,12 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     final ItemStack newCursor = clicked.split(this.getAmountToStayInHand(clicked.getAmount()));
                     if (clicked.getAmount() == 0)
                     {
-                        if (! inv.atomicReplace(slot, clicked, null))
+                        if (! inv.replace(slot, clicked, null))
                         {
                             return false;
                         }
                     }
-                    if (! inv.atomicReplaceCursorItem(/*cursor*/ null, newCursor))
+                    if (! inv.replaceCursorItem(/*cursor*/ null, newCursor))
                     {
                         return false;
                     }
@@ -161,13 +161,13 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                         final ItemStack splitted = cursor.split(1);
                         if (cursor.getAmount() == 0)
                         {
-                            if (! inv.atomicReplaceCursorItem(cursor, null))
+                            if (! inv.replaceCursorItem(cursor, null))
                             {
                                 return false;
                             }
                         }
 
-                        if (! inv.atomicReplace(slot,/*clicked*/ null, splitted))
+                        if (! inv.replace(slot,/*clicked*/ null, splitted))
                         {
                             return false;
                         }
@@ -191,7 +191,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                             final ItemStack rest = clicked.addFrom(cursor, 1);
                             if (cursor.getAmount() == 0)
                             {
-                                if (! inv.atomicReplaceCursorItem(cursor, null))
+                                if (! inv.replaceCursorItem(cursor, null))
                                 {
                                     return false;
                                 }
@@ -208,7 +208,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                             {
                                 return true;
                             }
-                            else if (! inv.atomicReplace(slot, clicked, cursor) || ! inv.atomicReplaceCursorItem(cursor, clicked))
+                            else if (! inv.replace(slot, clicked, cursor) || ! inv.replaceCursorItem(cursor, clicked))
                             {
                                 return false;
                             }
@@ -230,7 +230,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
                 if ((slotProp.getSlotType().equals(SlotType.CONTAINER) || slotProp.getSlotType().equals(SlotType.HOTBAR)) && (clicked.getMaterial() instanceof ArmorMat))
                 {
-                    return ! ((ArmorMat) clicked.getMaterial()).getArmorType().setItem(inv, clicked) || inv.atomicReplace(slot, clicked, null);
+                    return ! ((ArmorMat) clicked.getMaterial()).getArmorType().setItem(inv, clicked) || inv.replace(slot, clicked, null);
                 }
                 if (slotProp.getSlotType().equals(SlotType.CONTAINER))
                 {
@@ -244,7 +244,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 }
                 if (rest.length == 0)
                 {
-                    if (! inv.atomicReplace(slot, clicked, null))
+                    if (! inv.replace(slot, clicked, null))
                     {
                         return false;
                     }
@@ -262,7 +262,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 }
                 if (clicked.getAmount() == 1)
                 {
-                    if (! inv.atomicReplace(slot, clicked, null))
+                    if (! inv.replace(slot, clicked, null))
                     {
                         return false;
                     }
@@ -280,7 +280,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else if (Objects.equals(ct, ClickType.CTRL_DROP_KEY))
             {
-                if (! inv.atomicReplace(slot, clicked, null))
+                if (! inv.replace(slot, clicked, null))
                 {
                     return false;
                 }
@@ -295,7 +295,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     return false;
                 }
                 final ItemStack inHeldSlot = inv.getHotbarInventory().getItem(ct.getButton());
-                return inv.atomicReplace(slot, clicked, inHeldSlot) && inv.getHotbarInventory().atomicReplace(ct.getButton(), inHeldSlot, clicked);
+                return inv.replace(slot, clicked, inHeldSlot) && inv.getHotbarInventory().replace(ct.getButton(), inHeldSlot, clicked);
             }
             else if (Objects.equals(ct, ClickType.MOUSE_LEFT_OUTSIDE))
             {
@@ -304,7 +304,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     inv.setCursorItem(null);
                     return true;
                 }
-                if (! inv.atomicReplaceCursorItem(cursor, null))
+                if (! inv.replaceCursorItem(cursor, null))
                 {
                     return false;
                 }
@@ -324,7 +324,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 item.setItemStack(new BaseItemStack(cursor.getMaterial(), 1)); // TODO: itemmeta
                 if (cursor.getAmount() == 1)
                 {
-                    if (! inv.atomicReplaceCursorItem(cursor, null))
+                    if (! inv.replaceCursorItem(cursor, null))
                     {
                         return false;
                     }
@@ -349,7 +349,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
                 final ItemStack newCursor = new BaseItemStack(clicked);
                 newCursor.setAmount(newCursor.getMaterial().getMaxStack());
-                return inv.atomicReplaceCursorItem(null, newCursor);
+                return inv.replaceCursorItem(null, newCursor);
             }
             else if (Objects.equals(ct, ClickType.MOUSE_LEFT_DRAG_START) || Objects.equals(ct, ClickType.MOUSE_RIGHT_DRAG_START))
             {
@@ -401,7 +401,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     }
                 }
 
-                return inv.atomicReplaceCursorItem(cursor, newCursor);
+                return inv.replaceCursorItem(cursor, newCursor);
             }
             else if (Objects.equals(ct, ClickType.DOUBLE_CLICK))
             {
@@ -469,7 +469,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         cursor.setAmount(newCursor);
         if (newItem <= 0)
         {
-            if (! inv.atomicReplace(slot, item, null))
+            if (! inv.replace(slot, item, null))
             {
                 return false;
             }

@@ -22,45 +22,37 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.recipe;
-
-import org.diorite.inventory.item.ItemStack;
+package org.diorite.inventory.recipe.craft;
 
 /**
- * Represent recipe item, it may use custom validate code.
+ * Represent recipe where items in crafting grid must me placed in valid shape.
  */
-public interface RecipeItem
+public interface ShapedRecipe
 {
     /**
-     * Check if given item is valid for this recipe item stack.
+     * Returns width of recipe.
      *
-     * @param item item to check.
-     *
-     * @return return true if item is valid.
+     * @return width of recipe.
      */
-    default boolean isValid(final ItemStack item)
+    default int getWidth()
     {
-        return this.getItem().isSimilar(item);
+        return this.getPattern().getColumns();
     }
 
     /**
-     * Returns item that will be placed in place of recipe item after crafting some recipe. <br>
-     * Like recipe item using Milk bucket and replacing into empty bucket when recipe is used. <br>
-     * Method will return null if recipe item don't use replacement item.
+     * Returns height of recipe.
      *
-     * @return item that will be placed in place of recipe item after crafting some recipe.
+     * @return height of recipe.
      */
-    default ItemStack getReplacement()
+    default int getHeight()
     {
-        return null;
+        return this.getPattern().getRows();
     }
 
     /**
-     * Returns valid item for this recipe item stack. <br>
-     * This item may not be the only one matching item stack for this recipe,
-     * like if recipe need any color of wool, this method may return only one color.
+     * Returns pattern for this recipe.
      *
-     * @return valid item for this recipe item stack.
+     * @return pattern for this recipe.
      */
-    ItemStack getItem();
+    RecipePattern getPattern();
 }

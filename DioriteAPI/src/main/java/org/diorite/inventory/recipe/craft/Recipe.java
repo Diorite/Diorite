@@ -22,73 +22,45 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.recipe;
+package org.diorite.inventory.recipe.craft;
 
-import org.diorite.inventory.Inventory;
-import org.diorite.inventory.InventoryType;
+import java.util.List;
+
+import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
 
-import gnu.trove.map.TShortObjectMap;
-
 /**
- * Represent any recipe, crafting, furnance, etc...
+ * Represent crafting recipe.
  */
 public interface Recipe
 {
     /**
      * Check if items in inventory matches pattern, and return crafted item if yes. <br>
+     * Method will remove recipe items for inventory too. <br>
+     * Method may add items to crafting grid too. (like replacing milk bucket with empty bucket) <br>
      * If items aren't valid, method will return null.
      *
      * @param inv inventory to check.
      *
      * @return crafting result if items in inventory matches pattern, or null.
      */
-    ItemStack craft(final Inventory inv);
-//    {
-//        final TShortObjectMap<SimpleRecipeItem> map = this.getValidItems();
-//        final TShortObjectIterator<SimpleRecipeItem> it = map.iterator();
-//        while (it.hasNext())
-//        {
-//            it.advance();
-//            if (! it.value().isValid(inv.getItem(it.key())))
-//            {
-//                return null;
-//            }
-//        }
-//    }
+    ItemStack craft(GridInventory inv);
 
     /**
-     * Returns map with valid recipe items, where key is slot id.
+     * Check if items in given GridInventory is valid for this recipe.
      *
-     * @return map with valid recipe items, where key is slot id.
+     * @param inventory inventory to check.
+     *
+     * @return true if items in given inventory can be used by this recipe.
      */
-    TShortObjectMap<SimpleRecipeItem> getValidItems();
+    boolean isValid(GridInventory inventory);
 
     /**
-     * Returns map with valid recipe items, where key is slot id.
+     * Returns basic result items. <br>
+     * Item returned by this method may not match item returned by {@link #craft(GridInventory)} method. <br>
+     * If some recipe replace item from inventory grid, like milk bucket to empty bucket, empty bucket will be returned too.
      *
-     * @return map with valid recipe items, where key is slot id.
+     * @return basic result items.
      */
-    TShortObjectMap<ItemStack> getResultItems();
-
-    /**
-     * Returns main result item, on slot 0.
-     *
-     * @return main result item, on slot 0.
-     */
-    ItemStack getMainResultItem();
-
-    /**
-     * Returns inventory with pattern and result items.
-     *
-     * @return inventory with pattern and result items.
-     */
-    Inventory getPatternInventory();
-
-    /**
-     * Returns type of inventory for this recipe.
-     *
-     * @return type of inventory for this recipe.
-     */
-    InventoryType getCraftingInventoryType();
+    List<ItemStack> getResult();
 }

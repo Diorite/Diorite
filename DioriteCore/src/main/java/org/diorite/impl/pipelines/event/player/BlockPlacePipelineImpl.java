@@ -56,7 +56,7 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
 
             if (item.getAmount() == 1)
             {
-                evt.getPlayer().getInventory().getHotbarInventory().atomicReplace(evt.getPlayer().getHeldItemSlot(), item, null);
+                evt.getPlayer().getInventory().getHotbarInventory().replace(evt.getPlayer().getHeldItemSlot(), item, null);
             }
             else
             {

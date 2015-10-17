@@ -133,7 +133,6 @@ public interface Inventory extends Iterable<ItemStack>
 
     /**
      * Replace first found item matching (==) given one.
-     * NOTE: replace is atomic.
      *
      * @param excepted item to replace.
      * @param newItem  replacement.
@@ -142,24 +141,10 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of IItemStack, so it can't be == to any item from inventory.
      */
-    int atomicReplace(ItemStack excepted, ItemStack newItem) throws IllegalArgumentException;
-
-    /**
-     * Replace all found items matching (==) give one.
-     * NOTE: every replace is atomic.
-     *
-     * @param excepted item to replace.
-     * @param newItem  replacement.
-     *
-     * @return array of slot ids of replaced items, empty if no item was replaced.
-     *
-     * @throws IllegalArgumentException if excepted item isn't impl version of IItemStack, so it can't be == to any item from inventory.
-     */
-    int[] atomicReplaceAll(ItemStack excepted, ItemStack newItem) throws IllegalArgumentException;
+    int replace(ItemStack excepted, ItemStack newItem) throws IllegalArgumentException;
 
     /**
      * Replace item on given slot, only if it matches (==) given item.
-     * NOTE: this is atomic operation.
      *
      * @param slot     slot to replace.
      * @param excepted item to replace.
@@ -169,7 +154,7 @@ public interface Inventory extends Iterable<ItemStack>
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of IItemStack, so it can't be == to any item from inventory.
      */
-    boolean atomicReplace(int slot, ItemStack excepted, ItemStack newItem) throws IllegalArgumentException;
+    boolean replace(int slot, ItemStack excepted, ItemStack newItem) throws IllegalArgumentException;
 
     /**
      * Try remove all items from given array,

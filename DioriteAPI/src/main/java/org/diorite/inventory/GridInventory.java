@@ -49,21 +49,21 @@ public interface GridInventory extends Inventory
      */
     int getRows();
 
-    default int getSlotIndex(final int x, final int y)
+    default int getSlotIndex(final int row, final int column)
     {
-        if ((x >= this.getColumns()) || (y >= this.getRows()))
+        if ((column >= this.getColumns()) || (row >= this.getRows()))
         {
             return - 1;
         }
-        return x + (y * this.getColumns());
+        return column + (row * this.getColumns());
     }
 
     /**
      * Replace item on given slot, only if it matches (==) given item.
      * NOTE: this is atomic operation.
      *
-     * @param x        x coordinate
-     * @param y        y coordinate
+     * @param row      row index.
+     * @param column   column index.
      * @param excepted item to replace.
      * @param newItem  replacement.
      *
@@ -71,21 +71,21 @@ public interface GridInventory extends Inventory
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of IItemStack, so it can't be == to any item from inventory.
      */
-    default boolean atomicReplace(final int x, final int y, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
+    default boolean atomicReplace(final int row, final int column, final ItemStack excepted, final ItemStack newItem) throws IllegalArgumentException
     {
-        final int slot = this.getSlotIndex(x, y);
-        return (slot != - 1) && this.atomicReplace(slot, excepted, newItem);
+        final int slot = this.getSlotIndex(row, column);
+        return (slot != - 1) && this.replace(slot, excepted, newItem);
     }
 
     /**
      * Clears out a particular slot in the index.
      *
-     * @param x x coordinate
-     * @param y y coordinate
+     * @param row    row index.
+     * @param column column index.
      */
-    default void clear(final int x, final int y)
+    default void clear(final int row, final int column)
     {
-        final int slot = this.getSlotIndex(x, y);
+        final int slot = this.getSlotIndex(row, column);
         if (slot == - 1)
         {
             return;
@@ -96,14 +96,14 @@ public interface GridInventory extends Inventory
     /**
      * Returns the IItemStack found in the slot at the given index
      *
-     * @param x x coordinate
-     * @param y y coordinate
+     * @param row    row index.
+     * @param column column index.
      *
      * @return The IItemStack in the slot
      */
-    default ItemStack getItem(final int x, final int y)
+    default ItemStack getItem(final int row, final int column)
     {
-        final int slot = this.getSlotIndex(x, y);
+        final int slot = this.getSlotIndex(row, column);
         if (slot == - 1)
         {
             return null;
@@ -114,15 +114,15 @@ public interface GridInventory extends Inventory
     /**
      * Stores the IItemStack at the given index of the inventory.
      *
-     * @param x    x coordinate
-     * @param y    y coordinate
-     * @param item The IItemStack to set
+     * @param row    row index.
+     * @param column column index.
+     * @param item   The IItemStack to set
      *
      * @return previous itemstack in this slot.
      */
-    default ItemStack setItem(final int x, final int y, final ItemStack item)
+    default ItemStack setItem(final int row, final int column, final ItemStack item)
     {
-        final int slot = this.getSlotIndex(x, y);
+        final int slot = this.getSlotIndex(row, column);
         if (slot == - 1)
         {
             return null;
@@ -133,16 +133,16 @@ public interface GridInventory extends Inventory
     /**
      * Get and remove the stack at the supplied position in this Inventory.
      *
-     * @param x x coordinate
-     * @param y y coordinate
+     * @param row    row index.
+     * @param column column index.
      *
      * @return ItemStack at the specified position or null if the slot is empty or out of bounds
      *
      * @see Inventory#poll(int)
      */
-    default ItemStack poll(final int x, final int y)
+    default ItemStack poll(final int row, final int column)
     {
-        final int slot = this.getSlotIndex(x, y);
+        final int slot = this.getSlotIndex(row, column);
         if (slot == - 1)
         {
             return null;
@@ -153,14 +153,14 @@ public interface GridInventory extends Inventory
     /**
      * Get the {@link Slot} at the specified position.
      *
-     * @param x x coordinate
-     * @param y y coordinate
+     * @param row    row index.
+     * @param column column index.
      *
      * @return {@link Slot} at the specified position or null if the coordinates are out of bounds
      */
-    default Slot getSlot(final int x, final int y)
+    default Slot getSlot(final int row, final int column)
     {
-        final int slot = this.getSlotIndex(x, y);
+        final int slot = this.getSlotIndex(row, column);
         if (slot == - 1)
         {
             return null;

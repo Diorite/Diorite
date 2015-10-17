@@ -22,45 +22,37 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.recipe;
+package org.diorite.inventory.recipe.craft;
 
-import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.recipe.RecipeItem;
 
 /**
- * Represent recipe item, it may use custom validate code.
+ * Represent recipe pattern for {@link ShapedRecipe}.
  */
-public interface RecipeItem
+public interface RecipePattern
 {
     /**
-     * Check if given item is valid for this recipe item stack.
+     * Returns width of recipe pattern.
      *
-     * @param item item to check.
-     *
-     * @return return true if item is valid.
+     * @return width of recipe pattern.
      */
-    default boolean isValid(final ItemStack item)
-    {
-        return this.getItem().isSimilar(item);
-    }
+    int getColumns();
 
     /**
-     * Returns item that will be placed in place of recipe item after crafting some recipe. <br>
-     * Like recipe item using Milk bucket and replacing into empty bucket when recipe is used. <br>
-     * Method will return null if recipe item don't use replacement item.
+     * Returns height of recipe pattern.
      *
-     * @return item that will be placed in place of recipe item after crafting some recipe.
+     * @return height of recipe pattern.
      */
-    default ItemStack getReplacement()
-    {
-        return null;
-    }
+    int getRows();
 
     /**
-     * Returns valid item for this recipe item stack. <br>
-     * This item may not be the only one matching item stack for this recipe,
-     * like if recipe need any color of wool, this method may return only one color.
+     * Returns recipe item on given pattern slot. <br>
+     * Returns null if there is no recipe item on given slot or slot is bigger than pattern size.
      *
-     * @return valid item for this recipe item stack.
+     * @param row    row index of pattern.
+     * @param column column index of pattern.
+     *
+     * @return recipe item on given pattern slot or null.
      */
-    ItemStack getItem();
+    RecipeItem getRecipeItem(int row, int column);
 }

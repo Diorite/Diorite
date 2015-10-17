@@ -41,11 +41,34 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
      */
     ItemStack getCursorItem();
 
+    /**
+     * Set cursor to given item, and return old cursor item.
+     *
+     * @param cursorItem new cursor item.
+     *
+     * @return old cursor item.
+     */
     ItemStack setCursorItem(ItemStack cursorItem);
 
+    /**
+     * Returns drag controller for player of this inventory.
+     *
+     * @return drag controller for player of this inventory.
+     */
     DragController getDragController();
 
-    boolean atomicReplaceCursorItem(ItemStack excepted, ItemStack cursorItem);
+    /**
+     * Put the given ItemStack into the helmet slot if it matches a excepted one.
+     * NOTE: this is atomic operation.
+     *
+     * @param excepted excepted item to replace.
+     * @param cursorItem   The ItemStack to use as cursor
+     *
+     * @return true if item was replaced.
+     *
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
+     */
+    boolean replaceCursorItem(ItemStack excepted, ItemStack cursorItem);
 
     /**
      * Returns sub-part of player inventory, contains only
