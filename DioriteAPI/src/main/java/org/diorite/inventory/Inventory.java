@@ -160,7 +160,7 @@ public interface Inventory extends Iterable<ItemStack>
      * Try remove all items from given array,
      * if {@code ifContains} is true, items will be removed only
      * if inventory contains them all, and then empty array (of size 0) will be returned.
-     * <p/>
+     * <br>
      * if {@code ifContains} is false, method will try remove as many items as it can,
      * if it will remove all items, then empty array (of size 0) will be returned, but
      * if any item wasn't removed, method will return array of this same size as given,
@@ -265,7 +265,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Returns a HashMap with all slots and IItemStacks in the inventory with
      * the given Material.
-     * <p/>
+     * <br>
      * The HashMap contains entries where, the key is the slot index, and the
      * value is the IItemStack in that slot. If no matching IItemStack with the
      * given Material is found, an empty map is returned.
@@ -282,7 +282,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Returns a HashMap with all slots and IItemStacks in the inventory with
      * the given Material.
-     * <p/>
+     * <br>
      * The HashMap contains entries where, the key is the slot index, and the
      * value is the IItemStack in that slot. If no matching IItemStack with the
      * given Material is found, an empty map is returned.
@@ -298,7 +298,7 @@ public interface Inventory extends Iterable<ItemStack>
      * Finds all slots in the inventory containing any IItemStacks with the
      * given IItemStack. This will only match slots if both the type and the
      * amount of the stack match
-     * <p/>
+     * <br>
      * The HashMap contains entries where, the key is the slot index, and the
      * value is the IItemStack in that slot. If no matching IItemStack with the
      * given Material is found, an empty map is returned.
@@ -423,7 +423,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Checks if the inventory contains any IItemStacks matching the given
      * IItemStack.
-     * <p/>
+     * <br>
      * This will only return true if both the type and the amount of the stack
      * match.
      *
@@ -477,7 +477,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Checks if the inventory contains at least the minimum amount specified
      * of exactly matching IItemStacks.
-     * <p/>
+     * <br>
      * An IItemStack only counts if both the type and the amount of the stack
      * match.
      *
@@ -560,7 +560,7 @@ public interface Inventory extends Iterable<ItemStack>
     /**
      * Stores the given IItemStacks in the inventory. This will try to fill
      * existing stacks and empty slots as well as it can.
-     * <p/>
+     * <br>
      * The returned array contains what it couldn't store, if all items fit
      * to the inventory, then returned array is empty (size 0), otherwise
      * it will be array of this same size as given one, contains IItemStacks that
