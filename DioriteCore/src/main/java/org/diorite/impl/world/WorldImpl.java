@@ -58,7 +58,7 @@ import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
-import org.diorite.utils.math.pack.IntsToLong;
+import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.Biome;
 import org.diorite.world.Block;
 import org.diorite.world.Dimension;
@@ -705,7 +705,7 @@ public class WorldImpl implements World, Tickable
                     {
                         if (this.isChunkLoaded(cx, cz))
                         {
-                            this.activeChunks.add(IntsToLong.pack(x, z));
+                            this.activeChunks.add(BigEndianUtils.toLong(x, z));
                         }
                     }
                 }

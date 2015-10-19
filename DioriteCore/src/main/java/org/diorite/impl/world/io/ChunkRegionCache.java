@@ -31,7 +31,7 @@ import java.lang.ref.SoftReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.utils.math.pack.IntsToLong;
+import org.diorite.utils.math.endian.BigEndianUtils;
 
 import gnu.trove.iterator.TLongObjectIterator;
 import gnu.trove.map.TLongObjectMap;
@@ -59,7 +59,7 @@ public abstract class ChunkRegionCache
 
     public ChunkRegion getChunkRegion(final int regionX, final int regionZ)
     {
-        final long key = IntsToLong.pack(regionX, regionZ);
+        final long key = BigEndianUtils.toLong(regionX, regionZ);
         final File file = new File(this.regionDir, "r." + regionX + "." + regionZ + this.extension);
 
         final Reference<ChunkRegion> ref = this.cache.get(key);

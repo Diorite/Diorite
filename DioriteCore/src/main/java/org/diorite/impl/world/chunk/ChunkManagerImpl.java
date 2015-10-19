@@ -44,7 +44,7 @@ import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkGenerateEvent;
 import org.diorite.event.chunk.ChunkLoadEvent;
 import org.diorite.event.chunk.ChunkPopulateEvent;
-import org.diorite.utils.math.pack.IntsToLong;
+import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
@@ -125,7 +125,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     @Override
     public ChunkImpl getChunk(final int x, final int z)
     {
-        final Long key = IntsToLong.pack(x, z);
+        final Long key = BigEndianUtils.toLong(x, z);
         if (this.chunks.containsKey(key))
         {
             return this.chunks.get(key);
@@ -143,7 +143,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     @Override
     public boolean isChunkLoaded(final int x, final int z)
     {
-        final Long key = IntsToLong.pack(x, z);
+        final Long key = BigEndianUtils.toLong(x, z);
         final ChunkImpl chunk = this.chunks.get(key);
         return (chunk != null) && chunk.isLoaded();
     }
@@ -151,7 +151,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     @Override
     public boolean isChunkInUse(final int x, final int z)
     {
-        final Long key = IntsToLong.pack(x, z);
+        final Long key = BigEndianUtils.toLong(x, z);
         final Set<ChunkLock> lockSet = this.locks.get(key);
         return (lockSet != null) && ! lockSet.isEmpty();
     }

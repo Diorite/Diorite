@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl;
-import org.diorite.utils.math.pack.IntsToLong;
+import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.World;
 
 import gnu.trove.iterator.TLongIterator;
@@ -54,8 +54,8 @@ public class ChunksTickGroup implements TickGroupImpl
             for (final TLongIterator it = chunks.getChunks().iterator(); it.hasNext(); )
             {
                 final long key = it.next();
-                final int x = IntsToLong.getA(key);
-                final int z = IntsToLong.getB(key);
+                final int x = BigEndianUtils.getIntA(key);
+                final int z = BigEndianUtils.getIntB(key);
                 final ChunkImpl chunk = cm.getChunk(x, z);
                 if ((chunk == null) || ! chunk.isLoaded())
                 {

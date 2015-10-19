@@ -77,7 +77,7 @@ import org.diorite.permissions.PlayerPermissionsContainer;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
-import org.diorite.utils.math.pack.IntsToLong;
+import org.diorite.utils.math.endian.BigEndianUtils;
 
 import gnu.trove.TIntCollection;
 import gnu.trove.list.array.TIntArrayList;
@@ -247,7 +247,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
 
     public boolean isVisibleChunk(final int x, final int z)
     {
-        return this.playerChunks.getVisibleChunks().contains(IntsToLong.pack(x, z));
+        return this.playerChunks.getVisibleChunks().contains(BigEndianUtils.toLong(x, z));
     }
 
     @Override
