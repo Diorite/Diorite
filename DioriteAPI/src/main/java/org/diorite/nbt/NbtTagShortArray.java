@@ -36,21 +36,41 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class NbtTagShortArray extends NbtAbstractTag
 {
+    /**
+     * Empty array of shorts.
+     */
     public static final short[] EMPTY = new short[0];
 
+    /**
+     * Value of nbt tag.
+     */
     protected short[] value;
 
+    /**
+     * Construct new NbtTagShortArray without name and empty array as value.
+     */
     public NbtTagShortArray()
     {
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagShortArray with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagShortArray(final String name)
     {
         super(name);
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagShortArray with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagShortArray(final String name, final short[] value)
     {
         super(name);
@@ -58,15 +78,36 @@ public class NbtTagShortArray extends NbtAbstractTag
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagShortArray tag to be cloned.
+     */
+    protected NbtTagShortArray(final NbtTagShortArray nbtTagShortArray)
+    {
+        super(nbtTagShortArray);
+        this.value = nbtTagShortArray.value.clone();
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public short[] getValue()
     {
         return this.value;
     }
 
-    public void setValue(final short[] i)
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param s value to set.
+     */
+    public void setValue(final short[] s)
     {
-        Validate.notNull(i, "array can't be null.");
-        this.value = i;
+        Validate.notNull(s, "array can't be null.");
+        this.value = s;
     }
 
     @Override
@@ -99,6 +140,13 @@ public class NbtTagShortArray extends NbtAbstractTag
             data[i] = inputStream.readShort();
         }
         this.value = data;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagShortArray clone()
+    {
+        return new NbtTagShortArray(this);
     }
 
     @Override

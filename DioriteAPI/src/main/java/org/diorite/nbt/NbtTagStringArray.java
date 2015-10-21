@@ -36,21 +36,41 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class NbtTagStringArray extends NbtAbstractTag
 {
+    /**
+     * Empty array of Strings.
+     */
     public static final String[] EMPTY = new String[0];
 
+    /**
+     * Value of nbt tag.
+     */
     protected String[] value;
 
+    /**
+     * Construct new NbtTagStringArray without name and empty array as value.
+     */
     public NbtTagStringArray()
     {
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagStringArray with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagStringArray(final String name)
     {
         super(name);
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagStringArray with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagStringArray(final String name, final String[] value)
     {
         super(name);
@@ -58,15 +78,36 @@ public class NbtTagStringArray extends NbtAbstractTag
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagStringArray tag to be cloned.
+     */
+    protected NbtTagStringArray(final NbtTagStringArray nbtTagStringArray)
+    {
+        super(nbtTagStringArray);
+        this.value = nbtTagStringArray.value.clone();
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public String[] getValue()
     {
         return this.value;
     }
 
-    public void setValue(final String[] i)
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param s value to set.
+     */
+    public void setValue(final String[] s)
     {
-        Validate.notNull(i, "array can't be null.");
-        this.value = i;
+        Validate.notNull(s, "array can't be null.");
+        this.value = s;
     }
 
     @Override
@@ -114,6 +155,13 @@ public class NbtTagStringArray extends NbtAbstractTag
             data[i] = new String(strData, NbtTag.STRING_CHARSET).intern();
         }
         this.value = data;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagStringArray clone()
+    {
+        return new NbtTagStringArray(this);
     }
 
     @Override

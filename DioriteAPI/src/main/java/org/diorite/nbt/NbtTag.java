@@ -27,31 +27,86 @@ package org.diorite.nbt;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+/**
+ * Represent nbt tag, nbt is used by minecraft to save most of game data.
+ */
 public interface NbtTag
 {
+    /**
+     * Charset used by nbt tags.
+     */
     Charset STRING_CHARSET = Charset.forName("UTF-8");
 
+    /**
+     * Returns name of this nbt tag. May return null.
+     *
+     * @return name of this nbt tag.
+     */
     String getName();
 
+    /**
+     * Set name of this nbt tag.
+     *
+     * @param name new name for this tag.
+     */
     void setName(String name);
 
-    default byte[] getNameBytes()
-    {
-        return this.getName().getBytes(STRING_CHARSET);
-    }
-
+    /**
+     * Returns parent nbt tag container for this tag.
+     *
+     * @return parent nbt tag container for this tag.
+     */
     NbtTagContainer getParent();
 
+    /**
+     * Set parent nbt tag container for this tag.
+     *
+     * @param parent parent of this nbt tag.
+     */
     void setParent(NbtTagContainer parent);
 
+    /**
+     * Returns id of type of this tag.
+     *
+     * @return id of type of this tag.
+     */
     default byte getTagID()
     {
         return this.getTagType().getTypeID();
     }
 
+    /**
+     * Returns type of this tag.
+     *
+     * @return type of this tag.
+     */
     NbtTagType getTagType();
 
+    /**
+     * Write this tag to given {@link NbtOutputStream}
+     *
+     * @param outputStream NbtOutputStream to use.
+     * @param anonymous    if tag should be saved with name.
+     *
+     * @throws IOException if write operation to NbtOutputStream failed.
+     */
     void write(NbtOutputStream outputStream, boolean anonymous) throws IOException;
 
+    /**
+     * Read data of this tag from given {@link NbtInputStream}
+     *
+     * @param inputStream NbtInputStream to use.
+     * @param anonymous   if stream contains name of this tag.
+     * @param limiter     instance of {@link NbtLimiter} to use.
+     *
+     * @throws IOException if read operation from NbtOutputStream failed.
+     */
     void read(NbtInputStream inputStream, boolean anonymous, NbtLimiter limiter) throws IOException;
+
+    /**
+     * Clone (deep) this NbtTag.
+     *
+     * @return clone of this nbt tag.
+     */
+    NbtTag clone();
 }

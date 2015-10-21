@@ -26,13 +26,40 @@ package org.diorite.nbt;
 
 import java.util.List;
 
+/**
+ * Represent {@link NbtTagContainer} where all elements are anonymous. (they don't have name)
+ */
 public interface NbtAnonymousTagContainer extends NbtTagContainer
 {
+    /**
+     * Add new nbt tag to this container.
+     *
+     * @param tag nbt tag to be added.
+     */
     void addTag(NbtTag tag);
 
+    /**
+     * Returns list of all nbt tags in this container.
+     *
+     * @return list of all nbt tags in this container.
+     */
     List<NbtTag> getTags();
 
+    /**
+     * Returns list of all nbt tags in this container casted to given type.
+     *
+     * @param tagClass type of nbt tags.
+     * @param <T>      type of nbt tags.
+     *
+     * @return list of all nbt tags in this container casted to given type.
+     */
     <T extends NbtTag> List<T> getTags(Class<T> tagClass);
 
+    /**
+     * Set nbt tag on given index to given tag.
+     *
+     * @param i   index of element.
+     * @param tag nbt tag to set.
+     */
     void setTag(int i, NbtTag tag);
 }

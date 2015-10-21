@@ -27,10 +27,23 @@ package org.diorite.nbt;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Represent class used to limit nbt data readed from stream. <br>
+ * It is used in packets to deny packets with too complex NBT data that can be used to "exploit" server. (ram usage, creating many nested lists etc)
+ */
 public class NbtLimiter
 {
-    public static final int DEFAULT_MAX_COMPLEXITY = 100;
+    /**
+     * Default max complexity level, nested lists/maps are increasing complexity level.
+     */
+    public static final int DEFAULT_MAX_COMPLEXITY = 10;
+    /**
+     * Default max amount of bytes that can be read from input stream.
+     */
     public static final int DEFAULT_MAX_BYTES      = 2097152; // 2 MB
+    /**
+     * Default max amount of elements that can be read from input stream.
+     */
     public static final int DEFAULT_MAX_ELEMENTS   = 300;
 
     private final int maxBytes;
@@ -40,6 +53,13 @@ public class NbtLimiter
     private       int complexity;
     private       int elements;
 
+    /**
+     * Construct new nbt limiter with given limits.
+     *
+     * @param maxBytes      max amount of bytes that can be read from input stream.
+     * @param maxComplexity max complexity level, nested lists/maps are increasing complexity level.
+     * @param maxElements   max amount of elements that can be read from input stream.
+     */
     public NbtLimiter(final int maxBytes, final int maxComplexity, final int maxElements)
     {
         this.maxBytes = maxBytes;
@@ -47,36 +67,71 @@ public class NbtLimiter
         this.maxElements = maxElements;
     }
 
+    /**
+     * Returns bytes that was already readed from stream.
+     *
+     * @return bytes that was already readed from stream.
+     */
     public int getBytes()
     {
         return this.bytes;
     }
 
-    public int getComplexity()
-    {
-        return this.complexity;
-    }
-
-    public int getMaxBytes()
-    {
-        return this.maxBytes;
-    }
-
-    public int getMaxComplexity()
-    {
-        return this.maxComplexity;
-    }
-
-    public int getMaxElements()
-    {
-        return this.maxElements;
-    }
-
+    /**
+     * Returns current amount of elements that was already readed from stream.
+     *
+     * @return current amount of elements that was already readed from stream.
+     */
     public int getElements()
     {
         return this.elements;
     }
 
+    /**
+     * Returns current level of complexity.
+     *
+     * @return current level of complexity.
+     */
+    public int getComplexity()
+    {
+        return this.complexity;
+    }
+
+    /**
+     * Returns bytes limit for this limiter.
+     *
+     * @return bytes limit for this limiter.
+     */
+    public int getMaxBytes()
+    {
+        return this.maxBytes;
+    }
+
+    /**
+     * Returns complexity level limit for this limiter.
+     *
+     * @return complexity level limit for this limiter.
+     */
+    public int getMaxComplexity()
+    {
+        return this.maxComplexity;
+    }
+
+    /**
+     * Returns elements limit for this limiter.
+     *
+     * @return elements limit for this limiter.
+     */
+    public int getMaxElements()
+    {
+        return this.maxElements;
+    }
+
+    /**
+     * Add readed bytes to this limiter, method will throw exception If the limit is exceeded.
+     *
+     * @param amount amount of readed bytes.
+     */
     public void countBytes(final int amount)
     {
         if (this.maxBytes <= 0)
@@ -90,6 +145,10 @@ public class NbtLimiter
         }
     }
 
+
+    /**
+     * Add complexity level to this limiter, method will throw exception If the limit is exceeded.
+     */
     public void incrementComplexity()
     {
         if (this.maxComplexity <= 0)
@@ -102,6 +161,12 @@ public class NbtLimiter
         }
     }
 
+
+    /**
+     * Add readed elements to this limiter, method will throw exception If the limit is exceeded.
+     *
+     * @param amount amount of readed elements.
+     */
     public void incrementElementsCount(final int amount)
     {
         if (this.maxElements <= 0)
@@ -121,11 +186,21 @@ public class NbtLimiter
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("maxBytes", this.maxBytes).append("maxComplexity", this.maxComplexity).append("maxElements", this.maxElements).append("bytes", this.bytes).append("complexity", this.complexity).append("elements", this.elements).toString();
     }
 
+    /**
+     * Create NbtLimiter with default settings.
+     *
+     * @return new NbtLimiter with default settings.
+     */
     public static NbtLimiter getDefault()
     {
         return new NbtLimiter(DEFAULT_MAX_BYTES, DEFAULT_MAX_COMPLEXITY, DEFAULT_MAX_ELEMENTS);
     }
 
+    /**
+     * Create NbtLimiter without limit.
+     *
+     * @return new NbtLimiter without limit.
+     */
     public static NbtLimiter getUnlimited()
     {
         return new NbtLimiter(0, 0, 0);

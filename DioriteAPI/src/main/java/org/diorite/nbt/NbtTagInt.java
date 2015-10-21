@@ -29,30 +29,71 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for int values.
+ */
 public class NbtTagInt extends NbtAbstractTag
 {
+    /**
+     * Value of nbt tag.
+     */
     protected int value;
 
+    /**
+     * Construct new NbtTagInt without name and 0 as value.
+     */
     public NbtTagInt()
     {
     }
 
+    /**
+     * Construct new NbtTagByte with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagInt(final String name)
     {
         super(name);
     }
 
+    /**
+     * Construct new NbtTagByte with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagInt(final String name, final int value)
     {
         super(name);
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagInt tag to be cloned.
+     */
+    protected NbtTagInt(final NbtTagInt nbtTagInt)
+    {
+        super(nbtTagInt);
+        this.value = nbtTagInt.value;
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public int getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param i value to set.
+     */
     public void setValue(final int i)
     {
         this.value = i;
@@ -78,6 +119,13 @@ public class NbtTagInt extends NbtAbstractTag
         limiter.incrementElementsCount(1);
 
         this.value = inputStream.readInt();
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagInt clone()
+    {
+        return new NbtTagInt(this);
     }
 
     @Override

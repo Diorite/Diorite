@@ -32,31 +32,69 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Represent list of nbt tags, nbt list-like container.
+ */
 public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContainer
 {
+    /**
+     * Value of nbt tag.
+     */
     protected List<NbtTag> tagList;
 
+    /**
+     * Construct new NbtTagList without name and empty list as value.
+     */
     public NbtTagList()
     {
-        this.tagList = new ArrayList<>(1);
+        this.tagList = new ArrayList<>(8);
     }
 
+    /**
+     * Construct new NbtTagList with given name and empty list as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagList(final String name)
     {
         super(name);
         this.tagList = new ArrayList<>(8);
     }
 
+    /**
+     * Construct new NbtTagList with given name and empty list as value.
+     *
+     * @param name name to be used.
+     * @param size initial capacity of list.
+     */
     public NbtTagList(final String name, final int size)
     {
         super(name);
         this.tagList = new ArrayList<>(size);
     }
 
+    /**
+     * Construct new NbtTagList with given name and list.
+     *
+     * @param name    name to be used.
+     * @param tagList list of tags to be used.
+     */
     public NbtTagList(final String name, final Collection<? extends NbtTag> tagList)
     {
         super(name);
         this.tagList = new ArrayList<>(tagList);
+    }
+
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagList tag to be cloned.
+     */
+    protected NbtTagList(final NbtTagList nbtTagList)
+    {
+        super(nbtTagList);
+        this.tagList = new ArrayList<>(nbtTagList.tagList.size());
+        nbtTagList.tagList.forEach(t -> this.addTag(t.clone()));
     }
 
     @Override
@@ -69,6 +107,7 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     public void addTag(final NbtTag tag)
     {
         this.tagList.add(tag);
+        tag.setParent(this);
     }
 
     @Override
@@ -103,6 +142,13 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     public void removeTag(final NbtTag tag)
     {
         this.tagList.remove(tag);
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagList clone()
+    {
+        return new NbtTagList(this);
     }
 
     @Override

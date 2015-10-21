@@ -24,7 +24,18 @@
 
 package org.diorite.nbt;
 
+/**
+ * Represent container of nbt tags.
+ */
 public interface NbtTagContainer extends NbtTag
 {
+    /**
+     * Remove given nbt tag from this container.
+     *
+     * @param tag nbt tag to be removed.
+     */
     void removeTag(NbtTag tag);
+
+    @Override
+    NbtTagContainer clone();
 }

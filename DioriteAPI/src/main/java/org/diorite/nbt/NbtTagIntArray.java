@@ -30,23 +30,46 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for int array values.
+ */
 public class NbtTagIntArray extends NbtAbstractTag
 {
+    /**
+     * Empty array of ints.
+     */
     public static final int[] EMPTY = new int[0];
 
+    /**
+     * Value of nbt tag.
+     */
     protected int[] value;
 
+    /**
+     * Construct new NbtTagIntArray without name and empty array as value.
+     */
     public NbtTagIntArray()
     {
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagIntArray with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagIntArray(final String name)
     {
         super(name);
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagIntArray with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagIntArray(final String name, final int[] value)
     {
         super(name);
@@ -54,11 +77,32 @@ public class NbtTagIntArray extends NbtAbstractTag
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagIntArray tag to be cloned.
+     */
+    protected NbtTagIntArray(final NbtTagIntArray nbtTagIntArray)
+    {
+        super(nbtTagIntArray);
+        this.value = nbtTagIntArray.value.clone();
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public int[] getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param i value to set.
+     */
     public void setValue(final int[] i)
     {
         Validate.notNull(i, "array can't be null.");
@@ -95,6 +139,13 @@ public class NbtTagIntArray extends NbtAbstractTag
             data[i] = inputStream.readInt();
         }
         this.value = data;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagIntArray clone()
+    {
+        return new NbtTagIntArray(this);
     }
 
     @Override

@@ -29,30 +29,71 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for double values.
+ */
 public class NbtTagDouble extends NbtAbstractTag
 {
+    /**
+     * Value of nbt tag.
+     */
     protected double value;
 
+    /**
+     * Construct new NbtTagDouble without name and 0 as value.
+     */
     public NbtTagDouble()
     {
     }
 
+    /**
+     * Construct new NbtTagDouble with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagDouble(final String name)
     {
         super(name);
     }
 
+    /**
+     * Construct new NbtTagDouble with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagDouble(final String name, final double value)
     {
         super(name);
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagDouble tag to be cloned.
+     */
+    protected NbtTagDouble(final NbtTagDouble nbtTagDouble)
+    {
+        super(nbtTagDouble);
+        this.value = nbtTagDouble.value;
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public double getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param d value to set.
+     */
     public void setValue(final double d)
     {
         this.value = d;
@@ -78,6 +119,13 @@ public class NbtTagDouble extends NbtAbstractTag
         limiter.incrementElementsCount(1);
 
         this.value = inputStream.readDouble();
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagDouble clone()
+    {
+        return new NbtTagDouble(this);
     }
 
     @Override

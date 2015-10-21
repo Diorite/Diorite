@@ -29,30 +29,71 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for string values.
+ */
 public class NbtTagString extends NbtAbstractTag
 {
+    /**
+     * Value of nbt tag.
+     */
     protected String value;
 
+    /**
+     * Construct new NbtTagString without name and 0 as value.
+     */
     public NbtTagString()
     {
     }
 
+    /**
+     * Construct new NbtTagString with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagString(final String name)
     {
         super(name);
     }
 
+    /**
+     * Construct new NbtTagString with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagString(final String name, final String value)
     {
         super(name);
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagString tag to be cloned.
+     */
+    protected NbtTagString(final NbtTagString nbtTagString)
+    {
+        super(nbtTagString);
+        this.value = nbtTagString.value;
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public String getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param s value to set.
+     */
     public void setValue(final String s)
     {
         this.value = s;
@@ -85,7 +126,7 @@ public class NbtTagString extends NbtAbstractTag
         limiter.incrementElementsCount(1);
 
         final int size = inputStream.readShort();
-        if (size == -1)
+        if (size == - 1)
         {
             this.value = null;
             return;
@@ -93,6 +134,13 @@ public class NbtTagString extends NbtAbstractTag
         final byte[] data = new byte[size];
         inputStream.readFully(data);
         this.value = new String(data, NbtTag.STRING_CHARSET).intern();
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagString clone()
+    {
+        return new NbtTagString(this);
     }
 
     @Override

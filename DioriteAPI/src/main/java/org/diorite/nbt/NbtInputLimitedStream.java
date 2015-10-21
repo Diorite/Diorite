@@ -31,10 +31,19 @@ import java.io.InputStream;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Represents nbt input stream that use {@link NbtLimiter} to limit readed data to prevent exploits.
+ */
 public class NbtInputLimitedStream extends FilterInputStream
 {
     private final NbtLimiter limiter;
 
+    /**
+     * Construct new limited stream using given input stream and limiter.
+     *
+     * @param in      input stream to be useed.
+     * @param limiter limiter of this input stream.
+     */
     public NbtInputLimitedStream(final InputStream in, final NbtLimiter limiter)
     {
         super(in);

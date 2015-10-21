@@ -27,12 +27,39 @@ package org.diorite.nbt;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Represent nbt tag element, placed at the end of nbt container etc..
+ */
 public class NbtTagEnd extends NbtAbstractTag
 {
+    /**
+     * Construct new NbtTagEnd.
+     */
+    public NbtTagEnd()
+    {
+    }
+
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagEnd tag to be cloned.
+     */
+    protected NbtTagEnd(final NbtTagEnd nbtTagEnd)
+    {
+        super(nbtTagEnd);
+    }
+
     @Override
     public NbtTagType getTagType()
     {
         return NbtTagType.END;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagEnd clone()
+    {
+        return new NbtTagEnd(this);
     }
 
     @Override

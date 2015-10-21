@@ -36,21 +36,41 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class NbtTagFloatArray extends NbtAbstractTag
 {
+    /**
+     * Empty array of floats.
+     */
     public static final float[] EMPTY = new float[0];
 
+    /**
+     * Value of nbt tag.
+     */
     protected float[] value;
 
+    /**
+     * Construct new NbtTagFloatArray without name and empty array as value.
+     */
     public NbtTagFloatArray()
     {
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagFloatArray with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagFloatArray(final String name)
     {
         super(name);
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagFloatArray with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagFloatArray(final String name, final float[] value)
     {
         super(name);
@@ -58,15 +78,36 @@ public class NbtTagFloatArray extends NbtAbstractTag
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagFloatArray tag to be cloned.
+     */
+    protected NbtTagFloatArray(final NbtTagFloatArray nbtTagFloatArray)
+    {
+        super(nbtTagFloatArray);
+        this.value = nbtTagFloatArray.value.clone();
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public float[] getValue()
     {
         return this.value;
     }
 
-    public void setValue(final float[] i)
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param f value to set.
+     */
+    public void setValue(final float[] f)
     {
-        Validate.notNull(i, "array can't be null.");
-        this.value = i;
+        Validate.notNull(f, "array can't be null.");
+        this.value = f;
     }
 
     @Override
@@ -99,6 +140,13 @@ public class NbtTagFloatArray extends NbtAbstractTag
             data[i] = inputStream.readFloat();
         }
         this.value = data;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagFloatArray clone()
+    {
+        return new NbtTagFloatArray(this);
     }
 
     @Override

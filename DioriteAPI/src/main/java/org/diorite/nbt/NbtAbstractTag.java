@@ -29,18 +29,46 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Abstract representation of NbtTag.
+ */
 public abstract class NbtAbstractTag implements NbtTag
 {
+    /**
+     * Name of this nbt tag.
+     */
     protected String name;
+    /**
+     * Parent of this nbt tag.
+     */
     protected NbtTagContainer parent = null;
 
-    public NbtAbstractTag()
+    /**
+     * Construct new nbt tag without name.
+     */
+    protected NbtAbstractTag()
     {
     }
 
-    public NbtAbstractTag(final String name)
+    /**
+     * Construct new nbt tag with given name.
+     *
+     * @param name name of this nbt tag.
+     */
+    protected NbtAbstractTag(final String name)
     {
         this.setName(name);
+    }
+
+    /**
+     * Clone constructor.
+     *
+     * @param nbtAbstractTag tag to clone.
+     */
+    protected NbtAbstractTag(final NbtAbstractTag nbtAbstractTag)
+    {
+        this.name = nbtAbstractTag.name;
+//        this.parent = nbtAbstractTag.parent;
     }
 
     @Override
@@ -50,11 +78,15 @@ public abstract class NbtAbstractTag implements NbtTag
     }
 
     @Override
-    public void setName(final String name)
+    public void setName(String name)
     {
         if (this.parent != null)
         {
             this.parent.removeTag(this);
+        }
+        if (name != null)
+        {
+            name = name.intern();
         }
         this.name = name;
         if (this.parent != null)
@@ -91,7 +123,7 @@ public abstract class NbtAbstractTag implements NbtTag
     {
         if (! anonymous)
         {
-            final byte[] name = this.getNameBytes();
+            final byte[] name = this.name.getBytes(STRING_CHARSET);
             outputStream.writeShort(name.length);
             outputStream.write(name);
         }

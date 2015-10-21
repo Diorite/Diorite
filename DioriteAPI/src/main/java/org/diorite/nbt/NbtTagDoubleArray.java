@@ -36,21 +36,41 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class NbtTagDoubleArray extends NbtAbstractTag
 {
+    /**
+     * Empty array of doubles.
+     */
     public static final double[] EMPTY = new double[0];
 
+    /**
+     * Value of nbt tag.
+     */
     protected double[] value;
 
+    /**
+     * Construct new NbtTagDoubleArray without name and empty array as value.
+     */
     public NbtTagDoubleArray()
     {
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagDoubleArray with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagDoubleArray(final String name)
     {
         super(name);
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagDoubleArray with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagDoubleArray(final String name, final double[] value)
     {
         super(name);
@@ -58,15 +78,36 @@ public class NbtTagDoubleArray extends NbtAbstractTag
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagDoubleArray tag to be cloned.
+     */
+    protected NbtTagDoubleArray(final NbtTagDoubleArray nbtTagDoubleArray)
+    {
+        super(nbtTagDoubleArray);
+        this.value = nbtTagDoubleArray.value.clone();
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public double[] getValue()
     {
         return this.value;
     }
 
-    public void setValue(final double[] i)
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param d value to set.
+     */
+    public void setValue(final double[] d)
     {
-        Validate.notNull(i, "array can't be null.");
-        this.value = i;
+        Validate.notNull(d, "array can't be null.");
+        this.value = d;
     }
 
     @Override
@@ -99,6 +140,13 @@ public class NbtTagDoubleArray extends NbtAbstractTag
             data[i] = inputStream.readDouble();
         }
         this.value = data;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagDoubleArray clone()
+    {
+        return new NbtTagDoubleArray(this);
     }
 
     @Override

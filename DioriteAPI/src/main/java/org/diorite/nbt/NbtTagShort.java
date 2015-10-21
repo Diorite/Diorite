@@ -29,36 +29,83 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for short values.
+ */
 public class NbtTagShort extends NbtAbstractTag
 {
+    /**
+     * Value of nbt tag.
+     */
     protected short value;
 
+    /**
+     * Construct new NbtTagShort without name and 0 as value.
+     */
     public NbtTagShort()
     {
     }
 
+    /**
+     * Construct new NbtTagShort with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagShort(final String name)
     {
         super(name);
     }
 
+    /**
+     * Construct new NbtTagShort with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagShort(final String name, final short value)
     {
         super(name);
         this.value = value;
     }
 
+    /**
+     * Construct new NbtTagShort with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagShort(final String name, final int value)
     {
         super(name);
         this.value = (short) value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagShort tag to be cloned.
+     */
+    protected NbtTagShort(final NbtTagShort nbtTagShort)
+    {
+        super(nbtTagShort);
+        this.value = nbtTagShort.value;
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public short getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param s value to set.
+     */
     public void setValue(final short s)
     {
         this.value = s;
@@ -84,6 +131,13 @@ public class NbtTagShort extends NbtAbstractTag
         limiter.incrementElementsCount(1);
 
         this.value = inputStream.readShort();
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagShort clone()
+    {
+        return new NbtTagShort(this);
     }
 
     @Override

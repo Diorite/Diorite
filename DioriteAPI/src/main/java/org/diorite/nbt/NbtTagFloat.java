@@ -29,36 +29,83 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for float values.
+ */
 public class NbtTagFloat extends NbtAbstractTag
 {
+    /**
+     * Value of nbt tag.
+     */
     protected float value;
 
+    /**
+     * Construct new NbtTagDouble without name and 0 as value.
+     */
     public NbtTagFloat()
     {
     }
 
+    /**
+     * Construct new NbtTagFloat with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagFloat(final String name)
     {
         super(name);
     }
 
+    /**
+     * Construct new NbtTagFloat with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagFloat(final String name, final float value)
     {
         super(name);
         this.value = value;
     }
 
+    /**
+     * Construct new NbtTagFloat with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagFloat(final String name, final double value)
     {
         super(name);
         this.value = (float) value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagFloat tag to be cloned.
+     */
+    protected NbtTagFloat(final NbtTagFloat nbtTagFloat)
+    {
+        super(nbtTagFloat);
+        this.value = nbtTagFloat.value;
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public float getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param f value to set.
+     */
     public void setValue(final float f)
     {
         this.value = f;
@@ -84,6 +131,13 @@ public class NbtTagFloat extends NbtAbstractTag
         limiter.incrementElementsCount(1);
 
         this.value = inputStream.readFloat();
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagFloat clone()
+    {
+        return new NbtTagFloat(this);
     }
 
     @Override

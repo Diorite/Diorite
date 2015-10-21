@@ -29,36 +29,83 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for byte values.
+ */
 public class NbtTagByte extends NbtAbstractTag
 {
+    /**
+     * Value of nbt tag.
+     */
     protected byte value;
 
+    /**
+     * Construct new NbtTagByte without name and 0 as value.
+     */
     public NbtTagByte()
     {
     }
 
+    /**
+     * Construct new NbtTagByte with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagByte(final String name)
     {
         super(name);
     }
 
+    /**
+     * Construct new NbtTagByte with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagByte(final String name, final byte value)
     {
         super(name);
         this.value = value;
     }
 
+    /**
+     * Construct new NbtTagByte with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagByte(final String name, final int value)
     {
         super(name);
         this.value = (byte) value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagByte tag to be cloned.
+     */
+    protected NbtTagByte(final NbtTagByte nbtTagByte)
+    {
+        super(nbtTagByte);
+        this.value = nbtTagByte.value;
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public byte getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param b value to set.
+     */
     public void setValue(final byte b)
     {
         this.value = b;
@@ -84,6 +131,13 @@ public class NbtTagByte extends NbtAbstractTag
         limiter.incrementElementsCount(1);
 
         this.value = inputStream.readByte();
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagByte clone()
+    {
+        return new NbtTagByte(this);
     }
 
     @Override

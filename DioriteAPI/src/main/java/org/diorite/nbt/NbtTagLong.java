@@ -29,30 +29,71 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for long values.
+ */
 public class NbtTagLong extends NbtAbstractTag
 {
+    /**
+     * Value of nbt tag.
+     */
     protected long value;
 
+    /**
+     * Construct new NbtTagLong without name and 0 as value.
+     */
     public NbtTagLong()
     {
     }
 
+    /**
+     * Construct new NbtTagLong with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagLong(final String name)
     {
         super(name);
     }
 
+    /**
+     * Construct new NbtTagLong with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagLong(final String name, final long value)
     {
         super(name);
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagLong tag to be cloned.
+     */
+    protected NbtTagLong(final NbtTagLong nbtTagLong)
+    {
+        super(nbtTagLong);
+        this.value = nbtTagLong.value;
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public long getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param l value to set.
+     */
     public void setValue(final long l)
     {
         this.value = l;
@@ -78,6 +119,13 @@ public class NbtTagLong extends NbtAbstractTag
         limiter.incrementElementsCount(1);
 
         this.value = inputStream.readLong();
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagLong clone()
+    {
+        return new NbtTagLong(this);
     }
 
     @Override

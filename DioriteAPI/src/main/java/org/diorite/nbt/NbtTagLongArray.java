@@ -36,21 +36,41 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class NbtTagLongArray extends NbtAbstractTag
 {
+    /**
+     * Empty array of longs.
+     */
     public static final long[] EMPTY = new long[0];
 
+    /**
+     * Value of nbt tag.
+     */
     protected long[] value;
 
+    /**
+     * Construct new NbtTagLongArray without name and empty array as value.
+     */
     public NbtTagLongArray()
     {
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagLongArray with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagLongArray(final String name)
     {
         super(name);
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagLongArray with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagLongArray(final String name, final long[] value)
     {
         super(name);
@@ -58,15 +78,36 @@ public class NbtTagLongArray extends NbtAbstractTag
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagLongArray tag to be cloned.
+     */
+    protected NbtTagLongArray(final NbtTagLongArray nbtTagLongArray)
+    {
+        super(nbtTagLongArray);
+        this.value = nbtTagLongArray.value.clone();
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public long[] getValue()
     {
         return this.value;
     }
 
-    public void setValue(final long[] i)
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param l value to set.
+     */
+    public void setValue(final long[] l)
     {
-        Validate.notNull(i, "array can't be null.");
-        this.value = i;
+        Validate.notNull(l, "array can't be null.");
+        this.value = l;
     }
 
     @Override
@@ -99,6 +140,13 @@ public class NbtTagLongArray extends NbtAbstractTag
             data[i] = inputStream.readLong();
         }
         this.value = data;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagLongArray clone()
+    {
+        return new NbtTagLongArray(this);
     }
 
     @Override

@@ -30,23 +30,46 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * NBT type for byte array values.
+ */
 public class NbtTagByteArray extends NbtAbstractTag
 {
+    /**
+     * Empty array of bytes.
+     */
     public static final byte[] EMPTY = new byte[0];
 
+    /**
+     * Value of nbt tag.
+     */
     protected byte[] value;
 
+    /**
+     * Construct new NbtTagByteArray without name and empty array as value.
+     */
     public NbtTagByteArray()
     {
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagByteArray with given name and 0 as value.
+     *
+     * @param name name to be used.
+     */
     public NbtTagByteArray(final String name)
     {
         super(name);
         this.value = EMPTY;
     }
 
+    /**
+     * Construct new NbtTagByteArray with given name and value.
+     *
+     * @param name  name to be used.
+     * @param value value to be used.
+     */
     public NbtTagByteArray(final String name, final byte[] value)
     {
         super(name);
@@ -54,11 +77,32 @@ public class NbtTagByteArray extends NbtAbstractTag
         this.value = value;
     }
 
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagByteArray tag to be cloned.
+     */
+    protected NbtTagByteArray(final NbtTagByteArray nbtTagByteArray)
+    {
+        super(nbtTagByteArray);
+        this.value = nbtTagByteArray.value.clone();
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
     public byte[] getValue()
     {
         return this.value;
     }
 
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param b value to set.
+     */
     public void setValue(final byte[] b)
     {
         Validate.notNull(b, "array can't be null.");
@@ -89,6 +133,13 @@ public class NbtTagByteArray extends NbtAbstractTag
         final byte[] data = new byte[size];
         inputStream.readFully(data);
         this.value = data;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagByteArray clone()
+    {
+        return new NbtTagByteArray(this);
     }
 
     @Override
