@@ -84,6 +84,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
     protected NbtTagCompound(final NbtTagCompound nbtTagCompound)
     {
         super(nbtTagCompound);
+        this.tags = new HashMap<>(nbtTagCompound.tags.size());
         for (final Entry<String, NbtTag> entry : nbtTagCompound.tags.entrySet())
         {
             this.setTag(entry.getKey(), entry.getValue().clone());
@@ -142,7 +143,23 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         {
             return this.tags.remove(name);
         }
-        return this.getCompound(name.substring(0, index)).removeTag(name.substring(index + 1));
+        final NbtTagCompound tag = this.getCompound(name.substring(0, index));
+        if (tag == null)
+        {
+            return null;
+        }
+        final NbtTag removed = tag.removeTag(name.substring(index + 1));
+        if (tag.isEmpty())
+        {
+            this.removeTag(tag.name);
+        }
+        return removed;
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return this.tags.isEmpty();
     }
 
     @Override
@@ -182,7 +199,8 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         {
             return this.tags.containsKey(name);
         }
-        return this.getCompound(name.substring(0, index)).containsTag(name.substring(index + 1));
+        final NbtTagCompound tag = this.getCompound(name.substring(0, index));
+        return (tag != null) && tag.containsTag(name.substring(index + 1));
     }
 
     @Override
@@ -1251,6 +1269,16 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
         this.getOrCreateCompound(path.substring(0, index)).setInt(path.substring(index + 1), value);
     }
 
+    @Override
+    public Map<String, Object> getNBTValue()
+    {
+        final Map<String, Object> result = new HashMap<>(this.tags.size());
+        for (final Entry<String, NbtTag> entry : this.tags.entrySet())
+        {
+            result.put(entry.getKey(), entry.getValue().getNBTValue());
+        }
+        return result;
+    }
 
     @Override
     public NbtTagType getTagType()

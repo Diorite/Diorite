@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * NBT type for short values.
  */
-public class NbtTagShort extends NbtAbstractTag
+public class NbtTagShort extends NbtAbstractTagNumber
 {
     /**
      * Value of nbt tag.
@@ -109,6 +109,24 @@ public class NbtTagShort extends NbtAbstractTag
     public void setValue(final short s)
     {
         this.value = s;
+    }
+
+    @Override
+    public Short getNumberValue()
+    {
+        return this.value;
+    }
+
+    @Override
+    public void setNumberValue(final Number i)
+    {
+        this.value = i.shortValue();
+    }
+
+    @Override
+    public Short getNBTValue()
+    {
+        return this.value;
     }
 
     @Override

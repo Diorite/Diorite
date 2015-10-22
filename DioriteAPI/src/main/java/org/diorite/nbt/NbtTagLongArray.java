@@ -111,6 +111,12 @@ public class NbtTagLongArray extends NbtAbstractTag
     }
 
     @Override
+    public long[] getNBTValue()
+    {
+        return this.value;
+    }
+
+    @Override
     public NbtTagType getTagType()
     {
         return NbtTagType.LONG_ARRAY;

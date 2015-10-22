@@ -111,6 +111,12 @@ public class NbtTagFloatArray extends NbtAbstractTag
     }
 
     @Override
+    public float[] getNBTValue()
+    {
+        return this.value;
+    }
+
+    @Override
     public NbtTagType getTagType()
     {
         return NbtTagType.FLOAT_ARRAY;

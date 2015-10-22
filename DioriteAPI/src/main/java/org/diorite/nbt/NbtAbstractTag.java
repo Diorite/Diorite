@@ -142,6 +142,9 @@ public abstract class NbtAbstractTag implements NbtTag
     }
 
     @Override
+    public abstract NbtAbstractTag clone();
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).append("parent", this.parent).toString();

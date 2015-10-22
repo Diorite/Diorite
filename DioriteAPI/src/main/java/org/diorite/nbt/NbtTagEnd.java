@@ -50,6 +50,12 @@ public class NbtTagEnd extends NbtAbstractTag
     }
 
     @Override
+    public Void getNBTValue()
+    {
+        return null;
+    }
+
+    @Override
     public NbtTagType getTagType()
     {
         return NbtTagType.END;

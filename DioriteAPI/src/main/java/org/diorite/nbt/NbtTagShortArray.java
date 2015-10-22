@@ -111,6 +111,12 @@ public class NbtTagShortArray extends NbtAbstractTag
     }
 
     @Override
+    public short[] getNBTValue()
+    {
+        return this.value;
+    }
+
+    @Override
     public NbtTagType getTagType()
     {
         return NbtTagType.SHORT_ARRAY;

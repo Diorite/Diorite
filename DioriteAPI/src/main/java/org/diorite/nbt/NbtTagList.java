@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -86,6 +87,22 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     }
 
     /**
+     * Construct new NbtTagList with given name and list.
+     *
+     * @param name    name to be used.
+     * @param tagList list of tags to be used.
+     */
+    public <T> NbtTagList(final String name, final NbtTagType type, final Collection<? extends T> values)
+    {
+        super(name);
+        this.tagList = new ArrayList<>(values.size());
+        for (final T value : values)
+        {
+            this.tagList.add(type.newInstance(value));
+        }
+    }
+
+    /**
      * Clone constructor.
      *
      * @param nbtTagList tag to be cloned.
@@ -95,6 +112,14 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
         super(nbtTagList);
         this.tagList = new ArrayList<>(nbtTagList.tagList.size());
         nbtTagList.tagList.forEach(t -> this.addTag(t.clone()));
+    }
+
+    @Override
+    public List<Object> getNBTValue()
+    {
+        final List<Object> list = new ArrayList<>(this.tagList.size());
+        list.addAll(this.tagList.stream().map(NbtTag::getNBTValue).collect(Collectors.toList()));
+        return list;
     }
 
     @Override
@@ -142,6 +167,12 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     public void removeTag(final NbtTag tag)
     {
         this.tagList.remove(tag);
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return this.tagList.isEmpty();
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")

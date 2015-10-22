@@ -110,6 +110,12 @@ public class NbtTagByteArray extends NbtAbstractTag
     }
 
     @Override
+    public byte[] getNBTValue()
+    {
+        return this.value;
+    }
+
+    @Override
     public NbtTagType getTagType()
     {
         return NbtTagType.BYTE_ARRAY;

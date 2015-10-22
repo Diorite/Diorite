@@ -25,24 +25,54 @@
 package org.diorite.nbt;
 
 /**
- * Represent container of nbt tags.
+ * NBT abstract type for numeric values.
  */
-public interface NbtTagContainer extends NbtTag
+public abstract class NbtAbstractTagNumber extends NbtAbstractTag
 {
     /**
-     * Remove given nbt tag from this container.
-     *
-     * @param tag nbt tag to be removed.
+     * Construct new NbtTagInt without name and 0 as value.
      */
-    void removeTag(NbtTag tag);
+    public NbtAbstractTagNumber()
+    {
+    }
 
     /**
-     * Returns true if container is empty.
+     * Construct new NbtTagByte with given name and 0 as value.
      *
-     * @return true if container is empty.
+     * @param name name to be used.
      */
-    boolean isEmpty();
+    public NbtAbstractTagNumber(final String name)
+    {
+        super(name);
+    }
+
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagInt tag to be cloned.
+     */
+    protected NbtAbstractTagNumber(final NbtAbstractTagNumber nbtTagInt)
+    {
+        super(nbtTagInt);
+    }
+
+    /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
+    public abstract Number getNumberValue();
+
+    /**
+     * Set value of this nbt tag.
+     *
+     * @param i value to set.
+     */
+    public abstract void setNumberValue(final Number i);
 
     @Override
-    NbtTagContainer clone();
+    public abstract Number getNBTValue();
+
+    @Override
+    public abstract NbtAbstractTagNumber clone();
 }

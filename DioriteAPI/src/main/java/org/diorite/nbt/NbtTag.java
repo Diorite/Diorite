@@ -52,6 +52,13 @@ public interface NbtTag
     void setName(String name);
 
     /**
+     * Returns value of this nbt tag.
+     *
+     * @return value of this nbt tag.
+     */
+    Object getNBTValue();
+
+    /**
      * Returns parent nbt tag container for this tag.
      *
      * @return parent nbt tag container for this tag.

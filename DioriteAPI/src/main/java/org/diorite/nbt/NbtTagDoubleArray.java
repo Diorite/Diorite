@@ -111,6 +111,12 @@ public class NbtTagDoubleArray extends NbtAbstractTag
     }
 
     @Override
+    public double[] getNBTValue()
+    {
+        return this.value;
+    }
+
+    @Override
     public NbtTagType getTagType()
     {
         return NbtTagType.DOUBLE_ARRAY;

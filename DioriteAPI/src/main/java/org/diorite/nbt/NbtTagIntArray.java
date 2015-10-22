@@ -110,6 +110,12 @@ public class NbtTagIntArray extends NbtAbstractTag
     }
 
     @Override
+    public int[] getNBTValue()
+    {
+        return this.value;
+    }
+
+    @Override
     public NbtTagType getTagType()
     {
         return NbtTagType.INTEGER_ARRAY;

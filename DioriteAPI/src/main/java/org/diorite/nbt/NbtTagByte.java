@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * NBT type for byte values.
  */
-public class NbtTagByte extends NbtAbstractTag
+public class NbtTagByte extends NbtAbstractTagNumber
 {
     /**
      * Value of nbt tag.
@@ -109,6 +109,24 @@ public class NbtTagByte extends NbtAbstractTag
     public void setValue(final byte b)
     {
         this.value = b;
+    }
+
+    @Override
+    public Byte getNumberValue()
+    {
+        return this.value;
+    }
+
+    @Override
+    public void setNumberValue(final Number i)
+    {
+        this.value = i.byteValue();
+    }
+
+    @Override
+    public Byte getNBTValue()
+    {
+        return this.value;
     }
 
     @Override

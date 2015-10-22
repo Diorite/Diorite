@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * NBT type for double values.
  */
-public class NbtTagDouble extends NbtAbstractTag
+public class NbtTagDouble extends NbtAbstractTagNumber
 {
     /**
      * Value of nbt tag.
@@ -97,6 +97,24 @@ public class NbtTagDouble extends NbtAbstractTag
     public void setValue(final double d)
     {
         this.value = d;
+    }
+
+    @Override
+    public Double getNumberValue()
+    {
+        return this.value;
+    }
+
+    @Override
+    public void setNumberValue(final Number i)
+    {
+        this.value = i.doubleValue();
+    }
+
+    @Override
+    public Double getNBTValue()
+    {
+        return this.value;
     }
 
     @Override

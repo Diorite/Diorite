@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * NBT type for float values.
  */
-public class NbtTagFloat extends NbtAbstractTag
+public class NbtTagFloat extends NbtAbstractTagNumber
 {
     /**
      * Value of nbt tag.
@@ -109,6 +109,24 @@ public class NbtTagFloat extends NbtAbstractTag
     public void setValue(final float f)
     {
         this.value = f;
+    }
+
+    @Override
+    public Float getNumberValue()
+    {
+        return this.value;
+    }
+
+    @Override
+    public void setNumberValue(final Number i)
+    {
+        this.value = i.floatValue();
+    }
+
+    @Override
+    public Float getNBTValue()
+    {
+        return this.value;
     }
 
     @Override
