@@ -24,6 +24,7 @@
 
 package org.diorite.impl.command.defaults;
 
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -46,7 +47,10 @@ import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.command.CommandPriority;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
+import org.diorite.material.blocks.stony.StoneMat;
 import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.PermissionsGroup;
 import org.diorite.permissions.PermissionsManager;
@@ -67,6 +71,31 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "itemmeta":
+                {
+                    final ItemStack item = new BaseItemStack(StoneMat.STONE_DIORITE);
+                    final ItemMeta meta = item.getItemMeta();
+                    meta.removeDisplayName();
+                    meta.removeLore();
+                    System.out.println(meta.hasDisplayName());
+                    System.out.println(meta.hasLore());
+                    System.out.println(meta.getDisplayName());
+                    System.out.println(meta.getLore());
+                    meta.setDisplayName("Custon name test");
+                    meta.setLore(Arrays.asList("Line 1", "Line 2", "Line 3"));
+                    p.getInventory().add(item);
+                    System.out.println(meta.hasDisplayName());
+                    System.out.println(meta.hasLore());
+                    System.out.println(meta.getDisplayName());
+                    System.out.println(meta.getLore());
+                    meta.removeDisplayName();
+                    meta.removeLore();
+                    System.out.println(meta.hasDisplayName());
+                    System.out.println(meta.hasLore());
+                    System.out.println(meta.getDisplayName());
+                    System.out.println(meta.getLore());
+                    break;
+                }
                 case "pextest":
                 {
                     sender.setOp(false);

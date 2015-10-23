@@ -24,6 +24,7 @@
 
 package org.diorite.inventory.item;
 
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
 
 public interface ItemStack extends Cloneable

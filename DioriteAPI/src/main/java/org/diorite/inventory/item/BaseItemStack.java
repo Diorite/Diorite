@@ -24,10 +24,14 @@
 
 package org.diorite.inventory.item;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.Diorite;
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
 
 /**
@@ -79,6 +83,11 @@ public class BaseItemStack implements ItemStack
     @Override
     public ItemMeta getItemMeta()
     {
+        if (this.itemMeta == null)
+        {
+            // TODO: type check etc...
+            this.itemMeta = Diorite.getCore().createItemMeta(this.material);
+        }
         return this.itemMeta;
     }
 
@@ -126,7 +135,7 @@ public class BaseItemStack implements ItemStack
         {
             return this.material.equals(Material.AIR);
         }
-        return this.material.equals(b.getMaterial()) && ItemMeta.equals(this.itemMeta, b.getItemMeta());
+        return this.material.equals(b.getMaterial()) && Objects.equals(this.itemMeta, b.getItemMeta());
     }
 
     @Override

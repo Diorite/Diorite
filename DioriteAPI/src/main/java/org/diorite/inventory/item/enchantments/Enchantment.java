@@ -22,41 +22,11 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.inventory.item;
+package org.diorite.inventory.item.enchantments;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
-import org.diorite.inventory.item.meta.ItemMeta;
-import org.diorite.nbt.NbtTagCompound;
-
-public abstract class ItemMetaImpl implements ItemMeta
+/**
+ * Represent enchantment type.
+ */
+public interface Enchantment
 {
-    protected NbtTagCompound tag;
-
-    public ItemMetaImpl(final NbtTagCompound tag)
-    {
-        this.tag = tag;
-    }
-
-    @Override
-    public NbtTagCompound getRawData()
-    {
-        return this.tag.clone();
-    }
-
-    @Override
-    public void setRawData(final NbtTagCompound tag)
-    {
-        this.tag = tag;
-    }
-
-    @Override
-    public abstract ItemMeta clone();
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tag", this.tag).toString();
-    }
 }

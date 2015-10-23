@@ -29,7 +29,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.item.BaseItemStack;
-import org.diorite.inventory.item.ItemMeta;
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.others.Dirtable;

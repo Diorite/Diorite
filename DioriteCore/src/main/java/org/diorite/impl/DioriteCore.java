@@ -69,6 +69,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.ConsoleReaderThread;
 import org.diorite.impl.input.InputThread;
+import org.diorite.impl.inventory.item.SimpleItemMetaImpl;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;
@@ -132,6 +133,9 @@ import org.diorite.event.player.PlayerInteractEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.event.player.PlayerJoinEvent;
 import org.diorite.event.player.PlayerQuitEvent;
+import org.diorite.inventory.item.meta.ItemMeta;
+import org.diorite.material.Material;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginManager;
@@ -604,6 +608,13 @@ public class DioriteCore implements Core
     public void setPluginManager(final PluginManager pluginManager)
     {
         this.pluginManager = pluginManager;
+    }
+
+    @Override
+    public ItemMeta createItemMeta(final Material material)
+    {
+        // TODO: type check etc...
+        return new SimpleItemMetaImpl(new NbtTagCompound("tag"));
     }
 
     @Override

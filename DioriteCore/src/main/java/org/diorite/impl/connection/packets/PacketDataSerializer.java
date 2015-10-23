@@ -54,7 +54,7 @@ import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.inventory.item.BaseItemStack;
-import org.diorite.inventory.item.ItemMeta;
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtInputStream;
