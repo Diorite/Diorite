@@ -29,14 +29,16 @@ import java.util.List;
 /**
  * Represent {@link NbtTagContainer} where all elements are anonymous. (they don't have name)
  */
-public interface NbtAnonymousTagContainer extends NbtTagContainer
+public interface NbtAnonymousTagContainer extends NbtTagContainer, List<NbtTag>
 {
     /**
      * Add new nbt tag to this container.
      *
      * @param tag nbt tag to be added.
+     *
+     * @return true if tag was added.
      */
-    void addTag(NbtTag tag);
+    boolean addTag(NbtTag tag);
 
     /**
      * Returns list of all nbt tags in this container.

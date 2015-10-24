@@ -30,10 +30,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * Abstract representation of NbtTag.
+ * Abstract representation of NbtTagm this class should be never used in code.
  */
-public abstract class NbtAbstractTag implements NbtTag
+abstract class NbtAbstractTag implements NbtTag
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Name of this nbt tag.
      */
@@ -41,7 +43,7 @@ public abstract class NbtAbstractTag implements NbtTag
     /**
      * Parent of this nbt tag.
      */
-    protected NbtTagContainer parent = null;
+    protected transient NbtTagContainer parent = null;
 
     /**
      * Construct new nbt tag without name.
@@ -126,18 +128,6 @@ public abstract class NbtAbstractTag implements NbtTag
             final byte[] name = this.name.getBytes(STRING_CHARSET);
             outputStream.writeShort(name.length);
             outputStream.write(name);
-        }
-    }
-
-    @Override
-    public void read(final NbtInputStream inputStream, final boolean anonymous, final NbtLimiter limiter) throws IOException
-    {
-        if (! anonymous)
-        {
-            final int nameSize = inputStream.readShort();
-            final byte[] nameBytes = new byte[nameSize];
-            inputStream.readFully(nameBytes);
-            this.setName(new String(nameBytes, STRING_CHARSET));
         }
     }
 

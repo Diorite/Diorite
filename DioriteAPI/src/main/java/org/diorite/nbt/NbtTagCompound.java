@@ -25,11 +25,12 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -39,6 +40,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContainer
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Value of nbt tag.
      */
@@ -157,9 +160,75 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
     }
 
     @Override
+    public int size()
+    {
+        return this.tags.size();
+    }
+
+    @Override
     public boolean isEmpty()
     {
         return this.tags.isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(final Object key)
+    {
+        return this.tags.containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(final Object value)
+    {
+        return this.tags.containsValue(value);
+    }
+
+    @Override
+    public NbtTag get(final Object key)
+    {
+        return this.tags.get(key);
+    }
+
+    @Override
+    public NbtTag put(final String key, final NbtTag value)
+    {
+        return this.tags.put(key, value);
+    }
+
+    @Override
+    public NbtTag remove(final Object key)
+    {
+        return this.tags.remove(key);
+    }
+
+    @Override
+    public void putAll(final Map<? extends String, ? extends NbtTag> m)
+    {
+        this.tags.putAll(m);
+    }
+
+    @Override
+    public void clear()
+    {
+        this.tags.clear();
+    }
+
+    @Override
+    public Set<String> keySet()
+    {
+        return this.tags.keySet();
+    }
+
+    @Override
+    public Collection<NbtTag> values()
+    {
+        return this.tags.values();
+    }
+
+    @Override
+    public Set<Entry<String, NbtTag>> entrySet()
+    {
+        return this.tags.entrySet();
     }
 
     @Override

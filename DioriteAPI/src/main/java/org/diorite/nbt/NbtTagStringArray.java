@@ -25,17 +25,22 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.collections.arrays.ArrayIterator;
+
 /**
  * Additional nbt type, added by diorite, it will break minecraft compatybility, use with caution. <br>
  * NBT type for arrays of String values.
  */
-public class NbtTagStringArray extends NbtAbstractTag
+public class NbtTagStringArray extends NbtAbstractTag implements Iterable<String>
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Empty array of Strings.
      */
@@ -174,5 +179,11 @@ public class NbtTagStringArray extends NbtAbstractTag
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
+    }
+
+    @Override
+    public Iterator<String> iterator()
+    {
+        return new ArrayIterator<>(this.value);
     }
 }

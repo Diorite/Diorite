@@ -22,57 +22,50 @@
  * SOFTWARE.
  */
 
-package org.diorite.nbt;
+package org.diorite.utils.collections.arrays.primitive;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.NoSuchElementException;
 
 /**
- * Represent nbt tag element, placed at the end of nbt container etc..
+ * Represent Boolean iterator for boolean array.
  */
-public class NbtTagEnd extends NbtAbstractTag
+public class BooleanIterator extends PrimitiveIterator<Boolean, boolean[]>
 {
-    private static final long serialVersionUID = 0;
-
     /**
-     * Construct new NbtTagEnd.
-     */
-    public NbtTagEnd()
-    {
-    }
-
-    /**
-     * Clone constructor.
+     * Construct new BooleanIterator for given primitive array.
      *
-     * @param nbtTagEnd tag to be cloned.
+     * @param primitiveArray array to be iterated.
      */
-    protected NbtTagEnd(final NbtTagEnd nbtTagEnd)
+    public BooleanIterator(final boolean[] primitiveArray)
     {
-        super(nbtTagEnd);
+        super(primitiveArray);
     }
 
     @Override
-    public Void getNBTValue()
+    public void setValue(final Boolean number)
     {
-        return null;
+        this.primitiveArray[this.index - 1] = number;
     }
 
     @Override
-    public NbtTagType getTagType()
+    public void setValue(final Number number)
     {
-        return NbtTagType.END;
-    }
-
-    @SuppressWarnings("CloneDoesntCallSuperClone")
-    @Override
-    public NbtTagEnd clone()
-    {
-        return new NbtTagEnd(this);
+        this.primitiveArray[this.index - 1] = number.intValue() == 1;
     }
 
     @Override
-    public String toString()
+    public boolean hasNext()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
+        return this.index < this.primitiveArray.length;
+    }
+
+    @Override
+    public Boolean next()
+    {
+        if (! this.hasNext())
+        {
+            throw new NoSuchElementException("Index >= Length, Index: " + this.index + ", Length: " + this.primitiveArray.length);
+        }
+        return this.primitiveArray[this.index++];
     }
 }

@@ -22,57 +22,50 @@
  * SOFTWARE.
  */
 
-package org.diorite.nbt;
+package org.diorite.utils.collections.arrays.primitive;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.NoSuchElementException;
 
 /**
- * Represent nbt tag element, placed at the end of nbt container etc..
+ * Represent Integer iterator for int array.
  */
-public class NbtTagEnd extends NbtAbstractTag
+public class IntIterator extends PrimitiveIterator<Integer, int[]>
 {
-    private static final long serialVersionUID = 0;
-
     /**
-     * Construct new NbtTagEnd.
-     */
-    public NbtTagEnd()
-    {
-    }
-
-    /**
-     * Clone constructor.
+     * Construct new IntIterator for given primitive array.
      *
-     * @param nbtTagEnd tag to be cloned.
+     * @param primitiveArray array to be iterated.
      */
-    protected NbtTagEnd(final NbtTagEnd nbtTagEnd)
+    public IntIterator(final int[] primitiveArray)
     {
-        super(nbtTagEnd);
+        super(primitiveArray);
     }
 
     @Override
-    public Void getNBTValue()
+    public void setValue(final Integer number)
     {
-        return null;
+        this.primitiveArray[this.index - 1] = number;
     }
 
     @Override
-    public NbtTagType getTagType()
+    public void setValue(final Number number)
     {
-        return NbtTagType.END;
-    }
-
-    @SuppressWarnings("CloneDoesntCallSuperClone")
-    @Override
-    public NbtTagEnd clone()
-    {
-        return new NbtTagEnd(this);
+        this.primitiveArray[this.index - 1] = number.intValue();
     }
 
     @Override
-    public String toString()
+    public boolean hasNext()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
+        return this.index < this.primitiveArray.length;
+    }
+
+    @Override
+    public Integer next()
+    {
+        if (! this.hasNext())
+        {
+            throw new NoSuchElementException("Index >= Length, Index: " + this.index + ", Length: " + this.primitiveArray.length);
+        }
+        return this.primitiveArray[this.index++];
     }
 }

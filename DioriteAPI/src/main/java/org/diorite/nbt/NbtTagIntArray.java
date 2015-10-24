@@ -25,16 +25,22 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.collections.arrays.primitive.IntIterator;
+import org.diorite.utils.collections.arrays.trove.TIntArrayIterator;
+
 /**
  * NBT type for int array values.
  */
-public class NbtTagIntArray extends NbtAbstractTag
+public class NbtTagIntArray extends NbtAbstractTag implements Iterable<Integer>
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Empty array of ints.
      */
@@ -152,6 +158,22 @@ public class NbtTagIntArray extends NbtAbstractTag
     public NbtTagIntArray clone()
     {
         return new NbtTagIntArray(this);
+    }
+
+    @Override
+    public Iterator<Integer> iterator()
+    {
+        return new IntIterator(this.value);
+    }
+
+    /**
+     * Returns instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     *
+     * @return instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     */
+    public TIntArrayIterator primitiveIterator()
+    {
+        return new TIntArrayIterator(this.value);
     }
 
     @Override

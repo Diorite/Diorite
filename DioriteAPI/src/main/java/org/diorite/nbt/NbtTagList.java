@@ -27,7 +27,9 @@ package org.diorite.nbt;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -38,6 +40,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContainer
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Value of nbt tag.
      */
@@ -89,8 +93,9 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     /**
      * Construct new NbtTagList with given name and list.
      *
-     * @param name    name to be used.
-     * @param tagList list of tags to be used.
+     * @param name   name to be used.
+     * @param type   type of values in this nbt tag list.
+     * @param values values of this nbt tag list.
      */
     public <T> NbtTagList(final String name, final NbtTagType type, final Collection<? extends T> values)
     {
@@ -129,10 +134,14 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     }
 
     @Override
-    public void addTag(final NbtTag tag)
+    public boolean addTag(final NbtTag tag)
     {
-        this.tagList.add(tag);
-        tag.setParent(this);
+        final boolean add = this.tagList.add(tag);
+        if (add)
+        {
+            tag.setParent(this);
+        }
+        return add;
     }
 
     @Override
@@ -170,9 +179,21 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     }
 
     @Override
+    public int size()
+    {
+        return this.tagList.size();
+    }
+
+    @Override
     public boolean isEmpty()
     {
         return this.tagList.isEmpty();
+    }
+
+    @Override
+    public boolean contains(final Object o)
+    {
+        return this.tagList.contains(o);
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")
@@ -216,6 +237,130 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
         {
             this.addTag(inputStream.readTag(tagType, true, limiter));
         }
+    }
+
+    @Override
+    public ListIterator<NbtTag> listIterator(final int index)
+    {
+        return this.tagList.listIterator(index);
+    }
+
+    @Override
+    public NbtTagList subList(final int fromIndex, final int toIndex)
+    {
+        return new NbtTagList(this.name, this.tagList.subList(fromIndex, toIndex));
+    }
+
+    @Override
+    public ListIterator<NbtTag> listIterator()
+    {
+        return this.tagList.listIterator();
+    }
+
+    @Override
+    public Iterator<NbtTag> iterator()
+    {
+        return this.tagList.iterator();
+    }
+
+    @Override
+    public NbtTag[] toArray()
+    {
+        return this.tagList.toArray(new NbtTag[this.size()]);
+    }
+
+    @SuppressWarnings("SuspiciousToArrayCall")
+    @Override
+    public <T> T[] toArray(final T[] a)
+    {
+        return this.tagList.toArray(a);
+    }
+
+    @Override
+    public boolean add(final NbtTag nbtTag)
+    {
+        return this.addTag(nbtTag);
+    }
+
+    @Override
+    public boolean remove(final Object o)
+    {
+        final boolean r = this.tagList.remove(o);
+        final NbtTag tag = (NbtTag) o;
+        tag.setParent(null);
+        return r;
+    }
+
+    @Override
+    public boolean containsAll(final Collection<?> c)
+    {
+        return this.tagList.containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(final Collection<? extends NbtTag> c)
+    {
+        return this.tagList.addAll(c);
+    }
+
+    @Override
+    public boolean addAll(final int index, final Collection<? extends NbtTag> c)
+    {
+        return this.tagList.addAll(index, c);
+    }
+
+    @Override
+    public boolean removeAll(final Collection<?> c)
+    {
+        return this.tagList.removeAll(c);
+    }
+
+    @Override
+    public boolean retainAll(final Collection<?> c)
+    {
+        return this.tagList.retainAll(c);
+    }
+
+    @Override
+    public void clear()
+    {
+        this.tagList.clear();
+    }
+
+    @Override
+    public NbtTag get(final int index)
+    {
+        return this.tagList.get(index);
+    }
+
+    @Override
+    public NbtTag set(final int index, final NbtTag element)
+    {
+        return this.tagList.set(index, element);
+    }
+
+    @Override
+    public void add(final int index, final NbtTag element)
+    {
+        this.tagList.add(index, element);
+    }
+
+    @Override
+    public NbtTag remove(final int index)
+    {
+        return this.tagList.remove(index);
+    }
+
+    @Override
+    public int indexOf(final Object o)
+    {
+        return this.tagList.indexOf(o);
+    }
+
+    @Override
+    public int lastIndexOf(final Object o)
+    {
+        return this.tagList.lastIndexOf(o);
     }
 
     @Override

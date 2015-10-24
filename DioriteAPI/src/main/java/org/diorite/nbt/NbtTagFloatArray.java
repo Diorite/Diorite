@@ -25,17 +25,23 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.collections.arrays.primitive.FloatIterator;
+import org.diorite.utils.collections.arrays.trove.TFloatArrayIterator;
+
 /**
  * Additional nbt type, added by diorite, it will break minecraft compatybility, use with caution. <br>
  * NBT type for arrays of float values.
  */
-public class NbtTagFloatArray extends NbtAbstractTag
+public class NbtTagFloatArray extends NbtAbstractTag implements Iterable<Float>
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Empty array of floats.
      */
@@ -153,6 +159,22 @@ public class NbtTagFloatArray extends NbtAbstractTag
     public NbtTagFloatArray clone()
     {
         return new NbtTagFloatArray(this);
+    }
+
+    @Override
+    public Iterator<Float> iterator()
+    {
+        return new FloatIterator(this.value);
+    }
+
+    /**
+     * Returns instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     *
+     * @return instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     */
+    public TFloatArrayIterator primitiveIterator()
+    {
+        return new TFloatArrayIterator(this.value);
     }
 
     @Override

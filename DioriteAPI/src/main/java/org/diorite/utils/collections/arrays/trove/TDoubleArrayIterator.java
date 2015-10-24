@@ -22,57 +22,56 @@
  * SOFTWARE.
  */
 
-package org.diorite.nbt;
+package org.diorite.utils.collections.arrays.trove;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.NoSuchElementException;
+
+import gnu.trove.iterator.TDoubleIterator;
 
 /**
- * Represent nbt tag element, placed at the end of nbt container etc..
+ * Represent {@link TDoubleIterator} for double array.
  */
-public class NbtTagEnd extends NbtAbstractTag
+public class TDoubleArrayIterator extends TPrimitiveArrayIterator<double[]> implements TDoubleIterator
 {
-    private static final long serialVersionUID = 0;
-
     /**
-     * Construct new NbtTagEnd.
-     */
-    public NbtTagEnd()
-    {
-    }
-
-    /**
-     * Clone constructor.
+     * Construct new TDoubleIterator for given primitive array.
      *
-     * @param nbtTagEnd tag to be cloned.
+     * @param primitiveArray array to be iterated.
      */
-    protected NbtTagEnd(final NbtTagEnd nbtTagEnd)
+    public TDoubleArrayIterator(final double[] primitiveArray)
     {
-        super(nbtTagEnd);
+        super(primitiveArray);
     }
 
     @Override
-    public Void getNBTValue()
+    public void setValue(final Number number)
     {
-        return null;
+        this.primitiveArray[this.index - 1] = number.doubleValue();
+    }
+
+    /**
+     * Set value on current index to given value.
+     *
+     * @param number value to set.
+     */
+    public void setValue(final double number)
+    {
+        this.primitiveArray[this.index - 1] = number;
     }
 
     @Override
-    public NbtTagType getTagType()
+    public boolean hasNext()
     {
-        return NbtTagType.END;
-    }
-
-    @SuppressWarnings("CloneDoesntCallSuperClone")
-    @Override
-    public NbtTagEnd clone()
-    {
-        return new NbtTagEnd(this);
+        return this.index < this.primitiveArray.length;
     }
 
     @Override
-    public String toString()
+    public double next()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
+        if (! this.hasNext())
+        {
+            throw new NoSuchElementException("Index >= Length, Index: " + this.index + ", Length: " + this.primitiveArray.length);
+        }
+        return this.primitiveArray[this.index++];
     }
 }

@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Represent {@link NbtTagContainer} where all elements have name.
  */
-public interface NbtNamedTagContainer extends NbtTagContainer
+public interface NbtNamedTagContainer extends NbtTagContainer, Map<String, NbtTag>
 {
     /**
      * Returns nbt tag with given name from this container.

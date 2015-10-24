@@ -25,12 +25,13 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 
 /**
  * Represent nbt tag, nbt is used by minecraft to save most of game data.
  */
-public interface NbtTag
+public interface NbtTag extends Serializable
 {
     /**
      * Charset used by nbt tags.
@@ -108,7 +109,16 @@ public interface NbtTag
      *
      * @throws IOException if read operation from NbtOutputStream failed.
      */
-    void read(NbtInputStream inputStream, boolean anonymous, NbtLimiter limiter) throws IOException;
+    default void read(final NbtInputStream inputStream, final boolean anonymous, final NbtLimiter limiter) throws IOException
+    {
+        if (! anonymous)
+        {
+            final int nameSize = inputStream.readShort();
+            final byte[] nameBytes = new byte[nameSize];
+            inputStream.readFully(nameBytes);
+            this.setName(new String(nameBytes, STRING_CHARSET));
+        }
+    }
 
     /**
      * Clone (deep) this NbtTag.

@@ -25,17 +25,23 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.collections.arrays.primitive.DoubleIterator;
+import org.diorite.utils.collections.arrays.trove.TDoubleArrayIterator;
+
 /**
  * Additional nbt type, added by diorite, it will break minecraft compatybility, use with caution. <br>
  * NBT type for arrays of double values.
  */
-public class NbtTagDoubleArray extends NbtAbstractTag
+public class NbtTagDoubleArray extends NbtAbstractTag implements Iterable<Double>
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Empty array of doubles.
      */
@@ -153,6 +159,22 @@ public class NbtTagDoubleArray extends NbtAbstractTag
     public NbtTagDoubleArray clone()
     {
         return new NbtTagDoubleArray(this);
+    }
+
+    @Override
+    public Iterator<Double> iterator()
+    {
+        return new DoubleIterator(this.value);
+    }
+
+    /**
+     * Returns instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     *
+     * @return instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     */
+    public TDoubleArrayIterator primitiveIterator()
+    {
+        return new TDoubleArrayIterator(this.value);
     }
 
     @Override

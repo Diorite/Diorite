@@ -114,13 +114,13 @@ public enum NbtTagType
      * String[] nbt tag type.
      */
     STRING_ARRAY(123, NbtTagStringArray.class, NbtTagStringArray::new, String[].class);
-    private static final TByteObjectMap<NbtTagType>      typeMap;
-    private final        byte                            typeID;
-    private final        Class<? extends NbtAbstractTag> typeClass;
-    private final        Supplier<NbtAbstractTag>        getInstance;
-    private final        Class<?>                        valueClass;
+    private static final TByteObjectMap<NbtTagType> typeMap;
+    private final        byte                       typeID;
+    private final        Class<? extends NbtTag>    typeClass;
+    private final        Supplier<NbtTag>           getInstance;
+    private final        Class<?>                   valueClass;
 
-    NbtTagType(final int typeID, final Class<? extends NbtAbstractTag> type, final Supplier<NbtAbstractTag> getInstance, final Class<?> valueClass)
+    NbtTagType(final int typeID, final Class<? extends NbtTag> type, final Supplier<NbtTag> getInstance, final Class<?> valueClass)
     {
         this.valueClass = valueClass;
         this.typeID = ((byte) typeID);
@@ -153,7 +153,7 @@ public enum NbtTagType
      *
      * @return class implementing this nbt type.
      */
-    public Class<? extends NbtAbstractTag> getTypeClass()
+    public Class<? extends NbtTag> getTypeClass()
     {
         return this.typeClass;
     }
@@ -206,7 +206,7 @@ public enum NbtTagType
      * @throws IllegalArgumentException if value isn't valid for this nbt tag type.
      */
     @SuppressWarnings("unchecked")
-    public <T extends NbtAbstractTag> T newInstance(final Object value) throws IllegalArgumentException
+    public <T extends NbtTag> T newInstance(final Object value) throws IllegalArgumentException
     {
         final T tag = (T) this.getInstance.get();
         switch (this)

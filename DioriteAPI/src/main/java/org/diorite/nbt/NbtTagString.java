@@ -34,6 +34,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class NbtTagString extends NbtAbstractTag
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Value of nbt tag.
      */

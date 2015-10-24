@@ -22,57 +22,50 @@
  * SOFTWARE.
  */
 
-package org.diorite.nbt;
+package org.diorite.utils.collections.arrays.primitive;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.NoSuchElementException;
 
 /**
- * Represent nbt tag element, placed at the end of nbt container etc..
+ * Represent Byte iterator for byte array.
  */
-public class NbtTagEnd extends NbtAbstractTag
+public class ByteIterator extends PrimitiveIterator<Byte, byte[]>
 {
-    private static final long serialVersionUID = 0;
-
     /**
-     * Construct new NbtTagEnd.
-     */
-    public NbtTagEnd()
-    {
-    }
-
-    /**
-     * Clone constructor.
+     * Construct new ByteIterator for given primitive array.
      *
-     * @param nbtTagEnd tag to be cloned.
+     * @param primitiveArray array to be iterated.
      */
-    protected NbtTagEnd(final NbtTagEnd nbtTagEnd)
+    public ByteIterator(final byte[] primitiveArray)
     {
-        super(nbtTagEnd);
+        super(primitiveArray);
     }
 
     @Override
-    public Void getNBTValue()
+    public void setValue(final Byte number)
     {
-        return null;
+        this.primitiveArray[this.index - 1] = number;
     }
 
     @Override
-    public NbtTagType getTagType()
+    public void setValue(final Number number)
     {
-        return NbtTagType.END;
-    }
-
-    @SuppressWarnings("CloneDoesntCallSuperClone")
-    @Override
-    public NbtTagEnd clone()
-    {
-        return new NbtTagEnd(this);
+        this.primitiveArray[this.index - 1] = number.byteValue();
     }
 
     @Override
-    public String toString()
+    public boolean hasNext()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
+        return this.index < this.primitiveArray.length;
+    }
+
+    @Override
+    public Byte next()
+    {
+        if (! this.hasNext())
+        {
+            throw new NoSuchElementException("Index >= Length, Index: " + this.index + ", Length: " + this.primitiveArray.length);
+        }
+        return this.primitiveArray[this.index++];
     }
 }

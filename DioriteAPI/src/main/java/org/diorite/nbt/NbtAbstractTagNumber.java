@@ -24,11 +24,26 @@
 
 package org.diorite.nbt;
 
+import java.io.IOException;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * NBT abstract type for numeric values.
  */
-public abstract class NbtAbstractTagNumber extends NbtAbstractTag
+public abstract class NbtAbstractTagNumber extends Number implements NbtTag
 {
+    private static final long serialVersionUID = 0L;
+    /**
+     * Name of this nbt tag.
+     */
+    protected String name;
+    /**
+     * Parent of this nbt tag.
+     */
+    protected transient NbtTagContainer parent = null;
+
     /**
      * Construct new NbtTagInt without name and 0 as value.
      */
@@ -43,17 +58,64 @@ public abstract class NbtAbstractTagNumber extends NbtAbstractTag
      */
     public NbtAbstractTagNumber(final String name)
     {
-        super(name);
+        this.setName(name);
     }
 
     /**
      * Clone constructor.
      *
-     * @param nbtTagInt tag to be cloned.
+     * @param nbtAbstractTagNumber tag to be cloned.
      */
-    protected NbtAbstractTagNumber(final NbtAbstractTagNumber nbtTagInt)
+    protected NbtAbstractTagNumber(final NbtAbstractTagNumber nbtAbstractTagNumber)
     {
-        super(nbtTagInt);
+        this.name = nbtAbstractTagNumber.name;
+    }
+
+    @Override
+    public String getName()
+    {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name)
+    {
+        if (this.parent != null)
+        {
+            this.parent.removeTag(this);
+        }
+        if (name != null)
+        {
+            name = name.intern();
+        }
+        this.name = name;
+        if (this.parent != null)
+        {
+            if (this.parent instanceof NbtAnonymousTagContainer)
+            {
+                ((NbtAnonymousTagContainer) this.parent).addTag(this);
+            }
+            else
+            {
+                ((NbtNamedTagContainer) this.parent).addTag(this);
+            }
+        }
+    }
+
+    @Override
+    public NbtTagContainer getParent()
+    {
+        return this.parent;
+    }
+
+    @Override
+    public void setParent(final NbtTagContainer parent)
+    {
+        if (this.parent != null)
+        {
+            this.parent.removeTag(this);
+        }
+        this.parent = parent;
     }
 
     /**
@@ -74,5 +136,58 @@ public abstract class NbtAbstractTagNumber extends NbtAbstractTag
     public abstract Number getNBTValue();
 
     @Override
+    public void write(final NbtOutputStream outputStream, final boolean anonymous) throws IOException
+    {
+        if (! anonymous)
+        {
+            final byte[] name = this.name.getBytes(STRING_CHARSET);
+            outputStream.writeShort(name.length);
+            outputStream.write(name);
+        }
+    }
+
+    @Override
     public abstract NbtAbstractTagNumber clone();
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("name", this.name).append("parent", this.parent).toString();
+    }
+
+    @Override
+    public double doubleValue()
+    {
+        return this.getNumberValue().doubleValue();
+    }
+
+    @Override
+    public float floatValue()
+    {
+        return this.getNumberValue().floatValue();
+    }
+
+    @Override
+    public long longValue()
+    {
+        return this.getNumberValue().longValue();
+    }
+
+    @Override
+    public int intValue()
+    {
+        return this.getNumberValue().intValue();
+    }
+
+    @Override
+    public byte byteValue()
+    {
+        return this.getNumberValue().byteValue();
+    }
+
+    @Override
+    public short shortValue()
+    {
+        return this.getNumberValue().shortValue();
+    }
 }

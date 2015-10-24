@@ -22,57 +22,72 @@
  * SOFTWARE.
  */
 
-package org.diorite.nbt;
+package org.diorite.utils.collections.arrays.primitive;
+
+import java.util.Iterator;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * Represent nbt tag element, placed at the end of nbt container etc..
+ * Represent Number iterator, this is wrapper for any {@link PrimitiveIterator}
  */
-public class NbtTagEnd extends NbtAbstractTag
+public class NumberIterator implements Iterator<Number>
 {
-    private static final long serialVersionUID = 0;
-
     /**
-     * Construct new NbtTagEnd.
+     * Wrapped primitive iterator.
      */
-    public NbtTagEnd()
-    {
-    }
+    protected final PrimitiveIterator<?, ?> it;
 
     /**
-     * Clone constructor.
+     * Construct new NumberIterator for given primitive iterator.
      *
-     * @param nbtTagEnd tag to be cloned.
+     * @param it iterator to be wrapped/used.
      */
-    protected NbtTagEnd(final NbtTagEnd nbtTagEnd)
+    public NumberIterator(final PrimitiveIterator<?, ?> it)
     {
-        super(nbtTagEnd);
+        this.it = it;
+    }
+
+    /**
+     * Set value on current index to given value.
+     *
+     * @param number value to set.
+     */
+    public void setValue(final Number number)
+    {
+        this.it.setValue(number);
     }
 
     @Override
-    public Void getNBTValue()
+    public boolean hasNext()
     {
-        return null;
+        return this.it.hasNext();
     }
 
     @Override
-    public NbtTagType getTagType()
+    public Number next()
     {
-        return NbtTagType.END;
-    }
-
-    @SuppressWarnings("CloneDoesntCallSuperClone")
-    @Override
-    public NbtTagEnd clone()
-    {
-        return new NbtTagEnd(this);
+        final Object o = this.it.next();
+        if (o instanceof Number)
+        {
+            return (Number) this.it.next();
+        }
+        if (o instanceof Character)
+        {
+            //noinspection UnnecessaryUnboxing
+            return (int) ((Character) o).charValue();
+        }
+        if (o instanceof Boolean)
+        {
+            return (Boolean) o ? 1 : 0;
+        }
+        throw new AssertionError("Unknown primitive type.");
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("it", this.it).toString();
     }
 }

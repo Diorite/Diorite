@@ -25,17 +25,23 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.collections.arrays.primitive.LongIterator;
+import org.diorite.utils.collections.arrays.trove.TLongArrayIterator;
+
 /**
  * Additional nbt type, added by diorite, it will break minecraft compatybility, use with caution. <br>
  * NBT type for arrays of long values.
  */
-public class NbtTagLongArray extends NbtAbstractTag
+public class NbtTagLongArray extends NbtAbstractTag implements Iterable<Long>
 {
+    private static final long serialVersionUID = 0;
+
     /**
      * Empty array of longs.
      */
@@ -153,6 +159,22 @@ public class NbtTagLongArray extends NbtAbstractTag
     public NbtTagLongArray clone()
     {
         return new NbtTagLongArray(this);
+    }
+
+    @Override
+    public Iterator<Long> iterator()
+    {
+        return new LongIterator(this.value);
+    }
+
+    /**
+     * Returns instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     *
+     * @return instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     */
+    public TLongArrayIterator primitiveIterator()
+    {
+        return new TLongArrayIterator(this.value);
     }
 
     @Override
