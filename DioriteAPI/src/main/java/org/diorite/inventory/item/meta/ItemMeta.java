@@ -32,7 +32,7 @@ import org.diorite.inventory.item.enchantments.Enchantment;
 import org.diorite.nbt.NbtTagCompound;
 
 import gnu.trove.TDecorators;
-import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.TObjectShortMap;
 
 /**
  * Represent meta data of item stack.
@@ -158,7 +158,7 @@ public interface ItemMeta
      *
      * @return An copy of the enchantments
      */
-    TObjectIntMap<Enchantment> getEnchants();
+    TObjectShortMap<Enchantment> getEnchants();
 
     /**
      * Returns a copy the enchantments in this ItemMeta. <br>
@@ -167,13 +167,14 @@ public interface ItemMeta
      *
      * @return An copy of the enchantments
      */
-    default Map<Enchantment, Integer> getEnchantsMap()
+    default Map<Enchantment, Short> getEnchantsMap()
     {
         return TDecorators.wrap(this.getEnchants());
     }
 
     /**
-     * Adds the specified enchantment to this item meta.
+     * Adds the specified enchantment to this item meta. <br>
+     * If enchantment already exist level will be updated, if level was this same, false will be returned.
      *
      * @param enchantment            Enchantment to add
      * @param level                  Level for the enchantment
@@ -213,23 +214,23 @@ public interface ItemMeta
     /**
      * Set itemflags which should be ignored when rendering a ItemStack in the Client. This Method does silently ignore double set itemFlags.
      *
-     * @param itemFlags The hideflags which shouldn't be rendered
+     * @param hideFlags The hideflags which shouldn't be rendered
      */
-    void addItemFlags(ItemFlag... itemFlags);
+    void addHideFlags(HideFlag... hideFlags);
 
     /**
      * Remove specific set of itemFlags. This tells the Client it should render it again. This Method does silently ignore double removed itemFlags.
      *
-     * @param itemFlags Hideflags which should be removed
+     * @param hideFlags Hideflags which should be removed
      */
-    void removeItemFlags(ItemFlag... itemFlags);
+    void removeHideFlags(HideFlag... hideFlags);
 
     /**
      * Get current set itemFlags. The collection returned is unmodifiable.
      *
      * @return A set of all itemFlags set
      */
-    Set<ItemFlag> getItemFlags();
+    Set<HideFlag> getHideFlags();
 
     /**
      * Check if the specified flag is present on this item.
@@ -238,12 +239,12 @@ public interface ItemMeta
      *
      * @return if it is present
      */
-    boolean hasItemFlag(ItemFlag flag);
+    boolean hasHideFlag(HideFlag flag);
 
     /**
      * Remove all item flags from this meta.
      */
-    void removeItemFlags();
+    void removeHideFlags();
 
     /**
      * Close this item meta.

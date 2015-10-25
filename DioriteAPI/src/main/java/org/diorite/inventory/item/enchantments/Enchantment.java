@@ -29,4 +29,26 @@ package org.diorite.inventory.item.enchantments;
  */
 public interface Enchantment
 {
+    /**
+     * Returns id number of this enchantment.
+     *
+     * @return id number of this enchantment.
+     */
+    int getID();
+
+    /**
+     * Check if this enchantment conflicts with given one.
+     *
+     * @param enchantment enchantment to be checked.
+     *
+     * @return true if this enchantment conflicts with given one.
+     */
+    boolean conflictsWith(Enchantment enchantment);
+
+    /**
+     * Returns the maximum level that this Enchantment may become.
+     *
+     * @return the maximum level that this Enchantment may become.
+     */
+    int getMaxLevel();
 }

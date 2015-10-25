@@ -69,7 +69,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.ConsoleReaderThread;
 import org.diorite.impl.input.InputThread;
-import org.diorite.impl.inventory.item.SimpleItemMetaImpl;
+import org.diorite.impl.inventory.item.meta.SimpleItemMetaImpl;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;

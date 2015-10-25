@@ -28,18 +28,39 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public enum ItemFlag
+/**
+ * Represent hide flags that can be used to hide some of item NBT tags from player.
+ */
+public enum HideFlag
 {
+    /**
+     * Hide any enchantments on item.
+     */
     HIDE_ENCHANTS(1),
+    /**
+     * Hidy any attribute modifiers on item.
+     */
     HIDE_ATTRIBUTES(2),
+    /**
+     * Hide unbreakable state on item.
+     */
     HIDE_UNBREAKABLE(4),
+    /**
+     * Hide list of blocks that item can destroy.
+     */
     HIDE_DESTROYS(8),
+    /**
+     * Hide CanPlaceOn list on item.
+     */
     HIDE_PLACED_ON(16),
-    HIDE_POTION_EFFECTS(32);
+    /**
+     * Hide potion effects, stored enchantments, book generation and author, firework explosion, freworks and map tooltips.
+     */
+    HIDE_DATA(32);
 
     private final byte value;
 
-    ItemFlag(final int value)
+    HideFlag(final int value)
     {
         this.value = (byte) value;
     }
@@ -61,17 +82,17 @@ public enum ItemFlag
      *
      * @return set of flags represented by given value.
      */
-    public static Set<ItemFlag> getFlags(int value)
+    public static Set<HideFlag> getFlags(int value)
     {
         if (value == 0)
         {
             return new HashSet<>(1);
         }
-        final Set<ItemFlag> flagsSet = new HashSet<>(6);
-        final ItemFlag[] flags = ItemFlag.values();
+        final Set<HideFlag> flagsSet = new HashSet<>(6);
+        final HideFlag[] flags = HideFlag.values();
         for (int i = flags.length - 1; i >= 0; i--)
         {
-            final ItemFlag flag = flags[i];
+            final HideFlag flag = flags[i];
             if (value >= flag.value)
             {
                 flagsSet.add(flag);
@@ -93,11 +114,11 @@ public enum ItemFlag
      *
      * @return int representation of given flags.
      */
-    public static int join(final ItemFlag... flags)
+    public static int join(final HideFlag... flags)
     {
         int i = 0;
-        final Collection<ItemFlag> flagsSet = new HashSet<>(flags.length);
-        for (final ItemFlag flag : flags)
+        final Collection<HideFlag> flagsSet = new HashSet<>(flags.length);
+        for (final HideFlag flag : flags)
         {
             if (flagsSet.add(flag))
             {
@@ -116,11 +137,11 @@ public enum ItemFlag
      *
      * @return int representation of given flags.
      */
-    public static int join(final Iterable<ItemFlag> flags)
+    public static int join(final Iterable<HideFlag> flags)
     {
         int i = 0;
-        final Collection<ItemFlag> flagsSet = new HashSet<>(10);
-        for (final ItemFlag flag : flags)
+        final Collection<HideFlag> flagsSet = new HashSet<>(10);
+        for (final HideFlag flag : flags)
         {
             if (flagsSet.add(flag))
             {
@@ -140,10 +161,10 @@ public enum ItemFlag
      * @return int representation of given flags.
      */
     @SuppressWarnings("TypeMayBeWeakened")
-    public static int join(final Set<ItemFlag> flags)
+    public static int join(final Set<HideFlag> flags)
     {
         int i = 0;
-        for (final ItemFlag flag : flags)
+        for (final HideFlag flag : flags)
         {
             i += flag.value;
         }
