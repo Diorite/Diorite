@@ -29,7 +29,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -39,7 +39,7 @@ import org.diorite.impl.connection.packets.login.PacketLoginServerListener;
 @PacketClass(id = 0x02, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.CLIENTBOUND, size = 54)
 public class PacketLoginServerSuccess extends PacketLoginServer
 {
-    private GameProfile profile; // 54 bytes
+    private GameProfileImpl profile; // 54 bytes
 
     public PacketLoginServerSuccess()
     {
@@ -50,7 +50,7 @@ public class PacketLoginServerSuccess extends PacketLoginServer
 
     }
 
-    public PacketLoginServerSuccess(final GameProfile profile)
+    public PacketLoginServerSuccess(final GameProfileImpl profile)
     {
         this.profile = profile;
     }

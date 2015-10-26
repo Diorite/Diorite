@@ -31,7 +31,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
@@ -116,7 +116,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
 
     protected final TIntCollection removeQueue = new TIntArrayList(5, - 1);
 
-    protected final GameProfile                gameProfile;
+    protected final GameProfileImpl            gameProfile;
     protected final CoreNetworkManager         networkManager;
     protected final PlayerChunksImpl           playerChunks;
     protected       byte                       viewDistance;
@@ -128,7 +128,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     protected PacketPlayServerAbilities abilities = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
     // TODO: add saving/loading data to/from NBT
-    public PlayerImpl(final DioriteCore core, final int id, final GameProfile gameProfile, final CoreNetworkManager networkManager, final ImmutableLocation location)
+    public PlayerImpl(final DioriteCore core, final int id, final GameProfileImpl gameProfile, final CoreNetworkManager networkManager, final ImmutableLocation location)
     {
         super(gameProfile.getId(), core, id, location);
         this.permissionContainer = Diorite.getServerManager().getPermissionsManager().createPlayerContainer(this);
@@ -230,7 +230,8 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         }
     }
 
-    public GameProfile getGameProfile()
+    @Override
+    public GameProfileImpl getGameProfile()
     {
         return this.gameProfile;
     }

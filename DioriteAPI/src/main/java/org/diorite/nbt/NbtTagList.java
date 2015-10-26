@@ -96,6 +96,7 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
      * @param name   name to be used.
      * @param type   type of values in this nbt tag list.
      * @param values values of this nbt tag list.
+     * @param <T>    type of values.
      */
     public <T> NbtTagList(final String name, final NbtTagType type, final Collection<? extends T> values)
     {

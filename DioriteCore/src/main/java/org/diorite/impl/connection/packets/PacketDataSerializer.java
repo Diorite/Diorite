@@ -38,7 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
@@ -392,19 +392,19 @@ public class PacketDataSerializer extends ByteBuf
         this.readInt();
     }
 
-    public void writeGameProfile(final GameProfile gameProfile)
+    public void writeGameProfile(final GameProfileImpl gameProfile)
     {
         this.writeText((gameProfile.getId() == null) ? "" : gameProfile.getId().toString());
         this.writeText(gameProfile.getName());
     }
 
-    public GameProfile readGameProfile()
+    public GameProfileImpl readGameProfile()
     {
         //noinspection MagicNumber
         final String uuidStr = this.readText(36);
         final String name = this.readText(Core.MAX_NICKNAME_SIZE);
         final UUID uuid = uuidStr.isEmpty() ? null : UUID.fromString(uuidStr);
-        return new GameProfile(uuid, name);
+        return new GameProfileImpl(uuid, name);
     }
 
     @SuppressWarnings("MagicNumber")

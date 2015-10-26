@@ -33,8 +33,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.GameProfile;
-import org.diorite.impl.auth.properties.Property;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -43,6 +42,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
+import org.diorite.auth.Property;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
@@ -69,22 +69,22 @@ public class PacketPlayServerPlayerInfo extends PacketPlayServer
         this.players = Arrays.asList(players);
     }
 
-    public PacketPlayServerPlayerInfo(final PlayerInfoAction action, final Collection<GameProfile> players)
+    public PacketPlayServerPlayerInfo(final PlayerInfoAction action, final Collection<GameProfileImpl> players)
     {
         this.action = action;
         this.players = new ArrayList<>(players.size());
-        for (final GameProfile gp : players)
+        for (final GameProfileImpl gp : players)
         {
             final Player p = Diorite.getCore().getPlayer(gp.getId());
             this.players.add(new PlayerInfoData(gp, p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
         }
     }
 
-    public PacketPlayServerPlayerInfo(final PlayerInfoAction action, final GameProfile... players)
+    public PacketPlayServerPlayerInfo(final PlayerInfoAction action, final GameProfileImpl... players)
     {
         this.action = action;
         this.players = new ArrayList<>(players.length);
-        for (final GameProfile gp : players)
+        for (final GameProfileImpl gp : players)
         {
             final Player p = Diorite.getCore().getPlayer(gp.getId());
             this.players.add(new PlayerInfoData(gp, p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
@@ -198,12 +198,12 @@ public class PacketPlayServerPlayerInfo extends PacketPlayServer
 
     public static class PlayerInfoData
     {
-        private final GameProfile   gameProfile;
-        private final int           latency;
-        private final GameMode      gameMode;
-        private final BaseComponent displayName;
+        private final GameProfileImpl gameProfile;
+        private final int             latency;
+        private final GameMode        gameMode;
+        private final BaseComponent   displayName;
 
-        public PlayerInfoData(final GameProfile gameProfile, final int latency, final GameMode gameMode, final BaseComponent displayName)
+        public PlayerInfoData(final GameProfileImpl gameProfile, final int latency, final GameMode gameMode, final BaseComponent displayName)
         {
             this.latency = latency;
             this.gameProfile = gameProfile;
@@ -213,25 +213,25 @@ public class PacketPlayServerPlayerInfo extends PacketPlayServer
 
         public PlayerInfoData(final UUID uuid, final BaseComponent displayName)
         {
-            this(new GameProfile(uuid, null), 0, null, displayName);
+            this(new GameProfileImpl(uuid, null), 0, null, displayName);
         }
 
         public PlayerInfoData(final UUID uuid, final GameMode gameMode)
         {
-            this(new GameProfile(uuid, null), 0, gameMode, null);
+            this(new GameProfileImpl(uuid, null), 0, gameMode, null);
         }
 
         public PlayerInfoData(final UUID uuid)
         {
-            this(new GameProfile(uuid, null), 0, null, null);
+            this(new GameProfileImpl(uuid, null), 0, null, null);
         }
 
         public PlayerInfoData(final UUID uuid, final int latency)
         {
-            this(new GameProfile(uuid, null), latency, null, null);
+            this(new GameProfileImpl(uuid, null), latency, null, null);
         }
 
-        public GameProfile getGameProfile()
+        public GameProfileImpl getGameProfile()
         {
             return this.gameProfile;
         }

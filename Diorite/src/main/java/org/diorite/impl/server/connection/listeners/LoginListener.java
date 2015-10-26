@@ -38,7 +38,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.MinecraftEncryption;
@@ -67,7 +67,7 @@ public class LoginListener implements PacketLoginClientListener
     private final byte[] token = new byte[4];
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
-    private       GameProfile        gameProfile;
+    private       GameProfileImpl    gameProfile;
     private       SecretKey          secretKey;
     private       String             hostname;
     private       ProtocolState      protocolState;
@@ -234,13 +234,13 @@ public class LoginListener implements PacketLoginClientListener
     }
 
     @Override
-    public GameProfile getGameProfile()
+    public GameProfileImpl getGameProfile()
     {
         return this.gameProfile;
     }
 
     @Override
-    public void setGameProfile(final GameProfile gameProfile)
+    public void setGameProfile(final GameProfileImpl gameProfile)
     {
         this.gameProfile = gameProfile;
     }

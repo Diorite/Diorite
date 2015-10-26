@@ -38,15 +38,15 @@ import com.google.gson.JsonSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 
 public class ServerPingPlayerSample
 {
-    private int           maxPlayers;
-    private int           onlinePlayers;
-    private GameProfile[] profiles;
+    private int               maxPlayers;
+    private int               onlinePlayers;
+    private GameProfileImpl[] profiles;
 
-    public ServerPingPlayerSample(final int maxPlayers, final int onlinePlayers, final GameProfile... profiles)
+    public ServerPingPlayerSample(final int maxPlayers, final int onlinePlayers, final GameProfileImpl... profiles)
     {
         this.maxPlayers = maxPlayers;
         this.onlinePlayers = onlinePlayers;
@@ -79,12 +79,12 @@ public class ServerPingPlayerSample
         this.onlinePlayers = onlinePlayers;
     }
 
-    public GameProfile[] getProfiles()
+    public GameProfileImpl[] getProfiles()
     {
         return this.profiles;
     }
 
-    public void setProfiles(final GameProfile[] profiles)
+    public void setProfiles(final GameProfileImpl[] profiles)
     {
         this.profiles = profiles;
     }
@@ -107,12 +107,12 @@ public class ServerPingPlayerSample
                 final JsonArray sample = jsonObject.get("sample").getAsJsonArray();
                 if (sample.size() > 0)
                 {
-                    final GameProfile[] gameProfiles = new GameProfile[sample.size()];
+                    final GameProfileImpl[] gameProfiles = new GameProfileImpl[sample.size()];
                     for (int i = 0; i < gameProfiles.length; i++)
                     {
                         final JsonObject profile = sample.get(i).getAsJsonObject();
                         final String str = profile.get("id").getAsString();
-                        gameProfiles[i] = new GameProfile(UUID.fromString(str), profile.get("name").getAsString());
+                        gameProfiles[i] = new GameProfileImpl(UUID.fromString(str), profile.get("name").getAsString());
                     }
                     playerSample.setProfiles(gameProfiles);
                 }

@@ -166,7 +166,7 @@ public enum NbtTagType
      * @return new instance of given nbt type.
      */
     @SuppressWarnings("unchecked")
-    public <T extends NbtAbstractTag> T newInstance()
+    public <T extends NbtTag> T newInstance()
     {
         return (T) this.getInstance.get();
     }

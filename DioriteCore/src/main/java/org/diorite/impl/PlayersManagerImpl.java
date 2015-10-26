@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
@@ -63,7 +63,7 @@ public class PlayersManagerImpl implements Tickable
         this.keepAliveTimer = (int) TimeUnit.SECONDS.toMillis(this.core.getKeepAliveTimer());
     }
 
-    public PlayerImpl createPlayer(final GameProfile gameProfile, final CoreNetworkManager networkManager)
+    public PlayerImpl createPlayer(final GameProfileImpl gameProfile, final CoreNetworkManager networkManager)
     {// TODO: loading player
         //noinspection MagicNumber
 

@@ -29,7 +29,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.properties.PropertyMap;
+import org.diorite.auth.PropertyMap;
 
 public class HasJoinedResponse extends Response
 {

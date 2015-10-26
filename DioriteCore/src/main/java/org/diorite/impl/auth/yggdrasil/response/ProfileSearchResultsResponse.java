@@ -35,13 +35,13 @@ import com.google.gson.JsonParseException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 
 public class ProfileSearchResultsResponse extends Response
 {
-    private GameProfile[] profiles;
+    private GameProfileImpl[] profiles;
 
-    public GameProfile[] getProfiles()
+    public GameProfileImpl[] getProfiles()
     {
         return this.profiles;
     }
@@ -76,7 +76,7 @@ public class ProfileSearchResultsResponse extends Response
             }
             else
             {
-                result.profiles = context.deserialize(json, GameProfile[].class);
+                result.profiles = context.deserialize(json, GameProfileImpl[].class);
             }
             return result;
         }

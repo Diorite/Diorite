@@ -22,14 +22,41 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.auth;
+package org.diorite.auth;
 
-import org.diorite.impl.auth.exceptions.AuthenticationException;
-import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
+import com.google.common.collect.ForwardingMultimap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 
-public interface SessionService
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+/**
+ * Represent {@link Multimap} for Properties mapped by string key.
+ *
+ * @see Property
+ */
+public class PropertyMap extends ForwardingMultimap<String, Property>
 {
-    void joinServer(GameProfileImpl gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException;
+    private final Multimap<String, Property> properties;
 
-    GameProfileImpl hasJoinedServer(GameProfileImpl gameProfile, String serverID) throws AuthenticationUnavailableException;
+    /**
+     * Construct new property map.
+     */
+    public PropertyMap()
+    {
+        this.properties = LinkedHashMultimap.create();
+    }
+
+    @Override
+    protected Multimap<String, Property> delegate()
+    {
+        return this.properties;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("properties", this.properties).toString();
+    }
 }

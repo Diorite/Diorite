@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Diorite (by Bart³omiej Mazur (aka GotoFinal))
+ * Copyright (c) 2015 Diorite (by Bartï¿½omiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.listeners.PacketHandshakeListener;
@@ -71,7 +71,7 @@ public class HandshakeListener implements PacketHandshakingServerListener
                 final InetSocketAddress address = (InetSocketAddress) this.networkManager.getSocketAddress();
                 this.networkManager.sendPacket(new PacketHandshakingClientSetProtocol(PacketHandshakeListener.CURRENT_PROTOCOL, RequestType.LOGIN, address.getPort(), address.getHostName()));
                 this.networkManager.setProtocol(EnumProtocol.LOGIN);
-                this.networkManager.sendPacket(new PacketLoginClientStart(new GameProfile(DioriteUtils.getCrackedUuid("player"), "player")));
+                this.networkManager.sendPacket(new PacketLoginClientStart(new GameProfileImpl(DioriteUtils.getCrackedUuid("player"), "player")));
                 break;
         }
     }

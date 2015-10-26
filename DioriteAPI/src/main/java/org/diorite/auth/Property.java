@@ -22,14 +22,49 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.auth;
+package org.diorite.auth;
 
-import org.diorite.impl.auth.exceptions.AuthenticationException;
-import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
+import java.security.PublicKey;
 
-public interface SessionService
+/**
+ * Represent GameProfile property, each property can have name, value and signature.
+ */
+public interface Property
 {
-    void joinServer(GameProfileImpl gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException;
+    /**
+     * Returns name of this property.
+     *
+     * @return name of this property.
+     */
+    String getName();
 
-    GameProfileImpl hasJoinedServer(GameProfileImpl gameProfile, String serverID) throws AuthenticationUnavailableException;
+    /**
+     * Returns value of this property.
+     *
+     * @return value of this property.
+     */
+    String getValue();
+
+    /**
+     * Returns signature of this property.
+     *
+     * @return signature of this property.
+     */
+    String getSignature();
+
+    /**
+     * Returns true if property have signature.
+     *
+     * @return true if property have signature.
+     */
+    boolean hasSignature();
+
+    /**
+     * Checks if this property is signed with valid signature for given key.
+     *
+     * @param publicKey key to be checked.
+     *
+     * @return true if this property is signed with valid signature.
+     */
+    boolean isSignatureValid(PublicKey publicKey);
 }

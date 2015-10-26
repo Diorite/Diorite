@@ -39,7 +39,7 @@ import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.world.World;
 
-public interface Player extends LivingEntity, PlayerCommandSender, InventoryHolder, OfflinePlayer, ArmoredEntity
+public interface Player extends Human, PlayerCommandSender, InventoryHolder, OfflinePlayer, ArmoredEntity
 {
     float WALK_SPEED         = 0.1f;
     float FLY_SPEED          = 0.05f;

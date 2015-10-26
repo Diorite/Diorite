@@ -48,17 +48,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.auth.SessionService;
 import org.diorite.impl.auth.exceptions.AuthenticationException;
 import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
 import org.diorite.impl.auth.exceptions.InvalidCredentialsException;
 import org.diorite.impl.auth.exceptions.UserMigratedException;
-import org.diorite.impl.auth.properties.PropertyMap;
+import org.diorite.impl.auth.properties.PropertyMapSerializer;
 import org.diorite.impl.auth.yggdrasil.request.JoinServerRequest;
 import org.diorite.impl.auth.yggdrasil.response.HasJoinedResponse;
 import org.diorite.impl.auth.yggdrasil.response.ProfileSearchResultsResponse;
 import org.diorite.impl.auth.yggdrasil.response.Response;
+import org.diorite.auth.PropertyMap;
 import org.diorite.utils.json.adapters.JsonUUIDAdapter;
 import org.diorite.utils.network.DioriteURLUtils;
 
@@ -71,7 +72,7 @@ public class YggdrasilSessionService implements SessionService
     private static final URL    CHECK_URL = DioriteURLUtils.createURL(BASE_URL + "hasJoined");
     //  private static final URL    PROFILE_URL = DioriteURLUtils.createURL(BASE_URL + "profile");
 
-    private final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new JsonUUIDAdapter(false)).registerTypeAdapter(GameProfile.class, new GameProfile.Serializer()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).registerTypeAdapter(ProfileSearchResultsResponse.class, new ProfileSearchResultsResponse.Serializer()).create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new JsonUUIDAdapter(false)).registerTypeAdapter(GameProfileImpl.class, new GameProfileImpl.Serializer()).registerTypeAdapter(PropertyMap.class, new PropertyMapSerializer()).registerTypeAdapter(ProfileSearchResultsResponse.class, new ProfileSearchResultsResponse.Serializer()).create();
     private final Proxy     proxy;
     private final String    clientToken;
     private final PublicKey publicKey;
@@ -114,13 +115,13 @@ public class YggdrasilSessionService implements SessionService
     }
 
     @Override
-    public void joinServer(final GameProfile gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException
+    public void joinServer(final GameProfileImpl gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException
     {
         this.makeRequest(JOIN_URL, new JoinServerRequest(authenticationToken, gameProfile.getId(), serverId), Response.class);
     }
 
     @Override
-    public GameProfile hasJoinedServer(final GameProfile gameProfile, final String serverID) throws AuthenticationUnavailableException
+    public GameProfileImpl hasJoinedServer(final GameProfileImpl gameProfile, final String serverID) throws AuthenticationUnavailableException
     {
         final Map<String, Object> arguments = new HashMap<>(2);
 
@@ -133,7 +134,7 @@ public class YggdrasilSessionService implements SessionService
             final HasJoinedResponse response = this.makeRequest(url, null, HasJoinedResponse.class);
             if ((response != null) && (response.getId() != null))
             {
-                final GameProfile result = new GameProfile(response.getId(), gameProfile.getName());
+                final GameProfileImpl result = new GameProfileImpl(response.getId(), gameProfile.getName());
                 if (response.getProperties() != null)
                 {
                     result.getProperties().putAll(response.getProperties());

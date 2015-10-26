@@ -29,7 +29,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -40,13 +40,13 @@ import org.diorite.Core;
 @PacketClass(id = 0x00, protocol = EnumProtocol.LOGIN, direction = EnumProtocolDirection.SERVERBOUND, size = 17)
 public class PacketLoginClientStart extends PacketLoginClient
 {
-    private GameProfile profile; // ~16 bytes + 1 byte for size
+    private GameProfileImpl profile; // ~16 bytes + 1 byte for size
 
     public PacketLoginClientStart()
     {
     }
 
-    public PacketLoginClientStart(final GameProfile profile)
+    public PacketLoginClientStart(final GameProfileImpl profile)
     {
         this.profile = profile;
     }
@@ -54,7 +54,7 @@ public class PacketLoginClientStart extends PacketLoginClient
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.profile = new GameProfile(null, data.readText(Core.MAX_NICKNAME_SIZE));
+        this.profile = new GameProfileImpl(null, data.readText(Core.MAX_NICKNAME_SIZE));
     }
 
     @Override
@@ -69,12 +69,12 @@ public class PacketLoginClientStart extends PacketLoginClient
         listener.handle(this);
     }
 
-    public GameProfile getProfile()
+    public GameProfileImpl getProfile()
     {
         return this.profile;
     }
 
-    public void setProfile(final GameProfile profile)
+    public void setProfile(final GameProfileImpl profile)
     {
         this.profile = profile;
     }

@@ -39,16 +39,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.auth.properties.PropertyMap;
+import org.diorite.auth.PropertyMap;
+import org.diorite.auth.GameProfile;
 
-public class GameProfile
+public class GameProfileImpl implements GameProfile
 {
     private UUID   id;
     private String name;
     private PropertyMap properties = new PropertyMap();
     private boolean legacy;
 
-    public GameProfile(final UUID id, final String name)
+    public GameProfileImpl(final UUID id, final String name)
     {
         if ((id == null) && (StringUtils.isBlank(name)))
         {
@@ -58,31 +59,37 @@ public class GameProfile
         this.name = name;
     }
 
+    @Override
     public UUID getId()
     {
         return this.id;
     }
 
+    @Override
     public void setId(final UUID id)
     {
         this.id = id;
     }
 
+    @Override
     public String getName()
     {
         return this.name;
     }
 
+    @Override
     public void setName(final String name)
     {
         this.name = name;
     }
 
+    @Override
     public PropertyMap getProperties()
     {
         return this.properties;
     }
 
+    @Override
     public void setProperties(final PropertyMap properties)
     {
         this.properties = properties;
@@ -98,6 +105,7 @@ public class GameProfile
         this.legacy = legacy;
     }
 
+    @Override
     public boolean isComplete()
     {
         return (this.id != null) && (StringUtils.isNotBlank(this.name));
@@ -120,7 +128,7 @@ public class GameProfile
         {
             return false;
         }
-        final GameProfile that = (GameProfile) o;
+        final GameProfileImpl that = (GameProfileImpl) o;
         return ! ((this.id != null) ? ! this.id.equals(that.id) : (that.id != null)) && ! ((this.name != null) ? ! this.name.equals(that.name) : (that.name != null));
     }
 
@@ -130,19 +138,19 @@ public class GameProfile
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("name", this.name).append("properties", this.properties).append("legacy", this.legacy).toString();
     }
 
-    public static class Serializer implements JsonSerializer<GameProfile>, JsonDeserializer<GameProfile>
+    public static class Serializer implements JsonSerializer<GameProfileImpl>, JsonDeserializer<GameProfileImpl>
     {
         @Override
-        public GameProfile deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException
+        public GameProfileImpl deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException
         {
             final JsonObject object = (JsonObject) json;
             final UUID id = object.has("id") ? (UUID) context.deserialize(object.get("id"), UUID.class) : null;
             final String name = object.has("name") ? object.getAsJsonPrimitive("name").getAsString() : null;
-            return new GameProfile(id, name);
+            return new GameProfileImpl(id, name);
         }
 
         @Override
-        public JsonElement serialize(final GameProfile src, final Type typeOfSrc, final JsonSerializationContext context)
+        public JsonElement serialize(final GameProfileImpl src, final Type typeOfSrc, final JsonSerializationContext context)
         {
             final JsonObject result = new JsonObject();
             if (src.getId() != null)

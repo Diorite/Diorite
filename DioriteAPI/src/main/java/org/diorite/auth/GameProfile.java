@@ -22,14 +22,63 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.auth;
+package org.diorite.auth;
 
-import org.diorite.impl.auth.exceptions.AuthenticationException;
-import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
+import java.util.UUID;
 
-public interface SessionService
+/**
+ * Represent player profile, profile contains all player data like uuid, nickname, skin.
+ */
+public interface GameProfile
 {
-    void joinServer(GameProfileImpl gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException;
+    /**
+     * Returns uuid of profile. <br>
+     * May return null.
+     *
+     * @return uuid of profile.
+     */
+    UUID getId();
 
-    GameProfileImpl hasJoinedServer(GameProfileImpl gameProfile, String serverID) throws AuthenticationUnavailableException;
+    /**
+     * Set uuid of profile.
+     *
+     * @param id new uuid.
+     */
+    void setId(UUID id);
+
+    /**
+     * Returns name of profile. <br>
+     * May return null.
+     *
+     * @return name of profile.
+     */
+    String getName();
+
+    /**
+     * Set name of profile.
+     *
+     * @param name new name.
+     */
+    void setName(String name);
+
+    /**
+     * Returns property map for this profile.
+     *
+     * @return property map for this profile.
+     */
+    PropertyMap getProperties();
+
+    /**
+     * Set property data of this profile.
+     *
+     * @param properties new property data.
+     */
+    void setProperties(PropertyMap properties);
+
+    /**
+     * Returns true if profile contains name and uuid.
+     *
+     * @return true if profile contains name and uuid.
+     */
+    boolean isComplete();
 }

@@ -24,6 +24,17 @@
 
 package org.diorite.entity;
 
-public interface Human
+import org.diorite.auth.GameProfile;
+
+/**
+ * Represent human entity, player or npc etc...
+ */
+public interface Human extends LivingEntity
 {
+    /**
+     * Returns game profile for this human entity.
+     *
+     * @return game profile for this human entity.
+     */
+    GameProfile getGameProfile();
 }

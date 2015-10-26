@@ -33,7 +33,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.auth.GameProfile;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
 import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.server.connection.listeners.LoginListener;
@@ -54,7 +54,7 @@ public class ThreadPlayerLookupUUID extends Thread
     @Override
     public void run()
     {
-        final GameProfile oldProfile = this.loginListener.getGameProfile();
+        final GameProfileImpl oldProfile = this.loginListener.getGameProfile();
         try
         {
             if (this.loginListener.getOnlineMode() != OnlineMode.TRUE) // TODO
@@ -66,7 +66,7 @@ public class ThreadPlayerLookupUUID extends Thread
             final KeyPair serverKeyPair = this.getServer().getKeyPair();
             //noinspection MagicNumber
             final String hash = new BigInteger(MinecraftEncryption.combineKeys(this.loginListener.getServerID(), serverKeyPair.getPublic(), this.loginListener.getSecretKey())).toString(16);
-            final GameProfile newProfile = this.getServer().getSessionService().hasJoinedServer(oldProfile, hash);
+            final GameProfileImpl newProfile = this.getServer().getSessionService().hasJoinedServer(oldProfile, hash);
             this.loginListener.setGameProfile(newProfile);
             if (newProfile == null)
             {
@@ -97,7 +97,7 @@ public class ThreadPlayerLookupUUID extends Thread
 
     private void allow()
     {
-        final GameProfile profile = this.loginListener.getGameProfile();
+        final GameProfileImpl profile = this.loginListener.getGameProfile();
         //noinspection ObjectToString
         this.loginListener.getLogger().info("Player " + profile.getName() + " (" + profile.getId() + ") [" + this.loginListener.getNetworkManager().getSocketAddress() + "] connected to server! (online-mode: " + this.loginListener.getOnlineMode() + ")");
         this.loginListener.setProtocolState(LoginListener.ProtocolState.READY_TO_ACCEPT);

@@ -34,44 +34,51 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Property
+import org.diorite.auth.Property;
+
+public class PropertyImpl implements Property
 {
     private final String name;
     private final String value;
     private final String signature;
 
-    public Property(final String value, final String name)
+    public PropertyImpl(final String value, final String name)
     {
         this(value, name, null);
     }
 
-    public Property(final String name, final String value, final String signature)
+    public PropertyImpl(final String name, final String value, final String signature)
     {
         this.name = name;
         this.value = value;
         this.signature = signature;
     }
 
+    @Override
     public String getName()
     {
         return this.name;
     }
 
+    @Override
     public String getValue()
     {
         return this.value;
     }
 
+    @Override
     public String getSignature()
     {
         return this.signature;
     }
 
+    @Override
     public boolean hasSignature()
     {
         return this.signature != null;
     }
 
+    @Override
     public boolean isSignatureValid(final PublicKey publicKey)
     {
         try

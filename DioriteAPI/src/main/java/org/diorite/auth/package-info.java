@@ -22,14 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.auth;
-
-import org.diorite.impl.auth.exceptions.AuthenticationException;
-import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
-
-public interface SessionService
-{
-    void joinServer(GameProfileImpl gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException;
-
-    GameProfileImpl hasJoinedServer(GameProfileImpl gameProfile, String serverID) throws AuthenticationUnavailableException;
-}
+/**
+ * Basic mojang profile data API
+ */
+package org.diorite.auth;
