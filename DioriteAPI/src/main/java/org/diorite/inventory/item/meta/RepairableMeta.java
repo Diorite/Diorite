@@ -27,13 +27,43 @@ package org.diorite.inventory.item.meta;
 /**
  * Represent item that can be repaired using anvil.
  */
-public interface Repairable
+public interface RepairableMeta extends ItemMeta
 {
+    /**
+     * Checks to see if this has a repair penalty.
+     *
+     * @return true if this has a repair penalty.
+     */
     boolean hasRepairCost();
 
+    /**
+     * Returns the repair penalty.
+     *
+     * @return the repair penalty.
+     */
     int getRepairCost();
 
-    void setRepairCost(int paramInt);
+    /**
+     * Sets the repair penalty.
+     *
+     * @param cost repair penalty
+     */
+    void setRepairCost(int cost);
 
-    Repairable clone();
+    /**
+     * Set if this tool is unbreakable.
+     *
+     * @param unbreakable if tool should be unbreakable.
+     */
+    void setUnbreakable(boolean unbreakable);
+
+    /**
+     * Returns true if tool is unbreakable.
+     *
+     * @return true if tool is unbreakable.
+     */
+    boolean isUnbreakable();
+
+    @Override
+    RepairableMeta clone();
 }

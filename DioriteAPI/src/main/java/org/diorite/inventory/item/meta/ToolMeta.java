@@ -31,21 +31,8 @@ import org.diorite.material.BlockMaterialData;
 /**
  * Represent {@link ItemMeta} used by tool items, like pickaxes.
  */
-public interface ToolMeta
+public interface ToolMeta extends RepairableMeta
 {
-    /**
-     * Set if this tool is unbreakable.
-     *
-     * @param unbreakable if tool should be unbreakable.
-     */
-    void setUnbreakable(boolean unbreakable);
-
-    /**
-     * Returns true if tool is unbreakable.
-     *
-     * @return true if tool is unbreakable.
-     */
-    boolean isUnbreakable();
 
     /**
      * Returns true if this tool is using CanDestory tag.
