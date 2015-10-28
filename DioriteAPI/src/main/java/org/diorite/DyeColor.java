@@ -28,7 +28,9 @@ import org.diorite.utils.Color;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
+import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TByteObjectHashMap;
 
 @SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
 public class DyeColor extends ASimpleEnum<DyeColor>
@@ -55,16 +57,19 @@ public class DyeColor extends ASimpleEnum<DyeColor>
     public static final DyeColor RED        = new DyeColor("RED", 0xE, 0x1, Color.fromRGB(0x993333), Color.fromRGB(0xB3312C));
     public static final DyeColor BLACK      = new DyeColor("BLACK", 0xF, 0x0, Color.fromRGB(0x191919), Color.fromRGB(0x1E1B1B));
 
-    private final int   blockFlag;
-    private final int   itemFlag;
+    private static final TByteObjectMap<DyeColor> byBlockFlag = new TByteObjectHashMap<>(16, SMALL_LOAD_FACTOR, (byte) - 1);
+    private static final TByteObjectMap<DyeColor> byItemFlag  = new TByteObjectHashMap<>(16, SMALL_LOAD_FACTOR, (byte) - 1);
+
+    private final byte  blockFlag;
+    private final byte  itemFlag;
     private final Color color;
     private final Color fireworkColor;
 
     protected DyeColor(final String enumName, final int enumId, final int blockFlag, final int itemFlag, final Color color, final Color fireworkColor)
     {
         super(enumName, enumId);
-        this.blockFlag = blockFlag;
-        this.itemFlag = itemFlag;
+        this.blockFlag = (byte) blockFlag;
+        this.itemFlag = (byte) itemFlag;
         this.color = color;
         this.fireworkColor = fireworkColor;
     }
@@ -73,26 +78,47 @@ public class DyeColor extends ASimpleEnum<DyeColor>
     {
         super(enumName);
         this.blockFlag = (byte) blockFlag;
-        this.itemFlag = (short) itemFlag;
+        this.itemFlag = (byte) itemFlag;
         this.color = color;
         this.fireworkColor = fireworkColor;
     }
 
+    /**
+     * Returns color representation for firework.
+     *
+     * @return color representation for firework.
+     */
     public Color getFireworkColor()
     {
         return this.fireworkColor;
     }
 
+    /**
+     * Returns int peresentation used by items.
+     *
+     * @return int peresentation used by items.
+     */
     public int getItemFlag()
     {
         return this.itemFlag;
     }
 
+    /**
+     * Returns int peresentation used by blocks.
+     *
+     * @return int peresentation used by blocks.
+     */
     public int getBlockFlag()
     {
         return this.blockFlag;
     }
 
+
+    /**
+     * Returns color representation of this dye color.
+     *
+     * @return color representation of this dye color.
+     */
     public Color getColor()
     {
         return this.color;
@@ -106,6 +132,8 @@ public class DyeColor extends ASimpleEnum<DyeColor>
     public static void register(final DyeColor element)
     {
         ASimpleEnum.register(DyeColor.class, element);
+        byBlockFlag.put(element.blockFlag, element);
+        byItemFlag.put(element.itemFlag, element);
     }
 
     /**
@@ -118,6 +146,30 @@ public class DyeColor extends ASimpleEnum<DyeColor>
     public static DyeColor getByEnumOrdinal(final int ordinal)
     {
         return getByEnumOrdinal(DyeColor.class, ordinal);
+    }
+
+    /**
+     * Get one of DyeColor entry by its item flag.
+     *
+     * @param flag item flag of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static DyeColor getByItemFlag(final int flag)
+    {
+        return byItemFlag.get((byte) flag);
+    }
+
+    /**
+     * Get one of DyeColor entry by its block flag.
+     *
+     * @param flag block flag of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static DyeColor getByBlockFlag(final int flag)
+    {
+        return byBlockFlag.get((byte) flag);
     }
 
     /**
