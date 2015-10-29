@@ -31,8 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.diorite.inventory.item.enchantments.Enchantment;
-import org.diorite.inventory.item.meta.HideFlag;
+import org.diorite.enchantments.Enchantment;
+import org.diorite.inventory.item.HideFlag;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;

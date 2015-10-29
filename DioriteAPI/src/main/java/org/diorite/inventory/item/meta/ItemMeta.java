@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.diorite.inventory.item.enchantments.Enchantment;
+import org.diorite.inventory.item.HideFlag;
+import org.diorite.enchantments.Enchantment;
 import org.diorite.nbt.NbtTagCompound;
 
 import gnu.trove.TDecorators;

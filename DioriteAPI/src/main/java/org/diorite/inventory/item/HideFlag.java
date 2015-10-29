@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.item.meta;
+package org.diorite.inventory.item;
 
 import java.util.Collection;
 import java.util.HashSet;

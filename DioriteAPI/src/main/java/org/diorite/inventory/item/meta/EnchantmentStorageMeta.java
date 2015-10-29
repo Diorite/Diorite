@@ -26,7 +26,7 @@ package org.diorite.inventory.item.meta;
 
 import java.util.Map;
 
-import org.diorite.inventory.item.enchantments.Enchantment;
+import org.diorite.enchantments.Enchantment;
 
 import gnu.trove.TDecorators;
 import gnu.trove.map.TObjectShortMap;

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.item.meta;
+package org.diorite.banner;
 
 import java.util.Map;
 

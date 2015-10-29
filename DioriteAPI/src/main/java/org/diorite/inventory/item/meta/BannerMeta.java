@@ -27,6 +27,7 @@ package org.diorite.inventory.item.meta;
 import java.util.List;
 
 import org.diorite.DyeColor;
+import org.diorite.banner.BannerPattern;
 
 /**
  * Represent banner meta data that use multiple patterns.

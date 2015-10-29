@@ -285,6 +285,7 @@ import org.diorite.material.items.food.MuttonMat;
 import org.diorite.material.items.food.PoisonousPotatoMat;
 import org.diorite.material.items.food.PorkchopMat;
 import org.diorite.material.items.food.PotatoMat;
+import org.diorite.material.items.food.PotionMat;
 import org.diorite.material.items.food.PumpkinPieMat;
 import org.diorite.material.items.food.RabbitMat;
 import org.diorite.material.items.food.RabbitStewMat;
@@ -731,7 +732,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final GhastTearMat                GHAST_TEAR                 = GhastTearMat.GHAST_TEAR;
     public static final GoldNuggetMat               GOLD_NUGGET                = GoldNuggetMat.GOLD_NUGGET;
     public static final NetherWartMat               NETHER_WART                = NetherWartMat.NETHER_WART;
-    //    public static final  Material                POTION               = new Material("POTION", 373, 1);
+    public static final PotionMat                   POTION                     = PotionMat.POTION;
     public static final GlassBottleMat              GLASS_BOTTLE               = GlassBottleMat.GLASS_BOTTLE;
     public static final SpiderEyeMat                SPIDER_EYE                 = SpiderEyeMat.SPIDER_EYE;
     public static final FermentedSpiderEyeMat       FERMENTED_SPIDER_EYE       = FermentedSpiderEyeMat.FERMENTED_SPIDER_EYE;
@@ -1734,7 +1735,7 @@ public abstract class Material implements SimpleEnum<Material>
         register(GHAST_TEAR);
         register(GOLD_NUGGET);
         register(NETHER_WART);
-//        register(POTION);
+        register(POTION);
         register(GLASS_BOTTLE);
         register(SPIDER_EYE);
         register(FERMENTED_SPIDER_EYE);

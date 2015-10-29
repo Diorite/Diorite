@@ -22,7 +22,47 @@
  * SOFTWARE.
  */
 
+package org.diorite.inventory.item.meta;
+
+import org.diorite.firework.FireworkEffect;
+
 /**
- * Enchantments API classes.
+ * Represents a meta that can store a single FireworkEffect. An example
+ * includes {@link org.diorite.material.Material#FIREWORK_CHARGE}.
  */
-package org.diorite.inventory.item.enchantments;
+public interface FireworkEffectMeta extends ItemMeta
+{
+
+    /**
+     * Sets the firework effect for this meta.
+     *
+     * @param effect the effect to set.
+     */
+    void setEffect(FireworkEffect effect);
+
+    /**
+     * Remove effect from this meta.
+     */
+    default void removeEffect()
+    {
+        this.setEffect(null);
+    }
+
+    /**
+     * Checks if this meta has an effect.
+     *
+     * @return true if this meta has an effect.
+     */
+    boolean hasEffect();
+
+    /**
+     * Gets the firework effect for this meta.
+     *
+     * @return the current effect.
+     */
+    FireworkEffect getEffect();
+
+    @Override
+    FireworkEffectMeta clone();
+}
+

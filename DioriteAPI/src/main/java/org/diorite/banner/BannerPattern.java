@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.item.meta;
+package org.diorite.banner;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
