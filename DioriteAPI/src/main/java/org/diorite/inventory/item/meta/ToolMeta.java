@@ -24,6 +24,7 @@
 
 package org.diorite.inventory.item.meta;
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.diorite.material.BlockMaterialData;
@@ -33,7 +34,6 @@ import org.diorite.material.BlockMaterialData;
  */
 public interface ToolMeta extends RepairableMeta
 {
-
     /**
      * Returns true if this tool is using CanDestory tag.
      *
@@ -51,7 +51,7 @@ public interface ToolMeta extends RepairableMeta
 
     /**
      * Returns set of {@link BlockMaterialData}, materials that can be destroyed by this tool. <br>
-     * Minecraft don't support subtypes here, so default type will be returned. <br>
+     * Minecraft don't support subtypes here. <br>
      * If set is empty and {@link #useCanDestoryTag()} is true, then this tool can't destory any block. <br>
      * If set is empty and {@link #useCanDestoryTag()} is false, then this tool can destory every block.
      *
@@ -60,9 +60,19 @@ public interface ToolMeta extends RepairableMeta
     Set<BlockMaterialData> getCanDestoryMaterials();
 
     /**
+     * Set materials that can be destroyed by this tool. <br>
+     * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.
+     * (Vanilla client can't see them)
+     *
+     * @param materials new collection of materials.
+     */
+    void setCanDestoryMaterials(Collection<BlockMaterialData> materials);
+
+    /**
      * Add new material that can be destroyed by this tool,
      * this method will automatically enable CanDestory tag if needed. <br>
-     * Method will ignore sub-type of material and use default type instead.
+     * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.
+     * (Vanilla client can't see them)
      *
      * @param material material to add.
      */
@@ -71,7 +81,8 @@ public interface ToolMeta extends RepairableMeta
     /**
      * Remove material that can be destroyed by this tool,
      * this method will automatically enable CanDestory tag if needed. <br>
-     * Method will ignore sub-type of material and use default type instead.
+     * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.
+     * (Vanilla client can't see them)
      *
      * @param material material to add.
      */

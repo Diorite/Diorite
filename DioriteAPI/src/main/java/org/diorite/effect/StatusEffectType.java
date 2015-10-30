@@ -198,6 +198,16 @@ public class StatusEffectType extends ASimpleEnum<StatusEffectType>
     }
 
     /**
+     * Returns type id of this status effect type.
+     *
+     * @return type id of this status effect type.
+     */
+    public byte getTypeID()
+    {
+        return this.typeID;
+    }
+
+    /**
      * Register new {@link StatusEffectType} entry in this enum.
      *
      * @param element new element to register.
@@ -230,6 +240,18 @@ public class StatusEffectType extends ASimpleEnum<StatusEffectType>
     public static StatusEffectType getByEnumName(final String name)
     {
         return getByEnumName(StatusEffectType.class, name);
+    }
+
+    /**
+     * Get one of PotionEffectType entry by its type id.
+     *
+     * @param type type id of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static StatusEffectType getByTypeID(final int type)
+    {
+        return byTypeID.get((byte) type);
     }
 
     /**

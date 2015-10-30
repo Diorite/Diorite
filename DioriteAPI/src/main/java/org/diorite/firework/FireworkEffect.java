@@ -217,8 +217,6 @@ public class FireworkEffect implements NbtSerializable
     /**
      * Construct a firework effect.
      *
-     * @param type The effect type
-     *
      * @return A utility object for building a firework effect
      */
     public static FireworkEffectBuilder builder()
