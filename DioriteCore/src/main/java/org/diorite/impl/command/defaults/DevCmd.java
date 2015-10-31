@@ -24,6 +24,7 @@
 
 package org.diorite.impl.command.defaults;
 
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -44,13 +45,14 @@ import org.diorite.chat.component.ComponentBuilder;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.command.CommandPriority;
+import org.diorite.enchantments.Enchantment;
+import org.diorite.entity.attrib.AttributeModifier;
+import org.diorite.entity.attrib.AttributeType;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
-import org.diorite.nbt.NbtTagCompound;
-import org.diorite.nbt.NbtTagList;
 import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.PermissionsGroup;
 import org.diorite.permissions.PermissionsManager;
@@ -73,18 +75,32 @@ public class DevCmd extends SystemCommandImpl
             {
                 case "itemmeta":
                 {
-                    final ItemStack item = new BaseItemStack(Material.ENCHANTED_BOOK);
+                    final ItemStack item = new BaseItemStack(Material.STONE);
                     final ItemMeta meta = item.getItemMeta();
-                    final NbtTagCompound nbt = meta.getRawData();
-                    final NbtTagList enchs = new NbtTagList("StoredEnchantments");
+                    meta.setDisplayName("Custom name!");
+                    meta.setLore(Arrays.asList("North to", "gupi nup"));
+                    meta.addEnchant(new Enchantment() // TODO :D
                     {
-                        final NbtTagCompound test = new NbtTagCompound();
-                        test.setShort("id", 1);
-                        test.setShort("lvl", 1);
-                        enchs.add(test);
-                    }
-                    nbt.addTag(enchs);
-                    meta.setRawData(nbt);
+                        @Override
+                        public int getID()
+                        {
+                            return 2;
+                        }
+
+                        @Override
+                        public boolean conflictsWith(final Enchantment enchantment)
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public int getMaxLevel()
+                        {
+                            return 5;
+                        }
+                    }, 3, true);
+                    meta.addAttributeModifier(AttributeModifier.builder().setName("t").setValue(2.25D).setType(AttributeType.GENERIC_ATTACK_DAMAGE).build());
+                    meta.addAttributeModifier(AttributeModifier.builder().setName("t").setValue(2.25D).setType(AttributeType.GENERIC_MAX_HEALTH).build());
                     p.getInventory().add(item);
                     break;
                 }

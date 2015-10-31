@@ -288,5 +288,8 @@ public class StatusEffectType extends ASimpleEnum<StatusEffectType>
         StatusEffectType.register(HEALTH_BOOST);
         StatusEffectType.register(ABSORPTION);
         StatusEffectType.register(SATURATION);
+        StatusEffectType.register(GLOWING);
+        StatusEffectType.register(LEVITATION);
+        StatusEffectType.register(BAD_LUCK);
     }
 }

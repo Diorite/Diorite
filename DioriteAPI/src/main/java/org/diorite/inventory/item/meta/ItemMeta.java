@@ -27,9 +27,11 @@ package org.diorite.inventory.item.meta;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
-import org.diorite.inventory.item.HideFlag;
 import org.diorite.enchantments.Enchantment;
+import org.diorite.entity.attrib.AttributeModifier;
+import org.diorite.inventory.item.HideFlag;
 import org.diorite.nbt.NbtTagCompound;
 
 import gnu.trove.TDecorators;
@@ -246,6 +248,84 @@ public interface ItemMeta
      * Remove all item flags from this meta.
      */
     void removeHideFlags();
+
+    /**
+     * Returns list of attribute modifiers, null if custom attributes tag isn't used.
+     *
+     * @return list of attribute modifiers, null if custom attributes tag isn't used.
+     */
+    List<AttributeModifier> getAttributeModifiers();
+
+    /**
+     * Set custom modifiers to this item meta.
+     *
+     * @param modifiers        modifiers to set.
+     * @param overrideDefaults if true then default modifiers will be removed.
+     */
+    void setAttributeModifiers(List<AttributeModifier> modifiers, boolean overrideDefaults);
+
+    /**
+     * Adds custom attribure modifer, if tag don't exist yet, default attribue modifiers will be kept.
+     *
+     * @param modifier modifier to add.
+     */
+    void addAttributeModifier(AttributeModifier modifier);
+
+    /**
+     * Remove all modifiers with matching uuid.
+     *
+     * @param uuid uuid of modifier to remove.
+     *
+     * @return true if at least one modifier was removed.
+     */
+    boolean removeAttributeModifiers(UUID uuid);
+
+    /**
+     * Remove all modifiers with matching name.
+     *
+     * @param name name of modifier to remove.
+     *
+     * @return true if at least one modifier was removed.
+     */
+    boolean removeAttributeModifiers(String name);
+
+    /**
+     * Remove given modifiers from this meta.
+     *
+     * @param modifiers modifiers to remove.
+     */
+    default void removeAttributeModifiers(final Iterable<AttributeModifier> modifiers)
+    {
+        modifiers.forEach(this::removeAttributeModifier);
+    }
+
+    /**
+     * Remove given modifier from this meta.
+     *
+     * @param modifier modifier to remove.
+     *
+     * @return true if modifier was removed.
+     */
+    boolean removeAttributeModifier(AttributeModifier modifier);
+
+    /**
+     * Returns list of default attribute modifiers that exists when there is no NBT tag.
+     *
+     * @return list of default attribute modifiers that exists when there is no NBT tag.
+     */
+    List<AttributeModifier> getDefaultAttributeModifiers();
+
+    /**
+     * Returns true if meta contains custom attribute modifiers.
+     *
+     * @return true if meta contains custom attribute modifiers.
+     */
+    boolean hasCustomModifiers();
+
+    /**
+     * Remove attribute modifiers nbt tag.
+     */
+    void removeAttributeModifiers();
 
     /**
      * Close this item meta.

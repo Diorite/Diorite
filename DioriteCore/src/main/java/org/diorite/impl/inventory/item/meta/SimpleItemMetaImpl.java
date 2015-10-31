@@ -30,8 +30,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.diorite.enchantments.Enchantment;
+import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.inventory.item.HideFlag;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.nbt.NbtTag;
@@ -46,15 +49,16 @@ import gnu.trove.map.hash.TObjectShortHashMap;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class SimpleItemMetaImpl extends ItemMetaImpl
 {
-    private static final String SEP               = ".";
-    private static final String DISPLAY           = "display";
-    private static final String DISPLAY_NAME      = DISPLAY + SEP + "Name";
-    private static final String LORE              = "Lore";
-    private static final String DISPLAY_LORE      = DISPLAY + SEP + LORE;
-    private static final String HIDE_FLAGS        = "HideFlags";
-    private static final String ENCHANTMENTS      = "ench";
-    private static final String ENCHANTMENT_ID    = "id";
-    private static final String ENCHANTMENT_LEVEL = "lvl";
+    private static final String SEP                 = ".";
+    private static final String DISPLAY             = "display";
+    private static final String DISPLAY_NAME        = DISPLAY + SEP + "Name";
+    private static final String LORE                = "Lore";
+    private static final String DISPLAY_LORE        = DISPLAY + SEP + LORE;
+    private static final String HIDE_FLAGS          = "HideFlags";
+    private static final String ENCHANTMENTS        = "ench";
+    private static final String ENCHANTMENT_ID      = "id";
+    private static final String ENCHANTMENT_LEVEL   = "lvl";
+    private static final String ATTRIBUTE_MODIFIERS = "AttributeModifiers";
 
     public SimpleItemMetaImpl(final NbtTagCompound tag)
     {
@@ -294,6 +298,86 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     public void removeHideFlags()
     {
         this.tag.removeTag(HIDE_FLAGS);
+    }
+
+    @Override
+    public List<AttributeModifier> getAttributeModifiers()
+    {
+        if (! this.tag.containsTag(ATTRIBUTE_MODIFIERS))
+        {
+            return null;
+        }
+        return this.tag.getList(ATTRIBUTE_MODIFIERS, NbtTagCompound.class).stream().map(AttributeModifier::fromNbt).collect(Collectors.toList());
+    }
+
+    @Override
+    public void setAttributeModifiers(final List<AttributeModifier> modifiers, final boolean overrideDefaults)
+    {
+        final List<AttributeModifier> newModifiers;
+        if (overrideDefaults)
+        {
+            newModifiers = new ArrayList<>(modifiers);
+        }
+        else
+        {
+            final List<AttributeModifier> defs = this.getDefaultAttributeModifiers();
+            newModifiers = new ArrayList<>(modifiers.size() + defs.size());
+            newModifiers.addAll(defs);
+            newModifiers.addAll(modifiers);
+        }
+        this.tag.removeTag(ATTRIBUTE_MODIFIERS);
+        this.tag.addTag(new NbtTagList(ATTRIBUTE_MODIFIERS, newModifiers.stream().map(AttributeModifier::serializeToNBT).collect(Collectors.toList())));
+    }
+
+    @Override
+    public void addAttributeModifier(final AttributeModifier modifier)
+    {
+        final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class, new NbtTagList(ATTRIBUTE_MODIFIERS, 3));
+        if (list.isEmpty() && ! this.tag.containsTag(ATTRIBUTE_MODIFIERS))
+        {
+            this.tag.addTag(list);
+        }
+        list.add(modifier.serializeToNBT());
+    }
+
+    @Override
+    public boolean removeAttributeModifiers(final UUID uuid)
+    {
+        final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
+        return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getUuid().equals(uuid));
+    }
+
+    @Override
+    public boolean removeAttributeModifiers(final String name)
+    {
+        final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
+        return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getName().map(s -> s.equals(name)).orElse(false));
+    }
+
+    @Override
+    public boolean removeAttributeModifier(final AttributeModifier modifier)
+    {
+        final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
+        return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).equals(modifier));
+    }
+
+    @Override
+    public List<AttributeModifier> getDefaultAttributeModifiers()
+    {
+        // TODO
+        return new ArrayList<>(2);
+    }
+
+    @Override
+    public boolean hasCustomModifiers()
+    {
+        return this.tag.containsTag(ATTRIBUTE_MODIFIERS);
+    }
+
+    @Override
+    public void removeAttributeModifiers()
+    {
+        this.tag.removeTag(ATTRIBUTE_MODIFIERS);
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")

@@ -39,8 +39,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.diorite.impl.auth.GameProfileImpl;
-import org.diorite.impl.entity.attrib.AttributeModifierImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
+import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
@@ -54,8 +54,8 @@ import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.inventory.item.BaseItemStack;
-import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
@@ -218,12 +218,12 @@ public class PacketDataSerializer extends ByteBuf
         }
     }
 
-    public AttributeModifierImpl readAttributeModifer()
+    public AttributeModifier readAttributeModifer()
     {
         final UUID uuid = this.readUUID();
         final double value = this.readDouble();
         final byte operation = this.readByte();
-        return new AttributeModifierImpl(uuid, value, ModifierOperation.getByEnumOrdinal(operation));
+        return new SimpleAttributeModifier(uuid, null, value, ModifierOperation.getByEnumOrdinal(operation), null, null);
     }
 
     public void writeAttributeModifer(final AttributeModifier attribute)

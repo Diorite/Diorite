@@ -46,7 +46,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerResourceP
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerTabComplete;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerUpdateAttributes;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerWorldParticles;
-import org.diorite.impl.entity.attrib.AttributeModifierImpl;
+import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
@@ -76,8 +76,8 @@ import org.diorite.inventory.item.ItemStack;
 import org.diorite.permissions.PlayerPermissionsContainer;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
-import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.math.endian.BigEndianUtils;
+import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 
 import gnu.trove.TIntCollection;
 import gnu.trove.list.array.TIntArrayList;
@@ -110,9 +110,8 @@ public class PlayerImpl extends LivingEntityImpl implements Player
      */
     protected static final byte META_KEY_SCORE = 18;
 
-
     // TODO: move this
-    private static final AttributeModifier tempSprintMod = new AttributeModifierImpl(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE);
+    private static final AttributeModifier tempSprintMod = new SimpleAttributeModifier(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), null, MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE, null, null);
 
     protected final TIntCollection removeQueue = new TIntArrayList(5, - 1);
 

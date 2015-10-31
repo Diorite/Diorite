@@ -35,6 +35,10 @@ import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import gnu.trove.map.TIntObjectMap;
 
+/**
+ * Represent possible modifier operations. <br>
+ * The game first sets X = Base, then executes all Operation 0 modifiers, then sets Y = X, then executes all Operation 1 modifiers, and finally executes all Operation 2 modifiers.
+ */
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class ModifierOperation extends ASimpleEnum<ModifierOperation>
 {
@@ -43,14 +47,34 @@ public class ModifierOperation extends ASimpleEnum<ModifierOperation>
         init(ModifierOperation.class, 3);
     }
 
+    /**
+     * Increment X by Value. <br>
+     * The game first sets X = Base, then executes all Operation 0 modifiers, then sets Y = X, then executes all Operation 1 modifiers, and finally executes all Operation 2 modifiers.
+     */
     public static final ModifierOperation ADD_NUMBER          = new ModifierOperation("ADD_NUMBER", ModifierValue::addX, mod -> mod.setY(mod.getX()));
+    /*
+     * Increment Y by X * Value. <br>
+     * The game first sets X = Base, then executes all Operation 0 modifiers, then sets Y = X, then executes all Operation 1 modifiers, and finally executes all Operation 2 modifiers.
+     */
     public static final ModifierOperation MULTIPLY_PERCENTAGE = new ModifierOperation("MULTIPLY_PERCENTAGE", (value, d) -> value.addY(value.getX() * d));
+    /**
+     * Y = Y * (1 + Amount) (equivalent to Increment Y by Y * Amount). <br>
+     * The game first sets X = Base, then executes all Operation 0 modifiers, then sets Y = X, then executes all Operation 1 modifiers, and finally executes all Operation 2 modifiers.
+     */
     public static final ModifierOperation ADD_PERCENTAGE      = new ModifierOperation("ADD_PERCENTAGE", (value, d) -> value.multipleY(1 + d));
 
     private static final SortedSet<ModifierOperation> sortedByID = new TreeSet<>((e1, e2) -> Integer.compare(e1.ordinal, e2.ordinal));
     private final ModifierOperationAction      action;
     private final UnaryOperator<ModifierValue> onEnd;
 
+    /**
+     * Construct new ModifierOperation.
+     *
+     * @param enumName enum name of operation.
+     * @param enumId   enum id of type.
+     * @param action   operation transform action.
+     * @param onEnd    function invoked at the end of all modifiers of this type.
+     */
     public ModifierOperation(final String enumName, final int enumId, final ModifierOperationAction action, final UnaryOperator<ModifierValue> onEnd)
     {
         super(enumName, enumId);
@@ -58,6 +82,13 @@ public class ModifierOperation extends ASimpleEnum<ModifierOperation>
         this.onEnd = onEnd;
     }
 
+    /**
+     * Construct new ModifierOperation.
+     *
+     * @param enumName enum name of operation.
+     * @param action   operation transform action.
+     * @param onEnd    function invoked at the end of all modifiers of this type.
+     */
     public ModifierOperation(final String enumName, final ModifierOperationAction action, final UnaryOperator<ModifierValue> onEnd)
     {
         super(enumName);
@@ -65,6 +96,12 @@ public class ModifierOperation extends ASimpleEnum<ModifierOperation>
         this.onEnd = onEnd;
     }
 
+    /**
+     * Construct new ModifierOperation.
+     *
+     * @param enumName enum name of operation.
+     * @param action   operation transform action.
+     */
     public ModifierOperation(final String enumName, final ModifierOperationAction action)
     {
         super(enumName);
@@ -72,32 +109,58 @@ public class ModifierOperation extends ASimpleEnum<ModifierOperation>
         this.onEnd = m -> m;
     }
 
+    /**
+     * Returns action transform function of this operation.
+     *
+     * @return action transform function of this operation.
+     */
     public ModifierOperationAction getAction()
     {
         return this.action;
     }
 
+    /**
+     * Returns function invoked at the end of all modifiers of this type.
+     *
+     * @return function invoked at the end of all modifiers of this type.
+     */
     public UnaryOperator<ModifierValue> getOnEnd()
     {
         return this.onEnd;
     }
 
+    /**
+     * Use action of this operation.
+     *
+     * @param value    value to be transformed.
+     * @param modValue modifier value to be used.
+     *
+     * @return this same modifier value after transform.
+     *
+     * @see ModifierOperationAction#use(ModifierValue, double)
+     */
     public ModifierValue use(final ModifierValue value, final double modValue)
     {
         return this.action.use(value, modValue);
     }
 
+    /**
+     * Invoke on end action for given value.
+     *
+     * @param value value to be transformed.
+     *
+     * @return this same modifier value after transform.
+     */
     public ModifierValue onEnd(final ModifierValue value)
     {
         return this.onEnd.apply(value);
     }
 
-    @FunctionalInterface
-    public interface ModifierOperationAction
-    {
-        ModifierValue use(ModifierValue value, double modValue);
-    }
-
+    /**
+     * Returns modifier operations sorted by id.
+     *
+     * @return modifier operations sorted by id.
+     */
     public static List<ModifierOperation> getSortedByID()
     {
         return new ArrayList<>(sortedByID);

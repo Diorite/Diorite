@@ -24,21 +24,105 @@
 
 package org.diorite.entity.attrib;
 
+import java.util.Optional;
 import java.util.UUID;
 
-public interface AttributeModifier
+import org.diorite.nbt.NbtSerializable;
+import org.diorite.nbt.NbtTagCompound;
+
+/**
+ * Represent attribute modifier that have uuid, value and type.
+ */
+public interface AttributeModifier extends NbtSerializable
 {
+    /**
+     * Increment X by Value. <br>
+     * The game first sets X = Base, then executes all Operation 0 modifiers, then sets Y = X, then executes all Operation 1 modifiers, and finally executes all Operation 2 modifiers.
+     */
     byte OPERATION_ADD_NUMBER          = 0;
+    /**
+     * Increment Y by X * Value. <br>
+     * The game first sets X = Base, then executes all Operation 0 modifiers, then sets Y = X, then executes all Operation 1 modifiers, and finally executes all Operation 2 modifiers.
+     */
     byte OPERATION_MULTIPLY_PERCENTAGE = 1;
+    /**
+     * Y = Y * (1 + Amount) (equivalent to Increment Y by Y * Amount). <br>
+     * The game first sets X = Base, then executes all Operation 0 modifiers, then sets Y = X, then executes all Operation 1 modifiers, and finally executes all Operation 2 modifiers.
+     */
     byte OPERATION_ADD_PERCENTAGE      = 2;
 
+    /**
+     * Returns type of attribute that will be modified by this modifier. <br>
+     * This field is only needed in item modifiers.
+     *
+     * @return type of attribute that will be modified by this modifier.
+     */
+    default Optional<AttributeType> getType()
+    {
+        return Optional.empty();
+    }
+
+    /**
+     * Returns uuid of this modifier.
+     *
+     * @return uuid of this modifier.
+     */
     UUID getUuid();
 
+    /**
+     * Returns name of this modifier.
+     *
+     * @return name of this modifier.
+     */
+    default Optional<String> getName()
+    {
+        return Optional.empty();
+    }
+
+    /**
+     * Returns value of this modifier.
+     *
+     * @return value of this modifier.
+     */
     double getValue();
 
+    /**
+     * Returns operation type of this modifier.
+     *
+     * @return operation type of this modifier.
+     */
     ModifierOperation getOperation();
 
-    boolean isSerialize();
+    /**
+     * Returns slot where item needs to be hold for this modifier. <br>
+     * Returns {@link ModifierSlot#NOT_SET} if this isn't item modifier.
+     *
+     * @return slot where item needs to be hold for this modifier.
+     */
+    default ModifierSlot getModifierSlot()
+    {
+        return ModifierSlot.NOT_SET;
+    }
 
-    AttributeModifier setSerialize(boolean serialize);
+    /**
+     * Deserialize AttributeModifier from {@link NbtTagCompound}.
+     *
+     * @param tag data to deserialize.
+     *
+     * @return deserialized AttributeModifier.
+     */
+    static AttributeModifier fromNbt(final NbtTagCompound tag)
+    {
+        return new BasicAttributeModifier(tag);
+    }
+
+    /**
+     * Construct new attribute modifier using builder.
+     *
+     * @return builder of attribute.
+     */
+    static AttributeModifierBuilder builder()
+    {
+        return new AttributeModifierBuilder();
+    }
 }
