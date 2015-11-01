@@ -33,7 +33,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.WoodType;
-import org.diorite.material.blocks.wooden.wood.LogMat;
+import org.diorite.material.blocks.LogMat;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.structures.tree.TreeStructure;

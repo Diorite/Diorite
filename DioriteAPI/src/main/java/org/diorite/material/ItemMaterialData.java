@@ -24,8 +24,8 @@
 
 package org.diorite.material;
 
-import org.diorite.material.items.food.EdibleItemMat;
-import org.diorite.material.items.tool.ToolMat;
+import org.diorite.material.items.EdibleItemMat;
+import org.diorite.material.items.ToolMat;
 
 /**
  * Abstract class for all items.

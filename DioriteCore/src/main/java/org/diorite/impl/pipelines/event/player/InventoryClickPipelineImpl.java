@@ -43,7 +43,7 @@ import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.slot.Slot;
 import org.diorite.inventory.slot.SlotType;
-import org.diorite.material.items.tool.ArmorMat;
+import org.diorite.material.items.ArmorMat;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
 @SuppressWarnings("ObjectEquality")

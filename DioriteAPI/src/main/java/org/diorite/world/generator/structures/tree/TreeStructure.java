@@ -36,9 +36,9 @@ import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.material.WoodType;
-import org.diorite.material.blocks.RotateAxisMat;
-import org.diorite.material.blocks.wooden.wood.LeavesMat;
-import org.diorite.material.blocks.wooden.wood.LogMat;
+import org.diorite.material.RotateAxisMat;
+import org.diorite.material.blocks.LeavesMat;
+import org.diorite.material.blocks.LogMat;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.structures.Structure;
 

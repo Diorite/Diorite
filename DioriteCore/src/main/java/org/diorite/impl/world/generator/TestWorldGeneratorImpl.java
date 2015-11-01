@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.material.Material;
 import org.diorite.material.WoodType;
-import org.diorite.material.blocks.stony.StoneMat;
+import org.diorite.material.blocks.StoneMat;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.noise.NoiseGenerator;
 import org.diorite.utils.math.noise.SimplexNoiseGenerator;
