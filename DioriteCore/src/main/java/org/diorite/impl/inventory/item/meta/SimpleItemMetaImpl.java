@@ -29,13 +29,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.diorite.enchantments.Enchantment;
+import org.diorite.enchantments.EnchantmentType;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.inventory.item.HideFlag;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
@@ -60,9 +62,32 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     private static final String ENCHANTMENT_LEVEL   = "lvl";
     private static final String ATTRIBUTE_MODIFIERS = "AttributeModifiers";
 
+    protected ItemStack itemStack;
+
     public SimpleItemMetaImpl(final NbtTagCompound tag)
     {
         super(tag);
+    }
+
+    public SimpleItemMetaImpl(final NbtTagCompound tag, final ItemStack itemStack)
+    {
+        super(tag);
+        this.itemStack = itemStack;
+    }
+
+    @Override
+    public Optional<ItemStack> getItemStack()
+    {
+        return Optional.ofNullable(this.itemStack);
+    }
+
+    @Override
+    public ItemMeta apply(final ItemStack item)
+    {
+        final SimpleItemMetaImpl meta = this.clone();
+        meta.itemStack = item;
+        item.setItemMeta(meta);
+        return meta;
     }
 
     @Override
@@ -123,7 +148,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     }
 
     @Override
-    public boolean hasEnchant(final Enchantment enchantment)
+    public boolean hasEnchant(final EnchantmentType enchantment)
     {
         final List<NbtTagCompound> tags = this.tag.getList(ENCHANTMENTS, NbtTagCompound.class);
         if (tags == null)
@@ -132,7 +157,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         }
         for (final NbtTagCompound tag : tags)
         {
-            if (tag.getShort(ENCHANTMENT_ID) == enchantment.getID())
+            if (tag.getShort(ENCHANTMENT_ID) == enchantment.getNumericID())
             {
                 return true;
             }
@@ -141,7 +166,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     }
 
     @Override
-    public int getEnchantLevel(final Enchantment enchantment)
+    public int getEnchantLevel(final EnchantmentType enchantment)
     {
         final List<NbtTagCompound> tags = this.tag.getList(ENCHANTMENTS, NbtTagCompound.class);
         if (tags == null)
@@ -150,7 +175,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         }
         for (final NbtTagCompound tag : tags)
         {
-            if (tag.getShort(ENCHANTMENT_ID) == enchantment.getID())
+            if (tag.getShort(ENCHANTMENT_ID) == enchantment.getNumericID())
             {
                 return tag.getShort(ENCHANTMENT_LEVEL);
             }
@@ -159,26 +184,26 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     }
 
     @Override
-    public TObjectShortMap<Enchantment> getEnchants()
+    public TObjectShortMap<EnchantmentType> getEnchants()
     {
         final List<NbtTagCompound> tags = this.tag.getList(ENCHANTMENTS, NbtTagCompound.class);
         if (tags == null)
         {
             return TCollections.unmodifiableMap(new TObjectShortHashMap<>(1, 1, (short) - 1));
         }
-        final TObjectShortMap<Enchantment> result = new TObjectShortHashMap<>(tags.size(), 1, (short) - 1);
+        final TObjectShortMap<EnchantmentType> result = new TObjectShortHashMap<>(tags.size(), 1, (short) - 1);
         for (final NbtTagCompound tag : tags)
         {
-            final Enchantment ench = null; // TODO getByID(tsg.getShort(ENCHANTMENT_ID));
+            final EnchantmentType ench = EnchantmentType.getByNumericID(tag.getShort(ENCHANTMENT_ID));
             result.put(ench, tag.getShort(ENCHANTMENT_LEVEL));
         }
         return TCollections.unmodifiableMap(result);
     }
 
     @Override
-    public boolean addEnchant(final Enchantment enchantment, final int level, final boolean ignoreLevelRestriction)
+    public boolean addEnchant(final EnchantmentType enchantment, final int level, final boolean ignoreLevelRestriction)
     {
-        if ((level <= 0) || (! ignoreLevelRestriction && (level > enchantment.getMaxLevel())))
+        if ((level <= 0) || (! ignoreLevelRestriction && (level > enchantment.getMaxLevel(this.itemStack, false))))
         {
             return false;
         }
@@ -192,7 +217,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         {
             for (final NbtTagCompound nbt : list.getTags(NbtTagCompound.class))
             {
-                if (nbt.getShort(ENCHANTMENT_ID) == enchantment.getID())
+                if (nbt.getShort(ENCHANTMENT_ID) == enchantment.getNumericID())
                 {
                     if (nbt.getShort(ENCHANTMENT_LEVEL) == level)
                     {
@@ -204,20 +229,20 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             }
         }
         final NbtTagCompound ench = new NbtTagCompound();
-        ench.setShort(ENCHANTMENT_ID, enchantment.getID());
+        ench.setShort(ENCHANTMENT_ID, enchantment.getNumericID());
         ench.setShort(ENCHANTMENT_LEVEL, level);
         list.addTag(ench);
         return true;
     }
 
     @Override
-    public boolean removeEnchant(final Enchantment enchantment)
+    public boolean removeEnchant(final EnchantmentType enchantment)
     {
         final NbtTagList list = this.tag.getTag(ENCHANTMENTS, NbtTagList.class);
         for (final Iterator<NbtTag> it = list.iterator(); it.hasNext(); )
         {
             final NbtTagCompound nbt = (NbtTagCompound) it.next();
-            if (nbt.getShort(ENCHANTMENT_ID) == enchantment.getID())
+            if (nbt.getShort(ENCHANTMENT_ID) == enchantment.getNumericID())
             {
                 it.remove();
                 if (list.isEmpty())
@@ -231,12 +256,12 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     }
 
     @Override
-    public boolean hasConflictingEnchant(final Enchantment enchantment)
+    public boolean hasConflictingEnchant(final EnchantmentType enchantment)
     {
         final List<NbtTagCompound> list = this.tag.getList(ENCHANTMENTS, NbtTagCompound.class);
         for (final NbtTagCompound nbt : list)
         {
-            final Enchantment ench = null; // TODO getByID(nbt.getShort(ENCHANTMENT_ID));
+            final EnchantmentType ench = EnchantmentType.getByNumericID(nbt.getShort(ENCHANTMENT_ID));
             if (enchantment.conflictsWith(ench))
             {
                 return true;
@@ -246,7 +271,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     }
 
     @Override
-    public void removeEnchantments()
+    public void removeEnchantmentTypes()
     {
         this.tag.removeTag(ENCHANTMENTS);
     }
@@ -382,8 +407,8 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
 
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
-    public ItemMeta clone()
+    public SimpleItemMetaImpl clone()
     {
-        return new SimpleItemMetaImpl(this.tag.clone());
+        return new SimpleItemMetaImpl(this.tag.clone(), this.itemStack);
     }
 }

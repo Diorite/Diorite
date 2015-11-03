@@ -26,12 +26,14 @@ package org.diorite.inventory.item.meta;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import org.diorite.enchantments.Enchantment;
+import org.diorite.enchantments.EnchantmentType;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.inventory.item.HideFlag;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.nbt.NbtTagCompound;
 
 import gnu.trove.TDecorators;
@@ -42,6 +44,22 @@ import gnu.trove.map.TObjectShortMap;
  */
 public interface ItemMeta
 {
+    /**
+     * Returns item stack where this item meta is set.
+     *
+     * @return item stack where this item meta is set.
+     */
+    Optional<ItemStack> getItemStack();
+
+    /**
+     * Apply this meta to given itemstak.
+     *
+     * @param item item to apply this meta.
+     *
+     * @return clone of this item meta that was set to given item.
+     */
+    ItemMeta apply(ItemStack item);
+
     /**
      * Returns copy of nbt compound tag of this item meta.
      *
@@ -144,7 +162,7 @@ public interface ItemMeta
      *
      * @return true if this enchantment exists for this meta
      */
-    boolean hasEnchant(Enchantment enchantment);
+    boolean hasEnchant(EnchantmentType enchantment);
 
     /**
      * Checks for the level of the specified enchantment.
@@ -153,7 +171,7 @@ public interface ItemMeta
      *
      * @return The level that the specified enchantment has, or 0 if none
      */
-    int getEnchantLevel(Enchantment enchantment);
+    int getEnchantLevel(EnchantmentType enchantment);
 
     /**
      * Returns a copy the enchantments in this ItemMeta. <br>
@@ -161,7 +179,7 @@ public interface ItemMeta
      *
      * @return An copy of the enchantments
      */
-    TObjectShortMap<Enchantment> getEnchants();
+    TObjectShortMap<EnchantmentType> getEnchants();
 
     /**
      * Returns a copy the enchantments in this ItemMeta. <br>
@@ -170,7 +188,7 @@ public interface ItemMeta
      *
      * @return An copy of the enchantments
      */
-    default Map<Enchantment, Short> getEnchantsMap()
+    default Map<EnchantmentType, Short> getEnchantsMap()
     {
         return TDecorators.wrap(this.getEnchants());
     }
@@ -179,7 +197,7 @@ public interface ItemMeta
      * Adds the specified enchantment to this item meta. <br>
      * If enchantment already exist level will be updated, if level was this same, false will be returned.
      *
-     * @param enchantment            Enchantment to add
+     * @param enchantment            EnchantmentType to add
      * @param level                  Level for the enchantment
      * @param ignoreLevelRestriction this indicates the enchantment should be
      *                               applied, ignoring the level limit
@@ -187,17 +205,17 @@ public interface ItemMeta
      * @return true if the item meta changed as a result of this call, false
      * otherwise
      */
-    boolean addEnchant(Enchantment enchantment, int level, boolean ignoreLevelRestriction);
+    boolean addEnchant(EnchantmentType enchantment, int level, boolean ignoreLevelRestriction);
 
     /**
      * Removes the specified enchantment from this item meta.
      *
-     * @param enchantment Enchantment to remove
+     * @param enchantment EnchantmentType to remove
      *
      * @return true if the item meta changed as a result of this call, false
      * otherwise
      */
-    boolean removeEnchant(Enchantment enchantment);
+    boolean removeEnchant(EnchantmentType enchantment);
 
     /**
      * Checks if the specified enchantment conflicts with any enchantments in
@@ -207,12 +225,12 @@ public interface ItemMeta
      *
      * @return true if the enchantment conflicts, false otherwise
      */
-    boolean hasConflictingEnchant(Enchantment enchantment);
+    boolean hasConflictingEnchant(EnchantmentType enchantment);
 
     /**
      * Remove all enchantments from this meta.
      */
-    void removeEnchantments();
+    void removeEnchantmentTypes();
 
     /**
      * Set itemflags which should be ignored when rendering a ItemStack in the Client. This Method does silently ignore double set itemFlags.

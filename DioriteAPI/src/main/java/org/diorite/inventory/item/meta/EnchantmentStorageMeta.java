@@ -26,13 +26,13 @@ package org.diorite.inventory.item.meta;
 
 import java.util.Map;
 
-import org.diorite.enchantments.Enchantment;
+import org.diorite.enchantments.EnchantmentType;
 
 import gnu.trove.TDecorators;
 import gnu.trove.map.TObjectShortMap;
 
 /**
- * EnchantmentMeta is specific to items that can store enchantments, as opposed to being enchanted. {@link org.diorite.material.Material#ENCHANTED_BOOK} is an example of an item with enchantment storage.
+ * EnchantmentStorageMeta is specific to items that can store enchantments, as opposed to being enchanted. {@link org.diorite.material.Material#ENCHANTED_BOOK} is an example of an item with enchantment storage.
  */
 
 public interface EnchantmentStorageMeta extends ItemMeta
@@ -51,7 +51,7 @@ public interface EnchantmentStorageMeta extends ItemMeta
      *
      * @return true if this enchantment is stored in this meta
      */
-    boolean hasStoredEnchant(Enchantment ench);
+    boolean hasStoredEnchant(EnchantmentType ench);
 
     /**
      * Checks for the level of the stored enchantment.
@@ -61,29 +61,29 @@ public interface EnchantmentStorageMeta extends ItemMeta
      * @return The level that the specified stored enchantment has, or 0 if
      * none
      */
-    int getStoredEnchantLevel(Enchantment ench);
+    int getStoredEnchantLevel(EnchantmentType ench);
 
     /**
      * Gets a copy the stored enchantments in this ItemMeta.
      *
      * @return An immutable copy of the stored enchantments
      */
-    TObjectShortMap<Enchantment> getStoredEnchants();
+    TObjectShortMap<EnchantmentType> getStoredEnchants();
 
     /**
      * Gets a copy the stored enchantments in this ItemMeta.
      *
      * @return An immutable copy of the stored enchantments
      */
-    default Map<Enchantment, Short> getStoredEnchantsMap()
+    default Map<EnchantmentType, Short> getStoredEnchantsMap()
     {
-        return TDecorators.wrap(this.getEnchants());
+        return TDecorators.wrap(this.getStoredEnchants());
     }
 
     /**
      * Stores the specified enchantment in this item meta.
      *
-     * @param ench                   Enchantment to store
+     * @param ench                   EnchantmentType to store
      * @param level                  Level for the enchantment
      * @param ignoreLevelRestriction this indicates the enchantment should be
      *                               applied, ignoring the level limit
@@ -93,19 +93,19 @@ public interface EnchantmentStorageMeta extends ItemMeta
      *
      * @throws IllegalArgumentException if enchantment is null
      */
-    boolean addStoredEnchant(Enchantment ench, int level, boolean ignoreLevelRestriction);
+    boolean addStoredEnchant(EnchantmentType ench, int level, boolean ignoreLevelRestriction);
 
     /**
      * Remove the specified stored enchantment from this item meta.
      *
-     * @param ench Enchantment to remove
+     * @param ench EnchantmentType to remove
      *
      * @return true if the item meta changed as a result of this call, false
      * otherwise
      *
      * @throws IllegalArgumentException if enchantment is null
      */
-    boolean removeStoredEnchant(Enchantment ench) throws IllegalArgumentException;
+    boolean removeStoredEnchant(EnchantmentType ench) throws IllegalArgumentException;
 
     /**
      * Remove all stored enchants.
@@ -120,7 +120,7 @@ public interface EnchantmentStorageMeta extends ItemMeta
      *
      * @return true if the enchantment conflicts, false otherwise
      */
-    boolean hasConflictingStoredEnchant(Enchantment ench);
+    boolean hasConflictingStoredEnchant(EnchantmentType ench);
 
     @Override
     EnchantmentStorageMeta clone();

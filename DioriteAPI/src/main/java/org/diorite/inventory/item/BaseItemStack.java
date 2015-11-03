@@ -86,7 +86,7 @@ public class BaseItemStack implements ItemStack
         if (this.itemMeta == null)
         {
             // TODO: type check etc...
-            this.itemMeta = Diorite.getCore().createItemMeta(this.material);
+            Diorite.getCore().createItemMeta(this.material).apply(this);
         }
         return this.itemMeta;
     }

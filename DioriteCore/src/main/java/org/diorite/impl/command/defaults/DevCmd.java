@@ -45,7 +45,7 @@ import org.diorite.chat.component.ComponentBuilder;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.command.CommandPriority;
-import org.diorite.enchantments.Enchantment;
+import org.diorite.enchantments.EnchantmentType;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.inventory.InventoryHolder;
@@ -79,26 +79,7 @@ public class DevCmd extends SystemCommandImpl
                     final ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName("Custom name!");
                     meta.setLore(Arrays.asList("North to", "gupi nup"));
-                    meta.addEnchant(new Enchantment() // TODO :D
-                    {
-                        @Override
-                        public int getID()
-                        {
-                            return 2;
-                        }
-
-                        @Override
-                        public boolean conflictsWith(final Enchantment enchantment)
-                        {
-                            return false;
-                        }
-
-                        @Override
-                        public int getMaxLevel()
-                        {
-                            return 5;
-                        }
-                    }, 3, true);
+                    meta.addEnchant(EnchantmentType.AQUA_AFFINITY, 3, true);
                     meta.addAttributeModifier(AttributeModifier.builder().setName("t").setValue(2.25D).setType(AttributeType.GENERIC_ATTACK_DAMAGE).build());
                     meta.addAttributeModifier(AttributeModifier.builder().setName("t").setValue(2.25D).setType(AttributeType.GENERIC_MAX_HEALTH).build());
                     p.getInventory().add(item);
