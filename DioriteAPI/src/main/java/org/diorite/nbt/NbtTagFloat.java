@@ -161,6 +161,34 @@ public class NbtTagFloat extends NbtAbstractTagNumber
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtTagFloat))
+        {
+            return false;
+        }
+        if (! super.equals(o))
+        {
+            return false;
+        }
+
+        final NbtTagFloat that = (NbtTagFloat) o;
+        return Float.compare(that.value, this.value) == 0;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = (31 * result) + ((this.value != + 0.0f) ? Float.floatToIntBits(this.value) : 0);
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();

@@ -25,6 +25,7 @@
 package org.diorite.nbt;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.apache.commons.lang3.Validate;
@@ -175,6 +176,34 @@ public class NbtTagShortArray extends NbtAbstractTag implements Iterable<Short>
     public TShortArrayIterator primitiveIterator()
     {
         return new TShortArrayIterator(this.value);
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtTagShortArray))
+        {
+            return false;
+        }
+        if (! super.equals(o))
+        {
+            return false;
+        }
+
+        final NbtTagShortArray shorts = (NbtTagShortArray) o;
+        return Arrays.equals(this.value, shorts.value);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = (31 * result) + Arrays.hashCode(this.value);
+        return result;
     }
 
     @Override

@@ -161,6 +161,34 @@ public class NbtTagShort extends NbtAbstractTagNumber
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtTagShort))
+        {
+            return false;
+        }
+        if (! super.equals(o))
+        {
+            return false;
+        }
+
+        final NbtTagShort that = (NbtTagShort) o;
+        return this.value == that.value;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = (31 * result) + (int) this.value;
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();

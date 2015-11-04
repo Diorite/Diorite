@@ -42,6 +42,7 @@ import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
 import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
+import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
 import org.diorite.BlockFace;
@@ -164,7 +165,7 @@ public class PacketDataSerializer extends ByteBuf
             final short damage = this.readShort();
             final Material mat = Material.getByID(id, damage);
             itemstack = new BaseItemStack((mat == null) ? Material.AIR : mat, amount);
-            itemstack.getItemMeta().setRawData(this.readNbtTagCompound());
+            itemstack.getItemMeta().setNbtData(this.readNbtTagCompound());
         }
         return itemstack;
     }
@@ -199,7 +200,7 @@ public class PacketDataSerializer extends ByteBuf
         this.writeByte(itemStack.getAmount());
         this.writeShort(mat.getType());
         final ItemMeta meta = itemStack.getItemMeta();
-        this.writeNbtTagCompound((meta == null) ? null : meta.getRawData());
+        this.writeNbtTagCompound((meta == null) ? null : ((meta instanceof ItemMetaImpl) ? ((ItemMetaImpl) meta).getRawData() : meta.getNbtData()));
     }
 
     public void writeNbtTagCompound(final NbtTag nbt)

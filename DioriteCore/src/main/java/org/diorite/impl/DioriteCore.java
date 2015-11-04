@@ -135,7 +135,6 @@ import org.diorite.event.player.PlayerJoinEvent;
 import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
-import org.diorite.nbt.NbtTagCompound;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginManager;
@@ -614,7 +613,7 @@ public class DioriteCore implements Core
     public ItemMeta createItemMeta(final Material material)
     {
         // TODO: type check etc...
-        return new SimpleItemMetaImpl(new NbtTagCompound("tag"));
+        return new SimpleItemMetaImpl(null);
     }
 
     @Override

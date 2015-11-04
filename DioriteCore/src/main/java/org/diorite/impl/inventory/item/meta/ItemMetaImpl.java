@@ -39,20 +39,84 @@ public abstract class ItemMetaImpl implements ItemMeta
         this.tag = tag;
     }
 
-    @Override
     public NbtTagCompound getRawData()
     {
+        return this.tag;
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return (this.tag == null) || this.tag.isEmpty();
+    }
+
+    @Override
+    public NbtTagCompound getNbtData()
+    {
+        if (this.tag == null)
+        {
+            return null;
+        }
         return this.tag.clone();
     }
 
     @Override
-    public void setRawData(final NbtTagCompound tag)
+    public void setNbtData(final NbtTagCompound tag)
     {
-        this.tag = tag;
+        this.tag = tag.clone();
     }
 
     @Override
     public abstract ItemMeta clone();
+
+    @Override
+    public void checkTag(final boolean get)
+    {
+        if (get)
+        {
+            if (this.tag == null)
+            {
+                this.tag = new NbtTagCompound("tag");
+            }
+        }
+        else if ((this.tag != null) && this.tag.isEmpty())
+        {
+            this.tag = null;
+        }
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof ItemMeta))
+        {
+            return false;
+        }
+
+        final ItemMeta itemMeta = (ItemMeta) o;
+        this.checkTag(false);
+        itemMeta.checkTag(false);
+        if (this.isEmpty() && itemMeta.isEmpty())
+        {
+            return true;
+        }
+        if (itemMeta instanceof ItemMetaImpl)
+        {
+            final ItemMetaImpl itemMetaImpl = (ItemMetaImpl) itemMeta;
+            return ! ((this.tag != null) ? ! this.tag.equals(itemMetaImpl.tag) : (itemMetaImpl.tag != null));
+        }
+        return ! ((this.tag != null) ? ! this.tag.equals(itemMeta.getNbtData()) : (itemMeta.getNbtData() != null));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return ((this.tag != null) && ! this.tag.isEmpty()) ? this.tag.hashCode() : 0;
+    }
 
     @Override
     public String toString()

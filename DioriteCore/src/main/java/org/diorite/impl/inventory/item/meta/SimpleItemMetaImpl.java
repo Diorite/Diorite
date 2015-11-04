@@ -27,6 +27,7 @@ package org.diorite.impl.inventory.item.meta;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -93,12 +94,16 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public boolean hasDisplayName()
     {
-        return this.tag.containsTag(DISPLAY_NAME);
+        return (this.tag != null) && this.tag.containsTag(DISPLAY_NAME);
     }
 
     @Override
     public String getDisplayName()
     {
+        if (this.tag == null)
+        {
+            return null;
+        }
         return this.tag.getString(DISPLAY_NAME);
     }
 
@@ -107,21 +112,30 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     {
         if (name == null)
         {
-            this.tag.removeTag(DISPLAY_NAME);
+            if (this.tag != null)
+            {
+                this.tag.removeTag(DISPLAY_NAME);
+                this.checkTag(false);
+            }
             return;
         }
+        this.checkTag(true);
         this.tag.setString(DISPLAY_NAME, name);
     }
 
     @Override
     public boolean hasLore()
     {
-        return this.tag.containsTag(DISPLAY_LORE);
+        return (this.tag != null) && this.tag.containsTag(DISPLAY_LORE);
     }
 
     @Override
     public List<String> getLore()
     {
+        if (this.tag == null)
+        {
+            return null;
+        }
         final NbtTag tag = this.tag.getTag(DISPLAY_LORE, NbtTagList.class);
         if (tag == null)
         {
@@ -135,21 +149,30 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     {
         if (lore == null)
         {
-            this.tag.removeTag(DISPLAY_LORE);
+            if (this.tag != null)
+            {
+                this.tag.removeTag(DISPLAY_LORE);
+                this.checkTag(false);
+            }
             return;
         }
+        this.checkTag(true);
         this.tag.addTag(DISPLAY, new NbtTagList(LORE, NbtTagType.STRING, lore));
     }
 
     @Override
     public boolean hasEnchants()
     {
-        return this.tag.getList(ENCHANTMENTS, NbtTagCompound.class, new ArrayList<>(1)).isEmpty();
+        return (this.tag != null) && this.tag.getList(ENCHANTMENTS, NbtTagCompound.class, new ArrayList<>(1)).isEmpty();
     }
 
     @Override
     public boolean hasEnchant(final EnchantmentType enchantment)
     {
+        if (this.tag == null)
+        {
+            return false;
+        }
         final List<NbtTagCompound> tags = this.tag.getList(ENCHANTMENTS, NbtTagCompound.class);
         if (tags == null)
         {
@@ -168,6 +191,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public int getEnchantLevel(final EnchantmentType enchantment)
     {
+        if (this.tag == null)
+        {
+            return 0;
+        }
         final List<NbtTagCompound> tags = this.tag.getList(ENCHANTMENTS, NbtTagCompound.class);
         if (tags == null)
         {
@@ -186,6 +213,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public TObjectShortMap<EnchantmentType> getEnchants()
     {
+        if (this.tag == null)
+        {
+            return TCollections.unmodifiableMap(new TObjectShortHashMap<>(1, 1, (short) - 1));
+        }
         final List<NbtTagCompound> tags = this.tag.getList(ENCHANTMENTS, NbtTagCompound.class);
         if (tags == null)
         {
@@ -207,10 +238,11 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         {
             return false;
         }
-        NbtTagList list = this.tag.getTag(ENCHANTMENTS, NbtTagList.class);
+        NbtTagList list = (this.tag == null) ? null : this.tag.getTag(ENCHANTMENTS, NbtTagList.class);
         if (list == null)
         {
             list = new NbtTagList(ENCHANTMENTS, 4);
+            this.checkTag(true);
             this.tag.addTag(list);
         }
         else
@@ -238,6 +270,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public boolean removeEnchant(final EnchantmentType enchantment)
     {
+        if (this.tag == null)
+        {
+            return false;
+        }
         final NbtTagList list = this.tag.getTag(ENCHANTMENTS, NbtTagList.class);
         for (final Iterator<NbtTag> it = list.iterator(); it.hasNext(); )
         {
@@ -248,6 +284,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
                 if (list.isEmpty())
                 {
                     this.tag.removeTag(ENCHANTMENTS);
+                    this.checkTag(false);
                 }
                 return true;
             }
@@ -258,6 +295,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public boolean hasConflictingEnchant(final EnchantmentType enchantment)
     {
+        if (this.tag == null)
+        {
+            return false;
+        }
         final List<NbtTagCompound> list = this.tag.getList(ENCHANTMENTS, NbtTagCompound.class);
         for (final NbtTagCompound nbt : list)
         {
@@ -273,14 +314,28 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public void removeEnchantmentTypes()
     {
+        if (this.tag == null)
+        {
+            return;
+        }
         this.tag.removeTag(ENCHANTMENTS);
+        this.checkTag(false);
     }
 
     @Override
     public void addHideFlags(final HideFlag... hideFlags)
     {
-        int flags = this.tag.getInt(HIDE_FLAGS);
-        final Set<HideFlag> set = HideFlag.getFlags(flags);
+        int flags;
+        final Set<HideFlag> set;
+        if (this.tag != null)
+        {
+            flags = this.tag.getInt(HIDE_FLAGS);
+            set = HideFlag.getFlags(flags);
+        }
+        else
+        {
+            set = new HashSet<>(hideFlags.length);
+        }
         Collections.addAll(set, hideFlags);
         flags = HideFlag.join(set);
         if (flags == 0)
@@ -293,6 +348,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public void removeHideFlags(final HideFlag... hideFlags)
     {
+        if (this.tag == null)
+        {
+            return;
+        }
         int flags = this.tag.getInt(HIDE_FLAGS);
         final Set<HideFlag> set = HideFlag.getFlags(flags);
         for (final HideFlag hideFlag : hideFlags)
@@ -303,6 +362,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         if (flags == 0)
         {
             this.tag.removeTag(HIDE_FLAGS);
+            this.checkTag(false);
         }
         this.tag.setInt(HIDE_FLAGS, flags);
     }
@@ -310,24 +370,37 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public Set<HideFlag> getHideFlags()
     {
+        if (this.tag == null)
+        {
+            return null;
+        }
         return HideFlag.getFlags(this.tag.getInt(HIDE_FLAGS));
     }
 
     @Override
     public boolean hasHideFlag(final HideFlag flag)
     {
-        return HideFlag.getFlags(this.tag.getInt(HIDE_FLAGS)).contains(flag);
+        return (this.tag != null) && HideFlag.getFlags(this.tag.getInt(HIDE_FLAGS)).contains(flag);
     }
 
     @Override
     public void removeHideFlags()
     {
+        if (this.tag == null)
+        {
+            return;
+        }
         this.tag.removeTag(HIDE_FLAGS);
+        this.checkTag(false);
     }
 
     @Override
     public List<AttributeModifier> getAttributeModifiers()
     {
+        if (this.tag == null)
+        {
+            return null;
+        }
         if (! this.tag.containsTag(ATTRIBUTE_MODIFIERS))
         {
             return null;
@@ -350,6 +423,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             newModifiers.addAll(defs);
             newModifiers.addAll(modifiers);
         }
+        this.checkTag(true);
         this.tag.removeTag(ATTRIBUTE_MODIFIERS);
         this.tag.addTag(new NbtTagList(ATTRIBUTE_MODIFIERS, newModifiers.stream().map(AttributeModifier::serializeToNBT).collect(Collectors.toList())));
     }
@@ -357,9 +431,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public void addAttributeModifier(final AttributeModifier modifier)
     {
-        final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class, new NbtTagList(ATTRIBUTE_MODIFIERS, 3));
-        if (list.isEmpty() && ! this.tag.containsTag(ATTRIBUTE_MODIFIERS))
+        final NbtTagList list = (this.tag == null) ? new NbtTagList(ATTRIBUTE_MODIFIERS, 3) : this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class, new NbtTagList(ATTRIBUTE_MODIFIERS, 3));
+        if (list.isEmpty() && ((this.tag == null) || ! this.tag.containsTag(ATTRIBUTE_MODIFIERS)))
         {
+            this.checkTag(true);
             this.tag.addTag(list);
         }
         list.add(modifier.serializeToNBT());
@@ -368,6 +443,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public boolean removeAttributeModifiers(final UUID uuid)
     {
+        if (this.tag == null)
+        {
+            return false;
+        }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
         return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getUuid().equals(uuid));
     }
@@ -375,6 +454,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public boolean removeAttributeModifiers(final String name)
     {
+        if (this.tag == null)
+        {
+            return false;
+        }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
         return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getName().map(s -> s.equals(name)).orElse(false));
     }
@@ -382,6 +465,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public boolean removeAttributeModifier(final AttributeModifier modifier)
     {
+        if (this.tag == null)
+        {
+            return false;
+        }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
         return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).equals(modifier));
     }
@@ -396,19 +483,24 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     @Override
     public boolean hasCustomModifiers()
     {
-        return this.tag.containsTag(ATTRIBUTE_MODIFIERS);
+        return (this.tag != null) && this.tag.containsTag(ATTRIBUTE_MODIFIERS);
     }
 
     @Override
     public void removeAttributeModifiers()
     {
+        if (this.tag == null)
+        {
+            return;
+        }
         this.tag.removeTag(ATTRIBUTE_MODIFIERS);
+        this.checkTag(false);
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public SimpleItemMetaImpl clone()
     {
-        return new SimpleItemMetaImpl(this.tag.clone(), this.itemStack);
+        return new SimpleItemMetaImpl((this.tag == null) ? null : this.tag.clone(), this.itemStack);
     }
 }

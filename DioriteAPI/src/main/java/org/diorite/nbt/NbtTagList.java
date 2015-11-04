@@ -365,6 +365,34 @@ public class NbtTagList extends NbtAbstractTag implements NbtAnonymousTagContain
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtTagList))
+        {
+            return false;
+        }
+        if (! super.equals(o))
+        {
+            return false;
+        }
+
+        final NbtTagList nbtTags = (NbtTagList) o;
+        return this.tagList.equals(nbtTags.tagList);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = (31 * result) + this.tagList.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tagList", this.tagList).toString();

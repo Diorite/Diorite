@@ -61,18 +61,25 @@ public interface ItemMeta
     ItemMeta apply(ItemStack item);
 
     /**
+     * Returns true if this meta isn't contains any data.
+     *
+     * @return true if this meta isn't contains any data.
+     */
+    boolean isEmpty();
+
+    /**
      * Returns copy of nbt compound tag of this item meta.
      *
      * @return copy of nbt compound tag of this item meta.
      */
-    NbtTagCompound getRawData();
+    NbtTagCompound getNbtData();
 
     /**
      * Set raw nbt data of this item to given tag.
      *
      * @param tag tag with meta data.
      */
-    void setRawData(NbtTagCompound tag);
+    void setNbtData(NbtTagCompound tag);
 
     /**
      * check if this item meta affect item,
@@ -83,7 +90,7 @@ public interface ItemMeta
      */
     default boolean isDefault()
     {
-        return this.getRawData().getTags().isEmpty();
+        return this.getNbtData().getTags().isEmpty();
     }
 
     /**
@@ -351,6 +358,15 @@ public interface ItemMeta
      * @return clone of this item meta.
      */
     ItemMeta clone();
+
+    /**
+     * This method should create or remove nbt tag if needed. <br>
+     * If given param is true, then method should create nbt if it doesn't exist yet. <br>
+     * If given param is false, then method should remove nbt if it is empty. <br>
+     *
+     * @param get true if method should check if tag exists.
+     */
+    void checkTag(boolean get);
 
 //    default boolean equals(final ItemMeta b)
 //    {

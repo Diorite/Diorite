@@ -80,8 +80,8 @@ public class DevCmd extends SystemCommandImpl
                     meta.setDisplayName("Custom name!");
                     meta.setLore(Arrays.asList("North to", "gupi nup"));
                     meta.addEnchant(EnchantmentType.AQUA_AFFINITY, 3, true);
-                    meta.addAttributeModifier(AttributeModifier.builder().setName("t").setValue(2.25D).setType(AttributeType.GENERIC_ATTACK_DAMAGE).build());
-                    meta.addAttributeModifier(AttributeModifier.builder().setName("t").setValue(2.25D).setType(AttributeType.GENERIC_MAX_HEALTH).build());
+                    meta.addAttributeModifier(AttributeModifier.builder().setUuid(new UUID(0,0)).setName("t").setValue(2.25D).setType(AttributeType.GENERIC_ATTACK_DAMAGE).build());
+                    meta.addAttributeModifier(AttributeModifier.builder().setUuid(new UUID(0,1)).setName("t").setValue(2.25D).setType(AttributeType.GENERIC_MAX_HEALTH).build());
                     p.getInventory().add(item);
                     break;
                 }

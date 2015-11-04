@@ -135,6 +135,28 @@ abstract class NbtAbstractTag implements NbtTag
     public abstract NbtAbstractTag clone();
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtAbstractTag))
+        {
+            return false;
+        }
+
+        final NbtAbstractTag that = (NbtAbstractTag) o;
+        return ! ((this.name != null) ? ! this.name.equals(that.name) : (that.name != null));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (this.name != null) ? this.name.hashCode() : 0;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).append("parent", this.parent).toString();

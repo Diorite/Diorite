@@ -24,8 +24,6 @@
 
 package org.diorite.inventory.item;
 
-import java.util.Objects;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -135,7 +133,15 @@ public class BaseItemStack implements ItemStack
         {
             return this.material.equals(Material.AIR);
         }
-        return this.material.equals(b.getMaterial()) && Objects.equals(this.itemMeta, b.getItemMeta());
+        if (! this.material.equals(b.getMaterial()))
+        {
+            return false;
+        }
+        if (this.itemMeta == null)
+        {
+            return b.getItemMeta().isEmpty();
+        }
+        return this.itemMeta.equals(b.getItemMeta());
     }
 
     @Override

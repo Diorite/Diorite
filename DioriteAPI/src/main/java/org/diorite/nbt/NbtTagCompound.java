@@ -1399,6 +1399,34 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtTagCompound))
+        {
+            return false;
+        }
+        if (! super.equals(o))
+        {
+            return false;
+        }
+
+        final NbtTagCompound that = (NbtTagCompound) o;
+        return this.tags.equals(that.tags);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = (31 * result) + this.tags.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tags", this.tags).toString();

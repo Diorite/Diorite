@@ -152,6 +152,34 @@ public class NbtTagString extends NbtAbstractTag
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtTagString))
+        {
+            return false;
+        }
+        if (! super.equals(o))
+        {
+            return false;
+        }
+
+        final NbtTagString that = (NbtTagString) o;
+        return ! ((this.value != null) ? ! this.value.equals(that.value) : (that.value != null));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = (31 * result) + ((this.value != null) ? this.value.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();

@@ -190,4 +190,26 @@ public abstract class NbtAbstractTagNumber extends Number implements NbtTag
     {
         return this.getNumberValue().shortValue();
     }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtAbstractTagNumber))
+        {
+            return false;
+        }
+
+        final NbtAbstractTagNumber that = (NbtAbstractTagNumber) o;
+        return ! ((this.name != null) ? ! this.name.equals(that.name) : (that.name != null));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (this.name != null) ? this.name.hashCode() : 0;
+    }
 }

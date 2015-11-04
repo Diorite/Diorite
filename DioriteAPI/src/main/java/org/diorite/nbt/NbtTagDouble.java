@@ -149,6 +149,35 @@ public class NbtTagDouble extends NbtAbstractTagNumber
     }
 
     @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof NbtTagDouble))
+        {
+            return false;
+        }
+        if (! super.equals(o))
+        {
+            return false;
+        }
+
+        final NbtTagDouble that = (NbtTagDouble) o;
+        return Double.compare(that.value, this.value) == 0;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        final long temp = Double.doubleToLongBits(this.value);
+        result = (31 * result) + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("value", this.value).toString();
