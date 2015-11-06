@@ -39,8 +39,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.auth.PropertyMap;
 import org.diorite.auth.GameProfile;
+import org.diorite.auth.PropertyMap;
+import org.diorite.nbt.NbtSerialization;
+import org.diorite.nbt.NbtTagCompound;
 
 public class GameProfileImpl implements GameProfile
 {
@@ -57,6 +59,13 @@ public class GameProfileImpl implements GameProfile
         }
         this.id = id;
         this.name = name;
+    }
+
+    public GameProfileImpl(final NbtTagCompound tag)
+    {
+        this.id = tag.containsTag("Id") ? UUID.fromString(tag.getString("Id")) : null;
+        this.name = tag.getString("Name");
+        this.properties = NbtSerialization.deserialize(PropertyMap.class, tag.getCompound("Properties"));
     }
 
     @Override
@@ -136,6 +145,16 @@ public class GameProfileImpl implements GameProfile
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("name", this.name).append("properties", this.properties).append("legacy", this.legacy).toString();
+    }
+
+    @Override
+    public NbtTagCompound serializeToNBT()
+    {
+        final NbtTagCompound tag = new NbtTagCompound();
+        tag.setString("Id", this.id.toString());
+        tag.setString("Name", this.name);
+        tag.put("Properties", this.properties.serializeToNBT());
+        return tag;
     }
 
     public static class Serializer implements JsonSerializer<GameProfileImpl>, JsonDeserializer<GameProfileImpl>

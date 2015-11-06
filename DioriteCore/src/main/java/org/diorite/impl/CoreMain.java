@@ -34,12 +34,27 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.reflections.Reflections;
 
+import org.diorite.impl.auth.GameProfileImpl;
+import org.diorite.impl.auth.properties.PropertyImpl;
 import org.diorite.impl.connection.packets.RegisterPackets;
+import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
 import org.diorite.Core;
+import org.diorite.auth.GameProfile;
+import org.diorite.auth.Property;
+import org.diorite.auth.PropertyMap;
+import org.diorite.banner.BannerPattern;
+import org.diorite.effect.StatusEffect;
+import org.diorite.entity.attrib.AttributeModifier;
+import org.diorite.entity.attrib.BasicAttributeModifier;
+import org.diorite.firework.FireworkEffect;
+import org.diorite.map.MapIcon;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.Material;
+import org.diorite.nbt.NbtSerializable;
+import org.diorite.nbt.NbtSerialization;
 import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.util.ResourceLeakDetector;
@@ -143,6 +158,7 @@ public final class CoreMain
             }
             System.out.println("Starting server, please wait...");
 
+            registerNbt();
             // register all packet classes.
             RegisterPackets.init();
 
@@ -161,6 +177,23 @@ public final class CoreMain
             t.printStackTrace();
         }
         return InitResult.RUN;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void registerNbt()
+    {
+        NbtSerialization.register(PropertyImpl::new, Property.class, PropertyImpl.class);
+        NbtSerialization.register(BannerPattern::new, BannerPattern.class);
+        NbtSerialization.register(StatusEffect::new, StatusEffect.class);
+        NbtSerialization.register(BasicAttributeModifier::new, AttributeModifier.class, BasicAttributeModifier.class, SimpleAttributeModifier.class);
+        NbtSerialization.register(FireworkEffect::new, FireworkEffect.class);
+        NbtSerialization.register(MapIcon::new, MapIcon.class);
+        NbtSerialization.register(GameProfileImpl::new, GameProfile.class, GameProfileImpl.class);
+        NbtSerialization.register(PropertyMap::new, PropertyMap.class);
+        if (enabledDebug)
+        {
+            new Reflections("").getSubTypesOf(NbtSerializable.class).stream().filter(c -> ! NbtSerialization.isRegistered(c)).forEach(c -> debug("[WARNING] Class: " + c.getCanonicalName() + " isn't registered in NbtSerialization,"));
+        }
     }
 
     public static OptionSet main(final String[] args, final boolean client, final Consumer<OptionParser> addon)

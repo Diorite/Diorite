@@ -26,10 +26,12 @@ package org.diorite.auth;
 
 import java.util.UUID;
 
+import org.diorite.nbt.NbtSerializable;
+
 /**
  * Represent player profile, profile contains all player data like uuid, nickname, skin.
  */
-public interface GameProfile
+public interface GameProfile extends NbtSerializable
 {
     /**
      * Returns uuid of profile. <br>

@@ -192,6 +192,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
     @Override
     public NbtTag put(final String key, final NbtTag value)
     {
+        value.setName(key);
         return this.tags.put(key, value);
     }
 

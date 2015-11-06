@@ -35,6 +35,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.auth.Property;
+import org.diorite.nbt.NbtTagCompound;
 
 public class PropertyImpl implements Property
 {
@@ -52,6 +53,13 @@ public class PropertyImpl implements Property
         this.name = name;
         this.value = value;
         this.signature = signature;
+    }
+
+    public PropertyImpl(final NbtTagCompound tag)
+    {
+        this.name = tag.getString("Name");
+        this.value = tag.getString("Value");
+        this.signature = tag.getString("Signature");
     }
 
     @Override
@@ -98,5 +106,18 @@ public class PropertyImpl implements Property
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.name).append("value", this.value).append("signature", this.signature).toString();
+    }
+
+    @Override
+    public NbtTagCompound serializeToNBT()
+    {
+        final NbtTagCompound nbt = new NbtTagCompound();
+        if (this.signature != null)
+        {
+            nbt.setString("Signature", this.signature);
+        }
+        nbt.setString("Value", this.value);
+        nbt.setString("Name", this.name);
+        return nbt;
     }
 }

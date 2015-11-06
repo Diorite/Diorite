@@ -24,10 +24,14 @@
 
 package org.diorite.nbt;
 
+import java.util.function.Function;
+
 /**
  * Represent object that can be serialized to {@link NbtTagCompound} and deserialized. <br>
- * Object implementing this interface should contains 1 NbtTagCompound arg constructor.
+ * <br>
+ * Every class implementing this interface should be registred using {@link NbtSerialization#register(Class, Function)}
  */
+@FunctionalInterface
 public interface NbtSerializable
 {
     /**

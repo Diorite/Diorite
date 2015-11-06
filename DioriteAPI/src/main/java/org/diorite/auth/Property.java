@@ -26,10 +26,12 @@ package org.diorite.auth;
 
 import java.security.PublicKey;
 
+import org.diorite.nbt.NbtSerializable;
+
 /**
  * Represent GameProfile property, each property can have name, value and signature.
  */
-public interface Property
+public interface Property extends NbtSerializable
 {
     /**
      * Returns name of this property.

@@ -24,6 +24,10 @@
 
 package org.diorite.auth;
 
+import java.util.Collection;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.ForwardingMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
@@ -31,12 +35,20 @@ import com.google.common.collect.Multimap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.nbt.NbtAnonymousTagContainer;
+import org.diorite.nbt.NbtNamedTagContainer;
+import org.diorite.nbt.NbtSerializable;
+import org.diorite.nbt.NbtSerialization;
+import org.diorite.nbt.NbtTag;
+import org.diorite.nbt.NbtTagCompound;
+import org.diorite.nbt.NbtTagList;
+
 /**
  * Represent {@link Multimap} for Properties mapped by string key.
  *
  * @see Property
  */
-public class PropertyMap extends ForwardingMultimap<String, Property>
+public class PropertyMap extends ForwardingMultimap<String, Property> implements NbtSerializable
 {
     private final Multimap<String, Property> properties;
 
@@ -46,6 +58,25 @@ public class PropertyMap extends ForwardingMultimap<String, Property>
     public PropertyMap()
     {
         this.properties = LinkedHashMultimap.create();
+    }
+
+    /**
+     * Deserialize PropertyMap from {@link NbtTagCompound}.
+     *
+     * @param tag data to deserialize.
+     */
+    public PropertyMap(final NbtNamedTagContainer tag)
+    {
+        this.properties = LinkedHashMultimap.create();
+        for (final Entry<String, NbtTag> entry : tag.getTags().entrySet())
+        {
+            if (! (entry.getValue() instanceof NbtTagList))
+            {
+                return;
+            }
+            final NbtAnonymousTagContainer list = (NbtAnonymousTagContainer) entry.getValue();
+            this.properties.putAll(entry.getKey(), list.getTags(NbtTagCompound.class).stream().map(t -> NbtSerialization.deserialize(Property.class, t)).collect(Collectors.toList()));
+        }
     }
 
     @Override
@@ -58,5 +89,19 @@ public class PropertyMap extends ForwardingMultimap<String, Property>
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("properties", this.properties).toString();
+    }
+
+    @Override
+    public NbtTagCompound serializeToNBT()
+    {
+        final NbtTagCompound result = new NbtTagCompound();
+        for (final Entry<String, Collection<Property>> entry : this.properties.asMap().entrySet())
+        {
+            final Collection<Property> col = entry.getValue();
+            final NbtTagList list = new NbtTagList(entry.getKey(), col.size());
+            col.stream().map(NbtSerializable::serializeToNBT).forEach(list::add);
+            result.addTag(list);
+        }
+        return result;
     }
 }
