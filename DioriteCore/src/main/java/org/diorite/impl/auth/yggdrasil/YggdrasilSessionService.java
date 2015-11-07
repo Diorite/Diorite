@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -49,30 +50,39 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.auth.GameProfileImpl;
+import org.diorite.impl.auth.GameProfiles;
 import org.diorite.impl.auth.SessionService;
 import org.diorite.impl.auth.exceptions.AuthenticationException;
 import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
 import org.diorite.impl.auth.exceptions.InvalidCredentialsException;
+import org.diorite.impl.auth.exceptions.TooManyRequestsException;
 import org.diorite.impl.auth.exceptions.UserMigratedException;
 import org.diorite.impl.auth.properties.PropertyMapSerializer;
 import org.diorite.impl.auth.yggdrasil.request.JoinServerRequest;
+import org.diorite.impl.auth.yggdrasil.request.ProfileSearchRequest;
 import org.diorite.impl.auth.yggdrasil.response.HasJoinedResponse;
+import org.diorite.impl.auth.yggdrasil.response.ProfileResponse;
 import org.diorite.impl.auth.yggdrasil.response.ProfileSearchResultsResponse;
 import org.diorite.impl.auth.yggdrasil.response.Response;
+import org.diorite.auth.GameProfile;
 import org.diorite.auth.PropertyMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.json.adapters.JsonUUIDAdapter;
 import org.diorite.utils.network.DioriteURLUtils;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class YggdrasilSessionService implements SessionService
 {
     public static final int CONNECT_TIMEOUT = 15000;
 
-    private static final String BASE_URL  = "https://sessionserver.mojang.com/session/minecraft/";
-    private static final URL    JOIN_URL  = DioriteURLUtils.createURL(BASE_URL + "join");
-    private static final URL    CHECK_URL = DioriteURLUtils.createURL(BASE_URL + "hasJoined");
-    //  private static final URL    PROFILE_URL = DioriteURLUtils.createURL(BASE_URL + "profile");
+    private static final String BASE_URL       = "https://sessionserver.mojang.com/session/minecraft/";
+    private static final URL    JOIN_URL       = DioriteURLUtils.createURL(BASE_URL + "join");
+    private static final URL    CHECK_URL      = DioriteURLUtils.createURL(BASE_URL + "hasJoined");
+    private static final URL    PROFILE_URL    = DioriteURLUtils.createURL(BASE_URL + "profile/");
+    private static final String API_BASE_URL   = "https://api.mojang.com/";
+    private static final URL    NAMES_TO_UUIDS = DioriteURLUtils.createURL(API_BASE_URL + "profiles/minecraft");
 
-    private final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new JsonUUIDAdapter(false)).registerTypeAdapter(GameProfileImpl.class, new GameProfileImpl.Serializer()).registerTypeAdapter(PropertyMap.class, new PropertyMapSerializer()).registerTypeAdapter(ProfileSearchResultsResponse.class, new ProfileSearchResultsResponse.Serializer()).create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new JsonUUIDAdapter(false)).registerTypeAdapter(ProfileSearchRequest.class, new ProfileSearchRequest.Serializer()).registerTypeAdapter(GameProfileImpl.class, new GameProfileImpl.Serializer()).registerTypeAdapter(PropertyMap.class, new PropertyMapSerializer()).registerTypeAdapter(ProfileSearchResultsResponse.class, new ProfileSearchResultsResponse.Serializer()).create();
     private final Proxy     proxy;
     private final String    clientToken;
     private final PublicKey publicKey;
@@ -112,6 +122,87 @@ public class YggdrasilSessionService implements SessionService
     public PublicKey getPublicKey()
     {
         return this.publicKey;
+    }
+
+    @Override
+    public CaseInsensitiveMap<GameProfile> getUUIDsFromUsernames(final String... names) throws AuthenticationException
+    {
+        final ProfileSearchResultsResponse response = this.makeRequest(NAMES_TO_UUIDS, new ProfileSearchRequest(names), ProfileSearchResultsResponse.class);
+        if ((response != null) && (response.getProfiles() != null))
+        {
+            final GameProfileImpl[] results = response.getProfiles();
+            if (results.length == 0)
+            {
+                return new CaseInsensitiveMap<>(1);
+            }
+            final CaseInsensitiveMap<GameProfile> resultMap = new CaseInsensitiveMap<>(results.length);
+            for (final GameProfileImpl result : results)
+            {
+                if (result == null)
+                {
+                    continue;
+                }
+                resultMap.put(result.getName(), result);
+            }
+            return resultMap;
+        }
+        return new CaseInsensitiveMap<>(1);
+    }
+
+    @Override
+    public GameProfileImpl getGameProfile(String name) throws AuthenticationException
+    {
+        final GameProfile gp = this.getUUIDsFromUsernames(name).get(name);
+        final UUID uuid = gp.getId();
+        name = gp.getName();
+
+        final GameProfileImpl mgp = this.getGameProfile0(uuid);
+        if (mgp == null)
+        {
+            GameProfiles.addEmptyEntry(name, uuid);
+        }
+        else
+        {
+            GameProfiles.addToCache(mgp);
+        }
+        return mgp;
+    }
+
+    private GameProfileImpl getGameProfile0(final UUID uuid) throws AuthenticationException
+    {
+        try
+        {
+            final URL url = new URL(PROFILE_URL, StringUtils.remove(uuid.toString(), '-') + "?unsigned=false");
+            final ProfileResponse response = this.makeRequest(url, null, ProfileResponse.class);
+            if ((response != null) && (response.getId() != null))
+            {
+                final GameProfileImpl result = new GameProfileImpl(response.getId(), response.getName());
+                if (response.getProperties() != null)
+                {
+                    result.getProperties().putAll(response.getProperties());
+                }
+                return result;
+            }
+        } catch (final MalformedURLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public GameProfileImpl getGameProfile(final UUID uuid) throws AuthenticationException
+    {
+        final GameProfileImpl gp = this.getGameProfile0(uuid);
+        if (gp == null)
+        {
+            GameProfiles.addEmptyEntry(null, uuid);
+        }
+        else
+        {
+            GameProfiles.addToCache(gp);
+        }
+        return gp;
     }
 
     @Override
@@ -201,14 +292,29 @@ public class YggdrasilSessionService implements SessionService
                 {
                     throw new UserMigratedException(result.getErrorMessage());
                 }
-                if (result.getError().equals("ForbiddenOperationException"))
+                if ("Not Found".equals(result.getCause()))
+                {
+                    return null;
+                }
+                if ("ForbiddenOperationException".equals(result.getError()))
                 {
                     throw new InvalidCredentialsException(result.getErrorMessage());
+                }
+                if ("TooManyRequestsException".equals(result.getError()))
+                {
+                    throw new TooManyRequestsException(result.getErrorMessage());
                 }
                 throw new AuthenticationException(result.getErrorMessage());
             }
             return result;
-        } catch (final IOException | JsonParseException | IllegalStateException e)
+        } catch (final IOException e)
+        {
+            if (e.getMessage().contains("429 for URL"))
+            {
+                throw new TooManyRequestsException("Too many requests!", e);
+            }
+            throw new AuthenticationUnavailableException("Cannot contact authentication server", e);
+        } catch (final JsonParseException | IllegalStateException e)
         {
             throw new AuthenticationUnavailableException("Cannot contact authentication server", e);
         }

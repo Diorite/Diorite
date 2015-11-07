@@ -22,24 +22,54 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.auth;
+package org.diorite.impl.auth.yggdrasil.response;
 
 import java.util.UUID;
 
-import org.diorite.impl.auth.exceptions.AuthenticationException;
-import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
-import org.diorite.auth.GameProfile;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-public interface SessionService
+import org.diorite.auth.PropertyMap;
+
+public class ProfileResponse extends Response
 {
-    CaseInsensitiveMap<GameProfile> getUUIDsFromUsernames(String[] names) throws AuthenticationException;
+    private UUID        id;
+    private String      name;
+    private PropertyMap properties;
 
-    GameProfile getGameProfile(String name) throws AuthenticationException;
+    public UUID getId()
+    {
+        return this.id;
+    }
 
-    GameProfile getGameProfile(UUID uuid) throws AuthenticationException;
+    public void setId(final UUID id)
+    {
+        this.id = id;
+    }
 
-    void joinServer(GameProfileImpl gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException;
+    public String getName()
+    {
+        return this.name;
+    }
 
-    GameProfileImpl hasJoinedServer(GameProfileImpl gameProfile, String serverID) throws AuthenticationUnavailableException;
+    public void setName(final String name)
+    {
+        this.name = name;
+    }
+
+    public PropertyMap getProperties()
+    {
+        return this.properties;
+    }
+
+    public void setProperties(final PropertyMap properties)
+    {
+        this.properties = properties;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("name", this.name).append("properties", this.properties).toString();
+    }
 }

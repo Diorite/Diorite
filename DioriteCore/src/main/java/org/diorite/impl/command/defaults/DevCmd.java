@@ -35,6 +35,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameState
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.inventory.item.meta.SkullMetaImpl;
 import org.diorite.Diorite;
 import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
@@ -52,7 +53,9 @@ import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.meta.ItemMeta;
+import org.diorite.inventory.item.meta.SkullMeta;
 import org.diorite.material.Material;
+import org.diorite.material.items.SkullMat;
 import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.PermissionsGroup;
 import org.diorite.permissions.PermissionsManager;
@@ -73,6 +76,15 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "skullmeta":
+                {
+                    final ItemStack item = new BaseItemStack(SkullMat.SKULL_PLAYER);
+                    final SkullMeta meta = new SkullMetaImpl(null);
+                    meta.setOwner(args.asString(0));
+                    item.setItemMeta(meta);
+                    p.getInventory().add(item);
+                    break;
+                }
                 case "itemmeta":
                 {
                     final ItemStack item = new BaseItemStack(Material.STONE);
@@ -80,8 +92,8 @@ public class DevCmd extends SystemCommandImpl
                     meta.setDisplayName("Custom name!");
                     meta.setLore(Arrays.asList("North to", "gupi nup"));
                     meta.addEnchant(EnchantmentType.AQUA_AFFINITY, 3, true);
-                    meta.addAttributeModifier(AttributeModifier.builder().setUuid(new UUID(0,0)).setName("t").setValue(2.25D).setType(AttributeType.GENERIC_ATTACK_DAMAGE).build());
-                    meta.addAttributeModifier(AttributeModifier.builder().setUuid(new UUID(0,1)).setName("t").setValue(2.25D).setType(AttributeType.GENERIC_MAX_HEALTH).build());
+                    meta.addAttributeModifier(AttributeModifier.builder().setUuid(new UUID(0, 0)).setName("t").setValue(2.25D).setType(AttributeType.GENERIC_ATTACK_DAMAGE).build());
+                    meta.addAttributeModifier(AttributeModifier.builder().setUuid(new UUID(0, 1)).setName("t").setValue(2.25D).setType(AttributeType.GENERIC_MAX_HEALTH).build());
                     p.getInventory().add(item);
                     break;
                 }

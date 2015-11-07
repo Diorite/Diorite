@@ -34,6 +34,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfileImpl;
+import org.diorite.impl.auth.GameProfiles;
 import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
 import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.server.connection.listeners.LoginListener;
@@ -72,8 +73,10 @@ public class ThreadPlayerLookupUUID extends Thread
             {
                 this.loginListener.disconnect("Failed to verify username!");
                 this.loginListener.getLogger().error("Username '" + oldProfile.getName() + "' tried to join with an invalid session");
+                GameProfiles.addEmptyEntry(oldProfile.getName(), UUID.nameUUIDFromBytes(("OfflinePlayer:" + oldProfile.getName()).getBytes(StandardCharsets.UTF_8)));
                 return;
             }
+            GameProfiles.addToCache(newProfile);
             this.allow();
         } catch (final AuthenticationUnavailableException serverEx)
         {

@@ -22,24 +22,28 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.auth;
+package org.diorite.impl.auth.exceptions;
 
-import java.util.UUID;
-
-import org.diorite.impl.auth.exceptions.AuthenticationException;
-import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
-import org.diorite.auth.GameProfile;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
-
-public interface SessionService
+public class TooManyRequestsException extends AuthenticationException
 {
-    CaseInsensitiveMap<GameProfile> getUUIDsFromUsernames(String[] names) throws AuthenticationException;
+    private static final long serialVersionUID = 0;
 
-    GameProfile getGameProfile(String name) throws AuthenticationException;
+    public TooManyRequestsException()
+    {
+    }
 
-    GameProfile getGameProfile(UUID uuid) throws AuthenticationException;
+    public TooManyRequestsException(final String message)
+    {
+        super(message);
+    }
 
-    void joinServer(GameProfileImpl gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException;
+    public TooManyRequestsException(final String message, final Throwable cause)
+    {
+        super(message, cause);
+    }
 
-    GameProfileImpl hasJoinedServer(GameProfileImpl gameProfile, String serverID) throws AuthenticationUnavailableException;
+    public TooManyRequestsException(final Throwable cause)
+    {
+        super(cause);
+    }
 }

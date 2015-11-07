@@ -25,6 +25,7 @@
 package org.diorite.impl.pipelines.event.player;
 
 import org.diorite.impl.DioriteCore;
+import org.diorite.impl.auth.GameProfiles;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
@@ -74,9 +75,9 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             player.getWorld().addEntity(player);
 
             DioriteCore.getInstance().addSync(() -> {
-                PacketPlayServer[] newPackets = player.getSpawnPackets();
+                final PacketPlayServer[] newPackets = player.getSpawnPackets();
                 DioriteCore.getInstance().getPlayersManager().forEachExcept(player, p -> {
-                    PacketPlayServer[] playerPackets = p.getSpawnPackets();
+                    final PacketPlayServer[] playerPackets = p.getSpawnPackets();
                     player.getNetworkManager().sendPackets(playerPackets);
                     p.getNetworkManager().sendPackets(newPackets);
                 });
@@ -96,6 +97,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
                 return;
             }
             final Player player = evt.getPlayer();
+            GameProfiles.addToCache(player.getGameProfile());
             this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!");
             this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
 //        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");

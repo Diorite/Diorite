@@ -31,6 +31,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.magic.MagicNumbers;
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.blocks.*;
 import org.diorite.material.items.*;
 import org.diorite.utils.SimpleEnum;
@@ -535,6 +536,16 @@ public abstract class Material implements SimpleEnum<Material>
      * @return if material is block-type.
      */
     public abstract boolean isBlock();
+
+    /**
+     * Returns type of ItemMeta used by this material.
+     *
+     * @return type of ItemMeta used by this material.
+     */
+    public Class<ItemMeta> getMetaType()
+    {
+        return ItemMeta.class;
+    }
 
     /**
      * Returns array contains all other (including current one) sub-types of this material.

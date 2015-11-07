@@ -53,10 +53,8 @@ public interface SkullMeta extends ItemMeta
      * downloading skin will not block current thread.
      *
      * @param nickname the new owner of the skull.
-     *
-     * @return true if the owner was successfully set.
      */
-    boolean setOwner(String nickname);
+    void setOwner(String nickname);
 
     /**
      * Sets the owner of the skull. <br>
@@ -64,20 +62,16 @@ public interface SkullMeta extends ItemMeta
      * downloading skin will not block current thread.
      *
      * @param uuid the new owner of the skull.
-     *
-     * @return true if the owner was successfully set.
      */
-    boolean setOwner(UUID uuid);
+    void setOwner(UUID uuid);
 
     /**
      * Sets the owner of the skull. <br>
      * Method will trust data in {@link GameProfile} even if it is fake or outdated.
      *
      * @param gameProfile the new owner of the skull.
-     *
-     * @return true if the owner was successfully set.
      */
-    boolean setOwner(GameProfile gameProfile);
+    void setOwner(GameProfile gameProfile);
 
     @Override
     SkullMeta clone();

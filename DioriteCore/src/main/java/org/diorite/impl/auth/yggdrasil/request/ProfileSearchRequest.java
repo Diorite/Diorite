@@ -22,24 +22,43 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.auth;
+package org.diorite.impl.auth.yggdrasil.request;
 
-import java.util.UUID;
+import java.lang.reflect.Type;
 
-import org.diorite.impl.auth.exceptions.AuthenticationException;
-import org.diorite.impl.auth.exceptions.AuthenticationUnavailableException;
-import org.diorite.auth.GameProfile;
-import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
-public interface SessionService
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+public class ProfileSearchRequest
 {
-    CaseInsensitiveMap<GameProfile> getUUIDsFromUsernames(String[] names) throws AuthenticationException;
+    public final String[] nicknames;
 
-    GameProfile getGameProfile(String name) throws AuthenticationException;
+    public ProfileSearchRequest(final String[] nicknames)
+    {
+        this.nicknames = nicknames;
+    }
 
-    GameProfile getGameProfile(UUID uuid) throws AuthenticationException;
+    public String[] getNicknames()
+    {
+        return this.nicknames;
+    }
 
-    void joinServer(GameProfileImpl gameProfile, final String authenticationToken, final String serverId) throws AuthenticationException;
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("nicknames", this.nicknames).toString();
+    }
 
-    GameProfileImpl hasJoinedServer(GameProfileImpl gameProfile, String serverID) throws AuthenticationUnavailableException;
+    public static class Serializer implements JsonSerializer<ProfileSearchRequest>
+    {
+        @Override
+        public JsonElement serialize(final ProfileSearchRequest src, final Type typeOfSrc, final JsonSerializationContext context)
+        {
+            return context.serialize(src.nicknames);
+        }
+    }
 }
