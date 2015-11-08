@@ -66,10 +66,12 @@ public class MapMetaImpl extends SimpleItemMetaImpl implements MapMeta
             }
             this.tag.removeTag(SCALING);
             this.checkTag(false);
+            this.setDirty();
             return;
         }
         this.checkTag(true);
         this.tag.setBoolean(SCALING, true);
+        this.setDirty();
     }
 
     @Override
@@ -98,6 +100,7 @@ public class MapMetaImpl extends SimpleItemMetaImpl implements MapMeta
             this.tag.addTag(list);
         }
         list.add(icon.serializeToNBT());
+        this.setDirty();
     }
 
     @Override
@@ -118,6 +121,7 @@ public class MapMetaImpl extends SimpleItemMetaImpl implements MapMeta
             this.tag.remove(DECORATIONS);
             this.checkTag(false);
         }
+        this.setDirty();
     }
 
     @Override
@@ -138,6 +142,7 @@ public class MapMetaImpl extends SimpleItemMetaImpl implements MapMeta
             this.tag.remove(DECORATIONS);
             this.checkTag(false);
         }
+        this.setDirty();
     }
 
     @Override
@@ -149,6 +154,7 @@ public class MapMetaImpl extends SimpleItemMetaImpl implements MapMeta
         }
         this.tag.remove(DECORATIONS);
         this.checkTag(false);
+        this.setDirty();
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")

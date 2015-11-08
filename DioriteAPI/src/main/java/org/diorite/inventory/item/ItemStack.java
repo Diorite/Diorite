@@ -44,9 +44,16 @@ public interface ItemStack extends Cloneable
     /**
      * ItemMeta contains data like name, lore, enchantments of item.
      *
-     * @return ItemMeta of itemstack, may be null.
+     * @return ItemMeta of itemstack.
      */
     ItemMeta getItemMeta();
+
+    /**
+     * Check if item stack contains item meta
+     *
+     * @return true if item stack contains item meta.
+     */
+    boolean hasItemMeta();
 
     /**
      * Change itemmeta of itemstack.
@@ -67,7 +74,10 @@ public interface ItemStack extends Cloneable
      */
     void setAmount(int amount);
 
-    void update();
+//    /**
+//     *
+//     */
+//    void update();
 
     /**
      * @return true if this is air itemstack.

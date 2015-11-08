@@ -116,11 +116,13 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             {
                 this.tag.removeTag(DISPLAY_NAME);
                 this.checkTag(false);
+                this.setDirty();
             }
             return;
         }
         this.checkTag(true);
         this.tag.setString(DISPLAY_NAME, name);
+        this.setDirty();
     }
 
     @Override
@@ -153,11 +155,13 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             {
                 this.tag.removeTag(DISPLAY_LORE);
                 this.checkTag(false);
+                this.setDirty();
             }
             return;
         }
         this.checkTag(true);
         this.tag.addTag(DISPLAY, new NbtTagList(LORE, NbtTagType.STRING, lore));
+        this.setDirty();
     }
 
     @Override
@@ -247,23 +251,25 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         }
         else
         {
-            for (final NbtTagCompound nbt : list.getTags(NbtTagCompound.class))
-            {
-                if (nbt.getShort(ENCHANTMENT_ID) == enchantment.getNumericID())
-                {
-                    if (nbt.getShort(ENCHANTMENT_LEVEL) == level)
-                    {
-                        return false;
-                    }
-                    nbt.setShort(ENCHANTMENT_LEVEL, level);
-                    return true;
-                }
-            }
+//            for (final NbtTagCompound nbt : list.getTags(NbtTagCompound.class))
+//            {
+//                if (nbt.getShort(ENCHANTMENT_ID) == enchantment.getNumericID())
+//                {
+//                    if (nbt.getShort(ENCHANTMENT_LEVEL) == level)
+//                    {
+//                        return false;
+//                    }
+//                    nbt.setShort(ENCHANTMENT_LEVEL, level);
+//                    this.setDirty();
+//                    return true;
+//                }
+//            }
         }
         final NbtTagCompound ench = new NbtTagCompound();
         ench.setShort(ENCHANTMENT_ID, enchantment.getNumericID());
         ench.setShort(ENCHANTMENT_LEVEL, level);
         list.addTag(ench);
+        this.setDirty();
         return true;
     }
 
@@ -286,6 +292,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
                     this.tag.removeTag(ENCHANTMENTS);
                     this.checkTag(false);
                 }
+                this.setDirty();
                 return true;
             }
         }
@@ -320,21 +327,25 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         }
         this.tag.removeTag(ENCHANTMENTS);
         this.checkTag(false);
+        this.setDirty();
     }
 
     @Override
     public void addHideFlags(final HideFlag... hideFlags)
     {
         int flags;
+        final int oldFlags;
         final Set<HideFlag> set;
         if (this.tag != null)
         {
             flags = this.tag.getInt(HIDE_FLAGS);
             set = HideFlag.getFlags(flags);
+            oldFlags = flags;
         }
         else
         {
             set = new HashSet<>(hideFlags.length);
+            oldFlags = 0;
         }
         Collections.addAll(set, hideFlags);
         flags = HideFlag.join(set);
@@ -343,6 +354,10 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             this.tag.removeTag(HIDE_FLAGS);
         }
         this.tag.setInt(HIDE_FLAGS, flags);
+        if (flags != oldFlags)
+        {
+            this.setDirty();
+        }
     }
 
     @Override
@@ -363,8 +378,11 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         {
             this.tag.removeTag(HIDE_FLAGS);
             this.checkTag(false);
+            this.setDirty();
+            return;
         }
         this.tag.setInt(HIDE_FLAGS, flags);
+        this.setDirty();
     }
 
     @Override
@@ -392,6 +410,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         }
         this.tag.removeTag(HIDE_FLAGS);
         this.checkTag(false);
+        this.setDirty();
     }
 
     @Override
@@ -426,6 +445,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         this.checkTag(true);
         this.tag.removeTag(ATTRIBUTE_MODIFIERS);
         this.tag.addTag(new NbtTagList(ATTRIBUTE_MODIFIERS, newModifiers.stream().map(AttributeModifier::serializeToNBT).collect(Collectors.toList())));
+        this.setDirty();
     }
 
     @Override
@@ -438,6 +458,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             this.tag.addTag(list);
         }
         list.add(modifier.serializeToNBT());
+        this.setDirty();
     }
 
     @Override
@@ -448,7 +469,12 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             return false;
         }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
-        return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getUuid().equals(uuid));
+        final boolean result = (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getUuid().equals(uuid));
+        if (result)
+        {
+            this.setDirty();
+        }
+        return result;
     }
 
     @Override
@@ -459,7 +485,12 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             return false;
         }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
-        return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getName().map(s -> s.equals(name)).orElse(false));
+        final boolean result = (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getName().map(s -> s.equals(name)).orElse(false));
+        if (result)
+        {
+            this.setDirty();
+        }
+        return result;
     }
 
     @Override
@@ -470,7 +501,12 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             return false;
         }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
-        return (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).equals(modifier));
+        final boolean result = (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).equals(modifier));
+        if (result)
+        {
+            this.setDirty();
+        }
+        return result;
     }
 
     @Override
@@ -495,6 +531,7 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         }
         this.tag.removeTag(ATTRIBUTE_MODIFIERS);
         this.checkTag(false);
+        this.setDirty();
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")

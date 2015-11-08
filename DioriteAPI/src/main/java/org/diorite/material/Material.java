@@ -433,11 +433,30 @@ public abstract class Material implements SimpleEnum<Material>
     private static final TIntObjectMap<Material> byID          = new TIntObjectHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
 
     private final   String enumName;
+    /**
+     * id of this material.
+     */
     protected final int    id;
+    /**
+     * minecraft string id of this material.
+     */
     protected final String minecraftId;
+    /**
+     * Max amount of items in item stack of this material.
+     */
     protected final int    maxStack;
+    /**
+     * Type name of sub-type.
+     */
     protected final String typeName;
+    /**
+     * id of sub-type.
+     */
     protected final short  type;
+    /**
+     * Item meta type of this material.
+     */
+    protected Class<? extends ItemMeta> metaType = ItemMeta.class;
 
     protected Material(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
@@ -542,9 +561,19 @@ public abstract class Material implements SimpleEnum<Material>
      *
      * @return type of ItemMeta used by this material.
      */
-    public Class<ItemMeta> getMetaType()
+    public Class<? extends ItemMeta> getMetaType()
     {
-        return ItemMeta.class;
+        return this.metaType;
+    }
+
+    /**
+     * Set meta type of this material, can be changed at runtime.
+     *
+     * @param metaType new meta type of this material.
+     */
+    public void setMetaType(final Class<? extends ItemMeta> metaType)
+    {
+        this.metaType = metaType;
     }
 
     /**

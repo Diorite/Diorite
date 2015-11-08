@@ -41,6 +41,7 @@ import org.diorite.inventory.item.ItemStack;
 public class PacketPlayClientWindowClick extends PacketPlayClient
 {
     public static final int SLOT_NOT_NEEDED = - 999;
+    public static final int INVALID_SLOT    = - 1;
     private int       id; // 1 byte, inventory id
     private short     clickedSlot; // 2 bytes
     private short     actionNumber; // 2 bytes

@@ -29,8 +29,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.item.BaseItemStack;
-import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
 import org.diorite.utils.others.Dirtable;
 
@@ -69,11 +69,11 @@ public class ItemStackImpl implements Dirtable, ItemStack
         return this.wrapped.isAir();
     }
 
-    @Override
-    public void update()
-    {
-        this.wrapped.update();
-    }
+//    @Override
+//    public void update()
+//    {
+//        this.wrapped.update();
+//    }
 
     @Override
     public int getAmount()
@@ -85,6 +85,12 @@ public class ItemStackImpl implements Dirtable, ItemStack
     public ItemMeta getItemMeta()
     {
         return this.wrapped.getItemMeta();
+    }
+
+    @Override
+    public boolean hasItemMeta()
+    {
+        return this.wrapped.hasItemMeta();
     }
 
     @Override
@@ -151,17 +157,26 @@ public class ItemStackImpl implements Dirtable, ItemStack
         return temp;
     }
 
+    private boolean isMetaDirty()
+    {
+        return ((this.wrapped != null) && this.wrapped.hasItemMeta() && this.wrapped.getItemMeta().isDirty());
+    }
+
     @Override
     public boolean isDirty()
     {
-        return this.dirty;
+        return this.dirty || this.isMetaDirty();
     }
 
     @Override
     public boolean setDirty(final boolean dirty)
     {
-        final boolean b = this.dirty;
+        final boolean b = this.dirty || this.isMetaDirty();
         this.dirty = dirty;
+        if ((this.wrapped != null) && this.wrapped.hasItemMeta())
+        {
+            this.wrapped.getItemMeta().setDirty(dirty);
+        }
         return b;
     }
 

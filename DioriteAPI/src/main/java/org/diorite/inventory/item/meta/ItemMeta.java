@@ -35,6 +35,7 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.inventory.item.HideFlag;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.utils.others.Dirtable;
 
 import gnu.trove.TDecorators;
 import gnu.trove.map.TObjectShortMap;
@@ -42,7 +43,7 @@ import gnu.trove.map.TObjectShortMap;
 /**
  * Represent meta data of item stack.
  */
-public interface ItemMeta
+public interface ItemMeta extends Dirtable
 {
     /**
      * Returns item stack where this item meta is set.

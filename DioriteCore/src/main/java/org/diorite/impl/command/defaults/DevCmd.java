@@ -29,13 +29,15 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
-import org.diorite.impl.inventory.item.meta.SkullMetaImpl;
+import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.Diorite;
 import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
@@ -76,12 +78,25 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "m2":
+                {
+                    final ItemMeta meta = p.getInventory().getItemInHand().getItemMeta();
+                    meta.setDisplayName(RandomStringUtils.randomAlphanumeric(16));
+                    break;
+                }
+                case "itemid":
+                {
+                    final ItemMetaImpl meta = (ItemMetaImpl) p.getInventory().getItemInHand().getItemMeta();
+                    System.out.println("Meta: " + System.identityHashCode(meta) + ", tag: " + (meta.getRawData() == null ? "NULL" : System.identityHashCode(meta.getRawData()) + "") + ", item: " + (! meta.getItemStack().isPresent() ? "NULL" : System.identityHashCode(meta.getItemStack().get()) + ""));
+                    break;
+                }
                 case "skullmeta":
                 {
                     final ItemStack item = new BaseItemStack(SkullMat.SKULL_PLAYER);
-                    final SkullMeta meta = new SkullMetaImpl(null);
+                    System.out.println(item.getItemMeta());
+                    final SkullMeta meta = (SkullMeta) item.getItemMeta();
                     meta.setOwner(args.asString(0));
-                    item.setItemMeta(meta);
+                    System.out.println(meta);
                     p.getInventory().add(item);
                     break;
                 }

@@ -29,6 +29,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
+import org.diorite.ItemFactory;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
 
@@ -37,7 +38,6 @@ import org.diorite.material.Material;
  */
 public class BaseItemStack implements ItemStack
 {
-    // TODO: lore, name and other stuff
     protected Material material;
     protected int      amount;
     protected ItemMeta itemMeta;
@@ -58,7 +58,7 @@ public class BaseItemStack implements ItemStack
     public BaseItemStack(final ItemStack item)
     {
         this(item.getMaterial(), item.getAmount());
-//        this.itemMeta =  TODO: clone item meta
+        this.itemMeta = item.getItemMeta().clone();
     }
 
     @Override
@@ -81,18 +81,35 @@ public class BaseItemStack implements ItemStack
     @Override
     public ItemMeta getItemMeta()
     {
+        final ItemFactory fac = Diorite.getCore().getItemFactory();
         if (this.itemMeta == null)
         {
-            // TODO: type check etc...
-            Diorite.getCore().createItemMeta(this.material).apply(this);
+            fac.construct(this.material).apply(this);
+        }
+        if (! this.itemMeta.getClass().equals(fac.construct(this.material.getMetaType()).getClass()))
+        {
+            fac.construct(this.material, this.itemMeta.getNbtData()).apply(this);
         }
         return this.itemMeta;
     }
 
     @Override
+    public boolean hasItemMeta()
+    {
+        return this.itemMeta != null;
+    }
+
+    @Override
     public void setItemMeta(final ItemMeta itemMeta)
     {
-        // TODO: add type check
+        if (itemMeta != null)
+        {
+            final ItemFactory fac = Diorite.getCore().getItemFactory();
+            if (! itemMeta.getClass().equals(fac.construct(this.material.getMetaType()).getClass()))
+            {
+                fac.construct(this.material, itemMeta.getNbtData()).apply(this);
+            }
+        }
         this.itemMeta = itemMeta;
     }
 
@@ -108,11 +125,11 @@ public class BaseItemStack implements ItemStack
         this.amount = amount;
     }
 
-    @Override
-    public void update()
-    {
-        // TODO
-    }
+//    @Override
+//    public void update()
+//    {
+//        // TODO
+//    }
 
     @Override
     public boolean isAir()

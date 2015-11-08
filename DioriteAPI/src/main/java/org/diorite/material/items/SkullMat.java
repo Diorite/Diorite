@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.inventory.item.meta.SkullMeta;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.SkullType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -115,6 +116,10 @@ public class SkullMat extends ItemMaterialData
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.skullType = skullType;
+    }
+
+    {
+        this.metaType = SkullMeta.class;
     }
 
     public SkullType getSkullType()

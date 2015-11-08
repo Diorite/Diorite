@@ -48,6 +48,19 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
     protected Map<String, NbtTag> tags;
 
     /**
+     * Raw constructor, allow any values, doesn't copy map etc...
+     *
+     * @param unused use null here.
+     * @param name   name of this tag.
+     * @param map    map of tags.
+     */
+    protected NbtTagCompound(Void unused, final String name, Map<String, NbtTag> map)
+    {
+        super(name);
+        this.tags = map;
+    }
+
+    /**
      * Construct new NbtTagCompound with empty string name and empty map as value.
      */
     public NbtTagCompound()

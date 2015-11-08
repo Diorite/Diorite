@@ -69,7 +69,6 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.input.ConsoleReaderThread;
 import org.diorite.impl.input.InputThread;
-import org.diorite.impl.inventory.item.meta.SimpleItemMetaImpl;
 import org.diorite.impl.log.ForwardLogHandler;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.impl.log.TerminalConsoleWriterThread;
@@ -99,6 +98,7 @@ import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.tick.TickGroups;
 import org.diorite.Core;
 import org.diorite.Diorite;
+import org.diorite.ItemFactory;
 import org.diorite.ServerManager;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.cfg.system.Template;
@@ -133,8 +133,6 @@ import org.diorite.event.player.PlayerInteractEvent;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.event.player.PlayerJoinEvent;
 import org.diorite.event.player.PlayerQuitEvent;
-import org.diorite.inventory.item.meta.ItemMeta;
-import org.diorite.material.Material;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginManager;
@@ -277,10 +275,11 @@ public class DioriteCore implements Core
     }
 
     protected final boolean isClient;
-    protected final CommandMapImpl                        commandMap = new CommandMapImpl();
-    protected final TickGroups                            ticker     = new TickGroups(this);
-    protected final SchedulerImpl                         scheduler  = new SchedulerImpl();
-    protected final ConcurrentLinkedQueue<SimpleSyncTask> syncQueue  = new ConcurrentLinkedQueue<>();
+    protected final CommandMapImpl                        commandMap  = new CommandMapImpl();
+    protected final TickGroups                            ticker      = new TickGroups(this);
+    protected final SchedulerImpl                         scheduler   = new SchedulerImpl();
+    protected final ConcurrentLinkedQueue<SimpleSyncTask> syncQueue   = new ConcurrentLinkedQueue<>();
+    protected final ItemFactory                           itemFactory = new ItemFactoryImpl();
     protected final Thread mainThread;
     protected final double[] recentTps = new double[3];
     private final String      serverVersion;
@@ -414,6 +413,12 @@ public class DioriteCore implements Core
             result[i] = (this.recentTps[i] > this.tps) ? this.tps : this.recentTps[i];
         }
         return result;
+    }
+
+    @Override
+    public ItemFactory getItemFactory()
+    {
+        return this.itemFactory;
     }
 
     @Override
@@ -607,13 +612,6 @@ public class DioriteCore implements Core
     public void setPluginManager(final PluginManager pluginManager)
     {
         this.pluginManager = pluginManager;
-    }
-
-    @Override
-    public ItemMeta createItemMeta(final Material material)
-    {
-        // TODO: type check etc...
-        return new SimpleItemMetaImpl(null);
     }
 
     @Override

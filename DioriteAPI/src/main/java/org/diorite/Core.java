@@ -44,8 +44,6 @@ import org.diorite.command.CommandMap;
 import org.diorite.command.PluginCommandBuilder;
 import org.diorite.command.sender.ConsoleCommandSender;
 import org.diorite.entity.Player;
-import org.diorite.inventory.item.meta.ItemMeta;
-import org.diorite.material.Material;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
@@ -83,6 +81,8 @@ public interface Core extends Synchronizable
     String getVersion();
 
     double[] getRecentTps();
+
+    ItemFactory getItemFactory();
 
     List<String> getOnlinePlayersNames(String prefix);
 
@@ -135,8 +135,6 @@ public interface Core extends Synchronizable
     void removeAllTitles();
 
     PluginManager getPluginManager();
-
-    ItemMeta createItemMeta(Material material);
 
     CommandMap getCommandMap();
 

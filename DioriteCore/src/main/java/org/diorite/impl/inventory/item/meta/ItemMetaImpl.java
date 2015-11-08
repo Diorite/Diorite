@@ -33,6 +33,7 @@ import org.diorite.nbt.NbtTagCompound;
 public abstract class ItemMetaImpl implements ItemMeta
 {
     protected NbtTagCompound tag;
+    protected boolean        dirty;
 
     public ItemMetaImpl(final NbtTagCompound tag)
     {
@@ -64,6 +65,7 @@ public abstract class ItemMetaImpl implements ItemMeta
     public void setNbtData(final NbtTagCompound tag)
     {
         this.tag = tag.clone();
+        this.setDirty();
     }
 
     @Override
@@ -77,12 +79,28 @@ public abstract class ItemMetaImpl implements ItemMeta
             if (this.tag == null)
             {
                 this.tag = new NbtTagCompound("tag");
+                this.setDirty();
             }
         }
         else if ((this.tag != null) && this.tag.isEmpty())
         {
             this.tag = null;
+            this.setDirty();
         }
+    }
+
+    @Override
+    public boolean isDirty()
+    {
+        return this.dirty;
+    }
+
+    @Override
+    public boolean setDirty(final boolean dirty)
+    {
+        final boolean old = this.dirty;
+        this.dirty = dirty;
+        return old;
     }
 
     @Override

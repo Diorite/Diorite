@@ -321,7 +321,9 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     return true;
                 }
                 final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                item.setItemStack(new BaseItemStack(cursor.getMaterial(), 1)); // TODO: itemmeta
+                final ItemStack it = new BaseItemStack(cursor.getMaterial(), 1);
+                it.setItemMeta(cursor.getItemMeta().clone());
+                item.setItemStack(it);
                 if (cursor.getAmount() == 1)
                 {
                     if (! inv.replaceCursorItem(cursor, null))
@@ -389,7 +391,9 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                         else
                         {
                             combined = perSlot;
-                            inv.setItem(dragSlot, new BaseItemStack(newCursor.getMaterial(), combined)); // FIXME item lose metadata
+                            final ItemStack it = new BaseItemStack(newCursor.getMaterial(), combined);
+                            it.setItemMeta(newCursor.getItemMeta().clone());
+                            inv.setItem(dragSlot, it);
                         }
 
                         newCursor.setAmount(newCursor.getAmount() - combined);

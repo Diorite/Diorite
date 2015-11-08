@@ -33,16 +33,22 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import org.diorite.impl.CoreMain;
+import org.diorite.impl.DioriteCore;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.auth.GameProfiles;
 import org.diorite.impl.auth.exceptions.AuthenticationException;
 import org.diorite.impl.auth.exceptions.TooManyRequestsException;
 import org.diorite.Diorite;
 import org.diorite.auth.GameProfile;
+import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.meta.SkullMeta;
 import org.diorite.nbt.NbtSerialization;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.utils.DioriteUtils;
 
 public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
 {
@@ -88,29 +94,7 @@ public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
             this.setOwner((GameProfile) null);
             return;
         }
-        this.checkTag(true);
-        SkullThread.addTask(() -> {
-            try
-            {
-                final GameProfile gp = GameProfiles.getGameProfile(nickname);
-                if (gp == null)
-                {
-                    return;
-                }
-                this.checkTag(true);
-                this.tag.put(OWNER, gp.serializeToNBT());
-            } catch (final TooManyRequestsException e)
-            {
-                if (CoreMain.isEnabledDebug())
-                {
-                    e.printStackTrace();
-                }
-                SkullThread.addTask(() -> this.setOwner(nickname), System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(TIMEOUT_DELAY));
-            } catch (final AuthenticationException e)
-            {
-                e.printStackTrace();
-            }
-        });
+        this.setOwner0(nickname);
     }
 
     @Override
@@ -121,26 +105,64 @@ public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
             this.setOwner((GameProfile) null);
             return;
         }
+        this.setOwner0(uuid);
+    }
+
+    private void setOwner0(final Object uuidOrName)
+    {
+        final boolean isUUID = uuidOrName instanceof UUID;
+        final UUID uuid = isUUID ? (UUID) uuidOrName : null;
+        final String nickname = isUUID ? null : (String) uuidOrName;
+        try
+        {
+            final GameProfile fastGP = isUUID ? GameProfiles.getGameProfile(uuid, true) : GameProfiles.getGameProfile(nickname, true);
+            if (fastGP != null)
+            {
+                this.checkTag(true);
+                this.getRawData().put(OWNER, fastGP.serializeToNBT());
+                this.setDirty();
+                return;
+            }
+        } catch (final AuthenticationException ignored) // never thrown if fast check.
+        {
+        }
+        this.setOwner(new GameProfileImpl(isUUID ? uuid : DioriteUtils.getCrackedUuid(nickname), nickname));
+        if (DioriteCore.getInstance().getOnlineMode() == OnlineMode.FALSE)
+        {
+            return;
+        }
+        final String temp = RandomStringUtils.randomAlphanumeric(32);
+        this.getRawData().setByte(temp, 0);
         SkullThread.addTask(() -> {
             try
             {
-                final GameProfile gp = GameProfiles.getGameProfile(uuid);
+                final GameProfile gp = isUUID ? GameProfiles.getGameProfile(uuid, false) : GameProfiles.getGameProfile(nickname, false);
                 if (gp == null)
                 {
                     return;
                 }
-                this.checkTag(true);
-                this.tag.put(OWNER, gp.serializeToNBT());
+                synchronized (this)
+                {
+                    this.checkTag(true);
+                    this.getRawData().put(OWNER, gp.serializeToNBT());
+                }
             } catch (final TooManyRequestsException e)
             {
                 if (CoreMain.isEnabledDebug())
                 {
                     e.printStackTrace();
                 }
-                SkullThread.addTask(() -> this.setOwner(uuid), System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(TIMEOUT_DELAY));
+                SkullThread.addTask(() -> this.setOwner0(uuidOrName), System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(TIMEOUT_DELAY));
             } catch (final AuthenticationException e)
             {
                 e.printStackTrace();
+            } finally
+            {
+                synchronized (this)
+                {
+                    this.getRawData().removeTag(temp);
+                    this.setDirty();
+                }
             }
         });
     }
@@ -156,10 +178,12 @@ public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
             }
             this.tag.removeTag(OWNER);
             this.checkTag(false);
+            this.setDirty();
             return;
         }
         this.checkTag(true);
         this.tag.put(OWNER, gameProfile.serializeToNBT());
+        this.setDirty();
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")

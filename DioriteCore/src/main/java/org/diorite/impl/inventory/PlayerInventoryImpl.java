@@ -102,7 +102,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     @Override
     public Slot getSlot(final int slot)
     {
-        return (slot == PacketPlayClientWindowClick.SLOT_NOT_NEEDED) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
+        return ((slot == PacketPlayClientWindowClick.SLOT_NOT_NEEDED) || (slot == PacketPlayClientWindowClick.INVALID_SLOT)) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
     }
 
     @Override

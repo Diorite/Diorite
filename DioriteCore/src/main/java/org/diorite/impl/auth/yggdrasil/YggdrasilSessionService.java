@@ -66,6 +66,7 @@ import org.diorite.impl.auth.yggdrasil.response.ProfileSearchResultsResponse;
 import org.diorite.impl.auth.yggdrasil.response.Response;
 import org.diorite.auth.GameProfile;
 import org.diorite.auth.PropertyMap;
+import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.json.adapters.JsonUUIDAdapter;
 import org.diorite.utils.network.DioriteURLUtils;
@@ -153,8 +154,11 @@ public class YggdrasilSessionService implements SessionService
     public GameProfileImpl getGameProfile(String name) throws AuthenticationException
     {
         final GameProfile gp = this.getUUIDsFromUsernames(name).get(name);
-        final UUID uuid = gp.getId();
-        name = gp.getName();
+        final UUID uuid = (gp == null) ? DioriteUtils.getCrackedUuid(name) : gp.getId();
+        if (gp != null)
+        {
+            name = gp.getName();
+        }
 
         final GameProfileImpl mgp = this.getGameProfile0(uuid);
         if (mgp == null)

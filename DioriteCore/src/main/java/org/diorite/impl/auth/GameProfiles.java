@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.exceptions.AuthenticationException;
 import org.diorite.auth.GameProfile;
+import org.diorite.cfg.DioriteConfig.OnlineMode;
 
 public final class GameProfiles
 {
@@ -105,9 +106,9 @@ public final class GameProfiles
         }
     }
 
-    public static GameProfile getGameProfile(final String name) throws AuthenticationException
+    public static GameProfile getGameProfile(final String name, final boolean onlyCache) throws AuthenticationException
     {
-        final GameProfileEntry entry = nameCache.get(name);
+        final GameProfileEntry entry = nameCache.get(name.toLowerCase());
         if (entry != null)
         {
             if ((System.currentTimeMillis() - entry.updateTime) <= MAX_TIME)
@@ -121,6 +122,10 @@ public final class GameProfiles
         {
             return null;
         }
+        if (onlyCache || (DioriteCore.getInstance().getOnlineMode() == OnlineMode.FALSE))
+        {
+            return null;
+        }
         final GameProfile gp = DioriteCore.getInstance().getSessionService().getGameProfile(name);
         if (gp == null)
         {
@@ -130,7 +135,7 @@ public final class GameProfiles
         return gp;
     }
 
-    public static GameProfile getGameProfile(final UUID uuid) throws AuthenticationException
+    public static GameProfile getGameProfile(final UUID uuid, final boolean onlyCache) throws AuthenticationException
     {
         final GameProfileEntry entry = uuidCache.get(uuid);
         if (entry != null)
@@ -141,6 +146,10 @@ public final class GameProfiles
             }
             uuidCache.remove(uuid);
             nameCache.remove(entry.profile.getName().toLowerCase());
+        }
+        if (onlyCache || (DioriteCore.getInstance().getOnlineMode() == OnlineMode.FALSE))
+        {
+            return null;
         }
         final GameProfile gp = DioriteCore.getInstance().getSessionService().getGameProfile(uuid);
         if (gp == null)

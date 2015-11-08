@@ -152,7 +152,7 @@ public abstract class NbtAbstractTagNumber extends Number implements NbtTag
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("name", this.name).append("parent", this.parent).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("name", this.name).toString();
     }
 
     @Override
