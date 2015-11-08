@@ -5,19 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>Examples</artifactId>
+        <artifactId>examples</artifactId>
         <groupId>org.diorite</groupId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ExampleCoreMod</artifactId>
+    <artifactId>example-core-mod</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.diorite</groupId>
-            <artifactId>DioriteCore</artifactId>
+            <artifactId>diorite-core</artifactId>
             <version>${diorite.version.raw}-SNAPSHOT</version>
         </dependency>
     </dependencies>

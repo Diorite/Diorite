@@ -22,7 +22,7 @@
     </properties>
 
     <groupId>org.diorite</groupId>
-    <artifactId>DioriteMaster</artifactId>
+    <artifactId>diorite-parent</artifactId>
     <version>indev-0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
@@ -31,11 +31,11 @@
         <url>https://github.com/Diorite/Diorite</url>
     </scm>
     <modules>
-        <module>DioriteAPI</module>
-        <module>DioriteCore</module>
-        <module>Diorite</module>
-        <module>DioritOS</module>
-        <module>Examples</module>
+        <module>diorite-api</module>
+        <module>diorite-core</module>
+        <module>diorite</module>
+        <module>dioritos</module>
+        <module>examples</module>
     </modules>
 
     <distributionManagement>
@@ -53,12 +53,12 @@
         <dependencies>
             <dependency>
                 <groupId>org.diorite</groupId>
-                <artifactId>DioriteCore</artifactId>
+                <artifactId>diorite-core</artifactId>
                 <version>${diorite.version.raw}-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.diorite</groupId>
-                <artifactId>DioriteAPI</artifactId>
+                <artifactId>diorite-api</artifactId>
                 <version>${diorite.version.raw}-SNAPSHOT</version>
             </dependency>
 

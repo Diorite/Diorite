@@ -6,18 +6,18 @@
 
     <parent>
         <groupId>org.diorite</groupId>
-        <artifactId>DioriteMaster</artifactId>
+        <artifactId>diorite-parent</artifactId>
         <version>indev-0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>DioriteCore</artifactId>
+    <artifactId>diorite-core</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.diorite</groupId>
-            <artifactId>DioriteAPI</artifactId>
+            <artifactId>diorite-api</artifactId>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
