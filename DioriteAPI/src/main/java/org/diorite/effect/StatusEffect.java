@@ -68,7 +68,7 @@ public class StatusEffect implements NbtSerializable
     {
         this.type = StatusEffectType.getByTypeID(tag.getByte("Id", 1));
         this.amplifier = tag.getByte("Amplifier");
-        this.duration = tag.getInt("Duration");
+        this.duration = tag.getInt("Duration") * 5;
         this.ambient = tag.getBoolean("Ambient");
         this.showParticles = tag.getBoolean("ShowParticles");
     }
@@ -131,7 +131,7 @@ public class StatusEffect implements NbtSerializable
         final NbtTagCompound tag = new NbtTagCompound();
         tag.setByte("Id", this.type.getTypeID());
         tag.setByte("Amplifier", this.amplifier);
-        tag.setInt("Duration", this.duration);
+        tag.setInt("Duration", this.duration / 5);
         tag.setBoolean("Ambient", this.ambient);
         tag.setBoolean("ShowParticles", this.showParticles);
         return tag;

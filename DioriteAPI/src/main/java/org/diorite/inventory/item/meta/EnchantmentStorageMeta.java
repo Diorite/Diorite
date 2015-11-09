@@ -90,10 +90,26 @@ public interface EnchantmentStorageMeta extends ItemMeta
      *
      * @return true if the item meta changed as a result of this call, false
      * otherwise
-     *
-     * @throws IllegalArgumentException if enchantment is null
      */
-    boolean addStoredEnchant(EnchantmentType ench, int level, boolean ignoreLevelRestriction);
+    default boolean addStoredEnchant(final EnchantmentType ench, final int level, final boolean ignoreLevelRestriction)
+    {
+        return this.addStoredEnchant(ench, level, ignoreLevelRestriction, false);
+    }
+
+    /**
+     * Stores the specified enchantment in this item meta.
+     *
+     * @param ench                   EnchantmentType to store
+     * @param level                  Level for the enchantment
+     * @param ignoreLevelRestriction this indicates the enchantment should be
+     *                               applied, ignoring the level limit
+     * @param ignoreDuplicates       if true, new enchant is always added
+     *                               even if there is other enchantment with time same type.
+     *
+     * @return true if the item meta changed as a result of this call, false
+     * otherwise
+     */
+    boolean addStoredEnchant(EnchantmentType enchantment, int level, boolean ignoreLevelRestriction, boolean ignoreDuplicates);
 
     /**
      * Remove the specified stored enchantment from this item meta.
@@ -102,8 +118,6 @@ public interface EnchantmentStorageMeta extends ItemMeta
      *
      * @return true if the item meta changed as a result of this call, false
      * otherwise
-     *
-     * @throws IllegalArgumentException if enchantment is null
      */
     boolean removeStoredEnchant(EnchantmentType ench) throws IllegalArgumentException;
 

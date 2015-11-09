@@ -170,15 +170,8 @@ public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
     @Override
     public void setOwner(final GameProfile gameProfile)
     {
-        if (gameProfile == null)
+        if (this.removeIfNeeded(OWNER, gameProfile))
         {
-            if (this.tag == null)
-            {
-                return;
-            }
-            this.tag.removeTag(OWNER);
-            this.checkTag(false);
-            this.setDirty();
             return;
         }
         this.checkTag(true);

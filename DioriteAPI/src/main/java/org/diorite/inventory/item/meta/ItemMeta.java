@@ -213,7 +213,26 @@ public interface ItemMeta extends Dirtable
      * @return true if the item meta changed as a result of this call, false
      * otherwise
      */
-    boolean addEnchant(EnchantmentType enchantment, int level, boolean ignoreLevelRestriction);
+    default boolean addEnchant(final EnchantmentType enchantment, final int level, final boolean ignoreLevelRestriction)
+    {
+        return this.addEnchant(enchantment, level, ignoreLevelRestriction, false);
+    }
+
+    /**
+     * Adds the specified enchantment to this item meta. <br>
+     * If enchantment already exist level will be updated, if level was this same, false will be returned.
+     *
+     * @param enchantment            EnchantmentType to add
+     * @param level                  Level for the enchantment
+     * @param ignoreLevelRestriction this indicates the enchantment should be
+     *                               applied, ignoring the level limit
+     * @param ignoreDuplicates       if true, new enchant is always added
+     *                               even if there is other enchantment with time same type.
+     *
+     * @return true if the item meta changed as a result of this call, false
+     * otherwise
+     */
+    boolean addEnchant(EnchantmentType enchantment, int level, boolean ignoreLevelRestriction, boolean ignoreDuplicates);
 
     /**
      * Removes the specified enchantment from this item meta.
@@ -238,7 +257,7 @@ public interface ItemMeta extends Dirtable
     /**
      * Remove all enchantments from this meta.
      */
-    void removeEnchantmentTypes();
+    void removeEnchants();
 
     /**
      * Set itemflags which should be ignored when rendering a ItemStack in the Client. This Method does silently ignore double set itemFlags.

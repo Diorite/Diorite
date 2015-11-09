@@ -58,15 +58,8 @@ public class MapMetaImpl extends SimpleItemMetaImpl implements MapMeta
     @Override
     public void setScaling(final boolean value)
     {
-        if (! value)
+        if (this.removeIfNeeded(SCALING, ! value))
         {
-            if (this.tag == null)
-            {
-                return;
-            }
-            this.tag.removeTag(SCALING);
-            this.checkTag(false);
-            this.setDirty();
             return;
         }
         this.checkTag(true);

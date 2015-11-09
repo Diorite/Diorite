@@ -151,7 +151,7 @@ public interface BookMeta extends ItemMeta
      *
      * @param pages A list of strings, each being a page
      */
-    void addPage(String... pages);
+    void addPages(String... pages);
 
     /**
      * Gets the number of pages in the book.

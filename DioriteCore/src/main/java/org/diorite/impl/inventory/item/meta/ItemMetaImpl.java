@@ -32,6 +32,8 @@ import org.diorite.nbt.NbtTagCompound;
 
 public abstract class ItemMetaImpl implements ItemMeta
 {
+    protected static final String SEP = ".";
+
     protected NbtTagCompound tag;
     protected boolean        dirty;
 
@@ -43,6 +45,44 @@ public abstract class ItemMetaImpl implements ItemMeta
     public NbtTagCompound getRawData()
     {
         return this.tag;
+    }
+
+    protected boolean removeIfNeeded(final String name, final Object value)
+    {
+        if (value == null)
+        {
+            this.removeTag(name);
+            return true;
+        }
+        return false;
+    }
+
+    private void removeTag(final String name)
+    {
+        if (this.tag == null)
+        {
+            return;
+        }
+        this.tag.removeTag(name);
+        this.checkTag(false);
+        this.setDirty();
+    }
+
+    protected boolean removeIfNeeded(final String name, final boolean isNull)
+    {
+        if (isNull)
+        {
+            this.removeTag(name);
+            return true;
+        }
+        return false;
+    }
+
+    protected void setStringTag(final String name, final String value)
+    {
+        this.checkTag(true);
+        this.tag.setString(name, value);
+        this.setDirty();
     }
 
     @Override

@@ -32,7 +32,6 @@ import org.diorite.firework.FireworkEffect;
  */
 public interface FireworkEffectMeta extends ItemMeta
 {
-
     /**
      * Sets the firework effect for this meta.
      *

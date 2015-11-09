@@ -38,6 +38,7 @@ import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
+import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Diorite;
 import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
@@ -48,6 +49,8 @@ import org.diorite.chat.component.ComponentBuilder;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.command.CommandPriority;
+import org.diorite.effect.StatusEffect;
+import org.diorite.effect.StatusEffectType;
 import org.diorite.enchantments.EnchantmentType;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeType;
@@ -55,8 +58,10 @@ import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.meta.ItemMeta;
+import org.diorite.inventory.item.meta.PotionMeta;
 import org.diorite.inventory.item.meta.SkullMeta;
 import org.diorite.material.Material;
+import org.diorite.material.items.PotionMat;
 import org.diorite.material.items.SkullMat;
 import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.PermissionsGroup;
@@ -78,6 +83,16 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "potionmeta":
+                {
+                    final ItemStack item = new BaseItemStack(new PotionMat("POTION", 373, "minecraft:potion", 1, "POTION", (short) 8193, 5, 6){});
+                    final PotionMeta meta = new PotionMetaImpl(null);
+                    meta.addCustomEffect(new StatusEffect(StatusEffectType.INVISIBILITY, 3,300,false, true), false);
+                    meta.addCustomEffect(new StatusEffect(StatusEffectType.INVISIBILITY, 3,30000,false, true), false);
+                    item.setItemMeta(meta);
+                    p.getInventory().add(item);
+                    break;
+                }
                 case "m2":
                 {
                     final ItemMeta meta = p.getInventory().getItemInHand().getItemMeta();
