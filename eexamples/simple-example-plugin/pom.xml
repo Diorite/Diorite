@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <artifactId>Examples</artifactId>
+        <artifactId>examples</artifactId>
         <groupId>org.diorite</groupId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>SimpleExamplePlugin</artifactId>
+    <artifactId>simple-example-plugin</artifactId>
     <packaging>jar</packaging>
 </project>
