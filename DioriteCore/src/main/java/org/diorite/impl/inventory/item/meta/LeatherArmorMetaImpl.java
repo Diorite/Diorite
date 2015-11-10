@@ -31,7 +31,7 @@ import org.diorite.utils.Color;
 
 public class LeatherArmorMetaImpl extends SimpleItemMetaImpl implements LeatherArmorMeta
 {
-    private static final String COLOR = "display.color";
+    protected static final String COLOR = "display.color";
 
     public LeatherArmorMetaImpl(final NbtTagCompound tag)
     {

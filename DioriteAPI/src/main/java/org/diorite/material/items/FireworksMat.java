@@ -26,6 +26,7 @@ package org.diorite.material.items;
 
 import java.util.Map;
 
+import org.diorite.inventory.item.meta.FireworkMeta;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableEntityMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -66,6 +67,10 @@ public class FireworksMat extends ItemMaterialData implements PlaceableEntityMat
     protected FireworksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
+    }
+
+    {
+        this.metaType = FireworkMeta.class;
     }
 
     @Override

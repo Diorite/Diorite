@@ -52,15 +52,15 @@ import gnu.trove.map.hash.TObjectShortHashMap;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class SimpleItemMetaImpl extends ItemMetaImpl
 {
-    private static final   String DISPLAY             = "display";
-    private static final   String DISPLAY_NAME        = DISPLAY + SEP + "Name";
-    private static final   String LORE                = "Lore";
-    private static final   String DISPLAY_LORE        = DISPLAY + SEP + LORE;
-    private static final   String HIDE_FLAGS          = "HideFlags";
-    private static final   String ENCHANTMENTS        = "ench";
+    protected static final String DISPLAY             = "display";
+    protected static final String DISPLAY_NAME        = DISPLAY + SEP + "Name";
+    protected static final String LORE                = "Lore";
+    protected static final String DISPLAY_LORE        = DISPLAY + SEP + LORE;
+    protected static final String HIDE_FLAGS          = "HideFlags";
+    protected static final String ENCHANTMENTS        = "ench";
     protected static final String ENCHANTMENT_ID      = "id";
     protected static final String ENCHANTMENT_LEVEL   = "lvl";
-    private static final   String ATTRIBUTE_MODIFIERS = "AttributeModifiers";
+    protected static final String ATTRIBUTE_MODIFIERS = "AttributeModifiers";
 
     protected ItemStack itemStack;
 
@@ -491,12 +491,20 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             return false;
         }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
-        final boolean result = (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getUuid().equals(uuid));
-        if (result)
+        if (list == null)
         {
-            this.setDirty();
+            return false;
         }
-        return result;
+        if (list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getUuid().equals(uuid)))
+        {
+            if (list.isEmpty())
+            {
+                this.removeAttributeModifiers();
+            }
+            this.setDirty();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -507,12 +515,20 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             return false;
         }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
-        final boolean result = (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getName().map(s -> s.equals(name)).orElse(false));
-        if (result)
+        if (list == null)
         {
-            this.setDirty();
+            return false;
         }
-        return result;
+        if (list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).getName().map(s -> s.equals(name)).orElse(false)))
+        {
+            if (list.isEmpty())
+            {
+                this.removeAttributeModifiers();
+            }
+            this.setDirty();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -523,12 +539,20 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
             return false;
         }
         final NbtTagList list = this.tag.getTag(ATTRIBUTE_MODIFIERS, NbtTagList.class);
-        final boolean result = (list != null) && list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).equals(modifier));
-        if (result)
+        if (list == null)
         {
-            this.setDirty();
+            return false;
         }
-        return result;
+        if (list.removeIf(e -> AttributeModifier.fromNbt((NbtTagCompound) e).equals(modifier)))
+        {
+            if (list.isEmpty())
+            {
+                this.removeAttributeModifiers();
+            }
+            this.setDirty();
+            return true;
+        }
+        return false;
     }
 
     @Override

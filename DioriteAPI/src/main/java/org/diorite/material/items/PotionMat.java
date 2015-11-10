@@ -26,6 +26,7 @@ package org.diorite.material.items;
 
 import java.util.Map;
 
+import org.diorite.inventory.item.meta.PotionMeta;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import gnu.trove.map.TShortObjectMap;
@@ -64,6 +65,10 @@ public class PotionMat extends EdibleItemMat
     protected PotionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, foodLevelIncrease, saturationIncrease);
+    }
+
+    {
+        this.metaType = PotionMeta.class;
     }
 
     @Override

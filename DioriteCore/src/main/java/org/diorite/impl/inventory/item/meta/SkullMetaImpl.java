@@ -52,8 +52,8 @@ import org.diorite.utils.DioriteUtils;
 
 public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
 {
-    private static final String OWNER         = "SkullOwner";
-    private static final int    TIMEOUT_DELAY = 90;
+    protected static final String OWNER         = "SkullOwner";
+    private static final   int    TIMEOUT_DELAY = 90;
 
     public SkullMetaImpl(final NbtTagCompound tag)
     {

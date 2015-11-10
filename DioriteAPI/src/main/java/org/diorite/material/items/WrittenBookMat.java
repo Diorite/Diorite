@@ -26,6 +26,7 @@ package org.diorite.material.items;
 
 import java.util.Map;
 
+import org.diorite.inventory.item.meta.BookMeta;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -65,6 +66,10 @@ public class WrittenBookMat extends ItemMaterialData
     protected WrittenBookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
+    }
+
+    {
+        this.metaType = BookMeta.class;
     }
 
     @Override

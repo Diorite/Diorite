@@ -37,10 +37,10 @@ import org.diorite.nbt.NbtTagList;
 
 public class FireworkMetaImpl extends SimpleItemMetaImpl implements FireworkMeta
 {
-    private static final String FIREWORK         = "Fireworks";
-    private static final String EFFECTS          = "Explosions";
-    private static final String FIREWORK_EFFECTS = FIREWORK + SEP + EFFECTS;
-    private static final String FIREWORK_POWER   = FIREWORK + SEP + "Flight";
+    protected static final String FIREWORK         = "Fireworks";
+    protected static final String EFFECTS          = "Explosions";
+    protected static final String FIREWORK_EFFECTS = FIREWORK + SEP + EFFECTS;
+    protected static final String FIREWORK_POWER   = FIREWORK + SEP + "Flight";
 
     public FireworkMetaImpl(final NbtTagCompound tag)
     {

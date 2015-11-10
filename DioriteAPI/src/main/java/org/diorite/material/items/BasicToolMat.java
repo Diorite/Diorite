@@ -27,6 +27,7 @@ package org.diorite.material.items;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.inventory.item.meta.ToolMeta;
 import org.diorite.material.BasicToolData;
 import org.diorite.material.BreakableItemMat;
 import org.diorite.material.EnchantableMat;
@@ -54,6 +55,10 @@ public abstract class BasicToolMat extends ItemMaterialData implements Breakable
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.toolData = toolData;
+    }
+
+    {
+        this.metaType = ToolMeta.class;
     }
 
     /**

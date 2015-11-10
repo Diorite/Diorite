@@ -26,6 +26,7 @@ package org.diorite.material.items;
 
 import java.util.Map;
 
+import org.diorite.inventory.item.meta.EnchantmentStorageMeta;
 import org.diorite.material.EnchantableMat;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -66,6 +67,10 @@ public class EnchantedBookMat extends ItemMaterialData implements EnchantableMat
     protected EnchantedBookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
+    }
+
+    {
+        this.metaType = EnchantmentStorageMeta.class;
     }
 
     @Override

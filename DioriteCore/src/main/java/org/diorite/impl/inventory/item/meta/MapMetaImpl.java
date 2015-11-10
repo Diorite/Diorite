@@ -36,8 +36,8 @@ import org.diorite.nbt.NbtTagList;
 
 public class MapMetaImpl extends SimpleItemMetaImpl implements MapMeta
 {
-    private static final String SCALING     = "map_is_scaling";
-    private static final String DECORATIONS = "Decorations";
+    protected static final String SCALING     = "map_is_scaling";
+    protected static final String DECORATIONS = "Decorations";
 
     public MapMetaImpl(final NbtTagCompound tag)
     {

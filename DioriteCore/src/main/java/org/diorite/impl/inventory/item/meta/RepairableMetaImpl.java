@@ -24,63 +24,67 @@
 
 package org.diorite.impl.inventory.item.meta;
 
-import org.diorite.firework.FireworkEffect;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.item.meta.FireworkEffectMeta;
-import org.diorite.nbt.NbtSerialization;
+import org.diorite.inventory.item.meta.RepairableMeta;
 import org.diorite.nbt.NbtTagCompound;
 
-public class FireworkEffectMetaImpl extends SimpleItemMetaImpl implements FireworkEffectMeta
+public class RepairableMetaImpl extends SimpleItemMetaImpl implements RepairableMeta
 {
-    protected static final String EXPLOSION = "Explosion";
+    protected static final String UNBREAKABLE = "Unbreakable";
+    protected static final String REPAIR_COST = "RepairCost";
 
-    public FireworkEffectMetaImpl(final NbtTagCompound tag)
+    public RepairableMetaImpl(final NbtTagCompound tag)
     {
         super(tag);
     }
 
-    public FireworkEffectMetaImpl(final NbtTagCompound tag, final ItemStack itemStack)
+    public RepairableMetaImpl(final NbtTagCompound tag, final ItemStack itemStack)
     {
         super(tag, itemStack);
     }
 
     @Override
-    public void setEffect(final FireworkEffect effect)
+    public boolean hasRepairCost()
     {
-        if (this.removeIfNeeded(EXPLOSION, effect))
+        return (this.tag != null) && this.tag.containsTag(REPAIR_COST);
+    }
+
+    @Override
+    public int getRepairCost()
+    {
+        if (this.tag == null)
         {
-            return;
+            return 0;
         }
+        return this.tag.getInt(REPAIR_COST);
+    }
+
+    @Override
+    public void setRepairCost(final int cost)
+    {
         this.checkTag(true);
-        this.tag.put(EXPLOSION, effect.serializeToNBT());
+        this.tag.setInt(REPAIR_COST, cost);
         this.setDirty();
     }
 
     @Override
-    public boolean hasEffect()
+    public void setUnbreakable(final boolean unbreakable)
     {
-        return (this.tag != null) && this.tag.containsTag(EXPLOSION);
+        this.checkTag(true);
+        this.tag.setBoolean(UNBREAKABLE, unbreakable);
+        this.setDirty();
     }
 
     @Override
-    public FireworkEffect getEffect()
+    public boolean isUnbreakable()
     {
-        if (this.tag == null)
-        {
-            return null;
-        }
-        final NbtTagCompound tag = this.tag.getCompound(EXPLOSION);
-        if (tag == null)
-        {
-            return null;
-        }
-        return NbtSerialization.deserialize(FireworkEffect.class, tag);
+        return (this.tag != null) && this.tag.getBoolean(UNBREAKABLE);
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
-    public FireworkEffectMetaImpl clone()
+    public ToolMetaImpl clone()
     {
-        return new FireworkEffectMetaImpl((this.tag == null) ? null : this.tag.clone(), this.itemStack);
+        return new ToolMetaImpl((this.tag == null) ? null : this.tag.clone(), this.itemStack);
     }
 }

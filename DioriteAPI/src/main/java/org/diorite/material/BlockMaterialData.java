@@ -28,6 +28,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.meta.BlockItemMeta;
 import org.diorite.material.data.drops.PossibleDrops;
 import org.diorite.material.data.drops.PossibleFixedDrop;
 import org.diorite.utils.lazy.LazyValue;
@@ -58,6 +59,10 @@ public abstract class BlockMaterialData extends Material implements PlaceableMat
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.hardness = hardness;
         this.blastResistance = blastResistance;
+    }
+
+    {
+        this.metaType = BlockItemMeta.class;
     }
 
     /**

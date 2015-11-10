@@ -26,6 +26,7 @@ package org.diorite.material.items;
 
 import java.util.Map;
 
+import org.diorite.inventory.item.meta.FireworkEffectMeta;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
@@ -65,6 +66,10 @@ public class FireworkChargeMat extends ItemMaterialData
     protected FireworkChargeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
+    }
+
+    {
+        this.metaType = FireworkEffectMeta.class;
     }
 
     @Override

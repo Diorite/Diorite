@@ -35,11 +35,11 @@ import org.diorite.nbt.NbtTagString;
 
 public class BookMetaImpl extends SimpleItemMetaImpl implements BookMeta
 {
-    private static final String RESOLVED   = "resolved";
-    private static final String GENERATION = "generation";
-    private static final String AUTHOR     = "author";
-    private static final String TITLE      = "title";
-    private static final String PAGES      = "pages";
+    protected static final String RESOLVED   = "resolved";
+    protected static final String GENERATION = "generation";
+    protected static final String AUTHOR     = "author";
+    protected static final String TITLE      = "title";
+    protected static final String PAGES      = "pages";
 
     public BookMetaImpl(final NbtTagCompound tag)
     {

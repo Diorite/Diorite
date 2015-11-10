@@ -39,8 +39,8 @@ import org.diorite.nbt.NbtTagList;
 
 public class PotionMetaImpl extends SimpleItemMetaImpl implements PotionMeta
 {
-    private static final String EFFECTS = "CustomPotionEffects";
-    private static final String POTION  = "Potion";
+    protected static final String EFFECTS = "CustomPotionEffects";
+    protected static final String POTION  = "Potion";
 
     public PotionMetaImpl(final NbtTagCompound tag)
     {
@@ -132,7 +132,20 @@ public class PotionMetaImpl extends SimpleItemMetaImpl implements PotionMeta
             return false;
         }
         final NbtTagList list = this.tag.getTag(EFFECTS, NbtTagList.class);
-        return (list != null) && list.removeIf(t -> new StatusEffect((NbtTagCompound) t).getType().equals(type));
+        if (list == null)
+        {
+            return false;
+        }
+        if (list.removeIf(t -> new StatusEffect((NbtTagCompound) t).getType().equals(type)))
+        {
+            if (list.isEmpty())
+            {
+                this.clearCustomEffects();
+            }
+            this.setDirty();
+            return true;
+        }
+        return false;
     }
 
     @Override

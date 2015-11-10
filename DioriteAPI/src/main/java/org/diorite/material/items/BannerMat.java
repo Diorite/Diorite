@@ -26,6 +26,7 @@ package org.diorite.material.items;
 
 import java.util.Map;
 
+import org.diorite.inventory.item.meta.BannerMeta;
 import org.diorite.material.FuelMat;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
@@ -67,6 +68,10 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
     protected BannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
+    }
+
+    {
+        this.metaType = BannerMeta.class;
     }
 
     @Override

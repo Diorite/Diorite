@@ -33,7 +33,7 @@ import gnu.trove.map.TObjectShortMap;
 
 public class EnchantmentStorageMetaImpl extends SimpleItemMetaImpl implements EnchantmentStorageMeta
 {
-    private static final String STORED_ENCHANTMENTS = "StoredEnchantments";
+    protected static final String STORED_ENCHANTMENTS = "StoredEnchantments";
 
     public EnchantmentStorageMetaImpl(final NbtTagCompound tag)
     {

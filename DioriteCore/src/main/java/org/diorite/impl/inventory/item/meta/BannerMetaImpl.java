@@ -35,10 +35,10 @@ import org.diorite.nbt.NbtTagCompound;
 public class BannerMetaImpl extends SimpleItemMetaImpl implements BannerMeta
 {
     // TODO banner meta data is stored under 'BlockEntityTag' tag, so it should extends BlockItemMeta
-    private static final String BASE_COLOR ="Base";
-    private static final String PATTERNS ="Patterns";
-    private static final String PATTERN_COLOR ="Color";
-    private static final String PATTERN_TYPE ="Pattern";
+    protected static final String BASE_COLOR ="Base";
+    protected static final String PATTERNS ="Patterns";
+    protected static final String PATTERN_COLOR ="Color";
+    protected static final String PATTERN_TYPE ="Pattern";
 
     public BannerMetaImpl(final NbtTagCompound tag)
     {

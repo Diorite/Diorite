@@ -27,6 +27,7 @@ package org.diorite.material.items;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.inventory.item.meta.RepairableMeta;
 import org.diorite.material.ArmorData;
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
@@ -61,6 +62,10 @@ public abstract class ArmorMat extends ItemMaterialData implements BreakableItem
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.armorMaterial = armorMaterial;
         this.armorType = armorType;
+    }
+
+    {
+        this.metaType = RepairableMeta.class;
     }
 
     /**

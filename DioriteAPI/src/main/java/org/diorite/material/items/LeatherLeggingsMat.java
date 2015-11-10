@@ -26,6 +26,7 @@ package org.diorite.material.items;
 
 import java.util.Map;
 
+import org.diorite.inventory.item.meta.LeatherArmorMeta;
 import org.diorite.material.ArmorMaterial;
 import org.diorite.material.ArmorType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -76,6 +77,10 @@ public class LeatherLeggingsMat extends LeggingsMat
     protected LeatherLeggingsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
+    }
+
+    {
+        this.metaType = LeatherArmorMeta.class;
     }
 
     @Override

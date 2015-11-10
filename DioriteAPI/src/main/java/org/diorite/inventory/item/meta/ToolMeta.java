@@ -52,8 +52,7 @@ public interface ToolMeta extends RepairableMeta
     /**
      * Returns set of {@link BlockMaterialData}, materials that can be destroyed by this tool. <br>
      * Minecraft don't support subtypes here. <br>
-     * If set is empty and {@link #useCanDestoryTag()} is true, then this tool can't destory any block. <br>
-     * If set is empty and {@link #useCanDestoryTag()} is false, then this tool can destory every block.
+     * Will return null if tag isn't used.
      *
      * @return set of {@link BlockMaterialData}, materials that can be destroyed by this tool if CanDestory tag is used.
      */
@@ -68,21 +67,37 @@ public interface ToolMeta extends RepairableMeta
      */
     void setCanDestoryMaterials(Collection<BlockMaterialData> materials);
 
+//    /**
+//     * Add new material that can be destroyed by this tool,
+//     * this method will automatically enable CanDestory tag if needed. <br>
+//     * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.
+//     * (Vanilla client can't see them)
+//     *
+//     * @param material material to add.
+//     */
+
     /**
      * Add new material that can be destroyed by this tool,
      * this method will automatically enable CanDestory tag if needed. <br>
-     * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.
-     * (Vanilla client can't see them)
+     * Minecraft don't support subtypes here.
      *
      * @param material material to add.
      */
     void addCanDestoryMaterial(BlockMaterialData material);
 
     /**
+     * Check if given material is already in CanDestory tag.
+     *
+     * @param material material to be checked.
+     *
+     * @return true if given material is in CanDestory tag.
+     */
+    boolean containsCanDestoryMaterial(BlockMaterialData material);
+
+    /**
      * Remove material that can be destroyed by this tool,
      * this method will automatically enable CanDestory tag if needed. <br>
-     * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.
-     * (Vanilla client can't see them)
+     * Minecraft don't support subtypes here.
      *
      * @param material material to add.
      */
