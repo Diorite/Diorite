@@ -35,6 +35,7 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.OfflinePlayer;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
@@ -54,19 +55,29 @@ public class PlaceholderType<T>
     /**
      * {@link CommandSender} placeholder type.
      */
-    public static final PlaceholderType<CommandSender> SENDER = create("sender", CommandSender.class);
+    public static final PlaceholderType<CommandSender> SENDER  = create("sender", CommandSender.class);
+    /**
+     * {@link org.diorite.OfflinePlayer} placeholder type.
+     */
+    public static final PlaceholderType<OfflinePlayer> OFFLINE = create("offline", OfflinePlayer.class);
     /**
      * {@link Entity} placeholder type.
      */
-    public static final PlaceholderType<Entity>        ENTITY = create("entity", Entity.class);
+    public static final PlaceholderType<Entity>        ENTITY  = create("entity", Entity.class);
     /**
      * {@link Player} placeholder type, it use sender and entity placeholders too.
      */
-    public static final PlaceholderType<Player>        PLAYER = create("player", Player.class, SENDER, ENTITY);
+    public static final PlaceholderType<Player>        PLAYER  = create("player", Player.class, SENDER, OFFLINE, ENTITY);
+    /**
+     * {@link Object} placeholder type, used by simple placeholders without any type, like just "points" instead of some object like "player.points"
+     */
+    public static final PlaceholderType<Object>        OBJECT  = create("", Object.class);
+
 
     static
     {
         SENDER.registerItem(new PlaceholderItem<>(SENDER, "name", CommandSender::getName));
+        OFFLINE.registerItem(new PlaceholderItem<>(OFFLINE, "name", OfflinePlayer::getName));
     }
 
     @SafeVarargs

@@ -224,12 +224,13 @@ public class PlaceholderData<T>
             {
                 final String string = key.toString();
                 int index = string.indexOf('.');
+                final boolean simple = index == - 1;
                 final String value = string.substring(index + 1);
                 final String typeID;
                 final String typeName;
                 String fullName = "$<";
                 {
-                    final String type = string.substring(0, index);
+                    final String type = simple ? "" : string.substring(0, index);
                     index = type.indexOf('#');
                     if (index == - 1)
                     {
@@ -324,12 +325,13 @@ public class PlaceholderData<T>
             {
                 final String string = key.toString();
                 int index = string.indexOf('.');
+                final boolean simple = index == - 1;
                 final String value = string.substring(index + 1);
                 final String typeID;
                 final String typeName;
                 String fullName = "$<";
                 {
-                    final String type = string.substring(0, index);
+                    final String type = simple ? "" : string.substring(0, index);
                     index = type.indexOf('#');
                     if (index == - 1)
                     {
@@ -344,14 +346,18 @@ public class PlaceholderData<T>
                         fullName += typeID + "#" + typeName;
                     }
                 }
-                fullName += "." + value + ">";
+                fullName += (simple ? "" : ".") + value + ">";
                 PlaceholderData<?> data = cache.get(fullName);
                 if (data == null)
                 {
                     final PlaceholderType<?> placeholderType = PlaceholderType.get(typeID);
                     if (placeholderType != null)
                     {
-                        final PlaceholderItem<?> item = placeholderType.getItem(value);
+                        PlaceholderItem<?> item = placeholderType.getItem(value);
+                        if ((item == null) && simple)
+                        {
+                            item = new PlaceholderItem<>(placeholderType, typeID, o -> o);
+                        }
                         if (item != null)
                         {
                             data = valueOf(fullName, typeName, item);
@@ -368,11 +374,12 @@ public class PlaceholderData<T>
                 }
                 if (data != null)
                 {
-                    Collection<PlaceholderData<?>> collection = result.get(data.objectName);
+                    final String dataID = simple ? value : data.objectName;
+                    Collection<PlaceholderData<?>> collection = result.get(dataID);
                     if (collection == null)
                     {
                         collection = new HashSet<>(5, .1f);
-                        result.put(data.objectName, collection);
+                        result.put(dataID, collection);
                     }
                     collection.add(data);
                 }

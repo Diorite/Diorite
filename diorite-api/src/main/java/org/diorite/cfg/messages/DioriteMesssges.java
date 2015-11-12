@@ -44,30 +44,51 @@ import org.diorite.plugin.ChildPlugin;
  */
 public final class DioriteMesssges
 {
+    static
+    {
+        DioriteMesssges.reload();
+    }
+
     /**
      * Helper variable to prevent a typo. Separator used in path.
      */
-    public static final char   SEP           = '.';
+    public static final char   SEP                   = '.';
+    /**
+     * Helper variable to prevent a typo. Common commands node.
+     */
+    public static final String KEY_COMMANDS          = "commands";
     /**
      * Helper variable to prevent a typo. Common player node.
      */
-    public static final String KEY_PLAYER    = "player";
+    public static final String KEY_PLAYER            = "player";
     /**
      * Helper variable to prevent a typo. Common entity node.
      */
-    public static final String KEY_ENTITY    = "entity";
+    public static final String KEY_ENTITY            = "entity";
     /**
      * Helper variable to prevent a typo. Common join node.
      */
-    public static final String KEY_JOIN      = "join";
+    public static final String KEY_JOIN              = "join";
     /**
      * Helper variable to prevent a typo. Common quit node.
      */
-    public static final String KEY_QUIT      = "quit";
+    public static final String KEY_QUIT              = "quit";
     /**
      * Helper variable to prevent a typo. Common killed by node.
      */
-    public static final String KEY_KILLED_BY = "killedby";
+    public static final String KEY_KILLED_BY         = "killedby";
+    /**
+     * Helper variable to prevent a typo. No player message for commands.
+     */
+    public static final String MSG_CMD_NO_PLAYER     = KEY_COMMANDS + SEP + "no-player";
+    /**
+     * Helper variable to prevent a typo. No player message for commands.
+     */
+    public static final String MSG_CMD_NO_PERMISSION = KEY_COMMANDS + SEP + "no-permission";
+    /**
+     * Helper variable to prevent a typo. Player join message.
+     */
+    public static final String MSG_CMD_PLAYER_JOIN   = KEY_PLAYER + SEP + KEY_JOIN;
 
     private static Messages msgs;
 

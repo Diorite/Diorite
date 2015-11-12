@@ -40,7 +40,8 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.TeleportData;
-import org.diorite.chat.ChatPosition;
+import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.Message.MessageData;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 import org.diorite.event.EventPriority;
@@ -98,8 +99,9 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             }
             final Player player = evt.getPlayer();
             GameProfiles.addToCache(player.getGameProfile());
-            this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!");
-            this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
+            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_CMD_PLAYER_JOIN, MessageData.e("player", player));
+//            this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!"); maybe we should not make users angry with this message :D
+//            this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
 //        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
 
             this.core.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it

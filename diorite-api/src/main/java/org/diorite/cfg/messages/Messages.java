@@ -96,7 +96,7 @@ public class Messages
      */
     public Messages(final Map<String, Message> messages, final Map<String, Messages> nodes)
     {
-        this.nodeSeparator = '\u0000';
+        this.nodeSeparator = '.';
         this.messages = messages;
         this.nodes = nodes;
         this.parentNode = null;
@@ -107,7 +107,7 @@ public class Messages
      */
     public Messages()
     {
-        this.nodeSeparator = '\u0000';
+        this.nodeSeparator = '.';
         this.messages = new HashMap<>(20, .5f);
         this.nodes = new HashMap<>(5, .2f);
         this.parentNode = null;

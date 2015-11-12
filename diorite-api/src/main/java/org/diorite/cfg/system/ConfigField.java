@@ -72,6 +72,7 @@ import org.diorite.cfg.annotations.defaults.CfgStringArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
 import org.diorite.cfg.system.elements.TemplateElement;
 import org.diorite.cfg.system.elements.TemplateElements;
+import org.diorite.utils.collections.WeakCollection;
 import org.diorite.utils.collections.comparators.AlphanumComparator;
 import org.diorite.utils.function.eval.BooleanEvaluator;
 import org.diorite.utils.function.eval.ByteEvaluator;
@@ -90,6 +91,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtNewMethod;
+import javassist.LoaderClassPath;
 import javassist.NotFoundException;
 
 /**
@@ -381,17 +383,22 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         return parseMethodAdv("return " + str + ";", clazz, returnClass, imports);
     }
 
+    private static final WeakCollection<ClassLoader> loaders = WeakCollection.usingHashSet(40);
+
     static Supplier parseMethodAdv(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, NotFoundException
     {
         final ClassPool pool = ClassPool.getDefault();
-
+        if (loaders.add(clazz.getClassLoader()))
+        {
+            pool.insertClassPath(new LoaderClassPath(clazz.getClassLoader()));
+        }
         pool.clearImportedPackages();
         for (final String impor : imports)
         {
             pool.importPackage(impor);
         }
 
-        final CtClass init = pool.makeClass((clazz.getName().startsWith("java") ? "org.diorite.cfg.system" : clazz.getPackage().getName()) + "." + VALID_JAVA_NAME.matcher(clazz.getName() + DioriteRandomUtils.nextLong()).replaceAll("_"));
+        final CtClass init = pool.makeClass((clazz.getName().startsWith("java") ? (ConfigField.class.getPackage().getName()) : clazz.getPackage().getName()) + "." + VALID_JAVA_NAME.matcher(clazz.getName() + DioriteRandomUtils.nextLong()).replaceAll("_"));
 
         final CtClass returnType;
         final CtClass interfaceType;
@@ -401,13 +408,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             if (returnClass.equals(boolean.class))
             {
                 returnType = CtClass.booleanType;
-                interfaceType = pool.get("org.diorite.utils.function.eval.BooleanEvaluator");
+                interfaceType = pool.get(BooleanEvaluator.class.getName());
                 func = c -> {
                     try
                     {
-                        BooleanEvaluator e = (BooleanEvaluator) c.newInstance();
+                        final BooleanEvaluator e = (BooleanEvaluator) c.newInstance();
                         return e::eval;
-                    } catch (Exception e)
+                    } catch (final Exception e)
                     {
                         throw new RuntimeException(e);
                     }
@@ -416,13 +423,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             else if (returnClass.equals(byte.class))
             {
                 returnType = CtClass.byteType;
-                interfaceType = pool.get("org.diorite.utils.function.eval.ByteEvaluator");
+                interfaceType = pool.get(ByteEvaluator.class.getName());
                 func = c -> {
                     try
                     {
-                        ByteEvaluator e = (ByteEvaluator) c.newInstance();
+                        final ByteEvaluator e = (ByteEvaluator) c.newInstance();
                         return e::eval;
-                    } catch (Exception e)
+                    } catch (final Exception e)
                     {
                         throw new RuntimeException(e);
                     }
@@ -431,13 +438,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             else if (returnClass.equals(char.class))
             {
                 returnType = CtClass.charType;
-                interfaceType = pool.get("org.diorite.utils.function.eval.CharEvaluator");
+                interfaceType = pool.get(CharEvaluator.class.getName());
                 func = c -> {
                     try
                     {
-                        CharEvaluator e = (CharEvaluator) c.newInstance();
+                        final CharEvaluator e = (CharEvaluator) c.newInstance();
                         return e::eval;
-                    } catch (Exception e)
+                    } catch (final Exception e)
                     {
                         throw new RuntimeException(e);
                     }
@@ -446,13 +453,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             else if (returnClass.equals(short.class))
             {
                 returnType = CtClass.shortType;
-                interfaceType = pool.get("org.diorite.utils.function.eval.ShortEvaluator");
+                interfaceType = pool.get(ShortEvaluator.class.getName());
                 func = c -> {
                     try
                     {
-                        ShortEvaluator e = (ShortEvaluator) c.newInstance();
+                        final ShortEvaluator e = (ShortEvaluator) c.newInstance();
                         return e::eval;
-                    } catch (Exception e)
+                    } catch (final Exception e)
                     {
                         throw new RuntimeException(e);
                     }
@@ -461,13 +468,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             else if (returnClass.equals(int.class))
             {
                 returnType = CtClass.intType;
-                interfaceType = pool.get("org.diorite.utils.function.eval.IntEvaluator");
+                interfaceType = pool.get(IntEvaluator.class.getName());
                 func = c -> {
                     try
                     {
-                        IntEvaluator e = (IntEvaluator) c.newInstance();
+                        final IntEvaluator e = (IntEvaluator) c.newInstance();
                         return e::eval;
-                    } catch (Exception e)
+                    } catch (final Exception e)
                     {
                         throw new RuntimeException(e);
                     }
@@ -476,13 +483,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             else if (returnClass.equals(long.class))
             {
                 returnType = CtClass.longType;
-                interfaceType = pool.get("org.diorite.utils.function.eval.LongEvaluator");
+                interfaceType = pool.get(LongEvaluator.class.getName());
                 func = c -> {
                     try
                     {
-                        LongEvaluator e = (LongEvaluator) c.newInstance();
+                        final LongEvaluator e = (LongEvaluator) c.newInstance();
                         return e::eval;
-                    } catch (Exception e)
+                    } catch (final Exception e)
                     {
                         throw new RuntimeException(e);
                     }
@@ -491,13 +498,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             else if (returnClass.equals(float.class))
             {
                 returnType = CtClass.floatType;
-                interfaceType = pool.get("org.diorite.utils.function.eval.FloatEvaluator");
+                interfaceType = pool.get(FloatEvaluator.class.getName());
                 func = c -> {
                     try
                     {
-                        FloatEvaluator e = (FloatEvaluator) c.newInstance();
+                        final FloatEvaluator e = (FloatEvaluator) c.newInstance();
                         return e::eval;
-                    } catch (Exception e)
+                    } catch (final Exception e)
                     {
                         throw new RuntimeException(e);
                     }
@@ -506,13 +513,13 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             else if (returnClass.equals(double.class))
             {
                 returnType = CtClass.doubleType;
-                interfaceType = pool.get("org.diorite.utils.function.eval.DoubleEvaluator");
+                interfaceType = pool.get(DoubleEvaluator.class.getName());
                 func = c -> {
                     try
                     {
-                        DoubleEvaluator e = (DoubleEvaluator) c.newInstance();
+                        final DoubleEvaluator e = (DoubleEvaluator) c.newInstance();
                         return e::eval;
-                    } catch (Exception e)
+                    } catch (final Exception e)
                     {
                         throw new RuntimeException(e);
                     }
@@ -525,21 +532,21 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
         }
         else
         {
-            returnType = pool.get("java.lang.Object");
-            interfaceType = pool.get("org.diorite.utils.function.eval.ObjectEvaluator");
+            returnType = pool.get(Object.class.getName());
+            interfaceType = pool.get(ObjectEvaluator.class.getName());
             func = c -> {
                 try
                 {
-                    ObjectEvaluator e = (ObjectEvaluator) c.newInstance();
+                    final ObjectEvaluator e = (ObjectEvaluator) c.newInstance();
                     return e::eval;
-                } catch (Exception e)
+                } catch (final Exception e)
                 {
                     throw new RuntimeException(e);
                 }
             };
         }
         init.setInterfaces(new CtClass[]{interfaceType});
-        init.addMethod(CtNewMethod.make(returnType, "eval", EMPTY_CLASSES, new CtClass[]{pool.get("java.lang.Exception")}, "{\n" + str + "\n}", init));
+        init.addMethod(CtNewMethod.make(returnType, "eval", EMPTY_CLASSES, new CtClass[]{pool.get(Exception.class.getName())}, "{\n" + str + "\n}", init));
         return func.apply(init.toClass(clazz.getClassLoader()));
     }
 

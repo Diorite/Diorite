@@ -25,6 +25,7 @@
 package org.diorite.impl.command.defaults;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -85,10 +86,12 @@ public class DevCmd extends SystemCommandImpl
             {
                 case "potionmeta":
                 {
-                    final ItemStack item = new BaseItemStack(new PotionMat("POTION", 373, "minecraft:potion", 1, "POTION", (short) 8193, 5, 6){});
+                    final ItemStack item = new BaseItemStack(new PotionMat("POTION", 373, "minecraft:potion", 1, "POTION", (short) 8193, 5, 6)
+                    {
+                    });
                     final PotionMeta meta = new PotionMetaImpl(null);
-                    meta.addCustomEffect(new StatusEffect(StatusEffectType.INVISIBILITY, 3,300,false, true), false);
-                    meta.addCustomEffect(new StatusEffect(StatusEffectType.INVISIBILITY, 3,30000,false, true), false);
+                    meta.addCustomEffect(new StatusEffect(StatusEffectType.INVISIBILITY, 3, 300, false, true), false);
+                    meta.addCustomEffect(new StatusEffect(StatusEffectType.INVISIBILITY, 3, 30000, false, true), false);
                     item.setItemMeta(meta);
                     p.getInventory().add(item);
                     break;
@@ -248,6 +251,12 @@ public class DevCmd extends SystemCommandImpl
                     sender.sendMessage("Created group: " + group);
                     break;
                 }
+                case "setlocale":
+                {
+                    p.setPreferedLocale((args.length() == 0) ? null : Locale.forLanguageTag(args.asText()));
+                    System.out.println("Done: " + p.getPreferedLocale());
+                    break;
+                }
                 case "msgr":
                 {
                     DioriteMesssges.reload();
@@ -256,7 +265,8 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "msg":
                 {
-                    DioriteMesssges.broadcastMessage(args.asText(), MessageData.e("player", p));
+                    p.setPreferedLocale(Locale.forLanguageTag("pl-PL"));
+                    DioriteMesssges.broadcastMessage(args.asText(), MessageData.e("player", p), MessageData.e("test", "Meeeh"));
                     break;
                 }
                 case "tc":

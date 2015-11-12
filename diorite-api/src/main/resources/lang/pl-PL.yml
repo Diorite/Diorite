@@ -1,0 +1,4 @@
+player:
+  join: "&3$<player.name>&7 dołączył do gry!"
+commands:
+  no-player: "&7Nie ma gracza o nicku: &3$<name>&7."

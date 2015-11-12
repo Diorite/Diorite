@@ -25,6 +25,7 @@
 package org.diorite.impl.entity;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -123,6 +124,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     protected       GameMode                   gameMode;
     protected final PlayerInventoryImpl        inventory;
     protected       PlayerPermissionsContainer permissionContainer;
+    protected       Locale                     preferedLocale;
 
     protected PacketPlayServerAbilities abilities = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
 
@@ -138,6 +140,18 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         this.gameMode = this.world.getDefaultGameMode();
         this.playerChunks = new PlayerChunksImpl(this);
         this.inventory = new PlayerInventoryImpl(this, 0); // 0 because this is owner of this inventory, and we need this to update
+    }
+
+    @Override
+    public Locale getPreferedLocale()
+    {
+        return this.preferedLocale;
+    }
+
+    @Override
+    public void setPreferedLocale(final Locale locale)
+    {
+        this.preferedLocale = locale;
     }
 
     @Override

@@ -1,2 +1,4 @@
 player:
   join: "&3$<player.name>&7 joined the server!"
+commands:
+  no-player: "&7There is no player with name: &3$<name>&7."

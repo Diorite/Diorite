@@ -266,7 +266,7 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <optimize>true</optimize>
-                    <showWarnings>true</showWarnings>
+                    <showWarnings>false</showWarnings>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
                 <dependencies>

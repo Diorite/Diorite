@@ -33,7 +33,7 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 public interface SessionService
 {
-    CaseInsensitiveMap<GameProfile> getUUIDsFromUsernames(String[] names) throws AuthenticationException;
+    CaseInsensitiveMap<GameProfile> getUUIDsFromUsernames(String... names) throws AuthenticationException;
 
     GameProfile getGameProfile(String name) throws AuthenticationException;
 

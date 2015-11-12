@@ -60,6 +60,15 @@ public interface CommandSender extends ServerOperator
         return null;
     }
 
+    /**
+     * Set prefered locale for this sender, may not do anything to sender if it don't support locales.
+     *
+     * @param locale new prefered locale.
+     */
+    default void setPreferedLocale(final Locale locale)
+    {
+    }
+
     default void sendRawMessage(final String... strs)
     {
         if (strs != null)
