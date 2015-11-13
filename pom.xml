@@ -17,13 +17,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lwjgl.version>3.0.0a</lwjgl.version>
         <diorite.build>unspecified</diorite.build>
-        <diorite.version.raw>indev-0.0.1</diorite.version.raw>
+        <diorite.version.raw>indev-0.0.2</diorite.version.raw>
         <diorite.version>${diorite.version.raw}-b${diorite.build}</diorite.version>
     </properties>
 
     <groupId>org.diorite</groupId>
     <artifactId>diorite-parent</artifactId>
-    <version>indev-0.0.1-SNAPSHOT</version>
+    <version>indev-0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:https://github.com/Diorite/Diorite.git</connection>
