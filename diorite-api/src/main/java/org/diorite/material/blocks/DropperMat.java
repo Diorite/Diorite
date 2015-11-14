@@ -167,21 +167,21 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
     protected final boolean   powered;
 
     @SuppressWarnings("MagicNumber")
-    protected DropperMat()
+    public DropperMat()
     {
         super("DROPPER", 158, "minecraft:dropper", "DOWN", (byte) 0x00, 3.5f, 17.5f);
         this.facing = BlockFace.DOWN;
         this.powered = false;
     }
 
-    protected DropperMat(final BlockFace facing, final boolean powered)
+    public DropperMat(final BlockFace facing, final boolean powered)
     {
         super(DROPPER_DOWN.name(), DROPPER_DOWN.ordinal(), DROPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered), DROPPER_DOWN.getHardness(), DROPPER_DOWN.getBlastResistance());
         this.facing = facing;
         this.powered = powered;
     }
 
-    protected DropperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered, final float hardness, final float blastResistance)
+    public DropperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.facing = facing;
@@ -315,6 +315,7 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
      */
     public static void register(final DropperMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

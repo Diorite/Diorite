@@ -53,14 +53,14 @@ public abstract class ButtonMat extends BlockMaterialData implements PowerableMa
      */
     protected final boolean   powered;
 
-    protected ButtonMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
+    public ButtonMat(final String enumName, final int id, final String minecraftId, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, face.name() + (powered ? "_POWERED" : ""), combine(face, powered), hardness, blastResistance);
         this.face = face;
         this.powered = powered;
     }
 
-    protected ButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
+    public ButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;

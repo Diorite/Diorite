@@ -57,12 +57,12 @@ public class FishingRodMat extends BasicToolMat
     protected final LazyValue<FishingRodMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected FishingRodMat()
+    public FishingRodMat()
     {
         super("FISHING_ROD", 346, "minecraft:fishing_rod", "NEW", (short) 0x00, new BasicToolData(65));
     }
 
-    protected FishingRodMat(final int durability)
+    public FishingRodMat(final int durability)
     {
         super(FISHING_ROD.name(), FISHING_ROD.getId(), FISHING_ROD.getMinecraftId(), Integer.toString(durability), (short) durability, new BasicToolData(FISHING_ROD.getToolData()));
     }
@@ -178,6 +178,7 @@ public class FishingRodMat extends BasicToolMat
      */
     public static void register(final FishingRodMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

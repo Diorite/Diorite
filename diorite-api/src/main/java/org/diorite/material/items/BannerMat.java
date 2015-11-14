@@ -55,17 +55,17 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
     private static final TShortObjectMap<BannerMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BannerMat()
+    public BannerMat()
     {
         super("BANNER", 425, "minecraft:banner", 16, "BANNER", (short) 0x00);
     }
 
-    protected BannerMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public BannerMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, BANNER.getMaxStack(), typeName, type);
     }
 
-    protected BannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public BannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -126,6 +126,7 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
      */
     public static void register(final BannerMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -53,17 +53,17 @@ public class ExperienceBottleMat extends ItemMaterialData implements PlaceableEn
     private static final TShortObjectMap<ExperienceBottleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected ExperienceBottleMat()
+    public ExperienceBottleMat()
     {
         super("EXPERIENCE_BOTTLE", 384, "minecraft:experience_bottle", "EXPERIENCE_BOTTLE", (short) 0x00);
     }
 
-    protected ExperienceBottleMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public ExperienceBottleMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected ExperienceBottleMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public ExperienceBottleMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class ExperienceBottleMat extends ItemMaterialData implements PlaceableEn
      */
     public static void register(final ExperienceBottleMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

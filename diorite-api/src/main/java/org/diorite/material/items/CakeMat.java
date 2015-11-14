@@ -53,17 +53,17 @@ public class CakeMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<CakeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CakeMat()
+    public CakeMat()
     {
         super("CAKE", 354, "minecraft:cake", 1, "CAKE", (short) 0x00);
     }
 
-    protected CakeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public CakeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, CAKE.getMaxStack(), typeName, type);
     }
 
-    protected CakeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public CakeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class CakeMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final CakeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

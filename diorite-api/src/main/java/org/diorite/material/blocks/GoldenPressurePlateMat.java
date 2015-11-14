@@ -189,17 +189,17 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
     private static final TByteObjectMap<GoldenPressurePlateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldenPressurePlateMat()
+    public GoldenPressurePlateMat()
     {
         super("GOLDEN_PRESSURE_PLATE", 147, "minecraft:light_weighted_pressure_plate", "0", (byte) 0x00, false, 0.5f, 2.5f);
     }
 
-    protected GoldenPressurePlateMat(final int type)
+    public GoldenPressurePlateMat(final int type)
     {
         super(GOLDEN_PRESSURE_PLATE_0.name(), GOLDEN_PRESSURE_PLATE_0.ordinal(), GOLDEN_PRESSURE_PLATE_0.getMinecraftId(), Integer.toString(type), (byte) type, true, GOLDEN_PRESSURE_PLATE_0.getHardness(), GOLDEN_PRESSURE_PLATE_0.getBlastResistance());
     }
 
-    protected GoldenPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final int power, final float hardness, final float blastResistance)
+    public GoldenPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final int power, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, powered, power, hardness, blastResistance);
     }
@@ -277,7 +277,7 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
      */
     public static void register(final GoldenPressurePlateMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -165,7 +165,7 @@ public class BirchDoorMat extends WoodenDoorMat
     protected final BlockFace blockFace;
 
     @SuppressWarnings("MagicNumber")
-    protected BirchDoorMat()
+    public BirchDoorMat()
     {
         super("BIRCH_DOOR", 194, "minecraft:birch_door", "BOTTOM_EAST", WoodType.BIRCH, 3, 15);
         this.powered = false;
@@ -175,7 +175,7 @@ public class BirchDoorMat extends WoodenDoorMat
         this.blockFace = BlockFace.EAST;
     }
 
-    protected BirchDoorMat(final boolean powered, final boolean hingeOnRightSide)
+    public BirchDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
         super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.ordinal(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodType.BIRCH, BIRCH_DOOR_BOTTOM_EAST.getHardness(), BIRCH_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -185,7 +185,7 @@ public class BirchDoorMat extends WoodenDoorMat
         this.blockFace = null;
     }
 
-    protected BirchDoorMat(final BlockFace blockFace, final boolean open)
+    public BirchDoorMat(final BlockFace blockFace, final boolean open)
     {
         super(BIRCH_DOOR_BOTTOM_EAST.name(), BIRCH_DOOR_BOTTOM_EAST.ordinal(), BIRCH_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodType.BIRCH, BIRCH_DOOR_BOTTOM_EAST.getHardness(), BIRCH_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
@@ -195,7 +195,7 @@ public class BirchDoorMat extends WoodenDoorMat
         this.blockFace = blockFace;
     }
 
-    protected BirchDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    public BirchDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, BIRCH_DOOR_BOTTOM_EAST.getHardness(), BIRCH_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -406,6 +406,7 @@ public class BirchDoorMat extends WoodenDoorMat
      */
     public static void register(final BirchDoorMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

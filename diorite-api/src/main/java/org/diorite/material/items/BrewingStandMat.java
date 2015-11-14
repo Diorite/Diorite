@@ -53,17 +53,17 @@ public class BrewingStandMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<BrewingStandMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BrewingStandMat()
+    public BrewingStandMat()
     {
         super("BREWING_STAND", 379, "minecraft:brewing_stand", "BREWING_STAND", (short) 0x00);
     }
 
-    protected BrewingStandMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public BrewingStandMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected BrewingStandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public BrewingStandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class BrewingStandMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final BrewingStandMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

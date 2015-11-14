@@ -59,22 +59,22 @@ public class LeatherChestplateMat extends ChestplateMat
     protected final LazyValue<LeatherChestplateMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected LeatherChestplateMat()
+    public LeatherChestplateMat()
     {
         super("LEATHER_CHESTPLATE", 299, "minecraft:leather_chestplate", "NEW", (short) 0, ArmorMaterial.LEATHER);
     }
 
-    protected LeatherChestplateMat(final int durability)
+    public LeatherChestplateMat(final int durability)
     {
         super(LEATHER_CHESTPLATE.name(), LEATHER_CHESTPLATE.getId(), LEATHER_CHESTPLATE.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.LEATHER);
     }
 
-    protected LeatherChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public LeatherChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, armorType);
     }
 
-    protected LeatherChestplateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public LeatherChestplateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
     }
@@ -184,6 +184,7 @@ public class LeatherChestplateMat extends ChestplateMat
      */
     public static void register(final LeatherChestplateMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

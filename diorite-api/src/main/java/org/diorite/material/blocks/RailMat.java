@@ -138,17 +138,17 @@ public class RailMat extends RailsMat
     private static final TByteObjectMap<RailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RailMat()
+    public RailMat()
     {
         super("RAIL", 66, "minecraft:rail", "FLAT_NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00, 0.7f, 3.5f);
     }
 
-    protected RailMat(final RailTypeMat type)
+    public RailMat(final RailTypeMat type)
     {
         super(RAIL_FLAT_NORTH_SOUTH.name(), RAIL_FLAT_NORTH_SOUTH.ordinal(), RAIL_FLAT_NORTH_SOUTH.getMinecraftId(), type.name(), type, (byte) 0x0, RAIL_FLAT_NORTH_SOUTH.getHardness(), RAIL_FLAT_NORTH_SOUTH.getBlastResistance());
     }
 
-    protected RailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final float hardness, final float blastResistance)
+    public RailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, railType, hardness, blastResistance);
     }
@@ -223,6 +223,7 @@ public class RailMat extends RailsMat
      */
     public static void register(final RailMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

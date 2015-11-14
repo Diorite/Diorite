@@ -72,22 +72,22 @@ public class CoalMat extends OreItemMatExt implements FuelMat
     private static final TShortObjectMap<CoalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CoalMat()
+    public CoalMat()
     {
         super("COAL", 263, "minecraft:coal", "COAL", (short) 0x00, COAL_ORE, COAL_BLOCK);
     }
 
-    protected CoalMat(final String name, final int type, final OreMat oreType, final OreBlockMat blockType)
+    public CoalMat(final String name, final int type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(COAL.name(), COAL.getId(), COAL.getMinecraftId(), name, (short) type, oreType, blockType);
     }
 
-    protected CoalMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public CoalMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, typeName, type, oreType, blockType);
     }
 
-    protected CoalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public CoalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, oreType, blockType);
     }
@@ -144,6 +144,7 @@ public class CoalMat extends OreItemMatExt implements FuelMat
      */
     public static void register(final CoalMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

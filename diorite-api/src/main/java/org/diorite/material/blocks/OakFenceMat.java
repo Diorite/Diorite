@@ -53,12 +53,12 @@ public class OakFenceMat extends WoodenFenceMat
     private static final TByteObjectMap<OakFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected OakFenceMat()
+    public OakFenceMat()
     {
         super("OAK_FENCE", 85, "minecraft:fence", "OAK_FENCE", WoodType.OAK, 2, 15);
     }
 
-    protected OakFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
+    public OakFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class OakFenceMat extends WoodenFenceMat
      */
     public static void register(final OakFenceMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

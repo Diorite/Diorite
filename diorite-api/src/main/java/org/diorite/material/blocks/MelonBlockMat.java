@@ -53,12 +53,12 @@ public class MelonBlockMat extends BlockMaterialData
     private static final TByteObjectMap<MelonBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MelonBlockMat()
+    public MelonBlockMat()
     {
         super("MELON_BLOCK", 103, "minecraft:melon_block", "MELON_BLOCK", (byte) 0x00, 1, 5);
     }
 
-    protected MelonBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public MelonBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class MelonBlockMat extends BlockMaterialData
      */
     public static void register(final MelonBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

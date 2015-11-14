@@ -55,17 +55,17 @@ public class IronIngotMat extends OreItemMatExt
     private static final TShortObjectMap<IronIngotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected IronIngotMat()
+    public IronIngotMat()
     {
         super("IRON_INGOT", 265, "minecraft:iron_ingot", "IRON_INGOT", (short) 0x00, Material.IRON_ORE, Material.IRON_BLOCK);
     }
 
-    protected IronIngotMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public IronIngotMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, typeName, type, oreType, blockType);
     }
 
-    protected IronIngotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public IronIngotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, oreType, blockType);
     }
@@ -115,6 +115,7 @@ public class IronIngotMat extends OreItemMatExt
      */
     public static void register(final IronIngotMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

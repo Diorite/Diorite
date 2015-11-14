@@ -133,21 +133,21 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
     private final boolean   activated;
 
     @SuppressWarnings("MagicNumber")
-    protected EndPortalFrameMat()
+    public EndPortalFrameMat()
     {
         super("END_PORTAL_FRAME", 120, "minecraft:end_portal_frame", "SOUTH", (byte) 0x00, - 1, 18_000_000);
         this.face = BlockFace.SOUTH;
         this.activated = false;
     }
 
-    protected EndPortalFrameMat(final BlockFace face, final boolean activated)
+    public EndPortalFrameMat(final BlockFace face, final boolean activated)
     {
         super(END_PORTAL_FRAME_SOUTH.name(), END_PORTAL_FRAME_SOUTH.ordinal(), END_PORTAL_FRAME_SOUTH.getMinecraftId(), face.name() + (activated ? "_EYE" : ""), combine(face, activated), END_PORTAL_FRAME_SOUTH.getHardness(), END_PORTAL_FRAME_SOUTH.getBlastResistance());
         this.face = face;
         this.activated = activated;
     }
 
-    protected EndPortalFrameMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean activated, final float hardness, final float blastResistance)
+    public EndPortalFrameMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean activated, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -292,6 +292,7 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
      */
     public static void register(final EndPortalFrameMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

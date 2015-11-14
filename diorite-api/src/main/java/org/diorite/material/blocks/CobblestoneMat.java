@@ -54,12 +54,12 @@ public class CobblestoneMat extends StonyMat implements VariantableMat
     private static final TByteObjectMap<CobblestoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CobblestoneMat()
+    public CobblestoneMat()
     {
         super("COBBLESTONE", 4, "minecraft:cobblestone", "COBBLESTONE", (byte) 0x00, 2, 30);
     }
 
-    protected CobblestoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public CobblestoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -125,6 +125,7 @@ public class CobblestoneMat extends StonyMat implements VariantableMat
      */
     public static void register(final CobblestoneMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

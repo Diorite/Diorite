@@ -52,12 +52,12 @@ public class DandelionMat extends FlowerMat
     private static final TByteObjectMap<DandelionMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DandelionMat()
+    public DandelionMat()
     {
         super("DANDELION", 37, "minecraft:yellow_flower", (byte) 0x00, FlowerTypeMat.DANDELION, 0, 0);
     }
 
-    protected DandelionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
+    public DandelionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
@@ -133,6 +133,7 @@ public class DandelionMat extends FlowerMat
      */
     public static void register(final DandelionMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

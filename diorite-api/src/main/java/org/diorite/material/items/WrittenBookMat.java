@@ -53,17 +53,17 @@ public class WrittenBookMat extends ItemMaterialData
     private static final TShortObjectMap<WrittenBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WrittenBookMat()
+    public WrittenBookMat()
     {
         super("WRITTEN_BOOK", 387, "minecraft:written_book", 16, "WRITTEN_BOOK", (short) 0x00);
     }
 
-    protected WrittenBookMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public WrittenBookMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, WRITTEN_BOOK.getMaxStack(), typeName, type);
     }
 
-    protected WrittenBookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public WrittenBookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -117,6 +117,7 @@ public class WrittenBookMat extends ItemMaterialData
      */
     public static void register(final WrittenBookMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -53,17 +53,17 @@ public class StickMat extends ItemMaterialData implements FuelMat
     private static final TShortObjectMap<StickMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected StickMat()
+    public StickMat()
     {
         super("STICK", 280, "minecraft:stick", "STICK", (short) 0x00);
     }
 
-    protected StickMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public StickMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected StickMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public StickMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -120,6 +120,7 @@ public class StickMat extends ItemMaterialData implements FuelMat
      */
     public static void register(final StickMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -53,12 +53,12 @@ public class NoteBlockMat extends WoodenMat implements FuelMat
     private static final TByteObjectMap<NoteBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected NoteBlockMat()
+    public NoteBlockMat()
     {
         super("NOTEBLOCK", 25, "minecraft:noteblock", "NOTEBLOCK", (byte) 0x00, 0.8f, 4);
     }
 
-    protected NoteBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public NoteBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -115,6 +115,7 @@ public class NoteBlockMat extends WoodenMat implements FuelMat
      */
     public static void register(final NoteBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

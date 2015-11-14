@@ -159,19 +159,19 @@ public class SaplingMat extends WoodMat implements FuelMat
 
     protected final SaplingStage stage;
 
-    protected SaplingMat()
+    public SaplingMat()
     {
         super("SAPLING", 6, "minecraft:sapling", "OAK", (byte) 0x00, WoodType.OAK, 0, 0);
         this.stage = SaplingStage.NEW;
     }
 
-    protected SaplingMat(final WoodType woodType, final SaplingStage stage)
+    public SaplingMat(final WoodType woodType, final SaplingStage stage)
     {
         super(SAPLING_OAK.name(), SAPLING_OAK.ordinal(), SAPLING_OAK.getMinecraftId(), woodType + (stage.getFlag() == 0 ? "" : "_" + stage.name()), combine(woodType, stage), woodType, SAPLING_OAK.getHardness(), SAPLING_OAK.getBlastResistance());
         this.stage = stage;
     }
 
-    protected SaplingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final SaplingStage stage, final float hardness, final float blastResistance)
+    public SaplingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final SaplingStage stage, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.stage = stage;
@@ -303,6 +303,7 @@ public class SaplingMat extends WoodMat implements FuelMat
      */
     public static void register(final SaplingMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -77,19 +77,19 @@ public class CommandBlockMat extends BlockMaterialData
     protected final boolean triggered;
 
     @SuppressWarnings("MagicNumber")
-    protected CommandBlockMat()
+    public CommandBlockMat()
     {
         super("COMMAND_BLOCK", 137, "minecraft:command_block", "COMMAND_BLOCK", (byte) 0x00, - 1, 18_000_000);
         this.triggered = false;
     }
 
-    protected CommandBlockMat(final boolean triggered)
+    public CommandBlockMat(final boolean triggered)
     {
         super(COMMAND_BLOCK.name(), COMMAND_BLOCK.ordinal(), COMMAND_BLOCK.getMinecraftId(), triggered ? "TRIGGERED" : "COMMAND_BLOCK", (byte) (triggered ? 1 : 0), COMMAND_BLOCK.getHardness(), COMMAND_BLOCK.getBlastResistance());
         this.triggered = triggered;
     }
 
-    protected CommandBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean triggered, final float hardness, final float blastResistance)
+    public CommandBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean triggered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.triggered = triggered;
@@ -179,6 +179,7 @@ public class CommandBlockMat extends BlockMaterialData
      */
     public static void register(final CommandBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

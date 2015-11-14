@@ -121,17 +121,17 @@ public class SnowLayerMat extends BlockMaterialData
     private static final TByteObjectMap<SnowLayerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SnowLayerMat()
+    public SnowLayerMat()
     {
         super("SNOW_LAYER_1", 78, "minecraft:snow_layer", "1", (byte) 0x00, 0.1f, 0.5f);
     }
 
-    protected SnowLayerMat(final int type)
+    public SnowLayerMat(final int type)
     {
         super(SNOW_LAYER_1.name(), SNOW_LAYER_1.ordinal(), SNOW_LAYER_1.getMinecraftId(), Integer.toString(type + 1), (byte) type, SNOW_LAYER_1.getHardness(), SNOW_LAYER_1.getBlastResistance());
     }
 
-    protected SnowLayerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public SnowLayerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -200,6 +200,7 @@ public class SnowLayerMat extends BlockMaterialData
      */
     public static void register(final SnowLayerMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

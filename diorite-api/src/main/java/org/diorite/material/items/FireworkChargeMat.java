@@ -53,17 +53,17 @@ public class FireworkChargeMat extends ItemMaterialData
     private static final TShortObjectMap<FireworkChargeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FireworkChargeMat()
+    public FireworkChargeMat()
     {
         super("FIREWORK_CHARGE", 402, "minecraft:firework_charge", "FIREWORK_CHARGE", (short) 0x00);
     }
 
-    protected FireworkChargeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public FireworkChargeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected FireworkChargeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public FireworkChargeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -117,6 +117,7 @@ public class FireworkChargeMat extends ItemMaterialData
      */
     public static void register(final FireworkChargeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -58,22 +58,22 @@ public class StonePickaxeMat extends PickaxeMat
     protected final LazyValue<StonePickaxeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected StonePickaxeMat()
+    public StonePickaxeMat()
     {
         super("STONE_PICKAXE", 274, "minecraft:stone_Pickaxe", "NEW", (short) 0, ToolMaterial.STONE);
     }
 
-    protected StonePickaxeMat(final int durability)
+    public StonePickaxeMat(final int durability)
     {
         super(STONE_PICKAXE.name(), STONE_PICKAXE.getId(), STONE_PICKAXE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.STONE);
     }
 
-    protected StonePickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public StonePickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected StonePickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public StonePickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class StonePickaxeMat extends PickaxeMat
      */
     public static void register(final StonePickaxeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -87,19 +87,19 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
     protected final VariantMat variant;
 
     @SuppressWarnings("MagicNumber")
-    protected RedSandstoneMat()
+    public RedSandstoneMat()
     {
         super("RED_SANDSTONE", 179, "minecraft:red_sandstone", "CLASSIC", (byte) 0x00, 0.8f, 4);
         this.variant = VariantMat.CLASSIC;
     }
 
-    protected RedSandstoneMat(final int type, final VariantMat variant)
+    public RedSandstoneMat(final int type, final VariantMat variant)
     {
         super(RED_SANDSTONE.name(), RED_SANDSTONE.ordinal(), RED_SANDSTONE.getMinecraftId(), variant.name(), (byte) type, RED_SANDSTONE.getHardness(), RED_SANDSTONE.getBlastResistance());
         this.variant = variant;
     }
 
-    protected RedSandstoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
+    public RedSandstoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.variant = variant;
@@ -169,6 +169,7 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
      */
     public static void register(final RedSandstoneMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

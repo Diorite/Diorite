@@ -51,17 +51,17 @@ public class MushroomStewMat extends EdibleItemMat
     private static final TShortObjectMap<MushroomStewMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MushroomStewMat()
+    public MushroomStewMat()
     {
         super("MUSHROOM_STEW", 282, "minecraft:mushroom_stew", 1, "MUSHROOM_STEW", (short) 0x00, 6, 7.2F);
     }
 
-    protected MushroomStewMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public MushroomStewMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, MUSHROOM_STEW.getMaxStack(), typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
-    protected MushroomStewMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public MushroomStewMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, foodLevelIncrease, saturationIncrease);
     }
@@ -111,6 +111,7 @@ public class MushroomStewMat extends EdibleItemMat
      */
     public static void register(final MushroomStewMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

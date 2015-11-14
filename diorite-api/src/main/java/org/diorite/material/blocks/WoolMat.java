@@ -191,19 +191,19 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
     protected final DyeColor color;
 
     @SuppressWarnings("MagicNumber")
-    protected WoolMat()
+    public WoolMat()
     {
         super("WOOL", 35, "minecraft:wool", "WHITE", (byte) 0x00, 0.8f, 4);
         this.color = DyeColor.WHITE;
     }
 
-    protected WoolMat(final DyeColor color)
+    public WoolMat(final DyeColor color)
     {
         super(WOOL_WHITE.name(), WOOL_WHITE.ordinal(), WOOL_WHITE.getMinecraftId(), color.name(), (short) color.getBlockFlag(), WOOL_WHITE.getHardness(), WOOL_WHITE.getBlastResistance());
         this.color = color;
     }
 
-    protected WoolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
+    public WoolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.color = color;
@@ -285,6 +285,7 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
      */
     public static void register(final WoolMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

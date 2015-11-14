@@ -53,12 +53,12 @@ public class DragonEggMat extends BlockMaterialData
     private static final TByteObjectMap<DragonEggMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DragonEggMat()
+    public DragonEggMat()
     {
         super("DRAGON_EGG", 122, "minecraft:dragon_egg", "DRAGON_EGG", (byte) 0x00, 3, 45);
     }
 
-    protected DragonEggMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public DragonEggMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class DragonEggMat extends BlockMaterialData
      */
     public static void register(final DragonEggMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -53,17 +53,17 @@ public class WheatSeedsMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<WheatSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WheatSeedsMat()
+    public WheatSeedsMat()
     {
         super("WHEAT_SEEDS", 295, "minecraft:wheat_seeds", "WHEAT_SEEDS", (short) 0x00);
     }
 
-    protected WheatSeedsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public WheatSeedsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected WheatSeedsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public WheatSeedsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class WheatSeedsMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final WheatSeedsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

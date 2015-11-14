@@ -53,17 +53,17 @@ public class EnderPearlMat extends ItemMaterialData implements PlaceableEntityMa
     private static final TShortObjectMap<EnderPearlMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected EnderPearlMat()
+    public EnderPearlMat()
     {
         super("ENDER_PEARL", 368, "minecraft:ender_pearl", 16, "ENDER_PEARL", (short) 0x00);
     }
 
-    protected EnderPearlMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public EnderPearlMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, ENDER_PEARL.getMaxStack(), typeName, type);
     }
 
-    protected EnderPearlMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public EnderPearlMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class EnderPearlMat extends ItemMaterialData implements PlaceableEntityMa
      */
     public static void register(final EnderPearlMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

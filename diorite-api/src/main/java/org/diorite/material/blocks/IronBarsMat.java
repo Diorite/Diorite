@@ -54,12 +54,12 @@ public class IronBarsMat extends BlockMaterialData implements FenceMat
     private static final TByteObjectMap<IronBarsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected IronBarsMat()
+    public IronBarsMat()
     {
         super("IRON_BARS", 101, "minecraft:iron_bars", "IRON_BARS", (byte) 0x00, 5, 30);
     }
 
-    protected IronBarsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public IronBarsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -109,6 +109,7 @@ public class IronBarsMat extends BlockMaterialData implements FenceMat
      */
     public static void register(final IronBarsMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

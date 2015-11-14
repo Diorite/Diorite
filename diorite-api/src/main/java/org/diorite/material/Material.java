@@ -42,7 +42,7 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 @SuppressWarnings("JavaDoc")
-public abstract class Material implements SimpleEnum<Material>
+public abstract class Material extends MaterialCounters implements SimpleEnum<Material>
 {
     public static final int MATERIALS_SIZE = 385;
 
@@ -473,6 +473,76 @@ public abstract class Material implements SimpleEnum<Material>
         this.type = type;
     }
 
+    /**
+     * Returns amount of all (with subtypes) items registered in diorite.
+     *
+     * @return amount of all (with subtypes) items registered in diorite.
+     */
+    public static int getAllItemMaterialsCount()
+    {
+        return allItems.get();
+    }
+
+    /**
+     * Returns amount of all (with subtypes) blocks registered in diorite.
+     *
+     * @return amount of all (with subtypes) blocks registered in diorite.
+     */
+    public static int getAllBlockMaterialsCount()
+    {
+        return allBlocks.get();
+    }
+
+    /**
+     * Returns amount of all (with subtypes) blocks and items registered in diorite.
+     *
+     * @return amount of all (with subtypes) blocks and items registered in diorite.
+     */
+    public static int getAllMaterialsCount()
+    {
+        return allItems.get() + allBlocks.get();
+    }
+
+    /**
+     * Returns amount of items registered in diorite.
+     *
+     * @return amount of items registered in diorite.
+     */
+    public static int getItemMaterialsCount()
+    {
+        return items.get();
+    }
+
+    /**
+     * Returns amount of blocks registered in diorite.
+     *
+     * @return amount of blocks registered in diorite.
+     */
+    public static int getBlockMaterialsCount()
+    {
+        return blocks.get();
+    }
+
+    /**
+     * Returns amount of blocks and items registered in diorite.
+     *
+     * @return amount of blocks and items registered in diorite.
+     */
+    public static int getMaterialsCount()
+    {
+        return items.get() + blocks.get();
+    }
+
+    /**
+     * Returns block that use largest id, used by diorite in few places.
+     *
+     * @return block that use largest id, used by diorite in few places.
+     */
+    public static BlockMaterialData getBlockWithLargestID()
+    {
+        return lastBlock;
+    }
+
     @Override
     public String name()
     {
@@ -673,7 +743,7 @@ public abstract class Material implements SimpleEnum<Material>
 
         final Material material = (Material) o;
 
-        return this.enumName.equals(material.enumName);
+        return this.enumName.equals(material.enumName) && this.typeName.equals(material.typeName);
     }
 
     @Override
@@ -1072,6 +1142,31 @@ public abstract class Material implements SimpleEnum<Material>
      */
     public static void register(final Material element)
     {
+        if (element instanceof ItemMaterialData)
+        {
+            items.incrementAndGet();
+        }
+        else
+        {
+            blocks.incrementAndGet();
+            if (lastBlock == null)
+            {
+                lastBlock = (BlockMaterialData) element;
+            }
+            else if (element.getId() > lastBlock.getId())
+            {
+                BlockMaterialData lasted = (BlockMaterialData) element;
+                final BlockMaterialData[] types = lasted.types();
+                for (final BlockMaterialData type : types)
+                {
+                    if (type.getType() > lasted.getType())
+                    {
+                        lasted = type;
+                    }
+                }
+                lastBlock = lasted;
+            }
+        }
         byID.put(element.ordinal(), element);
         byName.put(element.name(), element);
         byMinecraftId.put(element.getMinecraftId(), element);

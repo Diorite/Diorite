@@ -96,19 +96,19 @@ public class LadderMat extends BlockMaterialData implements AttachableMat
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected LadderMat()
+    public LadderMat()
     {
         super("LADDER", 65, "minecraft:ladder", "NORTH", (byte) 0x00, 0.4f, 2);
         this.face = BlockFace.NORTH;
     }
 
-    protected LadderMat(final BlockFace face)
+    public LadderMat(final BlockFace face)
     {
         super(LADDER_NORTH.name(), LADDER_NORTH.ordinal(), LADDER_NORTH.getMinecraftId(), face.name(), combine(face), LADDER_NORTH.getHardness(), LADDER_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected LadderMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public LadderMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -217,6 +217,7 @@ public class LadderMat extends BlockMaterialData implements AttachableMat
      */
     public static void register(final LadderMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

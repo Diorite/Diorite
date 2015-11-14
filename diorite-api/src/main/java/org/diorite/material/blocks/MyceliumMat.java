@@ -52,12 +52,12 @@ public class MyceliumMat extends EarthMat
     private static final TByteObjectMap<MyceliumMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MyceliumMat()
+    public MyceliumMat()
     {
         super("MYCELIUM", 110, "minecraft:mycelium", "MYCELIUM", (byte) 0x00, 0.6f, 2.5f);
     }
 
-    protected MyceliumMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public MyceliumMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -107,6 +107,7 @@ public class MyceliumMat extends EarthMat
      */
     public static void register(final MyceliumMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

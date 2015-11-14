@@ -51,17 +51,17 @@ public class FishMat extends EdibleItemMat
     private static final TShortObjectMap<FishMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FishMat()
+    public FishMat()
     {
         super("FISH", 349, "minecraft:fish", "FISH", (short) 0x00, 2, 0.4F);
     }
 
-    protected FishMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public FishMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
-    protected FishMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public FishMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, foodLevelIncrease, saturationIncrease);
     }
@@ -111,6 +111,7 @@ public class FishMat extends EdibleItemMat
      */
     public static void register(final FishMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

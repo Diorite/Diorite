@@ -53,12 +53,12 @@ public class GlowstoneMat extends BlockMaterialData
     private static final TByteObjectMap<GlowstoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GlowstoneMat()
+    public GlowstoneMat()
     {
         super("GLOWSTONE", 89, "minecraft:glowstone", "GLOWSTONE", (byte) 0x00, 0.3f, 1.5f);
     }
 
-    protected GlowstoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public GlowstoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class GlowstoneMat extends BlockMaterialData
      */
     public static void register(final GlowstoneMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

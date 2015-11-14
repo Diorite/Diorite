@@ -30,22 +30,22 @@ import org.diorite.material.ArmorType;
 @SuppressWarnings("JavaDoc")
 public abstract class ChestplateMat extends ArmorMat
 {
-    protected ChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial)
+    public ChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, ArmorType.CHESTPLATE);
     }
 
-    protected ChestplateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial)
+    public ChestplateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, ArmorType.CHESTPLATE);
     }
 
-    protected ChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public ChestplateMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, armorType);
     }
 
-    protected ChestplateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public ChestplateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
     }

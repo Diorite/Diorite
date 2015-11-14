@@ -51,17 +51,17 @@ public class CarrotMat extends EdibleItemMat
     private static final TShortObjectMap<CarrotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CarrotMat()
+    public CarrotMat()
     {
         super("CARROT", 391, "minecraft:carrot", "CARROT", (short) 0x00, 3, 3.6F);
     }
 
-    protected CarrotMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public CarrotMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
-    protected CarrotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public CarrotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, foodLevelIncrease, saturationIncrease);
     }
@@ -111,6 +111,7 @@ public class CarrotMat extends EdibleItemMat
      */
     public static void register(final CarrotMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

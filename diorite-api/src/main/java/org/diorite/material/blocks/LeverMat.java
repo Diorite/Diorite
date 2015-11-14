@@ -199,7 +199,7 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
     protected final boolean   powered;
 
     @SuppressWarnings("MagicNumber")
-    protected LeverMat()
+    public LeverMat()
     {
         super("LEVER", 69, "minecraft:lever", "DOWN", (byte) 0x00, 0.5f, 2.5f);
         this.face = BlockFace.DOWN;
@@ -207,7 +207,7 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
         this.powered = false;
     }
 
-    protected LeverMat(final BlockFace face, final boolean rotated, final boolean powered)
+    public LeverMat(final BlockFace face, final boolean rotated, final boolean powered)
     {
         super(LEVER_DOWN.name(), LEVER_DOWN.ordinal(), LEVER_DOWN.getMinecraftId(), face.name() + (rotated ? "_SOUTH" : "") + (powered ? "_POWERED" : ""), combine(face, rotated, powered), LEVER_DOWN.getHardness(), LEVER_DOWN.getBlastResistance());
         this.face = face;
@@ -215,7 +215,7 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
         this.powered = powered;
     }
 
-    protected LeverMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean rotated, final boolean powered, final float hardness, final float blastResistance)
+    public LeverMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean rotated, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -380,6 +380,7 @@ public class LeverMat extends BlockMaterialData implements PowerableMat, Attacha
      */
     public static void register(final LeverMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

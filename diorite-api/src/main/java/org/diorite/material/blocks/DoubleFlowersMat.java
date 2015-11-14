@@ -111,17 +111,17 @@ public class DoubleFlowersMat extends FlowerMat
     private static final TByteObjectMap<DoubleFlowersMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DoubleFlowersMat()
+    public DoubleFlowersMat()
     {
         super("DOUBLE_FLOWERS", 175, "minecraft:double_plant", (byte) 0x00, FlowerTypeMat.SUNFLOWER, 0, 0);
     }
 
-    protected DoubleFlowersMat(final int type, final FlowerTypeMat flowerType)
+    public DoubleFlowersMat(final int type, final FlowerTypeMat flowerType)
     {
         super(DOUBLE_FLOWERS_SUNFLOWER.name(), DOUBLE_FLOWERS_SUNFLOWER.ordinal(), DOUBLE_FLOWERS_SUNFLOWER.getMinecraftId(), (byte) type, flowerType, DOUBLE_FLOWERS_SUNFLOWER.getHardness(), DOUBLE_FLOWERS_SUNFLOWER.getBlastResistance());
     }
 
-    protected DoubleFlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
+    public DoubleFlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
@@ -197,6 +197,7 @@ public class DoubleFlowersMat extends FlowerMat
      */
     public static void register(final DoubleFlowersMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

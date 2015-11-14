@@ -33,22 +33,22 @@ import org.diorite.material.ToolType;
 @SuppressWarnings("JavaDoc")
 public abstract class PickaxeMat extends ToolMat
 {
-    protected PickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial)
+    public PickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, ToolType.PICKAXE);
     }
 
-    protected PickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial)
+    public PickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, ToolType.PICKAXE);
     }
 
-    protected PickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public PickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected PickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public PickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }

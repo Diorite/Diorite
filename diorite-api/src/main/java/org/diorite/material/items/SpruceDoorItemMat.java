@@ -52,17 +52,17 @@ public class SpruceDoorItemMat extends WoodenDoorItemMat
     private static final TShortObjectMap<SpruceDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SpruceDoorItemMat()
+    public SpruceDoorItemMat()
     {
         super("SPRUCE_DOOR_ITEM", 427, "minecraft:spruce_door", "SPRUCE_DOOR_ITEM", (short) 0x00, WoodType.SPRUCE);
     }
 
-    protected SpruceDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
+    public SpruceDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, typeName, type, woodType);
     }
 
-    protected SpruceDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
+    public SpruceDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
     }
@@ -112,6 +112,7 @@ public class SpruceDoorItemMat extends WoodenDoorItemMat
      */
     public static void register(final SpruceDoorItemMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

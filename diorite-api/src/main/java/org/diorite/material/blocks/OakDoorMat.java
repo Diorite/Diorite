@@ -165,7 +165,7 @@ public class OakDoorMat extends WoodenDoorMat
     protected final BlockFace blockFace;
 
     @SuppressWarnings("MagicNumber")
-    protected OakDoorMat()
+    public OakDoorMat()
     {
         super("OAK_DOOR", 64, "minecraft:wooden_door", "OAK_DOOR", WoodType.OAK, 3, 15);
         this.powered = false;
@@ -175,7 +175,7 @@ public class OakDoorMat extends WoodenDoorMat
         this.blockFace = BlockFace.EAST;
     }
 
-    protected OakDoorMat(final boolean powered, final boolean hingeOnRightSide)
+    public OakDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
         super(OAK_DOOR_BOTTOM_EAST.name(), OAK_DOOR_BOTTOM_EAST.ordinal(), OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodType.OAK, OAK_DOOR_BOTTOM_EAST.getHardness(), OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -185,7 +185,7 @@ public class OakDoorMat extends WoodenDoorMat
         this.blockFace = null;
     }
 
-    protected OakDoorMat(final BlockFace blockFace, final boolean open)
+    public OakDoorMat(final BlockFace blockFace, final boolean open)
     {
         super(OAK_DOOR_BOTTOM_EAST.name(), OAK_DOOR_BOTTOM_EAST.ordinal(), OAK_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodType.OAK, OAK_DOOR_BOTTOM_EAST.getHardness(), OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
@@ -195,7 +195,7 @@ public class OakDoorMat extends WoodenDoorMat
         this.blockFace = blockFace;
     }
 
-    protected OakDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    public OakDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, OAK_DOOR_BOTTOM_EAST.getHardness(), OAK_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -406,6 +406,7 @@ public class OakDoorMat extends WoodenDoorMat
      */
     public static void register(final OakDoorMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

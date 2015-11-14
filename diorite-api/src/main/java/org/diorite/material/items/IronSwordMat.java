@@ -58,22 +58,22 @@ public class IronSwordMat extends SwordMat
     protected final LazyValue<IronSwordMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected IronSwordMat()
+    public IronSwordMat()
     {
         super("IRON_SWORD", 267, "minecraft:iron_Sword", "NEW", (short) 0, ToolMaterial.IRON);
     }
 
-    protected IronSwordMat(final int durability)
+    public IronSwordMat(final int durability)
     {
         super(IRON_SWORD.name(), IRON_SWORD.getId(), IRON_SWORD.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.IRON);
     }
 
-    protected IronSwordMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public IronSwordMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected IronSwordMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public IronSwordMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class IronSwordMat extends SwordMat
      */
     public static void register(final IronSwordMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

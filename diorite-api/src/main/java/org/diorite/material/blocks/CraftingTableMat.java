@@ -54,12 +54,12 @@ public class CraftingTableMat extends BlockMaterialData implements FuelMat
     private static final TByteObjectMap<CraftingTableMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CraftingTableMat()
+    public CraftingTableMat()
     {
         super("CRAFTING_TABLE", 58, "minecraft:crafting_table", "CRAFTING_TABLE", (byte) 0x00, 2.5f, 12.5f);
     }
 
-    protected CraftingTableMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public CraftingTableMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -116,6 +116,7 @@ public class CraftingTableMat extends BlockMaterialData implements FuelMat
      */
     public static void register(final CraftingTableMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -53,17 +53,17 @@ public class RedstoneComparatorItemMat extends ItemMaterialData implements Place
     private static final TShortObjectMap<RedstoneComparatorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneComparatorItemMat()
+    public RedstoneComparatorItemMat()
     {
         super("REDSTONE_COMPARATOR_ITEM", 404, "minecraft:comparator", "REDSTONE_COMPARATOR_ITEM", (short) 0x00);
     }
 
-    protected RedstoneComparatorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public RedstoneComparatorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected RedstoneComparatorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public RedstoneComparatorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class RedstoneComparatorItemMat extends ItemMaterialData implements Place
      */
     public static void register(final RedstoneComparatorItemMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

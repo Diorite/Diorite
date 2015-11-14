@@ -54,12 +54,12 @@ public class BookshelfMat extends BlockMaterialData implements FuelMat
     private static final TByteObjectMap<BookshelfMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BookshelfMat()
+    public BookshelfMat()
     {
         super("BOOKSHELF", 47, "minecraft:bookshelf", "BOOKSHELF", (byte) 0x00, 1.5f, 7.5f);
     }
 
-    protected BookshelfMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public BookshelfMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -116,6 +116,7 @@ public class BookshelfMat extends BlockMaterialData implements FuelMat
      */
     public static void register(final BookshelfMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

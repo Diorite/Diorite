@@ -58,22 +58,22 @@ public class DiamondAxeMat extends AxeMat
     protected final LazyValue<DiamondAxeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected DiamondAxeMat()
+    public DiamondAxeMat()
     {
         super("DIAMOND_AXE", 279, "minecraft:diamond_Axe", "NEW", (short) 0, ToolMaterial.DIAMOND);
     }
 
-    protected DiamondAxeMat(final int durability)
+    public DiamondAxeMat(final int durability)
     {
         super(DIAMOND_AXE.name(), DIAMOND_AXE.getId(), DIAMOND_AXE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.DIAMOND);
     }
 
-    protected DiamondAxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public DiamondAxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected DiamondAxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public DiamondAxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class DiamondAxeMat extends AxeMat
      */
     public static void register(final DiamondAxeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

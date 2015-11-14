@@ -58,22 +58,22 @@ public class GoldBootsMat extends BootsMat
     protected final LazyValue<GoldBootsMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldBootsMat()
+    public GoldBootsMat()
     {
         super("GOLD_BOOTS", 317, "minecraft:gold_boots", "NEW", (short) 0, ArmorMaterial.GOLD);
     }
 
-    protected GoldBootsMat(final int durability)
+    public GoldBootsMat(final int durability)
     {
         super(GOLD_BOOTS.name(), GOLD_BOOTS.getId(), GOLD_BOOTS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.GOLD);
     }
 
-    protected GoldBootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public GoldBootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, armorType);
     }
 
-    protected GoldBootsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public GoldBootsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
     }
@@ -179,6 +179,7 @@ public class GoldBootsMat extends BootsMat
      */
     public static void register(final GoldBootsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

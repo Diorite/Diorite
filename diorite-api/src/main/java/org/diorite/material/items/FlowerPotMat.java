@@ -53,17 +53,17 @@ public class FlowerPotMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<FlowerPotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FlowerPotMat()
+    public FlowerPotMat()
     {
         super("FLOWER_POT", 390, "minecraft:flower_pot", "FLOWER_POT", (short) 0x00);
     }
 
-    protected FlowerPotMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public FlowerPotMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected FlowerPotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public FlowerPotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class FlowerPotMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final FlowerPotMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -45,13 +45,13 @@ public abstract class BasicToolMat extends ItemMaterialData implements Breakable
      */
     protected final BasicToolData toolData;
 
-    protected BasicToolMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final BasicToolData toolData)
+    public BasicToolMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final BasicToolData toolData)
     {
         super(enumName, id, minecraftId, 1, typeName, type);
         this.toolData = toolData;
     }
 
-    protected BasicToolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final BasicToolData toolData)
+    public BasicToolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final BasicToolData toolData)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.toolData = toolData;

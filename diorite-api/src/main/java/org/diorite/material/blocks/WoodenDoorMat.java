@@ -34,12 +34,12 @@ import org.diorite.utils.collections.maps.SimpleEnumMap;
  */
 public abstract class WoodenDoorMat extends WoodMat implements DoorMat
 {
-    protected WoodenDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodType woodType, final float hardness, final float blastResistance)
+    public WoodenDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, typeName, (byte) 0, woodType, hardness, blastResistance);
     }
 
-    protected WoodenDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
+    public WoodenDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, hardness, blastResistance);
     }

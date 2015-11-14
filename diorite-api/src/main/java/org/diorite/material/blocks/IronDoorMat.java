@@ -165,7 +165,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
     protected final BlockFace blockFace;
 
     @SuppressWarnings("MagicNumber")
-    protected IronDoorMat()
+    public IronDoorMat()
     {
         super("IRON_DOOR", 71, "minecraft:iron_door", "BOTTOM_EAST", (byte) 0x00, 5, 25);
         this.powered = false;
@@ -175,7 +175,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
         this.blockFace = BlockFace.EAST;
     }
 
-    protected IronDoorMat(final String enumName, final boolean powered, final boolean hingeOnRightSide)
+    public IronDoorMat(final String enumName, final boolean powered, final boolean hingeOnRightSide)
     {
         super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.ordinal(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(powered, hingeOnRightSide), IRON_DOOR_BOTTOM_EAST.getHardness(), IRON_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -185,7 +185,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
         this.blockFace = null;
     }
 
-    protected IronDoorMat(final String enumName, final BlockFace blockFace, final boolean open)
+    public IronDoorMat(final String enumName, final BlockFace blockFace, final boolean open)
     {
         super(IRON_DOOR_BOTTOM_EAST.name(), IRON_DOOR_BOTTOM_EAST.ordinal(), IRON_DOOR_BOTTOM_EAST.getMinecraftId(), enumName, DoorMat.combine(blockFace, open), IRON_DOOR_BOTTOM_EAST.getHardness(), IRON_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
@@ -195,7 +195,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
         this.blockFace = blockFace;
     }
 
-    protected IronDoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace, final float hardness, final float blastResistance)
+    public IronDoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.powered = powered;
@@ -406,6 +406,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
      */
     public static void register(final IronDoorMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

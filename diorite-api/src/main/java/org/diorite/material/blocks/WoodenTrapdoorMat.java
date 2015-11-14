@@ -188,17 +188,17 @@ public class WoodenTrapdoorMat extends TrapdoorMat implements FuelMat
     private static final TByteObjectMap<WoodenTrapdoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WoodenTrapdoorMat()
+    public WoodenTrapdoorMat()
     {
         super("WOODEN_TRAPDOOR", 96, "minecraft:trapdoor", BlockFace.WEST, false, false, 3, 15);
     }
 
-    protected WoodenTrapdoorMat(final BlockFace face, final boolean open, final boolean onTop)
+    public WoodenTrapdoorMat(final BlockFace face, final boolean open, final boolean onTop)
     {
         super(WOODEN_TRAPDOOR_WEST_BOTTOM.name(), WOODEN_TRAPDOOR_WEST_BOTTOM.ordinal(), WOODEN_TRAPDOOR_WEST_BOTTOM.getMinecraftId(), face, open, onTop, WOODEN_TRAPDOOR_WEST_BOTTOM.getHardness(), WOODEN_TRAPDOOR_WEST_BOTTOM.getBlastResistance());
     }
 
-    protected WoodenTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop, final float hardness, final float blastResistance)
+    public WoodenTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, open, onTop, hardness, blastResistance);
     }
@@ -300,6 +300,7 @@ public class WoodenTrapdoorMat extends TrapdoorMat implements FuelMat
      */
     public static void register(final WoodenTrapdoorMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

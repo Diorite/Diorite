@@ -53,14 +53,14 @@ public interface OreItemMat
         protected final OreMat      blockOreType;
         protected final OreBlockMat blockType;
 
-        protected OreItemMatExt(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+        public OreItemMatExt(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
         {
             super(enumName, id, minecraftId, typeName, type);
             this.blockOreType = oreType;
             this.blockType = blockType;
         }
 
-        protected OreItemMatExt(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+        public OreItemMatExt(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
         {
             super(enumName, id, minecraftId, maxStack, typeName, type);
             this.blockOreType = oreType;

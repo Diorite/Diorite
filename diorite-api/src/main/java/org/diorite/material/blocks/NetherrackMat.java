@@ -53,12 +53,12 @@ public class NetherrackMat extends BlockMaterialData
     private static final TByteObjectMap<NetherrackMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected NetherrackMat()
+    public NetherrackMat()
     {
         super("NETHERRACK", 87, "minecraft:netherrack", "NETHERRACK", (byte) 0x00, 0.4f, 2);
     }
 
-    protected NetherrackMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public NetherrackMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class NetherrackMat extends BlockMaterialData
      */
     public static void register(final NetherrackMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

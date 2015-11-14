@@ -188,17 +188,17 @@ public class IronTrapdoorMat extends TrapdoorMat
     private static final TByteObjectMap<IronTrapdoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected IronTrapdoorMat()
+    public IronTrapdoorMat()
     {
         super("IRON_TRAPDOOR", 167, "minecraft:iron_trapdoor", BlockFace.WEST, false, false, 5, 25);
     }
 
-    protected IronTrapdoorMat(final BlockFace face, final boolean open, final boolean onTop)
+    public IronTrapdoorMat(final BlockFace face, final boolean open, final boolean onTop)
     {
         super(IRON_TRAPDOOR_WEST_BOTTOM.name(), IRON_TRAPDOOR_WEST_BOTTOM.ordinal(), IRON_TRAPDOOR_WEST_BOTTOM.getMinecraftId(), face, open, onTop, IRON_TRAPDOOR_WEST_BOTTOM.getHardness(), IRON_TRAPDOOR_WEST_BOTTOM.getBlastResistance());
     }
 
-    protected IronTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop, final float hardness, final float blastResistance)
+    public IronTrapdoorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean open, final boolean onTop, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, open, onTop, hardness, blastResistance);
     }
@@ -299,6 +299,7 @@ public class IronTrapdoorMat extends TrapdoorMat
      */
     public static void register(final IronTrapdoorMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

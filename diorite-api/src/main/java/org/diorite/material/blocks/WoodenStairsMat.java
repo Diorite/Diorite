@@ -41,14 +41,14 @@ public abstract class WoodenStairsMat extends WoodMat implements StairsMat, Fuel
     protected final BlockFace face;
     protected final boolean   upsideDown;
 
-    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    public WoodenStairsMat(final String enumName, final int id, final String minecraftId, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
-        super(enumName, id, minecraftId, face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), (byte) 0, woodType, hardness, blastResistance);
+        super(enumName, id, minecraftId, face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown), woodType, hardness, blastResistance);
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    protected WoodenStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    public WoodenStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.face = face;

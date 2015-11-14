@@ -52,17 +52,17 @@ public class GhastTearMat extends ItemMaterialData
     private static final TShortObjectMap<GhastTearMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GhastTearMat()
+    public GhastTearMat()
     {
         super("GHAST_TEAR", 370, "minecraft:ghast_tear", "GHAST_TEAR", (short) 0x00);
     }
 
-    protected GhastTearMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public GhastTearMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected GhastTearMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public GhastTearMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class GhastTearMat extends ItemMaterialData
      */
     public static void register(final GhastTearMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

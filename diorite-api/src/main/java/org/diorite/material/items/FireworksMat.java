@@ -54,17 +54,17 @@ public class FireworksMat extends ItemMaterialData implements PlaceableEntityMat
     private static final TShortObjectMap<FireworksMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FireworksMat()
+    public FireworksMat()
     {
         super("FIREWORKS", 401, "minecraft:fireworks", "FIREWORKS", (short) 0x00);
     }
 
-    protected FireworksMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public FireworksMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected FireworksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public FireworksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -118,6 +118,7 @@ public class FireworksMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static void register(final FireworksMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

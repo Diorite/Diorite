@@ -191,19 +191,19 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     protected final DyeColor color;
 
     @SuppressWarnings("MagicNumber")
-    protected CarpetMat()
+    public CarpetMat()
     {
         super("CARPET", 171, "minecraft:carpet", "WHITE", (short) DyeColor.WHITE.getBlockFlag(), 0.1f, 0.5f);
         this.color = DyeColor.WHITE;
     }
 
-    protected CarpetMat(final DyeColor color)
+    public CarpetMat(final DyeColor color)
     {
         super(CARPET_WHITE.name(), CARPET_WHITE.ordinal(), CARPET_WHITE.getMinecraftId(), color.name(), (short) color.getBlockFlag(), CARPET_WHITE.getHardness(), CARPET_WHITE.getBlastResistance());
         this.color = color;
     }
 
-    protected CarpetMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
+    public CarpetMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.color = color;
@@ -285,6 +285,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
      */
     public static void register(final CarpetMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

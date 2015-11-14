@@ -32,22 +32,22 @@ import org.diorite.material.ArmorType;
  */
 public abstract class LeggingsMat extends ArmorMat
 {
-    protected LeggingsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial)
+    public LeggingsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, ArmorType.LEGGINGS);
     }
 
-    protected LeggingsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial)
+    public LeggingsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, ArmorType.LEGGINGS);
     }
 
-    protected LeggingsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public LeggingsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, armorType);
     }
 
-    protected LeggingsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public LeggingsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
     }

@@ -191,19 +191,19 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
     protected final DyeColor color;
 
     @SuppressWarnings("MagicNumber")
-    protected StainedHardenedClayMat()
+    public StainedHardenedClayMat()
     {
         super("STAINED_HARDENED_CLAY", 159, "minecraft:stained_hardened_clay", "WHITE", (byte) 0x00, 1.25f, 30);
         this.color = DyeColor.WHITE;
     }
 
-    protected StainedHardenedClayMat(final DyeColor color)
+    public StainedHardenedClayMat(final DyeColor color)
     {
         super(STAINED_HARDENED_CLAY_WHITE.name(), STAINED_HARDENED_CLAY_WHITE.ordinal(), STAINED_HARDENED_CLAY_WHITE.getMinecraftId(), color.name(), (short) color.getBlockFlag(), STAINED_HARDENED_CLAY_WHITE.getHardness(), STAINED_HARDENED_CLAY_WHITE.getBlastResistance());
         this.color = color;
     }
 
-    protected StainedHardenedClayMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
+    public StainedHardenedClayMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.color = color;
@@ -285,7 +285,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
      */
     public static void register(final StainedHardenedClayMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

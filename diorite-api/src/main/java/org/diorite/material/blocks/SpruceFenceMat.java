@@ -53,12 +53,12 @@ public class SpruceFenceMat extends WoodenFenceMat
     private static final TByteObjectMap<SpruceFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SpruceFenceMat()
+    public SpruceFenceMat()
     {
         super("SPRUCE_FENCE", 188, "minecraft:spruce_fence", "SPRUCE_FENCE", WoodType.SPRUCE, 2, 15);
     }
 
-    protected SpruceFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
+    public SpruceFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class SpruceFenceMat extends WoodenFenceMat
      */
     public static void register(final SpruceFenceMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

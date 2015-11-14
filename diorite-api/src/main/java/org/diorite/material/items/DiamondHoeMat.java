@@ -58,22 +58,22 @@ public class DiamondHoeMat extends HoeMat
     protected final LazyValue<DiamondHoeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected DiamondHoeMat()
+    public DiamondHoeMat()
     {
         super("DIAMOND_HOE", 293, "minecraft:diamond_Hoe", "NEW", (short) 0, ToolMaterial.DIAMOND);
     }
 
-    protected DiamondHoeMat(final int durability)
+    public DiamondHoeMat(final int durability)
     {
         super(DIAMOND_HOE.name(), DIAMOND_HOE.getId(), DIAMOND_HOE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.DIAMOND);
     }
 
-    protected DiamondHoeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public DiamondHoeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected DiamondHoeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public DiamondHoeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class DiamondHoeMat extends HoeMat
      */
     public static void register(final DiamondHoeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

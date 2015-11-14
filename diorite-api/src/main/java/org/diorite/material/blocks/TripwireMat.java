@@ -48,50 +48,50 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * Subtypes: <br>
  * <ol>
  * <li>
- * POWERED___:
- * Type name: 'Powered   ' <br>
+ * POWERED_IN_AIR_VALID_DISARMED:
+ * Type name: 'Powered In Air Valid Disarmed' <br>
  * SubID: 15 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * IN_AIR__:
- * Type name: 'In Air  ' <br>
+ * IN_AIR_VALID_DISARMED:
+ * Type name: 'In Air Valid Disarmed' <br>
  * SubID: 14 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * POWERED__:
- * Type name: 'Powered  ' <br>
+ * POWERED_VALID_DISARMED:
+ * Type name: 'Powered Valid Disarmed' <br>
  * SubID: 13 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * VALID_:
- * Type name: 'Valid ' <br>
+ * VALID_DISARMED:
+ * Type name: 'Valid Disarmed' <br>
  * SubID: 12 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * POWERED__:
- * Type name: 'Powered  ' <br>
+ * POWERED_IN_AIR_DISARMED:
+ * Type name: 'Powered In Air Disarmed' <br>
  * SubID: 11 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * IN_AIR_:
- * Type name: 'In Air ' <br>
+ * IN_AIR_DISARMED:
+ * Type name: 'In Air Disarmed' <br>
  * SubID: 10 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * POWERED_:
- * Type name: 'Powered ' <br>
+ * POWERED_DISARMED:
+ * Type name: 'Powered Disarmed' <br>
  * SubID: 9 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
@@ -104,22 +104,22 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * POWERED__:
- * Type name: 'Powered  ' <br>
+ * POWERED_IN_AIR_VALID:
+ * Type name: 'Powered In Air Valid' <br>
  * SubID: 7 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * IN_AIR_:
- * Type name: 'In Air ' <br>
+ * IN_AIR_VALID:
+ * Type name: 'In Air Valid' <br>
  * SubID: 6 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * POWERED_:
- * Type name: 'Powered ' <br>
+ * POWERED_VALID:
+ * Type name: 'Powered Valid' <br>
  * SubID: 5 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
@@ -132,8 +132,8 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * Blast Resistance 0 <br>
  * </li>
  * <li>
- * POWERED_:
- * Type name: 'Powered ' <br>
+ * POWERED_IN_AIR:
+ * Type name: 'Powered In Air' <br>
  * SubID: 3 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
@@ -215,7 +215,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
     protected final boolean disarmed;
 
     @SuppressWarnings("MagicNumber")
-    protected TripwireMat()
+    public TripwireMat()
     {
         super("TRIPWIRE", 132, "minecraft:tripwire", "RAW", (byte) 0x00, 0, 0);
         this.powered = false;
@@ -224,7 +224,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
         this.disarmed = false;
     }
 
-    protected TripwireMat(final boolean powered, final boolean inAir, final boolean valid, final boolean disarmed)
+    public TripwireMat(final boolean powered, final boolean inAir, final boolean valid, final boolean disarmed)
     {
         super(TRIPWIRE.name(), TRIPWIRE.ordinal(), TRIPWIRE.getMinecraftId(), combineName(powered, inAir, valid, disarmed), combine(powered, inAir, valid, disarmed), TRIPWIRE.getHardness(), TRIPWIRE.getBlastResistance());
         this.powered = powered;
@@ -368,10 +368,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
                 {
                     str.append("_");
                 }
-                else
-                {
-                    str.append("IN_AIR");
-                }
+                str.append("IN_AIR");
                 first = false;
             }
             if (valid)
@@ -380,10 +377,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
                 {
                     str.append("_");
                 }
-                else
-                {
-                    str.append("VALID");
-                }
+                str.append("VALID");
                 first = false;
             }
             if (disarmed)
@@ -392,10 +386,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
                 {
                     str.append("_");
                 }
-                else
-                {
-                    str.append("DISARMED");
-                }
+                str.append("DISARMED");
             }
             return str.toString();
         }
@@ -469,6 +460,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
      */
     public static void register(final TripwireMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

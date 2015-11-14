@@ -186,17 +186,17 @@ public class FlowerPotBlockMat extends BlockMaterialData
     private static final TByteObjectMap<FlowerPotBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FlowerPotBlockMat()
+    public FlowerPotBlockMat()
     {
         super("FLOWER_POT_BLOCK", 140, "minecraft:flower_pot", "EMPTY", (byte) 0x00, 0, 0);
     }
 
-    protected FlowerPotBlockMat(final String enumName, final int type)
+    public FlowerPotBlockMat(final String enumName, final int type)
     {
         super(FLOWER_POT_BLOCK_EMPTY.name(), FLOWER_POT_BLOCK_EMPTY.ordinal(), FLOWER_POT_BLOCK_EMPTY.getMinecraftId(), enumName, (byte) type, FLOWER_POT_BLOCK_EMPTY.getHardness(), FLOWER_POT_BLOCK_EMPTY.getBlastResistance());
     }
 
-    protected FlowerPotBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public FlowerPotBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -252,6 +252,7 @@ public class FlowerPotBlockMat extends BlockMaterialData
      */
     public static void register(final FlowerPotBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -54,12 +54,12 @@ public class MossyCobblestoneMat extends StonyMat implements VariantableMat
     private static final TByteObjectMap<MossyCobblestoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MossyCobblestoneMat()
+    public MossyCobblestoneMat()
     {
         super("MOSSY_COBBLESTONE", 48, "minecraft:mossy_cobblestone", "MOSSY_COBBLESTONE", (byte) 0x00, 2, 30);
     }
 
-    protected MossyCobblestoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public MossyCobblestoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -125,7 +125,7 @@ public class MossyCobblestoneMat extends StonyMat implements VariantableMat
      */
     public static void register(final MossyCobblestoneMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -53,17 +53,17 @@ public class PumpkinSeedsMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<PumpkinSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PumpkinSeedsMat()
+    public PumpkinSeedsMat()
     {
         super("PUMPKIN_SEEDS", 361, "minecraft:pumpkin_seeds", "PUMPKIN_SEEDS", (short) 0x00);
     }
 
-    protected PumpkinSeedsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public PumpkinSeedsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected PumpkinSeedsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public PumpkinSeedsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class PumpkinSeedsMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final PumpkinSeedsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

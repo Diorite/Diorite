@@ -103,19 +103,19 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
     protected final VariantMat variant;
 
     @SuppressWarnings("MagicNumber")
-    protected QuartzBlockMat()
+    public QuartzBlockMat()
     {
         super("QUARTZ_BLOCK", 155, "minecraft:quartz_block", "QUARTZ_BLOCK", (byte) 0x00, QUARTZ_ORE, QUARTZ, 0.8f, 4);
         this.variant = VariantMat.CLASSIC;
     }
 
-    protected QuartzBlockMat(final int type, final VariantMat variant)
+    public QuartzBlockMat(final int type, final VariantMat variant)
     {
         super(QUARTZ_BLOCK.name(), QUARTZ_BLOCK.ordinal(), QUARTZ_BLOCK.getMinecraftId(), variant.name(), (byte) type, QUARTZ_BLOCK.getOre(), QUARTZ_BLOCK.getOreItem(), QUARTZ_BLOCK.getHardness(), QUARTZ_BLOCK.getBlastResistance());
         this.variant = variant;
     }
 
-    protected QuartzBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final VariantMat variant, final float hardness, final float blastResistance)
+    public QuartzBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final VariantMat variant, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, ore, item, hardness, blastResistance);
         this.variant = variant;
@@ -185,6 +185,7 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
      */
     public static void register(final QuartzBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -192,19 +192,19 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
     protected final DyeColor color;
 
     @SuppressWarnings("MagicNumber")
-    protected StainedGlassPaneMat()
+    public StainedGlassPaneMat()
     {
         super("STAINED_GLASS_PANE", 160, "minecraft:stained_glass_pane", "WHITE", (byte) 0x00, 0.3f, 1.5f);
         this.color = DyeColor.WHITE;
     }
 
-    protected StainedGlassPaneMat(final DyeColor color)
+    public StainedGlassPaneMat(final DyeColor color)
     {
         super(STAINED_GLASS_PANE_WHITE.name(), STAINED_GLASS_PANE_WHITE.ordinal(), STAINED_GLASS_PANE_WHITE.getMinecraftId(), color.name(), (short) color.getBlockFlag(), STAINED_GLASS_PANE_WHITE.getHardness(), STAINED_GLASS_PANE_WHITE.getBlastResistance());
         this.color = color;
     }
 
-    protected StainedGlassPaneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
+    public StainedGlassPaneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.color = color;
@@ -286,7 +286,7 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
      */
     public static void register(final StainedGlassPaneMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

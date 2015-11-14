@@ -52,17 +52,17 @@ public class SugarMat extends ItemMaterialData
     private static final TShortObjectMap<SugarMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SugarMat()
+    public SugarMat()
     {
         super("SUGAR", 353, "minecraft:sugar", "SUGAR", (short) 0x00);
     }
 
-    protected SugarMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public SugarMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected SugarMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public SugarMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class SugarMat extends ItemMaterialData
      */
     public static void register(final SugarMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -155,17 +155,17 @@ public class PistonExtensionMat extends PistonBaseMat
     private static final TByteObjectMap<PistonExtensionMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PistonExtensionMat()
+    public PistonExtensionMat()
     {
         super("PISTON_EXTENSION", 36, "minecraft:piston_extension", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
-    protected PistonExtensionMat(final BlockFace face, final boolean extended)
+    public PistonExtensionMat(final BlockFace face, final boolean extended)
     {
         super(PISTON_EXTENSION_DOWN.name(), PISTON_EXTENSION_DOWN.ordinal(), PISTON_EXTENSION_DOWN.getMinecraftId(), face, extended, PISTON_EXTENSION_DOWN.getHardness(), PISTON_EXTENSION_DOWN.getBlastResistance());
     }
 
-    protected PistonExtensionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
+    public PistonExtensionMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, facing, extended, hardness, blastResistance);
     }
@@ -259,6 +259,7 @@ public class PistonExtensionMat extends PistonBaseMat
      */
     public static void register(final PistonExtensionMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

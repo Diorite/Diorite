@@ -53,12 +53,12 @@ public class EmeraldOreMat extends OreMat
     private static final TByteObjectMap<EmeraldOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected EmeraldOreMat()
+    public EmeraldOreMat()
     {
         super("EMERALD_ORE", 129, "minecraft:emerald_ore", "EMERALD_ORE", (byte) 0x00, EMERALD, EMERALD_BLOCK, 3, 15);
     }
 
-    protected EmeraldOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
+    public EmeraldOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class EmeraldOreMat extends OreMat
      */
     public static void register(final EmeraldOreMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

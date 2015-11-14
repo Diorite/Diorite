@@ -124,17 +124,17 @@ public class BirchFenceGateMat extends WoodenFenceGateMat
     private static final TByteObjectMap<BirchFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BirchFenceGateMat()
+    public BirchFenceGateMat()
     {
         super("BIRCH_FENCE_GATE", 184, "minecraft:brich_fence_gate", WoodType.BIRCH, BlockFace.SOUTH, false, 2, 15);
     }
 
-    protected BirchFenceGateMat(final BlockFace face, final boolean open)
+    public BirchFenceGateMat(final BlockFace face, final boolean open)
     {
         super(BIRCH_FENCE_GATE_SOUTH.name(), BIRCH_FENCE_GATE_SOUTH.ordinal(), BIRCH_FENCE_GATE_SOUTH.getMinecraftId(), WoodType.BIRCH, face, open, BIRCH_FENCE_GATE_SOUTH.getHardness(), BIRCH_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected BirchFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
+    public BirchFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }
@@ -222,6 +222,7 @@ public class BirchFenceGateMat extends WoodenFenceGateMat
      */
     public static void register(final BirchFenceGateMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

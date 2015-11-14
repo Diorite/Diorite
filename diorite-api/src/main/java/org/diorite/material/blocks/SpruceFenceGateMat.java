@@ -124,17 +124,17 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
     private static final TByteObjectMap<SpruceFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SpruceFenceGateMat()
+    public SpruceFenceGateMat()
     {
         super("SPRUCE_FENCE_GATE", 183, "minecraft:spruce_fence_gate", WoodType.SPRUCE, BlockFace.SOUTH, false, 2, 15);
     }
 
-    protected SpruceFenceGateMat(final BlockFace face, final boolean open)
+    public SpruceFenceGateMat(final BlockFace face, final boolean open)
     {
         super(SPRUCE_FENCE_GATE_SOUTH.name(), SPRUCE_FENCE_GATE_SOUTH.ordinal(), SPRUCE_FENCE_GATE_SOUTH.getMinecraftId(), WoodType.SPRUCE, face, open, SPRUCE_FENCE_GATE_SOUTH.getHardness(), SPRUCE_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected SpruceFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
+    public SpruceFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }
@@ -222,6 +222,7 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
      */
     public static void register(final SpruceFenceGateMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

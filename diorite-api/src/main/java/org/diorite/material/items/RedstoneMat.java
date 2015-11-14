@@ -56,7 +56,7 @@ public class RedstoneMat extends OreItemMatExt implements PlaceableMat
     private static final TShortObjectMap<RedstoneMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneMat()
+    public RedstoneMat()
     {
         super("REDSTONE", 331, "minecraft:redstone", "REDSTONE", (short) 0x00, Material.REDSTONE_ORE, Material.REDSTONE_BLOCK);
     }
@@ -116,6 +116,7 @@ public class RedstoneMat extends OreItemMatExt implements PlaceableMat
      */
     public static void register(final RedstoneMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

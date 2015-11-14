@@ -153,17 +153,17 @@ public class WoodenButtonMat extends ButtonMat
     private static final TByteObjectMap<WoodenButtonMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WoodenButtonMat()
+    public WoodenButtonMat()
     {
         super("WOODEN_BUTTON", 143, "minecraft:wooden_button", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
-    protected WoodenButtonMat(final BlockFace face, final boolean powered)
+    public WoodenButtonMat(final BlockFace face, final boolean powered)
     {
         super(WOODEN_BUTTON_DOWN.name(), WOODEN_BUTTON_DOWN.ordinal(), WOODEN_BUTTON_DOWN.getMinecraftId(), face, powered, WOODEN_BUTTON_DOWN.getHardness(), WOODEN_BUTTON_DOWN.getBlastResistance());
     }
 
-    protected WoodenButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
+    public WoodenButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, powered, hardness, blastResistance);
     }
@@ -257,6 +257,7 @@ public class WoodenButtonMat extends ButtonMat
      */
     public static void register(final WoodenButtonMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

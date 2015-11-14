@@ -52,17 +52,17 @@ public class GlowstoneDustMat extends ItemMaterialData
     private static final TShortObjectMap<GlowstoneDustMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GlowstoneDustMat()
+    public GlowstoneDustMat()
     {
         super("GLOWSTONE_DUST", 348, "minecraft:glowstone_dust", "GLOWSTONE_DUST", (short) 0x00);
     }
 
-    protected GlowstoneDustMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public GlowstoneDustMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected GlowstoneDustMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public GlowstoneDustMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class GlowstoneDustMat extends ItemMaterialData
      */
     public static void register(final GlowstoneDustMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

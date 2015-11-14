@@ -77,19 +77,19 @@ public class SpongeMat extends BlockMaterialData
     protected final boolean isWet;
 
     @SuppressWarnings("MagicNumber")
-    protected SpongeMat()
+    public SpongeMat()
     {
         super("SPONGE", 19, "minecraft:sponge", "DRY", (byte) 0x00, 0.6f, 3);
         this.isWet = false;
     }
 
-    protected SpongeMat(final boolean isWet)
+    public SpongeMat(final boolean isWet)
     {
         super(SPONGE.name(), SPONGE.ordinal(), SPONGE.getMinecraftId(), isWet ? "WEY" : "DRY", (byte) (isWet ? 1 : 0), SPONGE.getHardness(), SPONGE.getBlastResistance());
         this.isWet = isWet;
     }
 
-    protected SpongeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean isWet, final float hardness, final float blastResistance)
+    public SpongeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean isWet, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.isWet = isWet;
@@ -156,6 +156,7 @@ public class SpongeMat extends BlockMaterialData
      */
     public static void register(final SpongeMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

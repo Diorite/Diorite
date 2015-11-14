@@ -72,17 +72,17 @@ public class StonePressurePlateMat extends PressurePlateMat
     private static final TByteObjectMap<StonePressurePlateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected StonePressurePlateMat()
+    public StonePressurePlateMat()
     {
         super("STONE_PRESSURE_PLATE", 70, "minecraft:stone_pressure_plate", "STONE_PRESSURE_PLATE", (byte) 0x00, false, 0.5f, 2.5f);
     }
 
-    protected StonePressurePlateMat(final int type, final boolean powered)
+    public StonePressurePlateMat(final int type, final boolean powered)
     {
         super(STONE_PRESSURE_PLATE.name(), STONE_PRESSURE_PLATE.ordinal(), STONE_PRESSURE_PLATE.getMinecraftId(), powered ? "POWERED" : "WOODEN_PRESSURE_PLATE", (byte) type, powered, STONE_PRESSURE_PLATE.getHardness(), STONE_PRESSURE_PLATE.getBlastResistance());
     }
 
-    protected StonePressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
+    public StonePressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, powered, hardness, blastResistance);
     }
@@ -157,7 +157,7 @@ public class StonePressurePlateMat extends PressurePlateMat
      */
     public static void register(final StonePressurePlateMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -58,22 +58,22 @@ public class IronHelmetMat extends HelmetMat
     protected final LazyValue<IronHelmetMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected IronHelmetMat()
+    public IronHelmetMat()
     {
         super("IRON_HELMET", 306, "minecraft:iron_helmet", "NEW", (short) 0, ArmorMaterial.IRON);
     }
 
-    protected IronHelmetMat(final int durability)
+    public IronHelmetMat(final int durability)
     {
         super(IRON_HELMET.name(), IRON_HELMET.getId(), IRON_HELMET.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.IRON);
     }
 
-    protected IronHelmetMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public IronHelmetMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, armorType);
     }
 
-    protected IronHelmetMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public IronHelmetMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
     }
@@ -179,6 +179,7 @@ public class IronHelmetMat extends HelmetMat
      */
     public static void register(final IronHelmetMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

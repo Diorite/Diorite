@@ -72,17 +72,17 @@ public class CobblestoneWallMat extends BlockMaterialData
     private static final TByteObjectMap<CobblestoneWallMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CobblestoneWallMat()
+    public CobblestoneWallMat()
     {
         super("COBBLESTONE_WALL", 139, "minecraft:cobblestone_wall", "COBBLESTONE_WALL", (byte) 0x00, 2, 30);
     }
 
-    protected CobblestoneWallMat(final String enumName, final int type)
+    public CobblestoneWallMat(final String enumName, final int type)
     {
         super(COBBLESTONE_WALL.name(), COBBLESTONE_WALL.ordinal(), COBBLESTONE_WALL.getMinecraftId(), enumName, (byte) type, COBBLESTONE_WALL.getHardness(), COBBLESTONE_WALL.getBlastResistance());
     }
 
-    protected CobblestoneWallMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public CobblestoneWallMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -132,6 +132,7 @@ public class CobblestoneWallMat extends BlockMaterialData
      */
     public static void register(final CobblestoneWallMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

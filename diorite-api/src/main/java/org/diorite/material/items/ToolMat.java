@@ -44,14 +44,14 @@ public abstract class ToolMat extends ItemMaterialData implements BreakableItemM
     protected final ToolMaterial toolMaterial;
     protected final ToolType     toolType;
 
-    protected ToolMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public ToolMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, 1, typeName, type);
         this.toolMaterial = toolMaterial;
         this.toolType = toolType;
     }
 
-    protected ToolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public ToolMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.toolMaterial = toolMaterial;

@@ -165,7 +165,7 @@ public class JungleDoorMat extends WoodenDoorMat
     protected final BlockFace blockFace;
 
     @SuppressWarnings("MagicNumber")
-    protected JungleDoorMat()
+    public JungleDoorMat()
     {
         super("JUNGLE_DOOR", 195, "minecraft:jungle_door", "BOTTOM_EAST", WoodType.JUNGLE, 3, 15);
         this.powered = false;
@@ -175,7 +175,7 @@ public class JungleDoorMat extends WoodenDoorMat
         this.blockFace = BlockFace.EAST;
     }
 
-    protected JungleDoorMat(final boolean powered, final boolean hingeOnRightSide)
+    public JungleDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
         super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.ordinal(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodType.JUNGLE, JUNGLE_DOOR_BOTTOM_EAST.getHardness(), JUNGLE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -185,7 +185,7 @@ public class JungleDoorMat extends WoodenDoorMat
         this.blockFace = null;
     }
 
-    protected JungleDoorMat(final BlockFace blockFace, final boolean open)
+    public JungleDoorMat(final BlockFace blockFace, final boolean open)
     {
         super(JUNGLE_DOOR_BOTTOM_EAST.name(), JUNGLE_DOOR_BOTTOM_EAST.ordinal(), JUNGLE_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodType.JUNGLE, JUNGLE_DOOR_BOTTOM_EAST.getHardness(), JUNGLE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
@@ -195,7 +195,7 @@ public class JungleDoorMat extends WoodenDoorMat
         this.blockFace = blockFace;
     }
 
-    protected JungleDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    public JungleDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, JUNGLE_DOOR_BOTTOM_EAST.getHardness(), JUNGLE_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -406,6 +406,7 @@ public class JungleDoorMat extends WoodenDoorMat
      */
     public static void register(final JungleDoorMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

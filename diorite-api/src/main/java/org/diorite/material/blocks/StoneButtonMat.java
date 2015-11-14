@@ -153,17 +153,17 @@ public class StoneButtonMat extends ButtonMat
     private static final TByteObjectMap<StoneButtonMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected StoneButtonMat()
+    public StoneButtonMat()
     {
         super("STONE_BUTTON", 77, "minecraft:stone_button", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
-    protected StoneButtonMat(final BlockFace face, final boolean powered)
+    public StoneButtonMat(final BlockFace face, final boolean powered)
     {
         super(STONE_BUTTON_DOWN.name(), STONE_BUTTON_DOWN.ordinal(), STONE_BUTTON_DOWN.getMinecraftId(), face, powered, STONE_BUTTON_DOWN.getHardness(), STONE_BUTTON_DOWN.getBlastResistance());
     }
 
-    protected StoneButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
+    public StoneButtonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, powered, hardness, blastResistance);
     }
@@ -257,6 +257,7 @@ public class StoneButtonMat extends ButtonMat
      */
     public static void register(final StoneButtonMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

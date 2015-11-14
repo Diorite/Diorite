@@ -52,12 +52,12 @@ public class EndStoneMat extends StonyMat
     private static final TByteObjectMap<EndStoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected EndStoneMat()
+    public EndStoneMat()
     {
         super("END_STONE", 121, "minecraft:end_stone", "END_STONE", (byte) 0x00, 3, 45);
     }
 
-    protected EndStoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public EndStoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -107,6 +107,7 @@ public class EndStoneMat extends StonyMat
      */
     public static void register(final EndStoneMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

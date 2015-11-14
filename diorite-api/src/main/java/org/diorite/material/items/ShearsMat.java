@@ -57,12 +57,12 @@ public class ShearsMat extends BasicToolMat
     protected final LazyValue<ShearsMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected ShearsMat()
+    public ShearsMat()
     {
         super("SHEARS", 359, "minecraft:shears", "NEW", (short) 0x00, new BasicToolData(238));
     }
 
-    protected ShearsMat(final int durability)
+    public ShearsMat(final int durability)
     {
         super(SHEARS.name(), SHEARS.getId(), SHEARS.getMinecraftId(), Integer.toString(durability), (short) durability, new BasicToolData(SHEARS.getToolData()));
     }
@@ -178,6 +178,7 @@ public class ShearsMat extends BasicToolMat
      */
     public static void register(final ShearsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -40,7 +40,67 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * ID of block: 163 <br>
  * String ID of block: minecraft:acacia_stairs <br>
  * Hardness: 2 <br>
- * Blast Resistance 15
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * NORTH_UPSIDE_DOWN:
+ * Type name: 'North Upside Down' <br>
+ * SubID: 7 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_UPSIDE_DOWN:
+ * Type name: 'South Upside Down' <br>
+ * SubID: 6 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_UPSIDE_DOWN:
+ * Type name: 'West Upside Down' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_UPSIDE_DOWN:
+ * Type name: 'East Upside Down' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
 @SuppressWarnings("JavaDoc")
 public class AcaciaStairsMat extends WoodenStairsMat
@@ -64,17 +124,17 @@ public class AcaciaStairsMat extends WoodenStairsMat
     private static final TByteObjectMap<AcaciaStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected AcaciaStairsMat()
+    public AcaciaStairsMat()
     {
         super("ACACIA_STAIRS", 163, "minecraft:acacia_stairs", WoodType.ACACIA, BlockFace.EAST, false, 2, 15);
     }
 
-    protected AcaciaStairsMat(final BlockFace face, final boolean upsideDown)
+    public AcaciaStairsMat(final BlockFace face, final boolean upsideDown)
     {
         super(ACACIA_STAIRS_EAST.name(), ACACIA_STAIRS_EAST.ordinal(), ACACIA_STAIRS_EAST.getMinecraftId(), WoodType.ACACIA, face, upsideDown, ACACIA_STAIRS_EAST.getHardness(), ACACIA_STAIRS_EAST.getBlastResistance());
     }
 
-    protected AcaciaStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    public AcaciaStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown, hardness, blastResistance);
     }
@@ -162,6 +222,7 @@ public class AcaciaStairsMat extends WoodenStairsMat
      */
     public static void register(final AcaciaStairsMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

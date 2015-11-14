@@ -86,19 +86,19 @@ public class DirtMat extends EarthMat implements VariantableMat
     protected final VariantMat variant;
 
     @SuppressWarnings("MagicNumber")
-    protected DirtMat()
+    public DirtMat()
     {
         super("DIRT", 3, "minecraft:dirt", "CLASSIC", (byte) 0x00, 0.5f, 2.5f);
         this.variant = VariantMat.CLASSIC;
     }
 
-    protected DirtMat(final int type, final VariantMat variant)
+    public DirtMat(final int type, final VariantMat variant)
     {
         super(DIRT.name(), DIRT.ordinal(), DIRT.getMinecraftId(), variant.name(), (byte) type, DIRT.getHardness(), DIRT.getBlastResistance());
         this.variant = variant;
     }
 
-    protected DirtMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
+    public DirtMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.variant = variant;
@@ -168,6 +168,7 @@ public class DirtMat extends EarthMat implements VariantableMat
      */
     public static void register(final DirtMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

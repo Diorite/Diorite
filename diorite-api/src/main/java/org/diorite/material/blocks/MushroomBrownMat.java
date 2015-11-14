@@ -52,12 +52,12 @@ public class MushroomBrownMat extends MushroomMat
     private static final TByteObjectMap<MushroomBrownMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MushroomBrownMat()
+    public MushroomBrownMat()
     {
         super("BROWN_MUSHROOM", 39, "minecraft:brown_mushroom", "BROWN_MUSHROOM", (byte) 0x00, 0, 0);
     }
 
-    protected MushroomBrownMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public MushroomBrownMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -107,6 +107,7 @@ public class MushroomBrownMat extends MushroomMat
      */
     public static void register(final MushroomBrownMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

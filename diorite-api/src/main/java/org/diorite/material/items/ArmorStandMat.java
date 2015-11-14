@@ -53,17 +53,17 @@ public class ArmorStandMat extends ItemMaterialData implements PlaceableEntityMa
     private static final TShortObjectMap<ArmorStandMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected ArmorStandMat()
+    public ArmorStandMat()
     {
         super("ARMOR_STAND", 416, "minecraft:armor_stand", 16, "ARMOR_STAND", (short) 0x00);
     }
 
-    protected ArmorStandMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public ArmorStandMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, ARMOR_STAND.getMaxStack(), typeName, type);
     }
 
-    protected ArmorStandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public ArmorStandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class ArmorStandMat extends ItemMaterialData implements PlaceableEntityMa
      */
     public static void register(final ArmorStandMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

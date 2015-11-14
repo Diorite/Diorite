@@ -51,17 +51,17 @@ public class BoatMat extends AbstractBoatMat
     private static final TShortObjectMap<BoatMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BoatMat()
+    public BoatMat()
     {
         super("BOAT", 333, "minecraft:boat", "BOAT", (short) 0x00);
     }
 
-    protected BoatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public BoatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected BoatMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public BoatMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -111,6 +111,7 @@ public class BoatMat extends AbstractBoatMat
      */
     public static void register(final BoatMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

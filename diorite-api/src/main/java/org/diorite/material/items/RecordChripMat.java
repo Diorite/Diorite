@@ -45,17 +45,17 @@ public class RecordChripMat extends RecordMat
     private static final Map<String, RecordChripMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RecordChripMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
-    protected RecordChripMat()
+    public RecordChripMat()
     {
         super("chrip", 2259);
     }
 
-    protected RecordChripMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
+    public RecordChripMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, typeName, type, sound);
     }
 
-    protected RecordChripMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
+    public RecordChripMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, sound);
     }
@@ -105,6 +105,7 @@ public class RecordChripMat extends RecordMat
      */
     public static void register(final RecordChripMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

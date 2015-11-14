@@ -58,22 +58,22 @@ public class DiamondPickaxeMat extends PickaxeMat
     protected final LazyValue<DiamondPickaxeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected DiamondPickaxeMat()
+    public DiamondPickaxeMat()
     {
         super("DIAMOND_PICKAXE", 278, "minecraft:diamond_Pickaxe", "NEW", (short) 0, ToolMaterial.DIAMOND);
     }
 
-    protected DiamondPickaxeMat(final int durability)
+    public DiamondPickaxeMat(final int durability)
     {
         super(DIAMOND_PICKAXE.name(), DIAMOND_PICKAXE.getId(), DIAMOND_PICKAXE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.DIAMOND);
     }
 
-    protected DiamondPickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public DiamondPickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected DiamondPickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public DiamondPickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class DiamondPickaxeMat extends PickaxeMat
      */
     public static void register(final DiamondPickaxeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -53,17 +53,17 @@ public class LavaBucketMat extends ItemMaterialData implements FuelMat
     private static final TShortObjectMap<LavaBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected LavaBucketMat()
+    public LavaBucketMat()
     {
         super("LAVA_BUCKET", 327, "minecraft:lava_bucket", 1, "LAVA_BUCKET", (short) 0x00);
     }
 
-    protected LavaBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public LavaBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, LAVA_BUCKET.getMaxStack(), typeName, type);
     }
 
-    protected LavaBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public LavaBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -120,6 +120,7 @@ public class LavaBucketMat extends ItemMaterialData implements FuelMat
      */
     public static void register(final LavaBucketMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

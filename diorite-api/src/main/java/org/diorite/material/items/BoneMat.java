@@ -52,17 +52,17 @@ public class BoneMat extends ItemMaterialData
     private static final TShortObjectMap<BoneMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BoneMat()
+    public BoneMat()
     {
         super("BONE", 352, "minecraft:bone", "BONE", (short) 0x00);
     }
 
-    protected BoneMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public BoneMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected BoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public BoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class BoneMat extends ItemMaterialData
      */
     public static void register(final BoneMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -54,17 +54,17 @@ public class GoldIngotMat extends OreItemMatExt
     private static final TShortObjectMap<GoldIngotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldIngotMat()
+    public GoldIngotMat()
     {
         super("GOLD_INGOT", 266, "minecraft:gold_ingot", "GOLD_INGOT", (short) 0x00, GOLD_ORE, GOLD_BLOCK);
     }
 
-    protected GoldIngotMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public GoldIngotMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, typeName, type, oreType, blockType);
     }
 
-    protected GoldIngotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public GoldIngotMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, oreType, blockType);
     }
@@ -114,6 +114,7 @@ public class GoldIngotMat extends OreItemMatExt
      */
     public static void register(final GoldIngotMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

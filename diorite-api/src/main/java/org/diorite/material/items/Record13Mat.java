@@ -45,17 +45,17 @@ public class Record13Mat extends RecordMat
     private static final Map<String, Record13Mat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<Record13Mat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
-    protected Record13Mat()
+    public Record13Mat()
     {
         super("13", 2256);
     }
 
-    protected Record13Mat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
+    public Record13Mat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, typeName, type, sound);
     }
 
-    protected Record13Mat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
+    public Record13Mat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, sound);
     }
@@ -105,6 +105,7 @@ public class Record13Mat extends RecordMat
      */
     public static void register(final Record13Mat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

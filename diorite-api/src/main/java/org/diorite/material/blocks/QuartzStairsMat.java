@@ -130,21 +130,21 @@ public class QuartzStairsMat extends BlockMaterialData implements StairsMat
     protected final boolean   upsideDown;
 
     @SuppressWarnings("MagicNumber")
-    protected QuartzStairsMat()
+    public QuartzStairsMat()
     {
         super("QUARTZ_STAIRS", 156, "minecraft:quartz_brick_stairs", "EAST", (byte) 0x00, 0.8f, 4);
         this.face = BlockFace.EAST;
         this.upsideDown = false;
     }
 
-    protected QuartzStairsMat(final BlockFace face, final boolean upsideDown)
+    public QuartzStairsMat(final BlockFace face, final boolean upsideDown)
     {
         super(QUARTZ_STAIRS_EAST.name(), QUARTZ_STAIRS_EAST.ordinal(), QUARTZ_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown), QUARTZ_STAIRS_EAST.getHardness(), QUARTZ_STAIRS_EAST.getBlastResistance());
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    protected QuartzStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    public QuartzStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -252,6 +252,7 @@ public class QuartzStairsMat extends BlockMaterialData implements StairsMat
      */
     public static void register(final QuartzStairsMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

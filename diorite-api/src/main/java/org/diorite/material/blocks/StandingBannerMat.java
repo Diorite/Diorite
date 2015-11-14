@@ -191,19 +191,19 @@ public class StandingBannerMat extends BannerBlockMat
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected StandingBannerMat()
+    public StandingBannerMat()
     {
         super("STANDING_BANNER_SOUTH", 176, "minecraft:standing_banner", 16, "SOUTH", (byte) 0x00, 1, 5);
         this.face = BlockFace.SOUTH;
     }
 
-    protected StandingBannerMat(final BlockFace face)
+    public StandingBannerMat(final BlockFace face)
     {
         super(STANDING_BANNER_SOUTH.name(), STANDING_BANNER_SOUTH.ordinal(), STANDING_BANNER_SOUTH.getMinecraftId(), STANDING_BANNER_SOUTH.getMaxStack(), face.name(), combine(face), STANDING_BANNER_SOUTH.getHardness(), STANDING_BANNER_SOUTH.getBlastResistance());
         this.face = face;
     }
 
-    protected StandingBannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public StandingBannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -331,6 +331,7 @@ public class StandingBannerMat extends BannerBlockMat
      */
     public static void register(final StandingBannerMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

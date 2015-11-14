@@ -97,19 +97,19 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected TrappedChestMat()
+    public TrappedChestMat()
     {
         super("TRAPPED_CHEST", 146, "minecraft:trapped_chest", "NORTH", (byte) 0x00, 2.5f, 12.5f);
         this.face = BlockFace.NORTH;
     }
 
-    protected TrappedChestMat(final BlockFace face)
+    public TrappedChestMat(final BlockFace face)
     {
         super(TRAPPED_CHEST_NORTH.name(), TRAPPED_CHEST_NORTH.ordinal(), TRAPPED_CHEST_NORTH.getMinecraftId(), face.name(), combine(face), TRAPPED_CHEST_NORTH.getHardness(), TRAPPED_CHEST_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected TrappedChestMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public TrappedChestMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -219,6 +219,7 @@ public class TrappedChestMat extends BlockMaterialData implements DirectionalMat
      */
     public static void register(final TrappedChestMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

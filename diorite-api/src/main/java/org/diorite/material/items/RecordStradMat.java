@@ -45,17 +45,17 @@ public class RecordStradMat extends RecordMat
     private static final Map<String, RecordStradMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RecordStradMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
-    protected RecordStradMat()
+    public RecordStradMat()
     {
         super("strad", 2264);
     }
 
-    protected RecordStradMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
+    public RecordStradMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, typeName, type, sound);
     }
 
-    protected RecordStradMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
+    public RecordStradMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, sound);
     }
@@ -105,6 +105,7 @@ public class RecordStradMat extends RecordMat
      */
     public static void register(final RecordStradMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

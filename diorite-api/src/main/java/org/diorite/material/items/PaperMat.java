@@ -52,17 +52,17 @@ public class PaperMat extends ItemMaterialData
     private static final TShortObjectMap<PaperMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PaperMat()
+    public PaperMat()
     {
         super("PAPER", 339, "minecraft:paper", "PAPER", (short) 0x00);
     }
 
-    protected PaperMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public PaperMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected PaperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public PaperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class PaperMat extends ItemMaterialData
      */
     public static void register(final PaperMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

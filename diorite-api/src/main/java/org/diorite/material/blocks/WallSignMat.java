@@ -96,19 +96,19 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected WallSignMat()
+    public WallSignMat()
     {
         super("WALL_SIGN", 68, "minecraft:wall_sign", 16, "NORTH", (byte) 0x02, 1, 5);
         this.face = BlockFace.NORTH;
     }
 
-    protected WallSignMat(final BlockFace face)
+    public WallSignMat(final BlockFace face)
     {
         super(WALL_SIGN_NORTH.name(), WALL_SIGN_NORTH.ordinal(), WALL_SIGN_NORTH.getMinecraftId(), WALL_SIGN_NORTH.getMaxStack(), face.name(), combine(face), WALL_SIGN_NORTH.getHardness(), WALL_SIGN_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected WallSignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public WallSignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -217,6 +217,7 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
      */
     public static void register(final WallSignMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -53,17 +53,17 @@ public class RedstoneRepeaterItemMat extends ItemMaterialData implements Placeab
     private static final TShortObjectMap<RedstoneRepeaterItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneRepeaterItemMat()
+    public RedstoneRepeaterItemMat()
     {
         super("REDSTONE_REPEATER_ITEM", 356, "minecraft:repeater", "REDSTONE_REPEATER_ITEM", (short) 0x00);
     }
 
-    protected RedstoneRepeaterItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public RedstoneRepeaterItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected RedstoneRepeaterItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public RedstoneRepeaterItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class RedstoneRepeaterItemMat extends ItemMaterialData implements Placeab
      */
     public static void register(final RedstoneRepeaterItemMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

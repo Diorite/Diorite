@@ -58,22 +58,22 @@ public class GoldenAxeMat extends AxeMat
     protected final LazyValue<GoldenAxeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldenAxeMat()
+    public GoldenAxeMat()
     {
         super("GOLDEN_AXE", 286, "minecraft:golden_Axe", "NEW", (short) 0, ToolMaterial.GOLD);
     }
 
-    protected GoldenAxeMat(final int durability)
+    public GoldenAxeMat(final int durability)
     {
         super(GOLDEN_AXE.name(), GOLDEN_AXE.getId(), GOLDEN_AXE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.GOLD);
     }
 
-    protected GoldenAxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public GoldenAxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected GoldenAxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public GoldenAxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class GoldenAxeMat extends AxeMat
      */
     public static void register(final GoldenAxeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

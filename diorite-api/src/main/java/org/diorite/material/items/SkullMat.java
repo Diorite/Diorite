@@ -100,19 +100,19 @@ public class SkullMat extends ItemMaterialData
     protected final SkullType skullType;
 
     @SuppressWarnings("MagicNumber")
-    protected SkullMat()
+    public SkullMat()
     {
         super("SKULL", 397, "minecraft:skull", SkullType.SKELETON.name(), (short) 0x00);
         this.skullType = SkullType.SKELETON;
     }
 
-    protected SkullMat(final SkullType skullType)
+    public SkullMat(final SkullType skullType)
     {
         super(SKULL_SKELETON.name(), SKULL_SKELETON.getId(), SKULL_SKELETON.getMinecraftId(), skullType.name(), skullType.getItemTypeID());
         this.skullType = skullType;
     }
 
-    protected SkullMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final SkullType skullType)
+    public SkullMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final SkullType skullType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.skullType = skullType;
@@ -196,6 +196,7 @@ public class SkullMat extends ItemMaterialData
      */
     public static void register(final SkullMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
         byType.put(element.getSkullType(), element);

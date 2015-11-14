@@ -53,17 +53,17 @@ public class LeadMat extends ItemMaterialData implements PlaceableEntityMat
     private static final TShortObjectMap<LeadMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected LeadMat()
+    public LeadMat()
     {
         super("LEAD", 420, "minecraft:lead", "LEAD", (short) 0x00);
     }
 
-    protected LeadMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public LeadMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected LeadMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public LeadMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class LeadMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static void register(final LeadMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

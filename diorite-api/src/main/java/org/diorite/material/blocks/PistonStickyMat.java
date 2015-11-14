@@ -153,17 +153,17 @@ public class PistonStickyMat extends PistonBaseMat
     private static final TByteObjectMap<PistonStickyMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PistonStickyMat()
+    public PistonStickyMat()
     {
         super("STICKY_PISTON", 29, "minecraft:sticky_piston", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
-    protected PistonStickyMat(final BlockFace face, final boolean extended)
+    public PistonStickyMat(final BlockFace face, final boolean extended)
     {
         super(STICKY_PISTON_DOWN.name(), STICKY_PISTON_DOWN.ordinal(), STICKY_PISTON_DOWN.getMinecraftId(), face, extended, STICKY_PISTON_DOWN.getHardness(), STICKY_PISTON_DOWN.getBlastResistance());
     }
 
-    protected PistonStickyMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
+    public PistonStickyMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, facing, extended, hardness, blastResistance);
     }
@@ -251,6 +251,7 @@ public class PistonStickyMat extends PistonBaseMat
      */
     public static void register(final PistonStickyMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

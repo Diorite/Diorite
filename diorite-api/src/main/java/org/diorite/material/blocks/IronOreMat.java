@@ -53,12 +53,12 @@ public class IronOreMat extends OreMat
     private static final TByteObjectMap<IronOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected IronOreMat()
+    public IronOreMat()
     {
         super("IRON_ORE", 15, "minecraft:iron_ore", "IRON_ORE", (byte) 0x00, IRON_INGOT, IRON_BLOCK, 3, 15);
     }
 
-    protected IronOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
+    public IronOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class IronOreMat extends OreMat
      */
     public static void register(final IronOreMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

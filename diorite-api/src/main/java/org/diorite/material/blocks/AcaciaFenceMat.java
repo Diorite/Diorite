@@ -53,12 +53,12 @@ public class AcaciaFenceMat extends WoodenFenceMat
     private static final TByteObjectMap<AcaciaFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected AcaciaFenceMat()
+    public AcaciaFenceMat()
     {
         super("ACACIA_FENCE", 192, "minecraft:acacia_fence", "ACACIA_FENCE", WoodType.ACACIA, 2, 15);
     }
 
-    protected AcaciaFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
+    public AcaciaFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class AcaciaFenceMat extends WoodenFenceMat
      */
     public static void register(final AcaciaFenceMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

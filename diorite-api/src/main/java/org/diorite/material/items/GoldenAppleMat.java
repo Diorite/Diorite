@@ -68,23 +68,23 @@ public class GoldenAppleMat extends EdibleItemMat
     private static final TShortObjectMap<GoldenAppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldenAppleMat()
+    public GoldenAppleMat()
     {
         super("GOLDED_APPLE", 322, "minecraft:golden_apple", "GOLDED_APPLE", (short) 0x00, 4, 9.6F);
     }
 
     @SuppressWarnings("MagicNumber")
-    protected GoldenAppleMat(final String name, final int type)
+    public GoldenAppleMat(final String name, final int type)
     {
         super(GOLDED_APPLE.name(), GOLDED_APPLE.getId(), GOLDED_APPLE.getMinecraftId(), name, (short) type, 4, 9.6F);
     }
 
-    protected GoldenAppleMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public GoldenAppleMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
-    protected GoldenAppleMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public GoldenAppleMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, foodLevelIncrease, saturationIncrease);
     }
@@ -134,6 +134,7 @@ public class GoldenAppleMat extends EdibleItemMat
      */
     public static void register(final GoldenAppleMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

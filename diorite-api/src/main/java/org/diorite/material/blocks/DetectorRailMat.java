@@ -145,7 +145,7 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
     public static final DetectorRailMat DETECTOR_RAIL_ASCENDING_WEST          = new DetectorRailMat(RailTypeMat.ASCENDING_WEST, false);
     public static final DetectorRailMat DETECTOR_RAIL_ASCENDING_NORTH         = new DetectorRailMat(RailTypeMat.ASCENDING_NORTH, false);
     public static final DetectorRailMat DETECTOR_RAIL_ASCENDING_SOUTH         = new DetectorRailMat(RailTypeMat.ASCENDING_SOUTH, false);
-    public static final DetectorRailMat DETECTOR_RAIL_NORTH_SOUTH_POWERED     = new DetectorRailMat(RailTypeMat.FLAT_WEST_EAST, true);
+    public static final DetectorRailMat DETECTOR_RAIL_NORTH_SOUTH_POWERED     = new DetectorRailMat(RailTypeMat.FLAT_NORTH_SOUTH, true);
     public static final DetectorRailMat DETECTOR_RAIL_WEST_EAST_POWERED       = new DetectorRailMat(RailTypeMat.FLAT_WEST_EAST, true);
     public static final DetectorRailMat DETECTOR_RAIL_ASCENDING_EAST_POWERED  = new DetectorRailMat(RailTypeMat.ASCENDING_EAST, true);
     public static final DetectorRailMat DETECTOR_RAIL_ASCENDING_WEST_POWERED  = new DetectorRailMat(RailTypeMat.ASCENDING_WEST, true);
@@ -158,19 +158,19 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
     protected final boolean powered;
 
     @SuppressWarnings("MagicNumber")
-    protected DetectorRailMat()
+    public DetectorRailMat()
     {
         super("DETECTOR_RAIL", 28, "minecraft:detector_rail", "NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00, 0.7f, 3.5f);
         this.powered = false;
     }
 
-    protected DetectorRailMat(final RailTypeMat type, final boolean powered)
+    public DetectorRailMat(final RailTypeMat type, final boolean powered)
     {
         super(DETECTOR_RAIL_NORTH_SOUTH.name(), DETECTOR_RAIL_NORTH_SOUTH.ordinal(), DETECTOR_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00, DETECTOR_RAIL_NORTH_SOUTH.getHardness(), DETECTOR_RAIL_NORTH_SOUTH.getBlastResistance());
         this.powered = powered;
     }
 
-    protected DetectorRailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final boolean powered, final float hardness, final float blastResistance)
+    public DetectorRailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, railType, hardness, blastResistance);
         this.powered = powered;
@@ -284,6 +284,7 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
      */
     public static void register(final DetectorRailMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

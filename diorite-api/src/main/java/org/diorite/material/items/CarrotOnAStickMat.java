@@ -57,12 +57,12 @@ public class CarrotOnAStickMat extends BasicToolMat
     protected final LazyValue<CarrotOnAStickMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected CarrotOnAStickMat()
+    public CarrotOnAStickMat()
     {
         super("CARROT_ON_A_STICK", 398, "minecraft:carrot_on_a_stick", "NEW", (short) 0x00, new BasicToolData(26));
     }
 
-    protected CarrotOnAStickMat(final int durability)
+    public CarrotOnAStickMat(final int durability)
     {
         super(CARROT_ON_A_STICK.name(), CARROT_ON_A_STICK.getId(), CARROT_ON_A_STICK.getMinecraftId(), Integer.toString(durability), (short) durability, new BasicToolData(CARROT_ON_A_STICK.getToolData()));
     }
@@ -178,6 +178,7 @@ public class CarrotOnAStickMat extends BasicToolMat
      */
     public static void register(final CarrotOnAStickMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

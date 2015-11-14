@@ -46,14 +46,14 @@ public abstract class PistonBaseMat extends BlockMaterialData implements Directi
     protected final BlockFace facing;
     protected final boolean   extended;
 
-    protected PistonBaseMat(final String enumName, final int id, final String minecraftId, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
+    public PistonBaseMat(final String enumName, final int id, final String minecraftId, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, facing.name() + (extended ? "_EXTENDED" : ""), combine(facing, extended), hardness, blastResistance);
         this.facing = facing;
         this.extended = extended;
     }
 
-    protected PistonBaseMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
+    public PistonBaseMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.facing = facing;

@@ -73,17 +73,17 @@ public class WoodenPressurePlateMat extends PressurePlateMat implements FuelMat
     private static final TByteObjectMap<WoodenPressurePlateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WoodenPressurePlateMat()
+    public WoodenPressurePlateMat()
     {
         super("WOODEN_PRESSURE_PLATE", 72, "minecraft:wooden_pressure_plate", "WOODEN_PRESSURE_PLATE", (byte) 0x00, false, 0.5f, 2.5f);
     }
 
-    protected WoodenPressurePlateMat(final int type, final boolean powered)
+    public WoodenPressurePlateMat(final int type, final boolean powered)
     {
         super(WOODEN_PRESSURE_PLATE.name(), WOODEN_PRESSURE_PLATE.ordinal(), WOODEN_PRESSURE_PLATE.getMinecraftId(), powered ? "POWERED" : "WOODEN_PRESSURE_PLATE", (byte) type, powered, WOODEN_PRESSURE_PLATE.getHardness(), WOODEN_PRESSURE_PLATE.getBlastResistance());
     }
 
-    protected WoodenPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
+    public WoodenPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, powered, hardness, blastResistance);
     }
@@ -165,7 +165,7 @@ public class WoodenPressurePlateMat extends PressurePlateMat implements FuelMat
      */
     public static void register(final WoodenPressurePlateMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

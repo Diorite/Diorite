@@ -57,12 +57,12 @@ public class BowMat extends BasicToolMat
     protected final LazyValue<BowMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected BowMat()
+    public BowMat()
     {
         super("BOW", 261, "minecraft:bow", "NEW", (short) 0x00, new BasicToolData(385));
     }
 
-    protected BowMat(final int durability)
+    public BowMat(final int durability)
     {
         super(BOW.name(), BOW.getId(), BOW.getMinecraftId(), Integer.toString(durability), (short) durability, new BasicToolData(BOW.getToolData()));
     }
@@ -178,6 +178,7 @@ public class BowMat extends BasicToolMat
      */
     public static void register(final BowMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

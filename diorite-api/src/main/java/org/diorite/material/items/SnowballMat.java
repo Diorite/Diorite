@@ -53,17 +53,17 @@ public class SnowballMat extends ItemMaterialData implements PlaceableEntityMat
     private static final TShortObjectMap<SnowballMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SnowballMat()
+    public SnowballMat()
     {
         super("SNOWBALL", 332, "minecraft:snowball", "SNOWBALL", (short) 0x00);
     }
 
-    protected SnowballMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public SnowballMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected SnowballMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public SnowballMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class SnowballMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static void register(final SnowballMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

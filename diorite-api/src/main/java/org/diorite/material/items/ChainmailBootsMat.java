@@ -58,22 +58,22 @@ public class ChainmailBootsMat extends BootsMat
     protected final LazyValue<ChainmailBootsMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected ChainmailBootsMat()
+    public ChainmailBootsMat()
     {
         super("CHAINMAIL_BOOTS", 305, "minecraft:chainmail_boots", "NEW", (short) 0, ArmorMaterial.CHAINMAIL);
     }
 
-    protected ChainmailBootsMat(final int durability)
+    public ChainmailBootsMat(final int durability)
     {
         super(CHAINMAIL_BOOTS.name(), CHAINMAIL_BOOTS.getId(), CHAINMAIL_BOOTS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.CHAINMAIL);
     }
 
-    protected ChainmailBootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public ChainmailBootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, armorType);
     }
 
-    protected ChainmailBootsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public ChainmailBootsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
     }
@@ -179,6 +179,7 @@ public class ChainmailBootsMat extends BootsMat
      */
     public static void register(final ChainmailBootsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -52,12 +52,12 @@ public class HardenedClayMat extends StonyMat
     private static final TByteObjectMap<HardenedClayMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected HardenedClayMat()
+    public HardenedClayMat()
     {
         super("HARDENED_CLAY", 172, "minecraft:hardened_clay", "HARDENED_CLAY", (byte) 0x00, 1.25f, 30);
     }
 
-    protected HardenedClayMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public HardenedClayMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -107,6 +107,7 @@ public class HardenedClayMat extends StonyMat
      */
     public static void register(final HardenedClayMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

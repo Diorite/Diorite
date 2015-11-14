@@ -96,19 +96,19 @@ public class CauldronBlockMat extends BlockMaterialData
     protected final int waterLevel;
 
     @SuppressWarnings("MagicNumber")
-    protected CauldronBlockMat()
+    public CauldronBlockMat()
     {
         super("CAULDRON_BLOCK", 118, "minecraft:cauldron", "EMPTY", (byte) 0x00, 2, 10);
         this.waterLevel = 0;
     }
 
-    protected CauldronBlockMat(final String enumName, final int type, final int waterLevel)
+    public CauldronBlockMat(final String enumName, final int type, final int waterLevel)
     {
         super(CAULDRON_BLOCK_EMPTY.name(), CAULDRON_BLOCK_EMPTY.ordinal(), CAULDRON_BLOCK_EMPTY.getMinecraftId(), enumName, (byte) type, CAULDRON_BLOCK_EMPTY.getHardness(), CAULDRON_BLOCK_EMPTY.getBlastResistance());
         this.waterLevel = waterLevel;
     }
 
-    protected CauldronBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int waterLevel, final float hardness, final float blastResistance)
+    public CauldronBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int waterLevel, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.waterLevel = waterLevel;
@@ -208,6 +208,7 @@ public class CauldronBlockMat extends BlockMaterialData
      */
     public static void register(final CauldronBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

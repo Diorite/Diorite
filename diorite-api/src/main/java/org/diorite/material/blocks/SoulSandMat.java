@@ -53,12 +53,12 @@ public class SoulSandMat extends BlockMaterialData
     private static final TByteObjectMap<SoulSandMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SoulSandMat()
+    public SoulSandMat()
     {
         super("SOUL_SAND", 88, "minecraft:soul_sand", "SOUL_SAND", (byte) 0x00, 0.5f, 2.5f);
     }
 
-    protected SoulSandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public SoulSandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class SoulSandMat extends BlockMaterialData
      */
     public static void register(final SoulSandMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -107,17 +107,17 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
     private static final TByteObjectMap<DoubleWoodenSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DoubleWoodenSlabMat()
+    public DoubleWoodenSlabMat()
     {
         super("DOUBLE_WOODEN_SLAB", 125, "minecraft:double_wooden_slab", "OAK", WoodType.OAK, SlabTypeMat.BOTTOM, 2, 30);
     }
 
-    protected DoubleWoodenSlabMat(final WoodType woodType, final SlabTypeMat slabType)
+    public DoubleWoodenSlabMat(final WoodType woodType, final SlabTypeMat slabType)
     {
         super(DOUBLE_WOODEN_SLAB_OAK.name(), DOUBLE_WOODEN_SLAB_OAK.ordinal(), DOUBLE_WOODEN_SLAB_OAK.getMinecraftId(), woodType.name() + (slabType.getFlag() == 0 ? "" : slabType.name()), woodType, slabType, DOUBLE_WOODEN_SLAB_OAK.getHardness(), DOUBLE_WOODEN_SLAB_OAK.getBlastResistance());
     }
 
-    protected DoubleWoodenSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final SlabTypeMat slabType, final float hardness, final float blastResistance)
+    public DoubleWoodenSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final SlabTypeMat slabType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, slabType, hardness, blastResistance);
     }
@@ -193,7 +193,7 @@ public class DoubleWoodenSlabMat extends WoodSlabMat
      */
     public static void register(final DoubleWoodenSlabMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

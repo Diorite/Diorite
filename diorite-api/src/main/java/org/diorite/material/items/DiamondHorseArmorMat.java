@@ -51,17 +51,17 @@ public class DiamondHorseArmorMat extends AbstractHorseArmor
     private static final TShortObjectMap<DiamondHorseArmorMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DiamondHorseArmorMat()
+    public DiamondHorseArmorMat()
     {
         super("DIAMOND_HORSE_ARMOR", 419, "minecraft:diamond_horse_armor", "DIAMOND_HORSE_ARMOR", (short) 0x00);
     }
 
-    protected DiamondHorseArmorMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public DiamondHorseArmorMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected DiamondHorseArmorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public DiamondHorseArmorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -111,6 +111,7 @@ public class DiamondHorseArmorMat extends AbstractHorseArmor
      */
     public static void register(final DiamondHorseArmorMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

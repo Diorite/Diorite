@@ -71,17 +71,17 @@ public class SandMat extends LooseMat
     private static final TByteObjectMap<SandMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SandMat()
+    public SandMat()
     {
         super("SAND", 12, "minecraft:sand", "SAND", (byte) 0x00, 0.5f, 2.5f);
     }
 
-    protected SandMat(final String enumName, final int type)
+    public SandMat(final String enumName, final int type)
     {
         super(SAND.name(), SAND.ordinal(), SAND.getMinecraftId(), enumName, (byte) type, SAND.getHardness(), SAND.getBlastResistance());
     }
 
-    protected SandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public SandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -131,6 +131,7 @@ public class SandMat extends LooseMat
      */
     public static void register(final SandMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -82,19 +82,19 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
     protected final RotateAxisMat rotateAxis;
 
     @SuppressWarnings("MagicNumber")
-    protected NetherPortalMat()
+    public NetherPortalMat()
     {
         super("NETHER_PORTAL", 90, "minecraft:portal", "EAST_WEST", (byte) 0x01, - 1, 18_000_000);
         this.rotateAxis = RotateAxisMat.EAST_WEST;
     }
 
-    protected NetherPortalMat(final String enumName, final RotateAxisMat rotateAxis)
+    public NetherPortalMat(final String enumName, final RotateAxisMat rotateAxis)
     {
         super(NETHER_PORTAL_EAST_WEST.name(), NETHER_PORTAL_EAST_WEST.ordinal(), NETHER_PORTAL_EAST_WEST.getMinecraftId(), enumName, combine(rotateAxis), NETHER_PORTAL_EAST_WEST.getHardness(), NETHER_PORTAL_EAST_WEST.getBlastResistance());
         this.rotateAxis = rotateAxis;
     }
 
-    protected NetherPortalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+    public NetherPortalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
@@ -214,6 +214,7 @@ public class NetherPortalMat extends BlockMaterialData implements RotatableMat, 
      */
     public static void register(final NetherPortalMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

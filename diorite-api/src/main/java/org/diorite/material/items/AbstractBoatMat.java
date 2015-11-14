@@ -33,12 +33,12 @@ import org.diorite.material.PlaceableEntityMat;
 @SuppressWarnings("JavaDoc")
 public abstract class AbstractBoatMat extends ItemMaterialData implements PlaceableEntityMat
 {
-    protected AbstractBoatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public AbstractBoatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, 1, typeName, type);
     }
 
-    protected AbstractBoatMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public AbstractBoatMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }

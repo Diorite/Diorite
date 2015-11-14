@@ -53,12 +53,12 @@ public class CoalOreMat extends OreMat
     private static final TByteObjectMap<CoalOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CoalOreMat()
+    public CoalOreMat()
     {
         super("COAL_ORE", 16, "minecraft:coal_ore", "COAL_ORE", (byte) 0x00, COAL, COAL_BLOCK, 3, 15);
     }
 
-    protected CoalOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
+    public CoalOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class CoalOreMat extends OreMat
      */
     public static void register(final CoalOreMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

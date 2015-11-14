@@ -156,7 +156,7 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
     private static final TByteObjectMap<WoodenSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WoodenSlabMat()
+    public WoodenSlabMat()
     {
         super("WOODEN_SLAB", 126, "minecraft:wooden_slab", "OAK", WoodType.OAK, SlabTypeMat.BOTTOM, 2, 15);
     }
@@ -244,6 +244,7 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
      */
     public static void register(final WoodenSlabMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

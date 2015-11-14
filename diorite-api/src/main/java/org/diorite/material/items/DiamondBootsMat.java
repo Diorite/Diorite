@@ -58,22 +58,22 @@ public class DiamondBootsMat extends BootsMat
     protected final LazyValue<DiamondBootsMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected DiamondBootsMat()
+    public DiamondBootsMat()
     {
         super("DIAMOND_BOOTS", 313, "minecraft:diamond_boots", "NEW", (short) 0, ArmorMaterial.DIAMOND);
     }
 
-    protected DiamondBootsMat(final int durability)
+    public DiamondBootsMat(final int durability)
     {
         super(DIAMOND_BOOTS.name(), DIAMOND_BOOTS.getId(), DIAMOND_BOOTS.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.DIAMOND);
     }
 
-    protected DiamondBootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public DiamondBootsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, armorType);
     }
 
-    protected DiamondBootsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public DiamondBootsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
     }
@@ -179,6 +179,7 @@ public class DiamondBootsMat extends BootsMat
      */
     public static void register(final DiamondBootsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

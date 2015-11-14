@@ -53,12 +53,12 @@ public class BirchFenceMat extends WoodenFenceMat
     private static final TByteObjectMap<BirchFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BirchFenceMat()
+    public BirchFenceMat()
     {
         super("BIRCH_FENCE", 189, "minecraft:birch_fence", "BIRCH_FENCE", WoodType.BIRCH, 2, 15);
     }
 
-    protected BirchFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
+    public BirchFenceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class BirchFenceMat extends WoodenFenceMat
      */
     public static void register(final BirchFenceMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

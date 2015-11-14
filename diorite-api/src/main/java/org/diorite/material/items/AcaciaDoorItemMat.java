@@ -52,17 +52,17 @@ public class AcaciaDoorItemMat extends WoodenDoorItemMat
     private static final TShortObjectMap<AcaciaDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected AcaciaDoorItemMat()
+    public AcaciaDoorItemMat()
     {
         super("ACACIA_DOOR_ITEM", 430, "minecraft:acacia_door", "ACACIA_DOOR_ITEM", (short) 0x00, WoodType.ACACIA);
     }
 
-    protected AcaciaDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
+    public AcaciaDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, typeName, type, woodType);
     }
 
-    protected AcaciaDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
+    public AcaciaDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
     }
@@ -112,6 +112,7 @@ public class AcaciaDoorItemMat extends WoodenDoorItemMat
      */
     public static void register(final AcaciaDoorItemMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

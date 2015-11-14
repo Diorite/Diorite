@@ -52,17 +52,17 @@ public class NetherBrickItemMat extends ItemMaterialData
     private static final TShortObjectMap<NetherBrickItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected NetherBrickItemMat()
+    public NetherBrickItemMat()
     {
         super("NETHER_BRICK_ITEM", 405, "minecraft:netherbrick", "NETHER_BRICK_ITEM", (short) 0x00);
     }
 
-    protected NetherBrickItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public NetherBrickItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected NetherBrickItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public NetherBrickItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class NetherBrickItemMat extends ItemMaterialData
      */
     public static void register(final NetherBrickItemMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

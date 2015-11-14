@@ -53,17 +53,17 @@ public class NetherWartMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<NetherWartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected NetherWartMat()
+    public NetherWartMat()
     {
         super("NETHER_WART", 372, "minecraft:nether_wart", "NETHER_WART", (short) 0x00);
     }
 
-    protected NetherWartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public NetherWartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected NetherWartMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public NetherWartMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class NetherWartMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final NetherWartMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -58,22 +58,22 @@ public class WoodenShovelMat extends ShovelMat
     protected final LazyValue<WoodenShovelMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected WoodenShovelMat()
+    public WoodenShovelMat()
     {
         super("WOODEN_SHOVEL", 269, "minecraft:wooden_Shovel", "NEW", (short) 0, ToolMaterial.WOODEN);
     }
 
-    protected WoodenShovelMat(final int durability)
+    public WoodenShovelMat(final int durability)
     {
         super(WOODEN_SHOVEL.name(), WOODEN_SHOVEL.getId(), WOODEN_SHOVEL.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.WOODEN);
     }
 
-    protected WoodenShovelMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public WoodenShovelMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected WoodenShovelMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public WoodenShovelMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class WoodenShovelMat extends ShovelMat
      */
     public static void register(final WoodenShovelMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

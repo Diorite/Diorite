@@ -124,19 +124,19 @@ public class FarmlandMat extends EarthMat
     private final int moisture;
 
     @SuppressWarnings("MagicNumber")
-    protected FarmlandMat()
+    public FarmlandMat()
     {
         super("FARMLAND", 60, "minecraft:farmland", "UNHYDRATED", (byte) 0x00, 0.6f, 3);
         this.moisture = 0;
     }
 
-    protected FarmlandMat(final String enumName, final int moisture)
+    public FarmlandMat(final String enumName, final int moisture)
     {
         super(FARMLAND_UNHYDRATED.name(), FARMLAND_UNHYDRATED.ordinal(), FARMLAND_UNHYDRATED.getMinecraftId(), enumName, (byte) moisture, FARMLAND_UNHYDRATED.getHardness(), FARMLAND_UNHYDRATED.getBlastResistance());
         this.moisture = moisture;
     }
 
-    protected FarmlandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int moisture, final float hardness, final float blastResistance)
+    public FarmlandMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int moisture, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.moisture = moisture;
@@ -230,6 +230,7 @@ public class FarmlandMat extends EarthMat
      */
     public static void register(final FarmlandMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

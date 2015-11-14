@@ -52,17 +52,17 @@ public class DarkOakDoorItemMat extends WoodenDoorItemMat
     private static final TShortObjectMap<DarkOakDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DarkOakDoorItemMat()
+    public DarkOakDoorItemMat()
     {
         super("DARK_OAK_DOOR_ITEM", 431, "minecraft:dark_oak_door", "DARK_OAK_DOOR_ITEM", (short) 0x00, WoodType.DARK_OAK);
     }
 
-    protected DarkOakDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
+    public DarkOakDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, typeName, type, woodType);
     }
 
-    protected DarkOakDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
+    public DarkOakDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType);
     }
@@ -112,6 +112,7 @@ public class DarkOakDoorItemMat extends WoodenDoorItemMat
      */
     public static void register(final DarkOakDoorItemMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

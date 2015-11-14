@@ -52,12 +52,12 @@ public class BedrockMat extends StonyMat
     private static final TByteObjectMap<BedrockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BedrockMat()
+    public BedrockMat()
     {
         super("BEDROCK", 7, "minecraft:bedrock", "BEDROCK", (byte) 0x00, - 1, 18_000_000);
     }
 
-    protected BedrockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public BedrockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -107,6 +107,7 @@ public class BedrockMat extends StonyMat
      */
     public static void register(final BedrockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

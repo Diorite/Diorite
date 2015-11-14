@@ -49,55 +49,111 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * <li>
  * EAST_NORTH_WEST_SOUTH:
  * Type name: 'East North West South' <br>
- * SubID: 22 <br>
+ * SubID: 15 <br>
  * Hardness: 0,2 <br>
  * Blast Resistance 1 <br>
  * </li>
  * <li>
  * EAST_NORTH_WEST:
  * Type name: 'East North West' <br>
- * SubID: 20 <br>
+ * SubID: 14 <br>
  * Hardness: 0,2 <br>
  * Blast Resistance 1 <br>
  * </li>
  * <li>
  * EAST_NORTH_SOUTH:
  * Type name: 'East North South' <br>
- * SubID: 18 <br>
+ * SubID: 13 <br>
  * Hardness: 0,2 <br>
  * Blast Resistance 1 <br>
  * </li>
  * <li>
  * EAST_NORTH:
  * Type name: 'East North' <br>
- * SubID: 16 <br>
+ * SubID: 12 <br>
  * Hardness: 0,2 <br>
  * Blast Resistance 1 <br>
  * </li>
  * <li>
  * EAST_WEST_SOUTH:
  * Type name: 'East West South' <br>
- * SubID: 6 <br>
+ * SubID: 11 <br>
  * Hardness: 0,2 <br>
  * Blast Resistance 1 <br>
  * </li>
  * <li>
  * EAST_WEST:
  * Type name: 'East West' <br>
- * SubID: 4 <br>
+ * SubID: 10 <br>
  * Hardness: 0,2 <br>
  * Blast Resistance 1 <br>
  * </li>
  * <li>
  * EAST_SOUTH:
  * Type name: 'East South' <br>
- * SubID: 2 <br>
+ * SubID: 9 <br>
  * Hardness: 0,2 <br>
  * Blast Resistance 1 <br>
  * </li>
  * <li>
  * EAST:
  * Type name: 'East' <br>
+ * SubID: 8 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * NORTH_WEST_SOUTH:
+ * Type name: 'North West South' <br>
+ * SubID: 7 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * NORTH_WEST:
+ * Type name: 'North West' <br>
+ * SubID: 6 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * NORTH_SOUTH:
+ * Type name: 'North South' <br>
+ * SubID: 5 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 4 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * SOUTH_WEST:
+ * Type name: 'South West' <br>
+ * SubID: 3 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 2 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 1 <br>
+ * Hardness: 0,2 <br>
+ * Blast Resistance 1 <br>
+ * </li>
+ * <li>
+ * NONE:
+ * Type name: 'None' <br>
  * SubID: 0 <br>
  * Hardness: 0,2 <br>
  * Blast Resistance 1 <br>
@@ -155,19 +211,19 @@ public class VineMat extends PlantMat
     protected final BlockFace[] faces;
 
     @SuppressWarnings("MagicNumber")
-    protected VineMat()
+    public VineMat()
     {
         super("VINE", 106, "minecraft:vine", "NONE", (byte) 0x00, 0.2f, 1);
         this.faces = BlockFace.EMPTY;
     }
 
-    protected VineMat(final BlockFace... faces)
+    public VineMat(final BlockFace... faces)
     {
         super(VINE.name(), VINE.ordinal(), VINE.getMinecraftId(), Arrays.stream(faces).map(Enum::name).reduce((a, b) -> a + "_" + b).orElse("NONE"), combine(faces), VINE.getHardness(), VINE.getBlastResistance());
         this.faces = faces.clone();
     }
 
-    protected VineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace[] faces, final float hardness, final float blastResistance)
+    public VineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace[] faces, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.faces = faces;
@@ -219,16 +275,16 @@ public class VineMat extends PlantMat
             switch (face)
             {
                 case SOUTH:
-                    result ^= (1 << SOUTH_FLAG);
+                    result |= SOUTH_FLAG;
                     break;
                 case WEST:
-                    result ^= (1 << WEST_FLAG);
+                    result |= WEST_FLAG;
                     break;
                 case NORTH:
-                    result ^= (1 << NORTH_FLAG);
+                    result |= NORTH_FLAG;
                     break;
                 case EAST:
-                    result ^= (1 << EAST_FLAG);
+                    result |= EAST_FLAG;
                     break;
                 default:
                     break;
@@ -283,6 +339,7 @@ public class VineMat extends PlantMat
      */
     public static void register(final VineMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

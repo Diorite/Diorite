@@ -45,17 +45,17 @@ public class RecordWaitMat extends RecordMat
     private static final Map<String, RecordWaitMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RecordWaitMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
-    protected RecordWaitMat()
+    public RecordWaitMat()
     {
         super("wait", 2267);
     }
 
-    protected RecordWaitMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
+    public RecordWaitMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, typeName, type, sound);
     }
 
-    protected RecordWaitMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
+    public RecordWaitMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, sound);
     }
@@ -105,6 +105,7 @@ public class RecordWaitMat extends RecordMat
      */
     public static void register(final RecordWaitMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -261,27 +261,27 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
     protected final RotateAxisMat rotateAxis;
 
     @SuppressWarnings("MagicNumber")
-    protected LogMat()
+    public LogMat()
     {
         super("LOG", 17, "minecraft:log", "QAK_UP_DOWN", (byte) 0x00, WoodType.OAK, 2, 10);
         this.rotateAxis = RotateAxisMat.UP_DOWN;
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LogMat(final WoodType type, final RotateAxisMat rotateAxis)
+    public LogMat(final WoodType type, final RotateAxisMat rotateAxis)
     {
         super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), type.name() + "_" + rotateAxis.name(), (byte) (type.getLogFlag() | rotateAxis.getFlag()), type, LOG_OAK.hardness, LOG_OAK.getBlastResistance());
         this.rotateAxis = rotateAxis;
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LogMat(final WoodType type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+    public LogMat(final WoodType type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
         super(LOG_OAK.name() + (type.isSecondLogID() ? "2" : ""), type.isSecondLogID() ? 162 : 17, LOG_OAK.getMinecraftId() + (type.isSecondLogID() ? "2" : ""), type.name() + "_" + rotateAxis.name(), (byte) (type.getLogFlag() | rotateAxis.getFlag()), type, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
     }
 
-    protected LogMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+    public LogMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
@@ -408,6 +408,7 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
     @SuppressWarnings("MagicNumber")
     public static void register(final LogMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) (element.getType() + ((element instanceof Log2) ? 16 : 0)), element);
         byName.put(element.getTypeName(), element);
     }
@@ -431,12 +432,12 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
      */
     public static class Log2 extends LogMat
     {
-        protected Log2(final WoodType type, final RotateAxisMat rotateAxis)
+        public Log2(final WoodType type, final RotateAxisMat rotateAxis)
         {
             super(type, rotateAxis);
         }
 
-        protected Log2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+        public Log2(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
         {
             super(enumName, id, minecraftId, maxStack, typeName, type, woodType, rotateAxis, hardness, blastResistance);
         }

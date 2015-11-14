@@ -41,14 +41,14 @@ public abstract class WoodenFenceGateMat extends WoodMat implements FenceGateMat
     protected final BlockFace face;
     protected final boolean   open;
 
-    protected WoodenFenceGateMat(final String enumName, final int id, final String minecraftId, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
+    public WoodenFenceGateMat(final String enumName, final int id, final String minecraftId, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, face.name() + (open ? "_OPEN" : ""), FenceGateMat.combine(face, open), woodType, hardness, blastResistance);
         this.face = face;
         this.open = open;
     }
 
-    protected WoodenFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
+    public WoodenFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
         this.face = face;

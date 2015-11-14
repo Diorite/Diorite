@@ -52,17 +52,17 @@ public class RabbitHideMat extends ItemMaterialData
     private static final TShortObjectMap<RabbitHideMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RabbitHideMat()
+    public RabbitHideMat()
     {
         super("RABBIT_HIDE", 415, "minecraft:rabbit_hide", "RABBIT_HIDE", (short) 0x00);
     }
 
-    protected RabbitHideMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public RabbitHideMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected RabbitHideMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public RabbitHideMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class RabbitHideMat extends ItemMaterialData
      */
     public static void register(final RabbitHideMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

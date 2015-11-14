@@ -53,22 +53,22 @@ public class FilledMapMat extends ItemMaterialData
     private static final TShortObjectMap<FilledMapMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FilledMapMat()
+    public FilledMapMat()
     {
         super("FILLED_MAP", 358, "minecraft:filled_map", "0", (short) 0x00);
     }
 
-    protected FilledMapMat(final short type)
+    public FilledMapMat(final short type)
     {
         super(FILLED_MAP.name(), FILLED_MAP.getId(), FILLED_MAP.getMinecraftId(), Integer.toString(type), type);
     }
 
-    protected FilledMapMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public FilledMapMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected FilledMapMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public FilledMapMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -141,6 +141,7 @@ public class FilledMapMat extends ItemMaterialData
      */
     public static void register(final FilledMapMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

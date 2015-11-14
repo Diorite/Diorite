@@ -96,19 +96,19 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected EnderChestMat()
+    public EnderChestMat()
     {
         super("ENDER_CHEST", 130, "minecraft:ender_chest", "NORTH", (byte) 0x00, 22.5f, 3_000);
         this.face = BlockFace.NORTH;
     }
 
-    protected EnderChestMat(final BlockFace face)
+    public EnderChestMat(final BlockFace face)
     {
         super(ENDER_CHEST_NORTH.name(), ENDER_CHEST_NORTH.ordinal(), ENDER_CHEST_NORTH.getMinecraftId(), face.name(), combine(face), ENDER_CHEST_NORTH.getHardness(), ENDER_CHEST_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected EnderChestMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public EnderChestMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -211,6 +211,7 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
      */
     public static void register(final EnderChestMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -109,19 +109,19 @@ public class MonsterEggTrapMat extends StonyMat
     protected final BlockMaterialData block;
 
     @SuppressWarnings("MagicNumber")
-    protected MonsterEggTrapMat()
+    public MonsterEggTrapMat()
     {
         super("MONSTER_EGG_TRAP", 97, "minecraft:monster_egg", "STONE", (byte) 0x00, 0.75f, 3.75f);
         this.block = StoneMat.STONE;
     }
 
-    protected MonsterEggTrapMat(final String enumName, final int type, final BlockMaterialData block)
+    public MonsterEggTrapMat(final String enumName, final int type, final BlockMaterialData block)
     {
         super(MONSTER_EGG_TRAP_STONE.name(), MONSTER_EGG_TRAP_STONE.ordinal(), MONSTER_EGG_TRAP_STONE.getMinecraftId(), enumName, (byte) type, MONSTER_EGG_TRAP_STONE.getHardness(), MONSTER_EGG_TRAP_STONE.getBlastResistance());
         this.block = block;
     }
 
-    protected MonsterEggTrapMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockMaterialData block, final float hardness, final float blastResistance)
+    public MonsterEggTrapMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockMaterialData block, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.block = block;
@@ -224,6 +224,7 @@ public class MonsterEggTrapMat extends StonyMat
      */
     public static void register(final MonsterEggTrapMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

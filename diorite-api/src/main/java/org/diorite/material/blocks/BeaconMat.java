@@ -53,12 +53,12 @@ public class BeaconMat extends BlockMaterialData
     private static final TByteObjectMap<BeaconMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BeaconMat()
+    public BeaconMat()
     {
         super("BEACON", 138, "minecraft:beacon", "BEACON", (byte) 0x00, 3, 15);
     }
 
-    protected BeaconMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public BeaconMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class BeaconMat extends BlockMaterialData
      */
     public static void register(final BeaconMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

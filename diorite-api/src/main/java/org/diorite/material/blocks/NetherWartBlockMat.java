@@ -94,19 +94,19 @@ public class NetherWartBlockMat extends CropsMat
     protected final int age;
 
     @SuppressWarnings("MagicNumber")
-    protected NetherWartBlockMat()
+    public NetherWartBlockMat()
     {
         super("NETHER_WART_BLOCK", 115, "minecraft:nether_wart", "0", (byte) 0x00, 0, 0);
         this.age = 0;
     }
 
-    protected NetherWartBlockMat(final String enumName, final int age)
+    public NetherWartBlockMat(final String enumName, final int age)
     {
         super(NETHER_WART_BLOCK_0.name(), NETHER_WART_BLOCK_0.ordinal(), NETHER_WART_BLOCK_0.getMinecraftId(), enumName, (byte) age, NETHER_WART_BLOCK_0.getHardness(), NETHER_WART_BLOCK_0.getBlastResistance());
         this.age = age;
     }
 
-    protected NetherWartBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
+    public NetherWartBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.age = age;
@@ -199,6 +199,7 @@ public class NetherWartBlockMat extends CropsMat
      */
     public static void register(final NetherWartBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

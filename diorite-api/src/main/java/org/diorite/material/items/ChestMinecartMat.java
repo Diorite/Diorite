@@ -51,17 +51,17 @@ public class ChestMinecartMat extends AbstractMinecartMat
     private static final TShortObjectMap<ChestMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected ChestMinecartMat()
+    public ChestMinecartMat()
     {
         super("CHEST_MINECART", 342, "minecraft:chest_minecart", "CHEST_MINECART", (short) 0x00);
     }
 
-    protected ChestMinecartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public ChestMinecartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected ChestMinecartMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public ChestMinecartMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -111,6 +111,7 @@ public class ChestMinecartMat extends AbstractMinecartMat
      */
     public static void register(final ChestMinecartMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

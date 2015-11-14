@@ -106,17 +106,17 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
     private static final TByteObjectMap<RedstoneTorchOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneTorchOnMat()
+    public RedstoneTorchOnMat()
     {
         super("REDSTONE_TORCH_ON", 76, "minecraft:redstone_torch", BlockFace.WEST, 0, 0);
     }
 
-    protected RedstoneTorchOnMat(final BlockFace face)
+    public RedstoneTorchOnMat(final BlockFace face)
     {
         super(REDSTONE_TORCH_ON_WEST.name(), REDSTONE_TORCH_ON_WEST.ordinal(), REDSTONE_TORCH_ON_WEST.getMinecraftId(), face, REDSTONE_TORCH_ON_WEST.getHardness(), REDSTONE_TORCH_ON_WEST.getBlastResistance());
     }
 
-    protected RedstoneTorchOnMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public RedstoneTorchOnMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, hardness, blastResistance);
     }
@@ -203,6 +203,7 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
      */
     public static void register(final RedstoneTorchOnMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -52,17 +52,17 @@ public class MagmaCreamMat extends ItemMaterialData
     private static final TShortObjectMap<MagmaCreamMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MagmaCreamMat()
+    public MagmaCreamMat()
     {
         super("MAGMA_CREAM", 378, "minecraft:magma_cream", "MAGMA_CREAM", (short) 0x00);
     }
 
-    protected MagmaCreamMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public MagmaCreamMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected MagmaCreamMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public MagmaCreamMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class MagmaCreamMat extends ItemMaterialData
      */
     public static void register(final MagmaCreamMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

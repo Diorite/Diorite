@@ -51,17 +51,17 @@ public class IronHorseArmorMat extends AbstractHorseArmor
     private static final TShortObjectMap<IronHorseArmorMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected IronHorseArmorMat()
+    public IronHorseArmorMat()
     {
         super("IRON_HORSE_ARMOR", 417, "minecraft:iron_horse_armor", "IRON_HORSE_ARMOR", (short) 0x00);
     }
 
-    protected IronHorseArmorMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public IronHorseArmorMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected IronHorseArmorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public IronHorseArmorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -111,6 +111,7 @@ public class IronHorseArmorMat extends AbstractHorseArmor
      */
     public static void register(final IronHorseArmorMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

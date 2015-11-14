@@ -58,22 +58,22 @@ public class GoldenSwordMat extends SwordMat
     protected final LazyValue<GoldenSwordMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldenSwordMat()
+    public GoldenSwordMat()
     {
         super("GOLDEN_SWORD", 283, "minecraft:golden_Sword", "NEW", (short) 0, ToolMaterial.GOLD);
     }
 
-    protected GoldenSwordMat(final int durability)
+    public GoldenSwordMat(final int durability)
     {
         super(GOLDEN_SWORD.name(), GOLDEN_SWORD.getId(), GOLDEN_SWORD.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.GOLD);
     }
 
-    protected GoldenSwordMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public GoldenSwordMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected GoldenSwordMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public GoldenSwordMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class GoldenSwordMat extends SwordMat
      */
     public static void register(final GoldenSwordMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

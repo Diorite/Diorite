@@ -57,12 +57,12 @@ public class FlintAndSteelMat extends BasicToolMat
     protected final LazyValue<FlintAndSteelMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected FlintAndSteelMat()
+    public FlintAndSteelMat()
     {
         super("FLINT_AND_STEEL", 259, "minecraft:flint_and_steel", "NEW", (short) 0x00, new BasicToolData(65));
     }
 
-    protected FlintAndSteelMat(final int durability)
+    public FlintAndSteelMat(final int durability)
     {
         super(FLINT_AND_STEEL.name(), FLINT_AND_STEEL.getId(), FLINT_AND_STEEL.getMinecraftId(), Integer.toString(durability), (short) durability, new BasicToolData(FLINT_AND_STEEL.getToolData()));
     }
@@ -178,6 +178,7 @@ public class FlintAndSteelMat extends BasicToolMat
      */
     public static void register(final FlintAndSteelMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -54,17 +54,17 @@ public class QuartzMat extends OreItemMatExt
     private static final TShortObjectMap<QuartzMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected QuartzMat()
+    public QuartzMat()
     {
         super("QUARTZ", 406, "minecraft:quartz", "QUARTZ", (short) 0x00, QUARTZ_ORE, QUARTZ_BLOCK);
     }
 
-    protected QuartzMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public QuartzMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, typeName, type, oreType, blockType);
     }
 
-    protected QuartzMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public QuartzMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, oreType, blockType);
     }
@@ -114,6 +114,7 @@ public class QuartzMat extends OreItemMatExt
      */
     public static void register(final QuartzMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

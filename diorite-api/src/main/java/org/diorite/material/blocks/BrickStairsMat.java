@@ -130,21 +130,21 @@ public class BrickStairsMat extends BlockMaterialData implements StairsMat
     protected final boolean   upsideDown;
 
     @SuppressWarnings("MagicNumber")
-    protected BrickStairsMat()
+    public BrickStairsMat()
     {
         super("BRICK_STAIRS", 108, "minecraft:brick_stairs", "EAST", (byte) 0x00, 2, 30);
         this.face = BlockFace.EAST;
         this.upsideDown = false;
     }
 
-    protected BrickStairsMat(final BlockFace face, final boolean upsideDown)
+    public BrickStairsMat(final BlockFace face, final boolean upsideDown)
     {
         super(BRICK_STAIRS_EAST.name(), BRICK_STAIRS_EAST.ordinal(), BRICK_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown), BRICK_STAIRS_EAST.getHardness(), BRICK_STAIRS_EAST.getBlastResistance());
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    protected BrickStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    public BrickStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -252,6 +252,7 @@ public class BrickStairsMat extends BlockMaterialData implements StairsMat
      */
     public static void register(final BrickStairsMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

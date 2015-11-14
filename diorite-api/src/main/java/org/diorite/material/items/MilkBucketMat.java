@@ -51,17 +51,17 @@ public class MilkBucketMat extends EdibleItemMat
     private static final TShortObjectMap<MilkBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MilkBucketMat()
+    public MilkBucketMat()
     {
         super("MILK_BUCKET", 335, "minecraft:milk_bucket", 1, "MILK_BUCKET", (short) 0x00, 0, 0);
     }
 
-    protected MilkBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public MilkBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, MILK_BUCKET.getMaxStack(), typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
-    protected MilkBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public MilkBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, foodLevelIncrease, saturationIncrease);
     }
@@ -111,6 +111,7 @@ public class MilkBucketMat extends EdibleItemMat
      */
     public static void register(final MilkBucketMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

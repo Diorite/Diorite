@@ -51,17 +51,17 @@ public class PoisonousPotatoMat extends EdibleItemMat
     private static final TShortObjectMap<PoisonousPotatoMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PoisonousPotatoMat()
+    public PoisonousPotatoMat()
     {
         super("POISONOUS_POTATO", 394, "minecraft:poisounous_potato", "POISONOUS_POTATO", (short) 0x00, 2, 1.2F);
     }
 
-    protected PoisonousPotatoMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public PoisonousPotatoMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
-    protected PoisonousPotatoMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public PoisonousPotatoMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, foodLevelIncrease, saturationIncrease);
     }
@@ -111,6 +111,7 @@ public class PoisonousPotatoMat extends EdibleItemMat
      */
     public static void register(final PoisonousPotatoMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

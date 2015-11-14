@@ -152,21 +152,21 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
     protected final boolean   powered;
 
     @SuppressWarnings("MagicNumber")
-    protected HopperMat()
+    public HopperMat()
     {
         super("HOPPER", 154, "minecraft:hopper", "DOWN", (byte) 0x00, 3, 15);
         this.facing = BlockFace.DOWN;
         this.powered = false;
     }
 
-    protected HopperMat(final BlockFace facing, final boolean powered)
+    public HopperMat(final BlockFace facing, final boolean powered)
     {
         super(HOPPER_DOWN.name(), HOPPER_DOWN.ordinal(), HOPPER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered), HOPPER_DOWN.getHardness(), HOPPER_DOWN.getBlastResistance());
         this.facing = facing;
         this.powered = powered;
     }
 
-    protected HopperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered, final float hardness, final float blastResistance)
+    public HopperMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.facing = facing;
@@ -297,6 +297,7 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
      */
     public static void register(final HopperMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

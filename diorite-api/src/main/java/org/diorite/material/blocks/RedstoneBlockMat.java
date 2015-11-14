@@ -53,12 +53,12 @@ public class RedstoneBlockMat extends OreBlockMat
     private static final TByteObjectMap<RedstoneBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneBlockMat()
+    public RedstoneBlockMat()
     {
         super("REDSTONE_BLOCK", 152, "minecraft:redstone_block", "REDSTONE_BLOCK", (byte) 0x00, REDSTONE_ORE, REDSTONE, 5, 30);
     }
 
-    protected RedstoneBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final float hardness, final float blastResistance)
+    public RedstoneBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, ore, item, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class RedstoneBlockMat extends OreBlockMat
      */
     public static void register(final RedstoneBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

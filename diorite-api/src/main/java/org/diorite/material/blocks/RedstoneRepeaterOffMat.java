@@ -189,17 +189,17 @@ public class RedstoneRepeaterOffMat extends RedstoneRepeaterMat
     private static final TByteObjectMap<RedstoneRepeaterOffMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneRepeaterOffMat()
+    public RedstoneRepeaterOffMat()
     {
         super("REDSTONE_REPEATER_OFF", 93, "minecraft:unpowered_repeater", BlockFace.NORTH, 1, 0, 0);
     }
 
-    protected RedstoneRepeaterOffMat(final BlockFace face, final int delay)
+    public RedstoneRepeaterOffMat(final BlockFace face, final int delay)
     {
         super(REDSTONE_REPEATER_OFF_NORTH_1.name(), REDSTONE_REPEATER_OFF_NORTH_1.ordinal(), REDSTONE_REPEATER_OFF_NORTH_1.getMinecraftId(), face, delay, REDSTONE_REPEATER_OFF_NORTH_1.getHardness(), REDSTONE_REPEATER_OFF_NORTH_1.getBlastResistance());
     }
 
-    protected RedstoneRepeaterOffMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int delay, final float hardness, final float blastResistance)
+    public RedstoneRepeaterOffMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int delay, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, delay, hardness, blastResistance);
     }
@@ -279,7 +279,7 @@ public class RedstoneRepeaterOffMat extends RedstoneRepeaterMat
      */
     public static void register(final RedstoneRepeaterOffMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

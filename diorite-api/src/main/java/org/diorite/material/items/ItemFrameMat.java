@@ -53,17 +53,17 @@ public class ItemFrameMat extends ItemMaterialData implements PlaceableEntityMat
     private static final TShortObjectMap<ItemFrameMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected ItemFrameMat()
+    public ItemFrameMat()
     {
         super("ITEM_FRAME", 389, "minecraft:item_frame", "ITEM_FRAME", (short) 0x00);
     }
 
-    protected ItemFrameMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public ItemFrameMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected ItemFrameMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public ItemFrameMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class ItemFrameMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static void register(final ItemFrameMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

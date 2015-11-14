@@ -53,12 +53,12 @@ public class TntMat extends BlockMaterialData
     private static final TByteObjectMap<TntMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected TntMat()
+    public TntMat()
     {
         super("TNT", 46, "minecraft:tnt", "TNT", (byte) 0x00, 0, 0);
     }
 
-    protected TntMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public TntMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class TntMat extends BlockMaterialData
      */
     public static void register(final TntMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

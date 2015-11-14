@@ -79,19 +79,19 @@ public class JukeboxMat extends BlockMaterialData implements FuelMat
     protected final boolean withDisc;
 
     @SuppressWarnings("MagicNumber")
-    protected JukeboxMat()
+    public JukeboxMat()
     {
         super("JUKEBOX", 84, "minecraft:jukebox", "EMPTY", (byte) 0x00, 2, 30);
         this.withDisc = false;
     }
 
-    protected JukeboxMat(final String enumName, final int type, final boolean withDisc)
+    public JukeboxMat(final String enumName, final int type, final boolean withDisc)
     {
         super(JUKEBOX.name(), JUKEBOX.ordinal(), JUKEBOX.getMinecraftId(), enumName, (byte) type, JUKEBOX.getHardness(), JUKEBOX.getBlastResistance());
         this.withDisc = withDisc;
     }
 
-    protected JukeboxMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean withDisc, final float hardness, final float blastResistance)
+    public JukeboxMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean withDisc, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.withDisc = withDisc;
@@ -184,6 +184,7 @@ public class JukeboxMat extends BlockMaterialData implements FuelMat
      */
     public static void register(final JukeboxMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

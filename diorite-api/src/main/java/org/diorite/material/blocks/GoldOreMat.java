@@ -53,12 +53,12 @@ public class GoldOreMat extends OreMat
     private static final TByteObjectMap<GoldOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldOreMat()
+    public GoldOreMat()
     {
         super("GOLD_ORE", 14, "minecraft:gold_ore", "GOLD_ORE", (byte) 0x00, GOLD_INGOT, GOLD_BLOCK, 3, 15);
     }
 
-    protected GoldOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
+    public GoldOreMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class GoldOreMat extends OreMat
      */
     public static void register(final GoldOreMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

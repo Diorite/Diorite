@@ -105,17 +105,17 @@ public class PlanksMat extends WoodMat implements FuelMat
     private static final TByteObjectMap<PlanksMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PlanksMat()
+    public PlanksMat()
     {
         super("PLANKS", 5, "minecraft:planks", "QAK", WoodType.OAK.getPlanksMeta(), WoodType.OAK, 2, 15);
     }
 
-    protected PlanksMat(final WoodType woodType)
+    public PlanksMat(final WoodType woodType)
     {
         super(PLANKS_OAK.name(), PLANKS_OAK.ordinal(), PLANKS_OAK.getMinecraftId(), woodType.name(), woodType.getPlanksMeta(), woodType, PLANKS_OAK.getHardness(), PLANKS_OAK.getBlastResistance());
     }
 
-    protected PlanksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
+    public PlanksMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, hardness, blastResistance);
     }
@@ -197,6 +197,7 @@ public class PlanksMat extends WoodMat implements FuelMat
      */
     public static void register(final PlanksMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

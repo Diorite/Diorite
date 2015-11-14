@@ -191,17 +191,17 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
     private static final Map<String, RedstoneWireMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<RedstoneWireMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
-    protected RedstoneWireMat()
+    public RedstoneWireMat()
     {
         super("REDSTONE_WIRE", 55, "minecraft:redstone_wire", "OFF", (byte) 0x00, 0, 0);
     }
 
-    protected RedstoneWireMat(final int type)
+    public RedstoneWireMat(final int type)
     {
         super(REDSTONE_WIRE_OFF.name(), REDSTONE_WIRE_OFF.ordinal(), REDSTONE_WIRE_OFF.getMinecraftId(), ((type == 0) ? "OFF" : ("ON_" + type)), (byte) type, REDSTONE_WIRE_OFF.getHardness(), REDSTONE_WIRE_OFF.getBlastResistance());
     }
 
-    protected RedstoneWireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public RedstoneWireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -294,6 +294,7 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
      */
     public static void register(final RedstoneWireMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

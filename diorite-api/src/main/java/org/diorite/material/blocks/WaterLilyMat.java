@@ -56,12 +56,12 @@ public class WaterLilyMat extends PlantMat
     private static final TByteObjectMap<WaterLilyMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WaterLilyMat()
+    public WaterLilyMat()
     {
         super("WATER_LILY", 111, "minecraft:waterlily", "WATER_LILY", (byte) 0x00, 0.6f, 0);
     }
 
-    protected WaterLilyMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public WaterLilyMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -111,6 +111,7 @@ public class WaterLilyMat extends PlantMat
      */
     public static void register(final WaterLilyMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
@@ -138,13 +139,13 @@ public class WaterLilyMat extends PlantMat
     {
         protected final RailTypeMat railType;
 
-        protected RailsMat(final String enumName, final int id, final String minecraftId, final String typeName, final RailTypeMat railType, final byte flags, final float hardness, final float blastResistance)
+        public RailsMat(final String enumName, final int id, final String minecraftId, final String typeName, final RailTypeMat railType, final byte flags, final float hardness, final float blastResistance)
         {
             super(enumName, id, minecraftId, typeName, (byte) (railType.getFlag() | flags), hardness, blastResistance);
             this.railType = railType;
         }
 
-        protected RailsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final float hardness, final float blastResistance)
+        public RailsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final float hardness, final float blastResistance)
         {
             super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
             this.railType = railType;

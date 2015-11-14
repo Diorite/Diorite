@@ -127,17 +127,17 @@ public class FlowersMat extends FlowerMat
     private static final TByteObjectMap<FlowersMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FlowersMat()
+    public FlowersMat()
     {
         super("FLOWERS", 38, "minecraft:red_flower", (byte) 0x00, FlowerTypeMat.POPPY, 0, 0);
     }
 
-    protected FlowersMat(final int type, final FlowerTypeMat flowerType)
+    public FlowersMat(final int type, final FlowerTypeMat flowerType)
     {
         super(FLOWERS_POPPY.name(), FLOWERS_POPPY.ordinal(), FLOWERS_POPPY.getMinecraftId(), (byte) type, flowerType, FLOWERS_POPPY.getHardness(), FLOWERS_POPPY.getBlastResistance());
     }
 
-    protected FlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
+    public FlowersMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
@@ -213,6 +213,7 @@ public class FlowersMat extends FlowerMat
      */
     public static void register(final FlowersMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

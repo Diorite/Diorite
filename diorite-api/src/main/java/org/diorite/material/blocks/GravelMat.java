@@ -52,12 +52,12 @@ public class GravelMat extends LooseMat
     private static final TByteObjectMap<GravelMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GravelMat()
+    public GravelMat()
     {
         super("GRAVEL", 13, "minecraft:gravel", "GRAVEL", (byte) 0x00, 0.5f, 2.5f);
     }
 
-    protected GravelMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public GravelMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -107,6 +107,7 @@ public class GravelMat extends LooseMat
      */
     public static void register(final GravelMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

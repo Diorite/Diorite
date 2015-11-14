@@ -52,17 +52,17 @@ public class NetherStarMat extends ItemMaterialData
     private static final TShortObjectMap<NetherStarMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected NetherStarMat()
+    public NetherStarMat()
     {
         super("NETHER_STAR", 399, "minecraft:nether_star", "NETHER_STAR", (short) 0x00);
     }
 
-    protected NetherStarMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public NetherStarMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected NetherStarMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public NetherStarMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class NetherStarMat extends ItemMaterialData
      */
     public static void register(final NetherStarMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

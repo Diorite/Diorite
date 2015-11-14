@@ -55,12 +55,12 @@ public class GrassMat extends EarthMat
     private static final TByteObjectMap<GrassMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GrassMat()
+    public GrassMat()
     {
         super("GRASS", 2, "minecraft:grass", "GRASS", (byte) 0x00, 0.6f, 3);
     }
 
-    protected GrassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public GrassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -116,6 +116,7 @@ public class GrassMat extends EarthMat
      */
     public static void register(final GrassMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

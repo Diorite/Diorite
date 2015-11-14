@@ -63,25 +63,25 @@ public class SpawnEggMat extends ItemMaterialData
     protected final EntityType entityType;
 
     @SuppressWarnings("MagicNumber")
-    protected SpawnEggMat()
+    public SpawnEggMat()
     {
         super("SPAWN_EGG_CREEPER", 383, "minecraft:spawn_egg", "CREEPER", (short) 0x50);
         this.entityType = EntityType.CREEPER;
     }
 
-    protected SpawnEggMat(final EntityType type)
+    public SpawnEggMat(final EntityType type)
     {
         super(SPAWN_EGG_CREEPER.name(), SPAWN_EGG_CREEPER.getId(), SPAWN_EGG_CREEPER.getMinecraftId(), type.name(), (short) type.getMinecraftId());
         this.entityType = type;
     }
 
-    protected SpawnEggMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final EntityType entityType)
+    public SpawnEggMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final EntityType entityType)
     {
         super(enumName, id, minecraftId, typeName, type);
         this.entityType = entityType;
     }
 
-    protected SpawnEggMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final EntityType entityType)
+    public SpawnEggMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final EntityType entityType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.entityType = entityType;
@@ -132,6 +132,7 @@ public class SpawnEggMat extends ItemMaterialData
      */
     public static void register(final SpawnEggMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

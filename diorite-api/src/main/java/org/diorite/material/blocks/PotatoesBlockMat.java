@@ -126,19 +126,19 @@ public class PotatoesBlockMat extends CropsMat
     protected final int age;
 
     @SuppressWarnings("MagicNumber")
-    protected PotatoesBlockMat()
+    public PotatoesBlockMat()
     {
         super("POTATOES_BLOCK", 142, "minecraft:potatoes", "0", (byte) 0x00, 0, 0);
         this.age = 0;
     }
 
-    protected PotatoesBlockMat(final String enumName, final int age)
+    public PotatoesBlockMat(final String enumName, final int age)
     {
         super(POTATOES_BLOCK_0.name(), POTATOES_BLOCK_0.ordinal(), POTATOES_BLOCK_0.getMinecraftId(), enumName, (byte) age, POTATOES_BLOCK_0.getHardness(), POTATOES_BLOCK_0.getBlastResistance());
         this.age = age;
     }
 
-    protected PotatoesBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
+    public PotatoesBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.age = age;
@@ -231,6 +231,7 @@ public class PotatoesBlockMat extends CropsMat
      */
     public static void register(final PotatoesBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

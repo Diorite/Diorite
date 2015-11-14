@@ -58,22 +58,22 @@ public class DiamondHelmetMat extends HelmetMat
     protected final LazyValue<DiamondHelmetMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected DiamondHelmetMat()
+    public DiamondHelmetMat()
     {
         super("DIAMOND_HELMET", 310, "minecraft:diamond_helmet", "NEW", (short) 0, ArmorMaterial.DIAMOND);
     }
 
-    protected DiamondHelmetMat(final int durability)
+    public DiamondHelmetMat(final int durability)
     {
         super(DIAMOND_HELMET.name(), DIAMOND_HELMET.getId(), DIAMOND_HELMET.getMinecraftId(), Integer.toString(durability), (short) durability, ArmorMaterial.DIAMOND);
     }
 
-    protected DiamondHelmetMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public DiamondHelmetMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, typeName, type, armorMaterial, armorType);
     }
 
-    protected DiamondHelmetMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public DiamondHelmetMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, armorMaterial, armorType);
     }
@@ -179,6 +179,7 @@ public class DiamondHelmetMat extends HelmetMat
      */
     public static void register(final DiamondHelmetMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

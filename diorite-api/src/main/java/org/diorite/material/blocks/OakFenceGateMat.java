@@ -124,17 +124,17 @@ public class OakFenceGateMat extends WoodenFenceGateMat
     private static final TByteObjectMap<OakFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected OakFenceGateMat()
+    public OakFenceGateMat()
     {
         super("OAK_FENCE_GATE", 107, "minecraft:fence_gate", WoodType.OAK, BlockFace.SOUTH, false, 2, 15);
     }
 
-    protected OakFenceGateMat(final BlockFace face, final boolean open)
+    public OakFenceGateMat(final BlockFace face, final boolean open)
     {
         super(OAK_FENCE_GATE_SOUTH.name(), OAK_FENCE_GATE_SOUTH.ordinal(), OAK_FENCE_GATE_SOUTH.getMinecraftId(), WoodType.OAK, face, open, OAK_FENCE_GATE_SOUTH.getHardness(), OAK_FENCE_GATE_SOUTH.getBlastResistance());
     }
 
-    protected OakFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
+    public OakFenceGateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean open, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, open, hardness, blastResistance);
     }
@@ -222,6 +222,7 @@ public class OakFenceGateMat extends WoodenFenceGateMat
      */
     public static void register(final OakFenceGateMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

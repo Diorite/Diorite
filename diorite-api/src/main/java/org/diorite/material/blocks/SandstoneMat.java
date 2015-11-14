@@ -86,19 +86,19 @@ public class SandstoneMat extends StonyMat implements VariantableMat
     protected final VariantMat variant;
 
     @SuppressWarnings("MagicNumber")
-    protected SandstoneMat()
+    public SandstoneMat()
     {
         super("SANDSTONE", 24, "minecraft:sandstone", "CLASSIC", (byte) 0x00, 0.8f, 4);
         this.variant = VariantMat.CLASSIC;
     }
 
-    protected SandstoneMat(final int type, final VariantMat variant)
+    public SandstoneMat(final int type, final VariantMat variant)
     {
         super(SANDSTONE.name(), SANDSTONE.ordinal(), SANDSTONE.getMinecraftId(), variant.name(), (byte) type, SANDSTONE.getHardness(), SANDSTONE.getBlastResistance());
         this.variant = variant;
     }
 
-    protected SandstoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
+    public SandstoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.variant = variant;
@@ -168,6 +168,7 @@ public class SandstoneMat extends StonyMat implements VariantableMat
      */
     public static void register(final SandstoneMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -52,12 +52,12 @@ public class DeadBushMat extends FlowerMat
     private static final TByteObjectMap<DeadBushMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DeadBushMat()
+    public DeadBushMat()
     {
         super("DEAD_BUSH", 32, "minecraft:deadbush", (byte) 0x00, FlowerTypeMat.DEAD_BUSH, 0, 0);
     }
 
-    protected DeadBushMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
+    public DeadBushMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
@@ -133,6 +133,7 @@ public class DeadBushMat extends FlowerMat
      */
     public static void register(final DeadBushMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

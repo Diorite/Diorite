@@ -51,17 +51,17 @@ public class FurnaceMinecartMat extends AbstractMinecartMat
     private static final TShortObjectMap<FurnaceMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FurnaceMinecartMat()
+    public FurnaceMinecartMat()
     {
         super("FURNACE_MINECART", 343, "minecraft:furnace_minecart", "FURNACE_MINECART", (short) 0x00);
     }
 
-    protected FurnaceMinecartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public FurnaceMinecartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected FurnaceMinecartMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public FurnaceMinecartMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -111,6 +111,7 @@ public class FurnaceMinecartMat extends AbstractMinecartMat
      */
     public static void register(final FurnaceMinecartMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

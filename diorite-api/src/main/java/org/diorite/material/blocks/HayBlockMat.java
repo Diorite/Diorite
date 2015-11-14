@@ -89,19 +89,19 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
     protected final RotateAxisMat rotateAxis;
 
     @SuppressWarnings("MagicNumber")
-    protected HayBlockMat()
+    public HayBlockMat()
     {
         super("HAY_BLOCK", 170, "minecraft:hay_block", "UP_DOWN", (byte) 0x00, 0.5f, 2.5f);
         this.rotateAxis = RotateAxisMat.UP_DOWN;
     }
 
-    protected HayBlockMat(final RotateAxisMat rotateAxis)
+    public HayBlockMat(final RotateAxisMat rotateAxis)
     {
         super(HAY_BLOCK_UP_DOWN.name(), HAY_BLOCK_UP_DOWN.ordinal(), HAY_BLOCK_UP_DOWN.getMinecraftId(), rotateAxis.name(), combine(rotateAxis), HAY_BLOCK_UP_DOWN.getHardness(), HAY_BLOCK_UP_DOWN.getBlastResistance());
         this.rotateAxis = rotateAxis;
     }
 
-    protected HayBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
+    public HayBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RotateAxisMat rotateAxis, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.rotateAxis = rotateAxis;
@@ -219,6 +219,7 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
      */
     public static void register(final HayBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

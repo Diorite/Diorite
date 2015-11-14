@@ -52,17 +52,17 @@ public class PrismarineCrystalsMat extends ItemMaterialData
     private static final TShortObjectMap<PrismarineCrystalsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PrismarineCrystalsMat()
+    public PrismarineCrystalsMat()
     {
         super("PRISMARINE_CRYSTALS", 410, "minecraft:prismarine_crystals", "PRISMARINE_CRYSTALS", (short) 0x00);
     }
 
-    protected PrismarineCrystalsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public PrismarineCrystalsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected PrismarineCrystalsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public PrismarineCrystalsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class PrismarineCrystalsMat extends ItemMaterialData
      */
     public static void register(final PrismarineCrystalsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

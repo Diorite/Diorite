@@ -58,22 +58,22 @@ public class DiamondSwordMat extends SwordMat
     protected final LazyValue<DiamondSwordMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected DiamondSwordMat()
+    public DiamondSwordMat()
     {
         super("DIAMOND_SWORD", 276, "minecraft:diamond_Sword", "NEW", (short) 0, ToolMaterial.DIAMOND);
     }
 
-    protected DiamondSwordMat(final int durability)
+    public DiamondSwordMat(final int durability)
     {
         super(DIAMOND_SWORD.name(), DIAMOND_SWORD.getId(), DIAMOND_SWORD.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.DIAMOND);
     }
 
-    protected DiamondSwordMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public DiamondSwordMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected DiamondSwordMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public DiamondSwordMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class DiamondSwordMat extends SwordMat
      */
     public static void register(final DiamondSwordMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

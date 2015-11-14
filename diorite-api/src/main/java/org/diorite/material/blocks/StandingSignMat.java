@@ -191,19 +191,19 @@ public class StandingSignMat extends SignBlockMat
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected StandingSignMat()
+    public StandingSignMat()
     {
         super("STANDING_SIGN", 63, "minecraft:standing_sign", 16, "SOUTH", (byte) 0x00, 1, 5);
         this.face = BlockFace.SOUTH;
     }
 
-    protected StandingSignMat(final BlockFace face)
+    public StandingSignMat(final BlockFace face)
     {
         super(STANDING_SIGN_SOUTH.name(), STANDING_SIGN_SOUTH.ordinal(), STANDING_SIGN_SOUTH.getMinecraftId(), STANDING_SIGN_SOUTH.getMaxStack(), face.name(), combine(face), STANDING_SIGN_SOUTH.getHardness(), STANDING_SIGN_SOUTH.getBlastResistance());
         this.face = face;
     }
 
-    protected StandingSignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public StandingSignMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -331,6 +331,7 @@ public class StandingSignMat extends SignBlockMat
      */
     public static void register(final StandingSignMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

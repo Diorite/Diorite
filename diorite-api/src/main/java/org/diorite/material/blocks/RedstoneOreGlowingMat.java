@@ -55,12 +55,12 @@ public class RedstoneOreGlowingMat extends OreMat
     private static final TByteObjectMap<RedstoneOreGlowingMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneOreGlowingMat()
+    public RedstoneOreGlowingMat()
     {
         super("REDSTONE_ORE_GLOWING", 74, "minecraft:lit_redstone_ore", "REDSTONE_ORE_GLOWING", (byte) 0x00, REDSTONE, REDSTONE_BLOCK, 3, 15);
     }
 
-    protected RedstoneOreGlowingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
+    public RedstoneOreGlowingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreItemMat item, final OreBlockMat block, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, item, block, hardness, blastResistance);
     }
@@ -116,7 +116,7 @@ public class RedstoneOreGlowingMat extends OreMat
      */
     public static void register(final RedstoneOreGlowingMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

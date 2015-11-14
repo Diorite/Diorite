@@ -146,7 +146,7 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
     public static final ActivatorRailMat ACTIVATOR_RAIL_ASCENDING_NORTH = new ActivatorRailMat(RailTypeMat.ASCENDING_NORTH, false);
     public static final ActivatorRailMat ACTIVATOR_RAIL_ASCENDING_SOUTH = new ActivatorRailMat(RailTypeMat.ASCENDING_SOUTH, false);
 
-    public static final ActivatorRailMat ACTIVATOR_RAIL_NORTH_SOUTH_POWERED     = new ActivatorRailMat(RailTypeMat.FLAT_WEST_EAST, true);
+    public static final ActivatorRailMat ACTIVATOR_RAIL_NORTH_SOUTH_POWERED     = new ActivatorRailMat(RailTypeMat.FLAT_NORTH_SOUTH, true);
     public static final ActivatorRailMat ACTIVATOR_RAIL_WEST_EAST_POWERED       = new ActivatorRailMat(RailTypeMat.FLAT_WEST_EAST, true);
     public static final ActivatorRailMat ACTIVATOR_RAIL_ASCENDING_EAST_POWERED  = new ActivatorRailMat(RailTypeMat.ASCENDING_EAST, true);
     public static final ActivatorRailMat ACTIVATOR_RAIL_ASCENDING_WEST_POWERED  = new ActivatorRailMat(RailTypeMat.ASCENDING_WEST, true);
@@ -159,19 +159,19 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
     protected final boolean powered;
 
     @SuppressWarnings("MagicNumber")
-    protected ActivatorRailMat()
+    public ActivatorRailMat()
     {
         super("ACTIVATOR_RAIL", 157, "minecraft:activator_rail", "NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00, 0.7f, 3.5f);
         this.powered = false;
     }
 
-    protected ActivatorRailMat(final RailTypeMat type, final boolean powered)
+    public ActivatorRailMat(final RailTypeMat type, final boolean powered)
     {
         super(ACTIVATOR_RAIL_NORTH_SOUTH.name(), ACTIVATOR_RAIL_NORTH_SOUTH.ordinal(), ACTIVATOR_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00, ACTIVATOR_RAIL_NORTH_SOUTH.getHardness(), ACTIVATOR_RAIL_NORTH_SOUTH.getBlastResistance());
         this.powered = powered;
     }
 
-    protected ActivatorRailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final boolean powered, final float hardness, final float blastResistance)
+    public ActivatorRailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, railType, hardness, blastResistance);
         this.powered = powered;
@@ -285,6 +285,7 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
      */
     public static void register(final ActivatorRailMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -191,19 +191,19 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
     protected final DyeColor color;
 
     @SuppressWarnings("MagicNumber")
-    protected StainedGlassMat()
+    public StainedGlassMat()
     {
         super("STAINED_GLASS", 95, "minecraft:stained_glass", "WHITE", (byte) 0x00, 0.3f, 1.5f);
         this.color = DyeColor.WHITE;
     }
 
-    protected StainedGlassMat(final DyeColor color)
+    public StainedGlassMat(final DyeColor color)
     {
         super(STAINED_GLASS_WHITE.name(), STAINED_GLASS_WHITE.ordinal(), STAINED_GLASS_WHITE.getMinecraftId(), color.name(), (short) color.getBlockFlag(), STAINED_GLASS_WHITE.getHardness(), STAINED_GLASS_WHITE.getBlastResistance());
         this.color = color;
     }
 
-    protected StainedGlassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
+    public StainedGlassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final DyeColor color, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.color = color;
@@ -285,6 +285,7 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
      */
     public static void register(final StainedGlassMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

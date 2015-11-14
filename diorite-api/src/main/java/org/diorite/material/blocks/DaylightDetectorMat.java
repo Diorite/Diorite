@@ -189,17 +189,17 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements 
     private static final TByteObjectMap<DaylightDetectorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DaylightDetectorMat()
+    public DaylightDetectorMat()
     {
         super("DAYLIGHT_DETECTOR", 151, "minecraft:daylight_detector", 0, 0.2f, 1);
     }
 
-    protected DaylightDetectorMat(final int power)
+    public DaylightDetectorMat(final int power)
     {
         super(DAYLIGHT_DETECTOR_OFF.name(), DAYLIGHT_DETECTOR_OFF.ordinal(), DAYLIGHT_DETECTOR_OFF.getMinecraftId(), power, DAYLIGHT_DETECTOR_OFF.getHardness(), DAYLIGHT_DETECTOR_OFF.getBlastResistance());
     }
 
-    protected DaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power, final float hardness, final float blastResistance)
+    public DaylightDetectorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, power, hardness, blastResistance);
     }
@@ -288,7 +288,7 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements 
      */
     public static void register(final DaylightDetectorMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

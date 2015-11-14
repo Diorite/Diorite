@@ -52,28 +52,84 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * <li>
  * WEST_SUBTRACT_POWERED:
  * Type name: 'West Subtract Powered' <br>
- * SubID: 11 <br>
+ * SubID: 15 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
  * SOUTH_SUBTRACT_POWERED:
  * Type name: 'South Subtract Powered' <br>
- * SubID: 10 <br>
+ * SubID: 14 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
  * EAST_SUBTRACT_POWERED:
  * Type name: 'East Subtract Powered' <br>
- * SubID: 9 <br>
+ * SubID: 13 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
  * <li>
  * NORTH_SUBTRACT_POWERED:
  * Type name: 'North Subtract Powered' <br>
+ * SubID: 12 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST_POWERED:
+ * Type name: 'West Powered' <br>
+ * SubID: 11 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_POWERED:
+ * Type name: 'South Powered' <br>
+ * SubID: 10 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST_POWERED:
+ * Type name: 'East Powered' <br>
+ * SubID: 9 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_POWERED:
+ * Type name: 'North Powered' <br>
  * SubID: 8 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * WEST_SUBTRACT:
+ * Type name: 'West Subtract' <br>
+ * SubID: 7 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * SOUTH_SUBTRACT:
+ * Type name: 'South Subtract' <br>
+ * SubID: 6 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * EAST_SUBTRACT:
+ * Type name: 'East Subtract' <br>
+ * SubID: 5 <br>
+ * Hardness: 0 <br>
+ * Blast Resistance 0 <br>
+ * </li>
+ * <li>
+ * NORTH_SUBTRACT:
+ * Type name: 'North Subtract' <br>
+ * SubID: 4 <br>
  * Hardness: 0 <br>
  * Blast Resistance 0 <br>
  * </li>
@@ -114,7 +170,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
      * Bit flag defining if comparator is in subtraction mode.
      * If bit is set to 0, then it isn't in subtraction mode.
      */
-    public static final byte SUBTRACTION_MODE_FLAG = 0x8;
+    public static final byte SUBTRACTION_MODE_FLAG = 0x4;
     /**
      * Bit flag defining if comparator is powered.
      * If bit is set to 0, then it isn't powered
@@ -153,7 +209,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
     protected final boolean   powered;
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneComparatorMat()
+    public RedstoneComparatorMat()
     {
         super("REDSTONE_COMPARATOR", 149, "minecraft:unpowered_comparator", "NORTH", (byte) 0x00, 0, 0);
         this.face = BlockFace.NORTH;
@@ -161,7 +217,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
         this.powered = false;
     }
 
-    protected RedstoneComparatorMat(final BlockFace face, final boolean subtractionMode, final boolean powered)
+    public RedstoneComparatorMat(final BlockFace face, final boolean subtractionMode, final boolean powered)
     {
         super(REDSTONE_COMPARATOR_NORTH.name(), REDSTONE_COMPARATOR_NORTH.ordinal(), REDSTONE_COMPARATOR_NORTH.getMinecraftId(), face.name() + (subtractionMode ? "_SUBTRACT" : "") + (powered ? "_POWERED" : ""), combine(face, subtractionMode, powered), REDSTONE_COMPARATOR_NORTH.getHardness(), REDSTONE_COMPARATOR_NORTH.getBlastResistance());
         this.face = face;
@@ -169,7 +225,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
         this.powered = powered;
     }
 
-    protected RedstoneComparatorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean subtractionMode, final boolean powered, final float hardness, final float blastResistance)
+    public RedstoneComparatorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean subtractionMode, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -325,6 +381,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
      */
     public static void register(final RedstoneComparatorMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

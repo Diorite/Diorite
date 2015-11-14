@@ -44,14 +44,14 @@ public abstract class EdibleItemMat extends ItemMaterialData
      */
     protected final float saturationIncrease;
 
-    protected EdibleItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public EdibleItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, typeName, type);
         this.foodLevelIncrease = foodLevelIncrease;
         this.saturationIncrease = saturationIncrease;
     }
 
-    protected EdibleItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public EdibleItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.foodLevelIncrease = foodLevelIncrease;

@@ -52,17 +52,17 @@ public class WaterBucketMat extends ItemMaterialData
     private static final TShortObjectMap<WaterBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WaterBucketMat()
+    public WaterBucketMat()
     {
         super("WATER_BUCKET", 326, "minecraft:water_bucket", 1, "WATER_BUCKET", (short) 0x00);
     }
 
-    protected WaterBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public WaterBucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, WATER_BUCKET.getMaxStack(), typeName, type);
     }
 
-    protected WaterBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public WaterBucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class WaterBucketMat extends ItemMaterialData
      */
     public static void register(final WaterBucketMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -165,7 +165,7 @@ public class AcaciaDoorMat extends WoodenDoorMat
     protected final BlockFace blockFace;
 
     @SuppressWarnings("MagicNumber")
-    protected AcaciaDoorMat()
+    public AcaciaDoorMat()
     {
         super("ACACIA_DOOR", 196, "minecraft:acacia_door", "BOTTOM_EAST", WoodType.ACACIA, 3, 15);
         this.powered = false;
@@ -175,7 +175,7 @@ public class AcaciaDoorMat extends WoodenDoorMat
         this.blockFace = BlockFace.EAST;
     }
 
-    protected AcaciaDoorMat(final boolean powered, final boolean hingeOnRightSide)
+    public AcaciaDoorMat(final boolean powered, final boolean hingeOnRightSide)
     {
         super(ACACIA_DOOR_BOTTOM_EAST.name(), ACACIA_DOOR_BOTTOM_EAST.ordinal(), ACACIA_DOOR_BOTTOM_EAST.getMinecraftId(), "TOP_" + (hingeOnRightSide ? "RIGHT" : "LEFT") + (powered ? "_POWERED" : ""), DoorMat.combine(powered, hingeOnRightSide), WoodType.ACACIA, ACACIA_DOOR_BOTTOM_EAST.getHardness(), ACACIA_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -185,7 +185,7 @@ public class AcaciaDoorMat extends WoodenDoorMat
         this.blockFace = null;
     }
 
-    protected AcaciaDoorMat(final BlockFace blockFace, final boolean open)
+    public AcaciaDoorMat(final BlockFace blockFace, final boolean open)
     {
         super(ACACIA_DOOR_BOTTOM_EAST.name(), ACACIA_DOOR_BOTTOM_EAST.ordinal(), ACACIA_DOOR_BOTTOM_EAST.getMinecraftId(), "BOTTOM_" + (open ? "OPEN_" : "") + blockFace.name(), DoorMat.combine(blockFace, open), WoodType.ACACIA, ACACIA_DOOR_BOTTOM_EAST.getHardness(), ACACIA_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = false;
@@ -195,7 +195,7 @@ public class AcaciaDoorMat extends WoodenDoorMat
         this.blockFace = blockFace;
     }
 
-    protected AcaciaDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
+    public AcaciaDoorMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final WoodType woodType, final boolean powered, final boolean hingeOnRightSide, final boolean open, final boolean topPart, final BlockFace blockFace)
     {
         super(enumName, id, minecraftId, typeName, type, woodType, ACACIA_DOOR_BOTTOM_EAST.getHardness(), ACACIA_DOOR_BOTTOM_EAST.getBlastResistance());
         this.powered = powered;
@@ -406,6 +406,7 @@ public class AcaciaDoorMat extends WoodenDoorMat
      */
     public static void register(final AcaciaDoorMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

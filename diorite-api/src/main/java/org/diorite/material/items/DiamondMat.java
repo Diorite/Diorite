@@ -54,17 +54,17 @@ public class DiamondMat extends OreItemMatExt
     private static final TShortObjectMap<DiamondMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DiamondMat()
+    public DiamondMat()
     {
         super("DIAMOND", 264, "minecraft:diamond", "DIAMOND", (short) 0x00, DIAMOND_ORE, DIAMOND_BLOCK);
     }
 
-    protected DiamondMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public DiamondMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, typeName, type, oreType, blockType);
     }
 
-    protected DiamondMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
+    public DiamondMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final OreMat oreType, final OreBlockMat blockType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, oreType, blockType);
     }
@@ -114,6 +114,7 @@ public class DiamondMat extends OreItemMatExt
      */
     public static void register(final DiamondMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

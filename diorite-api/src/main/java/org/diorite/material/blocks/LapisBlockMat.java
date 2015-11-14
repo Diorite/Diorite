@@ -54,12 +54,12 @@ public class LapisBlockMat extends OreBlockMat
     private static final TByteObjectMap<LapisBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected LapisBlockMat()
+    public LapisBlockMat()
     {
         super("LAPIS_BLOCK", 22, "minecraft:lapis_block", "LAPIS_BLOCK", (byte) 0x00, LAPIS_ORE, DyeMat.DYE_LAPIS_LAZULI, 3, 15);
     }
 
-    protected LapisBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final float hardness, final float blastResistance)
+    public LapisBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final OreMat ore, final OreItemMat item, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, ore, item, hardness, blastResistance);
     }
@@ -109,6 +109,7 @@ public class LapisBlockMat extends OreBlockMat
      */
     public static void register(final LapisBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

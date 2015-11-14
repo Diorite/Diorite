@@ -79,17 +79,17 @@ public class TallGrassMat extends FlowerMat
     private static final TByteObjectMap<TallGrassMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected TallGrassMat()
+    public TallGrassMat()
     {
         super("TALL_GRASS", 31, "minecraft:tallgrass", (byte) 0x00, FlowerTypeMat.SHRUB, 0, 0);
     }
 
-    protected TallGrassMat(final int type, final FlowerTypeMat flowerType)
+    public TallGrassMat(final int type, final FlowerTypeMat flowerType)
     {
         super(TALL_GRASS_SHRUB.name(), TALL_GRASS_SHRUB.ordinal(), TALL_GRASS_SHRUB.getMinecraftId(), (byte) type, flowerType, TALL_GRASS_SHRUB.getHardness(), TALL_GRASS_SHRUB.getBlastResistance());
     }
 
-    protected TallGrassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
+    public TallGrassMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, flowerType, hardness, blastResistance);
     }
@@ -165,6 +165,7 @@ public class TallGrassMat extends FlowerMat
      */
     public static void register(final TallGrassMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

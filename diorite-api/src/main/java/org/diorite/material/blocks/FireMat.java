@@ -192,17 +192,17 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
     private static final TByteObjectMap<FireMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FireMat()
+    public FireMat()
     {
         super("FIRE", 51, "minecraft:fire", "0", (byte) 0x0, 0, 0);
     }
 
-    protected FireMat(final int age)
+    public FireMat(final int age)
     {
         super(FIRE_0.name(), FIRE_0.ordinal(), FIRE_0.getMinecraftId(), Integer.toString(age), (byte) age, FIRE_0.getHardness(), FIRE_0.getBlastResistance());
     }
 
-    protected FireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public FireMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -288,6 +288,7 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
      */
     public static void register(final FireMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

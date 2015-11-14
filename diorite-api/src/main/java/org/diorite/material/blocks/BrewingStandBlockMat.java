@@ -142,19 +142,19 @@ public class BrewingStandBlockMat extends BlockMaterialData
     protected final boolean[] hasBottle;
 
     @SuppressWarnings("MagicNumber")
-    protected BrewingStandBlockMat()
+    public BrewingStandBlockMat()
     {
         super("BREWING_STAND_BLOCK", 117, "minecraft:brewing_stand", "EMPTY", (byte) 0x00, 0.5f, 2.5f);
         this.hasBottle = new boolean[3];
     }
 
-    protected BrewingStandBlockMat(final String enumName, final boolean slot0, final boolean slot1, final boolean slot2)
+    public BrewingStandBlockMat(final String enumName, final boolean slot0, final boolean slot1, final boolean slot2)
     {
         super(BREWING_STAND_BLOCK_EMPTY.name(), BREWING_STAND_BLOCK_EMPTY.ordinal(), BREWING_STAND_BLOCK_EMPTY.getMinecraftId(), enumName, combine(slot0, slot1, slot2), BREWING_STAND_BLOCK_EMPTY.getHardness(), BREWING_STAND_BLOCK_EMPTY.getBlastResistance());
         this.hasBottle = new boolean[]{slot0, slot1, slot2};
     }
 
-    protected BrewingStandBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean[] hasBottle, final float hardness, final float blastResistance)
+    public BrewingStandBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean[] hasBottle, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.hasBottle = hasBottle;
@@ -273,7 +273,7 @@ public class BrewingStandBlockMat extends BlockMaterialData
      */
     public static void register(final BrewingStandBlockMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

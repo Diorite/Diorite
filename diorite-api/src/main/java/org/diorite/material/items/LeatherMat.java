@@ -52,17 +52,17 @@ public class LeatherMat extends ItemMaterialData
     private static final TShortObjectMap<LeatherMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected LeatherMat()
+    public LeatherMat()
     {
         super("LEATHER", 334, "minecraft:leather", "LEATHER", (short) 0x00);
     }
 
-    protected LeatherMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public LeatherMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected LeatherMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public LeatherMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class LeatherMat extends ItemMaterialData
      */
     public static void register(final LeatherMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

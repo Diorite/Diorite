@@ -203,24 +203,24 @@ public class DoubleStoneSlabMat extends StonySlabMat
     private static final TByteObjectMap<DoubleStoneSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DoubleStoneSlabMat()
+    public DoubleStoneSlabMat()
     {
         super("DOUBLE_STONE_SLAB", 43, "minecraft:double_stone_slab", "STONE", SlabTypeMat.FULL, StoneSlabTypeMat.STONE, 2, 30);
     }
 
     @SuppressWarnings("MagicNumber")
-    protected DoubleStoneSlabMat(final String enumName, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
+    public DoubleStoneSlabMat(final String enumName, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
     {
         super(DOUBLE_STONE_SLAB_STONE.name() + (stoneType.isSecondStoneSlabID() ? "2" : ""), (stoneType.isSecondStoneSlabID() ? 181 : 43), DOUBLE_STONE_SLAB_STONE.getMinecraftId() + (stoneType.isSecondStoneSlabID() ? "2" : ""), enumName, slabType, stoneType, hardness, blastResistance);
     }
 
     @SuppressWarnings("MagicNumber")
-    protected DoubleStoneSlabMat(final String enumName, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType)
+    public DoubleStoneSlabMat(final String enumName, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType)
     {
         super(DOUBLE_STONE_SLAB_STONE.name() + (stoneType.isSecondStoneSlabID() ? "2" : ""), (stoneType.isSecondStoneSlabID() ? 181 : 43), DOUBLE_STONE_SLAB_STONE.getMinecraftId() + (stoneType.isSecondStoneSlabID() ? "2" : ""), enumName, slabType, stoneType, DOUBLE_STONE_SLAB_STONE.getHardness(), DOUBLE_STONE_SLAB_STONE.getBlastResistance());
     }
 
-    protected DoubleStoneSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
+    public DoubleStoneSlabMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final SlabTypeMat slabType, final StoneSlabTypeMat stoneType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, slabType, stoneType, hardness, blastResistance);
     }
@@ -290,6 +290,7 @@ public class DoubleStoneSlabMat extends StonySlabMat
      */
     public static void register(final DoubleStoneSlabMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

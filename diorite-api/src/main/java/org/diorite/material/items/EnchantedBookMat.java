@@ -54,17 +54,17 @@ public class EnchantedBookMat extends ItemMaterialData implements EnchantableMat
     private static final TShortObjectMap<EnchantedBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected EnchantedBookMat()
+    public EnchantedBookMat()
     {
         super("ENCHANTED_BOOK", 403, "minecraft:enchanted_book", 1, "ENCHANTED_BOOK", (short) 0x00);
     }
 
-    protected EnchantedBookMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public EnchantedBookMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, ENCHANTED_BOOK.getMaxStack(), typeName, type);
     }
 
-    protected EnchantedBookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public EnchantedBookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -124,6 +124,7 @@ public class EnchantedBookMat extends ItemMaterialData implements EnchantableMat
      */
     public static void register(final EnchantedBookMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

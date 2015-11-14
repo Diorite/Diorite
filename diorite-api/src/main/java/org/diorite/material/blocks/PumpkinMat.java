@@ -97,17 +97,17 @@ public class PumpkinMat extends AbstractPumpkinMat
     private static final TByteObjectMap<PumpkinMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PumpkinMat()
+    public PumpkinMat()
     {
         super("PUMPKIN", 86, "minecraft:pumpkin", BlockFace.SOUTH, 1, 5);
     }
 
-    protected PumpkinMat(final BlockFace face)
+    public PumpkinMat(final BlockFace face)
     {
         super(PUMPKIN_SOUTH.name(), PUMPKIN_SOUTH.ordinal(), PUMPKIN_SOUTH.getMinecraftId(), face, PUMPKIN_SOUTH.getHardness(), PUMPKIN_SOUTH.getBlastResistance());
     }
 
-    protected PumpkinMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public PumpkinMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, face, hardness, blastResistance);
     }
@@ -182,6 +182,7 @@ public class PumpkinMat extends AbstractPumpkinMat
      */
     public static void register(final PumpkinMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

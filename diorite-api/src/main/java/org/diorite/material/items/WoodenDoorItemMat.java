@@ -32,13 +32,13 @@ public abstract class WoodenDoorItemMat extends DoorItemMat
 {
     protected final WoodType woodType;
 
-    protected WoodenDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
+    public WoodenDoorItemMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, typeName, type);
         this.woodType = woodType;
     }
 
-    protected WoodenDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
+    public WoodenDoorItemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final WoodType woodType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.woodType = woodType;

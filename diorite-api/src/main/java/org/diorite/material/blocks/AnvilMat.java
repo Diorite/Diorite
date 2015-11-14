@@ -163,7 +163,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
     protected final boolean          rotated;
 
     @SuppressWarnings("MagicNumber")
-    protected AnvilMat()
+    public AnvilMat()
     {
         super("ANVIL", 145, "minecraft:anvil", "NORTH_SOUTH_NEW", (byte) 0x00, 5, 6_000);
         this.damage = AnvilBlockDamage.NEW;
@@ -171,7 +171,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         this.rotated = false;
     }
 
-    protected AnvilMat(final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated)
+    public AnvilMat(final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated)
     {
         super(ANVIL_NORTH_SOUTH_NEW.name(), ANVIL_NORTH_SOUTH_NEW.ordinal(), ANVIL_NORTH_SOUTH_NEW.getMinecraftId(), combineName(damage, axis, rotated), combine(damage, axis, rotated), ANVIL_NORTH_SOUTH_NEW.getHardness(), ANVIL_NORTH_SOUTH_NEW.getBlastResistance());
         this.damage = damage;
@@ -179,7 +179,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
         this.rotated = rotated;
     }
 
-    protected AnvilMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated, final float hardness, final float blastResistance)
+    public AnvilMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final AnvilBlockDamage damage, final RotateAxisMat axis, final boolean rotated, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.damage = damage;
@@ -392,6 +392,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
      */
     public static void register(final AnvilMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

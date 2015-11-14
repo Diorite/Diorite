@@ -58,22 +58,22 @@ public class WoodenHoeMat extends HoeMat
     protected final LazyValue<WoodenHoeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected WoodenHoeMat()
+    public WoodenHoeMat()
     {
         super("WOODEN_HOE", 290, "minecraft:wooden_Hoe", "NEW", (short) 0, ToolMaterial.WOODEN);
     }
 
-    protected WoodenHoeMat(final int durability)
+    public WoodenHoeMat(final int durability)
     {
         super(WOODEN_HOE.name(), WOODEN_HOE.getId(), WOODEN_HOE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.WOODEN);
     }
 
-    protected WoodenHoeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public WoodenHoeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected WoodenHoeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public WoodenHoeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class WoodenHoeMat extends HoeMat
      */
     public static void register(final WoodenHoeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -50,14 +50,14 @@ public abstract class ArmorMat extends ItemMaterialData implements BreakableItem
      */
     protected final ArmorType     armorType;
 
-    protected ArmorMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public ArmorMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, 1, typeName, type);
         this.armorMaterial = armorMaterial;
         this.armorType = armorType;
     }
 
-    protected ArmorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
+    public ArmorMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ArmorMaterial armorMaterial, final ArmorType armorType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.armorMaterial = armorMaterial;

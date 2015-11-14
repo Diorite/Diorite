@@ -106,21 +106,21 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
     protected final boolean   onWall;
 
     @SuppressWarnings("MagicNumber")
-    protected SkullBlockMat()
+    public SkullBlockMat()
     {
         super("SKULL_BLOCK_FLOOR", 144, "minecraft:skull", "FLOOR", (byte) 0x01, 1, 5);
         this.face = null;
         this.onWall = false;
     }
 
-    protected SkullBlockMat(final String enumName, final BlockFace face)
+    public SkullBlockMat(final String enumName, final BlockFace face)
     {
         super(SKULL_BLOCK_FLOOR.name(), SKULL_BLOCK_FLOOR.ordinal(), SKULL_BLOCK_FLOOR.getMinecraftId(), enumName, combine(face), SKULL_BLOCK_FLOOR.getHardness(), SKULL_BLOCK_FLOOR.getBlastResistance());
         this.face = face;
         this.onWall = true;
     }
 
-    protected SkullBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean onWall, final float hardness, final float blastResistance)
+    public SkullBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean onWall, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -256,6 +256,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
      */
     public static void register(final SkullBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

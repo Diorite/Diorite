@@ -52,17 +52,17 @@ public class WheatMat extends ItemMaterialData
     private static final TShortObjectMap<WheatMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected WheatMat()
+    public WheatMat()
     {
         super("WHEAT", 296, "minecraft:wheat", "WHEAT", (short) 0x00);
     }
 
-    protected WheatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public WheatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected WheatMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public WheatMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class WheatMat extends ItemMaterialData
      */
     public static void register(final WheatMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -53,12 +53,12 @@ public class MobSpawnerMat extends BlockMaterialData
     private static final TByteObjectMap<MobSpawnerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MobSpawnerMat()
+    public MobSpawnerMat()
     {
         super("MOB_SPAWNER", 52, "minecraft:mob_spawner", "MOB_SPAWNER", (byte) 0x00, 5, 25);
     }
 
-    protected MobSpawnerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public MobSpawnerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class MobSpawnerMat extends BlockMaterialData
      */
     public static void register(final MobSpawnerMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

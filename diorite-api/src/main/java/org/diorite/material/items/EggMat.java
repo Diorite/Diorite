@@ -53,17 +53,17 @@ public class EggMat extends ItemMaterialData implements PlaceableEntityMat
     private static final TShortObjectMap<EggMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected EggMat()
+    public EggMat()
     {
         super("EGG", 344, "minecraft:egg", 16, "EGG", (short) 0x00);
     }
 
-    protected EggMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public EggMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, EGG.getMaxStack(), typeName, type);
     }
 
-    protected EggMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public EggMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class EggMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static void register(final EggMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

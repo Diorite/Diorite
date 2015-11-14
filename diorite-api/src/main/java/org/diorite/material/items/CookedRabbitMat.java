@@ -51,17 +51,17 @@ public class CookedRabbitMat extends EdibleItemMat
     private static final TShortObjectMap<CookedRabbitMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CookedRabbitMat()
+    public CookedRabbitMat()
     {
         super("COOKED_RABBIT", 412, "minecraft:cooked_rabbit", "COOKED_RABBIT", (short) 0x00, 5, 6);
     }
 
-    protected CookedRabbitMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public CookedRabbitMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, typeName, type, foodLevelIncrease, saturationIncrease);
     }
 
-    protected CookedRabbitMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
+    public CookedRabbitMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, foodLevelIncrease, saturationIncrease);
     }
@@ -111,6 +111,7 @@ public class CookedRabbitMat extends EdibleItemMat
      */
     public static void register(final CookedRabbitMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

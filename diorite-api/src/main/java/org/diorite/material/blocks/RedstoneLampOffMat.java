@@ -52,12 +52,12 @@ public class RedstoneLampOffMat extends RedstoneLampMat
     private static final TByteObjectMap<RedstoneLampOffMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedstoneLampOffMat()
+    public RedstoneLampOffMat()
     {
         super("REDSTONE_LAMP_OFF", 123, "minecraft:redstone_lamp", "REDSTONE_LAMP_OFF", (byte) 0x00, 0.3f, 1.5f);
     }
 
-    protected RedstoneLampOffMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public RedstoneLampOffMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -113,6 +113,7 @@ public class RedstoneLampOffMat extends RedstoneLampMat
      */
     public static void register(final RedstoneLampOffMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

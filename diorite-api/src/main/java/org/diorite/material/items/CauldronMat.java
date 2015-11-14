@@ -53,17 +53,17 @@ public class CauldronMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<CauldronMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CauldronMat()
+    public CauldronMat()
     {
         super("CAULDRON", 380, "minecraft:cauldron", "CAULDRON", (short) 0x00);
     }
 
-    protected CauldronMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public CauldronMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected CauldronMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public CauldronMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class CauldronMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final CauldronMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

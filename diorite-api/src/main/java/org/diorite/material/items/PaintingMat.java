@@ -53,17 +53,17 @@ public class PaintingMat extends ItemMaterialData implements PlaceableEntityMat
     private static final TShortObjectMap<PaintingMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PaintingMat()
+    public PaintingMat()
     {
         super("PAINTING", 321, "minecraft:painting", "PAINTING", (short) 0x00);
     }
 
-    protected PaintingMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public PaintingMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected PaintingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public PaintingMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class PaintingMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static void register(final PaintingMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

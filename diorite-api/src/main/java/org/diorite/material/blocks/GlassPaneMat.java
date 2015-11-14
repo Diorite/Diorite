@@ -54,12 +54,12 @@ public class GlassPaneMat extends BlockMaterialData implements FenceMat
     private static final TByteObjectMap<GlassPaneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected GlassPaneMat()
+    public GlassPaneMat()
     {
         super("GLASS_PANE", 102, "minecraft:glass_pane", "GLASS_PANE", (byte) 0x00, 0.3f, 1.5f);
     }
 
-    protected GlassPaneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public GlassPaneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -109,6 +109,7 @@ public class GlassPaneMat extends BlockMaterialData implements FenceMat
      */
     public static void register(final GlassPaneMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

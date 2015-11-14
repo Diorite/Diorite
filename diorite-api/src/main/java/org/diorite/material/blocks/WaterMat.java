@@ -84,23 +84,23 @@ public class WaterMat extends LiquidMat
     private static final Map<String, WaterMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<WaterMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
 
-    protected WaterMat(final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    public WaterMat(final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super("WATER" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStageMat.SOURCE, liquidType, hardness, blastResistance);
     }
 
     @SuppressWarnings("MagicNumber")
-    protected WaterMat(final LiquidTypeMat liquidType)
+    public WaterMat(final LiquidTypeMat liquidType)
     {
         super("WATER" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 9 : 8, liquidType.isStill() ? "minecraft:flowing_water" : "minecraft:water", "SOURCE", LiquidStageMat.SOURCE, liquidType, 100, 500);
     }
 
-    protected WaterMat(final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    public WaterMat(final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super(liquidType.isStill() ? WATER_SOURCE_STILL.name() : WATER_SOURCE.name(), WATER_SOURCE.ordinal() + ((liquidType == LiquidTypeMat.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType, hardness, blastResistance);
     }
 
-    protected WaterMat(final LiquidStageMat stage, final LiquidTypeMat liquidType)
+    public WaterMat(final LiquidStageMat stage, final LiquidTypeMat liquidType)
     {
         super(liquidType.isStill() ? WATER_SOURCE_STILL.name() : WATER_SOURCE.name(), WATER_SOURCE.ordinal() + ((liquidType == LiquidTypeMat.STILL) ? 1 : 0), liquidType.isNormal() ? WATER_SOURCE.getMinecraftId() : WATER_SOURCE_STILL.getMinecraftId(), WATER_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType, liquidType.isStill() ? WATER_SOURCE_STILL.getHardness() : WATER_SOURCE.getHardness(), liquidType.isStill() ? WATER_SOURCE_STILL.getBlastResistance() : WATER_SOURCE.getBlastResistance());
     }
@@ -240,6 +240,7 @@ public class WaterMat extends LiquidMat
      */
     public static void register(final WaterMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put(element.getFixedDataValue(), element);
         byName.put(element.getTypeName(), element);
     }

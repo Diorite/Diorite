@@ -32,12 +32,12 @@ import org.diorite.material.BasicToolData;
 @SuppressWarnings("JavaDoc")
 public abstract class AbstractBowMat extends BasicToolMat
 {
-    protected AbstractBowMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final BasicToolData toolData)
+    public AbstractBowMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final BasicToolData toolData)
     {
         super(enumName, id, minecraftId, typeName, type, toolData);
     }
 
-    protected AbstractBowMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final BasicToolData toolData)
+    public AbstractBowMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final BasicToolData toolData)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolData);
     }

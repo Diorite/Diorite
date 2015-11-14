@@ -45,17 +45,17 @@ public class RecordStalMat extends RecordMat
     private static final Map<String, RecordStalMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<RecordStalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
-    protected RecordStalMat()
+    public RecordStalMat()
     {
         super("stal", 2263);
     }
 
-    protected RecordStalMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
+    public RecordStalMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, typeName, type, sound);
     }
 
-    protected RecordStalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
+    public RecordStalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final Sound sound)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, sound);
     }
@@ -105,6 +105,7 @@ public class RecordStalMat extends RecordMat
      */
     public static void register(final RecordStalMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

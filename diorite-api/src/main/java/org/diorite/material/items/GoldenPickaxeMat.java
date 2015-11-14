@@ -58,22 +58,22 @@ public class GoldenPickaxeMat extends PickaxeMat
     protected final LazyValue<GoldenPickaxeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldenPickaxeMat()
+    public GoldenPickaxeMat()
     {
         super("GOLDEN_PICKAXE", 285, "minecraft:golden_Pickaxe", "NEW", (short) 0, ToolMaterial.GOLD);
     }
 
-    protected GoldenPickaxeMat(final int durability)
+    public GoldenPickaxeMat(final int durability)
     {
         super(GOLDEN_PICKAXE.name(), GOLDEN_PICKAXE.getId(), GOLDEN_PICKAXE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.GOLD);
     }
 
-    protected GoldenPickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public GoldenPickaxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected GoldenPickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public GoldenPickaxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class GoldenPickaxeMat extends PickaxeMat
      */
     public static void register(final GoldenPickaxeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

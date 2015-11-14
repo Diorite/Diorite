@@ -130,21 +130,21 @@ public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
     protected final boolean   upsideDown;
 
     @SuppressWarnings("MagicNumber")
-    protected NetherBrickStairsMat()
+    public NetherBrickStairsMat()
     {
         super("NETHER_BRICK_STAIRS", 114, "minecraft:nether_brick_stairs", "EAST", (byte) 0x00, 2, 30);
         this.face = BlockFace.EAST;
         this.upsideDown = false;
     }
 
-    protected NetherBrickStairsMat(final BlockFace face, final boolean upsideDown)
+    public NetherBrickStairsMat(final BlockFace face, final boolean upsideDown)
     {
         super(NETHER_BRICK_STAIRS_EAST.name(), NETHER_BRICK_STAIRS_EAST.ordinal(), NETHER_BRICK_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown), NETHER_BRICK_STAIRS_EAST.getHardness(), NETHER_BRICK_STAIRS_EAST.getBlastResistance());
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    protected NetherBrickStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    public NetherBrickStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -252,7 +252,7 @@ public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
      */
     public static void register(final NetherBrickStairsMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

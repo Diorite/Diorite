@@ -166,19 +166,19 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
     protected final boolean powered;
 
     @SuppressWarnings("MagicNumber")
-    protected PoweredRailMat()
+    public PoweredRailMat()
     {
         super("POWERED_RAIL", 27, "minecraft:golden_rail", "FLAT_NORTH_SOUTH", RailTypeMat.FLAT_NORTH_SOUTH, (byte) 0x00, 0.7f, 3.5f);
         this.powered = false;
     }
 
-    protected PoweredRailMat(final RailTypeMat type, final boolean powered)
+    public PoweredRailMat(final RailTypeMat type, final boolean powered)
     {
         super(POWERED_RAIL_NORTH_SOUTH.name(), POWERED_RAIL_NORTH_SOUTH.ordinal(), POWERED_RAIL_NORTH_SOUTH.getMinecraftId(), type.name() + (powered ? "_POWERED" : ""), type, powered ? POWERED_FLAG : 0x00, POWERED_RAIL_NORTH_SOUTH.getHardness(), POWERED_RAIL_NORTH_SOUTH.getBlastResistance());
         this.powered = powered;
     }
 
-    protected PoweredRailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final boolean powered, final float hardness, final float blastResistance)
+    public PoweredRailMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final RailTypeMat railType, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, railType, hardness, blastResistance);
         this.powered = powered;
@@ -292,6 +292,7 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
      */
     public static void register(final PoweredRailMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

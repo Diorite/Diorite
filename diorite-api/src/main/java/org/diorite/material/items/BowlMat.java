@@ -52,17 +52,17 @@ public class BowlMat extends ItemMaterialData
     private static final TShortObjectMap<BowlMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BowlMat()
+    public BowlMat()
     {
         super("BOWL", 281, "minecraft:bowl", "BOWL", (short) 0x00);
     }
 
-    protected BowlMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public BowlMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected BowlMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public BowlMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class BowlMat extends ItemMaterialData
      */
     public static void register(final BowlMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

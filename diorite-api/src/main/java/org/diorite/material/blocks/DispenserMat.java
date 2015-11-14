@@ -167,21 +167,21 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
     protected final boolean   powered;
 
     @SuppressWarnings("MagicNumber")
-    protected DispenserMat()
+    public DispenserMat()
     {
         super("DISPENSER", 23, "minecraft:dispenser", "DOWN", (byte) 0x00, 3.5f, 17.5f);
         this.facing = BlockFace.DOWN;
         this.powered = false;
     }
 
-    protected DispenserMat(final BlockFace facing, final boolean powered)
+    public DispenserMat(final BlockFace facing, final boolean powered)
     {
         super(DISPENSER_DOWN.name(), DISPENSER_DOWN.ordinal(), DISPENSER_DOWN.getMinecraftId(), facing.name() + (powered ? "_POWERED" : ""), combine(facing, powered), DISPENSER_DOWN.getHardness(), DISPENSER_DOWN.getBlastResistance());
         this.facing = facing;
         this.powered = powered;
     }
 
-    protected DispenserMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered, final float hardness, final float blastResistance)
+    public DispenserMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.facing = facing;
@@ -315,6 +315,7 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
      */
     public static void register(final DispenserMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

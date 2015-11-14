@@ -86,28 +86,28 @@ public class LavaMat extends LiquidMat
     private static final TByteObjectMap<LavaMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
-    protected LavaMat(final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    public LavaMat(final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super("LAVA" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 11 : 10, liquidType.isStill() ? "minecraft:flowing_lava" : "minecraft:lava", "SOURCE", LiquidStageMat.SOURCE, liquidType, hardness, blastResistance);
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LavaMat(final LiquidTypeMat liquidType)
+    public LavaMat(final LiquidTypeMat liquidType)
     {
         super("LAVA" + (liquidType.isStill() ? "_STILL" : ""), liquidType.isStill() ? 11 : 10, liquidType.isStill() ? "minecraft:flowing_lava" : "minecraft:lava", "SOURCE", LiquidStageMat.SOURCE, liquidType, 100, liquidType.isStill() ? 500 : 0);
     }
 
-    protected LavaMat(final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    public LavaMat(final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super(liquidType.isStill() ? LAVA_SOURCE_STILL.name() : LAVA_SOURCE.name(), LAVA_SOURCE.ordinal() + ((liquidType.isStill()) ? 1 : 0), liquidType.isNormal() ? LAVA_SOURCE.getMinecraftId() : LAVA_SOURCE_STILL.getMinecraftId(), LAVA_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType, hardness, blastResistance);
     }
 
-    protected LavaMat(final LiquidStageMat stage, final LiquidTypeMat liquidType)
+    public LavaMat(final LiquidStageMat stage, final LiquidTypeMat liquidType)
     {
         super(liquidType.isStill() ? LAVA_SOURCE_STILL.name() : LAVA_SOURCE.name(), LAVA_SOURCE.ordinal() + ((liquidType.isStill()) ? 1 : 0), liquidType.isNormal() ? LAVA_SOURCE.getMinecraftId() : LAVA_SOURCE_STILL.getMinecraftId(), LAVA_SOURCE.getMaxStack(), stage.name() + (liquidType == LiquidTypeMat.STILL ? "_STILL" : ""), stage, liquidType, liquidType.isStill() ? LAVA_SOURCE_STILL.getHardness() : LAVA_SOURCE.getHardness(), liquidType.isStill() ? LAVA_SOURCE_STILL.getBlastResistance() : LAVA_SOURCE.getBlastResistance());
     }
 
-    protected LavaMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    public LavaMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, stage, liquidType, hardness, blastResistance);
     }
@@ -249,6 +249,7 @@ public class LavaMat extends LiquidMat
      */
     public static void register(final LavaMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put(element.getFixedDataValue(), element);
         byName.put(element.getTypeName(), element);
     }
@@ -274,17 +275,17 @@ public class LavaMat extends LiquidMat
     public static class LavaStill extends LavaMat
     {
         @SuppressWarnings("MagicNumber")
-        protected LavaStill()
+        public LavaStill()
         {
             super(LiquidTypeMat.STILL, 100, 500);
         }
 
-        protected LavaStill(final LiquidStageMat stage)
+        public LavaStill(final LiquidStageMat stage)
         {
             super(stage, LiquidTypeMat.STILL, LAVA_SOURCE_STILL.getHardness(), LAVA_SOURCE_STILL.getBlastResistance());
         }
 
-        protected LavaStill(final LiquidStageMat stage, final float hardness, final float blastResistance)
+        public LavaStill(final LiquidStageMat stage, final float hardness, final float blastResistance)
         {
             super(stage, LiquidTypeMat.STILL, hardness, blastResistance);
         }

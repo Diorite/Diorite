@@ -46,14 +46,14 @@ public abstract class LiquidMat extends BlockMaterialData
      */
     protected final LiquidTypeMat  liquidType;
 
-    protected LiquidMat(final String enumName, final int id, final String minecraftId, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    public LiquidMat(final String enumName, final int id, final String minecraftId, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, typeName, stage.getDataValue(), hardness, blastResistance);
         this.stage = stage;
         this.liquidType = liquidType;
     }
 
-    protected LiquidMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
+    public LiquidMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final LiquidStageMat stage, final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, stage.getDataValue(), hardness, blastResistance);
         this.stage = stage;

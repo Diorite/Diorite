@@ -58,22 +58,22 @@ public class StoneHoeMat extends HoeMat
     protected final LazyValue<StoneHoeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected StoneHoeMat()
+    public StoneHoeMat()
     {
         super("STONE_HOE", 291, "minecraft:stone_Hoe", "NEW", (short) 0, ToolMaterial.STONE);
     }
 
-    protected StoneHoeMat(final int durability)
+    public StoneHoeMat(final int durability)
     {
         super(STONE_HOE.name(), STONE_HOE.getId(), STONE_HOE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.STONE);
     }
 
-    protected StoneHoeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public StoneHoeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected StoneHoeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public StoneHoeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class StoneHoeMat extends HoeMat
      */
     public static void register(final StoneHoeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

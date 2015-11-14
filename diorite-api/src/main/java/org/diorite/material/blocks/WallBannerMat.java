@@ -96,19 +96,19 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected WallBannerMat()
+    public WallBannerMat()
     {
         super("WALL_BANNER", 177, "minecraft:wall_banner", 16, "NORTH", (byte) 0x02, 1, 5);
         this.face = BlockFace.NORTH;
     }
 
-    protected WallBannerMat(final BlockFace face)
+    public WallBannerMat(final BlockFace face)
     {
         super(WALL_BANNER_NORTH.name(), WALL_BANNER_NORTH.ordinal(), WALL_BANNER_NORTH.getMinecraftId(), WALL_BANNER_NORTH.getMaxStack(), face.name(), combine(face), WALL_BANNER_NORTH.getHardness(), WALL_BANNER_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected WallBannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public WallBannerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -217,6 +217,7 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
      */
     public static void register(final WallBannerMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

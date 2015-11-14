@@ -190,17 +190,17 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
     private static final TByteObjectMap<CactusMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected CactusMat()
+    public CactusMat()
     {
         super("CACTUS", 81, "minecraft:cactus", "0", (byte) 0x00, 0.4f, 2);
     }
 
-    protected CactusMat(final int age)
+    public CactusMat(final int age)
     {
         super(CACTUS_0.name(), CACTUS_0.ordinal(), CACTUS_0.getMinecraftId(), Integer.toString(age), (byte) age, CACTUS_0.getHardness(), CACTUS_0.getBlastResistance());
     }
 
-    protected CactusMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public CactusMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -286,6 +286,7 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
      */
     public static void register(final CactusMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

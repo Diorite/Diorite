@@ -161,17 +161,17 @@ public class RedMushroomBlockMat extends MushroomBlockMat
     private static final TByteObjectMap<RedMushroomBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected RedMushroomBlockMat()
+    public RedMushroomBlockMat()
     {
         super("RED_MUSHROOM_BLOCK", 100, "minecraft:red_mushroom_block", Type.PORES_FULL, 0.2f, 1);
     }
 
-    protected RedMushroomBlockMat(final Type type)
+    public RedMushroomBlockMat(final Type type)
     {
         super(RED_MUSHROOM_BLOCK_PORES_FULL.name(), RED_MUSHROOM_BLOCK_PORES_FULL.ordinal(), RED_MUSHROOM_BLOCK_PORES_FULL.getMinecraftId(), type, RED_MUSHROOM_BLOCK_PORES_FULL.getHardness(), RED_MUSHROOM_BLOCK_PORES_FULL.getBlastResistance());
     }
 
-    protected RedMushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType, final float hardness, final float blastResistance)
+    public RedMushroomBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final Type mushroomType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, mushroomType, hardness, blastResistance);
     }
@@ -246,7 +246,7 @@ public class RedMushroomBlockMat extends MushroomBlockMat
      */
     public static void register(final RedMushroomBlockMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -126,19 +126,19 @@ public class MelonStemMat extends PlantStemMat
     protected final int age;
 
     @SuppressWarnings("MagicNumber")
-    protected MelonStemMat()
+    public MelonStemMat()
     {
         super("MELON_STEM", 105, "minecraft:melon_stem", "0", (byte) 0x00, 0, 0);
         this.age = 0;
     }
 
-    protected MelonStemMat(final String enumName, final int age)
+    public MelonStemMat(final String enumName, final int age)
     {
         super(MELON_STEM_0.name(), MELON_STEM_0.ordinal(), MELON_STEM_0.getMinecraftId(), enumName, (byte) age, MELON_STEM_0.getHardness(), MELON_STEM_0.getBlastResistance());
         this.age = age;
     }
 
-    protected MelonStemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
+    public MelonStemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.age = age;
@@ -231,6 +231,7 @@ public class MelonStemMat extends PlantStemMat
      */
     public static void register(final MelonStemMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -201,7 +201,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
     private final boolean   isOccupied;
 
     @SuppressWarnings("MagicNumber")
-    protected BedBlockMat()
+    public BedBlockMat()
     {
         super("BED_BLOCK", 26, "minecraft:bed", 1, "FOOT_SOUTH", (byte) 0x00, 0.2f, 1);
         this.blockFacing = BlockFace.SOUTH;
@@ -209,7 +209,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
         this.isOccupied = false;
     }
 
-    protected BedBlockMat(final BlockFace face, final boolean isHeadPart, final boolean isOccupied)
+    public BedBlockMat(final BlockFace face, final boolean isHeadPart, final boolean isOccupied)
     {
         super(BED_FOOT_SOUTH.name(), BED_FOOT_SOUTH.ordinal(), BED_FOOT_SOUTH.getMinecraftId(), BED_FOOT_SOUTH.getMaxStack(), (isHeadPart ? "HEAD_" : "FOOT_") + face.name() + (isOccupied ? "_OCCUPIED" : ""), combine(face, isHeadPart, isOccupied), BED_FOOT_SOUTH.getHardness(), BED_FOOT_SOUTH.getBlastResistance());
         this.blockFacing = face;
@@ -217,7 +217,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
         this.isOccupied = isOccupied;
     }
 
-    protected BedBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace blockFacing, final boolean isHeadPart, final boolean isOccupied, final float hardness, final float blastResistance)
+    public BedBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace blockFacing, final boolean isHeadPart, final boolean isOccupied, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.blockFacing = blockFacing;
@@ -348,6 +348,7 @@ public class BedBlockMat extends BlockMaterialData implements DirectionalMat
      */
     public static void register(final BedBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

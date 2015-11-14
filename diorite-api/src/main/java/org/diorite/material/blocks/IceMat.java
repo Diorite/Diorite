@@ -53,12 +53,12 @@ public class IceMat extends BlockMaterialData
     private static final TByteObjectMap<IceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected IceMat()
+    public IceMat()
     {
         super("ICE", 79, "minecraft:ice", "ICE", (byte) 0x00, 0.5f, 2.5f);
     }
 
-    protected IceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public IceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class IceMat extends BlockMaterialData
      */
     public static void register(final IceMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

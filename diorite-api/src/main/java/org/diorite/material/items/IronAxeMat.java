@@ -58,22 +58,22 @@ public class IronAxeMat extends AxeMat
     protected final LazyValue<IronAxeMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected IronAxeMat()
+    public IronAxeMat()
     {
         super("IRON_AXE", 258, "minecraft:iron_Axe", "NEW", (short) 0, ToolMaterial.IRON);
     }
 
-    protected IronAxeMat(final int durability)
+    public IronAxeMat(final int durability)
     {
         super(IRON_AXE.name(), IRON_AXE.getId(), IRON_AXE.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.IRON);
     }
 
-    protected IronAxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public IronAxeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected IronAxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public IronAxeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class IronAxeMat extends AxeMat
      */
     public static void register(final IronAxeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

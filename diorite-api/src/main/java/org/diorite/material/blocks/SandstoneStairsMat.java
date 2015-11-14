@@ -130,21 +130,21 @@ public class SandstoneStairsMat extends BlockMaterialData implements StairsMat
     protected final boolean   upsideDown;
 
     @SuppressWarnings("MagicNumber")
-    protected SandstoneStairsMat()
+    public SandstoneStairsMat()
     {
         super("SANDSTONE_STAIRS", 128, "minecraft:sandstone_stairs", "EAST", (byte) 0x00, 0.8f, 4);
         this.face = BlockFace.EAST;
         this.upsideDown = false;
     }
 
-    protected SandstoneStairsMat(final BlockFace face, final boolean upsideDown)
+    public SandstoneStairsMat(final BlockFace face, final boolean upsideDown)
     {
         super(SANDSTONE_STAIRS_EAST.name(), SANDSTONE_STAIRS_EAST.ordinal(), SANDSTONE_STAIRS_EAST.getMinecraftId(), face.name() + (upsideDown ? "_UPSIDE_DOWN" : ""), StairsMat.combine(face, upsideDown), SANDSTONE_STAIRS_EAST.getHardness(), SANDSTONE_STAIRS_EAST.getBlastResistance());
         this.face = face;
         this.upsideDown = upsideDown;
     }
 
-    protected SandstoneStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    public SandstoneStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -252,6 +252,7 @@ public class SandstoneStairsMat extends BlockMaterialData implements StairsMat
      */
     public static void register(final SandstoneStairsMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

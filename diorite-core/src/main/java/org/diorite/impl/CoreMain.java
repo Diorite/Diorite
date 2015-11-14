@@ -31,7 +31,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.reflections.Reflections;
@@ -50,8 +49,6 @@ import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.BasicAttributeModifier;
 import org.diorite.firework.FireworkEffect;
 import org.diorite.map.MapIcon;
-import org.diorite.material.BlockMaterialData;
-import org.diorite.material.ItemMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtSerializable;
 import org.diorite.nbt.NbtSerialization;
@@ -163,15 +160,12 @@ public final class CoreMain
             RegisterPackets.init();
 
             // TODO: load "magic values"
-            // never remove this line (Material.getByID()), it's needed even if it don't do anything for you.
+            // never remove this line (Material.values), it's needed even if it don't do anything for you.
             // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
-            System.out.println("Registered " + Material.values().length + (enabledDebug ? (" (" + Stream.of(Material.values()).map(Material::types).mapToInt(t -> t.length).sum() + " with sub-types)") : "") + " vanilla minecraft blocks and items.");
-            if (enabledDebug)
-            {
-                System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof BlockMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft blocks.");
-                System.out.println("Registered " + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).count() + " (" + Stream.of(Material.values()).filter(m -> m instanceof ItemMaterialData).map(Material::types).mapToInt(t -> t.length).sum() + ") vanilla minecraft items.");
-            }
-//                new DioriteCore(Proxy.NO_PROXY, options, client).start(options);
+            Material.values();
+            System.out.println("Registered " + Material.getBlockMaterialsCount() + " (" + Material.getAllBlockMaterialsCount() + " with sub-types) diorite blocks.");
+            System.out.println("Registered " + Material.getItemMaterialsCount() + " (" + Material.getAllItemMaterialsCount() + " with sub-types) diorite items.");
+            System.out.println("Registered " + Material.getMaterialsCount() + " (" + Material.getAllMaterialsCount() + " with sub-types) diorite blocks and items.");
         } catch (final Throwable t)
         {
             t.printStackTrace();

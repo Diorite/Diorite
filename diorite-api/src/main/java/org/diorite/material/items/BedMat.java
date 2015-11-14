@@ -53,17 +53,17 @@ public class BedMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<BedMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BedMat()
+    public BedMat()
     {
         super("BED", 355, "minecraft:bed", 1, "BED", (short) 0x00);
     }
 
-    protected BedMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public BedMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, BED.getMaxStack(), typeName, type);
     }
 
-    protected BedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public BedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class BedMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final BedMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

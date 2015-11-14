@@ -191,17 +191,17 @@ public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
     private static final TByteObjectMap<ReedsBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected ReedsBlockMat()
+    public ReedsBlockMat()
     {
         super("REEDS_BLOCK", 83, "minecraft:reeds", "0", (byte) 0x00, 0, 0);
     }
 
-    protected ReedsBlockMat(final int age)
+    public ReedsBlockMat(final int age)
     {
         super(REEDS_BLOCK_0.name(), REEDS_BLOCK_0.ordinal(), REEDS_BLOCK_0.getMinecraftId(), Integer.toString(age), (byte) age, REEDS_BLOCK_0.getHardness(), REEDS_BLOCK_0.getBlastResistance());
     }
 
-    protected ReedsBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public ReedsBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -287,6 +287,7 @@ public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
      */
     public static void register(final ReedsBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

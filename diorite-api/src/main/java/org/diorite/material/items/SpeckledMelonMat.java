@@ -52,17 +52,17 @@ public class SpeckledMelonMat extends ItemMaterialData
     private static final TShortObjectMap<SpeckledMelonMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SpeckledMelonMat()
+    public SpeckledMelonMat()
     {
         super("SPECKLED_MELON", 382, "minecraft:speckled_melon", "SPECKLED_MELON", (short) 0x00);
     }
 
-    protected SpeckledMelonMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public SpeckledMelonMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected SpeckledMelonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public SpeckledMelonMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class SpeckledMelonMat extends ItemMaterialData
      */
     public static void register(final SpeckledMelonMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

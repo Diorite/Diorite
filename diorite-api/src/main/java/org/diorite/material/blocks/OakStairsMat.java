@@ -40,7 +40,67 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * ID of block: 53 <br>
  * String ID of block: minecraft:oak_stairs <br>
  * Hardness: 2 <br>
- * Blast Resistance 15
+ * Blast Resistance 15 <br>
+ * <br>
+ * Subtypes: <br>
+ * <ol>
+ * <li>
+ * NORTH_UPSIDE_DOWN:
+ * Type name: 'North Upside Down' <br>
+ * SubID: 7 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH_UPSIDE_DOWN:
+ * Type name: 'South Upside Down' <br>
+ * SubID: 6 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST_UPSIDE_DOWN:
+ * Type name: 'West Upside Down' <br>
+ * SubID: 5 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST_UPSIDE_DOWN:
+ * Type name: 'East Upside Down' <br>
+ * SubID: 4 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * NORTH:
+ * Type name: 'North' <br>
+ * SubID: 3 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * SOUTH:
+ * Type name: 'South' <br>
+ * SubID: 2 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * WEST:
+ * Type name: 'West' <br>
+ * SubID: 1 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * <li>
+ * EAST:
+ * Type name: 'East' <br>
+ * SubID: 0 <br>
+ * Hardness: 2 <br>
+ * Blast Resistance 15 <br>
+ * </li>
+ * </ol>
  */
 @SuppressWarnings("JavaDoc")
 public class OakStairsMat extends WoodenStairsMat
@@ -64,17 +124,17 @@ public class OakStairsMat extends WoodenStairsMat
     private static final TByteObjectMap<OakStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected OakStairsMat()
+    public OakStairsMat()
     {
         super("OAK_STAIRS", 53, "minecraft:oak_stairs", WoodType.OAK, BlockFace.EAST, false, 2, 15);
     }
 
-    protected OakStairsMat(final BlockFace face, final boolean upsideDown)
+    public OakStairsMat(final BlockFace face, final boolean upsideDown)
     {
         super(OAK_STAIRS_EAST.name(), OAK_STAIRS_EAST.ordinal(), OAK_STAIRS_EAST.getMinecraftId(), WoodType.OAK, face, upsideDown, OAK_STAIRS_EAST.getHardness(), OAK_STAIRS_EAST.getBlastResistance());
     }
 
-    protected OakStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
+    public OakStairsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final WoodType woodType, final BlockFace face, final boolean upsideDown, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, woodType, face, upsideDown, hardness, blastResistance);
     }
@@ -162,6 +222,7 @@ public class OakStairsMat extends WoodenStairsMat
      */
     public static void register(final OakStairsMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

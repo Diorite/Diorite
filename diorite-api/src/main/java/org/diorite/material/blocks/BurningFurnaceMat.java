@@ -95,19 +95,19 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected BurningFurnaceMat()
+    public BurningFurnaceMat()
     {
         super("BURNING_FURNACE", 62, "minecraft:lit_furnace", "NORTH", (byte) 0x00, 3.5f, 17.5f);
         this.face = BlockFace.NORTH;
     }
 
-    protected BurningFurnaceMat(final BlockFace face)
+    public BurningFurnaceMat(final BlockFace face)
     {
         super(BURNING_FURNACE_NORTH.name(), BURNING_FURNACE_NORTH.ordinal(), BURNING_FURNACE_NORTH.getMinecraftId(), face.name(), combine(face), BURNING_FURNACE_NORTH.getHardness(), BURNING_FURNACE_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected BurningFurnaceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public BurningFurnaceMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -204,6 +204,7 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
      */
     public static void register(final BurningFurnaceMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

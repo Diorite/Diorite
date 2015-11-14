@@ -97,19 +97,19 @@ public class ChestMat extends BlockMaterialData implements DirectionalMat, FuelM
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected ChestMat()
+    public ChestMat()
     {
         super("CHEST", 54, "minecraft:chest", "NORTH", (byte) 0x00, 12.5f, 2.5f);
         this.face = BlockFace.NORTH;
     }
 
-    protected ChestMat(final BlockFace face)
+    public ChestMat(final BlockFace face)
     {
         super(CHEST_NORTH.name(), CHEST_NORTH.ordinal(), CHEST_NORTH.getMinecraftId(), face.name(), combine(face), CHEST_NORTH.getHardness(), CHEST_NORTH.getBlastResistance());
         this.face = face;
     }
 
-    protected ChestMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public ChestMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -219,6 +219,7 @@ public class ChestMat extends BlockMaterialData implements DirectionalMat, FuelM
      */
     public static void register(final ChestMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

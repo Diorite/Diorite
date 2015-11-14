@@ -53,17 +53,17 @@ public class ReedsMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<ReedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected ReedsMat()
+    public ReedsMat()
     {
         super("REEDS", 338, "minecraft:reeds", "REEDS", (short) 0x00);
     }
 
-    protected ReedsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public ReedsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected ReedsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public ReedsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class ReedsMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final ReedsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -113,19 +113,19 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
     protected final BlockFace face;
 
     @SuppressWarnings("MagicNumber")
-    protected TorchMat()
+    public TorchMat()
     {
         super("TORCH_EAST", 50, "minecraft:torch", "EAST", (byte) 0x01, 0, 0);
         this.face = BlockFace.EAST;
     }
 
-    protected TorchMat(final BlockFace face)
+    public TorchMat(final BlockFace face)
     {
         super(TORCH_EAST.name(), TORCH_EAST.ordinal(), TORCH_EAST.getMinecraftId(), (face == BlockFace.SELF) ? "ITEM" : face.name(), combine(face), TORCH_EAST.getHardness(), TORCH_EAST.getBlastResistance());
         this.face = face;
     }
 
-    protected TorchMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
+    public TorchMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -238,6 +238,7 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
      */
     public static void register(final TorchMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -120,19 +120,19 @@ public class CakeBlockMat extends BlockMaterialData
     protected final byte piecesEaten;
 
     @SuppressWarnings("MagicNumber")
-    protected CakeBlockMat()
+    public CakeBlockMat()
     {
         super("CAKE_BLOCK", 92, "minecraft:cake", 1, "0", (byte) 0x00, 0.5f, 2.5f);
         this.piecesEaten = 0x0;
     }
 
-    protected CakeBlockMat(final int piecesEaten)
+    public CakeBlockMat(final int piecesEaten)
     {
         super(CAKE_BLOCK_0.name(), CAKE_BLOCK_0.ordinal(), CAKE_BLOCK_0.getMinecraftId(), CAKE_BLOCK_0.getMaxStack(), Integer.toString(piecesEaten), (byte) piecesEaten, CAKE_BLOCK_0.getHardness(), CAKE_BLOCK_0.getBlastResistance());
         this.piecesEaten = (byte) piecesEaten;
     }
 
-    protected CakeBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final byte piecesEaten, final float hardness, final float blastResistance)
+    public CakeBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final byte piecesEaten, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.piecesEaten = piecesEaten;
@@ -236,6 +236,7 @@ public class CakeBlockMat extends BlockMaterialData
      */
     public static void register(final CakeBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

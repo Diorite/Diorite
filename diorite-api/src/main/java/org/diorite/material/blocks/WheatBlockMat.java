@@ -126,19 +126,19 @@ public class WheatBlockMat extends CropsMat
     protected final int age;
 
     @SuppressWarnings("MagicNumber")
-    protected WheatBlockMat()
+    public WheatBlockMat()
     {
         super("WHEAT_BLOCK", 59, "minecraft:wheat", "0", (byte) 0x00, 0, 0);
         this.age = 0;
     }
 
-    protected WheatBlockMat(final String enumName, final int age)
+    public WheatBlockMat(final String enumName, final int age)
     {
         super(WHEAT_BLOCK_0.name(), WHEAT_BLOCK_0.ordinal(), WHEAT_BLOCK_0.getMinecraftId(), enumName, (byte) age, WHEAT_BLOCK_0.getHardness(), WHEAT_BLOCK_0.getBlastResistance());
         this.age = age;
     }
 
-    protected WheatBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
+    public WheatBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.age = age;
@@ -231,6 +231,7 @@ public class WheatBlockMat extends CropsMat
      */
     public static void register(final WheatBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

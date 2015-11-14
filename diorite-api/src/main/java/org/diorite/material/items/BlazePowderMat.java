@@ -52,17 +52,17 @@ public class BlazePowderMat extends ItemMaterialData
     private static final TShortObjectMap<BlazePowderMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BlazePowderMat()
+    public BlazePowderMat()
     {
         super("BLAZE_POWDER", 377, "minecraft:blaze_powder", "BLAZE_POWDER", (short) 0x00);
     }
 
-    protected BlazePowderMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public BlazePowderMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected BlazePowderMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public BlazePowderMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class BlazePowderMat extends ItemMaterialData
      */
     public static void register(final BlazePowderMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

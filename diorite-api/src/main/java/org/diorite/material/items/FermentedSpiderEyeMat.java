@@ -52,17 +52,17 @@ public class FermentedSpiderEyeMat extends ItemMaterialData
     private static final TShortObjectMap<FermentedSpiderEyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected FermentedSpiderEyeMat()
+    public FermentedSpiderEyeMat()
     {
         super("FERMENTED_SPIDER_EYE", 376, "minecraft:fermented_spider_eye", "FERMENTED_SPIDER_EYE", (short) 0x00);
     }
 
-    protected FermentedSpiderEyeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public FermentedSpiderEyeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected FermentedSpiderEyeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public FermentedSpiderEyeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class FermentedSpiderEyeMat extends ItemMaterialData
      */
     public static void register(final FermentedSpiderEyeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

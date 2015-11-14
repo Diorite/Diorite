@@ -56,12 +56,12 @@ public class AirMat extends BlockMaterialData
     private static final Map<String, AirMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<AirMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
-    protected AirMat()
+    public AirMat()
     {
         super("AIR", 0, "minecraft:air", 0, "AIR", (byte) 0x00, 0, 0);
     }
 
-    protected AirMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public AirMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -131,6 +131,7 @@ public class AirMat extends BlockMaterialData
     {
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
+        allBlocks.incrementAndGet();
     }
 
     @Override

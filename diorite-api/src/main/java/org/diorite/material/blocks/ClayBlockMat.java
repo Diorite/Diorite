@@ -52,12 +52,12 @@ public class ClayBlockMat extends EarthMat
     private static final TByteObjectMap<ClayBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected ClayBlockMat()
+    public ClayBlockMat()
     {
         super("CLAY_BLOCK", 82, "minecraft:clay", "CLAY_BLOCK", (byte) 0x00, 0.6f, 3);
     }
 
-    protected ClayBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public ClayBlockMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -107,6 +107,7 @@ public class ClayBlockMat extends EarthMat
      */
     public static void register(final ClayBlockMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

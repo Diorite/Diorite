@@ -208,7 +208,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
     protected final boolean   powered;
 
     @SuppressWarnings("MagicNumber")
-    protected TripwireHookMat()
+    public TripwireHookMat()
     {
         super("TRIPWIRE_HOOK", 131, "minecraft:tripwire_hook", "SOUTH", (byte) 0x00, 0, 0);
         this.face = BlockFace.SOUTH;
@@ -216,7 +216,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
         this.powered = false;
     }
 
-    protected TripwireHookMat(final BlockFace face, final boolean ready, final boolean powered)
+    public TripwireHookMat(final BlockFace face, final boolean ready, final boolean powered)
     {
         super(TRIPWIRE_HOOK_SOUTH.name(), TRIPWIRE_HOOK_SOUTH.ordinal(), TRIPWIRE_HOOK_SOUTH.getMinecraftId(), face.name() + (ready ? "_READY" : "") + (powered ? "_POWERED" : ""), combine(face, ready, powered), TRIPWIRE_HOOK_SOUTH.getHardness(), TRIPWIRE_HOOK_SOUTH.getBlastResistance());
         this.face = face;
@@ -224,7 +224,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
         this.powered = powered;
     }
 
-    protected TripwireHookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean ready, final boolean powered, final float hardness, final float blastResistance)
+    public TripwireHookMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final boolean ready, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -387,6 +387,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
      */
     public static void register(final TripwireHookMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

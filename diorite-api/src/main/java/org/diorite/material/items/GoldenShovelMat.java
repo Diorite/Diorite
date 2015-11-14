@@ -58,22 +58,22 @@ public class GoldenShovelMat extends ShovelMat
     protected final LazyValue<GoldenShovelMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);
 
     @SuppressWarnings("MagicNumber")
-    protected GoldenShovelMat()
+    public GoldenShovelMat()
     {
         super("GOLDEN_SHOVEL", 284, "minecraft:golden_Shovel", "NEW", (short) 0, ToolMaterial.GOLD);
     }
 
-    protected GoldenShovelMat(final int durability)
+    public GoldenShovelMat(final int durability)
     {
         super(GOLDEN_SHOVEL.name(), GOLDEN_SHOVEL.getId(), GOLDEN_SHOVEL.getMinecraftId(), Integer.toString(durability), (short) durability, ToolMaterial.GOLD);
     }
 
-    protected GoldenShovelMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public GoldenShovelMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, typeName, type, toolMaterial, toolType);
     }
 
-    protected GoldenShovelMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
+    public GoldenShovelMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final ToolMaterial toolMaterial, final ToolType toolType)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, toolMaterial, toolType);
     }
@@ -179,6 +179,7 @@ public class GoldenShovelMat extends ShovelMat
      */
     public static void register(final GoldenShovelMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

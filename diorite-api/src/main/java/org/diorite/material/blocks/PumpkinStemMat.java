@@ -126,19 +126,19 @@ public class PumpkinStemMat extends PlantStemMat
     protected final int age;
 
     @SuppressWarnings("MagicNumber")
-    protected PumpkinStemMat()
+    public PumpkinStemMat()
     {
         super("PUMPKIN_STEM", 104, "minecraft:pumpkin_stem", "0", (byte) 0x00, 0, 0);
         this.age = 0;
     }
 
-    protected PumpkinStemMat(final String enumName, final int age)
+    public PumpkinStemMat(final String enumName, final int age)
     {
         super(PUMPKIN_STEM_0.name(), PUMPKIN_STEM_0.ordinal(), PUMPKIN_STEM_0.getMinecraftId(), enumName, (byte) age, PUMPKIN_STEM_0.getHardness(), PUMPKIN_STEM_0.getBlastResistance());
         this.age = age;
     }
 
-    protected PumpkinStemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
+    public PumpkinStemMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int age, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.age = age;
@@ -231,6 +231,7 @@ public class PumpkinStemMat extends PlantStemMat
      */
     public static void register(final PumpkinStemMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

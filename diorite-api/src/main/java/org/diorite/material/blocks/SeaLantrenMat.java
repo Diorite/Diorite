@@ -53,12 +53,12 @@ public class SeaLantrenMat extends BlockMaterialData
     private static final TByteObjectMap<SeaLantrenMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SeaLantrenMat()
+    public SeaLantrenMat()
     {
         super("SEA_LANTREN", 169, "minecraft:sea_lantren", "SEA_LANTREN", (byte) 0x00, 0.3f, 1.5f);
     }
 
-    protected SeaLantrenMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public SeaLantrenMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -108,6 +108,7 @@ public class SeaLantrenMat extends BlockMaterialData
      */
     public static void register(final SeaLantrenMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

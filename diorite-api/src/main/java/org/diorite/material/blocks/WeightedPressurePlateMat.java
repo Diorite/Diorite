@@ -36,13 +36,13 @@ public abstract class WeightedPressurePlateMat extends PressurePlateMat implemen
 {
     protected final int power;
 
-    protected WeightedPressurePlateMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
+    public WeightedPressurePlateMat(final String enumName, final int id, final String minecraftId, final String typeName, final byte type, final boolean powered, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, typeName, type, powered, hardness, blastResistance);
         this.power = type;
     }
 
-    protected WeightedPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final int power, final float hardness, final float blastResistance)
+    public WeightedPressurePlateMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final boolean powered, final int power, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, powered, hardness, blastResistance);
         this.power = power;

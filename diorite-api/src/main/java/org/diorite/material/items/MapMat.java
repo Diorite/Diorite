@@ -52,17 +52,17 @@ public class MapMat extends ItemMaterialData
     private static final TShortObjectMap<MapMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MapMat()
+    public MapMat()
     {
         super("MAP", 395, "minecraft:map", "MAP", (short) 0x00);
     }
 
-    protected MapMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public MapMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected MapMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public MapMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class MapMat extends ItemMaterialData
      */
     public static void register(final MapMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

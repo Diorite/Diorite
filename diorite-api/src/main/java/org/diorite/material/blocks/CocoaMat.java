@@ -167,21 +167,21 @@ public class CocoaMat extends CropsMat implements AttachableMat
     protected final int       age;
 
     @SuppressWarnings("MagicNumber")
-    protected CocoaMat()
+    public CocoaMat()
     {
         super("COCOA_NORTH_0", 127, "minecraft:cocoa", "NORTH_0", (byte) 0x00, 0.2f, 15);
         this.face = BlockFace.NORTH;
         this.age = 0;
     }
 
-    protected CocoaMat(final String enumName, final BlockFace face, final int age)
+    public CocoaMat(final String enumName, final BlockFace face, final int age)
     {
         super(COCOA_NORTH_0.name(), COCOA_NORTH_0.ordinal(), COCOA_NORTH_0.getMinecraftId(), enumName, combine(face, age), COCOA_NORTH_0.getHardness(), COCOA_NORTH_0.getBlastResistance());
         this.face = face;
         this.age = age;
     }
 
-    protected CocoaMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int age, final float hardness, final float blastResistance)
+    public CocoaMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace face, final int age, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.face = face;
@@ -325,6 +325,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
      */
     public static void register(final CocoaMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

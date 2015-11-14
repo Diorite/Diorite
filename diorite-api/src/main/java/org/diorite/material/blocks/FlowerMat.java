@@ -38,13 +38,13 @@ public abstract class FlowerMat extends PlantMat
      */
     protected final FlowerTypeMat flowerType;
 
-    protected FlowerMat(final String enumName, final int id, final String minecraftId, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
+    public FlowerMat(final String enumName, final int id, final String minecraftId, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, flowerType.name(), type, hardness, blastResistance);
         this.flowerType = flowerType;
     }
 
-    protected FlowerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
+    public FlowerMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final FlowerTypeMat flowerType, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.flowerType = flowerType;

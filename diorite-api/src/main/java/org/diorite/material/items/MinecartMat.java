@@ -51,17 +51,17 @@ public class MinecartMat extends AbstractMinecartMat
     private static final TShortObjectMap<MinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MinecartMat()
+    public MinecartMat()
     {
         super("MINECART", 328, "minecraft:minecraft", "MINECART", (short) 0x00);
     }
 
-    protected MinecartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public MinecartMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected MinecartMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public MinecartMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -111,6 +111,7 @@ public class MinecartMat extends AbstractMinecartMat
      */
     public static void register(final MinecartMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

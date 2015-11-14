@@ -179,25 +179,25 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
     protected final DyeColor color;
 
     @SuppressWarnings("MagicNumber")
-    protected DyeMat()
+    public DyeMat()
     {
         super("DYE", 351, "minecraft:dye", "INK_SAC", (short) 0x00);
         this.color = DyeColor.BLACK;
     }
 
-    protected DyeMat(final String typeName, final DyeColor color)
+    public DyeMat(final String typeName, final DyeColor color)
     {
         super(DYE_INK_SAC.name(), DYE_INK_SAC.getId(), DYE_INK_SAC.getMinecraftId(), typeName, (short) color.getItemFlag());
         this.color = color;
     }
 
-    protected DyeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final DyeColor color)
+    public DyeMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final DyeColor color)
     {
         super(enumName, id, minecraftId, typeName, type);
         this.color = color;
     }
 
-    protected DyeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final DyeColor color)
+    public DyeMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final DyeColor color)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
         this.color = color;
@@ -260,6 +260,7 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
      */
     public static void register(final DyeMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
@@ -309,21 +310,21 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
         protected final OreMat      blockOreType;
         protected final OreBlockMat blockType;
 
-        protected DyeLapisLazuliMat()
+        public DyeLapisLazuliMat()
         {
             super("LAPIS_LAZULI", DyeColor.BLUE);
             this.blockOreType = LapisOreMat.LAPIS_ORE;
             this.blockType = LapisBlockMat.LAPIS_BLOCK;
         }
 
-        protected DyeLapisLazuliMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final DyeColor dyeColor, final OreMat oreType, final OreBlockMat blockType)
+        public DyeLapisLazuliMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final DyeColor dyeColor, final OreMat oreType, final OreBlockMat blockType)
         {
             super(enumName, id, minecraftId, typeName, type, dyeColor);
             this.blockOreType = oreType;
             this.blockType = blockType;
         }
 
-        protected DyeLapisLazuliMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final DyeColor dyeColor, final OreMat oreType, final OreBlockMat blockType)
+        public DyeLapisLazuliMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type, final DyeColor dyeColor, final OreMat oreType, final OreBlockMat blockType)
         {
             super(enumName, id, minecraftId, maxStack, typeName, type, dyeColor);
             this.blockOreType = oreType;

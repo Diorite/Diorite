@@ -80,17 +80,17 @@ public class PrismarineMat extends BlockMaterialData
     private static final TByteObjectMap<PrismarineMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected PrismarineMat()
+    public PrismarineMat()
     {
         super("PRISMARINE", 168, "minecraft:prismarine", "PRISMARINE", (byte) 0x00, 1.5f, 30);
     }
 
-    protected PrismarineMat(final String enumName, final int type)
+    public PrismarineMat(final String enumName, final int type)
     {
         super(PRISMARINE.name(), PRISMARINE.ordinal(), PRISMARINE.getMinecraftId(), enumName, (byte) type, PRISMARINE.getHardness(), PRISMARINE.getBlastResistance());
     }
 
-    protected PrismarineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public PrismarineMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -140,6 +140,7 @@ public class PrismarineMat extends BlockMaterialData
      */
     public static void register(final PrismarineMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

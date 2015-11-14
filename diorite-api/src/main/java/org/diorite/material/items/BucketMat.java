@@ -52,17 +52,17 @@ public class BucketMat extends ItemMaterialData
     private static final TShortObjectMap<BucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected BucketMat()
+    public BucketMat()
     {
         super("BUCKET", 325, "minecraft:bucket", 16, "BUCKET", (short) 0x00);
     }
 
-    protected BucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public BucketMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, BUCKET.getMaxStack(), typeName, type);
     }
 
-    protected BucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public BucketMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class BucketMat extends ItemMaterialData
      */
     public static void register(final BucketMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

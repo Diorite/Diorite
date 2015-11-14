@@ -118,19 +118,19 @@ public class StoneMat extends StonyMat implements VariantableMat
     protected final VariantMat variant;
 
     @SuppressWarnings("MagicNumber")
-    protected StoneMat()
+    public StoneMat()
     {
         super("STONE", 1, "minecraft:stone", "STONE", (byte) 0x00, 1.5f, 30);
         this.variant = VariantMat.CLASSIC;
     }
 
-    protected StoneMat(final String enumName, final int type, final VariantMat variant)
+    public StoneMat(final String enumName, final int type, final VariantMat variant)
     {
         super(STONE.name(), STONE.ordinal(), STONE.getMinecraftId(), enumName, (byte) type, STONE.getHardness(), STONE.getBlastResistance());
         this.variant = variant;
     }
 
-    protected StoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
+    public StoneMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final VariantMat variant, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
         this.variant = variant;
@@ -232,6 +232,7 @@ public class StoneMat extends StonyMat implements VariantableMat
      */
     public static void register(final StoneMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

@@ -190,17 +190,17 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
     private static final TByteObjectMap<DaylightDetectorInvertedMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected DaylightDetectorInvertedMat()
+    public DaylightDetectorInvertedMat()
     {
         super("DAYLIGHT_DETECTOR_INVERTED", 178, "minecraft:daylight_detector_inverted", 0, 0.2f, 1);
     }
 
-    protected DaylightDetectorInvertedMat(final int power)
+    public DaylightDetectorInvertedMat(final int power)
     {
         super(DAYLIGHT_DETECTOR_INVERTED_OFF.name(), DAYLIGHT_DETECTOR_INVERTED_OFF.ordinal(), DAYLIGHT_DETECTOR_INVERTED_OFF.getMinecraftId(), power, DAYLIGHT_DETECTOR_INVERTED_OFF.getHardness(), DAYLIGHT_DETECTOR_INVERTED_OFF.getBlastResistance());
     }
 
-    protected DaylightDetectorInvertedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power, final float hardness, final float blastResistance)
+    public DaylightDetectorInvertedMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final int power, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, power, hardness, blastResistance);
     }
@@ -288,7 +288,7 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
      */
     public static void register(final DaylightDetectorInvertedMat element)
     {
-        byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

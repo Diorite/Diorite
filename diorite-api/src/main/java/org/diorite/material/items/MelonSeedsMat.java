@@ -53,17 +53,17 @@ public class MelonSeedsMat extends ItemMaterialData implements PlaceableMat
     private static final TShortObjectMap<MelonSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected MelonSeedsMat()
+    public MelonSeedsMat()
     {
         super("MELON_SEEDS", 362, "minecraft:melon_seeds", "MELON_SEEDS", (short) 0x00);
     }
 
-    protected MelonSeedsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public MelonSeedsMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected MelonSeedsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public MelonSeedsMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -113,6 +113,7 @@ public class MelonSeedsMat extends ItemMaterialData implements PlaceableMat
      */
     public static void register(final MelonSeedsMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

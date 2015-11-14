@@ -52,17 +52,17 @@ public class NameTagMat extends ItemMaterialData
     private static final TShortObjectMap<NameTagMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected NameTagMat()
+    public NameTagMat()
     {
         super("NAME_TAG", 421, "minecraft:name_tag", "NAME_TAG", (short) 0x00);
     }
 
-    protected NameTagMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    public NameTagMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected NameTagMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    public NameTagMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
@@ -112,6 +112,7 @@ public class NameTagMat extends ItemMaterialData
      */
     public static void register(final NameTagMat element)
     {
+        allItems.incrementAndGet();
         byID.put(element.getType(), element);
         byName.put(element.getTypeName(), element);
     }

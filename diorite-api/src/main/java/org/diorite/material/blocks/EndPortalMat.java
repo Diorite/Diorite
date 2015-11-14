@@ -56,12 +56,12 @@ public class EndPortalMat extends BlockMaterialData implements PortalMat
     private static final TByteObjectMap<EndPortalMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected EndPortalMat()
+    public EndPortalMat()
     {
         super("END_PORTAL", 119, "minecraft:end_portal", "END_PORTAL", (byte) 0x00, - 1, 18_000_000);
     }
 
-    protected EndPortalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    public EndPortalMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
@@ -117,6 +117,7 @@ public class EndPortalMat extends BlockMaterialData implements PortalMat
      */
     public static void register(final EndPortalMat element)
     {
+        allBlocks.incrementAndGet();
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
