@@ -37,7 +37,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 
-@PacketClass(id = 0x02, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x0F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayServerChat extends PacketPlayServer
 {
     private BaseComponent content;

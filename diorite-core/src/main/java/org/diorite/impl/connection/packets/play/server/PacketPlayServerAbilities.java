@@ -35,7 +35,7 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 
-@PacketClass(id = 0x39, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 9)
+@PacketClass(id = 0x2B, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 9)
 public class PacketPlayServerAbilities extends PacketPlayServer
 {
     public static final byte INVULNERABLE_FLAG    = 0x01;

@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.inventory.item.ItemStack;
 
-@PacketClass(id = 0x2F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 100)
+@PacketClass(id = 0x16, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 100)
 public class PacketPlayServerSetSlot extends PacketPlayServer
 {
     private int       windowId; // 1 byte

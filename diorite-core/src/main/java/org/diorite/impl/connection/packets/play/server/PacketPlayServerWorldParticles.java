@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.Particle;
 
-@PacketClass(id = 0x2A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 50)
+@PacketClass(id = 0x22, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 50)
 public class PacketPlayServerWorldParticles extends PacketPlayServer
 {
     private Particle particle;  // 4 bytes

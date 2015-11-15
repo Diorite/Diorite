@@ -38,7 +38,7 @@ import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 
-@PacketClass(id = 0x23, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 13)
+@PacketClass(id = 0x0B, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 13)
 public class PacketPlayServerBlockChange extends PacketPlayServer
 {
     private BlockLocation location; // 8 bytes

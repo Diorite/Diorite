@@ -43,9 +43,6 @@ import org.diorite.impl.entity.attrib.AttributePropertyImpl;
 import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
-import org.diorite.impl.world.chunk.ChunkImpl;
-import org.diorite.impl.world.chunk.ChunkPartImpl;
-import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 import org.diorite.Core;
 import org.diorite.chat.component.BaseComponent;
@@ -64,9 +61,7 @@ import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagType;
-import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.Vector3F;
-import org.diorite.world.chunk.Chunk;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -83,60 +78,6 @@ public class PacketDataSerializer extends ByteBuf
     public PacketDataSerializer(final ByteBuf bytebuf)
     {
         this.byteBuf = bytebuf;
-    }
-
-    public BlockFace readBlockFace()
-    {
-        switch (this.readUnsignedByte())
-        {
-            case 0:
-                return BlockFace.DOWN;
-            case 1:
-                return BlockFace.UP;
-            case 2:
-                return BlockFace.NORTH;
-            case 3:
-                return BlockFace.SOUTH;
-            case 4:
-                return BlockFace.WEST;
-            case 5:
-                return BlockFace.EAST;
-            default:
-                return null;
-        }
-    }
-
-    public void writeBlockFace(final BlockFace face)
-    {
-        if (face == null)
-        {
-            this.writeByte(- 1);
-            return;
-        }
-        switch (face)
-        {
-            case NORTH:
-                this.writeByte(2);
-                break;
-            case EAST:
-                this.writeByte(5);
-                break;
-            case SOUTH:
-                this.writeByte(3);
-                break;
-            case WEST:
-                this.writeByte(4);
-                break;
-            case UP:
-                this.writeByte(1);
-                break;
-            case DOWN:
-                this.writeByte(0);
-                break;
-            default:
-                this.writeByte(- 1);
-                break;
-        }
     }
 
     public void writeEntityMetadata(final EntityMetadataEntry<?> data)
@@ -265,99 +206,6 @@ public class PacketDataSerializer extends ByteBuf
         this.writeText(ComponentSerializer.toString(baseComponent));
     }
 
-    public void writeChunkSimple(final ChunkImpl chunk, final int mask, final boolean skyLight, final boolean groundUpContinuous, final boolean writeSize) // groundUpContinuous, with biomes
-    {
-        final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
-
-        final byte chunkPartsCount = DioriteMathUtils.countBits(chunk.getMask()); // number of chunks to sent
-        final ChunkPartImpl[] chunkPartsToSent = new ChunkPartImpl[chunkPartsCount];
-
-        for (int i = 0, j = 0, localMask = 1; i < chunkParts.length; ++ i, localMask <<= 1)
-        {
-            if ((mask & localMask) != 0)
-            {
-                chunkPartsToSent[j++] = chunkParts[i];
-            }
-        }
-
-        // skyLight ? 2 bytes per block, one byte per light : 2 bytes per block, half per blockLight
-        final int sectionSize = skyLight ? (ChunkPartImpl.CHUNK_DATA_SIZE * 3) : ((ChunkPartImpl.CHUNK_DATA_SIZE * 5) / 2);
-
-        final byte[] data = new byte[(chunkPartsCount * sectionSize) + (groundUpContinuous ? Chunk.CHUNK_BIOMES_SIZE : 0)]; // size of all chunk parts and biomes if enabled
-        int index = 0;
-
-
-        // write all blocks
-        for (final ChunkPartImpl chunkPart : chunkPartsToSent)
-        {
-            for (final short blockData : chunkPart.getBlocks().getArray())
-            {
-                //noinspection MagicNumber
-                data[index++] = (byte) (blockData & 255);
-                //noinspection MagicNumber
-                data[index++] = (byte) ((blockData >> 8) & 255);
-            }
-        }
-
-        // add all block light
-        for (final ChunkPartImpl chunkPart : chunkPartsToSent)
-        {
-            final byte[] blockLightData = chunkPart.getBlockLight().getRawData();
-            System.arraycopy(blockLightData, 0, data, index, blockLightData.length);
-            index += blockLightData.length;
-        }
-
-        // add skyLight if needed
-        if (skyLight)
-        {
-            for (final ChunkPartImpl chunkPart : chunkPartsToSent)
-            {
-                final byte[] skyLightData = chunkPart.getSkyLight().getRawData();
-                System.arraycopy(skyLightData, 0, data, index, skyLightData.length);
-                index += skyLightData.length;
-            }
-        }
-
-        // and biomes if needed
-        if (groundUpContinuous)
-        {
-            for (int i = 0; i < chunk.getBiomes().length; ++ i)
-            {
-                data[index++] = chunk.getBiomes()[i];
-            }
-        }
-
-        // write all data with size of it
-        if (writeSize)
-        {
-            this.writeByteWord(data);
-        }
-        else
-        {
-            this.writeBytes(data);
-        }
-    }
-
-    public void writeChunk(final ChunkImpl chunk, int mask, final boolean skyLight, final boolean groundUpContinuous) // groundUpContinuous, with biomes
-    {
-        final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
-
-        // remove empty chunks from mask
-        for (int i = 0, chunkPartsLength = chunkParts.length; i < chunkPartsLength; i++)
-        {
-            final ChunkPartImpl part = chunkParts[i];
-            if ((part == null) || part.isEmpty())
-            {
-                mask &= ~ (1 << i);
-            }
-        }
-
-        // mask
-        this.writeShort(mask);
-        // chunk data
-        this.writeChunkSimple(chunk, mask, skyLight, groundUpContinuous, true);
-    }
-
     public void writeBlockLocation(final BlockLocation loc)
     {
         this.writeLong(loc.asLong());
@@ -374,6 +222,31 @@ public class PacketDataSerializer extends ByteBuf
         this.writeBytes(abyte);
     }
 
+    @SuppressWarnings("MagicNumber")
+    public static int varintSize(final int i)
+    {
+        if ((i < 0) || (i >= 268435456))
+        {
+            return 5;
+        }
+        if (i < 128)
+        {
+            return 1;
+        }
+        if (i < 16384)
+        {
+            return 2;
+        }
+        if (i < 2097152)
+        {
+            return 3;
+        }
+        if (i < 268435456)
+        {
+            return 4;
+        }
+        throw new AssertionError();
+    }
     public byte[] readByteWord()
     {
         final byte[] abyte = new byte[this.readVarInt()];
@@ -382,9 +255,9 @@ public class PacketDataSerializer extends ByteBuf
         return abyte;
     }
 
-    public <T extends Enum<T>> Enum<T> readEnum(final Class<T> oclass)
+    public <T extends Enum<T>> T readEnum(final Class<T> c)
     {
-        return oclass.getEnumConstants()[this.readVarInt()];
+        return c.getEnumConstants()[this.readVarInt()];
     }
 
     public void writeEnum(final Enum<?> oenum)

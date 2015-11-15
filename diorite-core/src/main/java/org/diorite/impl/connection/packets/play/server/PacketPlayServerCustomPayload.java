@@ -35,7 +35,7 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 
-@PacketClass(id = 0x3F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
+@PacketClass(id = 0x18, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND)
 public class PacketPlayServerCustomPayload extends PacketPlayServer
 {
     public static final int TAG_SIZE = 20;

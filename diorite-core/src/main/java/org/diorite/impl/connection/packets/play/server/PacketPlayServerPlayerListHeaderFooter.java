@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.chat.component.BaseComponent;
 
-@PacketClass(id = 0x47, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 256)
+@PacketClass(id = 0x46, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 256)
 public class PacketPlayServerPlayerListHeaderFooter extends PacketPlayServer
 {
     private BaseComponent header; // ~128 bytes

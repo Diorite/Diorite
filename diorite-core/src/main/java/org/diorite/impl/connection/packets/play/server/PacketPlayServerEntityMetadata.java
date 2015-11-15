@@ -38,7 +38,7 @@ import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.entity.Entity;
 
-@PacketClass(id = 0x1C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 140)
+@PacketClass(id = 0x39, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 140)
 public class PacketPlayServerEntityMetadata extends PacketPlayServer
 {
     private int                              entityId; // ~5 bytes

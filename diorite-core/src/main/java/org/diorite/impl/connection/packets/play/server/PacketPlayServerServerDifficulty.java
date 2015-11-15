@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.Difficulty;
 
-@PacketClass(id = 0x41, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 1)
+@PacketClass(id = 0x0D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 1)
 public class PacketPlayServerServerDifficulty extends PacketPlayServer
 {
     private Difficulty difficulty; // 1 byte

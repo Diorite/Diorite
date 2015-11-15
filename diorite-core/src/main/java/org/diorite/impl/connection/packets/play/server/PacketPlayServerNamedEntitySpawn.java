@@ -36,10 +36,10 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.HumanImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 
-@PacketClass(id = 0x0C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 140)
+@PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 140)
 public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
 {
     private int                              entityId; // ~5 bytes
@@ -49,7 +49,6 @@ public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
     private int                              z; // 4 bytes, WARNING! This is 'fixed-point' number
     private byte                             yaw; // 1 byte
     private byte                             pitch; // 1 byte
-    private short                            currentItem; // 2 bytes
     private Iterable<EntityMetadataEntry<?>> metadata; // ~not more than 128 bytes
 
     public PacketPlayServerNamedEntitySpawn()
@@ -57,7 +56,7 @@ public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
     }
 
     @SuppressWarnings("MagicNumber")
-    public PacketPlayServerNamedEntitySpawn(final PlayerImpl entity)
+    public PacketPlayServerNamedEntitySpawn(final HumanImpl entity)
     {
         this.entityId = entity.getId();
         this.uuid = entity.getUniqueID();
@@ -67,7 +66,6 @@ public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
         this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);
         this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
 
-        this.currentItem = (short) entity.getHeldItemSlot();
         // TODO pasre metadata from entity, or get it if possible
         this.metadata = entity.getMetadata().getEntries();
     }
@@ -82,7 +80,6 @@ public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
         this.z = data.readInt();
         this.yaw = data.readByte();
         this.pitch = data.readByte();
-        this.currentItem = data.readShort();
         this.metadata = data.readEntityMetadata();
     }
 
@@ -96,7 +93,6 @@ public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
         data.writeInt(this.z);
         data.writeByte(this.yaw);
         data.writeByte(this.pitch);
-        data.writeShort(this.currentItem);
         data.writeEntityMetadata(this.metadata);
     }
 
@@ -176,16 +172,6 @@ public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
         this.pitch = pitch;
     }
 
-    public short getCurrentItem()
-    {
-        return this.currentItem;
-    }
-
-    public void setCurrentItem(final short currentItem)
-    {
-        this.currentItem = currentItem;
-    }
-
     public Iterable<EntityMetadataEntry<?>> getMetadata()
     {
         return this.metadata;
@@ -199,6 +185,6 @@ public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("entityId", this.entityId).append("uuid", this.uuid).append("x", this.x).append("y", this.y).append("z", this.z).append("pitch", this.pitch).append("yaw", this.yaw).append("currentItem", this.currentItem).append("metadata", this.metadata).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("entityId", this.entityId).append("uuid", this.uuid).append("x", this.x).append("y", this.y).append("z", this.z).append("pitch", this.pitch).append("yaw", this.yaw).append("metadata", this.metadata).toString();
     }
 }

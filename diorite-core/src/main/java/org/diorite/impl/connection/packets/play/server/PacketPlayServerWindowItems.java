@@ -37,7 +37,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 
-@PacketClass(id = 0x30, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
+@PacketClass(id = 0x14, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
 public class PacketPlayServerWindowItems extends PacketPlayServer
 {
     private int                windowId; // 1 byte

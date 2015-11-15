@@ -33,6 +33,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerChunkUnload;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerCloseWindow;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerCustomPayload;
@@ -47,7 +48,6 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerHeldItemS
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerLogin;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunk;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunkBulk;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedEntitySpawn;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerOpenWindow;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
@@ -124,12 +124,6 @@ public class PlayListener implements PacketPlayServerListener
 
     @Override
     public void handle(final PacketPlayServerPosition packet)
-    {
-
-    }
-
-    @Override
-    public void handle(final PacketPlayServerMapChunkBulk packet)
     {
 
     }
@@ -298,6 +292,12 @@ public class PlayListener implements PacketPlayServerListener
 
     @Override
     public void handle(final PacketPlayServerMapChunk packet)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayServerChunkUnload packet)
     {
 
     }

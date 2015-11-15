@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientResourcePackStatus;
 
-@PacketClass(id = 0x48, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 180)
+@PacketClass(id = 0x32, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 180)
 public class PacketPlayServerResourcePackSend extends PacketPlayServer
 {
     private String url; // ~130 bytes

@@ -28,5 +28,20 @@ import org.diorite.impl.connection.packets.PacketListener;
 
 public interface PacketHandshakeListener extends PacketListener
 {
-    int CURRENT_PROTOCOL = 47;
+    /**
+     * Remember that java will inline this variable in compile-time, so it will be not updated when mod is used on new version.
+     *
+     * @see #getCurrentProtocolVersion()
+     */
+    int CURRENT_PROTOCOL = 86;//76;
+
+    /**
+     * This method returns current protocol version.
+     *
+     * @return current protocol version.
+     */
+    static int getCurrentProtocolVersion()
+    {
+        return CURRENT_PROTOCOL;
+    }
 }

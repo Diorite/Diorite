@@ -36,9 +36,9 @@ public class ClientCommand extends ASimpleEnum<ClientCommand>
         init(ClientCommand.class, 3);
     }
 
-    public static final ClientCommand PERFORM_RESPAWN            = new ClientCommand("PERFORM_RESPAWN");
-    public static final ClientCommand REQUEST_STATS              = new ClientCommand("REQUEST_STATS");
-    public static final ClientCommand OPEN_INVENTORY_ACHIEVEMENT = new ClientCommand("OPEN_INVENTORY_ACHIEVEMENT");
+    public static final ClientCommand PERFORM_RESPAWN = new ClientCommand("PERFORM_RESPAWN");
+    public static final ClientCommand REQUEST_STATS   = new ClientCommand("REQUEST_STATS");
+    public static final ClientCommand OPEN_INVENTORY  = new ClientCommand("OPEN_INVENTORY");
 
     public ClientCommand(final String enumName, final int enumId)
     {
@@ -97,6 +97,6 @@ public class ClientCommand extends ASimpleEnum<ClientCommand>
     {
         ClientCommand.register(PERFORM_RESPAWN);
         ClientCommand.register(REQUEST_STATS);
-        ClientCommand.register(OPEN_INVENTORY_ACHIEVEMENT);
+        ClientCommand.register(OPEN_INVENTORY);
     }
 }

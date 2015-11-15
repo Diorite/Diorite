@@ -47,7 +47,7 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
 
-@PacketClass(id = 0x38, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
+@PacketClass(id = 0x2D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
 public class PacketPlayServerPlayerInfo extends PacketPlayServer
 {
     private PlayerInfoAction           action; // ~5 bytes
@@ -97,7 +97,7 @@ public class PacketPlayServerPlayerInfo extends PacketPlayServer
         this.players = new ArrayList<>(players.length);
         for (final PlayerImpl p : players)
         {
-            this.players.add(new PlayerInfoData(p.getGameProfile(), p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
+            this.players.add(new PlayerInfoData((GameProfileImpl) p.getGameProfile(), p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
         }
     }
 

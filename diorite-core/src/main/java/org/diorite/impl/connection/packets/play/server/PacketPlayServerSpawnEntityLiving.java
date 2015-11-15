@@ -25,6 +25,7 @@
 package org.diorite.impl.connection.packets.play.server;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -37,16 +38,17 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 
-@PacketClass(id = 0x0F, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 150)
+@PacketClass(id = 0x03, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 170)
 public class PacketPlayServerSpawnEntityLiving extends PacketPlayServer
 {
-    private int                              entityId; // ~5 bytes
-    private byte                             entityTypeId; // 1 byte
-    private int                              x; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int                              y; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int                              z; // 4 bytes, WARNING! This is 'fixed-point' number
-    private byte                             yaw; // 1 byte
-    private byte                             pitch; // 1 byte
+    private int  entityId; // ~5 bytes
+    private UUID entityUUID; // 16 bytes
+    private byte entityTypeId; // 1 byte
+    private int  x; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int  y; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int  z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private byte yaw; // 1 byte
+    private byte pitch; // 1 byte
     private byte                             headPitch; // 1 byte
     private short                            movX; // 2 bytes
     private short                            movY; // 2 bytes
@@ -61,6 +63,7 @@ public class PacketPlayServerSpawnEntityLiving extends PacketPlayServer
     public PacketPlayServerSpawnEntityLiving(final EntityImpl entity)
     {
         this.entityId = entity.getId();
+        this.entityUUID = entity.getUniqueID();
         this.entityTypeId = (byte) entity.getMcId();
         this.x = (int) (entity.getX() * 32);
         this.y = (int) (entity.getY() * 32);
@@ -80,6 +83,7 @@ public class PacketPlayServerSpawnEntityLiving extends PacketPlayServer
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.entityId = data.readVarInt();
+        this.entityUUID = data.readUUID();
         this.entityTypeId = data.readByte();
         this.x = data.readInt();
         this.y = data.readInt();
@@ -98,6 +102,7 @@ public class PacketPlayServerSpawnEntityLiving extends PacketPlayServer
     {
 //        System.out.println("write packet...3");
         data.writeVarInt(this.entityId);
+        data.writeUUID(this.entityUUID);
         data.writeByte(this.entityTypeId);
         data.writeInt(this.x);
         data.writeInt(this.y);

@@ -25,6 +25,7 @@
 package org.diorite.impl.connection.packets.play.server;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -37,10 +38,11 @@ import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.EntityObject;
 
-@PacketClass(id = 0x0E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 30)
+@PacketClass(id = 0x00, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 50)
 public class PacketPlayServerSpawnEntity extends PacketPlayServer
 {
     private int   entityId; // ~5 bytes
+    private UUID  entityUUID; // 16 bytes
     private byte  entityTypeId; // 1 byte
     private int   x; // 4 bytes, WARNING! This is 'fixed-point' number
     private int   y; // 4 bytes, WARNING! This is 'fixed-point' number
@@ -60,6 +62,7 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
     public <T extends EntityImpl & EntityObject> PacketPlayServerSpawnEntity(final T entity)
     {
         this.entityId = entity.getId();
+        this.entityUUID = entity.getUniqueID();
         this.entityTypeId = (byte) entity.getMcId();
         if (entity.getType().isLiving())
         {
@@ -82,6 +85,7 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.entityId = data.readVarInt();
+        this.entityUUID = data.readUUID();
         this.entityTypeId = data.readByte();
         this.x = data.readInt();
         this.y = data.readInt();
@@ -89,12 +93,9 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
         this.pitch = data.readByte();
         this.yaw = data.readByte();
         this.objectData = data.readInt();
-        if (this.objectData > 0)
-        {
-            this.movX = data.readShort();
-            this.movY = data.readShort();
-            this.movZ = data.readShort();
-        }
+        this.movX = data.readShort();
+        this.movY = data.readShort();
+        this.movZ = data.readShort();
     }
 
     @Override
@@ -102,6 +103,7 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
     {
 //        System.out.println("write packet...2");
         data.writeVarInt(this.entityId);
+        data.writeUUID(this.entityUUID);
         data.writeByte(this.entityTypeId);
         data.writeInt(this.x);
         data.writeInt(this.y);
@@ -109,12 +111,9 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
         data.writeByte(this.pitch);
         data.writeByte(this.yaw);
         data.writeInt(this.objectData);
-        if (this.objectData > 0)
-        {
-            data.writeShort(this.movX);
-            data.writeShort(this.movY);
-            data.writeShort(this.movZ);
-        }
+        data.writeShort(this.movX);
+        data.writeShort(this.movY);
+        data.writeShort(this.movZ);
     }
 
     @Override
@@ -131,6 +130,16 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
     public void setEntityId(final int entityId)
     {
         this.entityId = entityId;
+    }
+
+    public UUID getEntityUUID()
+    {
+        return this.entityUUID;
+    }
+
+    public void setEntityUUID(final UUID entityUUID)
+    {
+        this.entityUUID = entityUUID;
     }
 
     public byte getEntityTypeId()
@@ -236,6 +245,6 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("entityId", this.entityId).append("entityTypeId", this.entityTypeId).append("x", this.x).append("y", this.y).append("z", this.z).append("pitch", this.pitch).append("yaw", this.yaw).append("objectData", this.objectData).append("movX", this.movX).append("movY", this.movY).append("movZ", this.movZ).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("entityId", this.entityId).append("entityUUID", this.entityUUID).append("entityTypeId", this.entityTypeId).append("x", this.x).append("y", this.y).append("z", this.z).append("pitch", this.pitch).append("yaw", this.yaw).append("objectData", this.objectData).append("movX", this.movX).append("movY", this.movY).append("movZ", this.movZ).toString();
     }
 }
