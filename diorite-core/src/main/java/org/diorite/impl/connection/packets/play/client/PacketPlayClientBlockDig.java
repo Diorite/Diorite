@@ -37,7 +37,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 
-@PacketClass(id = 0x07, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 10)
+@PacketClass(id = 0x10, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 10)
 public class PacketPlayClientBlockDig extends PacketPlayClient
 {
     private BlockDigAction action; // 1 byte
@@ -66,7 +66,7 @@ public class PacketPlayClientBlockDig extends PacketPlayClient
     {
         this.action = BlockDigAction.values()[data.readByte()];
         this.blockLocation = data.readBlockLocation();
-        this.blockFace = data.readBlockFace();
+        this.blockFace = readBlockFace(data);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class PacketPlayClientBlockDig extends PacketPlayClient
     {
         data.writeByte(this.action.ordinal());
         data.writeBlockLocation(this.blockLocation);
-        data.writeBlockFace(this.blockFace);
+        writeBlockFace(this.blockFace, data);
     }
 
     @Override
@@ -126,6 +126,68 @@ public class PacketPlayClientBlockDig extends PacketPlayClient
         FINISH_DIG,
         DROP_ITEM_STACK,
         DROP_ITEM,
-        SHOT_ARROW_OR_EAT
+        SHOT_ARROW_OR_EAT,
+        SWAP_OFF_HAND // TODO implement
     }
+
+
+    protected static BlockFace readBlockFace(final int i)
+    {
+        switch (i)
+        {
+            case 0:
+                return BlockFace.DOWN;
+            case 1:
+                return BlockFace.UP;
+            case 2:
+                return BlockFace.NORTH;
+            case 3:
+                return BlockFace.SOUTH;
+            case 4:
+                return BlockFace.WEST;
+            case 5:
+                return BlockFace.EAST;
+            default:
+                return null;
+        }
+    }
+
+    protected static BlockFace readBlockFace(final PacketDataSerializer data)
+    {
+        return readBlockFace(data.readByte());
+    }
+
+    protected static void writeBlockFace(final BlockFace face, final PacketDataSerializer data)
+    {
+        if (face == null)
+        {
+            data.writeByte(- 1);
+            return;
+        }
+        switch (face)
+        {
+            case NORTH:
+                data.writeByte(2);
+                break;
+            case EAST:
+                data.writeByte(5);
+                break;
+            case SOUTH:
+                data.writeByte(3);
+                break;
+            case WEST:
+                data.writeByte(4);
+                break;
+            case UP:
+                data.writeByte(1);
+                break;
+            case DOWN:
+                data.writeByte(0);
+                break;
+            default:
+                data.writeByte(- 1);
+                break;
+        }
+    }
+
 }

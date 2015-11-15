@@ -34,14 +34,17 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
+import org.diorite.entity.data.HandType;
 import org.diorite.utils.math.geometry.Vector3F;
 
-@PacketClass(id = 0x02, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 18)
+@PacketClass(id = 0x09, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 20)
 public class PacketPlayClientUseEntity extends PacketPlayClient
 {
     private int             targetEntity; // ~5 bytes
     private EntityUseAction action; // ~1 byte
     private Vector3F        interactAtLocation; // 12 bytes
+    private HandType        handType; // ~1 byte
+
 
     public PacketPlayClientUseEntity()
     {
@@ -53,7 +56,7 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
         this.action = action;
     }
 
-    public PacketPlayClientUseEntity(final int targetEntity, final EntityUseAction action, final Vector3F interactAtLocation)
+    public PacketPlayClientUseEntity(final int targetEntity, final EntityUseAction action, final Vector3F interactAtLocation, final HandType handType)
     {
         this.targetEntity = targetEntity;
         this.action = action;
@@ -62,6 +65,18 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
             throw new IllegalArgumentException();
         }
         this.interactAtLocation = interactAtLocation;
+        this.handType = handType;
+    }
+
+    public PacketPlayClientUseEntity(final int targetEntity, final EntityUseAction action, final HandType handType)
+    {
+        this.targetEntity = targetEntity;
+        this.action = action;
+        if (! ((action == EntityUseAction.INTERACT) || (action == EntityUseAction.INTERACTAT)))
+        {
+            throw new IllegalArgumentException();
+        }
+        this.handType = handType;
     }
 
     public int getTargetEntity()
@@ -94,6 +109,16 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
         this.interactAtLocation = interactAtLocation;
     }
 
+    public HandType getHandType()
+    {
+        return this.handType;
+    }
+
+    public void setHandType(final HandType handType)
+    {
+        this.handType = handType;
+    }
+
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
@@ -102,6 +127,11 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
         if (this.action == EntityUseAction.INTERACTAT)
         {
             this.interactAtLocation = data.readVector3F();
+            this.handType = data.readEnum(HandType.class);
+        }
+        else if (this.action == EntityUseAction.INTERACT)
+        {
+            this.handType = data.readEnum(HandType.class);
         }
     }
 
@@ -113,6 +143,11 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
         if (this.action == EntityUseAction.INTERACTAT)
         {
             data.writeVector3F(this.interactAtLocation);
+            data.writeEnum(this.handType);
+        }
+        else if (this.action == EntityUseAction.INTERACT)
+        {
+            data.writeEnum(this.handType);
         }
     }
 

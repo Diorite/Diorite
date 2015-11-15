@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.entity.EntityAction;
 
-@PacketClass(id = 0x0B, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 11)
+@PacketClass(id = 0x11, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 11)
 public class PacketPlayClientEntityAction extends PacketPlayClient
 {
     private int          entityID; // ~5 bytes

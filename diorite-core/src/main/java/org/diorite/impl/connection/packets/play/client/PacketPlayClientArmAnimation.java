@@ -26,30 +26,61 @@ package org.diorite.impl.connection.packets.play.client;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
+import org.diorite.entity.data.HandType;
 
-@PacketClass(id = 0x0A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 0)
+@PacketClass(id = 0x17, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 1)
 public class PacketPlayClientArmAnimation extends PacketPlayClient
 {
+    private HandType handType; // 1 byte
+
+    public PacketPlayClientArmAnimation()
+    {
+    }
+
+    public PacketPlayClientArmAnimation(final HandType handType)
+    {
+        this.handType = handType;
+    }
+
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-
+        this.handType = data.readEnum(HandType.class);
     }
 
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
+        data.writeEnum(this.handType);
+    }
 
+    public HandType getHandType()
+    {
+        return this.handType;
+    }
+
+    public void setHandType(final HandType handType)
+    {
+        this.handType = handType;
     }
 
     @Override
     public void handle(final PacketPlayClientListener listener)
     {
         listener.handle(this);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("handType", this.handType).toString();
     }
 }

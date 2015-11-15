@@ -36,23 +36,23 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
+import org.diorite.entity.data.HandType;
 import org.diorite.utils.CursorPos;
 
-@PacketClass(id = 0x08, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 50)
+@PacketClass(id = 0x19, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 15)
 public class PacketPlayClientBlockPlace extends PacketPlayClient
 {
     private BlockLocation location; // 8 bytes
-    // private ItemStackImpl itemStack; // 2 bytes if null, 7 if simple item. ~40 // ignored by server, always read as null to prevent memory leaks and client ability to crash server.
-    private CursorPos     cursorPos; // 4 bytes
+    private CursorPos     cursorPos; // 5 bytes
 
     public PacketPlayClientBlockPlace()
     {
     }
 
-    public PacketPlayClientBlockPlace(final BlockLocation location, final BlockFace blockFace, final float cursorX, final float cursorY, final float cursorZ)
+    public PacketPlayClientBlockPlace(final BlockLocation location, final BlockFace blockFace, final HandType handType, final float cursorX, final float cursorY, final float cursorZ)
     {
         this.location = location;
-        this.cursorPos = new CursorPos(blockFace, cursorX, cursorY, cursorZ);
+        this.cursorPos = new CursorPos(blockFace, handType, cursorX, cursorY, cursorZ);
     }
 
     public PacketPlayClientBlockPlace(final BlockLocation location, final CursorPos cursorPos)
@@ -65,20 +65,15 @@ public class PacketPlayClientBlockPlace extends PacketPlayClient
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.location = data.readBlockLocation();
-        final BlockFace blockFace = data.readBlockFace();
-
-        // this.itemStack = data.readItemStack(); // don't read item stack, skip all bytes instead
-        data.skipBytes(data.readableBytes() - 3); // skip rest of bytes, except last 3 (cursor pos)
-
-        this.cursorPos = new CursorPos(blockFace, data.readUnsignedByte(), data.readUnsignedByte(), data.readUnsignedByte());
+        this.cursorPos = new CursorPos(readBlockFace(data), data.readEnum(HandType.class), data.readUnsignedByte(), data.readUnsignedByte(), data.readUnsignedByte());
     }
 
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeBlockLocation(this.location);
-        data.writeBlockFace(this.cursorPos.getBlockFace());
-        data.writeItemStack(null);
+        writeBlockFace(this.cursorPos.getBlockFace(), data);
+        data.writeEnum(this.cursorPos.getHandType());
         data.writeByte(this.cursorPos.getPixelX());
         data.writeByte(this.cursorPos.getPixelY());
         data.writeByte(this.cursorPos.getPixelZ());
@@ -115,4 +110,43 @@ public class PacketPlayClientBlockPlace extends PacketPlayClient
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("location", this.location).append("cursorPos", this.cursorPos).toString();
     }
+
+    protected static BlockFace readBlockFace(final PacketDataSerializer data)
+    {
+        return PacketPlayClientBlockDig.readBlockFace(data.readVarInt());
+    }
+
+    protected static void writeBlockFace(final BlockFace face, final PacketDataSerializer data)
+    {
+        if (face == null)
+        {
+            data.writeVarInt(- 1);
+            return;
+        }
+        switch (face)
+        {
+            case NORTH:
+                data.writeVarInt(2);
+                break;
+            case EAST:
+                data.writeVarInt(5);
+                break;
+            case SOUTH:
+                data.writeVarInt(3);
+                break;
+            case WEST:
+                data.writeVarInt(4);
+                break;
+            case UP:
+                data.writeVarInt(1);
+                break;
+            case DOWN:
+                data.writeVarInt(0);
+                break;
+            default:
+                data.writeVarInt(- 1);
+                break;
+        }
+    }
+
 }

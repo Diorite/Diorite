@@ -35,19 +35,18 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.BlockLocation;
-import org.diorite.chat.component.BaseComponent;
 
-@PacketClass(id = 0x12, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 350)
+@PacketClass(id = 0x16, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 350)
 public class PacketPlayClientUpdateSign extends PacketPlayClient
 {
     private BlockLocation location; // 8 bytes
-    private BaseComponent[] lines; // ~256 bytes
+    private String[]      lines; // ~256 bytes
 
     public PacketPlayClientUpdateSign()
     {
     }
 
-    public PacketPlayClientUpdateSign(final BlockLocation location, final BaseComponent... lines)
+    public PacketPlayClientUpdateSign(final BlockLocation location, final String... lines)
     {
         this.location = location;
         this.lines = lines;
@@ -63,22 +62,22 @@ public class PacketPlayClientUpdateSign extends PacketPlayClient
         this.location = location;
     }
 
-    public BaseComponent getLine(final int id)
+    public String getLine(final int id)
     {
         return this.lines[id];
     }
 
-    public void setLine(final int id, final BaseComponent text)
+    public void setLine(final int id, final String text)
     {
         this.lines[id] = text;
     }
 
-    public BaseComponent[] getLines()
+    public String[] getLines()
     {
         return this.lines;
     }
 
-    public void setLines(final BaseComponent[] lines)
+    public void setLines(final String[] lines)
     {
         this.lines = lines;
     }
@@ -88,10 +87,10 @@ public class PacketPlayClientUpdateSign extends PacketPlayClient
     {
         this.location = data.readBlockLocation();
 
-        this.lines = new BaseComponent[4];
+        this.lines = new String[4];
         for (int i = 0; i < 4; i++)
         {
-            this.lines[i] = data.readBaseComponent();
+            this.lines[i] = data.readText(Short.MAX_VALUE);
         }
     }
 
@@ -101,7 +100,7 @@ public class PacketPlayClientUpdateSign extends PacketPlayClient
         data.writeBlockLocation(this.location);
         for (int i = 0; i < 4; i++)
         {
-            data.writeBaseComponent(this.lines[i]);
+            data.writeText(this.lines[i]);
         }
     }
 

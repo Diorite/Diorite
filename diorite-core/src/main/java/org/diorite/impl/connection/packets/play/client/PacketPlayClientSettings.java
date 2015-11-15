@@ -36,8 +36,9 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.DisplayedSkinParts;
 import org.diorite.chat.ChatVisibility;
+import org.diorite.entity.data.HandType;
 
-@PacketClass(id = 0x15, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 12)
+@PacketClass(id = 0x03, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 13)
 public class PacketPlayClientSettings extends PacketPlayClient
 {
     private String             locale; // ~8 bytes
@@ -45,18 +46,20 @@ public class PacketPlayClientSettings extends PacketPlayClient
     private ChatVisibility     chatVisibility; // 1 byte
     private boolean            colorsEnabled; // 1 byte
     private DisplayedSkinParts displayedSkinParts; // 1 byte
+    private HandType           handType; // 1 byte
 
     public PacketPlayClientSettings()
     {
     }
 
-    public PacketPlayClientSettings(final String locale, final byte viewDistance, final ChatVisibility chatVisibility, final boolean colorsEnabled, final DisplayedSkinParts displayedSkinParts)
+    public PacketPlayClientSettings(final String locale, final byte viewDistance, final ChatVisibility chatVisibility, final boolean colorsEnabled, final DisplayedSkinParts displayedSkinParts, final HandType handType)
     {
         this.locale = locale;
         this.viewDistance = viewDistance;
         this.chatVisibility = chatVisibility;
         this.colorsEnabled = colorsEnabled;
         this.displayedSkinParts = displayedSkinParts;
+        this.handType = handType;
     }
 
     @Override
@@ -67,6 +70,7 @@ public class PacketPlayClientSettings extends PacketPlayClient
         this.chatVisibility = ChatVisibility.getByEnumOrdinal(data.readByte());
         this.colorsEnabled = data.readBoolean();
         this.displayedSkinParts = DisplayedSkinParts.fromByteFlag(data.readUnsignedByte());
+        this.handType = data.readEnum(HandType.class);
     }
 
     @Override
@@ -77,6 +81,7 @@ public class PacketPlayClientSettings extends PacketPlayClient
         data.writeByte(this.chatVisibility.ordinal());
         data.writeBoolean(this.colorsEnabled);
         data.writeByte(this.displayedSkinParts.toByteFlag());
+        data.writeEnum(this.handType);
     }
 
     @Override
@@ -133,6 +138,16 @@ public class PacketPlayClientSettings extends PacketPlayClient
     public void setDisplayedSkinParts(final DisplayedSkinParts displayedSkinParts)
     {
         this.displayedSkinParts = displayedSkinParts;
+    }
+
+    public HandType getHandType()
+    {
+        return this.handType;
+    }
+
+    public void setHandType(final HandType handType)
+    {
+        this.handType = handType;
     }
 
     @Override
