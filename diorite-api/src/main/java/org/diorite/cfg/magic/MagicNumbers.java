@@ -54,7 +54,7 @@ public final class MagicNumbers
     @MagicNumber("attributes.types.generic.maxHealth.min")
     public static double ATTRIBUTES__GENERIC_MAX_HEALTH__MIN     = 0;
     @MagicNumber("attributes.types.generic.maxHealth.max")
-    public static double ATTRIBUTES__GENERIC_MAX_HEALTH__MAX     = Integer.MAX_VALUE;
+    public static double ATTRIBUTES__GENERIC_MAX_HEALTH__MAX     = 1024;
 
     // attributes/generic.followRange
     @MagicNumber("attributes.types.generic.followRange.default")
@@ -78,7 +78,7 @@ public final class MagicNumbers
     @MagicNumber("attributes.types.generic.movementSpeed.min")
     public static double ATTRIBUTES__GENERIC_MOVEMENT_SPEED__MIN     = 0;
     @MagicNumber("attributes.types.generic.movementSpeed.max")
-    public static double ATTRIBUTES__GENERIC_MOVEMENT_SPEED__MAX     = Double.MAX_VALUE;
+    public static double ATTRIBUTES__GENERIC_MOVEMENT_SPEED__MAX     = 1024;
 
     // attributes/generic.attackDamage
     @MagicNumber("attributes.types.generic.attackDamage.default")
@@ -86,7 +86,15 @@ public final class MagicNumbers
     @MagicNumber("attributes.types.generic.attackDamage.min")
     public static double ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MIN     = 0;
     @MagicNumber("attributes.types.generic.attackDamage.max")
-    public static double ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MAX     = Double.MAX_VALUE;
+    public static double ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MAX     = 2048;
+
+    // attributes/generic.attackSpeed
+    @MagicNumber("attributes.types.generic.attackSpeed.default")
+    public static double ATTRIBUTES__GENERIC_ATTACK_SPEED__DEFAULT = 2;
+    @MagicNumber("attributes.types.generic.attackSpeed.min")
+    public static double ATTRIBUTES__GENERIC_ATTACK_SPEED__MIN     = 0;
+    @MagicNumber("attributes.types.generic.attackSpeed.max")
+    public static double ATTRIBUTES__GENERIC_ATTACK_SPEED__MAX     = 2048;
 
     // attributes/horse.jumpStrength
     @MagicNumber("attributes.types.horse.jumpStrength.default")

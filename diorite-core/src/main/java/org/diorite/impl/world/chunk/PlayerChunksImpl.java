@@ -24,9 +24,7 @@
 
 package org.diorite.impl.world.chunk;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -35,8 +33,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.Tickable;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerChunkUnload;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunk;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunkBulk;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.utils.collections.sets.ConcurrentSet;
@@ -117,7 +115,7 @@ public class PlayerChunksImpl implements Tickable
             }
             it.remove();
             this.chunkLock.release(key);
-            this.player.getNetworkManager().sendPacket(PacketPlayServerMapChunk.unload(chunkPos));
+            this.player.getNetworkManager().sendPacket(new PacketPlayServerChunkUnload(chunkPos));
         }
     }
 
@@ -137,7 +135,7 @@ public class PlayerChunksImpl implements Tickable
 
         forChunks(r, this.lastUpdate, chunkPos -> {
             impl.forcePopulation(chunkPos.getX(), chunkPos.getZ());
-            long key = chunkPos.asLong();
+            final long key = chunkPos.asLong();
             if (this.visibleChunks.contains(key))
             {
                 oldChunks.remove(key);
@@ -150,36 +148,18 @@ public class PlayerChunksImpl implements Tickable
             }
 
         });
-        if (chunksToSent.isEmpty() && oldChunks.isEmpty())
+        if (chunksToSent.isEmpty() /*&& oldChunks.isEmpty()*/)
         {
             return;
         }
-        List<PacketPlayServerMapChunk> packets = new ArrayList<>(6);
-        int bulkSize = 6;
 
+        final PacketPlayServerMapChunk[] packets = new PacketPlayServerMapChunk[chunksToSent.size()];
+        int i = 0;
         for (final ChunkImpl chunk : chunksToSent)
         {
-            chunk.load();
-            final PacketPlayServerMapChunk packet = new PacketPlayServerMapChunk(true, chunk);
-            final int messageSize = PacketPlayServerMapChunkBulk.HEADER_SIZE + packet.getData().getRawData().length;
-
-            // send current data if too big
-            if ((bulkSize + messageSize) > PacketPlayServerMapChunkBulk.MAX_SIZE)
-            {
-                this.player.getNetworkManager().sendPacket(new PacketPlayServerMapChunkBulk(packets, this.player.getWorld()));
-                packets = new ArrayList<>(6);
-                bulkSize = 6;
-            }
-
-            bulkSize += messageSize;
-            packets.add(packet);
+            packets[i++] = new PacketPlayServerMapChunk(true, chunk);
         }
-
-        // send rest if exist
-        if (! packets.isEmpty())
-        {
-            this.player.getNetworkManager().sendPacket(new PacketPlayServerMapChunkBulk(packets, this.player.getWorld()));
-        }
+        this.player.getNetworkManager().sendPackets(packets);
     }
 
     @Override

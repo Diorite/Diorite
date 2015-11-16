@@ -27,25 +27,27 @@ package org.diorite.impl.world.chunk;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.connection.packets.PacketDataSerializer;
+import org.diorite.impl.world.chunk.pattern.PatternImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.arrays.NibbleArray;
-import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.chunk.Chunk;
 
 public class ChunkPartImpl // part of chunk 16x16x16
 {
     public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
-    private final    byte             yPos; // from 0 to 15
-    private volatile int              blocksCount;
-    private          AtomicShortArray blocks; // id and sub-id(0-15) of every block
-    private          NibbleArray      skyLight;
-    private          NibbleArray      blockLight;
+    private final byte        yPos; // from 0 to 15
+    private final PatternImpl pattern;
+    private final ChunkBuffer chunkBuffer;
+    private       NibbleArray skyLight;
+    private       NibbleArray blockLight;
 
     public ChunkPartImpl(final byte yPos, final boolean hasSkyLight)
     {
         this.yPos = yPos;
-        this.blocks = new AtomicShortArray(CHUNK_DATA_SIZE);
+        this.pattern = new PatternImpl();
+        this.chunkBuffer = new ChunkBuffer(this.pattern.bitsPerBlock());
         this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
         if (hasSkyLight)
         {
@@ -56,9 +58,10 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blockLight.fill((byte) 0x0);
     }
 
-    public ChunkPartImpl(final AtomicShortArray blocks, final byte yPos, final boolean hasSkyLight)
+    public ChunkPartImpl(final ChunkBuffer blocks, final PatternImpl pattern, final byte yPos, final boolean hasSkyLight)
     {
-        this.blocks = blocks;
+        this.pattern = pattern;
+        this.chunkBuffer = blocks;
         this.blockLight = new NibbleArray(CHUNK_DATA_SIZE);
         this.yPos = yPos;
         if (hasSkyLight)
@@ -70,12 +73,59 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blockLight.fill((byte) 0x0);
     }
 
-    public ChunkPartImpl(final AtomicShortArray blocks, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
+    public ChunkPartImpl(final ChunkBuffer blocks, final PatternImpl pattern, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
     {
-        this.blocks = blocks;
+        this.pattern = pattern;
+        this.chunkBuffer = blocks;
         this.skyLight = skyLight;
         this.blockLight = blockLight;
         this.yPos = yPos;
+    }
+
+    public void write(final PacketDataSerializer data)
+    {
+        this.pattern.write(data);
+        final byte[] bytes = this.chunkBuffer.getBytes();
+        data.writeVarInt(bytes.length / 8);
+
+    }
+
+    public static class ChunkSectionData
+    {
+        public final PatternImpl pattern;
+        public final byte[]      blocks;
+        public final byte[]      blockLight;
+        public final byte[]      skyLight;
+        public final int         size;
+
+        public ChunkSectionData(final ChunkPartImpl part, final boolean appendSkyLight)
+        {
+            int size = 0;
+            this.pattern = part.getPattern();
+            this.blocks = part.chunkBuffer.getBytes();
+            this.blockLight = part.blockLight.getRawData();
+            size = this.blocks.length + this.blockLight.length;
+            if (appendSkyLight)
+            {
+                this.skyLight = part.skyLight.getRawData();
+                size += this.skyLight.length;
+            }
+            else
+            {
+                this.skyLight = null;
+            }
+            this.size = size;
+        }
+    }
+
+    public PatternImpl getPattern()
+    {
+        return this.pattern;
+    }
+
+    public ChunkBuffer getChunkBuffer()
+    {
+        return this.chunkBuffer;
     }
 
     /**
@@ -85,7 +135,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
      */
     public ChunkPartImpl snapshot()
     {
-        return new ChunkPartImpl(new AtomicShortArray(this.blocks.getArray()), this.skyLight.snapshot(), this.blockLight.snapshot(), this.yPos);
+        return new ChunkPartImpl(this.chunkBuffer.clone(), this.pattern.clone(), this.skyLight.snapshot(), this.blockLight.snapshot(), this.yPos);
     }
 
     public BlockMaterialData setBlock(final int x, final int y, final int z, final int id, final int meta)
@@ -95,29 +145,14 @@ public class ChunkPartImpl // part of chunk 16x16x16
         {
             return old;
         }
-        // TODO: check this
-        if (this.blocks.compareAndSet(toArrayIndex(x, y, z), (short) ((old.ordinal() << 4) | old.getType()), (short) ((id << 4) | meta)))
-        {
-            if (old.getType() != 0)
-            {
-                if (id == 0)
-                {
-                    this.blocksCount--;
-                }
-            }
-            else if (id != 0)
-            {
-                this.blocksCount++;
-            }
-            return old;
-        }
-        return this.getBlockType(x, y, z);
+        this.chunkBuffer.set(toArrayIndex(x, y, z), this.pattern.put(id, (byte) meta));
+        return old;
     }
 
     @SuppressWarnings("MagicNumber")
     public BlockMaterialData rawSetBlock(final int x, final int y, final int z, final int id, final int meta)
     {
-        final short data = this.blocks.getAndSet(toArrayIndex(x, y, z), (short) ((id << 4) | meta));
+        final int data = this.chunkBuffer.getAndSet(toArrayIndex(x, y, z), this.pattern.put(id, (byte) meta));
         final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
         return (type == null) ? Material.AIR : type;
     }
@@ -130,37 +165,30 @@ public class ChunkPartImpl // part of chunk 16x16x16
     @SuppressWarnings("MagicNumber")
     public BlockMaterialData getBlockType(final int x, final int y, final int z)
     {
-        final short data = this.blocks.get(toArrayIndex(x, y, z));
+        final int data = this.chunkBuffer.get(toArrayIndex(x, y, z));
         final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
         return (type == null) ? Material.AIR : type;
     }
-
-    public AtomicShortArray getBlocks()
-    {
-        return this.blocks;
-    }
-
-    public void setBlocks(final AtomicShortArray blocks)
-    {
-        this.blocks = blocks;
-    }
+//
+//    public AtomicShortArray getBlocks()
+//    {
+//        return this.blocks;
+//    }
+//
+//    public void setBlocks(final AtomicShortArray blocks)
+//    {
+//        this.blocks = blocks;
+//    }
 
     public int recalculateBlockCount()
     {
-        this.blocksCount = 0;
-        for (final short type : this.blocks.getArray())
-        {
-            if (type != 0)
-            {
-                this.blocksCount++;
-            }
-        }
-        return this.blocksCount;
+        this.chunkBuffer.recalculateNonZero();
+        return this.chunkBuffer.nonZero();
     }
 
     public int getBlocksCount()
     {
-        return this.blocksCount;
+        return this.chunkBuffer.nonZero();
     }
 
     public NibbleArray getBlockLight()
@@ -190,7 +218,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
 
     public boolean isEmpty()
     {
-        return this.blocksCount == 0;
+        return this.chunkBuffer.nonZero() == 0;
     }
 
     @SuppressWarnings("MagicNumber")
@@ -202,6 +230,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("yPos", this.yPos).append("blocks", this.blocks).append("skyLight", this.skyLight).append("blockLight", this.blockLight).append("blocksCount", this.blocksCount).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("yPos", this.yPos).append("blocks", this.chunkBuffer).append("skyLight", this.skyLight).append("blockLight", this.blockLight).toString();
     }
 }

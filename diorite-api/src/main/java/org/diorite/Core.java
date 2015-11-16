@@ -73,7 +73,7 @@ public interface Core extends Synchronizable
 
     static String getMinecraftVersion()
     {
-        return "1.8.7";
+        return "1.9";
     }
 
     Logger getLogger();

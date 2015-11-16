@@ -237,7 +237,7 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
     public static final EnchantmentType MENDING               = new EnchantmentType("MENDING", "mending", 70, t -> false);
 
     private static final Map<String, EnchantmentType>     byStringID    = new CaseInsensitiveMap<>(27, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<EnchantmentType> byNumericType = new TShortObjectHashMap<>(27, SMALL_LOAD_FACTOR);
+    private static final TShortObjectMap<EnchantmentType> byNumericType = new TShortObjectHashMap<>(27, SMALL_LOAD_FACTOR, (short) -1);
 
     /**
      * String ID of this enchantment.

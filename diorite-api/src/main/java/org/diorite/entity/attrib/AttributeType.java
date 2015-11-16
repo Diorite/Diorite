@@ -41,6 +41,7 @@ public class AttributeType
     public static final  AttributeType              GENERIC_KNOCKBACK_RESISTANCE = new AttributeType("GENERIC_KNOCKBACK_RESISTANCE", "generic.knockbackResistance", ATTRIBUTES__GENERIC_KNOCKBACK_RESISTANCE__DEFAULT, ATTRIBUTES__GENERIC_KNOCKBACK_RESISTANCE__MIN, ATTRIBUTES__GENERIC_KNOCKBACK_RESISTANCE__MAX);
     public static final  AttributeType              GENERIC_MOVEMENT_SPEED       = new AttributeType("GENERIC_MOVEMENT_SPEED", "generic.movementSpeed", ATTRIBUTES__GENERIC_MOVEMENT_SPEED__DEFAULT, ATTRIBUTES__GENERIC_MOVEMENT_SPEED__MIN, ATTRIBUTES__GENERIC_MOVEMENT_SPEED__MAX);
     public static final  AttributeType              GENERIC_ATTACK_DAMAGE        = new AttributeType("GENERIC_ATTACK_DAMAGE", "generic.attackDamage", ATTRIBUTES__GENERIC_ATTACK_DAMAGE__DEFAULT, ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MIN, ATTRIBUTES__GENERIC_ATTACK_DAMAGE__MAX);
+    public static final  AttributeType              GENERIC_ATTACK_SPEED         = new AttributeType("GENERIC_ATTACK_SPEED", "generic.attackSpeed", ATTRIBUTES__GENERIC_ATTACK_SPEED__DEFAULT, ATTRIBUTES__GENERIC_ATTACK_SPEED__MIN, ATTRIBUTES__GENERIC_ATTACK_SPEED__MAX);
     public static final  AttributeType              HORSE_JUMP_STRENGTH          = new AttributeType("HORSE_JUMP_STRENGTH", "horse.jumpStrength", ATTRIBUTES__HORSE_JUMP_STRENGTH__DEFAULT, ATTRIBUTES__HORSE_JUMP_STRENGTH__MIN, ATTRIBUTES__HORSE_JUMP_STRENGTH__MAX);
     public static final  AttributeType              ZOMBIE_SPAWN_REINFORCMENTS   = new AttributeType("ZOMBIE_SPAWN_REINFORCMENTS", "zombie.spawnReinforcements", ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__DEFAULT, ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__MIN, ATTRIBUTES__ZOMBIE_SPAWN_REINFORCMENTS__MAX);
     private static final Map<String, AttributeType> byName                       = new CaseInsensitiveMap<>(7, .1f);
@@ -115,6 +116,7 @@ public class AttributeType
         register(GENERIC_KNOCKBACK_RESISTANCE);
         register(GENERIC_MOVEMENT_SPEED);
         register(GENERIC_ATTACK_DAMAGE);
+        register(GENERIC_ATTACK_SPEED);
         register(HORSE_JUMP_STRENGTH);
         register(ZOMBIE_SPAWN_REINFORCMENTS);
     }

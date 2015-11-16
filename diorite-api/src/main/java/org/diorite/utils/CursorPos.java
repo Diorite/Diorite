@@ -29,6 +29,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.entity.data.HandType;
 import org.diorite.utils.math.ByteRange;
 import org.diorite.utils.math.FloatRange;
 
@@ -44,6 +45,7 @@ public class CursorPos
     private static final FloatRange validFloatRange = new FloatRange(0, 1);
 
     private final BlockFace blockFace;
+    private final HandType  handType;
     private final byte      x;
     private final byte      y;
     private final byte      z;
@@ -52,12 +54,15 @@ public class CursorPos
      * Construct new CursorPos using pixel coordinates, from 0 to 16
      *
      * @param blockFace clicked blockface, may be null
+     * @param handType  type of used hand.
      * @param x         x pixel coordinate, from 0 to 16.
      * @param y         y pixel coordinate, from 0 to 16.
      * @param z         z pixel coordinate, from 0 to 16.
      */
-    public CursorPos(final BlockFace blockFace, final int x, final int y, final int z)
+    public CursorPos(final BlockFace blockFace, final HandType handType, final int x, final int y, final int z)
     {
+        Validate.notNull(handType, "HandType can't be null.");
+        this.handType = handType;
         if (blockFace != null)
         {
             Validate.isTrue(blockFace.isBasic(), "BlockFace must be simple or null.");
@@ -75,12 +80,15 @@ public class CursorPos
      * Construct new CursorPos using block coordinates, from 0 to 1
      *
      * @param blockFace clicked blockface, may be null
+     * @param handType  type of used hand.
      * @param x         x block coordinate, from 0 to 1.
      * @param y         y block coordinate, from 0 to 1.
      * @param z         z block coordinate, from 0 to 1.
      */
-    public CursorPos(final BlockFace blockFace, final float x, final float y, final float z)
+    public CursorPos(final BlockFace blockFace, final HandType handType, final float x, final float y, final float z)
     {
+        Validate.notNull(handType, "HandType can't be null.");
+        this.handType = handType;
         if (blockFace != null)
         {
             Validate.isTrue(blockFace.isBasic(), "BlockFace must be simple.");
@@ -108,6 +116,16 @@ public class CursorPos
     public BlockFace getBlockFace()
     {
         return this.blockFace;
+    }
+
+    /**
+     * Returns type of hand, main or off.
+     *
+     * @return type of hand, main or off.
+     */
+    public HandType getHandType()
+    {
+        return this.handType;
     }
 
     /**
@@ -206,6 +224,6 @@ public class CursorPos
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("blockFace", this.blockFace).append("x", this.x).append("y", this.y).append("z", this.z).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("blockFace", this.blockFace).append("handType", this.handType).append("x", this.x).append("y", this.y).append("z", this.z).toString();
     }
 }

@@ -36,6 +36,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
+import org.diorite.impl.world.chunk.pattern.PatternImpl;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkUnloadEvent;
 import org.diorite.material.BlockMaterialData;
@@ -44,7 +45,6 @@ import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.utils.collections.sets.ConcurrentSet;
-import org.diorite.utils.concurrent.atomic.AtomicShortArray;
 import org.diorite.world.Biome;
 import org.diorite.world.Block;
 import org.diorite.world.World;
@@ -416,13 +416,24 @@ public class ChunkImpl implements Chunk
             final NibbleArray blockLight = new NibbleArray(sectionTag.getByteArray("BlockLight"));
             final NibbleArray skyLight = new NibbleArray(sectionTag.getByteArray("SkyLight"));
 
-            final short[] types = new short[rawTypes.length];
+            final PatternImpl pattern = new PatternImpl();
+            final int[] loading = new int[rawTypes.length];
             for (int i = 0; i < rawTypes.length; i++)
             {
-                types[i] = (short) ((((extTypes == null) ? 0 : extTypes.get(i)) << 12) | ((rawTypes[i] & 0xff) << 4) | data.get(i));
+                final int k = ((((extTypes == null) ? 0 : extTypes.get(i)) << 12) | ((rawTypes[i] & 0xff) << 4) | data.get(i));
+                if (Material.getByID(k >> 4, k & 15) == null)
+                {
+                    throw new IllegalArgumentException("Unknown material: " + k + " (" + (k >> 4) + ":" + (k & 15) + ")");
+                }
+                loading[i] = k;
             }
-            final ChunkPartImpl part = new ChunkPartImpl(new AtomicShortArray(types), skyLight, blockLight, y);
-            part.recalculateBlockCount();
+            final ChunkBuffer cb = new ChunkBuffer(pattern.bitsPerBlock());
+            int k = 0;
+            for (final int i : loading)
+            {
+                cb.set(k++, pattern.put(i));
+            }
+            final ChunkPartImpl part = new ChunkPartImpl(cb, pattern, skyLight, blockLight, y);
             sections[y] = part;
         }
         this.chunkParts = sections;
@@ -509,12 +520,14 @@ public class ChunkImpl implements Chunk
                 }
                 final NbtTagCompound sectionNBT = new NbtTagCompound();
                 sectionNBT.setByte("Y", chunkPart.getYPos());
-                final byte[] blocksIDs = new byte[chunkPart.getBlocks().length()];
+                final ChunkBuffer buffer = chunkPart.getChunkBuffer();
+                final PatternImpl pattern = chunkPart.getPattern();
+                final byte[] blocksIDs = new byte[ChunkPartImpl.CHUNK_DATA_SIZE];
                 final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray();
                 org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = null;
-                for (int i = 0; i < chunkPart.getBlocks().length(); ++ i)
+                for (int i = 0; i < ChunkPartImpl.CHUNK_DATA_SIZE; ++ i)
                 {
-                    final short block = chunkPart.getBlocks().get(i);
+                    final int block = pattern.getAsInt(buffer.get(i));
                     final int blockMeta = i & 15;
                     final int blockData = (i >> 8) & 15;
                     final int blockID = (i >> 4) & 15;
