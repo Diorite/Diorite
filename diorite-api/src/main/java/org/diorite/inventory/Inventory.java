@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
 
+import org.diorite.entity.Human;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
@@ -645,11 +646,15 @@ public interface Inventory extends Iterable<ItemStack>
     void clear();
 
     /**
-     * @return A collection of players who are viewing this Inventory.
+     * Returns A collection of humans who are viewing this Inventory.
+     *
+     * @return A collection of humans who are viewing this Inventory.
      */
-    Collection<? extends Player> getViewers();
+    Collection<? extends Human> getViewers();
 
     /**
+     * Returns string with the title of inventory.
+     *
      * @return A String with the title of inventory.
      */
     String getTitle();

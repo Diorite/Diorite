@@ -37,7 +37,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
-import org.diorite.entity.Player;
+import org.diorite.entity.Human;
 import org.diorite.inventory.Inventory;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.ItemStack;
@@ -53,7 +53,7 @@ import gnu.trove.set.hash.TShortHashSet;
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {
     protected final T holder;
-    protected final Set<PlayerImpl> viewers = new ConcurrentSet<>(5, 0.2f, 6);
+    protected final Set<Human> viewers = new ConcurrentSet<>(5, 0.2f, 6);
     protected String title;
 
     protected InventoryImpl(final T holder)
@@ -107,7 +107,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
             }
         }
         final PacketPlayServerSetSlot[] packetsArray = packets.toArray(new PacketPlayServerSetSlot[packets.size()]);
-        this.viewers.forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
+        this.viewers.stream().filter(h -> h instanceof PlayerImpl).map(h -> (PlayerImpl) h).forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
     }
 
     /**
@@ -450,7 +450,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     }
 
     @Override
-    public Set<? extends Player> getViewers()
+    public Set<? extends Human> getViewers()
     {
         return this.viewers;
     }

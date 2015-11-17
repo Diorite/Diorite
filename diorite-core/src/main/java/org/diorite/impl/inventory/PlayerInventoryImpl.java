@@ -34,9 +34,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerWindowItems;
+import org.diorite.impl.entity.HumanImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
+import org.diorite.entity.Human;
 import org.diorite.entity.Player;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerInventory;
@@ -46,13 +48,13 @@ import org.diorite.inventory.slot.Slot;
 import org.diorite.material.Material;
 import org.diorite.utils.DioriteUtils;
 
-public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements PlayerInventory
+public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements PlayerInventory
 {
     private static final short CURSOR_SLOT   = - 1;
     private static final int   CURSOR_WINDOW = - 1;
 
-    private final int        windowId;
-    private final PlayerImpl holder;
+    private final int       windowId;
+    private final HumanImpl holder;
     private final DragControllerImpl             drag       = new DragControllerImpl();
     private final ItemStackImplArray             content    = ItemStackImplArray.create(InventoryType.PLAYER.getSize());
     private final Slot[]                         slots      = new Slot[InventoryType.PLAYER.getSize()];
@@ -71,7 +73,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
         Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_HOTBAR.getSize()), Slot.BASE_HOTBAR_SLOT);
     }
 
-    public PlayerInventoryImpl(final PlayerImpl holder, final int windowId)
+    public PlayerInventoryImpl(final HumanImpl holder, final int windowId)
     {
         super(holder);
         this.windowId = windowId;
@@ -428,6 +430,10 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     @Override
     public void softUpdate()
     {
+        if (! (this.holder instanceof Player))
+        {
+            return;
+        }
         ItemStackImpl cursor = this.cursorItem.get();
         if ((this.wasCursorNotNull && (cursor == null)) || ((cursor != null) && cursor.isDirty()))
         {
@@ -444,7 +450,7 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
                     this.wasCursorNotNull = true;
                 }
             }
-            this.holder.getNetworkManager().sendPacket(new PacketPlayServerSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
+            ((PlayerImpl) this.holder).getNetworkManager().sendPacket(new PacketPlayServerSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
 
         }
         super.softUpdate();
@@ -453,17 +459,17 @@ public class PlayerInventoryImpl extends InventoryImpl<PlayerImpl> implements Pl
     @Override
     public void update()
     {
-        this.viewers.forEach(this::update);
+        this.viewers.stream().filter(h -> h instanceof Player).map(h -> (Player) h).forEach(this::update);
     }
 
     @Override
-    public Player getEquipmentHolder()
+    public Human getEquipmentHolder()
     {
         return this.holder;
     }
 
     @Override
-    public PlayerImpl getHolder()
+    public HumanImpl getHolder()
     {
         return this.holder;
     }

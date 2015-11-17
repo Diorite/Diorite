@@ -79,7 +79,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         ItemStackImpl.validate(e.getCursorItem());
         final ItemStackImpl cursor = (ItemStackImpl) e.getCursorItem();
         final int slot = e.getClickedSlot();
-        final PlayerInventoryImpl inv = player.getInventory(); // TODO
+        final PlayerInventoryImpl inv = (PlayerInventoryImpl) player.getInventory(); // TODO
 
         final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem());
 

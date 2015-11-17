@@ -24,7 +24,7 @@
 
 package org.diorite.inventory;
 
-import org.diorite.entity.Player;
+import org.diorite.entity.Human;
 
 public interface PlayerInventoryPart extends Inventory
 {
@@ -39,7 +39,7 @@ public interface PlayerInventoryPart extends Inventory
      * @return The holder of the inventory; null if it has no holder.
      */
     @Override
-    Player getHolder();
+    Human getHolder();
 
     @Override
     default int getWindowId()

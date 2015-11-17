@@ -24,7 +24,7 @@
 
 package org.diorite.inventory;
 
-import org.diorite.entity.Player;
+import org.diorite.entity.Human;
 import org.diorite.inventory.item.ItemStack;
 
 public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
@@ -64,7 +64,7 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      */
     default int getHeldItemSlot()
     {
-        final Player holder = this.getHolder();
+        final Human holder = this.getHolder();
         if (holder == null)
         {
             return - 1;
@@ -79,7 +79,7 @@ public interface PlayerHotbarInventory extends Inventory, PlayerInventoryPart
      */
     default void setHeldItemSlot(final int slot)
     {
-        final Player holder = this.getHolder();
+        final Human holder = this.getHolder();
         if (holder == null)
         {
             return;

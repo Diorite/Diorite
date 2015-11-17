@@ -29,12 +29,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.inventory.item.ItemStackImplArray;
+import org.diorite.entity.Human;
 import org.diorite.entity.Player;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.PlayerInventoryPart;
 import org.diorite.inventory.slot.Slot;
 
-public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> implements PlayerInventoryPart
+public abstract class PlayerInventoryPartImpl extends InventoryImpl<Human> implements PlayerInventoryPart
 {
     protected final PlayerInventoryImpl playerInventory;
     protected final ItemStackImplArray  content;
@@ -48,7 +49,7 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     }
 
     @Override
-    public Player getHolder()
+    public Human getHolder()
     {
         return this.playerInventory.getHolder();
     }

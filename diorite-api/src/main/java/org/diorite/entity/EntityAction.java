@@ -39,13 +39,14 @@ public class EntityAction extends ASimpleEnum<EntityAction>
         init(EntityAction.class, 7);
     }
 
+    // TODO this class may not be good idea.
+
     public static final EntityAction CROUCH          = new EntityAction("CROUCH", (p, args) -> p.setCrouching(true));
     public static final EntityAction UNCROUCH        = new EntityAction("UNCROUCH", (p, args) -> p.setCrouching(false));
     public static final EntityAction LEAVE_BED       = new EntityAction("LEAVE_BED", null);
     public static final EntityAction START_SPRINTING = new EntityAction("START_SPRINTING", (p, args) -> p.setSprinting(true));
     public static final EntityAction STOP_SPRINTING  = new EntityAction("STOP_SPRINTING", (p, args) -> p.setSprinting(false));
     public static final EntityAction JUMP_WITH_HORSE = new EntityAction("JUMP_WITH_HORSE", null);
-    public static final EntityAction OPEN_INVENTORY  = new EntityAction("OPEN_INVENTORY", null);
 
     private final BiConsumer<Player, Object[]> onAction; // idk if this is good idea...
 
@@ -125,6 +126,5 @@ public class EntityAction extends ASimpleEnum<EntityAction>
         EntityAction.register(START_SPRINTING);
         EntityAction.register(STOP_SPRINTING);
         EntityAction.register(JUMP_WITH_HORSE);
-        EntityAction.register(OPEN_INVENTORY);
     }
 }

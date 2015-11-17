@@ -24,17 +24,176 @@
 
 package org.diorite.entity;
 
+import org.diorite.GameMode;
 import org.diorite.auth.GameProfile;
+import org.diorite.command.sender.HumanCommandSender;
+import org.diorite.entity.data.HandSide;
+import org.diorite.entity.data.HandType;
+import org.diorite.inventory.InventoryHolder;
+import org.diorite.inventory.PlayerInventory;
+import org.diorite.permissions.GroupablePermissionsContainer;
+import org.diorite.world.World;
 
 /**
  * Represent human entity, player or npc etc...
  */
-public interface Human extends LivingEntity
+public interface Human extends LivingEntity, InventoryHolder, ArmoredEntity, HumanCommandSender
 {
+    float WALK_SPEED         = 0.1f;
+    float FLY_SPEED          = 0.05f;
+    float SPRINT_SPEED_BOOST = 0.30000001192092896f;
+
     /**
      * Returns game profile for this human entity.
      *
      * @return game profile for this human entity.
      */
     GameProfile getGameProfile();
+
+    /**
+     * Returns side of given hand type.
+     *
+     * @param type type of hand.
+     *
+     * @return side of given hand type.
+     */
+    HandSide getHandSide(HandType type);
+
+    /**
+     * Returns type of hand for given hand side.
+     *
+     * @param side side of hand.
+     *
+     * @return type of hand for given hand side.
+     */
+    HandType getHandSide(HandSide side);
+
+    /**
+     * Set main hand to given side hand type.
+     *
+     * @param side side of new main hand.
+     */
+    void setMainHand(HandSide side);
+
+    /**
+     * Gets this player current {@link GameMode}
+     *
+     * @return Current game mode
+     */
+    GameMode getGameMode();
+
+    /**
+     * Sets this player's {@link GameMode}
+     *
+     * @param gameMode New gamemode
+     */
+    void setGameMode(GameMode gameMode);
+
+    /**
+     * Gets whether the player is crouching or not
+     *
+     * @return True if player crouching
+     */
+    boolean isCrouching();
+
+    /**
+     * Sets whether the player is crouching or not
+     *
+     * @param isCrouching New crouch status
+     */
+    void setCrouching(boolean isCrouching);
+
+    /**
+     * Gets whether the player is sprinting or not
+     *
+     * @return True if player sprinting
+     */
+    boolean isSprinting();
+
+    /**
+     * Sets whether the player is sprinting or not.
+     *
+     * @param isSprinting New sprint status
+     */
+    void setSprinting(boolean isSprinting);
+
+    /**
+     * Get the slot number of the currently held item
+     *
+     * @return Held item slot number
+     */
+    int getHeldItemSlot();
+
+    /**
+     * Set the slot number of the currently held item
+     *
+     * @param slot new slot id, from 0 to 8.
+     */
+    void setHeldItemSlot(final int slot);
+
+    /**
+     * Gets whether player can fly or not
+     *
+     * @return True, if player can fly
+     */
+    boolean canFly();
+
+    /**
+     * Sets whether player can fly
+     *
+     * @param value True if player should be able to fly
+     */
+    void setCanFly(boolean value);
+
+    /**
+     * Sets whether player can fly and speed
+     *
+     * @param value    True if player should be able to fly
+     * @param flySpeed New speed
+     */
+    void setCanFly(boolean value, double flySpeed);
+
+    /**
+     * Gets player's current fly speed
+     *
+     * @return Current fly speed
+     */
+    float getFlySpeed();
+
+    /**
+     * Sets player's fly speed
+     *
+     * @param flySpeed New fly speed
+     */
+    void setFlySpeed(double flySpeed);
+
+    /**
+     * Gets this player's walk speed
+     *
+     * @return Walk speed
+     */
+    float getWalkSpeed();
+
+    /**
+     * Sets this player's walk speed
+     *
+     * @param walkSpeed Walk speed
+     */
+    void setWalkSpeed(double walkSpeed);
+
+    /**
+     * Returns the world on which is player
+     *
+     * @return World
+     */
+    default World getWorld()
+    {
+        return this.getLocation().getWorld();
+    }
+
+    @Override
+    PlayerInventory getInventory();
+
+    @Override
+    GroupablePermissionsContainer getPermissionsContainer();
 }

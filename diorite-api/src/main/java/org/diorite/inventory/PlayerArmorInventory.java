@@ -24,7 +24,7 @@
 
 package org.diorite.inventory;
 
-import org.diorite.entity.Player;
+import org.diorite.entity.Human;
 
 public interface PlayerArmorInventory extends Inventory, EntityEquipment, PlayerInventoryPart
 {
@@ -35,7 +35,7 @@ public interface PlayerArmorInventory extends Inventory, EntityEquipment, Player
     }
 
     @Override
-    default Player getEquipmentHolder()
+    default Human getEquipmentHolder()
     {
         return this.getHolder();
     }

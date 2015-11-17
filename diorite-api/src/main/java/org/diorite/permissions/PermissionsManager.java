@@ -28,7 +28,7 @@ import java.util.SortedSet;
 
 import org.diorite.Diorite;
 import org.diorite.ServerManager;
-import org.diorite.entity.Player;
+import org.diorite.entity.Human;
 import org.diorite.permissions.pattern.PermissionPattern;
 import org.diorite.plugin.DioritePlugin;
 
@@ -68,7 +68,7 @@ public interface PermissionsManager
      *
      * @return new instance of player permissions container.
      */
-    PlayerPermissionsContainer createPlayerContainer(Player permissible);
+    PlayerPermissionsContainer createPlayerContainer(Human permissible);
 
     /**
      * Create groupable permissions container for given permissible.

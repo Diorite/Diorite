@@ -26,7 +26,7 @@ package org.diorite.impl.inventory;
 
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
-import org.diorite.entity.Player;
+import org.diorite.entity.Human;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerHotbarInventory;
 import org.diorite.inventory.item.ItemStack;
@@ -47,7 +47,7 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
     @Override
     public ItemStack getItemInHand()
     {
-        final Player holder = this.getHolder();
+        final Human holder = this.getHolder();
         if (holder == null)
         {
             return null;
@@ -58,7 +58,7 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
     @Override
     public ItemStack setItemInHand(final ItemStack stack)
     {
-        final Player holder = this.getHolder();
+        final Human holder = this.getHolder();
         if (holder == null)
         {
             return null;
@@ -70,7 +70,7 @@ public class PlayerHotbarInventoryImpl extends PlayerInventoryPartImpl implement
     public boolean replaceItemInHand(final ItemStack excepted, final ItemStack stack) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        final Player holder = this.getHolder();
+        final Human holder = this.getHolder();
         return (holder != null) && this.content.compareAndSet(holder.getHeldItemSlot(), (ItemStackImpl) excepted, ItemStackImpl.wrap(stack));
     }
 }

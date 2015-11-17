@@ -27,24 +27,15 @@ package org.diorite.entity;
 import java.util.List;
 
 import org.diorite.Core;
-import org.diorite.GameMode;
 import org.diorite.OfflinePlayer;
 import org.diorite.Particle;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
-import org.diorite.inventory.InventoryHolder;
-import org.diorite.inventory.PlayerInventory;
-import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.utils.math.DioriteRandom;
-import org.diorite.world.World;
 
-public interface Player extends Human, PlayerCommandSender, InventoryHolder, OfflinePlayer, ArmoredEntity
+public interface Player extends Human, PlayerCommandSender, OfflinePlayer
 {
-    float WALK_SPEED         = 0.1f;
-    float FLY_SPEED          = 0.05f;
-    float SPRINT_SPEED_BOOST = 0.30000001192092896f;
-
     @Override
     default Player getPlayer()
     {
@@ -57,29 +48,12 @@ public interface Player extends Human, PlayerCommandSender, InventoryHolder, Off
         return this.getCore().getPlayer(this.getUniqueID()) != null;
     }
 
-    @Override
-    PlayerInventory getInventory();
-
     /**
      * Send tab complete packet to player.
      *
      * @param strs strings to send.
      */
     void sendTabCompletes(List<String> strs);
-
-    /**
-     * Gets this player current {@link GameMode}
-     *
-     * @return Current game mode
-     */
-    GameMode getGameMode();
-
-    /**
-     * Sets this player's {@link GameMode}
-     *
-     * @param gameMode New gamemode
-     */
-    void setGameMode(GameMode gameMode);
 
     /**
      * Gets this player's ping
@@ -96,34 +70,6 @@ public interface Player extends Human, PlayerCommandSender, InventoryHolder, Off
     void kick(BaseComponent reason);
 
     /**
-     * Gets whether the player is crouching or not
-     *
-     * @return True if player crouching
-     */
-    boolean isCrouching();
-
-    /**
-     * Sets whether the player is crouching or not
-     *
-     * @param isCrouching New crouch status
-     */
-    void setCrouching(boolean isCrouching);
-
-    /**
-     * Gets whether the player is sprinting or not
-     *
-     * @return True if player sprinting
-     */
-    boolean isSprinting();
-
-    /**
-     * Sets whether the player is sprinting or not.
-     *
-     * @param isSprinting New sprint status
-     */
-    void setSprinting(boolean isSprinting);
-
-    /**
      * Gets player's view distance
      * This value is defined by client
      * Determines what distance (chunks) will see the player
@@ -131,20 +77,6 @@ public interface Player extends Human, PlayerCommandSender, InventoryHolder, Off
      * @return View distance
      */
     byte getViewDistance();
-
-    /**
-     * Get the slot number of the currently held item
-     *
-     * @return Held item slot number
-     */
-    int getHeldItemSlot();
-
-    /**
-     * Set the slot number of the currently held item
-     *
-     * @param slot new slot id, from 0 to 8.
-     */
-    void setHeldItemSlot(final int slot);
 
     /**
      * Gets player's render distance
@@ -178,56 +110,6 @@ public interface Player extends Human, PlayerCommandSender, InventoryHolder, Off
     void setResourcePack(String resourcePack, String hash);
 
     /**
-     * Gets whether player can fly or not
-     *
-     * @return True, if player can fly
-     */
-    boolean canFly();
-
-    /**
-     * Sets whether player can fly
-     *
-     * @param value True if player should be able to fly
-     */
-    void setCanFly(boolean value);
-
-    /**
-     * Sets whether player can fly and speed
-     *
-     * @param value    True if player should be able to fly
-     * @param flySpeed New speed
-     */
-    void setCanFly(boolean value, double flySpeed);
-
-    /**
-     * Gets player's current fly speed
-     *
-     * @return Current fly speed
-     */
-    float getFlySpeed();
-
-    /**
-     * Sets player's fly speed
-     *
-     * @param flySpeed New fly speed
-     */
-    void setFlySpeed(double flySpeed);
-
-    /**
-     * Gets this player's walk speed
-     *
-     * @return Walk speed
-     */
-    float getWalkSpeed();
-
-    /**
-     * Sets this player's walk speed
-     *
-     * @param walkSpeed Walk speed
-     */
-    void setWalkSpeed(double walkSpeed);
-
-    /**
      * Creates particle <b>only</b> to this player
      *
      * @param particle       Particle which should be shown
@@ -250,16 +132,6 @@ public interface Player extends Human, PlayerCommandSender, InventoryHolder, Off
      * Sending a inventory content to player
      */
     void updateInventory();
-
-    /**
-     * Returns the world on which is player
-     *
-     * @return World
-     */
-    default World getWorld()
-    {
-        return this.getLocation().getWorld();
-    }
 
     /**
      * Updates text on tab header/footer for this player
@@ -314,7 +186,4 @@ public interface Player extends Human, PlayerCommandSender, InventoryHolder, Off
      * @return this player random instance
      */
     DioriteRandom getRandom();
-
-    @Override
-    GroupablePermissionsContainer getPermissionsContainer();
 }

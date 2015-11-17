@@ -27,14 +27,14 @@ package org.diorite.impl.permissions;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.entity.Player;
+import org.diorite.entity.Human;
 import org.diorite.permissions.PlayerPermissionsContainer;
 
 public class PlayerPermissionsContainerImpl extends GroupablePermissionsContainerImpl implements PlayerPermissionsContainer
 {
     protected boolean op;
 
-    protected PlayerPermissionsContainerImpl(final boolean op, final Player player)
+    protected PlayerPermissionsContainerImpl(final boolean op, final Human player)
     {
         super(player);
         this.op = op;

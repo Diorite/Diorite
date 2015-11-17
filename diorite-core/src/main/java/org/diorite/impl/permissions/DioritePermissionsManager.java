@@ -41,6 +41,7 @@ import org.diorite.impl.permissions.pattern.PermissionPatternImpl;
 import org.diorite.impl.permissions.perm.AdvancedPermissionImpl;
 import org.diorite.impl.permissions.perm.PermissionImpl;
 import org.diorite.Diorite;
+import org.diorite.entity.Human;
 import org.diorite.entity.Player;
 import org.diorite.permissions.GroupEntry;
 import org.diorite.permissions.GroupablePermissionsContainer;
@@ -83,7 +84,7 @@ public class DioritePermissionsManager implements PermissionsManager
     }
 
     @Override
-    public PlayerPermissionsContainer createPlayerContainer(final Player permissible)
+    public PlayerPermissionsContainer createPlayerContainer(final Human permissible)
     {
         return new PlayerPermissionsContainerImpl(false, permissible);
     }
