@@ -67,7 +67,7 @@ public class PacketPlayServerBlockChange extends PacketPlayServer
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.location = data.readBlockLocation();
+        this.location = data.readBlockLocationFromLong();
         final int blockData = data.readVarInt();
         this.rawID = (blockData >> 4);
         this.rawType = (byte) (blockData & 15);
@@ -76,7 +76,7 @@ public class PacketPlayServerBlockChange extends PacketPlayServer
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-        data.writeBlockLocation(this.location);
+        data.writeBlockLocationAsLong(this.location);
         data.writeVarInt(((this.rawID << 4) | this.rawType));
     }
 

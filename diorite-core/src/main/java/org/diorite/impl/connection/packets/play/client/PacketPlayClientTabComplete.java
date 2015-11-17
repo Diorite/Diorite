@@ -61,7 +61,7 @@ public class PacketPlayClientTabComplete extends PacketPlayClient
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.content = data.readText(Short.MAX_VALUE);
-        this.blockLocation = data.readBoolean() ? data.readBlockLocation() : null;
+        this.blockLocation = data.readBoolean() ? data.readBlockLocationFromLong() : null;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PacketPlayClientTabComplete extends PacketPlayClient
         data.writeBoolean(this.blockLocation != null);
         if (this.blockLocation != null)
         {
-            data.writeBlockLocation(this.blockLocation);
+            data.writeBlockLocationAsLong(this.blockLocation);
         }
     }
 

@@ -85,7 +85,7 @@ public class PacketPlayClientUpdateSign extends PacketPlayClient
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.location = data.readBlockLocation();
+        this.location = data.readBlockLocationFromLong();
 
         this.lines = new String[4];
         for (int i = 0; i < 4; i++)
@@ -97,7 +97,7 @@ public class PacketPlayClientUpdateSign extends PacketPlayClient
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-        data.writeBlockLocation(this.location);
+        data.writeBlockLocationAsLong(this.location);
         for (int i = 0; i < 4; i++)
         {
             data.writeText(this.lines[i]);

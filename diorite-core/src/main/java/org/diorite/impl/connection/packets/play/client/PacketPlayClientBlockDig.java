@@ -65,7 +65,7 @@ public class PacketPlayClientBlockDig extends PacketPlayClient
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.action = BlockDigAction.values()[data.readByte()];
-        this.blockLocation = data.readBlockLocation();
+        this.blockLocation = data.readBlockLocationFromLong();
         this.blockFace = readBlockFace(data);
     }
 
@@ -73,7 +73,7 @@ public class PacketPlayClientBlockDig extends PacketPlayClient
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeByte(this.action.ordinal());
-        data.writeBlockLocation(this.blockLocation);
+        data.writeBlockLocationAsLong(this.blockLocation);
         writeBlockFace(this.blockFace, data);
     }
 

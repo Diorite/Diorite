@@ -53,13 +53,13 @@ public class PacketPlayServerSpawnPosition extends PacketPlayServer
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.location = data.readBlockLocation();
+        this.location = data.readBlockLocationFromLong();
     }
 
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-        data.writeBlockLocation(this.location);
+        data.writeBlockLocationAsLong(this.location);
     }
 
     @Override

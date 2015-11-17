@@ -64,14 +64,14 @@ public class PacketPlayClientBlockPlace extends PacketPlayClient
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.location = data.readBlockLocation();
+        this.location = data.readBlockLocationFromLong();
         this.cursorPos = new CursorPos(readBlockFace(data), data.readEnum(HandType.class), data.readUnsignedByte(), data.readUnsignedByte(), data.readUnsignedByte());
     }
 
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-        data.writeBlockLocation(this.location);
+        data.writeBlockLocationAsLong(this.location);
         writeBlockFace(this.cursorPos.getBlockFace(), data);
         data.writeEnum(this.cursorPos.getHandType());
         data.writeByte(this.cursorPos.getPixelX());

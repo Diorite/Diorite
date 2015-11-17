@@ -206,12 +206,12 @@ public class PacketDataSerializer extends ByteBuf
         this.writeText(ComponentSerializer.toString(baseComponent));
     }
 
-    public void writeBlockLocation(final BlockLocation loc)
+    public void writeBlockLocationAsLong(final BlockLocation loc)
     {
         this.writeLong(loc.asLong());
     }
 
-    public BlockLocation readBlockLocation()
+    public BlockLocation readBlockLocationFromLong()
     {
         return BlockLocation.fromLong(this.readLong());
     }
