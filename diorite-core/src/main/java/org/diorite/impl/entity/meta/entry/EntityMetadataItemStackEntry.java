@@ -24,6 +24,7 @@
 
 package org.diorite.impl.entity.meta.entry;
 
+import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
 import org.diorite.inventory.item.ItemStack;
 
@@ -38,5 +39,11 @@ public class EntityMetadataItemStackEntry extends EntityMetadataObjectEntry<Item
     public EntityMetadataType getDataType()
     {
         return EntityMetadataType.ITEM_STACK;
+    }
+
+    @Override
+    public void write(final PacketDataSerializer data)
+    {
+        data.writeItemStack(this.data);
     }
 }

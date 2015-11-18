@@ -24,6 +24,7 @@
 
 package org.diorite.impl.entity.meta.entry;
 
+import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
 
 public class EntityMetadataStringEntry extends EntityMetadataObjectEntry<String>
@@ -37,5 +38,11 @@ public class EntityMetadataStringEntry extends EntityMetadataObjectEntry<String>
     public EntityMetadataType getDataType()
     {
         return EntityMetadataType.STRING;
+    }
+
+    @Override
+    public void write(final PacketDataSerializer data)
+    {
+        data.writeText(this.data);
     }
 }

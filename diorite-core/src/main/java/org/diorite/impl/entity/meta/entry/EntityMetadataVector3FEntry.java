@@ -24,6 +24,7 @@
 
 package org.diorite.impl.entity.meta.entry;
 
+import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
 import org.diorite.utils.math.geometry.Vector3F;
 
@@ -37,6 +38,12 @@ public class EntityMetadataVector3FEntry extends EntityMetadataObjectEntry<Vecto
     @Override
     public EntityMetadataType getDataType()
     {
-        return EntityMetadataType.ROTATION;
+        return EntityMetadataType.VECTOR3F;
+    }
+
+    @Override
+    public void write(final PacketDataSerializer data)
+    {
+        data.writeVector3F(this.data);
     }
 }

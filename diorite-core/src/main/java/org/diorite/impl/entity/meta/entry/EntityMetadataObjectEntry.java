@@ -27,7 +27,7 @@ package org.diorite.impl.entity.meta.entry;
 @SuppressWarnings("ClassHasNoToStringMethod")
 public abstract class EntityMetadataObjectEntry<T> extends EntityMetadataEntry<T>
 {
-    private T data;
+    protected T data;
 
     public EntityMetadataObjectEntry(final int index, final T data)
     {

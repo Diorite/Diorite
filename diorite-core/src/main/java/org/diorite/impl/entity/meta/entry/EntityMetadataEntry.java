@@ -27,6 +27,7 @@ package org.diorite.impl.entity.meta.entry;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
 import org.diorite.utils.others.Dirtable;
 
@@ -55,6 +56,8 @@ public abstract class EntityMetadataEntry<T> implements Dirtable
     public abstract T getData();
 
     public abstract void setData(final T data);
+
+    public abstract void write(final PacketDataSerializer data);
 
     @Override
     public boolean isDirty()

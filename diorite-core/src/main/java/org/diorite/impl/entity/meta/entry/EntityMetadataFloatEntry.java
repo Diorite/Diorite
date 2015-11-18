@@ -24,6 +24,7 @@
 
 package org.diorite.impl.entity.meta.entry;
 
+import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
@@ -74,5 +75,11 @@ public class EntityMetadataFloatEntry extends EntityMetadataEntry<Float>
     public void setData(final Float data)
     {
         this.value = data;
+    }
+
+    @Override
+    public void write(final PacketDataSerializer data)
+    {
+        data.writeFloat(this.value);
     }
 }

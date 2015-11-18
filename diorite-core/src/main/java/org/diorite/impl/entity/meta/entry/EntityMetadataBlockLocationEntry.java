@@ -24,6 +24,7 @@
 
 package org.diorite.impl.entity.meta.entry;
 
+import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
 import org.diorite.BlockLocation;
 
@@ -38,5 +39,13 @@ public class EntityMetadataBlockLocationEntry extends EntityMetadataObjectEntry<
     public EntityMetadataType getDataType()
     {
         return EntityMetadataType.LOCATION;
+    }
+
+    @Override
+    public void write(final PacketDataSerializer data)
+    {
+        data.writeInt(this.data.getX());
+        data.writeInt(this.data.getY());
+        data.writeInt(this.data.getZ());
     }
 }
