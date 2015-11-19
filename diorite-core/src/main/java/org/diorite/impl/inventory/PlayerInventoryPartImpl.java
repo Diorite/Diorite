@@ -28,6 +28,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Player;
 import org.diorite.inventory.PlayerInventory;
@@ -48,7 +49,7 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     }
 
     @Override
-    public Player getHolder()
+    public PlayerImpl getHolder()
     {
         return this.playerInventory.getHolder();
     }
@@ -96,7 +97,7 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Player> impl
     }
 
     @Override
-    public void softUpdate()
+    public boolean softUpdate()
     {
         throw new UnsupportedOperationException("soft update should be called only for root EQ.");
     }

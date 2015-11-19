@@ -111,7 +111,7 @@ public final class DioriteUtils
             }
             for (int k = i + 1; k < itemsLength; k++)
             {
-                final ItemStack item2 = items[i];
+                final ItemStack item2 = items[k];
                 if (item.isSimilar(item2))
                 {
                     if (respectStackSize)

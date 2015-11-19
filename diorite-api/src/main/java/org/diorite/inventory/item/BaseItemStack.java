@@ -261,15 +261,22 @@ public class BaseItemStack implements ItemStack
         {
             return true;
         }
-        if (! (o instanceof BaseItemStack))
+        if (! (o instanceof ItemStack))
         {
             return false;
         }
 
-        final BaseItemStack itemStack = (BaseItemStack) o;
+        if (o instanceof BaseItemStack)
+        {
+            final BaseItemStack itemStack = (BaseItemStack) o;
 
-        return (this.amount == itemStack.amount) && ! ((this.material != null) ? ! this.material.equals(itemStack.material) : (itemStack.material != null)) && ((this.itemMeta == null) || this.itemMeta.equals(itemStack.itemMeta));
-
+            return (this.amount == itemStack.amount) && ! ((this.material != null) ? ! this.material.equals(itemStack.material) : (itemStack.material != null)) && ((this.itemMeta == null) || this.itemMeta.equals(itemStack.itemMeta));
+        }
+        else
+        {
+            final ItemStack itemStack = (ItemStack) o;
+            return (this.amount == itemStack.getAmount()) && ! ((this.material != null) ? ! this.material.equals(itemStack.getMaterial()) : (itemStack.getMaterial() != null)) && ((this.itemMeta == null) || this.itemMeta.equals(itemStack.getItemMeta()));
+        }
     }
 
     @Override

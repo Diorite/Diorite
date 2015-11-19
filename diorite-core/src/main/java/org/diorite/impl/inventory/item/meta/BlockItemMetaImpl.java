@@ -24,67 +24,78 @@
 
 package org.diorite.impl.inventory.item.meta;
 
+import java.util.Collection;
+import java.util.Set;
+
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.item.meta.RepairableMeta;
+import org.diorite.inventory.item.meta.BlockItemMeta;
+import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtTagCompound;
 
-public class RepairableMetaImpl extends SimpleItemMetaImpl implements RepairableMeta
+public class BlockItemMetaImpl extends SimpleItemMetaImpl implements BlockItemMeta
 {
-    protected static final String UNBREAKABLE = "Unbreakable";
-    protected static final String REPAIR_COST = "RepairCost";
-
-    public RepairableMetaImpl(final NbtTagCompound tag)
+    public BlockItemMetaImpl(final NbtTagCompound tag)
     {
         super(tag);
     }
 
-    public RepairableMetaImpl(final NbtTagCompound tag, final ItemStack itemStack)
+    public BlockItemMetaImpl(final NbtTagCompound tag, final ItemStack itemStack)
     {
         super(tag, itemStack);
     }
 
     @Override
-    public boolean hasRepairCost()
+    public boolean hasBlockState()
     {
-        return (this.tag != null) && this.tag.containsTag(REPAIR_COST);
+        return false;
     }
 
     @Override
-    public int getRepairCost()
+    public boolean useCanPlaceOnTag()
     {
-        if (this.tag == null)
-        {
-            return 0;
-        }
-        return this.tag.getInt(REPAIR_COST);
+        return false;
     }
 
     @Override
-    public void setRepairCost(final int cost)
+    public void setUseCanPlaceOnTag(final boolean useCanPlaceOnTag)
     {
-        this.checkTag(true);
-        this.tag.setInt(REPAIR_COST, cost);
-        this.setDirty();
+
     }
 
     @Override
-    public void setUnbreakable(final boolean unbreakable)
+    public Set<BlockMaterialData> getCanPlaceOnMaterials()
     {
-        this.checkTag(true);
-        this.tag.setBoolean(UNBREAKABLE, unbreakable);
-        this.setDirty();
+        return null;
     }
 
     @Override
-    public boolean isUnbreakable()
+    public void setCanPlaceOnMaterials(final Collection<BlockMaterialData> materials)
     {
-        return (this.tag != null) && this.tag.getBoolean(UNBREAKABLE);
+
+    }
+
+    @Override
+    public void addCanPlaceOnMaterial(final BlockMaterialData material)
+    {
+
+    }
+
+    @Override
+    public void removeCanPlaceOnMaterial(final BlockMaterialData material)
+    {
+
+    }
+
+    @Override
+    public void removeCanPlaceOnMaterials()
+    {
+
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
-    public RepairableMetaImpl clone()
+    public BlockItemMetaImpl clone()
     {
-        return new RepairableMetaImpl((this.tag == null) ? null : this.tag.clone(), this.itemStack);
+        return new BlockItemMetaImpl((this.tag == null) ? null : this.tag.clone(), this.itemStack);
     }
 }
