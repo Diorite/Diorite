@@ -31,6 +31,7 @@ import java.util.function.Function;
 import org.apache.commons.lang3.Validate;
 
 import org.diorite.impl.inventory.item.meta.BannerMetaImpl;
+import org.diorite.impl.inventory.item.meta.BlockItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.BookMetaImpl;
 import org.diorite.impl.inventory.item.meta.EnchantmentStorageMetaImpl;
 import org.diorite.impl.inventory.item.meta.FireworkEffectMetaImpl;
@@ -44,6 +45,7 @@ import org.diorite.impl.inventory.item.meta.SkullMetaImpl;
 import org.diorite.impl.inventory.item.meta.ToolMetaImpl;
 import org.diorite.ItemFactory;
 import org.diorite.inventory.item.meta.BannerMeta;
+import org.diorite.inventory.item.meta.BlockItemMeta;
 import org.diorite.inventory.item.meta.BookMeta;
 import org.diorite.inventory.item.meta.EnchantmentStorageMeta;
 import org.diorite.inventory.item.meta.FireworkEffectMeta;
@@ -74,6 +76,7 @@ public class ItemFactoryImpl implements ItemFactory
         this.metaTypes.put(RepairableMeta.class, RepairableMetaImpl::new);
         this.metaTypes.put(SkullMeta.class, SkullMetaImpl::new);
         this.metaTypes.put(ToolMeta.class, ToolMetaImpl::new);
+        this.metaTypes.put(BlockItemMeta.class, BlockItemMetaImpl::new);
         // TODO add rest
     }
 

@@ -24,17 +24,19 @@
 
 package org.diorite.impl;
 
+import org.diorite.impl.inventory.recipe.IRecipeManager;
+import org.diorite.impl.inventory.recipe.RecipeManagerImpl;
 import org.diorite.impl.permissions.DioritePermissionsManager;
-import org.diorite.ServerManager;
 import org.diorite.permissions.PermissionsManager;
 
 /**
  * Class used to manage all event pipelines, other pipelines, plugins and more.
  */
-public class ServerManagerImpl implements ServerManager
+public class ServerManagerImpl implements IServerManager
 {
     private final DioriteCore core;
     private PermissionsManager permissionsManager = new DioritePermissionsManager();
+    private IRecipeManager     recipeManager      = new RecipeManagerImpl();
 
     public ServerManagerImpl(final DioriteCore core)
     {
@@ -51,5 +53,17 @@ public class ServerManagerImpl implements ServerManager
     public void setPermissionsManager(final PermissionsManager permissionsManager)
     {
         this.permissionsManager = permissionsManager;
+    }
+
+    @Override
+    public IRecipeManager getRecipeManager()
+    {
+        return this.recipeManager;
+    }
+
+    @Override
+    public void setRecipeManager(final IRecipeManager recipeManager)
+    {
+        this.recipeManager = recipeManager;
     }
 }

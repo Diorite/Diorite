@@ -533,7 +533,8 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     public void closeInventory(final int id)
     {
         final PlayerCraftingInventoryImpl ci = this.inventory.getCraftingInventory();
-        for (int i = 0, s = ci.size(); i < s; i++)
+        ci.setResult(null);
+        for (int i = 1, s = ci.size(); i < s; i++) // from 1, result is set to null
         {
             final ItemStack itemStack = ci.setItem(i, null);
             if (itemStack != null)

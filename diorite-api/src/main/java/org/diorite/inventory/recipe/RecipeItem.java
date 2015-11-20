@@ -36,11 +36,18 @@ public interface RecipeItem
      *
      * @param item item to check.
      *
-     * @return return true if item is valid.
+     * @return return null if item isn't valid or item to remove on craft.
      */
-    default boolean isValid(final ItemStack item)
+    default ItemStack isValid(final ItemStack item)
     {
-        return this.getItem().isSimilar(item);
+        final ItemStack pat = this.getItem();
+        if (! pat.isSimilar(item))
+        {
+            return null;
+        }
+        final ItemStack is = item.clone();
+        is.setAmount(pat.getAmount());
+        return is;
     }
 
     /**

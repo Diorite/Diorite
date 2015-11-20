@@ -79,7 +79,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         ItemStackImpl.validate(e.getCursorItem());
         final ItemStackImpl cursor = (ItemStackImpl) e.getCursorItem();
         final int slot = e.getClickedSlot();
-        final PlayerInventoryImpl inv = player.getInventory(); // TODO
+        final PlayerInventoryImpl inv = player.getInventory(); // TODO inventory view etc
 
         final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem());
 
@@ -92,23 +92,36 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     return true;
                 }
+                if (slotProp.getSlotType().equals(SlotType.RESULT))
+                {
+                    inv.getCraftingInventory().confirmRecipe(false);
+                    return true;
+                }
                 if (cursor == null)
                 {
                     if ((clicked != null) && (! inv.replace(slot, clicked, null) || ! inv.replaceCursorItem(null, clicked)))
                     {
                         return false; // item changed before we made own change
                     }
+//                    inv.getCraftingInventory().confirmRecipe();
                 }
                 else
                 {
                     if (cursor.isSimilar(clicked))
                     {
+//                        if (slotProp.getSlotType().equals(SlotType.RESULT))
+//                        {
+//                            inv.getCraftingInventory().confirmRecipe();
+//                        }
+//                        else
+//                        {
                         final ItemStack newCursor = clicked.combine(cursor);
 
                         if (! inv.replaceCursorItem(cursor, newCursor))
                         {
                             return false;
                         }
+//                        }
                     }
                     else
                     {
@@ -128,6 +141,11 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 if (slot == - 1) // click in non-slot place, like inventory border.
                 {
+                    return true;
+                }
+                if (slotProp.getSlotType().equals(SlotType.RESULT))
+                {
+                    inv.getCraftingInventory().confirmRecipe(false);
                     return true;
                 }
                 if (cursor == null)
@@ -220,6 +238,11 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             {
                 if (clicked == null)
                 {
+                    return true;
+                }
+                if (slotProp.getSlotType().equals(SlotType.RESULT))
+                {
+                    inv.getCraftingInventory().confirmRecipe(true);
                     return true;
                 }
 

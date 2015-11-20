@@ -27,6 +27,7 @@ package org.diorite;
 import org.diorite.event.Event;
 import org.diorite.event.EventType;
 import org.diorite.event.pipelines.EventPipeline;
+import org.diorite.inventory.recipe.RecipeManager;
 import org.diorite.permissions.PermissionsManager;
 
 /**
@@ -80,4 +81,11 @@ public interface ServerManager
      * @param permissionsManager new permissions manager for server.
      */
     void setPermissionsManager(PermissionsManager permissionsManager);
+
+    /**
+     * Returns recipe manager for this server.
+     *
+     * @return recipe manager for this server.
+     */
+    RecipeManager getRecipeManager();
 }

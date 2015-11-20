@@ -24,9 +24,7 @@
 
 package org.diorite.impl.inventory.recipe.craft;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -42,22 +40,24 @@ import org.diorite.inventory.slot.SlotType;
 /**
  * Implementation of shapeless recipe
  */
-public class SimpleShapelessRecipeImpl extends SimpleRecipeImpl implements ShapelessRecipe
+public class SimpleShapelessSingleRecipeImpl extends SimpleRecipeImpl implements ShapelessRecipe
 {
-    protected final List<RecipeItem> ingredients;
+    protected final RecipeItem ingredient;
 
-    public SimpleShapelessRecipeImpl(final List<RecipeItem> ingredients, final ItemStack result, final long priority)
+    private final transient List<RecipeItem> ingredientList;
+
+    public SimpleShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority)
     {
         super(result, priority);
-        this.ingredients = new ArrayList<>(ingredients);
+        this.ingredient = ingredient;
+        this.ingredientList = Collections.singletonList(ingredient);
     }
 
     @Override
     public RecipeCheckResult isMatching(final GridInventory inventory)
     {
-        final LinkedList<RecipeItem> ingredients = new LinkedList<>(this.getIngredients());
-        final ItemStack[] items = new ItemStack[ingredients.size()];
-        int j = 0;
+        boolean matching = false;
+        final ItemStack[] result = new ItemStack[1];
         for (int i = 0, size = inventory.size(); i < size; i++)
         {
             if (inventory.getSlot(i).getSlotType().equals(SlotType.RESULT))
@@ -69,36 +69,31 @@ public class SimpleShapelessRecipeImpl extends SimpleRecipeImpl implements Shape
             {
                 continue;
             }
-            boolean matching = false;
-            for (final Iterator<RecipeItem> iterator = ingredients.iterator(); iterator.hasNext(); )
+            final ItemStack valid = this.ingredient.isValid(item);
+            if (valid != null)
             {
-                final RecipeItem ingredient = iterator.next();
-                final ItemStack valid = ingredient.isValid(item);
-                if (valid != null)
+                if (matching)
                 {
-                    items[j++] = valid;
-                    iterator.remove();
-                    matching = true;
-                    break;
+                    return null;
                 }
+                matching = true;
+                result[0] = valid;
+                continue;
             }
-            if (! matching)
-            {
-                return null;
-            }
+            return null;
         }
-        return ingredients.isEmpty() ? new RecipeCheckResultImpl(this, this.result, items) : null;
+        return matching ? new RecipeCheckResultImpl(this, this.result, result) : null;
     }
 
     @Override
     public List<RecipeItem> getIngredients()
     {
-        return new ArrayList<>(this.ingredients);
+        return this.ingredientList;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("ingredients", this.ingredients).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("ingredient", this.ingredient).toString();
     }
 }

@@ -27,7 +27,9 @@ package org.diorite.inventory.recipe;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.Material;
 
 /**
  * Represent simple recipe item, that check name/lore/etc only if recipe item have custom one.
@@ -62,15 +64,44 @@ public class SimpleRecipeItem implements RecipeItem
         this.ignoreData = ignoreData;
     }
 
+    /**
+     * Construct new recipe item with given item as pattern.
+     *
+     * @param item pattern item.
+     */
+    public SimpleRecipeItem(final Material item)
+    {
+        this(item, false);
+    }
+
+    /**
+     * Construct new recipe item with given item as pattern.
+     *
+     * @param item       pattern item.
+     * @param ignoreData if pattern item should ignore subtype of material
+     */
+    public SimpleRecipeItem(final Material item, final boolean ignoreData)
+    {
+        this.item = new BaseItemStack(item);
+        this.ignoreData = ignoreData;
+    }
+
     @Override
-    public boolean isValid(final ItemStack item)
+    public ItemStack isValid(final ItemStack item)
     {
         if (item == null)
         {
-            return false;
+            return null;
         }
-        // TODO check other data
-        return (this.ignoreData ? this.item.getMaterial().isThisSameID(item.getMaterial()) : this.item.getMaterial().equals(item.getMaterial())) && (this.item.getAmount() <= item.getAmount());
+        // TODO check other data?
+        final boolean valid = (this.ignoreData ? this.item.getMaterial().isThisSameID(item.getMaterial()) : this.item.getMaterial().equals(item.getMaterial())) && (this.item.getAmount() <= item.getAmount());
+        if (! valid)
+        {
+            return null;
+        }
+        final ItemStack is = item.clone();
+        is.setAmount(this.item.getAmount());
+        return is;
     }
 
     @Override
