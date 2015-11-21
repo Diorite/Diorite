@@ -26,7 +26,6 @@ package org.diorite.command;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
@@ -100,9 +99,9 @@ public class Arguments implements Iterable<String>
      *
      * @return selected element after converting to given type.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public <T> T get(final int index, final Function<String, T> func) throws NoSuchElementException
+    public <T> T get(final int index, final Function<String, T> func) throws ArrayIndexOutOfBoundsException
     {
         return func.apply(this.asString(index));
     }
@@ -114,9 +113,9 @@ public class Arguments implements Iterable<String>
      *
      * @return true if array contains given string.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public boolean contains(final String str) throws NoSuchElementException
+    public boolean contains(final String str) throws ArrayIndexOutOfBoundsException
     {
         for (final String arg : this.args)
         {
@@ -135,9 +134,9 @@ public class Arguments implements Iterable<String>
      *
      * @return true if array contains given string.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public boolean containsIgnoreCase(final String str) throws NoSuchElementException
+    public boolean containsIgnoreCase(final String str) throws ArrayIndexOutOfBoundsException
     {
         for (final String arg : this.args)
         {
@@ -228,9 +227,9 @@ public class Arguments implements Iterable<String>
      *
      * @return {@link Player} or null if player is offline.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public Player asPlayer(final int index) throws NoSuchElementException
+    public Player asPlayer(final int index) throws ArrayIndexOutOfBoundsException
     {
         return Diorite.getCore().getPlayer(this.asString(index));
     } // TODO: add asOfflinePlayer
@@ -245,9 +244,9 @@ public class Arguments implements Iterable<String>
      * @return x, y, z block coordinates as {@link BlockLocation}
      *
      * @throws InvalidCommandArgumentException if any of numbers can't be parsed to coordinate.
-     * @throws NoSuchElementException          if {@code args.length > startIndex + 2}
+     * @throws ArrayIndexOutOfBoundsException  if {@code args.length > startIndex + 2}
      */
-    public BlockLocation readCoordinates(final int startIndex, BlockLocation origin) throws NoSuchElementException, InvalidCommandArgumentException
+    public BlockLocation readCoordinates(final int startIndex, BlockLocation origin) throws ArrayIndexOutOfBoundsException, InvalidCommandArgumentException
     {
         this.check(startIndex + 2);
         if (origin == null)
@@ -268,9 +267,9 @@ public class Arguments implements Iterable<String>
      * @return x, y, z, yaw, pitch as {@link ImmutableLocation}
      *
      * @throws InvalidCommandArgumentException if any of numbers can't be parsed to coordinate.
-     * @throws NoSuchElementException          if {@code args.length > startIndex + 2} or + 4 if withRotation is true.
+     * @throws ArrayIndexOutOfBoundsException  if {@code args.length > startIndex + 2} or + 4 if withRotation is true.
      */
-    public ImmutableLocation readCoordinates(final int startIndex, final boolean withRotation, final Entity entity) throws NoSuchElementException, InvalidCommandArgumentException
+    public ImmutableLocation readCoordinates(final int startIndex, final boolean withRotation, final Entity entity) throws ArrayIndexOutOfBoundsException, InvalidCommandArgumentException
     {
         return this.readCoordinates(startIndex, withRotation, entity.getLocation());
     }
@@ -286,9 +285,9 @@ public class Arguments implements Iterable<String>
      * @return x, y, z, yaw, pitch as {@link ImmutableLocation}
      *
      * @throws InvalidCommandArgumentException if any of numbers can't be parsed to coordinate.
-     * @throws NoSuchElementException          if {@code args.length > startIndex + 2} or + 4 if withRotation is true.
+     * @throws ArrayIndexOutOfBoundsException  if {@code args.length > startIndex + 2} or + 4 if withRotation is true.
      */
-    public ImmutableLocation readCoordinates(final int startIndex, final boolean withRotation, Loc origin) throws NoSuchElementException, InvalidCommandArgumentException
+    public ImmutableLocation readCoordinates(final int startIndex, final boolean withRotation, Loc origin) throws ArrayIndexOutOfBoundsException, InvalidCommandArgumentException
     {
         this.check(startIndex + (withRotation ? 4 : 2));
         if (origin == null)
@@ -319,9 +318,9 @@ public class Arguments implements Iterable<String>
      * @return coordinate.
      *
      * @throws InvalidCommandArgumentException if number can't be parsed to coordinate.
-     * @throws NoSuchElementException          if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException  if {@code args.length > index}
      */
-    public double readCoordinate(final int index, final double origin) throws NoSuchElementException, InvalidCommandArgumentException
+    public double readCoordinate(final int index, final double origin) throws ArrayIndexOutOfBoundsException, InvalidCommandArgumentException
     {
         this.check(index);
         final String str = this.args[index];
@@ -360,9 +359,9 @@ public class Arguments implements Iterable<String>
      * @return rotation.
      *
      * @throws InvalidCommandArgumentException if number can't be parsed to rotation.
-     * @throws NoSuchElementException          if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException  if {@code args.length > index}
      */
-    public float readRotation(final int index, final float origin) throws NoSuchElementException, InvalidCommandArgumentException
+    public float readRotation(final int index, final float origin) throws ArrayIndexOutOfBoundsException, InvalidCommandArgumentException
     {
         this.check(index);
         final String str = this.args[index];
@@ -401,9 +400,9 @@ public class Arguments implements Iterable<String>
      * @return coordinate.
      *
      * @throws InvalidCommandArgumentException if number can't be parsed to coordinate.
-     * @throws NoSuchElementException          if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException  if {@code args.length > index}
      */
-    public int readCoordinate(final int index, final int origin) throws NoSuchElementException, InvalidCommandArgumentException
+    public int readCoordinate(final int index, final int origin) throws ArrayIndexOutOfBoundsException, InvalidCommandArgumentException
     {
         this.check(index);
         final String str = this.args[index];
@@ -435,12 +434,76 @@ public class Arguments implements Iterable<String>
      *
      * @return raw value from wrapped array of strings.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public String asString(final int index) throws NoSuchElementException
+    public String asString(final int index) throws ArrayIndexOutOfBoundsException
     {
         this.check(index);
         return this.args[index];
+    }
+
+    /**
+     * Parse selected argument to int, if argument can't be parsed to int, then it will return default value.
+     *
+     * @param index index of element, 0 is first element.
+     * @param def   default value.
+     *
+     * @return parsed value or default one.
+     *
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
+     */
+    public int asInt(final int index, final int def) throws ArrayIndexOutOfBoundsException
+    {
+        this.check(index);
+        return asInt(this.args[index], def);
+    }
+
+    /**
+     * Parse selected argument to long, if argument can't be parsed to long, then it will return default value.
+     *
+     * @param index index of element, 0 is first element.
+     * @param def   default value.
+     *
+     * @return parsed value or default one.
+     *
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
+     */
+    public long asLong(final int index, final long def) throws ArrayIndexOutOfBoundsException
+    {
+        this.check(index);
+        return asLong(this.args[index], def);
+    }
+
+    /**
+     * Parse selected argument to double, if argument can't be parsed to double, then it will return default value.
+     *
+     * @param index index of element, 0 is first element.
+     * @param def   default value.
+     *
+     * @return parsed value or default one.
+     *
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
+     */
+    public double asDouble(final int index, final double def) throws ArrayIndexOutOfBoundsException
+    {
+        this.check(index);
+        return asDouble(this.args[index], def);
+    }
+
+    /**
+     * Parse selected argument to float, if argument can't be parsed to float, then it will return default value.
+     *
+     * @param index index of element, 0 is first element.
+     * @param def   default value.
+     *
+     * @return parsed value or default one.
+     *
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
+     */
+    public float asFloat(final int index, final float def) throws ArrayIndexOutOfBoundsException
+    {
+        this.check(index);
+        return asFloat(this.args[index], def);
     }
 
     /**
@@ -450,9 +513,9 @@ public class Arguments implements Iterable<String>
      *
      * @return parsed value or null.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public Integer asInt(final int index) throws NoSuchElementException
+    public Integer asInt(final int index) throws ArrayIndexOutOfBoundsException
     {
         this.check(index);
         return asInt(this.args[index]);
@@ -465,9 +528,9 @@ public class Arguments implements Iterable<String>
      *
      * @return parsed value or null.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public Long asLong(final int index) throws NoSuchElementException
+    public Long asLong(final int index) throws ArrayIndexOutOfBoundsException
     {
         this.check(index);
         return asLong(this.args[index]);
@@ -480,9 +543,9 @@ public class Arguments implements Iterable<String>
      *
      * @return parsed value or null.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public Double asDouble(final int index) throws NoSuchElementException
+    public Double asDouble(final int index) throws ArrayIndexOutOfBoundsException
     {
         this.check(index);
         return asDouble(this.args[index]);
@@ -495,9 +558,9 @@ public class Arguments implements Iterable<String>
      *
      * @return parsed value or null.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public Float asFloat(final int index) throws NoSuchElementException
+    public Float asFloat(final int index) throws ArrayIndexOutOfBoundsException
     {
         this.check(index);
         return asFloat(this.args[index]);
@@ -510,10 +573,10 @@ public class Arguments implements Iterable<String>
      *
      * @return parsed value/
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      * @see Boolean#parseBoolean(String)
      */
-    public boolean asBoolean(final int index) throws NoSuchElementException
+    public boolean asBoolean(final int index) throws ArrayIndexOutOfBoundsException
     {
         this.check(index);
         return Boolean.parseBoolean(this.args[index]);
@@ -531,9 +594,9 @@ public class Arguments implements Iterable<String>
      *
      * @return true/false or null.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      */
-    public Boolean asBoolean(final int index, final Collection<String> trueWords, final Collection<String> falseWords) throws NoSuchElementException
+    public Boolean asBoolean(final int index, final Collection<String> trueWords, final Collection<String> falseWords) throws ArrayIndexOutOfBoundsException
     {
         final String str = this.asString(index);
         if (trueWords.stream().anyMatch(s -> s.equalsIgnoreCase(str)))
@@ -579,19 +642,19 @@ public class Arguments implements Iterable<String>
      *
      * @return arguments as single string.
      *
-     * @throws NoSuchElementException if {@code args.length > index}
+     * @throws ArrayIndexOutOfBoundsException if {@code args.length > index}
      * @see StringUtils#join(Object[], char, int, int)
      */
-    public String asText(final int fromIndex, final int toIndex) throws NoSuchElementException
+    public String asText(final int fromIndex, final int toIndex) throws ArrayIndexOutOfBoundsException
     {
         return StringUtils.join(this.args, ' ', fromIndex, toIndex);
     }
 
-    private void check(final int index) throws NoSuchElementException
+    private void check(final int index) throws ArrayIndexOutOfBoundsException
     {
         if (this.args.length <= index)
         {
-            throw new NoSuchElementException("Out of range, length: " + Arguments.this.args.length + ", index: " + index);
+            throw new ArrayIndexOutOfBoundsException("Out of range, length: " + Arguments.this.args.length + ", index: " + index);
         }
     }
 
@@ -817,7 +880,7 @@ public class Arguments implements Iterable<String>
             {
                 if (Arguments.this.args.length <= this.index)
                 {
-                    throw new NoSuchElementException("Out of range, length: " + Arguments.this.args.length + ", index: " + this.index);
+                    throw new ArrayIndexOutOfBoundsException("Out of range, length: " + Arguments.this.args.length + ", index: " + this.index);
                 }
                 return Arguments.this.args[this.index++];
             }

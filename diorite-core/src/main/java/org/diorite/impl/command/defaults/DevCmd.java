@@ -84,6 +84,15 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "gib":
+                {
+                    final ItemStack item = new BaseItemStack(Material.APPLE);
+                    item.setAmount(args.has(0) ? args.asInt(0, 1) : 1);
+                    final ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName("Diorite");
+                    p.getInventory().add(item);
+                    break;
+                }
                 case "potionmeta":
                 {
                     final ItemStack item = new BaseItemStack(new PotionMat("POTION", 373, "minecraft:potion", 1, "POTION", (short) 8193, 5, 6)

@@ -24,43 +24,75 @@
 
 package org.diorite.impl.inventory.recipe.craft;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.recipe.RecipeItem;
+import org.diorite.inventory.recipe.craft.CharMapRecipePattern;
 import org.diorite.inventory.recipe.craft.RecipePattern;
 
-/**
- * {@link RecipePattern} that use array of {@link org.diorite.inventory.recipe.RecipeItem} as implementation.
- */
-public class ArrayRecipePattern implements RecipePattern
-{
-    protected final RecipeItem[][] items;
+import gnu.trove.TCollections;
+import gnu.trove.map.TCharObjectMap;
+import gnu.trove.map.hash.TCharObjectHashMap;
 
-    public ArrayRecipePattern(final RecipeItem[][] items)
+/**
+ * {@link RecipePattern} that use array of {@link RecipeItem} as implementation.
+ */
+public class CharMapRecipePatternImpl implements CharMapRecipePattern
+{
+    protected final TCharObjectMap<RecipeItem> items;
+    protected final String[]                   pattern;
+
+    public CharMapRecipePatternImpl(final TCharObjectMap<RecipeItem> items, final String[] pattern)
     {
-        Validate.notNull(items, "Recipe pattern can't be null.");
-        Validate.notEmpty(items, "Recipe pattern can't be empty.");
-        Validate.noNullElements(items, "Recipe pattern elements can't be null.");
-        this.items = items;
+        Validate.notNull(pattern, "Recipe pattern can't be null.");
+        Validate.notEmpty(pattern, "Recipe pattern can't be empty.");
+        Validate.noNullElements(pattern, "Recipe pattern elements can't be null.");
+        Validate.notNull(items, "Recipe pattern items can't be null.");
+        this.items = TCollections.unmodifiableMap(new TCharObjectHashMap<>(items));
+        this.pattern = pattern.clone();
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("pattern", this.pattern).toString();
+    }
+
+    @Override
+    public String[] getPattern()
+    {
+        return this.pattern.clone();
+    }
+
+    @Override
+    public TCharObjectMap<RecipeItem> getIngredients()
+    {
+        return this.items;
+    }
+
+    @Override
+    public RecipeItem getIngredient(final char c)
+    {
+        return this.items.get(c);
     }
 
     @Override
     public int getColumns()
     {
-        return this.items[0].length;
+        return this.pattern[0].length();
     }
 
     @Override
     public int getRows()
     {
-        return this.items.length;
+        return this.pattern.length;
     }
 
     @Override
@@ -70,7 +102,7 @@ public class ArrayRecipePattern implements RecipePattern
         {
             return null;
         }
-        return this.items[row][column];
+        return this.getIngredient(this.pattern[row].charAt(column));
     }
 
     private transient List<RecipeItem> itemsList;
@@ -80,25 +112,8 @@ public class ArrayRecipePattern implements RecipePattern
     {
         if (this.itemsList == null)
         {
-            this.itemsList = new ArrayList<>(this.getColumns() * this.getRows());
-            for (final RecipeItem[] items : this.items)
-            {
-                for (final RecipeItem item : items)
-                {
-                    if (item != null)
-                    {
-                        this.itemsList.add(item);
-                    }
-                }
-            }
-            this.itemsList = Collections.unmodifiableList(new ArrayList<>(this.itemsList));
+            this.itemsList = Collections.unmodifiableList(this.items.valueCollection().stream().filter(item -> item != null).collect(Collectors.toList()));
         }
         return this.itemsList;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("items", this.items).toString();
     }
 }

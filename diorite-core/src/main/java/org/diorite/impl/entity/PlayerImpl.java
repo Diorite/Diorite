@@ -72,7 +72,6 @@ import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.EntityEquipment;
-import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.permissions.PlayerPermissionsContainer;
 import org.diorite.utils.math.DioriteRandom;
@@ -540,7 +539,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
             if (itemStack != null)
             {
                 final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getCore(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                item.setItemStack(new BaseItemStack(itemStack.getMaterial(), itemStack.getAmount()));
+                item.setItemStack(itemStack.clone());
                 this.getWorld().addEntity(item);
             }
         }
@@ -548,9 +547,10 @@ public class PlayerImpl extends LivingEntityImpl implements Player
         if (cur != null)
         {
             final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getCore(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-            item.setItemStack(new BaseItemStack(cur.getMaterial(), cur.getAmount()));
+            item.setItemStack(cur.clone());
             this.getWorld().addEntity(item);
         }
+        ci.checkRecipe(false);
     }
 
     @Override

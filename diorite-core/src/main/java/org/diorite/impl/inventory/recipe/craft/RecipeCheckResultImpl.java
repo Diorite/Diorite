@@ -7,8 +7,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.inventory.recipe.craft.Recipe;
+import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
@@ -61,6 +61,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      *
      * @return matched recipe.
      */
+    @Override
     public Recipe getRecipe()
     {
         return this.recipe;
@@ -71,6 +72,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      *
      * @return result itemstack.
      */
+    @Override
     public ItemStack getResult()
     {
         return this.result;
@@ -82,6 +84,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      *
      * @return array of items that should be removed from inventory on craft.
      */
+    @Override
     public ItemStack[] getItemsToConsume()
     {
         return this.itemsToConsume;
@@ -92,6 +95,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      *
      * @return items that should be changed in inventory.
      */
+    @Override
     public TShortObjectMap<ItemStack> getOnCraft()
     {
         return this.onCraft;

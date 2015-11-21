@@ -24,8 +24,11 @@
 
 package org.diorite.impl.inventory.recipe.craft;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -44,17 +47,14 @@ import gnu.trove.map.hash.TShortObjectHashMap;
 /**
  * Implementation of shapeless recipe
  */
-public class SimpleShapelessSingleRecipeImpl extends SimpleRecipeImpl implements ShapelessRecipe
+public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
 {
-    protected final RecipeItem ingredient;
+    protected final List<RecipeItem> ingredients;
 
-    private final transient List<RecipeItem> ingredientList;
-
-    public SimpleShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla)
+    public ShapelessRecipeImpl(final List<RecipeItem> ingredients, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[], ItemStack> resultFunc)
     {
-        super(extractResults(result, ingredient), priority, vanilla);
-        this.ingredient = ingredient;
-        this.ingredientList = Collections.singletonList(ingredient);
+        super(extractResults(result, ingredients), priority, vanilla, resultFunc);
+        this.ingredients = new ArrayList<>(ingredients);
     }
 
     @Override
@@ -63,8 +63,9 @@ public class SimpleShapelessSingleRecipeImpl extends SimpleRecipeImpl implements
         final Player player = (inventory.getHolder() instanceof Player) ? (Player) inventory.getHolder() : null;
         final TShortObjectMap<ItemStack> onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
 
-        boolean matching = false;
-        final ItemStack[] result = new ItemStack[1];
+        final LinkedList<RecipeItem> ingredients = new LinkedList<>(this.getIngredients());
+        final ItemStack[] items = new ItemStack[ingredients.size()];
+        int j = 0;
         for (short i = 0, size = (short) inventory.size(); i < size; i++)
         {
             if (inventory.getSlot(i).getSlotType().equals(SlotType.RESULT))
@@ -76,36 +77,41 @@ public class SimpleShapelessSingleRecipeImpl extends SimpleRecipeImpl implements
             {
                 continue;
             }
-            final ItemStack valid = this.ingredient.isValid(player, item);
-            if (valid != null)
+            boolean matching = false;
+            for (final Iterator<RecipeItem> iterator = ingredients.iterator(); iterator.hasNext(); )
             {
-                if (matching)
+                final RecipeItem ingredient = iterator.next();
+                final ItemStack valid = ingredient.isValid(player, item);
+                if (valid != null)
                 {
-                    return null;
+                    final ItemStack repl = ingredient.getReplacement();
+                    if (repl != null)
+                    {
+                        onCraft.put(i, repl);
+                    }
+                    items[j++] = valid;
+                    iterator.remove();
+                    matching = true;
+                    break;
                 }
-                matching = true;
-                result[0] = valid;
-                final ItemStack repl = this.ingredient.getReplacement();
-                if (repl != null)
-                {
-                    onCraft.put(i, repl);
-                }
-                continue;
             }
-            return null;
+            if (! matching)
+            {
+                return null;
+            }
         }
-        return matching ? new RecipeCheckResultImpl(this, this.result, result, onCraft) : null;
+        return ingredients.isEmpty() ? new RecipeCheckResultImpl(this, this.resultFunc.apply(player, items.clone()), items, onCraft) : null;
     }
 
     @Override
     public List<RecipeItem> getIngredients()
     {
-        return this.ingredientList;
+        return new ArrayList<>(this.ingredients);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("ingredient", this.ingredient).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("ingredients", this.ingredients).toString();
     }
 }

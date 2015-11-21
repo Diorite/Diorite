@@ -24,12 +24,15 @@
 
 package org.diorite.inventory.recipe;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.function.BiPredicate;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.material.Material;
 
 /**
  * Represent simple recipe item, that check name/lore/etc only if recipe item have custom one.
@@ -39,55 +42,33 @@ public class SimpleRecipeItem implements RecipeItem
     /**
      * Pattern item of this recipe.
      */
-    protected final ItemStack item;
-    protected final boolean   ignoreData;
-
+    protected final ItemStack                                  item;
     /**
-     * Construct new recipe item with given item as pattern.
-     *
-     * @param item pattern item.
+     * If pattern should ignore material sub-type.
      */
-    public SimpleRecipeItem(final ItemStack item)
-    {
-        this(item, false);
-    }
+    protected final boolean                                    ignoreData;
+    /**
+     * Validators if this recipe item, allowing to check more item data. <br>
+     * Player may be null when using.
+     */
+    protected final Collection<BiPredicate<Player, ItemStack>> validators;
 
     /**
      * Construct new recipe item with given item as pattern.
      *
      * @param item       pattern item.
      * @param ignoreData if pattern item should ignore subtype of material
+     * @param validators validators of thic recipe item, allowing to check additional data of item. Player may be null.
      */
-    public SimpleRecipeItem(final ItemStack item, final boolean ignoreData)
+    public SimpleRecipeItem(final ItemStack item, final boolean ignoreData, final Collection<BiPredicate<Player, ItemStack>> validators)
     {
         this.item = item.clone();
         this.ignoreData = ignoreData;
-    }
-
-    /**
-     * Construct new recipe item with given item as pattern.
-     *
-     * @param item pattern item.
-     */
-    public SimpleRecipeItem(final Material item)
-    {
-        this(item, false);
-    }
-
-    /**
-     * Construct new recipe item with given item as pattern.
-     *
-     * @param item       pattern item.
-     * @param ignoreData if pattern item should ignore subtype of material
-     */
-    public SimpleRecipeItem(final Material item, final boolean ignoreData)
-    {
-        this.item = new BaseItemStack(item);
-        this.ignoreData = ignoreData;
+        this.validators = (validators == null) ? null : new ArrayList<>(validators);
     }
 
     @Override
-    public ItemStack isValid(final ItemStack item)
+    public ItemStack isValid(final Player player, final ItemStack item)
     {
         if (item == null)
         {
@@ -96,6 +77,10 @@ public class SimpleRecipeItem implements RecipeItem
         // TODO check other data?
         final boolean valid = (this.ignoreData ? this.item.getMaterial().isThisSameID(item.getMaterial()) : this.item.getMaterial().equals(item.getMaterial())) && (this.item.getAmount() <= item.getAmount());
         if (! valid)
+        {
+            return null;
+        }
+        if ((this.validators != null) && ! this.validators.stream().allMatch(f -> f.test(player, item)))
         {
             return null;
         }

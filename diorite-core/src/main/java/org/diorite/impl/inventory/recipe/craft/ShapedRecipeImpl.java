@@ -24,6 +24,8 @@
 
 package org.diorite.impl.inventory.recipe.craft;
 
+import java.util.function.BiFunction;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -41,13 +43,13 @@ import gnu.trove.map.hash.TShortObjectHashMap;
 /**
  * Implementation of shaped recipe.
  */
-public class SimpleShapedRecipeImpl extends SimpleRecipeImpl implements ShapedRecipe
+public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
 {
     protected final RecipePattern pattern;
 
-    public SimpleShapedRecipeImpl(final RecipePattern pattern, final ItemStack result, final long priority, final boolean vanilla)
+    public ShapedRecipeImpl(final RecipePattern pattern, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[], ItemStack> resultFunc)
     {
-        super(extractResults(result, pattern.getRecipeItems()), priority, vanilla);
+        super(extractResults(result, pattern.getRecipeItems()), priority, vanilla, resultFunc);
         this.pattern = pattern;
     }
 
@@ -163,7 +165,7 @@ public class SimpleShapedRecipeImpl extends SimpleRecipeImpl implements ShapedRe
             }
             invCol = 0;
         }
-        return new RecipeCheckResultImpl(this, this.result, items, onCraft);
+        return new RecipeCheckResultImpl(this, this.resultFunc.apply(player, items), items, onCraft);
     }
 
     @Override

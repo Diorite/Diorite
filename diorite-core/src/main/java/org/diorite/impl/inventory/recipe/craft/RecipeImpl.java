@@ -4,30 +4,38 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeItem;
 
-abstract class SimpleRecipeImpl extends PriorityRecipeImpl
+abstract class RecipeImpl extends PriorityRecipeImpl
 {
-    protected final ItemStack       result;
-    protected final List<ItemStack> resultList;
+    protected final ItemStack                                  result;
+    protected final List<ItemStack>                            resultList;
+    protected final BiFunction<Player, ItemStack[], ItemStack> resultFunc;
 
-    protected SimpleRecipeImpl(final ItemStack result, final long priority, final boolean vanilla)
+    protected RecipeImpl(final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[], ItemStack> resultFunc)
     {
         super(priority, vanilla);
+        Validate.notNull(resultFunc, "Result function can't be null.");
+        Validate.notNull(result, "Result item can't be null.");
         this.result = result;
+        this.resultFunc = resultFunc;
         this.resultList = Collections.singletonList(result.clone());
     }
 
-    protected SimpleRecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla)
+    protected RecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[], ItemStack> resultFunc)
     {
         super(priority, vanilla);
+        Validate.notNull(resultFunc, "Result function can't be null.");
         Validate.notEmpty(result, "Result list can't be empty.");
+        this.resultFunc = resultFunc;
         this.result = result.get(0);
         this.resultList = (result.size() == 1) ? Collections.singletonList(this.result) : Collections.unmodifiableList(new ArrayList<>(result));
     }

@@ -24,6 +24,8 @@
 
 package org.diorite.inventory.recipe.craft;
 
+import java.util.Collection;
+
 import org.diorite.inventory.recipe.RecipeItem;
 
 /**
@@ -55,4 +57,11 @@ public interface RecipePattern
      * @return recipe item on given pattern slot or null.
      */
     RecipeItem getRecipeItem(int row, int column);
+
+    /**
+     * Returns all recipe items from this pattern.
+     *
+     * @return all recipe items from this pattern.
+     */
+    Collection<RecipeItem> getRecipeItems();
 }

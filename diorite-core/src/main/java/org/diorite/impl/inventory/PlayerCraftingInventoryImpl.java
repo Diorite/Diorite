@@ -24,12 +24,18 @@
 
 package org.diorite.impl.inventory;
 
+import java.util.UUID;
+
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
+import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.Diorite;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerCraftingInventory;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeManager;
 import org.diorite.inventory.recipe.craft.Recipe;
@@ -38,6 +44,8 @@ import org.diorite.utils.DioriteUtils;
 
 import gnu.trove.TShortCollection;
 import gnu.trove.iterator.TShortIterator;
+import gnu.trove.map.TShortObjectMap;
+import gnu.trove.map.hash.TShortObjectHashMap;
 import gnu.trove.set.hash.TShortHashSet;
 
 public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl implements PlayerCraftingInventory
@@ -142,6 +150,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         {
             final Recipe recipe = this.recipe.getRecipe();
             ItemStack result = null;
+            final TShortObjectMap<ItemStack> onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
             while ((this.recipe != null) && (recipe == this.recipe.getRecipe())) // as long as recipe is this same.
             {
                 if (this.removeItems(true, this.recipe.getItemsToConsume()).length != 0)
@@ -157,12 +166,21 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                     result.setAmount(result.getAmount() + this.recipe.getResult().getAmount());
                 }
                 this.recipe.getOnCraft().forEachEntry((a, b) -> {
-                    this.setItem(a, b);
+                    final ItemStack old = onCraft.get(a);
+                    if (old == null)
+                    {
+                        onCraft.put(a, b.clone());
+                    }
+                    else
+                    {
+                        old.setAmount(old.getAmount() + b.getAmount());
+                    }
                     return true;
                 });
                 this.checkRecipe(false);
             }
             this.getPlayerInventory().addFromEnd(result);
+            onCraft.forEachEntry(this::addReplacment);
         }
         else
         {
@@ -178,11 +196,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             final ItemStack result = this.recipe.getResult().clone();
             result.setAmount(result.getAmount() + ((cursor == null) ? 0 : cursor.getAmount()));
             this.getPlayerInventory().replaceCursorItem(cursor, result);
-            this.recipe.getOnCraft().forEachEntry((a, b) -> {
-                this.setItem(a, b);
-                return true;
-            });
-
+            this.recipe.getOnCraft().forEachEntry(this::addReplacment);
 
             this.checkRecipe(false);
         }
@@ -200,6 +214,62 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             }
             this.getHolder().getNetworkManager().sendPackets(packets);
         }
+    }
+
+    private void dropArray(final ItemStack[] rest)
+    {
+        if (rest.length != 0)
+        {
+            for (final ItemStack itemStack : rest)
+            {
+                final ItemImpl itemEntity = new ItemImpl(UUID.randomUUID(), DioriteCore.getInstance(), EntityImpl.getNextEntityID(), this.getHolder().getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
+                itemEntity.setItemStack(new BaseItemStack(itemStack));
+                this.getHolder().getWorld().addEntity(itemEntity);
+            }
+        }
+    }
+
+    private boolean addReplacment(final short a, final ItemStack b)
+    {
+        final ItemStack item = this.getItem(a);
+        if (item == null)
+        {
+            if (b.getAmount() > b.getMaterial().getMaxStack())
+            {
+                final ItemStack fullB = b.clone();
+                fullB.setAmount(b.getMaterial().getMaxStack());
+                this.setItem(a, fullB);
+                b.setAmount(b.getAmount() - fullB.getAmount());
+                this.dropArray(this.playerInventory.addFromEnd(b));
+            }
+            else
+            {
+                this.setItem(a, b);
+            }
+        }
+        else if (item.isSimilar(b))
+        {
+            int newAmount = item.getAmount() + b.getAmount();
+            if (newAmount > item.getMaterial().getMaxStack())
+            {
+                item.setAmount(item.getMaterial().getMaxStack());
+                this.setItem(a, item);
+                newAmount -= item.getMaterial().getMaxStack();
+                final ItemStack item2 = item.clone();
+                item2.setAmount(newAmount);
+                this.dropArray(this.playerInventory.addFromEnd(item2));
+            }
+            else
+            {
+                item.setAmount(newAmount);
+                this.setItem(a, item);
+            }
+        }
+        else
+        {
+            this.dropArray(this.playerInventory.addFromEnd(b));
+        }
+        return true;
     }
 
     public void checkRecipe(final boolean onlyResult)
@@ -222,6 +292,28 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                 }
                 return;
             }
+
+            if (this.recipe == null) // don't check empty eq for recipes
+            {
+                int nonNull = 0;
+                for (final ItemStack itemStack : this.getContents())
+                {
+                    if (itemStack != null)
+                    {
+                        nonNull++;
+                    }
+                }
+                if (nonNull == 0)
+                {
+                    return;
+                }
+                else if ((nonNull == 1) && (this.getResult() != null))
+                {
+                    this.setResult(null);
+                    return;
+                }
+            }
+
             final RecipeCheckResult result = rm.matchRecipe(this);
             if (result == null)
             {

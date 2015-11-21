@@ -26,6 +26,7 @@ package org.diorite.impl.inventory.recipe.craft;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -44,15 +45,15 @@ import gnu.trove.map.hash.TShortObjectHashMap;
 /**
  * Implementation of shapeless recipe
  */
-public class SimpleShapelessSingleRecipeImpl extends SimpleRecipeImpl implements ShapelessRecipe
+public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRecipe
 {
     protected final RecipeItem ingredient;
 
     private final transient List<RecipeItem> ingredientList;
 
-    public SimpleShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla)
+    public ShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[], ItemStack> resultFunc)
     {
-        super(extractResults(result, ingredient), priority, vanilla);
+        super(extractResults(result, ingredient), priority, vanilla, resultFunc);
         this.ingredient = ingredient;
         this.ingredientList = Collections.singletonList(ingredient);
     }
@@ -94,7 +95,7 @@ public class SimpleShapelessSingleRecipeImpl extends SimpleRecipeImpl implements
             }
             return null;
         }
-        return matching ? new RecipeCheckResultImpl(this, this.result, result, onCraft) : null;
+        return matching ? new RecipeCheckResultImpl(this, this.resultFunc.apply(player, result), result, onCraft) : null;
     }
 
     @Override

@@ -418,6 +418,12 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     }
 
     @Override
+    public boolean hasHideFlags()
+    {
+        return this.tag.containsKey(HIDE_FLAGS);
+    }
+
+    @Override
     public boolean hasHideFlag(final HideFlag flag)
     {
         return (this.tag != null) && HideFlag.getFlags(this.tag.getInt(HIDE_FLAGS)).contains(flag);

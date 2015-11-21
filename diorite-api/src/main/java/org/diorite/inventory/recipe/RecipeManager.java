@@ -12,6 +12,13 @@ import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 public interface RecipeManager
 {
     /**
+     * Returns new instance of recipe builder.
+     *
+     * @return new instance of recipe builder.
+     */
+    RecipeBuilder builder();
+
+    /**
      * Adds new recipe to this manager, returns true if recipe was added.
      *
      * @param recipe recipe to add.

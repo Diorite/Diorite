@@ -7,11 +7,13 @@ import org.diorite.inventory.recipe.craft.Recipe;
 
 abstract class PriorityRecipeImpl implements Recipe
 {
-    protected final long priority;
+    protected final long    priority;
+    protected final boolean vanilla;
 
-    protected PriorityRecipeImpl(final long priority)
+    protected PriorityRecipeImpl(final long priority, final boolean vanilla)
     {
         this.priority = priority;
+        this.vanilla = vanilla;
     }
 
     @Override

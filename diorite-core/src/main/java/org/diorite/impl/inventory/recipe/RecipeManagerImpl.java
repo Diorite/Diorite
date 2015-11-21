@@ -1,19 +1,14 @@
 package org.diorite.impl.inventory.recipe;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.diorite.impl.inventory.recipe.craft.ArrayRecipePattern;
-import org.diorite.impl.inventory.recipe.craft.SimpleShapedRecipeImpl;
-import org.diorite.impl.inventory.recipe.craft.SimpleShapelessRecipeImpl;
-import org.diorite.impl.inventory.recipe.craft.SimpleShapelessSingleRecipeImpl;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.inventory.GridInventory;
-import org.diorite.inventory.item.BaseItemStack;
-import org.diorite.inventory.recipe.RecipeItem;
-import org.diorite.inventory.recipe.SimpleRecipeItem;
+import org.diorite.inventory.recipe.RecipeBuilder;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.material.Material;
@@ -34,6 +29,12 @@ public class RecipeManagerImpl implements IRecipeManager
         }
         return 1;
     });
+
+    @Override
+    public RecipeBuilder builder()
+    {
+        return new RecipeBuilderImpl();
+    }
 
     @Override
     public boolean add(final Recipe recipe)
@@ -89,25 +90,17 @@ public class RecipeManagerImpl implements IRecipeManager
     public void addDefaultRecipes()
     {
         int i = 0;
-        this.recipes.add(new SimpleShapelessSingleRecipeImpl(new SimpleRecipeItem(Material.STONE, true), new BaseItemStack(Material.STONE_BUTTON), getPriority(i++)));
-        this.recipes.add(new SimpleShapedRecipeImpl(new ArrayRecipePattern(new RecipeItem[][]{{new SimpleRecipeItem(Material.STONE), null}, {null, new SimpleRecipeItem(Material.STICK)}}), new BaseItemStack(Material.STONE_SWORD), getPriority(i++)));
-        this.recipes.add(new SimpleShapedRecipeImpl(new ArrayRecipePattern(new RecipeItem[][]{{new SimpleRecipeItem(Material.STICK)}}), new BaseItemStack(WoolMat.WOOL_BLUE), getPriority(i++)));
-        {
-            final List<RecipeItem> recipeItems = new ArrayList<>(2);
-            recipeItems.add(new SimpleRecipeItem(Material.STICK));
-            recipeItems.add(new SimpleRecipeItem(Material.STONE));
-            this.recipes.add(new SimpleShapelessRecipeImpl(recipeItems, new BaseItemStack(Material.STONE_AXE), getPriority(i++)));
-        }
-        {
-            final List<RecipeItem> recipeItems = new ArrayList<>(2);
-            recipeItems.add(new SimpleRecipeItem(DyeMat.DYE_LAPIS_LAZULI));
-            recipeItems.add(new SimpleRecipeItem(WoolMat.WOOL_WHITE));
-            this.recipes.add(new SimpleShapelessRecipeImpl(recipeItems, new BaseItemStack(WoolMat.WOOL_BLUE), getPriority(i++)));
-        }
-        // TODO
+        this.builder().priority(getPriority(i++)).shapeless().addIngredient().item(Material.STONE, true).build().result(Material.STONE_BUTTON).buildAndAdd();
+        this.builder().priority(getPriority(i++)).shaped().pattern("s ", "S ").addIngredient('s').item(Material.STONE).addIngredient('S').item(Material.STICK).build().result(Material.STONE_SWORD).buildAndAdd();
+        this.builder().priority(getPriority(i++)).shaped().pattern("s").addIngredient('s').item(Material.STICK).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
+        this.builder().priority(getPriority(i++)).shapeless().addIngredient().item(Material.STICK).addIngredient().item(Material.STONE).build().result(Material.STONE_AXE).buildAndAdd();
+        this.builder().priority(getPriority(i++)).shapeless().addIngredient().item(DyeMat.DYE_LAPIS_LAZULI).addIngredient().item(WoolMat.WOOL_WHITE, false).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
+        this.builder().priority(getPriority(i++)).shapeless().addIngredient().item(Material.APPLE, false).replacement(Material.DIRT, 16).simpleValidator(item -> "Diorite".equals(item.getItemMeta().getDisplayName())).build().result(Material.GOLDEN_APPLE).buildAndAdd();
     }
 
+    @Override
+    public String toString()
     {
-        this.addDefaultRecipes();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("recipes", this.recipes).toString();
     }
 }

@@ -199,7 +199,7 @@ public interface Inventory extends Iterable<ItemStack>
      * @param excepted item to replace.
      * @param newItem  replacement.
      *
-     * @return slot id of replaced item, or -1 if no item was replaced.
+     * @return slot id of replaced item, or -1 if no item was replacement.
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
@@ -211,7 +211,7 @@ public interface Inventory extends Iterable<ItemStack>
      * @param excepted item to replace.
      * @param newItem  replacement.
      *
-     * @return slot id of replaced item, or -1 if no item was replaced.
+     * @return slot id of replaced item, or -1 if no item was replacement.
      *
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
