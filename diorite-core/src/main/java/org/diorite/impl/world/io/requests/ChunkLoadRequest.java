@@ -74,7 +74,6 @@ public class ChunkLoadRequest extends Request<ChunkImpl>
         return this.z;
     }
 
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Override
     public boolean equals(final Object o)
     {

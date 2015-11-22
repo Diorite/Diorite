@@ -34,7 +34,6 @@ import org.apache.commons.lang3.Validate;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
-@SuppressWarnings("MagicNumber")
 public enum ChatColor
 {
     BLACK("black", '0', 0),

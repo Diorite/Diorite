@@ -33,6 +33,8 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
@@ -78,6 +80,7 @@ public class WorldImpl implements World, Tickable
     private static final int CHUNK_FLAG            = (Chunk.CHUNK_SIZE - 1);
     public static final  int DEFAULT_AUTOSAVE_TIME = 20 * 60 * 5; // 5 min, TODO: load it from config
 
+    private final   Logger           worldLoaderLogger;
     protected final String           name;
     protected final WorldGroupImpl   worldGroup;
     protected final ChunkManagerImpl chunkManager;
@@ -112,6 +115,7 @@ public class WorldImpl implements World, Tickable
 
     public WorldImpl(final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator, final Map<String, Object> generatorOptions)
     {
+        this.worldLoaderLogger = LoggerFactory.getLogger("[WorldLoader][" + name + "]");
         this.name = name;
         this.worldGroup = group;
         this.dimension = dimension;
@@ -193,7 +197,7 @@ public class WorldImpl implements World, Tickable
     public synchronized void loadBase(final int chunkRadius, final BlockLocation center)
     {
         final int toLoad = DioriteMathUtils.square((chunkRadius << 1) + 1);
-        System.out.println("[WorldLoader] Loading " + toLoad + " spawn chunks for world: " + this.name);
+        this.worldLoaderLogger.info("Loading " + toLoad + " spawn chunks.");
         final LoadInfo info = new LoadInfo();
         this.spawnLock.clear();
         if (chunkRadius > 0)
@@ -223,7 +227,7 @@ public class WorldImpl implements World, Tickable
                         {
                             //noinspection HardcodedFileSeparator
                             info.lastTime = cur;
-                            System.out.println("[ChunkLoader][" + this.name + "] Chunk: " + chunkNum + "/" + toLoad + ", (" + i + " left)");
+                            this.worldLoaderLogger.info("Chunk: " + chunkNum + "/" + toLoad + ", (" + i + " left)");
                         }
                     }
                     i--;
@@ -241,7 +245,7 @@ public class WorldImpl implements World, Tickable
             //noinspection HardcodedFileSeparator
             info.lastTime = System.currentTimeMillis();
         }
-        System.out.println("[WorldLoader] Loaded " + info.loadedChunks.get() + " spawn chunks for world: " + this.name);
+        this.worldLoaderLogger.info("Loaded " + info.loadedChunks.get() + " spawn chunks.");
     }
 
     public NbtTagCompound writeTo(final NbtTagCompound tag)

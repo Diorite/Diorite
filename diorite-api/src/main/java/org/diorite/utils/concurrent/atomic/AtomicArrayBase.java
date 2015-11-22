@@ -38,7 +38,7 @@ import sun.misc.Unsafe;
 
 /**
  * Copy of {@link AtomicReferenceArray} with non-final methods and offset param.
- * <p>
+ * <br>
  * An array of object references in which elements may be updated
  * atomically.
  *

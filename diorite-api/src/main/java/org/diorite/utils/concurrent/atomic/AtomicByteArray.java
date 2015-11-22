@@ -31,7 +31,6 @@ import java.util.concurrent.atomic.AtomicIntegerArray;
 /**
  * Atomic array with byte elements.
  */
-@SuppressWarnings("MagicNumber")
 public class AtomicByteArray implements Serializable
 {
     private static final long serialVersionUID = 0;
@@ -204,7 +203,7 @@ public class AtomicByteArray implements Serializable
 
     /**
      * Gets an array containing all the values in the array. The returned values are not guaranteed to be from the same time instant.
-     * <p>
+     * <br>
      * If an array is provided and it is the correct length, then that array will be used as the destination array.
      *
      * @param array the provided array
@@ -226,7 +225,7 @@ public class AtomicByteArray implements Serializable
 
     /**
      * Gets an array containing all the values in the array.
-     * <p>
+     * <br>
      * The returned values are not guaranteed to be from the same time instant.
      *
      * @return the array
@@ -238,7 +237,7 @@ public class AtomicByteArray implements Serializable
 
     /**
      * Returns a string representation of the array.
-     * <p>
+     * <br>
      * The returned values are not guaranteed to be from the same time instant.
      *
      * @return the String

@@ -146,7 +146,6 @@ public class Metrics
                 public Set<MetricsPlotter> getPlotters()
                 {
                     final Set<MetricsPlotter> result = new HashSet<>(20);
-                    //noinspection MagicNumber
                     final TShortIntMap map = new TShortIntHashMap(20, .1f, (short) 0, 0);
                     core.getWorldsManager().getWorlds().forEach(w -> w.getEntityTrackers().getStats().forEachEntry((id, amount) -> {
                         map.put(id, map.get(id) + amount);

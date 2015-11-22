@@ -175,15 +175,10 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_8   = new DaylightDetectorInvertedMat(8);
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_9   = new DaylightDetectorInvertedMat(9);
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_10  = new DaylightDetectorInvertedMat(10);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_11  = new DaylightDetectorInvertedMat(11);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_12  = new DaylightDetectorInvertedMat(12);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_13  = new DaylightDetectorInvertedMat(13);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_14  = new DaylightDetectorInvertedMat(14);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_15  = new DaylightDetectorInvertedMat(15);
 
     private static final Map<String, DaylightDetectorInvertedMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

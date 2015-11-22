@@ -76,9 +76,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContains(EventPriority, String, EventPipelineHandler)}
      *
@@ -101,9 +101,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContains(EventPriority, String, EventPipelineHandler)}
      *
@@ -126,9 +126,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContainsFromTail(EventPriority, String, EventPipelineHandler)}
      *
@@ -149,9 +149,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContains(EventPriority, String, EventPipelineHandler)}
      *
@@ -174,9 +174,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContains(EventPriority, String, EventPipelineHandler)}
      *
@@ -199,9 +199,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContainsFromTail(EventPriority, String, EventPipelineHandler)}
      *
@@ -222,9 +222,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBefore(EventPriority, String, EventPipelineHandler)}
      *
@@ -247,9 +247,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBefore(EventPriority, String, EventPipelineHandler)}
      *
@@ -272,9 +272,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBeforeFromTail(EventPriority, String, EventPipelineHandler)}
      *
@@ -295,9 +295,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfter(EventPriority, String, EventPipelineHandler)}
      *
@@ -320,9 +320,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfter(EventPriority, String, EventPipelineHandler)}
      *
@@ -345,9 +345,9 @@ public interface EventPipeline<T extends Event> extends Pipeline<EventPipelineHa
     /**
      * Method will look for event priority pipeline element from {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfterFromTail(EventPriority, String, EventPipelineHandler)}
      *

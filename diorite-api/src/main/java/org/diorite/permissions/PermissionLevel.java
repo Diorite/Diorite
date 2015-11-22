@@ -59,7 +59,7 @@ public enum PermissionLevel
                 @Override
                 public boolean getValue(final boolean op)
                 {
-                    return !op;
+                    return ! op;
                 }
             };
 

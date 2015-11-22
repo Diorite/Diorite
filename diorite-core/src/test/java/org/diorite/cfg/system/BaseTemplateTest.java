@@ -139,7 +139,7 @@ public class BaseTemplateTest extends TestCase
 
     public static class TestCfg
     {
-        String value = "heh";
+        final String value = "heh";
 
         @CfgStringDefault("Dzialaj!")
         String meh;

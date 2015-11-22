@@ -114,7 +114,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
         return this.getBlockType(x, y, z);
     }
 
-    @SuppressWarnings("MagicNumber")
     public BlockMaterialData rawSetBlock(final int x, final int y, final int z, final int id, final int meta)
     {
         final short data = this.blocks.getAndSet(toArrayIndex(x, y, z), (short) ((id << 4) | meta));
@@ -127,7 +126,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
         return this.setBlock(x, y, z, material.ordinal(), material.getType());
     }
 
-    @SuppressWarnings("MagicNumber")
     public BlockMaterialData getBlockType(final int x, final int y, final int z)
     {
         final short data = this.blocks.get(toArrayIndex(x, y, z));

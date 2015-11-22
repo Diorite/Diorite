@@ -174,15 +174,10 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements 
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_8   = new DaylightDetectorMat(8);
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_9   = new DaylightDetectorMat(9);
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_10  = new DaylightDetectorMat(10);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_11  = new DaylightDetectorMat(11);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_12  = new DaylightDetectorMat(12);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_13  = new DaylightDetectorMat(13);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_14  = new DaylightDetectorMat(14);
-    @SuppressWarnings("MagicNumber")
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_15  = new DaylightDetectorMat(15);
 
     private static final Map<String, DaylightDetectorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

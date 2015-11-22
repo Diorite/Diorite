@@ -24,6 +24,9 @@
 
 package org.diorite.impl;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.inventory.recipe.IRecipeManager;
 import org.diorite.impl.inventory.recipe.RecipeManagerImpl;
 import org.diorite.impl.permissions.DioritePermissionsManager;
@@ -65,5 +68,11 @@ public class ServerManagerImpl implements IServerManager
     public void setRecipeManager(final IRecipeManager recipeManager)
     {
         this.recipeManager = recipeManager;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
     }
 }

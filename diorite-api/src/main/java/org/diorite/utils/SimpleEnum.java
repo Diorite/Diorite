@@ -40,7 +40,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
  * Simple interface-based enum, that can be edited in runtime. <br>
  * You should use {@link org.diorite.utils.SimpleEnum.ASimpleEnum} as super class where possible. <br>
  * But you should use this class when casting, or as variable type. <br>
- * <p>
+ * <br>
  * Every simple enum must contains static methods: <br>
  * void register(T) <br>
  * T[] values() <br>
@@ -160,7 +160,7 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
     /**
      * You should use this class as super class instead of {@link SimpleEnum} where possible. <br>
      * But you should NOT use this class for variable types, casting etc... <br>
-     * <p>
+     * <br>
      * This class contains default implementations of equals, hashCode and toString methods.
      *
      * @param <T> type of enum.

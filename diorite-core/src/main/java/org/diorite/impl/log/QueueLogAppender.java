@@ -25,6 +25,7 @@
 package org.diorite.impl.log;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -98,7 +99,7 @@ public class QueueLogAppender extends AbstractAppender
         QUEUE_LOCK.writeLock().unlock();
         if (layout == null)
         {
-            layout = PatternLayout.createLayout(null, null, null, null, false, false, null, null);
+            layout = PatternLayout.createLayout(null, null, null, null, StandardCharsets.UTF_8, false, false, null, null);
         }
         return new QueueLogAppender(name, filter, layout, ignoreExceptions, queue);
     }

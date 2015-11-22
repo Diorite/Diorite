@@ -197,7 +197,6 @@ public class BlockLocation
         return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
     }
 
-    @SuppressWarnings("MagicNumber")
     public double distanceSquaredFromCenter(final double x, final double y, final double z)
     {
         final double deltaX = ((double) this.x + 0.5) - x;
@@ -262,7 +261,6 @@ public class BlockLocation
         return new ImmutableLocation(this.x, this.y, this.z, this.world);
     }
 
-    @SuppressWarnings("MagicNumber")
     public static BlockLocation fromLong(final long pos)
     {
         final int x = (int) (pos >> 38);

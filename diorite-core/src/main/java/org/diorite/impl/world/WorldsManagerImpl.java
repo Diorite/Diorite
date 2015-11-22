@@ -39,6 +39,8 @@ import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.cfg.DioriteConfigImpl;
@@ -60,10 +62,17 @@ import org.diorite.world.WorldsManager;
 
 public class WorldsManagerImpl implements WorldsManager
 {
+    private final Logger logger = LoggerFactory.getLogger("[WorldLoader]");
+
     private WorldImpl        defaultWorld;
     private WorldsConfigImpl config;
     private final Map<String, WorldGroupImpl> groups = new ConcurrentHashMap<>(5, .1f, 4);
     private final Map<String, WorldImpl>      worlds = new ConcurrentHashMap<>(5, .1f, 4);
+
+    public Logger getLogger()
+    {
+        return this.logger;
+    }
 
     public void setDefaultWorld(final WorldImpl defaultWorld)
     {
@@ -186,10 +195,10 @@ public class WorldsManagerImpl implements WorldsManager
                 wgImpl.addWorld(wImpl);
             }).collect(Collectors.toList()));
         }
-        System.out.println("[WorldLoader] Loading " + loaders.size() + " worlds...");
+        this.logger.info("Loading " + loaders.size() + " worlds...");
         loaders.stream().forEach(Runnable::run);
         this.setDefaultWorld(this.getWorld(this.config.getDefaultWorld()));
-        System.out.println("[WorldLoader] Loaded all " + loaders.size() + " worlds!");
+        this.logger.info("Loaded all " + loaders.size() + " worlds!");
     }
 
     private void loadWorld(final WorldImpl world, final WorldConfig worldConfig)
@@ -206,7 +215,7 @@ public class WorldsManagerImpl implements WorldsManager
                 world.loadNBT(tag.getCompound(""), worldConfig);
             } catch (final IOException e)
             {
-                System.err.println("Can't read world in: " + world.getWorldFile().getPath());
+                this.logger.info("Can't read world in: " + world.getWorldFile().getPath());
                 e.printStackTrace();
             }
         }

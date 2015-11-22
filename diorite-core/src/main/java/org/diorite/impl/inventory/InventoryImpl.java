@@ -76,7 +76,6 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
 
 //    public abstract void softUpdate();
 
-    @SuppressWarnings("MagicNumber")
     final TShortCollection notNullItems = new TShortHashSet(50, .2f, Short.MIN_VALUE); // used only for updates
 
     public boolean softUpdate()

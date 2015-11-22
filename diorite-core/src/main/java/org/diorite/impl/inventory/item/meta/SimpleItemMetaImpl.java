@@ -35,6 +35,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.enchantments.EnchantmentType;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.inventory.item.HideFlag;
@@ -591,5 +594,11 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
     public SimpleItemMetaImpl clone()
     {
         return new SimpleItemMetaImpl((this.tag == null) ? null : this.tag.clone(), this.itemStack);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).toString();
     }
 }

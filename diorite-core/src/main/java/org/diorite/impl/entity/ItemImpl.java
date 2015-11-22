@@ -59,7 +59,6 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     private int yLastJoinPos;
     private int zLastJoinPos;
 
-    @SuppressWarnings("MagicNumber")
     public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.25F, 0.25F);
 
     public ItemImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)

@@ -175,15 +175,10 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
     public static final CactusMat CACTUS_8  = new CactusMat(0x8);
     public static final CactusMat CACTUS_9  = new CactusMat(0x9);
     public static final CactusMat CACTUS_10 = new CactusMat(0xA);
-    @SuppressWarnings("MagicNumber")
     public static final CactusMat CACTUS_11 = new CactusMat(0xB);
-    @SuppressWarnings("MagicNumber")
     public static final CactusMat CACTUS_12 = new CactusMat(0xC);
-    @SuppressWarnings("MagicNumber")
     public static final CactusMat CACTUS_13 = new CactusMat(0xD);
-    @SuppressWarnings("MagicNumber")
     public static final CactusMat CACTUS_14 = new CactusMat(0xE);
-    @SuppressWarnings("MagicNumber")
     public static final CactusMat CACTUS_15 = new CactusMat(0xF);
 
     private static final Map<String, CactusMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

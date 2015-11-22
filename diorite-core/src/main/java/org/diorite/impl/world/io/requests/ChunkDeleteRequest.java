@@ -59,7 +59,6 @@ public class ChunkDeleteRequest extends Request<Boolean>
         return this.z;
     }
 
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Override
     public boolean equals(final Object o)
     {

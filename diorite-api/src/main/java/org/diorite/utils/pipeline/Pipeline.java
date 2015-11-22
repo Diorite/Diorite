@@ -36,14 +36,14 @@ import java.util.stream.StreamSupport;
  * Interface representing pipeline where every element have name.
  * Names don't needs to be unique, but it's easier and safer to
  * keep names unique.
- * <p>
+ * <br>
  * Interface contains many method allowing to inserting elements
  * at specific positions, like before other element, or after it.
  * Or just add new element on the end or beginning of pipeline.
- * <p>
+ * <br>
  * If there is more than one element with some name, people may
  * need use indexes, that are allowing to select elements to edit.
- * <p>
+ * <br>
  * Due to incompatybilites with {@link Collection} and {@link java.util.Map}
  * pipeline don't extends them, only {@link Iterable} is compatybile with it.
  *
@@ -112,14 +112,14 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return false,
      * and no changes will be made.
      *
@@ -145,14 +145,14 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return false,
      * and no changes will be made.
      *
@@ -183,12 +183,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return false,
      * and no changes will be made.
      *
@@ -213,12 +213,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return false,
      * and no changes will be made.
      *
@@ -239,12 +239,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element BEFORE current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return false,
      * and no changes will be made.
      *
@@ -269,12 +269,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element BEFORE current one.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return false,
      * and no changes will be made.
      *
@@ -295,12 +295,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element with value equals to given param,
      * and remove it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and remove current element.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -316,9 +316,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element with given value,
      * and remove it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -333,12 +333,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element with value equals to given param,
      * and remove it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and remove current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -354,9 +354,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code before} param,
      * and remove it.
-     * <p>
+     * <br>
      * Method is iterating from head to rail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -371,9 +371,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Remove all elements from pipeline with given value.
      * Removed values are limited by {@code limit} param.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * Every removed element decrement {@code limit},
      * and when it hit 0, method stops.
      * Use -1 for no limit.
@@ -388,9 +388,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Remove all elements from pipeline with given name.
      * Removed values are limited by {@code limit} param.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * Every removed element decrement {@code limit},
      * and when it hit 0, method stops.
      * Use -1 for no limit.
@@ -405,9 +405,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Remove all elements from pipeline with given value.
      * Removed values are limited by {@code limit} param.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Every removed element decrement {@code limit},
      * and when it hit 0, method stops.
      * Use -1 for no limit.
@@ -422,9 +422,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Remove all elements from pipeline with given name.
      * Removed values are limited by {@code limit} param.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Every removed element decrement {@code limit},
      * and when it hit 0, method stops.
      * Use -1 for no limit.
@@ -439,12 +439,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code name} param,
      * and remove it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and remove current element.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -461,9 +461,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code name} param,
      * and remove it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -479,12 +479,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code name} param,
      * and remove it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and remove current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -498,9 +498,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code name} param,
      * and remove it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -512,7 +512,7 @@ public interface Pipeline<E> extends Iterable<E>
 
     /**
      * Remove all elements from pipeline with given name.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
      *
      * @param name name of elements to remove from pipeline.
@@ -525,7 +525,7 @@ public interface Pipeline<E> extends Iterable<E>
 
     /**
      * Remove all elements from pipeline with given value.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
      *
      * @param o element to remove from pipeline.
@@ -539,9 +539,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code name} param,
      * and remove it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will just return null,
      * and no changes will be made.
      *
@@ -606,9 +606,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it value to given value.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #setIfContains(String, Object)}
      *
@@ -638,9 +638,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it value to given value.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #setIfContains(String, Object)}
      *
@@ -670,9 +670,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it value to given value.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #setIfContains(String, Object)}
      *
@@ -697,12 +697,12 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element, or use {@link #set(String, Object)}
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #setIfContains(String, Object, int)}
      *
@@ -734,12 +734,12 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element, or use {@link #setFromHead(String, Object)}
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #setIfContains(String, Object, int)}
      *
@@ -771,12 +771,12 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element, or use {@link #setFromTail(String, Object)}
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #setIfContainsFromTail(String, Object, int)}
      *
@@ -801,12 +801,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it name and value to given params.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #set(String, Object)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #replaceIfContains(String, String, Object)}
      *
@@ -837,12 +837,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it name and value to given params.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setFromHead(String, Object)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #replaceIfContainsFromHead(String, String, Object)}
      *
@@ -873,12 +873,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it name and value to given params.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setFromTail(String, Object)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #replaceIfContainsFromTail(String, String, Object)}
      *
@@ -904,15 +904,15 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #set(String, Object, int)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #replaceIfContains(String, String, Object, int)}
      *
@@ -945,15 +945,15 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setFromHead(String, Object, int)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #replaceIfContainsFromHead(String, String, Object, int)}
      *
@@ -986,15 +986,15 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setFromTail(String, Object, int)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #replaceIfContainsFromTail(String, String, Object, int)}
      *
@@ -1020,9 +1020,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContains(String, String, Object)}
      *
@@ -1047,9 +1047,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContainsFromHead(String, String, Object)}
      *
@@ -1074,9 +1074,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContainsFromTail(String, String, Object)}
      *
@@ -1097,12 +1097,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element BEFORE current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContains(String, String, Object, int)}
      *
@@ -1128,12 +1128,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element BEFORE current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContainsFromHead(String, String, Object, int)}
      *
@@ -1159,12 +1159,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element BEFORE current one.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addBeforeIfContainsFromTail(String, String, Object, int)}
      *
@@ -1186,12 +1186,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContains(String, String, Object)}
      *
@@ -1216,12 +1216,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContainsFromHead(String, String, Object)}
      *
@@ -1246,12 +1246,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContainsFromTail(String, String, Object)}
      *
@@ -1272,12 +1272,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContains(String, String, Object, int)}
      *
@@ -1303,12 +1303,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContainsFromHead(String, String, Object, int)}
      *
@@ -1334,12 +1334,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will throw error.
      * {@link #addAfterIfContainsFromTail(String, String, Object, int)}
      *
@@ -1361,9 +1361,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it value to given value.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #set(String, Object)}
      *
@@ -1394,9 +1394,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it value to given value.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #setFromHead(String, Object)}
      *
@@ -1427,9 +1427,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it value to given value.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #setFromTail(String, Object)}
      *
@@ -1453,12 +1453,12 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element, or use {@link #setIfContains(String, Object)}
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #set(String, Object, int)}
      *
@@ -1491,12 +1491,12 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element, or use {@link #setIfContainsFromHead(String, Object)}
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #setFromHead(String, Object, int)}
      *
@@ -1529,12 +1529,12 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element, or use {@link #setIfContainsFromTail(String, Object)}
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #setFromTail(String, Object, int)}
      *
@@ -1558,12 +1558,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it name and value to given params.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setIfContains(String, Object)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #replace(String, String, Object)}
      *
@@ -1595,12 +1595,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it name and value to given params.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setIfContainsFromHead(String, Object)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #replaceFromHead(String, String, Object)}
      *
@@ -1632,12 +1632,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code element} param,
      * and change it name and value to given params.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setIfContainsFromTail(String, Object)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #replaceFromTail(String, String, Object)}
      *
@@ -1662,15 +1662,15 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setIfContains(String, Object, int)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #replace(String, String, Object, int)}
      *
@@ -1704,15 +1704,15 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setIfContainsFromHead(String, Object, int)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #replaceFromHead(String, String, Object, int)}
      *
@@ -1746,15 +1746,15 @@ public interface Pipeline<E> extends Iterable<E>
      * Method will look for {@code index} pipeline element named as in {@code element} param,
      * and change it name and value to given params.
      * use 0 as index to use first found element.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and change name and value of current element.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * Use this same value as element and name to just change value of element.
      * Or use {@link #setIfContainsFromTail(String, Object, int)}
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #replaceFromTail(String, String, Object, int)}
      *
@@ -1779,9 +1779,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBefore(String, String, Object)}
      *
@@ -1805,9 +1805,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBeforeFromHead(String, String, Object)}
      *
@@ -1831,9 +1831,9 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBeforeFromTail(String, String, Object)}
      *
@@ -1853,12 +1853,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element BEFORE current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBefore(String, String, Object, int)}
      *
@@ -1883,12 +1883,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element BEFORE current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBeforeFromHead(String, String, Object, int)}
      *
@@ -1913,12 +1913,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code before} param,
      * and add new element with given name and value BEFORE it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element BEFORE current one.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addBeforeFromTail(String, String, Object, int)}
      *
@@ -1939,12 +1939,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfter(String, String, Object)}
      *
@@ -1968,12 +1968,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfterFromHead(String, String, Object)}
      *
@@ -1997,12 +1997,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for first pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfterFromTail(String, String, Object)}
      *
@@ -2022,12 +2022,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfter(String, String, Object, int)}
      *
@@ -2052,12 +2052,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from head to tail of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfterFromHead(String, String, Object, int)}
      *
@@ -2082,12 +2082,12 @@ public interface Pipeline<E> extends Iterable<E>
     /**
      * Method will look for {@code index} pipeline element named as in {@code after} param,
      * and add new element with given name and value AFTER it.
-     * <p>
+     * <br>
      * Index is decremented each time when iterator find element with matching name,
      * when index is equals to 0 iterator stops and add new element AFTER current one.
-     * <p>
+     * <br>
      * Method is iterating from tail to head of pipeline.
-     * <p>
+     * <br>
      * If there is no element with given name, method will do nothing.
      * {@link #addAfterFromTail(String, String, Object, int)}
      *

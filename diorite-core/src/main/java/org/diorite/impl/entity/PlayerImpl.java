@@ -85,9 +85,7 @@ import gnu.trove.list.array.TIntArrayList;
 // TODO: add Human or other entity not fully a player class for bots/npcs
 public class PlayerImpl extends LivingEntityImpl implements Player
 {
-    @SuppressWarnings("MagicNumber")
     public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.6F, 1.8F);
-    @SuppressWarnings("MagicNumber")
     public static final ImmutableEntityBoundingBox DIE_SIZE  = new ImmutableEntityBoundingBox(0.2F, 0.2F);
 
     /**
@@ -122,7 +120,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     protected       byte                       renderDistance;
     protected       GameMode                   gameMode;
     protected final PlayerInventoryImpl        inventory;
-    protected       PlayerPermissionsContainer permissionContainer;
+    protected final PlayerPermissionsContainer permissionContainer;
     protected       Locale                     preferedLocale;
 
     protected PacketPlayServerAbilities abilities = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);

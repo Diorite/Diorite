@@ -45,7 +45,7 @@ import org.diorite.utils.DioriteUtils;
 
 /**
  * Based on {@link java.util.concurrent.ConcurrentLinkedDeque}
- * <p>
+ * <br>
  * Basic implementation of {@link Pipeline} class.
  *
  * @param <E> type of elements stored in pipeline.

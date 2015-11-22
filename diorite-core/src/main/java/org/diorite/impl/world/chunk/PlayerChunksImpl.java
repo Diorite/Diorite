@@ -52,7 +52,6 @@ public class PlayerChunksImpl implements Tickable
     public static final int CHUNK_BULK_SIZE = 4;
 
     private final PlayerImpl player;
-    @SuppressWarnings("MagicNumber")
     private final TLongSet visibleChunks = new TLongHashSet(400);
     private final ChunkLock chunkLock;
     private       boolean   logout;
@@ -137,7 +136,7 @@ public class PlayerChunksImpl implements Tickable
 
         forChunks(r, this.lastUpdate, chunkPos -> {
             impl.forcePopulation(chunkPos.getX(), chunkPos.getZ());
-            long key = chunkPos.asLong();
+            final long key = chunkPos.asLong();
             if (this.visibleChunks.contains(key))
             {
                 oldChunks.remove(key);

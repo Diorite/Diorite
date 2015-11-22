@@ -44,8 +44,8 @@ public interface RecipeBuilder
     /**
      * Set result itemstack for this recipe.
      *
-     * @param itemStack result itemstack material.
-     * @param amount    amount of material.
+     * @param material result itemstack material.
+     * @param amount   amount of material.
      *
      * @return this same builder for method chains.
      */
@@ -230,7 +230,7 @@ public interface RecipeBuilder
         /**
          * Add more ingredients to this recipe.
          *
-         * @param itemStack  ingredient to be added.
+         * @param itemStack   ingredient to be added.
          * @param replacement replacement item for this ingredient.
          *
          * @return this same builder for method chains.
@@ -368,8 +368,8 @@ public interface RecipeBuilder
         }
 
         /**
-         * @param c          pattern key of this recipe item.
-         * @param itemStack  ingredient to be added.
+         * @param c           pattern key of this recipe item.
+         * @param itemStack   ingredient to be added.
          * @param replacement replacement item for this ingredient.
          *
          * @return this same builder for method chains.

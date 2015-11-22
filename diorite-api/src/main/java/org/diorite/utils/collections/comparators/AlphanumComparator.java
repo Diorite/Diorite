@@ -31,7 +31,7 @@ import java.util.Comparator;
 /**
  * Human-friendly string comparator,
  * instead of simple string comparator, this check numbers in strings.
- * <p>
+ * <br>
  * Default comparator:
  * Some-1-String
  * Some-10-String
@@ -39,7 +39,7 @@ import java.util.Comparator;
  * Some-2-String
  * Some-5-String
  * Some-50-String
- * <p>
+ * <br>
  * AlphanumComparator:
  * Some-1-String
  * Some-2-String

@@ -30,7 +30,7 @@ import org.diorite.world.World;
 
 /**
  * Generates noise using the "classic" perlin generator
- * <p>
+ * <br>
  * From Bukkit project https://github.com/Bukkit/Bukkit
  *
  * @see SimplexNoiseGenerator "Improved" and faster version with slighly

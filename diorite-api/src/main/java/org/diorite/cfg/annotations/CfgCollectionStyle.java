@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * Allows define collection style of selected field.
  * Defining style may speed-up yaml generation, but it
  * may also cause problems if style isn't compatyble with used data.
- * <p>
+ * <br>
  * Ignored by fields that don't know how to use it.
  */
 @Retention(RetentionPolicy.RUNTIME)

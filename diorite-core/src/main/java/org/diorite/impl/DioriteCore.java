@@ -1131,9 +1131,7 @@ public class DioriteCore implements Core
             s.playersManager = new PlayersManagerImpl(s);
             s.worldsManager = new WorldsManagerImpl();
         });
-        initPipeline.addLast("DioriteCore|initRecipes", (s, p, d) -> {
-            s.serverManager.getRecipeManager().addDefaultRecipes();
-        });
+        initPipeline.addLast("DioriteCore|initRecipes", (s, p, d) -> s.serverManager.getRecipeManager().addDefaultRecipes());
         initPipeline.addLast("DioriteCore|initTimings", (s, p, d) -> s.timings = new TimingsManagerImpl());
 
         startPipeline = new CoreStartPipeline();

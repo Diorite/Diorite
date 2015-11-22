@@ -56,7 +56,7 @@ public class SenderCommandEvent extends SenderEvent
      * Returns command that will be executed at the end of pipeline event,
      * this will be null at the beginning, and should be set to some command
      * instance before end of pipeline.
-     * <p>
+     * <br>
      * By default diorite will set that on first pipeline handler.
      *
      * @return command to use.

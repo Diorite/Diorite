@@ -26,8 +26,8 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
-import org.diorite.Diorite;
 import org.diorite.impl.command.SystemCommandImpl;
+import org.diorite.Diorite;
 import org.diorite.command.CommandPriority;
 
 public class VersionCmd extends SystemCommandImpl

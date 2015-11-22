@@ -62,7 +62,7 @@ public class ParticleCmd extends SystemCommandImpl
             final float offsetZ = args.asFloat(7);
             final float particleData = args.asFloat(8);
             final int particleCount = args.asInt(9);
-            int[] data = new int[particle.getDataSize()];
+            final int[] data = new int[particle.getDataSize()];
             for (int i = 0; i < particle.getDataSize(); i++)
             {
                 data[i] = args.asInt(10 + i);

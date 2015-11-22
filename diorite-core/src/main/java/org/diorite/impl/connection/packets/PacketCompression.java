@@ -46,7 +46,6 @@ import io.netty.handler.codec.DecoderException;
 public class PacketCompression extends PacketByteBufByteToMessageCodec
 {
     public static final int    MAX_PACKET_SIZE = 2097152; // 2 MB
-    @SuppressWarnings("MagicNumber")
     private final       byte[] bytes           = new byte[8192];
     private final Inflater inflater;
     private final Deflater deflater;

@@ -145,14 +145,12 @@ public class LoginListener implements PacketLoginClientListener
     {
         if (this.core.getCompressionThreshold() >= 0)
         {
-            this.networkManager.sendPacket(new PacketLoginServerSetCompression(this.core.getCompressionThreshold()), future -> {
-                this.networkManager.setCompression(this.core.getCompressionThreshold());
-            });
+            this.networkManager.sendPacket(new PacketLoginServerSetCompression(this.core.getCompressionThreshold()), future -> this.networkManager.setCompression(this.core.getCompressionThreshold()));
         }
         this.networkManager.sendPacket(new PacketLoginServerSuccess(this.gameProfile), future -> {
             this.networkManager.setProtocol(EnumProtocol.PLAY);
 
-            PlayerImpl player = this.core.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);
+            final PlayerImpl player = this.core.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);
             this.networkManager.setPacketListener(new PlayListener(LoginListener.this.core, LoginListener.this.networkManager, player));
             this.core.getPlayersManager().playerJoin(player);
         });

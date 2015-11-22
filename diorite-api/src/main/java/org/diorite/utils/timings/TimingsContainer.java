@@ -30,8 +30,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public final class TimingsContainer // TODO
 {
     private final String name;
-    private long latestTime;
-    private long avarageTime;
+    private       long   latestTime;
+    private       long   avarageTime;
 
     public TimingsContainer(final String name)
     {

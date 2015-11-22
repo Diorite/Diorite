@@ -35,6 +35,8 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.auth.properties.PropertyImpl;
@@ -66,6 +68,7 @@ public final class CoreMain
     public static final  float   JAVA_8         = 52.0f;
     public static final  int     MB_128         = 131072; // 1024KB * 128
     private static final Pattern PERM_GEN_PAT   = Pattern.compile("[^\\d]");
+    private static final Logger  debugLogger    = LoggerFactory.getLogger("[DEBUG]");
     static               boolean consoleEnabled = true;
     static               boolean useJline       = true;
     static               boolean enabledDebug   = false;
@@ -253,7 +256,7 @@ public final class CoreMain
     {
         if (enabledDebug)
         {
-            System.out.println("[DEBUG] " + obj);
+            debugLogger.info(obj.toString());
         }
     }
 

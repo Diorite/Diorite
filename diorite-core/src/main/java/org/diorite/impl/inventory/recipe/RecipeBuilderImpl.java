@@ -200,7 +200,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
         private final RecipeBuilderImpl oldBuilder;
         protected     String[]          pattern;
         protected     RecipePattern     alternatePattern;
-        protected TCharObjectMap<RecipeItem> items = new TCharObjectHashMap<>();
+        protected final TCharObjectMap<RecipeItem> items = new TCharObjectHashMap<>();
 
         ShapedRecipeBuilderImpl(final RecipeBuilderImpl recipeBuilder)
         {

@@ -29,7 +29,7 @@ import org.diorite.event.pipelines.EventPipeline;
 
 /**
  * {@link EventPipeline} using {@link ChunkLoadEvent} as type.
- * <p>
+ * <br>
  * Default handlers are: <br>
  * <b>Diorite|Load</b> {@literal ->} load chunk and set it to event. <br>
  * {@link org.diorite.event.EventPriority#LOWEST} <br>

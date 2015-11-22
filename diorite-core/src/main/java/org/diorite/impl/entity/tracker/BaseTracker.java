@@ -39,7 +39,7 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 
-@SuppressWarnings({"ObjectEquality", "MagicNumber"})
+@SuppressWarnings({"ObjectEquality"})
 public abstract class BaseTracker<T extends EntityImpl & Trackable>
 {
     protected final T      tracker;
@@ -47,9 +47,9 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
     protected       double xLoc;
     protected       double yLoc;
     protected       double zLoc;
-    protected       float  yaw;
-    protected       float  pitch;
-    protected       float  headRot;
+    protected final float  yaw;
+    protected final float  pitch;
+    protected final float  headRot;
     protected       float  velX;
     protected       float  velY;
     protected       float  velZ;

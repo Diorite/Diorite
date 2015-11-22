@@ -47,7 +47,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @see WeakReference
  */
-@SuppressWarnings("ObjectEquality")
 public final class WeakCollection<T> implements Collection<T>
 {
     static final Object NO_VALUE = new Object();

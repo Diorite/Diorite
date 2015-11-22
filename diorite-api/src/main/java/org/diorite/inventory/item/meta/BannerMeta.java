@@ -32,7 +32,8 @@ import org.diorite.banner.BannerPattern;
 /**
  * Represent banner meta data that use multiple patterns.
  */
-public interface BannerMeta extends ItemMeta {
+public interface BannerMeta extends ItemMeta
+{
 
     /**
      * Returns the base color for this banner
@@ -74,6 +75,7 @@ public interface BannerMeta extends ItemMeta {
      * Returns the pattern at the specified index
      *
      * @param i the index
+     *
      * @return the pattern
      */
     BannerPattern getPattern(int i);
@@ -82,6 +84,7 @@ public interface BannerMeta extends ItemMeta {
      * Removes the pattern at the specified index
      *
      * @param i the index
+     *
      * @return the removed pattern
      */
     BannerPattern removePattern(int i);

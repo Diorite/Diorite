@@ -21,7 +21,7 @@ public interface RecipeManager
     /**
      * Adds new recipe to this manager, returns true if recipe was added.
      *
-     * @param recipe recipe to add.
+     * @param recipe recipe to be added.
      *
      * @return true if recipe was added.
      */
@@ -30,7 +30,7 @@ public interface RecipeManager
     /**
      * Remove given recipe from this manager, return true if any recipe was removed.
      *
-     * @param recipe
+     * @param recipe recipe to be added.
      *
      * @return true if any recipe was removed.
      */

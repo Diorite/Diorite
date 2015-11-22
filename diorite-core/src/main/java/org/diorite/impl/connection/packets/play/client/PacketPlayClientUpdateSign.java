@@ -40,7 +40,7 @@ import org.diorite.chat.component.BaseComponent;
 @PacketClass(id = 0x12, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 350)
 public class PacketPlayClientUpdateSign extends PacketPlayClient
 {
-    private BlockLocation location; // 8 bytes
+    private BlockLocation   location; // 8 bytes
     private BaseComponent[] lines; // ~256 bytes
 
     public PacketPlayClientUpdateSign()

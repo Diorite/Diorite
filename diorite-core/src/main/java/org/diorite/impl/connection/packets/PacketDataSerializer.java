@@ -401,7 +401,6 @@ public class PacketDataSerializer extends ByteBuf
 
     public GameProfileImpl readGameProfile()
     {
-        //noinspection MagicNumber
         final String uuidStr = this.readText(36);
         final String name = this.readText(Core.MAX_NICKNAME_SIZE);
         final UUID uuid = uuidStr.isEmpty() ? null : UUID.fromString(uuidStr);

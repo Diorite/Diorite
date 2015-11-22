@@ -8,7 +8,7 @@ import gnu.trove.map.TShortObjectMap;
 /**
  * Represent results after checking if recipe is valid for given inventory.
  *
- * @see Recipe#isValid(GridInventory)
+ * @see Recipe#isMatching(GridInventory)
  */
 public interface RecipeCheckResult
 {

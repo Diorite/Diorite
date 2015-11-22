@@ -45,7 +45,7 @@ import gnu.trove.map.TIntObjectMap;
 /**
  * Simple enum with field annotation-based options.
  */
-@SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
+@SuppressWarnings({"ClassHasNoToStringMethod"})
 public class FieldOptions extends ASimpleEnum<FieldOptions>
 {
     /**

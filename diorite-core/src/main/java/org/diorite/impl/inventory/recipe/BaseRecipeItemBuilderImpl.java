@@ -22,7 +22,7 @@ public abstract class BaseRecipeItemBuilderImpl<T extends RecipeBuilder, B exten
     protected       ItemStack item;
     protected       boolean   ignoreType;
     protected       ItemStack replacement;
-    protected Collection<BiPredicate<Player, ItemStack>> validators = new ArrayList<>(4);
+    protected final Collection<BiPredicate<Player, ItemStack>> validators = new ArrayList<>(4);
 
     protected BaseRecipeItemBuilderImpl(final T builder)
     {

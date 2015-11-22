@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * Allows define string style of selected field.
  * Defining style may speed-up yaml generation, but it
  * may also cause problems if style isn't compatyble with used data.
- * <p>
+ * <br>
  * Ignored by fields that don't know how to use it.
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -58,14 +58,14 @@ public @interface CfgStringStyle
         /**
          * Always use double quotes in strings, will cause problems with
          * multi-lined strings.
-         * <p>
+         * <br>
          * node: "value of node"
          */
         ALWAYS_QUOTED,
         /**
          * Always use single quotes in strings, will cause problems with
          * multi-lined strings.
-         * <p>
+         * <br>
          * node: 'value of node'
          */
         ALWAYS_SINGLE_QUOTED,

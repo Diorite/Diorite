@@ -29,6 +29,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.inventory.item.meta.BannerMetaImpl;
 import org.diorite.impl.inventory.item.meta.BlockItemMetaImpl;
@@ -121,5 +123,11 @@ public class ItemFactoryImpl implements ItemFactory
             throw new IllegalArgumentException("No constructor registered for " + clazz.getCanonicalName() + " meta type.");
         }
         return (T) constructor.apply(nbt);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("metaTypes", this.metaTypes).toString();
     }
 }

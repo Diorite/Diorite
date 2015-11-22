@@ -67,7 +67,6 @@ public class ChunkSaveRequest extends Request<Void>
         return this.data.getZ();
     }
 
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Override
     public boolean equals(final Object o)
     {

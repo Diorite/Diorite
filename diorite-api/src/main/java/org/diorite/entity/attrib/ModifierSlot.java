@@ -50,27 +50,27 @@ public class ModifierSlot extends ASimpleEnum<ModifierSlot>
     /**
      * Item needs to be holded in second hand. (left by default)
      */
-    public static final ModifierSlot OFF_HAND = new ModifierSlot("OFF_HAND", "offhand");
+    public static final ModifierSlot OFF_HAND  = new ModifierSlot("OFF_HAND", "offhand");
     /**
      * Item needs to be worn as boots.
      */
-    public static final ModifierSlot FEET     = new ModifierSlot("FEET", "feet");
+    public static final ModifierSlot FEET      = new ModifierSlot("FEET", "feet");
     /**
      * Item needs to be worn as leggings.
      */
-    public static final ModifierSlot LEGS     = new ModifierSlot("LEGS", "legs");
+    public static final ModifierSlot LEGS      = new ModifierSlot("LEGS", "legs");
     /**
      * Item needs to be worn as chestplate.
      */
-    public static final ModifierSlot TORSO    = new ModifierSlot("TORSO", "torso");
+    public static final ModifierSlot TORSO     = new ModifierSlot("TORSO", "torso");
     /**
      * Item needs to be worn as helmet.
      */
-    public static final ModifierSlot HEAD     = new ModifierSlot("HEAD", "head");
+    public static final ModifierSlot HEAD      = new ModifierSlot("HEAD", "head");
     /**
      * Modifier isn't from item or other unknown state.
      */
-    public static final ModifierSlot NOT_SET = new ModifierSlot("NOT_SET", "");
+    public static final ModifierSlot NOT_SET   = new ModifierSlot("NOT_SET", "");
 
     private static final Map<String, ModifierSlot> byTypeName = new CaseInsensitiveMap<>(7, SMALL_LOAD_FACTOR);
 

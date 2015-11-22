@@ -44,7 +44,7 @@ import org.diorite.permissions.PermissionsGroup;
 
 public class GroupablePermissionsContainerImpl extends PermissionsContainerImpl implements GroupablePermissionsContainer
 {
-    protected SortedSet<GroupEntry> groups = new TreeSet<>();
+    protected final SortedSet<GroupEntry> groups = new TreeSet<>();
 
     protected GroupablePermissionsContainerImpl()
     {
@@ -66,6 +66,7 @@ public class GroupablePermissionsContainerImpl extends PermissionsContainerImpl 
         this.groups.add(group);
     }
 
+    @Override
     public PermissionLevel getPermissionLevel(final Permission permission)
     {
         final PermissionEntry<?> entry;

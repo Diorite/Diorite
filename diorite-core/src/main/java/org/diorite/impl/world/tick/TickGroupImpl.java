@@ -62,7 +62,6 @@ public interface TickGroupImpl extends Tickable, TickGroup
 
     boolean isEmpty();
 
-    @SuppressWarnings("MagicNumber")
     class ChunkGroup
     {
         private final WeakReference<WorldImpl> world;

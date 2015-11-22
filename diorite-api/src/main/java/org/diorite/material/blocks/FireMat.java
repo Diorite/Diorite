@@ -177,15 +177,10 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
     public static final FireMat FIRE_8  = new FireMat(0x8);
     public static final FireMat FIRE_9  = new FireMat(0x9);
     public static final FireMat FIRE_10 = new FireMat(0xA);
-    @SuppressWarnings("MagicNumber")
     public static final FireMat FIRE_11 = new FireMat(0xB);
-    @SuppressWarnings("MagicNumber")
     public static final FireMat FIRE_12 = new FireMat(0xC);
-    @SuppressWarnings("MagicNumber")
     public static final FireMat FIRE_13 = new FireMat(0xD);
-    @SuppressWarnings("MagicNumber")
     public static final FireMat FIRE_14 = new FireMat(0xE);
-    @SuppressWarnings("MagicNumber")
     public static final FireMat FIRE_15 = new FireMat(0xF);
 
     private static final Map<String, FireMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

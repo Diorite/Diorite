@@ -70,7 +70,7 @@ public interface Recipe
 
     /**
      * Returns basic result items. <br>
-     * Item returned by this method may not match item returned by {@link #craft(GridInventory)} method. <br>
+     * Item returned by this method may not match items returned by {@link #isMatching(GridInventory)} method. <br>
      * If some recipe replace item from inventory grid, like milk bucket to empty bucket, empty bucket will be returned too.
      *
      * @return basic result items.

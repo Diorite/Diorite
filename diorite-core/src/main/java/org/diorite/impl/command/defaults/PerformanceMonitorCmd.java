@@ -50,12 +50,12 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                 int classSize = 0;
                 int methodSize = 0;
                 int threadSize = 0;
-                Map<Thread, StackTraceElement[]> allStackTraces = new LinkedHashMap<>(Thread.getAllStackTraces());
+                final Map<Thread, StackTraceElement[]> allStackTraces = new LinkedHashMap<>(Thread.getAllStackTraces());
 
-                for (Iterator<Entry<Thread, StackTraceElement[]>> iterator = allStackTraces.entrySet().iterator(); iterator.hasNext(); )
+                for (final Iterator<Entry<Thread, StackTraceElement[]>> iterator = allStackTraces.entrySet().iterator(); iterator.hasNext(); )
                 {
                     final Entry<Thread, StackTraceElement[]> entry = iterator.next();
-                    Thread t = entry.getKey();
+                    final Thread t = entry.getKey();
                     boolean add = true;
                     if (args.length() > 1)
                     {
@@ -80,8 +80,8 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                         threadSize = t.getName().length();
                     }
 
-                    StackTraceElement[] sts = entry.getValue();
-                    for (StackTraceElement st : sts)
+                    final StackTraceElement[] sts = entry.getValue();
+                    for (final StackTraceElement st : sts)
                     {
                         if (st.getClassName().length() > classSize)
                         {
@@ -97,12 +97,12 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                 int i = 0;
                 StringBuilder sb = new StringBuilder(2048);
                 sb.append("\n&c====== &3Thread dump &c======\n");
-                for (Entry<Thread, StackTraceElement[]> entry : allStackTraces.entrySet())
+                for (final Entry<Thread, StackTraceElement[]> entry : allStackTraces.entrySet())
                 {
 
                     // WARN: shit code here.
-                    Thread t = entry.getKey();
-                    StackTraceElement[] sts = entry.getValue();
+                    final Thread t = entry.getKey();
+                    final StackTraceElement[] sts = entry.getValue();
                     sb.append("\n&7[&3").append(t.getName()).append("&7]");
                     for (int j = t.getName().length(); j < methodSize; j++)
                     {
@@ -114,9 +114,9 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                         sb.append(' ');
                     }
                     sb.append(" State: &3").append(t.getState()).append(" &7 priority=").append(t.getPriority()).append(" \n");
-                    for (StackTraceElement st : sts)
+                    for (final StackTraceElement st : sts)
                     {
-                        boolean isOwn = st.getClassName().contains("diorite");
+                        final boolean isOwn = st.getClassName().contains("diorite");
                         if (isOwn)
                         {
                             sb.append("    &c&l== &r&3");
@@ -142,7 +142,7 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                         }
                         else
                         {
-                            int line = st.getLineNumber();
+                            final int line = st.getLineNumber();
                             if (line == - 1)
                             {
                                 sb.append(" NULL ");
@@ -150,7 +150,7 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                             else
                             {
                                 // don't look at that, please.
-                                String lineStr = Integer.toString(line);
+                                final String lineStr = Integer.toString(line);
                                 if (lineStr.length() == 1)
                                 {
                                     sb.append("  0").append(lineStr).append("  ");
@@ -199,8 +199,8 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
                 }
                 return;
             }
-            boolean gc = args.has(0) && args.asString(0).equalsIgnoreCase("-gc");
-            boolean memOnly = args.has(0) && args.asString(0).equalsIgnoreCase("-mem");
+            final boolean gc = args.has(0) && args.asString(0).equalsIgnoreCase("-gc");
+            final boolean memOnly = args.has(0) && args.asString(0).equalsIgnoreCase("-mem");
             if (gc)
             {
                 this.display(sender, true);

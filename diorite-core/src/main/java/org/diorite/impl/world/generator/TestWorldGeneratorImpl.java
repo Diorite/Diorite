@@ -159,8 +159,8 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 //                    s.generate(chunk.getPos(), random, (chunk.getX() * 16), chunk.getHighestBlockY(5, 5) + 1, (chunk.getZ() * 16));
                     for (int i = 0; i < 4; i++)
                     {
-                        int rx = random.nextInt(Chunk.CHUNK_SIZE);
-                        int rz = random.nextInt(Chunk.CHUNK_SIZE);
+                        final int rx = random.nextInt(Chunk.CHUNK_SIZE);
+                        final int rz = random.nextInt(Chunk.CHUNK_SIZE);
                         s.generate(chunk.getPos(), random, (chunk.getX() << 4) + rx, chunk.getHighestBlockY(rx, rz), (chunk.getZ() << 4) + rz);
                     }
 
