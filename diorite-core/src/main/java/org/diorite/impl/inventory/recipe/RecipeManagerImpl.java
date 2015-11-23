@@ -9,6 +9,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.recipe.RecipeBuilder;
+import org.diorite.inventory.recipe.RecipeBuilder.ShapedRecipeBuilder;
+import org.diorite.inventory.recipe.RecipeBuilder.ShapelessRecipeBuilder;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.material.Material;
@@ -81,22 +83,34 @@ public class RecipeManagerImpl implements IRecipeManager
         return null;
     }
 
-    private static long getPriority(final int i)
+    private static volatile int i = 0;
+
+    private static long getPriority()
     {
-        return Recipe.DIORITE_START + ((2 * i) * Recipe.DIORITE_SPACE);
+        return Recipe.DIORITE_START + ((2 * (i++)) * Recipe.DIORITE_SPACE);
     }
 
     @Override
     public void addDefaultRecipes()
     {
-        int i = 0;
-        this.builder().priority(getPriority(i++)).shapeless().addIngredient().item(Material.STONE, true).build().result(Material.STONE_BUTTON).buildAndAdd();
-        this.builder().priority(getPriority(i++)).shaped().pattern("s ", "S ").addIngredient('s').item(Material.STONE).addIngredient('S').item(Material.STICK).build().result(Material.STONE_SWORD).buildAndAdd();
-        this.builder().priority(getPriority(i++)).shaped().pattern("s").addIngredient('s').item(Material.STICK).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
-        this.builder().priority(getPriority(i++)).shapeless().addIngredient().item(Material.STICK).addIngredient().item(Material.STONE).build().result(Material.STONE_AXE).buildAndAdd();
-        this.builder().priority(getPriority(i++)).shapeless().addIngredient().item(DyeMat.DYE_LAPIS_LAZULI).addIngredient().item(WoolMat.WOOL_WHITE, false).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
-        this.builder().priority(getPriority(i++)).shapeless().addIngredient().item(Material.APPLE, false).replacement(Material.DIRT, 16).simpleValidator(item -> "Diorite".equals(item.getItemMeta().getDisplayName())).build().result(Material.GOLDEN_APPLE).buildAndAdd();
+        this.builder().priority(getPriority()).shapeless().addIngredient().item(Material.STONE, true).build().result(Material.STONE_BUTTON).buildAndAdd();
+        this.builder().priority(getPriority()).shaped().pattern("s ", "S ").addIngredient('s').item(Material.STONE).addIngredient('S').item(Material.STICK).build().result(Material.STONE_SWORD).buildAndAdd();
+        this.builder().priority(getPriority()).shaped().pattern("s").addIngredient('s').item(Material.STICK).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
+        this.builder().priority(getPriority()).shapeless().addIngredient().item(Material.STICK).addIngredient().item(Material.STONE).build().result(Material.STONE_AXE).buildAndAdd();
+        this.builder().priority(getPriority()).shapeless().addIngredient().item(DyeMat.DYE_LAPIS_LAZULI).addIngredient().item(WoolMat.WOOL_WHITE, false).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
+        this.builder().priority(getPriority()).shapeless().addIngredient().item(Material.APPLE, 2, false).replacement(Material.DIRT, 16).simpleValidator(item -> "Diorite".equals(item.getItemMeta().getDisplayName())).build().result(Material.GOLDEN_APPLE).buildAndAdd();
     }
+
+    private ShapedRecipeBuilder shaped(final Material resultMat, final int resultAmount,final String... pattern)
+    {
+        return this.builder().priority(getPriority()).vanilla(true).result(resultMat, resultAmount).shaped().pattern(pattern);
+    }
+
+    private ShapelessRecipeBuilder shapeless(final Material resultMat, final int resultAmount)
+    {
+        return this.builder().priority(getPriority()).vanilla(true).result(resultMat, resultAmount).shapeless();
+    }
+
 
     @Override
     public String toString()

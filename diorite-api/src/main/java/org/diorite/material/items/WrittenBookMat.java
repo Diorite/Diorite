@@ -117,7 +117,7 @@ public class WrittenBookMat extends ItemMaterialData
      */
     public static void register(final WrittenBookMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

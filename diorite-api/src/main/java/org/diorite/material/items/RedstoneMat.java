@@ -116,7 +116,7 @@ public class RedstoneMat extends OreItemMatExt implements PlaceableMat
      */
     public static void register(final RedstoneMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

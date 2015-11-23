@@ -176,7 +176,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     public static final CarpetMat CARPET_LIME       = new CarpetMat(DyeColor.LIME);
     public static final CarpetMat CARPET_PINK       = new CarpetMat(DyeColor.PINK);
     public static final CarpetMat CARPET_GRAY       = new CarpetMat(DyeColor.GRAY);
-    public static final CarpetMat CARPET_SILVER     = new CarpetMat(DyeColor.LIGHT_GRAY);
+    public static final CarpetMat CARPET_LIGHT_GRAY = new CarpetMat(DyeColor.LIGHT_GRAY);
     public static final CarpetMat CARPET_CYAN       = new CarpetMat(DyeColor.CYAN);
     public static final CarpetMat CARPET_PURPLE     = new CarpetMat(DyeColor.PURPLE);
     public static final CarpetMat CARPET_BLUE       = new CarpetMat(DyeColor.BLUE);
@@ -313,7 +313,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
         CarpetMat.register(CARPET_LIME);
         CarpetMat.register(CARPET_PINK);
         CarpetMat.register(CARPET_GRAY);
-        CarpetMat.register(CARPET_SILVER);
+        CarpetMat.register(CARPET_LIGHT_GRAY);
         CarpetMat.register(CARPET_CYAN);
         CarpetMat.register(CARPET_PURPLE);
         CarpetMat.register(CARPET_BLUE);

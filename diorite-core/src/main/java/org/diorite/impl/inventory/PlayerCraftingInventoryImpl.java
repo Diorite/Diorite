@@ -102,39 +102,39 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             final ItemStack[] items = DioriteUtils.compact(false, this.recipe.getItemsToConsume());
             possibleBugs = new TShortHashSet(items.length);
             short k = 0;
-            short i;
+            short bugSlot;
             short startIndex = - 1;
             do
             {
-                i = (short) this.playerInventory.firstNotFull(items[k].getMaterial());
-                if (i != - 1)
+                bugSlot = (short) this.playerInventory.firstNotFull(items[k].getMaterial());
+                if (bugSlot != - 1)
                 {
-                    short ii = (short) this.playerInventory.firstNotFull(items[k]);
-                    if (i != ii)
+                    short bugSlot2 = (short) this.playerInventory.firstNotFull(items[k]);
+                    if (bugSlot != bugSlot2)
                     {
-                        if (ii != - 1)
+                        if (bugSlot2 != - 1)
                         {
-                            possibleBugs.add(ii);
+                            possibleBugs.add(bugSlot2);
                         }
                         else
                         {
-                            ii = (short) this.playerInventory.first((ItemStack) null, startIndex + 1);
-                            if (ii != - 1)
+                            bugSlot2 = (short) this.playerInventory.first((ItemStack) null, startIndex + 1);
+                            if (bugSlot2 != - 1)
                             {
-                                startIndex = i;
-                                possibleBugs.add(ii);
+                                startIndex = bugSlot;
+                                possibleBugs.add(bugSlot2);
                             }
                         }
                     }
-                    possibleBugs.add(i);
+                    possibleBugs.add(bugSlot);
                 }
                 else
                 {
-                    i = (short) this.playerInventory.first((ItemStack) null, startIndex + 1);
-                    if (i != - 1)
+                    bugSlot = (short) this.playerInventory.first((ItemStack) null, startIndex + 1);
+                    if (bugSlot != - 1)
                     {
-                        startIndex = i;
-                        possibleBugs.add(i);
+                        startIndex = bugSlot;
+                        possibleBugs.add(bugSlot);
                     }
                 }
                 k++;

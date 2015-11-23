@@ -111,7 +111,7 @@ public class FurnaceMinecartMat extends AbstractMinecartMat
      */
     public static void register(final FurnaceMinecartMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

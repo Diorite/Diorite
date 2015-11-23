@@ -105,7 +105,7 @@ public class RecordMallMat extends RecordMat
      */
     public static void register(final RecordMallMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

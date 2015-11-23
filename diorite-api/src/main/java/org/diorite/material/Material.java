@@ -33,6 +33,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.blocks.*;
+import org.diorite.material.blocks.DoubleStoneSlabMat.DoubleStoneSlab2;
+import org.diorite.material.blocks.StoneSlabMat.StoneSlab2;
 import org.diorite.material.items.*;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
@@ -75,7 +77,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final BedBlockMat                 BED_BLOCK                  = BedBlockMat.BED_FOOT_SOUTH;
     public static final PoweredRailMat              POWERED_RAIL               = PoweredRailMat.POWERED_RAIL_NORTH_SOUTH;
     public static final DetectorRailMat             DETECTOR_RAIL              = DetectorRailMat.DETECTOR_RAIL_NORTH_SOUTH;
-    public static final PistonStickyMat             PISTON_STICKY              = PistonStickyMat.STICKY_PISTON_DOWN;
+    public static final PistonStickyMat             PISTON_STICKY              = PistonStickyMat.PISTON_STICKY_DOWN;
     public static final CobwebMat                   WEB                        = CobwebMat.COBWEB;
     public static final TallGrassMat                TALL_GRASS                 = TallGrassMat.TALL_GRASS_SHRUB;
     public static final DeadBushMat                 DEAD_BUSH                  = DeadBushMat.DEAD_BUSH;
@@ -212,7 +214,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final BarrierMat                  BARRIER                    = BarrierMat.BARRIER;
     public static final IronTrapdoorMat             IRON_TRAPDOOR              = IronTrapdoorMat.IRON_TRAPDOOR_WEST_BOTTOM;
     public static final PrismarineMat               PRISMARINE                 = PrismarineMat.PRISMARINE;
-    public static final SeaLantrenMat               SEA_LANTERN                = SeaLantrenMat.SEA_LANTREN;
+    public static final SeaLanternMat               SEA_LANTERN                = SeaLanternMat.SEA_LANTERN;
     public static final HayBlockMat                 HAY_BLOCK                  = HayBlockMat.HAY_BLOCK_UP_DOWN;
     public static final CarpetMat                   CARPET                     = CarpetMat.CARPET_WHITE;
     public static final HardenedClayMat             HARDENED_CLAY              = HardenedClayMat.HARDENED_CLAY;
@@ -306,7 +308,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final PorkchopMat                 PORKCHOP                   = PorkchopMat.PORKCHOP;
     public static final CookedPorkchopMat           COOKED_PORKCHOP            = CookedPorkchopMat.COOKED_PORKCHOP;
     public static final PaintingMat                 PAINTING                   = PaintingMat.PAINTING;
-    public static final GoldenAppleMat              GOLDEN_APPLE               = GoldenAppleMat.GOLDED_APPLE;
+    public static final GoldenAppleMat              GOLDEN_APPLE               = GoldenAppleMat.GOLDEN_APPLE;
     public static final SignMat                     SIGN                       = SignMat.SIGN;
     public static final OakDoorItemMat              OAK_DOOR_ITEM              = OakDoorItemMat.OAK_DOOR_ITEM;
     public static final BucketMat                   BUCKET                     = BucketMat.BUCKET;
@@ -316,7 +318,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final SaddleMat                   SADDLE                     = SaddleMat.SADDLE;
     public static final IronDoorItemMat             IRON_DOOR_ITEM             = IronDoorItemMat.IRON_DOOR_ITEM;
     public static final RedstoneMat                 REDSTONE                   = RedstoneMat.REDSTONE;
-    public static final SnowballMat                 SNOW_BALL                  = SnowballMat.SNOWBALL;
+    public static final SnowballMat                 SNOWBALL                   = SnowballMat.SNOWBALL;
     public static final BoatMat                     BOAT                       = BoatMat.BOAT;
     public static final LeatherMat                  LEATHER                    = LeatherMat.LEATHER;
     public static final MilkBucketMat               MILK_BUCKET                = MilkBucketMat.MILK_BUCKET;
@@ -409,7 +411,7 @@ public abstract class Material implements SimpleEnum<Material>
     public static final CommandBlockMinecartMat     COMMAND_BLOCK_MINECART     = CommandBlockMinecartMat.COMMAND_BLOCK_MINECART;
     public static final MuttonMat                   MUTTON                     = MuttonMat.MUTTON;
     public static final CookedMuttonMat             COOKED_MUTTON              = CookedMuttonMat.COOKED_MUTTON;
-    public static final BannerMat                   BANNER                     = BannerMat.BANNER;
+    public static final BannerMat                   BANNER                     = BannerMat.BANNER_BLACK;
     public static final SpruceDoorItemMat           SPRUCE_DOOR_ITEM           = SpruceDoorItemMat.SPRUCE_DOOR_ITEM;
     public static final BirchDoorItemMat            BIRCH_DOOR_ITEM            = BirchDoorItemMat.BIRCH_DOOR_ITEM;
     public static final JungleDoorItemMat           JUNGLE_DOOR_ITEM           = JungleDoorItemMat.JUNGLE_DOOR_ITEM;
@@ -502,7 +504,7 @@ public abstract class Material implements SimpleEnum<Material>
      *
      * @return sub-id of material
      */
-    public short getType()
+    public int getType()
     {
         return this.type;
     }
@@ -1132,6 +1134,8 @@ public abstract class Material implements SimpleEnum<Material>
         register(IRON_BLOCK);
         register(DOUBLE_STONE_SLAB);
         register(STONE_SLAB);
+        register(DoubleStoneSlab2.DOUBLE_STONE_SLAB_RED_SANDSTONE);
+        register(StoneSlab2.STONE_SLAB_RED_SANDSTONE);
         register(BRICK_BLOCK);
         register(TNT);
         register(BOOKSHELF);
@@ -1358,7 +1362,7 @@ public abstract class Material implements SimpleEnum<Material>
         register(SADDLE);
         register(IRON_DOOR_ITEM);
         register(REDSTONE);
-        register(SNOW_BALL);
+        register(SNOWBALL);
         register(BOAT);
         register(LEATHER);
         register(MILK_BUCKET);

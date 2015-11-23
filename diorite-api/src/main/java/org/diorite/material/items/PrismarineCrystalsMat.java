@@ -112,7 +112,7 @@ public class PrismarineCrystalsMat extends ItemMaterialData
      */
     public static void register(final PrismarineCrystalsMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

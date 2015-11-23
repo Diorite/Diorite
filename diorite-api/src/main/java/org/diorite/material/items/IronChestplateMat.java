@@ -179,7 +179,7 @@ public class IronChestplateMat extends ChestplateMat
      */
     public static void register(final IronChestplateMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

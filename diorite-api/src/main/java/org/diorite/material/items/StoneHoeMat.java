@@ -179,7 +179,7 @@ public class StoneHoeMat extends HoeMat
      */
     public static void register(final StoneHoeMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -179,7 +179,7 @@ public class ChainmailChestplateMat extends ChestplateMat
      */
     public static void register(final ChainmailChestplateMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -111,7 +111,7 @@ public class FishMat extends EdibleItemMat
      */
     public static void register(final FishMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

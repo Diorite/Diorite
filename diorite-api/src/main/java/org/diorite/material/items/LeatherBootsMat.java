@@ -184,7 +184,7 @@ public class LeatherBootsMat extends BootsMat
      */
     public static void register(final LeatherBootsMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

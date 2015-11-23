@@ -105,7 +105,7 @@ public class RecordStalMat extends RecordMat
      */
     public static void register(final RecordStalMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 
