@@ -28,11 +28,11 @@ public interface RecipeCheckResult
 
     /**
      * Returns array of items that should be removed from inventory on craft. <br>
-     * May contains null elements.
+     * Array should match crafting slots.
      *
      * @return array of items that should be removed from inventory on craft.
      */
-    ItemStack[] getItemsToConsume();
+    ItemStack[][] getItemsToConsume();
 
     /**
      * Returns items that should be changed in inventory.

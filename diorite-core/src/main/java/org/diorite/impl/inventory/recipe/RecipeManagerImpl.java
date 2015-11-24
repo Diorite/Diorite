@@ -101,7 +101,7 @@ public class RecipeManagerImpl implements IRecipeManager
         this.builder().priority(getPriority()).shapeless().addIngredient().item(Material.APPLE, 2, false).replacement(Material.DIRT, 16).simpleValidator(item -> "Diorite".equals(item.getItemMeta().getDisplayName())).build().result(Material.GOLDEN_APPLE).buildAndAdd();
     }
 
-    private ShapedRecipeBuilder shaped(final Material resultMat, final int resultAmount,final String... pattern)
+    private ShapedRecipeBuilder shaped(final Material resultMat, final int resultAmount, final String... pattern)
     {
         return this.builder().priority(getPriority()).vanilla(true).result(resultMat, resultAmount).shaped().pattern(pattern);
     }

@@ -22,7 +22,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
 {
     private final Recipe                     recipe;
     private final ItemStack                  result;
-    private final ItemStack[]                itemsToConsume;
+    private final ItemStack[][]              itemsToConsume;
     private final TShortObjectMap<ItemStack> onCraft;
 
     /**
@@ -33,7 +33,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      * @param itemsToConsume array of items that should be removed from inventory on craft.
      * @param onCraft        map of items that should be changed in inventory
      */
-    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final ItemStack[] itemsToConsume, final TShortObjectMap<ItemStack> onCraft)
+    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final ItemStack[][] itemsToConsume, final TShortObjectMap<ItemStack> onCraft)
     {
         this.recipe = recipe;
         this.result = result;
@@ -48,7 +48,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      * @param result         result item stack.
      * @param itemsToConsume array of items that should be removed from inventory on craft.
      */
-    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final ItemStack[] itemsToConsume)
+    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final ItemStack[][] itemsToConsume)
     {
         this.recipe = recipe;
         this.result = result;
@@ -56,45 +56,24 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
         this.onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
     }
 
-    /**
-     * Returns matched recipe.
-     *
-     * @return matched recipe.
-     */
     @Override
     public Recipe getRecipe()
     {
         return this.recipe;
     }
 
-    /**
-     * Returns result itemstack.
-     *
-     * @return result itemstack.
-     */
     @Override
     public ItemStack getResult()
     {
         return this.result;
     }
 
-    /**
-     * Returns array of items that should be removed from inventory on craft. <br>
-     * May contains null elements.
-     *
-     * @return array of items that should be removed from inventory on craft.
-     */
     @Override
-    public ItemStack[] getItemsToConsume()
+    public ItemStack[][] getItemsToConsume()
     {
         return this.itemsToConsume;
     }
 
-    /**
-     * Returns items that should be changed in inventory.
-     *
-     * @return items that should be changed in inventory.
-     */
     @Override
     public TShortObjectMap<ItemStack> getOnCraft()
     {

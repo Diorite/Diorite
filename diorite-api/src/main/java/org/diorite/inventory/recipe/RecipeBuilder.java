@@ -64,7 +64,7 @@ public interface RecipeBuilder
      *
      * @return this same builder for method chains.
      */
-    RecipeBuilder result(BiFunction<Player, ItemStack[], ItemStack> itemStack);
+    RecipeBuilder result(BiFunction<Player, ItemStack[][], ItemStack> itemStack);
 
     /**
      * Set dynamic result function for this recipe. Like coloring armor based on armor and dyes consumed when crafting.<br>
@@ -75,7 +75,7 @@ public interface RecipeBuilder
      *
      * @return this same builder for method chains.
      */
-    default RecipeBuilder result(final Function<ItemStack[], ItemStack> itemStack)
+    default RecipeBuilder result(final Function<ItemStack[][], ItemStack> itemStack)
     {
         return this.result((player, itemStacks) -> itemStack.apply(itemStacks));
     }
@@ -154,13 +154,13 @@ public interface RecipeBuilder
         }
 
         @Override
-        default ShapelessRecipeBuilder result(final Function<ItemStack[], ItemStack> itemStack)
+        default ShapelessRecipeBuilder result(final Function<ItemStack[][], ItemStack> itemStack)
         {
             return this.result((player, itemStacks) -> itemStack.apply(itemStacks));
         }
 
         @Override
-        ShapelessRecipeBuilder result(BiFunction<Player, ItemStack[], ItemStack> itemStack);
+        ShapelessRecipeBuilder result(BiFunction<Player, ItemStack[][], ItemStack> itemStack);
 
         @Override
         ShapelessRecipeBuilder vanilla(boolean vanilla);
@@ -271,13 +271,13 @@ public interface RecipeBuilder
         }
 
         @Override
-        default ShapedRecipeBuilder result(final Function<ItemStack[], ItemStack> itemStack)
+        default ShapedRecipeBuilder result(final Function<ItemStack[][], ItemStack> itemStack)
         {
             return this.result((player, itemStacks) -> itemStack.apply(itemStacks));
         }
 
         @Override
-        ShapedRecipeBuilder result(BiFunction<Player, ItemStack[], ItemStack> itemStack);
+        ShapedRecipeBuilder result(BiFunction<Player, ItemStack[][], ItemStack> itemStack);
 
         @Override
         ShapedRecipeBuilder vanilla(boolean vanilla);

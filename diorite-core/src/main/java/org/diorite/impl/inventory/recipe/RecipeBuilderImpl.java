@@ -12,9 +12,6 @@ import org.diorite.impl.inventory.recipe.craft.CharMapRecipePatternImpl;
 import org.diorite.impl.inventory.recipe.craft.ShapedRecipeImpl;
 import org.diorite.impl.inventory.recipe.craft.ShapelessRecipeImpl;
 import org.diorite.impl.inventory.recipe.craft.ShapelessSingleRecipeImpl;
-import org.diorite.impl.inventory.recipe.craft.SimpleShapedRecipeImpl;
-import org.diorite.impl.inventory.recipe.craft.SimpleShapelessRecipeImpl;
-import org.diorite.impl.inventory.recipe.craft.SimpleShapelessSingleRecipeImpl;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeBuilder;
@@ -31,7 +28,7 @@ import gnu.trove.map.hash.TCharObjectHashMap;
 public class RecipeBuilderImpl implements RecipeBuilder
 {
     private ItemStack result;
-    private BiFunction<Player, ItemStack[], ItemStack> func     = null;
+    private BiFunction<Player, ItemStack[][], ItemStack> func     = null;
     private boolean                                    vanilla  = false;
     private Long                                       priority = null;
 
@@ -43,7 +40,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
     }
 
     @Override
-    public RecipeBuilder result(final BiFunction<Player, ItemStack[], ItemStack> itemStack)
+    public RecipeBuilder result(final BiFunction<Player, ItemStack[][], ItemStack> itemStack)
     {
         this.func = itemStack;
         return this;
@@ -105,7 +102,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
         }
 
         @Override
-        public ShapelessRecipeBuilder result(final BiFunction<Player, ItemStack[], ItemStack> itemStack)
+        public ShapelessRecipeBuilder result(final BiFunction<Player, ItemStack[][], ItemStack> itemStack)
         {
             this.oldBuilder.result(itemStack);
             return this;
@@ -138,7 +135,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
             {
                 if (this.oldBuilder.func == null)
                 {
-                    return new SimpleShapelessSingleRecipeImpl(this.ingredients.iterator().next(), this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
+                    return new ShapelessSingleRecipeImpl(this.ingredients.iterator().next(), this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
                 }
                 else
                 {
@@ -147,7 +144,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
             }
             if (this.oldBuilder.func == null)
             {
-                return new SimpleShapelessRecipeImpl(this.ingredients, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
+                return new ShapelessRecipeImpl(this.ingredients, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
             }
             else
             {
@@ -215,7 +212,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
         }
 
         @Override
-        public ShapedRecipeBuilder result(final BiFunction<Player, ItemStack[], ItemStack> itemStack)
+        public ShapedRecipeBuilder result(final BiFunction<Player, ItemStack[][], ItemStack> itemStack)
         {
             this.oldBuilder.result(itemStack);
             return this;
@@ -254,7 +251,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
             final RecipePattern pat = (this.alternatePattern == null) ? new CharMapRecipePatternImpl(this.items, this.pattern) : this.alternatePattern;
             if (this.oldBuilder.func == null)
             {
-                return new SimpleShapedRecipeImpl(pat, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
+                return new ShapedRecipeImpl(pat, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
             }
             else
             {

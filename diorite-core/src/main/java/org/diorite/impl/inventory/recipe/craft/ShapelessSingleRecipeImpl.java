@@ -37,7 +37,6 @@ import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeItem;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.inventory.recipe.craft.ShapelessRecipe;
-import org.diorite.inventory.slot.SlotType;
 
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
@@ -51,9 +50,16 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
 
     private final transient List<RecipeItem> ingredientList;
 
-    public ShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[], ItemStack> resultFunc)
+    public ShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[][], ItemStack> resultFunc)
     {
         super(extractResults(result, ingredient), priority, vanilla, resultFunc);
+        this.ingredient = ingredient;
+        this.ingredientList = Collections.singletonList(ingredient);
+    }
+
+    public ShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla)
+    {
+        super(extractResults(result, ingredient), priority, vanilla);
         this.ingredient = ingredient;
         this.ingredientList = Collections.singletonList(ingredient);
     }
@@ -65,12 +71,18 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
         final TShortObjectMap<ItemStack> onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
 
         boolean matching = false;
-        final ItemStack[] result = new ItemStack[1];
-        for (short i = 0, size = (short) inventory.size(); i < size; i++)
+        final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
+        final ItemStack[][] result = new ItemStack[maxInvRow][maxInvCol];
+        int col = - 1, row = 0;
+        for (short i = 1, size = (short) inventory.size(); i < size; i++)
         {
-            if (inventory.getSlot(i).getSlotType().equals(SlotType.RESULT))
+            if (++ col > maxInvCol)
             {
-                continue;
+                col = 0;
+                if (++ row > maxInvRow)
+                {
+                    throw new IllegalStateException("Inventory is larger than excepted.");
+                }
             }
             final ItemStack item = inventory.getItem(i);
             if (item == null)
@@ -85,7 +97,7 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
                     return null;
                 }
                 matching = true;
-                result[0] = valid;
+                result[row][col] = valid;
                 final ItemStack repl = this.ingredient.getReplacement();
                 if (repl != null)
                 {
@@ -95,7 +107,7 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
             }
             return null;
         }
-        return matching ? new RecipeCheckResultImpl(this, this.resultFunc.apply(player, result), result, onCraft) : null;
+        return matching ? new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, result), result, onCraft) : null;
     }
 
     @Override

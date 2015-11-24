@@ -16,26 +16,35 @@ import org.diorite.inventory.recipe.RecipeItem;
 
 abstract class RecipeImpl extends PriorityRecipeImpl
 {
-    protected final ItemStack                                  result;
-    protected final List<ItemStack>                            resultList;
-    protected final BiFunction<Player, ItemStack[], ItemStack> resultFunc;
+    protected final ItemStack                                    result;
+    protected final List<ItemStack>                              resultList;
+    protected final BiFunction<Player, ItemStack[][], ItemStack> resultFunc;
+//
+//    protected RecipeImpl(final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[][], ItemStack> resultFunc)
+//    {
+//        super(priority, vanilla);
+//        Validate.notNull(resultFunc, "Result function can't be null.");
+//        Validate.notNull(result, "Result item can't be null.");
+//        this.result = result;
+//        this.resultFunc = resultFunc;
+//        this.resultList = Collections.singletonList(result.clone());
+//    }
 
-    protected RecipeImpl(final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[], ItemStack> resultFunc)
-    {
-        super(priority, vanilla);
-        Validate.notNull(resultFunc, "Result function can't be null.");
-        Validate.notNull(result, "Result item can't be null.");
-        this.result = result;
-        this.resultFunc = resultFunc;
-        this.resultList = Collections.singletonList(result.clone());
-    }
-
-    protected RecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[], ItemStack> resultFunc)
+    protected RecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[][], ItemStack> resultFunc)
     {
         super(priority, vanilla);
         Validate.notNull(resultFunc, "Result function can't be null.");
         Validate.notEmpty(result, "Result list can't be empty.");
         this.resultFunc = resultFunc;
+        this.result = result.get(0);
+        this.resultList = (result.size() == 1) ? Collections.singletonList(this.result) : Collections.unmodifiableList(new ArrayList<>(result));
+    }
+
+    protected RecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla)
+    {
+        super(priority, vanilla);
+        Validate.notEmpty(result, "Result list can't be empty.");
+        this.resultFunc = null;
         this.result = result.get(0);
         this.resultList = (result.size() == 1) ? Collections.singletonList(this.result) : Collections.unmodifiableList(new ArrayList<>(result));
     }

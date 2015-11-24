@@ -99,7 +99,16 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         final TShortCollection possibleBugs;
         if (! this.recipe.getRecipe().isVanilla())
         {
-            final ItemStack[] items = DioriteUtils.compact(false, this.recipe.getItemsToConsume());
+            final ItemStack[][] itemsToConsume = this.recipe.getItemsToConsume();
+            final ItemStack[] flat = new ItemStack[itemsToConsume.length * itemsToConsume[0].length];
+            {
+                int i = 0;
+                for (final ItemStack[] rowToConsume : itemsToConsume)
+                {
+                    System.arraycopy(rowToConsume, 0, flat, (i++) * rowToConsume.length, rowToConsume.length);
+                }
+            }
+            final ItemStack[] items = DioriteUtils.compact(false, flat);
             possibleBugs = new TShortHashSet(items.length);
             short k = 0;
             short bugSlot;
@@ -153,10 +162,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             final TShortObjectMap<ItemStack> onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
             while ((this.recipe != null) && (recipe == this.recipe.getRecipe())) // as long as recipe is this same.
             {
-                if (this.removeItems(true, this.recipe.getItemsToConsume()).length != 0)
-                {
-                    throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
-                }
+                this.take(this.recipe.getItemsToConsume());
                 if (result == null)
                 {
                     result = this.recipe.getResult().clone();
@@ -177,7 +183,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                     }
                     return true;
                 });
-                this.checkRecipe(false);
+                this.checkRecipe(recipe);
             }
             this.getPlayerInventory().addFromEnd(result);
             onCraft.forEachEntry(this::addReplacment);
@@ -189,10 +195,9 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             {
                 return; // can't craft more.
             }
-            if (this.removeItems(true, this.recipe.getItemsToConsume()).length != 0)
-            {
-                throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
-            }
+
+            this.take(this.recipe.getItemsToConsume());
+
             final ItemStack result = this.recipe.getResult().clone();
             result.setAmount(result.getAmount() + ((cursor == null) ? 0 : cursor.getAmount()));
             this.getPlayerInventory().replaceCursorItem(cursor, result);
@@ -213,6 +218,38 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                 packets[i++] = new PacketPlayServerSetSlot(this.playerInventory.getWindowId(), slot, item);
             }
             this.getHolder().getNetworkManager().sendPackets(packets);
+        }
+    }
+
+    private void take(final ItemStack[][] gridToTake)
+    {
+        int row = 0, col = 0;
+        for (final ItemStack[] rowToTake : gridToTake)
+        {
+            for (final ItemStack toTake : rowToTake)
+            {
+                final ItemStack eqItem = this.getItem(row, col);
+                boolean skip = false;
+                if (toTake == null)
+                {
+                    if (eqItem != null)
+                    {
+                        throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
+                    }
+                    skip = true;
+                }
+                if (! skip)
+                {
+                    if ((eqItem == null) || (eqItem.getAmount() < toTake.getAmount()) || ! eqItem.isSimilar(toTake))
+                    {
+                        throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
+                    }
+                    eqItem.setAmount(eqItem.getAmount() - toTake.getAmount());
+                }
+                col++;
+            }
+            col = 0;
+            row++;
         }
     }
 
@@ -272,6 +309,39 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         return true;
     }
 
+    public void checkRecipe(final Recipe lastRecipe)
+    {
+        RecipeCheckResult result = lastRecipe.isMatching(this);
+        if (result == null)
+        {
+            final RecipeManager rm = Diorite.getServerManager().getRecipeManager();
+            result = rm.matchRecipe(this);
+        }
+        this.updateRecipe(result);
+    }
+
+    private void updateRecipe(final RecipeCheckResult result)
+    {
+        if (result == null)
+        {
+            if (this.recipe == null)
+            {
+                return;
+            }
+            this.recipe = null;
+            if (this.getResult() != null)
+            {
+                this.setResult(null);
+            }
+            return;
+        }
+        this.recipe = result;
+        if (! this.recipe.getResult().equals(this.getResult()))
+        {
+            this.setResult(this.recipe.getResult());
+        }
+    }
+
     public void checkRecipe(final boolean onlyResult)
     {
         final RecipeManager rm = Diorite.getServerManager().getRecipeManager();
@@ -315,24 +385,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             }
 
             final RecipeCheckResult result = rm.matchRecipe(this);
-            if (result == null)
-            {
-                if (this.recipe == null)
-                {
-                    return;
-                }
-                this.recipe = null;
-                if (this.getResult() != null)
-                {
-                    this.setResult(null);
-                }
-                return;
-            }
-            this.recipe = result;
-            if (! this.recipe.getResult().equals(this.getResult()))
-            {
-                this.setResult(this.recipe.getResult());
-            }
+            this.updateRecipe(result);
         }
     }
 
