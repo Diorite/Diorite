@@ -179,7 +179,7 @@ public class GoldenShovelMat extends ShovelMat
      */
     public static void register(final GoldenShovelMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

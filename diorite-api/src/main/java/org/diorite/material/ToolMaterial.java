@@ -52,7 +52,7 @@ public class ToolMaterial extends ASimpleEnum<ToolMaterial>
         init(ToolMaterial.class, 5);
         {
             final SimpleEnumMap<ToolType, ToolData> properties = new SimpleEnumMap<>(4);
-            WOODEN = new ToolMaterial("WOODEN", Material.PLANKS, 1000, 60, 15, properties);
+            WOODEN = new ToolMaterial("WOODEN", Material.PLANKS, 1000, 59, 15, properties);
             properties.put(ToolType.PICKAXE, new ToolData(WOODEN, ToolType.PICKAXE, 2, 1.2 /*-4.0*/));
             properties.put(ToolType.SHOVEL, new ToolData(WOODEN, ToolType.SHOVEL, 2.5, 1.0 /*-4.0*/));
             properties.put(ToolType.AXE, new ToolData(WOODEN, ToolType.AXE, 7, 0.8 /*-4.0*/));
@@ -61,7 +61,7 @@ public class ToolMaterial extends ASimpleEnum<ToolMaterial>
         }
         {
             final SimpleEnumMap<ToolType, ToolData> properties = new SimpleEnumMap<>(4);
-            STONE = new ToolMaterial("STONE", Material.COBBLESTONE, 2000, 132, 5, properties);
+            STONE = new ToolMaterial("STONE", Material.COBBLESTONE, 2000, 131, 5, properties);
             properties.put(ToolType.PICKAXE, new ToolData(STONE, ToolType.PICKAXE, 3, 1.2 /*-4.0*/));
             properties.put(ToolType.SHOVEL, new ToolData(STONE, ToolType.SHOVEL, 3.5, 1.0 /*-4.0*/));
             properties.put(ToolType.AXE, new ToolData(STONE, ToolType.AXE, 9, 0.8 /*-4.0*/));
@@ -70,7 +70,7 @@ public class ToolMaterial extends ASimpleEnum<ToolMaterial>
         }
         {
             final SimpleEnumMap<ToolType, ToolData> properties = new SimpleEnumMap<>(4);
-            IRON = new ToolMaterial("IRON", Material.IRON_INGOT, 3000, 251, 14, properties);
+            IRON = new ToolMaterial("IRON", Material.IRON_INGOT, 3000, 250, 14, properties);
             properties.put(ToolType.PICKAXE, new ToolData(IRON, ToolType.PICKAXE, 4, 1.2 /*-4.0*/));
             properties.put(ToolType.SHOVEL, new ToolData(IRON, ToolType.SHOVEL, 4.5, 1.0 /*-4.0*/));
             properties.put(ToolType.AXE, new ToolData(IRON, ToolType.AXE, 9, 0.9 /*-4.0*/));
@@ -79,7 +79,7 @@ public class ToolMaterial extends ASimpleEnum<ToolMaterial>
         }
         {
             final SimpleEnumMap<ToolType, ToolData> properties = new SimpleEnumMap<>(4);
-            GOLD = new ToolMaterial("GOLD", Material.GOLD_INGOT, 4000, 33, 22, properties);
+            GOLD = new ToolMaterial("GOLD", Material.GOLD_INGOT, 4000, 32, 22, properties);
             properties.put(ToolType.PICKAXE, new ToolData(GOLD, ToolType.PICKAXE, 2, 1.2 /*-4.0*/));
             properties.put(ToolType.SHOVEL, new ToolData(GOLD, ToolType.SHOVEL, 2.5, 1.0 /*-4.0*/));
             properties.put(ToolType.AXE, new ToolData(GOLD, ToolType.AXE, 7, 1.0 /*-4.0*/));
@@ -88,7 +88,7 @@ public class ToolMaterial extends ASimpleEnum<ToolMaterial>
         }
         {
             final SimpleEnumMap<ToolType, ToolData> properties = new SimpleEnumMap<>(4);
-            DIAMOND = new ToolMaterial("DIAMOND", Material.DIAMOND, 5000, 1562, 10, properties);
+            DIAMOND = new ToolMaterial("DIAMOND", Material.DIAMOND, 5000, 1561, 10, properties);
             properties.put(ToolType.PICKAXE, new ToolData(DIAMOND, ToolType.PICKAXE, 5, 1.2 /*-4.0*/));
             properties.put(ToolType.SHOVEL, new ToolData(DIAMOND, ToolType.SHOVEL, 5.5, 1.0 /*-4.0*/));
             properties.put(ToolType.AXE, new ToolData(DIAMOND, ToolType.AXE, 9, 1.0 /*-4.0*/));

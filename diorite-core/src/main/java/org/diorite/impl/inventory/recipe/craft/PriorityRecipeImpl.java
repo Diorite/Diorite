@@ -23,6 +23,12 @@ abstract class PriorityRecipeImpl implements Recipe
     }
 
     @Override
+    public boolean isVanilla()
+    {
+        return this.vanilla;
+    }
+
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("priority", this.priority).toString();

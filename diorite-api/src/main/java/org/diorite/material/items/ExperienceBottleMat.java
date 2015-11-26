@@ -113,7 +113,7 @@ public class ExperienceBottleMat extends ItemMaterialData implements PlaceableEn
      */
     public static void register(final ExperienceBottleMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

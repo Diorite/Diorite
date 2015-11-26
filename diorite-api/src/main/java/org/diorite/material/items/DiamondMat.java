@@ -114,7 +114,7 @@ public class DiamondMat extends OreItemMatExt
      */
     public static void register(final DiamondMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

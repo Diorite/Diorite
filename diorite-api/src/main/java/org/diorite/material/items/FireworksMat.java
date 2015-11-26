@@ -118,7 +118,7 @@ public class FireworksMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static void register(final FireworksMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

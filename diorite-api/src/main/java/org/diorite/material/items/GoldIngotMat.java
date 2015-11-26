@@ -114,7 +114,7 @@ public class GoldIngotMat extends OreItemMatExt
      */
     public static void register(final GoldIngotMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -120,7 +120,7 @@ public class StickMat extends ItemMaterialData implements FuelMat
      */
     public static void register(final StickMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

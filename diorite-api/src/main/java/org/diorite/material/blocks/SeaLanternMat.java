@@ -40,37 +40,37 @@ import gnu.trove.map.hash.TByteObjectHashMap;
  * Blast Resistance 1,5
  */
 @SuppressWarnings("JavaDoc")
-public class SeaLantrenMat extends BlockMaterialData
+public class SeaLanternMat extends BlockMaterialData
 {
     /**
      * Sub-ids used by diorite/minecraft by default
      */
     public static final int USED_DATA_VALUES = 1;
 
-    public static final SeaLantrenMat SEA_LANTREN = new SeaLantrenMat();
+    public static final SeaLanternMat SEA_LANTERN = new SeaLanternMat();
 
-    private static final Map<String, SeaLantrenMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SeaLantrenMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Map<String, SeaLanternMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final TByteObjectMap<SeaLanternMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
 
     @SuppressWarnings("MagicNumber")
-    protected SeaLantrenMat()
+    protected SeaLanternMat()
     {
-        super("SEA_LANTREN", 169, "minecraft:sea_lantren", "SEA_LANTREN", (byte) 0x00, 0.3f, 1.5f);
+        super("SEA_LANTERN", 169, "minecraft:sea_lantern", "SEA_LANTERN", (byte) 0x00, 0.3f, 1.5f);
     }
 
-    protected SeaLantrenMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
+    protected SeaLanternMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final float hardness, final float blastResistance)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type, hardness, blastResistance);
     }
 
     @Override
-    public SeaLantrenMat getType(final String name)
+    public SeaLanternMat getType(final String name)
     {
         return getByEnumName(name);
     }
 
     @Override
-    public SeaLantrenMat getType(final int id)
+    public SeaLanternMat getType(final int id)
     {
         return getByID(id);
     }
@@ -82,7 +82,7 @@ public class SeaLantrenMat extends BlockMaterialData
      *
      * @return sub-type of SeaLantren or null
      */
-    public static SeaLantrenMat getByID(final int id)
+    public static SeaLanternMat getByID(final int id)
     {
         return byID.get((byte) id);
     }
@@ -95,7 +95,7 @@ public class SeaLantrenMat extends BlockMaterialData
      *
      * @return sub-type of SeaLantren or null
      */
-    public static SeaLantrenMat getByEnumName(final String name)
+    public static SeaLanternMat getByEnumName(final String name)
     {
         return byName.get(name);
     }
@@ -106,28 +106,28 @@ public class SeaLantrenMat extends BlockMaterialData
      *
      * @param element sub-type to register
      */
-    public static void register(final SeaLantrenMat element)
+    public static void register(final SeaLanternMat element)
     {
         byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 
     @Override
-    public SeaLantrenMat[] types()
+    public SeaLanternMat[] types()
     {
-        return SeaLantrenMat.seaLantrenTypes();
+        return SeaLanternMat.seaLantrenTypes();
     }
 
     /**
      * @return array that contains all sub-types of this block.
      */
-    public static SeaLantrenMat[] seaLantrenTypes()
+    public static SeaLanternMat[] seaLantrenTypes()
     {
-        return byID.values(new SeaLantrenMat[byID.size()]);
+        return byID.values(new SeaLanternMat[byID.size()]);
     }
 
     static
     {
-        SeaLantrenMat.register(SEA_LANTREN);
+        SeaLanternMat.register(SEA_LANTERN);
     }
 }

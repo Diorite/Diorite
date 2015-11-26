@@ -9,6 +9,7 @@ import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeItemBuilder.ShapedRecipeItemBuilder;
 import org.diorite.inventory.recipe.RecipeItemBuilder.ShapelessRecipeItemBuilder;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipePattern;
 import org.diorite.inventory.recipe.craft.ShapedRecipe;
@@ -64,7 +65,7 @@ public interface RecipeBuilder
      *
      * @return this same builder for method chains.
      */
-    RecipeBuilder result(BiFunction<Player, ItemStack[], ItemStack> itemStack);
+    RecipeBuilder result(BiFunction<Player, CraftingGrid, ItemStack> itemStack);
 
     /**
      * Set dynamic result function for this recipe. Like coloring armor based on armor and dyes consumed when crafting.<br>
@@ -75,7 +76,7 @@ public interface RecipeBuilder
      *
      * @return this same builder for method chains.
      */
-    default RecipeBuilder result(final Function<ItemStack[], ItemStack> itemStack)
+    default RecipeBuilder result(final Function<CraftingGrid, ItemStack> itemStack)
     {
         return this.result((player, itemStacks) -> itemStack.apply(itemStacks));
     }
@@ -154,13 +155,13 @@ public interface RecipeBuilder
         }
 
         @Override
-        default ShapelessRecipeBuilder result(final Function<ItemStack[], ItemStack> itemStack)
+        default ShapelessRecipeBuilder result(final Function<CraftingGrid, ItemStack> itemStack)
         {
             return this.result((player, itemStacks) -> itemStack.apply(itemStacks));
         }
 
         @Override
-        ShapelessRecipeBuilder result(BiFunction<Player, ItemStack[], ItemStack> itemStack);
+        ShapelessRecipeBuilder result(BiFunction<Player, CraftingGrid, ItemStack> itemStack);
 
         @Override
         ShapelessRecipeBuilder vanilla(boolean vanilla);
@@ -271,13 +272,13 @@ public interface RecipeBuilder
         }
 
         @Override
-        default ShapedRecipeBuilder result(final Function<ItemStack[], ItemStack> itemStack)
+        default ShapedRecipeBuilder result(final Function<CraftingGrid, ItemStack> itemStack)
         {
             return this.result((player, itemStacks) -> itemStack.apply(itemStacks));
         }
 
         @Override
-        ShapedRecipeBuilder result(BiFunction<Player, ItemStack[], ItemStack> itemStack);
+        ShapedRecipeBuilder result(BiFunction<Player, CraftingGrid, ItemStack> itemStack);
 
         @Override
         ShapedRecipeBuilder vanilla(boolean vanilla);

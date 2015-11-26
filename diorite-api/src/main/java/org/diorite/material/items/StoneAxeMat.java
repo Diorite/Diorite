@@ -179,7 +179,7 @@ public class StoneAxeMat extends AxeMat
      */
     public static void register(final StoneAxeMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

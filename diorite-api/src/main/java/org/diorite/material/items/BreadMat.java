@@ -111,7 +111,7 @@ public class BreadMat extends EdibleItemMat
      */
     public static void register(final BreadMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

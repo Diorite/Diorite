@@ -179,7 +179,7 @@ public class IronLeggingsMat extends LeggingsMat
      */
     public static void register(final IronLeggingsMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

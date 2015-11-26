@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 
@@ -22,7 +23,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
 {
     private final Recipe                     recipe;
     private final ItemStack                  result;
-    private final ItemStack[]                itemsToConsume;
+    private final CraftingGrid               itemsToConsume;
     private final TShortObjectMap<ItemStack> onCraft;
 
     /**
@@ -33,7 +34,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      * @param itemsToConsume array of items that should be removed from inventory on craft.
      * @param onCraft        map of items that should be changed in inventory
      */
-    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final ItemStack[] itemsToConsume, final TShortObjectMap<ItemStack> onCraft)
+    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final CraftingGrid itemsToConsume, final TShortObjectMap<ItemStack> onCraft)
     {
         this.recipe = recipe;
         this.result = result;
@@ -48,7 +49,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      * @param result         result item stack.
      * @param itemsToConsume array of items that should be removed from inventory on craft.
      */
-    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final ItemStack[] itemsToConsume)
+    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final CraftingGrid itemsToConsume)
     {
         this.recipe = recipe;
         this.result = result;
@@ -56,45 +57,24 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
         this.onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
     }
 
-    /**
-     * Returns matched recipe.
-     *
-     * @return matched recipe.
-     */
     @Override
     public Recipe getRecipe()
     {
         return this.recipe;
     }
 
-    /**
-     * Returns result itemstack.
-     *
-     * @return result itemstack.
-     */
     @Override
     public ItemStack getResult()
     {
         return this.result;
     }
 
-    /**
-     * Returns array of items that should be removed from inventory on craft. <br>
-     * May contains null elements.
-     *
-     * @return array of items that should be removed from inventory on craft.
-     */
     @Override
-    public ItemStack[] getItemsToConsume()
+    public CraftingGrid getItemsToConsume()
     {
         return this.itemsToConsume;
     }
 
-    /**
-     * Returns items that should be changed in inventory.
-     *
-     * @return items that should be changed in inventory.
-     */
     @Override
     public TShortObjectMap<ItemStack> getOnCraft()
     {
@@ -115,7 +95,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
 
         final RecipeCheckResultImpl that = (RecipeCheckResultImpl) o;
 
-        return this.recipe.equals(that.recipe) && this.result.equals(that.result) && Arrays.equals(this.itemsToConsume, that.itemsToConsume) && ! ((this.onCraft != null) ? ! this.onCraft.equals(that.onCraft) : (that.onCraft != null));
+        return this.recipe.equals(that.recipe) && this.result.equals(that.result) && this.itemsToConsume.equals(that.itemsToConsume) && ! ((this.onCraft != null) ? ! this.onCraft.equals(that.onCraft) : (that.onCraft != null));
 
     }
 
@@ -124,7 +104,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
     {
         int result1 = this.recipe.hashCode();
         result1 = (31 * result1) + this.result.hashCode();
-        result1 = (31 * result1) + Arrays.hashCode(this.itemsToConsume);
+        result1 = (31 * result1) + this.itemsToConsume.hashCode();
         result1 = (31 * result1) + ((this.onCraft != null) ? this.onCraft.hashCode() : 0);
         return result1;
     }

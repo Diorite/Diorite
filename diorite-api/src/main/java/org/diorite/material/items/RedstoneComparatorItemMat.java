@@ -113,7 +113,7 @@ public class RedstoneComparatorItemMat extends ItemMaterialData implements Place
      */
     public static void register(final RedstoneComparatorItemMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

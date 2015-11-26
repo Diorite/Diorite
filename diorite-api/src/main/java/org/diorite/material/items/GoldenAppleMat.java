@@ -46,7 +46,7 @@ import gnu.trove.map.hash.TShortObjectHashMap;
  * Max item stack size: 64
  * </li>
  * <li>
- * GOLDED_APPLE:
+ * GOLDEN_APPLE:
  * Type name: 'Golded Apple' <br>
  * SubID: 0 <br>
  * Max item stack size: 64
@@ -61,8 +61,8 @@ public class GoldenAppleMat extends EdibleItemMat
      */
     public static final int USED_DATA_VALUES = 2;
 
-    public static final GoldenAppleMat GOLDED_APPLE           = new GoldenAppleMat();
-    public static final GoldenAppleMat GOLDED_ENCHANTED_APPLE = new GoldenAppleMat("ENCHANTED", 0x01);
+    public static final GoldenAppleMat GOLDEN_APPLE           = new GoldenAppleMat();
+    public static final GoldenAppleMat GOLDEN_ENCHANTED_APPLE = new GoldenAppleMat("ENCHANTED_APPLE", 0x01);
 
     private static final Map<String, GoldenAppleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TShortObjectMap<GoldenAppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
@@ -70,13 +70,13 @@ public class GoldenAppleMat extends EdibleItemMat
     @SuppressWarnings("MagicNumber")
     protected GoldenAppleMat()
     {
-        super("GOLDED_APPLE", 322, "minecraft:golden_apple", "GOLDED_APPLE", (short) 0x00, 4, 9.6F);
+        super("GOLDEN_APPLE", 322, "minecraft:golden_apple", "GOLDEN_APPLE", (short) 0x00, 4, 9.6F);
     }
 
     @SuppressWarnings("MagicNumber")
     protected GoldenAppleMat(final String name, final int type)
     {
-        super(GOLDED_APPLE.name(), GOLDED_APPLE.getId(), GOLDED_APPLE.getMinecraftId(), name, (short) type, 4, 9.6F);
+        super(GOLDEN_APPLE.name(), GOLDEN_APPLE.getId(), GOLDEN_APPLE.getMinecraftId(), name, (short) type, 4, 9.6F);
     }
 
     protected GoldenAppleMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type, final int foodLevelIncrease, final float saturationIncrease)
@@ -134,7 +134,7 @@ public class GoldenAppleMat extends EdibleItemMat
      */
     public static void register(final GoldenAppleMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 
@@ -154,8 +154,8 @@ public class GoldenAppleMat extends EdibleItemMat
 
     static
     {
-        GoldenAppleMat.register(GOLDED_APPLE);
-        GoldenAppleMat.register(GOLDED_ENCHANTED_APPLE);
+        GoldenAppleMat.register(GOLDEN_APPLE);
+        GoldenAppleMat.register(GOLDEN_ENCHANTED_APPLE);
     }
 }
 

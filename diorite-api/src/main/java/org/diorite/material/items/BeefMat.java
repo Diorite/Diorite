@@ -111,7 +111,7 @@ public class BeefMat extends EdibleItemMat
      */
     public static void register(final BeefMat element)
     {
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 
