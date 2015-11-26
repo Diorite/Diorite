@@ -100,8 +100,15 @@ public final class DioriteUtils
      *
      * @return compacted array of items.
      */
-    public static ItemStack[] compact(final boolean respectStackSize, final ItemStack... items)
+    public static ItemStack[] compact(final boolean respectStackSize, final ItemStack... itemsToCopact)
     {
+        final ItemStack[] items = new ItemStack[itemsToCopact.length];
+        int j = 0;
+        for (final ItemStack itemStack : itemsToCopact)
+        {
+            items[j++] = (itemStack == null) ? null : itemStack.clone();
+        }
+
         for (int i = 0, itemsLength = items.length; i < itemsLength; i++)
         {
             final ItemStack item = items[i];

@@ -59,7 +59,7 @@ public class ShearsMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     protected ShearsMat()
     {
-        super("SHEARS", 359, "minecraft:shears", "NEW", (short) 0x00, new BasicToolData(238));
+        super("SHEARS", 359, "minecraft:shears", "NEW", (short) 0x00, new BasicToolData(237));
     }
 
     protected ShearsMat(final int durability)

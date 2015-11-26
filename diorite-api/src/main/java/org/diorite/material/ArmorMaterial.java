@@ -64,46 +64,46 @@ public class ArmorMaterial extends ASimpleEnum<ArmorMaterial>
         {
             final SimpleEnumMap<ArmorType, ArmorData> properties = new SimpleEnumMap<>(4);
             LEATHER = new ArmorMaterial("LEATHER", Material.LEATHER, 15, properties);
-            properties.put(ArmorType.HELMET, new ArmorData(LEATHER, ArmorType.HELMET, 56, 1));
-            properties.put(ArmorType.CHESTPLATE, new ArmorData(LEATHER, ArmorType.CHESTPLATE, 81, 3));
-            properties.put(ArmorType.LEGGINGS, new ArmorData(LEATHER, ArmorType.LEGGINGS, 76, 2));
-            properties.put(ArmorType.BOOTS, new ArmorData(LEATHER, ArmorType.BOOTS, 66, 1));
+            properties.put(ArmorType.HELMET, new ArmorData(LEATHER, ArmorType.HELMET, 55, 1));
+            properties.put(ArmorType.CHESTPLATE, new ArmorData(LEATHER, ArmorType.CHESTPLATE, 80, 3));
+            properties.put(ArmorType.LEGGINGS, new ArmorData(LEATHER, ArmorType.LEGGINGS, 75, 2));
+            properties.put(ArmorType.BOOTS, new ArmorData(LEATHER, ArmorType.BOOTS, 65, 1));
             ArmorMaterial.register(LEATHER);
         }
         {
             final SimpleEnumMap<ArmorType, ArmorData> properties = new SimpleEnumMap<>(4);
             IRON = new ArmorMaterial("IRON", Material.IRON_INGOT, 9, properties);
-            properties.put(ArmorType.HELMET, new ArmorData(IRON, ArmorType.HELMET, 166, 2));
-            properties.put(ArmorType.CHESTPLATE, new ArmorData(IRON, ArmorType.CHESTPLATE, 241, 6));
-            properties.put(ArmorType.LEGGINGS, new ArmorData(IRON, ArmorType.LEGGINGS, 226, 5));
-            properties.put(ArmorType.BOOTS, new ArmorData(IRON, ArmorType.BOOTS, 196, 2));
+            properties.put(ArmorType.HELMET, new ArmorData(IRON, ArmorType.HELMET, 165, 2));
+            properties.put(ArmorType.CHESTPLATE, new ArmorData(IRON, ArmorType.CHESTPLATE, 240, 6));
+            properties.put(ArmorType.LEGGINGS, new ArmorData(IRON, ArmorType.LEGGINGS, 225, 5));
+            properties.put(ArmorType.BOOTS, new ArmorData(IRON, ArmorType.BOOTS, 195, 2));
             ArmorMaterial.register(IRON);
         }
         {
             final SimpleEnumMap<ArmorType, ArmorData> properties = new SimpleEnumMap<>(4);
             CHAINMAIL = new ArmorMaterial("CHAINMAIL", Material.FIRE, 12, properties);
-            properties.put(ArmorType.HELMET, new ArmorData(CHAINMAIL, ArmorType.HELMET, 166, 2));
-            properties.put(ArmorType.CHESTPLATE, new ArmorData(CHAINMAIL, ArmorType.CHESTPLATE, 241, 5));
-            properties.put(ArmorType.LEGGINGS, new ArmorData(CHAINMAIL, ArmorType.LEGGINGS, 226, 4));
-            properties.put(ArmorType.BOOTS, new ArmorData(CHAINMAIL, ArmorType.BOOTS, 196, 1));
+            properties.put(ArmorType.HELMET, new ArmorData(CHAINMAIL, ArmorType.HELMET, 165, 2));
+            properties.put(ArmorType.CHESTPLATE, new ArmorData(CHAINMAIL, ArmorType.CHESTPLATE, 240, 5));
+            properties.put(ArmorType.LEGGINGS, new ArmorData(CHAINMAIL, ArmorType.LEGGINGS, 225, 4));
+            properties.put(ArmorType.BOOTS, new ArmorData(CHAINMAIL, ArmorType.BOOTS, 195, 1));
             ArmorMaterial.register(CHAINMAIL);
         }
         {
             final SimpleEnumMap<ArmorType, ArmorData> properties = new SimpleEnumMap<>(4);
             GOLD = new ArmorMaterial("GOLD", Material.GOLD_INGOT, 25, properties);
-            properties.put(ArmorType.HELMET, new ArmorData(GOLD, ArmorType.HELMET, 78, 2));
-            properties.put(ArmorType.CHESTPLATE, new ArmorData(GOLD, ArmorType.CHESTPLATE, 113, 5));
-            properties.put(ArmorType.LEGGINGS, new ArmorData(GOLD, ArmorType.LEGGINGS, 106, 3));
-            properties.put(ArmorType.BOOTS, new ArmorData(GOLD, ArmorType.BOOTS, 92, 1));
+            properties.put(ArmorType.HELMET, new ArmorData(GOLD, ArmorType.HELMET, 77, 2));
+            properties.put(ArmorType.CHESTPLATE, new ArmorData(GOLD, ArmorType.CHESTPLATE, 112, 5));
+            properties.put(ArmorType.LEGGINGS, new ArmorData(GOLD, ArmorType.LEGGINGS, 105, 3));
+            properties.put(ArmorType.BOOTS, new ArmorData(GOLD, ArmorType.BOOTS, 91, 1));
             ArmorMaterial.register(GOLD);
         }
         {
             final SimpleEnumMap<ArmorType, ArmorData> properties = new SimpleEnumMap<>(4);
             DIAMOND = new ArmorMaterial("DIAMOND", Material.DIAMOND, 10, properties);
-            properties.put(ArmorType.HELMET, new ArmorData(DIAMOND, ArmorType.HELMET, 364, 3));
-            properties.put(ArmorType.CHESTPLATE, new ArmorData(DIAMOND, ArmorType.CHESTPLATE, 529, 8));
-            properties.put(ArmorType.LEGGINGS, new ArmorData(DIAMOND, ArmorType.LEGGINGS, 496, 6));
-            properties.put(ArmorType.BOOTS, new ArmorData(DIAMOND, ArmorType.BOOTS, 430, 3));
+            properties.put(ArmorType.HELMET, new ArmorData(DIAMOND, ArmorType.HELMET, 363, 3));
+            properties.put(ArmorType.CHESTPLATE, new ArmorData(DIAMOND, ArmorType.CHESTPLATE, 528, 8));
+            properties.put(ArmorType.LEGGINGS, new ArmorData(DIAMOND, ArmorType.LEGGINGS, 495, 6));
+            properties.put(ArmorType.BOOTS, new ArmorData(DIAMOND, ArmorType.BOOTS, 429, 3));
             ArmorMaterial.register(DIAMOND);
         }
     }

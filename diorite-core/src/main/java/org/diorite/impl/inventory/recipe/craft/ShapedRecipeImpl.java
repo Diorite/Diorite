@@ -33,6 +33,7 @@ import org.diorite.entity.Player;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.inventory.recipe.craft.RecipePattern;
 import org.diorite.inventory.recipe.craft.ShapedRecipe;
@@ -47,7 +48,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
 {
     protected final RecipePattern pattern;
 
-    public ShapedRecipeImpl(final RecipePattern pattern, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[][], ItemStack> resultFunc)
+    public ShapedRecipeImpl(final RecipePattern pattern, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(extractResults(result, pattern.getRecipeItems()), priority, vanilla, resultFunc);
         this.pattern = pattern;
@@ -68,7 +69,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
         final RecipePattern pattern = this.pattern;
         final int maxPatRow = pattern.getRows(), maxPatCol = pattern.getColumns();
         final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
-        final ItemStack[][] items = new ItemStack[maxInvRow][maxInvCol];
+        final CraftingGrid items = new CraftingGridImpl(maxInvRow, maxInvCol);
 
         int startPatRow = - 1;
         int startPatCol = - 1;
@@ -131,7 +132,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
         {
             return null;
         }
-        items[startInvRow][startInvCol] = valid;
+        items.setItem(startInvRow, startInvCol, valid);
         ItemStack repl = recipeItem.getReplacement();
         if (repl != null)
         {
@@ -188,7 +189,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
                     {
                         return null;
                     }
-                    items[invRow][invCol] = valid;
+                    items.setItem(invRow, invCol, valid);
                     repl = recipeItem.getReplacement();
                     if (repl != null)
                     {
@@ -212,7 +213,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
             }
             invCol = 0;
         }
-        return new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items), items, onCraft);
+        return new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft);
     }
 
     @Override

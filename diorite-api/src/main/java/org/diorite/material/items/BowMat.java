@@ -59,7 +59,7 @@ public class BowMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     protected BowMat()
     {
-        super("BOW", 261, "minecraft:bow", "NEW", (short) 0x00, new BasicToolData(385));
+        super("BOW", 261, "minecraft:bow", "NEW", (short) 0x00, new BasicToolData(384));
     }
 
     protected BowMat(final int durability)

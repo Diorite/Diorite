@@ -59,7 +59,7 @@ public class FishingRodMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     protected FishingRodMat()
     {
-        super("FISHING_ROD", 346, "minecraft:fishing_rod", "NEW", (short) 0x00, new BasicToolData(65));
+        super("FISHING_ROD", 346, "minecraft:fishing_rod", "NEW", (short) 0x00, new BasicToolData(64));
     }
 
     protected FishingRodMat(final int durability)

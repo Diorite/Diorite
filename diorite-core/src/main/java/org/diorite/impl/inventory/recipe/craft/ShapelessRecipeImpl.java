@@ -37,6 +37,7 @@ import org.diorite.entity.Player;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.inventory.recipe.craft.ShapelessRecipe;
 
@@ -50,7 +51,7 @@ public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
 {
     protected final List<RecipeItem> ingredients;
 
-    public ShapelessRecipeImpl(final List<RecipeItem> ingredients, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[][], ItemStack> resultFunc)
+    public ShapelessRecipeImpl(final List<RecipeItem> ingredients, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(extractResults(result, ingredients), priority, vanilla, resultFunc);
         this.ingredients = new ArrayList<>(ingredients);
@@ -70,11 +71,11 @@ public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
 
         final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
         final LinkedList<RecipeItem> ingredients = new LinkedList<>(this.getIngredients());
-        final ItemStack[][] items = new ItemStack[maxInvRow][maxInvCol];
+        final CraftingGrid items = new CraftingGridImpl(maxInvRow, maxInvCol);
         int col = - 1, row = 0;
         for (short i = 1, size = (short) inventory.size(); i < size; i++)
         {
-            if (++ col > maxInvCol)
+            if (++ col >= maxInvCol)
             {
                 col = 0;
                 if (++ row > maxInvRow)
@@ -99,7 +100,7 @@ public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
                     {
                         onCraft.put(i, repl);
                     }
-                    items[row][col] = valid;
+                    items.setItem(row, col, valid);
                     iterator.remove();
                     matching = true;
                     break;

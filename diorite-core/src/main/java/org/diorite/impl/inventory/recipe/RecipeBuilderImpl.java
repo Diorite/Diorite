@@ -17,6 +17,7 @@ import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeBuilder;
 import org.diorite.inventory.recipe.RecipeItem;
 import org.diorite.inventory.recipe.RecipeItemBuilder;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipePattern;
 import org.diorite.inventory.recipe.craft.ShapedRecipe;
@@ -28,9 +29,9 @@ import gnu.trove.map.hash.TCharObjectHashMap;
 public class RecipeBuilderImpl implements RecipeBuilder
 {
     private ItemStack result;
-    private BiFunction<Player, ItemStack[][], ItemStack> func     = null;
-    private boolean                                    vanilla  = false;
-    private Long                                       priority = null;
+    private BiFunction<Player, CraftingGrid, ItemStack> func     = null;
+    private boolean                                     vanilla  = false;
+    private Long                                        priority = null;
 
     @Override
     public RecipeBuilder result(final ItemStack itemStack)
@@ -40,7 +41,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
     }
 
     @Override
-    public RecipeBuilder result(final BiFunction<Player, ItemStack[][], ItemStack> itemStack)
+    public RecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
     {
         this.func = itemStack;
         return this;
@@ -102,7 +103,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
         }
 
         @Override
-        public ShapelessRecipeBuilder result(final BiFunction<Player, ItemStack[][], ItemStack> itemStack)
+        public ShapelessRecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
         {
             this.oldBuilder.result(itemStack);
             return this;
@@ -212,7 +213,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
         }
 
         @Override
-        public ShapedRecipeBuilder result(final BiFunction<Player, ItemStack[][], ItemStack> itemStack)
+        public ShapedRecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
         {
             this.oldBuilder.result(itemStack);
             return this;

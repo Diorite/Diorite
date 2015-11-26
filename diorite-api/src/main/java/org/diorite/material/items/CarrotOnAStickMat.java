@@ -59,7 +59,7 @@ public class CarrotOnAStickMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     protected CarrotOnAStickMat()
     {
-        super("CARROT_ON_A_STICK", 398, "minecraft:carrot_on_a_stick", "NEW", (short) 0x00, new BasicToolData(26));
+        super("CARROT_ON_A_STICK", 398, "minecraft:carrot_on_a_stick", "NEW", (short) 0x00, new BasicToolData(25));
     }
 
     protected CarrotOnAStickMat(final int durability)

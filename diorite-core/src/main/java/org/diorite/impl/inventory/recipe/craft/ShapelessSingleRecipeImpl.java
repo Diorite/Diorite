@@ -35,6 +35,7 @@ import org.diorite.entity.Player;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.inventory.recipe.craft.ShapelessRecipe;
 
@@ -50,7 +51,7 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
 
     private final transient List<RecipeItem> ingredientList;
 
-    public ShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[][], ItemStack> resultFunc)
+    public ShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(extractResults(result, ingredient), priority, vanilla, resultFunc);
         this.ingredient = ingredient;
@@ -72,7 +73,7 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
 
         boolean matching = false;
         final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
-        final ItemStack[][] result = new ItemStack[maxInvRow][maxInvCol];
+        final CraftingGrid items = new CraftingGridImpl(maxInvRow, maxInvCol);
         int col = - 1, row = 0;
         for (short i = 1, size = (short) inventory.size(); i < size; i++)
         {
@@ -97,7 +98,7 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
                     return null;
                 }
                 matching = true;
-                result[row][col] = valid;
+                items.setItem(row, col, valid);
                 final ItemStack repl = this.ingredient.getReplacement();
                 if (repl != null)
                 {
@@ -107,7 +108,7 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
             }
             return null;
         }
-        return matching ? new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, result), result, onCraft) : null;
+        return matching ? new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft) : null;
     }
 
     @Override

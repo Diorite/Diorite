@@ -59,7 +59,7 @@ public class FlintAndSteelMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     protected FlintAndSteelMat()
     {
-        super("FLINT_AND_STEEL", 259, "minecraft:flint_and_steel", "NEW", (short) 0x00, new BasicToolData(65));
+        super("FLINT_AND_STEEL", 259, "minecraft:flint_and_steel", "NEW", (short) 0x00, new BasicToolData(64));
     }
 
     protected FlintAndSteelMat(final int durability)

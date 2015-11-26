@@ -13,14 +13,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 
 abstract class RecipeImpl extends PriorityRecipeImpl
 {
-    protected final ItemStack                                    result;
-    protected final List<ItemStack>                              resultList;
-    protected final BiFunction<Player, ItemStack[][], ItemStack> resultFunc;
+    protected final ItemStack                                   result;
+    protected final List<ItemStack>                             resultList;
+    protected final BiFunction<Player, CraftingGrid, ItemStack> resultFunc;
 //
-//    protected RecipeImpl(final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[][], ItemStack> resultFunc)
+//    protected RecipeImpl(final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
 //    {
 //        super(priority, vanilla);
 //        Validate.notNull(resultFunc, "Result function can't be null.");
@@ -30,7 +31,7 @@ abstract class RecipeImpl extends PriorityRecipeImpl
 //        this.resultList = Collections.singletonList(result.clone());
 //    }
 
-    protected RecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla, final BiFunction<Player, ItemStack[][], ItemStack> resultFunc)
+    protected RecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(priority, vanilla);
         Validate.notNull(resultFunc, "Result function can't be null.");

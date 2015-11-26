@@ -38,6 +38,7 @@ import org.diorite.inventory.PlayerCraftingInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeManager;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.utils.DioriteUtils;
@@ -99,16 +100,8 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         final TShortCollection possibleBugs;
         if (! this.recipe.getRecipe().isVanilla())
         {
-            final ItemStack[][] itemsToConsume = this.recipe.getItemsToConsume();
-            final ItemStack[] flat = new ItemStack[itemsToConsume.length * itemsToConsume[0].length];
-            {
-                int i = 0;
-                for (final ItemStack[] rowToConsume : itemsToConsume)
-                {
-                    System.arraycopy(rowToConsume, 0, flat, (i++) * rowToConsume.length, rowToConsume.length);
-                }
-            }
-            final ItemStack[] items = DioriteUtils.compact(false, flat);
+            final CraftingGrid itemsToConsume = this.recipe.getItemsToConsume();
+            final ItemStack[] items = DioriteUtils.compact(false, itemsToConsume.getItems());
             possibleBugs = new TShortHashSet(items.length);
             short k = 0;
             short bugSlot;
@@ -221,35 +214,34 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         }
     }
 
-    private void take(final ItemStack[][] gridToTake)
+    private void take(final CraftingGrid gridToTake)
     {
         int row = 0, col = 0;
-        for (final ItemStack[] rowToTake : gridToTake)
+        for (final ItemStack toTake : gridToTake.getItems())
         {
-            for (final ItemStack toTake : rowToTake)
+            final ItemStack eqItem = this.getItem(row, col);
+            boolean skip = false;
+            if (toTake == null)
             {
-                final ItemStack eqItem = this.getItem(row, col);
-                boolean skip = false;
-                if (toTake == null)
+                if (eqItem != null)
                 {
-                    if (eqItem != null)
-                    {
-                        throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
-                    }
-                    skip = true;
+                    throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
                 }
-                if (! skip)
-                {
-                    if ((eqItem == null) || (eqItem.getAmount() < toTake.getAmount()) || ! eqItem.isSimilar(toTake))
-                    {
-                        throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
-                    }
-                    eqItem.setAmount(eqItem.getAmount() - toTake.getAmount());
-                }
-                col++;
+                skip = true;
             }
-            col = 0;
-            row++;
+            if (! skip)
+            {
+                if ((eqItem == null) || (eqItem.getAmount() < toTake.getAmount()) || ! eqItem.isSimilar(toTake))
+                {
+                    throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
+                }
+                eqItem.setAmount(eqItem.getAmount() - toTake.getAmount());
+            }
+            if (++ col >= gridToTake.getColumns())
+            {
+                col = 0;
+                row++;
+            }
         }
     }
 

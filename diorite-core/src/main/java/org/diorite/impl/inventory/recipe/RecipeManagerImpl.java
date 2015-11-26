@@ -1,6 +1,7 @@
 package org.diorite.impl.inventory.recipe;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -9,11 +10,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.chat.ChatColor;
 import org.diorite.inventory.GridInventory;
+import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeBuilder;
 import org.diorite.inventory.recipe.RecipeBuilder.ShapedRecipeBuilder;
 import org.diorite.inventory.recipe.RecipeBuilder.ShapelessRecipeBuilder;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
+import org.diorite.material.BreakableItemMat;
+import org.diorite.material.ItemMaterialData;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.CarpetMat;
 import org.diorite.material.blocks.CobblestoneWallMat;
@@ -433,13 +438,15 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shaped(PlanksMat.PLANKS_DARK_OAK, 4, "l").addIngredient('l').item(LogMat.LOG_DARK_OAK, false).build().buildAndAdd();
         this.shaped(Material.STONE_BUTTON, 1, "s").addIngredient('s').item(Material.STONE, false).build().buildAndAdd();
         this.shaped(Material.WOODEN_BUTTON, 1, "w").addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
+
+        // repair
+
 //        this.shapeless(Material.LEATHER_HELMET, 0).addIngredient().item(DyeMat.DYE_PURPLE, false).build().buildAndAdd(); // TODO
 //        this.shapeless(Material.FIREWORKS, 0).addIngredient().item(Material.GUNPOWDER, false).addIngredient().item(Material.PAPER, false).build().buildAndAdd(); // TODO
 //        this.shapeless(Material.BANNER, 0).addIngredient().item(Material.BANNER, false).build().buildAndAdd(); // TODO
 //        this.shapeless(Material.WRITTEN_BOOK, 0).addIngredient().item(Material.WRITABLE_BOOK, false).build().buildAndAdd(); // TODO
 //        this.shapeless(Material.MAP, 0).addIngredient().item(Material.MAP, false).build().buildAndAdd(); // TODO
         this.shapeless(DyeMat.DYE_MAGENTA, 4).addIngredient().item(DyeMat.DYE_LAPIS_LAZULI, false).addIngredient().item(DyeMat.DYE_RED, false).addIngredient().item(DyeMat.DYE_RED, false).addIngredient().item(DyeMat.DYE_BONE_MEAL, false).build().buildAndAdd();
-        this.shapeless(Material.LEATHER_HELMET, 1).addIngredient().item(Material.LEATHER_HELMET, false).build().buildAndAdd();
         this.shapeless(Material.BOOK, 1).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.LEATHER, false).build().buildAndAdd();
         this.shapeless(Material.MUSHROOM_STEW, 1).addIngredient().item(Material.BROWN_MUSHROOM, false).addIngredient().item(Material.RED_MUSHROOM, false).addIngredient().item(Material.BOWL, false).build().buildAndAdd();
         this.shapeless(Material.PUMPKIN_PIE, 1).addIngredient().item(Material.PUMPKIN, false).addIngredient().item(Material.SUGAR, false).addIngredient().item(Material.EGG, false).build().buildAndAdd();
@@ -498,6 +505,51 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shapeless(DyeMat.DYE_MAGENTA, 2).addIngredient().item(DoubleFlowersMat.DOUBLE_FLOWERS_LILAC, false).build().buildAndAdd();
         this.shapeless(DyeMat.DYE_RED, 2).addIngredient().item(DoubleFlowersMat.DOUBLE_FLOWERS_ROSE_BUSH, false).build().buildAndAdd();
         this.shapeless(DyeMat.DYE_PINK, 2).addIngredient().item(DoubleFlowersMat.DOUBLE_FLOWERS_PEONY, false).build().buildAndAdd();
+
+        this.repair(Material.WOODEN_PICKAXE, Material.WOODEN_AXE, Material.WOODEN_SHOVEL, Material.WOODEN_HOE, Material.WOODEN_SWORD);
+        this.repair(Material.STONE_PICKAXE, Material.STONE_AXE, Material.STONE_SHOVEL, Material.STONE_HOE, Material.STONE_SWORD);
+        this.repair(Material.IRON_PICKAXE, Material.IRON_AXE, Material.IRON_SHOVEL, Material.IRON_HOE, Material.IRON_SWORD);
+        this.repair(Material.GOLDEN_PICKAXE, Material.GOLDEN_AXE, Material.GOLDEN_SHOVEL, Material.GOLDEN_HOE, Material.GOLDEN_SWORD);
+        this.repair(Material.DIAMOND_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_SHOVEL, Material.DIAMOND_HOE, Material.DIAMOND_SWORD);
+
+        this.repair(Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS);
+        this.repair(Material.IRON_HELMET, Material.IRON_CHESTPLATE, Material.IRON_LEGGINGS, Material.IRON_BOOTS);
+        this.repair(Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS);
+        this.repair(Material.GOLD_HELMET, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS);
+        this.repair(Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends ItemMaterialData & BreakableItemMat> void repair(final T... mat)
+    {
+        for (final T t : mat)
+        {
+            this.repair(t).buildAndAdd();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends ItemMaterialData & BreakableItemMat> ShapelessRecipeBuilder repair(final T mat)
+    {
+        return this.shapeless(mat, 1).addIngredient().item(mat, true).addIngredient().item(mat, true).build().result(grid -> {
+            final List<ItemStack> items = grid.getItemsList();
+            if (items.size() != 2)
+            {
+                throw new IllegalStateException("Unexcepted items size in repair recipe! " + items);
+            }
+            final Material temp = items.get(0).getMaterial();
+            final Material temp2 = items.get(1).getMaterial();
+            if (! (temp instanceof ItemMaterialData) || ! (temp instanceof BreakableItemMat) || ! (temp2 instanceof ItemMaterialData) || ! (temp2 instanceof BreakableItemMat))
+            {
+                throw new IllegalStateException("Repair recipe with unrepairable items.");
+            }
+            final T itemMat = (T) temp;
+            final T itemMat2 = (T) temp2;
+            // min( Item A uses + Item B uses + floor(Max uses / 20), Max uses)
+            // TODO maybe add way to configure that too (at least from API side without overriding whole recipe)
+            final int newDurability = Math.min(itemMat.getLeftUses() + itemMat2.getLeftUses() + (itemMat.getBaseDurability() / 20), itemMat.getBaseDurability());
+            return new BaseItemStack((Material) itemMat.setLeftUses(newDurability), 1);
+        });
     }
 
     private ShapedRecipeBuilder shaped(final Material resultMat, final int resultAmount, final String... pattern)
@@ -509,7 +561,6 @@ public class RecipeManagerImpl implements IRecipeManager
     {
         return this.builder().priority(getPriority()).vanilla(true).result(resultMat, resultAmount).shapeless();
     }
-
 
     @Override
     public String toString()

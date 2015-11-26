@@ -83,6 +83,16 @@ public interface BreakableItemMat
     BreakableItemMat increaseDurability();
 
     /**
+     * Returns this same as {@link #decreaseDurability()}
+     *
+     * @return this same as {@link #decreaseDurability()}
+     */
+    default BreakableItemMat increaseLeftUses()
+    {
+        return this.decreaseDurability();
+    }
+
+    /**
      * Returns this same material but with decreased durability level. <br>
      * In Minecraft durability equals to 0 means full, so this will return
      * less broken material type than current one. <br>
@@ -96,6 +106,16 @@ public interface BreakableItemMat
     BreakableItemMat decreaseDurability();
 
     /**
+     * Returns this same as {@link #increaseDurability()} ()}
+     *
+     * @return this same as {@link #increaseDurability()} ()}
+     */
+    default BreakableItemMat decreaseLeftUses()
+    {
+        return this.increaseDurability();
+    }
+
+    /**
      * Get sub-type of item with given durability. <br>
      * Implementation should cache results. (at least in real-values range)
      *
@@ -104,4 +124,16 @@ public interface BreakableItemMat
      * @return sub-type of item with given durability.
      */
     BreakableItemMat setDurability(int durability);
+
+    /**
+     * This same as {@link #setDurability(int)} for BaseDurability-leftUses.
+     *
+     * @param leftUses new left uses of item.
+     *
+     * @return sub-type of item with given left usages.
+     */
+    default BreakableItemMat setLeftUses(final int leftUses)
+    {
+        return this.setDurability(this.getBaseDurability() - leftUses);
+    }
 }
