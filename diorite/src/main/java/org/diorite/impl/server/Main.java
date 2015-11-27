@@ -31,6 +31,7 @@ import java.net.UnknownHostException;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.server.connection.ServerConnection;
+import org.diorite.impl.world.WorldsManagerImpl;
 import org.diorite.impl.world.generator.FlatWorldGeneratorImpl;
 import org.diorite.impl.world.generator.TestWorldGeneratorImpl;
 import org.diorite.impl.world.generator.VoidWorldGeneratorImpl;
@@ -75,9 +76,10 @@ public final class Main
             WorldGenerators.registerGenerator(TestWorldGeneratorImpl.createInitializer());
         });
         DioriteCore.getStartPipeline().addAfter("DioriteCore|DefaultGenerators", "DioriteCore|LoadWorlds", (s, p, options) -> {
-            System.out.println("Loading worlds...");
-            s.getWorldsManager().init(s.getConfig(), s.getConfig().getWorlds().getWorldsDir());
-            System.out.println("Worlds loaded.");
+            final WorldsManagerImpl wm = s.getWorldsManager();
+            wm.getLogger().info("Loading worlds...");
+            wm.init(s.getConfig(), s.getConfig().getWorlds().getWorldsDir());
+            wm.getLogger().info("Worlds loaded.");
         });
 
         final OptionSet options = CoreMain.main(args, false, null);

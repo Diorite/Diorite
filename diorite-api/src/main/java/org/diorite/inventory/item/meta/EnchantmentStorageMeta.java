@@ -99,7 +99,7 @@ public interface EnchantmentStorageMeta extends ItemMeta
     /**
      * Stores the specified enchantment in this item meta.
      *
-     * @param ench                   EnchantmentType to store
+     * @param enchantment            EnchantmentType to store
      * @param level                  Level for the enchantment
      * @param ignoreLevelRestriction this indicates the enchantment should be
      *                               applied, ignoring the level limit

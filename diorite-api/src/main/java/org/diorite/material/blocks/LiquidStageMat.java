@@ -49,7 +49,6 @@ public enum LiquidStageMat
     STAGE_6_FALLING(STAGE_6.dataValue | LiquidMat.FALLING_FLAG),
     STAGE_7_FALLING(STAGE_7.dataValue | LiquidMat.FALLING_FLAG);
 
-    @SuppressWarnings("MagicNumber")
     private static final TByteObjectMap<LiquidStageMat> byID = new TByteObjectHashMap<>(16);
 
     private final byte dataValue;

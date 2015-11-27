@@ -273,7 +273,7 @@ public class DioritePermissionsManager implements PermissionsManager
             return;
         }
         Diorite.getOnlinePlayers().stream().map(Player::getPermissionsContainer).forEach(p -> {
-            GroupEntry entry = p.removeGroup(oldGroup);
+            final GroupEntry entry = p.removeGroup(oldGroup);
             if (entry != null)
             {
                 p.addGroup(new GroupEntry(group, entry.getPriotity()));

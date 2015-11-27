@@ -27,7 +27,6 @@ package org.diorite.material;
 /**
  * Enum with possible rotate axis.
  */
-@SuppressWarnings("MagicNumber")
 public enum RotateAxisMat
 {
     /**

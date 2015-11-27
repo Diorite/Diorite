@@ -32,7 +32,6 @@ import gnu.trove.map.hash.TObjectLongHashMap;
  * Small utility class useful when we have something to log, that can be invoked very often and we don't want make spam in output. <br>
  * Like log it only once per few minutes.
  */
-@SuppressWarnings("MagicNumber")
 public final class SpammyError
 {
     private static final TObjectLongHashMap<Object> errors = new TObjectLongHashMap<>(10, 0.1f, 0);

@@ -84,7 +84,7 @@ public class SenderTabCompleteEvent extends SenderEvent
      * if tab complete isn't for command, it will return null. <br>
      * this will be null at the beginning, and should be set to some command
      * instance before end of pipeline.
-     * <p>
+     * <br>
      * By default diorite will set that on first pipeline handler.
      *
      * @return command to use.

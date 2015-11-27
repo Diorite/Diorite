@@ -35,7 +35,7 @@ import org.diorite.world.World;
 
 /**
  * From Bukkit project.
- * <p>
+ * <br>
  * Represents a mutable vector. Because the components of Vectors are mutable,
  * storing Vectors long term may be dangerous if passing code modifies the
  * Vector later. If you want to keep around a Vector, it may be wise to call
@@ -394,7 +394,7 @@ public class Vector implements Cloneable, Serializable
 
     /**
      * Returns whether this vector is in an axis-aligned bounding box.
-     * <p>
+     * <br>
      * The minimum and maximum vectors given must be truly the minimum and
      * maximum X, Y and Z components.
      *
@@ -603,7 +603,7 @@ public class Vector implements Cloneable, Serializable
 
     /**
      * Checks to see if two objects are equal.
-     * <p>
+     * <br>
      * Only two Vectors can ever return true. This method uses a fuzzy match
      * to account for floating point errors. The epsilon can be retrieved
      * with epsilon.

@@ -101,16 +101,15 @@ public abstract class Scheduler
 
     /**
      * Check if the task currently running.
-     * <p>
+     * <br>
      * A repeating task might not be running currently, but will be running in
      * the future. A task that has finished, and does not repeat, will not be
      * running ever again.
-     * <p>
+     * <br>
      * Explicitly, a task is running if there exists a thread for it, and that
      * thread is alive.
      *
      * @param taskId The task to check.
-     *               <p>
      *
      * @return If the task is currently running.
      */
@@ -118,13 +117,12 @@ public abstract class Scheduler
 
     /**
      * Check if the task queued to be run later.
-     * <p>
+     * <br>
      * If a repeating task is currently running, it might not be queued now
      * but could be in the future. A task that is not queued, and not running,
      * will not be queued again.
      *
      * @param taskId The task to check.
-     *               <p>
      *
      * @return If the task is queued to be run.
      */
@@ -132,7 +130,7 @@ public abstract class Scheduler
 
     /**
      * Returns a list of all active workers.
-     * <p>
+     * <br>
      * This list contains asynch tasks that are being executed by separate
      * threads.
      *

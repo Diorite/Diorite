@@ -99,7 +99,6 @@ import org.diorite.impl.world.tick.TickGroups;
 import org.diorite.Core;
 import org.diorite.Diorite;
 import org.diorite.ItemFactory;
-import org.diorite.ServerManager;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
@@ -301,7 +300,7 @@ public class DioriteCore implements Core
     protected DioriteConfigImpl        config;
     protected PluginManager            pluginManager;
     protected TimingsManager           timings;
-    protected ServerManager            serverManager;
+    protected IServerManager           serverManager;
     protected                    KeyPair keyPair     = MinecraftEncryption.generateKeyPair();
     protected transient volatile boolean isRunning   = true;
     protected transient volatile boolean hasStopped  = false;
@@ -919,12 +918,12 @@ public class DioriteCore implements Core
     }
 
     @Override
-    public ServerManager getServerManager()
+    public IServerManager getServerManager()
     {
         return this.serverManager;
     }
 
-    public void setServerManager(final ServerManager serverManager)
+    public void setServerManager(final IServerManager serverManager)
     {
         this.serverManager = serverManager;
     }
@@ -1132,6 +1131,7 @@ public class DioriteCore implements Core
             s.playersManager = new PlayersManagerImpl(s);
             s.worldsManager = new WorldsManagerImpl();
         });
+        initPipeline.addLast("DioriteCore|initRecipes", (s, p, d) -> s.serverManager.getRecipeManager().addDefaultRecipes());
         initPipeline.addLast("DioriteCore|initTimings", (s, p, d) -> s.timings = new TimingsManagerImpl());
 
         startPipeline = new CoreStartPipeline();

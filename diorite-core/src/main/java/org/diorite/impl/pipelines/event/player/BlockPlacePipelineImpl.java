@@ -49,7 +49,7 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
                 return;
             }
 
-            if (!(item.getMaterial() instanceof BlockMaterialData)) // TODO check if material can be placed
+            if (! (item.getMaterial() instanceof BlockMaterialData)) // TODO check if material can be placed
             {
                 return;
             }

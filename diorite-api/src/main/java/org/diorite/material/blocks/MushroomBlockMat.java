@@ -94,7 +94,6 @@ public abstract class MushroomBlockMat extends BlockMaterialData implements Fuel
     /**
      * Enum with all usable mushroom block texture types.
      */
-    @SuppressWarnings("MagicNumber")
     public enum Type
     {
         /**

@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * Used to define default value of custom object type.
  * Object is read using String path to static non-arg method
  * that should return default value.
- * <p>
+ * <br>
  * Additionally you can use few placeholders:
  * {@literal {emptyMap} -> new HashMap<>(1);}
  * {@literal {emptyList} -> new ArrayList<>(1);}
@@ -47,7 +47,7 @@ public @interface CfgDelegateDefault
      * String should be a path to default value, like package.Class#getDefaultValue
      * Mehod must be static and no-args, you can skip class with method is in this same
      * class as field that will use this default value.
-     * <p>
+     * <br>
      * Additionally you can use few placeholders:
      * {@literal {emptyMap} -> new HashMap<>(1);}
      * {@literal {emptyList} -> new ArrayList<>(1);}

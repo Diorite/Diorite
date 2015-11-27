@@ -65,7 +65,6 @@ public class ThreadPlayerLookupUUID extends Thread
                 return;
             }
             final KeyPair serverKeyPair = this.getServer().getKeyPair();
-            //noinspection MagicNumber
             final String hash = new BigInteger(MinecraftEncryption.combineKeys(this.loginListener.getServerID(), serverKeyPair.getPublic(), this.loginListener.getSecretKey())).toString(16);
             final GameProfileImpl newProfile = this.getServer().getSessionService().hasJoinedServer(oldProfile, hash);
             this.loginListener.setGameProfile(newProfile);

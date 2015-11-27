@@ -125,7 +125,7 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     protected          float             velX;
     protected          float             velY;
     protected          float             velZ;
-    protected          EntityMetadata    metadata;
+    protected final    EntityMetadata    metadata;
     protected          BaseTracker<?>    tracker;
 
     protected boolean aiEnabled = true; // don't do any actions if AI is disabled

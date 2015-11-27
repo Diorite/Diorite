@@ -27,6 +27,8 @@ package org.diorite.firework;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.Color;
 
@@ -219,5 +221,11 @@ public class FireworkEffectBuilder
     public FireworkEffect build()
     {
         return new FireworkEffect(this.flicker, this.trail, this.colors.build(), this.fadeColors.build(), this.type);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("flicker", this.flicker).append("trail", this.trail).append("colors", this.colors).append("fadeColors", this.fadeColors).append("type", this.type).toString();
     }
 }

@@ -135,19 +135,19 @@ public class PistonStickyMat extends PistonBaseMat
      */
     public static final int USED_DATA_VALUES = 12;
 
-    public static final PistonStickyMat STICKY_PISTON_DOWN  = new PistonStickyMat();
-    public static final PistonStickyMat STICKY_PISTON_UP    = new PistonStickyMat(BlockFace.UP, false);
-    public static final PistonStickyMat STICKY_PISTON_NORTH = new PistonStickyMat(BlockFace.NORTH, false);
-    public static final PistonStickyMat STICKY_PISTON_SOUTH = new PistonStickyMat(BlockFace.SOUTH, false);
-    public static final PistonStickyMat STICKY_PISTON_WEST  = new PistonStickyMat(BlockFace.WEST, false);
-    public static final PistonStickyMat STICKY_PISTON_EAST  = new PistonStickyMat(BlockFace.EAST, false);
+    public static final PistonStickyMat PISTON_STICKY_DOWN  = new PistonStickyMat();
+    public static final PistonStickyMat PISTON_STICKY_UP    = new PistonStickyMat(BlockFace.UP, false);
+    public static final PistonStickyMat PISTON_STICKY_NORTH = new PistonStickyMat(BlockFace.NORTH, false);
+    public static final PistonStickyMat PISTON_STICKY_SOUTH = new PistonStickyMat(BlockFace.SOUTH, false);
+    public static final PistonStickyMat PISTON_STICKY_WEST  = new PistonStickyMat(BlockFace.WEST, false);
+    public static final PistonStickyMat PISTON_STICKY_EAST  = new PistonStickyMat(BlockFace.EAST, false);
 
-    public static final PistonStickyMat STICKY_PISTON_DOWN_EXTENDED  = new PistonStickyMat(BlockFace.DOWN, true);
-    public static final PistonStickyMat STICKY_PISTON_UP_EXTENDED    = new PistonStickyMat(BlockFace.UP, true);
-    public static final PistonStickyMat STICKY_PISTON_NORTH_EXTENDED = new PistonStickyMat(BlockFace.NORTH, true);
-    public static final PistonStickyMat STICKY_PISTON_SOUTH_EXTENDED = new PistonStickyMat(BlockFace.SOUTH, true);
-    public static final PistonStickyMat STICKY_PISTON_WEST_EXTENDED  = new PistonStickyMat(BlockFace.WEST, true);
-    public static final PistonStickyMat STICKY_PISTON_EAST_EXTENDED  = new PistonStickyMat(BlockFace.EAST, true);
+    public static final PistonStickyMat PISTON_STICKY_DOWN_EXTENDED  = new PistonStickyMat(BlockFace.DOWN, true);
+    public static final PistonStickyMat PISTON_STICKY_UP_EXTENDED    = new PistonStickyMat(BlockFace.UP, true);
+    public static final PistonStickyMat PISTON_STICKY_NORTH_EXTENDED = new PistonStickyMat(BlockFace.NORTH, true);
+    public static final PistonStickyMat PISTON_STICKY_SOUTH_EXTENDED = new PistonStickyMat(BlockFace.SOUTH, true);
+    public static final PistonStickyMat PISTON_STICKY_WEST_EXTENDED  = new PistonStickyMat(BlockFace.WEST, true);
+    public static final PistonStickyMat PISTON_STICKY_EAST_EXTENDED  = new PistonStickyMat(BlockFace.EAST, true);
 
     private static final Map<String, PistonStickyMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
     private static final TByteObjectMap<PistonStickyMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
@@ -155,12 +155,12 @@ public class PistonStickyMat extends PistonBaseMat
     @SuppressWarnings("MagicNumber")
     public PistonStickyMat()
     {
-        super("STICKY_PISTON", 29, "minecraft:sticky_piston", BlockFace.DOWN, false, 0.5f, 2.5f);
+        super("PISTON_STICKY", 29, "minecraft:sticky_piston", BlockFace.DOWN, false, 0.5f, 2.5f);
     }
 
     public PistonStickyMat(final BlockFace face, final boolean extended)
     {
-        super(STICKY_PISTON_DOWN.name(), STICKY_PISTON_DOWN.ordinal(), STICKY_PISTON_DOWN.getMinecraftId(), face, extended, STICKY_PISTON_DOWN.getHardness(), STICKY_PISTON_DOWN.getBlastResistance());
+        super(PISTON_STICKY_DOWN.name(), PISTON_STICKY_DOWN.ordinal(), PISTON_STICKY_DOWN.getMinecraftId(), face, extended, PISTON_STICKY_DOWN.getHardness(), PISTON_STICKY_DOWN.getBlastResistance());
     }
 
     public PistonStickyMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final byte type, final BlockFace facing, final boolean extended, final float hardness, final float blastResistance)
@@ -272,17 +272,17 @@ public class PistonStickyMat extends PistonBaseMat
 
     static
     {
-        PistonStickyMat.register(STICKY_PISTON_DOWN);
-        PistonStickyMat.register(STICKY_PISTON_UP);
-        PistonStickyMat.register(STICKY_PISTON_NORTH);
-        PistonStickyMat.register(STICKY_PISTON_SOUTH);
-        PistonStickyMat.register(STICKY_PISTON_WEST);
-        PistonStickyMat.register(STICKY_PISTON_EAST);
-        PistonStickyMat.register(STICKY_PISTON_DOWN_EXTENDED);
-        PistonStickyMat.register(STICKY_PISTON_UP_EXTENDED);
-        PistonStickyMat.register(STICKY_PISTON_NORTH_EXTENDED);
-        PistonStickyMat.register(STICKY_PISTON_SOUTH_EXTENDED);
-        PistonStickyMat.register(STICKY_PISTON_WEST_EXTENDED);
-        PistonStickyMat.register(STICKY_PISTON_EAST_EXTENDED);
+        PistonStickyMat.register(PISTON_STICKY_DOWN);
+        PistonStickyMat.register(PISTON_STICKY_UP);
+        PistonStickyMat.register(PISTON_STICKY_NORTH);
+        PistonStickyMat.register(PISTON_STICKY_SOUTH);
+        PistonStickyMat.register(PISTON_STICKY_WEST);
+        PistonStickyMat.register(PISTON_STICKY_EAST);
+        PistonStickyMat.register(PISTON_STICKY_DOWN_EXTENDED);
+        PistonStickyMat.register(PISTON_STICKY_UP_EXTENDED);
+        PistonStickyMat.register(PISTON_STICKY_NORTH_EXTENDED);
+        PistonStickyMat.register(PISTON_STICKY_SOUTH_EXTENDED);
+        PistonStickyMat.register(PISTON_STICKY_WEST_EXTENDED);
+        PistonStickyMat.register(PISTON_STICKY_EAST_EXTENDED);
     }
 }

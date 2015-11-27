@@ -230,7 +230,7 @@ public class AtomicShortArray implements Serializable
 
     /**
      * Gets an array containing all the values in the array. The returned values are not guaranteed to be from the same time instant.
-     * <p>
+     * <br>
      * If an array is provided and it is the correct length, then that array will be used as the destination array.
      *
      * @param array the provided array
@@ -371,7 +371,7 @@ public class AtomicShortArray implements Serializable
 
     /**
      * Gets an array containing all the values in the array.
-     * <p>
+     * <br>
      * The returned values are not guaranteed to be from the same time instant.
      *
      * @return the array
@@ -383,7 +383,7 @@ public class AtomicShortArray implements Serializable
 
     /**
      * Returns a string representation of the array.
-     * <p>
+     * <br>
      * The returned values are not guaranteed to be from the same time instant.
      *
      * @return the String

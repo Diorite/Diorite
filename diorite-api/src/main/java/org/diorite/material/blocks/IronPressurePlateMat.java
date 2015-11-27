@@ -174,15 +174,10 @@ public class IronPressurePlateMat extends WeightedPressurePlateMat
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_8  = new IronPressurePlateMat(0x8);
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_9  = new IronPressurePlateMat(0x9);
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_10 = new IronPressurePlateMat(0xA);
-    @SuppressWarnings("MagicNumber")
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_11 = new IronPressurePlateMat(0xB);
-    @SuppressWarnings("MagicNumber")
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_12 = new IronPressurePlateMat(0xC);
-    @SuppressWarnings("MagicNumber")
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_13 = new IronPressurePlateMat(0xD);
-    @SuppressWarnings("MagicNumber")
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_14 = new IronPressurePlateMat(0xE);
-    @SuppressWarnings("MagicNumber")
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_15 = new IronPressurePlateMat(0xF);
 
     private static final Map<String, IronPressurePlateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

@@ -49,6 +49,14 @@ public interface GridInventory extends Inventory
      */
     int getRows();
 
+    /**
+     * Returns slot index for given row/column.
+     *
+     * @param row    row of slot.
+     * @param column column of slot.
+     *
+     * @return slot index for given row/column.
+     */
     default int getSlotIndex(final int row, final int column)
     {
         if ((column >= this.getColumns()) || (row >= this.getRows()))

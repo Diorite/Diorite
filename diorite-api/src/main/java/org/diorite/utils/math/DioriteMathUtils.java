@@ -118,7 +118,7 @@ public final class DioriteMathUtils
      * {@code LXXX -> 80}<br>
      * {@code MCMX -> 1910}<br>
      * {@code MCMIII -> 1903}<br>
-     * <p>
+     * <br>
      * It can also convert not really valid numbers, like:
      * {@code IIIIIX -> 5}<br>
      * {@code MDCCCCX -> 1910}<br>
@@ -723,7 +723,7 @@ public final class DioriteMathUtils
 
     /**
      * count 1 bits in nubmer.
-     * <p>
+     * <br>
      * {@literal 10: 1010 -> 2}<br>
      * {@literal 2: 10 -> 1}<br>
      * {@literal 56: 111000 -> 3}<br>
@@ -747,7 +747,7 @@ public final class DioriteMathUtils
 
     /**
      * count 1 bits in nubmer.
-     * <p>
+     * <br>
      * {@literal 10: 1010 -> 2}<br>
      * {@literal 2: 10 -> 1}<br>
      * {@literal 56: 111000 -> 3}<br>
@@ -771,7 +771,7 @@ public final class DioriteMathUtils
 
     /**
      * count 1 bits in nubmer.
-     * <p>
+     * <br>
      * {@literal 10: 1010 -> 2}<br>
      * {@literal 2: 10 -> 1}<br>
      * {@literal 56: 111000 -> 3}<br>
@@ -795,7 +795,7 @@ public final class DioriteMathUtils
 
     /**
      * count 1 bits in nubmer.
-     * <p>
+     * <br>
      * {@literal 10: 1010 -> 2}<br>
      * {@literal 2: 10 -> 1}<br>
      * {@literal 56: 111000 -> 3}<br>
@@ -819,7 +819,7 @@ public final class DioriteMathUtils
 
     /**
      * count 1 bits in nubmer.
-     * <p>
+     * <br>
      * {@literal 10: 1010 -> 2}<br>
      * {@literal 2: 10 -> 1}<br>
      * {@literal 56: 111000 -> 3}<br>

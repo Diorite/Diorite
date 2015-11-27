@@ -127,7 +127,7 @@ public abstract class Slot
      * amount if only part of item can be inserted. (returned itemstack is
      * item stack that can be inserted). Like Beacon block, only one item
      * from item stack can be inserted. <br>
-     * <p>
+     * <br>
      * WARNING: it will not check if there is space in this slot, it only
      * check if this slot can hold this type of item.
      *

@@ -24,9 +24,14 @@
 
 package org.diorite.inventory.recipe;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.function.BiPredicate;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 
 /**
@@ -37,40 +42,51 @@ public class SimpleRecipeItem implements RecipeItem
     /**
      * Pattern item of this recipe.
      */
-    protected final ItemStack item;
-    protected final boolean   ignoreData;
-
+    protected final ItemStack                                  item;
     /**
-     * Construct new recipe item with given item as pattern.
-     *
-     * @param item pattern item.
+     * If pattern should ignore material sub-type.
      */
-    public SimpleRecipeItem(final ItemStack item)
-    {
-        this(item, false);
-    }
+    protected final boolean                                    ignoreData;
+    /**
+     * Validators if this recipe item, allowing to check more item data. <br>
+     * Player may be null when using.
+     */
+    protected final Collection<BiPredicate<Player, ItemStack>> validators;
 
     /**
      * Construct new recipe item with given item as pattern.
      *
      * @param item       pattern item.
      * @param ignoreData if pattern item should ignore subtype of material
+     * @param validators validators of thic recipe item, allowing to check additional data of item. Player may be null.
      */
-    public SimpleRecipeItem(final ItemStack item, final boolean ignoreData)
+    public SimpleRecipeItem(final ItemStack item, final boolean ignoreData, final Collection<BiPredicate<Player, ItemStack>> validators)
     {
         this.item = item.clone();
         this.ignoreData = ignoreData;
+        this.validators = (validators == null) ? null : new ArrayList<>(validators);
     }
 
     @Override
-    public boolean isValid(final ItemStack item)
+    public ItemStack isValid(final Player player, final ItemStack item)
     {
         if (item == null)
         {
-            return false;
+            return null;
         }
-        // TODO check other data
-        return (this.ignoreData ? this.item.getMaterial().isThisSameID(item.getMaterial()) : this.item.getMaterial().equals(item.getMaterial())) && (this.item.getAmount() <= item.getAmount());
+        // TODO check other data?
+        final boolean valid = (this.ignoreData ? this.item.getMaterial().isThisSameID(item.getMaterial()) : this.item.getMaterial().equals(item.getMaterial())) && (this.item.getAmount() <= item.getAmount());
+        if (! valid)
+        {
+            return null;
+        }
+        if ((this.validators != null) && ! this.validators.stream().allMatch(f -> f.test(player, item)))
+        {
+            return null;
+        }
+        final ItemStack is = item.clone();
+        is.setAmount(this.item.getAmount());
+        return is;
     }
 
     @Override

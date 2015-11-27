@@ -30,7 +30,7 @@ import org.diorite.world.chunk.Chunk;
 
 /**
  * {@link EventPipeline} using {@link ChunkPopulateEvent} as type.
- * <p>
+ * <br>
  * Default handlers are: <br>
  * {@link org.diorite.event.EventPriority#LOWEST} <br>
  * <b>Diorite|Pop</b> {@literal ->} default chunk populate {@link Chunk#populate()}. <br>

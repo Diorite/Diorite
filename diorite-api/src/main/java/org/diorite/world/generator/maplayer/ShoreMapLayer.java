@@ -35,7 +35,6 @@ import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 
-@SuppressWarnings("MagicNumber")
 public class ShoreMapLayer extends MapLayer
 {
     protected static final TIntSet    OCEANS         = new TIntHashSet(2);

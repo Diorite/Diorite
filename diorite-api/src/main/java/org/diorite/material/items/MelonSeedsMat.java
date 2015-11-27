@@ -114,7 +114,7 @@ public class MelonSeedsMat extends ItemMaterialData implements PlaceableMat
     public static void register(final MelonSeedsMat element)
     {
         allItems.incrementAndGet();
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

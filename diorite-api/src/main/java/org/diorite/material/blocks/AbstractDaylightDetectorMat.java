@@ -40,7 +40,6 @@ public abstract class AbstractDaylightDetectorMat extends BlockMaterialData impl
     /**
      * Power range of day light detector, from 0 to 15.
      */
-    @SuppressWarnings("MagicNumber")
     public static final ByteRange POWER_RANGE = new ByteRange(0, 15);
 
     /**

@@ -59,7 +59,7 @@ public class BowMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     public BowMat()
     {
-        super("BOW", 261, "minecraft:bow", "NEW", (short) 0x00, new BasicToolData(385));
+        super("BOW", 261, "minecraft:bow", "NEW", (short) 0x00, new BasicToolData(384));
     }
 
     public BowMat(final int durability)
@@ -179,7 +179,7 @@ public class BowMat extends BasicToolMat
     public static void register(final BowMat element)
     {
         allItems.incrementAndGet();
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

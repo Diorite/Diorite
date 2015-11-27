@@ -31,9 +31,9 @@ import org.diorite.world.World;
 
 /**
  * Generates simplex-based noise.
- * <p>
+ * <br>
  * From Bukkit project https://github.com/Bukkit/Bukkit
- * <p>
+ * <br>
  * Source:
  * Stefan Gustavson at
  * <a href="http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf">

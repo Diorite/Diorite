@@ -106,7 +106,7 @@ public class Record11Mat extends RecordMat
     public static void register(final Record11Mat element)
     {
         allItems.incrementAndGet();
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -176,7 +176,7 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
     public static final WoolMat WOOL_LIME       = new WoolMat(DyeColor.LIME);
     public static final WoolMat WOOL_PINK       = new WoolMat(DyeColor.PINK);
     public static final WoolMat WOOL_GRAY       = new WoolMat(DyeColor.GRAY);
-    public static final WoolMat WOOL_SILVER     = new WoolMat(DyeColor.LIGHT_GRAY);
+    public static final WoolMat WOOL_LIGHT_GRAY = new WoolMat(DyeColor.LIGHT_GRAY);
     public static final WoolMat WOOL_CYAN       = new WoolMat(DyeColor.CYAN);
     public static final WoolMat WOOL_PURPLE     = new WoolMat(DyeColor.PURPLE);
     public static final WoolMat WOOL_BLUE       = new WoolMat(DyeColor.BLUE);
@@ -314,7 +314,7 @@ public class WoolMat extends BlockMaterialData implements ColorableMat
         WoolMat.register(WOOL_LIME);
         WoolMat.register(WOOL_PINK);
         WoolMat.register(WOOL_GRAY);
-        WoolMat.register(WOOL_SILVER);
+        WoolMat.register(WOOL_LIGHT_GRAY);
         WoolMat.register(WOOL_CYAN);
         WoolMat.register(WOOL_PURPLE);
         WoolMat.register(WOOL_BLUE);

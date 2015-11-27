@@ -54,7 +54,7 @@ public class NbtTagCompound extends NbtAbstractTag implements NbtNamedTagContain
      * @param name   name of this tag.
      * @param map    map of tags.
      */
-    protected NbtTagCompound(Void unused, final String name, Map<String, NbtTag> map)
+    protected NbtTagCompound(final Void unused, final String name, final Map<String, NbtTag> map)
     {
         super(name);
         this.tags = map;

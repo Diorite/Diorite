@@ -65,7 +65,6 @@ public class ChunkImpl implements Chunk
     protected byte[]          biomes;
     protected ChunkPartImpl[] chunkParts; // size of 16, parts can be null
 
-    @SuppressWarnings("MagicNumber")
     protected final TLongObjectMap<TileEntityImpl> tileEntities = new TLongObjectHashMap<>(1, .2f, Long.MAX_VALUE);
     protected final Set<EntityImpl>                entities     = new ConcurrentSet<>(4, .3f, 2);
 

@@ -176,7 +176,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_LIME       = new StainedHardenedClayMat(DyeColor.LIME);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_PINK       = new StainedHardenedClayMat(DyeColor.PINK);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_GRAY       = new StainedHardenedClayMat(DyeColor.GRAY);
-    public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_SILVER     = new StainedHardenedClayMat(DyeColor.LIGHT_GRAY);
+    public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_LIGHT_GRAY = new StainedHardenedClayMat(DyeColor.LIGHT_GRAY);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_CYAN       = new StainedHardenedClayMat(DyeColor.CYAN);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_PURPLE     = new StainedHardenedClayMat(DyeColor.PURPLE);
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_BLUE       = new StainedHardenedClayMat(DyeColor.BLUE);
@@ -313,7 +313,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
         StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_LIME);
         StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_PINK);
         StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_GRAY);
-        StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_SILVER);
+        StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_LIGHT_GRAY);
         StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_CYAN);
         StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_PURPLE);
         StainedHardenedClayMat.register(STAINED_HARDENED_CLAY_BLUE);

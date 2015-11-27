@@ -24,6 +24,9 @@
 
 package org.diorite.inventory.recipe;
 
+import java.util.function.BiFunction;
+
+import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 
 /**
@@ -34,13 +37,33 @@ public interface RecipeItem
     /**
      * Check if given item is valid for this recipe item stack.
      *
-     * @param item item to check.
+     * @param player player that is using recipe, may be null.
+     * @param item   item to check.
      *
-     * @return return true if item is valid.
+     * @return return null if item isn't valid or item to remove on craft.
      */
-    default boolean isValid(final ItemStack item)
+    default ItemStack isValid(final Player player, final ItemStack item)
     {
-        return this.getItem().isSimilar(item);
+        return this.asFunction().apply(player, item);
+    }
+
+    /**
+     * Returns this recipe item as validate function.
+     *
+     * @return this recipe item as validate function.
+     */
+    default BiFunction<Player, ItemStack, ItemStack> asFunction()
+    {
+        return ((player, item) -> {
+            final ItemStack pat = this.getItem();
+            if (! pat.isSimilar(item))
+            {
+                return null;
+            }
+            final ItemStack is = item.clone();
+            is.setAmount(pat.getAmount());
+            return is;
+        });
     }
 
     /**

@@ -75,7 +75,7 @@ public class DevCmd extends SystemCommandImpl
         super("dev", Pattern.compile("(dev)(:(?<action>([a-z0-9_]*))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             final String action = matchedPattern.group("action");
-            PlayerImpl p = (PlayerImpl) sender;
+            final PlayerImpl p = (PlayerImpl) sender;
             if (action == null)
             {
                 p.getNetworkManager().sendPacket(new PacketPlayServerBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
@@ -84,6 +84,15 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "gib":
+                {
+                    final ItemStack item = new BaseItemStack(Material.APPLE);
+                    item.setAmount(args.has(0) ? args.asInt(0, 1) : 1);
+                    final ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName("Diorite");
+                    p.getInventory().add(item);
+                    break;
+                }
                 case "potionmeta":
                 {
                     final ItemStack item = new BaseItemStack(new PotionMat("POTION", 373, "minecraft:potion", 1, "POTION", (short) 8193, 5, 6)
@@ -137,7 +146,7 @@ public class DevCmd extends SystemCommandImpl
                     sender.sendMessage("Testing permissions: ");
                     sender.sendMessage("foo.bar: " + sender.hasPermission("foo.bar")); // false
                     sender.sendMessage("Your groups: " + mag.getPermissibleGroups(sender).stream().map(f -> f.getGroup().getName()).collect(Collectors.toList())); // empty
-                    PermissionsGroup group = mag.createGroup("test");
+                    final PermissionsGroup group = mag.createGroup("test");
                     sender.sendMessage("Adding to group (" + group.getName() + "): " + mag.addPermissibleToGroup(sender, group, 1)); // true
                     sender.sendMessage("Your groups: " + mag.getPermissibleGroups(sender).stream().map(f -> f.getGroup().getName()).collect(Collectors.toList())); // test
                     mag.setPermission(group, "foo.bar", PermissionLevel.TRUE);
@@ -197,7 +206,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "pexaddg":
                 {
-                    PermissionsGroup group = mag.getGroup(args.asString(0));
+                    final PermissionsGroup group = mag.getGroup(args.asString(0));
                     if (group == null)
                     {
                         sender.sendMessage("No group, " + args.asString(0));
@@ -215,7 +224,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "pexaddu":
                 {
-                    boolean added = mag.addPermissibleToGroup(sender, args.asString(0), args.asInt(1));
+                    final boolean added = mag.addPermissibleToGroup(sender, args.asString(0), args.asInt(1));
                     sender.sendMessage("Added you to " + args.asString(0) + " group: " + added);
                     break;
                 }
@@ -241,13 +250,13 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "pexrg":
                 {
-                    PermissionsGroup group = mag.removeGroup(args.asString(0));
+                    final PermissionsGroup group = mag.removeGroup(args.asString(0));
                     sender.sendMessage("Removed group: " + group);
                     break;
                 }
                 case "pexcg":
                 {
-                    PermissionsGroup group = mag.createGroup(args.asString(0));
+                    final PermissionsGroup group = mag.createGroup(args.asString(0));
                     sender.sendMessage("Created group: " + group);
                     break;
                 }
@@ -271,7 +280,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "tc":
                 {
-                    TextComponent tc = ComponentBuilder.start("test <r> ing").color(ChatColor.RED).event(new ClickEvent(Action.OPEN_URL, "www.diorite.org:<port>")).appendLegacy("§2 costam costam §8<r> dbdjs fdd").create();
+                    final TextComponent tc = ComponentBuilder.start("test <r> ing").color(ChatColor.RED).event(new ClickEvent(Action.OPEN_URL, "www.diorite.org:<port>")).appendLegacy("§2 costam costam §8<r> dbdjs fdd").create();
                     sender.sendMessage(tc);
                     System.out.println(tc.toLegacyText());
                     System.out.println(ComponentSerializer.toString(tc));
@@ -282,7 +291,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "rep":
                 {
-                    TextComponent tc = ComponentBuilder.start("test <r> ing").color(ChatColor.RED).event(new ClickEvent(Action.OPEN_URL, "www.diorite.org:<port>")).appendLegacy("§2 costam costam §8<r> dbdjs fdd").create();
+                    final TextComponent tc = ComponentBuilder.start("test <r> ing").color(ChatColor.RED).event(new ClickEvent(Action.OPEN_URL, "www.diorite.org:<port>")).appendLegacy("§2 costam costam §8<r> dbdjs fdd").create();
                     sender.sendMessage(tc.duplicate());
                     tc.replace("<r>", ComponentBuilder.start("Replaced clickable text").event(new ClickEvent(Action.SUGGEST_COMMAND, "YeY")).create());
                     tc.replace("<port>", new TextComponent("8081"));
@@ -308,14 +317,14 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "en":
                 {
-                    ItemImpl item = new ItemImpl(UUID.randomUUID(), p.getCore(), EntityImpl.getNextEntityID(), p.getLocation().addX(3).addY(1));
+                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), p.getCore(), EntityImpl.getNextEntityID(), p.getLocation().addX(3).addY(1));
                     item.setItemStack(new BaseItemStack(Material.TNT));
                     p.getWorld().addEntity(item);
                     break;
                 }
                 case "ep":
                 {
-                    for (EntityImpl e : p.getNearbyEntities(args.asDouble(0), args.asDouble(0), args.asDouble(0)))
+                    for (final EntityImpl e : p.getNearbyEntities(args.asDouble(0), args.asDouble(0), args.asDouble(0)))
                     {
                         sender.sendSimpleColoredMessage("[" + e.getId() + "] " + e.getType() + ": " + e.getLocation());
                     }

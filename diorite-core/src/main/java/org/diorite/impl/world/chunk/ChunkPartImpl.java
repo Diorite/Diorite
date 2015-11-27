@@ -149,7 +149,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
         return old;
     }
 
-    @SuppressWarnings("MagicNumber")
     public BlockMaterialData rawSetBlock(final int x, final int y, final int z, final int id, final int meta)
     {
         final int data = this.chunkBuffer.getAndSet(toArrayIndex(x, y, z), this.pattern.put(id, (byte) meta));
@@ -162,7 +161,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
         return this.setBlock(x, y, z, material.ordinal(), material.getType());
     }
 
-    @SuppressWarnings("MagicNumber")
     public BlockMaterialData getBlockType(final int x, final int y, final int z)
     {
         final int data = this.chunkBuffer.get(toArrayIndex(x, y, z));

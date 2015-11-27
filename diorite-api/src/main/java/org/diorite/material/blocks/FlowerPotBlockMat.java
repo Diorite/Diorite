@@ -172,13 +172,10 @@ public class FlowerPotBlockMat extends BlockMaterialData
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_CACTUS           = new FlowerPotBlockMat("LEGACY_CACTUS", 0x9);
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_DEAD_BUSH        = new FlowerPotBlockMat("LEGACY_DEAD_BUSH", 0xA);
-    @SuppressWarnings("MagicNumber")
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_FERN             = new FlowerPotBlockMat("LEGACY_FERN", 0xB);
-    @SuppressWarnings("MagicNumber")
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_ACACIA_SAPLING   = new FlowerPotBlockMat("LEGACY_ACACIA_SAPLING", 0xC);
-    @SuppressWarnings("MagicNumber")
     @Deprecated
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_DARK_OAK_SAPLING = new FlowerPotBlockMat("LEGACY_DARK_OAK_SAPLING", 0xD);
 

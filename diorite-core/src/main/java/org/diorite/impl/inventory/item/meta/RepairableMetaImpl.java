@@ -83,8 +83,8 @@ public class RepairableMetaImpl extends SimpleItemMetaImpl implements Repairable
 
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
-    public ToolMetaImpl clone()
+    public RepairableMetaImpl clone()
     {
-        return new ToolMetaImpl((this.tag == null) ? null : this.tag.clone(), this.itemStack);
+        return new RepairableMetaImpl((this.tag == null) ? null : this.tag.clone(), this.itemStack);
     }
 }

@@ -113,7 +113,7 @@ public class JungleDoorItemMat extends WoodenDoorItemMat
     public static void register(final JungleDoorItemMat element)
     {
         allItems.incrementAndGet();
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

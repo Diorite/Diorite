@@ -29,6 +29,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.exceptions.AuthenticationException;
 import org.diorite.auth.GameProfile;
@@ -169,6 +172,12 @@ public final class GameProfiles
         {
             this.profile = profile;
             this.updateTime = System.currentTimeMillis();
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("profile", this.profile).append("updateTime", this.updateTime).toString();
         }
     }
 }

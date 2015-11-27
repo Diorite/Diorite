@@ -174,15 +174,10 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_8  = new GoldenPressurePlateMat(0x8);
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_9  = new GoldenPressurePlateMat(0x9);
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_10 = new GoldenPressurePlateMat(0xA);
-    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_11 = new GoldenPressurePlateMat(0xB);
-    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_12 = new GoldenPressurePlateMat(0xC);
-    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_13 = new GoldenPressurePlateMat(0xD);
-    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_14 = new GoldenPressurePlateMat(0xE);
-    @SuppressWarnings("MagicNumber")
     public static final GoldenPressurePlateMat GOLDEN_PRESSURE_PLATE_15 = new GoldenPressurePlateMat(0xF);
 
     private static final Map<String, GoldenPressurePlateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

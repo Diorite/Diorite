@@ -48,7 +48,7 @@ public class ChunkLoadPipelineImpl extends SimpleEventPipeline<ChunkLoadEvent> i
             try
             {
                 evt.setNeedBeGenerated(impl.getChunkManager().getService().queueChunkLoadAndGet(chunk, ChunkIOService.INSTANT_PRIORITY) == null);
-            } catch (Exception e)
+            } catch (final Exception e)
             {
                 System.err.println("[ChunkIO] Error while loading chunk (" + x + "," + z + ")");
                 e.printStackTrace();

@@ -29,7 +29,7 @@ import org.diorite.event.pipelines.EventPipeline;
 
 /**
  * {@link EventPipeline} using {@link SenderCommandEvent} as type.
- * <p>
+ * <br>
  * Default handlers are: <br>
  * <b>Diorite|Cmd</b> {@literal ->} find command to execute. (only if command ism't already set) <br>
  * {@link org.diorite.event.EventPriority#LOWEST} <br>

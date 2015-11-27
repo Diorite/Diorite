@@ -61,8 +61,8 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
      * Put the given ItemStack into the helmet slot if it matches a excepted one.
      * NOTE: this is atomic operation.
      *
-     * @param excepted excepted item to replace.
-     * @param cursorItem   The ItemStack to use as cursor
+     * @param excepted   excepted item to replace.
+     * @param cursorItem The ItemStack to use as cursor
      *
      * @return true if item was replaced.
      *

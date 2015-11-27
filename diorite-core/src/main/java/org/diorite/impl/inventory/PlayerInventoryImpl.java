@@ -25,6 +25,8 @@
 package org.diorite.impl.inventory;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.Validate;
@@ -45,6 +47,7 @@ import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.slot.Slot;
+import org.diorite.inventory.slot.SlotType;
 import org.diorite.material.Material;
 import org.diorite.utils.DioriteUtils;
 
@@ -66,8 +69,8 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
         this.slots[i] = Slot.BASE_RESULT_SLOT;
         Arrays.fill(this.slots, 1, i + InventoryType.PLAYER_CRAFTING.getSize(), Slot.BASE_CRAFTING_SLOT);
         i += InventoryType.PLAYER_CRAFTING.getSize();
-        Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_ARMOR.getSize()) - 1, Slot.BASE_ARMOR_SLOT);
-        i += InventoryType.PLAYER_ARMOR.getSize() - 1;
+        Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_ARMOR.getSize()), Slot.BASE_ARMOR_SLOT);
+        i += InventoryType.PLAYER_ARMOR.getSize();
         Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_EQ.getSize()), Slot.BASE_CONTAINER_SLOT);
         i += InventoryType.PLAYER_EQ.getSize();
         Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_HOTBAR.getSize()), Slot.BASE_HOTBAR_SLOT);
@@ -85,6 +88,12 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
     }
 
     @Override
+    public Slot getSlot(final int slot)
+    {
+        return ((slot == PacketPlayClientWindowClick.SLOT_NOT_NEEDED) || (slot == PacketPlayClientWindowClick.INVALID_SLOT)) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
+    }
+
+    @Override
     public int firstEmpty()
     {
         int i = this.hotbar.firstEmpty();
@@ -99,12 +108,6 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
             offset = this.eq.getSlotOffset();
         }
         return offset + i;
-    }
-
-    @Override
-    public Slot getSlot(final int slot)
-    {
-        return ((slot == PacketPlayClientWindowClick.SLOT_NOT_NEEDED) || (slot == PacketPlayClientWindowClick.INVALID_SLOT)) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
     }
 
     @Override
@@ -163,77 +166,219 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
     }
 
     @Override
+    public int firstNotFull(final Material material)
+    {
+        int i = this.hotbar.firstNotFull(material);
+        int offset = this.hotbar.getSlotOffset();
+        if (i == - 1)
+        {
+            i = this.eq.firstNotFull(material);
+            if (i == - 1)
+            {
+                return - 1;
+            }
+            offset = this.eq.getSlotOffset();
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int firstNotFull(final Material material, final int startIndex)
+    {
+        int offset = this.hotbar.getSlotOffset();
+        int start = (startIndex >= offset) ? (startIndex - offset) : startIndex;
+        int i = (start >= this.hotbar.size()) ? - 1 : this.hotbar.firstNotFull(material, start);
+        if (i == - 1)
+        {
+            offset += this.eq.getSlotOffset();
+            start = (startIndex >= offset) ? (startIndex - offset) : (startIndex);
+            i = (start >= offset) ? - 1 : this.eq.firstNotFull(material, start - this.eq.getSlotOffset());
+            if ((i >= this.eq.size()) || (i == - 1))
+            {
+                return - 1;
+            }
+            i += this.eq.getSlotOffset();
+            return i;
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int firstNotFull(final ItemStack item, final boolean withAmount)
+    {
+        return this.firstNotFull(item, 0, withAmount);
+    }
+
+    @Override
+    public int firstNotFull(final ItemStack item, final int startIndex, final boolean withAmount)
+    {
+        int offset = this.hotbar.getSlotOffset();
+        int start = (startIndex >= offset) ? (startIndex - offset) : startIndex;
+        int i = (start >= this.hotbar.size()) ? - 1 : this.hotbar.firstNotFull(item, start, withAmount);
+        if (i == - 1)
+        {
+            offset += this.eq.getSlotOffset();
+            start = (startIndex >= offset) ? (startIndex - offset) : (startIndex);
+            i = (start >= offset) ? - 1 : this.eq.firstNotFull(item, start - this.eq.getSlotOffset(), withAmount);
+            if ((i >= this.eq.size()) || (i == - 1))
+            {
+                return - 1;
+            }
+            i += this.eq.getSlotOffset();
+            return i;
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int lastEmpty()
+    {
+        int i = this.hotbar.lastEmpty();
+        int offset = this.hotbar.getSlotOffset();
+        if (i == - 1)
+        {
+            i = this.eq.lastEmpty();
+            if (i == - 1)
+            {
+                return - 1;
+            }
+            offset = this.eq.getSlotOffset();
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int last(final Material material)
+    {
+        int i = this.hotbar.last(material);
+        int offset = this.hotbar.getSlotOffset();
+        if (i == - 1)
+        {
+            i = this.eq.last(material);
+            if (i == - 1)
+            {
+                return - 1;
+            }
+            offset = this.eq.getSlotOffset();
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int last(final ItemStack item, final boolean withAmount)
+    {
+        int i = this.hotbar.last(item, withAmount);
+        int offset = this.hotbar.getSlotOffset();
+        if (i == - 1)
+        {
+            i = this.eq.last(item, withAmount);
+            if (i == - 1)
+            {
+                return - 1;
+            }
+            offset = this.eq.getSlotOffset();
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int last(final ItemStack item, final int startIndex, final boolean withAmount)
+    {
+        int offset = this.hotbar.getSlotOffset();
+        int start = (startIndex >= offset) ? (startIndex - offset) : startIndex;
+        int i = (start >= this.hotbar.size()) ? - 1 : this.hotbar.last(item, start, withAmount);
+        if (i == - 1)
+        {
+            offset += this.eq.getSlotOffset();
+            start = (startIndex >= offset) ? (startIndex - offset) : (startIndex);
+            i = (start >= offset) ? - 1 : this.eq.last(item, start - this.eq.getSlotOffset(), withAmount);
+            if ((i >= this.eq.size()) || (i == - 1))
+            {
+                return - 1;
+            }
+            i += this.eq.getSlotOffset();
+            return i;
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int lastNotFull(final Material material)
+    {
+        int i = this.hotbar.lastNotFull(material);
+        int offset = this.hotbar.getSlotOffset();
+        if (i == - 1)
+        {
+            i = this.eq.lastNotFull(material);
+            if (i == - 1)
+            {
+                return - 1;
+            }
+            offset = this.eq.getSlotOffset();
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int lastNotFull(final Material material, final int startIndex)
+    {
+        int offset = this.hotbar.getSlotOffset();
+        int start = (startIndex >= offset) ? (startIndex - offset) : startIndex;
+        int i = (start >= this.hotbar.size()) ? - 1 : this.hotbar.lastNotFull(material, start);
+        if (i == - 1)
+        {
+            offset += this.eq.getSlotOffset();
+            start = (startIndex >= offset) ? (startIndex - offset) : (startIndex);
+            i = (start >= offset) ? - 1 : this.eq.lastNotFull(material, start - this.eq.getSlotOffset());
+            if ((i >= this.eq.size()) || (i == - 1))
+            {
+                return - 1;
+            }
+            i += this.eq.getSlotOffset();
+            return i;
+        }
+        return offset + i;
+    }
+
+    @Override
+    public int lastNotFull(final ItemStack item, final boolean withAmount)
+    {
+        return this.lastNotFull(item, this.size() - 1, withAmount);
+    }
+
+    @Override
+    public int lastNotFull(final ItemStack item, final int startIndex, final boolean withAmount)
+    {
+        int offset = this.hotbar.getSlotOffset();
+        int start = (startIndex >= offset) ? (startIndex - offset) : startIndex;
+        int i = (start >= this.hotbar.size()) ? - 1 : this.hotbar.lastNotFull(item, start, withAmount);
+        if (i == - 1)
+        {
+            offset += this.eq.getSlotOffset();
+            start = (startIndex >= offset) ? (startIndex - offset) : (startIndex);
+            i = (start >= offset) ? - 1 : this.eq.lastNotFull(item, start - this.eq.getSlotOffset(), withAmount);
+            if ((i >= this.eq.size()) || (i == - 1))
+            {
+                return - 1;
+            }
+            i += this.eq.getSlotOffset();
+            return i;
+        }
+        return offset + i;
+    }
+
+    @Override
     public ItemStack[] add(final ItemStack... items)
     {
-        Validate.noNullElements(items, "Item cannot be null");
+        final ItemStack[] leftover = this.hotbar.add(items);
+        return this.eq.add(leftover);
+    }
 
-        final ItemStack[] leftover = new ItemStack[items.length];
-        boolean fully = true;
-        for (int i = 0; i < items.length; i++)
-        {
-            final ItemStack item = items[i];
-            int firstPartial = - 1;
-            while (true)
-            {
-                if (firstPartial != - 2)
-                {
-                    firstPartial = this.first(item, firstPartial + 1, false);
-                }
-                if ((firstPartial == - 1) || (firstPartial == - 2))
-                {
-                    final int firstFree = this.firstEmpty();
-                    if (firstFree == - 1)
-                    {
-                        leftover[i] = item;
-                        fully = false;
-                        break;
-                    }
-                    if (item.getAmount() > item.getMaterial().getMaxStack())
-                    {
-
-                        final ItemStack stack = new BaseItemStack(item);
-                        stack.setAmount(item.getMaterial().getMaxStack());
-                        this.setItem(firstFree, stack);
-                        item.setAmount(item.getAmount() - item.getMaterial().getMaxStack());
-                    }
-                    else
-                    {
-                        this.setItem(firstFree, item);
-                        break;
-                    }
-                }
-                else
-                {
-                    final ItemStack itemStack = this.getItem(firstPartial);
-
-                    if (itemStack.getAmount() >= itemStack.getMaterial().getMaxStack())
-                    {
-                        if (firstPartial == (this.fullEq.size() - 1))
-                        {
-                            firstPartial = - 2;
-                        }
-                        continue;
-                    }
-
-                    final int amount = item.getAmount();
-                    final int partialAmount = itemStack.getAmount();
-                    final int maxAmount = itemStack.getMaterial().getMaxStack();
-                    if ((amount + partialAmount) <= maxAmount)
-                    {
-                        itemStack.setAmount(amount + partialAmount);
-                        break;
-                    }
-                    itemStack.setAmount(maxAmount);
-                    item.setAmount((amount + partialAmount) - maxAmount);
-
-                    if (firstPartial == (this.fullEq.size() - 1))
-                    {
-                        firstPartial = - 2;
-                    }
-                }
-            }
-        }
-        return fully ? DioriteUtils.EMPTY_ITEM_STACK : leftover;
+    @Override
+    public ItemStack[] addFromEnd(final ItemStack... items)
+    {
+        final ItemStack[] leftover = this.hotbar.addFromEnd(items);
+        return this.eq.addFromEnd(leftover);
     }
 
     @Override
@@ -427,33 +572,111 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
         ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayServerWindowItems(this.windowId, this.content));
     }
 
-    @Override
-    public void softUpdate()
+    private boolean isCraftingSlot(final int i)
     {
-        if (! (this.holder instanceof Player))
+        final Slot slot = this.getSlot(i);
+        if (slot == null)
         {
-            return;
+            return false;
         }
-        ItemStackImpl cursor = this.cursorItem.get();
-        if ((this.wasCursorNotNull && (cursor == null)) || ((cursor != null) && cursor.isDirty()))
+        final SlotType type = slot.getSlotType();
+        return type.equals(SlotType.CRAFTING) || type.equals(SlotType.RESULT);
+    }
+
+    private Map<Short, PacketPlayServerSetSlot> softUpdate0() // TODO change if we will switch to fastutils
+    {
+        boolean craftingGridUpdated = false;
+        boolean onlyResult = true;
+        final int itemsLength = this.content.length();
+        final Map<Short, PacketPlayServerSetSlot> packets = new LinkedHashMap<>(itemsLength);
+        for (short i = 0; i < itemsLength; i++)
         {
-            if (cursor != null)
+            final ItemStackImpl item = this.content.get(i);
+
+            if (item != null)
             {
-                if ((cursor.getAmount() == 0) || (Material.AIR.simpleEquals(cursor.getMaterial())))
+                if ((item.getAmount() == 0) || (Material.AIR.simpleEquals(item.getMaterial())))
                 {
-                    this.replaceCursorItem(cursor, null);
-                    cursor = null;
+                    this.replace(i, item, null);
+                    packets.remove(i);
+                    packets.put(i, new PacketPlayServerSetSlot(this.windowId, i, null));
+                    continue;
                 }
-                else
+                this.notNullItems.add(i);
+                if (item.setClean()) // returns true if item was dirty before cleaning
                 {
-                    cursor.setClean();
-                    this.wasCursorNotNull = true;
+                    if (this.isCraftingSlot(i))
+                    {
+                        craftingGridUpdated = true;
+                        if (! this.getSlot(i).getSlotType().equals(SlotType.RESULT))
+                        {
+                            onlyResult = false;
+                        }
+                    }
+                    packets.remove(i);
+                    packets.put(i, new PacketPlayServerSetSlot(this.windowId, i, item));
                 }
             }
-            ((PlayerImpl) this.holder).getNetworkManager().sendPacket(new PacketPlayServerSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
-
+            else if (this.notNullItems.remove(i))
+            {
+                if (! craftingGridUpdated && this.isCraftingSlot(i))
+                {
+                    craftingGridUpdated = true;
+                    if (! this.getSlot(i).getSlotType().equals(SlotType.RESULT))
+                    {
+                        onlyResult = false;
+                    }
+                }
+                packets.remove(i);
+                packets.put(i, new PacketPlayServerSetSlot(this.windowId, i, null));
+            }
         }
-        super.softUpdate();
+        if (craftingGridUpdated)
+        {
+            this.crafting.checkRecipe(onlyResult);
+            for (int i = this.crafting.size(); i >= 0; i--)
+            {
+                final short slotIndex = (short) (this.crafting.getSlotOffset() + i);
+                packets.remove(slotIndex);
+                packets.put(slotIndex, new PacketPlayServerSetSlot(this.windowId, slotIndex, this.getItem(slotIndex)));
+            }
+        }
+        // cursor
+        {
+            ItemStackImpl cursor = this.cursorItem.get();
+            if ((this.wasCursorNotNull && (cursor == null)) || ((cursor != null) && cursor.isDirty()))
+            {
+                if (cursor != null)
+                {
+                    if ((cursor.getAmount() == 0) || (Material.AIR.simpleEquals(cursor.getMaterial())))
+                    {
+                        this.replaceCursorItem(cursor, null);
+                        cursor = null;
+                    }
+                    else
+                    {
+                        cursor.setClean();
+                        this.wasCursorNotNull = true;
+                    }
+                }
+                packets.remove(CURSOR_SLOT);
+                packets.put(CURSOR_SLOT, new PacketPlayServerSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
+            }
+        }
+        return packets;
+    }
+
+    @Override
+    public boolean softUpdate()
+    {
+        final Map<Short, PacketPlayServerSetSlot> packets = this.softUpdate0();
+        if (! packets.isEmpty())
+        {
+            final PacketPlayServerSetSlot[] packetsArray = packets.values().toArray(new PacketPlayServerSetSlot[packets.size()]);
+            this.viewers.forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
+            return true;
+        }
+        return false;
     }
 
     @Override

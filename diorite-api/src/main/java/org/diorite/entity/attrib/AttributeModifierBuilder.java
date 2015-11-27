@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Attribute modifier builder, uuid, name and slot don't need to be set.
@@ -152,5 +154,11 @@ public class AttributeModifierBuilder
     public AttributeModifier build()
     {
         return new BasicAttributeModifier((this.uuid == null) ? UUID.randomUUID() : this.uuid, this.name, this.value, this.operation, (this.slot == null) ? ModifierSlot.NOT_SET : this.slot, this.type);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("uuid", this.uuid).append("name", this.name).append("value", this.value).append("operation", this.operation).append("slot", this.slot).append("type", this.type).toString();
     }
 }

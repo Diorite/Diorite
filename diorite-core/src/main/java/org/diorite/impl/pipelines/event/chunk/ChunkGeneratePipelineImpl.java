@@ -42,7 +42,7 @@ public class ChunkGeneratePipelineImpl extends SimpleEventPipeline<ChunkGenerate
             try
             {
                 ((WorldImpl) evt.getWorld()).getChunkManager().generateChunk(evt.getChunk(), evt.getChunkX(), evt.getChunkZ());
-            } catch (Throwable e)
+            } catch (final Throwable e)
             {
                 System.err.println("[ChunkIO] Error while generating chunk (" + evt.getChunkX() + "," + evt.getChunkZ() + ")");
                 e.printStackTrace();

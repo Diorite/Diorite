@@ -24,6 +24,11 @@
 
 package org.diorite.impl.inventory.recipe.craft;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -66,6 +71,29 @@ public class ArrayRecipePattern implements RecipePattern
             return null;
         }
         return this.items[row][column];
+    }
+
+    private transient List<RecipeItem> itemsList;
+
+    @Override
+    public synchronized Collection<RecipeItem> getRecipeItems()
+    {
+        if (this.itemsList == null)
+        {
+            this.itemsList = new ArrayList<>(this.getColumns() * this.getRows());
+            for (final RecipeItem[] items : this.items)
+            {
+                for (final RecipeItem item : items)
+                {
+                    if (item != null)
+                    {
+                        this.itemsList.add(item);
+                    }
+                }
+            }
+            this.itemsList = Collections.unmodifiableList(new ArrayList<>(this.itemsList));
+        }
+        return this.itemsList;
     }
 
     @Override

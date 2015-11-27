@@ -239,7 +239,7 @@ public class PlayListener implements PacketPlayClientListener
                 EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));
             }
 
-            if(packet.getAction() == BlockDigAction.START_DIG)
+            if (packet.getAction() == BlockDigAction.START_DIG)
             {
                 this.core.sync(() -> EventType.callEvent(new PlayerInteractEvent(this.player, Action.LEFT_CLICK_ON_BLOCK, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock())));
             }

@@ -180,7 +180,7 @@ public class DiamondLeggingsMat extends LeggingsMat
     public static void register(final DiamondLeggingsMat element)
     {
         allItems.incrementAndGet();
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -24,12 +24,8 @@
 
 package org.diorite.inventory.recipe.craft;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.diorite.inventory.GridInventory;
-import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeItem;
 
 /**
@@ -37,40 +33,16 @@ import org.diorite.inventory.recipe.RecipeItem;
  */
 public interface ShapelessRecipe extends Recipe
 {
-    @Override
-    default boolean isValid(final GridInventory inventory)
-    {
-        final LinkedList<RecipeItem> ingredients = new LinkedList<>(this.getIngredients());
-        for (int i = 0, size = ingredients.size(); i < size; i++)
-        {
-            final ItemStack item = inventory.getItem(i);
-            if (item == null)
-            {
-                continue;
-            }
-            boolean matching = false;
-            for (final Iterator<RecipeItem> iterator = ingredients.iterator(); iterator.hasNext(); )
-            {
-                final RecipeItem ingredient = iterator.next();
-                if (ingredient.isValid(item))
-                {
-                    iterator.remove();
-                    matching = true;
-                    break;
-                }
-            }
-            if (! matching)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
     /**
      * Returns ingredients needed by this recipe.
      *
      * @return ingredients needed by this recipe.
      */
     List<RecipeItem> getIngredients();
+
+    @Override
+    default long getPriority()
+    {
+        return DEFAULT_SHAPELESS_RECIPE_PRIORITY;
+    }
 }

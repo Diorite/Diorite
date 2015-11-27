@@ -176,15 +176,10 @@ public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
     public static final ReedsBlockMat REEDS_BLOCK_8  = new ReedsBlockMat(0x8);
     public static final ReedsBlockMat REEDS_BLOCK_9  = new ReedsBlockMat(0x9);
     public static final ReedsBlockMat REEDS_BLOCK_10 = new ReedsBlockMat(0xA);
-    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_11 = new ReedsBlockMat(0xB);
-    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_12 = new ReedsBlockMat(0xC);
-    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_13 = new ReedsBlockMat(0xD);
-    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_14 = new ReedsBlockMat(0xE);
-    @SuppressWarnings("MagicNumber")
     public static final ReedsBlockMat REEDS_BLOCK_15 = new ReedsBlockMat(0xF);
 
     private static final Map<String, ReedsBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

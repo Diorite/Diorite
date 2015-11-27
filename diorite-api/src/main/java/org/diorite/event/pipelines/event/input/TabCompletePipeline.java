@@ -32,7 +32,7 @@ import org.diorite.event.player.PlayerChatEvent;
 
 /**
  * {@link EventPipeline} using {@link PlayerChatEvent} as type.
- * <p>
+ * <br>
  * Default handlers are: <br>
  * <b>Diorite|Base</b> {@literal ->} Find default tab completes. <br>
  * {@link org.diorite.event.EventPriority#LOWEST} <br>

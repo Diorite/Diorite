@@ -177,7 +177,7 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_LIME       = new StainedGlassPaneMat(DyeColor.LIME);
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_PINK       = new StainedGlassPaneMat(DyeColor.PINK);
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_GRAY       = new StainedGlassPaneMat(DyeColor.GRAY);
-    public static final StainedGlassPaneMat STAINED_GLASS_PANE_SILVER     = new StainedGlassPaneMat(DyeColor.LIGHT_GRAY);
+    public static final StainedGlassPaneMat STAINED_GLASS_PANE_LIGHT_GRAY = new StainedGlassPaneMat(DyeColor.LIGHT_GRAY);
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_CYAN       = new StainedGlassPaneMat(DyeColor.CYAN);
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_PURPLE     = new StainedGlassPaneMat(DyeColor.PURPLE);
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_BLUE       = new StainedGlassPaneMat(DyeColor.BLUE);
@@ -314,7 +314,7 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
         StainedGlassPaneMat.register(STAINED_GLASS_PANE_LIME);
         StainedGlassPaneMat.register(STAINED_GLASS_PANE_PINK);
         StainedGlassPaneMat.register(STAINED_GLASS_PANE_GRAY);
-        StainedGlassPaneMat.register(STAINED_GLASS_PANE_SILVER);
+        StainedGlassPaneMat.register(STAINED_GLASS_PANE_LIGHT_GRAY);
         StainedGlassPaneMat.register(STAINED_GLASS_PANE_CYAN);
         StainedGlassPaneMat.register(STAINED_GLASS_PANE_PURPLE);
         StainedGlassPaneMat.register(STAINED_GLASS_PANE_BLUE);

@@ -59,7 +59,7 @@ public class ShearsMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     public ShearsMat()
     {
-        super("SHEARS", 359, "minecraft:shears", "NEW", (short) 0x00, new BasicToolData(238));
+        super("SHEARS", 359, "minecraft:shears", "NEW", (short) 0x00, new BasicToolData(237));
     }
 
     public ShearsMat(final int durability)
@@ -179,7 +179,7 @@ public class ShearsMat extends BasicToolMat
     public static void register(final ShearsMat element)
     {
         allItems.incrementAndGet();
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

@@ -43,7 +43,7 @@ public class GamemodeCmd extends SystemCommandImpl
                 sender.sendSimpleColoredMessage("&4No target...");
                 return;
             }
-            GameMode gameMode = args.has(0) ? args.asSimpleEnumValue(GameMode.class, 0) : (target.getGameMode().equals(GameMode.CREATIVE) ? GameMode.SURVIVAL : GameMode.CREATIVE);
+            final GameMode gameMode = args.has(0) ? args.asSimpleEnumValue(GameMode.class, 0) : (target.getGameMode().equals(GameMode.CREATIVE) ? GameMode.SURVIVAL : GameMode.CREATIVE);
             if (gameMode == null)
             {
                 sender.sendSimpleColoredMessage("&4No gamemode named: &c" + args.asString(0));

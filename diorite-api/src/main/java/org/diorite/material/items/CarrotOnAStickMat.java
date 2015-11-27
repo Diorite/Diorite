@@ -59,7 +59,7 @@ public class CarrotOnAStickMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     public CarrotOnAStickMat()
     {
-        super("CARROT_ON_A_STICK", 398, "minecraft:carrot_on_a_stick", "NEW", (short) 0x00, new BasicToolData(26));
+        super("CARROT_ON_A_STICK", 398, "minecraft:carrot_on_a_stick", "NEW", (short) 0x00, new BasicToolData(25));
     }
 
     public CarrotOnAStickMat(final int durability)
@@ -179,7 +179,7 @@ public class CarrotOnAStickMat extends BasicToolMat
     public static void register(final CarrotOnAStickMat element)
     {
         allItems.incrementAndGet();
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

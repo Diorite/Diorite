@@ -281,6 +281,13 @@ public interface ItemMeta extends Dirtable
     Set<HideFlag> getHideFlags();
 
     /**
+     * Checks for the existence of any hide flags.
+     *
+     * @return true if an hide flag exists on this meta
+     */
+    boolean hasHideFlags();
+
+    /**
      * Check if the specified flag is present on this item.
      *
      * @param flag the flag to check

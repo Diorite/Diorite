@@ -33,10 +33,10 @@ import java.lang.annotation.Target;
  * Allows define collection type of selected field.
  * Any type other than unknown will disable build-in type checks,
  * so yaml generation will be faster, but may fail if you don't use valid type.
- * <p>
+ * <br>
  * If collection contais other collections (or maps or arrays) of primitive types, you can
  * select primitive type.
- * <p>
+ * <br>
  * Ignored by fields that don't know how to use it.
  */
 @Retention(RetentionPolicy.RUNTIME)

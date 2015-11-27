@@ -51,7 +51,7 @@ import org.diorite.utils.reflections.DioriteReflectionUtils;
 
 /**
  * Manager class for element templates.
- * <p>
+ * <br>
  * It contains {@link Pipeline} {@link #elements} that contains templates for default java object types.
  * Method {@link #getElement(Class)} is trying to get element from pipleline using few methods:
  * (using next only if prev method fail and returns null)
@@ -60,23 +60,23 @@ import org.diorite.utils.reflections.DioriteReflectionUtils;
  * 3. By type: template with {@link TemplateElement#fieldType} that is {@link Class#isAssignableFrom(Class)} to given class
  * 4. By type: template which {@link TemplateElement#canBeConverted(Class)} method will return true.
  * 5. If there is still no matching template, {@link #getDefaultTemplatesHandler()} is used.
- * <p>
+ * <br>
  * Elements in pipeline should be in valid order,
  * object types that are 'hard' to convert, should be first,
  * and types that can be easly convert should be last.
- * <p>
+ * <br>
  * In default pipeline, first elements are {@link Enum}, {@link java.net.URI}, {@link java.net.URL}, {@link File} and {@link java.nio.file.Path} handlers.
- * <p>
+ * <br>
  * Next element is {@link Map}, only classes implementing that interface can be used with this template,
  * if you want add map impelementation that should use other template you MUST add it BEFORE this element, by:
  * {@link #getElements()} and {@link Pipeline#addBefore(String, String, Object)}
- * <p>
+ * <br>
  * Next element is {@link Iterable}, if object implementing map interface will be passed to
  * iterable template, it will convert it using {@link Map#entrySet()}
- * <p>
+ * <br>
  * Next one is {@link Iterator}, if object implementing {@link Iterable} interface will be passed to
  * iterator template, it will convert it using {@link Iterable#iterator()}
- * <p>
+ * <br>
  * Next elements are all primitives arrays: boolean, char, long, int, short. byte, double, float,
  * then Object[], all primitives and {@link String} at the end.
  */

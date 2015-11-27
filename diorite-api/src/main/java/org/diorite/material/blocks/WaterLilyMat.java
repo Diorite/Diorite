@@ -184,7 +184,7 @@ public class WaterLilyMat extends PlantMat
         }
     }
 
-    public static enum RailTypeMat
+    public enum RailTypeMat
     {
         FLAT_NORTH_SOUTH(0x00),
         FLAT_WEST_EAST(0x01),

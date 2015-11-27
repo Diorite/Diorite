@@ -38,8 +38,8 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 @PacketClass(id = 0x12, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 9)
 public class PacketPlayClientSteerVehicle extends PacketPlayClient
 {
-    private float sideways; // 4 bytes
-    private float forward; // 4 bytes
+    private float   sideways; // 4 bytes
+    private float   forward; // 4 bytes
     private boolean jump; // 1/4 byte
     private boolean unMount; // 1/4 byte
 

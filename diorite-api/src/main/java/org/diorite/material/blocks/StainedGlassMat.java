@@ -176,7 +176,7 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
     public static final StainedGlassMat STAINED_GLASS_LIME       = new StainedGlassMat(DyeColor.LIME);
     public static final StainedGlassMat STAINED_GLASS_PINK       = new StainedGlassMat(DyeColor.PINK);
     public static final StainedGlassMat STAINED_GLASS_GRAY       = new StainedGlassMat(DyeColor.GRAY);
-    public static final StainedGlassMat STAINED_GLASS_SILVER     = new StainedGlassMat(DyeColor.LIGHT_GRAY);
+    public static final StainedGlassMat STAINED_GLASS_LIGHT_GRAY = new StainedGlassMat(DyeColor.LIGHT_GRAY);
     public static final StainedGlassMat STAINED_GLASS_CYAN       = new StainedGlassMat(DyeColor.CYAN);
     public static final StainedGlassMat STAINED_GLASS_PURPLE     = new StainedGlassMat(DyeColor.PURPLE);
     public static final StainedGlassMat STAINED_GLASS_BLUE       = new StainedGlassMat(DyeColor.BLUE);
@@ -314,7 +314,7 @@ public class StainedGlassMat extends BlockMaterialData implements ColorableMat
         StainedGlassMat.register(STAINED_GLASS_LIME);
         StainedGlassMat.register(STAINED_GLASS_PINK);
         StainedGlassMat.register(STAINED_GLASS_GRAY);
-        StainedGlassMat.register(STAINED_GLASS_SILVER);
+        StainedGlassMat.register(STAINED_GLASS_LIGHT_GRAY);
         StainedGlassMat.register(STAINED_GLASS_CYAN);
         StainedGlassMat.register(STAINED_GLASS_PURPLE);
         StainedGlassMat.register(STAINED_GLASS_BLUE);

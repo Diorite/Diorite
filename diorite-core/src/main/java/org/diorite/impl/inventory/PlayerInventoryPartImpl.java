@@ -97,7 +97,7 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Human> imple
     }
 
     @Override
-    public void softUpdate()
+    public boolean softUpdate()
     {
         throw new UnsupportedOperationException("soft update should be called only for root EQ.");
     }

@@ -59,7 +59,7 @@ public class FlintAndSteelMat extends BasicToolMat
     @SuppressWarnings("MagicNumber")
     public FlintAndSteelMat()
     {
-        super("FLINT_AND_STEEL", 259, "minecraft:flint_and_steel", "NEW", (short) 0x00, new BasicToolData(65));
+        super("FLINT_AND_STEEL", 259, "minecraft:flint_and_steel", "NEW", (short) 0x00, new BasicToolData(64));
     }
 
     public FlintAndSteelMat(final int durability)
@@ -179,7 +179,7 @@ public class FlintAndSteelMat extends BasicToolMat
     public static void register(final FlintAndSteelMat element)
     {
         allItems.incrementAndGet();
-        byID.put(element.getType(), element);
+        byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

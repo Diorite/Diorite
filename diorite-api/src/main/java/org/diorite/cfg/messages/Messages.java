@@ -261,7 +261,7 @@ public class Messages
     /**
      * Try broadcast this message to selected comamnd senders in target sender language if possible, if message is disabled method will just return false.
      *
-     * @param path   path to message.
+     * @param path    path to message.
      * @param targets targets of message.
      * @param data    placeholder objects to use.
      *
@@ -276,7 +276,7 @@ public class Messages
     /**
      * Try broadcast this message (to all players) in target player language if possible, if message is disabled method will just return false.
      *
-     * @param path   path to message.
+     * @param path path to message.
      * @param data placeholder objects to use.
      *
      * @return true if message was send.
@@ -290,7 +290,7 @@ public class Messages
     /**
      * Try broadcast this message to selected comamnd senders in target sender language if possible, if message is disabled method will just return false.
      *
-     * @param path   path to message.
+     * @param path    path to message.
      * @param targets targets of message.
      * @param lang    default language to use if target don't have any.
      * @param data    placeholder objects to use.
@@ -306,7 +306,7 @@ public class Messages
     /**
      * Try broadcast this message (to all players) in target player language if possible, if message is disabled method will just return false.
      *
-     * @param path   path to message.
+     * @param path path to message.
      * @param lang default language to use if target don't have any.
      * @param data placeholder objects to use.
      *
@@ -321,7 +321,7 @@ public class Messages
     /**
      * Try broadcast this message to selected comamnd senders, if message is disabled method will just return false.
      *
-     * @param path   path to message.
+     * @param path    path to message.
      * @param targets targets of message.
      * @param lang    language to use if possible.
      * @param data    placeholder objects to use.
@@ -337,7 +337,7 @@ public class Messages
     /**
      * Try broadcast this message (to all players), if message is disabled method will just return false.
      *
-     * @param path   path to message.
+     * @param path path to message.
      * @param lang language to use if possible.
      * @param data placeholder objects to use.
      *

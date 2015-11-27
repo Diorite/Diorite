@@ -86,7 +86,6 @@ public interface Loc
         return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
     }
 
-    @SuppressWarnings("MagicNumber")
     default double distanceSquaredFromCenter(final double x, final double y, final double z)
     {
         final double deltaX = (this.getX() + 0.5) - x;

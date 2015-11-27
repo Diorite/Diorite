@@ -30,7 +30,7 @@ import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-@SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
+@SuppressWarnings({"ClassHasNoToStringMethod"})
 public class EntityType extends ASimpleEnum<EntityType>
 {
     static

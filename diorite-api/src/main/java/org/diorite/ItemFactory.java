@@ -66,6 +66,7 @@ public interface ItemFactory
      *
      * @param clazz item meta class used in {@link #registerMetaType(Class, Function)}, don't use implementation classes here.
      * @param nbt   nbt data to be used, null value allowed.
+     * @param <T>   type of ItemMeta.
      *
      * @return constructed ItemMeta instance.
      */
@@ -87,6 +88,7 @@ public interface ItemFactory
      * Construct new ItemMeta instance for given item meta class, api class must be used.
      *
      * @param clazz item meta class used in {@link #registerMetaType(Class, Function)}, don't use implementation classes here.
+     * @param <T>   type of ItemMeta.
      *
      * @return constructed ItemMeta instance.
      */

@@ -44,13 +44,11 @@ import gnu.trove.map.hash.TShortIntHashMap;
 
 public class EntityTrackers implements Tickable
 {
-    @SuppressWarnings("MagicNumber")
     private final TIntObjectMap<BaseTracker<?>> trackers = new TIntObjectHashMap<>(1000, 0.25F, - 1);
     /**
      * Maps entity type id and amount of entity of that type. <br>
      * Used by statisitcs and performance commands.
      */
-    @SuppressWarnings("MagicNumber")
     private final TShortIntMap                  stats    = new TShortIntHashMap(50, 0.1f, (short) 0, 0); // only for stats, performance commands etc.
     private final WorldImpl world;
 
@@ -120,7 +118,7 @@ public class EntityTrackers implements Tickable
 
     public EntityTracker addTracked(final EntityImpl trackable)
     {
-        final EntityTracker et= new EntityTracker(trackable);
+        final EntityTracker et = new EntityTracker(trackable);
         this.trackers.put(trackable.getId(), et);
         this.incrementStat(trackable);
         return et;

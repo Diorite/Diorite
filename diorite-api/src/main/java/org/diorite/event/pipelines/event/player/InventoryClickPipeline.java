@@ -29,7 +29,7 @@ import org.diorite.event.player.PlayerInventoryClickEvent;
 
 /**
  * {@link EventPipeline} using {@link PlayerInventoryClickEvent} as type.
- * <p>
+ * <br>
  * Default handlers are: <br>
  * {@link org.diorite.event.EventPriority#LOWEST} <br>
  * {@link org.diorite.event.EventPriority#LOWER} <br>
