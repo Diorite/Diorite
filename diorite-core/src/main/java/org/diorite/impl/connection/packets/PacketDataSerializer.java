@@ -718,9 +718,21 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public short getShortLE(final int i)
+    {
+        return this.byteBuf.getShortLE(i);
+    }
+
+    @Override
     public int getUnsignedShort(final int i)
     {
         return this.byteBuf.getUnsignedShort(i);
+    }
+
+    @Override
+    public int getUnsignedShortLE(final int i)
+    {
+        return this.byteBuf.getUnsignedShortLE(i);
     }
 
     @Override
@@ -730,9 +742,21 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public int getMediumLE(final int i)
+    {
+        return this.byteBuf.getMediumLE(i);
+    }
+
+    @Override
     public int getUnsignedMedium(final int i)
     {
         return this.byteBuf.getUnsignedMedium(i);
+    }
+
+    @Override
+    public int getUnsignedMediumLE(final int i)
+    {
+        return this.byteBuf.getUnsignedMediumLE(i);
     }
 
     @Override
@@ -742,15 +766,33 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public int getIntLE(final int i)
+    {
+        return this.byteBuf.getIntLE(i);
+    }
+
+    @Override
     public long getUnsignedInt(final int i)
     {
         return this.byteBuf.getUnsignedInt(i);
     }
 
     @Override
+    public long getUnsignedIntLE(final int i)
+    {
+        return this.byteBuf.getUnsignedIntLE(i);
+    }
+
+    @Override
     public long getLong(final int i)
     {
         return this.byteBuf.getLong(i);
+    }
+
+    @Override
+    public long getLongLE(final int i)
+    {
+        return this.byteBuf.getLongLE(i);
     }
 
     @Override
@@ -838,9 +880,21 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public ByteBuf setShortLE(final int i, final int i1)
+    {
+        return this.byteBuf.setShortLE(i, i1);
+    }
+
+    @Override
     public ByteBuf setMedium(final int i, final int j)
     {
         return this.byteBuf.setMedium(i, j);
+    }
+
+    @Override
+    public ByteBuf setMediumLE(final int i, final int i1)
+    {
+        return this.byteBuf.setMediumLE(i, i1);
     }
 
     @Override
@@ -850,9 +904,21 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public ByteBuf setIntLE(final int i, final int i1)
+    {
+        return this.byteBuf.setIntLE(i, i1);
+    }
+
+    @Override
     public ByteBuf setLong(final int i, final long j)
     {
         return this.byteBuf.setLong(i, j);
+    }
+
+    @Override
+    public ByteBuf setLongLE(final int i, final long l)
+    {
+        return this.byteBuf.setLongLE(i, l);
     }
 
     @Override
@@ -952,9 +1018,21 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public short readShortLE()
+    {
+        return this.byteBuf.readShortLE();
+    }
+
+    @Override
     public int readUnsignedShort()
     {
         return this.byteBuf.readUnsignedShort();
+    }
+
+    @Override
+    public int readUnsignedShortLE()
+    {
+        return this.byteBuf.readUnsignedShortLE();
     }
 
     @Override
@@ -964,9 +1042,21 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public int readMediumLE()
+    {
+        return this.byteBuf.readMediumLE();
+    }
+
+    @Override
     public int readUnsignedMedium()
     {
         return this.byteBuf.readUnsignedMedium();
+    }
+
+    @Override
+    public int readUnsignedMediumLE()
+    {
+        return this.byteBuf.readUnsignedMediumLE();
     }
 
     @Override
@@ -976,15 +1066,33 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public int readIntLE()
+    {
+        return this.byteBuf.readIntLE();
+    }
+
+    @Override
     public long readUnsignedInt()
     {
         return this.byteBuf.readUnsignedInt();
     }
 
     @Override
+    public long readUnsignedIntLE()
+    {
+        return this.byteBuf.readUnsignedIntLE();
+    }
+
+    @Override
     public long readLong()
     {
         return this.byteBuf.readLong();
+    }
+
+    @Override
+    public long readLongLE()
+    {
+        return this.byteBuf.readLongLE();
     }
 
     @Override
@@ -1090,9 +1198,21 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public ByteBuf writeShortLE(final int i)
+    {
+        return this.byteBuf.writeShortLE(i);
+    }
+
+    @Override
     public ByteBuf writeMedium(final int i)
     {
         return this.byteBuf.writeMedium(i);
+    }
+
+    @Override
+    public ByteBuf writeMediumLE(final int i)
+    {
+        return this.byteBuf.writeMediumLE(i);
     }
 
     @Override
@@ -1102,9 +1222,21 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public ByteBuf writeIntLE(final int i)
+    {
+        return this.byteBuf.writeIntLE(i);
+    }
+
+    @Override
     public ByteBuf writeLong(final long i)
     {
         return this.byteBuf.writeLong(i);
+    }
+
+    @Override
+    public ByteBuf writeLongLE(final long l)
+    {
+        return this.byteBuf.writeLongLE(l);
     }
 
     @Override
