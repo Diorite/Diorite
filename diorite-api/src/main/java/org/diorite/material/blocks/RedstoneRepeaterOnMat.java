@@ -279,7 +279,8 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
      */
     public static void register(final RedstoneRepeaterOnMat element)
     {
-        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();
+        byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

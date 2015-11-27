@@ -109,10 +109,10 @@ public class HandshakeListener implements PacketHandshakingClientListener
 //                    this.disconnect(TextComponent.fromLegacyText("Outdated client, we are on 1.9"));
 //                }
 //                else
-                {
-                    this.networkManager.setPacketListener(new LoginListener(this.core, this.networkManager, packet.getServerAddress() + ":" + packet.getServerPort()));
-                }
-                break;
+            {
+                this.networkManager.setPacketListener(new LoginListener(this.core, this.networkManager, packet.getServerAddress() + ":" + packet.getServerPort()));
+            }
+            break;
             case STATUS:
                 this.networkManager.setProtocol(EnumProtocol.STATUS);
                 this.networkManager.setPacketListener(new StatusListener(this.core, this.networkManager));

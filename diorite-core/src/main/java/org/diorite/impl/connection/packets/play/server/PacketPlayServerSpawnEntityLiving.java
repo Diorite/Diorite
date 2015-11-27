@@ -41,14 +41,14 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 @PacketClass(id = 0x03, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 170)
 public class PacketPlayServerSpawnEntityLiving extends PacketPlayServer
 {
-    private int  entityId; // ~5 bytes
-    private UUID entityUUID; // 16 bytes
-    private byte entityTypeId; // 1 byte
-    private int  x; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int  y; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int  z; // 4 bytes, WARNING! This is 'fixed-point' number
-    private byte yaw; // 1 byte
-    private byte pitch; // 1 byte
+    private int                              entityId; // ~5 bytes
+    private UUID                             entityUUID; // 16 bytes
+    private byte                             entityTypeId; // 1 byte
+    private int                              x; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int                              y; // 4 bytes, WARNING! This is 'fixed-point' number
+    private int                              z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private byte                             yaw; // 1 byte
+    private byte                             pitch; // 1 byte
     private byte                             headPitch; // 1 byte
     private short                            movX; // 2 bytes
     private short                            movY; // 2 bytes

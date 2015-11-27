@@ -286,7 +286,8 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
      */
     public static void register(final StainedGlassPaneMat element)
     {
-        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();
+        byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

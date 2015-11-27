@@ -283,7 +283,8 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements 
      */
     public static void register(final DaylightDetectorMat element)
     {
-        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();
+        byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

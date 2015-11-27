@@ -272,7 +272,8 @@ public class GoldenPressurePlateMat extends WeightedPressurePlateMat
      */
     public static void register(final GoldenPressurePlateMat element)
     {
-        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();
+        byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

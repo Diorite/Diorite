@@ -252,7 +252,8 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
      */
     public static void register(final RedSandstoneStairsMat element)
     {
-        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();
+        byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 

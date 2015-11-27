@@ -247,6 +247,7 @@ public class PacketDataSerializer extends ByteBuf
         }
         throw new AssertionError();
     }
+
     public byte[] readByteWord()
     {
         final byte[] abyte = new byte[this.readVarInt()];

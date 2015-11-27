@@ -54,7 +54,7 @@ public class ArrayPatternImpl implements PatternData
     public int getAsInt(final int sectionID)
     {
         final int i = this.pattern[sectionID];
-        if (i == -1)
+        if (i == - 1)
         {
             return 0;
         }

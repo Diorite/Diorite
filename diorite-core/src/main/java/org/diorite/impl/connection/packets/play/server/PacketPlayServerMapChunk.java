@@ -106,7 +106,7 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         data.writeInt(this.z);
         data.writeBoolean(this.fullChunk);
         data.writeVarInt(this.mask);
-        System.out.println(Integer.toBinaryString(this.mask) + " ("+x+", "+this.z+"), " + this.data.length);
+        System.out.println(Integer.toBinaryString(this.mask) + " (" + x + ", " + this.z + "), " + this.data.length);
         data.writeByteWord(this.data);
     }
 

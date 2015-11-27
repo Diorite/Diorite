@@ -1,7 +1,5 @@
 package org.diorite.impl.inventory.recipe.craft;
 
-import java.util.Arrays;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

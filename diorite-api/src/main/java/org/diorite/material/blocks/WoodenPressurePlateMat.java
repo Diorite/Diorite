@@ -165,7 +165,8 @@ public class WoodenPressurePlateMat extends PressurePlateMat implements FuelMat
      */
     public static void register(final WoodenPressurePlateMat element)
     {
-        allBlocks.incrementAndGet();byID.put((byte) element.getType(), element);
+        allBlocks.incrementAndGet();
+        byID.put((byte) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 
