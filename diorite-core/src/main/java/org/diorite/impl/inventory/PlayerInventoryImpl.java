@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -44,12 +43,10 @@ import org.diorite.entity.Human;
 import org.diorite.entity.Player;
 import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerInventory;
-import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.slot.Slot;
 import org.diorite.inventory.slot.SlotType;
 import org.diorite.material.Material;
-import org.diorite.utils.DioriteUtils;
 
 public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements PlayerInventory
 {
@@ -673,7 +670,7 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
         if (! packets.isEmpty())
         {
             final PacketPlayServerSetSlot[] packetsArray = packets.values().toArray(new PacketPlayServerSetSlot[packets.size()]);
-            this.viewers.forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
+            this.viewers.stream().filter(p -> p instanceof PlayerImpl).forEach(p -> ((PlayerImpl) p).getNetworkManager().sendPackets(packetsArray));
             return true;
         }
         return false;

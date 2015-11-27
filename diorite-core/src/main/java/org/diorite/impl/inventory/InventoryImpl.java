@@ -108,7 +108,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         if (! packets.isEmpty())
         {
             final PacketPlayServerSetSlot[] packetsArray = packets.toArray(new PacketPlayServerSetSlot[packets.size()]);
-            this.viewers.forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
+            this.viewers.stream().filter(h -> h instanceof PlayerImpl).map(h -> (PlayerImpl) h).forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
             return true;
         }
         return false;

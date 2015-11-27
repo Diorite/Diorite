@@ -34,7 +34,6 @@ import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.entity.data.HandSide;
 import org.diorite.entity.data.HandType;
 import org.diorite.inventory.EntityEquipment;
-import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.permissions.GroupablePermissionsContainer;
@@ -272,7 +271,7 @@ public class HumanImpl extends LivingEntityImpl implements Human
     }
 
     @Override
-    public PlayerInventory getInventory()
+    public PlayerInventoryImpl getInventory()
     {
         return this.inventory;
     }
