@@ -24,11 +24,10 @@
 
 package org.diorite.world;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class Dimension extends ASimpleEnum<Dimension>
@@ -42,7 +41,7 @@ public class Dimension extends ASimpleEnum<Dimension>
     public static final Dimension OVERWORLD = new Dimension("OVERWORLD", true, 0);
     public static final Dimension END       = new Dimension("END", false, 1);
 
-    private static final TIntObjectMap<Dimension> byDimID = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final Int2ObjectMap<Dimension> byDimID = new Int2ObjectOpenHashMap<>(3, SMALL_LOAD_FACTOR);
 
     private final boolean hasSkyLight;
     private final int     id;
@@ -121,8 +120,8 @@ public class Dimension extends ASimpleEnum<Dimension>
      */
     public static Dimension[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(Dimension.class);
-        return (Dimension[]) map.values(new Dimension[map.size()]);
+        final Int2ObjectMap<Dimension> map = getByEnumOrdinal(Dimension.class);
+        return map.values().toArray(new Dimension[map.size()]);
     }
 
     static

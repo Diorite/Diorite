@@ -30,8 +30,8 @@ import org.diorite.material.AgeableBlockMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Reeds Block' block material in minecraft. <br>
@@ -183,7 +183,7 @@ public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
     public static final ReedsBlockMat REEDS_BLOCK_15 = new ReedsBlockMat(0xF);
 
     private static final Map<String, ReedsBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<ReedsBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<ReedsBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected ReedsBlockMat()
@@ -297,7 +297,7 @@ public class ReedsBlockMat extends PlantMat implements AgeableBlockMat
      */
     public static ReedsBlockMat[] reedsTypes()
     {
-        return byID.values(new ReedsBlockMat[byID.size()]);
+        return byID.values().toArray(new ReedsBlockMat[byID.size()]);
     }
 
     static

@@ -49,8 +49,10 @@
         <!--<artifactId>sqlite-jdbc</artifactId>-->
         <!--</dependency>-->
         <dependency>
-            <groupId>net.sf.trove4j</groupId>
-            <artifactId>trove4j</artifactId>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <!--<groupId>net.sf.trove4j</groupId>-->
+            <!--<artifactId>trove4j</artifactId>-->
         </dependency>
         <dependency>
             <groupId>net.sf.jopt-simple</groupId>

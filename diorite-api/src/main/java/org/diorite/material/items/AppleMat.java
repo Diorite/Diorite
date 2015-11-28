@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Apple' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class AppleMat extends EdibleItemMat
     public static final AppleMat APPLE = new AppleMat();
 
     private static final Map<String, AppleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<AppleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<AppleMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected AppleMat()
@@ -126,7 +126,7 @@ public class AppleMat extends EdibleItemMat
      */
     public static AppleMat[] appleTypes()
     {
-        return byID.values(new AppleMat[byID.size()]);
+        return byID.values().toArray(new AppleMat[byID.size()]);
     }
 
     static

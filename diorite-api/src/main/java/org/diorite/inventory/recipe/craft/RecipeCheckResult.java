@@ -3,7 +3,7 @@ package org.diorite.inventory.recipe.craft;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
 
-import gnu.trove.map.TShortObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 
 /**
  * Represent results after checking if recipe is valid for given inventory.
@@ -39,5 +39,5 @@ public interface RecipeCheckResult
      *
      * @return items that should be changed in inventory.
      */
-    TShortObjectMap<ItemStack> getOnCraft();
+    Short2ObjectMap<ItemStack> getOnCraft();
 }

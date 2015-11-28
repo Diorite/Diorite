@@ -24,11 +24,10 @@
 
 package org.diorite.entity;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 @SuppressWarnings({"ClassHasNoToStringMethod"})
 public class EntityType extends ASimpleEnum<EntityType>
@@ -43,7 +42,7 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static final EntityType CREEPER = new EntityType("CREEPER", Creeper.class, 50, "Creeper");
     // TODO
 
-    private static final TIntObjectMap<EntityType> byMcId = new TIntObjectHashMap<>(3, .1f, - 1);
+    private static final Int2ObjectMap<EntityType> byMcId = new Int2ObjectOpenHashMap<>(3, .1f);
 
     private final Class<? extends Entity> dioriteEntityClass;
     private final boolean                 living;
@@ -140,8 +139,8 @@ public class EntityType extends ASimpleEnum<EntityType>
      */
     public static EntityType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(EntityType.class);
-        return (EntityType[]) map.values(new EntityType[map.size()]);
+        final Int2ObjectMap<EntityType> map = getByEnumOrdinal(EntityType.class);
+        return map.values().toArray(new EntityType[map.size()]);
     }
 
     static

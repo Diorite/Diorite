@@ -33,8 +33,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Dye' item material in minecraft. <br>
@@ -168,7 +168,7 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
     public static final BannerMat BANNER_WHITE      = new BannerMat(DyeColor.WHITE);
 
     private static final Map<String, BannerMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BannerMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<BannerMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;
 
@@ -268,7 +268,7 @@ public class BannerMat extends ItemMaterialData implements PlaceableMat, FuelMat
      */
     public static BannerMat[] bannerTypes()
     {
-        return byID.values(new BannerMat[byID.size()]);
+        return byID.values().toArray(new BannerMat[byID.size()]);
     }
 
     static

@@ -34,8 +34,8 @@ import org.diorite.material.AttachableMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Wall Sign' block material in minecraft. <br>
@@ -91,7 +91,7 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
     public static final WallSignMat WALL_SIGN_EAST  = new WallSignMat(BlockFace.EAST);
 
     private static final Map<String, WallSignMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WallSignMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<WallSignMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
 
@@ -232,7 +232,7 @@ public class WallSignMat extends SignBlockMat implements AttachableMat
      */
     public static WallSignMat[] wallSignTypes()
     {
-        return byID.values(new WallSignMat[byID.size()]);
+        return byID.values().toArray(new WallSignMat[byID.size()]);
     }
 
     static

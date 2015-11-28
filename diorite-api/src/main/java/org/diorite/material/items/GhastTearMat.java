@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Ghast Tear' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class GhastTearMat extends ItemMaterialData
     public static final GhastTearMat GHAST_TEAR = new GhastTearMat();
 
     private static final Map<String, GhastTearMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GhastTearMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<GhastTearMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected GhastTearMat()
@@ -127,7 +127,7 @@ public class GhastTearMat extends ItemMaterialData
      */
     public static GhastTearMat[] ghastTearTypes()
     {
-        return byID.values(new GhastTearMat[byID.size()]);
+        return byID.values().toArray(new GhastTearMat[byID.size()]);
     }
 
     static

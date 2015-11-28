@@ -30,8 +30,8 @@ import org.diorite.material.AgeableBlockMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Cactus' block material in minecraft. <br>
@@ -182,7 +182,7 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
     public static final CactusMat CACTUS_15 = new CactusMat(0xF);
 
     private static final Map<String, CactusMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CactusMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CactusMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected CactusMat()
@@ -296,7 +296,7 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
      */
     public static CactusMat[] cactusTypes()
     {
-        return byID.values(new CactusMat[byID.size()]);
+        return byID.values().toArray(new CactusMat[byID.size()]);
     }
 
     static

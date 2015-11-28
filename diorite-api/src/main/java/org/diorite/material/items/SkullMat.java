@@ -35,8 +35,8 @@ import org.diorite.material.SkullType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.collections.maps.SimpleEnumMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Skull' item material in minecraft. <br>
@@ -93,7 +93,7 @@ public class SkullMat extends ItemMaterialData
     public static final SkullMat SKULL_CREEPER         = new SkullMat(SkullType.CREEPER);
 
     private static final Map<String, SkullMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SkullMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<SkullMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     private static final SimpleEnumMap<SkullType, SkullMat> byType = new SimpleEnumMap<>(5);
 
@@ -212,7 +212,7 @@ public class SkullMat extends ItemMaterialData
      */
     public static SkullMat[] skullTypes()
     {
-        return byID.values(new SkullMat[byID.size()]);
+        return byID.values().toArray(new SkullMat[byID.size()]);
     }
 
     static

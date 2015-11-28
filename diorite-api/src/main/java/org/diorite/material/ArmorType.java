@@ -26,10 +26,9 @@ package org.diorite.material;
 
 import org.diorite.inventory.EntityEquipment;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Represent type of armor element.
@@ -139,8 +138,8 @@ public abstract class ArmorType extends ASimpleEnum<ArmorType>
      */
     public static ArmorType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ArmorType.class);
-        return (ArmorType[]) map.values(new ArmorType[map.size()]);
+        final Int2ObjectMap<ArmorType> map = getByEnumOrdinal(ArmorType.class);
+        return map.values().toArray(new ArmorType[map.size()]);
     }
 
     static

@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Cobblestone Wall' block material in minecraft. <br>
@@ -69,7 +69,7 @@ public class CobblestoneWallMat extends BlockMaterialData
     public static final CobblestoneWallMat COBBLESTONE_WALL_MOSSY = new CobblestoneWallMat("MOSSY", 0x1);
 
     private static final Map<String, CobblestoneWallMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CobblestoneWallMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CobblestoneWallMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected CobblestoneWallMat()
@@ -147,7 +147,7 @@ public class CobblestoneWallMat extends BlockMaterialData
      */
     public static CobblestoneWallMat[] cobblestoneWallTypes()
     {
-        return byID.values(new CobblestoneWallMat[byID.size()]);
+        return byID.values().toArray(new CobblestoneWallMat[byID.size()]);
     }
 
     static

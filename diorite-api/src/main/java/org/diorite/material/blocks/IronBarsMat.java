@@ -30,8 +30,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.FenceMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Iron Bars' block material in minecraft. <br>
@@ -51,7 +51,7 @@ public class IronBarsMat extends BlockMaterialData implements FenceMat
     public static final IronBarsMat IRON_BARS = new IronBarsMat();
 
     private static final Map<String, IronBarsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<IronBarsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<IronBarsMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected IronBarsMat()
@@ -124,7 +124,7 @@ public class IronBarsMat extends BlockMaterialData implements FenceMat
      */
     public static IronBarsMat[] ironBarsTypes()
     {
-        return byID.values(new IronBarsMat[byID.size()]);
+        return byID.values().toArray(new IronBarsMat[byID.size()]);
     }
 
     static

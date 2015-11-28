@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Oak Door Item' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class OakDoorItemMat extends WoodenDoorItemMat
     public static final OakDoorItemMat OAK_DOOR_ITEM = new OakDoorItemMat();
 
     private static final Map<String, OakDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<OakDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<OakDoorItemMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected OakDoorItemMat()
@@ -127,7 +127,7 @@ public class OakDoorItemMat extends WoodenDoorItemMat
      */
     public static OakDoorItemMat[] oakDoorItemTypes()
     {
-        return byID.values(new OakDoorItemMat[byID.size()]);
+        return byID.values().toArray(new OakDoorItemMat[byID.size()]);
     }
 
     static

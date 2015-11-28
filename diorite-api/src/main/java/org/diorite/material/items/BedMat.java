@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Bed' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class BedMat extends ItemMaterialData implements PlaceableMat
     public static final BedMat BED = new BedMat();
 
     private static final Map<String, BedMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BedMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<BedMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected BedMat()
@@ -128,7 +128,7 @@ public class BedMat extends ItemMaterialData implements PlaceableMat
      */
     public static BedMat[] bedTypes()
     {
-        return byID.values(new BedMat[byID.size()]);
+        return byID.values().toArray(new BedMat[byID.size()]);
     }
 
     static

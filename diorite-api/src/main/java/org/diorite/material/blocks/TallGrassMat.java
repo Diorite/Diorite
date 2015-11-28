@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Tall Grass' block material in minecraft. <br>
@@ -76,7 +76,7 @@ public class TallGrassMat extends FlowerMat
     public static final TallGrassMat TALL_GRASS_FERN  = new TallGrassMat(0x2, FlowerTypeMat.FERN);
 
     private static final Map<String, TallGrassMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<TallGrassMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<TallGrassMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected TallGrassMat()
@@ -180,7 +180,7 @@ public class TallGrassMat extends FlowerMat
      */
     public static TallGrassMat[] tallGrassTypes()
     {
-        return byID.values(new TallGrassMat[byID.size()]);
+        return byID.values().toArray(new TallGrassMat[byID.size()]);
     }
 
     static

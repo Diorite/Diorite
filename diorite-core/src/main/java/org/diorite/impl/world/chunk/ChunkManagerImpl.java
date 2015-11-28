@@ -51,8 +51,8 @@ import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
 import org.diorite.world.generator.maplayer.MapLayer;
 
-import gnu.trove.TLongCollection;
-import gnu.trove.set.hash.TLongHashSet;
+import it.unimi.dsi.fastutil.longs.LongCollection;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 public class ChunkManagerImpl implements ChunkManager, Tickable
 {
@@ -304,10 +304,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     @Override
     public void doTick(final int tps)
     {
-        this.chunks.values().stream().filter(ChunkImpl::isLoaded).forEach(c -> c.getTileEntities().forEachValue(t -> {
-            t.doTick(tps);
-            return true;
-        }));
+        this.chunks.values().stream().filter(ChunkImpl::isLoaded).forEach(c -> c.getTileEntities().forEach((l, t) -> t.doTick(tps)));
     }
 
     /**
@@ -340,7 +337,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
     {
         private final ChunkManagerImpl cm;
         private final String           desc;
-        private final TLongCollection keys = new TLongHashSet(3);
+        private final LongCollection keys = new LongOpenHashSet(3);
 
         public ChunkLock(final ChunkManagerImpl cm, final String desc)
         {
@@ -370,10 +367,7 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
 
         public synchronized void clear()
         {
-            this.keys.forEach(key -> {
-                this.cm.getLockSet(key).remove(this);
-                return true;
-            });
+            this.keys.forEach(key -> this.cm.getLockSet(key).remove(this));
             this.keys.clear();
         }
 

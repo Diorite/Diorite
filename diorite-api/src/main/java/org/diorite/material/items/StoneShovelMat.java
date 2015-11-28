@@ -32,8 +32,8 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Stone Shovel' item material in minecraft. <br>
@@ -52,7 +52,7 @@ public class StoneShovelMat extends ShovelMat
     public static final StoneShovelMat STONE_SHOVEL = new StoneShovelMat();
 
     private static final Map<String, StoneShovelMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<StoneShovelMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<StoneShovelMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final LazyValue<StoneShovelMat> next = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() + 1) : null);
     protected final LazyValue<StoneShovelMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);

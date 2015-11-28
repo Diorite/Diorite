@@ -32,8 +32,8 @@ import org.diorite.material.blocks.OreBlockMat;
 import org.diorite.material.blocks.OreMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Coal' item material in minecraft. <br>
@@ -69,7 +69,7 @@ public class CoalMat extends OreItemMatExt implements FuelMat
     public static final CoalMat CHARCOAL = new CoalMat("CHARCOAL", 0x01, null, COAL_BLOCK);
 
     private static final Map<String, CoalMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<CoalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<CoalMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected CoalMat()
@@ -159,7 +159,7 @@ public class CoalMat extends OreItemMatExt implements FuelMat
      */
     public static CoalMat[] coalTypes()
     {
-        return byID.values(new CoalMat[byID.size()]);
+        return byID.values().toArray(new CoalMat[byID.size()]);
     }
 
     static

@@ -33,8 +33,8 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Leather Helmet' item material in minecraft. <br>
@@ -53,7 +53,7 @@ public class LeatherHelmetMat extends HelmetMat
     public static final LeatherHelmetMat LEATHER_HELMET = new LeatherHelmetMat();
 
     private static final Map<String, LeatherHelmetMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<LeatherHelmetMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<LeatherHelmetMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final LazyValue<LeatherHelmetMat> next = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() + 1) : null);
     protected final LazyValue<LeatherHelmetMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);

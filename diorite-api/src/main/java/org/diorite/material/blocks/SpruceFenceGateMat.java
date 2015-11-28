@@ -32,8 +32,8 @@ import org.diorite.material.StairsMat;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Spruce Fence Gate' block material in minecraft. <br>
@@ -121,7 +121,7 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
     public static final SpruceFenceGateMat SPRUCE_FENCE_GATE_EAST_OPEN  = new SpruceFenceGateMat(BlockFace.EAST, true);
 
     private static final Map<String, SpruceFenceGateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SpruceFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<SpruceFenceGateMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected SpruceFenceGateMat()
@@ -237,7 +237,7 @@ public class SpruceFenceGateMat extends WoodenFenceGateMat
      */
     public static SpruceFenceGateMat[] spruceFenceGateTypes()
     {
-        return byID.values(new SpruceFenceGateMat[byID.size()]);
+        return byID.values().toArray(new SpruceFenceGateMat[byID.size()]);
     }
 
     static

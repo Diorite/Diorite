@@ -32,8 +32,8 @@ import org.diorite.material.StairsMat;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Jungle Stairs' block material in minecraft. <br>
@@ -61,7 +61,7 @@ public class JungleStairsMat extends WoodenStairsMat
     public static final JungleStairsMat JUNGLE_STAIRS_NORTH_UPSIDE_DOWN = new JungleStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, JungleStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<JungleStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<JungleStairsMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected JungleStairsMat()
@@ -177,7 +177,7 @@ public class JungleStairsMat extends WoodenStairsMat
      */
     public static JungleStairsMat[] jungleStairsTypes()
     {
-        return byID.values(new JungleStairsMat[byID.size()]);
+        return byID.values().toArray(new JungleStairsMat[byID.size()]);
     }
 
     static

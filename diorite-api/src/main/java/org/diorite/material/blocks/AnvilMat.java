@@ -36,8 +36,8 @@ import org.diorite.material.RotatableMat;
 import org.diorite.material.RotateAxisMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Anvil' block material in minecraft. <br>
@@ -156,7 +156,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
     public static final AnvilMat ANVIL_SOUTH_NORTH_VERY_DAMAGED     = new AnvilMat(AnvilBlockDamage.VERY_DAMAGED, RotateAxisMat.NORTH_SOUTH, true);
 
     private static final Map<String, AnvilMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<AnvilMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<AnvilMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final AnvilBlockDamage damage;
     protected final RotateAxisMat    axis;
@@ -407,7 +407,7 @@ public class AnvilMat extends BlockMaterialData implements RotatableMat
      */
     public static AnvilMat[] anvilTypes()
     {
-        return byID.values(new AnvilMat[byID.size()]);
+        return byID.values().toArray(new AnvilMat[byID.size()]);
     }
 
     static

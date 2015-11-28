@@ -30,8 +30,8 @@ import org.diorite.material.FuelMat;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Planks' block material in minecraft. <br>
@@ -102,7 +102,7 @@ public class PlanksMat extends WoodMat implements FuelMat
     public static final PlanksMat PLANKS_DARK_OAK = new PlanksMat(WoodType.DARK_OAK);
 
     private static final Map<String, PlanksMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PlanksMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<PlanksMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected PlanksMat()
@@ -212,7 +212,7 @@ public class PlanksMat extends WoodMat implements FuelMat
      */
     public static PlanksMat[] planksTypes()
     {
-        return byID.values(new PlanksMat[byID.size()]);
+        return byID.values().toArray(new PlanksMat[byID.size()]);
     }
 
     static

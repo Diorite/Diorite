@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Oak Fence' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class OakFenceMat extends WoodenFenceMat
     public static final OakFenceMat OAK_FENCE = new OakFenceMat();
 
     private static final Map<String, OakFenceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<OakFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<OakFenceMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected OakFenceMat()
@@ -123,7 +123,7 @@ public class OakFenceMat extends WoodenFenceMat
      */
     public static OakFenceMat[] oakFenceTypes()
     {
-        return byID.values(new OakFenceMat[byID.size()]);
+        return byID.values().toArray(new OakFenceMat[byID.size()]);
     }
 
     static

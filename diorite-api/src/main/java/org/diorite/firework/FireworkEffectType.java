@@ -24,12 +24,11 @@
 
 package org.diorite.firework;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Enum with possible firework types.
@@ -63,7 +62,7 @@ public class FireworkEffectType extends ASimpleEnum<FireworkEffectType>
      */
     public static final FireworkEffectType CREEPER    = new FireworkEffectType("CREEPER", 4);
 
-    private static final TByteObjectMap<FireworkEffectType> byTypeID = new TByteObjectHashMap<>(5, SMALL_LOAD_FACTOR, (byte) - 1);
+    private static final Byte2ObjectMap<FireworkEffectType> byTypeID = new Byte2ObjectOpenHashMap<>(5, SMALL_LOAD_FACTOR);
 
     /**
      * ID for this firework effect type.
@@ -157,8 +156,8 @@ public class FireworkEffectType extends ASimpleEnum<FireworkEffectType>
      */
     public static FireworkEffectType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(FireworkEffectType.class);
-        return (FireworkEffectType[]) map.values(new FireworkEffectType[map.size()]);
+        final Int2ObjectMap<FireworkEffectType> map = getByEnumOrdinal(FireworkEffectType.class);
+        return map.values().toArray(new FireworkEffectType[map.size()]);
     }
 
     static

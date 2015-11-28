@@ -24,10 +24,9 @@
 
 package org.diorite;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class GameMode extends ASimpleEnum<GameMode>
@@ -100,8 +99,8 @@ public class GameMode extends ASimpleEnum<GameMode>
      */
     public static GameMode[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(GameMode.class);
-        return (GameMode[]) map.values(new GameMode[map.size()]);
+        final Int2ObjectMap<GameMode> map = getByEnumOrdinal(GameMode.class);
+        return map.values().toArray(new GameMode[map.size()]);
     }
 
     static

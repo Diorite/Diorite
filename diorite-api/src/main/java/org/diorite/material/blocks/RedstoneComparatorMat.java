@@ -36,8 +36,8 @@ import org.diorite.material.Material;
 import org.diorite.material.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Redstone Comparator' block material in minecraft. <br>
@@ -146,7 +146,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
     public static final RedstoneComparatorMat REDSTONE_COMPARATOR_WEST_SUBTRACT_POWERED  = new RedstoneComparatorMat(BlockFace.WEST, true, true);
 
     private static final Map<String, RedstoneComparatorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneComparatorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedstoneComparatorMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
     protected final boolean   subtractionMode;
@@ -340,7 +340,7 @@ public class RedstoneComparatorMat extends BlockMaterialData implements Powerabl
      */
     public static RedstoneComparatorMat[] redstoneComparatorTypes()
     {
-        return byID.values(new RedstoneComparatorMat[byID.size()]);
+        return byID.values().toArray(new RedstoneComparatorMat[byID.size()]);
     }
 
     static

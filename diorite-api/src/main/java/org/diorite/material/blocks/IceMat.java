@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Ice' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class IceMat extends BlockMaterialData
     public static final IceMat ICE = new IceMat();
 
     private static final Map<String, IceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<IceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<IceMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected IceMat()
@@ -123,7 +123,7 @@ public class IceMat extends BlockMaterialData
      */
     public static IceMat[] iceTypes()
     {
-        return byID.values(new IceMat[byID.size()]);
+        return byID.values().toArray(new IceMat[byID.size()]);
     }
 
     static

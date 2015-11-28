@@ -24,10 +24,9 @@
 
 package org.diorite.map;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Represent map icons, icons are stored in /textures/map/map_icons.png
@@ -164,8 +163,8 @@ public class MapIconType extends ASimpleEnum<MapIconType>
      */
     public static MapIconType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(MapIconType.class);
-        return (MapIconType[]) map.values(new MapIconType[map.size()]);
+        final Int2ObjectMap<MapIconType> map = getByEnumOrdinal(MapIconType.class);
+        return map.values().toArray(new MapIconType[map.size()]);
     }
 
     static

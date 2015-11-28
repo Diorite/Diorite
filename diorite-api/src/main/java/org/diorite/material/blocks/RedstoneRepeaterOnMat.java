@@ -30,8 +30,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Redstone Repeater On' block material in minecraft. <br>
@@ -186,7 +186,7 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
     public static final RedstoneRepeaterOnMat REDSTONE_REPEATER_ON_WEST_4  = new RedstoneRepeaterOnMat(BlockFace.WEST, 4);
 
     private static final Map<String, RedstoneRepeaterOnMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneRepeaterOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedstoneRepeaterOnMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected RedstoneRepeaterOnMat()
@@ -294,7 +294,7 @@ public class RedstoneRepeaterOnMat extends RedstoneRepeaterMat
      */
     public static RedstoneRepeaterOnMat[] redstoneRepeaterOnTypes()
     {
-        return byID.values(new RedstoneRepeaterOnMat[byID.size()]);
+        return byID.values().toArray(new RedstoneRepeaterOnMat[byID.size()]);
     }
 
     static

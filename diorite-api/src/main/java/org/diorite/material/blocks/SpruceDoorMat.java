@@ -35,8 +35,8 @@ import org.diorite.material.Material;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Spruce Door' block material in minecraft. <br>
@@ -156,7 +156,7 @@ public class SpruceDoorMat extends WoodenDoorMat
     public static final SpruceDoorMat SPRUCE_DOOR_TOP_RIGHT_POWERED = new SpruceDoorMat(true, true);
 
     private static final Map<String, SpruceDoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SpruceDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<SpruceDoorMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean   powered;
     protected final boolean   hingeOnRightSide;
@@ -421,7 +421,7 @@ public class SpruceDoorMat extends WoodenDoorMat
      */
     public static SpruceDoorMat[] spruceDoorTypes()
     {
-        return byID.values(new SpruceDoorMat[byID.size()]);
+        return byID.values().toArray(new SpruceDoorMat[byID.size()]);
     }
 
     static

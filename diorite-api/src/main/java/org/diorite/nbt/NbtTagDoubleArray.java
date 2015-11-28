@@ -32,8 +32,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.collections.arrays.fastutil.FastUtilDoubleIterator;
 import org.diorite.utils.collections.arrays.primitive.DoubleIterator;
-import org.diorite.utils.collections.arrays.trove.TDoubleArrayIterator;
 
 /**
  * Additional nbt type, added by diorite, it will break minecraft compatybility, use with caution. <br>
@@ -169,13 +169,13 @@ public class NbtTagDoubleArray extends NbtAbstractTag implements Iterable<Double
     }
 
     /**
-     * Returns instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     * Returns instance of primitive iterator based on FastUtil interface {@link it.unimi.dsi.fastutil.doubles.DoubleIterator}.
      *
-     * @return instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     * @return instance of primitive iterator based on FastUtil interface {@link it.unimi.dsi.fastutil.doubles.DoubleIterator}.
      */
-    public TDoubleArrayIterator primitiveIterator()
+    public FastUtilDoubleIterator primitiveIterator()
     {
-        return new TDoubleArrayIterator(this.value);
+        return new FastUtilDoubleIterator(this.value);
     }
 
     @Override

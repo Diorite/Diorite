@@ -34,8 +34,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.DirectionalMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Burning Furnace' block material in minecraft. <br>
@@ -90,7 +90,7 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
     public static final BurningFurnaceMat BURNING_FURNACE_EAST  = new BurningFurnaceMat(BlockFace.EAST);
 
     private static final Map<String, BurningFurnaceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BurningFurnaceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<BurningFurnaceMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
 
@@ -219,7 +219,7 @@ public class BurningFurnaceMat extends BlockMaterialData implements DirectionalM
      */
     public static BurningFurnaceMat[] burningFurnaceTypes()
     {
-        return byID.values(new BurningFurnaceMat[byID.size()]);
+        return byID.values().toArray(new BurningFurnaceMat[byID.size()]);
     }
 
     static

@@ -35,8 +35,8 @@ import org.diorite.material.Material;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Dark Oak Door' block material in minecraft. <br>
@@ -156,7 +156,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
     public static final DarkOakDoorMat DARK_OAK_DOOR_TOP_RIGHT_POWERED = new DarkOakDoorMat(true, true);
 
     private static final Map<String, DarkOakDoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DarkOakDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DarkOakDoorMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean   powered;
     protected final boolean   hingeOnRightSide;
@@ -421,7 +421,7 @@ public class DarkOakDoorMat extends WoodenDoorMat
      */
     public static DarkOakDoorMat[] darkOakDoorTypes()
     {
-        return byID.values(new DarkOakDoorMat[byID.size()]);
+        return byID.values().toArray(new DarkOakDoorMat[byID.size()]);
     }
 
     static

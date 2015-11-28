@@ -34,8 +34,8 @@ import org.diorite.material.Material;
 import org.diorite.material.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Tripwire' block material in minecraft. <br>
@@ -207,7 +207,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
     public static final TripwireMat TRIPWIRE_POWERED_IN_AIR_VALID_DISARMED = new TripwireMat(true, true, true, true);
 
     private static final Map<String, TripwireMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<TripwireMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<TripwireMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean powered;
     protected final boolean inAir;
@@ -484,7 +484,7 @@ public class TripwireMat extends BlockMaterialData implements PowerableMat
      */
     public static TripwireMat[] tripwireTypes()
     {
-        return byID.values(new TripwireMat[byID.size()]);
+        return byID.values().toArray(new TripwireMat[byID.size()]);
     }
 
     static

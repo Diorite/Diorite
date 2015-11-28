@@ -26,13 +26,13 @@ package org.diorite.utils.collections.hash;
 
 import org.diorite.utils.SimpleEnum;
 
-import gnu.trove.strategy.HashingStrategy;
+import it.unimi.dsi.fastutil.Hash.Strategy;
 
 /**
  * Hashing strategy for simple enum objects.
  */
 @SuppressWarnings("rawtypes")
-public class SimpleEnumHashingStrategy implements HashingStrategy<SimpleEnum>
+public class SimpleEnumHashingStrategy implements Strategy<SimpleEnum>
 {
     private static final long serialVersionUID = 0;
 
@@ -49,7 +49,7 @@ public class SimpleEnumHashingStrategy implements HashingStrategy<SimpleEnum>
     public static final SimpleEnumHashingStrategy INSTANCE = new SimpleEnumHashingStrategy();
 
     @Override
-    public int computeHashCode(final SimpleEnum s)
+    public int hashCode(final SimpleEnum s)
     {
         return s.ordinal();
     }

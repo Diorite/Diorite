@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Hardened Clay' block material in minecraft. <br>
@@ -49,7 +49,7 @@ public class HardenedClayMat extends StonyMat
     public static final HardenedClayMat HARDENED_CLAY = new HardenedClayMat();
 
     private static final Map<String, HardenedClayMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<HardenedClayMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<HardenedClayMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected HardenedClayMat()
@@ -122,7 +122,7 @@ public class HardenedClayMat extends StonyMat
      */
     public static HardenedClayMat[] hardenedClayTypes()
     {
-        return byID.values(new HardenedClayMat[byID.size()]);
+        return byID.values().toArray(new HardenedClayMat[byID.size()]);
     }
 
     static

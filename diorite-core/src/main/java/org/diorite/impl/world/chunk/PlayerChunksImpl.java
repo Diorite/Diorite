@@ -42,17 +42,17 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.world.chunk.ChunkPos;
 
-import gnu.trove.TLongCollection;
-import gnu.trove.iterator.TLongIterator;
-import gnu.trove.set.TLongSet;
-import gnu.trove.set.hash.TLongHashSet;
+import it.unimi.dsi.fastutil.longs.LongCollection;
+import it.unimi.dsi.fastutil.longs.LongIterator;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 
 public class PlayerChunksImpl implements Tickable
 {
     public static final int CHUNK_BULK_SIZE = 4;
 
     private final PlayerImpl player;
-    private final TLongSet visibleChunks = new TLongHashSet(400);
+    private final LongSet visibleChunks = new LongOpenHashSet(400);
     private final ChunkLock chunkLock;
     private       boolean   logout;
     private       ChunkPos  lastUpdate;
@@ -70,7 +70,7 @@ public class PlayerChunksImpl implements Tickable
         return this.player.getRenderDistance();
     }
 
-    public TLongSet getVisibleChunks()
+    public LongSet getVisibleChunks()
     {
         return this.visibleChunks;
     }
@@ -88,7 +88,7 @@ public class PlayerChunksImpl implements Tickable
     public void logout()
     {
         this.logout = true;
-        for (final TLongIterator it = this.visibleChunks.iterator(); it.hasNext(); )
+        for (final LongIterator it = this.visibleChunks.iterator(); it.hasNext(); )
         {
             final long key = it.next();
             this.chunkLock.release(key);
@@ -106,7 +106,7 @@ public class PlayerChunksImpl implements Tickable
         this.lastUnload = curr;
         final byte render = this.getRenderDistance();
 
-        for (final TLongIterator it = this.visibleChunks.iterator(); it.hasNext(); )
+        for (final LongIterator it = this.visibleChunks.iterator(); it.hasNext(); )
         {
             final long key = it.next();
             final ChunkPos chunkPos = ChunkPos.fromLong(key);
@@ -129,7 +129,7 @@ public class PlayerChunksImpl implements Tickable
         {
             return;
         }
-        final TLongCollection oldChunks = new TLongHashSet(this.visibleChunks);
+        final LongCollection oldChunks = new LongOpenHashSet(this.visibleChunks);
         final Collection<ChunkImpl> chunksToSent = new ConcurrentSet<>();
         final int r = this.lastUpdateR++;
         final ChunkManagerImpl impl = this.player.getWorld().getChunkManager();

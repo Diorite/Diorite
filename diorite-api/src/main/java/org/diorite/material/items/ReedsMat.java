@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Reeds' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class ReedsMat extends ItemMaterialData implements PlaceableMat
     public static final ReedsMat REEDS = new ReedsMat();
 
     private static final Map<String, ReedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ReedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<ReedsMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected ReedsMat()
@@ -128,7 +128,7 @@ public class ReedsMat extends ItemMaterialData implements PlaceableMat
      */
     public static ReedsMat[] reedsTypes()
     {
-        return byID.values(new ReedsMat[byID.size()]);
+        return byID.values().toArray(new ReedsMat[byID.size()]);
     }
 
     static

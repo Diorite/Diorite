@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Beef' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class BeefMat extends EdibleItemMat
     public static final BeefMat BEEF = new BeefMat();
 
     private static final Map<String, BeefMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BeefMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<BeefMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected BeefMat()
@@ -126,7 +126,7 @@ public class BeefMat extends EdibleItemMat
      */
     public static BeefMat[] beefTypes()
     {
-        return byID.values(new BeefMat[byID.size()]);
+        return byID.values().toArray(new BeefMat[byID.size()]);
     }
 
     static

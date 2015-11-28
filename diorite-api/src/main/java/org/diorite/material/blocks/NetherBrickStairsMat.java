@@ -35,8 +35,8 @@ import org.diorite.material.Material;
 import org.diorite.material.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Nether Brick Stairs' block material in minecraft. <br>
@@ -124,7 +124,7 @@ public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
     public static final NetherBrickStairsMat NETHER_BRICK_STAIRS_NORTH_UPSIDE_DOWN = new NetherBrickStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, NetherBrickStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<NetherBrickStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<NetherBrickStairsMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
     protected final boolean   upsideDown;
@@ -267,7 +267,7 @@ public class NetherBrickStairsMat extends BlockMaterialData implements StairsMat
      */
     public static NetherBrickStairsMat[] netherBrickStairsTypes()
     {
-        return byID.values(new NetherBrickStairsMat[byID.size()]);
+        return byID.values().toArray(new NetherBrickStairsMat[byID.size()]);
     }
 
     static

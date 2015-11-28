@@ -36,8 +36,8 @@ import org.diorite.material.Material;
 import org.diorite.material.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Tripwire Hook' block material in minecraft. <br>
@@ -201,7 +201,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
     public static final TripwireHookMat TRIPWIRE_HOOK_EAST_READY_POWERED  = new TripwireHookMat(BlockFace.EAST, true, true);
 
     private static final Map<String, TripwireHookMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<TripwireHookMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<TripwireHookMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
     protected final boolean   ready;
@@ -402,7 +402,7 @@ public class TripwireHookMat extends BlockMaterialData implements PowerableMat, 
      */
     public static TripwireHookMat[] tripwireHookTypes()
     {
-        return byID.values(new TripwireHookMat[byID.size()]);
+        return byID.values().toArray(new TripwireHookMat[byID.size()]);
     }
 
     static

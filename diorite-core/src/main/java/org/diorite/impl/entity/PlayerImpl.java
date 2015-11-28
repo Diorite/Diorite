@@ -79,8 +79,8 @@ import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 
-import gnu.trove.TIntCollection;
-import gnu.trove.list.array.TIntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntCollection;
 
 // TODO: add Human or other entity not fully a player class for bots/npcs
 public class PlayerImpl extends LivingEntityImpl implements Player
@@ -111,7 +111,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     // TODO: move this
     private static final AttributeModifier tempSprintMod = new SimpleAttributeModifier(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), null, MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE, null, null);
 
-    protected final TIntCollection removeQueue = new TIntArrayList(5, - 1);
+    protected final IntCollection removeQueue = new IntArrayList(5);
 
     protected final GameProfileImpl            gameProfile;
     protected final CoreNetworkManager         networkManager;
@@ -185,7 +185,7 @@ public class PlayerImpl extends LivingEntityImpl implements Player
             final int[] ids;
             synchronized (this.removeQueue)
             {
-                ids = this.removeQueue.toArray();
+                ids = this.removeQueue.toIntArray();
                 this.removeQueue.clear();
             }
             this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(ids));

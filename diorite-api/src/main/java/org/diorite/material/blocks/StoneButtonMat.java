@@ -30,8 +30,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Stone Button' block material in minecraft. <br>
@@ -150,7 +150,7 @@ public class StoneButtonMat extends ButtonMat
     public static final StoneButtonMat STONE_BUTTON_UP_POWERED    = new StoneButtonMat(BlockFace.UP, true);
 
     private static final Map<String, StoneButtonMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<StoneButtonMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<StoneButtonMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected StoneButtonMat()
@@ -272,7 +272,7 @@ public class StoneButtonMat extends ButtonMat
      */
     public static StoneButtonMat[] stoneButtonTypes()
     {
-        return byID.values(new StoneButtonMat[byID.size()]);
+        return byID.values().toArray(new StoneButtonMat[byID.size()]);
     }
 
     static

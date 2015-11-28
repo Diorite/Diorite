@@ -33,13 +33,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.math.endian.BigEndianUtils;
 
-import gnu.trove.iterator.TLongObjectIterator;
-import gnu.trove.map.TLongObjectMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 public abstract class ChunkRegionCache
 {
-    protected final TLongObjectMap<Reference<ChunkRegion>> cache = new TLongObjectHashMap<>(100);
+    protected final Long2ObjectMap<Reference<ChunkRegion>> cache = new Long2ObjectOpenHashMap<>(100);
 
     protected final String extension;
     protected final File   regionDir;
@@ -93,11 +93,9 @@ public abstract class ChunkRegionCache
     {
         synchronized (this.cache)
         {
-            final TLongObjectIterator<Reference<ChunkRegion>> it = this.cache.iterator();
-            while (it.hasNext())
+            for (final Entry<Reference<ChunkRegion>> entry : this.cache.long2ObjectEntrySet())
             {
-                it.advance();
-                final ChunkRegion value = it.value().get();
+                final ChunkRegion value = entry.getValue().get();
                 if (value != null)
                 {
                     value.close();

@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Gold Block' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class GoldBlockMat extends OreBlockMat
     public static final GoldBlockMat GOLD_BLOCK = new GoldBlockMat();
 
     private static final Map<String, GoldBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<GoldBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<GoldBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected GoldBlockMat()
@@ -123,7 +123,7 @@ public class GoldBlockMat extends OreBlockMat
      */
     public static GoldBlockMat[] goldBlockTypes()
     {
-        return byID.values(new GoldBlockMat[byID.size()]);
+        return byID.values().toArray(new GoldBlockMat[byID.size()]);
     }
 
     static

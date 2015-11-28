@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Flowers' block material in minecraft. <br>
@@ -124,7 +124,7 @@ public class FlowersMat extends FlowerMat
     public static final FlowersMat FLOWERS_OXEYE_DAISY  = new FlowersMat(0x8, FlowerTypeMat.OXEYE_DAISY);
 
     private static final Map<String, FlowersMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<FlowersMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<FlowersMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected FlowersMat()
@@ -228,7 +228,7 @@ public class FlowersMat extends FlowerMat
      */
     public static FlowersMat[] flowersTypes()
     {
-        return byID.values(new FlowersMat[byID.size()]);
+        return byID.values().toArray(new FlowersMat[byID.size()]);
     }
 
     static

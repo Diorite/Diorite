@@ -34,8 +34,8 @@ import org.diorite.material.VariantMat;
 import org.diorite.material.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Red Sandstone' block material in minecraft. <br>
@@ -82,7 +82,7 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
     public static final RedSandstoneMat RED_SANDSTONE_SMOOTH   = new RedSandstoneMat(0x2, VariantMat.SMOOTH);
 
     private static final Map<String, RedSandstoneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedSandstoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedSandstoneMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final VariantMat variant;
 
@@ -184,7 +184,7 @@ public class RedSandstoneMat extends BlockMaterialData implements VariantableMat
      */
     public static RedSandstoneMat[] redSandstoneTypes()
     {
-        return byID.values(new RedSandstoneMat[byID.size()]);
+        return byID.values().toArray(new RedSandstoneMat[byID.size()]);
     }
 
     static

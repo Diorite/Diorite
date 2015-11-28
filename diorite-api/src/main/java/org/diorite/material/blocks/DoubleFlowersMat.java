@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Double Flowers' block material in minecraft. <br>
@@ -108,7 +108,7 @@ public class DoubleFlowersMat extends FlowerMat
     public static final DoubleFlowersMat DOUBLE_FLOWERS_DOUBLE_TOP = new DoubleFlowersMat(0x8, FlowerTypeMat.DOUBLE_TOP);
 
     private static final Map<String, DoubleFlowersMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DoubleFlowersMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DoubleFlowersMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected DoubleFlowersMat()
@@ -212,7 +212,7 @@ public class DoubleFlowersMat extends FlowerMat
      */
     public static DoubleFlowersMat[] doubleFlowersTypes()
     {
-        return byID.values(new DoubleFlowersMat[byID.size()]);
+        return byID.values().toArray(new DoubleFlowersMat[byID.size()]);
     }
 
     static

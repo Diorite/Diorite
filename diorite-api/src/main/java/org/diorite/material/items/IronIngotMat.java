@@ -32,8 +32,8 @@ import org.diorite.material.blocks.OreBlockMat;
 import org.diorite.material.blocks.OreMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Iron Ingot' item material in minecraft. <br>
@@ -52,7 +52,7 @@ public class IronIngotMat extends OreItemMatExt
     public static final IronIngotMat IRON_INGOT = new IronIngotMat();
 
     private static final Map<String, IronIngotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<IronIngotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<IronIngotMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected IronIngotMat()
@@ -130,7 +130,7 @@ public class IronIngotMat extends OreItemMatExt
      */
     public static IronIngotMat[] ironIngotTypes()
     {
-        return byID.values(new IronIngotMat[byID.size()]);
+        return byID.values().toArray(new IronIngotMat[byID.size()]);
     }
 
     static

@@ -32,8 +32,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Command Block' block material in minecraft. <br>
@@ -72,7 +72,7 @@ public class CommandBlockMat extends BlockMaterialData
     public static final CommandBlockMat COMMAND_BLOCK_TRIGGERED = new CommandBlockMat(true);
 
     private static final Map<String, CommandBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CommandBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CommandBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean triggered;
 
@@ -194,7 +194,7 @@ public class CommandBlockMat extends BlockMaterialData
      */
     public static CommandBlockMat[] commandBlockTypes()
     {
-        return byID.values(new CommandBlockMat[byID.size()]);
+        return byID.values().toArray(new CommandBlockMat[byID.size()]);
     }
 
     static

@@ -32,8 +32,8 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Chainmail Boots' item material in minecraft. <br>
@@ -52,7 +52,7 @@ public class ChainmailBootsMat extends BootsMat
     public static final ChainmailBootsMat CHAINMAIL_BOOTS = new ChainmailBootsMat();
 
     private static final Map<String, ChainmailBootsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ChainmailBootsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<ChainmailBootsMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final LazyValue<ChainmailBootsMat> next = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() + 1) : null);
     protected final LazyValue<ChainmailBootsMat> prev = new LazyValue<>(() -> (this.haveValidDurability()) ? getByDurability(this.getDurability() - 1) : null);

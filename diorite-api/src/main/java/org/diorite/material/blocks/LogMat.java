@@ -37,8 +37,8 @@ import org.diorite.material.RotateAxisMat;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Log' block material in minecraft. <br>
@@ -256,7 +256,7 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
     public static final LogMat LOG_DARK_OAK_BARK = new Log2(WoodType.DARK_OAK, RotateAxisMat.NONE);
 
     private static final Map<String, LogMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<LogMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<LogMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final RotateAxisMat rotateAxis;
 
@@ -423,7 +423,7 @@ public class LogMat extends WoodMat implements RotatableMat, FuelMat
      */
     public static LogMat[] logTypes()
     {
-        return byID.values(new LogMat[byID.size()]);
+        return byID.values().toArray(new LogMat[byID.size()]);
     }
 
     /**

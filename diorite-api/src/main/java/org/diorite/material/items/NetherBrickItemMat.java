@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Nether Brick Item' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class NetherBrickItemMat extends ItemMaterialData
     public static final NetherBrickItemMat NETHER_BRICK_ITEM = new NetherBrickItemMat();
 
     private static final Map<String, NetherBrickItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<NetherBrickItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<NetherBrickItemMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected NetherBrickItemMat()
@@ -127,7 +127,7 @@ public class NetherBrickItemMat extends ItemMaterialData
      */
     public static NetherBrickItemMat[] netherBrickTypes()
     {
-        return byID.values(new NetherBrickItemMat[byID.size()]);
+        return byID.values().toArray(new NetherBrickItemMat[byID.size()]);
     }
 
     static

@@ -24,10 +24,9 @@
 
 package org.diorite.world;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class WorldType extends ASimpleEnum<WorldType>
@@ -116,8 +115,8 @@ public class WorldType extends ASimpleEnum<WorldType>
      */
     public static WorldType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(WorldType.class);
-        return (WorldType[]) map.values(new WorldType[map.size()]);
+        final Int2ObjectMap<WorldType> map = getByEnumOrdinal(WorldType.class);
+        return map.values().toArray(new WorldType[map.size()]);
     }
 
     static

@@ -33,8 +33,8 @@ import org.diorite.material.VariantMat;
 import org.diorite.material.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Dirt' block material in minecraft. <br>
@@ -81,7 +81,7 @@ public class DirtMat extends EarthMat implements VariantableMat
     public static final DirtMat DIRT_PODZOL = new DirtMat(0x2, VariantMat.PODZOL);
 
     private static final Map<String, DirtMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DirtMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DirtMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final VariantMat variant;
 
@@ -183,7 +183,7 @@ public class DirtMat extends EarthMat implements VariantableMat
      */
     public static DirtMat[] dirtTypes()
     {
-        return byID.values(new DirtMat[byID.size()]);
+        return byID.values().toArray(new DirtMat[byID.size()]);
     }
 
     static

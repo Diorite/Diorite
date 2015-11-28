@@ -30,8 +30,8 @@ import org.diorite.inventory.item.meta.BookMeta;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Writable Book' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class WritableBookMat extends ItemMaterialData
     public static final WritableBookMat WRITABLE_BOOK = new WritableBookMat();
 
     private static final Map<String, WritableBookMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<WritableBookMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<WritableBookMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected WritableBookMat()
@@ -132,7 +132,7 @@ public class WritableBookMat extends ItemMaterialData
      */
     public static WritableBookMat[] writableBookTypes()
     {
-        return byID.values(new WritableBookMat[byID.size()]);
+        return byID.values().toArray(new WritableBookMat[byID.size()]);
     }
 
     static

@@ -26,10 +26,9 @@ package org.diorite.entity;
 
 import java.util.function.BiConsumer;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class EntityAction extends ASimpleEnum<EntityAction>
@@ -113,8 +112,8 @@ public class EntityAction extends ASimpleEnum<EntityAction>
      */
     public static EntityAction[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(EntityAction.class);
-        return (EntityAction[]) map.values(new EntityAction[map.size()]);
+        final Int2ObjectMap<EntityAction> map = getByEnumOrdinal(EntityAction.class);
+        return map.values().toArray(new EntityAction[map.size()]);
     }
 
     static

@@ -51,9 +51,9 @@ import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.entity.EntityType;
 import org.diorite.utils.SpammyError;
 
-import gnu.trove.iterator.TShortIntIterator;
-import gnu.trove.map.TShortIntMap;
-import gnu.trove.map.hash.TShortIntHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2IntMap;
+import it.unimi.dsi.fastutil.shorts.Short2IntMap.Entry;
+import it.unimi.dsi.fastutil.shorts.Short2IntOpenHashMap;
 
 public class Metrics
 {
@@ -146,18 +146,14 @@ public class Metrics
                 public Set<MetricsPlotter> getPlotters()
                 {
                     final Set<MetricsPlotter> result = new HashSet<>(20);
-                    final TShortIntMap map = new TShortIntHashMap(20, .1f, (short) 0, 0);
-                    core.getWorldsManager().getWorlds().forEach(w -> w.getEntityTrackers().getStats().forEachEntry((id, amount) -> {
-                        map.put(id, map.get(id) + amount);
-                        return true;
-                    }));
-                    for (final TShortIntIterator it = map.iterator(); it.hasNext(); )
+                    final Short2IntMap map = new Short2IntOpenHashMap(20, .1f);
+                    core.getWorldsManager().getWorlds().forEach(w -> w.getEntityTrackers().getStats().short2IntEntrySet().forEach((entry) -> map.put(entry.getShortKey(), (map.get(entry.getShortKey()) + entry.getIntValue()))));
+                    for (final Entry entry : map.short2IntEntrySet())
                     {
-                        it.advance();
-                        final EntityType type = EntityType.getByMinecraftId(it.key());
+                        final EntityType type = EntityType.getByMinecraftId(entry.getShortKey());
                         if (type != null)
                         {
-                            result.add(new SimpleMetricsPlotter(type.getMcName(), it.value()));
+                            result.add(new SimpleMetricsPlotter(type.getMcName(), entry.getIntValue()));
                         }
                     }
                     return result;

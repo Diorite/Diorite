@@ -1,7 +1,5 @@
 package org.diorite.impl.inventory.recipe.craft;
 
-import java.util.Arrays;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,8 +9,8 @@ import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Represent results after checking if recipe is valid for given inventory.
@@ -24,7 +22,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
     private final Recipe                     recipe;
     private final ItemStack                  result;
     private final CraftingGrid               itemsToConsume;
-    private final TShortObjectMap<ItemStack> onCraft;
+    private final Short2ObjectMap<ItemStack> onCraft;
 
     /**
      * Construct new CraftResult for given recipe and items.
@@ -34,7 +32,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      * @param itemsToConsume array of items that should be removed from inventory on craft.
      * @param onCraft        map of items that should be changed in inventory
      */
-    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final CraftingGrid itemsToConsume, final TShortObjectMap<ItemStack> onCraft)
+    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final CraftingGrid itemsToConsume, final Short2ObjectMap<ItemStack> onCraft)
     {
         this.recipe = recipe;
         this.result = result;
@@ -54,7 +52,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
         this.recipe = recipe;
         this.result = result;
         this.itemsToConsume = itemsToConsume;
-        this.onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
+        this.onCraft = new Short2ObjectOpenHashMap<>(2, .5F);
     }
 
     @Override
@@ -76,7 +74,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
     }
 
     @Override
-    public TShortObjectMap<ItemStack> getOnCraft()
+    public Short2ObjectMap<ItemStack> getOnCraft()
     {
         return this.onCraft;
     }

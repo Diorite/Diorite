@@ -33,7 +33,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.collections.arrays.primitive.ShortIterator;
-import org.diorite.utils.collections.arrays.trove.TShortArrayIterator;
+import org.diorite.utils.collections.arrays.fastutil.FastUtilShortIterator;
 
 /**
  * Additional nbt type, added by diorite, it will break minecraft compatybility, use with caution. <br>
@@ -169,13 +169,13 @@ public class NbtTagShortArray extends NbtAbstractTag implements Iterable<Short>
     }
 
     /**
-     * Returns instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     * Returns instance of primitive iterator based on FastUtil interface {@link it.unimi.dsi.fastutil.shorts.ShortIterator}.
      *
-     * @return instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     * @return instance of primitive iterator based on FastUtil interface {@link it.unimi.dsi.fastutil.shorts.ShortIterator}.
      */
-    public TShortArrayIterator primitiveIterator()
+    public FastUtilShortIterator primitiveIterator()
     {
-        return new TShortArrayIterator(this.value);
+        return new FastUtilShortIterator(this.value);
     }
 
     @Override

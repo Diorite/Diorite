@@ -31,8 +31,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Fire' block material in minecraft. <br>
@@ -184,7 +184,7 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
     public static final FireMat FIRE_15 = new FireMat(0xF);
 
     private static final Map<String, FireMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<FireMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<FireMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected FireMat()
@@ -298,7 +298,7 @@ public class FireMat extends BlockMaterialData implements AgeableBlockMat
      */
     public static FireMat[] fireTypes()
     {
-        return byID.values(new FireMat[byID.size()]);
+        return byID.values().toArray(new FireMat[byID.size()]);
     }
 
     static

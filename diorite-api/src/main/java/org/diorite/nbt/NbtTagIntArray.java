@@ -33,7 +33,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.utils.collections.arrays.primitive.IntIterator;
-import org.diorite.utils.collections.arrays.trove.TIntArrayIterator;
 
 /**
  * NBT type for int array values.
@@ -168,13 +167,13 @@ public class NbtTagIntArray extends NbtAbstractTag implements Iterable<Integer>
     }
 
     /**
-     * Returns instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     * Returns instance of primitive iterator based on FastUtil interface {@link it.unimi.dsi.fastutil.ints.IntIterator}.
      *
-     * @return instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     * @return instance of primitive iterator based on FastUtil interface {@link it.unimi.dsi.fastutil.ints.IntIterator}.
      */
-    public TIntArrayIterator primitiveIterator()
+    public IntIterator primitiveIterator()
     {
-        return new TIntArrayIterator(this.value);
+        return new IntIterator(this.value);
     }
 
     @Override

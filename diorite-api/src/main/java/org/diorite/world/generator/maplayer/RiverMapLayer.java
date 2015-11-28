@@ -36,27 +36,27 @@ import static org.diorite.world.Biome.RIVER;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TIntHashSet;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 
 public class RiverMapLayer extends MapLayer
 {
-    protected static final TIntSet    OCEANS         = new TIntHashSet(2);
-    protected static final TIntIntMap SPECIAL_RIVERS = new TIntIntHashMap(3);
+    protected static final IntSet     OCEANS         = new IntOpenHashSet(2);
+    protected static final Int2IntMap SPECIAL_RIVERS = new Int2IntOpenHashMap(3);
     public static final    int        CLEAR_VALUE    = 0;
     public static final    int        RIVER_VALUE    = 1;
 
     protected final MapLayer belowLayer;
     protected final MapLayer mergeLayer;
 
-    public static TIntSet getOceans()
+    public static IntSet getOceans()
     {
         return OCEANS;
     }
 
-    public static TIntIntMap getSpecialRivers()
+    public static Int2IntMap getSpecialRivers()
     {
         return SPECIAL_RIVERS;
     }

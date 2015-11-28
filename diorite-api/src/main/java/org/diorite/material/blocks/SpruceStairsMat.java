@@ -32,8 +32,8 @@ import org.diorite.material.StairsMat;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Spruce Stairs' block material in minecraft. <br>
@@ -61,7 +61,7 @@ public class SpruceStairsMat extends WoodenStairsMat
     public static final SpruceStairsMat SPRUCE_STAIRS_NORTH_UPSIDE_DOWN = new SpruceStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, SpruceStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SpruceStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<SpruceStairsMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected SpruceStairsMat()
@@ -177,7 +177,7 @@ public class SpruceStairsMat extends WoodenStairsMat
      */
     public static SpruceStairsMat[] spruceStairsTypes()
     {
-        return byID.values(new SpruceStairsMat[byID.size()]);
+        return byID.values().toArray(new SpruceStairsMat[byID.size()]);
     }
 
     static

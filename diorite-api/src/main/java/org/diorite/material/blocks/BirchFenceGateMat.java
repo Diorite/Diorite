@@ -32,8 +32,8 @@ import org.diorite.material.Material;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Birch Fence Gate' block material in minecraft. <br>
@@ -121,7 +121,7 @@ public class BirchFenceGateMat extends WoodenFenceGateMat
     public static final BirchFenceGateMat BIRCH_FENCE_GATE_EAST_OPEN  = new BirchFenceGateMat(BlockFace.EAST, true);
 
     private static final Map<String, BirchFenceGateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BirchFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<BirchFenceGateMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected BirchFenceGateMat()
@@ -237,7 +237,7 @@ public class BirchFenceGateMat extends WoodenFenceGateMat
      */
     public static BirchFenceGateMat[] birchFenceGateTypes()
     {
-        return byID.values(new BirchFenceGateMat[byID.size()]);
+        return byID.values().toArray(new BirchFenceGateMat[byID.size()]);
     }
 
     static

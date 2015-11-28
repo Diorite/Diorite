@@ -25,4 +25,4 @@
 /**
  * Primitive iterators using trove API.
  */
-package org.diorite.utils.collections.arrays.trove;
+package org.diorite.utils.collections.arrays.fastutil;

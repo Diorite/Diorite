@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Command Block Minecart' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class CommandBlockMinecartMat extends AbstractMinecartMat
     public static final CommandBlockMinecartMat COMMAND_BLOCK_MINECART = new CommandBlockMinecartMat();
 
     private static final Map<String, CommandBlockMinecartMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<CommandBlockMinecartMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<CommandBlockMinecartMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected CommandBlockMinecartMat()
@@ -126,7 +126,7 @@ public class CommandBlockMinecartMat extends AbstractMinecartMat
      */
     public static CommandBlockMinecartMat[] commandBlockMinecartTypes()
     {
-        return byID.values(new CommandBlockMinecartMat[byID.size()]);
+        return byID.values().toArray(new CommandBlockMinecartMat[byID.size()]);
     }
 
     static

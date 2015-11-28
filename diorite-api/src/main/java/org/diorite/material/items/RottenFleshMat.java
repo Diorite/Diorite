@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Rotten Flesh' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class RottenFleshMat extends EdibleItemMat
     public static final RottenFleshMat ROTTEN_FLESH = new RottenFleshMat();
 
     private static final Map<String, RottenFleshMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RottenFleshMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<RottenFleshMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected RottenFleshMat()
@@ -126,7 +126,7 @@ public class RottenFleshMat extends EdibleItemMat
      */
     public static RottenFleshMat[] rottenFleshTypes()
     {
-        return byID.values(new RottenFleshMat[byID.size()]);
+        return byID.values().toArray(new RottenFleshMat[byID.size()]);
     }
 
     static

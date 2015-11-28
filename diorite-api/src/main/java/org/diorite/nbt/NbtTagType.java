@@ -31,9 +31,10 @@ import java.util.function.Supplier;
 
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 
-import gnu.trove.TCollections;
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMaps;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
+
 
 /**
  * Enum of nbt tag types.
@@ -114,7 +115,7 @@ public enum NbtTagType
      * String[] nbt tag type.
      */
     STRING_ARRAY(123, NbtTagStringArray.class, NbtTagStringArray::new, String[].class);
-    private static final TByteObjectMap<NbtTagType> typeMap;
+    private static final Byte2ObjectMap<NbtTagType> typeMap;
     private final        byte                       typeID;
     private final        Class<? extends NbtTag>    typeClass;
     private final        Supplier<NbtTag>           getInstance;
@@ -372,11 +373,11 @@ public enum NbtTagType
 
     static
     {
-        final TByteObjectMap<NbtTagType> types = new TByteObjectHashMap<>(20, 0.5f, (byte) - 1);
+        final Byte2ObjectMap<NbtTagType> types = new Byte2ObjectOpenHashMap<>(20, 0.5f);
         for (final NbtTagType type : values())
         {
             types.put(type.typeID, type);
         }
-        typeMap = TCollections.unmodifiableMap(types);
+        typeMap = Byte2ObjectMaps.unmodifiable(types);
     }
 }

@@ -25,12 +25,11 @@
 package org.diorite;
 
 import org.diorite.utils.Color;
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
 public class DyeColor extends ASimpleEnum<DyeColor>
@@ -57,8 +56,8 @@ public class DyeColor extends ASimpleEnum<DyeColor>
     public static final DyeColor RED        = new DyeColor("RED", 0xE, 0x1, Color.fromRGB(0x993333), Color.fromRGB(0xB3312C));
     public static final DyeColor BLACK      = new DyeColor("BLACK", 0xF, 0x0, Color.fromRGB(0x191919), Color.fromRGB(0x1E1B1B));
 
-    private static final TByteObjectMap<DyeColor> byBlockFlag = new TByteObjectHashMap<>(16, SMALL_LOAD_FACTOR, (byte) - 1);
-    private static final TByteObjectMap<DyeColor> byItemFlag  = new TByteObjectHashMap<>(16, SMALL_LOAD_FACTOR, (byte) - 1);
+    private static final Byte2ObjectMap<DyeColor> byBlockFlag = new Byte2ObjectOpenHashMap<>(16, SMALL_LOAD_FACTOR);
+    private static final Byte2ObjectMap<DyeColor> byItemFlag  = new Byte2ObjectOpenHashMap<>(16, SMALL_LOAD_FACTOR);
 
     private final byte  blockFlag;
     private final byte  itemFlag;
@@ -189,8 +188,8 @@ public class DyeColor extends ASimpleEnum<DyeColor>
      */
     public static DyeColor[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(DyeColor.class);
-        return (DyeColor[]) map.values(new DyeColor[map.size()]);
+        final Int2ObjectMap<DyeColor> map = getByEnumOrdinal(DyeColor.class);
+        return map.values().toArray(new DyeColor[map.size()]);
     }
 
     static

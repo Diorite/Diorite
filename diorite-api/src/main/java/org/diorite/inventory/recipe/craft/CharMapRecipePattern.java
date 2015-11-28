@@ -2,7 +2,7 @@ package org.diorite.inventory.recipe.craft;
 
 import org.diorite.inventory.recipe.RecipeItem;
 
-import gnu.trove.map.TCharObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 
 /**
  * Represent simple pattern that use map of chars to recipe items as implementation.
@@ -21,7 +21,7 @@ public interface CharMapRecipePattern extends RecipePattern
      *
      * @return ingredients used by this pattern.
      */
-    TCharObjectMap<RecipeItem> getIngredients();
+    Char2ObjectMap<RecipeItem> getIngredients();
 
     /**
      * Returns ingredient for given char, may return null for unknown char.

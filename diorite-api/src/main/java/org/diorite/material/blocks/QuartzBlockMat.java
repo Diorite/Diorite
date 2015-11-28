@@ -34,8 +34,8 @@ import org.diorite.material.VariantMat;
 import org.diorite.material.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Quartz Block' block material in minecraft. <br>
@@ -98,7 +98,7 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
     public static final QuartzBlockMat QUARTZ_BLOCK_PILLAR_EAST_WEST   = new QuartzBlockMat(0x4, VariantMat.PILLAR_EAST_WEST);
 
     private static final Map<String, QuartzBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<QuartzBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<QuartzBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final VariantMat variant;
 
@@ -200,7 +200,7 @@ public class QuartzBlockMat extends OreBlockMat implements VariantableMat
      */
     public static QuartzBlockMat[] quartzBlockTypes()
     {
-        return byID.values(new QuartzBlockMat[byID.size()]);
+        return byID.values().toArray(new QuartzBlockMat[byID.size()]);
     }
 
     static

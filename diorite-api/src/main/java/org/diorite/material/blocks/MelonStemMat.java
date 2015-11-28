@@ -32,8 +32,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Melon Stem' block material in minecraft. <br>
@@ -121,7 +121,7 @@ public class MelonStemMat extends PlantStemMat
     public static final MelonStemMat MELON_BLOCK_RIPE = new MelonStemMat("RIPE", 0x7);
 
     private static final Map<String, MelonStemMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<MelonStemMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<MelonStemMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final int age;
 
@@ -246,7 +246,7 @@ public class MelonStemMat extends PlantStemMat
      */
     public static MelonStemMat[] melonStemTypes()
     {
-        return byID.values(new MelonStemMat[byID.size()]);
+        return byID.values().toArray(new MelonStemMat[byID.size()]);
     }
 
     static

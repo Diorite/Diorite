@@ -31,8 +31,8 @@ import org.diorite.material.Material;
 import org.diorite.material.PortalMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'End Portal' block material in minecraft. <br>
@@ -53,7 +53,7 @@ public class EndPortalMat extends BlockMaterialData implements PortalMat
     public static final EndPortalMat END_PORTAL = new EndPortalMat();
 
     private static final Map<String, EndPortalMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<EndPortalMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<EndPortalMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected EndPortalMat()
@@ -132,7 +132,7 @@ public class EndPortalMat extends BlockMaterialData implements PortalMat
      */
     public static EndPortalMat[] endPortalTypes()
     {
-        return byID.values(new EndPortalMat[byID.size()]);
+        return byID.values().toArray(new EndPortalMat[byID.size()]);
     }
 
     static

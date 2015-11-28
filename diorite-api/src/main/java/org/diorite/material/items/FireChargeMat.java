@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Fire Charge' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class FireChargeMat extends ItemMaterialData
     public static final FireChargeMat FIRE_CHARGE = new FireChargeMat();
 
     private static final Map<String, FireChargeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FireChargeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<FireChargeMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected FireChargeMat()
@@ -127,7 +127,7 @@ public class FireChargeMat extends ItemMaterialData
      */
     public static FireChargeMat[] fireChargeTypes()
     {
-        return byID.values(new FireChargeMat[byID.size()]);
+        return byID.values().toArray(new FireChargeMat[byID.size()]);
     }
 
     static

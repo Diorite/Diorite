@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Sign' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class SignMat extends ItemMaterialData implements PlaceableMat
     public static final SignMat SIGN = new SignMat();
 
     private static final Map<String, SignMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SignMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<SignMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected SignMat()
@@ -128,7 +128,7 @@ public class SignMat extends ItemMaterialData implements PlaceableMat
      */
     public static SignMat[] signTypes()
     {
-        return byID.values(new SignMat[byID.size()]);
+        return byID.values().toArray(new SignMat[byID.size()]);
     }
 
     static

@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Daylight Detector Inverted' block material in minecraft. <br>
@@ -182,7 +182,7 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
     public static final DaylightDetectorInvertedMat DAYLIGHT_DETECTOR_INVERTED_15  = new DaylightDetectorInvertedMat(15);
 
     private static final Map<String, DaylightDetectorInvertedMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DaylightDetectorInvertedMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DaylightDetectorInvertedMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected DaylightDetectorInvertedMat()
@@ -298,7 +298,7 @@ public class DaylightDetectorInvertedMat extends AbstractDaylightDetectorMat
      */
     public static DaylightDetectorInvertedMat[] daylightDetectorInvertedTypes()
     {
-        return byID.values(new DaylightDetectorInvertedMat[byID.size()]);
+        return byID.values().toArray(new DaylightDetectorInvertedMat[byID.size()]);
     }
 
     static

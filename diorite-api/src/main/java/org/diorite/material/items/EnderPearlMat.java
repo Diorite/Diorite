@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableEntityMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Ender Pearl' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class EnderPearlMat extends ItemMaterialData implements PlaceableEntityMa
     public static final EnderPearlMat ENDER_PEARL = new EnderPearlMat();
 
     private static final Map<String, EnderPearlMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<EnderPearlMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<EnderPearlMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected EnderPearlMat()
@@ -128,7 +128,7 @@ public class EnderPearlMat extends ItemMaterialData implements PlaceableEntityMa
      */
     public static EnderPearlMat[] enderPearlTypes()
     {
-        return byID.values(new EnderPearlMat[byID.size()]);
+        return byID.values().toArray(new EnderPearlMat[byID.size()]);
     }
 
     static

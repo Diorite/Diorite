@@ -33,8 +33,8 @@ import com.google.common.collect.Maps;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketClass;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public enum EnumProtocol
 {
@@ -43,7 +43,7 @@ public enum EnumProtocol
     STATUS("STATUS", 1),
     LOGIN("LOGIN", 2);
 
-    private static final TIntObjectMap<EnumProtocol>                          enumProtocolMap;
+    private static final Int2ObjectMap<EnumProtocol>                          enumProtocolMap;
     private static final Map<Class<?>, EnumProtocol>                          classEnumProtocolMap;
     private final        String                                               name;
     private final        int                                                  status;
@@ -129,7 +129,7 @@ public enum EnumProtocol
 
     static
     {
-        enumProtocolMap = new TIntObjectHashMap<>();
+        enumProtocolMap = new Int2ObjectOpenHashMap<>();
         classEnumProtocolMap = Maps.newHashMap();
         for (final EnumProtocol enumProtocol : values())
         {

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.utils.collections.arrays.trove;
+package org.diorite.utils.collections.arrays.fastutil;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -31,7 +31,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * Iterator for primitive arrays, it use primitive array but return wrapper types.
  */
-public abstract class TPrimitiveArrayIterator<ARRAY> implements gnu.trove.iterator.TPrimitiveIterator
+public abstract class FastUtilPrimitiveIterator<ARRAY>
 {
     /**
      * Primitive array, line int[] etc...
@@ -48,7 +48,7 @@ public abstract class TPrimitiveArrayIterator<ARRAY> implements gnu.trove.iterat
      *
      * @param primitiveArray array to be iterated.
      */
-    protected TPrimitiveArrayIterator(final ARRAY primitiveArray)
+    protected FastUtilPrimitiveIterator(final ARRAY primitiveArray)
     {
         Validate.notNull(primitiveArray, "Array can't be null!");
         Validate.isTrue(primitiveArray.getClass().isArray() && primitiveArray.getClass().getComponentType().isPrimitive(), "Argument must be an primitive array!");
@@ -61,12 +61,6 @@ public abstract class TPrimitiveArrayIterator<ARRAY> implements gnu.trove.iterat
      * @param number value to set.
      */
     public abstract void setValue(final Number number);
-
-    @Override
-    public void remove()
-    {
-        throw new UnsupportedOperationException("Can't remove element from array.");
-    }
 
     @Override
     public String toString()

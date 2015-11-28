@@ -29,7 +29,8 @@ import java.util.Map;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.hash.SimpleEnumHashingStrategy;
 
-import gnu.trove.map.hash.TCustomHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 
 /**
  * Map with simple enum objects as keys.
@@ -37,56 +38,108 @@ import gnu.trove.map.hash.TCustomHashMap;
  * @param <K> simple enum key type.
  * @param <V> value type.
  */
-public class SimpleEnumMap<K extends SimpleEnum<K>, V> extends TCustomHashMap<K, V>
+@SuppressWarnings({"unchecked", "rawtypes"})
+public class SimpleEnumMap<K extends SimpleEnum<K>, V> extends Object2ObjectOpenCustomHashMap<K, V>
 {
     private static final long serialVersionUID = 0;
 
     /**
-     * Construct new SimpleEnumMap.
+     * Creates a new hash map with initial expected {@link Hash#DEFAULT_INITIAL_SIZE} entries and {@link Hash#DEFAULT_LOAD_FACTOR} as load factor.
      */
     public SimpleEnumMap()
     {
-        super(SimpleEnumHashingStrategy.INSTANCE);
+        super((Strategy) SimpleEnumHashingStrategy.INSTANCE);
     }
 
     /**
-     * Construct new SimpleEnumMap.
+     * Creates a new hash map.
+     * <br>
+     * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
      *
-     * @param initialCapacity initial capacity of map.
+     * @param expected the expected number of elements in the hash set.
+     * @param f        the load factor.
      */
-    public SimpleEnumMap(final int initialCapacity)
+    public SimpleEnumMap(final int expected, final float f)
     {
-        super(SimpleEnumHashingStrategy.INSTANCE, initialCapacity);
+        super(expected, f, (Strategy) SimpleEnumHashingStrategy.INSTANCE);
     }
 
     /**
-     * Construct new SimpleEnumMap.
+     * Creates a new hash map with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor.
      *
-     * @param initialCapacity initial capacity of map.
-     * @param loadFactor      load factor of map.
+     * @param expected the expected number of elements in the hash map.
      */
-    public SimpleEnumMap(final int initialCapacity, final float loadFactor)
+    public SimpleEnumMap(final int expected)
     {
-        super(SimpleEnumHashingStrategy.INSTANCE, initialCapacity, loadFactor);
+        super(expected, (Strategy) SimpleEnumHashingStrategy.INSTANCE);
     }
 
     /**
-     * Construct new SimpleEnumMap.
+     * Creates a new hash map copying a given one.
      *
-     * @param map map to copy.
+     * @param m a {@link Map} to be copied into the new hash map.
+     * @param f the load factor.
      */
-    public SimpleEnumMap(final TCustomHashMap<? extends K, ? extends V> map)
+    public SimpleEnumMap(final Map<? extends K, ? extends V> m, final float f)
     {
-        super(SimpleEnumHashingStrategy.INSTANCE, map);
+        super(m, f, (Strategy) SimpleEnumHashingStrategy.INSTANCE);
     }
 
     /**
-     * Construct new SimpleEnumMap.
+     * Creates a new hash map with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor copying a given one.
      *
-     * @param map map to copy.
+     * @param m a {@link Map} to be copied into the new hash map.
      */
-    public SimpleEnumMap(final Map<? extends K, ? extends V> map)
+    public SimpleEnumMap(final Map<? extends K, ? extends V> m)
     {
-        super(SimpleEnumHashingStrategy.INSTANCE, map);
+        super(m, (Strategy) SimpleEnumHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash map copying a given type-specific one.
+     *
+     * @param m a type-specific map to be copied into the new hash map.
+     * @param f the load factor.
+     */
+    public SimpleEnumMap(final Object2ObjectMap<K, V> m, final float f)
+    {
+        super(m, f, (Strategy) SimpleEnumHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash map with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor copying a given type-specific one.
+     *
+     * @param m a type-specific map to be copied into the new hash map.
+     */
+    public SimpleEnumMap(final Object2ObjectMap<K, V> m)
+    {
+        super(m, (Strategy) SimpleEnumHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash map using the elements of two parallel arrays.
+     *
+     * @param k the array of keys of the new hash map.
+     * @param v the array of corresponding values in the new hash map.
+     * @param f the load factor.
+     *
+     * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
+     */
+    public SimpleEnumMap(final K[] k, final V[] v, final float f)
+    {
+        super(k, v, f, (Strategy) SimpleEnumHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash map with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor using the elements of two parallel arrays.
+     *
+     * @param k the array of keys of the new hash map.
+     * @param v the array of corresponding values in the new hash map.
+     *
+     * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
+     */
+    public SimpleEnumMap(final K[] k, final V[] v)
+    {
+        super(k, v, (Strategy) SimpleEnumHashingStrategy.INSTANCE);
     }
 }

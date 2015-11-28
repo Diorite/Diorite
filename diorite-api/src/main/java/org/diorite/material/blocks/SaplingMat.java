@@ -34,8 +34,8 @@ import org.diorite.material.Material;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Sapling' block material in minecraft. <br>
@@ -155,7 +155,7 @@ public class SaplingMat extends WoodMat implements FuelMat
     public static final SaplingMat SAPLING_DARK_OAK_OLDER = new SaplingMat(WoodType.DARK_OAK, SaplingStage.OLDER);
 
     private static final Map<String, SaplingMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SaplingMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<SaplingMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final SaplingStage stage;
 
@@ -318,7 +318,7 @@ public class SaplingMat extends WoodMat implements FuelMat
      */
     public static SaplingMat[] saplingTypes()
     {
-        return byID.values(new SaplingMat[byID.size()]);
+        return byID.values().toArray(new SaplingMat[byID.size()]);
     }
 
     static

@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Brick Block' block material in minecraft. <br>
@@ -49,7 +49,7 @@ public class BrickBlockMat extends StonyMat
     public static final BrickBlockMat BRICK_BLOCK = new BrickBlockMat();
 
     private static final Map<String, BrickBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BrickBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<BrickBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected BrickBlockMat()
@@ -122,7 +122,7 @@ public class BrickBlockMat extends StonyMat
      */
     public static BrickBlockMat[] brickBlockTypes()
     {
-        return byID.values(new BrickBlockMat[byID.size()]);
+        return byID.values().toArray(new BrickBlockMat[byID.size()]);
     }
 
     static

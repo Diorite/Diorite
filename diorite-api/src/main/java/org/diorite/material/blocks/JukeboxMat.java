@@ -34,8 +34,8 @@ import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Jukebox' block material in minecraft. <br>
@@ -74,7 +74,7 @@ public class JukeboxMat extends BlockMaterialData implements FuelMat
     public static final JukeboxMat JUKEBOX_WITH_DISC = new JukeboxMat("WITH_DISC", 0x1, true);
 
     private static final Map<String, JukeboxMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<JukeboxMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<JukeboxMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean withDisc;
 
@@ -199,7 +199,7 @@ public class JukeboxMat extends BlockMaterialData implements FuelMat
      */
     public static JukeboxMat[] jukeboxTypes()
     {
-        return byID.values(new JukeboxMat[byID.size()]);
+        return byID.values().toArray(new JukeboxMat[byID.size()]);
     }
 
     static

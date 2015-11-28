@@ -32,8 +32,8 @@ import org.diorite.material.SlabTypeMat;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Wooden Slab' block material in minecraft. <br>
@@ -153,7 +153,7 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
     public static final WoodenSlabMat WOODEN_SLAB_ACACIA_UPPER   = new WoodenSlabMat(WoodType.ACACIA, SlabTypeMat.UPPER);
 
     private static final Map<String, WoodenSlabMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WoodenSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<WoodenSlabMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected WoodenSlabMat()
@@ -259,7 +259,7 @@ public class WoodenSlabMat extends WoodSlabMat implements FuelMat
      */
     public static WoodenSlabMat[] woodenSlabTypes()
     {
-        return byID.values(new WoodenSlabMat[byID.size()]);
+        return byID.values().toArray(new WoodenSlabMat[byID.size()]);
     }
 
     static

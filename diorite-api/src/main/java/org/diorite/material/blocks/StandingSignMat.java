@@ -33,8 +33,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Standing Sign' block material in minecraft. <br>
@@ -186,7 +186,7 @@ public class StandingSignMat extends SignBlockMat
     public static final StandingSignMat STANDING_SIGN_SOUTH_SOUTH_EAST = new StandingSignMat(BlockFace.SOUTH_SOUTH_EAST);
 
     private static final Map<String, StandingSignMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<StandingSignMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<StandingSignMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
 
@@ -346,7 +346,7 @@ public class StandingSignMat extends SignBlockMat
      */
     public static StandingSignMat[] standingSignTypes()
     {
-        return byID.values(new StandingSignMat[byID.size()]);
+        return byID.values().toArray(new StandingSignMat[byID.size()]);
     }
 
     static

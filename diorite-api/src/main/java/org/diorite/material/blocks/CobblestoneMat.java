@@ -30,8 +30,8 @@ import org.diorite.material.VariantMat;
 import org.diorite.material.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Cobblestone' block material in minecraft. <br>
@@ -51,7 +51,7 @@ public class CobblestoneMat extends StonyMat implements VariantableMat
     public static final CobblestoneMat COBBLESTONE = new CobblestoneMat();
 
     private static final Map<String, CobblestoneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CobblestoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CobblestoneMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected CobblestoneMat()
@@ -140,7 +140,7 @@ public class CobblestoneMat extends StonyMat implements VariantableMat
      */
     public static CobblestoneMat[] cobblestoneTypes()
     {
-        return byID.values(new CobblestoneMat[byID.size()]);
+        return byID.values().toArray(new CobblestoneMat[byID.size()]);
     }
 
     static

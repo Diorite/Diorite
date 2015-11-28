@@ -32,8 +32,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Carrots Block' block material in minecraft. <br>
@@ -121,7 +121,7 @@ public class CarrotsBlockMat extends CropsMat
     public static final CarrotsBlockMat CARROTS_BLOCK_RIPE = new CarrotsBlockMat("RIPE", 0x7);
 
     private static final Map<String, CarrotsBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CarrotsBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CarrotsBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final int age;
 
@@ -246,7 +246,7 @@ public class CarrotsBlockMat extends CropsMat
      */
     public static CarrotsBlockMat[] carrotsBlockTypes()
     {
-        return byID.values(new CarrotsBlockMat[byID.size()]);
+        return byID.values().toArray(new CarrotsBlockMat[byID.size()]);
     }
 
     static

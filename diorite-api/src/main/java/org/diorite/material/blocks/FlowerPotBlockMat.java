@@ -30,8 +30,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Flower Pot Block' block material in minecraft. <br>
@@ -180,7 +180,7 @@ public class FlowerPotBlockMat extends BlockMaterialData
     public static final FlowerPotBlockMat FLOWER_POT_BLOCK_LEGACY_DARK_OAK_SAPLING = new FlowerPotBlockMat("LEGACY_DARK_OAK_SAPLING", 0xD);
 
     private static final Map<String, FlowerPotBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<FlowerPotBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<FlowerPotBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected FlowerPotBlockMat()
@@ -264,7 +264,7 @@ public class FlowerPotBlockMat extends BlockMaterialData
      */
     public static FlowerPotBlockMat[] flowerPotTypes()
     {
-        return byID.values(new FlowerPotBlockMat[byID.size()]);
+        return byID.values().toArray(new FlowerPotBlockMat[byID.size()]);
     }
 
     static

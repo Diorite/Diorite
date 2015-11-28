@@ -30,8 +30,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Redstone Torch On' block material in minecraft. <br>
@@ -103,7 +103,7 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
     public static final RedstoneTorchOnMat REDSTONE_TORCH_ON_ITEM  = new RedstoneTorchOnMat(BlockFace.SELF);
 
     private static final Map<String, RedstoneTorchOnMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneTorchOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedstoneTorchOnMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected RedstoneTorchOnMat()
@@ -218,7 +218,7 @@ public class RedstoneTorchOnMat extends RedstoneTorchMat
      */
     public static RedstoneTorchOnMat[] redstoneTorchOnTypes()
     {
-        return byID.values(new RedstoneTorchOnMat[byID.size()]);
+        return byID.values().toArray(new RedstoneTorchOnMat[byID.size()]);
     }
 
     static

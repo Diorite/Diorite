@@ -29,17 +29,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.world.Biome;
 
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
 public class RarePlainsMapLayer extends MapLayer
 {
-    protected static final TIntIntMap RARE_PLAINS = new TIntIntHashMap(1);
+    protected static final Int2IntMap RARE_PLAINS = new Int2IntOpenHashMap(1);
     public static final    int        CHANCE      = 57;
 
     protected final MapLayer belowLayer;
 
-    public static TIntIntMap getRarePlains()
+    public static Int2IntMap getRarePlains()
     {
         return RARE_PLAINS;
     }

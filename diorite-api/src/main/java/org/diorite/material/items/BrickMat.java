@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Brick' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class BrickMat extends ItemMaterialData
     public static final BrickMat BRICK = new BrickMat();
 
     private static final Map<String, BrickMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BrickMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<BrickMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected BrickMat()
@@ -127,7 +127,7 @@ public class BrickMat extends ItemMaterialData
      */
     public static BrickMat[] brickTypes()
     {
-        return byID.values(new BrickMat[byID.size()]);
+        return byID.values().toArray(new BrickMat[byID.size()]);
     }
 
     static

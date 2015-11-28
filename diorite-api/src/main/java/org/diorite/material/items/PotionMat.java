@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.inventory.item.meta.PotionMeta;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Potion' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class PotionMat extends EdibleItemMat
     public static final PotionMat POTION = new PotionMat();
 
     private static final Map<String, PotionMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PotionMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<PotionMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected PotionMat()
@@ -131,7 +131,7 @@ public class PotionMat extends EdibleItemMat
      */
     public static PotionMat[] potionTypes()
     {
-        return byID.values(new PotionMat[byID.size()]);
+        return byID.values().toArray(new PotionMat[byID.size()]);
     }
 
     static

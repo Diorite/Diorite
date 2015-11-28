@@ -24,11 +24,10 @@
 
 package org.diorite.material;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.SimpleEnumMap;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Represent material of armor.
@@ -209,8 +208,8 @@ public class ArmorMaterial extends ASimpleEnum<ArmorMaterial>
      */
     public static ArmorMaterial[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ArmorMaterial.class);
-        return (ArmorMaterial[]) map.values(new ArmorMaterial[map.size()]);
+        final Int2ObjectMap<ArmorMaterial> map = getByEnumOrdinal(ArmorMaterial.class);
+        return map.values().toArray(new ArmorMaterial[map.size()]);
     }
 
 }

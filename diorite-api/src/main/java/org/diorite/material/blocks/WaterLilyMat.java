@@ -32,8 +32,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Water Lily' block material in minecraft. <br>
@@ -53,7 +53,7 @@ public class WaterLilyMat extends PlantMat
     public static final WaterLilyMat WATER_LILY = new WaterLilyMat();
 
     private static final Map<String, WaterLilyMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WaterLilyMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<WaterLilyMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected WaterLilyMat()
@@ -126,7 +126,7 @@ public class WaterLilyMat extends PlantMat
      */
     public static WaterLilyMat[] waterLilyTypes()
     {
-        return byID.values(new WaterLilyMat[byID.size()]);
+        return byID.values().toArray(new WaterLilyMat[byID.size()]);
     }
 
     static

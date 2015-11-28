@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Magma Cream' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class MagmaCreamMat extends ItemMaterialData
     public static final MagmaCreamMat MAGMA_CREAM = new MagmaCreamMat();
 
     private static final Map<String, MagmaCreamMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<MagmaCreamMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<MagmaCreamMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected MagmaCreamMat()
@@ -127,7 +127,7 @@ public class MagmaCreamMat extends ItemMaterialData
      */
     public static MagmaCreamMat[] magmaCreamTypes()
     {
-        return byID.values(new MagmaCreamMat[byID.size()]);
+        return byID.values().toArray(new MagmaCreamMat[byID.size()]);
     }
 
     static

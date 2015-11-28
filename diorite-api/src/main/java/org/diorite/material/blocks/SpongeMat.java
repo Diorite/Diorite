@@ -32,8 +32,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Sponge' block material in minecraft. <br>
@@ -72,7 +72,7 @@ public class SpongeMat extends BlockMaterialData
     public static final SpongeMat SPONGE_WET = new SpongeMat(true);
 
     private static final Map<String, SpongeMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SpongeMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<SpongeMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean isWet;
 
@@ -171,7 +171,7 @@ public class SpongeMat extends BlockMaterialData
      */
     public static SpongeMat[] spongeTypes()
     {
-        return byID.values(new SpongeMat[byID.size()]);
+        return byID.values().toArray(new SpongeMat[byID.size()]);
     }
 
     static

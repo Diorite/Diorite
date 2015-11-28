@@ -35,8 +35,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Skull Block Floor' block material in minecraft. <br>
@@ -100,7 +100,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
     public static final SkullBlockMat SKULL_BLOCK_WALL_WEST  = new SkullBlockMat("WALL_WEST", BlockFace.WEST);
 
     private static final Map<String, SkullBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SkullBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<SkullBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
     protected final boolean   onWall;
@@ -271,7 +271,7 @@ public class SkullBlockMat extends BlockMaterialData implements AttachableMat
      */
     public static SkullBlockMat[] skullBlockTypes()
     {
-        return byID.values(new SkullBlockMat[byID.size()]);
+        return byID.values().toArray(new SkullBlockMat[byID.size()]);
     }
 
     static

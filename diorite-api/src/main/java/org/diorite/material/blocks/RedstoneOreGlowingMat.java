@@ -30,8 +30,8 @@ import org.diorite.material.Material;
 import org.diorite.material.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Redstone Ore Glowing' block material in minecraft. <br>
@@ -52,7 +52,7 @@ public class RedstoneOreGlowingMat extends OreMat
     public static final RedstoneOreGlowingMat REDSTONE_ORE_GLOWING = new RedstoneOreGlowingMat();
 
     private static final Map<String, RedstoneOreGlowingMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneOreGlowingMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedstoneOreGlowingMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected RedstoneOreGlowingMat()
@@ -131,7 +131,7 @@ public class RedstoneOreGlowingMat extends OreMat
      */
     public static RedstoneOreGlowingMat[] redstoneOreGlowingTypes()
     {
-        return byID.values(new RedstoneOreGlowingMat[byID.size()]);
+        return byID.values().toArray(new RedstoneOreGlowingMat[byID.size()]);
     }
 
     static

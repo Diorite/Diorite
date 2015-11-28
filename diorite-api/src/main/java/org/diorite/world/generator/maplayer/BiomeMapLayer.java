@@ -30,53 +30,53 @@ import static org.diorite.world.Biome.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gnu.trove.list.TIntList;
-import gnu.trove.list.array.TIntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 
 @SuppressWarnings("MagicNumber")
 public class BiomeMapLayer extends MapLayer
 {
-    protected static final TIntList WARM       = TIntArrayList.wrap(new int[]{DESERT.getBiomeId(), DESERT.getBiomeId(), DESERT.getBiomeId(), SAVANNA.getBiomeId(), SAVANNA.getBiomeId(), PLAINS.getBiomeId()});
-    protected static final TIntList WET        = TIntArrayList.wrap(new int[]{PLAINS.getBiomeId(), PLAINS.getBiomeId(), FOREST.getBiomeId(), BIRCH_FOREST.getBiomeId(), ROOFED_FOREST.getBiomeId(), EXTREME_HILLS.getBiomeId(), SWAMPLAND.getBiomeId()});
-    protected static final TIntList DRY        = TIntArrayList.wrap(new int[]{PLAINS.getBiomeId(), FOREST.getBiomeId(), TAIGA.getBiomeId(), EXTREME_HILLS.getBiomeId()});
-    protected static final TIntList COLD       = TIntArrayList.wrap(new int[]{ICE_PLAINS.getBiomeId(), ICE_PLAINS.getBiomeId(), COLD_TAIGA.getBiomeId()});
-    protected static final TIntList WARM_LARGE = TIntArrayList.wrap(new int[]{MESA_PLATEAU_FOREST.getBiomeId(), MESA_PLATEAU_FOREST.getBiomeId(), MESA_PLATEAU.getBiomeId()});
-    protected static final TIntList DRY_LARGE  = TIntArrayList.wrap(new int[]{MEGA_TAIGA.getBiomeId()});
-    protected static final TIntList WET_LARGE  = TIntArrayList.wrap(new int[]{JUNGLE.getBiomeId()});
+    protected static final IntList WARM       = IntArrayList.wrap(new int[]{DESERT.getBiomeId(), DESERT.getBiomeId(), DESERT.getBiomeId(), SAVANNA.getBiomeId(), SAVANNA.getBiomeId(), PLAINS.getBiomeId()});
+    protected static final IntList WET        = IntArrayList.wrap(new int[]{PLAINS.getBiomeId(), PLAINS.getBiomeId(), FOREST.getBiomeId(), BIRCH_FOREST.getBiomeId(), ROOFED_FOREST.getBiomeId(), EXTREME_HILLS.getBiomeId(), SWAMPLAND.getBiomeId()});
+    protected static final IntList DRY        = IntArrayList.wrap(new int[]{PLAINS.getBiomeId(), FOREST.getBiomeId(), TAIGA.getBiomeId(), EXTREME_HILLS.getBiomeId()});
+    protected static final IntList COLD       = IntArrayList.wrap(new int[]{ICE_PLAINS.getBiomeId(), ICE_PLAINS.getBiomeId(), COLD_TAIGA.getBiomeId()});
+    protected static final IntList WARM_LARGE = IntArrayList.wrap(new int[]{MESA_PLATEAU_FOREST.getBiomeId(), MESA_PLATEAU_FOREST.getBiomeId(), MESA_PLATEAU.getBiomeId()});
+    protected static final IntList DRY_LARGE  = IntArrayList.wrap(new int[]{MEGA_TAIGA.getBiomeId()});
+    protected static final IntList WET_LARGE  = IntArrayList.wrap(new int[]{JUNGLE.getBiomeId()});
 
     protected final MapLayer belowLayer;
 
-    public static TIntList getWarm()
+    public static IntList getWarm()
     {
         return WARM;
     }
 
-    public static TIntList getWet()
+    public static IntList getWet()
     {
         return WET;
     }
 
-    public static TIntList getDry()
+    public static IntList getDry()
     {
         return DRY;
     }
 
-    public static TIntList getCold()
+    public static IntList getCold()
     {
         return COLD;
     }
 
-    public static TIntList getWarmLarge()
+    public static IntList getWarmLarge()
     {
         return WARM_LARGE;
     }
 
-    public static TIntList getDryLarge()
+    public static IntList getDryLarge()
     {
         return DRY_LARGE;
     }
 
-    public static TIntList getWetLarge()
+    public static IntList getWetLarge()
     {
         return WET_LARGE;
     }

@@ -26,11 +26,10 @@ package org.diorite.inventory;
 
 import java.util.Map;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
 public class InventoryType extends ASimpleEnum<InventoryType>
@@ -190,8 +189,8 @@ public class InventoryType extends ASimpleEnum<InventoryType>
      */
     public static InventoryType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(InventoryType.class);
-        return (InventoryType[]) map.values(new InventoryType[map.size()]);
+        final Int2ObjectMap<InventoryType> map = getByEnumOrdinal(InventoryType.class);
+        return map.values().toArray(new InventoryType[map.size()]);
     }
 
     static

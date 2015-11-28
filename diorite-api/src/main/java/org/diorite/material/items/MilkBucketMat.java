@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Milk Bucket' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class MilkBucketMat extends EdibleItemMat
     public static final MilkBucketMat MILK_BUCKET = new MilkBucketMat();
 
     private static final Map<String, MilkBucketMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<MilkBucketMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<MilkBucketMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected MilkBucketMat()
@@ -126,7 +126,7 @@ public class MilkBucketMat extends EdibleItemMat
      */
     public static MilkBucketMat[] milkBucketTypes()
     {
-        return byID.values(new MilkBucketMat[byID.size()]);
+        return byID.values().toArray(new MilkBucketMat[byID.size()]);
     }
 
     static

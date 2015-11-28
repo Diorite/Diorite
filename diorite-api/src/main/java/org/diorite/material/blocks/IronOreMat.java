@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Iron Ore' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class IronOreMat extends OreMat
     public static final IronOreMat IRON_ORE = new IronOreMat();
 
     private static final Map<String, IronOreMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<IronOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<IronOreMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected IronOreMat()
@@ -123,7 +123,7 @@ public class IronOreMat extends OreMat
      */
     public static IronOreMat[] ironOreTypes()
     {
-        return byID.values(new IronOreMat[byID.size()]);
+        return byID.values().toArray(new IronOreMat[byID.size()]);
     }
 
     static

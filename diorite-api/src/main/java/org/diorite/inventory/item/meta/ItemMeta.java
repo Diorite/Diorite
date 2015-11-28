@@ -25,7 +25,6 @@
 package org.diorite.inventory.item.meta;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -37,8 +36,7 @@ import org.diorite.inventory.item.ItemStack;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.others.Dirtable;
 
-import gnu.trove.TDecorators;
-import gnu.trove.map.TObjectShortMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 
 /**
  * Represent meta data of item stack.
@@ -187,19 +185,7 @@ public interface ItemMeta extends Dirtable
      *
      * @return An copy of the enchantments
      */
-    TObjectShortMap<EnchantmentType> getEnchants();
-
-    /**
-     * Returns a copy the enchantments in this ItemMeta. <br>
-     * Returns an empty map if none. <br>
-     * Plugins should use {@link #getEnchants()} where possible.
-     *
-     * @return An copy of the enchantments
-     */
-    default Map<EnchantmentType, Short> getEnchantsMap()
-    {
-        return TDecorators.wrap(this.getEnchants());
-    }
+    Object2ShortMap<EnchantmentType> getEnchants();
 
     /**
      * Adds the specified enchantment to this item meta. <br>

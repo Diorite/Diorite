@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Red Mushroom Block' block material in minecraft. <br>
@@ -158,7 +158,7 @@ public class RedMushroomBlockMat extends MushroomBlockMat
 
 
     private static final Map<String, RedMushroomBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedMushroomBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedMushroomBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected RedMushroomBlockMat()
@@ -261,7 +261,7 @@ public class RedMushroomBlockMat extends MushroomBlockMat
      */
     public static RedMushroomBlockMat[] redMushroomBlockTypes()
     {
-        return byID.values(new RedMushroomBlockMat[byID.size()]);
+        return byID.values().toArray(new RedMushroomBlockMat[byID.size()]);
     }
 
     static

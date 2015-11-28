@@ -30,23 +30,23 @@ import static org.diorite.world.Biome.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TIntHashSet;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 
 public class ShoreMapLayer extends MapLayer
 {
-    protected static final TIntSet    OCEANS         = new TIntHashSet(2);
-    protected static final TIntIntMap SPECIAL_SHORES = new TIntIntHashMap(18);
+    protected static final IntSet     OCEANS         = new IntOpenHashSet(2);
+    protected static final Int2IntMap SPECIAL_SHORES = new Int2IntOpenHashMap(18);
     protected final MapLayer belowLayer;
 
-    public static TIntSet getOceans()
+    public static IntSet getOceans()
     {
         return OCEANS;
     }
 
-    public static TIntIntMap getSpecialShores()
+    public static Int2IntMap getSpecialShores()
     {
         return SPECIAL_SHORES;
     }

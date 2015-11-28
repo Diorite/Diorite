@@ -24,12 +24,12 @@
 
 package org.diorite.utils.collections.hash;
 
-import gnu.trove.strategy.HashingStrategy;
+import it.unimi.dsi.fastutil.Hash.Strategy;
 
 /**
  * Case insensitive hashing strategy.
  */
-public class CaseInsensitiveHashingStrategy implements HashingStrategy<String>
+public class CaseInsensitiveHashingStrategy implements Strategy<String>
 {
     private static final long serialVersionUID = 0;
 
@@ -46,7 +46,7 @@ public class CaseInsensitiveHashingStrategy implements HashingStrategy<String>
     public static final CaseInsensitiveHashingStrategy INSTANCE = new CaseInsensitiveHashingStrategy();
 
     @Override
-    public int computeHashCode(final String s)
+    public int hashCode(final String s)
     {
         return s.toLowerCase().hashCode();
     }

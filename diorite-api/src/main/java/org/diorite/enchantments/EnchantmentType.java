@@ -28,13 +28,12 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Enum of all possible enchantment types in vanilla minecraft.
@@ -237,7 +236,7 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
     public static final EnchantmentType MENDING               = new EnchantmentType("MENDING", "mending", 70, t -> false);
 
     private static final Map<String, EnchantmentType>     byStringID    = new CaseInsensitiveMap<>(27, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<EnchantmentType> byNumericType = new TShortObjectHashMap<>(27, SMALL_LOAD_FACTOR);
+    private static final Short2ObjectMap<EnchantmentType> byNumericType = new Short2ObjectOpenHashMap<>(27, SMALL_LOAD_FACTOR);
 
     /**
      * String ID of this enchantment.
@@ -395,8 +394,8 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      */
     public static EnchantmentType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(EnchantmentType.class);
-        return (EnchantmentType[]) map.values(new EnchantmentType[map.size()]);
+        final Int2ObjectMap<EnchantmentType> map = getByEnumOrdinal(EnchantmentType.class);
+        return map.values().toArray(new EnchantmentType[map.size()]);
     }
 
     static

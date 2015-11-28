@@ -39,8 +39,8 @@ import org.diorite.material.blocks.OreBlockMat;
 import org.diorite.material.blocks.OreMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Dye' item material in minecraft. <br>
@@ -174,7 +174,7 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
     public static final DyeMat            DYE_BONE_MEAL    = new DyeMat("BONE_MEAL", DyeColor.WHITE);
 
     private static final Map<String, DyeMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<DyeMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<DyeMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;
 
@@ -275,7 +275,7 @@ public class DyeMat extends ItemMaterialData implements ColorableMat
      */
     public static DyeMat[] dyeTypes()
     {
-        return byID.values(new DyeMat[byID.size()]);
+        return byID.values().toArray(new DyeMat[byID.size()]);
     }
 
     static

@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Dandelion' block material in minecraft. <br>
@@ -49,7 +49,7 @@ public class DandelionMat extends FlowerMat
     public static final DandelionMat DANDELION = new DandelionMat();
 
     private static final Map<String, DandelionMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DandelionMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DandelionMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected DandelionMat()
@@ -148,7 +148,7 @@ public class DandelionMat extends FlowerMat
      */
     public static DandelionMat[] dandelionTypes()
     {
-        return byID.values(new DandelionMat[byID.size()]);
+        return byID.values().toArray(new DandelionMat[byID.size()]);
     }
 
     static

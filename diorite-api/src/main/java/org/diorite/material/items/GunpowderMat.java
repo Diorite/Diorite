@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Gunpowder' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class GunpowderMat extends ItemMaterialData
     public static final GunpowderMat GUNPOWDER = new GunpowderMat();
 
     private static final Map<String, GunpowderMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GunpowderMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<GunpowderMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected GunpowderMat()
@@ -127,7 +127,7 @@ public class GunpowderMat extends ItemMaterialData
      */
     public static GunpowderMat[] gunpowderTypes()
     {
-        return byID.values(new GunpowderMat[byID.size()]);
+        return byID.values().toArray(new GunpowderMat[byID.size()]);
     }
 
     static

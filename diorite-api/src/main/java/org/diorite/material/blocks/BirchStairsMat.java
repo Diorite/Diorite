@@ -32,8 +32,8 @@ import org.diorite.material.StairsMat;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Birch Stairs' block material in minecraft. <br>
@@ -61,7 +61,7 @@ public class BirchStairsMat extends WoodenStairsMat
     public static final BirchStairsMat BIRCH_STAIRS_NORTH_UPSIDE_DOWN = new BirchStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, BirchStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BirchStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<BirchStairsMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected BirchStairsMat()
@@ -177,7 +177,7 @@ public class BirchStairsMat extends WoodenStairsMat
      */
     public static BirchStairsMat[] birchStairsTypes()
     {
-        return byID.values(new BirchStairsMat[byID.size()]);
+        return byID.values().toArray(new BirchStairsMat[byID.size()]);
     }
 
     static

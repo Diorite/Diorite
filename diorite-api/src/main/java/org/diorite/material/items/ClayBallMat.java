@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Clay Ball' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class ClayBallMat extends ItemMaterialData
     public static final ClayBallMat CLAY_BALL = new ClayBallMat();
 
     private static final Map<String, ClayBallMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ClayBallMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<ClayBallMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected ClayBallMat()
@@ -127,7 +127,7 @@ public class ClayBallMat extends ItemMaterialData
      */
     public static ClayBallMat[] clayBallTypes()
     {
-        return byID.values(new ClayBallMat[byID.size()]);
+        return byID.values().toArray(new ClayBallMat[byID.size()]);
     }
 
     static

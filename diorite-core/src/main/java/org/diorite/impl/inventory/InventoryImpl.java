@@ -45,10 +45,10 @@ import org.diorite.material.Material;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 
-import gnu.trove.TIntCollection;
-import gnu.trove.TShortCollection;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.set.hash.TShortHashSet;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntCollection;
+import it.unimi.dsi.fastutil.shorts.ShortCollection;
+import it.unimi.dsi.fastutil.shorts.ShortOpenHashSet;
 
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {
@@ -76,7 +76,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
 
 //    public abstract void softUpdate();
 
-    final TShortCollection notNullItems = new TShortHashSet(50, .2f, Short.MIN_VALUE); // used only for updates
+    final ShortCollection notNullItems = new ShortOpenHashSet(50, .2f); // used only for updates
 
     public boolean softUpdate()
     {
@@ -181,7 +181,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         {
             return DioriteUtils.EMPTY_INT;
         }
-        final TIntCollection list = new TIntArrayList(10);
+        final IntCollection list = new IntArrayList(10);
         for (int i = 0, size = content.length(); i < size; i++)
         {
             final ItemStack item = content.get(i);
@@ -195,7 +195,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         {
             return DioriteUtils.EMPTY_INT;
         }
-        return list.toArray();
+        return list.toIntArray();
     }
 
     @Override
@@ -241,7 +241,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         {
             return DioriteUtils.EMPTY_INT;
         }
-        final TIntCollection list = new TIntArrayList(10);
+        final IntCollection list = new IntArrayList(10);
         for (int i = 0, size = content.length(); i < size; i++)
         {
             final ItemStack item = content.get(i);
@@ -268,7 +268,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         {
             return DioriteUtils.EMPTY_INT;
         }
-        return list.toArray();
+        return list.toIntArray();
     }
 
     @Override
@@ -300,7 +300,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         {
             return DioriteUtils.EMPTY_INT;
         }
-        final TIntCollection list = new TIntArrayList(10);
+        final IntCollection list = new IntArrayList(10);
         for (int i = content.length() - 1; i >= 0; i--)
         {
             final ItemStack item = content.get(i);
@@ -314,7 +314,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         {
             return DioriteUtils.EMPTY_INT;
         }
-        return list.toArray();
+        return list.toIntArray();
     }
 
     @Override
@@ -360,7 +360,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         {
             return DioriteUtils.EMPTY_INT;
         }
-        final TIntCollection list = new TIntArrayList(10);
+        final IntCollection list = new IntArrayList(10);
         for (int i = content.length() - 1; i >= 0; i--)
         {
             final ItemStack item = content.get(i);
@@ -387,7 +387,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         {
             return DioriteUtils.EMPTY_INT;
         }
-        return list.toArray();
+        return list.toIntArray();
     }
 
     @Override

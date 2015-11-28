@@ -30,8 +30,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Piston Extension' block material in minecraft. <br>
@@ -152,7 +152,7 @@ public class PistonExtensionMat extends PistonBaseMat
     public static final PistonExtensionMat PISTON_EXTENSION_EAST_EXTENDED  = new PistonExtensionMat(BlockFace.EAST, true);
 
     private static final Map<String, PistonExtensionMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PistonExtensionMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<PistonExtensionMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected PistonExtensionMat()
@@ -274,7 +274,7 @@ public class PistonExtensionMat extends PistonBaseMat
      */
     public static PistonExtensionMat[] pistonExtensionTypes()
     {
-        return byID.values(new PistonExtensionMat[byID.size()]);
+        return byID.values().toArray(new PistonExtensionMat[byID.size()]);
     }
 
     static

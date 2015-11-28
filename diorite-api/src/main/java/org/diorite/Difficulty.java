@@ -24,11 +24,10 @@
 
 package org.diorite;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class Difficulty extends ASimpleEnum<Difficulty>
@@ -43,7 +42,7 @@ public class Difficulty extends ASimpleEnum<Difficulty>
     public static final Difficulty NORMAL   = new Difficulty("NORMAL", 2, "options.difficulty.normal");
     public static final Difficulty HARD     = new Difficulty("HARD", 3, "options.difficulty.hard");
 
-    private static final TIntObjectMap<Difficulty> byLevel = new TIntObjectHashMap<>(4, SMALL_LOAD_FACTOR);
+    private static final Int2ObjectMap<Difficulty> byLevel = new Int2ObjectOpenHashMap<>(4, SMALL_LOAD_FACTOR);
 
     private final int    level;
     private final String option;
@@ -117,8 +116,8 @@ public class Difficulty extends ASimpleEnum<Difficulty>
      */
     public static Difficulty[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(Difficulty.class);
-        return (Difficulty[]) map.values(new Difficulty[map.size()]);
+        final Int2ObjectMap<Difficulty> map = getByEnumOrdinal(Difficulty.class);
+        return map.values().toArray(new Difficulty[map.size()]);
     }
 
     static

@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Nether Brick Fence' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class NetherBrickFenceMat extends BlockMaterialData
     public static final NetherBrickFenceMat NETHER_BRICK_FENCE = new NetherBrickFenceMat();
 
     private static final Map<String, NetherBrickFenceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<NetherBrickFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<NetherBrickFenceMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected NetherBrickFenceMat()
@@ -123,7 +123,7 @@ public class NetherBrickFenceMat extends BlockMaterialData
      */
     public static NetherBrickFenceMat[] netherBrickFenceTypes()
     {
-        return byID.values(new NetherBrickFenceMat[byID.size()]);
+        return byID.values().toArray(new NetherBrickFenceMat[byID.size()]);
     }
 
     static

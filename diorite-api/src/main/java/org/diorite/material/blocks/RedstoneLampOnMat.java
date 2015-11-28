@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Redstone Lamp On' block material in minecraft. <br>
@@ -51,7 +51,7 @@ public class RedstoneLampOnMat extends RedstoneLampMat
     public static final RedstoneLampOnMat REDSTONE_LAMP_ON = new RedstoneLampOnMat();
 
     private static final Map<String, RedstoneLampOnMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneLampOnMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedstoneLampOnMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     protected RedstoneLampOnMat()
@@ -136,7 +136,7 @@ public class RedstoneLampOnMat extends RedstoneLampMat
      */
     public static RedstoneLampOnMat[] redstoneLampOnTypes()
     {
-        return byID.values(new RedstoneLampOnMat[byID.size()]);
+        return byID.values().toArray(new RedstoneLampOnMat[byID.size()]);
     }
 
     static

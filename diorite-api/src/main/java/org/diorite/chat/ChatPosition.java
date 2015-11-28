@@ -24,10 +24,9 @@
 
 package org.diorite.chat;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 public class ChatPosition extends ASimpleEnum<ChatPosition>
 {
@@ -89,8 +88,8 @@ public class ChatPosition extends ASimpleEnum<ChatPosition>
      */
     public static ChatPosition[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ChatPosition.class);
-        return (ChatPosition[]) map.values(new ChatPosition[map.size()]);
+        final Int2ObjectMap<ChatPosition> map = getByEnumOrdinal(ChatPosition.class);
+        return map.values().toArray(new ChatPosition[map.size()]);
     }
 
     static

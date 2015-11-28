@@ -34,8 +34,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.ColorableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Carpet' block material in minecraft. <br>
@@ -186,7 +186,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
     public static final CarpetMat CARPET_BLACK      = new CarpetMat(DyeColor.BLACK);
 
     private static final Map<String, CarpetMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CarpetMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CarpetMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;
 
@@ -300,7 +300,7 @@ public class CarpetMat extends BlockMaterialData implements ColorableMat
      */
     public static CarpetMat[] carpetTypes()
     {
-        return byID.values(new CarpetMat[byID.size()]);
+        return byID.values().toArray(new CarpetMat[byID.size()]);
     }
 
     static
