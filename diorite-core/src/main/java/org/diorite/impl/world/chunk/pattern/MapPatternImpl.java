@@ -7,35 +7,39 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 
-import gnu.trove.iterator.TIntIntIterator;
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap.Entry;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+
 
 public class MapPatternImpl implements PatternData
 {
     protected static final int GLOBAL_SIZE_DOWN = 4095;
-    protected final TIntIntMap pattern;
-    protected final TIntIntMap mirror;
+    protected final Int2IntMap pattern;
+    protected final Int2IntMap mirror;
     private int lastUsed = 0;
 
     public MapPatternImpl()
     {
-        this.pattern = new TIntIntHashMap(64, .5F, - 1, 0);
-        this.mirror = new TIntIntHashMap(64, .5F, 0, - 1);
-        ;
+        this.pattern = new Int2IntOpenHashMap(64, .5F);
+        this.pattern.defaultReturnValue(0);
+        this.mirror = new Int2IntOpenHashMap(64, .5F);
+        this.mirror.defaultReturnValue(- 1);
     }
 
-    private MapPatternImpl(final TIntIntMap pattern, final TIntIntMap mirror, final int lastUsed)
+    private MapPatternImpl(final Int2IntMap pattern, final Int2IntMap mirror, final int lastUsed)
     {
-        this.pattern = new TIntIntHashMap(pattern);
-        this.mirror = new TIntIntHashMap(mirror);
+        this.pattern = new Int2IntOpenHashMap(pattern);
+        this.mirror = new Int2IntOpenHashMap(mirror);
         this.lastUsed = lastUsed;
     }
 
     public MapPatternImpl(final ArrayPatternImpl old)
     {
-        this.pattern = new TIntIntHashMap(64, .5F, - 1, 0);
-        this.mirror = new TIntIntHashMap(64, .5F, 0, - 1);
+        this.pattern = new Int2IntOpenHashMap(64, .5F);
+        this.pattern.defaultReturnValue(0);
+        this.mirror = new Int2IntOpenHashMap(64, .5F);
+        this.mirror.defaultReturnValue(- 1);
         for (final int mcID : old.pattern)
         {
             this.pattern.put(this.lastUsed, mcID);
@@ -112,11 +116,9 @@ public class MapPatternImpl implements PatternData
             synchronized (this.pattern)
             {
                 mapping = new int[this.pattern.size()];
-                final TIntIntIterator it = this.pattern.iterator();
-                while (it.hasNext())
+                for (final Entry entry : this.pattern.int2IntEntrySet())
                 {
-                    it.advance();
-                    mapping[it.key()] = it.value();
+                    mapping[entry.getIntKey()] = entry.getIntValue();
                 }
                 this.ref = new SoftReference<>(mapping);
             }
