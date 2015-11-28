@@ -36,8 +36,8 @@ import org.diorite.material.RotatableMat;
 import org.diorite.material.RotateAxisMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Hay Block' block material in minecraft. <br>
@@ -84,7 +84,7 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
     public static final HayBlockMat HAY_BLOCK_NORTH_SOUTH = new HayBlockMat(RotateAxisMat.NORTH_SOUTH);
 
     private static final Map<String, HayBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<HayBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<HayBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final RotateAxisMat rotateAxis;
 
@@ -235,7 +235,7 @@ public class HayBlockMat extends BlockMaterialData implements RotatableMat
      */
     public static HayBlockMat[] hayBlockTypes()
     {
-        return byID.values(new HayBlockMat[byID.size()]);
+        return byID.values().toArray(new HayBlockMat[byID.size()]);
     }
 
     static

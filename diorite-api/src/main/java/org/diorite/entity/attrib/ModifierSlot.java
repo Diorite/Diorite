@@ -26,11 +26,10 @@ package org.diorite.entity.attrib;
 
 import java.util.Map;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Represent slot where item needs to be holded to apply modifiers.
@@ -166,8 +165,8 @@ public class ModifierSlot extends ASimpleEnum<ModifierSlot>
      */
     public static ModifierSlot[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ModifierSlot.class);
-        return (ModifierSlot[]) map.values(new ModifierSlot[map.size()]);
+        final Int2ObjectMap<ModifierSlot> map = getByEnumOrdinal(ModifierSlot.class);
+        return map.values().toArray(new ModifierSlot[map.size()]);
     }
 
     static

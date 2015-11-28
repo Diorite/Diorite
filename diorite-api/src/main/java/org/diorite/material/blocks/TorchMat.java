@@ -35,8 +35,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Torch East' block material in minecraft. <br>
@@ -108,7 +108,7 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
     public static final TorchMat TORCH_ITEM  = new TorchMat(BlockFace.SELF);
 
     private static final Map<String, TorchMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<TorchMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<TorchMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
 
@@ -254,7 +254,7 @@ public class TorchMat extends BlockMaterialData implements AttachableMat
      */
     public static TorchMat[] torchTypes()
     {
-        return byID.values(new TorchMat[byID.size()]);
+        return byID.values().toArray(new TorchMat[byID.size()]);
     }
 
     static

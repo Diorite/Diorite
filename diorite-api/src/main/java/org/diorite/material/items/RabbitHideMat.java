@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Rabbit Hide' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class RabbitHideMat extends ItemMaterialData
     public static final RabbitHideMat RABBIT_HIDE = new RabbitHideMat();
 
     private static final Map<String, RabbitHideMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RabbitHideMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<RabbitHideMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public RabbitHideMat()
@@ -128,7 +128,7 @@ public class RabbitHideMat extends ItemMaterialData
      */
     public static RabbitHideMat[] rabbitHideTypes()
     {
-        return byID.values(new RabbitHideMat[byID.size()]);
+        return byID.values().toArray(new RabbitHideMat[byID.size()]);
     }
 
     static

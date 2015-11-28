@@ -24,10 +24,9 @@
 
 package org.diorite.inventory;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
 public class ClickType extends ASimpleEnum<ClickType>
@@ -146,8 +145,8 @@ public class ClickType extends ASimpleEnum<ClickType>
      */
     public static ClickType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ClickType.class);
-        return (ClickType[]) map.values(new ClickType[map.size()]);
+        final Int2ObjectMap<ClickType> map = getByEnumOrdinal(ClickType.class);
+        return map.values().toArray(new ClickType[map.size()]);
     }
 
     static

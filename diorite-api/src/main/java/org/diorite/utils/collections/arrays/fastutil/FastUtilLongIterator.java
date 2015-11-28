@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-package org.diorite.utils.collections.arrays.trove;
+package org.diorite.utils.collections.arrays.fastutil;
 
 import java.util.NoSuchElementException;
 
-import gnu.trove.iterator.TDoubleIterator;
+import it.unimi.dsi.fastutil.longs.LongIterator;
 
 /**
- * Represent {@link TDoubleIterator} for double array.
+ * Represent {@link TLongIterator} for long array.
  */
-public class TDoubleArrayIterator extends TPrimitiveArrayIterator<double[]> implements TDoubleIterator
+public class FastUtilLongIterator extends FastUtilPrimitiveIterator<long[]> implements LongIterator
 {
     /**
-     * Construct new TDoubleIterator for given primitive array.
+     * Construct new LongIterator for given primitive array.
      *
      * @param primitiveArray array to be iterated.
      */
-    public TDoubleArrayIterator(final double[] primitiveArray)
+    public FastUtilLongIterator(final long[] primitiveArray)
     {
         super(primitiveArray);
     }
@@ -46,7 +46,7 @@ public class TDoubleArrayIterator extends TPrimitiveArrayIterator<double[]> impl
     @Override
     public void setValue(final Number number)
     {
-        this.primitiveArray[this.index - 1] = number.doubleValue();
+        this.primitiveArray[this.index - 1] = number.longValue();
     }
 
     /**
@@ -54,7 +54,7 @@ public class TDoubleArrayIterator extends TPrimitiveArrayIterator<double[]> impl
      *
      * @param number value to set.
      */
-    public void setValue(final double number)
+    public void setValue(final long number)
     {
         this.primitiveArray[this.index - 1] = number;
     }
@@ -66,12 +66,31 @@ public class TDoubleArrayIterator extends TPrimitiveArrayIterator<double[]> impl
     }
 
     @Override
-    public double next()
+    public Long next()
+    {
+        return this.nextLong();
+    }
+
+    @Override
+    public long nextLong()
     {
         if (! this.hasNext())
         {
             throw new NoSuchElementException("Index >= Length, Index: " + this.index + ", Length: " + this.primitiveArray.length);
         }
         return this.primitiveArray[this.index++];
+    }
+
+    @Override
+    public int skip(final int n)
+    {
+        if ((this.index + n) < this.primitiveArray.length)
+        {
+            this.index += n;
+            return n;
+        }
+        final int r = this.primitiveArray.length - this.index - 1;
+        this.index = this.primitiveArray.length - 1;
+        return r;
     }
 }

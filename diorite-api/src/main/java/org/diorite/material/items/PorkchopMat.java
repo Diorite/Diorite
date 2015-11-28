@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Porkchop' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class PorkchopMat extends EdibleItemMat
     public static final PorkchopMat PORKCHOP = new PorkchopMat();
 
     private static final Map<String, PorkchopMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PorkchopMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<PorkchopMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public PorkchopMat()
@@ -127,7 +127,7 @@ public class PorkchopMat extends EdibleItemMat
      */
     public static PorkchopMat[] porkchopTypes()
     {
-        return byID.values(new PorkchopMat[byID.size()]);
+        return byID.values().toArray(new PorkchopMat[byID.size()]);
     }
 
     static

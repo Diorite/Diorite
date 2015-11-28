@@ -34,19 +34,19 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gnu.trove.list.TIntList;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 
 public class BiomeEdgeMapLayer extends MapLayer
 {
-    protected static final TIntIntMap                MESA_EDGES       = new TIntIntHashMap(2);
-    protected static final TIntIntMap                MEGA_TAIGA_EDGES = new TIntIntHashMap(1);
-    protected static final TIntIntMap                DESERT_EDGES     = new TIntIntHashMap(1);
-    protected static final TIntIntMap                SWAMP1_EDGES     = new TIntIntHashMap(1);
-    protected static final TIntIntMap                SWAMP2_EDGES     = new TIntIntHashMap(1);
-    protected static final Map<TIntIntMap, TIntList> EDGES            = new HashMap<>(5);
+    protected static final Int2IntMap               MESA_EDGES       = new Int2IntOpenHashMap(2);
+    protected static final Int2IntMap               MEGA_TAIGA_EDGES = new Int2IntOpenHashMap(1);
+    protected static final Int2IntMap               DESERT_EDGES     = new Int2IntOpenHashMap(1);
+    protected static final Int2IntMap               SWAMP1_EDGES     = new Int2IntOpenHashMap(1);
+    protected static final Int2IntMap               SWAMP2_EDGES     = new Int2IntOpenHashMap(1);
+    protected static final Map<Int2IntMap, IntList> EDGES            = new HashMap<>(5);
 
     protected final MapLayer belowLayer;
 
@@ -73,9 +73,9 @@ public class BiomeEdgeMapLayer extends MapLayer
                 // This applies biome large edges using Von Neumann neighborhood
                 final int centerVal = values[(j + 1 + ((i + 1) * gridSizeX))];
                 int val = centerVal;
-                for (final Entry<TIntIntMap, TIntList> entry : EDGES.entrySet())
+                for (final Entry<Int2IntMap, IntList> entry : EDGES.entrySet())
                 {
-                    final TIntIntMap map = entry.getKey();
+                    final Int2IntMap map = entry.getKey();
                     if (map.containsKey(centerVal))
                     {
                         final int upperVal = values[(j + 1 + (i * gridSizeX))];
@@ -110,9 +110,9 @@ public class BiomeEdgeMapLayer extends MapLayer
 
         EDGES.put(MESA_EDGES, null);
         EDGES.put(MEGA_TAIGA_EDGES, null);
-        EDGES.put(DESERT_EDGES, TIntArrayList.wrap(new int[]{ICE_PLAINS.getBiomeId()}));
-        EDGES.put(SWAMP1_EDGES, TIntArrayList.wrap(new int[]{DESERT.getBiomeId(), COLD_TAIGA.getBiomeId(), ICE_PLAINS.getBiomeId()}));
-        EDGES.put(SWAMP2_EDGES, TIntArrayList.wrap(new int[]{JUNGLE.getBiomeId()}));
+        EDGES.put(DESERT_EDGES, IntArrayList.wrap(new int[]{ICE_PLAINS.getBiomeId()}));
+        EDGES.put(SWAMP1_EDGES, IntArrayList.wrap(new int[]{DESERT.getBiomeId(), COLD_TAIGA.getBiomeId(), ICE_PLAINS.getBiomeId()}));
+        EDGES.put(SWAMP2_EDGES, IntArrayList.wrap(new int[]{JUNGLE.getBiomeId()}));
     }
 
     @Override

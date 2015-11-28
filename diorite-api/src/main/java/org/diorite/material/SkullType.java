@@ -24,10 +24,9 @@
 
 package org.diorite.material;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class SkullType extends ASimpleEnum<SkullType>
@@ -101,8 +100,8 @@ public class SkullType extends ASimpleEnum<SkullType>
      */
     public static SkullType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(SkullType.class);
-        return (SkullType[]) map.values(new SkullType[map.size()]);
+        final Int2ObjectMap<SkullType> map = getByEnumOrdinal(SkullType.class);
+        return map.values().toArray(new SkullType[map.size()]);
     }
 
     static

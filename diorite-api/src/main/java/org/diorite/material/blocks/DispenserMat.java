@@ -35,8 +35,8 @@ import org.diorite.material.Material;
 import org.diorite.material.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Dispenser' block material in minecraft. <br>
@@ -161,7 +161,7 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
     public static final DispenserMat DISPENSER_EAST_POWERED  = new DispenserMat(BlockFace.EAST, true);
 
     private static final Map<String, DispenserMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DispenserMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DispenserMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace facing;
     protected final boolean   powered;
@@ -331,7 +331,7 @@ public class DispenserMat extends StonyMat implements DirectionalMat, PowerableM
      */
     public static DispenserMat[] dispenserTypes()
     {
-        return byID.values(new DispenserMat[byID.size()]);
+        return byID.values().toArray(new DispenserMat[byID.size()]);
     }
 
     static

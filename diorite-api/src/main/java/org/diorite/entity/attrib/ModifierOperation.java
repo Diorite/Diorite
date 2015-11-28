@@ -30,10 +30,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.UnaryOperator;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Represent possible modifier operations. <br>
@@ -206,8 +205,8 @@ public class ModifierOperation extends ASimpleEnum<ModifierOperation>
      */
     public static ModifierOperation[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ModifierOperation.class);
-        return (ModifierOperation[]) map.values(new ModifierOperation[map.size()]);
+        final Int2ObjectMap<ModifierOperation> map = getByEnumOrdinal(ModifierOperation.class);
+        return map.values().toArray(new ModifierOperation[map.size()]);
     }
 
 

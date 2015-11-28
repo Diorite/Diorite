@@ -33,8 +33,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 /**
  * Simple interface-based enum, that can be edited in runtime. <br>
@@ -170,7 +170,7 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
     {
         private static final Map<Class<?>, AtomicInteger>                ids       = new HashMap<>(40);
         private static final Map<Class<?>, Map<String, SimpleEnum<?>>>   byName    = new HashMap<>(40);
-        private static final Map<Class<?>, TIntObjectMap<SimpleEnum<?>>> byOrdinal = new HashMap<>(40);
+        private static final Map<Class<?>, Int2ObjectMap<SimpleEnum<?>>> byOrdinal = new HashMap<>(40);
 
         protected final String enumName;
         protected final int    ordinal;
@@ -257,7 +257,7 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
 
         protected static void register(final Class<?> clazz, final SimpleEnum<?> e)
         {
-            final Entry<Map<String, SimpleEnum<?>>, TIntObjectMap<SimpleEnum<?>>> maps = init(clazz, 10);
+            final Entry<Map<String, SimpleEnum<?>>, Int2ObjectMap<SimpleEnum<?>>> maps = init(clazz, 10);
             maps.getKey().put(e.name(), e);
             maps.getValue().put(e.ordinal(), e);
         }
@@ -267,12 +267,17 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
             return byName.get(clazz);
         }
 
-        protected static TIntObjectMap<SimpleEnum<?>> getByEnumOrdinal(final Class<?> clazz)
+//        protected static Int2ObjectMap<SimpleEnum<?>> getByEnumOrdinal(final Class<?> clazz)
+//        {
+//            return byOrdinal.get(clazz);
+//        }
+
+        protected static <K extends SimpleEnum<K>> Int2ObjectMap<K> getByEnumOrdinal(final Class<K> clazz)
         {
-            return byOrdinal.get(clazz);
+            return (Int2ObjectMap<K>) byOrdinal.get(clazz);
         }
 
-        protected static Entry<Map<String, SimpleEnum<?>>, TIntObjectMap<SimpleEnum<?>>> init(final Class<?> clazz, final int size)
+        protected static Entry<Map<String, SimpleEnum<?>>, Int2ObjectMap<SimpleEnum<?>>> init(final Class<?> clazz, final int size)
         {
             Map<String, SimpleEnum<?>> byName = ASimpleEnum.byName.get(clazz);
             if (byName == null)
@@ -280,10 +285,10 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
                 byName = new CaseInsensitiveMap<>(size, SMALL_LOAD_FACTOR);
                 ASimpleEnum.byName.put(clazz, byName);
             }
-            TIntObjectMap<SimpleEnum<?>> byID = ASimpleEnum.byOrdinal.get(clazz);
+            Int2ObjectMap<SimpleEnum<?>> byID = ASimpleEnum.byOrdinal.get(clazz);
             if (byID == null)
             {
-                byID = new TIntObjectHashMap<>(size, SMALL_LOAD_FACTOR);
+                byID = new Int2ObjectOpenHashMap<>(size, SMALL_LOAD_FACTOR);
                 ASimpleEnum.byOrdinal.put(clazz, byID);
             }
             return new SimpleEntry<>(byName, byID);

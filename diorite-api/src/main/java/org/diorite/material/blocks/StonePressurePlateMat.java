@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Stone Pressure Plate' block material in minecraft. <br>
@@ -69,7 +69,7 @@ public class StonePressurePlateMat extends PressurePlateMat
     public static final StonePressurePlateMat STONE_PRESSURE_PLATE_POWERED = new StonePressurePlateMat(0x1, true);
 
     private static final Map<String, StonePressurePlateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<StonePressurePlateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<StonePressurePlateMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public StonePressurePlateMat()
@@ -173,7 +173,7 @@ public class StonePressurePlateMat extends PressurePlateMat
      */
     public static StonePressurePlateMat[] stonePressurePlateTypes()
     {
-        return byID.values(new StonePressurePlateMat[byID.size()]);
+        return byID.values().toArray(new StonePressurePlateMat[byID.size()]);
     }
 
     static

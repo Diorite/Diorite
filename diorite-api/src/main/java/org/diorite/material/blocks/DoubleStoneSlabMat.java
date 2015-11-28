@@ -30,8 +30,8 @@ import org.diorite.material.Material;
 import org.diorite.material.SlabTypeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Double Stone Slab' block material in minecraft. <br>
@@ -200,7 +200,7 @@ public class DoubleStoneSlabMat extends StonySlabMat
     public static final DoubleStoneSlabMat DOUBLE_STONE_SLAB_RED_SANDSTONE_SMOOTH = new DoubleStoneSlab2("RED_SANDSTONE_SMOOTH", SlabTypeMat.SMOOTH_FULL, StoneSlabTypeMat.RED_SANDSTONE);
 
     private static final Map<String, DoubleStoneSlabMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DoubleStoneSlabMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DoubleStoneSlabMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public DoubleStoneSlabMat()
@@ -306,7 +306,7 @@ public class DoubleStoneSlabMat extends StonySlabMat
      */
     public static DoubleStoneSlabMat[] doubleStoneSlabTypes()
     {
-        return byID.values(new DoubleStoneSlabMat[byID.size()]);
+        return byID.values().toArray(new DoubleStoneSlabMat[byID.size()]);
     }
 
     /**

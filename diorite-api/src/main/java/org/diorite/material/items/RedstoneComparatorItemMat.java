@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Redstone Comparator Item' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class RedstoneComparatorItemMat extends ItemMaterialData implements Place
     public static final RedstoneComparatorItemMat REDSTONE_COMPARATOR_ITEM = new RedstoneComparatorItemMat();
 
     private static final Map<String, RedstoneComparatorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RedstoneComparatorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<RedstoneComparatorItemMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public RedstoneComparatorItemMat()
@@ -129,7 +129,7 @@ public class RedstoneComparatorItemMat extends ItemMaterialData implements Place
      */
     public static RedstoneComparatorItemMat[] redstoneComparatorItemTypes()
     {
-        return byID.values(new RedstoneComparatorItemMat[byID.size()]);
+        return byID.values().toArray(new RedstoneComparatorItemMat[byID.size()]);
     }
 
     static

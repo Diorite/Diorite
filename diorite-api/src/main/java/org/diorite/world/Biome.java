@@ -27,13 +27,12 @@ package org.diorite.world;
 import java.util.Map;
 import java.util.Random;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.noise.SimplexOctaveGenerator;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 @SuppressWarnings({"MagicNumber", "ClassHasNoToStringMethod"})
 public class Biome extends ASimpleEnum<Biome>
@@ -108,7 +107,7 @@ public class Biome extends ASimpleEnum<Biome>
     public static final Biome TAIGA_MOUNTAINS               = new Biome("TAIGA_MOUNTAINS", "Taiga M", 133, 0.5F, 0.5F, true);
     public static final Biome THE_END                       = new Biome("THE_END", "The End", 9, 0.5F, 0.5F, true);
 
-    private static final TIntObjectMap<Biome> byBiomeID      = new TIntObjectHashMap<>(3, SMALL_LOAD_FACTOR);
+    private static final Int2ObjectMap<Biome> byBiomeID      = new Int2ObjectOpenHashMap<>(3, SMALL_LOAD_FACTOR);
     private static final Map<String, Biome>   byBiomeName    = new CaseInsensitiveMap<>(3, SMALL_LOAD_FACTOR);
     /**
      * all biomes with humidity above tihs value are wet.
@@ -347,8 +346,8 @@ public class Biome extends ASimpleEnum<Biome>
      */
     public static Biome[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(Biome.class);
-        return (Biome[]) map.values(new Biome[map.size()]);
+        final Int2ObjectMap<Biome> map = getByEnumOrdinal(Biome.class);
+        return map.values().toArray(new Biome[map.size()]);
     }
 
     static

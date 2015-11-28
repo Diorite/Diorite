@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Acacia Door Item' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class AcaciaDoorItemMat extends WoodenDoorItemMat
     public static final AcaciaDoorItemMat ACACIA_DOOR_ITEM = new AcaciaDoorItemMat();
 
     private static final Map<String, AcaciaDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<AcaciaDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<AcaciaDoorItemMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public AcaciaDoorItemMat()
@@ -128,7 +128,7 @@ public class AcaciaDoorItemMat extends WoodenDoorItemMat
      */
     public static AcaciaDoorItemMat[] acaciaDoorItemTypes()
     {
-        return byID.values(new AcaciaDoorItemMat[byID.size()]);
+        return byID.values().toArray(new AcaciaDoorItemMat[byID.size()]);
     }
 
     static

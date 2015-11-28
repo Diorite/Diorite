@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Flower Pot' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class FlowerPotMat extends ItemMaterialData implements PlaceableMat
     public static final FlowerPotMat FLOWER_POT = new FlowerPotMat();
 
     private static final Map<String, FlowerPotMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FlowerPotMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<FlowerPotMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public FlowerPotMat()
@@ -129,7 +129,7 @@ public class FlowerPotMat extends ItemMaterialData implements PlaceableMat
      */
     public static FlowerPotMat[] flowerPotTypes()
     {
-        return byID.values(new FlowerPotMat[byID.size()]);
+        return byID.values().toArray(new FlowerPotMat[byID.size()]);
     }
 
     static

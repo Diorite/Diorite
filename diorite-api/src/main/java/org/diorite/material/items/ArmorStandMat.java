@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableEntityMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Armor Stand' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class ArmorStandMat extends ItemMaterialData implements PlaceableEntityMa
     public static final ArmorStandMat ARMOR_STAND = new ArmorStandMat();
 
     private static final Map<String, ArmorStandMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<ArmorStandMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<ArmorStandMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public ArmorStandMat()
@@ -129,7 +129,7 @@ public class ArmorStandMat extends ItemMaterialData implements PlaceableEntityMa
      */
     public static ArmorStandMat[] armorStandTypes()
     {
-        return byID.values(new ArmorStandMat[byID.size()]);
+        return byID.values().toArray(new ArmorStandMat[byID.size()]);
     }
 
     static

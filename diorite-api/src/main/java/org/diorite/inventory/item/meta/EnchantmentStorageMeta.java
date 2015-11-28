@@ -24,12 +24,9 @@
 
 package org.diorite.inventory.item.meta;
 
-import java.util.Map;
-
 import org.diorite.enchantments.EnchantmentType;
 
-import gnu.trove.TDecorators;
-import gnu.trove.map.TObjectShortMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 
 /**
  * EnchantmentStorageMeta is specific to items that can store enchantments, as opposed to being enchanted. {@link org.diorite.material.Material#ENCHANTED_BOOK} is an example of an item with enchantment storage.
@@ -68,17 +65,7 @@ public interface EnchantmentStorageMeta extends ItemMeta
      *
      * @return An immutable copy of the stored enchantments
      */
-    TObjectShortMap<EnchantmentType> getStoredEnchants();
-
-    /**
-     * Gets a copy the stored enchantments in this ItemMeta.
-     *
-     * @return An immutable copy of the stored enchantments
-     */
-    default Map<EnchantmentType, Short> getStoredEnchantsMap()
-    {
-        return TDecorators.wrap(this.getStoredEnchants());
-    }
+    Object2ShortMap<EnchantmentType> getStoredEnchants();
 
     /**
      * Stores the specified enchantment in this item meta.

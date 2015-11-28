@@ -32,8 +32,8 @@ import org.diorite.material.Material;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Acacia Fence Gate' block material in minecraft. <br>
@@ -121,7 +121,7 @@ public class AcaciaFenceGateMat extends WoodenFenceGateMat
     public static final AcaciaFenceGateMat ACACIA_FENCE_GATE_EAST_OPEN  = new AcaciaFenceGateMat(BlockFace.EAST, true);
 
     private static final Map<String, AcaciaFenceGateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<AcaciaFenceGateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<AcaciaFenceGateMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public AcaciaFenceGateMat()
@@ -238,7 +238,7 @@ public class AcaciaFenceGateMat extends WoodenFenceGateMat
      */
     public static AcaciaFenceGateMat[] acaciaFenceGateTypes()
     {
-        return byID.values(new AcaciaFenceGateMat[byID.size()]);
+        return byID.values().toArray(new AcaciaFenceGateMat[byID.size()]);
     }
 
     static

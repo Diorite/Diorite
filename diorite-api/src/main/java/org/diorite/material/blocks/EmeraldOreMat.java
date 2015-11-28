@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Emerald Ore' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class EmeraldOreMat extends OreMat
     public static final EmeraldOreMat EMERALD_ORE = new EmeraldOreMat();
 
     private static final Map<String, EmeraldOreMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<EmeraldOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<EmeraldOreMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public EmeraldOreMat()
@@ -124,7 +124,7 @@ public class EmeraldOreMat extends OreMat
      */
     public static EmeraldOreMat[] emeraldOreTypes()
     {
-        return byID.values(new EmeraldOreMat[byID.size()]);
+        return byID.values().toArray(new EmeraldOreMat[byID.size()]);
     }
 
     static

@@ -35,8 +35,8 @@ import org.diorite.material.DirectionalMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Ender Chest' block material in minecraft. <br>
@@ -91,7 +91,7 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
     public static final EnderChestMat ENDER_CHEST_EAST  = new EnderChestMat(BlockFace.EAST);
 
     private static final Map<String, EnderChestMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<EnderChestMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<EnderChestMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
 
@@ -227,7 +227,7 @@ public class EnderChestMat extends BlockMaterialData implements DirectionalMat
      */
     public static EnderChestMat[] enderChestTypes()
     {
-        return byID.values(new EnderChestMat[byID.size()]);
+        return byID.values().toArray(new EnderChestMat[byID.size()]);
     }
 
     static

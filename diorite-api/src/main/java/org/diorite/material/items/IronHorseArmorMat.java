@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Iron Horse Armor' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class IronHorseArmorMat extends AbstractHorseArmor
     public static final IronHorseArmorMat IRON_HORSE_ARMOR = new IronHorseArmorMat();
 
     private static final Map<String, IronHorseArmorMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<IronHorseArmorMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<IronHorseArmorMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public IronHorseArmorMat()
@@ -127,7 +127,7 @@ public class IronHorseArmorMat extends AbstractHorseArmor
      */
     public static IronHorseArmorMat[] ironHorseArmorTypes()
     {
-        return byID.values(new IronHorseArmorMat[byID.size()]);
+        return byID.values().toArray(new IronHorseArmorMat[byID.size()]);
     }
 
     static

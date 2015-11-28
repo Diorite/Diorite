@@ -40,8 +40,8 @@ import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.DioriteMathUtils;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 @SuppressWarnings("JavaDoc")
 public abstract class Material extends MaterialCounters implements SimpleEnum<Material>
@@ -432,7 +432,7 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
 
     private static final Map<String, Material>   byName        = new CaseInsensitiveMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
     private static final Map<String, Material>   byMinecraftId = new CaseInsensitiveMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
-    private static final TIntObjectMap<Material> byID          = new TIntObjectHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
+    private static final Int2ObjectMap<Material> byID          = new Int2ObjectOpenHashMap<>(MATERIALS_SIZE, SMALL_LOAD_FACTOR);
 
     private final   String enumName;
     /**
@@ -1179,7 +1179,7 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
      */
     public static Material[] values()
     {
-        return byID.values(new Material[byID.size()]);
+        return byID.values().toArray(new Material[byID.size()]);
     }
 
     static

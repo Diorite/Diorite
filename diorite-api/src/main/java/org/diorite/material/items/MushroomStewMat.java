@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Mushroom Stew' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class MushroomStewMat extends EdibleItemMat
     public static final MushroomStewMat MUSHROOM_STEW = new MushroomStewMat();
 
     private static final Map<String, MushroomStewMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<MushroomStewMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<MushroomStewMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public MushroomStewMat()
@@ -127,7 +127,7 @@ public class MushroomStewMat extends EdibleItemMat
      */
     public static MushroomStewMat[] mushroomStewTypes()
     {
-        return byID.values(new MushroomStewMat[byID.size()]);
+        return byID.values().toArray(new MushroomStewMat[byID.size()]);
     }
 
     static

@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.OreItemMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Quartz Ore' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class QuartzOreMat extends OreMat
     public static final QuartzOreMat QUARTZ_ORE = new QuartzOreMat();
 
     private static final Map<String, QuartzOreMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<QuartzOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<QuartzOreMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public QuartzOreMat()
@@ -124,7 +124,7 @@ public class QuartzOreMat extends OreMat
      */
     public static QuartzOreMat[] quartzOreTypes()
     {
-        return byID.values(new QuartzOreMat[byID.size()]);
+        return byID.values().toArray(new QuartzOreMat[byID.size()]);
     }
 
     static

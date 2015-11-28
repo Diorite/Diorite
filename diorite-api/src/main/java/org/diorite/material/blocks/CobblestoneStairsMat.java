@@ -35,8 +35,8 @@ import org.diorite.material.Material;
 import org.diorite.material.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Cobblestone Stairs' block material in minecraft. <br>
@@ -124,7 +124,7 @@ public class CobblestoneStairsMat extends BlockMaterialData implements StairsMat
     public static final CobblestoneStairsMat COBBLESTONE_STAIRS_NORTH_UPSIDE_DOWN = new CobblestoneStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, CobblestoneStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CobblestoneStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CobblestoneStairsMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
     protected final boolean   upsideDown;
@@ -268,7 +268,7 @@ public class CobblestoneStairsMat extends BlockMaterialData implements StairsMat
      */
     public static CobblestoneStairsMat[] cobblestoneStairsTypes()
     {
-        return byID.values(new CobblestoneStairsMat[byID.size()]);
+        return byID.values().toArray(new CobblestoneStairsMat[byID.size()]);
     }
 
     static

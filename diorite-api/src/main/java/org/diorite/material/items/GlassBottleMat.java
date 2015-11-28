@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Glass Bottle' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class GlassBottleMat extends ItemMaterialData
     public static final GlassBottleMat GLASS_BOTTLE = new GlassBottleMat();
 
     private static final Map<String, GlassBottleMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<GlassBottleMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<GlassBottleMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public GlassBottleMat()
@@ -128,7 +128,7 @@ public class GlassBottleMat extends ItemMaterialData
      */
     public static GlassBottleMat[] glassBottleTypes()
     {
-        return byID.values(new GlassBottleMat[byID.size()]);
+        return byID.values().toArray(new GlassBottleMat[byID.size()]);
     }
 
     static

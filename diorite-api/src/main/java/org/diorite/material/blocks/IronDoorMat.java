@@ -35,8 +35,8 @@ import org.diorite.material.DoorMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Iron Door' block material in minecraft. <br>
@@ -156,7 +156,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
     public static final IronDoorMat IRON_DOOR_TOP_RIGHT_POWERED = new IronDoorMat("TOP_RIGHT_POWERED", true, true);
 
     private static final Map<String, IronDoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<IronDoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<IronDoorMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean   powered;
     protected final boolean   hingeOnRightSide;
@@ -422,7 +422,7 @@ public class IronDoorMat extends BlockMaterialData implements DoorMat
      */
     public static IronDoorMat[] ironDoorTypes()
     {
-        return byID.values(new IronDoorMat[byID.size()]);
+        return byID.values().toArray(new IronDoorMat[byID.size()]);
     }
 
     static

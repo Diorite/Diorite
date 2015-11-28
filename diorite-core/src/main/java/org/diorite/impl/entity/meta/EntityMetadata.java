@@ -45,15 +45,15 @@ import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.math.geometry.Vector3F;
 
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 public class EntityMetadata
 {
-    private final TByteObjectHashMap<EntityMetadataEntry<?>> data;
+    private final Byte2ObjectOpenHashMap<EntityMetadataEntry<?>> data;
 
     public EntityMetadata()
     {
-        this.data = new TByteObjectHashMap<>(9, SimpleEnum.SMALL_LOAD_FACTOR, (byte) - 1);
+        this.data = new Byte2ObjectOpenHashMap<>(9, SimpleEnum.SMALL_LOAD_FACTOR);
     }
 
     public void add(final EntityMetadataEntry<?> entry)
@@ -67,7 +67,7 @@ public class EntityMetadata
 
     public Collection<EntityMetadataEntry<?>> getOutdatedEntries()
     {
-        return this.data.valueCollection().stream().filter(EntityMetadataEntry::isDirty).collect(Collectors.toSet());
+        return this.data.values().stream().filter(EntityMetadataEntry::isDirty).collect(Collectors.toSet());
     }
 
     /**
@@ -78,7 +78,7 @@ public class EntityMetadata
     public Collection<EntityMetadataEntry<?>> popOutdatedEntries()
     {
         final Collection<EntityMetadataEntry<?>> result = new HashSet<>(3);
-        this.data.valueCollection().stream().filter(EntityMetadataEntry::isDirty).forEach(e -> {
+        this.data.values().stream().filter(EntityMetadataEntry::isDirty).forEach(e -> {
             e.setClean();
             result.add(e);
         });
@@ -87,7 +87,7 @@ public class EntityMetadata
 
     public Collection<EntityMetadataEntry<?>> getEntries()
     {
-        return this.data.valueCollection().stream().collect(Collectors.toSet());
+        return this.data.values().stream().collect(Collectors.toSet());
     }
 
     /*

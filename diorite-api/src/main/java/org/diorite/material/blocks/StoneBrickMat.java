@@ -33,8 +33,8 @@ import org.diorite.material.VariantMat;
 import org.diorite.material.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Stone Brick' block material in minecraft. <br>
@@ -89,7 +89,7 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
     public static final StoneBrickMat STONE_BRICK_CHISELED = new StoneBrickMat(0x3, VariantMat.CHISELED);
 
     private static final Map<String, StoneBrickMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<StoneBrickMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<StoneBrickMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final VariantMat variant;
 
@@ -192,7 +192,7 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
      */
     public static StoneBrickMat[] stoneBrickTypes()
     {
-        return byID.values(new StoneBrickMat[byID.size()]);
+        return byID.values().toArray(new StoneBrickMat[byID.size()]);
     }
 
     static

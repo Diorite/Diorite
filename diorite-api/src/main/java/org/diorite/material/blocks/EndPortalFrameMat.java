@@ -35,8 +35,8 @@ import org.diorite.material.DirectionalMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'End Portal Frame' block material in minecraft. <br>
@@ -127,7 +127,7 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
     public static final EndPortalFrameMat END_PORTAL_FRAME_EAST_EYE  = new EndPortalFrameMat(BlockFace.EAST, true);
 
     private static final Map<String, EndPortalFrameMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<EndPortalFrameMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<EndPortalFrameMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     private final BlockFace face;
     private final boolean   activated;
@@ -308,7 +308,7 @@ public class EndPortalFrameMat extends BlockMaterialData implements DirectionalM
      */
     public static EndPortalFrameMat[] endPortalFrameTypes()
     {
-        return byID.values(new EndPortalFrameMat[byID.size()]);
+        return byID.values().toArray(new EndPortalFrameMat[byID.size()]);
     }
 
     static

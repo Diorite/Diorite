@@ -24,10 +24,9 @@
 
 package org.diorite.material;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Simple enum for types of wood.
@@ -121,8 +120,8 @@ public class WoodType extends ASimpleEnum<WoodType>
      */
     public static WoodType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(WoodType.class);
-        return (WoodType[]) map.values(new WoodType[map.size()]);
+        final Int2ObjectMap<WoodType> map = getByEnumOrdinal(WoodType.class);
+        return map.values().toArray(new WoodType[map.size()]);
     }
 
     static

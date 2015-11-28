@@ -35,8 +35,8 @@ import org.diorite.material.Material;
 import org.diorite.material.StairsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Red Sandstone Stairs' block material in minecraft. <br>
@@ -124,7 +124,7 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
     public static final RedSandstoneStairsMat RED_SANDSTONE_STAIRS_NORTH_UPSIDE_DOWN = new RedSandstoneStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, RedSandstoneStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedSandstoneStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedSandstoneStairsMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
     protected final boolean   upsideDown;
@@ -268,7 +268,7 @@ public class RedSandstoneStairsMat extends BlockMaterialData implements StairsMa
      */
     public static RedSandstoneStairsMat[] redSandstoneStairsTypes()
     {
-        return byID.values(new RedSandstoneStairsMat[byID.size()]);
+        return byID.values().toArray(new RedSandstoneStairsMat[byID.size()]);
     }
 
     static

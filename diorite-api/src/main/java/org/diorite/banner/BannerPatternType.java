@@ -26,11 +26,10 @@ package org.diorite.banner;
 
 import java.util.Map;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class BannerPatternType extends ASimpleEnum<BannerPatternType>
@@ -175,8 +174,8 @@ public class BannerPatternType extends ASimpleEnum<BannerPatternType>
      */
     public static BannerPatternType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(BannerPatternType.class);
-        return (BannerPatternType[]) map.values(new BannerPatternType[map.size()]);
+        final Int2ObjectMap<BannerPatternType> map = getByEnumOrdinal(BannerPatternType.class);
+        return map.values().toArray(new BannerPatternType[map.size()]);
     }
 
     static

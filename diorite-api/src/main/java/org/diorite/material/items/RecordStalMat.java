@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.Sound;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 @SuppressWarnings("MagicNumber")
 public class RecordStalMat extends RecordMat
@@ -43,7 +43,7 @@ public class RecordStalMat extends RecordMat
     public static final RecordStalMat RECORD_STAL = new RecordStalMat();
 
     private static final Map<String, RecordStalMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordStalMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<RecordStalMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     public RecordStalMat()
     {
@@ -121,7 +121,7 @@ public class RecordStalMat extends RecordMat
      */
     public static RecordStalMat[] recordStalTypes()
     {
-        return byID.values(new RecordStalMat[byID.size()]);
+        return byID.values().toArray(new RecordStalMat[byID.size()]);
     }
 
     static

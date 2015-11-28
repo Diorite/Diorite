@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Pumpkin Seeds' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class PumpkinSeedsMat extends ItemMaterialData implements PlaceableMat
     public static final PumpkinSeedsMat PUMPKIN_SEEDS = new PumpkinSeedsMat();
 
     private static final Map<String, PumpkinSeedsMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PumpkinSeedsMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<PumpkinSeedsMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public PumpkinSeedsMat()
@@ -129,7 +129,7 @@ public class PumpkinSeedsMat extends ItemMaterialData implements PlaceableMat
      */
     public static PumpkinSeedsMat[] pumpkinSeedsTypes()
     {
-        return byID.values(new PumpkinSeedsMat[byID.size()]);
+        return byID.values().toArray(new PumpkinSeedsMat[byID.size()]);
     }
 
     static

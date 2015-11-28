@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableEntityMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Lead' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class LeadMat extends ItemMaterialData implements PlaceableEntityMat
     public static final LeadMat LEAD = new LeadMat();
 
     private static final Map<String, LeadMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<LeadMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<LeadMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public LeadMat()
@@ -129,7 +129,7 @@ public class LeadMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static LeadMat[] leadTypes()
     {
-        return byID.values(new LeadMat[byID.size()]);
+        return byID.values().toArray(new LeadMat[byID.size()]);
     }
 
     static

@@ -35,8 +35,8 @@ import org.diorite.material.blocks.WaterLilyMat.RailTypeMat;
 import org.diorite.material.blocks.WaterLilyMat.RailsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Detector Rail' block material in minecraft. <br>
@@ -153,7 +153,7 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
     public static final DetectorRailMat DETECTOR_RAIL_ASCENDING_SOUTH_POWERED = new DetectorRailMat(RailTypeMat.ASCENDING_SOUTH, true);
 
     private static final Map<String, DetectorRailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DetectorRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DetectorRailMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean powered;
 
@@ -300,7 +300,7 @@ public class DetectorRailMat extends RailsMat implements PowerableMat
      */
     public static DetectorRailMat[] detectorRailTypes()
     {
-        return byID.values(new DetectorRailMat[byID.size()]);
+        return byID.values().toArray(new DetectorRailMat[byID.size()]);
     }
 
     static

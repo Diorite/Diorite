@@ -30,8 +30,8 @@ import org.diorite.material.OreItemMat;
 import org.diorite.material.items.DyeMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Lapis Ore' block material in minecraft. <br>
@@ -51,7 +51,7 @@ public class LapisOreMat extends OreMat
     public static final LapisOreMat LAPIS_ORE = new LapisOreMat();
 
     private static final Map<String, LapisOreMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<LapisOreMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<LapisOreMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public LapisOreMat()
@@ -125,7 +125,7 @@ public class LapisOreMat extends OreMat
      */
     public static LapisOreMat[] lapisOreTypes()
     {
-        return byID.values(new LapisOreMat[byID.size()]);
+        return byID.values().toArray(new LapisOreMat[byID.size()]);
     }
 
     static

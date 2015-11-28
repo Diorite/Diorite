@@ -35,8 +35,8 @@ import org.diorite.material.Material;
 import org.diorite.material.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Dropper' block material in minecraft. <br>
@@ -161,7 +161,7 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
     public static final DropperMat DROPPER_EAST_POWERED  = new DropperMat(BlockFace.EAST, true);
 
     private static final Map<String, DropperMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DropperMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DropperMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace facing;
     protected final boolean   powered;
@@ -331,7 +331,7 @@ public class DropperMat extends StonyMat implements DirectionalMat, PowerableMat
      */
     public static DropperMat[] dropperTypes()
     {
-        return byID.values(new DropperMat[byID.size()]);
+        return byID.values().toArray(new DropperMat[byID.size()]);
     }
 
     static

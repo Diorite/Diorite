@@ -48,9 +48,9 @@ import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagList;
 import org.diorite.nbt.NbtTagType;
 
-import gnu.trove.TCollections;
-import gnu.trove.map.TObjectShortMap;
-import gnu.trove.map.hash.TObjectShortHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortMaps;
+import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class SimpleItemMetaImpl extends ItemMetaImpl
@@ -214,28 +214,28 @@ public class SimpleItemMetaImpl extends ItemMetaImpl
         return this.getEnchantLevel(ENCHANTMENTS, enchantment);
     }
 
-    TObjectShortMap<EnchantmentType> getEnchants(final String key)
+    Object2ShortMap<EnchantmentType> getEnchants(final String key)
     {
         if (this.tag == null)
         {
-            return TCollections.unmodifiableMap(new TObjectShortHashMap<>(1, 1, (short) - 1));
+            return Object2ShortMaps.unmodifiable(new Object2ShortOpenHashMap<>(1, 1));
         }
         final List<NbtTagCompound> tags = this.tag.getList(key, NbtTagCompound.class);
         if (tags == null)
         {
-            return TCollections.unmodifiableMap(new TObjectShortHashMap<>(1, 1, (short) - 1));
+            return Object2ShortMaps.unmodifiable(new Object2ShortOpenHashMap<>(1, 1));
         }
-        final TObjectShortMap<EnchantmentType> result = new TObjectShortHashMap<>(tags.size(), 1, (short) - 1);
+        final Object2ShortMap<EnchantmentType> result = new Object2ShortOpenHashMap<>(tags.size(), 1);
         for (final NbtTagCompound tag : tags)
         {
             final EnchantmentType ench = EnchantmentType.getByNumericID(tag.getShort(ENCHANTMENT_ID));
             result.put(ench, tag.getShort(ENCHANTMENT_LEVEL));
         }
-        return TCollections.unmodifiableMap(result);
+        return Object2ShortMaps.unmodifiable(result);
     }
 
     @Override
-    public TObjectShortMap<EnchantmentType> getEnchants()
+    public Object2ShortMap<EnchantmentType> getEnchants()
     {
         return this.getEnchants(ENCHANTMENTS);
     }

@@ -24,10 +24,9 @@
 
 package org.diorite.impl.connection;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 public class ClientCommand extends ASimpleEnum<ClientCommand>
 {
@@ -89,8 +88,8 @@ public class ClientCommand extends ASimpleEnum<ClientCommand>
      */
     public static ClientCommand[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ClientCommand.class);
-        return (ClientCommand[]) map.values(new ClientCommand[map.size()]);
+        final Int2ObjectMap<ClientCommand> map = getByEnumOrdinal(ClientCommand.class);
+        return map.values().toArray(new ClientCommand[map.size()]);
     }
 
     static

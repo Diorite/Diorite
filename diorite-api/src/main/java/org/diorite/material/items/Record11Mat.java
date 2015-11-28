@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.Sound;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 @SuppressWarnings("MagicNumber")
 public class Record11Mat extends RecordMat
@@ -43,7 +43,7 @@ public class Record11Mat extends RecordMat
     public static final Record11Mat RECORD_11 = new Record11Mat();
 
     private static final Map<String, Record11Mat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<Record11Mat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<Record11Mat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     public Record11Mat()
     {
@@ -121,7 +121,7 @@ public class Record11Mat extends RecordMat
      */
     public static Record11Mat[] record11Types()
     {
-        return byID.values(new Record11Mat[byID.size()]);
+        return byID.values().toArray(new Record11Mat[byID.size()]);
     }
 
     static

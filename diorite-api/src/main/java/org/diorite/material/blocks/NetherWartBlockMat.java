@@ -32,8 +32,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Nether Wart Block' block material in minecraft. <br>
@@ -89,7 +89,7 @@ public class NetherWartBlockMat extends CropsMat
     public static final NetherWartBlockMat NETHER_WART_BLOCK_RIPE = new NetherWartBlockMat("RIPE", 0x3);
 
     private static final Map<String, NetherWartBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<NetherWartBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<NetherWartBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final int age;
 
@@ -215,7 +215,7 @@ public class NetherWartBlockMat extends CropsMat
      */
     public static NetherWartBlockMat[] netherWartBlockTypes()
     {
-        return byID.values(new NetherWartBlockMat[byID.size()]);
+        return byID.values().toArray(new NetherWartBlockMat[byID.size()]);
     }
 
     static

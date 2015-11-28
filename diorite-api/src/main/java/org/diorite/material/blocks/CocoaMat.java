@@ -35,8 +35,8 @@ import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.ByteRange;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Cocoa North 0' block material in minecraft. <br>
@@ -161,7 +161,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
     public static final CocoaMat COCOA_WEST_RIPE  = new CocoaMat("WEST_RIPE", BlockFace.WEST, 2);
 
     private static final Map<String, CocoaMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CocoaMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CocoaMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
     protected final int       age;
@@ -341,7 +341,7 @@ public class CocoaMat extends CropsMat implements AttachableMat
      */
     public static CocoaMat[] cocoaTypes()
     {
-        return byID.values(new CocoaMat[byID.size()]);
+        return byID.values().toArray(new CocoaMat[byID.size()]);
     }
 
     static

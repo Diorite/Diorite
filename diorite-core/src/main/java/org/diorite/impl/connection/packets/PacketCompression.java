@@ -35,12 +35,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.ByteToMessageCodec.PacketByteBufByteToMessageCodec;
 
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
 @SuppressWarnings("MagicNumber")
 public class PacketCompression extends PacketByteBufByteToMessageCodec
@@ -59,11 +59,11 @@ public class PacketCompression extends PacketByteBufByteToMessageCodec
     }
 
 
-    private static final TIntIntMap sizes;
+    private static final Int2IntMap sizes;
 
     static
     {
-        sizes = new TIntIntHashMap(641, .1f, - 1, - 1);
+        sizes = new Int2IntOpenHashMap(641, .1f);
         for (int k = 100; k <= 1_000_000_000; k *= 10)
         {
             for (int i = k, to = (k * 10), add = (k / 10); i < to; i += add)

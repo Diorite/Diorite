@@ -34,8 +34,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.ColorableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Stained Hardened Clay' block material in minecraft. <br>
@@ -186,7 +186,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
     public static final StainedHardenedClayMat STAINED_HARDENED_CLAY_BLACK      = new StainedHardenedClayMat(DyeColor.BLACK);
 
     private static final Map<String, StainedHardenedClayMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<StainedHardenedClayMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<StainedHardenedClayMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;
 
@@ -301,7 +301,7 @@ public class StainedHardenedClayMat extends BlockMaterialData implements Colorab
      */
     public static StainedHardenedClayMat[] stainedHardenedClayTypes()
     {
-        return byID.values(new StainedHardenedClayMat[byID.size()]);
+        return byID.values().toArray(new StainedHardenedClayMat[byID.size()]);
     }
 
     static

@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Brewing Stand' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class BrewingStandMat extends ItemMaterialData implements PlaceableMat
     public static final BrewingStandMat BREWING_STAND = new BrewingStandMat();
 
     private static final Map<String, BrewingStandMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BrewingStandMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<BrewingStandMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public BrewingStandMat()
@@ -129,7 +129,7 @@ public class BrewingStandMat extends ItemMaterialData implements PlaceableMat
      */
     public static BrewingStandMat[] brewingStandTypes()
     {
-        return byID.values(new BrewingStandMat[byID.size()]);
+        return byID.values().toArray(new BrewingStandMat[byID.size()]);
     }
 
     static

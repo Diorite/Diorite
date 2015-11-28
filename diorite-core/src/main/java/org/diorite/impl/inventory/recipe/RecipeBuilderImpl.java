@@ -23,8 +23,8 @@ import org.diorite.inventory.recipe.craft.RecipePattern;
 import org.diorite.inventory.recipe.craft.ShapedRecipe;
 import org.diorite.inventory.recipe.craft.ShapelessRecipe;
 
-import gnu.trove.map.TCharObjectMap;
-import gnu.trove.map.hash.TCharObjectHashMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 
 public class RecipeBuilderImpl implements RecipeBuilder
 {
@@ -198,7 +198,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
         private final RecipeBuilderImpl oldBuilder;
         protected     String[]          pattern;
         protected     RecipePattern     alternatePattern;
-        protected final TCharObjectMap<RecipeItem> items = new TCharObjectHashMap<>();
+        protected final Char2ObjectMap<RecipeItem> items = new Char2ObjectOpenHashMap<>();
 
         ShapedRecipeBuilderImpl(final RecipeBuilderImpl recipeBuilder)
         {

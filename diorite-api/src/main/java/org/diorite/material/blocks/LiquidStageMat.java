@@ -24,8 +24,8 @@
 
 package org.diorite.material.blocks;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Possible stages of liquid, liquid can be in two stages: normal and falling, each stage can have 7 levels and source level of liquid in it.
@@ -49,7 +49,7 @@ public enum LiquidStageMat
     STAGE_6_FALLING(STAGE_6.dataValue | LiquidMat.FALLING_FLAG),
     STAGE_7_FALLING(STAGE_7.dataValue | LiquidMat.FALLING_FLAG);
 
-    private static final TByteObjectMap<LiquidStageMat> byID = new TByteObjectHashMap<>(16);
+    private static final Byte2ObjectMap<LiquidStageMat> byID = new Byte2ObjectOpenHashMap<>(16);
 
     private final byte dataValue;
 

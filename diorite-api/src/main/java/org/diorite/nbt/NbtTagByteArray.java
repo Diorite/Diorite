@@ -32,8 +32,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.utils.collections.arrays.fastutil.FastUtilByteIterator;
 import org.diorite.utils.collections.arrays.primitive.ByteIterator;
-import org.diorite.utils.collections.arrays.trove.TByteArrayIterator;
 
 /**
  * NBT type for byte array values.
@@ -162,13 +162,13 @@ public class NbtTagByteArray extends NbtAbstractTag implements Iterable<Byte>
     }
 
     /**
-     * Returns instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     * Returns instance of primitive iterator based on FastUtil interface {@link it.unimi.dsi.fastutil.bytes.ByteIterator}.
      *
-     * @return instance of primitive iterator based on trove interface {@link gnu.trove.iterator.TPrimitiveIterator}.
+     * @return instance of primitive iterator based on FastUtil interface {@link it.unimi.dsi.fastutil.bytes.ByteIterator}.
      */
-    public TByteArrayIterator primitiveIterator()
+    public FastUtilByteIterator primitiveIterator()
     {
-        return new TByteArrayIterator(this.value);
+        return new FastUtilByteIterator(this.value);
     }
 
     @Override

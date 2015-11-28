@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing block "Lava" and all its subtypes.
@@ -83,7 +83,7 @@ public class LavaMat extends LiquidMat
     public static final LavaMat LAVA_STAGE_7_FALLING_STILL = new LavaStill(LiquidStageMat.STAGE_7_FALLING);
 
     private static final Map<String, LavaMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<LavaMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
+    private static final Byte2ObjectMap<LavaMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public LavaMat(final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
@@ -265,7 +265,7 @@ public class LavaMat extends LiquidMat
      */
     public static LavaMat[] lavaTypes()
     {
-        return byID.values(new LavaMat[byID.size()]);
+        return byID.values().toArray(new LavaMat[byID.size()]);
     }
 
     /**

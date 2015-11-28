@@ -30,8 +30,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.FuelMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Wooden Trapdoor' block material in minecraft. <br>
@@ -185,7 +185,7 @@ public class WoodenTrapdoorMat extends TrapdoorMat implements FuelMat
     public static final WoodenTrapdoorMat WOODEN_TRAPDOOR_NORTH_TOP_OPEN = new WoodenTrapdoorMat(BlockFace.NORTH, true, true);
 
     private static final Map<String, WoodenTrapdoorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WoodenTrapdoorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<WoodenTrapdoorMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public WoodenTrapdoorMat()
@@ -316,7 +316,7 @@ public class WoodenTrapdoorMat extends TrapdoorMat implements FuelMat
      */
     public static WoodenTrapdoorMat[] woodenTrapdoorTypes()
     {
-        return byID.values(new WoodenTrapdoorMat[byID.size()]);
+        return byID.values().toArray(new WoodenTrapdoorMat[byID.size()]);
     }
 
     static

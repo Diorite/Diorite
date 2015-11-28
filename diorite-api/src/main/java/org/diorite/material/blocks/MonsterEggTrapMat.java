@@ -32,8 +32,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Monster Egg Trap' block material in minecraft. <br>
@@ -104,7 +104,7 @@ public class MonsterEggTrapMat extends StonyMat
     public static final MonsterEggTrapMat MONSTER_EGG_TRAP_STONE_BRICK_CHISELED = new MonsterEggTrapMat("STONE_BRICK_CHISELED", 0x5, StoneBrickMat.STONE_BRICK_CHISELED);
 
     private static final Map<String, MonsterEggTrapMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<MonsterEggTrapMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<MonsterEggTrapMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockMaterialData block;
 
@@ -240,7 +240,7 @@ public class MonsterEggTrapMat extends StonyMat
      */
     public static MonsterEggTrapMat[] monsterEggTrapTypes()
     {
-        return byID.values(new MonsterEggTrapMat[byID.size()]);
+        return byID.values().toArray(new MonsterEggTrapMat[byID.size()]);
     }
 
     static

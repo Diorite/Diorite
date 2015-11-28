@@ -45,11 +45,11 @@ import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.utils.DioriteUtils;
 
-import gnu.trove.TShortCollection;
-import gnu.trove.iterator.TShortIterator;
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
-import gnu.trove.set.hash.TShortHashSet;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.shorts.ShortCollection;
+import it.unimi.dsi.fastutil.shorts.ShortIterator;
+import it.unimi.dsi.fastutil.shorts.ShortOpenHashSet;
 
 public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl implements PlayerCraftingInventory
 {
@@ -100,12 +100,12 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         final Human holder = this.getHolder();
 
         // fix ghost items (custom recipes), meh mojang...
-        final TShortCollection possibleBugs;
+        final ShortCollection possibleBugs;
         if ((holder instanceof PlayerImpl) && ! this.recipe.getRecipe().isVanilla())
         {
             final CraftingGrid itemsToConsume = this.recipe.getItemsToConsume();
             final ItemStack[] items = DioriteUtils.compact(false, itemsToConsume.getItems());
-            possibleBugs = new TShortHashSet(items.length);
+            possibleBugs = new ShortOpenHashSet(items.length);
             short k = 0;
             short bugSlot;
             short startIndex = - 1;
@@ -155,7 +155,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         {
             final Recipe recipe = this.recipe.getRecipe();
             ItemStack result = null;
-            final TShortObjectMap<ItemStack> onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
+            final Short2ObjectMap<ItemStack> onCraft = new Short2ObjectOpenHashMap<>(2, .5F);
             while ((this.recipe != null) && (recipe == this.recipe.getRecipe())) // as long as recipe is this same.
             {
                 this.take(this.recipe.getItemsToConsume());
@@ -167,22 +167,21 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                 {
                     result.setAmount(result.getAmount() + this.recipe.getResult().getAmount());
                 }
-                this.recipe.getOnCraft().forEachEntry((a, b) -> {
-                    final ItemStack old = onCraft.get(a);
+                this.recipe.getOnCraft().short2ObjectEntrySet().forEach((entry) -> {
+                    final ItemStack old = onCraft.get(entry.getShortKey());
                     if (old == null)
                     {
-                        onCraft.put(a, b.clone());
+                        onCraft.put(entry.getShortKey(), entry.getValue().clone());
                     }
                     else
                     {
-                        old.setAmount(old.getAmount() + b.getAmount());
+                        old.setAmount(old.getAmount() + entry.getValue().getAmount());
                     }
-                    return true;
                 });
                 this.checkRecipe(recipe);
             }
             this.getPlayerInventory().addFromEnd(result);
-            onCraft.forEachEntry(this::addReplacment);
+            onCraft.short2ObjectEntrySet().forEach(e -> this.addReplacment(e.getShortKey(), e.getValue()));
         }
         else
         {
@@ -197,7 +196,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             final ItemStack result = this.recipe.getResult().clone();
             result.setAmount(result.getAmount() + ((cursor == null) ? 0 : cursor.getAmount()));
             this.getPlayerInventory().replaceCursorItem(cursor, result);
-            this.recipe.getOnCraft().forEachEntry(this::addReplacment);
+            this.recipe.getOnCraft().short2ObjectEntrySet().forEach(e -> this.addReplacment(e.getShortKey(), e.getValue()));
 
             this.checkRecipe(false);
         }
@@ -207,7 +206,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         {
             final PacketPlayServerSetSlot[] packets = new PacketPlayServerSetSlot[possibleBugs.size()];
             int i = 0;
-            for (final TShortIterator it = possibleBugs.iterator(); it.hasNext(); )
+            for (final ShortIterator it = possibleBugs.iterator(); it.hasNext(); )
             {
                 final short slot = it.next();
                 final ItemStackImpl item = this.playerInventory.getItem(slot);

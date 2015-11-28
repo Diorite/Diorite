@@ -37,10 +37,9 @@ import org.diorite.cfg.annotations.CfgFooterNoNewLine;
 import org.diorite.cfg.annotations.CfgStringArrayMultilineThreshold;
 import org.diorite.cfg.annotations.CfgStringStyle;
 import org.diorite.cfg.annotations.CfgStringStyle.StringStyle;
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Simple enum with field annotation-based options.
@@ -191,8 +190,8 @@ public class FieldOptions extends ASimpleEnum<FieldOptions>
      */
     public static FieldOptions[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(FieldOptions.class);
-        return (FieldOptions[]) map.values(new FieldOptions[map.size()]);
+        final Int2ObjectMap<FieldOptions> map = getByEnumOrdinal(FieldOptions.class);
+        return map.values().toArray(new FieldOptions[map.size()]);
     }
 
     static

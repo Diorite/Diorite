@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.Sound;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 @SuppressWarnings("MagicNumber")
 public class RecordWaitMat extends RecordMat
@@ -43,7 +43,7 @@ public class RecordWaitMat extends RecordMat
     public static final RecordWaitMat RECORD_WAIT = new RecordWaitMat();
 
     private static final Map<String, RecordWaitMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RecordWaitMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<RecordWaitMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     public RecordWaitMat()
     {
@@ -121,7 +121,7 @@ public class RecordWaitMat extends RecordMat
      */
     public static RecordWaitMat[] recordWaitTypes()
     {
-        return byID.values(new RecordWaitMat[byID.size()]);
+        return byID.values().toArray(new RecordWaitMat[byID.size()]);
     }
 
     static

@@ -24,12 +24,11 @@
 
 package org.diorite.effect;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class StatusEffectType extends ASimpleEnum<StatusEffectType>
@@ -149,7 +148,7 @@ public class StatusEffectType extends ASimpleEnum<StatusEffectType>
      */
     public static final StatusEffectType BAD_LUCK        = new StatusEffectType("BAD_LUCK", 27, false, 0);
 
-    private static final TByteObjectMap<StatusEffectType> byTypeID = new TByteObjectHashMap<>(5, SMALL_LOAD_FACTOR, (byte) - 1);
+    private static final Byte2ObjectMap<StatusEffectType> byTypeID = new Byte2ObjectOpenHashMap<>(5, SMALL_LOAD_FACTOR);
 
     /**
      * Id of potion effect type.
@@ -259,8 +258,8 @@ public class StatusEffectType extends ASimpleEnum<StatusEffectType>
      */
     public static StatusEffectType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(StatusEffectType.class);
-        return (StatusEffectType[]) map.values(new StatusEffectType[map.size()]);
+        final Int2ObjectMap<StatusEffectType> map = getByEnumOrdinal(StatusEffectType.class);
+        return map.values().toArray(new StatusEffectType[map.size()]);
     }
 
     static

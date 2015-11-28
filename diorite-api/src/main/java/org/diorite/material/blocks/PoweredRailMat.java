@@ -35,8 +35,8 @@ import org.diorite.material.blocks.WaterLilyMat.RailTypeMat;
 import org.diorite.material.blocks.WaterLilyMat.RailsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Powered Rail' block material in minecraft. <br>
@@ -161,7 +161,7 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
     public static final PoweredRailMat POWERED_RAIL_ASCENDING_SOUTH_POWERED = new PoweredRailMat(RailTypeMat.ASCENDING_SOUTH, true);
 
     private static final Map<String, PoweredRailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PoweredRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<PoweredRailMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean powered;
 
@@ -308,7 +308,7 @@ public class PoweredRailMat extends RailsMat implements PowerableMat
      */
     public static PoweredRailMat[] poweredRailTypes()
     {
-        return byID.values(new PoweredRailMat[byID.size()]);
+        return byID.values().toArray(new PoweredRailMat[byID.size()]);
     }
 
     static

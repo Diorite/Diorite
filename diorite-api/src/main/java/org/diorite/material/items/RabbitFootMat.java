@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Rabbit Foot' item material in minecraft. <br>
@@ -49,7 +49,7 @@ public class RabbitFootMat extends ItemMaterialData
     public static final RabbitFootMat RABBIT_FOOT = new RabbitFootMat();
 
     private static final Map<String, RabbitFootMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<RabbitFootMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<RabbitFootMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public RabbitFootMat()
@@ -128,7 +128,7 @@ public class RabbitFootMat extends ItemMaterialData
      */
     public static RabbitFootMat[] rabbitFootTypes()
     {
-        return byID.values(new RabbitFootMat[byID.size()]);
+        return byID.values().toArray(new RabbitFootMat[byID.size()]);
     }
 
     static

@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Iron Door Item' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class IronDoorItemMat extends DoorItemMat
     public static final IronDoorItemMat IRON_DOOR_ITEM = new IronDoorItemMat();
 
     private static final Map<String, IronDoorItemMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<IronDoorItemMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<IronDoorItemMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public IronDoorItemMat()
@@ -127,7 +127,7 @@ public class IronDoorItemMat extends DoorItemMat
      */
     public static IronDoorItemMat[] ironDoorItemTypes()
     {
-        return byID.values(new IronDoorItemMat[byID.size()]);
+        return byID.values().toArray(new IronDoorItemMat[byID.size()]);
     }
 
     static

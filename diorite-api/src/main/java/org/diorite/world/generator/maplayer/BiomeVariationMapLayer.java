@@ -30,27 +30,27 @@ import static org.diorite.world.Biome.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gnu.trove.list.TIntList;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 
 @SuppressWarnings("MagicNumber")
 public class BiomeVariationMapLayer extends MapLayer
 {
-    protected static final TIntList                ISLANDS       = TIntArrayList.wrap(new int[]{PLAINS.getBiomeId(), FOREST.getBiomeId()});
-    protected static final TIntObjectMap<TIntList> VARIATIONS    = new TIntObjectHashMap<>(16);
-    public static final    int                     VARIATION_MOD = 128;
+    protected static final IntList                ISLANDS       = IntArrayList.wrap(new int[]{PLAINS.getBiomeId(), FOREST.getBiomeId()});
+    protected static final Int2ObjectMap<IntList> VARIATIONS    = new Int2ObjectOpenHashMap<>(16);
+    public static final    int                    VARIATION_MOD = 128;
 
     protected final MapLayer belowLayer;
     protected final MapLayer variationLayer;
 
-    public static TIntList getIslands()
+    public static IntList getIslands()
     {
         return ISLANDS;
     }
 
-    public static TIntObjectMap<TIntList> getVariations()
+    public static Int2ObjectMap<IntList> getVariations()
     {
         return VARIATIONS;
     }
@@ -173,22 +173,22 @@ public class BiomeVariationMapLayer extends MapLayer
 
     static
     {
-        VARIATIONS.put(DESERT.getBiomeId(), TIntArrayList.wrap(new int[]{DESERT_HILLS.getBiomeId()}));
-        VARIATIONS.put(FOREST.getBiomeId(), TIntArrayList.wrap(new int[]{FOREST_HILLS.getBiomeId()}));
-        VARIATIONS.put(BIRCH_FOREST.getBiomeId(), TIntArrayList.wrap(new int[]{BIRCH_FOREST_HILLS.getBiomeId()}));
-        VARIATIONS.put(ROOFED_FOREST.getBiomeId(), TIntArrayList.wrap(new int[]{PLAINS.getBiomeId()}));
-        VARIATIONS.put(TAIGA.getBiomeId(), TIntArrayList.wrap(new int[]{TAIGA_HILLS.getBiomeId()}));
-        VARIATIONS.put(MEGA_TAIGA.getBiomeId(), TIntArrayList.wrap(new int[]{MEGA_TAIGA_HILLS.getBiomeId()}));
-        VARIATIONS.put(COLD_TAIGA.getBiomeId(), TIntArrayList.wrap(new int[]{COLD_TAIGA_HILLS.getBiomeId()}));
-        VARIATIONS.put(PLAINS.getBiomeId(), TIntArrayList.wrap(new int[]{FOREST.getBiomeId(), FOREST.getBiomeId(), FOREST_HILLS.getBiomeId()}));
-        VARIATIONS.put(ICE_PLAINS.getBiomeId(), TIntArrayList.wrap(new int[]{ICE_MOUNTAINS.getBiomeId()}));
-        VARIATIONS.put(JUNGLE.getBiomeId(), TIntArrayList.wrap(new int[]{JUNGLE_HILLS.getBiomeId()}));
-        VARIATIONS.put(OCEAN.getBiomeId(), TIntArrayList.wrap(new int[]{DEEP_OCEAN.getBiomeId()}));
-        VARIATIONS.put(EXTREME_HILLS.getBiomeId(), TIntArrayList.wrap(new int[]{EXTREME_HILLS_PLUS.getBiomeId()}));
-        VARIATIONS.put(SAVANNA.getBiomeId(), TIntArrayList.wrap(new int[]{SAVANNA_PLATEAU.getBiomeId()}));
-        VARIATIONS.put(MESA_PLATEAU_FOREST.getBiomeId(), TIntArrayList.wrap(new int[]{MESA.getBiomeId()}));
-        VARIATIONS.put(MESA_PLATEAU.getBiomeId(), TIntArrayList.wrap(new int[]{MESA.getBiomeId()}));
-        VARIATIONS.put(MESA.getBiomeId(), TIntArrayList.wrap(new int[]{MESA.getBiomeId()}));
+        VARIATIONS.put(DESERT.getBiomeId(), IntArrayList.wrap(new int[]{DESERT_HILLS.getBiomeId()}));
+        VARIATIONS.put(FOREST.getBiomeId(), IntArrayList.wrap(new int[]{FOREST_HILLS.getBiomeId()}));
+        VARIATIONS.put(BIRCH_FOREST.getBiomeId(), IntArrayList.wrap(new int[]{BIRCH_FOREST_HILLS.getBiomeId()}));
+        VARIATIONS.put(ROOFED_FOREST.getBiomeId(), IntArrayList.wrap(new int[]{PLAINS.getBiomeId()}));
+        VARIATIONS.put(TAIGA.getBiomeId(), IntArrayList.wrap(new int[]{TAIGA_HILLS.getBiomeId()}));
+        VARIATIONS.put(MEGA_TAIGA.getBiomeId(), IntArrayList.wrap(new int[]{MEGA_TAIGA_HILLS.getBiomeId()}));
+        VARIATIONS.put(COLD_TAIGA.getBiomeId(), IntArrayList.wrap(new int[]{COLD_TAIGA_HILLS.getBiomeId()}));
+        VARIATIONS.put(PLAINS.getBiomeId(), IntArrayList.wrap(new int[]{FOREST.getBiomeId(), FOREST.getBiomeId(), FOREST_HILLS.getBiomeId()}));
+        VARIATIONS.put(ICE_PLAINS.getBiomeId(), IntArrayList.wrap(new int[]{ICE_MOUNTAINS.getBiomeId()}));
+        VARIATIONS.put(JUNGLE.getBiomeId(), IntArrayList.wrap(new int[]{JUNGLE_HILLS.getBiomeId()}));
+        VARIATIONS.put(OCEAN.getBiomeId(), IntArrayList.wrap(new int[]{DEEP_OCEAN.getBiomeId()}));
+        VARIATIONS.put(EXTREME_HILLS.getBiomeId(), IntArrayList.wrap(new int[]{EXTREME_HILLS_PLUS.getBiomeId()}));
+        VARIATIONS.put(SAVANNA.getBiomeId(), IntArrayList.wrap(new int[]{SAVANNA_PLATEAU.getBiomeId()}));
+        VARIATIONS.put(MESA_PLATEAU_FOREST.getBiomeId(), IntArrayList.wrap(new int[]{MESA.getBiomeId()}));
+        VARIATIONS.put(MESA_PLATEAU.getBiomeId(), IntArrayList.wrap(new int[]{MESA.getBiomeId()}));
+        VARIATIONS.put(MESA.getBiomeId(), IntArrayList.wrap(new int[]{MESA.getBiomeId()}));
     }
 
     @Override

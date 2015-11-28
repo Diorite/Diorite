@@ -30,8 +30,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'String' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class StringMat extends ItemMaterialData implements PlaceableMat
     public static final StringMat STRING = new StringMat();
 
     private static final Map<String, StringMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<StringMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<StringMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public StringMat()
@@ -129,7 +129,7 @@ public class StringMat extends ItemMaterialData implements PlaceableMat
      */
     public static StringMat[] stringTypes()
     {
-        return byID.values(new StringMat[byID.size()]);
+        return byID.values().toArray(new StringMat[byID.size()]);
     }
 
     static

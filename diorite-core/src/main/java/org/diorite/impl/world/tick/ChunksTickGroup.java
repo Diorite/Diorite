@@ -35,7 +35,7 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.World;
 
-import gnu.trove.iterator.TLongIterator;
+import it.unimi.dsi.fastutil.longs.LongIterator;
 
 public class ChunksTickGroup implements TickGroupImpl
 {
@@ -51,7 +51,7 @@ public class ChunksTickGroup implements TickGroupImpl
     {
         this.chunks.stream().filter(ChunkGroup::isLoaded).forEach(chunks -> {
             final ChunkManagerImpl cm = chunks.getWorld().getChunkManager();
-            for (final TLongIterator it = chunks.getChunks().iterator(); it.hasNext(); )
+            for (final LongIterator it = chunks.getChunks().iterator(); it.hasNext(); )
             {
                 final long key = it.next();
                 final int x = BigEndianUtils.getIntA(key);

@@ -30,8 +30,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Snow Layer 1' block material in minecraft. <br>
@@ -118,7 +118,7 @@ public class SnowLayerMat extends BlockMaterialData
     public static final SnowLayerMat SNOW_LAYER_8 = new SnowLayerMat(0x07);
 
     private static final Map<String, SnowLayerMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<SnowLayerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<SnowLayerMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public SnowLayerMat()
@@ -216,7 +216,7 @@ public class SnowLayerMat extends BlockMaterialData
      */
     public static SnowLayerMat[] snowLayerTypes()
     {
-        return byID.values(new SnowLayerMat[byID.size()]);
+        return byID.values().toArray(new SnowLayerMat[byID.size()]);
     }
 
     static

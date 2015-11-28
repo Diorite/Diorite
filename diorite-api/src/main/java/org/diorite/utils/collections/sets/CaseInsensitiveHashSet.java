@@ -25,20 +25,45 @@
 package org.diorite.utils.collections.sets;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.diorite.utils.collections.hash.CaseInsensitiveHashingStrategy;
 
-import gnu.trove.set.hash.TCustomHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectCollection;
+import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 
 /**
  * Case insensitive Hash set for strings.
  */
-public class CaseInsensitiveHashSet extends TCustomHashSet<String>
+public class CaseInsensitiveHashSet extends ObjectOpenCustomHashSet<String>
 {
     private static final long serialVersionUID = 0;
 
     /**
-     * Construct new CaseInsensitiveHashSet.
+     * Creates a new hash set.
+     * <br>
+     * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
+     *
+     * @param expected the expected number of elements in the hash set.
+     * @param f        the load factor.
+     */
+    public CaseInsensitiveHashSet(final int expected, final float f)
+    {
+        super(expected, f, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor.
+     *
+     * @param expected the expected number of elements in the hash set.
+     */
+    public CaseInsensitiveHashSet(final int expected)
+    {
+        super(expected, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set with initial expected {@link Hash#DEFAULT_INITIAL_SIZE} elements and {@link Hash#DEFAULT_LOAD_FACTOR} as load factor.
      */
     public CaseInsensitiveHashSet()
     {
@@ -46,33 +71,111 @@ public class CaseInsensitiveHashSet extends TCustomHashSet<String>
     }
 
     /**
-     * Construct new CaseInsensitiveHashSet.
+     * Creates a new hash set copying a given collection.
      *
-     * @param initialCapacity initial capacity of set.
-     * @param loadFactor      load factor of set.
+     * @param c a {@link Collection} to be copied into the new hash set.
+     * @param f the load factor.
      */
-    public CaseInsensitiveHashSet(final int initialCapacity, final float loadFactor)
+    public CaseInsensitiveHashSet(final Collection<? extends String> c, final float f)
     {
-        super(CaseInsensitiveHashingStrategy.INSTANCE, initialCapacity, loadFactor);
+        super(c, f, CaseInsensitiveHashingStrategy.INSTANCE);
     }
 
     /**
-     * Construct new CaseInsensitiveHashSet.
+     * Creates a new hash set with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor copying a given collection.
      *
-     * @param initialCapacity initial capacity of set.
+     * @param c a {@link Collection} to be copied into the new hash set.
      */
-    public CaseInsensitiveHashSet(final int initialCapacity)
+    public CaseInsensitiveHashSet(final Collection<? extends String> c)
     {
-        super(CaseInsensitiveHashingStrategy.INSTANCE, initialCapacity);
+        super(c, CaseInsensitiveHashingStrategy.INSTANCE);
     }
 
     /**
-     * Construct new CaseInsensitiveHashSet.
+     * Creates a new hash set copying a given type-specific collection.
      *
-     * @param collection collection to copy as set.
+     * @param c a type-specific collection to be copied into the new hash set.
+     * @param f the load factor.
      */
-    public CaseInsensitiveHashSet(final Collection<? extends String> collection)
+    public CaseInsensitiveHashSet(final ObjectCollection<? extends String> c, final float f)
     {
-        super(CaseInsensitiveHashingStrategy.INSTANCE, collection);
+        super(c, f, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor copying a given type-specific collection.
+     *
+     * @param c a type-specific collection to be copied into the new hash set.
+     */
+    public CaseInsensitiveHashSet(final ObjectCollection<? extends String> c)
+    {
+        super(c, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set using elements provided by a type-specific iterator.
+     *
+     * @param i a type-specific iterator whose elements will fill the set.
+     * @param f the load factor.
+     */
+    public CaseInsensitiveHashSet(final Iterator<? extends String> i, final float f)
+    {
+        super(i, f, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor using elements provided by a type-specific iterator.
+     *
+     * @param i a type-specific iterator whose elements will fill the set.
+     */
+    public CaseInsensitiveHashSet(final Iterator<? extends String> i)
+    {
+        super(i, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set and fills it with the elements of a given array.
+     *
+     * @param a      an array whose elements will be used to fill the set.
+     * @param offset the first element to use.
+     * @param length the number of elements to use.
+     * @param f      the load factor.
+     */
+    public CaseInsensitiveHashSet(final String[] a, final int offset, final int length, final float f)
+    {
+        super(a, offset, length, f, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor and fills it with the elements of a given array.
+     *
+     * @param a      an array whose elements will be used to fill the set.
+     * @param offset the first element to use.
+     * @param length the number of elements to use.
+     */
+    public CaseInsensitiveHashSet(final String[] a, final int offset, final int length)
+    {
+        super(a, offset, length, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set copying the elements of an array.
+     *
+     * @param a an array to be copied into the new hash set.
+     * @param f the load factor.
+     */
+    public CaseInsensitiveHashSet(final String[] a, final float f)
+    {
+        super(a, f, CaseInsensitiveHashingStrategy.INSTANCE);
+    }
+
+    /**
+     * Creates a new hash set with {@link Hash#DEFAULT_LOAD_FACTOR} as load factor copying the elements of an array.
+     *
+     * @param a an array to be copied into the new hash set.
+     */
+    public CaseInsensitiveHashSet(final String[] a)
+    {
+        super(a, CaseInsensitiveHashingStrategy.INSTANCE);
     }
 }

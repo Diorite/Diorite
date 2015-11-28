@@ -32,8 +32,8 @@ import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.ByteRange;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Redstone Wire' block material in minecraft. <br>
@@ -189,7 +189,7 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
     public static final RedstoneWireMat REDSTONE_WIRE_ON_15 = new RedstoneWireMat(0xF);
 
     private static final Map<String, RedstoneWireMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RedstoneWireMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RedstoneWireMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     public RedstoneWireMat()
     {
@@ -310,7 +310,7 @@ public class RedstoneWireMat extends BlockMaterialData implements ChangeablePowe
      */
     public static RedstoneWireMat[] redstoneWireTypes()
     {
-        return byID.values(new RedstoneWireMat[byID.size()]);
+        return byID.values().toArray(new RedstoneWireMat[byID.size()]);
     }
 
     static

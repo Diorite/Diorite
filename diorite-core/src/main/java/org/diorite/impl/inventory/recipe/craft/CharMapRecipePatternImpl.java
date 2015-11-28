@@ -37,25 +37,25 @@ import org.diorite.inventory.recipe.RecipeItem;
 import org.diorite.inventory.recipe.craft.CharMapRecipePattern;
 import org.diorite.inventory.recipe.craft.RecipePattern;
 
-import gnu.trove.TCollections;
-import gnu.trove.map.TCharObjectMap;
-import gnu.trove.map.hash.TCharObjectHashMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectMaps;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 
 /**
  * {@link RecipePattern} that use array of {@link RecipeItem} as implementation.
  */
 public class CharMapRecipePatternImpl implements CharMapRecipePattern
 {
-    protected final TCharObjectMap<RecipeItem> items;
+    protected final Char2ObjectMap<RecipeItem> items;
     protected final String[]                   pattern;
 
-    public CharMapRecipePatternImpl(final TCharObjectMap<RecipeItem> items, final String[] pattern)
+    public CharMapRecipePatternImpl(final Char2ObjectMap<RecipeItem> items, final String[] pattern)
     {
         Validate.notNull(pattern, "Recipe pattern can't be null.");
         Validate.notEmpty(pattern, "Recipe pattern can't be empty.");
         Validate.noNullElements(pattern, "Recipe pattern elements can't be null.");
         Validate.notNull(items, "Recipe pattern items can't be null.");
-        this.items = TCollections.unmodifiableMap(new TCharObjectHashMap<>(items));
+        this.items = Char2ObjectMaps.unmodifiable(new Char2ObjectOpenHashMap<>(items));
         this.pattern = pattern.clone();
     }
 
@@ -72,7 +72,7 @@ public class CharMapRecipePatternImpl implements CharMapRecipePattern
     }
 
     @Override
-    public TCharObjectMap<RecipeItem> getIngredients()
+    public Char2ObjectMap<RecipeItem> getIngredients()
     {
         return this.items;
     }
@@ -112,7 +112,7 @@ public class CharMapRecipePatternImpl implements CharMapRecipePattern
     {
         if (this.itemsList == null)
         {
-            this.itemsList = Collections.unmodifiableList(this.items.valueCollection().stream().filter(item -> item != null).collect(Collectors.toList()));
+            this.itemsList = Collections.unmodifiableList(this.items.values().stream().filter(item -> item != null).collect(Collectors.toList()));
         }
         return this.itemsList;
     }

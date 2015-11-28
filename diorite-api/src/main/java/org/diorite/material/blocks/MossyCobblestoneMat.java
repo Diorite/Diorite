@@ -30,8 +30,8 @@ import org.diorite.material.VariantMat;
 import org.diorite.material.VariantableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Mossy Cobblestone' block material in minecraft. <br>
@@ -51,7 +51,7 @@ public class MossyCobblestoneMat extends StonyMat implements VariantableMat
     public static final MossyCobblestoneMat MOSSY_COBBLESTONE = new MossyCobblestoneMat();
 
     private static final Map<String, MossyCobblestoneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<MossyCobblestoneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<MossyCobblestoneMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public MossyCobblestoneMat()
@@ -141,7 +141,7 @@ public class MossyCobblestoneMat extends StonyMat implements VariantableMat
      */
     public static MossyCobblestoneMat[] mossyCobblestoneTypes()
     {
-        return byID.values(new MossyCobblestoneMat[byID.size()]);
+        return byID.values().toArray(new MossyCobblestoneMat[byID.size()]);
     }
 
     static

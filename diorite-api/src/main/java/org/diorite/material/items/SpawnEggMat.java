@@ -34,8 +34,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.collections.maps.SimpleEnumMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Spawn Egg Creeper' item material in minecraft. <br>
@@ -55,7 +55,7 @@ public class SpawnEggMat extends ItemMaterialData
     // TODO: add more
 
     private static final Map<String, SpawnEggMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<SpawnEggMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<SpawnEggMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
 
     private static final SimpleEnumMap<EntityType, SkullMat> byType = new SimpleEnumMap<>(5);
@@ -148,7 +148,7 @@ public class SpawnEggMat extends ItemMaterialData
      */
     public static SpawnEggMat[] spawnEggTypes()
     {
-        return byID.values(new SpawnEggMat[byID.size()]);
+        return byID.values().toArray(new SpawnEggMat[byID.size()]);
     }
 
     static

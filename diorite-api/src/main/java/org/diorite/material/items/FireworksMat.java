@@ -31,8 +31,8 @@ import org.diorite.material.ItemMaterialData;
 import org.diorite.material.PlaceableEntityMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Fireworks' item material in minecraft. <br>
@@ -51,7 +51,7 @@ public class FireworksMat extends ItemMaterialData implements PlaceableEntityMat
     public static final FireworksMat FIREWORKS = new FireworksMat();
 
     private static final Map<String, FireworksMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FireworksMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<FireworksMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public FireworksMat()
@@ -134,7 +134,7 @@ public class FireworksMat extends ItemMaterialData implements PlaceableEntityMat
      */
     public static FireworksMat[] fireworksTypes()
     {
-        return byID.values(new FireworksMat[byID.size()]);
+        return byID.values().toArray(new FireworksMat[byID.size()]);
     }
 
     static

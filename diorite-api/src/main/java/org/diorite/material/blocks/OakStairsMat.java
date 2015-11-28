@@ -32,8 +32,8 @@ import org.diorite.material.StairsMat;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Oak Stairs' block material in minecraft. <br>
@@ -121,7 +121,7 @@ public class OakStairsMat extends WoodenStairsMat
     public static final OakStairsMat OAK_STAIRS_NORTH_UPSIDE_DOWN = new OakStairsMat(BlockFace.NORTH, true);
 
     private static final Map<String, OakStairsMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<OakStairsMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<OakStairsMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public OakStairsMat()
@@ -238,7 +238,7 @@ public class OakStairsMat extends WoodenStairsMat
      */
     public static OakStairsMat[] oakStairsTypes()
     {
-        return byID.values(new OakStairsMat[byID.size()]);
+        return byID.values().toArray(new OakStairsMat[byID.size()]);
     }
 
     static

@@ -32,8 +32,8 @@ import org.diorite.material.data.drops.PossibleDrops;
 import org.diorite.material.data.drops.PossibleNoDrop;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Air' block material in minecraft. <br>
@@ -54,7 +54,7 @@ public class AirMat extends BlockMaterialData
     public static final AirMat AIR = new AirMat();
 
     private static final Map<String, AirMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<AirMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<AirMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     public AirMat()
     {
@@ -145,7 +145,7 @@ public class AirMat extends BlockMaterialData
      */
     public static AirMat[] airTypes()
     {
-        return byID.values(new AirMat[byID.size()]);
+        return byID.values().toArray(new AirMat[byID.size()]);
     }
 
     static

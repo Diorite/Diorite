@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Brown Mushroom' block material in minecraft. <br>
@@ -49,7 +49,7 @@ public class MushroomBrownMat extends MushroomMat
     public static final MushroomBrownMat BROWN_MUSHROOM = new MushroomBrownMat();
 
     private static final Map<String, MushroomBrownMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<MushroomBrownMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<MushroomBrownMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public MushroomBrownMat()
@@ -123,7 +123,7 @@ public class MushroomBrownMat extends MushroomMat
      */
     public static MushroomBrownMat[] mushroomBrownTypes()
     {
-        return byID.values(new MushroomBrownMat[byID.size()]);
+        return byID.values().toArray(new MushroomBrownMat[byID.size()]);
     }
 
     static

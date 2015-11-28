@@ -36,8 +36,8 @@ import org.diorite.world.TickGroup;
 import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 
-import gnu.trove.TLongCollection;
-import gnu.trove.set.hash.TLongHashSet;
+import it.unimi.dsi.fastutil.longs.LongCollection;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 public interface TickGroupImpl extends Tickable, TickGroup
 {
@@ -50,10 +50,7 @@ public interface TickGroupImpl extends Tickable, TickGroup
     default void tickChunk(final ChunkImpl chunk, final int tps)
     {
         chunk.setLastTickThread(Thread.currentThread());
-        chunk.getTileEntities().forEachValue(t -> {
-            t.doTick(tps);
-            return true;
-        });
+        chunk.getTileEntities().values().forEach(t -> t.doTick(tps));
         chunk.getEntities().forEach(e -> e.doTick(tps));
         // TODO random block update and other shit
     }
@@ -65,15 +62,15 @@ public interface TickGroupImpl extends Tickable, TickGroup
     class ChunkGroup
     {
         private final WeakReference<WorldImpl> world;
-        public static final int             CHUNKS_PER_FILE = 1024;
-        private final       TLongCollection chunks          = new TLongHashSet(CHUNKS_PER_FILE / 2, .5f);
+        public static final int            CHUNKS_PER_FILE = 1024;
+        private final       LongCollection chunks          = new LongOpenHashSet(CHUNKS_PER_FILE / 2, .5f);
 
         public ChunkGroup(final WorldImpl world)
         {
             this.world = new WeakReference<>(world);
         }
 
-        public TLongCollection getChunks()
+        public LongCollection getChunks()
         {
             return this.chunks;
         }

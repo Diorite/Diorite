@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing block "Water" and all its subtypes.
@@ -82,7 +82,7 @@ public class WaterMat extends LiquidMat
     public static final WaterMat WATER_STAGE_7_FALLING_STILL = new WaterStill(LiquidStageMat.STAGE_7_FALLING);
 
     private static final Map<String, WaterMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WaterMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
+    private static final Byte2ObjectMap<WaterMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES << 1, SMALL_LOAD_FACTOR);
 
     public WaterMat(final LiquidTypeMat liquidType, final float hardness, final float blastResistance)
     {
@@ -256,7 +256,7 @@ public class WaterMat extends LiquidMat
      */
     public static WaterMat[] waterTypes()
     {
-        return byID.values(new WaterMat[byID.size()]);
+        return byID.values().toArray(new WaterMat[byID.size()]);
     }
 
     /**

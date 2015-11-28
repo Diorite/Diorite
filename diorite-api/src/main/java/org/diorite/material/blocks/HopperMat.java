@@ -36,8 +36,8 @@ import org.diorite.material.Material;
 import org.diorite.material.PowerableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Hopper' block material in minecraft. <br>
@@ -146,7 +146,7 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
     public static final HopperMat HOPPER_EAST_POWERED  = new HopperMat(BlockFace.EAST, true);
 
     private static final Map<String, HopperMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<HopperMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<HopperMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace facing;
     protected final boolean   powered;
@@ -313,7 +313,7 @@ public class HopperMat extends BlockMaterialData implements DirectionalMat, Powe
      */
     public static HopperMat[] hopperTypes()
     {
-        return byID.values(new HopperMat[byID.size()]);
+        return byID.values().toArray(new HopperMat[byID.size()]);
     }
 
     static

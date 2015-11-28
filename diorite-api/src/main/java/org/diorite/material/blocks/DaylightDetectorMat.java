@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.FuelMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Daylight Detector' block material in minecraft. <br>
@@ -181,7 +181,7 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements 
     public static final DaylightDetectorMat DAYLIGHT_DETECTOR_15  = new DaylightDetectorMat(15);
 
     private static final Map<String, DaylightDetectorMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DaylightDetectorMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DaylightDetectorMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public DaylightDetectorMat()
@@ -299,7 +299,7 @@ public class DaylightDetectorMat extends AbstractDaylightDetectorMat implements 
      */
     public static DaylightDetectorMat[] daylightDetectorTypes()
     {
-        return byID.values(new DaylightDetectorMat[byID.size()]);
+        return byID.values().toArray(new DaylightDetectorMat[byID.size()]);
     }
 
     static

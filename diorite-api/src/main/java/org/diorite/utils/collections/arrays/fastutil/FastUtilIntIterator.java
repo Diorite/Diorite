@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-package org.diorite.utils.collections.arrays.trove;
+package org.diorite.utils.collections.arrays.fastutil;
 
 import java.util.NoSuchElementException;
 
-import gnu.trove.iterator.TIntIterator;
+import it.unimi.dsi.fastutil.ints.IntIterator;
 
 /**
  * Represent {@link TIntIterator} for int array.
  */
-public class TIntArrayIterator extends TPrimitiveArrayIterator<int[]> implements TIntIterator
+public class FastUtilIntIterator extends FastUtilPrimitiveIterator<int[]> implements IntIterator
 {
     /**
-     * Construct new TIntIterator for given primitive array.
+     * Construct new IntIterator for given primitive array.
      *
      * @param primitiveArray array to be iterated.
      */
-    public TIntArrayIterator(final int[] primitiveArray)
+    public FastUtilIntIterator(final int[] primitiveArray)
     {
         super(primitiveArray);
     }
@@ -66,12 +66,31 @@ public class TIntArrayIterator extends TPrimitiveArrayIterator<int[]> implements
     }
 
     @Override
-    public int next()
+    public Integer next()
+    {
+        return this.nextInt();
+    }
+
+    @Override
+    public int nextInt()
     {
         if (! this.hasNext())
         {
             throw new NoSuchElementException("Index >= Length, Index: " + this.index + ", Length: " + this.primitiveArray.length);
         }
         return this.primitiveArray[this.index++];
+    }
+
+    @Override
+    public int skip(final int n)
+    {
+        if ((this.index + n) < this.primitiveArray.length)
+        {
+            this.index += n;
+            return n;
+        }
+        final int r = this.primitiveArray.length - this.index - 1;
+        this.index = this.primitiveArray.length - 1;
+        return r;
     }
 }

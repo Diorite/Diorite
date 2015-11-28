@@ -26,7 +26,8 @@ package org.diorite.utils;
 
 import java.util.concurrent.TimeUnit;
 
-import gnu.trove.map.hash.TObjectLongHashMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 /**
  * Small utility class useful when we have something to log, that can be invoked very often and we don't want make spam in output. <br>
@@ -34,7 +35,12 @@ import gnu.trove.map.hash.TObjectLongHashMap;
  */
 public final class SpammyError
 {
-    private static final TObjectLongHashMap<Object> errors = new TObjectLongHashMap<>(10, 0.1f, 0);
+    private static final Object2LongMap<Object> errors = new Object2LongOpenHashMap<>(10, 0.1f);
+
+    static
+    {
+        errors.defaultReturnValue(0);
+    }
 
     private SpammyError()
     {
@@ -50,7 +56,7 @@ public final class SpammyError
     public static void err(final String message, final int secondsBetweenLogs, final Object key)
     {
         final long currentTime = System.currentTimeMillis();
-        final long nextTime = errors.get(key) + TimeUnit.SECONDS.toMillis(secondsBetweenLogs);
+        final long nextTime = errors.getLong(key) + TimeUnit.SECONDS.toMillis(secondsBetweenLogs);
         if (currentTime >= nextTime)
         {
             System.err.println(message);
@@ -68,7 +74,7 @@ public final class SpammyError
     public static void out(final String message, final int secondsBetweenLogs, final Object key)
     {
         final long currentTime = System.currentTimeMillis();
-        final long nextTime = errors.get(key) + TimeUnit.SECONDS.toMillis(secondsBetweenLogs);
+        final long nextTime = errors.getLong(key) + TimeUnit.SECONDS.toMillis(secondsBetweenLogs);
         if (currentTime >= nextTime)
         {
             System.out.println(message);

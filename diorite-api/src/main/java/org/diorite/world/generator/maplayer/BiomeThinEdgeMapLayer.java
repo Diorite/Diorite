@@ -34,38 +34,38 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gnu.trove.list.TIntList;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TIntHashSet;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 
 public class BiomeThinEdgeMapLayer extends MapLayer
 {
-    protected static final TIntSet                   OCEANS       = new TIntHashSet(2);
-    protected static final TIntIntMap                MESA_EDGES   = new TIntIntHashMap(6);
-    protected static final TIntIntMap                JUNGLE_EDGES = new TIntIntHashMap(4);
-    protected static final Map<TIntIntMap, TIntList> EDGES        = new HashMap<>(2);
+    protected static final IntSet                   OCEANS       = new IntOpenHashSet(2);
+    protected static final Int2IntMap               MESA_EDGES   = new Int2IntOpenHashMap(6);
+    protected static final Int2IntMap               JUNGLE_EDGES = new Int2IntOpenHashMap(4);
+    protected static final Map<Int2IntMap, IntList> EDGES        = new HashMap<>(2);
 
     protected final MapLayer belowLayer;
 
-    public static TIntSet getOceans()
+    public static IntSet getOceans()
     {
         return OCEANS;
     }
 
-    public static TIntIntMap getMesaEdges()
+    public static Int2IntMap getMesaEdges()
     {
         return MESA_EDGES;
     }
 
-    public static TIntIntMap getJungleEdges()
+    public static Int2IntMap getJungleEdges()
     {
         return JUNGLE_EDGES;
     }
 
-    public static Map<TIntIntMap, TIntList> getEdges()
+    public static Map<Int2IntMap, IntList> getEdges()
     {
         return EDGES;
     }
@@ -93,9 +93,9 @@ public class BiomeThinEdgeMapLayer extends MapLayer
                 // This applies biome thin edges using Von Neumann neighborhood
                 final int centerVal = values[(j + 1 + ((i + 1) * gridSizeX))];
                 int val = centerVal;
-                for (final Entry<TIntIntMap, TIntList> entry : EDGES.entrySet())
+                for (final Entry<Int2IntMap, IntList> entry : EDGES.entrySet())
                 {
-                    final TIntIntMap map = entry.getKey();
+                    final Int2IntMap map = entry.getKey();
                     if (map.containsKey(centerVal))
                     {
                         final int upperVal = values[(j + 1 + (i * gridSizeX))];
@@ -134,7 +134,7 @@ public class BiomeThinEdgeMapLayer extends MapLayer
         JUNGLE_EDGES.put(JUNGLE_EDGE_MOUNTAINS.getBiomeId(), JUNGLE_EDGE.getBiomeId());
 
         EDGES.put(MESA_EDGES, null);
-        EDGES.put(JUNGLE_EDGES, TIntArrayList.wrap(new int[]{JUNGLE.getBiomeId(), JUNGLE_HILLS.getBiomeId(), JUNGLE_MOUNTAINS.getBiomeId(), JUNGLE_EDGE_MOUNTAINS.getBiomeId(), FOREST.getBiomeId(), TAIGA.getBiomeId()}));
+        EDGES.put(JUNGLE_EDGES, IntArrayList.wrap(new int[]{JUNGLE.getBiomeId(), JUNGLE_HILLS.getBiomeId(), JUNGLE_MOUNTAINS.getBiomeId(), JUNGLE_EDGE_MOUNTAINS.getBiomeId(), FOREST.getBiomeId(), TAIGA.getBiomeId()}));
     }
 
     @Override

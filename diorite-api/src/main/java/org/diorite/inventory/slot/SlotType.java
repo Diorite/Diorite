@@ -24,10 +24,9 @@
 
 package org.diorite.inventory.slot;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 public class SlotType extends ASimpleEnum<SlotType>
 {
@@ -93,8 +92,8 @@ public class SlotType extends ASimpleEnum<SlotType>
      */
     public static SlotType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(SlotType.class);
-        return (SlotType[]) map.values(new SlotType[map.size()]);
+        final Int2ObjectMap<SlotType> map = getByEnumOrdinal(SlotType.class);
+        return map.values().toArray(new SlotType[map.size()]);
     }
 
     static

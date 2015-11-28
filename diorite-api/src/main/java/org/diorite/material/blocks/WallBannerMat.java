@@ -34,8 +34,8 @@ import org.diorite.material.AttachableMat;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Wall Banner' block material in minecraft. <br>
@@ -91,7 +91,7 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
     public static final WallBannerMat WALL_BANNER_EAST  = new WallBannerMat(BlockFace.EAST);
 
     private static final Map<String, WallBannerMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WallBannerMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<WallBannerMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace face;
 
@@ -233,7 +233,7 @@ public class WallBannerMat extends BannerBlockMat implements AttachableMat
      */
     public static WallBannerMat[] wallBannerTypes()
     {
-        return byID.values(new WallBannerMat[byID.size()]);
+        return byID.values().toArray(new WallBannerMat[byID.size()]);
     }
 
     static

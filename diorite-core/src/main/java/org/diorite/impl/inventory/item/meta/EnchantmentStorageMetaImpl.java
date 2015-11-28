@@ -29,7 +29,7 @@ import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.meta.EnchantmentStorageMeta;
 import org.diorite.nbt.NbtTagCompound;
 
-import gnu.trove.map.TObjectShortMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 
 public class EnchantmentStorageMetaImpl extends SimpleItemMetaImpl implements EnchantmentStorageMeta
 {
@@ -64,7 +64,7 @@ public class EnchantmentStorageMetaImpl extends SimpleItemMetaImpl implements En
     }
 
     @Override
-    public TObjectShortMap<EnchantmentType> getStoredEnchants()
+    public Object2ShortMap<EnchantmentType> getStoredEnchants()
     {
         return this.getEnchants(STORED_ENCHANTMENTS);
     }

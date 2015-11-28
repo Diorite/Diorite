@@ -35,8 +35,8 @@ import org.diorite.material.blocks.WaterLilyMat.RailTypeMat;
 import org.diorite.material.blocks.WaterLilyMat.RailsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Activator Rail' block material in minecraft. <br>
@@ -154,7 +154,7 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
     public static final ActivatorRailMat ACTIVATOR_RAIL_ASCENDING_SOUTH_POWERED = new ActivatorRailMat(RailTypeMat.ASCENDING_SOUTH, true);
 
     private static final Map<String, ActivatorRailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<ActivatorRailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<ActivatorRailMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final boolean powered;
 
@@ -301,7 +301,7 @@ public class ActivatorRailMat extends RailsMat implements PowerableMat
      */
     public static ActivatorRailMat[] activatorRailTypes()
     {
-        return byID.values(new ActivatorRailMat[byID.size()]);
+        return byID.values().toArray(new ActivatorRailMat[byID.size()]);
     }
 
     static

@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Dead Bush' block material in minecraft. <br>
@@ -49,7 +49,7 @@ public class DeadBushMat extends FlowerMat
     public static final DeadBushMat DEAD_BUSH = new DeadBushMat();
 
     private static final Map<String, DeadBushMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<DeadBushMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<DeadBushMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public DeadBushMat()
@@ -149,7 +149,7 @@ public class DeadBushMat extends FlowerMat
      */
     public static DeadBushMat[] deadBushTypes()
     {
-        return byID.values(new DeadBushMat[byID.size()]);
+        return byID.values().toArray(new DeadBushMat[byID.size()]);
     }
 
     static

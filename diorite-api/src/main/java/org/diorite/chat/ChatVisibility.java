@@ -24,10 +24,9 @@
 
 package org.diorite.chat;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public class ChatVisibility extends ASimpleEnum<ChatVisibility>
@@ -99,8 +98,8 @@ public class ChatVisibility extends ASimpleEnum<ChatVisibility>
      */
     public static ChatVisibility[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ChatVisibility.class);
-        return (ChatVisibility[]) map.values(new ChatVisibility[map.size()]);
+        final Int2ObjectMap<ChatVisibility> map = getByEnumOrdinal(ChatVisibility.class);
+        return map.values().toArray(new ChatVisibility[map.size()]);
     }
 
     static

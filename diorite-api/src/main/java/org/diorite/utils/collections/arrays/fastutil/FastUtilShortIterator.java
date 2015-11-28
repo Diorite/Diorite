@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-package org.diorite.utils.collections.arrays.trove;
+package org.diorite.utils.collections.arrays.fastutil;
 
 import java.util.NoSuchElementException;
 
-import gnu.trove.iterator.TShortIterator;
+import it.unimi.dsi.fastutil.shorts.ShortIterator;
 
 /**
  * Represent {@link TShortIterator} for short array.
  */
-public class TShortArrayIterator extends TPrimitiveArrayIterator<short[]> implements TShortIterator
+public class FastUtilShortIterator extends FastUtilPrimitiveIterator<short[]> implements ShortIterator
 {
     /**
-     * Construct new TShortIterator for given primitive array.
+     * Construct new ShortIterator for given primitive array.
      *
      * @param primitiveArray array to be iterated.
      */
-    public TShortArrayIterator(final short[] primitiveArray)
+    public FastUtilShortIterator(final short[] primitiveArray)
     {
         super(primitiveArray);
     }
@@ -66,12 +66,31 @@ public class TShortArrayIterator extends TPrimitiveArrayIterator<short[]> implem
     }
 
     @Override
-    public short next()
+    public Short next()
+    {
+        return this.nextShort();
+    }
+
+    @Override
+    public short nextShort()
     {
         if (! this.hasNext())
         {
             throw new NoSuchElementException("Index >= Length, Index: " + this.index + ", Length: " + this.primitiveArray.length);
         }
         return this.primitiveArray[this.index++];
+    }
+
+    @Override
+    public int skip(final int n)
+    {
+        if ((this.index + n) < this.primitiveArray.length)
+        {
+            this.index += n;
+            return n;
+        }
+        final int r = this.primitiveArray.length - this.index - 1;
+        this.index = this.primitiveArray.length - 1;
+        return r;
     }
 }

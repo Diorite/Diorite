@@ -27,11 +27,10 @@ package org.diorite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 public class Sound extends ASimpleEnum<Sound>
 {
@@ -120,8 +119,8 @@ public class Sound extends ASimpleEnum<Sound>
      */
     public static Sound[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(Sound.class);
-        return (Sound[]) map.values(new Sound[map.size()]);
+        final Int2ObjectMap<Sound> map = getByEnumOrdinal(Sound.class);
+        return map.values().toArray(new Sound[map.size()]);
     }
 
     static

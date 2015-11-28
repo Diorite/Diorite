@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Tnt' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class TntMat extends BlockMaterialData
     public static final TntMat TNT = new TntMat();
 
     private static final Map<String, TntMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<TntMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<TntMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public TntMat()
@@ -124,7 +124,7 @@ public class TntMat extends BlockMaterialData
      */
     public static TntMat[] tntTypes()
     {
-        return byID.values(new TntMat[byID.size()]);
+        return byID.values().toArray(new TntMat[byID.size()]);
     }
 
     static

@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-package org.diorite.utils.collections.arrays.trove;
+package org.diorite.utils.collections.arrays.fastutil;
 
 import java.util.NoSuchElementException;
 
-import gnu.trove.iterator.TByteIterator;
+import it.unimi.dsi.fastutil.bytes.ByteIterator;
 
 /**
- * Represent {@link TByteIterator} for byte array.
+ * Represent {@link ByteIterator} for byte array.
  */
-public class TByteArrayIterator extends TPrimitiveArrayIterator<byte[]> implements TByteIterator
+public class FastUtilByteIterator extends FastUtilPrimitiveIterator<byte[]> implements ByteIterator
 {
     /**
-     * Construct new TByteIterator for given primitive array.
+     * Construct new ByteIterator for given primitive array.
      *
      * @param primitiveArray array to be iterated.
      */
-    public TByteArrayIterator(final byte[] primitiveArray)
+    public FastUtilByteIterator(final byte[] primitiveArray)
     {
         super(primitiveArray);
     }
@@ -66,12 +66,31 @@ public class TByteArrayIterator extends TPrimitiveArrayIterator<byte[]> implemen
     }
 
     @Override
-    public byte next()
+    public Byte next()
+    {
+        return this.nextByte();
+    }
+
+    @Override
+    public byte nextByte()
     {
         if (! this.hasNext())
         {
             throw new NoSuchElementException("Index >= Length, Index: " + this.index + ", Length: " + this.primitiveArray.length);
         }
         return this.primitiveArray[this.index++];
+    }
+
+    @Override
+    public int skip(final int n)
+    {
+        if ((this.index + n) < this.primitiveArray.length)
+        {
+            this.index += n;
+            return n;
+        }
+        final int r = this.primitiveArray.length - this.index - 1;
+        this.index = this.primitiveArray.length - 1;
+        return r;
     }
 }

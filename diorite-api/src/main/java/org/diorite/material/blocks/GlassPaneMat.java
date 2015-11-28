@@ -30,8 +30,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.FenceMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Glass Pane' block material in minecraft. <br>
@@ -51,7 +51,7 @@ public class GlassPaneMat extends BlockMaterialData implements FenceMat
     public static final GlassPaneMat GLASS_PANE = new GlassPaneMat();
 
     private static final Map<String, GlassPaneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<GlassPaneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<GlassPaneMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public GlassPaneMat()
@@ -125,7 +125,7 @@ public class GlassPaneMat extends BlockMaterialData implements FenceMat
      */
     public static GlassPaneMat[] glassPaneTypes()
     {
-        return byID.values(new GlassPaneMat[byID.size()]);
+        return byID.values().toArray(new GlassPaneMat[byID.size()]);
     }
 
     static

@@ -31,8 +31,8 @@ import org.diorite.material.blocks.WaterLilyMat.RailTypeMat;
 import org.diorite.material.blocks.WaterLilyMat.RailsMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Rail' block material in minecraft. <br>
@@ -135,7 +135,7 @@ public class RailMat extends RailsMat
     public static final RailMat RAIL_CURVED_NORTH_EAST = new RailMat(RailTypeMat.CURVED_NORTH_EAST);
 
     private static final Map<String, RailMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<RailMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<RailMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public RailMat()
@@ -239,7 +239,7 @@ public class RailMat extends RailsMat
      */
     public static RailMat[] railTypes()
     {
-        return byID.values(new RailMat[byID.size()]);
+        return byID.values().toArray(new RailMat[byID.size()]);
     }
 
     static

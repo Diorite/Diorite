@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Boat' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class BoatMat extends AbstractBoatMat
     public static final BoatMat BOAT = new BoatMat();
 
     private static final Map<String, BoatMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<BoatMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<BoatMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public BoatMat()
@@ -127,7 +127,7 @@ public class BoatMat extends AbstractBoatMat
      */
     public static BoatMat[] boatTypes()
     {
-        return byID.values(new BoatMat[byID.size()]);
+        return byID.values().toArray(new BoatMat[byID.size()]);
     }
 
     static

@@ -30,8 +30,8 @@ import org.diorite.inventory.item.meta.MapMeta;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Filled Map' item material in minecraft. <br>
@@ -50,7 +50,7 @@ public class FilledMapMat extends ItemMaterialData
     public static final FilledMapMat FILLED_MAP = new FilledMapMat();
 
     private static final Map<String, FilledMapMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<FilledMapMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<FilledMapMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public FilledMapMat()
@@ -157,7 +157,7 @@ public class FilledMapMat extends ItemMaterialData
      */
     public static FilledMapMat[] filledMapTypes()
     {
-        return byID.values(new FilledMapMat[byID.size()]);
+        return byID.values().toArray(new FilledMapMat[byID.size()]);
     }
 
     static

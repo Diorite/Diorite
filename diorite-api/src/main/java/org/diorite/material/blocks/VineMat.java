@@ -34,8 +34,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Vine' block material in minecraft. <br>
@@ -206,7 +206,7 @@ public class VineMat extends PlantMat
     public static final VineMat VINE_EAST_NORTH_WEST_SOUTH = new VineMat(BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH);
 
     private static final Map<String, VineMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<VineMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<VineMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final BlockFace[] faces;
 
@@ -355,7 +355,7 @@ public class VineMat extends PlantMat
      */
     public static VineMat[] vineTypes()
     {
-        return byID.values(new VineMat[byID.size()]);
+        return byID.values().toArray(new VineMat[byID.size()]);
     }
 
     static

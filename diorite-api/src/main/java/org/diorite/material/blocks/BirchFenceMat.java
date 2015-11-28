@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.material.WoodType;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Birch Fence' block material in minecraft. <br>
@@ -50,7 +50,7 @@ public class BirchFenceMat extends WoodenFenceMat
     public static final BirchFenceMat BRICH_FENCE = new BirchFenceMat();
 
     private static final Map<String, BirchFenceMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<BirchFenceMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<BirchFenceMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public BirchFenceMat()
@@ -124,7 +124,7 @@ public class BirchFenceMat extends WoodenFenceMat
      */
     public static BirchFenceMat[] birchFenceTypes()
     {
-        return byID.values(new BirchFenceMat[byID.size()]);
+        return byID.values().toArray(new BirchFenceMat[byID.size()]);
     }
 
     static

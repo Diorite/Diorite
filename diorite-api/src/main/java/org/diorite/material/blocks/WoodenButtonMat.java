@@ -30,8 +30,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Wooden Button' block material in minecraft. <br>
@@ -150,7 +150,7 @@ public class WoodenButtonMat extends ButtonMat
     public static final WoodenButtonMat WOODEN_BUTTON_UP_POWERED    = new WoodenButtonMat(BlockFace.UP, true);
 
     private static final Map<String, WoodenButtonMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<WoodenButtonMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<WoodenButtonMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public WoodenButtonMat()
@@ -273,7 +273,7 @@ public class WoodenButtonMat extends ButtonMat
      */
     public static WoodenButtonMat[] woodenButtonTypes()
     {
-        return byID.values(new WoodenButtonMat[byID.size()]);
+        return byID.values().toArray(new WoodenButtonMat[byID.size()]);
     }
 
     static

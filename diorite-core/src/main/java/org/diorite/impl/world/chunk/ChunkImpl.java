@@ -51,8 +51,8 @@ import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
-import gnu.trove.map.TLongObjectMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 public class ChunkImpl implements Chunk
 {
@@ -65,7 +65,7 @@ public class ChunkImpl implements Chunk
     protected byte[]          biomes;
     protected ChunkPartImpl[] chunkParts; // size of 16, parts can be null
 
-    protected final TLongObjectMap<TileEntityImpl> tileEntities = new TLongObjectHashMap<>(1, .2f, Long.MAX_VALUE);
+    protected final Long2ObjectMap<TileEntityImpl> tileEntities = new Long2ObjectOpenHashMap<>(1, .2f);
     protected final Set<EntityImpl>                entities     = new ConcurrentSet<>(4, .3f, 2);
 
     @Override
@@ -194,7 +194,7 @@ public class ChunkImpl implements Chunk
         }
     }
 
-    public TLongObjectMap<TileEntityImpl> getTileEntities()
+    public Long2ObjectMap<TileEntityImpl> getTileEntities()
     {
         return this.tileEntities;
     }

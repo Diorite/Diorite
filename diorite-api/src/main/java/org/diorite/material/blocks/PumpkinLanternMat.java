@@ -30,8 +30,8 @@ import org.diorite.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Pumpkin Lantern' block material in minecraft. <br>
@@ -94,7 +94,7 @@ public class PumpkinLanternMat extends AbstractPumpkinMat
     public static final PumpkinLanternMat PUMPKIN_LANTERN_SELF  = new PumpkinLanternMat(BlockFace.SELF);
 
     private static final Map<String, PumpkinLanternMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<PumpkinLanternMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<PumpkinLanternMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public PumpkinLanternMat()
@@ -198,7 +198,7 @@ public class PumpkinLanternMat extends AbstractPumpkinMat
      */
     public static PumpkinLanternMat[] pumpkinLanternTypes()
     {
-        return byID.values(new PumpkinLanternMat[byID.size()]);
+        return byID.values().toArray(new PumpkinLanternMat[byID.size()]);
     }
 
     static

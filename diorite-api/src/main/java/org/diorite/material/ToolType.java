@@ -24,10 +24,9 @@
 
 package org.diorite.material;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
-import gnu.trove.map.TIntObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Represent type of tool.
@@ -94,8 +93,8 @@ public class ToolType extends ASimpleEnum<ToolType>
      */
     public static ToolType[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(ToolType.class);
-        return (ToolType[]) map.values(new ToolType[map.size()]);
+        final Int2ObjectMap<ToolType> map = getByEnumOrdinal(ToolType.class);
+        return map.values().toArray(new ToolType[map.size()]);
     }
 
     static

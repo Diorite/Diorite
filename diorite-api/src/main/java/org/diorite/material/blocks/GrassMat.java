@@ -31,8 +31,8 @@ import org.diorite.material.data.drops.PossibleDrops;
 import org.diorite.material.data.drops.PossibleFixedDrop;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Grass' block material in minecraft. <br>
@@ -52,7 +52,7 @@ public class GrassMat extends EarthMat
     public static final GrassMat GRASS = new GrassMat();
 
     private static final Map<String, GrassMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<GrassMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<GrassMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public GrassMat()
@@ -132,7 +132,7 @@ public class GrassMat extends EarthMat
      */
     public static GrassMat[] grassTypes()
     {
-        return byID.values(new GrassMat[byID.size()]);
+        return byID.values().toArray(new GrassMat[byID.size()]);
     }
 
     static

@@ -35,8 +35,8 @@ import org.diorite.material.ColorableMat;
 import org.diorite.material.FenceMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Stained Glass Pane' block material in minecraft. <br>
@@ -187,7 +187,7 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
     public static final StainedGlassPaneMat STAINED_GLASS_PANE_BLACK      = new StainedGlassPaneMat(DyeColor.BLACK);
 
     private static final Map<String, StainedGlassPaneMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<StainedGlassPaneMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<StainedGlassPaneMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final DyeColor color;
 
@@ -302,7 +302,7 @@ public class StainedGlassPaneMat extends BlockMaterialData implements ColorableM
      */
     public static StainedGlassPaneMat[] stainedGlassPaneTypes()
     {
-        return byID.values(new StainedGlassPaneMat[byID.size()]);
+        return byID.values().toArray(new StainedGlassPaneMat[byID.size()]);
     }
 
     static

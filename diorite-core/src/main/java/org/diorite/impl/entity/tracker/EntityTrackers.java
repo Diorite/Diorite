@@ -37,19 +37,19 @@ import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.entity.Entity;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.TShortIntMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.map.hash.TShortIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2IntMap;
+import it.unimi.dsi.fastutil.shorts.Short2IntOpenHashMap;
 
 public class EntityTrackers implements Tickable
 {
-    private final TIntObjectMap<BaseTracker<?>> trackers = new TIntObjectHashMap<>(1000, 0.25F, - 1);
+    private final Int2ObjectMap<BaseTracker<?>> trackers = new Int2ObjectOpenHashMap<>(1000, 0.25F);
     /**
      * Maps entity type id and amount of entity of that type. <br>
      * Used by statisitcs and performance commands.
      */
-    private final TShortIntMap                  stats    = new TShortIntHashMap(50, 0.1f, (short) 0, 0); // only for stats, performance commands etc.
+    private final Short2IntMap                  stats    = new Short2IntOpenHashMap(50, 0.1f); // only for stats, performance commands etc.
     private final WorldImpl world;
 
     public EntityTrackers(final WorldImpl world)
@@ -67,7 +67,7 @@ public class EntityTrackers implements Tickable
         return this.trackers.get(entity.getId());
     }
 
-    public TShortIntMap getStats() // not for API use, TODO: add API for that
+    public Short2IntMap getStats() // not for API use, TODO: add API for that
     {
         return this.stats;
     }
@@ -135,10 +135,7 @@ public class EntityTrackers implements Tickable
         if (trackable instanceof PlayerImpl)
         {
             final PlayerImpl player = (PlayerImpl) trackable;
-            this.trackers.forEachValue(t -> {
-                t.remove(player);
-                return true;
-            });
+            this.trackers.values().forEach((t) -> t.remove(player));
         }
         this.decrementStat(trackable);
         return true;
@@ -146,10 +143,7 @@ public class EntityTrackers implements Tickable
 
     public void updatePlayer(final PlayerImpl player)
     {
-        this.trackers.forEachValue(t -> {
-            t.updatePlayer(player);
-            return true;
-        });
+        this.trackers.values().forEach((t) -> t.updatePlayer(player));
     }
 
     @Override
@@ -157,10 +151,7 @@ public class EntityTrackers implements Tickable
     {
         //noinspection ObjectEquality
         final Collection<PlayerImpl> players = DioriteCore.getInstance().getPlayersManager().getOnlinePlayers(p -> p.getWorld() == this.world);
-        this.trackers.forEachValue(t -> {
-            t.tick(tps, players);
-            return true;
-        });
+        this.trackers.values().forEach((t) -> t.tick(tps, players));
     }
 
     @Override

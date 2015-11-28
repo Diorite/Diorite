@@ -29,8 +29,8 @@ import java.util.Map;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.utils.math.DioriteMathUtils;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Iron Pressure Plate' block material in minecraft. <br>
@@ -181,7 +181,7 @@ public class IronPressurePlateMat extends WeightedPressurePlateMat
     public static final IronPressurePlateMat IRON_PRESSURE_PLATE_15 = new IronPressurePlateMat(0xF);
 
     private static final Map<String, IronPressurePlateMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<IronPressurePlateMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<IronPressurePlateMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public IronPressurePlateMat()
@@ -288,7 +288,7 @@ public class IronPressurePlateMat extends WeightedPressurePlateMat
      */
     public static IronPressurePlateMat[] ironPressurePlateTypes()
     {
-        return byID.values(new IronPressurePlateMat[byID.size()]);
+        return byID.values().toArray(new IronPressurePlateMat[byID.size()]);
     }
 
     static

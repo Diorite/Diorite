@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Poisonous Potato' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class PoisonousPotatoMat extends EdibleItemMat
     public static final PoisonousPotatoMat POISONOUS_POTATO = new PoisonousPotatoMat();
 
     private static final Map<String, PoisonousPotatoMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<PoisonousPotatoMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<PoisonousPotatoMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public PoisonousPotatoMat()
@@ -127,7 +127,7 @@ public class PoisonousPotatoMat extends EdibleItemMat
      */
     public static PoisonousPotatoMat[] poisonousPotatoTypes()
     {
-        return byID.values(new PoisonousPotatoMat[byID.size()]);
+        return byID.values().toArray(new PoisonousPotatoMat[byID.size()]);
     }
 
     static

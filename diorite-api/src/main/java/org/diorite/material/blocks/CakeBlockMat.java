@@ -34,8 +34,8 @@ import org.diorite.material.Material;
 import org.diorite.material.blocks.MushroomBlockMat.Type;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TByteObjectMap;
-import gnu.trove.map.hash.TByteObjectHashMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * Class representing 'Cake Block' block material in minecraft. <br>
@@ -115,7 +115,7 @@ public class CakeBlockMat extends BlockMaterialData
     public static final CakeBlockMat CAKE_BLOCK_6 = new CakeBlockMat(0x6);
 
     private static final Map<String, CakeBlockMat>    byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TByteObjectMap<CakeBlockMat> byID   = new TByteObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Byte.MIN_VALUE);
+    private static final Byte2ObjectMap<CakeBlockMat> byID   = new Byte2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     protected final byte piecesEaten;
 
@@ -252,7 +252,7 @@ public class CakeBlockMat extends BlockMaterialData
      */
     public static CakeBlockMat[] cakeTypes()
     {
-        return byID.values(new CakeBlockMat[byID.size()]);
+        return byID.values().toArray(new CakeBlockMat[byID.size()]);
     }
 
     static

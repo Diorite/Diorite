@@ -38,8 +38,8 @@ import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.inventory.recipe.craft.RecipePattern;
 import org.diorite.inventory.recipe.craft.ShapedRecipe;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Implementation of shaped recipe.
@@ -64,7 +64,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
     public RecipeCheckResult isMatching(final GridInventory inventory)
     {
         final Player player = (inventory.getHolder() instanceof Player) ? (Player) inventory.getHolder() : null;
-        final TShortObjectMap<ItemStack> onCraft = new TShortObjectHashMap<>(2, .5F, Short.MIN_VALUE);
+        final Short2ObjectMap<ItemStack> onCraft = new Short2ObjectOpenHashMap<>(2, .5F);
 
         final RecipePattern pattern = this.pattern;
         final int maxPatRow = pattern.getRows(), maxPatCol = pattern.getColumns();

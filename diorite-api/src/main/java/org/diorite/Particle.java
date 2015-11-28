@@ -29,12 +29,11 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 @SuppressWarnings("MagicNumber")
 public class Particle extends ASimpleEnum<Particle>
@@ -87,7 +86,7 @@ public class Particle extends ASimpleEnum<Particle>
     public static final Particle ITEM_TAKE         = new Particle("ITEM_TAKE", "take", 40);
     public static final Particle MOB_APPEARANCE    = new Particle("MOB_APPEARANCE", "mobappearance", 41);
 
-    private static final TIntObjectMap<Particle> byParticleID   = new TIntObjectHashMap<>(42, SMALL_LOAD_FACTOR);
+    private static final Int2ObjectMap<Particle> byParticleID   = new Int2ObjectOpenHashMap<>(42, SMALL_LOAD_FACTOR);
     private static final Map<String, Particle>   byParticleName = new CaseInsensitiveMap<>(42, SMALL_LOAD_FACTOR);
     private final String particleName;
     private final int    particleId;
@@ -172,8 +171,8 @@ public class Particle extends ASimpleEnum<Particle>
      */
     public static Particle[] values()
     {
-        final TIntObjectMap<SimpleEnum<?>> map = getByEnumOrdinal(Particle.class);
-        return (Particle[]) map.values(new Particle[map.size()]);
+        final Int2ObjectMap<Particle> map = getByEnumOrdinal(Particle.class);
+        return map.values().toArray(new Particle[map.size()]);
     }
 
     @Override

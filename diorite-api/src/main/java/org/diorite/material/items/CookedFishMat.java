@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
  * Class representing 'Cooked Fish' item material in minecraft. <br>
@@ -48,7 +48,7 @@ public class CookedFishMat extends EdibleItemMat
     public static final CookedFishMat COOKED_FISH = new CookedFishMat();
 
     private static final Map<String, CookedFishMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final TShortObjectMap<CookedFishMat> byID   = new TShortObjectHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR, Short.MIN_VALUE);
+    private static final Short2ObjectMap<CookedFishMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
     public CookedFishMat()
@@ -127,7 +127,7 @@ public class CookedFishMat extends EdibleItemMat
      */
     public static CookedFishMat[] cookedFishTypes()
     {
-        return byID.values(new CookedFishMat[byID.size()]);
+        return byID.values().toArray(new CookedFishMat[byID.size()]);
     }
 
     static
