@@ -25,9 +25,11 @@
 package org.diorite.impl.inventory.recipe.craft;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -71,6 +73,7 @@ public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
 
         final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
         final LinkedList<RecipeItem> ingredients = new LinkedList<>(this.getIngredients());
+        final Collection<BiConsumer<Player, CraftingGrid>> reps = new ArrayList<>(maxInvCol * maxInvRow);
         final CraftingGrid items = new CraftingGridImpl(maxInvRow, maxInvCol);
         int col = - 1, row = 0;
         for (short i = 1, size = (short) inventory.size(); i < size; i++)
@@ -95,11 +98,14 @@ public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
                 final ItemStack valid = ingredient.isValid(player, item);
                 if (valid != null)
                 {
-                    final ItemStack repl = ingredient.getReplacement();
-                    if (repl != null)
-                    {
-                        onCraft.put(i, repl);
-                    }
+                    final short icpy = i;
+                    reps.add((p, c) -> {
+                        final ItemStack repl = ingredient.getReplacement(p, c);
+                        if (repl != null)
+                        {
+                            onCraft.put(icpy, repl);
+                        }
+                    });
                     items.setItem(row, col, valid);
                     iterator.remove();
                     matching = true;
@@ -111,6 +117,7 @@ public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
                 return null;
             }
         }
+        reps.forEach(c -> c.accept(player, items));
         return ingredients.isEmpty() ? new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft) : null;
     }
 

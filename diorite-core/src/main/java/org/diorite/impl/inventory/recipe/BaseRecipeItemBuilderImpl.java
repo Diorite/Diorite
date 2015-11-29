@@ -2,6 +2,7 @@ package org.diorite.impl.inventory.recipe;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,14 +15,16 @@ import org.diorite.inventory.recipe.RecipeItem;
 import org.diorite.inventory.recipe.RecipeItemBuilder;
 import org.diorite.inventory.recipe.ReplacedRecipeItem;
 import org.diorite.inventory.recipe.SimpleRecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseRecipeItemBuilderImpl<T extends RecipeBuilder, B extends RecipeItemBuilder<T, B>> implements RecipeItemBuilder<T, B>
 {
-    protected final T         builder;
-    protected       ItemStack item;
-    protected       boolean   ignoreType;
-    protected       ItemStack replacement;
+    protected final T                                           builder;
+    protected       ItemStack                                   item;
+    protected       boolean                                     ignoreType;
+    protected       ItemStack                                   replacement;
+    protected       BiFunction<Player, CraftingGrid, ItemStack> replacmentFunc;
     protected final Collection<BiPredicate<Player, ItemStack>> validators = new ArrayList<>(4);
 
     protected BaseRecipeItemBuilderImpl(final T builder)
@@ -33,6 +36,14 @@ public abstract class BaseRecipeItemBuilderImpl<T extends RecipeBuilder, B exten
     public B replacement(final ItemStack replacement)
     {
         this.replacement = replacement;
+        return (B) this;
+    }
+
+    @Override
+    public B replacement(final ItemStack basicReplacement, final BiFunction<Player, CraftingGrid, ItemStack> replacement)
+    {
+        this.replacement = basicReplacement;
+        this.replacmentFunc = replacement;
         return (B) this;
     }
 
@@ -55,7 +66,7 @@ public abstract class BaseRecipeItemBuilderImpl<T extends RecipeBuilder, B exten
     {
         if (this.replacement != null)
         {
-            return new ReplacedRecipeItem(this.item, this.ignoreType, this.replacement, this.validators);
+            return new ReplacedRecipeItem(this.item, this.ignoreType, this.replacmentFunc, this.replacement, this.validators);
         }
         return new SimpleRecipeItem(this.item, this.ignoreType, this.validators);
     }

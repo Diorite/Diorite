@@ -1114,6 +1114,7 @@ public class DioriteCore implements Core
             }
         });
         initPipeline.addLast("DioriteCore|registerEvents", (s, p, d) -> s.registerEvents());
+        initPipeline.addLast("DioriteCore|initTimings", (s, p, d) -> s.timings = new TimingsManagerImpl());
         initPipeline.addLast("DioriteCore|initSessionService", (s, p, d) -> s.sessionService = new YggdrasilSessionService(d.proxy, UUID.randomUUID().toString()));
         initPipeline.addLast("DioriteCore|addShutdownHook", (s, p, d) -> Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try
@@ -1132,7 +1133,6 @@ public class DioriteCore implements Core
             s.worldsManager = new WorldsManagerImpl();
         });
         initPipeline.addLast("DioriteCore|initRecipes", (s, p, d) -> s.serverManager.getRecipeManager().addDefaultRecipes());
-        initPipeline.addLast("DioriteCore|initTimings", (s, p, d) -> s.timings = new TimingsManagerImpl());
 
         startPipeline = new CoreStartPipeline();
         startPipeline.addLast("DioriteCore|EnableMods", (s, pipeline, options) -> s.getPluginManager().getPlugins().stream().filter(p -> ! p.isEnabled() && p.isCoreMod()).forEach(p -> p.setEnabled(true)));

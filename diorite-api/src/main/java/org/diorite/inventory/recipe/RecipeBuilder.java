@@ -238,7 +238,7 @@ public interface RecipeBuilder
          */
         default ShapelessRecipeBuilder addIngredient(final ItemStack itemStack, final ItemStack replacement)
         {
-            return this.addIngredient(new ReplacedRecipeItem(itemStack, false, replacement, null));
+            return this.addIngredient(new ReplacedRecipeItem(itemStack, false, null, replacement, null));
         }
 
         /**
@@ -377,7 +377,7 @@ public interface RecipeBuilder
          */
         default ShapedRecipeBuilder addIngredient(final char c, final ItemStack itemStack, final ItemStack replacement)
         {
-            return this.addIngredient(c, new ReplacedRecipeItem(itemStack, false, replacement, null));
+            return this.addIngredient(c, new ReplacedRecipeItem(itemStack, false, null, replacement, null));
         }
 
         /**

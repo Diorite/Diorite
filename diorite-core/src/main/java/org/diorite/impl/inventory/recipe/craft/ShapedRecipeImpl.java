@@ -24,6 +24,9 @@
 
 package org.diorite.impl.inventory.recipe.craft;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -70,6 +73,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
         final int maxPatRow = pattern.getRows(), maxPatCol = pattern.getColumns();
         final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
         final CraftingGrid items = new CraftingGridImpl(maxInvRow, maxInvCol);
+        final Collection<BiConsumer<Player, CraftingGrid>> reps = new ArrayList<>(maxInvCol * maxInvRow);
 
         int startPatRow = - 1;
         int startPatCol = - 1;
@@ -125,18 +129,23 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
         }
         // pattern can fit into crafting table
 
-        RecipeItem recipeItem = pattern.getRecipeItem(startPatRow, startPatCol);
-        ItemStack invItem = inventory.getItem(startInvRow, startInvCol);
-        ItemStack valid = recipeItem.isValid(player, invItem);
-        if (valid == null) // fast check first item
         {
-            return null;
-        }
-        items.setItem(startInvRow, startInvCol, valid);
-        ItemStack repl = recipeItem.getReplacement();
-        if (repl != null)
-        {
-            onCraft.put((short) 0, repl);
+            final RecipeItem recipeItem = pattern.getRecipeItem(startPatRow, startPatCol);
+            final ItemStack invItem = inventory.getItem(startInvRow, startInvCol);
+            final ItemStack valid = recipeItem.isValid(player, invItem);
+            if (valid == null) // fast check first item
+            {
+                return null;
+            }
+            items.setItem(startInvRow, startInvCol, valid);
+
+            reps.add((p, c) -> {
+                final ItemStack repl = recipeItem.getReplacement(p, c);
+                if (repl != null)
+                {
+                    onCraft.put((short) 0, repl);
+                }
+            });
         }
         int invRow = startInvRow, invCol = startInvCol + 1;
         int patRow = startPatRow, patCol = startPatCol;
@@ -174,8 +183,8 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
                 patCol = first ? patCol : startPatCol;
                 for (int col = 0; (patCol < maxPatCol) || (invCol < maxInvRow); col++, patCol++, invCol++)
                 {
-                    recipeItem = pattern.getRecipeItem(patRow, patCol);
-                    invItem = inventory.getItem(invRow, invCol);
+                    final RecipeItem recipeItem = pattern.getRecipeItem(patRow, patCol);
+                    final ItemStack invItem = inventory.getItem(invRow, invCol);
                     if (recipeItem == null)
                     {
                         if (invItem != null)
@@ -184,16 +193,21 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
                         }
                         continue;
                     }
-                    valid = recipeItem.isValid(player, invItem);
+                    final ItemStack valid = recipeItem.isValid(player, invItem);
                     if (valid == null)
                     {
                         return null;
                     }
                     items.setItem(invRow, invCol, valid);
-                    repl = recipeItem.getReplacement();
-                    if (repl != null)
                     {
-                        onCraft.put((short) inventory.getSlotIndex(row, col), repl);
+                        final short icpy = (short) inventory.getSlotIndex(row, col);
+                        reps.add((p, c) -> {
+                            final ItemStack repl = recipeItem.getReplacement(p, c);
+                            if (repl != null)
+                            {
+                                onCraft.put(icpy, repl);
+                            }
+                        });
                     }
                 }
                 first = false;
@@ -205,7 +219,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
         {
             for (; invCol < maxInvCol; invCol++)
             {
-                invItem = inventory.getItem(invRow, invCol);
+                final ItemStack invItem = inventory.getItem(invRow, invCol);
                 if (invItem != null)
                 {
                     return null;
@@ -213,6 +227,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
             }
             invCol = 0;
         }
+        reps.forEach(c -> c.accept(player, items));
         return new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft);
     }
 

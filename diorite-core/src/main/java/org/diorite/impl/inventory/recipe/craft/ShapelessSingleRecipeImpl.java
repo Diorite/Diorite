@@ -90,16 +90,16 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
             {
                 continue;
             }
+            if (matching)
+            {
+                return null;
+            }
             final ItemStack valid = this.ingredient.isValid(player, item);
             if (valid != null)
             {
-                if (matching)
-                {
-                    return null;
-                }
                 matching = true;
                 items.setItem(row, col, valid);
-                final ItemStack repl = this.ingredient.getReplacement();
+                final ItemStack repl = this.ingredient.getReplacement(player, items);
                 if (repl != null)
                 {
                     onCraft.put(i, repl);

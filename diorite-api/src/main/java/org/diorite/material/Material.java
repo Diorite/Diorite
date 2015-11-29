@@ -675,7 +675,7 @@ public abstract class Material implements SimpleEnum<Material>
 
         final Material material = (Material) o;
 
-        return this.enumName.equals(material.enumName);
+        return this.enumName.equals(material.enumName) && this.typeName.equals(material.typeName);
     }
 
     @Override

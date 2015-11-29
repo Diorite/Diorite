@@ -12,12 +12,16 @@ import org.diorite.chat.ChatColor;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.meta.BookMeta;
+import org.diorite.inventory.item.meta.BookMeta.GenerationEnum;
+import org.diorite.inventory.item.meta.LeatherArmorMeta;
 import org.diorite.inventory.recipe.RecipeBuilder;
 import org.diorite.inventory.recipe.RecipeBuilder.ShapedRecipeBuilder;
 import org.diorite.inventory.recipe.RecipeBuilder.ShapelessRecipeBuilder;
 import org.diorite.inventory.recipe.craft.Recipe;
 import org.diorite.inventory.recipe.craft.RecipeCheckResult;
 import org.diorite.material.BreakableItemMat;
+import org.diorite.material.ColorableMat;
 import org.diorite.material.ItemMaterialData;
 import org.diorite.material.Material;
 import org.diorite.material.blocks.CarpetMat;
@@ -42,10 +46,12 @@ import org.diorite.material.blocks.StoneSlabMat;
 import org.diorite.material.blocks.TorchMat;
 import org.diorite.material.blocks.WoodenSlabMat;
 import org.diorite.material.blocks.WoolMat;
+import org.diorite.material.items.ArmorMat;
 import org.diorite.material.items.BannerMat;
 import org.diorite.material.items.CoalMat;
 import org.diorite.material.items.DyeMat;
 import org.diorite.material.items.GoldenAppleMat;
+import org.diorite.utils.Color;
 
 public class RecipeManagerImpl implements IRecipeManager
 {
@@ -439,13 +445,10 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shaped(Material.STONE_BUTTON, 1, "s").addIngredient('s').item(Material.STONE, false).build().buildAndAdd();
         this.shaped(Material.WOODEN_BUTTON, 1, "w").addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
 
-        // repair
-
-//        this.shapeless(Material.LEATHER_HELMET, 0).addIngredient().item(DyeMat.DYE_PURPLE, false).build().buildAndAdd(); // TODO
 //        this.shapeless(Material.FIREWORKS, 0).addIngredient().item(Material.GUNPOWDER, false).addIngredient().item(Material.PAPER, false).build().buildAndAdd(); // TODO
 //        this.shapeless(Material.BANNER, 0).addIngredient().item(Material.BANNER, false).build().buildAndAdd(); // TODO
-//        this.shapeless(Material.WRITTEN_BOOK, 0).addIngredient().item(Material.WRITABLE_BOOK, false).build().buildAndAdd(); // TODO
 //        this.shapeless(Material.MAP, 0).addIngredient().item(Material.MAP, false).build().buildAndAdd(); // TODO
+//        this.shapeless(Material.BANNER, 0).addIngredient().item(DyeMat.DYE_PURPLE, false).build().buildAndAdd(); // TODO
         this.shapeless(DyeMat.DYE_MAGENTA, 4).addIngredient().item(DyeMat.DYE_LAPIS_LAZULI, false).addIngredient().item(DyeMat.DYE_RED, false).addIngredient().item(DyeMat.DYE_RED, false).addIngredient().item(DyeMat.DYE_BONE_MEAL, false).build().buildAndAdd();
         this.shapeless(Material.BOOK, 1).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.LEATHER, false).build().buildAndAdd();
         this.shapeless(Material.MUSHROOM_STEW, 1).addIngredient().item(Material.BROWN_MUSHROOM, false).addIngredient().item(Material.RED_MUSHROOM, false).addIngredient().item(Material.BOWL, false).build().buildAndAdd();
@@ -486,7 +489,6 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shapeless(DyeMat.DYE_CYAN, 2).addIngredient().item(DyeMat.DYE_LAPIS_LAZULI, false).addIngredient().item(DyeMat.DYE_GREEN, false).build().buildAndAdd();
         this.shapeless(DyeMat.DYE_PURPLE, 2).addIngredient().item(DyeMat.DYE_LAPIS_LAZULI, false).addIngredient().item(DyeMat.DYE_RED, false).build().buildAndAdd();
         this.shapeless(DyeMat.DYE_MAGENTA, 2).addIngredient().item(DyeMat.DYE_PURPLE, false).addIngredient().item(DyeMat.DYE_PINK, false).build().buildAndAdd();
-//        this.shapeless(Material.BANNER, 0).addIngredient().item(DyeMat.DYE_PURPLE, false).build().buildAndAdd(); // TODO
         this.shapeless(Material.FLINT_AND_STEEL, 1).addIngredient().item(Material.IRON_INGOT, false).addIngredient().item(Material.FLINT, false).build().buildAndAdd();
         this.shapeless(Material.ENDER_EYE, 1).addIngredient().item(Material.ENDER_PEARL, false).addIngredient().item(Material.BLAZE_POWDER, false).build().buildAndAdd();
         this.shapeless(Material.BLAZE_POWDER, 2).addIngredient().item(Material.BLAZE_ROD, false).build().buildAndAdd();
@@ -517,6 +519,110 @@ public class RecipeManagerImpl implements IRecipeManager
         this.repair(Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS);
         this.repair(Material.GOLD_HELMET, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS);
         this.repair(Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS);
+
+        this.color(Material.LEATHER_HELMET);
+        this.color(Material.LEATHER_CHESTPLATE);
+        this.color(Material.LEATHER_LEGGINGS);
+        this.color(Material.LEATHER_BOOTS);
+
+        this.bookCopy();
+    }
+
+    private void bookCopy()
+    {
+        final ShapelessRecipeBuilder builder = this.shapeless(Material.WRITTEN_BOOK, 1).addIngredient().item(Material.WRITTEN_BOOK, true).replacement(Material.WRITTEN_BOOK, grid -> {
+            for (final ItemStack itemStack : grid.getItems())
+            {
+                if ((itemStack != null) && itemStack.getMaterial().simpleEquals(Material.WRITTEN_BOOK))
+                {
+                    return itemStack;
+                }
+            }
+            throw new AssertionError("Copy book crafting grid without book to copy.");
+        }).simpleValidator(item -> ((BookMeta) item.getItemMeta()).getGeneration() < GenerationEnum.COPY_OF_COPY.getGeneration()).build();
+        for (int i = 1; i < 9; i++)
+        {
+            builder.addIngredient().item(Material.WRITABLE_BOOK, true).build();
+            builder.result(grid -> {
+                int copys = 0;
+                ItemStack orginal = null;
+                for (final ItemStack itemStack : grid.getItems())
+                {
+                    if (itemStack == null)
+                    {
+                        continue;
+                    }
+                    if (itemStack.getMaterial().simpleEquals(Material.WRITTEN_BOOK))
+                    {
+                        orginal = itemStack.clone();
+                        continue;
+                    }
+                    copys++;
+                }
+                assert orginal != null;
+                orginal.setAmount(copys);
+                final BookMeta meta = (BookMeta) orginal.getItemMeta();
+                meta.setGeneration(meta.getGeneration() + 1);
+                return orginal;
+            });
+            builder.buildAndAdd();
+        }
+
+    }
+
+    private void color(final ArmorMat mat)
+    {
+        final ShapelessRecipeBuilder builder = this.shapeless(mat, 1).addIngredient().item(mat, true).build();
+        for (int i = 1; i < 9; i++)
+        {
+            builder.addIngredient().item(Material.DYE, true).build();
+            builder.result(grid -> {
+                int colors = 0;
+                int tr = 0, tg = 0, tb = 0;
+                double totalMax = 0;
+                final List<ItemStack> items = grid.getItemsList();
+                for (final ItemStack item : items)
+                {
+                    if (item.getMaterial().equals(mat))
+                    {
+                        final LeatherArmorMeta meta = ((LeatherArmorMeta) item.getItemMeta());
+                        final Color color = meta.getColor();
+                        if (color != null)
+                        {
+                            final int r = color.getRed();
+                            final int g = color.getGreen();
+                            final int b = color.getBlue();
+                            tr += r;
+                            tg += g;
+                            tb += b;
+                            totalMax += Math.max(r, Math.max(g, b));
+                            colors++;
+                        }
+                        continue;
+                    }
+                    final Color color = ((ColorableMat) item.getMaterial()).getColor().getColor();
+                    final int r = color.getRed();
+                    final int g = color.getGreen();
+                    final int b = color.getBlue();
+                    tr += r;
+                    tg += g;
+                    tb += b;
+                    totalMax += Math.max(r, Math.max(g, b));
+                    colors++;
+                }
+                final double avgRed = tr / colors;
+                final double avgGreen = tg / colors;
+                final double avgBlue = tb / colors;
+                final double gainFactor = (totalMax / colors) / Math.max(avgRed, Math.max(avgGreen, avgBlue));
+                final Color resultColor = Color.fromRGB((int) (avgRed * gainFactor), (int) (avgGreen * gainFactor), (int) (avgBlue * gainFactor));
+
+                final ItemStack item = new BaseItemStack(mat);
+                final LeatherArmorMeta meta = ((LeatherArmorMeta) item.getItemMeta());
+                meta.setColor(resultColor);
+                return item;
+            });
+            builder.buildAndAdd();
+        }
     }
 
     @SuppressWarnings("unchecked")
