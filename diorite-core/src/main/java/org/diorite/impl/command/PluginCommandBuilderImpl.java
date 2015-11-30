@@ -48,7 +48,7 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
     private       List<String>     aliases;
     private       CommandExecutor  executor;
     private       ExceptionHandler handler;
-    private       byte             priority;
+    private       int             priority;
 
     private PluginCommandBuilderImpl(final DioritePlugin dioritePlugin, final String name)
     {
@@ -139,7 +139,7 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
     }
 
     @Override
-    public PluginCommandBuilderImpl priority(final byte priority)
+    public PluginCommandBuilderImpl priority(final int priority)
     {
         this.priority = priority;
         return this;

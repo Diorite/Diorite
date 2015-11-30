@@ -57,6 +57,13 @@ public interface BannerMeta extends ItemMeta
     List<BannerPattern> getPatterns();
 
     /**
+     * Returns true if banner don't have any patterns.
+     *
+     * @return true if banner don't have any patterns.
+     */
+    boolean hasPatterns();
+
+    /**
      * Sets the patterns used on this banner
      *
      * @param patterns the new list of patterns

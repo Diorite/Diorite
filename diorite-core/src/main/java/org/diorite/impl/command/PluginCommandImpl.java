@@ -38,7 +38,7 @@ public class PluginCommandImpl extends MainCommandImpl implements PluginCommand
 {
     private final DioritePlugin dioritePlugin;
 
-    public PluginCommandImpl(final String name, final Pattern pattern, final byte priority, final DioritePlugin dioritePlugin)
+    public PluginCommandImpl(final String name, final Pattern pattern, final int priority, final DioritePlugin dioritePlugin)
     {
         super(name, pattern, priority);
         this.dioritePlugin = dioritePlugin;
@@ -56,7 +56,7 @@ public class PluginCommandImpl extends MainCommandImpl implements PluginCommand
         this.dioritePlugin = dioritePlugin;
     }
 
-    public PluginCommandImpl(final String name, final Collection<String> aliases, final byte priority, final DioritePlugin dioritePlugin)
+    public PluginCommandImpl(final String name, final Collection<String> aliases, final int priority, final DioritePlugin dioritePlugin)
     {
         super(name, aliases, priority);
         this.dioritePlugin = dioritePlugin;

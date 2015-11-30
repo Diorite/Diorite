@@ -35,6 +35,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class IntRange
 {
     /**
+     * Range from 1 to 1.
+     */
+    public static final IntRange ONE   = new IntRange(1, 1);
+    /**
      * Range from 0 to 0.
      */
     public static final IntRange EMPTY = new IntRange(0, 0);

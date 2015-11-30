@@ -35,6 +35,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class ByteRange
 {
     /**
+     * Range from 1 to 1.
+     */
+    public static final ByteRange ONE   = new ByteRange(1, 1);
+    /**
      * Range from 0 to 0.
      */
     public static final ByteRange EMPTY = new ByteRange(0, 0);

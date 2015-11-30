@@ -35,6 +35,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class LongRange
 {
     /**
+     * Range from 1 to 1.
+     */
+    public static final LongRange ONE   = new LongRange(1, 1);
+    /**
      * Range from 0 to 0.
      */
     public static final LongRange EMPTY = new LongRange(0, 0);

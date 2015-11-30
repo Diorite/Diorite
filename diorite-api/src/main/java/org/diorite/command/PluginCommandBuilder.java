@@ -27,25 +27,112 @@ package org.diorite.command;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import org.diorite.Diorite;
+
+/**
+ * Simple builder for commands
+ */
 public interface PluginCommandBuilder
 {
+    /**
+     * Adds alias to builder.
+     *
+     * @param str alias to be added.
+     *
+     * @return this same builder for method chains.
+     */
     PluginCommandBuilder alias(String str);
 
+    /**
+     * Adds aliases to builder.
+     *
+     * @param str aliases to be added.
+     *
+     * @return this same builder for method chains.
+     */
     PluginCommandBuilder alias(String... str);
 
+    /**
+     * Adds aliases to builder.
+     *
+     * @param str aliases to be added.
+     *
+     * @return this same builder for method chains.
+     */
     PluginCommandBuilder alias(Collection<String> str);
 
+    /**
+     * Set pattern of this command, pattern is optional.
+     *
+     * @param pattern pattern to be used.
+     *
+     * @return this same builder for method chains.
+     */
     PluginCommandBuilder pattern(String pattern);
 
+    /**
+     * Set pattern of this command, pattern is optional.
+     *
+     * @param pattern pattern to be used.
+     *
+     * @return this same builder for method chains.
+     */
     PluginCommandBuilder pattern(String... pattern);
 
+    /**
+     * Set pattern of this command, pattern is optional.
+     *
+     * @param pattern pattern to be used.
+     *
+     * @return this same builder for method chains.
+     */
     PluginCommandBuilder pattern(Pattern pattern);
 
+    /**
+     * Set executor of this command, you must set any executor.
+     *
+     * @param executor executor to be used.
+     *
+     * @return this same builder for method chains.
+     */
     PluginCommandBuilder executor(CommandExecutor executor);
 
+    /**
+     * Set exception handler of this command.
+     *
+     * @param handler handler to be used.
+     *
+     * @return this same builder for method chains.
+     */
     PluginCommandBuilder exceptionHandler(ExceptionHandler handler);
 
-    PluginCommandBuilder priority(byte priority);
+    /**
+     * Set priority of this command,
+     * commands with higher priority will be checked first,
+     * priority can be changed in cfg. (and on runtime)
+     *
+     * @param priority priority to be used.
+     *
+     * @return this same builder for method chains.
+     */
+    PluginCommandBuilder priority(int priority);
 
+    /**
+     * Build this command and returns it.
+     *
+     * @return created command.
+     */
     PluginCommand build();
+
+    /**
+     * Build this command, adds it to diorite by {@link CommandMap#registerCommand(PluginCommand)} and returns it.
+     *
+     * @return created command.
+     */
+    default PluginCommand register()
+    {
+        final PluginCommand cmd = this.build();
+        Diorite.getCommandMap().registerCommand(cmd);
+        return cmd;
+    }
 }

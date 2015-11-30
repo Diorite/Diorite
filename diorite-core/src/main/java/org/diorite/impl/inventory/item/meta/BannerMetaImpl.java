@@ -69,6 +69,12 @@ public class BannerMetaImpl extends SimpleItemMetaImpl implements BannerMeta
     }
 
     @Override
+    public boolean hasPatterns()
+    {
+        return false;
+    }
+
+    @Override
     public void setPatterns(final List<BannerPattern> patterns)
     {
 

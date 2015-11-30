@@ -35,9 +35,9 @@ import org.diorite.command.MainCommand;
 
 public abstract class MainCommandImpl extends CommandImpl implements MainCommand
 {
-    private byte priority; // commands with higher priority will be checked first, priority can be changed in cfg. (and on runtime)
+    private int priority; // commands with higher priority will be checked first, priority can be changed in cfg. (and on runtime)
 
-    public MainCommandImpl(final String name, final Pattern pattern, final byte priority)
+    public MainCommandImpl(final String name, final Pattern pattern, final int priority)
     {
         super(name, pattern);
         this.priority = priority;
@@ -53,7 +53,7 @@ public abstract class MainCommandImpl extends CommandImpl implements MainCommand
         this(name, (Pattern) null);
     }
 
-    public MainCommandImpl(final String name, final Collection<String> aliases, final byte priority)
+    public MainCommandImpl(final String name, final Collection<String> aliases, final int priority)
     {
         super(name, aliases);
         this.priority = priority;
@@ -65,13 +65,13 @@ public abstract class MainCommandImpl extends CommandImpl implements MainCommand
     }
 
     @Override
-    public byte getPriority()
+    public int getPriority()
     {
         return this.priority;
     }
 
     @Override
-    public void setPriority(final byte priority)
+    public void setPriority(final int priority)
     {
         this.priority = priority;
     }
