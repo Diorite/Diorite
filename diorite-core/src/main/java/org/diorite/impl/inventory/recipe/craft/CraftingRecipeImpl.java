@@ -12,10 +12,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
 
-abstract class RecipeImpl extends PriorityRecipeImpl
+abstract class CraftingRecipeImpl extends PriorityCraftingRecipeImpl
 {
     protected final ItemStack                                   result;
     protected final List<ItemStack>                             resultList;
@@ -31,30 +31,20 @@ abstract class RecipeImpl extends PriorityRecipeImpl
 //        this.resultList = Collections.singletonList(result.clone());
 //    }
 
-    protected RecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
+    protected CraftingRecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(priority, vanilla);
-        Validate.notNull(resultFunc, "Result function can't be null.");
         Validate.notEmpty(result, "Result list can't be empty.");
         this.resultFunc = resultFunc;
         this.result = result.get(0);
         this.resultList = (result.size() == 1) ? Collections.singletonList(this.result) : Collections.unmodifiableList(new ArrayList<>(result));
     }
 
-    protected RecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla)
-    {
-        super(priority, vanilla);
-        Validate.notEmpty(result, "Result list can't be empty.");
-        this.resultFunc = null;
-        this.result = result.get(0);
-        this.resultList = (result.size() == 1) ? Collections.singletonList(this.result) : Collections.unmodifiableList(new ArrayList<>(result));
-    }
-
-    protected static List<ItemStack> extractResults(final ItemStack result, final Collection<RecipeItem> ingredients)
+    protected static List<ItemStack> extractResults(final ItemStack result, final Collection<CraftingRecipeItem> ingredients)
     {
         final List<ItemStack> results = new ArrayList<>(ingredients.size() + 1);
         results.add(result);
-        for (final RecipeItem ingredient : ingredients)
+        for (final CraftingRecipeItem ingredient : ingredients)
         {
             if (ingredient.getReplacement() == null)
             {
@@ -65,11 +55,11 @@ abstract class RecipeImpl extends PriorityRecipeImpl
         return results;
     }
 
-    protected static List<ItemStack> extractResults(final ItemStack result, final RecipeItem... ingredients)
+    protected static List<ItemStack> extractResults(final ItemStack result, final CraftingRecipeItem... ingredients)
     {
         final List<ItemStack> results = new ArrayList<>(ingredients.length + 1);
         results.add(result);
-        for (final RecipeItem ingredient : ingredients)
+        for (final CraftingRecipeItem ingredient : ingredients)
         {
             if (ingredient.getReplacement() == null)
             {

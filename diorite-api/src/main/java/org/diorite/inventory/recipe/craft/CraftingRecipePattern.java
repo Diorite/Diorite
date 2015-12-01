@@ -24,41 +24,35 @@
 
 package org.diorite.inventory.recipe.craft;
 
+import org.diorite.inventory.recipe.RecipePattern;
+
 /**
- * Represent recipe where items in crafting grid must me placed in valid shape.
+ * Represent recipe pattern for {@link ShapedCraftingRecipe}.
  */
-public interface ShapedRecipe extends Recipe
+public interface CraftingRecipePattern extends RecipePattern
 {
     /**
-     * Returns width of recipe.
+     * Returns width of recipe pattern.
      *
-     * @return width of recipe.
+     * @return width of recipe pattern.
      */
-    default int getWidth()
-    {
-        return this.getPattern().getColumns();
-    }
+    int getColumns();
 
     /**
-     * Returns height of recipe.
+     * Returns height of recipe pattern.
      *
-     * @return height of recipe.
+     * @return height of recipe pattern.
      */
-    default int getHeight()
-    {
-        return this.getPattern().getRows();
-    }
+    int getRows();
 
     /**
-     * Returns pattern for this recipe.
+     * Returns recipe item on given pattern slot. <br>
+     * Returns null if there is no recipe item on given slot or slot is bigger than pattern size.
      *
-     * @return pattern for this recipe.
+     * @param row    row index of pattern.
+     * @param column column index of pattern.
+     *
+     * @return recipe item on given pattern slot or null.
      */
-    RecipePattern getPattern();
-
-    @Override
-    default long getPriority()
-    {
-        return DEFAULT_SHAPED_RECIPE_PRIORITY;
-    }
+    CraftingRecipeItem getRecipeItem(int row, int column);
 }

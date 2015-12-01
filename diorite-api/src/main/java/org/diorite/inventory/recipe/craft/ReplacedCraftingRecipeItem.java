@@ -1,4 +1,4 @@
-package org.diorite.inventory.recipe;
+package org.diorite.inventory.recipe.craft;
 
 import java.util.Collection;
 import java.util.function.BiFunction;
@@ -9,13 +9,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.craft.CraftingGrid;
 
 /**
  * Represent simple recipe item, that check name/lore/etc only if recipe item have custom one,
  * and replace to other item after crafting.
  */
-public class ReplacedRecipeItem extends SimpleRecipeItem
+public class ReplacedCraftingRecipeItem extends BasicCraftingRecipeItem
 {
     /**
      * Basic Replacment item.
@@ -39,7 +38,7 @@ public class ReplacedRecipeItem extends SimpleRecipeItem
      * @param replacementFunc replacement item function, see {@link #getReplacement(Player, CraftingGrid)}, may by null.
      * @param validators      validators of thic recipe item, allowing to check additional data of item. Player may be null.
      */
-    public ReplacedRecipeItem(final ItemStack item, final boolean ignoreData, final BiFunction<Player, CraftingGrid, ItemStack> replacementFunc, final ItemStack replacement, final Collection<BiPredicate<Player, ItemStack>> validators)
+    public ReplacedCraftingRecipeItem(final ItemStack item, final boolean ignoreData, final BiFunction<Player, CraftingGrid, ItemStack> replacementFunc, final ItemStack replacement, final Collection<BiPredicate<Player, ItemStack>> validators)
     {
         super(item, ignoreData, validators);
         this.replacement = replacement;

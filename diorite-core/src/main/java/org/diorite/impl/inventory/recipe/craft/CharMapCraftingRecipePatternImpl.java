@@ -33,23 +33,23 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.inventory.recipe.RecipeItem;
-import org.diorite.inventory.recipe.craft.CharMapRecipePattern;
-import org.diorite.inventory.recipe.craft.RecipePattern;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
+import org.diorite.inventory.recipe.craft.CharMapCraftingRecipePattern;
+import org.diorite.inventory.recipe.craft.CraftingRecipePattern;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMaps;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 
 /**
- * {@link RecipePattern} that use array of {@link RecipeItem} as implementation.
+ * {@link CraftingRecipePattern} that use array of {@link CraftingRecipeItem} as implementation.
  */
-public class CharMapRecipePatternImpl implements CharMapRecipePattern
+public class CharMapCraftingRecipePatternImpl implements CharMapCraftingRecipePattern
 {
-    protected final Char2ObjectMap<RecipeItem> items;
-    protected final String[]                   pattern;
+    protected final Char2ObjectMap<CraftingRecipeItem> items;
+    protected final String[]                           pattern;
 
-    public CharMapRecipePatternImpl(final Char2ObjectMap<RecipeItem> items, final String[] pattern)
+    public CharMapCraftingRecipePatternImpl(final Char2ObjectMap<CraftingRecipeItem> items, final String[] pattern)
     {
         Validate.notNull(pattern, "Recipe pattern can't be null.");
         Validate.notEmpty(pattern, "Recipe pattern can't be empty.");
@@ -72,13 +72,13 @@ public class CharMapRecipePatternImpl implements CharMapRecipePattern
     }
 
     @Override
-    public Char2ObjectMap<RecipeItem> getIngredients()
+    public Char2ObjectMap<CraftingRecipeItem> getIngredients()
     {
         return this.items;
     }
 
     @Override
-    public RecipeItem getIngredient(final char c)
+    public CraftingRecipeItem getIngredient(final char c)
     {
         return this.items.get(c);
     }
@@ -96,7 +96,7 @@ public class CharMapRecipePatternImpl implements CharMapRecipePattern
     }
 
     @Override
-    public RecipeItem getRecipeItem(final int row, final int column)
+    public CraftingRecipeItem getRecipeItem(final int row, final int column)
     {
         if ((row >= this.getRows()) || (column >= this.getColumns()))
         {
@@ -105,10 +105,10 @@ public class CharMapRecipePatternImpl implements CharMapRecipePattern
         return this.getIngredient(this.pattern[row].charAt(column));
     }
 
-    private transient List<RecipeItem> itemsList;
+    private transient List<CraftingRecipeItem> itemsList;
 
     @Override
-    public synchronized Collection<RecipeItem> getRecipeItems()
+    public synchronized Collection<CraftingRecipeItem> getRecipeItems()
     {
         if (this.itemsList == null)
         {

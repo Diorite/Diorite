@@ -38,10 +38,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.entity.Player;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeItem;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
-import org.diorite.inventory.recipe.craft.RecipeCheckResult;
-import org.diorite.inventory.recipe.craft.ShapelessRecipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingRepeatableRecipeItem;
+import org.diorite.inventory.recipe.craft.ShapelessCraftingRecipe;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
@@ -49,30 +50,24 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 /**
  * Implementation of shapeless recipe
  */
-public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
+public class ShapelessCraftingRecipeImpl extends CraftingRecipeImpl implements ShapelessCraftingRecipe
 {
-    protected final List<RecipeItem> ingredients;
+    protected final List<CraftingRecipeItem> ingredients;
 
-    public ShapelessRecipeImpl(final List<RecipeItem> ingredients, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
+    public ShapelessCraftingRecipeImpl(final List<CraftingRecipeItem> ingredients, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(extractResults(result, ingredients), priority, vanilla, resultFunc);
         this.ingredients = new ArrayList<>(ingredients);
     }
 
-    public ShapelessRecipeImpl(final List<RecipeItem> ingredients, final ItemStack result, final long priority, final boolean vanilla)
-    {
-        super(extractResults(result, ingredients), priority, vanilla);
-        this.ingredients = new ArrayList<>(ingredients);
-    }
-
     @Override
-    public RecipeCheckResult isMatching(final GridInventory inventory)
+    public CraftingRecipeCheckResult isMatching(final GridInventory inventory)
     {
         final Player player = (inventory.getHolder() instanceof Player) ? (Player) inventory.getHolder() : null;
         final Short2ObjectMap<ItemStack> onCraft = new Short2ObjectOpenHashMap<>(2, .5F);
 
         final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
-        final LinkedList<RecipeItem> ingredients = new LinkedList<>(this.getIngredients());
+        final LinkedList<CraftingRecipeItem> ingredients = new LinkedList<>(this.getIngredients());
         final Collection<BiConsumer<Player, CraftingGrid>> reps = new ArrayList<>(maxInvCol * maxInvRow);
         final CraftingGrid items = new CraftingGridImpl(maxInvRow, maxInvCol);
         int col = - 1, row = 0;
@@ -92,9 +87,9 @@ public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
                 continue;
             }
             boolean matching = false;
-            for (final Iterator<RecipeItem> iterator = ingredients.iterator(); iterator.hasNext(); )
+            for (final Iterator<CraftingRecipeItem> iterator = ingredients.iterator(); iterator.hasNext(); )
             {
-                final RecipeItem ingredient = iterator.next();
+                final CraftingRecipeItem ingredient = iterator.next();
                 final ItemStack valid = ingredient.isValid(player, item);
                 if (valid != null)
                 {
@@ -118,13 +113,19 @@ public class ShapelessRecipeImpl extends RecipeImpl implements ShapelessRecipe
             }
         }
         reps.forEach(c -> c.accept(player, items));
-        return ingredients.isEmpty() ? new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft) : null;
+        return ingredients.isEmpty() ? new CraftingRecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft) : null;
     }
 
     @Override
-    public List<RecipeItem> getIngredients()
+    public List<CraftingRecipeItem> getIngredients()
     {
         return new ArrayList<>(this.ingredients);
+    }
+
+    @Override
+    public List<? extends CraftingRepeatableRecipeItem> getRepeatableIngredients()
+    {
+        return null;
     }
 
     @Override

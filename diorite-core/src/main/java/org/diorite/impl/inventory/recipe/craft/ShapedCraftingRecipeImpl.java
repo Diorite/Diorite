@@ -35,11 +35,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.entity.Player;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
-import org.diorite.inventory.recipe.craft.RecipeCheckResult;
-import org.diorite.inventory.recipe.craft.RecipePattern;
-import org.diorite.inventory.recipe.craft.ShapedRecipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
+import org.diorite.inventory.recipe.craft.CraftingRecipePattern;
+import org.diorite.inventory.recipe.craft.ShapedCraftingRecipe;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
@@ -47,29 +47,23 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 /**
  * Implementation of shaped recipe.
  */
-public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
+public class ShapedCraftingRecipeImpl extends CraftingRecipeImpl implements ShapedCraftingRecipe
 {
-    protected final RecipePattern pattern;
+    protected final CraftingRecipePattern pattern;
 
-    public ShapedRecipeImpl(final RecipePattern pattern, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
+    public ShapedCraftingRecipeImpl(final CraftingRecipePattern pattern, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(extractResults(result, pattern.getRecipeItems()), priority, vanilla, resultFunc);
         this.pattern = pattern;
     }
 
-    public ShapedRecipeImpl(final RecipePattern pattern, final ItemStack result, final long priority, final boolean vanilla)
-    {
-        super(extractResults(result, pattern.getRecipeItems()), priority, vanilla);
-        this.pattern = pattern;
-    }
-
     @Override
-    public RecipeCheckResult isMatching(final GridInventory inventory)
+    public CraftingRecipeCheckResult isMatching(final GridInventory inventory)
     {
         final Player player = (inventory.getHolder() instanceof Player) ? (Player) inventory.getHolder() : null;
         final Short2ObjectMap<ItemStack> onCraft = new Short2ObjectOpenHashMap<>(2, .5F);
 
-        final RecipePattern pattern = this.pattern;
+        final CraftingRecipePattern pattern = this.pattern;
         final int maxPatRow = pattern.getRows(), maxPatCol = pattern.getColumns();
         final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
         final CraftingGrid items = new CraftingGridImpl(maxInvRow, maxInvCol);
@@ -130,7 +124,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
         // pattern can fit into crafting table
 
         {
-            final RecipeItem recipeItem = pattern.getRecipeItem(startPatRow, startPatCol);
+            final CraftingRecipeItem recipeItem = pattern.getRecipeItem(startPatRow, startPatCol);
             final ItemStack invItem = inventory.getItem(startInvRow, startInvCol);
             final ItemStack valid = recipeItem.isValid(player, invItem);
             if (valid == null) // fast check first item
@@ -183,7 +177,7 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
                 patCol = first ? patCol : startPatCol;
                 for (int col = 0; (patCol < maxPatCol) || (invCol < maxInvRow); col++, patCol++, invCol++)
                 {
-                    final RecipeItem recipeItem = pattern.getRecipeItem(patRow, patCol);
+                    final CraftingRecipeItem recipeItem = pattern.getRecipeItem(patRow, patCol);
                     final ItemStack invItem = inventory.getItem(invRow, invCol);
                     if (recipeItem == null)
                     {
@@ -228,11 +222,11 @@ public class ShapedRecipeImpl extends RecipeImpl implements ShapedRecipe
             invCol = 0;
         }
         reps.forEach(c -> c.accept(player, items));
-        return new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft);
+        return new CraftingRecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft);
     }
 
     @Override
-    public RecipePattern getPattern()
+    public CraftingRecipePattern getPattern()
     {
         return this.pattern;
     }

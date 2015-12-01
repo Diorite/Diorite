@@ -6,8 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
-import org.diorite.inventory.recipe.craft.Recipe;
-import org.diorite.inventory.recipe.craft.RecipeCheckResult;
+import org.diorite.inventory.recipe.craft.CraftingRecipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
@@ -15,11 +15,11 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 /**
  * Represent results after checking if recipe is valid for given inventory.
  *
- * @see Recipe#isMatching(GridInventory)
+ * @see CraftingRecipe#isMatching(GridInventory)
  */
-public class RecipeCheckResultImpl implements RecipeCheckResult
+public class CraftingRecipeCheckResultImpl implements CraftingRecipeCheckResult
 {
-    private final Recipe                     recipe;
+    private final CraftingRecipe             recipe;
     private final ItemStack                  result;
     private final CraftingGrid               itemsToConsume;
     private final Short2ObjectMap<ItemStack> onCraft;
@@ -32,7 +32,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      * @param itemsToConsume array of items that should be removed from inventory on craft.
      * @param onCraft        map of items that should be changed in inventory
      */
-    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final CraftingGrid itemsToConsume, final Short2ObjectMap<ItemStack> onCraft)
+    public CraftingRecipeCheckResultImpl(final CraftingRecipe recipe, final ItemStack result, final CraftingGrid itemsToConsume, final Short2ObjectMap<ItemStack> onCraft)
     {
         this.recipe = recipe;
         this.result = result;
@@ -47,7 +47,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
      * @param result         result item stack.
      * @param itemsToConsume array of items that should be removed from inventory on craft.
      */
-    public RecipeCheckResultImpl(final Recipe recipe, final ItemStack result, final CraftingGrid itemsToConsume)
+    public CraftingRecipeCheckResultImpl(final CraftingRecipe recipe, final ItemStack result, final CraftingGrid itemsToConsume)
     {
         this.recipe = recipe;
         this.result = result;
@@ -56,7 +56,7 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
     }
 
     @Override
-    public Recipe getRecipe()
+    public CraftingRecipe getRecipe()
     {
         return this.recipe;
     }
@@ -86,12 +86,12 @@ public class RecipeCheckResultImpl implements RecipeCheckResult
         {
             return true;
         }
-        if (! (o instanceof RecipeCheckResultImpl))
+        if (! (o instanceof CraftingRecipeCheckResultImpl))
         {
             return false;
         }
 
-        final RecipeCheckResultImpl that = (RecipeCheckResultImpl) o;
+        final CraftingRecipeCheckResultImpl that = (CraftingRecipeCheckResultImpl) o;
 
         return this.recipe.equals(that.recipe) && this.result.equals(that.result) && this.itemsToConsume.equals(that.itemsToConsume) && ! ((this.onCraft != null) ? ! this.onCraft.equals(that.onCraft) : (that.onCraft != null));
 

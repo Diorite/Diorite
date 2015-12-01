@@ -33,17 +33,17 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.inventory.recipe.RecipeItem;
-import org.diorite.inventory.recipe.craft.RecipePattern;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingRecipePattern;
 
 /**
- * {@link RecipePattern} that use array of {@link org.diorite.inventory.recipe.RecipeItem} as implementation.
+ * {@link CraftingRecipePattern} that use array of {@link CraftingRecipeItem} as implementation.
  */
-public class ArrayRecipePattern implements RecipePattern
+public class ArrayCraftingRecipePattern implements CraftingRecipePattern
 {
-    protected final RecipeItem[][] items;
+    protected final CraftingRecipeItem[][] items;
 
-    public ArrayRecipePattern(final RecipeItem[][] items)
+    public ArrayCraftingRecipePattern(final CraftingRecipeItem[][] items)
     {
         Validate.notNull(items, "Recipe pattern can't be null.");
         Validate.notEmpty(items, "Recipe pattern can't be empty.");
@@ -64,7 +64,7 @@ public class ArrayRecipePattern implements RecipePattern
     }
 
     @Override
-    public RecipeItem getRecipeItem(final int row, final int column)
+    public CraftingRecipeItem getRecipeItem(final int row, final int column)
     {
         if ((row >= this.getRows()) || (column >= this.getColumns()))
         {
@@ -73,17 +73,17 @@ public class ArrayRecipePattern implements RecipePattern
         return this.items[row][column];
     }
 
-    private transient List<RecipeItem> itemsList;
+    private transient List<CraftingRecipeItem> itemsList;
 
     @Override
-    public synchronized Collection<RecipeItem> getRecipeItems()
+    public synchronized Collection<CraftingRecipeItem> getRecipeItems()
     {
         if (this.itemsList == null)
         {
             this.itemsList = new ArrayList<>(this.getColumns() * this.getRows());
-            for (final RecipeItem[] items : this.items)
+            for (final CraftingRecipeItem[] items : this.items)
             {
-                for (final RecipeItem item : items)
+                for (final CraftingRecipeItem item : items)
                 {
                     if (item != null)
                     {

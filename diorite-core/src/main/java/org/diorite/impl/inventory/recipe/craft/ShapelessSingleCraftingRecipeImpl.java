@@ -34,10 +34,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.entity.Player;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeItem;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
-import org.diorite.inventory.recipe.craft.RecipeCheckResult;
-import org.diorite.inventory.recipe.craft.ShapelessRecipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingRepeatableRecipeItem;
+import org.diorite.inventory.recipe.craft.ShapelessCraftingRecipe;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
@@ -45,28 +46,31 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 /**
  * Implementation of shapeless recipe
  */
-public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRecipe
+public class ShapelessSingleCraftingRecipeImpl extends CraftingRecipeImpl implements ShapelessCraftingRecipe
 {
-    protected final RecipeItem ingredient;
+    protected final CraftingRecipeItem ingredient;
 
-    private final transient List<RecipeItem> ingredientList;
+    private final transient List<CraftingRecipeItem>           ingredientList;
+    private final transient List<CraftingRepeatableRecipeItem> repeatableIngredientList;
 
-    public ShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
+    public ShapelessSingleCraftingRecipeImpl(final CraftingRecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(extractResults(result, ingredient), priority, vanilla, resultFunc);
         this.ingredient = ingredient;
-        this.ingredientList = Collections.singletonList(ingredient);
-    }
-
-    public ShapelessSingleRecipeImpl(final RecipeItem ingredient, final ItemStack result, final long priority, final boolean vanilla)
-    {
-        super(extractResults(result, ingredient), priority, vanilla);
-        this.ingredient = ingredient;
-        this.ingredientList = Collections.singletonList(ingredient);
+        if (ingredient instanceof CraftingRepeatableRecipeItem)
+        {
+            this.ingredientList = Collections.emptyList();
+            this.repeatableIngredientList = Collections.singletonList((CraftingRepeatableRecipeItem) ingredient);
+        }
+        else
+        {
+            this.ingredientList = Collections.singletonList(ingredient);
+            this.repeatableIngredientList = Collections.emptyList();
+        }
     }
 
     @Override
-    public RecipeCheckResult isMatching(final GridInventory inventory)
+    public CraftingRecipeCheckResult isMatching(final GridInventory inventory)
     {
         final Player player = (inventory.getHolder() instanceof Player) ? (Player) inventory.getHolder() : null;
         final Short2ObjectMap<ItemStack> onCraft = new Short2ObjectOpenHashMap<>(2, .5F);
@@ -108,13 +112,19 @@ public class ShapelessSingleRecipeImpl extends RecipeImpl implements ShapelessRe
             }
             return null;
         }
-        return matching ? new RecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft) : null;
+        return matching ? new CraftingRecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft) : null;
     }
 
     @Override
-    public List<RecipeItem> getIngredients()
+    public List<? extends CraftingRecipeItem> getIngredients()
     {
         return this.ingredientList;
+    }
+
+    @Override
+    public List<? extends CraftingRepeatableRecipeItem> getRepeatableIngredients()
+    {
+        return repeatableIngredientList;
     }
 
     @Override

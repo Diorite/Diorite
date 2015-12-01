@@ -1,4 +1,4 @@
-package org.diorite.impl.inventory.recipe;
+package org.diorite.impl.inventory.recipe.craft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,25 +8,21 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.inventory.recipe.craft.CharMapRecipePatternImpl;
-import org.diorite.impl.inventory.recipe.craft.ShapedRecipeImpl;
-import org.diorite.impl.inventory.recipe.craft.ShapelessRecipeImpl;
-import org.diorite.impl.inventory.recipe.craft.ShapelessSingleRecipeImpl;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeBuilder;
-import org.diorite.inventory.recipe.RecipeItem;
-import org.diorite.inventory.recipe.RecipeItemBuilder;
+import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItemBuilder;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
-import org.diorite.inventory.recipe.craft.Recipe;
-import org.diorite.inventory.recipe.craft.RecipePattern;
-import org.diorite.inventory.recipe.craft.ShapedRecipe;
-import org.diorite.inventory.recipe.craft.ShapelessRecipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipePattern;
+import org.diorite.inventory.recipe.craft.ShapedCraftingRecipe;
+import org.diorite.inventory.recipe.craft.ShapelessCraftingRecipe;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 
-public class RecipeBuilderImpl implements RecipeBuilder
+public class CraftingRecipeBuilderImpl implements CraftingRecipeBuilder
 {
     private ItemStack result;
     private BiFunction<Player, CraftingGrid, ItemStack> func     = null;
@@ -34,155 +30,167 @@ public class RecipeBuilderImpl implements RecipeBuilder
     private Long                                        priority = null;
 
     @Override
-    public RecipeBuilder result(final ItemStack itemStack)
+    public CraftingRecipeBuilder result(final ItemStack itemStack)
     {
         this.result = itemStack;
         return this;
     }
 
     @Override
-    public RecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
+    public CraftingRecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
     {
         this.func = itemStack;
         return this;
     }
 
     @Override
-    public RecipeBuilder vanilla(final boolean vanilla)
+    public CraftingRecipeBuilder vanilla(final boolean vanilla)
     {
         this.vanilla = vanilla;
         return this;
     }
 
     @Override
-    public RecipeBuilder priority(final long priority)
+    public CraftingRecipeBuilder priority(final long priority)
     {
         this.priority = priority;
         return this;
     }
 
     @Override
-    public ShapelessRecipeBuilder shapeless()
+    public ShapelessCraftingRecipeBuilder shapeless()
     {
-        return new ShapelessRecipeBuilderImpl(this);
+        return new ShapelessCraftingRecipeBuilderImpl(this);
     }
 
     @Override
-    public ShapedRecipeBuilder shaped()
+    public ShapedCraftingRecipeBuilder shaped()
     {
-        return new ShapedRecipeBuilderImpl(this);
+        return new ShapedCraftingRecipeBuilderImpl(this);
     }
 
     @Override
-    public Recipe build() throws RuntimeException
+    public CraftingRecipe build() throws RuntimeException
     {
         throw new RuntimeException("Unknown type of recipe.");
     }
 
     @Override
-    public Recipe buildAndAdd() throws RuntimeException
+    public CraftingRecipe buildAndAdd() throws RuntimeException
     {
         throw new RuntimeException("Unknown type of recipe.");
     }
 
-    private static class ShapelessRecipeBuilderImpl implements ShapelessRecipeBuilder
+    private static class ShapelessCraftingRecipeBuilderImpl implements ShapelessCraftingRecipeBuilder
     {
-        private final RecipeBuilderImpl oldBuilder;
-        private final List<RecipeItem> ingredients = new ArrayList<>(10);
+        private final CraftingRecipeBuilderImpl oldBuilder;
+        private final List<CraftingRecipeItem> ingredients = new ArrayList<>(10);
 
-        ShapelessRecipeBuilderImpl(final RecipeBuilderImpl recipeBuilder)
+        ShapelessCraftingRecipeBuilderImpl(final CraftingRecipeBuilderImpl recipeBuilder)
         {
             this.oldBuilder = recipeBuilder;
         }
 
         @Override
-        public ShapelessRecipeBuilder result(final ItemStack itemStack)
+        public ShapelessCraftingRecipeBuilder result(final ItemStack itemStack)
         {
             this.oldBuilder.result(itemStack);
             return this;
         }
 
         @Override
-        public ShapelessRecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
+        public ShapelessCraftingRecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
         {
             this.oldBuilder.result(itemStack);
             return this;
         }
 
         @Override
-        public ShapelessRecipeBuilder vanilla(final boolean vanilla)
+        public ShapelessCraftingRecipeBuilder vanilla(final boolean vanilla)
         {
             this.oldBuilder.vanilla(vanilla);
             return this;
         }
 
         @Override
-        public ShapelessRecipeBuilder priority(final long priority)
+        public ShapelessCraftingRecipeBuilder priority(final long priority)
         {
             this.oldBuilder.priority(priority);
             return this;
         }
 
         @Override
-        public ShapelessRecipe build()
+        public ShapelessCraftingRecipe build()
         {
             Validate.notEmpty(this.ingredients, "ingredients list can't be empty.");
             Validate.notNull(this.oldBuilder.result, "result item can't be null.");
             if (this.oldBuilder.priority == null)
             {
-                this.priority(Recipe.DEFAULT_SHAPELESS_RECIPE_PRIORITY);
+                this.priority(CraftingRecipe.DEFAULT_SHAPELESS_RECIPE_PRIORITY);
             }
             if (this.ingredients.size() == 1)
             {
                 if (this.oldBuilder.func == null)
                 {
-                    return new ShapelessSingleRecipeImpl(this.ingredients.iterator().next(), this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
+                    return new ShapelessSingleCraftingRecipeImpl(this.ingredients.iterator().next(), this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, null);
                 }
                 else
                 {
-                    return new ShapelessSingleRecipeImpl(this.ingredients.iterator().next(), this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, this.oldBuilder.func);
+                    return new ShapelessSingleCraftingRecipeImpl(this.ingredients.iterator().next(), this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, this.oldBuilder.func);
                 }
             }
             if (this.oldBuilder.func == null)
             {
-                return new ShapelessRecipeImpl(this.ingredients, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
+                return new ShapelessCraftingRecipeImpl(this.ingredients, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, null);
             }
             else
             {
-                return new ShapelessRecipeImpl(this.ingredients, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, this.oldBuilder.func);
+                return new ShapelessCraftingRecipeImpl(this.ingredients, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, this.oldBuilder.func);
             }
         }
 
         @Override
-        public ShapelessRecipeItemBuilder addIngredient()
+        public ShapelessCraftingRecipeItemBuilder addIngredient()
         {
-            return new ShapelessRecipeItemBuilder(this);
+            return new ShapelessCraftingRecipeItemBuilder(this);
         }
 
         @Override
-        public ShapelessRecipeBuilder addIngredient(final RecipeItem item)
+        public ShapelessCraftingRecipeBuilder addIngredient(final CraftingRecipeItem item)
         {
             this.ingredients.add(item);
             return this;
         }
 
-        private static class ShapelessRecipeItemBuilder extends BaseRecipeItemBuilderImpl<ShapelessRecipeBuilder, RecipeItemBuilder.ShapelessRecipeItemBuilder> implements RecipeItemBuilder.ShapelessRecipeItemBuilder
+        private static class ShapelessCraftingRecipeItemBuilder extends BaseCraftingRecipeItemBuilderImpl<ShapelessCraftingRecipeBuilder, CraftingRecipeItemBuilder.ShapelessCraftingRecipeItemBuilder> implements CraftingRecipeItemBuilder.ShapelessCraftingRecipeItemBuilder
         {
-            protected ShapelessRecipeItemBuilder(final ShapelessRecipeBuilder builder)
+            protected ShapelessCraftingRecipeItemBuilder(final ShapelessCraftingRecipeBuilder builder)
             {
                 super(builder);
             }
 
             @Override
-            protected void addItem(final RecipeItem item)
+            protected void addItem(final CraftingRecipeItem item)
             {
                 this.builder.addIngredient(item);
             }
 
             @Override
-            public ShapelessRecipeItemBuilder addIngredient()
+            public ShapelessCraftingRecipeItemBuilder addIngredient()
             {
                 return this.build().addIngredient();
+            }
+
+            @Override
+            public ShapelessCraftingRecipeItemBuilder repeatable()
+            {
+                return null; // TODO
+            }
+
+            @Override
+            public ShapelessCraftingRecipeItemBuilder repeatable(final BiFunction<ItemStack, List<ItemStack>, ItemStack> transformFunc)
+            {
+                return null;
             }
         }
 
@@ -193,48 +201,48 @@ public class RecipeBuilderImpl implements RecipeBuilder
         }
     }
 
-    private static class ShapedRecipeBuilderImpl implements ShapedRecipeBuilder
+    private static class ShapedCraftingRecipeBuilderImpl implements ShapedCraftingRecipeBuilder
     {
-        private final RecipeBuilderImpl oldBuilder;
-        protected     String[]          pattern;
-        protected     RecipePattern     alternatePattern;
-        protected final Char2ObjectMap<RecipeItem> items = new Char2ObjectOpenHashMap<>();
+        private final CraftingRecipeBuilderImpl oldBuilder;
+        protected     String[]                  pattern;
+        protected     CraftingRecipePattern     alternatePattern;
+        protected final Char2ObjectMap<CraftingRecipeItem> items = new Char2ObjectOpenHashMap<>();
 
-        ShapedRecipeBuilderImpl(final RecipeBuilderImpl recipeBuilder)
+        ShapedCraftingRecipeBuilderImpl(final CraftingRecipeBuilderImpl recipeBuilder)
         {
             this.oldBuilder = recipeBuilder;
         }
 
         @Override
-        public ShapedRecipeBuilder result(final ItemStack itemStack)
+        public ShapedCraftingRecipeBuilder result(final ItemStack itemStack)
         {
             this.oldBuilder.result(itemStack);
             return this;
         }
 
         @Override
-        public ShapedRecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
+        public ShapedCraftingRecipeBuilder result(final BiFunction<Player, CraftingGrid, ItemStack> itemStack)
         {
             this.oldBuilder.result(itemStack);
             return this;
         }
 
         @Override
-        public ShapedRecipeBuilder vanilla(final boolean vanilla)
+        public ShapedCraftingRecipeBuilder vanilla(final boolean vanilla)
         {
             this.oldBuilder.vanilla(vanilla);
             return this;
         }
 
         @Override
-        public ShapedRecipeBuilder priority(final long priority)
+        public ShapedCraftingRecipeBuilder priority(final long priority)
         {
             this.oldBuilder.priority(priority);
             return this;
         }
 
         @Override
-        public ShapedRecipe build()
+        public ShapedCraftingRecipe build()
         {
             if ((this.pattern == null) && (this.alternatePattern == null))
             {
@@ -247,21 +255,21 @@ public class RecipeBuilderImpl implements RecipeBuilder
             Validate.notNull(this.oldBuilder.result, "result item can't be null.");
             if (this.oldBuilder.priority == null)
             {
-                this.priority(Recipe.DEFAULT_SHAPED_RECIPE_PRIORITY);
+                this.priority(CraftingRecipe.DEFAULT_SHAPED_RECIPE_PRIORITY);
             }
-            final RecipePattern pat = (this.alternatePattern == null) ? new CharMapRecipePatternImpl(this.items, this.pattern) : this.alternatePattern;
+            final CraftingRecipePattern pat = (this.alternatePattern == null) ? new CharMapCraftingRecipePatternImpl(this.items, this.pattern) : this.alternatePattern;
             if (this.oldBuilder.func == null)
             {
-                return new ShapedRecipeImpl(pat, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla);
+                return new ShapedCraftingRecipeImpl(pat, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, null);
             }
             else
             {
-                return new ShapedRecipeImpl(pat, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, this.oldBuilder.func);
+                return new ShapedCraftingRecipeImpl(pat, this.oldBuilder.result, this.oldBuilder.priority, this.oldBuilder.vanilla, this.oldBuilder.func);
             }
         }
 
         @Override
-        public ShapedRecipeBuilder pattern(final String... pattern)
+        public ShapedCraftingRecipeBuilder pattern(final String... pattern)
         {
             if (this.alternatePattern != null)
             {
@@ -272,7 +280,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
         }
 
         @Override
-        public ShapedRecipeBuilder pattern(final RecipePattern pattern)
+        public ShapedCraftingRecipeBuilder pattern(final CraftingRecipePattern pattern)
         {
             if (this.pattern != null)
             {
@@ -283,13 +291,13 @@ public class RecipeBuilderImpl implements RecipeBuilder
         }
 
         @Override
-        public ShapedRecipeItemBuilder addIngredient(final char c)
+        public ShapedCraftingRecipeItemBuilder addIngredient(final char c)
         {
-            return new ShapedRecipeItemBuilder(c, this);
+            return new ShapedCraftingRecipeItemBuilder(c, this);
         }
 
         @Override
-        public ShapedRecipeBuilder addIngredient(final char c, final RecipeItem item)
+        public ShapedCraftingRecipeBuilder addIngredient(final char c, final CraftingRecipeItem item)
         {
             if (this.alternatePattern != null)
             {
@@ -299,18 +307,18 @@ public class RecipeBuilderImpl implements RecipeBuilder
             return this;
         }
 
-        private static class ShapedRecipeItemBuilder extends BaseRecipeItemBuilderImpl<ShapedRecipeBuilder, RecipeItemBuilder.ShapedRecipeItemBuilder> implements RecipeItemBuilder.ShapedRecipeItemBuilder
+        private static class ShapedCraftingRecipeItemBuilder extends BaseCraftingRecipeItemBuilderImpl<ShapedCraftingRecipeBuilder, CraftingRecipeItemBuilder.ShapedCraftingRecipeItemBuilder> implements CraftingRecipeItemBuilder.ShapedCraftingRecipeItemBuilder
         {
             protected final char c;
 
-            protected ShapedRecipeItemBuilder(final char c, final ShapedRecipeBuilder builder)
+            protected ShapedCraftingRecipeItemBuilder(final char c, final ShapedCraftingRecipeBuilder builder)
             {
                 super(builder);
                 this.c = c;
             }
 
             @Override
-            protected void addItem(final RecipeItem item)
+            protected void addItem(final CraftingRecipeItem item)
             {
                 this.builder.addIngredient(this.c, item);
             }
@@ -322,7 +330,7 @@ public class RecipeBuilderImpl implements RecipeBuilder
             }
 
             @Override
-            public RecipeItemBuilder.ShapedRecipeItemBuilder addIngredient(final char c)
+            public ShapedCraftingRecipeItemBuilder addIngredient(final char c)
             {
                 return this.build().addIngredient(c);
             }

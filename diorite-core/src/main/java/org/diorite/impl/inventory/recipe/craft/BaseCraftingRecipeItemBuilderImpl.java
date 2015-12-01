@@ -1,4 +1,4 @@
-package org.diorite.impl.inventory.recipe;
+package org.diorite.impl.inventory.recipe.craft;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,15 +10,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeBuilder;
-import org.diorite.inventory.recipe.RecipeItem;
-import org.diorite.inventory.recipe.RecipeItemBuilder;
-import org.diorite.inventory.recipe.ReplacedRecipeItem;
-import org.diorite.inventory.recipe.SimpleRecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItemBuilder;
+import org.diorite.inventory.recipe.craft.ReplacedCraftingRecipeItem;
+import org.diorite.inventory.recipe.craft.BasicCraftingRecipeItem;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
 
 @SuppressWarnings("unchecked")
-public abstract class BaseRecipeItemBuilderImpl<T extends RecipeBuilder, B extends RecipeItemBuilder<T, B>> implements RecipeItemBuilder<T, B>
+public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipeBuilder, B extends CraftingRecipeItemBuilder<T, B>> implements CraftingRecipeItemBuilder<T, B>
 {
     protected final T                                           builder;
     protected       ItemStack                                   item;
@@ -27,7 +27,7 @@ public abstract class BaseRecipeItemBuilderImpl<T extends RecipeBuilder, B exten
     protected       BiFunction<Player, CraftingGrid, ItemStack> replacmentFunc;
     protected final Collection<BiPredicate<Player, ItemStack>> validators = new ArrayList<>(4);
 
-    protected BaseRecipeItemBuilderImpl(final T builder)
+    protected BaseCraftingRecipeItemBuilderImpl(final T builder)
     {
         this.builder = builder;
     }
@@ -62,16 +62,16 @@ public abstract class BaseRecipeItemBuilderImpl<T extends RecipeBuilder, B exten
         return (B) this;
     }
 
-    protected RecipeItem createItem()
+    protected CraftingRecipeItem createItem()
     {
         if (this.replacement != null)
         {
-            return new ReplacedRecipeItem(this.item, this.ignoreType, this.replacmentFunc, this.replacement, this.validators);
+            return new ReplacedCraftingRecipeItem(this.item, this.ignoreType, this.replacmentFunc, this.replacement, this.validators);
         }
-        return new SimpleRecipeItem(this.item, this.ignoreType, this.validators);
+        return new BasicCraftingRecipeItem(this.item, this.ignoreType, this.validators);
     }
 
-    protected abstract void addItem(RecipeItem item);
+    protected abstract void addItem(CraftingRecipeItem item);
 
     @Override
     public T build()

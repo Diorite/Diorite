@@ -1,18 +1,21 @@
 package org.diorite.inventory.recipe;
 
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeBuilder.ShapedRecipeBuilder;
-import org.diorite.inventory.recipe.RecipeBuilder.ShapelessRecipeBuilder;
-import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.material.Material;
 
+/**
+ * Represent basic recipe item builder.
+ *
+ * @param <T> type of recipe builder.
+ * @param <B> type of item builder.
+ */
 public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItemBuilder<T, B>>
 {
     /**
@@ -22,84 +25,6 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
      * @return recipe builder for method chains.
      */
     T build();
-
-    /**
-     * Sets replacement item of this recipe item.
-     *
-     * @param basicReplacement basic replacement item, used by {@link RecipeItem#getReplacement()}
-     * @param replacement      function that create replacement item stack based on items that were consumed by recipe.
-     *
-     * @return this same builder for method chains.
-     */
-    B replacement(ItemStack basicReplacement, BiFunction<Player, CraftingGrid, ItemStack> replacement);
-
-    /**
-     * Sets replacement item of this recipe item.
-     *
-     * @param basicReplacement basic replacement item material, used by {@link RecipeItem#getReplacement()}
-     * @param replacement      function that create replacement item stack based on items that were consumed by recipe.
-     *
-     * @return this same builder for method chains.
-     */
-    default B replacement(final Material basicReplacement, final BiFunction<Player, CraftingGrid, ItemStack> replacement)
-    {
-        return this.replacement(new BaseItemStack(basicReplacement), replacement);
-    }
-
-    /**
-     * Sets replacement item of this recipe item.
-     *
-     * @param basicReplacement basic replacement item material, used by {@link RecipeItem#getReplacement()}
-     * @param amount           amount of that material.
-     * @param replacement      function that create replacement item stack based on items that were consumed by recipe.
-     *
-     * @return this same builder for method chains.
-     */
-    default B replacement(final Material basicReplacement, final int amount, final BiFunction<Player, CraftingGrid, ItemStack> replacement)
-    {
-        return this.replacement(new BaseItemStack(basicReplacement, amount), replacement);
-    }
-
-
-    /**
-     * Sets replacement item of this recipe item.
-     *
-     * @param basicReplacement basic replacement item, used by {@link RecipeItem#getReplacement()}
-     * @param replacement      function that create replacement item stack based on items that were consumed by recipe.
-     *
-     * @return this same builder for method chains.
-     */
-    default B replacement(final ItemStack basicReplacement, final Function<CraftingGrid, ItemStack> replacement)
-    {
-        return this.replacement(basicReplacement, (p, c) -> replacement.apply(c));
-    }
-
-    /**
-     * Sets replacement item of this recipe item.
-     *
-     * @param basicReplacement basic replacement item material, used by {@link RecipeItem#getReplacement()}
-     * @param replacement      function that create replacement item stack based on items that were consumed by recipe.
-     *
-     * @return this same builder for method chains.
-     */
-    default B replacement(final Material basicReplacement, final Function<CraftingGrid, ItemStack> replacement)
-    {
-        return this.replacement(new BaseItemStack(basicReplacement), (p, c) -> replacement.apply(c));
-    }
-
-    /**
-     * Sets replacement item of this recipe item.
-     *
-     * @param basicReplacement basic replacement item material, used by {@link RecipeItem#getReplacement()}
-     * @param amount           amount of that material.
-     * @param replacement      function that create replacement item stack based on items that were consumed by recipe.
-     *
-     * @return this same builder for method chains.
-     */
-    default B replacement(final Material basicReplacement, final int amount, final Function<CraftingGrid, ItemStack> replacement)
-    {
-        return this.replacement(new BaseItemStack(basicReplacement, amount), (p, c) -> replacement.apply(c));
-    }
 
     /**
      * Sets replacement item of this recipe item.
@@ -230,27 +155,28 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
      */
     B validator(final BiPredicate<Player, ItemStack> validator);
 
-    interface ShapelessRecipeItemBuilder extends RecipeItemBuilder<ShapelessRecipeBuilder, ShapelessRecipeItemBuilder>
+    /**
+     * Represent recipe item builder that can create {@link RepeatableRecipeItem} too.
+     *
+     * @param <T> type of recipe builder.
+     * @param <B> type of item builder.
+     */
+    interface RepeatableRecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItemBuilder<T, B>> extends RecipeItemBuilder<T, B>
     {
         /**
-         * Build and add this recipe item to recipe builder, and returns new recipe item builder. <br>
-         * Builder must contans any item or at least one validator.
+         * Make this recipe item repeatable, so it can be used 1 or more time in crafting grid.
          *
-         * @return new recipe item builder.
+         * @return this same builder for method chains.
          */
-        ShapelessRecipeItemBuilder addIngredient();
-    }
+        B repeatable();
 
-    interface ShapedRecipeItemBuilder extends RecipeItemBuilder<ShapedRecipeBuilder, ShapedRecipeItemBuilder>
-    {
         /**
-         * Build and add this recipe item to recipe builder, and returns new recipe item builder. <br>
-         * Builder must contans any item or at least one validator.
+         * Make this recipe item repeatable, so it can be used 1 or more time in crafting grid.
          *
-         * @param c pattern key of this recipe item.
+         * @param transformFunc Transform function that transform result item using list of repeated ingredients.
          *
-         * @return new recipe item builder.
+         * @return this same builder for method chains.
          */
-        ShapedRecipeItemBuilder addIngredient(char c);
+        B repeatable(BiFunction<ItemStack, List<ItemStack>, ItemStack> transformFunc);
     }
 }

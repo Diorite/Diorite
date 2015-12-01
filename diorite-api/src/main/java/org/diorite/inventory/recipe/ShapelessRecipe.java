@@ -22,14 +22,13 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.recipe.craft;
+package org.diorite.inventory.recipe;
 
 import java.util.List;
 
-import org.diorite.inventory.recipe.RecipeItem;
-
 /**
- * Represent recipe where items in crafting grid may be placed in any shape.
+ * Represent recipe where items may be placed in any shape. <br>
+ * Also this recipe support multiple usages of one ingredient, like you can use one or more.
  */
 public interface ShapelessRecipe extends Recipe
 {
@@ -38,7 +37,14 @@ public interface ShapelessRecipe extends Recipe
      *
      * @return ingredients needed by this recipe.
      */
-    List<RecipeItem> getIngredients();
+    List<? extends RecipeItem> getIngredients();
+
+    /**
+     * Returns repeatable ingredients needed by this recipe.
+     *
+     * @return repeatable ingredients needed by this recipe.
+     */
+    List<? extends RepeatableRecipeItem> getRepeatableIngredients();
 
     @Override
     default long getPriority()

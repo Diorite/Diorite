@@ -3,14 +3,14 @@ package org.diorite.impl.inventory.recipe.craft;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.inventory.recipe.craft.Recipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipe;
 
-abstract class PriorityRecipeImpl implements Recipe
+abstract class PriorityCraftingRecipeImpl implements CraftingRecipe
 {
     protected final long    priority;
     protected final boolean vanilla;
 
-    protected PriorityRecipeImpl(final long priority, final boolean vanilla)
+    protected PriorityCraftingRecipeImpl(final long priority, final boolean vanilla)
     {
         this.priority = priority;
         this.vanilla = vanilla;

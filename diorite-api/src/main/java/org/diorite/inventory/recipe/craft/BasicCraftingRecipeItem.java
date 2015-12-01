@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.recipe;
+package org.diorite.inventory.recipe.craft;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,9 +35,9 @@ import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 
 /**
- * Represent simple recipe item, that check name/lore/etc only if recipe item have custom one.
+ * Represent basic recipe item, that check name/lore/etc only if recipe item have custom one.
  */
-public class SimpleRecipeItem implements RecipeItem
+public class BasicCraftingRecipeItem implements CraftingRecipeItem
 {
     /**
      * Pattern item of this recipe.
@@ -60,7 +60,7 @@ public class SimpleRecipeItem implements RecipeItem
      * @param ignoreData if pattern item should ignore subtype of material
      * @param validators validators of thic recipe item, allowing to check additional data of item. Player may be null.
      */
-    public SimpleRecipeItem(final ItemStack item, final boolean ignoreData, final Collection<BiPredicate<Player, ItemStack>> validators)
+    public BasicCraftingRecipeItem(final ItemStack item, final boolean ignoreData, final Collection<BiPredicate<Player, ItemStack>> validators)
     {
         this.item = item.clone();
         this.ignoreData = ignoreData;

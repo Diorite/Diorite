@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.inventory.recipe.craft.CraftingRecipeBuilderImpl;
 import org.diorite.chat.ChatColor;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.BaseItemStack;
@@ -15,11 +16,12 @@ import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.meta.BookMeta;
 import org.diorite.inventory.item.meta.BookMeta.GenerationEnum;
 import org.diorite.inventory.item.meta.LeatherArmorMeta;
-import org.diorite.inventory.recipe.RecipeBuilder;
-import org.diorite.inventory.recipe.RecipeBuilder.ShapedRecipeBuilder;
-import org.diorite.inventory.recipe.RecipeBuilder.ShapelessRecipeBuilder;
-import org.diorite.inventory.recipe.craft.Recipe;
-import org.diorite.inventory.recipe.craft.RecipeCheckResult;
+import org.diorite.inventory.item.meta.MapMeta;
+import org.diorite.inventory.recipe.craft.CraftingRecipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder;
+import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder.ShapedCraftingRecipeBuilder;
+import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder.ShapelessCraftingRecipeBuilder;
+import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
 import org.diorite.material.BreakableItemMat;
 import org.diorite.material.ColorableMat;
 import org.diorite.material.ItemMaterialData;
@@ -55,7 +57,7 @@ import org.diorite.utils.Color;
 
 public class RecipeManagerImpl implements IRecipeManager
 {
-    final Set<Recipe> recipes = new TreeSet<>((r1, r2) -> {
+    final Set<CraftingRecipe> recipes = new TreeSet<>((r1, r2) -> {
         if (r1.equals(r2))
         {
             return 0;
@@ -69,22 +71,57 @@ public class RecipeManagerImpl implements IRecipeManager
     });
 
     @Override
-    public RecipeBuilder builder()
+    public CraftingRecipeBuilder craftingBuilder()
     {
-        return new RecipeBuilderImpl();
+        return new CraftingRecipeBuilderImpl();
     }
 
     @Override
-    public boolean add(final Recipe recipe)
+    public boolean add(final CraftingRecipe recipe)
     {
         return this.recipes.add(recipe);
     }
 
     @Override
-    public boolean remove(final Recipe recipe)
+    public boolean remove(final CraftingRecipe recipe)
     {
         return this.recipes.remove(recipe);
     }
+
+    @Override
+    public void resetCraftingRecipes()
+    {
+        this.clearCraftingRecipes();
+        this.addDefaultCraftingRecipes();
+    }
+
+    @Override
+    public void clearCraftingRecipes()
+    {
+        this.recipes.clear();
+    }
+
+    @Override
+    public Iterator<CraftingRecipe> craftingRecipeIterator()
+    {
+        return this.recipes.iterator();
+    }
+
+    @Override
+    public CraftingRecipeCheckResult matchCraftingRecipe(final GridInventory grid)
+    {
+        for (final CraftingRecipe recipe : this.recipes)
+        {
+            final CraftingRecipeCheckResult result = recipe.isMatching(grid);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        return null;
+    }
+
+    private static volatile int i = 0;
 
     @Override
     public void reset()
@@ -96,45 +133,23 @@ public class RecipeManagerImpl implements IRecipeManager
     @Override
     public void clear()
     {
-        this.recipes.clear();
+        this.clearCraftingRecipes();
+    }
+
+    private static long getNextPriority()
+    {
+        return CraftingRecipe.DIORITE_START + ((2 * (i++)) * CraftingRecipe.DIORITE_SPACE);
     }
 
     @Override
-    public Iterator<Recipe> recipeIterator()
-    {
-        return this.recipes.iterator();
-    }
-
-    @Override
-    public RecipeCheckResult matchRecipe(final GridInventory grid)
-    {
-        for (final Recipe recipe : this.recipes)
-        {
-            final RecipeCheckResult result = recipe.isMatching(grid);
-            if (result != null)
-            {
-                return result;
-            }
-        }
-        return null;
-    }
-
-    private static volatile int i = 0;
-
-    private static long getPriority()
-    {
-        return Recipe.DIORITE_START + ((2 * (i++)) * Recipe.DIORITE_SPACE);
-    }
-
-    @Override
-    public void addDefaultRecipes()
+    public void addDefaultCraftingRecipes()
     {
 //        this.builder().priority(getPriority()).shapeless().addIngredient().item(Material.STONE, true).build().result(Material.STONE_BUTTON).buildAndAdd();
 //        this.builder().priority(getPriority()).shaped().pattern("s ", "S ").addIngredient('s').item(Material.STONE).addIngredient('S').item(Material.STICK).build().result(Material.STONE_SWORD).buildAndAdd();
 //        this.builder().priority(getPriority()).shaped().pattern("s").addIngredient('s').item(Material.STICK).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
 //        this.builder().priority(getPriority()).shapeless().addIngredient().item(Material.STICK).addIngredient().item(Material.STONE).build().result(Material.STONE_AXE).buildAndAdd();
 //        this.builder().priority(getPriority()).shapeless().addIngredient().item(DyeMat.DYE_LAPIS_LAZULI).addIngredient().item(WoolMat.WOOL_WHITE, false).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
-        this.builder().priority(getPriority()).shapeless().addIngredient().item(Material.APPLE, 2, false).replacement(Material.DIRT, 16).simpleValidator(item -> ChatColor.translateAlternateColorCodesInString("&3Diorite").equals(item.getItemMeta().getDisplayName())).build().result(Material.GOLDEN_APPLE).buildAndAdd();
+        this.craftingBuilder().priority(getNextPriority()).shapeless().addIngredient().item(Material.APPLE, 2, false).replacement(Material.DIRT, 16).simpleValidator(item -> ChatColor.translateAlternateColorCodesInString("&3Diorite").equals(item.getItemMeta().getDisplayName())).build().result(Material.GOLDEN_APPLE).buildAndAdd();
 
         this.shaped(Material.WOODEN_PICKAXE, 1, "www", "_s_", "_s_").addIngredient('s').item(Material.STICK, false).addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
         this.shaped(Material.STONE_PICKAXE, 1, "ccc", "_s_", "_s_").addIngredient('s').item(Material.STICK, false).addIngredient('c').item(Material.COBBLESTONE, true).build().buildAndAdd();
@@ -203,7 +218,6 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shaped(StainedGlassMat.STAINED_GLASS_ORANGE, 8, "ggg", "gig", "ggg").addIngredient('i').item(DyeMat.DYE_ORANGE, false).addIngredient('g').item(Material.GLASS, false).build().buildAndAdd();
         this.shaped(Material.STAINED_HARDENED_CLAY, 8, "hhh", "hih", "hhh").addIngredient('i').item(DyeMat.DYE_BONE_MEAL, false).addIngredient('h').item(Material.HARDENED_CLAY, false).build().buildAndAdd();
         this.shaped(Material.STAINED_GLASS, 8, "ggg", "gig", "ggg").addIngredient('i').item(DyeMat.DYE_BONE_MEAL, false).addIngredient('g').item(Material.GLASS, false).build().buildAndAdd();
-        this.shaped(Material.MAP, 1, "ppp", "pmp", "ppp").addIngredient('m').item(Material.FILLED_MAP, true).addIngredient('p').item(Material.PAPER, false).build().buildAndAdd(); // TODO
         this.shaped(BannerMat.BANNER_WHITE, 1, "www", "www", "_s_").addIngredient('s').item(Material.STICK, false).addIngredient('w').item(Material.WOOL, false).build().buildAndAdd();
         this.shaped(BannerMat.BANNER_ORANGE, 1, "www", "www", "_s_").addIngredient('s').item(Material.STICK, false).addIngredient('w').item(WoolMat.WOOL_ORANGE, false).build().buildAndAdd();
         this.shaped(BannerMat.BANNER_MAGENTA, 1, "www", "www", "_s_").addIngredient('s').item(Material.STICK, false).addIngredient('w').item(WoolMat.WOOL_MAGENTA, false).build().buildAndAdd();
@@ -445,10 +459,6 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shaped(Material.STONE_BUTTON, 1, "s").addIngredient('s').item(Material.STONE, false).build().buildAndAdd();
         this.shaped(Material.WOODEN_BUTTON, 1, "w").addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
 
-//        this.shapeless(Material.FIREWORKS, 0).addIngredient().item(Material.GUNPOWDER, false).addIngredient().item(Material.PAPER, false).build().buildAndAdd(); // TODO
-//        this.shapeless(Material.BANNER, 0).addIngredient().item(Material.BANNER, false).build().buildAndAdd(); // TODO
-//        this.shapeless(Material.MAP, 0).addIngredient().item(Material.MAP, false).build().buildAndAdd(); // TODO
-//        this.shapeless(Material.BANNER, 0).addIngredient().item(DyeMat.DYE_PURPLE, false).build().buildAndAdd(); // TODO
         this.shapeless(DyeMat.DYE_MAGENTA, 4).addIngredient().item(DyeMat.DYE_LAPIS_LAZULI, false).addIngredient().item(DyeMat.DYE_RED, false).addIngredient().item(DyeMat.DYE_RED, false).addIngredient().item(DyeMat.DYE_BONE_MEAL, false).build().buildAndAdd();
         this.shapeless(Material.BOOK, 1).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.PAPER, false).addIngredient().item(Material.LEATHER, false).build().buildAndAdd();
         this.shapeless(Material.MUSHROOM_STEW, 1).addIngredient().item(Material.BROWN_MUSHROOM, false).addIngredient().item(Material.RED_MUSHROOM, false).addIngredient().item(Material.BOWL, false).build().buildAndAdd();
@@ -526,11 +536,76 @@ public class RecipeManagerImpl implements IRecipeManager
         this.color(Material.LEATHER_BOOTS);
 
         this.bookCopy();
+        this.mapZoom();
+        this.mapCopy();
+
+
+//        this.shapeless(Material.FIREWORKS, 0).addIngredient().item(Material.GUNPOWDER, false).addIngredient().item(Material.PAPER, false).build().buildAndAdd(); // TODO
+//        this.shapeless(Material.BANNER, 0).addIngredient().item(Material.BANNER, false).build().buildAndAdd(); // TODO
+//        this.shapeless(Material.BANNER, 0).addIngredient().item(DyeMat.DYE_PURPLE, false).build().buildAndAdd(); // TODO
+    }
+
+    private void mapZoom()
+    {
+        this.shaped(Material.FILLED_MAP, 1, "ppp", "pmp", "ppp").result(grid -> {
+            ItemStack map = null;
+            ItemStack[] items = grid.getItems();
+            if (items.length == 9)
+            {
+                map = items[4].clone();
+            }
+            else
+            {
+                for (final ItemStack item : items)
+                {
+                    if (item.getMaterial().isThisSameID(Material.FILLED_MAP))
+                    {
+                        map = item.clone();
+                        break;
+                    }
+                }
+            }
+            assert map != null;
+            final MapMeta meta = (MapMeta) map.getItemMeta();
+            meta.setScaling((meta.getScaling() + 1));
+            return map;
+        }).addIngredient('m').item(Material.FILLED_MAP, true).simpleValidator(item -> ((MapMeta) item.getItemMeta()).getScaling() < 4).addIngredient('p').item(Material.PAPER, false).build().buildAndAdd();
+
+    }
+
+    private void mapCopy()
+    {
+        final ShapelessCraftingRecipeBuilder builder = this.shapeless(Material.FILLED_MAP, 1).addIngredient().item(Material.FILLED_MAP, true).build();
+        for (int i = 1; i < 9; i++)
+        {
+            builder.addIngredient().item(Material.MAP, true).build();
+            builder.result(grid -> {
+                int copys = 0;
+                ItemStack orginal = null;
+                for (final ItemStack itemStack : grid.getItems())
+                {
+                    if (itemStack == null)
+                    {
+                        continue;
+                    }
+                    if (itemStack.getMaterial().simpleEquals(Material.FILLED_MAP))
+                    {
+                        orginal = itemStack.clone();
+                        continue;
+                    }
+                    copys++;
+                }
+                assert orginal != null;
+                orginal.setAmount(copys + 1);
+                return orginal;
+            });
+            builder.buildAndAdd();
+        }
     }
 
     private void bookCopy()
     {
-        final ShapelessRecipeBuilder builder = this.shapeless(Material.WRITTEN_BOOK, 1).addIngredient().item(Material.WRITTEN_BOOK, true).replacement(Material.WRITTEN_BOOK, grid -> {
+        final ShapelessCraftingRecipeBuilder builder = this.shapeless(Material.WRITTEN_BOOK, 1).addIngredient().item(Material.WRITTEN_BOOK, true).replacement(Material.WRITTEN_BOOK, grid -> {
             for (final ItemStack itemStack : grid.getItems())
             {
                 if ((itemStack != null) && itemStack.getMaterial().simpleEquals(Material.WRITTEN_BOOK))
@@ -567,12 +642,11 @@ public class RecipeManagerImpl implements IRecipeManager
             });
             builder.buildAndAdd();
         }
-
     }
 
     private void color(final ArmorMat mat)
     {
-        final ShapelessRecipeBuilder builder = this.shapeless(mat, 1).addIngredient().item(mat, true).build();
+        final ShapelessCraftingRecipeBuilder builder = this.shapeless(mat, 1).addIngredient().item(mat, true).build();
         for (int i = 1; i < 9; i++)
         {
             builder.addIngredient().item(Material.DYE, true).build();
@@ -635,7 +709,7 @@ public class RecipeManagerImpl implements IRecipeManager
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends ItemMaterialData & BreakableItemMat> ShapelessRecipeBuilder repair(final T mat)
+    private <T extends ItemMaterialData & BreakableItemMat> ShapelessCraftingRecipeBuilder repair(final T mat)
     {
         return this.shapeless(mat, 1).addIngredient().item(mat, true).addIngredient().item(mat, true).build().result(grid -> {
             final List<ItemStack> items = grid.getItemsList();
@@ -658,14 +732,14 @@ public class RecipeManagerImpl implements IRecipeManager
         });
     }
 
-    private ShapedRecipeBuilder shaped(final Material resultMat, final int resultAmount, final String... pattern)
+    private ShapedCraftingRecipeBuilder shaped(final Material resultMat, final int resultAmount, final String... pattern)
     {
-        return this.builder().priority(getPriority()).vanilla(true).result(resultMat, resultAmount).shaped().pattern(pattern);
+        return this.craftingBuilder().priority(getNextPriority()).vanilla(true).result(resultMat, resultAmount).shaped().pattern(pattern);
     }
 
-    private ShapelessRecipeBuilder shapeless(final Material resultMat, final int resultAmount)
+    private ShapelessCraftingRecipeBuilder shapeless(final Material resultMat, final int resultAmount)
     {
-        return this.builder().priority(getPriority()).vanilla(true).result(resultMat, resultAmount).shapeless();
+        return this.craftingBuilder().priority(getNextPriority()).vanilla(true).result(resultMat, resultAmount).shapeless();
     }
 
     @Override

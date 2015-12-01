@@ -2,22 +2,22 @@ package org.diorite.inventory.recipe.craft;
 
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
-
-import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import org.diorite.inventory.recipe.RecipeCheckResult;
 
 /**
  * Represent results after checking if recipe is valid for given inventory.
  *
- * @see Recipe#isMatching(GridInventory)
+ * @see CraftingRecipe#isMatching(GridInventory)
  */
-public interface RecipeCheckResult
+public interface CraftingRecipeCheckResult extends RecipeCheckResult
 {
     /**
      * Returns matched recipe.
      *
      * @return matched recipe.
      */
-    Recipe getRecipe();
+    @Override
+    CraftingRecipe getRecipe();
 
     /**
      * Returns result itemstack.
@@ -33,11 +33,4 @@ public interface RecipeCheckResult
      * @return crafting grid of items that should be removed from inventory on craft.
      */
     CraftingGrid getItemsToConsume();
-
-    /**
-     * Returns items that should be changed in inventory.
-     *
-     * @return items that should be changed in inventory.
-     */
-    Short2ObjectMap<ItemStack> getOnCraft();
 }

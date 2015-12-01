@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.inventory.recipe.craft;
+package org.diorite.inventory.recipe;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
 
 /**
- * Represent crafting recipe.
+ * Represent any recipe.
  */
 public interface Recipe
 {
@@ -58,15 +58,6 @@ public interface Recipe
      * Free space between diorite recipes priority.
      */
     long DIORITE_SPACE                     = 1_000_000L;
-
-    /**
-     * Check if items in given GridInventory is valid for this recipe.
-     *
-     * @param inventory inventory to check.
-     *
-     * @return special object contains results of check, or null if recipe isn't matching.
-     */
-    RecipeCheckResult isMatching(final GridInventory inventory);
 
     /**
      * Returns basic result items. <br>

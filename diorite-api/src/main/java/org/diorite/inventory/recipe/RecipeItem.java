@@ -28,7 +28,6 @@ import java.util.function.BiFunction;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.craft.CraftingGrid;
 
 /**
  * Represent recipe item, it may use custom validate code.
@@ -68,25 +67,10 @@ public interface RecipeItem
     }
 
     /**
-     * Returns item that will be placed in place of recipe item after crafting some recipe. <br>
-     * Like recipe item using Milk bucket and replacing into empty bucket when recipe is used. <br>
-     * Method will return null if recipe item don't use replacement item.
-     *
-     * @param player       player that used recipe, may be null.
-     * @param craftingGrid items consumed by recipe.
-     *
-     * @return item that will be placed in place of recipe item after crafting some recipe.
-     */
-    default ItemStack getReplacement(final Player player, final CraftingGrid craftingGrid)
-    {
-        return null;
-    }
-
-    /**
      * Returns base item that will be placed in place of recipe item after crafting some recipe. <br>
      * Like recipe item using Milk bucket and replacing into empty bucket when recipe is used. <br>
      * Method will return null if recipe item don't use replacement item. <br>
-     * Item returned by this method may not be real replacement item, see {@link #getReplacement(Player, CraftingGrid)}
+     * Item returned by this method may not be real replacement item, each type of recipe items contains own method for that.
      *
      * @return item that will be placed in place of recipe item after crafting some recipe.
      */
