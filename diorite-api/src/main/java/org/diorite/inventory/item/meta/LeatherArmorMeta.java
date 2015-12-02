@@ -26,7 +26,7 @@ package org.diorite.inventory.item.meta;
 
 import org.diorite.utils.Color;
 
-public interface LeatherArmorMeta extends ItemMeta
+public interface LeatherArmorMeta extends RepairableMeta
 {
     /**
      * Default color of leather armor.

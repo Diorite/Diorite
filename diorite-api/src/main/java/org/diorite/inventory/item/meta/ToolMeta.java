@@ -109,4 +109,7 @@ public interface ToolMeta extends RepairableMeta
      * Use {@link #setUseCanDestoryTag(boolean)} if you want disable CanDestory tag.
      */
     void removeCanDestoryMaterials();
+
+    @Override
+    ToolMeta clone();
 }

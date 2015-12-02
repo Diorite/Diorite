@@ -30,6 +30,7 @@ import java.util.function.Predicate;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.math.DioriteMathUtils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
@@ -387,6 +388,28 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
     public static EnchantmentType getByStringID(final String id)
     {
         return byStringID.get(id);
+    }
+
+    /**
+     * Get one of EnchantmentType entry by string, string may be a numeric ID, enum name or minecraft id.
+     *
+     * @param str id/name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static EnchantmentType matchEnchantment(final String str)
+    {
+        final Integer id = DioriteMathUtils.asInt(str);
+        if (id != null)
+        {
+            return getByNumericID(id);
+        }
+        final EnchantmentType type = byStringID.get(str);
+        if (type != null)
+        {
+            return type;
+        }
+        return getByEnumName(str);
     }
 
     /**

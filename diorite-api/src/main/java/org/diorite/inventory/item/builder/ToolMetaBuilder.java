@@ -1,0 +1,76 @@
+package org.diorite.inventory.item.builder;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.Diorite;
+import org.diorite.inventory.item.meta.ToolMeta;
+
+/**
+ * Represent builder of tool item meta data.
+ */
+public class ToolMetaBuilder implements IToolMetaBuilder<ToolMetaBuilder, ToolMeta>
+{
+    /**
+     * Wrapped item meta used by builder.
+     */
+    protected final ToolMeta meta;
+
+    /**
+     * Construct new meta builder, based on given meta.
+     *
+     * @param meta source meta to copy to this builder.
+     */
+    protected ToolMetaBuilder(final ToolMeta meta)
+    {
+        this.meta = meta.clone();
+    }
+
+    /**
+     * Construct new meta builder.
+     */
+    protected ToolMetaBuilder()
+    {
+        this.meta = Diorite.getCore().getItemFactory().construct(ToolMeta.class);
+    }
+
+    @Override
+    public ToolMeta meta()
+    {
+        return this.meta;
+    }
+
+    @Override
+    public ToolMetaBuilder getBuilder()
+    {
+        return this;
+    }
+
+    /**
+     * Returns new builder of item meta data.
+     *
+     * @return new builder of item meta data.
+     */
+    public ToolMetaBuilder start()
+    {
+        return new ToolMetaBuilder();
+    }
+
+    /**
+     * Returns new builder of item meta data, based on given one.
+     *
+     * @param meta source meta to copy to new builder.
+     *
+     * @return new builder of item meta data.
+     */
+    public ToolMetaBuilder start(final ToolMeta meta)
+    {
+        return new ToolMetaBuilder(meta);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("meta", this.meta).toString();
+    }
+}

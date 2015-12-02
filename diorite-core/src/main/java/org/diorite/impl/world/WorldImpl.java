@@ -50,7 +50,7 @@ import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
-import org.diorite.Loc;
+import org.diorite.ILocation;
 import org.diorite.Location;
 import org.diorite.Particle;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
@@ -100,7 +100,7 @@ public class WorldImpl implements World, Tickable
     protected       int            clearWeatherTime;
     protected       int            rainTime;
     protected       int            thunderTime;
-    protected       Loc            spawn;
+    protected       ILocation      spawn;
     protected       WorldGenerator generator;
     protected       long           time;
     protected final ChunkLock      spawnLock;
@@ -542,7 +542,7 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
-    public void setSpawn(final Loc spawn)
+    public void setSpawn(final ILocation spawn)
     {
         this.spawn = spawn.toImmutableLocation();
     }

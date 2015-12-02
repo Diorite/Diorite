@@ -35,7 +35,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.BlockLocation;
 import org.diorite.Diorite;
 import org.diorite.ImmutableLocation;
-import org.diorite.Loc;
+import org.diorite.ILocation;
 import org.diorite.command.exceptions.InvalidCommandArgumentException;
 import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
@@ -287,7 +287,7 @@ public class Arguments implements Iterable<String>
      * @throws InvalidCommandArgumentException if any of numbers can't be parsed to coordinate.
      * @throws ArrayIndexOutOfBoundsException  if {@code args.length > startIndex + 2} or + 4 if withRotation is true.
      */
-    public ImmutableLocation readCoordinates(final int startIndex, final boolean withRotation, Loc origin) throws ArrayIndexOutOfBoundsException, InvalidCommandArgumentException
+    public ImmutableLocation readCoordinates(final int startIndex, final boolean withRotation, ILocation origin) throws ArrayIndexOutOfBoundsException, InvalidCommandArgumentException
     {
         this.check(startIndex + (withRotation ? 4 : 2));
         if (origin == null)

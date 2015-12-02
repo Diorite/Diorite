@@ -139,18 +139,4 @@ public interface ItemStack extends Cloneable
      * @return cloned itemstack.
      */
     ItemStack clone();
-
-    static boolean isSimilar(final ItemStack a, final ItemStack b)
-    {
-        //noinspection ObjectEquality
-        if (a == b)
-        {
-            return true;
-        }
-        if (a != null)
-        {
-            return a.isSimilar(b);
-        }
-        return b.isSimilar(null);
-    }
 }

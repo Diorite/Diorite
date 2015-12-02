@@ -29,7 +29,7 @@ import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
 
-public interface Loc
+public interface ILocation
 {
     double getX();
 
@@ -68,7 +68,7 @@ public interface Loc
         return Math.sqrt(this.distanceSquaredFromCenter(x, y, z));
     }
 
-    default double distance(final Loc location)
+    default double distance(final ILocation location)
     {
         return Math.sqrt(this.distanceSquared(location));
     }
@@ -94,19 +94,19 @@ public interface Loc
         return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
     }
 
-    default double distanceSquared(final Loc location)
+    default double distanceSquared(final ILocation location)
     {
         return this.distanceSquared(location.getX(), location.getY(), location.getZ());
     }
 
-    Loc crossProduct(Loc location);
+    ILocation crossProduct(ILocation location);
 
-    default boolean isInAABB(final Loc min, final Loc max)
+    default boolean isInAABB(final ILocation min, final ILocation max)
     {
         return (this.getX() >= min.getX()) && (this.getX() <= max.getX()) && (this.getY() >= min.getY()) && (this.getY() <= max.getY()) && (this.getZ() >= min.getZ()) && (this.getZ() <= max.getZ());
     }
 
-    default boolean isInSphere(final Loc origin, final double radius)
+    default boolean isInSphere(final ILocation origin, final double radius)
     {
         return (DioriteMathUtils.square(origin.getX() - this.getX()) + DioriteMathUtils.square(origin.getY() - this.getY()) + DioriteMathUtils.square(origin.getZ() - this.getZ())) <= DioriteMathUtils.square(radius);
     }
@@ -116,7 +116,7 @@ public interface Loc
         return this.distanceSquared(location.getX(), location.getY(), location.getZ());
     }
 
-    Loc crossProduct(BlockLocation location);
+    ILocation crossProduct(BlockLocation location);
 
     default boolean isInAABB(final BlockLocation min, final BlockLocation max)
     {
