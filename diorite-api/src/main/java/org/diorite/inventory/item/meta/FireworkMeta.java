@@ -24,6 +24,7 @@
 
 package org.diorite.inventory.item.meta;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.diorite.firework.FireworkEffect;
@@ -59,6 +60,13 @@ public interface FireworkMeta extends ItemMeta
      * @throws IllegalArgumentException If effects is null.
      */
     void addEffects(Iterable<FireworkEffect> effects) throws IllegalArgumentException;
+
+    /**
+     * Sets effects to this firework.
+     *
+     * @param effects effects to be set.
+     */
+    void setEffects(Collection<FireworkEffect> effects);
 
     /**
      * Returns the effects in this firework.

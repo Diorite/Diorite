@@ -4,6 +4,9 @@ import org.diorite.inventory.item.meta.RepairableMeta;
 
 /**
  * Interface of builder of repairable item meta data.
+ *
+ * @param <B> type of builder.
+ * @param <M> type of item meta.
  */
 public interface IRepairableMetaBuilder<B extends IRepairableMetaBuilder<B, M>, M extends RepairableMeta> extends IMetaBuilder<B, M>
 {

@@ -8,6 +8,9 @@ import org.diorite.material.BlockMaterialData;
 
 /**
  * Interface of builder of tool item meta data.
+ *
+ * @param <B> type of builder.
+ * @param <M> type of item meta.
  */
 public interface IToolMetaBuilder<B extends IToolMetaBuilder<B, M>, M extends ToolMeta> extends IRepairableMetaBuilder<B, M>
 {

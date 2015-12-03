@@ -109,6 +109,19 @@ public class FireworkMetaImpl extends SimpleItemMetaImpl implements FireworkMeta
     }
 
     @Override
+    public void setEffects(final Collection<FireworkEffect> effects) throws IllegalArgumentException
+    {
+        if (this.removeIfNeeded(FIREWORK_EFFECTS, effects) || this.removeIfNeeded(FIREWORK_EFFECTS, effects.isEmpty()))
+        {
+            return;
+        }
+        this.checkTag(true);
+        final NbtTagList list = new NbtTagList(EFFECTS, effects.size());
+        effects.forEach(e -> list.add(e.serializeToNBT()));
+        this.tag.addTag(FIREWORK, list);
+    }
+
+    @Override
     public List<FireworkEffect> getEffects()
     {
         if (this.tag == null)

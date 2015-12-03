@@ -7,6 +7,9 @@ import org.diorite.map.MapIcon;
 
 /**
  * Interface of builder of map item meta data.
+ *
+ * @param <B> type of builder.
+ * @param <M> type of item meta.
  */
 public interface IMapMetaBuilder<B extends IMapMetaBuilder<B, M>, M extends MapMeta> extends IMetaBuilder<B, M>
 {

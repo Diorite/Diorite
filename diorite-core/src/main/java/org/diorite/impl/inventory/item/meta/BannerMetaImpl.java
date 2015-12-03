@@ -24,6 +24,7 @@
 
 package org.diorite.impl.inventory.item.meta;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.diorite.DyeColor;
@@ -82,6 +83,12 @@ public class BannerMetaImpl extends SimpleItemMetaImpl implements BannerMeta
 
     @Override
     public void addPattern(final BannerPattern pattern)
+    {
+
+    }
+
+    @Override
+    public void addPatterns(final Collection<BannerPattern> patterns)
     {
 
     }

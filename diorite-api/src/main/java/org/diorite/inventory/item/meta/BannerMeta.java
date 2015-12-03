@@ -24,6 +24,7 @@
 
 package org.diorite.inventory.item.meta;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.diorite.DyeColor;
@@ -34,7 +35,6 @@ import org.diorite.banner.BannerPattern;
  */
 public interface BannerMeta extends ItemMeta
 {
-
     /**
      * Returns the base color for this banner
      *
@@ -79,6 +79,14 @@ public interface BannerMeta extends ItemMeta
     void addPattern(BannerPattern pattern);
 
     /**
+     * Adds new patterns on top of the existing
+     * patterns
+     *
+     * @param patterns new patterns to add
+     */
+    void addPatterns(Collection<BannerPattern> patterns);
+
+    /**
      * Returns the pattern at the specified index
      *
      * @param i the index
@@ -111,4 +119,7 @@ public interface BannerMeta extends ItemMeta
      * @return the number of patterns
      */
     int numberOfPatterns();
+
+    @Override
+    BannerMeta clone();
 }

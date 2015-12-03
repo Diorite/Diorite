@@ -7,6 +7,9 @@ import org.diorite.inventory.item.meta.BookMeta.GenerationEnum;
 
 /**
  * Interface of builder of book item meta data.
+ *
+ * @param <B> type of builder.
+ * @param <M> type of item meta.
  */
 public interface IBookMetaBuilder<B extends IBookMetaBuilder<B, M>, M extends BookMeta> extends IMetaBuilder<B, M>
 {

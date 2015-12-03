@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
 
 /**
@@ -17,12 +18,22 @@ public class ItemBuilder
      */
     protected ItemStack itemStack;
 
-    private ItemBuilder(final Material material)
+    /**
+     * Construct new item builder for given material.
+     *
+     * @param material material of new item.
+     */
+    protected ItemBuilder(final Material material)
     {
         this.itemStack = new BaseItemStack(material);
     }
 
-    private ItemBuilder(final ItemStack itemStack)
+    /**
+     * Construct new item builder for given item stack.
+     *
+     * @param itemStack source item stack to copy data to new builder.
+     */
+    protected ItemBuilder(final ItemStack itemStack)
     {
         this.itemStack = itemStack.clone();
     }
@@ -89,6 +100,19 @@ public class ItemBuilder
     public ItemBuilder meta(final IMetaBuilder<?, ?> builder)
     {
         this.itemStack.setItemMeta(builder.build());
+        return this;
+    }
+
+    /**
+     * Set meta data of this item.
+     *
+     * @param meta meta data to copy.
+     *
+     * @return builder for method chains.
+     */
+    public ItemBuilder meta(final ItemMeta meta)
+    {
+        this.itemStack.setItemMeta(meta.clone());
         return this;
     }
 

@@ -5,6 +5,9 @@ import org.diorite.utils.Color;
 
 /**
  * Interface of builder of leather armor item meta data.
+ *
+ * @param <B> type of builder.
+ * @param <M> type of item meta.
  */
 public interface ILeatherArmorMetaBuilder<B extends ILeatherArmorMetaBuilder<B, M>, M extends LeatherArmorMeta> extends IRepairableMetaBuilder<B, M>
 {

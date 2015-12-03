@@ -7,6 +7,9 @@ import org.diorite.inventory.item.meta.SkullMeta;
 
 /**
  * Interface of builder of skull item meta data.
+ *
+ * @param <B> type of builder.
+ * @param <M> type of item meta.
  */
 public interface ISkullMetaBuilder<B extends ISkullMetaBuilder<B, M>, M extends SkullMeta> extends IMetaBuilder<B, M>
 {

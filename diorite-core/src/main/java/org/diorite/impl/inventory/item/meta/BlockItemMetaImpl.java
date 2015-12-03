@@ -81,6 +81,12 @@ public class BlockItemMetaImpl extends SimpleItemMetaImpl implements BlockItemMe
     }
 
     @Override
+    public void addCanPlaceOnMaterials(final Collection<BlockMaterialData> materials)
+    {
+
+    }
+
+    @Override
     public void removeCanPlaceOnMaterial(final BlockMaterialData material)
     {
 

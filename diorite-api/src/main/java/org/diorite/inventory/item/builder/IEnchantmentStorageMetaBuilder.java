@@ -8,6 +8,9 @@ import it.unimi.dsi.fastutil.objects.Object2ShortMap.Entry;
 
 /**
  * Interface of builder of enchantment storage item meta data.
+ *
+ * @param <B> type of builder.
+ * @param <M> type of item meta.
  */
 public interface IEnchantmentStorageMetaBuilder<B extends IEnchantmentStorageMetaBuilder<B, M>, M extends EnchantmentStorageMeta> extends IMetaBuilder<B, M>
 {
