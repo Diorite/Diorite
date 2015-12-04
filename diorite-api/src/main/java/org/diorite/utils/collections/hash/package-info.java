@@ -25,6 +25,6 @@
 /**
  * Additional hashing strategy for diorite plugins.
  *
- * @see gnu.trove.strategy.HashingStrategy
+ * @see it.unimi.dsi.fastutil.Hash.Strategy
  */
 package org.diorite.utils.collections.hash;

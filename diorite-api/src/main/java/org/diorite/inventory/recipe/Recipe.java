@@ -26,7 +26,6 @@ package org.diorite.inventory.recipe;
 
 import java.util.List;
 
-import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.ItemStack;
 
 /**
@@ -61,7 +60,7 @@ public interface Recipe
 
     /**
      * Returns basic result items. <br>
-     * Item returned by this method may not match items returned by {@link #isMatching(GridInventory)} method. <br>
+     * Item returned by this method may not match items returned by matching method. <br>
      * If some recipe replace item from inventory grid, like milk bucket to empty bucket, empty bucket will be returned too.
      *
      * @return basic result items.

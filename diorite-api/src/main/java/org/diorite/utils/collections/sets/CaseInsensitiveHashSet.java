@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 import org.diorite.utils.collections.hash.CaseInsensitiveHashingStrategy;
 
+import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 

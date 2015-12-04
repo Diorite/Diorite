@@ -29,7 +29,7 @@ import java.util.NoSuchElementException;
 import it.unimi.dsi.fastutil.floats.FloatIterator;
 
 /**
- * Represent {@link TFloatIterator} for float array.
+ * Represent {@link FloatIterator} for float array.
  */
 public class FastUtilFloatIterator extends FastUtilPrimitiveIterator<float[]> implements FloatIterator
 {

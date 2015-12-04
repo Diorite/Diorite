@@ -29,7 +29,7 @@ import java.util.NoSuchElementException;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 
 /**
- * Represent {@link TLongIterator} for long array.
+ * Represent {@link LongIterator} for long array.
  */
 public class FastUtilLongIterator extends FastUtilPrimitiveIterator<long[]> implements LongIterator
 {

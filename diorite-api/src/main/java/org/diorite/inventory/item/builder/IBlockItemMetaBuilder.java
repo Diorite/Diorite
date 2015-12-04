@@ -111,7 +111,7 @@ public interface IBlockItemMetaBuilder<B extends IBlockItemMetaBuilder<B, M>, M 
      * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.
      * (Vanilla client can't see them)
      *
-     * @param materials material to add.
+     * @param src source item meta to copy data from it.
      *
      * @return builder for method chains.
      */
@@ -129,7 +129,7 @@ public interface IBlockItemMetaBuilder<B extends IBlockItemMetaBuilder<B, M>, M 
     /**
      * Clear list of materials where this block can be placed on,
      * this method will automatically enable CanPlaceOn tag if needed. <br>
-     * Use {@link #setUseCanPlaceOnTag(boolean)} if you want disable CanPlaceOn tag.
+     * Use {@link #useCanPlaceOnTag(boolean)} if you want disable CanPlaceOn tag.
      *
      * @return builder for method chains.
      */

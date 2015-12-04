@@ -96,7 +96,7 @@ public final class DioriteUtils
      * so it will join duplicated items etc.
      *
      * @param respectStackSize if method should respect max stack size.
-     * @param items            item to compact.
+     * @param itemsToCopact    item to compact.
      *
      * @return compacted array of items.
      */

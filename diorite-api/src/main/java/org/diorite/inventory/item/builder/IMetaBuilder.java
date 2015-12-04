@@ -389,31 +389,6 @@ public interface IMetaBuilder<B extends IMetaBuilder<B, M>, M extends ItemMeta>
     }
 
     /**
-     * Copy all data from given meta to this builder.
-     *
-     * @param meta source meta to copy data.
-     */
-    default B copy(final ItemMeta meta)
-    {
-        return this.copyBasic(meta);
-    }
-
-    /**
-     * Copy basic (that exist in every type of meta) data from given meta to this builder.
-     *
-     * @param meta source meta to copy data.
-     */
-    default B copyBasic(final ItemMeta meta)
-    {
-        this.name(meta);
-        this.lore(meta);
-        this.setAttributeModifier(meta);
-        this.setEnchants(meta);
-        this.addHideFlags(meta);
-        return this.getBuilder();
-    }
-
-    /**
      * Returns created item meta.
      *
      * @return created item meta.
