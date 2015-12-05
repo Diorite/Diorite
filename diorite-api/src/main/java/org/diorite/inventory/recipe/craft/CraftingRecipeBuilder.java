@@ -2,9 +2,11 @@ package org.diorite.inventory.recipe.craft;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
-import org.diorite.Diorite;
 import org.diorite.entity.Player;
+import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.recipe.RecipeBuilder;
@@ -101,6 +103,13 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
     CraftingRecipeBuilder priority(long priority);
 
     /**
+     * Returns recipe group that created this builder. (master recipe manager by default)
+     *
+     * @return recipe group that created this builder.
+     */
+    CraftingRecipeGroup getParent();
+
+    /**
      * Returns shapless recipe builder.
      *
      * @return shapless recipe builder.
@@ -113,6 +122,22 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
      * @return shaped recipe builder.
      */
     ShapedCraftingRecipeBuilder shaped();
+
+    /**
+     * Returns grouped recipe builder.
+     *
+     * @return grouped recipe builder.
+     */
+    GroupCraftingRecipeBuilder grouped();
+
+    /**
+     * Returns semi-shaped recipe builder. <br>
+     * WARN: semi shaped recipes allows for creating ver advanced patterns but they are also much slower than other types.
+     * Use with caution, and with valid priority.
+     *
+     * @return semi-shaped recipe builder.
+     */
+    SemiShapedCraftingRecipeBuilder semiShaped();
 
     /**
      * Builds and create recipe using all given data.
@@ -135,7 +160,308 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
     CraftingRecipe buildAndAdd() throws RuntimeException;
 
     /**
-     * Advanced class for creating shapeless crafting recipes
+     * Builder interface for creating semi-shaped crafting recipes
+     */
+    interface SemiShapedCraftingRecipeBuilder extends ShapelessCraftingRecipeBuilder, ShapedCraftingRecipeBuilder
+    {
+        @Override
+        SemiShapedCraftingRecipeBuilder result(ItemStack itemStack);
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder result(final Material material)
+        {
+            return this.result(new BaseItemStack(material));
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder result(final Material material, final int amount)
+        {
+            return this.result(new BaseItemStack(material, amount));
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder result(final Function<CraftingGrid, ItemStack> itemStack)
+        {
+            return this.result((player, itemStacks) -> itemStack.apply(itemStacks));
+        }
+
+        @Override
+        SemiShapedCraftingRecipeBuilder result(BiFunction<Player, CraftingGrid, ItemStack> itemStack);
+
+        @Override
+        SemiShapedCraftingRecipeBuilder vanilla(boolean vanilla);
+
+        @Override
+        SemiShapedCraftingRecipeBuilder priority(long priority);
+
+        @Override
+        default ShapelessCraftingRecipeBuilder shapeless()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        default ShapedCraftingRecipeBuilder shaped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        default GroupCraftingRecipeBuilder grouped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder semiShaped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        SemiShapedCraftingRecipe build() throws RuntimeException;
+
+        @Override
+        default SemiShapedCraftingRecipe buildAndAdd() throws RuntimeException
+        {
+            final SemiShapedCraftingRecipe recipe = this.build();
+            this.getParent().add(recipe);
+            return recipe;
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder addIngredients(final CraftingRecipeItem... items)
+        {
+            for (final CraftingRecipeItem item : items)
+            {
+                this.addIngredient(item);
+            }
+            return this;
+        }
+
+        @Override
+        ShapelessCraftingRecipeItemBuilder addIngredient();
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder addIngredient(final ItemStack itemStack, final boolean ignoreType)
+        {
+            return this.addIngredient(new BasicCraftingRecipeItem(itemStack, ignoreType, null));
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder addIngredient(final ItemStack itemStack, final ItemStack replacement)
+        {
+            return this.addIngredient(new ReplacedCraftingRecipeItem(itemStack, false, null, replacement, null));
+        }
+
+        @Override
+        SemiShapedCraftingRecipeBuilder addIngredient(CraftingRecipeItem item);
+
+        @Override
+        SemiShapedCraftingRecipeBuilder pattern(String... pattern);
+
+        @Override
+        SemiShapedCraftingRecipeBuilder pattern(CraftingRecipePattern pattern);
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder pattern(final char[]... pattern)
+        {
+            final String[] pat = new String[pattern.length];
+            int i = 0;
+            for (final char[] chars : pattern)
+            {
+                pat[i++] = new String(chars);
+            }
+            return this.pattern(pat);
+        }
+
+        @Override
+        ShapedCraftingRecipeItemBuilder addIngredient(char c);
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder addIngredient(final char c, final ItemStack itemStack, final boolean ignoreType)
+        {
+            return this.addIngredient(c, new BasicCraftingRecipeItem(itemStack, ignoreType, null));
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder addIngredient(final char c, final ItemStack itemStack, final ItemStack replacement)
+        {
+            return this.addIngredient(c, new ReplacedCraftingRecipeItem(itemStack, false, null, replacement, null));
+        }
+
+        @Override
+        SemiShapedCraftingRecipeBuilder addIngredient(char c, CraftingRecipeItem item);
+    }
+
+    /**
+     * Builder interface for creating shapeless crafting recipes
+     */
+    interface GroupCraftingRecipeBuilder extends CraftingRecipeBuilder
+    {
+        @Override
+        GroupCraftingRecipeBuilder result(ItemStack itemStack);
+
+        @Override
+        default GroupCraftingRecipeBuilder result(final Material material)
+        {
+            return this.result(new BaseItemStack(material));
+        }
+
+        @Override
+        default GroupCraftingRecipeBuilder result(final Material material, final int amount)
+        {
+            return this.result(new BaseItemStack(material, amount));
+        }
+
+        @Override
+        default GroupCraftingRecipeBuilder result(final Function<CraftingGrid, ItemStack> itemStack)
+        {
+            return this.result((player, itemStacks) -> itemStack.apply(itemStacks));
+        }
+
+        @Override
+        GroupCraftingRecipeBuilder result(BiFunction<Player, CraftingGrid, ItemStack> itemStack);
+
+        @Override
+        GroupCraftingRecipeBuilder vanilla(boolean vanilla);
+
+        @Override
+        GroupCraftingRecipeBuilder priority(long priority);
+
+        @Override
+        default ShapelessCraftingRecipeBuilder shapeless()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        default ShapedCraftingRecipeBuilder shaped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        default GroupCraftingRecipeBuilder grouped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder semiShaped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        CraftingRecipeGroup build() throws RuntimeException;
+
+        @Override
+        default CraftingRecipeGroup buildAndAdd() throws RuntimeException
+        {
+            final CraftingRecipeGroup recipe = this.build();
+            this.getParent().add(recipe);
+            return recipe;
+        }
+
+        /**
+         * Adds fast group validator, it should do fast check if any recipe in group may be valid for items in inventory. <br>
+         * It don't need return valid value, it may return true even if this group don't contains valid recipe for given eq.
+         *
+         * @param predicate predicate of inventory, should be fast.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder validator(Predicate<GridInventory> predicate);
+
+        /**
+         * Adds fast group validator as recipe, it should do fast check if any recipe in group may be valid for items in inventory. <br>
+         * It don't need return valid value, it may return true even if this group don't contains valid recipe for given eq.
+         *
+         * @param predicateRecipe predicate recipe of inventory, should be simple.
+         *
+         * @return this same builder for method chains.
+         */
+        default GroupCraftingRecipeBuilder validator(final CraftingRecipe predicateRecipe)
+        {
+            return this.validator(eq -> predicateRecipe.isMatching(eq) != null);
+        }
+
+        /**
+         * Adds recipe to this group, this recipe also can be a group.
+         *
+         * @param recipe recipe to be added.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder addRecipe(CraftingRecipe recipe);
+
+        /**
+         * Adds recipe to this group, this recipe also can be a group.
+         *
+         * @param recipe function to transform builder.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder addRecipe(UnaryOperator<CraftingRecipeBuilder> recipe);
+
+        /**
+         * Adds shaped recipe to this group.
+         *
+         * @param recipe function to transform builder.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder addShapedRecipe(UnaryOperator<ShapedCraftingRecipeBuilder> recipe);
+
+        /**
+         * Adds shapeless recipe to this group.
+         *
+         * @param recipe function to transform builder.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder addShapelessRecipe(UnaryOperator<ShapelessCraftingRecipeBuilder> recipe);
+
+        /**
+         * Adds grouped recipe to this group.
+         *
+         * @param recipe function to transform builder.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder addGroupedRecipe(UnaryOperator<GroupCraftingRecipeBuilder> recipe);
+
+        /**
+         * Adds semi-shaped recipe to this group.
+         *
+         * @param recipe function to transform builder.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder addSemiShapedRecipe(UnaryOperator<SemiShapedCraftingRecipeBuilder> recipe);
+
+        /**
+         * Adds shaped recipe to this group.
+         *
+         * @param recipe function to transform builder.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder addShapedRecipe_(Function<ShapedCraftingRecipeBuilder, ShapedCraftingRecipeItemBuilder> recipe);
+
+        /**
+         * Adds shapeless recipe to this group.
+         *
+         * @param recipe function to transform builder.
+         *
+         * @return this same builder for method chains.
+         */
+        GroupCraftingRecipeBuilder addShapelessRecipe_(Function<ShapelessCraftingRecipeBuilder, ShapelessCraftingRecipeItemBuilder> recipe);
+    }
+
+    /**
+     * Builder interface for creating shapeless crafting recipes
      */
     interface ShapelessCraftingRecipeBuilder extends CraftingRecipeBuilder
     {
@@ -182,13 +508,25 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
         }
 
         @Override
+        default GroupCraftingRecipeBuilder grouped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder semiShaped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
         ShapelessCraftingRecipe build() throws RuntimeException;
 
         @Override
         default ShapelessCraftingRecipe buildAndAdd() throws RuntimeException
         {
             final ShapelessCraftingRecipe recipe = this.build();
-            Diorite.getServerManager().getRecipeManager().add(recipe);
+            this.getParent().add(recipe);
             return recipe;
         }
 
@@ -252,7 +590,7 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
     }
 
     /**
-     * Advanced class for creating shaped crafting recipes
+     * Builder interface for creating shaped crafting recipes
      */
     interface ShapedCraftingRecipeBuilder extends CraftingRecipeBuilder
     {
@@ -299,13 +637,25 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
         }
 
         @Override
+        default GroupCraftingRecipeBuilder grouped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
+        default SemiShapedCraftingRecipeBuilder semiShaped()
+        {
+            throw new IllegalStateException("You can't change type of builder!");
+        }
+
+        @Override
         ShapedCraftingRecipe build();
 
         @Override
         default ShapedCraftingRecipe buildAndAdd() throws RuntimeException
         {
             final ShapedCraftingRecipe recipe = this.build();
-            Diorite.getServerManager().getRecipeManager().add(recipe);
+            this.getParent().add(recipe);
             return recipe;
         }
 

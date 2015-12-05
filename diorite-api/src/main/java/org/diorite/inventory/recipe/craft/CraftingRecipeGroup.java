@@ -3,13 +3,14 @@ package org.diorite.inventory.recipe.craft;
 import java.util.Iterator;
 
 import org.diorite.inventory.GridInventory;
+import org.diorite.inventory.recipe.RecipeGroup;
 
 /**
  * RecipeGroup for crafting recipes.
  *
  * @see org.diorite.inventory.recipe.RecipeGroup
  */
-public interface CraftingRecipeGroup
+public interface CraftingRecipeGroup extends RecipeGroup, CraftingRecipe
 {
     /**
      * Returns new instance of crafting recipe builder.
@@ -37,21 +38,12 @@ public interface CraftingRecipeGroup
     boolean remove(CraftingRecipe recipe);
 
     /**
-     * Removes all crafting recipes and add only vanilla recipes again.
-     */
-    void resetCraftingRecipes();
-
-    /**
-     * Removes ALL crafting recipes.
-     */
-    void clearCraftingRecipes();
-
-    /**
      * Returns iterator of recipes, may be used to remove recipes.
      *
      * @return iterator of recipes, may be used to remove recipes.
      */
-    Iterator<CraftingRecipe> craftingRecipeIterator();
+    @Override
+    Iterator<? extends CraftingRecipe> recipeIterator();
 
     /**
      * Try find possible recipe for given inventory. <br>

@@ -57,18 +57,7 @@ import org.diorite.utils.Color;
 
 public class RecipeManagerImpl implements IRecipeManager
 {
-    final Set<CraftingRecipe> recipes = new TreeSet<>((r1, r2) -> {
-        if (r1.equals(r2))
-        {
-            return 0;
-        }
-        int i = Long.compare(r1.getPriority(), r2.getPriority());
-        if (i != 0)
-        {
-            return i;
-        }
-        return 1;
-    });
+    private final Set<CraftingRecipe> recipes = new TreeSet<>(RecipeComparator.INSTANCE);
 
     @Override
     public CraftingRecipeBuilder craftingBuilder()
@@ -86,6 +75,12 @@ public class RecipeManagerImpl implements IRecipeManager
     public boolean remove(final CraftingRecipe recipe)
     {
         return this.recipes.remove(recipe);
+    }
+
+    @Override
+    public Iterator<? extends CraftingRecipe> recipeIterator()
+    {
+        return this.recipes.iterator();
     }
 
     @Override
@@ -134,6 +129,30 @@ public class RecipeManagerImpl implements IRecipeManager
     public void clear()
     {
         this.clearCraftingRecipes();
+    }
+
+    @Override
+    public CraftingRecipeCheckResult isMatching(final GridInventory inventory)
+    {
+        throw new IllegalStateException("isMatching method used on root recipe manager.");
+    }
+
+    @Override
+    public List<ItemStack> getResult()
+    {
+        throw new IllegalStateException("getResult method used on root recipe manager.");
+    }
+
+    @Override
+    public long getPriority()
+    {
+        throw new IllegalStateException("getPriority method used on root recipe manager.");
+    }
+
+    @Override
+    public boolean isVanilla()
+    {
+        throw new IllegalStateException("isVanilla method used on root recipe manager.");
     }
 
     private static long getNextPriority()
@@ -747,4 +766,5 @@ public class RecipeManagerImpl implements IRecipeManager
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("recipes", this.recipes).toString();
     }
+
 }

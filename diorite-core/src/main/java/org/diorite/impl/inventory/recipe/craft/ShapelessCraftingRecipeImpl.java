@@ -26,9 +26,12 @@ package org.diorite.impl.inventory.recipe.craft;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
@@ -52,12 +55,14 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
  */
 public class ShapelessCraftingRecipeImpl extends CraftingRecipeImpl implements ShapelessCraftingRecipe
 {
-    protected final List<CraftingRecipeItem> ingredients;
+    protected final List<CraftingRecipeItem>           ingredients;
+    protected final List<CraftingRepeatableRecipeItem> repeatableIngredients;
 
-    public ShapelessCraftingRecipeImpl(final List<CraftingRecipeItem> ingredients, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
+    public ShapelessCraftingRecipeImpl(final List<CraftingRecipeItem> ingredients, final List<CraftingRepeatableRecipeItem> repeatableIngredients, final ItemStack result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
-        super(extractResults(result, ingredients), priority, vanilla, resultFunc);
+        super(extractResults(result, ingredients, repeatableIngredients), priority, vanilla, resultFunc);
         this.ingredients = new ArrayList<>(ingredients);
+        this.repeatableIngredients = new ArrayList<>(repeatableIngredients);
     }
 
     @Override
@@ -68,52 +73,146 @@ public class ShapelessCraftingRecipeImpl extends CraftingRecipeImpl implements S
 
         final int maxInvRow = inventory.getRows(), maxInvCol = inventory.getColumns();
         final LinkedList<CraftingRecipeItem> ingredients = new LinkedList<>(this.getIngredients());
+        final Collection<CraftingRepeatableRecipeItem> repeatableIngredients = new LinkedList<>(this.getRepeatableIngredients());
         final Collection<BiConsumer<Player, CraftingGrid>> reps = new ArrayList<>(maxInvCol * maxInvRow);
         final CraftingGrid items = new CraftingGridImpl(maxInvRow, maxInvCol);
         int col = - 1, row = 0;
-        for (short i = 1, size = (short) inventory.size(); i < size; i++)
+        ItemStack result;
+        if (this.repeatableIngredients.isEmpty())
         {
-            if (++ col >= maxInvCol)
+            for (short i = 1, size = (short) inventory.size(); i < size; i++)
             {
-                col = 0;
-                if (++ row > maxInvRow)
+                if (++ col >= maxInvCol)
                 {
-                    throw new IllegalStateException("Inventory is larger than excepted.");
+                    col = 0;
+                    if (++ row > maxInvRow)
+                    {
+                        throw new IllegalStateException("Inventory is larger than excepted.");
+                    }
+                }
+                final ItemStack item = inventory.getItem(i);
+                if (item == null)
+                {
+                    continue;
+                }
+                boolean matching = false;
+                //noinspection Duplicates
+                for (final Iterator<CraftingRecipeItem> iterator = ingredients.iterator(); iterator.hasNext(); )
+                {
+                    final CraftingRecipeItem ingredient = iterator.next();
+                    final ItemStack valid = ingredient.isValid(player, item);
+                    if (valid != null)
+                    {
+                        final short icpy = i;
+                        reps.add((p, c) -> {
+                            final ItemStack repl = ingredient.getReplacement(p, c);
+                            if (repl != null)
+                            {
+                                onCraft.put(icpy, repl);
+                            }
+                        });
+                        items.setItem(row, col, valid);
+                        iterator.remove();
+                        matching = true;
+                        break;
+                    }
+                }
+                if (! matching)
+                {
+                    return null;
                 }
             }
-            final ItemStack item = inventory.getItem(i);
-            if (item == null)
+            result = (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone());
+        }
+        else
+        {
+            final Map<CraftingRepeatableRecipeItem, List<ItemStack>> repeatableItems = new IdentityHashMap<>(this.repeatableIngredients.size());
+            for (short i = 1, size = (short) inventory.size(); i < size; i++)
             {
-                continue;
-            }
-            boolean matching = false;
-            for (final Iterator<CraftingRecipeItem> iterator = ingredients.iterator(); iterator.hasNext(); )
-            {
-                final CraftingRecipeItem ingredient = iterator.next();
-                final ItemStack valid = ingredient.isValid(player, item);
-                if (valid != null)
+                if (++ col >= maxInvCol)
                 {
-                    final short icpy = i;
-                    reps.add((p, c) -> {
-                        final ItemStack repl = ingredient.getReplacement(p, c);
-                        if (repl != null)
+                    col = 0;
+                    if (++ row > maxInvRow)
+                    {
+                        throw new IllegalStateException("Inventory is larger than excepted.");
+                    }
+                }
+                final ItemStack item = inventory.getItem(i);
+                if (item == null)
+                {
+                    continue;
+                }
+                boolean matching = false;
+                if (! ingredients.isEmpty())
+                {
+                    //noinspection Duplicates
+                    for (final Iterator<CraftingRecipeItem> iterator = ingredients.iterator(); iterator.hasNext(); )
+                    {
+                        final CraftingRecipeItem ingredient = iterator.next();
+                        final ItemStack valid = ingredient.isValid(player, item);
+                        if (valid != null)
                         {
-                            onCraft.put(icpy, repl);
+                            final short icpy = i;
+                            reps.add((p, c) -> {
+                                final ItemStack repl = ingredient.getReplacement(p, c);
+                                if (repl != null)
+                                {
+                                    onCraft.put(icpy, repl);
+                                }
+                            });
+                            items.setItem(row, col, valid);
+                            iterator.remove();
+                            matching = true;
+                            break;
                         }
-                    });
-                    items.setItem(row, col, valid);
-                    iterator.remove();
-                    matching = true;
-                    break;
+                    }
+                }
+                if (! matching)
+                {
+                    for (final CraftingRepeatableRecipeItem ingredient : this.repeatableIngredients)
+                    {
+                        final ItemStack valid = ingredient.isValid(player, item);
+                        if (valid != null)
+                        {
+                            final short icpy = i;
+                            reps.add((p, c) -> {
+                                final ItemStack repl = ingredient.getReplacement(p, c);
+                                if (repl != null)
+                                {
+                                    onCraft.put(icpy, repl);
+                                }
+                            });
+                            List<ItemStack> repItems = repeatableItems.get(ingredient);
+                            if (repItems == null)
+                            {
+                                repeatableIngredients.remove(ingredient);
+                                repItems = new ArrayList<>(10);
+                                repeatableItems.put(ingredient, repItems);
+                            }
+                            repItems.add(valid);
+                            items.setItem(row, col, valid);
+                            matching = true;
+                            break;
+                        }
+                    }
+                }
+                if (! matching)
+                {
+                    return null;
                 }
             }
-            if (! matching)
+            if (! repeatableIngredients.isEmpty())
             {
                 return null;
             }
+            result = (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone());
+            for (final Entry<CraftingRepeatableRecipeItem, List<ItemStack>> entry : repeatableItems.entrySet())
+            {
+                result = entry.getKey().transform(result, entry.getValue());
+            }
         }
         reps.forEach(c -> c.accept(player, items));
-        return ingredients.isEmpty() ? new CraftingRecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft) : null;
+        return ingredients.isEmpty() ? new CraftingRecipeCheckResultImpl(this, result, items, onCraft) : null;
     }
 
     @Override
@@ -125,12 +224,12 @@ public class ShapelessCraftingRecipeImpl extends CraftingRecipeImpl implements S
     @Override
     public List<? extends CraftingRepeatableRecipeItem> getRepeatableIngredients()
     {
-        return null;
+        return new ArrayList<>(this.repeatableIngredients);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("ingredients", this.ingredients).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("ingredients", this.ingredients).append("repeatableIngredients", this.repeatableIngredients).toString();
     }
 }

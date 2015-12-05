@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,8 +13,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
+import org.diorite.inventory.recipe.Recipe;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
 
 abstract class CraftingRecipeImpl extends PriorityCraftingRecipeImpl
 {
@@ -40,7 +42,7 @@ abstract class CraftingRecipeImpl extends PriorityCraftingRecipeImpl
         this.resultList = (result.size() == 1) ? Collections.singletonList(this.result) : Collections.unmodifiableList(new ArrayList<>(result));
     }
 
-    protected static List<ItemStack> extractResults(final ItemStack result, final Collection<CraftingRecipeItem> ingredients)
+    protected static List<ItemStack> extractResults(final ItemStack result, final Collection<? extends CraftingRecipeItem> ingredients)
     {
         final List<ItemStack> results = new ArrayList<>(ingredients.size() + 1);
         results.add(result);
@@ -51,6 +53,25 @@ abstract class CraftingRecipeImpl extends PriorityCraftingRecipeImpl
                 continue;
             }
             results.add(ingredient.getReplacement());
+        }
+        return results;
+    }
+
+    @SafeVarargs
+    protected static List<ItemStack> extractResults(final ItemStack result, final Collection<? extends CraftingRecipeItem>... ingredients)
+    {
+        final List<ItemStack> results = new ArrayList<>((ingredients.length * 5) + 1);
+        results.add(result);
+        for (final Collection<? extends CraftingRecipeItem> ingredientsList : ingredients)
+        {
+            for (final CraftingRecipeItem ingredient : ingredientsList)
+            {
+                if (ingredient.getReplacement() == null)
+                {
+                    continue;
+                }
+                results.add(ingredient.getReplacement());
+            }
         }
         return results;
     }
@@ -67,6 +88,14 @@ abstract class CraftingRecipeImpl extends PriorityCraftingRecipeImpl
             }
             results.add(ingredient.getReplacement());
         }
+        return results;
+    }
+
+    protected static List<ItemStack> extractResultsFromRecipes(final ItemStack result, final Collection<Recipe> recipes)
+    {
+        final List<ItemStack> results = new ArrayList<>((recipes.size() << 3) + 1);
+        results.add(result);
+        results.addAll(recipes.stream().flatMap(r -> r.getResult().stream()).collect(Collectors.toList()));
         return results;
     }
 

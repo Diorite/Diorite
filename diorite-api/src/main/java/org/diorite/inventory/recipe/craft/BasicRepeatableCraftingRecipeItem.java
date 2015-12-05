@@ -17,7 +17,7 @@ public class BasicRepeatableCraftingRecipeItem implements CraftingRepeatableReci
      */
     protected final CraftingRecipeItem                                        item;
     /**
-     * Transform func.
+     * Transform result func.
      *
      * @see #transform(ItemStack, List)
      */
@@ -27,7 +27,7 @@ public class BasicRepeatableCraftingRecipeItem implements CraftingRepeatableReci
      * Construct new BasicRepeatableRecipeItem for given recipe item and transform function.
      *
      * @param item          recipe item to wrap.
-     * @param transformFunc transform function.
+     * @param transformFunc transform result item function.
      */
     public BasicRepeatableCraftingRecipeItem(final CraftingRecipeItem item, final BiFunction<ItemStack, List<ItemStack>, ItemStack> transformFunc)
     {

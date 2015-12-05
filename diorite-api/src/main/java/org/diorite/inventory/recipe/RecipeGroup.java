@@ -1,5 +1,7 @@
 package org.diorite.inventory.recipe;
 
+import java.util.Iterator;
+
 /**
  * RecipeGroup, it is some kind of fake recipe that act like RecipeManager too. <br>
  * It allow grouping related recipes to speed up lookup for valid one. <br>
@@ -9,7 +11,7 @@ package org.diorite.inventory.recipe;
  * With group we first validate group recipe, and check if this is any type of log,
  * so it will be only one simple check to say that recipe is invalid instead of 6.
  */
-public interface RecipeGroup
+public interface RecipeGroup extends Recipe
 {
     /**
      * Removes all recipes and add only vanilla recipes again.
@@ -20,4 +22,11 @@ public interface RecipeGroup
      * Removes ALL recipes.
      */
     void clear();
+
+    /**
+     * Returns iterator of recipes, may be used to remove recipes.
+     *
+     * @return iterator of recipes, may be used to remove recipes.
+     */
+    Iterator<? extends Recipe> recipeIterator();
 }
