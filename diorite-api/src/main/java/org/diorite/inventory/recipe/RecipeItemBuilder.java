@@ -73,7 +73,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern    pattern item.
      * @param ignoreType if subtype of material should be ignored.
@@ -86,7 +87,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern pattern item.
      * @param amount  amount of this item.
@@ -99,7 +101,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern    pattern item.
      * @param amount     amount of this item.
@@ -113,7 +116,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern pattern item.
      *
@@ -125,7 +129,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern    pattern item.
      * @param ignoreType if subtype of material should be ignored.

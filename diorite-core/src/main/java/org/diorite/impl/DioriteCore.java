@@ -923,6 +923,12 @@ public class DioriteCore implements Core
         return this.serverManager;
     }
 
+    @Override
+    public boolean isDebug()
+    {
+        return CoreMain.isEnabledDebug();
+    }
+
     public void setServerManager(final IServerManager serverManager)
     {
         this.serverManager = serverManager;

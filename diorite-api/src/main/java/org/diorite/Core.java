@@ -76,6 +76,8 @@ public interface Core extends Synchronizable
         return "1.8.7";
     }
 
+    boolean isDebug();
+
     Logger getLogger();
 
     String getVersion();

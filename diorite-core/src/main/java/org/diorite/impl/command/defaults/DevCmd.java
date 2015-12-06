@@ -124,7 +124,7 @@ public class DevCmd extends SystemCommandImpl
                 case "itemid":
                 {
                     final ItemMetaImpl meta = (ItemMetaImpl) p.getInventory().getItemInHand().getItemMeta();
-                    System.out.println("Meta: " + System.identityHashCode(meta) + ", tag: " + (meta.getRawData() == null ? "NULL" : System.identityHashCode(meta.getRawData()) + "") + ", item: " + (! meta.getItemStack().isPresent() ? "NULL" : System.identityHashCode(meta.getItemStack().get()) + ""));
+                    System.out.println("Meta: " + System.identityHashCode(meta) + ", tag: " + (meta.getRawNbtData() == null ? "NULL" : System.identityHashCode(meta.getRawNbtData()) + "") + ", item: " + (! meta.getItemStack().isPresent() ? "NULL" : System.identityHashCode(meta.getItemStack().get()) + ""));
                     break;
                 }
                 case "skullmeta":

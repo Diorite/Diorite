@@ -10,12 +10,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder;
 import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
 import org.diorite.inventory.recipe.craft.CraftingRecipeItemBuilder;
-import org.diorite.inventory.recipe.craft.ReplacedCraftingRecipeItem;
-import org.diorite.inventory.recipe.craft.BasicCraftingRecipeItem;
-import org.diorite.inventory.recipe.craft.CraftingGrid;
+import org.diorite.inventory.recipe.craft.MultiCraftingRecipeItem;
+import org.diorite.inventory.recipe.craft.SimpleCraftingRecipeItem;
+
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipeBuilder, B extends CraftingRecipeItemBuilder<T, B>> implements CraftingRecipeItemBuilder<T, B>
@@ -26,6 +29,7 @@ public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipe
     protected       ItemStack                                   replacement;
     protected       BiFunction<Player, CraftingGrid, ItemStack> replacmentFunc;
     protected final Collection<BiPredicate<Player, ItemStack>> validators = new ArrayList<>(4);
+    protected       Object2BooleanMap<ItemStack>               otherItems = new Object2BooleanOpenHashMap<>(4);
 
     protected BaseCraftingRecipeItemBuilderImpl(final T builder)
     {
@@ -50,8 +54,12 @@ public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipe
     @Override
     public B item(final ItemStack pattern, final boolean ignoreType)
     {
-        this.item = pattern;
-        this.ignoreType = ignoreType;
+        this.otherItems.put(pattern, ignoreType);
+        if (this.item == null)
+        {
+            this.item = pattern;
+            this.ignoreType = ignoreType;
+        }
         return (B) this;
     }
 
@@ -64,11 +72,11 @@ public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipe
 
     protected CraftingRecipeItem createItem()
     {
-        if (this.replacement != null)
+        if (this.otherItems.size() == 1)
         {
-            return new ReplacedCraftingRecipeItem(this.item, this.ignoreType, this.replacmentFunc, this.replacement, this.validators);
+            return new SimpleCraftingRecipeItem(this.item, this.ignoreType, this.replacmentFunc, this.replacement, this.validators);
         }
-        return new BasicCraftingRecipeItem(this.item, this.ignoreType, this.validators);
+        return new MultiCraftingRecipeItem(this.item, this.otherItems, this.replacmentFunc, this.replacement, this.validators);
     }
 
     protected abstract void addItem(CraftingRecipeItem item);

@@ -60,6 +60,16 @@ public interface ItemMeta extends Dirtable
     ItemMeta apply(ItemStack item);
 
     /**
+     * Returns raw nbt tag data. Editing it may cause many problems, it should be used as read-only.
+     *
+     * @return raw nbt tag data.
+     *
+     * @see #getNbtData()
+     * @see #setNbtData(NbtTagCompound)
+     */
+    NbtTagCompound getRawNbtData();
+
+    /**
      * Returns true if this meta isn't contains any data.
      *
      * @return true if this meta isn't contains any data.

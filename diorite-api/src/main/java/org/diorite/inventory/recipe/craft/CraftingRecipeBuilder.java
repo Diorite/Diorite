@@ -245,13 +245,13 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
         @Override
         default SemiShapedCraftingRecipeBuilder addIngredient(final ItemStack itemStack, final boolean ignoreType)
         {
-            return this.addIngredient(new BasicCraftingRecipeItem(itemStack, ignoreType, null));
+            return this.addIngredient(new SimpleCraftingRecipeItem(itemStack, ignoreType, null));
         }
 
         @Override
         default SemiShapedCraftingRecipeBuilder addIngredient(final ItemStack itemStack, final ItemStack replacement)
         {
-            return this.addIngredient(new ReplacedCraftingRecipeItem(itemStack, false, null, replacement, null));
+            return this.addIngredient(new SimpleCraftingRecipeItem(itemStack, false, null, replacement, null));
         }
 
         @Override
@@ -281,13 +281,13 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
         @Override
         default SemiShapedCraftingRecipeBuilder addIngredient(final char c, final ItemStack itemStack, final boolean ignoreType)
         {
-            return this.addIngredient(c, new BasicCraftingRecipeItem(itemStack, ignoreType, null));
+            return this.addIngredient(c, new SimpleCraftingRecipeItem(itemStack, ignoreType, null));
         }
 
         @Override
         default SemiShapedCraftingRecipeBuilder addIngredient(final char c, final ItemStack itemStack, final ItemStack replacement)
         {
-            return this.addIngredient(c, new ReplacedCraftingRecipeItem(itemStack, false, null, replacement, null));
+            return this.addIngredient(c, new SimpleCraftingRecipeItem(itemStack, false, null, replacement, null));
         }
 
         @Override
@@ -563,7 +563,7 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
          */
         default ShapelessCraftingRecipeBuilder addIngredient(final ItemStack itemStack, final boolean ignoreType)
         {
-            return this.addIngredient(new BasicCraftingRecipeItem(itemStack, ignoreType, null));
+            return this.addIngredient(new SimpleCraftingRecipeItem(itemStack, ignoreType, null));
         }
 
         /**
@@ -576,7 +576,7 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
          */
         default ShapelessCraftingRecipeBuilder addIngredient(final ItemStack itemStack, final ItemStack replacement)
         {
-            return this.addIngredient(new ReplacedCraftingRecipeItem(itemStack, false, null, replacement, null));
+            return this.addIngredient(new SimpleCraftingRecipeItem(itemStack, false, null, replacement, null));
         }
 
         /**
@@ -715,7 +715,7 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
          */
         default ShapedCraftingRecipeBuilder addIngredient(final char c, final ItemStack itemStack, final boolean ignoreType)
         {
-            return this.addIngredient(c, new BasicCraftingRecipeItem(itemStack, ignoreType, null));
+            return this.addIngredient(c, new SimpleCraftingRecipeItem(itemStack, ignoreType, null));
         }
 
         /**
@@ -727,7 +727,7 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
          */
         default ShapedCraftingRecipeBuilder addIngredient(final char c, final ItemStack itemStack, final ItemStack replacement)
         {
-            return this.addIngredient(c, new ReplacedCraftingRecipeItem(itemStack, false, null, replacement, null));
+            return this.addIngredient(c, new SimpleCraftingRecipeItem(itemStack, false, null, replacement, null));
         }
 
         /**

@@ -200,7 +200,7 @@ public class PacketDataSerializer extends ByteBuf
         this.writeByte(itemStack.getAmount());
         this.writeShort(mat.getType());
         final ItemMeta meta = itemStack.getItemMeta();
-        this.writeNbtTagCompound((meta == null) ? null : ((meta instanceof ItemMetaImpl) ? ((ItemMetaImpl) meta).getRawData() : meta.getNbtData()));
+        this.writeNbtTagCompound((meta == null) ? null : ((meta instanceof ItemMetaImpl) ? ((ItemMetaImpl) meta).getRawNbtData() : meta.getNbtData()));
     }
 
     public void writeNbtTagCompound(final NbtTag nbt)
