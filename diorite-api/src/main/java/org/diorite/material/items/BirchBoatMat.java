@@ -32,48 +32,48 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 /**
- * Class representing 'Boat' item material in minecraft. <br>
- * ID of material: 333 <br>
- * String ID of material: minecraft:boat <br>
+ * Class representing 'Birch Boat' item material in minecraft. <br>
+ * ID of material: 445 <br>
+ * String ID of material: minecraft:birch_boat <br>
  * Max item stack size: 1
  */
 @SuppressWarnings("JavaDoc")
-public class BoatMat extends AbstractBoatMat
+public class BirchBoatMat extends AbstractBoatMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
      */
     public static final int USED_DATA_VALUES = 1;
 
-    public static final BoatMat BOAT = new BoatMat();
+    public static final BirchBoatMat BIRCH_BOAT = new BirchBoatMat();
 
-    private static final Map<String, BoatMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
-    private static final Short2ObjectMap<BoatMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Map<String, BirchBoatMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
+    private static final Short2ObjectMap<BirchBoatMat> byID   = new Short2ObjectOpenHashMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);
 
     @SuppressWarnings("MagicNumber")
-    protected BoatMat()
+    protected BirchBoatMat()
     {
-        super("BOAT", 333, "minecraft:boat", "BOAT", (short) 0x00);
+        super("BIRCH_BOAT", 445, "minecraft:birch_boat", "BIRCH_BOAT", (short) 0x00);
     }
 
-    protected BoatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
+    protected BirchBoatMat(final String enumName, final int id, final String minecraftId, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, typeName, type);
     }
 
-    protected BoatMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
+    protected BirchBoatMat(final String enumName, final int id, final String minecraftId, final int maxStack, final String typeName, final short type)
     {
         super(enumName, id, minecraftId, maxStack, typeName, type);
     }
 
     @Override
-    public BoatMat getType(final int type)
+    public BirchBoatMat getType(final int type)
     {
         return getByID(type);
     }
 
     @Override
-    public BoatMat getType(final String type)
+    public BirchBoatMat getType(final String type)
     {
         return getByEnumName(type);
     }
@@ -85,7 +85,7 @@ public class BoatMat extends AbstractBoatMat
      *
      * @return sub-type of Boat or null
      */
-    public static BoatMat getByID(final int id)
+    public static BirchBoatMat getByID(final int id)
     {
         return byID.get((short) id);
     }
@@ -98,7 +98,7 @@ public class BoatMat extends AbstractBoatMat
      *
      * @return sub-type of Boat or null
      */
-    public static BoatMat getByEnumName(final String name)
+    public static BirchBoatMat getByEnumName(final String name)
     {
         return byName.get(name);
     }
@@ -109,29 +109,29 @@ public class BoatMat extends AbstractBoatMat
      *
      * @param element sub-type to register
      */
-    public static void register(final BoatMat element)
+    public static void register(final BirchBoatMat element)
     {
         byID.put((short) element.getType(), element);
         byName.put(element.getTypeName(), element);
     }
 
     @Override
-    public BoatMat[] types()
+    public BirchBoatMat[] types()
     {
-        return BoatMat.boatTypes();
+        return BirchBoatMat.boatTypes();
     }
 
     /**
      * @return array that contains all sub-types of this item.
      */
-    public static BoatMat[] boatTypes()
+    public static BirchBoatMat[] boatTypes()
     {
-        return byID.values().toArray(new BoatMat[byID.size()]);
+        return byID.values().toArray(new BirchBoatMat[byID.size()]);
     }
 
     static
     {
-        BoatMat.register(BOAT);
+        BirchBoatMat.register(BIRCH_BOAT);
     }
 }
 
