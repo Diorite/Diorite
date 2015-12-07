@@ -300,11 +300,39 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         return true;
     }
 
+    private boolean checkNotNull()
+    {
+        int nonNull = 0;
+        for (final ItemStack itemStack : this)
+        {
+            if ((itemStack != null) && (itemStack.getAmount() > 0))
+            {
+                nonNull++;
+            }
+        }
+        if (nonNull == 0)
+        {
+            this.recipe = null;
+            return true;
+        }
+        if ((nonNull == 1) && (this.getResult() != null))
+        {
+            this.recipe = null;
+            this.setResult(null);
+            return true;
+        }
+        return false;
+    }
+
     public void checkRecipe(final CraftingRecipe lastRecipe)
     {
         CraftingRecipeCheckResult result = lastRecipe.isMatching(this);
         if (result == null)
         {
+            if (this.checkNotNull())
+            {
+                return;
+            }
             final CraftingRecipeManager rm = Diorite.getServerManager().getRecipeManager();
             result = rm.matchCraftingRecipe(this);
         }
@@ -354,25 +382,9 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                 return;
             }
 
-            if (this.recipe == null) // don't check empty eq for recipes
+            if (this.checkNotNull())
             {
-                int nonNull = 0;
-                for (final ItemStack itemStack : this.getContents())
-                {
-                    if (itemStack != null)
-                    {
-                        nonNull++;
-                    }
-                }
-                if (nonNull == 0)
-                {
-                    return;
-                }
-                else if ((nonNull == 1) && (this.getResult() != null))
-                {
-                    this.setResult(null);
-                    return;
-                }
+                return;
             }
 
             final CraftingRecipeCheckResult result = rm.matchCraftingRecipe(this);
