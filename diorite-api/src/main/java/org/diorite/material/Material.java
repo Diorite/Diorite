@@ -66,7 +66,9 @@ public abstract class Material implements SimpleEnum<Material>
     public static final IronOreMat                  IRON_ORE                   = IronOreMat.IRON_ORE;
     public static final CoalOreMat                  COAL_ORE                   = CoalOreMat.COAL_ORE;
     public static final LogMat                      LOG                        = LogMat.LOG_OAK;
+    public static final LogMat                      LOG2                       = LogMat.LOG_ACACIA;
     public static final LeavesMat                   LEAVES                     = LeavesMat.LEAVES_OAK;
+    public static final LeavesMat                   LEAVES2                    = LeavesMat.LEAVES_ACACIA;
     public static final SpongeMat                   SPONGE                     = SpongeMat.SPONGE;
     public static final GlassMat                    GLASS                      = GlassMat.GLASS;
     public static final LapisOreMat                 LAPIS_ORE                  = LapisOreMat.LAPIS_ORE;
@@ -92,7 +94,9 @@ public abstract class Material implements SimpleEnum<Material>
     public static final GoldBlockMat                GOLD_BLOCK                 = GoldBlockMat.GOLD_BLOCK;
     public static final IronBlockMat                IRON_BLOCK                 = IronBlockMat.IRON_BLOCK;
     public static final DoubleStoneSlabMat          DOUBLE_STONE_SLAB          = DoubleStoneSlabMat.DOUBLE_STONE_SLAB_STONE;
+    public static final DoubleStoneSlabMat          DOUBLE_STONE_SLAB2         = DoubleStoneSlabMat.DOUBLE_STONE_SLAB_RED_SANDSTONE;
     public static final StoneSlabMat                STONE_SLAB                 = StoneSlabMat.STONE_SLAB_STONE;
+    public static final StoneSlabMat                STONE_SLAB2                = StoneSlabMat.STONE_SLAB_RED_SANDSTONE;
     public static final BrickBlockMat               BRICK_BLOCK                = BrickBlockMat.BRICK_BLOCK;
     public static final TntMat                      TNT                        = TntMat.TNT;
     public static final BookshelfMat                BOOKSHELF                  = BookshelfMat.BOOKSHELF;

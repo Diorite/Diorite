@@ -89,7 +89,7 @@ public class ShapelessSingleCraftingRecipeImpl extends CraftingRecipeImpl implem
             final List<ItemStack> repeatedIngredients = new ArrayList<>(10);
             for (short i = 1, size = (short) inventory.size(); i < size; i++)
             {
-                if (++ col > maxInvCol)
+                if (++ col >= maxInvCol)
                 {
                     col = 0;
                     if (++ row > maxInvRow)
@@ -125,7 +125,7 @@ public class ShapelessSingleCraftingRecipeImpl extends CraftingRecipeImpl implem
         {
             for (short i = 1, size = (short) inventory.size(); i < size; i++)
             {
-                if (++ col > maxInvCol)
+                if (++ col >= maxInvCol)
                 {
                     col = 0;
                     if (++ row > maxInvRow)

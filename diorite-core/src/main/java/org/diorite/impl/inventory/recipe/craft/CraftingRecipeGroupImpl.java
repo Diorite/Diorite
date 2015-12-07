@@ -25,7 +25,15 @@ public class CraftingRecipeGroupImpl extends CraftingRecipeImpl implements Craft
 
     public CraftingRecipeGroupImpl(final Predicate<GridInventory> predicate, final Collection<CraftingRecipe> recipes, final ItemStack result, final long priority, final boolean vanilla)
     {
-        super(Collections.singletonList(result), priority, vanilla, null);
+        super((result == null) ? null : Collections.singletonList(result), priority, vanilla, null);
+        this.predicate = predicate;
+        this.recipes.addAll(recipes);
+        this.cpy = recipes;
+    }
+
+    public CraftingRecipeGroupImpl(final Predicate<GridInventory> predicate, final Collection<CraftingRecipe> recipes, final long priority, final boolean vanilla)
+    {
+        super(null, priority, vanilla, null);
         this.predicate = predicate;
         this.recipes.addAll(recipes);
         this.cpy = recipes;

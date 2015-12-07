@@ -171,7 +171,7 @@ public class CraftingRecipeBuilderImpl implements CraftingRecipeBuilder
         @Override
         public CraftingRecipeGroup build()
         {
-            Validate.notNull(this.oldBuilder.result, "result item can't be null.");
+//            Validate.notNull(this.oldBuilder.result, "result item can't be null.");
             Validate.notNull(this.validator, "validator can't be null.");
             if (this.oldBuilder.priority == null)
             {
@@ -312,7 +312,7 @@ public class CraftingRecipeBuilderImpl implements CraftingRecipeBuilder
             {
                 throw new IllegalArgumentException("Can't use both patterns at once.");
             }
-            Validate.notNull(this.oldBuilder.result, "result item can't be null.");
+//            Validate.notNull(this.oldBuilder.result, "result item can't be null.");
             if (this.oldBuilder.priority == null)
             {
                 this.priority(CraftingRecipe.DEFAULT_RECIPE_PRIORITY);
@@ -442,7 +442,7 @@ public class CraftingRecipeBuilderImpl implements CraftingRecipeBuilder
             {
                 Validate.notEmpty(this.repeatableIngredients, "ingredients list can't be empty.");
             }
-            Validate.notNull(this.oldBuilder.result, "result item can't be null.");
+//            Validate.notNull(this.oldBuilder.result, "result item can't be null.");
             if (this.oldBuilder.priority == null)
             {
                 this.priority(CraftingRecipe.DEFAULT_SHAPELESS_RECIPE_PRIORITY);
@@ -605,7 +605,7 @@ public class CraftingRecipeBuilderImpl implements CraftingRecipeBuilder
             {
                 throw new IllegalArgumentException("Can't use both patterns at once.");
             }
-            Validate.notNull(this.oldBuilder.result, "result item can't be null.");
+//            Validate.notNull(this.oldBuilder.result, "result item can't be null.");
             if (this.oldBuilder.priority == null)
             {
                 this.priority(CraftingRecipe.DEFAULT_SHAPED_RECIPE_PRIORITY);

@@ -36,10 +36,19 @@ abstract class CraftingRecipeImpl extends PriorityCraftingRecipeImpl
     protected CraftingRecipeImpl(final List<ItemStack> result, final long priority, final boolean vanilla, final BiFunction<Player, CraftingGrid, ItemStack> resultFunc)
     {
         super(priority, vanilla);
-        Validate.notEmpty(result, "Result list can't be empty.");
         this.resultFunc = resultFunc;
-        this.result = result.get(0);
-        this.resultList = (result.size() == 1) ? Collections.singletonList(this.result) : Collections.unmodifiableList(new ArrayList<>(result));
+
+        if (result != null)
+        {
+            Validate.notEmpty(result, "Result list can't be empty.");
+            this.result = result.get(0);
+            this.resultList = (result.size() == 1) ? Collections.singletonList(this.result) : Collections.unmodifiableList(new ArrayList<>(result));
+        }
+        else
+        {
+            this.result = null;
+            this.resultList = Collections.emptyList();
+        }
     }
 
     protected static List<ItemStack> extractResults(final ItemStack result, final Collection<? extends CraftingRecipeItem> ingredients)

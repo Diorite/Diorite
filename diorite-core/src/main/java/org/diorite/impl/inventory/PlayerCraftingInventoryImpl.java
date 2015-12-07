@@ -37,10 +37,10 @@ import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerCraftingInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.craft.CraftingRecipeManager;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.CraftingRecipe;
 import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
+import org.diorite.inventory.recipe.craft.CraftingRecipeManager;
 import org.diorite.utils.DioriteUtils;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
@@ -232,7 +232,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             {
                 if ((eqItem == null) || (eqItem.getAmount() < toTake.getAmount()) || ! eqItem.isSimilar(toTake))
                 {
-                    throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
+                    throw new IllegalArgumentException("Crafting failed (eqItem: " + eqItem + ", " + toTake + ") for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
                 }
                 eqItem.setAmount(eqItem.getAmount() - toTake.getAmount());
             }

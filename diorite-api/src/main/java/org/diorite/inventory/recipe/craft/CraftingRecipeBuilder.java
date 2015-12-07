@@ -388,6 +388,32 @@ public interface CraftingRecipeBuilder extends RecipeBuilder
         }
 
         /**
+         * Adds fast group validator as recipe, it should do fast check if any recipe in group may be valid for items in inventory. <br>
+         * It don't need return valid value, it may return true even if this group don't contains valid recipe for given eq.
+         *
+         * @param predicateRecipe predicate recipe of inventory, should be simple.
+         *
+         * @return this same builder for method chains.
+         */
+        default GroupCraftingRecipeBuilder validator(final CraftingRecipeBuilder predicateRecipe)
+        {
+            return this.validator(predicateRecipe.build());
+        }
+
+        /**
+         * Adds fast group validator as recipe, it should do fast check if any recipe in group may be valid for items in inventory. <br>
+         * It don't need return valid value, it may return true even if this group don't contains valid recipe for given eq.
+         *
+         * @param predicateRecipe predicate recipe of inventory, should be simple.
+         *
+         * @return this same builder for method chains.
+         */
+        default GroupCraftingRecipeBuilder validator(final CraftingRecipeItemBuilder<?, ?> predicateRecipe)
+        {
+            return this.validator(predicateRecipe.build().build());
+        }
+
+        /**
          * Adds recipe to this group, this recipe also can be a group.
          *
          * @param recipe recipe to be added.
