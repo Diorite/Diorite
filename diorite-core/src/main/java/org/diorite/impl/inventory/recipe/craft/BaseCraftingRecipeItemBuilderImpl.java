@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.recipe.craft.AnyCraftingRecipeItem;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder;
 import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
@@ -24,6 +25,7 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipeBuilder, B extends CraftingRecipeItemBuilder<T, B>> implements CraftingRecipeItemBuilder<T, B>
 {
     protected final T                                           builder;
+    protected       boolean                                     any;
     protected       ItemStack                                   item;
     protected       boolean                                     ignoreType;
     protected       ItemStack                                   replacement;
@@ -64,6 +66,13 @@ public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipe
     }
 
     @Override
+    public B any()
+    {
+        this.any = true;
+        return (B) this;
+    }
+
+    @Override
     public B validator(final BiPredicate<Player, ItemStack> validator)
     {
         this.validators.add(validator);
@@ -72,6 +81,10 @@ public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipe
 
     protected CraftingRecipeItem createItem()
     {
+        if (this.any)
+        {
+            return new AnyCraftingRecipeItem(this.item, this.replacmentFunc, this.replacement, this.validators);
+        }
         if (this.otherItems.size() == 1)
         {
             return new SimpleCraftingRecipeItem(this.item, this.ignoreType, this.replacmentFunc, this.replacement, this.validators);
@@ -84,7 +97,7 @@ public abstract class BaseCraftingRecipeItemBuilderImpl<T extends CraftingRecipe
     @Override
     public T build()
     {
-        if ((this.item == null) && this.validators.isEmpty())
+        if (((this.item == null) && ! this.any) && this.validators.isEmpty())
         {
             throw new RuntimeException("Can't create recipe item without any pattern data.");
         }

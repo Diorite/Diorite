@@ -136,7 +136,7 @@ public class MultiCraftingRecipeItem implements CraftingRecipeItem
                 continue;
             }
             final ItemStack is = item.clone();
-            is.setAmount(this.item.getAmount());
+            is.setAmount(patItem.getAmount());
             return is;
         }
         return null;

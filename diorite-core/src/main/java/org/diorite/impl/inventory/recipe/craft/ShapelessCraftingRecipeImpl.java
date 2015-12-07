@@ -209,6 +209,7 @@ public class ShapelessCraftingRecipeImpl extends CraftingRecipeImpl implements S
             for (final Entry<CraftingRepeatableRecipeItem, List<ItemStack>> entry : repeatableItems.entrySet())
             {
                 result = entry.getKey().transform(result, entry.getValue());
+                result = entry.getKey().transform(result, items);
             }
         }
         reps.forEach(c -> c.accept(player, items));

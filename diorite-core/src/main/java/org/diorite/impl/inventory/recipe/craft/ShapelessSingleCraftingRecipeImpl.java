@@ -119,6 +119,7 @@ public class ShapelessSingleCraftingRecipeImpl extends CraftingRecipeImpl implem
             }
             result = (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone());
             result = ((RepeatableRecipeItem) this.ingredient).transform(result, repeatedIngredients);
+            result = ((CraftingRepeatableRecipeItem) this.ingredient).transform(result, items);
         }
         else
         {

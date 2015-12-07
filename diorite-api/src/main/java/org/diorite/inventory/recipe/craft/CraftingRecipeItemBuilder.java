@@ -100,6 +100,18 @@ public interface CraftingRecipeItemBuilder<T extends CraftingRecipeBuilder, B ex
          * @return new recipe item builder.
          */
         ShapelessCraftingRecipeItemBuilder addIngredient();
+
+        /**
+         * Build and add this recipe item to recipe builder, and returns this same item builder. <br>
+         * Builder must contans any item or at least one validator.
+         *
+         * @return this same recipe item builder.
+         */
+        default ShapelessCraftingRecipeItemBuilder addClone()
+        {
+            this.addIngredient();
+            return this;
+        }
     }
 
     interface ShapedCraftingRecipeItemBuilder extends CraftingRecipeItemBuilder<ShapedCraftingRecipeBuilder, ShapedCraftingRecipeItemBuilder>

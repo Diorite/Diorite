@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.material.Material;
 
 /**
@@ -129,6 +130,14 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
+     * Sets pattern item of this recipe item to any possible item (but you can still use validators). <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
+     *
+     * @return this same builder for method chains.
+     */
+    B any();
+
+    /**
      * Sets pattern item of this recipe item. <br>
      * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
@@ -183,5 +192,14 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
          * @return this same builder for method chains.
          */
         B repeatable(BiFunction<ItemStack, List<ItemStack>, ItemStack> transformFunc);
+
+        /**
+         * Make this recipe item repeatable, so it can be used 1 or more time in crafting grid.
+         *
+         * @param transformFunc Transform function that transform result item using list of repeated ingredients.
+         *
+         * @return this same builder for method chains.
+         */
+        B repeatableAdv(BiFunction<ItemStack, CraftingGrid, ItemStack> transformFunc);
     }
 }

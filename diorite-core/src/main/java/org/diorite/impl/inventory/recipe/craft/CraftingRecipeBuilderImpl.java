@@ -489,6 +489,7 @@ public class CraftingRecipeBuilderImpl implements CraftingRecipeBuilder
     {
         private boolean                                           isRepeatable;
         private BiFunction<ItemStack, List<ItemStack>, ItemStack> repeatableFunc;
+        private BiFunction<ItemStack, CraftingGrid, ItemStack>    repeatableAdvFunc;
 
         protected ShapelessCraftingRecipeItemBuilder(final ShapelessCraftingRecipeBuilder builder)
         {
@@ -506,7 +507,7 @@ public class CraftingRecipeBuilderImpl implements CraftingRecipeBuilder
         {
             if (this.isRepeatable)
             {
-                return new BasicRepeatableCraftingRecipeItem(super.createItem(), this.repeatableFunc);
+                return new BasicRepeatableCraftingRecipeItem(super.createItem(), this.repeatableFunc, this.repeatableAdvFunc);
             }
             return super.createItem();
         }
@@ -529,6 +530,14 @@ public class CraftingRecipeBuilderImpl implements CraftingRecipeBuilder
         {
             this.isRepeatable = true;
             this.repeatableFunc = transformFunc;
+            return this;
+        }
+
+        @Override
+        public ShapelessCraftingRecipeItemBuilder repeatableAdv(final BiFunction<ItemStack, CraftingGrid, ItemStack> transformFunc)
+        {
+            this.isRepeatable = true;
+            this.repeatableAdvFunc = transformFunc;
             return this;
         }
 

@@ -184,11 +184,16 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
         protected ASimpleEnum(final String enumName)
         {
             this.enumName = enumName;
-            AtomicInteger i = ids.get(this.getClass());
+            Class<?> clazz = this.getClass();
+            while (clazz.isAnonymousClass())
+            {
+                clazz = clazz.getSuperclass();
+            }
+            AtomicInteger i = ids.get(clazz);
             if (i == null)
             {
                 i = new AtomicInteger();
-                ids.put(this.getClass(), i);
+                ids.put(clazz, i);
             }
             this.ordinal = i.getAndIncrement();
         }

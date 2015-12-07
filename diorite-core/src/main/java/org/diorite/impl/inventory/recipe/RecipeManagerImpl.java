@@ -14,6 +14,7 @@ import org.diorite.chat.ChatColor;
 import org.diorite.inventory.GridInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.builder.ItemBuilder;
 import org.diorite.inventory.item.meta.BookMeta;
 import org.diorite.inventory.item.meta.BookMeta.GenerationEnum;
 import org.diorite.inventory.item.meta.LeatherArmorMeta;
@@ -25,6 +26,9 @@ import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder.ShapedCraftingRe
 import org.diorite.inventory.recipe.craft.CraftingRecipeBuilder.ShapelessCraftingRecipeBuilder;
 import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
 import org.diorite.inventory.recipe.craft.CraftingRecipeItemBuilder;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItemBuilder.ShapelessCraftingRecipeItemBuilder;
+import org.diorite.inventory.recipe.craft.ShapelessCraftingRecipe;
+import org.diorite.material.ArmorMaterial;
 import org.diorite.material.BreakableItemMat;
 import org.diorite.material.ColorableMat;
 import org.diorite.material.ItemMaterialData;
@@ -208,8 +212,21 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shaped(Material.DIAMOND_LEGGINGS, 1, "ddd", "d_d", "d_d").addIngredient('d').item(Material.DIAMOND, false).build().buildAndAdd();
         this.shaped(Material.GOLD_CHESTPLATE, 1, "g_g", "ggg", "ggg").addIngredient('g').item(Material.GOLD_INGOT, false).build().buildAndAdd();
         this.shaped(Material.GOLD_LEGGINGS, 1, "ggg", "g_g", "g_g").addIngredient('g').item(Material.GOLD_INGOT, false).build().buildAndAdd();
-
+        this.shaped(Material.JUKEBOX, 1, "www", "wdw", "www").addIngredient('w').item(Material.PLANKS, true).addIngredient('d').item(Material.DIAMOND, false).build().buildAndAdd();
+        this.shaped(Material.LEAD, 2, "ss_", "sS_", "__s").addIngredient('s').item(Material.STRING, false).addIngredient('S').item(Material.SLIMEBALL, false).build().buildAndAdd();
+        this.shaped(Material.NOTEBLOCK, 1, "www", "wrw", "www").addIngredient('r').item(Material.REDSTONE, false).addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
+        this.shaped(Material.BOOKSHELF, 1, "www", "bbb", "www").addIngredient('b').item(Material.BOOK, false).addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
+        this.shaped(Material.TNT, 1, "sSs", "SsS", "sSs").addIngredient('s').item(Material.GUNPOWDER, false).addIngredient('S').item(Material.SAND, true).build().buildAndAdd();
+        this.shaped(Material.LADDER, 3, "s_s", "sss", "s_s").addIngredient('s').item(Material.STICK, false).build().buildAndAdd();
+        this.shaped(Material.SIGN, 3, "www", "www", "_s_").addIngredient('s').item(Material.STICK, false).addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
+        this.shaped(Material.CAKE, 1, "mmm", "ses", "www").addIngredient('m').item(Material.MILK_BUCKET, false).replacement(Material.BUCKET).addIngredient('s').item(Material.SUGAR, false).addIngredient('w').item(Material.WHEAT, false).addIngredient('e').item(Material.EGG, false).build().buildAndAdd();
+        this.shaped(Material.RAIL, 16, "i_i", "isi", "i_i").addIngredient('i').item(Material.IRON_INGOT, false).addIngredient('s').item(Material.STICK, false).build().buildAndAdd();
+        this.shaped(Material.POWERED_RAIL, 6, "g_g", "gsg", "grg").addIngredient('s').item(Material.STICK, false).addIngredient('g').item(Material.GOLD_INGOT, false).addIngredient('r').item(Material.REDSTONE, false).build().buildAndAdd();
+        this.shaped(Material.ACTIVATOR_RAIL, 6, "isi", "iri", "isi").addIngredient('i').item(Material.IRON_INGOT, false).addIngredient('s').item(Material.STICK, false).addIngredient('r').item(RedstoneTorchOnMat.REDSTONE_TORCH_ON_ITEM, true).build().buildAndAdd();
+        this.shaped(Material.DETECTOR_RAIL, 6, "i_i", "isi", "iri").addIngredient('i').item(Material.IRON_INGOT, false).addIngredient('s').item(Material.STONE_PRESSURE_PLATE, true).addIngredient('r').item(Material.REDSTONE, false).build().buildAndAdd();
+        this.shaped(Material.CAULDRON, 1, "i_i", "i_i", "iii").addIngredient('i').item(Material.IRON_INGOT, false).build().buildAndAdd();
         this.shaped(Material.STAINED_GLASS, 8, "ggg", "gig", "ggg").addIngredient('i').item(DyeMat.DYE_BONE_MEAL, false).addIngredient('g').item(Material.GLASS, false).build().buildAndAdd();
+        this.shaped(Material.STAINED_HARDENED_CLAY, 8, "hhh", "hih", "hhh").addIngredient('i').item(DyeMat.DYE_BONE_MEAL, false).addIngredient('h').item(Material.HARDENED_CLAY, false).build().buildAndAdd();
         // @formatter:off
         this.grouped(this.shaped(Material.STAINED_GLASS, 8, "ggg", "gdg", "ggg").addIngredient('g').item(Material.GLASS, false).addIngredient('d').item(Material.DYE, true))
             .addShapedRecipe_(b -> b.result(StainedGlassMat.STAINED_GLASS_BLACK     , 8).pattern("ggg", "gdg", "ggg").addIngredient('g').item(Material.GLASS, false).addIngredient('d').item(DyeMat.DYE_INK_SAC     , false))
@@ -229,10 +246,6 @@ public class RecipeManagerImpl implements IRecipeManager
             .addShapedRecipe_(b -> b.result(StainedGlassMat.STAINED_GLASS_ORANGE    , 8).pattern("ggg", "gdg", "ggg").addIngredient('g').item(Material.GLASS, false).addIngredient('d').item(DyeMat.DYE_ORANGE      , false))
             .addShapedRecipe_(b -> b.result(StainedGlassMat.STAINED_GLASS_WHITE     , 8).pattern("ggg", "gdg", "ggg").addIngredient('g').item(Material.GLASS, false).addIngredient('d').item(DyeMat.DYE_BONE_MEAL   , false))
             .buildAndAdd();
-        // @formatter:on
-
-        this.shaped(Material.STAINED_HARDENED_CLAY, 8, "hhh", "hih", "hhh").addIngredient('i').item(DyeMat.DYE_BONE_MEAL, false).addIngredient('h').item(Material.HARDENED_CLAY, false).build().buildAndAdd();
-        // @formatter:off
         this.grouped(this.shaped(Material.STAINED_HARDENED_CLAY, 8, "hhh", "hdh", "hhh").addIngredient('h').item(Material.HARDENED_CLAY, false).addIngredient('d').item(Material.DYE, true))
             .addShapedRecipe_(b -> b.result(StainedHardenedClayMat.STAINED_HARDENED_CLAY_BLACK     , 8).pattern("hhh", "hdh", "hhh").addIngredient('h').item(Material.HARDENED_CLAY, true).addIngredient('w').item(DyeMat.DYE_INK_SAC     , false))
             .addShapedRecipe_(b -> b.result(StainedHardenedClayMat.STAINED_HARDENED_CLAY_RED       , 8).pattern("hhh", "hdh", "hhh").addIngredient('h').item(Material.HARDENED_CLAY, true).addIngredient('w').item(DyeMat.DYE_RED         , false))
@@ -251,9 +264,6 @@ public class RecipeManagerImpl implements IRecipeManager
             .addShapedRecipe_(b -> b.result(StainedHardenedClayMat.STAINED_HARDENED_CLAY_ORANGE    , 8).pattern("hhh", "hdh", "hhh").addIngredient('h').item(Material.HARDENED_CLAY, true).addIngredient('w').item(DyeMat.DYE_ORANGE      , false))
             .addShapedRecipe_(b -> b.result(StainedHardenedClayMat.STAINED_HARDENED_CLAY_WHITE     , 8).pattern("hhh", "hdh", "hhh").addIngredient('h').item(Material.HARDENED_CLAY, true).addIngredient('w').item(DyeMat.DYE_BONE_MEAL   , false))
             .buildAndAdd();
-        // @formatter:on
-
-        // @formatter:off
         this.grouped(this.shaped(Material.BANNER, 1, "www", "www", "_s_").addIngredient('s').item(Material.STICK, true).addIngredient('w').item(Material.WOOL, true))
             .addShapedRecipe_(b -> b.result(BannerMat.BANNER_BLACK     , 1).pattern("www", "www", "_s_").addIngredient('s').item(Material.STICK, true).addIngredient('w').item(WoolMat.WOOL_BLACK     , false))
             .addShapedRecipe_(b -> b.result(BannerMat.BANNER_RED       , 1).pattern("www", "www", "_s_").addIngredient('s').item(Material.STICK, true).addIngredient('w').item(WoolMat.WOOL_RED       , false))
@@ -272,27 +282,116 @@ public class RecipeManagerImpl implements IRecipeManager
             .addShapedRecipe_(b -> b.result(BannerMat.BANNER_ORANGE    , 1).pattern("www", "www", "_s_").addIngredient('s').item(Material.STICK, true).addIngredient('w').item(WoolMat.WOOL_ORANGE    , false))
             .addShapedRecipe_(b -> b.result(BannerMat.BANNER_WHITE     , 1).pattern("www", "www", "_s_").addIngredient('s').item(Material.STICK, true).addIngredient('w').item(WoolMat.WOOL_WHITE     , false))
             .buildAndAdd();
+        this.grouped(this.shaped(Material.STAINED_GLASS_PANE, 16, "sss", "sss").addIngredient('s').item(Material.STAINED_GLASS, true))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_WHITE     , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_WHITE     , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_ORANGE    , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_ORANGE    , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_MAGENTA   , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_MAGENTA   , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_LIGHT_BLUE, 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_LIGHT_BLUE, false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_YELLOW    , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_YELLOW    , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_LIME      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_LIME      , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_PINK      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_PINK      , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_GRAY      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_GRAY      , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_LIGHT_GRAY, 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_LIGHT_GRAY, false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_CYAN      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_CYAN      , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_PURPLE    , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_PURPLE    , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_BLUE      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_BLUE      , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_BROWN     , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_BROWN     , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_GREEN     , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_GREEN     , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_RED       , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_RED       , false))
+            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_BLACK     , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_BLACK     , false))
+            .buildAndAdd();
+        this.grouped(this.shaped(Material.CARPET, 3, "ww").addIngredient('w').item(Material.WOOL, true))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_WHITE     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_WHITE     , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_ORANGE    , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_ORANGE    , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_MAGENTA   , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_MAGENTA   , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_LIGHT_BLUE, 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_LIGHT_BLUE, false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_YELLOW    , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_YELLOW    , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_LIME      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_LIME      , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_PINK      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_PINK      , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_GRAY      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_GRAY      , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_LIGHT_GRAY, 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_LIGHT_GRAY, false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_CYAN      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_CYAN      , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_PURPLE    , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_PURPLE    , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_BLUE      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_BLUE      , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_BROWN     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_BROWN     , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_GREEN     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_GREEN     , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_RED       , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_RED       , false))
+            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_BLACK     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_BLACK     , false))
+            .buildAndAdd();
         // @formatter:on
 
-        this.shaped(Material.JUKEBOX, 1, "www", "wdw", "www").addIngredient('w').item(Material.PLANKS, true).addIngredient('d').item(Material.DIAMOND, false).build().buildAndAdd();
-        this.shaped(Material.LEAD, 2, "ss_", "sS_", "__s").addIngredient('s').item(Material.STRING, false).addIngredient('S').item(Material.SLIMEBALL, false).build().buildAndAdd();
-        this.shaped(Material.NOTEBLOCK, 1, "www", "wrw", "www").addIngredient('r').item(Material.REDSTONE, false).addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
-        this.shaped(Material.BOOKSHELF, 1, "www", "bbb", "www").addIngredient('b').item(Material.BOOK, false).addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
-        this.shaped(Material.TNT, 1, "sSs", "SsS", "sSs").addIngredient('s').item(Material.GUNPOWDER, false).addIngredient('S').item(Material.SAND, true).build().buildAndAdd();
-        this.shaped(Material.LADDER, 3, "s_s", "sss", "s_s").addIngredient('s').item(Material.STICK, false).build().buildAndAdd();
-        this.shaped(Material.SIGN, 3, "www", "www", "_s_").addIngredient('s').item(Material.STICK, false).addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
-        this.shaped(Material.CAKE, 1, "mmm", "ses", "www").addIngredient('m').item(Material.MILK_BUCKET, false).replacement(Material.BUCKET).addIngredient('s').item(Material.SUGAR, false).addIngredient('w').item(Material.WHEAT, false).addIngredient('e').item(Material.EGG, false).build().buildAndAdd();
-        this.shaped(Material.RAIL, 16, "i_i", "isi", "i_i").addIngredient('i').item(Material.IRON_INGOT, false).addIngredient('s').item(Material.STICK, false).build().buildAndAdd();
-        this.shaped(Material.POWERED_RAIL, 6, "g_g", "gsg", "grg").addIngredient('s').item(Material.STICK, false).addIngredient('g').item(Material.GOLD_INGOT, false).addIngredient('r').item(Material.REDSTONE, false).build().buildAndAdd();
-        this.shaped(Material.ACTIVATOR_RAIL, 6, "isi", "iri", "isi").addIngredient('i').item(Material.IRON_INGOT, false).addIngredient('s').item(Material.STICK, false).addIngredient('r').item(RedstoneTorchOnMat.REDSTONE_TORCH_ON_ITEM, true).build().buildAndAdd();
-        this.shaped(Material.DETECTOR_RAIL, 6, "i_i", "isi", "iri").addIngredient('i').item(Material.IRON_INGOT, false).addIngredient('s').item(Material.STONE_PRESSURE_PLATE, true).addIngredient('r').item(Material.REDSTONE, false).build().buildAndAdd();
-        this.shaped(Material.CAULDRON, 1, "i_i", "i_i", "iii").addIngredient('i').item(Material.IRON_INGOT, false).build().buildAndAdd();
-        this.shaped(Material.OAK_STAIRS, 4, "w__", "ww_", "www").addIngredient('w').item(Material.PLANKS, false).build().buildAndAdd();
-        this.shaped(Material.BIRCH_STAIRS, 4, "w__", "ww_", "www").addIngredient('w').item(PlanksMat.PLANKS_BIRCH, false).build().buildAndAdd();
-        this.shaped(Material.SPRUCE_STAIRS, 4, "w__", "ww_", "www").addIngredient('w').item(PlanksMat.PLANKS_SPRUCE, false).build().buildAndAdd();
-        this.shaped(Material.JUNGLE_STAIRS, 4, "w__", "ww_", "www").addIngredient('w').item(PlanksMat.PLANKS_JUNGLE, false).build().buildAndAdd();
-        this.shaped(Material.ACACIA_STAIRS, 4, "w__", "ww_", "www").addIngredient('w').item(PlanksMat.PLANKS_ACACIA, false).build().buildAndAdd();
-        this.shaped(Material.DARK_OAK_STAIRS, 4, "w__", "ww_", "www").addIngredient('w').item(PlanksMat.PLANKS_DARK_OAK, false).build().buildAndAdd();
+        // @formatter:off
+        this.grouped(this.shaped(Material.WOODEN_SLAB, 6, "ppp").addIngredient('p').item(Material.PLANKS, true))
+            .addShapedRecipe_(b -> b.result(WoodenSlabMat.WOODEN_SLAB_OAK     , 6).pattern("ppp").addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
+            .addShapedRecipe_(b -> b.result(WoodenSlabMat.WOODEN_SLAB_BIRCH   , 6).pattern("ppp").addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
+            .addShapedRecipe_(b -> b.result(WoodenSlabMat.WOODEN_SLAB_SPRUCE  , 6).pattern("ppp").addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
+            .addShapedRecipe_(b -> b.result(WoodenSlabMat.WOODEN_SLAB_JUNGLE  , 6).pattern("ppp").addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
+            .addShapedRecipe_(b -> b.result(WoodenSlabMat.WOODEN_SLAB_ACACIA  , 6).pattern("ppp").addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
+            .addShapedRecipe_(b -> b.result(WoodenSlabMat.WOODEN_SLAB_DARK_OAK, 6).pattern("ppp").addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
+            .buildAndAdd();
+        this.grouped(this.shaped(Material.OAK_STAIRS, 4,  "p__", "pp_", "ppp").addIngredient('p').item(Material.PLANKS, true))
+            .addShapedRecipe_(b -> b.result(Material.OAK_STAIRS     , 3).pattern("p__", "pp_", "ppp").addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
+            .addShapedRecipe_(b -> b.result(Material.BIRCH_STAIRS   , 3).pattern("p__", "pp_", "ppp").addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
+            .addShapedRecipe_(b -> b.result(Material.SPRUCE_STAIRS  , 3).pattern("p__", "pp_", "ppp").addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
+            .addShapedRecipe_(b -> b.result(Material.JUNGLE_STAIRS  , 3).pattern("p__", "pp_", "ppp").addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
+            .addShapedRecipe_(b -> b.result(Material.ACACIA_STAIRS  , 3).pattern("p__", "pp_", "ppp").addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
+            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_STAIRS, 3).pattern("p__", "pp_", "ppp").addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
+            .buildAndAdd();
+        this.grouped(this.shaped(Material.OAK_STAIRS, 4,  "__p", "_pp", "ppp").addIngredient('p').item(Material.PLANKS, true))
+            .addShapedRecipe_(b -> b.result(Material.OAK_STAIRS     , 3).pattern("__p", "_pp", "ppp").addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
+            .addShapedRecipe_(b -> b.result(Material.BIRCH_STAIRS   , 3).pattern("__p", "_pp", "ppp").addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
+            .addShapedRecipe_(b -> b.result(Material.SPRUCE_STAIRS  , 3).pattern("__p", "_pp", "ppp").addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
+            .addShapedRecipe_(b -> b.result(Material.JUNGLE_STAIRS  , 3).pattern("__p", "_pp", "ppp").addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
+            .addShapedRecipe_(b -> b.result(Material.ACACIA_STAIRS  , 3).pattern("__p", "_pp", "ppp").addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
+            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_STAIRS, 3).pattern("__p", "_pp", "ppp").addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
+            .buildAndAdd();
+        this.grouped(this.shaped(Material.OAK_DOOR_ITEM, 3, "pp", "pp", "pp").addIngredient('p').item(Material.PLANKS, true))
+            .addShapedRecipe_(b -> b.result(Material.OAK_DOOR_ITEM     , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
+            .addShapedRecipe_(b -> b.result(Material.BIRCH_DOOR_ITEM   , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
+            .addShapedRecipe_(b -> b.result(Material.SPRUCE_DOOR_ITEM  , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
+            .addShapedRecipe_(b -> b.result(Material.JUNGLE_DOOR_ITEM  , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
+            .addShapedRecipe_(b -> b.result(Material.ACACIA_DOOR_ITEM  , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
+            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_DOOR_ITEM, 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
+            .buildAndAdd();
+        this.grouped(this.shaped(Material.OAK_FENCE, 3, "psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(Material.PLANKS, true))
+            .addShapedRecipe_(b -> b.result(Material.OAK_FENCE     , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
+            .addShapedRecipe_(b -> b.result(Material.BIRCH_FENCE   , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
+            .addShapedRecipe_(b -> b.result(Material.SPRUCE_FENCE  , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
+            .addShapedRecipe_(b -> b.result(Material.JUNGLE_FENCE  , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
+            .addShapedRecipe_(b -> b.result(Material.ACACIA_FENCE  , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
+            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_FENCE, 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
+            .buildAndAdd();
+        this.grouped(this.shaped(Material.OAK_FENCE_GATE, 1, "sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(Material.PLANKS, true))
+            .addShapedRecipe_(b -> b.result(Material.OAK_FENCE_GATE     , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
+            .addShapedRecipe_(b -> b.result(Material.BIRCH_FENCE_GATE   , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
+            .addShapedRecipe_(b -> b.result(Material.SPRUCE_FENCE_GATE  , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
+            .addShapedRecipe_(b -> b.result(Material.JUNGLE_FENCE_GATE  , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
+            .addShapedRecipe_(b -> b.result(Material.ACACIA_FENCE_GATE  , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
+            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_FENCE_GATE, 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
+            .buildAndAdd();
+        this.grouped(this.shaped(Material.OAK_BOAT, 1, "psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(Material.PLANKS, true))
+            .addShapedRecipe_(b -> b.result(Material.OAK_BOAT     , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
+            .addShapedRecipe_(b -> b.result(Material.BIRCH_BOAT   , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
+            .addShapedRecipe_(b -> b.result(Material.SPRUCE_BOAT  , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
+            .addShapedRecipe_(b -> b.result(Material.JUNGLE_BOAT  , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
+            .addShapedRecipe_(b -> b.result(Material.ACACIA_BOAT  , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
+            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_BOAT, 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
+            .buildAndAdd();
+        // @formatter:on
+
+        // @formatter:off
+        this.grouped(this.shaped(Material.STONE_SLAB, 6, "xxx").addIngredient('x').any())
+            .addShapedRecipe_(b -> b.result(StoneSlabMat.STONE_SLAB              , 6).pattern("sss").addIngredient('s').item(Material.STONE        , false))
+            .addShapedRecipe_(b -> b.result(StoneSlabMat.STONE_SLAB_COBBLESTONE  , 6).pattern("ccc").addIngredient('c').item(Material.COBBLESTONE  , false))
+            .addShapedRecipe_(b -> b.result(StoneSlabMat.STONE_SLAB_SANDSTONE    , 6).pattern("sss").addIngredient('s').item(Material.SANDSTONE    , false))
+            .addShapedRecipe_(b -> b.result(StoneSlabMat.STONE_SLAB_BRICKS       , 6).pattern("bbb").addIngredient('b').item(Material.BRICK_BLOCK  , false))
+            .addShapedRecipe_(b -> b.result(StoneSlabMat.STONE_SLAB_STONE_BRICKS , 6).pattern("sss").addIngredient('s').item(Material.STONE_BRICK  , false))
+            .addShapedRecipe_(b -> b.result(StoneSlabMat.STONE_SLAB_NETHER_BRICKS, 6).pattern("nnn").addIngredient('n').item(Material.NETHER_BRICK , false))
+            .addShapedRecipe_(b -> b.result(StoneSlabMat.STONE_SLAB_QUARTZ       , 6).pattern("qqq").addIngredient('q').item(Material.QUARTZ_BLOCK , false))
+            .addShapedRecipe_(b -> b.result(StoneSlabMat.STONE_SLAB_RED_SANDSTONE, 6).pattern("rrr").addIngredient('r').item(Material.RED_SANDSTONE, false))
+            .buildAndAdd();
+        // @formatter:on
+
         this.shaped(Material.FISHING_ROD, 1, "__s", "_sS", "s_S").addIngredient('s').item(Material.STICK, false).addIngredient('S').item(Material.STRING, false).build().buildAndAdd();
         this.shaped(Material.COBBLESTONE_STAIRS, 4, "c__", "cc_", "ccc").addIngredient('c').item(Material.COBBLESTONE, true).build().buildAndAdd();
         this.shaped(Material.BRICK_STAIRS, 4, "b__", "bb_", "bbb").addIngredient('b').item(Material.BRICK_BLOCK, true).build().buildAndAdd();
@@ -340,75 +439,11 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shaped(Material.GOLD_HELMET, 1, "ggg", "g_g").addIngredient('g').item(Material.GOLD_INGOT, false).build().buildAndAdd();
         this.shaped(Material.GOLD_BOOTS, 1, "g_g", "g_g").addIngredient('g').item(Material.GOLD_INGOT, false).build().buildAndAdd();
 
-        // @formatter:off
-        this.grouped(this.shaped(Material.STAINED_GLASS_PANE, 16, "sss", "sss").addIngredient('s').item(Material.STAINED_GLASS, true))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_WHITE     , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_WHITE     , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_ORANGE    , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_ORANGE    , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_MAGENTA   , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_MAGENTA   , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_LIGHT_BLUE, 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_LIGHT_BLUE, false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_YELLOW    , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_YELLOW    , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_LIME      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_LIME      , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_PINK      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_PINK      , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_GRAY      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_GRAY      , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_LIGHT_GRAY, 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_LIGHT_GRAY, false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_CYAN      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_CYAN      , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_PURPLE    , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_PURPLE    , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_BLUE      , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_BLUE      , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_BROWN     , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_BROWN     , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_GREEN     , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_GREEN     , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_RED       , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_RED       , false))
-            .addShapedRecipe_(b -> b.result(StainedGlassPaneMat.STAINED_GLASS_PANE_BLACK     , 16).pattern("sss", "sss").addIngredient('s').item(StainedGlassMat.STAINED_GLASS_BLACK     , false))
-            .buildAndAdd();
-        // @formatter:on
-
-        // @formatter:off
-        this.grouped(this.shaped(Material.OAK_FENCE, 3, "psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(Material.PLANKS, true))
-            .addShapedRecipe_(b -> b.result(Material.OAK_FENCE     , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
-            .addShapedRecipe_(b -> b.result(Material.BIRCH_FENCE   , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
-            .addShapedRecipe_(b -> b.result(Material.SPRUCE_FENCE  , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
-            .addShapedRecipe_(b -> b.result(Material.JUNGLE_FENCE  , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
-            .addShapedRecipe_(b -> b.result(Material.ACACIA_FENCE  , 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
-            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_FENCE, 3).pattern("psp", "psp").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
-            .buildAndAdd();
-        // @formatter:on
-
         // TODO: group walls?
         this.shaped(Material.COBBLESTONE_WALL, 6, "ccc", "ccc").addIngredient('c').item(Material.COBBLESTONE, true).build().buildAndAdd();
         this.shaped(CobblestoneWallMat.COBBLESTONE_WALL_MOSSY, 6, "mmm", "mmm").addIngredient('m').item(Material.MOSSY_COBBLESTONE, true).build().buildAndAdd();
         this.shaped(Material.NETHER_BRICK_FENCE, 6, "nnn", "nnn").addIngredient('n').item(Material.NETHER_BRICK, true).build().buildAndAdd();
 
-        // @formatter:off
-        this.grouped(this.shaped(Material.OAK_FENCE_GATE, 1, "sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(Material.PLANKS, true))
-            .addShapedRecipe_(b -> b.result(Material.OAK_FENCE_GATE     , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
-            .addShapedRecipe_(b -> b.result(Material.BIRCH_FENCE_GATE   , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
-            .addShapedRecipe_(b -> b.result(Material.SPRUCE_FENCE_GATE  , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
-            .addShapedRecipe_(b -> b.result(Material.JUNGLE_FENCE_GATE  , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
-            .addShapedRecipe_(b -> b.result(Material.ACACIA_FENCE_GATE  , 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
-            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_FENCE_GATE, 1).pattern("sps", "sps").addIngredient('s').item(Material.STICK, false).addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
-            .buildAndAdd();
-        // @formatter:on
-
-        // @formatter:off
-        this.grouped(this.shaped(Material.OAK_DOOR_ITEM, 3, "pp", "pp", "pp").addIngredient('p').item(Material.PLANKS, true))
-            .addShapedRecipe_(b -> b.result(Material.OAK_DOOR_ITEM     , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
-            .addShapedRecipe_(b -> b.result(Material.BIRCH_DOOR_ITEM   , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
-            .addShapedRecipe_(b -> b.result(Material.SPRUCE_DOOR_ITEM  , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
-            .addShapedRecipe_(b -> b.result(Material.JUNGLE_DOOR_ITEM  , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
-            .addShapedRecipe_(b -> b.result(Material.ACACIA_DOOR_ITEM  , 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
-            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_DOOR_ITEM, 3).pattern("pp", "pp", "pp").addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
-            .buildAndAdd();
-        // @formatter:on
-
-        // @formatter:off
-        this.grouped(this.shaped(Material.OAK_BOAT, 1, "psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(Material.PLANKS, true))
-            .addShapedRecipe_(b -> b.result(Material.OAK_BOAT     , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_OAK     , false))
-            .addShapedRecipe_(b -> b.result(Material.BIRCH_BOAT   , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_BIRCH   , false))
-            .addShapedRecipe_(b -> b.result(Material.SPRUCE_BOAT  , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_SPRUCE  , false))
-            .addShapedRecipe_(b -> b.result(Material.JUNGLE_BOAT  , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_JUNGLE  , false))
-            .addShapedRecipe_(b -> b.result(Material.ACACIA_BOAT  , 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_ACACIA  , false))
-            .addShapedRecipe_(b -> b.result(Material.DARK_OAK_BOAT, 1).pattern("psp", "ppp").addIngredient('s').item(Material.WOODEN_SHOVEL, false).addIngredient('p').item(PlanksMat.PLANKS_DARK_OAK, false))
-            .buildAndAdd();
-        // @formatter:on
 
         this.shaped(Material.WOODEN_TRAPDOOR, 2, "www", "www").addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
         this.shaped(Material.IRON_DOOR_ITEM, 3, "ii", "ii", "ii").addIngredient('i').item(Material.IRON_INGOT, false).build().buildAndAdd();
@@ -459,20 +494,7 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shaped(Material.COOKIE, 8, "wiw").addIngredient('i').item(DyeMat.DYE_COCOA_BEANS, false).addIngredient('w').item(Material.WHEAT, false).build().buildAndAdd();
         this.shaped(Material.PAPER, 3, "sss").addIngredient('s').item(Material.REEDS, false).build().buildAndAdd();
         this.shaped(Material.SNOW_LAYER, 6, "sss").addIngredient('s').item(Material.SNOW_BLOCK, true).build().buildAndAdd();
-        this.shaped(StoneSlabMat.STONE_SLAB_COBBLESTONE, 6, "ccc").addIngredient('c').item(Material.COBBLESTONE, true).build().buildAndAdd();
-        this.shaped(Material.STONE_SLAB, 6, "sss").addIngredient('s').item(Material.STONE, false).build().buildAndAdd();
-        this.shaped(StoneSlabMat.STONE_SLAB_SANDSTONE, 6, "sss").addIngredient('s').item(Material.SANDSTONE, true).build().buildAndAdd();
-        this.shaped(StoneSlabMat.STONE_SLAB_BRICKS, 6, "bbb").addIngredient('b').item(Material.BRICK_BLOCK, true).build().buildAndAdd();
-        this.shaped(StoneSlabMat.STONE_SLAB_STONE_BRICKS, 6, "sss").addIngredient('s').item(Material.STONE_BRICK, true).build().buildAndAdd();
-        this.shaped(StoneSlabMat.STONE_SLAB_NETHER_BRICKS, 6, "nnn").addIngredient('n').item(Material.NETHER_BRICK, true).build().buildAndAdd();
-        this.shaped(StoneSlabMat.STONE_SLAB_QUARTZ, 6, "qqq").addIngredient('q').item(Material.QUARTZ_BLOCK, true).build().buildAndAdd();
-        this.shaped(StoneSlabMat.STONE_SLAB_STONE, 6, "rrr").addIngredient('r').item(Material.RED_SANDSTONE, true).build().buildAndAdd();
-        this.shaped(Material.WOODEN_SLAB, 6, "www").addIngredient('w').item(Material.PLANKS, false).build().buildAndAdd();
-        this.shaped(WoodenSlabMat.WOODEN_SLAB_BIRCH, 6, "www").addIngredient('w').item(PlanksMat.PLANKS_BIRCH, false).build().buildAndAdd();
-        this.shaped(WoodenSlabMat.WOODEN_SLAB_SPRUCE, 6, "www").addIngredient('w').item(PlanksMat.PLANKS_SPRUCE, false).build().buildAndAdd();
-        this.shaped(WoodenSlabMat.WOODEN_SLAB_JUNGLE, 6, "www").addIngredient('w').item(PlanksMat.PLANKS_JUNGLE, false).build().buildAndAdd();
-        this.shaped(WoodenSlabMat.WOODEN_SLAB_ACACIA, 6, "www").addIngredient('w').item(PlanksMat.PLANKS_ACACIA, false).build().buildAndAdd();
-        this.shaped(WoodenSlabMat.WOODEN_SLAB_DARK_OAK, 6, "www").addIngredient('w').item(PlanksMat.PLANKS_DARK_OAK, false).build().buildAndAdd();
+
         this.shaped(Material.BREAD, 1, "www").addIngredient('w').item(Material.WHEAT, false).build().buildAndAdd();
         this.shaped(Material.TRIPWIRE_HOOK, 2, "i", "s", "w").addIngredient('i').item(Material.IRON_INGOT, false).addIngredient('s').item(Material.STICK, false).addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
         this.shaped(Material.TRAPPED_CHEST, 1, "ct").addIngredient('t').item(Material.TRIPWIRE_HOOK, true).addIngredient('c').item(Material.CHEST, true).build().buildAndAdd();
@@ -482,26 +504,6 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shaped(QuartzBlockMat.QUARTZ_BLOCK_PILLAR_VERTICAL, 2, "q", "q").addIngredient('q').item(Material.QUARTZ_BLOCK, false).build().buildAndAdd();
         this.shaped(StoneBrickMat.STONE_BRICK_CHISELED, 1, "s", "s").addIngredient('s').item(StoneSlabMat.STONE_SLAB_STONE_BRICKS, false).build().buildAndAdd();
 
-        // @formatter:off
-        this.grouped(this.shaped(Material.CARPET, 3, "ww").addIngredient('w').item(Material.WOOL, true))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_WHITE     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_WHITE     , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_ORANGE    , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_ORANGE    , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_MAGENTA   , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_MAGENTA   , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_LIGHT_BLUE, 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_LIGHT_BLUE, false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_YELLOW    , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_YELLOW    , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_LIME      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_LIME      , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_PINK      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_PINK      , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_GRAY      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_GRAY      , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_LIGHT_GRAY, 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_LIGHT_GRAY, false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_CYAN      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_CYAN      , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_PURPLE    , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_PURPLE    , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_BLUE      , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_BLUE      , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_BROWN     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_BROWN     , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_GREEN     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_GREEN     , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_RED       , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_RED       , false))
-            .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_BLACK     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_BLACK     , false))
-            .buildAndAdd();
-        // @formatter:on
 
         this.shaped(Material.STICK, 4, "w", "w").addIngredient('w').item(Material.PLANKS, true).build().buildAndAdd();
         this.shaped(TorchMat.TORCH_ITEM, 4, "c", "s").addIngredient('s').item(Material.STICK, false).addIngredient('c').item(Material.COAL, false).build().buildAndAdd();
@@ -599,23 +601,20 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shapeless(DyeMat.DYE_RED, 2).addIngredient().item(DoubleFlowersMat.DOUBLE_FLOWERS_ROSE_BUSH, false).build().buildAndAdd();
         this.shapeless(DyeMat.DYE_PINK, 2).addIngredient().item(DoubleFlowersMat.DOUBLE_FLOWERS_PEONY, false).build().buildAndAdd();
 
-        this.repair(Material.WOODEN_PICKAXE, Material.WOODEN_AXE, Material.WOODEN_SHOVEL, Material.WOODEN_HOE, Material.WOODEN_SWORD);
-        this.repair(Material.STONE_PICKAXE, Material.STONE_AXE, Material.STONE_SHOVEL, Material.STONE_HOE, Material.STONE_SWORD);
-        this.repair(Material.IRON_PICKAXE, Material.IRON_AXE, Material.IRON_SHOVEL, Material.IRON_HOE, Material.IRON_SWORD);
-        this.repair(Material.GOLDEN_PICKAXE, Material.GOLDEN_AXE, Material.GOLDEN_SHOVEL, Material.GOLDEN_HOE, Material.GOLDEN_SWORD);
-        this.repair(Material.DIAMOND_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_SHOVEL, Material.DIAMOND_HOE, Material.DIAMOND_SWORD);
+        // @formatter:off
+        this.repair(Material.WOODEN_PICKAXE, Material.WOODEN_AXE, Material.WOODEN_SHOVEL, Material.WOODEN_HOE, Material.WOODEN_SWORD,
+                Material.STONE_PICKAXE, Material.STONE_AXE, Material.STONE_SHOVEL, Material.STONE_HOE, Material.STONE_SWORD,
+                Material.IRON_PICKAXE, Material.IRON_AXE, Material.IRON_SHOVEL, Material.IRON_HOE, Material.IRON_SWORD,
+                Material.GOLDEN_PICKAXE, Material.GOLDEN_AXE, Material.GOLDEN_SHOVEL, Material.GOLDEN_HOE, Material.GOLDEN_SWORD,
+                Material.DIAMOND_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_SHOVEL, Material.DIAMOND_HOE, Material.DIAMOND_SWORD,
+                Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS,
+                Material.IRON_HELMET, Material.IRON_CHESTPLATE, Material.IRON_LEGGINGS, Material.IRON_BOOTS,
+                Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS,
+                Material.GOLD_HELMET, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS, Material.DIAMOND_HELMET,
+                Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS);
+        // @formatter:on
 
-        this.repair(Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS);
-        this.repair(Material.IRON_HELMET, Material.IRON_CHESTPLATE, Material.IRON_LEGGINGS, Material.IRON_BOOTS);
-        this.repair(Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS);
-        this.repair(Material.GOLD_HELMET, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS);
-        this.repair(Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS);
-
-        this.color(Material.LEATHER_HELMET);
-        this.color(Material.LEATHER_CHESTPLATE);
-        this.color(Material.LEATHER_LEGGINGS);
-        this.color(Material.LEATHER_BOOTS);
-
+        this.grouped(this.shapeless(Material.LEATHER_HELMET, 1).addIngredient().item(Material.DYE, true).repeatable().addIngredient().item(Material.LEATHER_HELMET).any().simpleValidator(i -> (i.getMaterial() instanceof ArmorMat) && ((ArmorMat) i.getMaterial()).getArmorMaterial().equals(ArmorMaterial.LEATHER))).addRecipe(this.color(Material.LEATHER_HELMET)).addRecipe(this.color(Material.LEATHER_CHESTPLATE)).addRecipe(this.color(Material.LEATHER_LEGGINGS)).addRecipe(this.color(Material.LEATHER_BOOTS)).buildAndAdd();
         this.bookCopy();
         this.mapZoom();
         this.mapCopy();
@@ -624,8 +623,6 @@ public class RecipeManagerImpl implements IRecipeManager
         this.shapeless(Material.FIREWORKS, 0).addIngredient().item(Material.GUNPOWDER, false).addIngredient().item(Material.PAPER, false).build().buildAndAdd(); // TODO
         this.shapeless(Material.BANNER, 0).addIngredient().item(Material.BANNER, false).build().buildAndAdd(); // TODO
         this.shapeless(Material.BANNER, 0).addIngredient().item(DyeMat.DYE_PURPLE, false).build().buildAndAdd(); // TODO
-
-
     }
 
     private void mapZoom()
@@ -653,37 +650,26 @@ public class RecipeManagerImpl implements IRecipeManager
             meta.setScaling((meta.getScaling() + 1));
             return map;
         }).addIngredient('m').item(Material.FILLED_MAP, true).simpleValidator(item -> ((MapMeta) item.getItemMeta()).getScaling() < 4).addIngredient('p').item(Material.PAPER, false).build().buildAndAdd();
-
     }
 
     private void mapCopy()
     {
-        final ShapelessCraftingRecipeBuilder builder = this.shapeless(Material.FILLED_MAP, 1).addIngredient().item(Material.FILLED_MAP, true).build();
-        for (int i = 1; i < 9; i++)
-        {
-            builder.addIngredient().item(Material.MAP, true).build();
-            builder.result(grid -> {
-                int copys = 0;
-                ItemStack orginal = null;
-                for (final ItemStack itemStack : grid.getItems())
+        final ShapelessCraftingRecipeBuilder builder = this.shapeless(Material.FILLED_MAP, 1).addIngredient().item(Material.FILLED_MAP, true).addIngredient().item(Material.MAP, true).repeatable((result, items) -> ItemBuilder.start(result).amount(items.size() + 1).build()).build();
+        builder.result(grid -> {
+            for (final ItemStack itemStack : grid.getItems())
+            {
+                if (itemStack == null)
                 {
-                    if (itemStack == null)
-                    {
-                        continue;
-                    }
-                    if (itemStack.getMaterial().simpleEquals(Material.FILLED_MAP))
-                    {
-                        orginal = itemStack.clone();
-                        continue;
-                    }
-                    copys++;
+                    continue;
                 }
-                assert orginal != null;
-                orginal.setAmount(copys + 1);
-                return orginal;
-            });
-            builder.buildAndAdd();
-        }
+                if (itemStack.getMaterial().simpleEquals(Material.FILLED_MAP))
+                {
+                    return itemStack.clone();
+                }
+            }
+            throw new AssertionError("Copy map crafting grid without map to copy.");
+        });
+        builder.buildAndAdd();
     }
 
     private void bookCopy()
@@ -698,97 +684,88 @@ public class RecipeManagerImpl implements IRecipeManager
             }
             throw new AssertionError("Copy book crafting grid without book to copy.");
         }).simpleValidator(item -> ((BookMeta) item.getItemMeta()).getGeneration() < GenerationEnum.COPY_OF_COPY.getGeneration()).build();
-        for (int i = 1; i < 9; i++)
-        {
-            builder.addIngredient().item(Material.WRITABLE_BOOK, true).build();
-            builder.result(grid -> {
-                int copys = 0;
-                ItemStack orginal = null;
-                for (final ItemStack itemStack : grid.getItems())
+        builder.addIngredient().item(Material.WRITABLE_BOOK, true).repeatable((result, items) -> ItemBuilder.start(result).amount(items.size()).build()).build();
+        builder.result(grid -> {
+            for (final ItemStack itemStack : grid.getItems())
+            {
+                if (itemStack == null)
                 {
-                    if (itemStack == null)
-                    {
-                        continue;
-                    }
-                    if (itemStack.getMaterial().simpleEquals(Material.WRITTEN_BOOK))
-                    {
-                        orginal = itemStack.clone();
-                        continue;
-                    }
-                    copys++;
+                    continue;
                 }
-                assert orginal != null;
-                orginal.setAmount(copys);
-                final BookMeta meta = (BookMeta) orginal.getItemMeta();
-                meta.setGeneration(meta.getGeneration() + 1);
-                return orginal;
-            });
-            builder.buildAndAdd();
-        }
+                if (itemStack.getMaterial().simpleEquals(Material.WRITTEN_BOOK))
+                {
+                    final ItemStack it = itemStack.clone();
+                    final BookMeta meta = (BookMeta) it.getItemMeta();
+                    meta.setGeneration(meta.getGeneration() + 1);
+                    return it;
+                }
+            }
+            throw new AssertionError("Copy book crafting grid without book to copy.");
+        });
+        builder.buildAndAdd();
     }
 
-    private void color(final ArmorMat mat)
+    private ShapelessCraftingRecipe color(final ArmorMat mat)
     {
-        final ShapelessCraftingRecipeBuilder builder = this.shapeless(mat, 1).addIngredient().item(mat, true).build();
-        for (int i = 1; i < 9; i++)
-        {
-            builder.addIngredient().item(Material.DYE, true).build();
-            builder.result(grid -> {
-                int colors = 0;
-                int tr = 0, tg = 0, tb = 0;
-                double totalMax = 0;
-                final List<ItemStack> items = grid.getItemsList();
-                for (final ItemStack item : items)
+        final ShapelessCraftingRecipeItemBuilder builder = this.shapeless(mat, 1).addIngredient().item(mat, true).addIngredient().item(Material.DYE, true);
+        return builder.repeatableAdv((result, grid) -> {
+            int colors = 0;
+            int tr = 0, tg = 0, tb = 0;
+            double totalMax = 0;
+            int dur = 0;
+            final List<ItemStack> items = grid.getItemsList();
+            for (final ItemStack item : items)
+            {
+                if (item.getMaterial().isThisSameID(result.getMaterial()))
                 {
-                    if (item.getMaterial().equals(mat))
+                    dur = item.getMaterial().getType();
+                    final LeatherArmorMeta meta = ((LeatherArmorMeta) item.getItemMeta());
+                    final Color color = meta.getColor();
+                    if (color != null)
                     {
-                        final LeatherArmorMeta meta = ((LeatherArmorMeta) item.getItemMeta());
-                        final Color color = meta.getColor();
-                        if (color != null)
-                        {
-                            final int r = color.getRed();
-                            final int g = color.getGreen();
-                            final int b = color.getBlue();
-                            tr += r;
-                            tg += g;
-                            tb += b;
-                            totalMax += Math.max(r, Math.max(g, b));
-                            colors++;
-                        }
-                        continue;
+                        final int r = color.getRed();
+                        final int g = color.getGreen();
+                        final int b = color.getBlue();
+                        tr += r;
+                        tg += g;
+                        tb += b;
+                        totalMax += Math.max(r, Math.max(g, b));
+                        colors++;
                     }
-                    final Color color = ((ColorableMat) item.getMaterial()).getColor().getColor();
-                    final int r = color.getRed();
-                    final int g = color.getGreen();
-                    final int b = color.getBlue();
-                    tr += r;
-                    tg += g;
-                    tb += b;
-                    totalMax += Math.max(r, Math.max(g, b));
-                    colors++;
+                    continue;
                 }
-                final double avgRed = tr / colors;
-                final double avgGreen = tg / colors;
-                final double avgBlue = tb / colors;
-                final double gainFactor = (totalMax / colors) / Math.max(avgRed, Math.max(avgGreen, avgBlue));
-                final Color resultColor = Color.fromRGB((int) (avgRed * gainFactor), (int) (avgGreen * gainFactor), (int) (avgBlue * gainFactor));
+                final Color color = ((ColorableMat) item.getMaterial()).getColor().getColor();
+                final int r = color.getRed();
+                final int g = color.getGreen();
+                final int b = color.getBlue();
+                tr += r;
+                tg += g;
+                tb += b;
+                totalMax += Math.max(r, Math.max(g, b));
+                colors++;
+            }
+            final double avgRed = tr / colors;
+            final double avgGreen = tg / colors;
+            final double avgBlue = tb / colors;
+            final double gainFactor = (totalMax / colors) / Math.max(avgRed, Math.max(avgGreen, avgBlue));
+            final Color resultColor = Color.fromRGB((int) (avgRed * gainFactor), (int) (avgGreen * gainFactor), (int) (avgBlue * gainFactor));
 
-                final ItemStack item = new BaseItemStack(mat);
-                final LeatherArmorMeta meta = ((LeatherArmorMeta) item.getItemMeta());
-                meta.setColor(resultColor);
-                return item;
-            });
-            builder.buildAndAdd();
-        }
+            final LeatherArmorMeta meta = ((LeatherArmorMeta) result.getItemMeta());
+            meta.setColor(resultColor);
+            result.setMaterial(result.getMaterial().getType(dur));
+            return result;
+        }).build().build();
     }
 
     @SuppressWarnings("unchecked")
     private <T extends ItemMaterialData & BreakableItemMat> void repair(final T... mat)
     {
+        final GroupCraftingRecipeBuilder builder = this.grouped(this.shapeless(Material.WOODEN_PICKAXE, 1).addIngredient().any().simpleValidator(i -> i.getMaterial() instanceof BreakableItemMat).addClone());
         for (final T t : mat)
         {
-            this.repair(t).buildAndAdd();
+            builder.addRecipe(this.repair(t).build());
         }
+        builder.buildAndAdd();
     }
 
     @SuppressWarnings("unchecked")
