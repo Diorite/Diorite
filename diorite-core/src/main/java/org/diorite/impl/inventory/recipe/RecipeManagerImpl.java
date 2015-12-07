@@ -664,9 +664,7 @@ public class RecipeManagerImpl implements IRecipeManager
                 .addShapelessRecipe_(b -> b.result(DyeMat.DYE_PINK      , 2).addIngredient().item(DoubleFlowersMat.DOUBLE_FLOWERS_PEONY    , false))
                 .addShapelessRecipe_(b -> b.result(DyeMat.DYE_YELLOW    , 1).addIngredient().item(Material.DANDELION                       , false)))
             .buildAndAdd();
-        // @formatter:on
 
-        // @formatter:off
         this.repair(Material.WOODEN_PICKAXE, Material.WOODEN_AXE, Material.WOODEN_SHOVEL, Material.WOODEN_HOE, Material.WOODEN_SWORD,
                 Material.STONE_PICKAXE, Material.STONE_AXE, Material.STONE_SHOVEL, Material.STONE_HOE, Material.STONE_SWORD,
                 Material.IRON_PICKAXE, Material.IRON_AXE, Material.IRON_SHOVEL, Material.IRON_HOE, Material.IRON_SWORD,
