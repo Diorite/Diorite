@@ -623,7 +623,7 @@ public class RecipeManagerImpl implements IRecipeManager
             .buildAndAdd();
 
         // 1 ingredients
-        this.grouped(this.craftingBuilder().shapeless().addIngredient().any().addClone())
+        this.grouped(this.craftingBuilder().shapeless().addIngredient().any())
             .addGroupedRecipe(g -> g.validator(this.craftingBuilder().shapeless().addIngredient().item(Material.LOG, true).item(Material.LOG2))
                 .addShapelessRecipe_(b -> b.result(PlanksMat.PLANKS_OAK     , 4).addIngredient().item(LogMat.LOG_OAK     , false))
                 .addShapelessRecipe_(b -> b.result(PlanksMat.PLANKS_SPRUCE  , 4).addIngredient().item(LogMat.LOG_SPRUCE  , false))
