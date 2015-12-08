@@ -177,6 +177,7 @@ public class RecipeManagerImpl implements IRecipeManager
 //        this.builder().priority(getPriority()).shaped().pattern("s").addIngredient('s').item(Material.STICK).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
 //        this.builder().priority(getPriority()).shapeless().addIngredient().item(Material.STICK).addIngredient().item(Material.STONE).build().result(Material.STONE_AXE).buildAndAdd();
 //        this.builder().priority(getPriority()).shapeless().addIngredient().item(DyeMat.DYE_LAPIS_LAZULI).addIngredient().item(WoolMat.WOOL_WHITE, false).build().result(WoolMat.WOOL_BLUE).buildAndAdd();
+
         this.craftingBuilder().priority(getNextPriority()).shapeless().addIngredient().item(Material.APPLE, 2, false).replacement(Material.DIRT, 16).simpleValidator(item -> ChatColor.translateAlternateColorCodesInString("&3Diorite").equals(item.getItemMeta().getDisplayName())).build().result(Material.GOLDEN_APPLE).buildAndAdd();
 
         // @formatter:off
@@ -224,6 +225,10 @@ public class RecipeManagerImpl implements IRecipeManager
             .buildAndAdd();
         // 2 ingredients
         this.grouped(this.craftingBuilder().shapeless().addIngredient().any().addClone())
+            .addShapedRecipe_(b -> b.result(Material.CARROT_ON_A_STICK, 1).pattern("f_", "_c").addIngredient('f').item(Material.FISHING_ROD, false).addIngredient('c').item(Material.CARROT, false))
+            .addShapedRecipe_(b -> b.result(Material.SHEARS           , 1).pattern("_i", "i_").addIngredient('i').item(Material.IRON_INGOT , false))
+            .addShapedRecipe_(b -> b.result(Material.SHEARS           , 1).pattern("i_", "_i").addIngredient('i').item(Material.IRON_INGOT , false))
+
             .addGroupedRecipe(g -> g.validator(this.craftingBuilder().shapeless().addIngredient().item(Material.WOOL, false).addIngredient().item(Material.DYE, true))
                 .addShapelessRecipe_(b -> b.result(WoolMat.WOOL_WHITE     , 1).addIngredient().item(Material.WOOL, false).addIngredient().item(DyeMat.DYE_BONE_MEAL   , false))
                 .addShapelessRecipe_(b -> b.result(WoolMat.WOOL_ORANGE    , 1).addIngredient().item(Material.WOOL, false).addIngredient().item(DyeMat.DYE_ORANGE      , false))
@@ -301,9 +306,6 @@ public class RecipeManagerImpl implements IRecipeManager
                     .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_GREEN     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_GREEN     , false))
                     .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_RED       , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_RED       , false))
                     .addShapedRecipe_(b -> b.result(CarpetMat.CARPET_BLACK     , 3).pattern("ww").addIngredient('w').item(WoolMat.WOOL_BLACK     , false))))
-
-            .addShapedRecipe_(b -> b.result(Material.CARROT_ON_A_STICK, 1).pattern("f_", "_c").addIngredient('f').item(Material.FISHING_ROD, false).addIngredient('c').item(Material.CARROT, false))
-            .addShapedRecipe_(b -> b.result(Material.SHEARS           , 1).pattern("_i", "i_").addIngredient('i').item(Material.IRON_INGOT , false))
             .buildAndAdd();
 
         // 3 ingredients
