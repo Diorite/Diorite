@@ -97,9 +97,9 @@ public class SimplePluginMain extends DioritePlugin
         }).build());
 
         final PluginCommandBuilder builder = Diorite.createCommand(this, "example");
-        builder.pattern(Pattern.compile("example(|:?<superArg>(\\d))")); // you can now use command like /example:4, /example:1 and still just /example
+        builder.pattern(Pattern.compile("example(:(?<superArg>(\\d))|)")); // you can now use command like /example:4, /example:1 and still just /example
         builder.executor(new ExampleCommand());
-        final PluginCommand cmd = builder.build();
+        final PluginCommand cmd = builder.register();
         final SubCommand subCommand = cmd.registerSubCommand("subcmd", new ExampleSubCmdCommand()); // you can use patterns here too.
 //         you can register sub commands for that subCommand object too.
 //        subCommand.registerSubCommand()

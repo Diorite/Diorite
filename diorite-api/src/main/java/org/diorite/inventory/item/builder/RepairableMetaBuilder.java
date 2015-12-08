@@ -1,0 +1,76 @@
+package org.diorite.inventory.item.builder;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.Diorite;
+import org.diorite.inventory.item.meta.RepairableMeta;
+
+/**
+ * Represent builder of repairable item meta data.
+ */
+public class RepairableMetaBuilder implements IRepairableMetaBuilder<RepairableMetaBuilder, RepairableMeta>
+{
+    /**
+     * Wrapped item meta used by builder.
+     */
+    protected final RepairableMeta meta;
+
+    /**
+     * Construct new meta builder, based on given meta.
+     *
+     * @param meta source meta to copy to this builder.
+     */
+    protected RepairableMetaBuilder(final RepairableMeta meta)
+    {
+        this.meta = meta.clone();
+    }
+
+    /**
+     * Construct new meta builder.
+     */
+    protected RepairableMetaBuilder()
+    {
+        this.meta = Diorite.getCore().getItemFactory().construct(RepairableMeta.class);
+    }
+
+    @Override
+    public RepairableMeta meta()
+    {
+        return this.meta;
+    }
+
+    @Override
+    public RepairableMetaBuilder getBuilder()
+    {
+        return this;
+    }
+
+    /**
+     * Returns new builder of item meta data.
+     *
+     * @return new builder of item meta data.
+     */
+    public RepairableMetaBuilder start()
+    {
+        return new RepairableMetaBuilder();
+    }
+
+    /**
+     * Returns new builder of item meta data, based on given one.
+     *
+     * @param meta source meta to copy to new builder.
+     *
+     * @return new builder of item meta data.
+     */
+    public RepairableMetaBuilder start(final RepairableMeta meta)
+    {
+        return new RepairableMetaBuilder(meta);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("meta", this.meta).toString();
+    }
+}

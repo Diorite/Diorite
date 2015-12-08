@@ -184,7 +184,7 @@ public class BlockLocation
         return Math.sqrt(this.distanceSquared(location));
     }
 
-    public double distance(final Loc location)
+    public double distance(final ILocation location)
     {
         return Math.sqrt(this.distanceSquared(location));
     }
@@ -205,22 +205,22 @@ public class BlockLocation
         return DioriteMathUtils.square(deltaX) + DioriteMathUtils.square(deltaY) + DioriteMathUtils.square(deltaZ);
     }
 
-    public double distanceSquared(final Loc location)
+    public double distanceSquared(final ILocation location)
     {
         return this.distanceSquared(location.getX(), location.getY(), location.getZ());
     }
 
-    public BlockLocation crossProduct(final Loc location)
+    public BlockLocation crossProduct(final ILocation location)
     {
         return new BlockLocation((int) ((this.y * location.getZ()) - (this.z * location.getY())), (int) ((this.z * location.getX()) - (this.x * location.getZ())), (int) ((this.x * location.getY()) - (this.y * location.getX())));
     }
 
-    public boolean isInAABB(final Loc min, final Loc max)
+    public boolean isInAABB(final ILocation min, final ILocation max)
     {
         return (this.x >= min.getX()) && (this.x <= max.getX()) && (this.y >= min.getY()) && (this.y <= max.getY()) && (this.z >= min.getZ()) && (this.z <= max.getZ());
     }
 
-    public boolean isInSphere(final Loc origin, final double radius)
+    public boolean isInSphere(final ILocation origin, final double radius)
     {
         return (DioriteMathUtils.square(origin.getX() - this.x) + DioriteMathUtils.square(origin.getY() - this.y) + DioriteMathUtils.square(origin.getZ() - this.z)) <= DioriteMathUtils.square(radius);
     }

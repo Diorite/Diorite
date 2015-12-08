@@ -67,9 +67,10 @@ public interface RecipeItem
     }
 
     /**
-     * Returns item that will be placed in place of recipe item after crafting some recipe. <br>
+     * Returns base item that will be placed in place of recipe item after crafting some recipe. <br>
      * Like recipe item using Milk bucket and replacing into empty bucket when recipe is used. <br>
-     * Method will return null if recipe item don't use replacement item.
+     * Method will return null if recipe item don't use replacement item. <br>
+     * Item returned by this method may not be real replacement item, each type of recipe items contains own method for that.
      *
      * @return item that will be placed in place of recipe item after crafting some recipe.
      */

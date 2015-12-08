@@ -29,7 +29,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.world.World;
 
-public class Location implements Loc
+public class Location implements ILocation
 {
     private double x;
     private double y;
@@ -141,7 +141,7 @@ public class Location implements Loc
     }
 
     @Override
-    public Location crossProduct(final Loc location)
+    public Location crossProduct(final ILocation location)
     {
         return new Location((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
     }

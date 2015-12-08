@@ -1,15 +1,12 @@
 package org.diorite.inventory.recipe.craft;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.recipe.ConsumedItems;
 
 /**
  * Represent crafting grid, wrapper for ItemStack array, used in more advanced recipes.
  */
-public interface CraftingGrid extends Cloneable
+public interface CraftingGrid extends ConsumedItems, Cloneable
 {
     /**
      * Gets the number of columns in the inventory.
@@ -24,25 +21,6 @@ public interface CraftingGrid extends Cloneable
      * @return The height of this ItemGrid.
      */
     int getRows();
-
-    /**
-     * Retruns raw array of items that you can edit.
-     *
-     * @return raw array of items that you can edit.
-     */
-    ItemStack[] getItems();
-
-    /**
-     * Returns list of items without null values.
-     *
-     * @return list of items without null values.
-     */
-    default List<ItemStack> getItemsList()
-    {
-        final List<ItemStack> list = Lists.newArrayList(this.getItems());
-        list.removeIf(i -> i == null);
-        return list;
-    }
 
     /**
      * Returns slot index for given row/column.
@@ -147,5 +125,6 @@ public interface CraftingGrid extends Cloneable
      *
      * @return copy of this inventory grid.
      */
+    @Override
     CraftingGrid clone();
 }

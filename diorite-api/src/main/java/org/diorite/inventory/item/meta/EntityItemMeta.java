@@ -30,4 +30,6 @@ package org.diorite.inventory.item.meta;
 public interface EntityItemMeta extends ItemMeta
 {
     // TODO implement
+    @Override
+    EntityItemMeta clone();
 }

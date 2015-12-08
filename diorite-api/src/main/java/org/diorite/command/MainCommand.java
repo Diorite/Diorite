@@ -24,11 +24,33 @@
 
 package org.diorite.command;
 
+/**
+ * Represent main command, that isn't any subcommand.
+ */
 public interface MainCommand extends Command
 {
+    /**
+     * Returns full name of this command, with unique prefix, like diorite:gamemode
+     *
+     * @return full name of this command, with unique prefix, like diorite:gamemode
+     */
     String getFullName();
 
-    byte getPriority();
+    /**
+     * Returns priority of this command. <br>
+     * Commands with higher priority will be checked first,
+     * priority can be changed in cfg. (and on runtime)
+     *
+     * @return priority of this command.
+     */
+    int getPriority();
 
-    void setPriority(byte priority);
+    /**
+     * Set priority of this command. <br>
+     * Commands with higher priority will be checked first,
+     * priority can be changed in cfg. (and on runtime)
+     *
+     * @param priority priority to be used.
+     */
+    void setPriority(int priority);
 }

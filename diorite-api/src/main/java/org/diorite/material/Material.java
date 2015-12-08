@@ -66,7 +66,9 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
     public static final IronOreMat                  IRON_ORE                   = IronOreMat.IRON_ORE;
     public static final CoalOreMat                  COAL_ORE                   = CoalOreMat.COAL_ORE;
     public static final LogMat                      LOG                        = LogMat.LOG_OAK;
+    public static final LogMat                      LOG2                       = LogMat.LOG_ACACIA;
     public static final LeavesMat                   LEAVES                     = LeavesMat.LEAVES_OAK;
+    public static final LeavesMat                   LEAVES2                    = LeavesMat.LEAVES_ACACIA;
     public static final SpongeMat                   SPONGE                     = SpongeMat.SPONGE;
     public static final GlassMat                    GLASS                      = GlassMat.GLASS;
     public static final LapisOreMat                 LAPIS_ORE                  = LapisOreMat.LAPIS_ORE;
@@ -92,7 +94,9 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
     public static final GoldBlockMat                GOLD_BLOCK                 = GoldBlockMat.GOLD_BLOCK;
     public static final IronBlockMat                IRON_BLOCK                 = IronBlockMat.IRON_BLOCK;
     public static final DoubleStoneSlabMat          DOUBLE_STONE_SLAB          = DoubleStoneSlabMat.DOUBLE_STONE_SLAB_STONE;
+    public static final DoubleStoneSlabMat          DOUBLE_STONE_SLAB2         = DoubleStoneSlabMat.DOUBLE_STONE_SLAB_RED_SANDSTONE;
     public static final StoneSlabMat                STONE_SLAB                 = StoneSlabMat.STONE_SLAB_STONE;
+    public static final StoneSlabMat                STONE_SLAB2                = StoneSlabMat.STONE_SLAB_RED_SANDSTONE;
     public static final BrickBlockMat               BRICK_BLOCK                = BrickBlockMat.BRICK_BLOCK;
     public static final TntMat                      TNT                        = TntMat.TNT;
     public static final BookshelfMat                BOOKSHELF                  = BookshelfMat.BOOKSHELF;
@@ -319,7 +323,7 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
     public static final IronDoorItemMat             IRON_DOOR_ITEM             = IronDoorItemMat.IRON_DOOR_ITEM;
     public static final RedstoneMat                 REDSTONE                   = RedstoneMat.REDSTONE;
     public static final SnowballMat                 SNOWBALL                   = SnowballMat.SNOWBALL;
-    public static final BoatMat                     BOAT                       = BoatMat.BOAT;
+    public static final OakBoatMat                  OAK_BOAT                   = OakBoatMat.OAK_BOAT;
     public static final LeatherMat                  LEATHER                    = LeatherMat.LEATHER;
     public static final MilkBucketMat               MILK_BUCKET                = MilkBucketMat.MILK_BUCKET;
     public static final BrickMat                    BRICK                      = BrickMat.BRICK;
@@ -417,6 +421,11 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
     public static final JungleDoorItemMat           JUNGLE_DOOR_ITEM           = JungleDoorItemMat.JUNGLE_DOOR_ITEM;
     public static final AcaciaDoorItemMat           ACACIA_DOOR_ITEM           = AcaciaDoorItemMat.ACACIA_DOOR_ITEM;
     public static final DarkOakDoorItemMat          DARK_OAK_DOOR_ITEM         = DarkOakDoorItemMat.DARK_OAK_DOOR_ITEM;
+    public static final SpruceBoatMat               SPRUCE_BOAT                = SpruceBoatMat.SPRUCE_BOAT;
+    public static final BirchBoatMat                BIRCH_BOAT                 = BirchBoatMat.BIRCH_BOAT;
+    public static final JungleBoatMat               JUNGLE_BOAT                = JungleBoatMat.JUNGLE_BOAT;
+    public static final AcaciaBoatMat               ACACIA_BOAT                = AcaciaBoatMat.ACACIA_BOAT;
+    public static final DarkOakBoatMat              DARK_OAK_BOAT              = DarkOakBoatMat.DARK_OAK_BOAT;
     public static final Record13Mat                 RECORD_13                  = Record13Mat.RECORD_13;
     public static final RecordCatMat                RECORD_CAT                 = RecordCatMat.RECORD_CAT;
     public static final RecordBlocksMat             RECORD_BLOCKS              = RecordBlocksMat.RECORD_BLOCKS;
@@ -1458,7 +1467,7 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
         register(IRON_DOOR_ITEM);
         register(REDSTONE);
         register(SNOWBALL);
-        register(BOAT);
+        register(OAK_BOAT);
         register(LEATHER);
         register(MILK_BUCKET);
         register(BRICK);
@@ -1556,6 +1565,11 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
         register(JUNGLE_DOOR_ITEM);
         register(ACACIA_DOOR_ITEM);
         register(DARK_OAK_DOOR_ITEM);
+        register(SPRUCE_BOAT);
+        register(BIRCH_BOAT);
+        register(JUNGLE_BOAT);
+        register(ACACIA_BOAT);
+        register(DARK_OAK_BOAT);
         register(RECORD_13);
         register(RECORD_CAT);
         register(RECORD_BLOCKS);

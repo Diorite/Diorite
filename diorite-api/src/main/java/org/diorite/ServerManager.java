@@ -27,7 +27,7 @@ package org.diorite;
 import org.diorite.event.Event;
 import org.diorite.event.EventType;
 import org.diorite.event.pipelines.EventPipeline;
-import org.diorite.inventory.recipe.RecipeManager;
+import org.diorite.inventory.recipe.craft.CraftingRecipeManager;
 import org.diorite.permissions.PermissionsManager;
 
 /**
@@ -87,5 +87,5 @@ public interface ServerManager
      *
      * @return recipe manager for this server.
      */
-    RecipeManager getRecipeManager();
+    CraftingRecipeManager getRecipeManager();
 }

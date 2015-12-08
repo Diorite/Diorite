@@ -39,10 +39,10 @@ import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.PlayerCraftingInventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeManager;
 import org.diorite.inventory.recipe.craft.CraftingGrid;
-import org.diorite.inventory.recipe.craft.Recipe;
-import org.diorite.inventory.recipe.craft.RecipeCheckResult;
+import org.diorite.inventory.recipe.craft.CraftingRecipe;
+import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
+import org.diorite.inventory.recipe.craft.CraftingRecipeManager;
 import org.diorite.utils.DioriteUtils;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
@@ -88,7 +88,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         return this.content.getSubArray(1).toArray(new ItemStack[this.content.length() - 1]);
     }
 
-    private transient RecipeCheckResult recipe;
+    private transient CraftingRecipeCheckResult recipe;
 
     @SuppressWarnings("ObjectEquality")
     public void confirmRecipe(final boolean all)
@@ -153,7 +153,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
 
         if (all)
         {
-            final Recipe recipe = this.recipe.getRecipe();
+            final CraftingRecipe recipe = this.recipe.getRecipe();
             ItemStack result = null;
             final Short2ObjectMap<ItemStack> onCraft = new Short2ObjectOpenHashMap<>(2, .5F);
             while ((this.recipe != null) && (recipe == this.recipe.getRecipe())) // as long as recipe is this same.
@@ -235,7 +235,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
             {
                 if ((eqItem == null) || (eqItem.getAmount() < toTake.getAmount()) || ! eqItem.isSimilar(toTake))
                 {
-                    throw new IllegalArgumentException("Crafting failed for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
+                    throw new IllegalArgumentException("Crafting failed (eqItem: " + eqItem + ", " + toTake + ") for recipe: " + this.recipe.getRecipe() + ", and inventory: " + this);
                 }
                 eqItem.setAmount(eqItem.getAmount() - toTake.getAmount());
             }
@@ -303,18 +303,46 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         return true;
     }
 
-    public void checkRecipe(final Recipe lastRecipe)
+    private boolean checkNotNull()
     {
-        RecipeCheckResult result = lastRecipe.isMatching(this);
+        int nonNull = 0;
+        for (final ItemStack itemStack : this)
+        {
+            if ((itemStack != null) && (itemStack.getAmount() > 0))
+            {
+                nonNull++;
+            }
+        }
+        if (nonNull == 0)
+        {
+            this.recipe = null;
+            return true;
+        }
+        if ((nonNull == 1) && (this.getResult() != null))
+        {
+            this.recipe = null;
+            this.setResult(null);
+            return true;
+        }
+        return false;
+    }
+
+    public void checkRecipe(final CraftingRecipe lastRecipe)
+    {
+        CraftingRecipeCheckResult result = lastRecipe.isMatching(this);
         if (result == null)
         {
-            final RecipeManager rm = Diorite.getServerManager().getRecipeManager();
-            result = rm.matchRecipe(this);
+            if (this.checkNotNull())
+            {
+                return;
+            }
+            final CraftingRecipeManager rm = Diorite.getServerManager().getRecipeManager();
+            result = rm.matchCraftingRecipe(this);
         }
         this.updateRecipe(result);
     }
 
-    private void updateRecipe(final RecipeCheckResult result)
+    private void updateRecipe(final CraftingRecipeCheckResult result)
     {
         if (result == null)
         {
@@ -338,7 +366,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
 
     public void checkRecipe(final boolean onlyResult)
     {
-        final RecipeManager rm = Diorite.getServerManager().getRecipeManager();
+        final CraftingRecipeManager rm = Diorite.getServerManager().getRecipeManager();
         synchronized (this)
         {
             if (onlyResult)
@@ -357,28 +385,12 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                 return;
             }
 
-            if (this.recipe == null) // don't check empty eq for recipes
+            if (this.checkNotNull())
             {
-                int nonNull = 0;
-                for (final ItemStack itemStack : this.getContents())
-                {
-                    if (itemStack != null)
-                    {
-                        nonNull++;
-                    }
-                }
-                if (nonNull == 0)
-                {
-                    return;
-                }
-                else if ((nonNull == 1) && (this.getResult() != null))
-                {
-                    this.setResult(null);
-                    return;
-                }
+                return;
             }
 
-            final RecipeCheckResult result = rm.matchRecipe(this);
+            final CraftingRecipeCheckResult result = rm.matchCraftingRecipe(this);
             this.updateRecipe(result);
         }
     }

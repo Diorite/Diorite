@@ -53,7 +53,7 @@ public class CommandMapImpl implements CommandMap
 
     private Iterable<MainCommand> getSortedCommandList()
     {
-        return this.commandMap.values().stream().sorted((c1, c2) -> Byte.compare(c2.getPriority(), c1.getPriority())).collect(Collectors.toList());
+        return this.commandMap.values().stream().sorted((c1, c2) -> Integer.compare(c2.getPriority(), c1.getPriority())).collect(Collectors.toList());
     }
 
     @Override

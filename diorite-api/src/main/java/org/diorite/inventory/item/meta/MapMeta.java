@@ -34,18 +34,18 @@ import org.diorite.map.MapIcon;
 public interface MapMeta extends ItemMeta
 {
     /**
-     * Checks to see if this map is scaling.
+     * Returns scale of this map.
      *
-     * @return true if this map is scaling.
+     * @return scale of this map.
      */
-    boolean isScaling();
+    int getScaling();
 
     /**
-     * Sets if this map is scaling or not.
+     * Sets scale of this map.
      *
      * @param value true to scale
      */
-    void setScaling(boolean value);
+    void setScaling(int value);
 
     /**
      * Returns collection of all icons on map.

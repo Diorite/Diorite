@@ -50,20 +50,24 @@ public class MapMetaImpl extends SimpleItemMetaImpl implements MapMeta
     }
 
     @Override
-    public boolean isScaling()
+    public int getScaling()
     {
-        return (this.tag != null) && this.tag.getBoolean(SCALING, false);
+        if (this.tag == null)
+        {
+            return 0;
+        }
+        return this.tag.getByte(SCALING, 0);
     }
 
     @Override
-    public void setScaling(final boolean value)
+    public void setScaling(final int value)
     {
-        if (this.removeIfNeeded(SCALING, ! value))
+        if (this.removeIfNeeded(SCALING, value == 0))
         {
             return;
         }
         this.checkTag(true);
-        this.tag.setBoolean(SCALING, true);
+        this.tag.setByte(SCALING, value);
         this.setDirty();
     }
 

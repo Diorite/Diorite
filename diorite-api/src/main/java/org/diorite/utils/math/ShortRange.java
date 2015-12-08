@@ -35,6 +35,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class ShortRange
 {
     /**
+     * Range from 1 to 1.
+     */
+    public static final ShortRange ONE   = new ShortRange(1, 1);
+    /**
      * Range from 0 to 0.
      */
     public static final ShortRange EMPTY = new ShortRange(0, 0);

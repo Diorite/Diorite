@@ -32,13 +32,17 @@ import java.util.regex.Pattern;
 
 import org.diorite.command.sender.CommandSender;
 
+// TODO: javadocs
+/**
+ * Represent any command from diorite.
+ */
 public interface Command
 {
     String COMMAND_PLUGIN_SEPARATOR = "::";
     @SuppressWarnings("HardcodedFileSeparator")
     String COMMAND_PREFIX      = "/";
     @SuppressWarnings("HardcodedFileSeparator")
-    char   COMMAND_PREFIX_CHAR = '/';
+    char   COMMAND_PREFIX_CHAR = COMMAND_PREFIX.charAt(0);
     String[] EMPTY_ARGS = new String[0];
 
     String getName();

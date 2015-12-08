@@ -58,6 +58,7 @@ import org.diorite.entity.attrib.AttributeType;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.inventory.item.meta.BookMeta;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.inventory.item.meta.PotionMeta;
 import org.diorite.inventory.item.meta.SkullMeta;
@@ -84,6 +85,15 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "bookmeta":
+                {
+                    final ItemStack item = new BaseItemStack(Material.WRITTEN_BOOK);
+                    final BookMeta meta = (BookMeta) item.getItemMeta();
+                    meta.setAuthor("Lel");
+                    meta.setPages("ugh");
+                    p.getInventory().add(item);
+                    break;
+                }
                 case "gib":
                 {
                     final ItemStack item = new BaseItemStack(Material.APPLE);
@@ -114,7 +124,7 @@ public class DevCmd extends SystemCommandImpl
                 case "itemid":
                 {
                     final ItemMetaImpl meta = (ItemMetaImpl) p.getInventory().getItemInHand().getItemMeta();
-                    System.out.println("Meta: " + System.identityHashCode(meta) + ", tag: " + (meta.getRawData() == null ? "NULL" : System.identityHashCode(meta.getRawData()) + "") + ", item: " + (! meta.getItemStack().isPresent() ? "NULL" : System.identityHashCode(meta.getItemStack().get()) + ""));
+                    System.out.println("Meta: " + System.identityHashCode(meta) + ", tag: " + (meta.getRawNbtData() == null ? "NULL" : System.identityHashCode(meta.getRawNbtData()) + "") + ", item: " + (! meta.getItemStack().isPresent() ? "NULL" : System.identityHashCode(meta.getItemStack().get()) + ""));
                     break;
                 }
                 case "skullmeta":

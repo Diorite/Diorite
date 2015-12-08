@@ -29,7 +29,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.world.World;
 
-public class ImmutableLocation implements Loc
+public class ImmutableLocation implements ILocation
 {
     public static final ImmutableLocation ZERO = new ImmutableLocation(0, 0, 0);
     private final double x;
@@ -136,7 +136,7 @@ public class ImmutableLocation implements Loc
     }
 
     @Override
-    public ImmutableLocation crossProduct(final Loc location)
+    public ImmutableLocation crossProduct(final ILocation location)
     {
         return new ImmutableLocation((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
     }

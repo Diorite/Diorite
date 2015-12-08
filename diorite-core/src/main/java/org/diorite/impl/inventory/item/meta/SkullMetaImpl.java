@@ -119,7 +119,7 @@ public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
             if (fastGP != null)
             {
                 this.checkTag(true);
-                this.getRawData().put(OWNER, fastGP.serializeToNBT());
+                this.getRawNbtData().put(OWNER, fastGP.serializeToNBT());
                 this.setDirty();
                 return;
             }
@@ -132,7 +132,7 @@ public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
             return;
         }
         final String temp = RandomStringUtils.randomAlphanumeric(32);
-        this.getRawData().setByte(temp, 0);
+        this.getRawNbtData().setByte(temp, 0);
         SkullThread.addTask(() -> {
             try
             {
@@ -144,7 +144,7 @@ public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
                 synchronized (this)
                 {
                     this.checkTag(true);
-                    this.getRawData().put(OWNER, gp.serializeToNBT());
+                    this.getRawNbtData().put(OWNER, gp.serializeToNBT());
                 }
             } catch (final TooManyRequestsException e)
             {
@@ -160,7 +160,7 @@ public class SkullMetaImpl extends SimpleItemMetaImpl implements SkullMeta
             {
                 synchronized (this)
                 {
-                    this.getRawData().removeTag(temp);
+                    this.getRawNbtData().removeTag(temp);
                     this.setDirty();
                 }
             }

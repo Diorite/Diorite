@@ -73,6 +73,14 @@ public interface SkullMeta extends ItemMeta
      */
     void setOwner(GameProfile gameProfile);
 
+    /**
+     * Removes owner of this head.
+     */
+    default void removeOwner()
+    {
+        this.setOwner((GameProfile) null);
+    }
+
     @Override
     SkullMeta clone();
 }

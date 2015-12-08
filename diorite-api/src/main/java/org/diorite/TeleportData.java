@@ -50,7 +50,7 @@ public class TeleportData
     {
     }
 
-    public TeleportData(final Loc location)
+    public TeleportData(final ILocation location)
     {
         this(location.getX(), location.getY(), location.getZ());
     }

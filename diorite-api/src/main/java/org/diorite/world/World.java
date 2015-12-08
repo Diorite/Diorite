@@ -33,7 +33,7 @@ import org.diorite.Difficulty;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
-import org.diorite.Loc;
+import org.diorite.ILocation;
 import org.diorite.Particle;
 import org.diorite.entity.Player;
 import org.diorite.material.BlockMaterialData;
@@ -122,7 +122,7 @@ public interface World
 
     ImmutableLocation getSpawn();
 
-    void setSpawn(Loc spawn);
+    void setSpawn(ILocation spawn);
 
     WorldGenerator getGenerator();
 

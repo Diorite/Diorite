@@ -29,7 +29,7 @@ import java.util.NoSuchElementException;
 import it.unimi.dsi.fastutil.shorts.ShortIterator;
 
 /**
- * Represent {@link TShortIterator} for short array.
+ * Represent {@link ShortIterator} for short array.
  */
 public class FastUtilShortIterator extends FastUtilPrimitiveIterator<short[]> implements ShortIterator
 {

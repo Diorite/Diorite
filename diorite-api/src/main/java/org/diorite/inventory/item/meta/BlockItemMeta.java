@@ -110,6 +110,16 @@ public interface BlockItemMeta extends ItemMeta
     void addCanPlaceOnMaterial(BlockMaterialData material);
 
     /**
+     * Add new materials where this block can be placed on,
+     * this method will automatically enable CanPlaceOn tag if needed. <br>
+     * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.
+     * (Vanilla client can't see them)
+     *
+     * @param materials materials to add.
+     */
+    void addCanPlaceOnMaterials(Collection<BlockMaterialData> materials);
+
+    /**
      * Remove material where this block can be placed on,
      * this method will automatically enable CanPlaceOn tag if needed. <br>
      * Minecraft don't support subtypes here, but diorite will save subtypes in separate tag.

@@ -29,7 +29,7 @@ import java.util.NoSuchElementException;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 
 /**
- * Represent {@link TIntIterator} for int array.
+ * Represent {@link IntIterator} for int array.
  */
 public class FastUtilIntIterator extends FastUtilPrimitiveIterator<int[]> implements IntIterator
 {

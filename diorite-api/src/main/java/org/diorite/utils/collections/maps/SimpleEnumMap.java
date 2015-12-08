@@ -29,6 +29,7 @@ import java.util.Map;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.collections.hash.SimpleEnumHashingStrategy;
 
+import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 

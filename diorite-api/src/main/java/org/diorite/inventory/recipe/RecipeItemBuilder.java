@@ -1,15 +1,22 @@
 package org.diorite.inventory.recipe;
 
+import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.inventory.recipe.RecipeBuilder.ShapedRecipeBuilder;
-import org.diorite.inventory.recipe.RecipeBuilder.ShapelessRecipeBuilder;
+import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.material.Material;
 
+/**
+ * Represent basic recipe item builder.
+ *
+ * @param <T> type of recipe builder.
+ * @param <B> type of item builder.
+ */
 public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItemBuilder<T, B>>
 {
     /**
@@ -67,7 +74,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern    pattern item.
      * @param ignoreType if subtype of material should be ignored.
@@ -80,7 +88,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern pattern item.
      * @param amount  amount of this item.
@@ -93,7 +102,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern    pattern item.
      * @param amount     amount of this item.
@@ -107,7 +117,8 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern pattern item.
      *
@@ -119,7 +130,16 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
     }
 
     /**
-     * Sets pattern item of this recipe item.
+     * Sets pattern item of this recipe item to any possible item (but you can still use validators). <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
+     *
+     * @return this same builder for method chains.
+     */
+    B any();
+
+    /**
+     * Sets pattern item of this recipe item. <br>
+     * If you use this multiple times, multiple possible items will be added, but they will share all other settings.
      *
      * @param pattern    pattern item.
      * @param ignoreType if subtype of material should be ignored.
@@ -149,27 +169,37 @@ public interface RecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItem
      */
     B validator(final BiPredicate<Player, ItemStack> validator);
 
-    interface ShapelessRecipeItemBuilder extends RecipeItemBuilder<ShapelessRecipeBuilder, ShapelessRecipeItemBuilder>
+    /**
+     * Represent recipe item builder that can create {@link RepeatableRecipeItem} too.
+     *
+     * @param <T> type of recipe builder.
+     * @param <B> type of item builder.
+     */
+    interface RepeatableRecipeItemBuilder<T extends RecipeBuilder, B extends RecipeItemBuilder<T, B>> extends RecipeItemBuilder<T, B>
     {
         /**
-         * Build and add this recipe item to recipe builder, and returns new recipe item builder. <br>
-         * Builder must contans any item or at least one validator.
+         * Make this recipe item repeatable, so it can be used 1 or more time in crafting grid.
          *
-         * @return new recipe item builder.
+         * @return this same builder for method chains.
          */
-        ShapelessRecipeItemBuilder addIngredient();
-    }
+        B repeatable();
 
-    interface ShapedRecipeItemBuilder extends RecipeItemBuilder<ShapedRecipeBuilder, ShapedRecipeItemBuilder>
-    {
         /**
-         * Build and add this recipe item to recipe builder, and returns new recipe item builder. <br>
-         * Builder must contans any item or at least one validator.
+         * Make this recipe item repeatable, so it can be used 1 or more time in crafting grid.
          *
-         * @param c pattern key of this recipe item.
+         * @param transformFunc Transform function that transform result item using list of repeated ingredients.
          *
-         * @return new recipe item builder.
+         * @return this same builder for method chains.
          */
-        ShapedRecipeItemBuilder addIngredient(char c);
+        B repeatable(BiFunction<ItemStack, List<ItemStack>, ItemStack> transformFunc);
+
+        /**
+         * Make this recipe item repeatable, so it can be used 1 or more time in crafting grid.
+         *
+         * @param transformFunc Transform function that transform result item using list of repeated ingredients.
+         *
+         * @return this same builder for method chains.
+         */
+        B repeatableAdv(BiFunction<ItemStack, CraftingGrid, ItemStack> transformFunc);
     }
 }
