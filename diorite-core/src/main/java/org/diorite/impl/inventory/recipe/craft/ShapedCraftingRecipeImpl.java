@@ -138,7 +138,7 @@ public class ShapedCraftingRecipeImpl extends CraftingRecipeImpl implements Shap
         {
             final int row = i / invCols;
             final int col = i % invCols;
-            if (pattern.getRecipeItem(row, col) != null)
+            if (inventory.getItem(row, col) != null)
             {
                 firstInvRow = row;
                 firstInvCol = col;
@@ -158,10 +158,10 @@ public class ShapedCraftingRecipeImpl extends CraftingRecipeImpl implements Shap
             return null;
         }
 
-        for (int i = 0; i < patternSize; i++)
+        for (int i = 0; i < invSize; i++)
         {
-            final int patRow = (i / patCols);
-            final int patCol = (i % patCols);
+            final int patRow = (i / invCols);
+            final int patCol = (i % invCols);
             final int invRow = (i / invCols) + deltaRow;
             final int invCol = (i % invCols) + deltaCol;
 
