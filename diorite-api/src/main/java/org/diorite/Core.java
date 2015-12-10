@@ -54,74 +54,236 @@ import org.diorite.world.WorldsManager;
 
 public interface Core extends Synchronizable
 {
+    /**
+     * Diorite chat prefix
+     */
     String PREFIX     = ChatColor.GRAY.toString() + "[" + ChatColor.DARK_AQUA.toString() + "Diorite" + ChatColor.GRAY.toString() + "]";
+    /**
+     * Diorite chat prefix without colors.
+     */
     String PREFIX_RAW = "[Diorite]";
+    /**
+     * Diorite chat prefix with space and reset color
+     */
     String PREFIX_MSG = PREFIX + " " + ChatColor.RESET.toString();
+    /**
+     * Name of diorite.
+     */
     String NANE       = "Diorite";
 
+    /**
+     * Number of ns in ms.
+     */
     int NANOS_IN_MILLI  = 1000000;
+    /**
+     * Number of ns in sec.
+     */
     int NANOS_IN_SECOND = NANOS_IN_MILLI * 1000;
 
+    /**
+     * Default server port.
+     */
     int  DEFAULT_PORT                         = 25565;
+    /**
+     * Default packet comperession threshold.
+     */
     int  DEFAULT_PACKET_COMPRESSION_THRESHOLD = 256;
+    /**
+     * Default tps setting.
+     */
     int  DEFAULT_TPS                          = 20;
+    /**
+     * Default render distance.
+     */
     byte DEFAULT_RENDER_DISTANCE              = 10;
+    /**
+     * Default time between ticks in ns.
+     */
     int  DEFAULT_WAIT_TIME                    = NANOS_IN_SECOND / DEFAULT_TPS;
+    /**
+     * Max length of nickname.
+     */
     int  MAX_NICKNAME_SIZE                    = 16;
 
+    /**
+     * Returns server manager contains many other managers that can be overridden.
+     *
+     * @return server manager contains many other managers.
+     */
     ServerManager getServerManager();
 
+    /**
+     * Returns current minecraft version, version supported by this version of diorite.
+     *
+     * @return current minecraft version, version supported by this version of diorite.
+     */
     static String getMinecraftVersion()
     {
-        return "1.8.7";
+        return "1.8.8";
     }
 
+    /**
+     * Returns true if debug is enabled.
+     *
+     * @return true if debug is enabled.
+     */
     boolean isDebug();
 
+    /**
+     * Returns main diorite logger.
+     *
+     * @return main diorite logger.
+     */
     Logger getLogger();
 
+    /**
+     * Returns version of diorite.
+     *
+     * @return version of diorite.
+     */
     String getVersion();
 
+    /**
+     * Returns recent TPS, in last few minutes.
+     *
+     * @return recent TPS, in last few minutes.
+     */
     double[] getRecentTps();
 
+    /**
+     * Returns instance of item factory that allows to create instances of item meta.
+     *
+     * @return instance of item factory that allows to create instances of item meta.
+     */
     ItemFactory getItemFactory();
 
+    /**
+     * Returns list of player nicknames that starts with given prefix.
+     *
+     * @param prefix prefix to find.
+     *
+     * @return list of player nicknames.
+     */
     List<String> getOnlinePlayersNames(String prefix);
 
+    /**
+     * Returns list of online players nicknames.
+     *
+     * @return list of player nicknames.
+     */
     List<String> getOnlinePlayersNames();
 
+    /**
+     * Returns diorite config instance.
+     *
+     * @return diorite config instance.
+     */
     DioriteConfig getConfig();
 
+    /**
+     * Returns diorite worlds manager.
+     *
+     * @return diorite worlds manager.
+     */
     WorldsManager getWorldsManager();
 
+    /**
+     * Returns instance of diorite scheduler.
+     *
+     * @return instance of diorite scheduler.
+     */
     Scheduler getScheduler();
 
+    /**
+     * Returns instance of diorite timings manager.
+     *
+     * @return instance of diorite timings manager.
+     */
     TimingsManager getTimings();
 
+    /**
+     * Broadcast given message on given position.
+     *
+     * @param position  position of message.
+     * @param component message to send.
+     */
     void broadcastMessage(ChatPosition position, BaseComponent component);
 
+    /**
+     * Sends message to console command sender.
+     *
+     * @param str message to send.
+     */
     void sendConsoleMessage(String str);
 
+    /**
+     * Sends message to console command sender.
+     *
+     * @param component message to send.
+     */
     void sendConsoleMessage(BaseComponent component);
 
+    /**
+     * Returns current render distance.
+     *
+     * @return current render distance.
+     */
     byte getRenderDistance();
 
+    /**
+     * Set render distance to given value.
+     *
+     * @param renderDistance new render distance.
+     */
     void setRenderDistance(byte renderDistance);
 
+    /**
+     * Returns instance of command sender that represent console.
+     *
+     * @return instance of command sender that represent console.
+     */
     ConsoleCommandSender getConsoleSender();
 
+    /**
+     * Returns true if main game loop is running.
+     *
+     * @return true if main game loop is running.
+     */
     boolean isRunning();
 
+    /**
+     * Returns game speed multiplicator.
+     *
+     * @return game speed multiplicator.
+     */
     double getSpeedMutli();
 
+    /**
+     * Sets game speed multiplicator, may cause weird behavior.
+     * @param mutli new speed multi.
+     */
     void setSpeedMutli(double mutli);
 
+    /**
+     * Returns current TPS settings, how many ticks per seconds server should do.
+     * @return current TPS settings, how many ticks per seconds server should do.
+     */
     int getTps();
 
+    /**
+     * Resets recent TPS calculations, used when TPS settings is changed.
+     */
     void resetRecentTps();
 
+    /**
+     * Set how many times per second server should do the tick loop.
+     * @param tps new ticks per seconds.
+     */
     void setTps(int tps);
 
+    /**
+     * Stops the server.
+     */
     void stop();
 
     void updatePlayerListHeaderAndFooter(BaseComponent header, BaseComponent footer);

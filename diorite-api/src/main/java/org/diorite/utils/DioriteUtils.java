@@ -130,7 +130,7 @@ public final class DioriteUtils
                             if (space > toAdd)
                             {
                                 item.setAmount(item.getAmount() + toAdd);
-                                items[i] = null;
+                                items[k] = null;
                             }
                             else
                             {
@@ -142,7 +142,7 @@ public final class DioriteUtils
                     else
                     {
                         item.setAmount(item.getAmount() + item2.getAmount());
-                        items[i] = null;
+                        items[k] = null;
                     }
                 }
 

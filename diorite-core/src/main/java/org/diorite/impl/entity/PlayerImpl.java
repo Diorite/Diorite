@@ -72,6 +72,7 @@ import org.diorite.entity.attrib.ModifierOperation;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.EntityEquipment;
+import org.diorite.inventory.Inventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.permissions.PlayerPermissionsContainer;
 import org.diorite.utils.math.DioriteRandom;
@@ -492,6 +493,12 @@ public class PlayerImpl extends LivingEntityImpl implements Player
     public PlayerInventoryImpl getInventory()
     {
         return this.inventory;
+    }
+
+    @Override
+    public void openInventory(final Inventory inv)
+    {
+
     }
 
     @Override

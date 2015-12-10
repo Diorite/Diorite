@@ -33,6 +33,7 @@ import org.diorite.Particle;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
+import org.diorite.inventory.Inventory;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.PlayerInventory;
 import org.diorite.permissions.GroupablePermissionsContainer;
@@ -59,6 +60,13 @@ public interface Player extends Human, PlayerCommandSender, InventoryHolder, Off
 
     @Override
     PlayerInventory getInventory();
+
+    /**
+     * Opens given inventory to this player.
+     *
+     * @param inv inventory to open.
+     */
+    void openInventory(final Inventory inv);
 
     /**
      * Send tab complete packet to player.
