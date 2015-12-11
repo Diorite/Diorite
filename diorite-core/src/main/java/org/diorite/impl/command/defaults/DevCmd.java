@@ -85,6 +85,11 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "eq":
+                {
+//                    Core
+                    break;
+                }
                 case "bookmeta":
                 {
                     final ItemStack item = new BaseItemStack(Material.WRITTEN_BOOK);

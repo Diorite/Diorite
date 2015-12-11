@@ -52,6 +52,7 @@ import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerQuitEvent;
+import org.diorite.inventory.Inventory;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.endian.BigEndianUtils;
@@ -293,6 +294,12 @@ public class PlayerImpl extends HumanImpl implements Player
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.gameProfile.getName()).append("uuid", this.gameProfile.getId()).toString();
+    }
+
+    @Override
+    public void openInventory(final Inventory inv)
+    {
+
     }
 
     @Override

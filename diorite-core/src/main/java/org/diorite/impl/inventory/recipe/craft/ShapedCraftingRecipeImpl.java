@@ -68,12 +68,7 @@ public class ShapedCraftingRecipeImpl extends CraftingRecipeImpl implements Shap
             return null;
         }
         final Player player = (inventory.getHolder() instanceof Player) ? (Player) inventory.getHolder() : null;
-
-        final int maxPatRow = patRows - 1, maxPatCol = patCols - 1;
-        final int maxInvRow = invRows - 1, maxInvCol = invCols - 1;
         final int deltaRows = invRows - patRows, deltaCols = invCols - patCols;
-        final int patternSize = (patRows * patCols);
-        final int invSize = (invRows * invCols);
         final Short2ObjectMap<ItemStack> onCraft = new Short2ObjectOpenHashMap<>(2, .5F);
         final CraftingGrid items = new CraftingGridImpl(invRows, invCols);
         final Collection<BiConsumer<Player, CraftingGrid>> reps = new ArrayList<>(invCols * invRows);
@@ -82,15 +77,12 @@ public class ShapedCraftingRecipeImpl extends CraftingRecipeImpl implements Shap
         int firstPatCol = - 1;
         int firstInvRow = - 1;
         int firstInvCol = - 1;
-        if (patRows == invRows)
+        if ((patRows == invRows) && (patCols == invCols))
         {
-            if (patCols == invCols) // this same size of pattern and eq, we can just check everything in simple loop
+            for (int row = 0; row < patRows; row++)
             {
-                for (int i = 0; i < patternSize; i++)
+                for (int col = 0; col < patCols; col++)
                 {
-                    final int row = i / patCols;
-                    final int col = i % patCols;
-
                     final CraftingRecipeItem recipeItem = pattern.getRecipeItem(row, col);
                     final ItemStack invItem = inventory.getItem(row, col);
                     if (recipeItem == null)
@@ -116,33 +108,37 @@ public class ShapedCraftingRecipeImpl extends CraftingRecipeImpl implements Shap
                         }
                     });
                 }
-                reps.forEach(c -> c.accept(player, items));
-                return new CraftingRecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft);
-            } // inventory have more columns, so some columns on right or left should be empty
-        }
+            }
+            reps.forEach(c -> c.accept(player, items));
+            return new CraftingRecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft);
+        } // inventory have more columns, so some columns on right or left should be empty
 
         // we need find first pattern element that isn't null
-        for (int i = 0; i < patternSize; i++)
+        patLoop:
+        for (int row = 0; row < patRows; row++)
         {
-            final int row = i / patCols;
-            final int col = i % patCols;
-            if (pattern.getRecipeItem(row, col) != null)
+            for (int col = 0; col < patCols; col++)
             {
-                firstPatRow = row;
-                firstPatCol = col;
-                break;
+                if (pattern.getRecipeItem(row, col) != null)
+                {
+                    firstPatRow = row;
+                    firstPatCol = col;
+                    break patLoop;
+                }
             }
         }
         // and inventory item
-        for (int i = 0; i < invSize; i++)
+        invLoop:
+        for (int row = 0; row < invRows; row++)
         {
-            final int row = i / invCols;
-            final int col = i % invCols;
-            if (pattern.getRecipeItem(row, col) != null)
+            for (int col = 0; col < invCols; col++)
             {
-                firstInvRow = row;
-                firstInvCol = col;
-                break;
+                if (inventory.getItem(row, col) != null)
+                {
+                    firstInvRow = row;
+                    firstInvCol = col;
+                    break invLoop;
+                }
             }
         }
         if ((firstPatCol == - 1) || (firstInvCol == - 1)) // no items in pattern or inventory
@@ -158,37 +154,38 @@ public class ShapedCraftingRecipeImpl extends CraftingRecipeImpl implements Shap
             return null;
         }
 
-        for (int i = 0; i < patternSize; i++)
+        for (int patRow = 0; patRow < invRows; patRow++)
         {
-            final int patRow = (i / patCols);
-            final int patCol = (i % patCols);
-            final int invRow = (i / invCols) + deltaRow;
-            final int invCol = (i % invCols) + deltaCol;
-
-            final CraftingRecipeItem recipeItem = pattern.getRecipeItem(patRow, patCol);
-            final ItemStack invItem = inventory.getItem(invRow, invCol);
-            if (recipeItem == null)
+            for (int patCol = 0; patCol < invCols; patCol++)
             {
-                if (invItem != null)
+                final int invRow = patRow + deltaRow;
+                final int invCol = patCol + deltaCol;
+
+                final CraftingRecipeItem recipeItem = pattern.getRecipeItem(patRow, patCol);
+                final ItemStack invItem = inventory.getItem(invRow, invCol);
+                if (recipeItem == null)
+                {
+                    if (invItem != null)
+                    {
+                        return null;
+                    }
+                    continue;
+                }
+                final ItemStack valid = recipeItem.isValid(player, invItem);
+                if (valid == null)
                 {
                     return null;
                 }
-                continue;
-            }
-            final ItemStack valid = recipeItem.isValid(player, invItem);
-            if (valid == null)
-            {
-                return null;
-            }
-            items.setItem(invRow, invCol, valid);
+                items.setItem(invRow, invCol, valid);
 
-            reps.add((p, c) -> {
-                final ItemStack repl = recipeItem.getReplacement(p, c);
-                if (repl != null)
-                {
-                    onCraft.put((short) 0, repl);
-                }
-            });
+                reps.add((p, c) -> {
+                    final ItemStack repl = recipeItem.getReplacement(p, c);
+                    if (repl != null)
+                    {
+                        onCraft.put((short) 0, repl);
+                    }
+                });
+            }
         }
         return new CraftingRecipeCheckResultImpl(this, (this.resultFunc == null) ? this.result : this.resultFunc.apply(player, items.clone()), items, onCraft);
     }

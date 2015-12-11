@@ -682,7 +682,7 @@ public class DioriteCore implements Core
 
     private void checkPluginManager()
     {
-        if (this.playersManager == null)
+        if (this.pluginManager == null)
         {
             this.pluginManager = new PluginManagerImpl(this.config.getPluginsDirectory());
         }
