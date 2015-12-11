@@ -59,10 +59,6 @@ public class PacketPlayServerSpawnPosition extends PacketPlayServer
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-//        data.writeVarInt(0);
-//        data.writeByte(0);
-//        data.writeByte(0);
-//        data.writeByte(0);
         data.writeBlockLocationAsLong(this.location);
     }
 
