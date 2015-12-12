@@ -39,7 +39,7 @@ import org.diorite.BlockLocation;
 import org.diorite.entity.data.HandType;
 import org.diorite.utils.CursorPos;
 
-@PacketClass(id = 0x19, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 15)
+@PacketClass(id = 0x1C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 15)
 public class PacketPlayClientBlockPlace extends PacketPlayClient
 {
     private BlockLocation location; // 8 bytes

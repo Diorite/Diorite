@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.world.chunk.ChunkPos;
 
-@PacketClass(id = 0x1C, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 8)
+@PacketClass(id = 0x1D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 8)
 public class PacketPlayServerChunkUnload extends PacketPlayServer
 {
     private ChunkPos chunkPos; // 8 bytes

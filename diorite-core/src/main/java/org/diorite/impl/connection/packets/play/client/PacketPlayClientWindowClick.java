@@ -37,7 +37,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.inventory.ClickType;
 import org.diorite.inventory.item.ItemStack;
 
-@PacketClass(id = 0x06, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 50)
+@PacketClass(id = 0x07, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 50)
 public class PacketPlayClientWindowClick extends PacketPlayClient
 {
     public static final int SLOT_NOT_NEEDED = - 999;

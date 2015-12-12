@@ -35,7 +35,7 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
-@PacketClass(id = 0x0A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 5)
+@PacketClass(id = 0x0B, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 5)
 public class PacketPlayClientKeepAlive extends PacketPlayClient
 {
     private int id; // ~5 bytes

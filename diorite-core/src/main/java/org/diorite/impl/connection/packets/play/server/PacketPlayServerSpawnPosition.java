@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.BlockLocation;
 
-@PacketClass(id = 0x42, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 8)
+@PacketClass(id = 0x43, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 8)
 public class PacketPlayServerSpawnPosition extends PacketPlayServer
 {
     private BlockLocation location; // 8 bytes
@@ -59,6 +59,10 @@ public class PacketPlayServerSpawnPosition extends PacketPlayServer
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
+//        data.writeVarInt(0);
+//        data.writeByte(0);
+//        data.writeByte(0);
+//        data.writeByte(0);
         data.writeBlockLocationAsLong(this.location);
     }
 

@@ -38,7 +38,7 @@ import org.diorite.DisplayedSkinParts;
 import org.diorite.chat.ChatVisibility;
 import org.diorite.entity.data.HandType;
 
-@PacketClass(id = 0x03, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 13)
+@PacketClass(id = 0x04, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 13)
 public class PacketPlayClientSettings extends PacketPlayClient
 {
     private String             locale; // ~8 bytes

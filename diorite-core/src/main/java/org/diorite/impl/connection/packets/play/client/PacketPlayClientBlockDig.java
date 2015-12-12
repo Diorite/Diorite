@@ -37,7 +37,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 
-@PacketClass(id = 0x10, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 10)
+@PacketClass(id = 0x13, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 10)
 public class PacketPlayClientBlockDig extends PacketPlayClient
 {
     private BlockDigAction action; // 1 byte

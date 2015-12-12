@@ -37,7 +37,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.entity.data.HandType;
 import org.diorite.utils.math.geometry.Vector3F;
 
-@PacketClass(id = 0x09, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 20)
+@PacketClass(id = 0x0A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 20)
 public class PacketPlayClientUseEntity extends PacketPlayClient
 {
     private int             targetEntity; // ~5 bytes
