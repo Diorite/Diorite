@@ -68,7 +68,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             player.getNetworkManager().sendPacket(new PacketPlayServerSpawnPosition(new BlockLocation(2, 255, - 2)));
             player.getNetworkManager().sendPacket(new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
             player.getNetworkManager().sendPacket(new PacketPlayServerHeldItemSlot(player.getHeldItemSlot()));
-            player.getNetworkManager().sendPacket(new PacketPlayServerPosition(new TeleportData(2, 255, - 2)));
+            player.getNetworkManager().sendPacket(new PacketPlayServerPosition(new TeleportData(2, 255, - 2), 5));
         }));
 
         this.addAfter("Diorite|StartPackets", "Diorite|EntityStuff", ((evt, pipeline) -> {

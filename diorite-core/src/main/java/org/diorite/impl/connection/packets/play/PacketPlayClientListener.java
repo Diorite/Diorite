@@ -47,6 +47,7 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientSettings;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientSpectate;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientSteerVehicle;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTabComplete;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientPositionConfirm;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTransaction;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUpdateSign;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseEntity;
@@ -105,4 +106,6 @@ public interface PacketPlayClientListener extends PacketPlayListener
     void handle(PacketPlayClientUpdateSign packet);
 
     void handle(PacketPlayClientUseEntity packet);
+
+    void handle(PacketPlayClientPositionConfirm packet);
 }

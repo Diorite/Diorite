@@ -48,6 +48,7 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientHeldItemS
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientKeepAlive;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientLook;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientPosition;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientPositionConfirm;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientPositionLook;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientResourcePackStatus;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientSetCreativeSlot;
@@ -178,8 +179,14 @@ public class PlayListener implements PacketPlayClientListener
     @Override
     public void handle(final PacketPlayClientSetCreativeSlot packet)
     {
-        CoreMain.debug("creative slot: " + packet.getSlot() + ", item: " + packet.getItem());
-        // TODO: meh.
+        if (this.player.getGameMode().equals(GameMode.CREATIVE))
+        {
+            this.player.getInventory().setItem(packet.getSlot(), packet.getItem());
+        }
+//        else
+//        {
+//            // TODO: maybe do something about this?
+//        }
     }
 
     @Override
@@ -216,6 +223,12 @@ public class PlayListener implements PacketPlayClientListener
     public void handle(final PacketPlayClientUseEntity packet)
     {
         // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayClientPositionConfirm packet)
+    {
+        System.out.println(packet);
     }
 
     @Override

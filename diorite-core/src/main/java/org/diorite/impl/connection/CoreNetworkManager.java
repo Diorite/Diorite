@@ -37,6 +37,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.listeners.PacketPlayListener;
 import org.diorite.impl.connection.packets.Packet;
@@ -290,6 +291,10 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
     @Override
     public void exceptionCaught(final ChannelHandlerContext channelHandlerContext, final Throwable throwable)
     {
+        if (CoreMain.isEnabledDebug())
+        {
+            throwable.printStackTrace();
+        }
         if (this.closed)
         {
             this.handleClosed();

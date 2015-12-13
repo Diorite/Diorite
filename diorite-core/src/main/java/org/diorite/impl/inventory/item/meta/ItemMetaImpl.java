@@ -105,7 +105,7 @@ public abstract class ItemMetaImpl implements ItemMeta
     @Override
     public void setNbtData(final NbtTagCompound tag)
     {
-        this.tag = tag.clone();
+        this.tag = (tag == null) ? null : tag.clone();
         this.setDirty();
     }
 

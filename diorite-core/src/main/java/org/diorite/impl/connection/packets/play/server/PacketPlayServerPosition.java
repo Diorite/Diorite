@@ -36,24 +36,27 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.TeleportData;
 
-@PacketClass(id = 0x2E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 33)
+@PacketClass(id = 0x2E, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 38)
 public class PacketPlayServerPosition extends PacketPlayServer
 {
     private TeleportData teleportData; // 33 bytes
+    private int          counter; // 1-5 bytes
 
     public PacketPlayServerPosition()
     {
     }
 
-    public PacketPlayServerPosition(final TeleportData teleportData)
+    public PacketPlayServerPosition(final TeleportData teleportData, final int counter)
     {
         this.teleportData = teleportData;
+        this.counter = counter;
     }
 
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.teleportData = new TeleportData(data.readDouble(), data.readDouble(), data.readDouble(), data.readFloat(), data.readFloat(), data.readUnsignedByte());
+        this.counter = data.readVarInt();
     }
 
     @Override
@@ -65,6 +68,7 @@ public class PacketPlayServerPosition extends PacketPlayServer
         data.writeFloat(this.getYaw());
         data.writeFloat(this.getPitch());
         data.writeByte(this.getRelativeFlags());
+        data.writeVarInt(this.counter);
     }
 
     @Override
@@ -193,9 +197,19 @@ public class PacketPlayServerPosition extends PacketPlayServer
         this.teleportData.setPitchRelatvie(isPitchRelatvie);
     }
 
+    public int getCounter()
+    {
+        return this.counter;
+    }
+
+    public void setCounter(final int counter)
+    {
+        this.counter = counter;
+    }
+
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("teleportData", this.teleportData).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("teleportData", this.teleportData).append("counter", this.counter).toString();
     }
 }
