@@ -44,6 +44,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerLogin;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunk;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedEntitySpawn;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedSoundEffect;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerOpenWindow;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerListHeaderFooter;
@@ -53,6 +54,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerRelEntity
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerResourcePackSend;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerServerDifficulty;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffect;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntityLiving;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnPosition;
@@ -138,4 +140,8 @@ public interface PacketPlayServerListener extends PacketListener
     void handle(PacketPlayServerMapChunk packet);
 
     void handle(PacketPlayServerChunkUnload packet);
+
+    void handle(PacketPlayServerSoundEffect packet);
+
+    void handle(PacketPlayServerNamedSoundEffect packet);
 }

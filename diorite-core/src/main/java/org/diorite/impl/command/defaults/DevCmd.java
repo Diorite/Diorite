@@ -35,12 +35,15 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedSoundEffect;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffect;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Diorite;
+import org.diorite.Sound;
 import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
 import org.diorite.chat.ChatColor;
@@ -85,6 +88,16 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "sound1":
+                {
+                    p.getNetworkManager().sendPacket(new PacketPlayServerSoundEffect(Sound.getById(args.asInt(0)), p.getLocation(), 2, 63));
+                    break;
+                }
+                case "sound2":
+                {
+                    p.getNetworkManager().sendPacket(new PacketPlayServerNamedSoundEffect(args.asString(0), p.getLocation(), 2, 63));
+                    break;
+                }
                 case "eq":
                 {
 //                    Core
