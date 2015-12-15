@@ -36,7 +36,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.entity.EntityImpl;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
-import org.diorite.impl.world.chunk.pattern.PatternImpl;
+import org.diorite.impl.world.chunk.palette.PaletteImpl;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkUnloadEvent;
 import org.diorite.material.BlockMaterialData;
@@ -415,7 +415,7 @@ public class ChunkImpl implements Chunk
             final NibbleArray blockLight = new NibbleArray(sectionTag.getByteArray("BlockLight"));
             final NibbleArray skyLight = new NibbleArray(sectionTag.getByteArray("SkyLight"));
 
-            final PatternImpl pattern = new PatternImpl();
+            final PaletteImpl pattern = new PaletteImpl();
             final int[] loading = new int[rawTypes.length];
             for (int i = 0; i < rawTypes.length; i++)
             {
@@ -426,13 +426,13 @@ public class ChunkImpl implements Chunk
                 }
                 loading[i] = k;
             }
-            final ChunkBuffer cb = new ChunkBuffer(pattern.bitsPerBlock());
+            final ChunkBlockData cd = new ChunkBlockData(pattern.bitsPerBlock(), ChunkPartImpl.CHUNK_DATA_SIZE);
             int k = 0;
             for (final int i : loading)
             {
-                cb.set(k++, pattern.put(i));
+                cd.set(k++, pattern.put(i));
             }
-            final ChunkPartImpl part = new ChunkPartImpl(cb, pattern, skyLight, blockLight, y);
+            final ChunkPartImpl part = new ChunkPartImpl(cd, pattern, skyLight, blockLight, y);
             sections[y] = part;
         }
         this.chunkParts = sections;
@@ -519,14 +519,14 @@ public class ChunkImpl implements Chunk
                 }
                 final NbtTagCompound sectionNBT = new NbtTagCompound();
                 sectionNBT.setByte("Y", chunkPart.getYPos());
-                final ChunkBuffer buffer = chunkPart.getChunkBuffer();
-                final PatternImpl pattern = chunkPart.getPattern();
+                final ChunkBlockData data = chunkPart.getBlockData();
+                final PaletteImpl pattern = chunkPart.getPalette();
                 final byte[] blocksIDs = new byte[ChunkPartImpl.CHUNK_DATA_SIZE];
                 final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray();
                 org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = null;
                 for (int i = 0; i < ChunkPartImpl.CHUNK_DATA_SIZE; ++ i)
                 {
-                    final int block = pattern.getAsInt(buffer.get(i));
+                    final int block = pattern.getAsInt(data.get(i));
                     final int blockMeta = i & 15;
                     final int blockData = (i >> 8) & 15;
                     final int blockID = (i >> 4) & 15;

@@ -1,4 +1,4 @@
-package org.diorite.impl.world.chunk.pattern;
+package org.diorite.impl.world.chunk.palette;
 
 import java.lang.ref.SoftReference;
 
@@ -6,20 +6,21 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
+import org.diorite.material.BlockMaterialData;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap.Entry;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
 
-public class MapPatternImpl implements PatternData
+public class MapPaletteImpl implements PaletteData
 {
     protected static final int GLOBAL_SIZE_DOWN = 4095;
     protected final Int2IntMap pattern;
     protected final Int2IntMap mirror;
     private int lastUsed = 0;
 
-    public MapPatternImpl()
+    public MapPaletteImpl()
     {
         this.pattern = new Int2IntOpenHashMap(64, .5F);
         this.pattern.defaultReturnValue(0);
@@ -27,21 +28,22 @@ public class MapPatternImpl implements PatternData
         this.mirror.defaultReturnValue(- 1);
     }
 
-    private MapPatternImpl(final Int2IntMap pattern, final Int2IntMap mirror, final int lastUsed)
+    private MapPaletteImpl(final Int2IntMap pattern, final Int2IntMap mirror, final int lastUsed)
     {
         this.pattern = new Int2IntOpenHashMap(pattern);
         this.mirror = new Int2IntOpenHashMap(mirror);
         this.lastUsed = lastUsed;
     }
 
-    public MapPatternImpl(final ArrayPatternImpl old)
+    public MapPaletteImpl(final ArrayPaletteImpl old)
     {
         this.pattern = new Int2IntOpenHashMap(64, .5F);
         this.pattern.defaultReturnValue(0);
         this.mirror = new Int2IntOpenHashMap(64, .5F);
         this.mirror.defaultReturnValue(- 1);
-        for (final int mcID : old.pattern)
+        for (final BlockMaterialData mat : old.pattern)
         {
+            final int mcID = mat.getIdAndMeta();
             this.pattern.put(this.lastUsed, mcID);
             this.mirror.put(mcID, this.lastUsed++);
         }
@@ -56,6 +58,17 @@ public class MapPatternImpl implements PatternData
             return 4;
         }
         return Math.max(4, Integer.SIZE - Integer.numberOfLeadingZeros(size - 1));
+    }
+
+    @Override
+    public int byteSize()
+    {
+        int bytes = PacketDataSerializer.varintSize(this.lastUsed);
+        for (int i = 0; i < this.lastUsed; ++ i)
+        {
+            bytes += PacketDataSerializer.varintSize(this.pattern.get(i));
+        }
+        return bytes;
     }
 
     @Override
@@ -80,29 +93,9 @@ public class MapPatternImpl implements PatternData
     }
 
     @Override
-    public int removeBySection(final int sectionID)
-    {
-        final int v = this.pattern.remove(sectionID);
-        this.mirror.remove(v);
-        return v;
-    }
-
-    @Override
-    public int removeByMinecraft(final int minecraftID)
-    {
-        final int k = this.mirror.remove(minecraftID);
-        if (k == - 1)
-        {
-            return - 1;
-        }
-        this.pattern.remove(k);
-        return k;
-    }
-
-    @Override
     public int size()
     {
-        return this.pattern.size();
+        return this.lastUsed;
     }
 
     private transient SoftReference<int[]> ref;
@@ -131,8 +124,9 @@ public class MapPatternImpl implements PatternData
     }
 
     @Override
-    public void read(final PacketDataSerializer data, final int size)
+    public void read(final PacketDataSerializer data)
     {
+        final int size = data.readVarInt();
         for (int i = 0; i < size; i++)
         {
             final int k = data.readVarInt();
@@ -143,21 +137,15 @@ public class MapPatternImpl implements PatternData
     }
 
     @Override
-    public PatternData getNext()
+    public PaletteData getNext()
     {
-        return GlobalPatternImpl.get();
+        return GlobalPaletteImpl.get();
     }
 
     @Override
-    public PatternData clone()
+    public PaletteData clone()
     {
-        return new MapPatternImpl(this.pattern, this.mirror, this.lastUsed);
-    }
-
-    @Override
-    public void clear()
-    {
-
+        return new MapPaletteImpl(this.pattern, this.mirror, this.lastUsed);
     }
 
 //    // for bits >13

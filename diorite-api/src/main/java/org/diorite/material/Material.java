@@ -774,6 +774,16 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
     }
 
     /**
+     * Returns id and meta as one int. (id << 4) | meta
+     *
+     * @return id and meta as one int. (id << 4) | meta
+     */
+    public int getIdAndMeta()
+    {
+        return (this.id << 4) | this.type;
+    }
+
+    /**
      * Some item's can't be directly added to player inventory,
      * (they will make client crash, thanks Mojang for that). <br>
      * This method will return other simillar item that can be added

@@ -27,10 +27,10 @@ package org.diorite.impl.world.generator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.world.chunk.ChunkBuffer;
+import org.diorite.impl.world.chunk.ChunkBlockData;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
-import org.diorite.impl.world.chunk.pattern.PatternImpl;
+import org.diorite.impl.world.chunk.palette.PaletteImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.world.chunk.Chunk;
@@ -129,7 +129,7 @@ public class ChunkBuilderImpl implements ChunkBuilder
             {
                 continue;
             }
-            chunkParts[i] = new ChunkPartImpl(chunkPart.buffer, chunkPart.pattern, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
+            chunkParts[i] = new ChunkPartImpl(chunkPart.blockData, chunkPart.pattern, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
 //            chunkParts[i].recalculateBlockCount();
         }
         chunk.setChunkParts(chunkParts);
@@ -142,21 +142,21 @@ public class ChunkBuilderImpl implements ChunkBuilder
     {
         public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
         private final ChunkBuilderImpl chunk;
-        private final PatternImpl      pattern;
-        private final ChunkBuffer      buffer;
+        private final PaletteImpl      pattern;
+        private final ChunkBlockData   blockData;
         private final byte             yPos; // from 0 to 15
 
         private ChunkPartBuilder(final ChunkBuilderImpl chunk, final byte yPos)
         {
             this.chunk = chunk;
             this.yPos = yPos;
-            this.pattern = new PatternImpl();
-            this.buffer = new ChunkBuffer(this.pattern.bitsPerBlock());
+            this.pattern = new PaletteImpl();
+            this.blockData = new ChunkBlockData(this.pattern.bitsPerBlock(), CHUNK_DATA_SIZE);
         }
 
         private void setBlock(final int x, final int y, final int z, final int id, final int meta)
         {
-            this.buffer.set(this.toArrayIndex(x, y, z), this.pattern.put(id, (byte) meta));
+            this.blockData.set(this.toArrayIndex(x, y, z), this.pattern.put(id, (byte) meta));
         }
 
         private void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
@@ -167,7 +167,7 @@ public class ChunkBuilderImpl implements ChunkBuilder
         @SuppressWarnings("MagicNumber")
         private BlockMaterialData getBlockType(final int x, final int y, final int z)
         {
-            final int data = this.pattern.getAsInt(this.buffer.get(this.toArrayIndex(x, y, z)));
+            final int data = this.pattern.getAsInt(this.blockData.get(this.toArrayIndex(x, y, z)));
             if (Material.getByID(data >> 4, data & 15) == null)
             {
                 return Material.AIR;

@@ -1,13 +1,13 @@
-package org.diorite.impl.world.chunk.pattern;
+package org.diorite.impl.world.chunk.palette;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.material.BlockMaterialData;
 
-public interface Pattern
+public interface Palette
 {
-    Pattern getNext();
+    Palette getNext();
 
-    void clear();
+//    void clear();
 
     int put(int minecraftIDandData); // returns -1 if id failed to add as pattern can't fit more ids
 
@@ -35,21 +35,11 @@ public interface Pattern
         return mat;
     }
 
-    int removeBySection(int sectionID);
-
-    int removeByMinecraft(int minecraftID);
-
     int size();
 
-    default int bitsPerBlock()
-    {
-        final int size = this.size();
-        if (size <= 1)
-        {
-            return 4;
-        }
-        return Math.max(4, Integer.SIZE - Integer.numberOfLeadingZeros(size - 1));
-    }
+    int bitsPerBlock();
+
+    int byteSize();
 
     void write(PacketDataSerializer data);
 }

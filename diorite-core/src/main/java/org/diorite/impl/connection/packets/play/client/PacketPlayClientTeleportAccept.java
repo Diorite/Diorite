@@ -36,15 +36,15 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 5)
-public class PacketPlayClientPositionConfirm extends PacketPlayClient
+public class PacketPlayClientTeleportAccept extends PacketPlayClient
 {
     private int id; // 1-5 bytes, VarInt
 
-    public PacketPlayClientPositionConfirm()
+    public PacketPlayClientTeleportAccept()
     {
     }
 
-    public PacketPlayClientPositionConfirm(final int id)
+    public PacketPlayClientTeleportAccept(final int id)
     {
         this.id = id;
     }

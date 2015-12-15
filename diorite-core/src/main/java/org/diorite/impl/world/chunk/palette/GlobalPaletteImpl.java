@@ -1,45 +1,39 @@
-package org.diorite.impl.world.chunk.pattern;
+package org.diorite.impl.world.chunk.palette;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 
-public class GlobalPatternImpl implements PatternData
+public class GlobalPaletteImpl implements PaletteData
 {
-    private static final   GlobalPatternImpl inst                   = new GlobalPatternImpl();
+    private static final   GlobalPaletteImpl inst                   = new GlobalPaletteImpl();
     protected static final int               DEFAULT_BITS_PER_BLOCK = 13;
 
-    private GlobalPatternImpl()
+    private GlobalPaletteImpl()
     {
     }
 
     @Override
-    public void read(final PacketDataSerializer data, final int size)
+    public void read(final PacketDataSerializer data)
     {
-
+        data.readVarInt();
     }
 
-    public static GlobalPatternImpl get()
+    public static GlobalPaletteImpl get()
     {
         return inst;
     }
 
     @Override
-    public PatternData getNext()
+    public PaletteData getNext()
     {
         throw new IllegalArgumentException("This is last pattern mode.");
     }
 
     @Override
-    public PatternData clone()
+    public PaletteData clone()
     {
         return this; // no need to clone
-    }
-
-    @Override
-    public void clear()
-    {
-
     }
 
     @Override
@@ -72,28 +66,21 @@ public class GlobalPatternImpl implements PatternData
         final BlockMaterialData data = (BlockMaterialData) BlockMaterialData.getByID(sectionID >> 4, sectionID & 15);
         if (data == null)
         {
-//            return Material.AIR;
-            return null;
+            return Material.AIR;
         }
         return data;
-    }
-
-    @Override
-    public int removeBySection(final int sectionID)
-    {
-        return - 1;
-    }
-
-    @Override
-    public int removeByMinecraft(final int minecraftID)
-    {
-        return - 1;
     }
 
     @Override
     public int size()
     {
         return Material.getAllItemMaterialsCount();
+    }
+
+    @Override
+    public int byteSize()
+    {
+        return 1;
     }
 
     @Override
@@ -105,6 +92,6 @@ public class GlobalPatternImpl implements PatternData
     @Override
     public void write(final PacketDataSerializer data)
     {
-        data.writeByte(this.bitsPerBlock());
+        data.writeVarInt(0);
     }
 }

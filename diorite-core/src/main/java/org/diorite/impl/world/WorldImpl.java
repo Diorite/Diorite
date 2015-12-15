@@ -49,8 +49,8 @@ import org.diorite.impl.world.io.requests.Request;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
-import org.diorite.ImmutableLocation;
 import org.diorite.ILocation;
+import org.diorite.ImmutableLocation;
 import org.diorite.Location;
 import org.diorite.Particle;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
@@ -576,7 +576,7 @@ public class WorldImpl implements World, Tickable
     {
         if ((y >= Chunk.CHUNK_FULL_HEIGHT) || (y < 0))
         {
-            throw new IllegalArgumentException("Y must be in range 0-" + (Chunk.CHUNK_FULL_HEIGHT - 1));
+            throw new IllegalArgumentException("Y (" + y + ") must be in range 0-" + (Chunk.CHUNK_FULL_HEIGHT - 1));
         }
         return this.getChunkAt(x >> 4, z >> 4).getBlock((x & CHUNK_FLAG), y, (z & CHUNK_FLAG));
     }

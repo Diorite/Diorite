@@ -25,7 +25,6 @@
 package org.diorite.impl.connection.packets.play.server;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -37,8 +36,6 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
-import org.diorite.impl.world.chunk.ChunkPartImpl.ChunkSectionData;
-import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.buffer.Unpooled;
 
@@ -66,7 +63,10 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         this.fullChunk = fullChunk;
         this.mask = chunk.getMask();
         this.skyLight = chunk.getWorld().hasSkyLight();
-        this.data = writeChunkSimple(chunk, this.mask, chunk.getWorld().hasSkyLight(), fullChunk);
+        this.data = new byte[calcSize(chunk, fullChunk, this.skyLight, this.mask)];
+        final PacketDataSerializer chunkSer = new PacketDataSerializer(Unpooled.wrappedBuffer(this.data));
+        chunkSer.writerIndex(0);
+        write(chunkSer, chunk, fullChunk, this.skyLight, this.mask);
     }
 
     public PacketPlayServerMapChunk(final boolean fullChunk, final ChunkImpl chunk, final boolean includeSkyLight)
@@ -76,7 +76,10 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         this.fullChunk = fullChunk;
         this.mask = chunk.getMask();
         this.skyLight = includeSkyLight;
-        this.data = writeChunkSimple(chunk, this.mask, includeSkyLight, fullChunk);
+        this.data = new byte[calcSize(chunk, fullChunk, this.skyLight, this.mask)];
+        final PacketDataSerializer chunkSer = new PacketDataSerializer(Unpooled.wrappedBuffer(this.data));
+        chunkSer.writerIndex(0);
+        write(chunkSer, chunk, fullChunk, includeSkyLight, this.mask);
     }
 
     public PacketPlayServerMapChunk(final boolean fullChunk, final ChunkImpl chunk, final boolean includeSkyLight, final int mask)
@@ -86,7 +89,10 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         this.fullChunk = fullChunk;
         this.mask = mask;
         this.skyLight = includeSkyLight;
-        this.data = writeChunkSimple(chunk, this.mask, includeSkyLight, fullChunk);
+        this.data = new byte[calcSize(chunk, fullChunk, this.skyLight, this.mask)];
+        final PacketDataSerializer chunkSer = new PacketDataSerializer(Unpooled.wrappedBuffer(this.data));
+        chunkSer.writerIndex(0);
+        write(chunkSer, chunk, fullChunk, includeSkyLight, mask);
     }
 
     @Override
@@ -106,7 +112,7 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         data.writeInt(this.z);
         data.writeBoolean(this.fullChunk);
         data.writeVarInt(this.mask);
-        System.out.println(Integer.toBinaryString(this.mask) + " (" + x + ", " + this.z + "), " + this.data.length);
+        System.out.println(Integer.toBinaryString(this.mask) + " (" + this.x + ", " + this.z + "), " + this.data.length);
         data.writeByteWord(this.data);
     }
 
@@ -152,51 +158,54 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).append("fullChunk", this.fullChunk).append("skyLight", this.skyLight).append("mask", this.mask).toString();
     }
 
-    public static byte[] writeChunkSimple(final ChunkImpl chunk, final int mask, final boolean skyLight, final boolean groundUpContinuous) // groundUpContinuous, with biomes
+    protected static int write(final PacketDataSerializer data, final ChunkImpl chunk, final boolean full, final boolean skyLight, final int mask) // RENAMED: a>write
     {
-        final ChunkPartImpl[] chunkParts = chunk.getChunkParts(); // get all chunk parts
-
-        final byte chunkPartsCount = DioriteMathUtils.countBits(chunk.getMask()); // number of chunks to sent
-        final ChunkSectionData[] chunkPartsToSent = new ChunkSectionData[chunkPartsCount];
-
-        for (int i = 0, j = 0, localMask = 1; i < chunkParts.length; ++ i, localMask <<= 1)
+        int size = 0;
+        final ChunkPartImpl[] sections = chunk.getChunkParts();
+        for (int i = 0, length = sections.length; i < length; ++ i)
         {
-            if ((mask & localMask) != 0)
+            final ChunkPartImpl section = sections[i];
+            if ((section != null) && (! full || ! section.isEmpty()) && ((mask & (1 << i)) != 0))
             {
-                chunkPartsToSent[j++] = new ChunkSectionData(chunkParts[i], skyLight);
+                size |= 1 << i;
+                section.write(data);
+                data.writeBytes(section.getBlockLight().getRawData());
+                if (skyLight)
+                {
+                    data.writeBytes(section.getSkyLight().getRawData());
+                }
             }
         }
-        final byte[] biomes = chunk.getBiomes();
-        int fullSize = groundUpContinuous ? biomes.length : 0;
-        for (final ChunkSectionData chunkPart : chunkPartsToSent)
+
+        if (full)
         {
-            fullSize += chunkPart.size + PacketDataSerializer.varintSize(chunkPart.size);
+            data.writeBytes(chunk.getBiomes());
         }
-        final PacketDataSerializer buf = new PacketDataSerializer(Unpooled.buffer(fullSize + 1000));
-        buf.resetWriterIndex();
-        for (final ChunkSectionData chunkPart : chunkPartsToSent)
-        {
-            chunkPart.pattern.write(buf);
-            buf.writeVarInt(chunkPart.size);
-            byte[] test = new byte[chunkPart.blocks.length];
-            Arrays.fill(test, (byte) 1);
-            buf.writeBytes(test);
-//            buf.writeBytes(chunkPart.blocks);
-            buf.writeBytes(chunkPart.blockLight);
-            if (skyLight)
-            {
-                buf.writeBytes(chunkPart.skyLight);
-            }
-        }
-        if (groundUpContinuous)
-        {
-            buf.writeBytes(biomes);
-        }
-        buf.resetReaderIndex();
-        final byte[] result;
-        buf.readBytes(result = new byte[buf.writerIndex()]);
-        buf.release();
-        return result;
+
+        return size;
     }
 
+    protected static int calcSize(final ChunkImpl chunk, final boolean full, final boolean skyLight, final int mask)
+    {
+        int bytes = 0;
+        final ChunkPartImpl[] sections = chunk.getChunkParts();
+        for (int length = sections.length, i = 0; i < length; ++ i)
+        {
+            final ChunkPartImpl section = sections[i];
+            if ((section != null) && (! full || ! section.isEmpty()) && ((mask & (1 << i)) != 0))
+            {
+                bytes += 1 + section.getPalette().byteSize() + PacketDataSerializer.varintSize(i) + (section.getBlockData().size() * 8);
+                bytes += section.getBlockLight().byteSize();
+                if (skyLight)
+                {
+                    bytes += section.getSkyLight().byteSize();
+                }
+            }
+        }
+        if (full)
+        {
+            bytes += chunk.getBiomes().length;
+        }
+        return bytes;
+    }
 }

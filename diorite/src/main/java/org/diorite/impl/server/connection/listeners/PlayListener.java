@@ -48,7 +48,7 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientHeldItemS
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientKeepAlive;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientLook;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientPosition;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientPositionConfirm;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientTeleportAccept;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientPositionLook;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientResourcePackStatus;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientSetCreativeSlot;
@@ -226,7 +226,7 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
-    public void handle(final PacketPlayClientPositionConfirm packet)
+    public void handle(final PacketPlayClientTeleportAccept packet)
     {
         System.out.println(packet);
     }
