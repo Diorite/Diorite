@@ -61,7 +61,7 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         this.x = chunk.getPos().getX();
         this.z = chunk.getPos().getZ();
         this.fullChunk = fullChunk;
-        this.mask = chunk.getMask();
+        this.mask = chunk.getMask(); // '\uFFFF';
         this.skyLight = chunk.getWorld().hasSkyLight();
         this.data = new byte[calcSize(chunk, fullChunk, this.skyLight, this.mask)];
         final PacketDataSerializer chunkSer = new PacketDataSerializer(Unpooled.wrappedBuffer(this.data));
@@ -112,7 +112,6 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         data.writeInt(this.z);
         data.writeBoolean(this.fullChunk);
         data.writeVarInt(this.mask);
-        System.out.println(Integer.toBinaryString(this.mask) + " (" + this.x + ", " + this.z + "), " + this.data.length);
         data.writeByteWord(this.data);
     }
 

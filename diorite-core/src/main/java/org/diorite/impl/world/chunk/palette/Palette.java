@@ -2,6 +2,7 @@ package org.diorite.impl.world.chunk.palette;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
 
 public interface Palette
 {
@@ -29,8 +30,7 @@ public interface Palette
         final BlockMaterialData mat = (BlockMaterialData) BlockMaterialData.getByID(data >> 4, data & 15);
         if (mat == null)
         {
-//            return Material.AIR;
-            return null;
+            return Material.AIR;
         }
         return mat;
     }

@@ -60,7 +60,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
         this.blockLight.fill((byte) 0x0);
     }
 
-    public ChunkPartImpl(final ChunkBlockData blocks, final PaletteImpl palette, final byte yPos, final boolean hasSkyLight)
+    public ChunkPartImpl(final ChunkBlockData blocks, final PaletteImpl palette, final byte yPos, final boolean hasSkyLight, final int nonNull)
     {
         this.palette = palette;
         this.chunkBlockData = blocks;
@@ -73,6 +73,14 @@ public class ChunkPartImpl // part of chunk 16x16x16
             this.skyLight.fill((byte) 0xf);
         }
         this.blockLight.fill((byte) 0x0);
+        if (nonNull == - 1)
+        {
+            this.recalculateBlockCount();
+        }
+        else
+        {
+            this.nonEmptyBlockCount = nonNull;
+        }
     }
 
     public ChunkPartImpl(final ChunkBlockData blocks, final PaletteImpl palette, final NibbleArray skyLight, final NibbleArray blockLight, final byte yPos)
@@ -87,7 +95,6 @@ public class ChunkPartImpl // part of chunk 16x16x16
     public void write(final PacketDataSerializer data)
     {
         final Palette palette = this.palette;
-        data.writeByte(palette.bitsPerBlock());
         palette.write(data);
         final long[] longs = this.chunkBlockData.getDataArray();
         data.writeVarInt(longs.length);
@@ -140,8 +147,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
 
     public BlockMaterialData rawSetBlock(final int x, final int y, final int z, final int id, final int meta)
     {
-        final int data = this.chunkBlockData.getAndSet(toArrayIndex(x, y, z), this.palette.put(id, (byte) meta));
-        final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
+        final BlockMaterialData type = this.chunkBlockData.getAndSet(toArrayIndex(x, y, z), this.palette.put(id, (byte) meta), this.palette);
         return (type == null) ? Material.AIR : type;
     }
 
@@ -152,8 +158,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
 
     public BlockMaterialData getBlockType(final int x, final int y, final int z)
     {
-        final int data = this.chunkBlockData.get(toArrayIndex(x, y, z));
-        final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
+        final BlockMaterialData type = this.chunkBlockData.get(toArrayIndex(x, y, z), this.palette);
         return (type == null) ? Material.AIR : type;
     }
 //
@@ -173,8 +178,7 @@ public class ChunkPartImpl // part of chunk 16x16x16
 
         for (int i = 0; i < CHUNK_DATA_SIZE; i++)
         {
-            final int data = this.chunkBlockData.get(i);
-            final BlockMaterialData type = (BlockMaterialData) Material.getByID(data >> 4, data & 15);
+            final BlockMaterialData type = this.chunkBlockData.get(i, this.palette);
             if ((type != null) && ! type.isThisSameID(Material.AIR))
             {
                 this.nonEmptyBlockCount++;

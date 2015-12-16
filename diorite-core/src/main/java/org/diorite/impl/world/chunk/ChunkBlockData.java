@@ -4,6 +4,9 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.world.chunk.palette.Palette;
+import org.diorite.material.BlockMaterialData;
+
 public class ChunkBlockData
 {
     private static final int MAX_BITS_PER_BLOCK = 32;
@@ -54,6 +57,16 @@ public class ChunkBlockData
         }
     }
 
+    public int getAsIntAndSet(final int index, final int patternID, final Palette palette)
+    {
+        return palette.getAsInt(this.getAndSet(index, patternID));
+    }
+
+    public BlockMaterialData getAndSet(final int index, final int patternID, final Palette palette)
+    {
+        return palette.get(this.getAndSet(index, patternID));
+    }
+
     public int getAndSet(final int index, final int patternID)
     {
         Validate.inclusiveBetween(0, (this.size - 1), index);
@@ -99,6 +112,16 @@ public class ChunkBlockData
             this.blocksArray[indexOfLastBit] = ((this.blocksArray[indexOfLastBit] >>> bitDelta) << bitDelta) | (((long) patternID & this.typeSize) >> bitOffsetDelta);
         }
 
+    }
+
+    public int getAsInt(final int index, final Palette palette)
+    {
+        return palette.getAsInt(this.get(index));
+    }
+
+    public BlockMaterialData get(final int index, final Palette palette)
+    {
+        return palette.get(this.get(index));
     }
 
     public int get(final int index)

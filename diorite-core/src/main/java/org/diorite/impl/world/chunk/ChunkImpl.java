@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -248,19 +247,21 @@ public class ChunkImpl implements Chunk
     {
         synchronized (this.lock)
         {
-            IntStream.range(0, CHUNK_SIZE * CHUNK_SIZE).forEach(xz -> {
-                final int x = xz / CHUNK_SIZE;
-                final int z = xz % CHUNK_SIZE;
-                this.heightMap[((z << 4) | x)] = - 1;
-                for (short y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
+            for (int x = 0; x < CHUNK_SIZE; x++)
+            {
+                for (int z = 0; z < CHUNK_SIZE; z++)
                 {
-                    if (this.getBlockType(x, y, z).isSolid())
+                    this.heightMap[((z << 4) | x)] = - 1;
+                    for (short y = Chunk.CHUNK_FULL_HEIGHT - 1; y >= 0; y--)
                     {
-                        this.heightMap[((z << 4) | x)] = y;
-                        return;
+                        if (this.getBlockType(x, y, z).isSolid())
+                        {
+                            this.heightMap[((z << 4) | x)] = y;
+                            break;
+                        }
                     }
                 }
-            });
+            }
         }
     }
 
@@ -415,7 +416,7 @@ public class ChunkImpl implements Chunk
             final NibbleArray blockLight = new NibbleArray(sectionTag.getByteArray("BlockLight"));
             final NibbleArray skyLight = new NibbleArray(sectionTag.getByteArray("SkyLight"));
 
-            final PaletteImpl pattern = new PaletteImpl();
+            final PaletteImpl palette = new PaletteImpl();
             final int[] loading = new int[rawTypes.length];
             for (int i = 0; i < rawTypes.length; i++)
             {
@@ -426,16 +427,17 @@ public class ChunkImpl implements Chunk
                 }
                 loading[i] = k;
             }
-            final ChunkBlockData cd = new ChunkBlockData(pattern.bitsPerBlock(), ChunkPartImpl.CHUNK_DATA_SIZE);
+            final ChunkBlockData cd = new ChunkBlockData(palette.bitsPerBlock(), ChunkPartImpl.CHUNK_DATA_SIZE);
             int k = 0;
             for (final int i : loading)
             {
-                cd.set(k++, pattern.put(i));
+                cd.set(k++, palette.put(i));
             }
-            final ChunkPartImpl part = new ChunkPartImpl(cd, pattern, skyLight, blockLight, y);
+            final ChunkPartImpl part = new ChunkPartImpl(cd, palette, skyLight, blockLight, y);
             sections[y] = part;
         }
         this.chunkParts = sections;
+//        this.recalculateBlockCounts();
 
         this.populated.set(tag.getBoolean("TerrainPopulated"));
         // TODO: load tile entites and other entities
@@ -520,13 +522,13 @@ public class ChunkImpl implements Chunk
                 final NbtTagCompound sectionNBT = new NbtTagCompound();
                 sectionNBT.setByte("Y", chunkPart.getYPos());
                 final ChunkBlockData data = chunkPart.getBlockData();
-                final PaletteImpl pattern = chunkPart.getPalette();
+                final PaletteImpl palette = chunkPart.getPalette();
                 final byte[] blocksIDs = new byte[ChunkPartImpl.CHUNK_DATA_SIZE];
                 final org.diorite.impl.world.chunk.ChunkNibbleArray blocksMetaData = new org.diorite.impl.world.chunk.ChunkNibbleArray();
                 org.diorite.impl.world.chunk.ChunkNibbleArray additionalData = null;
                 for (int i = 0; i < ChunkPartImpl.CHUNK_DATA_SIZE; ++ i)
                 {
-                    final int block = pattern.getAsInt(data.get(i));
+                    final int block = data.getAsInt(i, palette);
                     final int blockMeta = i & 15;
                     final int blockData = (i >> 8) & 15;
                     final int blockID = (i >> 4) & 15;

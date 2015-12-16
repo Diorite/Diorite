@@ -86,7 +86,7 @@ public class GlobalPaletteImpl implements PaletteData
     @Override
     public int bitsPerBlock()
     {
-        return 0;
+        return DEFAULT_BITS_PER_BLOCK;
     }
 
     @Override

@@ -129,7 +129,7 @@ public class ChunkBuilderImpl implements ChunkBuilder
             {
                 continue;
             }
-            chunkParts[i] = new ChunkPartImpl(chunkPart.blockData, chunkPart.pattern, (byte) i, chunk.getWorld().getDimension().hasSkyLight());
+            chunkParts[i] = new ChunkPartImpl(chunkPart.blockData, chunkPart.palette, (byte) i, chunk.getWorld().getDimension().hasSkyLight(), chunkPart.nonEmptyBlockCount);
 //            chunkParts[i].recalculateBlockCount();
         }
         chunk.setChunkParts(chunkParts);
@@ -142,21 +142,30 @@ public class ChunkBuilderImpl implements ChunkBuilder
     {
         public static final int CHUNK_DATA_SIZE = Chunk.CHUNK_SIZE * Chunk.CHUNK_PART_HEIGHT * Chunk.CHUNK_SIZE;
         private final ChunkBuilderImpl chunk;
-        private final PaletteImpl      pattern;
+        private final PaletteImpl      palette;
         private final ChunkBlockData   blockData;
         private final byte             yPos; // from 0 to 15
+        private       int              nonEmptyBlockCount;
 
         private ChunkPartBuilder(final ChunkBuilderImpl chunk, final byte yPos)
         {
             this.chunk = chunk;
             this.yPos = yPos;
-            this.pattern = new PaletteImpl();
-            this.blockData = new ChunkBlockData(this.pattern.bitsPerBlock(), CHUNK_DATA_SIZE);
+            this.palette = new PaletteImpl();
+            this.blockData = new ChunkBlockData(this.palette.bitsPerBlock(), CHUNK_DATA_SIZE);
         }
 
         private void setBlock(final int x, final int y, final int z, final int id, final int meta)
         {
-            this.blockData.set(this.toArrayIndex(x, y, z), this.pattern.put(id, (byte) meta));
+            final BlockMaterialData old = this.blockData.getAndSet(this.toArrayIndex(x, y, z), this.palette.put(id, (byte) meta), this.palette);
+            if ((old.getId() == 0) && (id != 0))
+            {
+                this.nonEmptyBlockCount++;
+            }
+            else if ((old.getId() != 0) && (id == 0))
+            {
+                this.nonEmptyBlockCount--;
+            }
         }
 
         private void setBlock(final int x, final int y, final int z, final BlockMaterialData material)
@@ -167,7 +176,7 @@ public class ChunkBuilderImpl implements ChunkBuilder
         @SuppressWarnings("MagicNumber")
         private BlockMaterialData getBlockType(final int x, final int y, final int z)
         {
-            final int data = this.pattern.getAsInt(this.blockData.get(this.toArrayIndex(x, y, z)));
+            final int data = this.blockData.getAsInt(this.toArrayIndex(x, y, z), this.palette);
             if (Material.getByID(data >> 4, data & 15) == null)
             {
                 return Material.AIR;
@@ -185,6 +194,26 @@ public class ChunkBuilderImpl implements ChunkBuilder
         public String toString()
         {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("chunk", this.chunk).append("yPos", this.yPos).toString();
+        }
+
+        public int recalculateBlockCount()
+        {
+            this.nonEmptyBlockCount = 0;
+
+            for (int i = 0; i < CHUNK_DATA_SIZE; i++)
+            {
+                final BlockMaterialData type = this.blockData.get(i, this.palette);
+                if ((type != null) && ! type.isThisSameID(Material.AIR))
+                {
+                    this.nonEmptyBlockCount++;
+                }
+            }
+            return this.nonEmptyBlockCount;
+        }
+
+        public int getBlocksCount()
+        {
+            return this.nonEmptyBlockCount;
         }
     }
 
