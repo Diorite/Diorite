@@ -50,16 +50,35 @@ import org.diorite.material.Material;
 
 public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements PlayerInventory
 {
-    private static final short CURSOR_SLOT   = - 1;
-    private static final int   CURSOR_WINDOW = - 1;
+    private static final short CURSOR_SLOT      = - 1;
+    private static final int   CURSOR_WINDOW    = - 1;
+    private static final int   SECOND_HAND_SLOT = 45;
 
     private final int       windowId;
     private final HumanImpl holder;
-    private final DragControllerImpl             drag       = new DragControllerImpl();
-    private final ItemStackImplArray             content    = ItemStackImplArray.create(InventoryType.PLAYER.getSize());
-    private final Slot[]                         slots      = new Slot[InventoryType.PLAYER.getSize()];
-    private final AtomicReference<ItemStackImpl> cursorItem = new AtomicReference<>();
-    private boolean wasCursorNotNull; // used only by softUpdate
+    private final DragControllerImpl drag       = new DragControllerImpl();
+    private final ItemStackImplArray content    = ItemStackImplArray.create(InventoryType.PLAYER.getSize());
+    private final Slot[]             slots      = new Slot[InventoryType.PLAYER.getSize()];
+    private final VirtualSlot        cursorItem = new VirtualSlot(CURSOR_SLOT);
+    private final VirtualSlot        secondHand = new VirtualSlot(SECOND_HAND_SLOT);
+
+    private static class VirtualSlot
+    {
+        private final int slot;
+        private final AtomicReference<ItemStackImpl> item = new AtomicReference<>();
+        private boolean wasNotNull; // used only by softUpdate
+
+        private VirtualSlot(final int slot)
+        {
+            this.slot = slot;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("item", this.item).append("wasNotNull", this.wasNotNull).toString();
+        }
+    }
 
     {
         int i = 0;
@@ -71,6 +90,8 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
         Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_EQ.getSize()), Slot.BASE_CONTAINER_SLOT);
         i += InventoryType.PLAYER_EQ.getSize();
         Arrays.fill(this.slots, i, (i + InventoryType.PLAYER_HOTBAR.getSize()), Slot.BASE_HOTBAR_SLOT);
+        i += InventoryType.PLAYER_HOTBAR.getSize();
+        this.slots[i] = Slot.BASE_SECOND_HAND_SLOT;
     }
 
     public PlayerInventoryImpl(final HumanImpl holder, final int windowId)
@@ -381,13 +402,13 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
     @Override
     public ItemStack getCursorItem()
     {
-        return this.cursorItem.get();
+        return this.cursorItem.item.get();
     }
 
     @Override
     public ItemStackImpl setCursorItem(final ItemStack cursorItem)
     {
-        return this.cursorItem.getAndSet(ItemStackImpl.wrap(cursorItem));
+        return this.cursorItem.item.getAndSet(ItemStackImpl.wrap(cursorItem));
     }
 
     @Override
@@ -400,7 +421,26 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
     public boolean replaceCursorItem(final ItemStack excepted, final ItemStack cursorItem) throws IllegalArgumentException
     {
         ItemStackImpl.validate(excepted);
-        return this.cursorItem.compareAndSet((ItemStackImpl) excepted, ItemStackImpl.wrap(cursorItem));
+        return this.cursorItem.item.compareAndSet((ItemStackImpl) excepted, ItemStackImpl.wrap(cursorItem));
+    }
+
+    @Override
+    public ItemStack getOffHandItem()
+    {
+        return this.secondHand.item.get();
+    }
+
+    @Override
+    public ItemStack setOffHandItem(final ItemStack offHandItem)
+    {
+        return this.secondHand.item.getAndSet(ItemStackImpl.wrap(offHandItem));
+    }
+
+    @Override
+    public boolean replaceOffHandItem(final ItemStack excepted, final ItemStack offHandItem)
+    {
+        ItemStackImpl.validate(excepted);
+        return this.secondHand.item.compareAndSet((ItemStackImpl) excepted, ItemStackImpl.wrap(offHandItem));
     }
 
     @Override
@@ -640,8 +680,8 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
         }
         // cursor
         {
-            ItemStackImpl cursor = this.cursorItem.get();
-            if ((this.wasCursorNotNull && (cursor == null)) || ((cursor != null) && cursor.isDirty()))
+            ItemStackImpl cursor = this.cursorItem.item.get();
+            if ((this.cursorItem.wasNotNull && (cursor == null)) || ((cursor != null) && cursor.isDirty()))
             {
                 if (cursor != null)
                 {
@@ -653,7 +693,7 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
                     else
                     {
                         cursor.setClean();
-                        this.wasCursorNotNull = true;
+                        this.cursorItem.wasNotNull = true;
                     }
                 }
                 packets.remove(CURSOR_SLOT);

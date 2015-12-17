@@ -35,13 +35,14 @@ public class SlotType extends ASimpleEnum<SlotType>
         init(SlotType.class, 7);
     }
 
-    public static final SlotType CONTAINER = new SlotType("CONTAINER");
-    public static final SlotType ARMOR     = new SlotType("ARMOR");
-    public static final SlotType CRAFTING  = new SlotType("CRAFTING");
-    public static final SlotType FUEL      = new SlotType("FUEL");
-    public static final SlotType HOTBAR    = new SlotType("HOTBAR");
-    public static final SlotType RESULT    = new SlotType("RESULT");
-    public static final SlotType OUTSIDE   = new SlotType("OUTSIDE");
+    public static final SlotType CONTAINER   = new SlotType("CONTAINER");
+    public static final SlotType ARMOR       = new SlotType("ARMOR");
+    public static final SlotType SECOND_HAND = new SlotType("SECOND_HAND");
+    public static final SlotType CRAFTING    = new SlotType("CRAFTING");
+    public static final SlotType FUEL        = new SlotType("FUEL");
+    public static final SlotType HOTBAR      = new SlotType("HOTBAR");
+    public static final SlotType RESULT      = new SlotType("RESULT");
+    public static final SlotType OUTSIDE     = new SlotType("OUTSIDE");
 
     public SlotType(final String enumName, final int enumId)
     {
@@ -100,6 +101,7 @@ public class SlotType extends ASimpleEnum<SlotType>
     {
         SlotType.register(CONTAINER);
         SlotType.register(ARMOR);
+        SlotType.register(SECOND_HAND);
         SlotType.register(CRAFTING);
         SlotType.register(FUEL);
         SlotType.register(HOTBAR);

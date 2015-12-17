@@ -37,7 +37,7 @@ import org.diorite.material.items.ArmorMat;
  */
 public abstract class Slot
 {
-    public static final Slot BASE_CONTAINER_SLOT = new Slot(SlotType.CONTAINER)
+    public static final Slot BASE_CONTAINER_SLOT   = new Slot(SlotType.CONTAINER)
     {
         @Override
         public ItemStack canHoldItem(final ItemStack item)
@@ -45,7 +45,7 @@ public abstract class Slot
             return item;
         }
     };
-    public static final Slot BASE_HOTBAR_SLOT    = new Slot(SlotType.HOTBAR)
+    public static final Slot BASE_HOTBAR_SLOT      = new Slot(SlotType.HOTBAR)
     {
         @Override
         public ItemStack canHoldItem(final ItemStack item)
@@ -53,7 +53,7 @@ public abstract class Slot
             return item;
         }
     };
-    public static final Slot BASE_ARMOR_SLOT     = new Slot(SlotType.ARMOR)
+    public static final Slot BASE_ARMOR_SLOT       = new Slot(SlotType.ARMOR)
     {
         @Override
         public ItemStack canHoldItem(final ItemStack item)
@@ -65,7 +65,7 @@ public abstract class Slot
             return (item.getMaterial() instanceof ArmorMat) ? item : null;
         }
     };
-    public static final Slot BASE_CRAFTING_SLOT  = new Slot(SlotType.CRAFTING)
+    public static final Slot BASE_SECOND_HAND_SLOT = new Slot(SlotType.SECOND_HAND)
     {
         @Override
         public ItemStack canHoldItem(final ItemStack item)
@@ -73,7 +73,15 @@ public abstract class Slot
             return item;
         }
     };
-    public static final Slot BASE_FUEL_SLOT      = new Slot(SlotType.FUEL)
+    public static final Slot BASE_CRAFTING_SLOT    = new Slot(SlotType.CRAFTING)
+    {
+        @Override
+        public ItemStack canHoldItem(final ItemStack item)
+        {
+            return item;
+        }
+    };
+    public static final Slot BASE_FUEL_SLOT        = new Slot(SlotType.FUEL)
     {
         @Override
         public ItemStack canHoldItem(final ItemStack item)
@@ -85,7 +93,7 @@ public abstract class Slot
             return (item.getMaterial() instanceof FuelMat) ? item : null;
         }
     };
-    public static final Slot BASE_RESULT_SLOT    = new Slot(SlotType.RESULT)
+    public static final Slot BASE_RESULT_SLOT      = new Slot(SlotType.RESULT)
     {
         @Override
         public ItemStack canHoldItem(final ItemStack item)
@@ -93,7 +101,7 @@ public abstract class Slot
             return null;
         }
     };
-    public static final Slot BASE_OUTSIDE_SLOT   = new Slot(SlotType.OUTSIDE)
+    public static final Slot BASE_OUTSIDE_SLOT     = new Slot(SlotType.OUTSIDE)
     {
         @Override
         public ItemStack canHoldItem(final ItemStack item)

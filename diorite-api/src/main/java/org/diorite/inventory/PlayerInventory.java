@@ -51,14 +51,7 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
     ItemStack setCursorItem(ItemStack cursorItem);
 
     /**
-     * Returns drag controller for player of this inventory.
-     *
-     * @return drag controller for player of this inventory.
-     */
-    DragController getDragController();
-
-    /**
-     * Put the given ItemStack into the helmet slot if it matches a excepted one.
+     * Put the given ItemStack into the cursor slot if it matches a excepted one.
      * NOTE: this is atomic operation.
      *
      * @param excepted   excepted item to replace.
@@ -69,6 +62,42 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
      * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
      */
     boolean replaceCursorItem(ItemStack excepted, ItemStack cursorItem);
+
+    /**
+     * Get item hold in off-hand by player.
+     *
+     * @return item hold in off-hand by player.
+     */
+    ItemStack getOffHandItem();
+
+    /**
+     * Set off-hand to given item, and return old off-hand item.
+     *
+     * @param offHandItem new off-hand item.
+     *
+     * @return old off-hand item.
+     */
+    ItemStack setOffHandItem(ItemStack offHandItem);
+
+    /**
+     * Put the given ItemStack into the off-hand slot if it matches a excepted one.
+     * NOTE: this is atomic operation.
+     *
+     * @param excepted   excepted item to replace.
+     * @param offHandItem The ItemStack to use as off-hand
+     *
+     * @return true if item was replaced.
+     *
+     * @throws IllegalArgumentException if excepted item isn't impl version of ItemStack, so it can't be == to any item from inventory.
+     */
+    boolean replaceOffHandItem(ItemStack excepted, ItemStack offHandItem);
+
+    /**
+     * Returns drag controller for player of this inventory.
+     *
+     * @return drag controller for player of this inventory.
+     */
+    DragController getDragController();
 
     /**
      * Returns sub-part of player inventory, contains only

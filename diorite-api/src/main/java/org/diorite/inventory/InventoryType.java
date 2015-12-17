@@ -39,7 +39,7 @@ public class InventoryType extends ASimpleEnum<InventoryType>
         init(InventoryType.class, 23);
     }
 
-    public static final InventoryType PLAYER            = new InventoryType("PLAYER", "", "Player", 45);
+    public static final InventoryType PLAYER            = new InventoryType("PLAYER", "", "Player", 46);
     public static final InventoryType PLAYER_CRAFTING   = new InventoryType("PLAYER_CRAFTING", "", "Crafting", 5, PLAYER, true);
     public static final InventoryType PLAYER_ARMOR      = new InventoryType("PLAYER_ARMOR", "", "Armor", 4, PLAYER, true);
     public static final InventoryType PLAYER_HOTBAR     = new InventoryType("PLAYER_HOTBAR", "", "Hotbar", 9, PLAYER, true);
