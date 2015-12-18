@@ -287,6 +287,7 @@ public class PlayerImpl extends HumanImpl implements Player
 
     private void updateAbilities()
     {
+        this.abilities.setDirty();
         this.abilities.send(this.networkManager);
     }
 

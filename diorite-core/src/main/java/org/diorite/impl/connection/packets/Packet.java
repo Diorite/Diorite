@@ -32,15 +32,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.utils.others.Dirtable;
 
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
-public abstract class Packet<T extends PacketListener>
+public abstract class Packet<T extends PacketListener> implements Dirtable
 {
     public static final int INITIAL_CAPACITY = 256;
-    protected volatile byte[] data;
+    protected volatile byte[]  data;
+    protected volatile boolean dirty;
 
     public Packet()
     {
@@ -49,6 +51,20 @@ public abstract class Packet<T extends PacketListener>
     public Packet(final byte[] data)
     {
         this.data = data;
+    }
+
+    @Override
+    public boolean isDirty()
+    {
+        return this.dirty;
+    }
+
+    @Override
+    public boolean setDirty(final boolean dirty)
+    {
+        final boolean d = this.dirty;
+        this.dirty = dirty;
+        return d;
     }
 
     public abstract void readPacket(PacketDataSerializer data) throws IOException;
@@ -72,11 +88,12 @@ public abstract class Packet<T extends PacketListener>
     public void writePacket(final PacketDataSerializer data) throws IOException
     {
         byte[] tempData = this.data;
-        if (tempData == null)
+        if ((tempData == null) || this.dirty)
         {
             synchronized (this)
             {
                 tempData = this.preparePacket(false);
+                this.dirty = false;
             }
             if (tempData == null)
             {

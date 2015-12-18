@@ -293,6 +293,7 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
     {
         if (CoreMain.isEnabledDebug())
         {
+            CoreMain.debug("Debug stacktrace (" + throwable + "):");
             throwable.printStackTrace();
         }
         if (this.closed)
