@@ -437,7 +437,7 @@ public class ChunkImpl implements Chunk
             sections[y] = part;
         }
         this.chunkParts = sections;
-//        this.recalculateBlockCounts();
+        this.recalculateBlockCounts();
 
         this.populated.set(tag.getBoolean("TerrainPopulated"));
         // TODO: load tile entites and other entities
