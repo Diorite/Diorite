@@ -26,22 +26,28 @@ package org.diorite.impl.entity.meta;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.entity.meta.entry.EntityMetadataBlockLocationEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataChatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
-import org.diorite.impl.entity.meta.entry.EntityMetadataShortEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataMaterialEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataUUIDEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataVector3FEntry;
 import org.diorite.BlockLocation;
+import org.diorite.chat.component.BaseComponent;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.Material;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.math.geometry.Vector3F;
 
@@ -49,6 +55,8 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 public class EntityMetadata
 {
+    public static final int END_MARKER = 0xff;
+
     private final Byte2ObjectOpenHashMap<EntityMetadataEntry<?>> data;
 
     public EntityMetadata()
@@ -105,17 +113,6 @@ public class EntityMetadata
         entry.setDirty();
     }
 
-    public void setShort(final byte index, final short value)
-    {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
-        if (! (entry instanceof EntityMetadataShortEntry))
-        {
-            throw new IllegalArgumentException("Metadata type mismatch excepted short but found: " + entry);
-        }
-        ((EntityMetadataShortEntry) entry).setValue(value);
-        entry.setDirty();
-    }
-
     public void setInt(final byte index, final int value)
     {
         final EntityMetadataEntry<?> entry = this.data.get(index);
@@ -169,21 +166,7 @@ public class EntityMetadata
             e.setDirty();
             return;
         }
-        if (entry instanceof EntityMetadataShortEntry)
-        {
-            final EntityMetadataShortEntry e = (EntityMetadataShortEntry) entry;
-            if (bool)
-            {
-                e.setValue((byte) (e.getValue() | (1 << flagIndex)));
-            }
-            else
-            {
-                e.setValue((byte) (e.getValue() & ~ (1 << flagIndex)));
-            }
-            e.setDirty();
-            return;
-        }
-        throw new IllegalArgumentException("Metadata type mismatch excepted byte, short or int but found: " + entry);
+        throw new IllegalArgumentException("Metadata type mismatch excepted byte or int but found: " + entry);
     }
 
     public void swichBoolean(final byte index, final int flagIndex)
@@ -203,14 +186,30 @@ public class EntityMetadata
             e.setDirty();
             return;
         }
-        if (entry instanceof EntityMetadataShortEntry)
+        throw new IllegalArgumentException("Metadata type mismatch excepted byte or int but found: " + entry);
+    }
+
+    public void setBoolean(final byte index, final boolean value)
+    {
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (! (entry instanceof EntityMetadataBooleanEntry))
         {
-            final EntityMetadataShortEntry e = (EntityMetadataShortEntry) entry;
-            e.setValue((byte) (e.getValue() ^ (1 << flagIndex)));
-            e.setDirty();
-            return;
+            throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
         }
-        throw new IllegalArgumentException("Metadata type mismatch excepted byte, short or int but found: " + entry);
+        ((EntityMetadataBooleanEntry) entry).setValue(value);
+        entry.setDirty();
+    }
+
+    public void swichBoolean(final byte index)
+    {
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (! (entry instanceof EntityMetadataBooleanEntry))
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
+        }
+        final EntityMetadataBooleanEntry boolEntry = (EntityMetadataBooleanEntry) entry;
+        boolEntry.setValue(! boolEntry.getValue());
+        entry.setDirty();
     }
 
     public void setString(final byte index, final String value)
@@ -222,6 +221,18 @@ public class EntityMetadata
         }
         //noinspection OverlyStrongTypeCast instanceof will block it anyway.
         ((EntityMetadataStringEntry) entry).setData(value);
+        entry.setDirty();
+    }
+
+    public void setChatComponent(final byte index, final BaseComponent value)
+    {
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (! (entry instanceof EntityMetadataChatEntry))
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted Chat but found: " + entry);
+        }
+        //noinspection OverlyStrongTypeCast instanceof will block it anyway.
+        ((EntityMetadataChatEntry) entry).setData(value);
         entry.setDirty();
     }
 
@@ -249,6 +260,18 @@ public class EntityMetadata
         entry.setDirty();
     }
 
+    public void setMaterial(final byte index, final Material value)
+    {
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (! (entry instanceof EntityMetadataMaterialEntry))
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted Material but found: " + entry);
+        }
+        //noinspection OverlyStrongTypeCast instanceof will block it anyway.
+        ((EntityMetadataMaterialEntry) entry).setData(value);
+        entry.setDirty();
+    }
+
     public void setVector3F(final byte index, final Vector3F value)
     {
         final EntityMetadataEntry<?> entry = this.data.get(index);
@@ -258,6 +281,18 @@ public class EntityMetadata
         }
         //noinspection OverlyStrongTypeCast instanceof will block it anyway.
         ((EntityMetadataVector3FEntry) entry).setData(value);
+        entry.setDirty();
+    }
+
+    public void setUUID(final byte index, final UUID value)
+    {
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (! (entry instanceof EntityMetadataUUIDEntry))
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted UUID but found: " + entry);
+        }
+        //noinspection OverlyStrongTypeCast instanceof will block it anyway.
+        ((EntityMetadataUUIDEntry) entry).setData(value);
         entry.setDirty();
     }
 
@@ -275,16 +310,6 @@ public class EntityMetadata
         this.setByte((byte) index, value);
     }
 
-    public void setShort(final int index, final int value)
-    {
-        this.setShort((byte) index, (short) value);
-    }
-
-    public void setShort(final int index, final short value)
-    {
-        this.setShort((byte) index, value);
-    }
-
     public void setInt(final int index, final int value)
     {
         this.setInt((byte) index, value);
@@ -298,6 +323,16 @@ public class EntityMetadata
     public void setFloat(final int index, final float value)
     {
         this.setFloat((byte) index, value);
+    }
+
+    public void setBoolean(final int index, final boolean bool)
+    {
+        this.setBoolean((byte) index, bool);
+    }
+
+    public void swichBoolean(final int index)
+    {
+        this.swichBoolean((byte) index);
     }
 
     public void setBoolean(final int index, final int flagIndex, final boolean bool)
@@ -323,6 +358,21 @@ public class EntityMetadata
     public void setBlockLocation(final int index, final BlockLocation value)
     {
         this.setBlockLocation((byte) index, value);
+    }
+
+    public void setUUID(final int index, final UUID value)
+    {
+        this.setUUID((byte) index, value);
+    }
+
+    public void setChatComponent(final int index, final BaseComponent value)
+    {
+        this.setChatComponent((byte) index, value);
+    }
+
+    public void setMaterial(final int index, final Material value)
+    {
+        this.setMaterial((byte) index, value);
     }
 
     public void setVector3F(final int index, final Vector3F value)
@@ -353,20 +403,6 @@ public class EntityMetadata
         return ((EntityMetadataByteEntry) entry).getValue();
     }
 
-    public short getShort(final byte index)
-    {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
-        if (entry == null)
-        {
-            return 0;
-        }
-        if (! (entry instanceof EntityMetadataShortEntry))
-        {
-            throw new IllegalArgumentException("Metadata type mismatch excepted short but found: " + entry);
-        }
-        return ((EntityMetadataShortEntry) entry).getValue();
-    }
-
     public int getInt(final byte index)
     {
         final EntityMetadataEntry<?> entry = this.data.get(index);
@@ -395,9 +431,19 @@ public class EntityMetadata
         return ((EntityMetadataFloatEntry) entry).getValue();
     }
 
+
     public boolean getBoolean(final byte index)
     {
-        return this.getByte(index) != 0;
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (entry == null)
+        {
+            return false;
+        }
+        if (! (entry instanceof EntityMetadataBooleanEntry))
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
+        }
+        return ((EntityMetadataBooleanEntry) entry).getValue();
     }
 
     public boolean getBoolean(final byte index, final int flagIndex)
@@ -415,11 +461,7 @@ public class EntityMetadata
         {
             return (((EntityMetadataIntEntry) entry).getValue() & (1 << flagIndex)) != 0;
         }
-        if (entry instanceof EntityMetadataShortEntry)
-        {
-            return (((EntityMetadataShortEntry) entry).getValue() & (1 << flagIndex)) != 0;
-        }
-        throw new IllegalArgumentException("Metadata type mismatch excepted byte, short or int but found: " + entry);
+        throw new IllegalArgumentException("Metadata type mismatch excepted byte or int but found: " + entry);
     }
 
     public int getNumberPart(final byte index, final int mask)
@@ -436,10 +478,6 @@ public class EntityMetadata
         if (entry instanceof EntityMetadataByteEntry)
         {
             return ((EntityMetadataByteEntry) entry).getValue() & mask;
-        }
-        if (entry instanceof EntityMetadataShortEntry)
-        {
-            return ((EntityMetadataShortEntry) entry).getValue() & mask;
         }
         throw new IllegalArgumentException("Metadata type mismatch excepted byte, short or int but found: " + entry);
     }
@@ -489,6 +527,51 @@ public class EntityMetadata
         return ((EntityMetadataBlockLocationEntry) entry).getData();
     }
 
+    public Material getMaterial(final byte index)
+    {
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (entry == null)
+        {
+            return null;
+        }
+        if (! (entry instanceof EntityMetadataMaterialEntry))
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted Material but found: " + entry);
+        }
+        //noinspection OverlyStrongTypeCast instanceof will block it anyway.
+        return ((EntityMetadataMaterialEntry) entry).getData();
+    }
+
+    public UUID getUUID(final byte index)
+    {
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (entry == null)
+        {
+            return null;
+        }
+        if (! (entry instanceof EntityMetadataUUIDEntry))
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted UUID but found: " + entry);
+        }
+        //noinspection OverlyStrongTypeCast instanceof will block it anyway.
+        return ((EntityMetadataUUIDEntry) entry).getData();
+    }
+
+    public BaseComponent getChatComponent(final byte index)
+    {
+        final EntityMetadataEntry<?> entry = this.data.get(index);
+        if (entry == null)
+        {
+            return null;
+        }
+        if (! (entry instanceof EntityMetadataChatEntry))
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted Chat but found: " + entry);
+        }
+        //noinspection OverlyStrongTypeCast instanceof will block it anyway.
+        return ((EntityMetadataChatEntry) entry).getData();
+    }
+
     public Vector3F getVector3F(final byte index)
     {
         final EntityMetadataEntry<?> entry = this.data.get(index);
@@ -513,11 +596,6 @@ public class EntityMetadata
         return this.getByte((byte) index);
     }
 
-    public short getShort(final int index)
-    {
-        return this.getShort((byte) index);
-    }
-
     public int getInt(final int index)
     {
         return this.getInt((byte) index);
@@ -533,7 +611,7 @@ public class EntityMetadata
         return this.getBoolean((byte) index);
     }
 
-    public boolean getBoolean(final int index, final int flagIndex)
+    public boolean getBoolean(final int index, int flagIndex)
     {
         return this.getBoolean((byte) index, flagIndex);
     }
@@ -556,6 +634,21 @@ public class EntityMetadata
     public BlockLocation getBlockLocation(final int index)
     {
         return this.getBlockLocation((byte) index);
+    }
+
+    public UUID getUUID(final int index)
+    {
+        return this.getUUID((byte) index);
+    }
+
+    public BaseComponent getChatComponent(final int index)
+    {
+        return this.getChatComponent((byte) index);
+    }
+
+    public Material getMaterial(final int index)
+    {
+        return this.getMaterial((byte) index);
     }
 
     public Vector3F getVector3F(final int index)

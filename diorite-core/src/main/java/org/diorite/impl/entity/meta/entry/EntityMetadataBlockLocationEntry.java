@@ -30,9 +30,12 @@ import org.diorite.BlockLocation;
 
 public class EntityMetadataBlockLocationEntry extends EntityMetadataObjectEntry<BlockLocation>
 {
-    public EntityMetadataBlockLocationEntry(final int index, final BlockLocation data)
+    private final boolean optional;
+
+    public EntityMetadataBlockLocationEntry(final int index, final BlockLocation data, final boolean optional)
     {
         super(index, data);
+        this.optional = optional;
     }
 
     @Override
@@ -44,8 +47,15 @@ public class EntityMetadataBlockLocationEntry extends EntityMetadataObjectEntry<
     @Override
     public void write(final PacketDataSerializer data)
     {
-        data.writeInt(this.data.getX());
-        data.writeInt(this.data.getY());
-        data.writeInt(this.data.getZ());
+        if (this.optional)
+        {
+            final boolean b = this.data != null;
+            data.writeBoolean(b);
+            if (! b)
+            {
+                return;
+            }
+        }
+        data.writeLong(this.data.asLong());
     }
 }

@@ -24,17 +24,22 @@
 
 package org.diorite.impl.entity.meta;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.entry.EntityMetadataBlockLocationEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataChatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
-import org.diorite.impl.entity.meta.entry.EntityMetadataShortEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataMaterialEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataUUIDEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataVector3FEntry;
 import org.diorite.BlockLocation;
+import org.diorite.material.Material;
 
 public enum EntityMetadataType
 {
@@ -50,20 +55,9 @@ public enum EntityMetadataType
                 }
             },
     /**
-     * short value type, {@link EntityMetadataShortEntry}
-     */
-    SHORT(1, EntityMetadataShortEntry.class)
-            {
-                @Override
-                public EntityMetadataByteEntry read(final int index, final PacketDataSerializer data)
-                {
-                    return new EntityMetadataByteEntry(index, data.readShort());
-                }
-            },
-    /**
      * integer value type, {@link EntityMetadataIntEntry}
      */
-    INT(2, EntityMetadataIntEntry.class)
+    INT(1, EntityMetadataIntEntry.class)
             {
                 @Override
                 public EntityMetadataIntEntry read(final int index, final PacketDataSerializer data)
@@ -74,7 +68,7 @@ public enum EntityMetadataType
     /**
      * float value type, {@link EntityMetadataFloatEntry}
      */
-    FLOAT(3, EntityMetadataFloatEntry.class)
+    FLOAT(2, EntityMetadataFloatEntry.class)
             {
                 @Override
                 public EntityMetadataFloatEntry read(final int index, final PacketDataSerializer data)
@@ -86,12 +80,23 @@ public enum EntityMetadataType
      * String value type, {@link EntityMetadataStringEntry}
      * UTF-8 String (VarInt prefixed)
      */
-    STRING(4, EntityMetadataStringEntry.class)
+    STRING(3, EntityMetadataStringEntry.class)
             {
                 @Override
                 public EntityMetadataStringEntry read(final int index, final PacketDataSerializer data)
                 {
                     return new EntityMetadataStringEntry(index, data.readText(Short.MAX_VALUE));
+                }
+            },
+    /**
+     * ChatComponent value type, {@link EntityMetadataChatEntry}
+     */
+    CHAT(4, EntityMetadataChatEntry.class)
+            {
+                @Override
+                public EntityMetadataChatEntry read(final int index, final PacketDataSerializer data)
+                {
+                    return new EntityMetadataChatEntry(index, data.readBaseComponent());
                 }
             },
     /**
@@ -106,18 +111,14 @@ public enum EntityMetadataType
                 }
             },
     /**
-     * BlockLocation value type, {@link EntityMetadataBlockLocationEntry}
-     * Int, Int, Int (x, y, z)
+     * boolean value type, {@link EntityMetadataBooleanEntry}
      */
-    LOCATION(6, EntityMetadataBlockLocationEntry.class)
+    BOOLEAN(6, EntityMetadataBooleanEntry.class)
             {
                 @Override
-                public EntityMetadataBlockLocationEntry read(final int index, final PacketDataSerializer data)
+                public EntityMetadataBooleanEntry read(final int index, final PacketDataSerializer data)
                 {
-                    final int x = data.readInt();
-                    final int y = data.readInt();
-                    final int z = data.readInt();
-                    return new EntityMetadataBlockLocationEntry(index, new BlockLocation(x, y, z));
+                    return new EntityMetadataBooleanEntry(index, data.readBoolean());
                 }
             },
     /**
@@ -130,6 +131,75 @@ public enum EntityMetadataType
                 public EntityMetadataVector3FEntry read(final int index, final PacketDataSerializer data)
                 {
                     return new EntityMetadataVector3FEntry(index, data.readVector3F());
+                }
+            },
+    /**
+     * BlockLocation value type, {@link EntityMetadataBlockLocationEntry}
+     * Int, Int, Int (x, y, z)
+     */
+    LOCATION(8, EntityMetadataBlockLocationEntry.class)
+            {
+                @Override
+                public EntityMetadataBlockLocationEntry read(final int index, final PacketDataSerializer data)
+                {
+                    return new EntityMetadataBlockLocationEntry(index, BlockLocation.fromLong(data.readLong()), false);
+                }
+            },
+    /**
+     * Optional BlockLocation value type, {@link EntityMetadataBlockLocationEntry}
+     * Bool, Int, Int, Int (exist, x, y, z) x/y/z only if bool is true.
+     */
+    OPTIONAL_LOCATION(9, EntityMetadataBlockLocationEntry.class)
+            {
+                @Override
+                public EntityMetadataBlockLocationEntry read(final int index, final PacketDataSerializer data)
+                {
+                    if (! data.readBoolean())
+                    {
+                        return new EntityMetadataBlockLocationEntry(index, null, true);
+                    }
+                    return new EntityMetadataBlockLocationEntry(index, BlockLocation.fromLong(data.readLong()), true);
+                }
+            },
+    /**
+     * Direction value type, {@link EntityMetadataIntEntry}
+     */
+    DIRECTION(10, EntityMetadataIntEntry.class)
+            {
+                // TODO
+                @Override
+                public EntityMetadataIntEntry read(final int index, final PacketDataSerializer data)
+                {
+                    CoreMain.debug("TODO: " + this + ", " + index);
+                    return new EntityMetadataIntEntry(index, data.readVarInt());
+                }
+            },
+    /**
+     * Optional UUID value type, {@link EntityMetadataUUIDEntry}
+     * Bool, UUID; uuid only if bool is true.
+     */
+    OPTIONAL_UUID(11, EntityMetadataUUIDEntry.class)
+            {
+                @Override
+                public EntityMetadataUUIDEntry read(final int index, final PacketDataSerializer data)
+                {
+                    if (! data.readBoolean())
+                    {
+                        return new EntityMetadataUUIDEntry(index, null);
+                    }
+                    return new EntityMetadataUUIDEntry(index, data.readUUID());
+                }
+            },
+    /**
+     * Block id value type, {@link EntityMetadataMaterialEntry}
+     */
+    MATERIAL(12, EntityMetadataMaterialEntry.class)
+            {
+                @Override
+                public EntityMetadataMaterialEntry read(final int index, final PacketDataSerializer data)
+                {
+                    final int k = data.readVarInt();
+                    return new EntityMetadataMaterialEntry(index, Material.getByID(k >> 4, k & 15));
                 }
             };
 

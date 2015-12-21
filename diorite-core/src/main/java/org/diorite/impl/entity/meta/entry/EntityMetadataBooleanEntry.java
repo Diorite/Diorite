@@ -28,22 +28,22 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
-public class EntityMetadataIntEntry extends EntityMetadataEntry<Integer>
+public class EntityMetadataBooleanEntry extends EntityMetadataEntry<Boolean>
 {
-    private int value;
+    private boolean value;
 
-    public EntityMetadataIntEntry(final int index, final int value)
+    public EntityMetadataBooleanEntry(final int index, final boolean value)
     {
         super(index);
         this.value = value;
     }
 
-    public int getValue()
+    public boolean getValue()
     {
         return this.value;
     }
 
-    public void setValue(final int value)
+    public void setValue(final boolean value)
     {
         this.value = value;
     }
@@ -51,17 +51,17 @@ public class EntityMetadataIntEntry extends EntityMetadataEntry<Integer>
     @Override
     public EntityMetadataType getDataType()
     {
-        return EntityMetadataType.INT;
+        return EntityMetadataType.BOOLEAN;
     }
 
     @Override
-    public Integer getData()
+    public Boolean getData()
     {
         return this.value;
     }
 
     @Override
-    public void setData(final Integer data)
+    public void setData(final Boolean data)
     {
         this.value = data;
     }
@@ -69,6 +69,6 @@ public class EntityMetadataIntEntry extends EntityMetadataEntry<Integer>
     @Override
     public void write(final PacketDataSerializer data)
     {
-        data.writeVarInt(this.value);
+        data.writeBoolean(this.value);
     }
 }

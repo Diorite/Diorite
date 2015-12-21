@@ -41,6 +41,7 @@ import java.util.UUID;
 import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.entity.attrib.AttributePropertyImpl;
 import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.BlockLocation;
@@ -88,7 +89,7 @@ public class PacketDataSerializer extends ByteBuf
     public void writeEntityMetadata(final Iterable<EntityMetadataEntry<?>> data)
     {
         data.forEach(this::writeEntityMetadata);
-        this.writeByte(Byte.MAX_VALUE); // mark end of metadata
+        this.writeByte(EntityMetadata.END_MARKER); // mark end of metadata
     }
 
     public List<EntityMetadataEntry<?>> readEntityMetadata()

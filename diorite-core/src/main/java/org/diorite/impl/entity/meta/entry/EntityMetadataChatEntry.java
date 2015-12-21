@@ -26,49 +26,24 @@ package org.diorite.impl.entity.meta.entry;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
+import org.diorite.chat.component.BaseComponent;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
-public class EntityMetadataIntEntry extends EntityMetadataEntry<Integer>
+public class EntityMetadataChatEntry extends EntityMetadataObjectEntry<BaseComponent>
 {
-    private int value;
-
-    public EntityMetadataIntEntry(final int index, final int value)
+    public EntityMetadataChatEntry(final int index, final BaseComponent data)
     {
-        super(index);
-        this.value = value;
-    }
-
-    public int getValue()
-    {
-        return this.value;
-    }
-
-    public void setValue(final int value)
-    {
-        this.value = value;
+        super(index, data);
     }
 
     @Override
     public EntityMetadataType getDataType()
     {
-        return EntityMetadataType.INT;
-    }
-
-    @Override
-    public Integer getData()
-    {
-        return this.value;
-    }
-
-    @Override
-    public void setData(final Integer data)
-    {
-        this.value = data;
+        return EntityMetadataType.CHAT;
     }
 
     @Override
     public void write(final PacketDataSerializer data)
     {
-        data.writeVarInt(this.value);
+        data.writeBaseComponent(this.data);
     }
 }

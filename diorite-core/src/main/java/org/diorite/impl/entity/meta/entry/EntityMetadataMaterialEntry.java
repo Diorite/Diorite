@@ -26,60 +26,24 @@ package org.diorite.impl.entity.meta.entry;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
+import org.diorite.material.Material;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
-public class EntityMetadataShortEntry extends EntityMetadataEntry<Short>
+public class EntityMetadataMaterialEntry extends EntityMetadataObjectEntry<Material>
 {
-    private short value;
-
-    public EntityMetadataShortEntry(final int index, final short value)
+    public EntityMetadataMaterialEntry(final int index, final Material material)
     {
-        super(index);
-        this.value = value;
-    }
-
-    public EntityMetadataShortEntry(final int index, final int value)
-    {
-        super(index);
-        this.value = (short) value;
-    }
-
-    public short getValue()
-    {
-        return this.value;
-    }
-
-    public void setValue(final short value)
-    {
-        this.value = value;
-    }
-
-    public void setValue(final int value)
-    {
-        this.value = (short) value;
+        super(index, material);
     }
 
     @Override
     public EntityMetadataType getDataType()
     {
-        return EntityMetadataType.SHORT;
-    }
-
-    @Override
-    public Short getData()
-    {
-        return this.value;
-    }
-
-    @Override
-    public void setData(final Short data)
-    {
-        this.value = data;
+        return EntityMetadataType.MATERIAL;
     }
 
     @Override
     public void write(final PacketDataSerializer data)
     {
-        data.writeShort(this.value);
+        data.writeVarInt(this.data.getIdAndMeta());
     }
 }
