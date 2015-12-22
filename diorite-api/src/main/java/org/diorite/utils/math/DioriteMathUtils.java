@@ -34,6 +34,21 @@ import java.util.Collection;
 @SuppressWarnings("MagicNumber")
 public final class DioriteMathUtils
 {
+    public static final float FLOAT_PI            = (float) Math.PI;
+    public static final int   CIRCLE_DEGREES      = 360;
+    public static final int   HALF_CIRCLE_DEGREES = CIRCLE_DEGREES / 2;
+
+    private static final int     SIN_CACHE_SIZE = 0xFFFF;
+    private static final float   UNKNOWN_CONST  = 10430.378F;
+    private static final float[] sinCache       = new float[SIN_CACHE_SIZE];
+
+    static
+    {
+        for (int i = 0; i <= SIN_CACHE_SIZE; i++)
+        {
+            sinCache[i] = ((float) Math.sin((i * Math.PI * 2.0D) / ((double) (SIN_CACHE_SIZE + 1))));
+        }
+    }
 
     private DioriteMathUtils()
     {
@@ -41,6 +56,30 @@ public final class DioriteMathUtils
 
     private static final NumberFormat simpleFormat          = new DecimalFormat("###.##");
     private static final NumberFormat simpleFormatForceZero = new DecimalFormat("###.00");
+
+    /**
+     * Faster sin method using special cache, based on Mojang code.
+     *
+     * @param angle angle.
+     *
+     * @return sin of given angle.
+     */
+    public static float sin(final float angle)
+    {
+        return sinCache[((int) (angle * UNKNOWN_CONST) & SIN_CACHE_SIZE)];
+    }
+
+    /**
+     * Faster cos method using special cache, based on Mojang code.
+     *
+     * @param angle angle.
+     *
+     * @return cos of given angle.
+     */
+    public static float cos(final float angle)
+    {
+        return sinCache[((int) ((angle * UNKNOWN_CONST) + ((SIN_CACHE_SIZE + 1) / 4)) & SIN_CACHE_SIZE)];
+    }
 
     /**
      * Change tps to number of milliseconds per tick, 1000/tps.

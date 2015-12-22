@@ -37,7 +37,7 @@ import org.apache.commons.lang3.Validate;
 
 public final class DioriteRandomUtils
 {
-    private static final DioriteRandom random = new DioriteRandom();
+    private static final ThreadLocal<DioriteRandom> random = ThreadLocal.withInitial(DioriteRandom::new);
 
     private DioriteRandomUtils()
     {
@@ -45,77 +45,77 @@ public final class DioriteRandomUtils
 
     public static DioriteRandom getRandom()
     {
-        return random;
+        return random.get();
     }
 
     public static <T> T getRand(final T[] array)
     {
-        return getRand(random, array);
+        return getRand(getRandom(), array);
     }
 
     public static <T> T getRand(final List<T> coll)
     {
-        return getRand(random, coll);
+        return getRand(getRandom(), coll);
     }
 
     public static <T, E extends Collection<T>> E getRand(final Collection<T> coll, final E target, final int amount)
     {
-        return getRand(random, coll, target, amount, true);
+        return getRand(getRandom(), coll, target, amount, true);
     }
 
     public static <T, E extends Collection<T>> E getRand(final Collection<T> coll, final E target, final int amount, final boolean noRepeat)
     {
-        return getRand(random, coll, target, amount, noRepeat);
+        return getRand(getRandom(), coll, target, amount, noRepeat);
     }
 
     public static <T> T getRand(final Collection<T> coll)
     {
-        return getRand(random, coll);
+        return getRand(getRandom(), coll);
     }
 
     public static long getRandLongSafe(final long a, final long b)
     {
-        return getRandLongSafe(random, a, b);
+        return getRandLongSafe(getRandom(), a, b);
     }
 
     public static int getRandIntSafe(final int a, final int b)
     {
-        return getRandIntSafe(random, a, b);
+        return getRandIntSafe(getRandom(), a, b);
     }
 
     public static double getRandDoubleSafe(final double a, final double b)
     {
-        return getRandDoubleSafe(random, a, b);
+        return getRandDoubleSafe(getRandom(), a, b);
     }
 
     public static float getRandFloatSafe(final float a, final float b)
     {
-        return getRandFloatSafe(random, a, b);
+        return getRandFloatSafe(getRandom(), a, b);
     }
 
     public static long getRandLong(final long min, final long max) throws IllegalArgumentException
     {
-        return getRandLong(random, min, max);
+        return getRandLong(getRandom(), min, max);
     }
 
     public static int getRandInt(final int min, final int max) throws IllegalArgumentException
     {
-        return getRandInt(random, min, max);
+        return getRandInt(getRandom(), min, max);
     }
 
     public static double getRandDouble(final double min, final double max) throws IllegalArgumentException
     {
-        return getRandDouble(random, min, max);
+        return getRandDouble(getRandom(), min, max);
     }
 
     public static float getRandFloat(final float min, final float max) throws IllegalArgumentException
     {
-        return getRandFloat(random, min, max);
+        return getRandFloat(getRandom(), min, max);
     }
 
     public static boolean getChance(final double chance)
     {
-        return getChance(random, chance);
+        return getChance(getRandom(), chance);
     }
 
 
@@ -288,7 +288,7 @@ public final class DioriteRandomUtils
      */
     public static void nextBytes(final byte[] bytes)
     {
-        random.nextBytes(bytes);
+        getRandom().nextBytes(bytes);
     }
 
     /**
@@ -310,7 +310,7 @@ public final class DioriteRandomUtils
      */
     public static int nextInt()
     {
-        return random.nextInt();
+        return getRandom().nextInt();
     }
 
     /**
@@ -368,7 +368,7 @@ public final class DioriteRandomUtils
      */
     public static int nextInt(final int bound)
     {
-        return random.nextInt(bound);
+        return getRandom().nextInt(bound);
     }
 
     /**
@@ -392,7 +392,7 @@ public final class DioriteRandomUtils
      */
     public static long nextLong()
     {
-        return random.nextLong();
+        return getRandom().nextLong();
     }
 
     /**
@@ -416,7 +416,7 @@ public final class DioriteRandomUtils
      */
     public static boolean nextBoolean()
     {
-        return random.nextBoolean();
+        return getRandom().nextBoolean();
     }
 
     /**
@@ -458,7 +458,7 @@ public final class DioriteRandomUtils
      */
     public static float nextFloat()
     {
-        return random.nextFloat();
+        return getRandom().nextFloat();
     }
 
     /**
@@ -503,7 +503,7 @@ public final class DioriteRandomUtils
      */
     public static double nextDouble()
     {
-        return random.nextDouble();
+        return getRandom().nextDouble();
     }
 
     // no nextGaussian method, it is synchronized, may cause blocks.
@@ -524,7 +524,7 @@ public final class DioriteRandomUtils
      */
     public static IntStream ints(final long streamSize)
     {
-        return random.ints(streamSize);
+        return getRandom().ints(streamSize);
     }
 
     /**
@@ -541,7 +541,7 @@ public final class DioriteRandomUtils
      */
     public static IntStream ints()
     {
-        return random.ints();
+        return getRandom().ints();
     }
 
     /**
@@ -579,7 +579,7 @@ public final class DioriteRandomUtils
      */
     public static IntStream ints(final long streamSize, final int randomNumberOrigin, final int randomNumberBound)
     {
-        return random.ints(streamSize, randomNumberOrigin, randomNumberBound);
+        return getRandom().ints(streamSize, randomNumberOrigin, randomNumberBound);
     }
 
     /**
@@ -617,7 +617,7 @@ public final class DioriteRandomUtils
      */
     public static IntStream ints(final int randomNumberOrigin, final int randomNumberBound)
     {
-        return random.ints(randomNumberOrigin, randomNumberBound);
+        return getRandom().ints(randomNumberOrigin, randomNumberBound);
     }
 
     /**
@@ -636,7 +636,7 @@ public final class DioriteRandomUtils
      */
     public static LongStream longs(final long streamSize)
     {
-        return random.longs(streamSize);
+        return getRandom().longs(streamSize);
     }
 
     /**
@@ -653,7 +653,7 @@ public final class DioriteRandomUtils
      */
     public static LongStream longs()
     {
-        return random.longs();
+        return getRandom().longs();
     }
 
     /**
@@ -696,7 +696,7 @@ public final class DioriteRandomUtils
      */
     public static LongStream longs(final long streamSize, final long randomNumberOrigin, final long randomNumberBound)
     {
-        return random.longs(streamSize, randomNumberOrigin, randomNumberBound);
+        return getRandom().longs(streamSize, randomNumberOrigin, randomNumberBound);
     }
 
     /**
@@ -739,7 +739,7 @@ public final class DioriteRandomUtils
      */
     public static LongStream longs(final long randomNumberOrigin, final long randomNumberBound)
     {
-        return random.longs(randomNumberOrigin, randomNumberBound);
+        return getRandom().longs(randomNumberOrigin, randomNumberBound);
     }
 
     /**
@@ -759,7 +759,7 @@ public final class DioriteRandomUtils
      */
     public static DoubleStream doubles(final long streamSize)
     {
-        return random.doubles(streamSize);
+        return getRandom().doubles(streamSize);
     }
 
     /**
@@ -777,7 +777,7 @@ public final class DioriteRandomUtils
      */
     public static DoubleStream doubles()
     {
-        return random.doubles();
+        return getRandom().doubles();
     }
 
     /**
@@ -810,7 +810,7 @@ public final class DioriteRandomUtils
      */
     public static DoubleStream doubles(final long streamSize, final double randomNumberOrigin, final double randomNumberBound)
     {
-        return random.doubles(streamSize, randomNumberOrigin, randomNumberBound);
+        return getRandom().doubles(streamSize, randomNumberOrigin, randomNumberBound);
     }
 
     /**
@@ -842,7 +842,7 @@ public final class DioriteRandomUtils
      */
     public static DoubleStream doubles(final double randomNumberOrigin, final double randomNumberBound)
     {
-        return random.doubles(randomNumberOrigin, randomNumberBound);
+        return getRandom().doubles(randomNumberOrigin, randomNumberBound);
     }
 
     public static DioriteRandom newRandom()
