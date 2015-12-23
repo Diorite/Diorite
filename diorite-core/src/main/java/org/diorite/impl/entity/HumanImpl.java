@@ -38,10 +38,18 @@ import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.permissions.PlayerPermissionsContainer;
+import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
+import org.diorite.utils.others.NamedUUID;
 
 public class HumanImpl extends LivingEntityImpl implements Human
 {
+    private static final float BASE_HEAD_HEIGHT      = 1.62F;
+    private static final float CROUCHING_HEAD_HEIGHT = BASE_HEAD_HEIGHT - 0.08F;
+    private static final float SLEEP_HEAD_HEIGHT     = 0.2F;
+    private static final float ITEM_DROP_MOD_Y       = 0.3F;
+    private static final float ITEM_DROP_MOD_VEL_Y   = 0.02F;
+
     @SuppressWarnings("MagicNumber")
     public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.6F, 1.8F);
     @SuppressWarnings("MagicNumber")
@@ -77,6 +85,7 @@ public class HumanImpl extends LivingEntityImpl implements Human
     protected HandSide                  mainHand     = HandSide.RIGHT;
     protected int                       heldItemSlot = 0;
     protected GameMode                  gameMode     = GameMode.SURVIVAL;
+    protected NamedUUID namedUUID;
 
     protected PlayerPermissionsContainer permissionContainer;
 
@@ -88,6 +97,71 @@ public class HumanImpl extends LivingEntityImpl implements Human
         this.permissionContainer = Diorite.getServerManager().getPermissionsManager().createPlayerContainer(this);
         this.gameMode = this.world.getDefaultGameMode();
         this.inventory = new PlayerInventoryImpl(this, 0); // 0 because this is owner of this inventory, and we need this to update
+        this.namedUUID = new NamedUUID(gameProfile.getName(), gameProfile.getId());
+    }
+
+    @Override
+    public NamedUUID getNamedUUID()
+    {
+        return this.namedUUID;
+    }
+
+    public void setNamedUUID(final NamedUUID namedUUID)
+    {
+        this.namedUUID = namedUUID;
+    }
+
+    public float getHeadHeight()
+    {
+        return this.isCrouching() ? CROUCHING_HEAD_HEIGHT : BASE_HEAD_HEIGHT;
+    }
+
+    @Override
+    public ItemImpl dropItem(final ItemStack itemStack)
+    {
+        if ((itemStack == null) || (itemStack.getAmount() == 0))
+        {
+            return null;
+        }
+        final double newY = (this.y - ITEM_DROP_MOD_Y) + this.getHeadHeight();
+        final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.core, EntityImpl.getNextEntityID(), new ImmutableLocation(this.x, newY, this.z, this.world));
+        item.setItemStack(itemStack);
+        item.setPickupDelay(ItemImpl.DEFAULT_DROP_PICKUP_DELAY);
+        item.setThrower(this.namedUUID);
+
+        float yMod = ITEM_DROP_MOD_Y;
+        item.velX = (- DioriteMathUtils.sin((this.yaw / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * DioriteMathUtils.cos((this.pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod);
+        item.velZ = (DioriteMathUtils.cos((this.yaw / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * DioriteMathUtils.cos((this.pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod);
+        item.velY = ((- DioriteMathUtils.sin((this.pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod) + DioriteMathUtils.F_ONE_OF_10);
+        final float randomAngle = this.random.nextFloat() * DioriteMathUtils.F_PI * 2;
+        yMod = ITEM_DROP_MOD_VEL_Y * this.random.nextFloat();
+        item.velX += Math.cos(randomAngle) * yMod;
+        item.velY += (this.random.nextFloat() - this.random.nextFloat()) * DioriteMathUtils.F_ONE_OF_10;
+        item.velZ += Math.sin(randomAngle) * yMod;
+
+        // TODO: event/pipeline etc.
+
+        this.world.addEntity(item);
+        return item;
+    }
+
+    @Override
+    public void doTick(final int tps)
+    {
+        super.doTick(tps);
+        this.pickupItems();
+    }
+
+    protected void pickupItems()
+    {
+        // TODO: maybe don't pickup every tick?
+        for (final ItemImpl entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
+        {
+            if (entity.canPickup())
+            {
+                entity.pickUpItem(this);
+            }
+        }
     }
 
     @Override
@@ -302,17 +376,13 @@ public class HumanImpl extends LivingEntityImpl implements Human
             final ItemStack itemStack = ci.setItem(i, null);
             if (itemStack != null)
             {
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getCore(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                item.setItemStack(new BaseItemStack(itemStack.getMaterial(), itemStack.getAmount()));
-                this.getWorld().addEntity(item);
+                this.dropItem(new BaseItemStack(itemStack.getMaterial(), itemStack.getAmount()));
             }
         }
         final ItemStack cur = this.inventory.setCursorItem(null);
         if (cur != null)
         {
-            final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.getCore(), EntityImpl.getNextEntityID(), this.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-            item.setItemStack(new BaseItemStack(cur.getMaterial(), cur.getAmount()));
-            this.getWorld().addEntity(item);
+            this.dropItem(new BaseItemStack(cur.getMaterial(), cur.getAmount()));
         }
     }
 

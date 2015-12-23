@@ -43,6 +43,8 @@ public interface ILocation
 
     World getWorld();
 
+    ILocation clone();
+
     default Chunk getChunk()
     {
         return this.getWorld().getChunkAt(this.getChunkPos());

@@ -34,6 +34,7 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
+import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityDestroy;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange.ReasonCodes;
@@ -121,11 +122,18 @@ public class PlayerImpl extends HumanImpl implements Player
             }
             this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(ids));
         }
+    }
 
+    @Override
+    protected void pickupItems()
+    {
         // TODO: maybe don't pickup every tick?
         for (final ItemImpl entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
         {
-            entity.pickUpItem(this);
+            if (entity.canPickup() && entity.pickUpItem(this))
+            {
+                this.networkManager.sendPacket(new PacketPlayServerCollect(entity.getId(), this.getId()));
+            }
         }
     }
 

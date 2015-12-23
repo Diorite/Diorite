@@ -34,9 +34,13 @@ import java.util.Collection;
 @SuppressWarnings("MagicNumber")
 public final class DioriteMathUtils
 {
-    public static final float FLOAT_PI            = (float) Math.PI;
-    public static final int   CIRCLE_DEGREES      = 360;
-    public static final int   HALF_CIRCLE_DEGREES = CIRCLE_DEGREES / 2;
+    public static final float  F_PI                = (float) Math.PI;
+    public static final int    CIRCLE_DEGREES      = 360;
+    public static final int    HALF_CIRCLE_DEGREES = CIRCLE_DEGREES / 2;
+    public static final double ONE_OF_10           = 1D / 10D;
+    public static final double ONE_OF_100          = 1D / 100D;
+    public static final float  F_ONE_OF_10         = 1F / 10F;
+    public static final float  F_ONE_OF_100        = 1F / 100F;
 
     private static final int     SIN_CACHE_SIZE = 0xFFFF;
     private static final float   UNKNOWN_CONST  = 10430.378F;
@@ -44,7 +48,7 @@ public final class DioriteMathUtils
 
     static
     {
-        for (int i = 0; i <= SIN_CACHE_SIZE; i++)
+        for (int i = 0; i < SIN_CACHE_SIZE; i++)
         {
             sinCache[i] = ((float) Math.sin((i * Math.PI * 2.0D) / ((double) (SIN_CACHE_SIZE + 1))));
         }

@@ -26,6 +26,7 @@ package org.diorite.impl.world;
 
 import java.io.File;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -36,8 +37,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.entity.tracker.EntityTrackers;
@@ -55,6 +58,7 @@ import org.diorite.Location;
 import org.diorite.Particle;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.entity.Player;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -77,8 +81,11 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 public class WorldImpl implements World, Tickable
 {
-    private static final int CHUNK_FLAG            = (Chunk.CHUNK_SIZE - 1);
-    public static final  int DEFAULT_AUTOSAVE_TIME = 20 * 60 * 5; // 5 min, TODO: load it from config
+
+    private static final float  ITEM_DROP_MOD_1       = 0.7F;
+    private static final double ITEM_DROP_MOD_2       = 0.35D;
+    private static final int    CHUNK_FLAG            = (Chunk.CHUNK_SIZE - 1);
+    public static final  int    DEFAULT_AUTOSAVE_TIME = 20 * 60 * 5; // 5 min, TODO: load it from config
 
     private final   Logger           worldLoaderLogger;
     protected final String           name;
@@ -285,6 +292,77 @@ public class WorldImpl implements World, Tickable
         this.hardcore = new HardcoreSettings(cfg.isHardcore(), cfg.getHardcoreAction());
         this.forceLoadedRadius = cfg.getForceLoadedRadius();
         this.spawn = new Location(cfg.getSpawnX(), cfg.getSpawnY(), cfg.getSpawnZ(), cfg.getSpawnYaw(), cfg.getSpawnPitch(), this);
+    }
+
+    @Override
+    public ItemImpl dropItemNaturally(final ILocation loc, final ItemStack item)
+    {
+        final double xs = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
+        final double ys = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
+        final double zs = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
+        final Location copyLoc = loc.toLocation();
+
+        randomLocationWithinBlock(copyLoc, xs, ys, zs);
+        return this.dropItem(copyLoc, item);
+    }
+
+    @Override
+    public ItemImpl dropItemNaturally(final BlockLocation loc, final ItemStack item)
+    {
+        final double xs = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
+        final double ys = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
+        final double zs = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
+        final Location copyLoc = loc.toLocation();
+
+        randomLocationWithinBlock(copyLoc, xs, ys, zs);
+        return this.dropItem(copyLoc, item);
+    }
+
+    @Override
+    public ItemImpl dropItem(final ILocation loc, final ItemStack itemStack)
+    {
+        if ((itemStack == null) || (itemStack.getAmount() == 0))
+        {
+            return null;
+        }
+        final ItemImpl item = new ItemImpl(UUID.randomUUID(), DioriteCore.getInstance(), EntityImpl.getNextEntityID(), loc.toImmutableLocation());
+        item.setItemStack(itemStack);
+        item.setPickupDelay(ItemImpl.DEFAULT_BLOCK_DROP_PICKUP_DELAY);
+
+        this.addEntity(item);
+        return item;
+    }
+
+    private static void randomLocationWithinBlock(final Location loc, final double xs, final double ys, final double zs)
+    {
+        final double prevX = loc.getX();
+        final double prevY = loc.getY();
+        final double prevZ = loc.getZ();
+        loc.add(xs, ys, zs);
+        if (loc.getX() < Math.floor(prevX))
+        {
+            loc.setX(Math.floor(prevX));
+        }
+        if (loc.getX() >= Math.ceil(prevX))
+        {
+            loc.setX(Math.ceil(prevX - DioriteMathUtils.ONE_OF_100));
+        }
+        if (loc.getY() < Math.floor(prevY))
+        {
+            loc.setY(Math.floor(prevY));
+        }
+        if (loc.getY() >= Math.ceil(prevY))
+        {
+            loc.setY(Math.ceil(prevY - DioriteMathUtils.ONE_OF_100));
+        }
+        if (loc.getZ() < Math.floor(prevZ))
+        {
+            loc.setZ(Math.floor(prevZ));
+        }
+        if (loc.getZ() >= Math.ceil(prevZ))
+        {
+            loc.setZ(Math.ceil(prevZ - DioriteMathUtils.ONE_OF_100));
+        }
     }
 
     public WorldType getWorldType()

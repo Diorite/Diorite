@@ -24,12 +24,8 @@
 
 package org.diorite.impl.inventory;
 
-import java.util.UUID;
-
-import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
-import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.entity.ItemImpl;
+import org.diorite.impl.entity.HumanImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
@@ -247,15 +243,13 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         }
     }
 
-    private void dropArray(final ItemStack[] rest)
+    private void dropArray(final ItemStack[] rest, final HumanImpl holder)
     {
         if (rest.length != 0)
         {
             for (final ItemStack itemStack : rest)
             {
-                final ItemImpl itemEntity = new ItemImpl(UUID.randomUUID(), DioriteCore.getInstance(), EntityImpl.getNextEntityID(), this.getHolder().getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                itemEntity.setItemStack(new BaseItemStack(itemStack));
-                this.getHolder().getWorld().addEntity(itemEntity);
+                holder.dropItem(new BaseItemStack(itemStack));
             }
         }
     }
@@ -271,7 +265,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                 fullB.setAmount(b.getMaterial().getMaxStack());
                 this.setItem(a, fullB);
                 b.setAmount(b.getAmount() - fullB.getAmount());
-                this.dropArray(this.playerInventory.addFromEnd(b));
+                this.dropArray(this.playerInventory.addFromEnd(b), this.playerInventory.getHolder());
             }
             else
             {
@@ -288,7 +282,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                 newAmount -= item.getMaterial().getMaxStack();
                 final ItemStack item2 = item.clone();
                 item2.setAmount(newAmount);
-                this.dropArray(this.playerInventory.addFromEnd(item2));
+                this.dropArray(this.playerInventory.addFromEnd(item2), this.playerInventory.getHolder());
             }
             else
             {
@@ -298,7 +292,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         }
         else
         {
-            this.dropArray(this.playerInventory.addFromEnd(b));
+            this.dropArray(this.playerInventory.addFromEnd(b), this.playerInventory.getHolder());
         }
         return true;
     }

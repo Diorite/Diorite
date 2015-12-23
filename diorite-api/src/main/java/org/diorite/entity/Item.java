@@ -26,4 +26,7 @@ package org.diorite.entity;
 
 public interface Item extends Entity
 {
+    int getPickupDelay();
+
+    void setPickupDelay(int pickupDelay);
 }

@@ -31,7 +31,9 @@ import org.diorite.entity.data.HandSide;
 import org.diorite.entity.data.HandType;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.PlayerInventory;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.permissions.GroupablePermissionsContainer;
+import org.diorite.utils.others.NamedUUID;
 import org.diorite.world.World;
 
 /**
@@ -42,6 +44,22 @@ public interface Human extends LivingEntity, InventoryHolder, ArmoredEntity, Hum
     float WALK_SPEED         = 0.1f;
     float FLY_SPEED          = 0.05f;
     float SPRINT_SPEED_BOOST = 0.30000001192092896f;
+
+    /**
+     * Returns object that contains UUID of entity and name of it (if any exist).
+     *
+     * @return object that contains UUID of entity and name of it (if any exist).
+     */
+    NamedUUID getNamedUUID();
+
+    /**
+     * Simulate player dropping an item from inventory.
+     *
+     * @param itemStack item stack to drop. (it don't need to be in inventory, no items consumed)
+     *
+     * @return created entity or null if drop failed.
+     */
+    Item dropItem(ItemStack itemStack);
 
     /**
      * Returns game profile for this human entity.

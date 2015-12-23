@@ -136,6 +136,12 @@ public class ImmutableLocation implements ILocation
     }
 
     @Override
+    public ImmutableLocation clone()
+    {
+        return new ImmutableLocation(this.x, this.y, this.z, this.yaw, this.pitch, this.world);
+    }
+
+    @Override
     public ImmutableLocation crossProduct(final ILocation location)
     {
         return new ImmutableLocation((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));

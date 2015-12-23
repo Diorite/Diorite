@@ -26,11 +26,8 @@ package org.diorite.impl.pipelines.event.player;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.UUID;
 
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerTransaction;
-import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.entity.ItemImpl;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
@@ -281,16 +278,14 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     {
                         return false;
                     }
-                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                    item.setItemStack(new BaseItemStack(clicked));
-                    player.getWorld().addEntity(item);
+
+                    player.dropItem(new BaseItemStack(clicked));
                 }
                 else
                 {
                     final ItemStack toDrop = clicked.split(1);
-                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                    item.setItemStack(new BaseItemStack(toDrop));
-                    player.getWorld().addEntity(item);
+
+                    player.dropItem(new BaseItemStack(toDrop));
                 }
             }
             else if (Objects.equals(ct, ClickType.CTRL_DROP_KEY))
@@ -299,9 +294,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     return false;
                 }
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                item.setItemStack(new BaseItemStack(clicked));
-                player.getWorld().addEntity(item);
+                player.dropItem(new BaseItemStack(clicked));
             }
             else if (ct.getMode() == 2) // 2 -> hot bar action
             {
@@ -323,9 +316,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 {
                     return false;
                 }
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
-                item.setItemStack(new BaseItemStack(cursor));
-                player.getWorld().addEntity(item);
+                player.dropItem(new BaseItemStack(cursor));
                 return true;
             }
             else if (Objects.equals(ct, ClickType.MOUSE_RIGHT_OUTSIDE))
@@ -335,21 +326,19 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     inv.setCursorItem(null);
                     return true;
                 }
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), player.getCore(), EntityImpl.getNextEntityID(), player.getLocation().addX(2));  // TODO:velocity + some .spawnEntity method
                 final ItemStack it = new BaseItemStack(cursor.getMaterial(), 1);
                 it.setItemMeta(cursor.getItemMeta().clone());
-                item.setItemStack(it);
                 if (cursor.getAmount() == 1)
                 {
                     if (! inv.replaceCursorItem(cursor, null))
                     {
                         return false;
                     }
-                    player.getWorld().addEntity(item);
+                    player.dropItem(it);
                     return true;
                 }
                 cursor.setAmount(cursor.getAmount() - 1);
-                player.getWorld().addEntity(item);
+                player.dropItem(it);
                 return true;
             }
             else if (Objects.equals(ct, ClickType.MOUSE_MIDDLE))

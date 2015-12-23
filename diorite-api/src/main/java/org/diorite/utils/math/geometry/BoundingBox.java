@@ -37,6 +37,16 @@ public class BoundingBox implements Cloneable
         return this.max.clone().subtract(this.min);
     }
 
+    public Vector getMin()
+    {
+        return this.min;
+    }
+
+    public Vector getMax()
+    {
+        return this.max;
+    }
+
     public final boolean intersects(final BoundingBox other)
     {
         return intersects(this, other);

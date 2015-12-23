@@ -157,7 +157,7 @@ public class PacketPlayServerMapChunk extends PacketPlayServer
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("z", this.z).append("fullChunk", this.fullChunk).append("skyLight", this.skyLight).append("mask", this.mask).toString();
     }
 
-    protected static int write(final PacketDataSerializer data, final ChunkImpl chunk, final boolean full, final boolean skyLight, final int mask) // RENAMED: a>write
+    protected static int write(final PacketDataSerializer data, final ChunkImpl chunk, final boolean full, final boolean skyLight, final int mask)
     {
         int size = 0;
         final ChunkPartImpl[] sections = chunk.getChunkParts();

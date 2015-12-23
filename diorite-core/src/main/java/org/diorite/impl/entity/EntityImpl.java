@@ -49,6 +49,8 @@ import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.utils.lazy.BooleanLazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.utils.math.DioriteRandom;
+import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.geometry.BoundingBox;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
 import org.diorite.utils.others.Resetable;
@@ -128,7 +130,8 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     protected final    EntityMetadata    metadata;
     protected          BaseTracker<?>    tracker;
 
-    protected boolean aiEnabled = true; // don't do any actions if AI is disabled
+    protected boolean       aiEnabled = true; // don't do any actions if AI is disabled
+    protected DioriteRandom random    = DioriteRandomUtils.getRandom();
 
     protected final BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
 
@@ -268,25 +271,31 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
     protected void doPhysics()
     {
         final double multi = DioriteCore.getInstance().getSpeedMutli();
+
+        double x = 0;
+        double y = 0;
+        double z = 0;
         if (this.velX != 0)
         {
-            this.x += (this.velX * multi);
+            x += (this.velX * multi);
         }
         if ((this.velY != 0))
         {
             if (this.isOnGround())
             {
                 this.velY = 0;
+                this.y = (this.getLocation().toBlockLocation().getY() + (1));
             }
             else
             {
-                this.y += (this.velY * multi);
+                y = (this.velY * multi);
             }
         }
         if (this.velZ != 0)
         {
-            this.z += (this.velZ * multi);
+            z = (this.velZ * multi);
         }
+        this.move(x, y, z);
     }
 
     public WorldImpl getWorld()
@@ -472,6 +481,17 @@ public abstract class EntityImpl extends GameObjectImpl implements Entity, Ticka
         this.z += modZ;
         this.yaw += modYaw;
         this.pitch += modPitch;
+
+        this.updateChunk(chunk, this.getChunk());
+    }
+
+    public void move(final double modX, final double modY, final double modZ)
+    {
+        final ChunkImpl chunk = this.getChunk();
+
+        this.x += modX;
+        this.y += modY;
+        this.z += modZ;
 
         this.updateChunk(chunk, this.getChunk());
     }

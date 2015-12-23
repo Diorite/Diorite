@@ -74,6 +74,13 @@ public class Location implements ILocation
         this.world = world;
     }
 
+    public void add(final double x, final double y, final double z)
+    {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
+
     @Override
     public double getX()
     {
@@ -150,6 +157,12 @@ public class Location implements ILocation
     public Location crossProduct(final BlockLocation location)
     {
         return new Location((this.y * location.getZ()) - (this.z * location.getY()), (this.z * location.getX()) - (this.x * location.getZ()), (this.x * location.getY()) - (this.y * location.getX()));
+    }
+
+    @Override
+    public Location clone()
+    {
+        return new Location(this.x, this.y, this.z, this.yaw, this.pitch, this.world);
     }
 
     @Override
