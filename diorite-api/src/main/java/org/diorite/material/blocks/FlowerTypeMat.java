@@ -112,5 +112,9 @@ public enum FlowerTypeMat
     /**
      * @see DeadBushMat#DEAD_BUSH
      */
-    DEAD_BUSH
+    DEAD_BUSH,
+    /**
+     * @see DeadBushMat#DEAD_BUSH
+     */
+    CHORUS_FLOWER
 }

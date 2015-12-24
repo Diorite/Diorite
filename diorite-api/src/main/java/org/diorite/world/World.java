@@ -32,10 +32,12 @@ import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
-import org.diorite.ImmutableLocation;
 import org.diorite.ILocation;
+import org.diorite.ImmutableLocation;
 import org.diorite.Particle;
+import org.diorite.entity.Item;
 import org.diorite.entity.Player;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.world.chunk.Chunk;
@@ -45,6 +47,12 @@ import org.diorite.world.generator.WorldGenerator;
 
 public interface World
 {
+    Item dropItemNaturally(ILocation loc, ItemStack item);
+
+    Item dropItemNaturally(BlockLocation loc, ItemStack item);
+
+    Item dropItem(ILocation loc, ItemStack item);
+
     boolean isVanillaCompatible();
 
     void loadChunk(Chunk chunk);

@@ -38,26 +38,34 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
+import org.diorite.entity.Human;
 import org.diorite.entity.Item;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
+import org.diorite.utils.others.NamedUUID;
 
 public class ItemImpl extends EntityImpl implements Item, EntityObject
 {
-    private static final double JOIN_DISTANCE           = 3; // TODO config.
-    private static final int    JOIN_DISTANCE_THRESHOLD = 3; // TODO config.
+    public static final  int    DEFAULT_BLOCK_DROP_PICKUP_DELAY = 50;
+    public static final  int    DEFAULT_DROP_PICKUP_DELAY       = 200;
+    private static final double JOIN_DISTANCE                   = 3; // TODO config.
+    private static final int    JOIN_DISTANCE_THRESHOLD         = 3; // TODO config.
 
     /**
      * ItemStack entry
      */
-    protected static final byte META_KEY_ITEM = 10;
+    protected static final byte META_KEY_ITEM = 5;
     private static final   int  DESPAWN_TIME  = 30000; // 5 min, TODO: add config value for that.
 
     // used for joining items when it moves away.
     private int xLastJoinPos;
     private int yLastJoinPos;
     private int zLastJoinPos;
+
+    private int pickupDelay;
+
+    private NamedUUID thrower;
 
     public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.25F, 0.25F);
 
@@ -84,17 +92,43 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM, item));
     }
 
-    public boolean pickUpItem(final PlayerImpl player)
+    @Override
+    public int getPickupDelay()
     {
-        final ItemStack[] left = player.getInventory().add(this.getItemStack());
+        return this.pickupDelay;
+    }
+
+    @Override
+    public void setPickupDelay(final int pickupDelay)
+    {
+        this.pickupDelay = pickupDelay;
+    }
+
+    public boolean canPickup()
+    {
+        return this.pickupDelay == 0;
+    }
+
+    public NamedUUID getThrower()
+    {
+        return this.thrower;
+    }
+
+    public void setThrower(final NamedUUID thrower)
+    {
+        this.thrower = thrower;
+    }
+
+    public boolean pickUpItem(final Human human)
+    {
+        final ItemStack[] left = human.getInventory().add(this.getItemStack());
         if (left.length != 0)
         {
             this.setItemStack(left[0]);
             return false;
         }
 
-        player.getNetworkManager().sendPacket(new PacketPlayServerCollect(this.getId(), player.getId()));
-        this.getWorld().getEntityTrackers().getTracker(player).sendToAll(new PacketPlayServerCollect(this.getId(), player.getId()));
+        this.getWorld().getEntityTrackers().getTracker(human).sendToAll(new PacketPlayServerCollect(this.getId(), human.getId()));
         this.remove(true);
         return true;
     }
@@ -163,6 +197,14 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         {
             return;
         }
+        if (this.pickupDelay > 0)
+        {
+            this.pickupDelay -= DioriteMathUtils.centisecondsPerTick(tps);
+            if (this.pickupDelay < 0)
+            {
+                this.pickupDelay = 0;
+            }
+        }
         this.timeLived += DioriteMathUtils.centisecondsPerTick(tps);
         if (this.timeLived >= DESPAWN_TIME)
         {
@@ -175,17 +217,42 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     @Override
     protected void doPhysics()
     {
-        if ((this.timeLived % 100) == 0)
+        if ((this.timeLived % 1000) == 0)
         {
             this.tracker.forceLocationUpdate();
         }
         super.doPhysics();
-        if (this.isOnGround())
+        final double t = 0.01;
+        if ((this.velZ > - t) && (this.velZ < t))
         {
-            return;
+            this.velX = 0;
         }
+        if ((this.velY > - t) && (this.velY < t))
+        {
+            this.velY = 0;
+        }
+        if ((this.velZ > - t) && (this.velZ < t))
+        {
+            this.velZ = 0;
+        }
+        double mod = PHYSIC_GRAVITY_CONST_1;
+        final double friction = 0.6;// TODO: add this to block params
+        final boolean ground = this.isOnGround();
+        if (ground)
+        {
+            mod = friction * mod;
+        }
+        this.velX *= mod;
+        this.velZ *= mod;
         this.velY *= PHYSIC_GRAVITY_CONST_1;
-        this.velY -= PHYSIC_GRAVITY_CONST_2;
+        if (! ground)
+        {
+            this.velY -= PHYSIC_GRAVITY_CONST_2;
+        }
+        if (ground)
+        {
+            this.velY *= - 0.5D;
+        }
     }
 
     @Override

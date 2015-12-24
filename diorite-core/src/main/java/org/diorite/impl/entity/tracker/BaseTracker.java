@@ -106,11 +106,11 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
             this.sendToAllExceptOwn(new PacketPlayServerEntityTeleport(this.tracker));
             return;
         }
-        final double deltaX;
-        final double deltaY;
-        final double deltaZ;
+        double deltaX = 0;
+        double deltaY = 0;
+        double deltaZ = 0;
         this.isMoving = this.forceLocationUpdate || (this.velY != 0) || (this.velZ != 0) || (this.velX != 0);
-//        if (this.isMoving) TODO: readd
+        if (this.isMoving) // TODO: rethink
         {
             this.forceLocationUpdate = false;
             deltaX = this.tracker.getX() - this.xLoc;
@@ -129,7 +129,7 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
             this.tracked.forEach(p -> p.removeEntityFromView(this));
         }
 
-//        if (this.isMoving && ! this.tracked.isEmpty()) TODO: readd
+        if (this.isMoving && ! this.tracked.isEmpty()) // TODO: rethink
         {
             if ((deltaX < 4) && (deltaX > - 4) && (deltaY < 4) && (deltaY > - 4) && (deltaZ < 4) && (deltaZ > - 4))
             {

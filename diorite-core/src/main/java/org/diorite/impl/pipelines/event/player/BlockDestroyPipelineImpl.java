@@ -24,13 +24,8 @@
 
 package org.diorite.impl.pipelines.event.player;
 
-import java.util.UUID;
-
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
-import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.entity.ItemImpl;
-import org.diorite.impl.world.WorldImpl;
 import org.diorite.GameMode;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.BlockDestroyPipeline;
@@ -76,9 +71,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
             final BlockMaterialData type = block.getType();
             for (final ItemStack itemStack : type.getPossibleDrops().simulateDrop(evt.getPlayer(), evt.getPlayer().getRandom(), evt.getItemInHand(), block))
             {
-                final ItemImpl item = new ItemImpl(UUID.randomUUID(), (DioriteCore) this.getCore(), EntityImpl.getNextEntityID(), evt.getBlock().getLocation().addY(1).toLocation());
-                item.setItemStack(itemStack);
-                ((WorldImpl) evt.getBlock().getLocation().getWorld()).addEntity(item);
+                block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
             }
         });
     }
