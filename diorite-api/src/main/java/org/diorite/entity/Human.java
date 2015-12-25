@@ -34,7 +34,6 @@ import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.utils.others.NamedUUID;
-import org.diorite.world.World;
 
 /**
  * Represent human entity, player or npc etc...
@@ -198,16 +197,6 @@ public interface Human extends LivingEntity, InventoryHolder, ArmoredEntity, Hum
      * @param walkSpeed Walk speed
      */
     void setWalkSpeed(double walkSpeed);
-
-    /**
-     * Returns the world on which is player
-     *
-     * @return World
-     */
-    default World getWorld()
-    {
-        return this.getLocation().getWorld();
-    }
 
     @Override
     PlayerInventory getInventory();

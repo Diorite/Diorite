@@ -1136,7 +1136,7 @@ public class DioriteCore implements Core
         initPipeline.addLast("DioriteCore|initGame", (s, p, d) -> {
             s.serverManager = new ServerManagerImpl(s);
             s.playersManager = new PlayersManagerImpl(s);
-            s.worldsManager = new WorldsManagerImpl();
+            s.worldsManager = new WorldsManagerImpl(s);
         });
         initPipeline.addLast("DioriteCore|initRecipes", (s, p, d) -> s.serverManager.getRecipeManager().addDefaultRecipes());
 

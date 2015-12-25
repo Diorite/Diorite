@@ -30,6 +30,7 @@ import org.diorite.Core;
 import org.diorite.GameObject;
 import org.diorite.ImmutableLocation;
 import org.diorite.scheduler.Synchronizable;
+import org.diorite.world.World;
 
 public interface Entity extends GameObject, Synchronizable
 {
@@ -41,6 +42,8 @@ public interface Entity extends GameObject, Synchronizable
 
     float getVelocityZ();
 
+    float getHeadPitch();
+
     boolean exist();
 
     int getId();
@@ -50,6 +53,12 @@ public interface Entity extends GameObject, Synchronizable
     double getZ();
 
     double getY();
+
+    float getYaw();
+
+    float getPitch();
+
+    World getWorld();
 
     ImmutableLocation getLocation();
 
@@ -65,4 +74,8 @@ public interface Entity extends GameObject, Synchronizable
     {
         return this.getType().getMinecraftId();
     }
+
+    boolean isAiEnabled();
+
+    void setAiEnabled(boolean aiEnabled);
 }

@@ -33,9 +33,8 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
-import org.diorite.entity.LivingEntity;
 
-public abstract class LivingEntityImpl extends AttributableEntityImpl implements LivingEntity
+abstract class LivingEntityImpl extends AttributableEntityImpl implements ILivingEntity
 {
     /**
      * float entry, hp of entity

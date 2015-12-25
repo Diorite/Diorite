@@ -3,9 +3,10 @@ package org.diorite.impl.entity;
 import java.util.UUID;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
@@ -42,43 +43,17 @@ import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.others.NamedUUID;
 
-public class HumanImpl extends LivingEntityImpl implements Human
+class HumanImpl extends LivingEntityImpl implements IHuman
 {
-    private static final float BASE_HEAD_HEIGHT      = 1.62F;
-    private static final float CROUCHING_HEAD_HEIGHT = BASE_HEAD_HEIGHT - 0.08F;
-    private static final float SLEEP_HEAD_HEIGHT     = 0.2F;
-    private static final float ITEM_DROP_MOD_Y       = 0.3F;
-    private static final float ITEM_DROP_MOD_VEL_Y   = 0.02F;
+    private static final float ITEM_DROP_MOD_VEL_Y = 0.02F;
 
     @SuppressWarnings("MagicNumber")
-    public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.6F, 1.8F);
-    @SuppressWarnings("MagicNumber")
-    public static final ImmutableEntityBoundingBox DIE_SIZE  = new ImmutableEntityBoundingBox(0.2F, 0.2F);
-
-    /**
-     * byte entry with visible skin parts flags.
-     */
-    protected static final byte META_KEY_SKIN_FLAGS = 10;
-
-    /**
-     * byte entry, 0x02 bool cape hidden
-     */
-    protected static final byte META_KEY_CAPE = 16;
-
-    /**
-     * float entry, amount of absorption hearts (yellow/gold ones)
-     */
-    protected static final byte META_KEY_ABSORPTION_HEARTS = 17;
-
-    /**
-     * int entry, amount of player points
-     */
-    protected static final byte META_KEY_SCORE = 18;
+    public static final ImmutableEntityBoundingBox DIE_SIZE = new ImmutableEntityBoundingBox(0.2F, 0.2F);
 
     // TODO: move this
     private static final AttributeModifier tempSprintMod = new SimpleAttributeModifier(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), null, MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE, null, null);
 
-    protected final GameProfileImpl     gameProfile;
+    protected final GameProfile         gameProfile;
     protected final PlayerInventoryImpl inventory;
 
     protected PacketPlayServerAbilities abilities    = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
@@ -89,7 +64,7 @@ public class HumanImpl extends LivingEntityImpl implements Human
 
     protected PlayerPermissionsContainer permissionContainer;
 
-    public HumanImpl(final DioriteCore core, final GameProfileImpl gameProfile, final int id, final ImmutableLocation location)
+    public HumanImpl(final DioriteCore core, final GameProfile gameProfile, final int id, final ImmutableLocation location)
     {
         super(gameProfile.getId(), core, id, location);
         this.aabb = BASE_SIZE.create(this);
@@ -106,11 +81,13 @@ public class HumanImpl extends LivingEntityImpl implements Human
         return this.namedUUID;
     }
 
+    @Override
     public void setNamedUUID(final NamedUUID namedUUID)
     {
         this.namedUUID = namedUUID;
     }
 
+    @Override
     public float getHeadHeight()
     {
         return this.isCrouching() ? CROUCHING_HEAD_HEIGHT : BASE_HEAD_HEIGHT;
@@ -124,9 +101,9 @@ public class HumanImpl extends LivingEntityImpl implements Human
             return null;
         }
         final double newY = (this.y - ITEM_DROP_MOD_Y) + this.getHeadHeight();
-        final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.core, EntityImpl.getNextEntityID(), new ImmutableLocation(this.x, newY, this.z, this.world));
+        final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), new ImmutableLocation(this.x, newY, this.z, this.world));
         item.setItemStack(itemStack);
-        item.setPickupDelay(ItemImpl.DEFAULT_DROP_PICKUP_DELAY);
+        item.setPickupDelay(IItem.DEFAULT_DROP_PICKUP_DELAY);
         item.setThrower(this.namedUUID);
 
         float yMod = ITEM_DROP_MOD_Y;
@@ -152,7 +129,8 @@ public class HumanImpl extends LivingEntityImpl implements Human
         this.pickupItems();
     }
 
-    protected void pickupItems()
+    @Override
+    public void pickupItems()
     {
         // TODO: maybe don't pickup every tick?
         for (final ItemImpl entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
@@ -323,16 +301,19 @@ public class HumanImpl extends LivingEntityImpl implements Human
         this.abilities.setWalkingSpeed((float) walkSpeed);
     }
 
+    @Override
     public PacketPlayServerAbilities getAbilities()
     {
         return this.abilities;
     }
 
+    @Override
     public void setAbilities(final PacketPlayServerAbilities abilities)
     {
         this.abilities = abilities;
     }
 
+    @Override
     public void setAbilities(final PacketPlayClientAbilities abilities)
     {
         // TOOD: I should check what player want change here (cheats)
@@ -368,6 +349,7 @@ public class HumanImpl extends LivingEntityImpl implements Human
         return this.inventory.getArmorInventory();
     }
 
+    @Override
     public void closeInventory(final int id)
     {
         final PlayerCraftingInventoryImpl ci = this.inventory.getCraftingInventory();
@@ -422,4 +404,9 @@ public class HumanImpl extends LivingEntityImpl implements Human
         return this.permissionContainer.setOp(op);
     }
 
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("gameProfile", this.gameProfile).toString();
+    }
 }

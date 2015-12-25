@@ -31,7 +31,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
@@ -47,6 +46,7 @@ import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.Particle;
+import org.diorite.auth.GameProfile;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.Entity;
@@ -62,7 +62,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntCollection;
 
 // TODO: add Human or other entity not fully a player class for bots/npcs
-public class PlayerImpl extends HumanImpl implements Player
+public class PlayerImpl extends HumanImpl implements IPlayer
 {
     protected final IntCollection removeQueue = new IntArrayList(5);
 
@@ -73,7 +73,7 @@ public class PlayerImpl extends HumanImpl implements Player
     protected       Locale             preferedLocale;
 
     // TODO: add saving/loading data to/from NBT
-    public PlayerImpl(final DioriteCore core, final int id, final GameProfileImpl gameProfile, final CoreNetworkManager networkManager, final ImmutableLocation location)
+    public PlayerImpl(final DioriteCore core, final GameProfile gameProfile, final CoreNetworkManager networkManager, final int id, final ImmutableLocation location)
     {
         super(core, gameProfile, id, location);
         this.networkManager = networkManager;
@@ -125,7 +125,7 @@ public class PlayerImpl extends HumanImpl implements Player
     }
 
     @Override
-    protected void pickupItems()
+    public void pickupItems()
     {
         // TODO: maybe don't pickup every tick?
         for (final ItemImpl entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
@@ -173,16 +173,19 @@ public class PlayerImpl extends HumanImpl implements Player
         }
     }
 
+    @Override
     public CoreNetworkManager getNetworkManager()
     {
         return this.networkManager;
     }
 
+    @Override
     public PlayerChunksImpl getPlayerChunks()
     {
         return this.playerChunks;
     }
 
+    @Override
     public boolean isVisibleChunk(final int x, final int z)
     {
         return this.playerChunks.getVisibleChunks().contains(BigEndianUtils.toLong(x, z));
@@ -230,6 +233,7 @@ public class PlayerImpl extends HumanImpl implements Player
         return this.viewDistance;
     }
 
+    @Override
     public void setViewDistance(final byte viewDistance)
     {
         this.viewDistance = viewDistance;
@@ -331,6 +335,7 @@ public class PlayerImpl extends HumanImpl implements Player
         return this.random;
     }
 
+    @Override
     public void onLogout()
     {
         this.remove(true);

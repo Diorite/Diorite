@@ -39,23 +39,15 @@ import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Human;
-import org.diorite.entity.Item;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteMathUtils;
-import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.others.NamedUUID;
 
-public class ItemImpl extends EntityImpl implements Item, EntityObject
+class ItemImpl extends EntityImpl implements IItem, EntityObject
 {
-    public static final  int    DEFAULT_BLOCK_DROP_PICKUP_DELAY = 50;
-    public static final  int    DEFAULT_DROP_PICKUP_DELAY       = 200;
     private static final double JOIN_DISTANCE                   = 3; // TODO config.
     private static final int    JOIN_DISTANCE_THRESHOLD         = 3; // TODO config.
 
-    /**
-     * ItemStack entry
-     */
-    protected static final byte META_KEY_ITEM = 5;
     private static final   int  DESPAWN_TIME  = 30000; // 5 min, TODO: add config value for that.
 
     // used for joining items when it moves away.
@@ -66,8 +58,6 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     private int pickupDelay;
 
     private NamedUUID thrower;
-
-    public static final ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.25F, 0.25F);
 
     public ItemImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
@@ -82,11 +72,13 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM, null));
     }
 
+    @Override
     public ItemStack getItemStack()
     {
         return this.metadata.getItemStack(META_KEY_ITEM);
     }
 
+    @Override
     public void setItemStack(final ItemStack item)
     {
         this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM, item));
@@ -104,21 +96,25 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
         this.pickupDelay = pickupDelay;
     }
 
+    @Override
     public boolean canPickup()
     {
         return this.pickupDelay == 0;
     }
 
+    @Override
     public NamedUUID getThrower()
     {
         return this.thrower;
     }
 
+    @Override
     public void setThrower(final NamedUUID thrower)
     {
         this.thrower = thrower;
     }
 
+    @Override
     public boolean pickUpItem(final Human human)
     {
         final ItemStack[] left = human.getInventory().add(this.getItemStack());
@@ -215,41 +211,31 @@ public class ItemImpl extends EntityImpl implements Item, EntityObject
     }
 
     @Override
-    protected void doPhysics()
+    public void doPhysics()
     {
-        if ((this.timeLived % 1000) == 0)
+        if ((this.timeLived % 100) == 0)
         {
             this.tracker.forceLocationUpdate();
         }
         super.doPhysics();
-        final double t = 0.01;
-        if ((this.velZ > - t) && (this.velZ < t))
+        if (this.isOnGround())
         {
             this.velX = 0;
-        }
-        if ((this.velY > - t) && (this.velY < t))
-        {
             this.velY = 0;
-        }
-        if ((this.velZ > - t) && (this.velZ < t))
-        {
             this.velZ = 0;
+            return;
         }
         double mod = PHYSIC_GRAVITY_CONST_1;
         final double friction = 0.6;// TODO: add this to block params
-        final boolean ground = this.isOnGround();
-        if (ground)
+        if (this.isOnGround())
         {
             mod = friction * mod;
         }
         this.velX *= mod;
         this.velZ *= mod;
         this.velY *= PHYSIC_GRAVITY_CONST_1;
-        if (! ground)
-        {
-            this.velY -= PHYSIC_GRAVITY_CONST_2;
-        }
-        if (ground)
+        this.velY -= PHYSIC_GRAVITY_CONST_2;
+        if (this.isOnGround())
         {
             this.velY *= - 0.5D;
         }

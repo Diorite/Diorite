@@ -42,7 +42,8 @@ import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
-import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Player;
@@ -67,7 +68,7 @@ public class PlayersManagerImpl implements Tickable
     {// TODO: loading player
         //noinspection MagicNumber
 
-        return new PlayerImpl(this.core, EntityImpl.getNextEntityID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.core.getWorldsManager().getDefaultWorld()));
+        return new PlayerImpl(this.core, IEntity.getNextEntityID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.core.getWorldsManager().getDefaultWorld()));
     }
 
     public void playerJoin(final PlayerImpl player)
@@ -92,7 +93,7 @@ public class PlayersManagerImpl implements Tickable
         return this.players;
     }
 
-    public void playerQuit(final PlayerImpl player)
+    public void playerQuit(final IPlayer player)
     {
         this.forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player));
         this.players.remove(player.getUniqueID());

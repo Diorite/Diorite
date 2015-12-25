@@ -33,13 +33,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.attrib.AttributeStorageImpl;
 import org.diorite.ImmutableLocation;
-import org.diorite.entity.AttributableEntity;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeStorage;
 import org.diorite.entity.attrib.AttributeType;
 
-public abstract class AttributableEntityImpl extends EntityImpl implements AttributableEntity
+abstract class AttributableEntityImpl extends EntityImpl implements IAttributableEntity
 {
     protected final AttributeStorage attributes = new AttributeStorageImpl(this);
 

@@ -88,4 +88,11 @@ public interface ServerManager
      * @return recipe manager for this server.
      */
     CraftingRecipeManager getRecipeManager();
+
+    /**
+     * Returns entity factory that can be used to create new entites.
+     *
+     * @return entity factory that can be used to create new entites.
+     */
+    EntityFactory getEntityFactory();
 }

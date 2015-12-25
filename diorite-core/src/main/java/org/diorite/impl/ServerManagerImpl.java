@@ -27,6 +27,8 @@ package org.diorite.impl;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.entity.DioriteEntityFactory;
+import org.diorite.impl.entity.IEntityFactory;
 import org.diorite.impl.inventory.recipe.IRecipeManager;
 import org.diorite.impl.inventory.recipe.RecipeManagerImpl;
 import org.diorite.impl.permissions.DioritePermissionsManager;
@@ -37,13 +39,17 @@ import org.diorite.permissions.PermissionsManager;
  */
 public class ServerManagerImpl implements IServerManager
 {
-    private final DioriteCore core;
-    private PermissionsManager permissionsManager = new DioritePermissionsManager();
-    private IRecipeManager     recipeManager      = new RecipeManagerImpl();
+    private final DioriteCore        core;
+    private       PermissionsManager permissionsManager;
+    private       IRecipeManager     recipeManager;
+    private       IEntityFactory     entityFactory;
 
     public ServerManagerImpl(final DioriteCore core)
     {
         this.core = core;
+        this.permissionsManager = new DioritePermissionsManager();
+        this.recipeManager = new RecipeManagerImpl();
+        this.entityFactory = new DioriteEntityFactory(core);
     }
 
     @Override
@@ -56,6 +62,18 @@ public class ServerManagerImpl implements IServerManager
     public void setPermissionsManager(final PermissionsManager permissionsManager)
     {
         this.permissionsManager = permissionsManager;
+    }
+
+    @Override
+    public IEntityFactory getEntityFactory()
+    {
+        return this.entityFactory;
+    }
+
+    @Override
+    public void setEntityFactory(final IEntityFactory entityFactory)
+    {
+        this.entityFactory = entityFactory;
     }
 
     @Override
