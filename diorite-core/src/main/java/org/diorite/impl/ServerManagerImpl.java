@@ -27,7 +27,7 @@ package org.diorite.impl;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.entity.DioriteEntityFactory;
+import org.diorite.impl.entity.diorite.DioriteEntityFactory;
 import org.diorite.impl.entity.IEntityFactory;
 import org.diorite.impl.inventory.recipe.IRecipeManager;
 import org.diorite.impl.inventory.recipe.RecipeManagerImpl;

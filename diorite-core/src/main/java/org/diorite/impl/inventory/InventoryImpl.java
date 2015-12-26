@@ -34,7 +34,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Human;
@@ -108,7 +108,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         if (! packets.isEmpty())
         {
             final PacketPlayServerSetSlot[] packetsArray = packets.toArray(new PacketPlayServerSetSlot[packets.size()]);
-            this.viewers.stream().filter(h -> h instanceof PlayerImpl).map(h -> (PlayerImpl) h).forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
+            this.viewers.stream().filter(h -> h instanceof IPlayer).map(h -> (IPlayer) h).forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
             return true;
         }
         return false;

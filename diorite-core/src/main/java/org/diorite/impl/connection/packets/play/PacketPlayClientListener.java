@@ -51,6 +51,7 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientTeleportA
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTransaction;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUpdateSign;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseEntity;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseItem;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
 
 public interface PacketPlayClientListener extends PacketPlayListener
@@ -108,4 +109,6 @@ public interface PacketPlayClientListener extends PacketPlayListener
     void handle(PacketPlayClientUseEntity packet);
 
     void handle(PacketPlayClientTeleportAccept packet);
+
+    void handle(PacketPlayClientUseItem packet);
 }

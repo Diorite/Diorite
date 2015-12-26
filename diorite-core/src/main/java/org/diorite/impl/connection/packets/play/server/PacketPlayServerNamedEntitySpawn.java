@@ -36,7 +36,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
-import org.diorite.impl.entity.HumanImpl;
+import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 
 @PacketClass(id = 0x05, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 140)
@@ -56,7 +56,7 @@ public class PacketPlayServerNamedEntitySpawn extends PacketPlayServer
     }
 
     @SuppressWarnings("MagicNumber")
-    public PacketPlayServerNamedEntitySpawn(final HumanImpl entity)
+    public PacketPlayServerNamedEntitySpawn(final IHuman entity)
     {
         this.entityId = entity.getId();
         this.uuid = entity.getUniqueID();

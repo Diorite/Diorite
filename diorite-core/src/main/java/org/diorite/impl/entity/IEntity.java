@@ -1,5 +1,6 @@
 package org.diorite.impl.entity;
 
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.diorite.impl.Tickable;
@@ -10,11 +11,39 @@ import org.diorite.impl.entity.tracker.Trackable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.entity.Entity;
+import org.diorite.entity.EntityType;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
 
 public interface IEntity extends Entity, Tickable, Trackable
 {
-    AtomicInteger ENTITY_ID = new AtomicInteger();
+    int           MAX_AIR_LEVEL                 = 300;
+    AtomicInteger ENTITY_ID                     = new AtomicInteger();
+    /**
+     * byte entry, with flags. {@link EntityImpl.BasicFlags}
+     */
+    byte          META_KEY_BASIC_FLAGS          = 0;
+    /**
+     * short entry, air level
+     */
+    byte          META_KEY_AIR                  = 1;
+    /**
+     * String entry, name/name tag
+     */
+    byte          META_KEY_NAME_TAG             = 2;
+    /**
+     * byte/bool entry, if name tag should be visible
+     */
+    byte          META_KEY_ALWAYS_SHOW_NAME_TAG = 3;
+    /**
+     * byte/bool entry, if entity should make sound.
+     */
+    byte          META_KEY_SILENT               = 4;
+
+    static int getNextEntityID()
+    {
+        return ENTITY_ID.getAndIncrement();
+    }
+
     void initMetadata();
 
     boolean isOnGround();
@@ -46,6 +75,12 @@ public interface IEntity extends Entity, Tickable, Trackable
 
     void setRotation(float newYaw, float newPitch);
 
+    @Override
+    Collection<? extends IEntity> getNearbyEntities(double x, double y, double z);
+
+    @Override
+    Collection<? extends IEntity> getNearbyEntities(double x, double y, double z, EntityType type);
+
     /**
      * @return Packet need to spawn entity
      */
@@ -58,11 +93,6 @@ public interface IEntity extends Entity, Tickable, Trackable
      * @return array of packets.
      */
     PacketPlayServer[] getSpawnPackets();
-
-    static int getNextEntityID()
-    {
-        return EntityImpl.ENTITY_ID.getAndIncrement();
-    }
 
     EntityBoundingBox getBoundingBox();
 }

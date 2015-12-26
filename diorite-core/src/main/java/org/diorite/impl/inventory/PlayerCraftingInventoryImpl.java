@@ -25,8 +25,8 @@
 package org.diorite.impl.inventory;
 
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
-import org.diorite.impl.entity.HumanImpl;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IHuman;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.Diorite;
@@ -97,7 +97,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
 
         // fix ghost items (custom recipes), meh mojang...
         final ShortCollection possibleBugs;
-        if ((holder instanceof PlayerImpl) && ! this.recipe.getRecipe().isVanilla())
+        if ((holder instanceof IPlayer) && ! this.recipe.getRecipe().isVanilla())
         {
             final CraftingGrid itemsToConsume = this.recipe.getItemsToConsume();
             final ItemStack[] items = DioriteUtils.compact(false, itemsToConsume.getItems());
@@ -208,7 +208,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
                 final ItemStackImpl item = this.playerInventory.getItem(slot);
                 packets[i++] = new PacketPlayServerSetSlot(this.playerInventory.getWindowId(), slot, item);
             }
-            ((PlayerImpl) holder).getNetworkManager().sendPackets(packets);
+            ((IPlayer) holder).getNetworkManager().sendPackets(packets);
         }
     }
 
@@ -243,7 +243,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         }
     }
 
-    private void dropArray(final ItemStack[] rest, final HumanImpl holder)
+    private void dropArray(final ItemStack[] rest, final IHuman holder)
     {
         if (rest.length != 0)
         {

@@ -36,7 +36,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInf
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPosition;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerServerDifficulty;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnPosition;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
 import org.diorite.TeleportData;
@@ -61,7 +61,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
     {
         this.addFirst("Diorite|StartPackets", ((evt, pipeline) -> {
             // TODO
-            final PlayerImpl player = (PlayerImpl) evt.getPlayer();
+            final IPlayer player = (IPlayer) evt.getPlayer();
             player.getNetworkManager().sendPacket(new PacketPlayServerLogin(player.getId(), player.getGameMode(), false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
             player.getNetworkManager().sendPacket(new PacketPlayServerCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
             player.getNetworkManager().sendPacket(new PacketPlayServerServerDifficulty(Difficulty.EASY));
@@ -72,7 +72,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
         }));
 
         this.addAfter("Diorite|StartPackets", "Diorite|EntityStuff", ((evt, pipeline) -> {
-            final PlayerImpl player = (PlayerImpl) evt.getPlayer();
+            final IPlayer player = (IPlayer) evt.getPlayer();
             player.getWorld().addEntity(player);
 
             DioriteCore.getInstance().addSync(() -> {
@@ -86,7 +86,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
         }));
 
         this.addAfter("Diorite|EntityStuff", "Diorite|PlayerListStuff", ((evt, pipeline) -> {
-            final PlayerImpl player = (PlayerImpl) evt.getPlayer();
+            final IPlayer player = (IPlayer) evt.getPlayer();
 
             DioriteCore.getInstance().getPlayersManager().forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
             DioriteCore.getInstance().getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));

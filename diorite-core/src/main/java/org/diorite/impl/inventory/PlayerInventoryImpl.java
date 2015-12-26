@@ -35,8 +35,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerWindowItems;
-import org.diorite.impl.entity.HumanImpl;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IHuman;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Human;
@@ -48,14 +48,14 @@ import org.diorite.inventory.slot.Slot;
 import org.diorite.inventory.slot.SlotType;
 import org.diorite.material.Material;
 
-public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements PlayerInventory
+public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements PlayerInventory
 {
     private static final short CURSOR_SLOT      = - 1;
     private static final int   CURSOR_WINDOW    = - 1;
     private static final int   SECOND_HAND_SLOT = 45;
 
-    private final int       windowId;
-    private final HumanImpl holder;
+    private final int    windowId;
+    private final IHuman holder;
     private final DragControllerImpl drag       = new DragControllerImpl();
     private final ItemStackImplArray content    = ItemStackImplArray.create(InventoryType.PLAYER.getSize());
     private final Slot[]             slots      = new Slot[InventoryType.PLAYER.getSize()];
@@ -94,7 +94,7 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
         this.slots[i] = Slot.BASE_SECOND_HAND_SLOT;
     }
 
-    public PlayerInventoryImpl(final HumanImpl holder, final int windowId)
+    public PlayerInventoryImpl(final IHuman holder, final int windowId)
     {
         super(holder);
         this.windowId = windowId;
@@ -606,7 +606,7 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
             throw new IllegalArgumentException("Player must be a viewer of inventory.");
         }
 
-        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayServerWindowItems(this.windowId, this.content));
+        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayServerWindowItems(this.windowId, this.content));
     }
 
     private boolean isCraftingSlot(final int i)
@@ -710,7 +710,7 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
         if (! packets.isEmpty())
         {
             final PacketPlayServerSetSlot[] packetsArray = packets.values().toArray(new PacketPlayServerSetSlot[packets.size()]);
-            this.viewers.stream().filter(p -> p instanceof PlayerImpl).forEach(p -> ((PlayerImpl) p).getNetworkManager().sendPackets(packetsArray));
+            this.viewers.stream().filter(p -> p instanceof IPlayer).forEach(p -> ((IPlayer) p).getNetworkManager().sendPackets(packetsArray));
             return true;
         }
         return false;
@@ -729,7 +729,7 @@ public class PlayerInventoryImpl extends InventoryImpl<HumanImpl> implements Pla
     }
 
     @Override
-    public HumanImpl getHolder()
+    public IHuman getHolder()
     {
         return this.holder;
     }

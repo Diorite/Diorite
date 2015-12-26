@@ -49,7 +49,7 @@ import org.diorite.impl.connection.packets.login.server.PacketLoginServerDisconn
 import org.diorite.impl.connection.packets.login.server.PacketLoginServerEncryptionBegin;
 import org.diorite.impl.connection.packets.login.server.PacketLoginServerSetCompression;
 import org.diorite.impl.connection.packets.login.server.PacketLoginServerSuccess;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.server.connection.NetworkManager;
 import org.diorite.impl.server.connection.ThreadPlayerLookupUUID;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
@@ -150,7 +150,7 @@ public class LoginListener implements PacketLoginClientListener
         this.networkManager.sendPacket(new PacketLoginServerSuccess(this.gameProfile), future -> {
             this.networkManager.setProtocol(EnumProtocol.PLAY);
 
-            final PlayerImpl player = this.core.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);
+            final IPlayer player = this.core.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);
             this.networkManager.setPacketListener(new PlayListener(LoginListener.this.core, LoginListener.this.networkManager, player));
             this.core.getPlayersManager().playerJoin(player);
         });

@@ -39,7 +39,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.auth.Property;
@@ -91,11 +91,11 @@ public class PacketPlayServerPlayerInfo extends PacketPlayServer
         }
     }
 
-    public PacketPlayServerPlayerInfo(final PlayerInfoAction action, final PlayerImpl... players)
+    public PacketPlayServerPlayerInfo(final PlayerInfoAction action, final IPlayer... players)
     {
         this.action = action;
         this.players = new ArrayList<>(players.length);
-        for (final PlayerImpl p : players)
+        for (final IPlayer p : players)
         {
             this.players.add(new PlayerInfoData((GameProfileImpl) p.getGameProfile(), p.getPing(), p.getGameMode(), TextComponent.fromLegacyText(p.getName())));
         }

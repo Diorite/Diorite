@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.diorite;
 
 import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
+import org.diorite.impl.entity.ILivingEntity;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
@@ -36,32 +37,7 @@ import org.diorite.ImmutableLocation;
 
 abstract class LivingEntityImpl extends AttributableEntityImpl implements ILivingEntity
 {
-    /**
-     * float entry, hp of entity
-     */
-    protected static final byte META_KEY_HEALTH = 6;
-
-    /**
-     * byte entry, Potion effect color over entity
-     */
-    protected static final byte META_KEY_POTION_EFFECT_COLOR = 7;
-
-    /**
-     * byte/bool entry, if potion is ambiend (less visible)
-     */
-    protected static final byte META_KEY_POTION_IS_AMBIENT = 8;
-
-    /**
-     * byte entry, number of arrows in player.
-     */
-    protected static final byte META_KEY_ARROWS_IN_BODY = 9;
-
-    /**
-     * byte/bool entry, if entity have AI
-     */
-    protected static final byte META_KEY_NO_AI = 15;
-
-    public LivingEntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
+    LivingEntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
     }

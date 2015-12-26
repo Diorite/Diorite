@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerTransaction;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.GameMode;
@@ -54,13 +54,13 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         this.addLast("Diorite|Handle", (evt, pipeline) -> {
             if (evt.isCancelled())
             {
-                ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayServerTransaction(evt.getWindowId(), evt.getActionNumber(), false));
+                ((IPlayer) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayServerTransaction(evt.getWindowId(), evt.getActionNumber(), false));
                 return;
             }
 //            System.out.println(evt.toString());
             final boolean accepted = this.handleClick(evt);
 
-            ((PlayerImpl) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayServerTransaction(evt.getWindowId(), evt.getActionNumber(), accepted));
+            ((IPlayer) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayServerTransaction(evt.getWindowId(), evt.getActionNumber(), accepted));
 
             if (! accepted)
             {
@@ -71,7 +71,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
     protected boolean handleClick(final PlayerInventoryClickEvent e)
     {
-        final PlayerImpl player = (PlayerImpl) e.getPlayer();
+        final IPlayer player = (IPlayer) e.getPlayer();
         final ClickType ct = e.getClickType();
         ItemStackImpl.validate(e.getCursorItem());
         final ItemStackImpl cursor = (ItemStackImpl) e.getCursorItem();

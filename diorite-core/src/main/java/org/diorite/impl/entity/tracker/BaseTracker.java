@@ -34,13 +34,13 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityTeleport;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerRelEntityMoveLook;
-import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 
 @SuppressWarnings({"ObjectEquality"})
-public abstract class BaseTracker<T extends EntityImpl & Trackable>
+public abstract class BaseTracker<T extends IEntity>
 {
     protected final T      tracker;
     protected final int    id;
@@ -57,7 +57,7 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
     protected boolean isMoving;
     protected boolean forceLocationUpdate;
 
-    protected final Collection<PlayerImpl> tracked = new ConcurrentSet<>(5, .3F, 3);
+    protected final Collection<IPlayer> tracked = new ConcurrentSet<>(5, .3F, 3);
 
     public BaseTracker(final T entity)
     {
@@ -91,7 +91,7 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
 
     private boolean first = true;
 
-    public void tick(final int tps, final Iterable<PlayerImpl> players)
+    public void tick(final int tps, final Iterable<IPlayer> players)
     {
         if (this.first)
         {
@@ -170,12 +170,12 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
         this.sendToAll(packet);
     }
 
-    public void updatePlayers(final Iterable<PlayerImpl> players)
+    public void updatePlayers(final Iterable<IPlayer> players)
     {
         players.forEach(this::updatePlayer);
     }
 
-    public void updatePlayer(final PlayerImpl player)
+    public void updatePlayer(final IPlayer player)
     {
         final int range = this.getTrackRange();
         if (player != this.tracker)
@@ -225,15 +225,15 @@ public abstract class BaseTracker<T extends EntityImpl & Trackable>
 
     public void despawn()
     {
-        for (final Iterator<PlayerImpl> iterator = this.tracked.iterator(); iterator.hasNext(); )
+        for (final Iterator<IPlayer> iterator = this.tracked.iterator(); iterator.hasNext(); )
         {
-            final PlayerImpl p = iterator.next();
+            final IPlayer p = iterator.next();
             iterator.remove();
             p.removeEntityFromView(this.tracker);
         }
     }
 
-    public void remove(final PlayerImpl player)
+    public void remove(final IPlayer player)
     {
         if (this.tracked.remove(player))
         {

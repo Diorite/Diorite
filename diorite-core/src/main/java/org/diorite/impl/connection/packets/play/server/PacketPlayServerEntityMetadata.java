@@ -34,7 +34,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
-import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.entity.Entity;
 
@@ -54,7 +54,7 @@ public class PacketPlayServerEntityMetadata extends PacketPlayServer
         this.metadata = metadata;
     }
 
-    public PacketPlayServerEntityMetadata(final EntityImpl entity)
+    public PacketPlayServerEntityMetadata(final IEntity entity)
     {
         this.entityId = entity.getId();
         this.metadata = entity.getMetadata().getOutdatedEntries();
@@ -66,7 +66,7 @@ public class PacketPlayServerEntityMetadata extends PacketPlayServer
         this.metadata = metadata;
     }
 
-    public PacketPlayServerEntityMetadata(final EntityImpl entity, final boolean forceAll)
+    public PacketPlayServerEntityMetadata(final IEntity entity, final boolean forceAll)
     {
         this.entityId = entity.getId();
         this.metadata = forceAll ? entity.getMetadata().getEntries() : entity.getMetadata().getOutdatedEntries();

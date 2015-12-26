@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.diorite;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -31,6 +31,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
+import org.diorite.impl.entity.IAttributableEntity;
 import org.diorite.impl.entity.attrib.AttributeStorageImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.attrib.AttributeModifier;
@@ -40,9 +41,9 @@ import org.diorite.entity.attrib.AttributeType;
 
 abstract class AttributableEntityImpl extends EntityImpl implements IAttributableEntity
 {
-    protected final AttributeStorage attributes = new AttributeStorageImpl(this);
+    final AttributeStorage attributes = new AttributeStorageImpl(this);
 
-    public AttributableEntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
+    AttributableEntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
     }

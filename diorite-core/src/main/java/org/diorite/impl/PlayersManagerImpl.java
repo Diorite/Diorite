@@ -42,9 +42,7 @@ import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
-import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IPlayer;
-import org.diorite.impl.entity.PlayerImpl;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
@@ -52,7 +50,7 @@ import org.diorite.event.player.PlayerJoinEvent;
 
 public class PlayersManagerImpl implements Tickable
 {
-    private final Map<UUID, PlayerImpl> players = new ConcurrentHashMap<>(100, 0.2f, 8);
+    private final Map<UUID, IPlayer> players = new ConcurrentHashMap<>(100, 0.2f, 8);
     private final DioriteCore core;
     private final int         keepAliveTimer;
 
@@ -64,14 +62,14 @@ public class PlayersManagerImpl implements Tickable
         this.keepAliveTimer = (int) TimeUnit.SECONDS.toMillis(this.core.getKeepAliveTimer());
     }
 
-    public PlayerImpl createPlayer(final GameProfileImpl gameProfile, final CoreNetworkManager networkManager)
+    public IPlayer createPlayer(final GameProfileImpl gameProfile, final CoreNetworkManager networkManager)
     {// TODO: loading player
         //noinspection MagicNumber
 
-        return new PlayerImpl(this.core, IEntity.getNextEntityID(), gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.core.getWorldsManager().getDefaultWorld()));
+        return this.core.getServerManager().getEntityFactory().createPlayer(gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.core.getWorldsManager().getDefaultWorld()));
     }
 
-    public void playerJoin(final PlayerImpl player)
+    public void playerJoin(final IPlayer player)
     {
         this.players.put(player.getUniqueID(), player);
         EventType.callEvent(new PlayerJoinEvent(player));
@@ -79,16 +77,16 @@ public class PlayersManagerImpl implements Tickable
 
     public List<String> getOnlinePlayersNames()
     {
-        return this.players.values().parallelStream().map(PlayerImpl::getName).collect(Collectors.toList());
+        return this.players.values().parallelStream().map(IPlayer::getName).collect(Collectors.toList());
     }
 
     public List<String> getOnlinePlayersNames(final String prefix)
     {
         final String lcPrefix = prefix.toLowerCase();
-        return this.players.values().parallelStream().map(PlayerImpl::getName).filter(s -> s.toLowerCase().startsWith(lcPrefix)).sorted().collect(Collectors.toList());
+        return this.players.values().parallelStream().map(IPlayer::getName).filter(s -> s.toLowerCase().startsWith(lcPrefix)).sorted().collect(Collectors.toList());
     }
 
-    public Map<UUID, PlayerImpl> getRawPlayers()
+    public Map<UUID, IPlayer> getRawPlayers()
     {
         return this.players;
     }
@@ -102,7 +100,7 @@ public class PlayersManagerImpl implements Tickable
 
 //    public void playerQuit(final UUID uuid)
 //    {
-//        final PlayerImpl player = this.players.remove(uuid);
+//        final IPlayer player = this.players.remove(uuid);
 //        if (player != null)
 //        {
 //            this.playerQuit(player);
@@ -146,51 +144,51 @@ public class PlayersManagerImpl implements Tickable
         this.forEach(p -> p != except, player -> player.getNetworkManager().sendPackets(packets));
     }
 
-    public Collection<PlayerImpl> getOnlinePlayers(final Predicate<PlayerImpl> predicate)
+    public Collection<IPlayer> getOnlinePlayers(final Predicate<IPlayer> predicate)
     {
         return this.players.values().stream().filter(predicate).collect(Collectors.toSet());
     }
 
-    public void forEach(final Predicate<PlayerImpl> predicate, final Packet<?> packet)
+    public void forEach(final Predicate<IPlayer> predicate, final Packet<?> packet)
     {
         this.forEach(predicate, player -> player.getNetworkManager().sendPacket(packet));
     }
 
-    public void forEachExcept(final Player except, final Predicate<PlayerImpl> predicate, final Packet<?> packet)
+    public void forEachExcept(final Player except, final Predicate<IPlayer> predicate, final Packet<?> packet)
     {
         //noinspection ObjectEquality
         this.forEach(p -> (p != except) && predicate.test(p), player -> player.getNetworkManager().sendPacket(packet));
     }
 
-    public void forEach(final Predicate<PlayerImpl> predicate, final Packet<?>[] packets)
+    public void forEach(final Predicate<IPlayer> predicate, final Packet<?>[] packets)
     {
         this.forEach(predicate, player -> player.getNetworkManager().sendPackets(packets));
     }
 
-    public void forEachExcept(final Player except, final Predicate<PlayerImpl> predicate, final Packet<?>[] packets)
+    public void forEachExcept(final Player except, final Predicate<IPlayer> predicate, final Packet<?>[] packets)
     {
         //noinspection ObjectEquality
         this.forEach(p -> (p != except) && predicate.test(p), player -> player.getNetworkManager().sendPackets(packets));
     }
 
-    public void forEachExcept(final Player except, final Consumer<PlayerImpl> consumer)
+    public void forEachExcept(final Player except, final Consumer<IPlayer> consumer)
     {
         //noinspection ObjectEquality
         this.players.values().stream().filter(p -> p != except).forEach(consumer);
     }
 
-    public void forEach(final Consumer<PlayerImpl> consumer)
+    public void forEach(final Consumer<IPlayer> consumer)
     {
         this.players.values().stream().forEach(consumer);
     }
 
-    public void forEachExcept(final Player except, final Predicate<PlayerImpl> predicate, final Consumer<PlayerImpl> consumer)
+    public void forEachExcept(final Player except, final Predicate<IPlayer> predicate, final Consumer<IPlayer> consumer)
     {
         //noinspection ObjectEquality
         this.players.values().stream().filter(p -> (p != except) && predicate.test(p)).forEach(consumer);
     }
 
-    public void forEach(final Predicate<PlayerImpl> predicate, final Consumer<PlayerImpl> consumer)
+    public void forEach(final Predicate<IPlayer> predicate, final Consumer<IPlayer> consumer)
     {
         this.players.values().stream().filter(predicate).forEach(consumer);
     }

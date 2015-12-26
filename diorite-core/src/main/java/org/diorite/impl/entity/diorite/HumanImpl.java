@@ -1,4 +1,4 @@
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.diorite;
 
 import java.util.UUID;
 
@@ -12,6 +12,9 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedEntitySpawn;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
+import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IHuman;
+import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
@@ -56,15 +59,15 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     protected final GameProfile         gameProfile;
     protected final PlayerInventoryImpl inventory;
 
-    protected PacketPlayServerAbilities abilities    = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
-    protected HandSide                  mainHand     = HandSide.RIGHT;
-    protected int                       heldItemSlot = 0;
-    protected GameMode                  gameMode     = GameMode.SURVIVAL;
-    protected NamedUUID namedUUID;
+    PacketPlayServerAbilities abilities    = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
+    HandSide                  mainHand     = HandSide.RIGHT;
+    int                       heldItemSlot = 0;
+    GameMode                  gameMode     = GameMode.SURVIVAL;
+    NamedUUID namedUUID;
 
-    protected PlayerPermissionsContainer permissionContainer;
+    PlayerPermissionsContainer permissionContainer;
 
-    public HumanImpl(final DioriteCore core, final GameProfile gameProfile, final int id, final ImmutableLocation location)
+    HumanImpl(final DioriteCore core, final GameProfile gameProfile, final int id, final ImmutableLocation location)
     {
         super(gameProfile.getId(), core, id, location);
         this.aabb = BASE_SIZE.create(this);

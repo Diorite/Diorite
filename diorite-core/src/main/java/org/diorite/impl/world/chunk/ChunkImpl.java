@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.palette.PaletteImpl;
@@ -65,7 +65,7 @@ public class ChunkImpl implements Chunk
     protected ChunkPartImpl[] chunkParts; // size of 16, parts can be null
 
     protected final Long2ObjectMap<TileEntityImpl> tileEntities = new Long2ObjectOpenHashMap<>(1, .2f);
-    protected final Set<EntityImpl>                entities     = new ConcurrentSet<>(4, .3f, 2);
+    protected final Set<IEntity>                   entities     = new ConcurrentSet<>(4, .3f, 2);
 
     @Override
     public Thread getLastTickThread()
@@ -198,17 +198,17 @@ public class ChunkImpl implements Chunk
         return this.tileEntities;
     }
 
-    public Set<EntityImpl> getEntities()
+    public Set<IEntity> getEntities()
     {
         return this.entities;
     }
 
-    public boolean removeEntity(final EntityImpl entity)
+    public boolean removeEntity(final IEntity entity)
     {
         return this.entities.remove(entity);
     }
 
-    public boolean addEntity(final EntityImpl entity)
+    public boolean addEntity(final IEntity entity)
     {
         return this.entities.add(entity);
     }

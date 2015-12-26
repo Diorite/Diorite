@@ -64,10 +64,16 @@ public class WorldsManagerImpl implements WorldsManager
 {
     private final Logger logger = LoggerFactory.getLogger("[WorldLoader]");
 
-    private WorldImpl        defaultWorld;
-    private WorldsConfigImpl config;
+    private final DioriteCore      core;
+    private       WorldImpl        defaultWorld;
+    private       WorldsConfigImpl config;
     private final Map<String, WorldGroupImpl> groups = new ConcurrentHashMap<>(5, .1f, 4);
     private final Map<String, WorldImpl>      worlds = new ConcurrentHashMap<>(5, .1f, 4);
+
+    public WorldsManagerImpl(final DioriteCore core)
+    {
+        this.core = core;
+    }
 
     public Logger getLogger()
     {
@@ -190,7 +196,7 @@ public class WorldsManagerImpl implements WorldsManager
             this.groups.put(wgc.getName(), wgImpl);
             loaders.addAll(wgc.getWorlds().stream().filter(WorldConfig::isEnabled).map(wc -> (Runnable) () -> {
                 final File wFile = new File(wgImpl.getDataFolder(), wc.getName());
-                final WorldImpl wImpl = new WorldImpl(new AnvilSerialIOService(wFile, wc.getName()), wc.getName(), wgImpl, wc.getDimension(), wc.getWorldType(), wc.getGenerator(), wc.getGeneratorSettings());
+                final WorldImpl wImpl = new WorldImpl(this.core, new AnvilSerialIOService(wFile, wc.getName()), wc.getName(), wgImpl, wc.getDimension(), wc.getWorldType(), wc.getGenerator(), wc.getGeneratorSettings());
                 this.loadWorld(wImpl, wc);
                 wgImpl.addWorld(wImpl);
             }).collect(Collectors.toList()));

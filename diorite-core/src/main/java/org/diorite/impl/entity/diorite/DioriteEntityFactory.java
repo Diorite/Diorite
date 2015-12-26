@@ -1,4 +1,4 @@
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.diorite;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +7,12 @@ import java.util.function.Function;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.impl.entity.ICreeper;
+import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IEntityFactory;
+import org.diorite.impl.entity.IHuman;
+import org.diorite.impl.entity.IItem;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
 import org.diorite.auth.GameProfile;

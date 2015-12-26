@@ -34,7 +34,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
-import org.diorite.impl.entity.EntityImpl;
+import org.diorite.impl.entity.IEntity;
 
 @PacketClass(id = 0x27, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 8)
 public class PacketPlayServerEntityLook extends PacketPlayServer
@@ -66,7 +66,7 @@ public class PacketPlayServerEntityLook extends PacketPlayServer
     }
 
     @SuppressWarnings("MagicNumber")
-    public PacketPlayServerEntityLook(final EntityImpl entity)
+    public PacketPlayServerEntityLook(final IEntity entity)
     {
         this.entityId = entity.getId();
         this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);

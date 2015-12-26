@@ -68,7 +68,7 @@ public interface Entity extends GameObject, Synchronizable
 
     <T extends Entity> Collection<? extends T> getNearbyEntities(double x, double y, double z, Class<? extends T> type);
 
-    <T extends Entity> Collection<? extends T> getNearbyEntities(double x, double y, double z, EntityType type);
+    Collection<? extends Entity> getNearbyEntities(double x, double y, double z, EntityType type);
 
     default int getMcId()
     {

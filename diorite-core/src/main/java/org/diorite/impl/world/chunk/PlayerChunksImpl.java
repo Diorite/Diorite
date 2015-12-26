@@ -35,7 +35,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerChunkUnload;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunk;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.world.chunk.ChunkPos;
@@ -49,7 +49,7 @@ public class PlayerChunksImpl implements Tickable
 {
     public static final int CHUNK_BULK_SIZE = 4;
 
-    private final PlayerImpl player;
+    private final IPlayer player;
     private final LongSet visibleChunks = new LongOpenHashSet(400);
     private final ChunkLock chunkLock;
     private       boolean   logout;
@@ -57,7 +57,7 @@ public class PlayerChunksImpl implements Tickable
     private       byte      lastUpdateR;
     private long lastUnload = System.currentTimeMillis();
 
-    public PlayerChunksImpl(final PlayerImpl player)
+    public PlayerChunksImpl(final IPlayer player)
     {
         this.player = player;
         this.chunkLock = player.getWorld().createLock(player.getName());
@@ -78,7 +78,7 @@ public class PlayerChunksImpl implements Tickable
         return this.player.getViewDistance();
     }
 
-    public PlayerImpl getPlayer()
+    public IPlayer getPlayer()
     {
         return this.player;
     }

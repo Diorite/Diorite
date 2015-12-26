@@ -66,7 +66,7 @@ import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerListHeaderFooter;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.input.ConsoleReaderThread;
 import org.diorite.impl.input.InputThread;
 import org.diorite.impl.log.ForwardLogHandler;
@@ -563,7 +563,7 @@ public class DioriteCore implements Core
     @Override
     public void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player)
     {
-        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayServerPlayerListHeaderFooter(header, footer));
+        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayServerPlayerListHeaderFooter(header, footer));
     }
 
     @Override
@@ -575,7 +575,7 @@ public class DioriteCore implements Core
     @Override
     public void sendTitle(final BaseComponent title, final BaseComponent subtitle, final int fadeIn, final int stay, final int fadeOut, final Player player)
     {
-        final CoreNetworkManager n = ((PlayerImpl) player).getNetworkManager();
+        final CoreNetworkManager n = ((IPlayer) player).getNetworkManager();
 
         if (title != null)
         {
@@ -593,7 +593,7 @@ public class DioriteCore implements Core
     @Override
     public void removeTitle(final Player player)
     {
-        ((PlayerImpl) player).getNetworkManager().sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.RESET));
+        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.RESET));
     }
 
     @Override

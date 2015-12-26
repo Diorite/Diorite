@@ -25,18 +25,18 @@
 package org.diorite.impl.entity.tracker;
 
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 
 @SuppressWarnings({"ObjectEquality"})
-public class PlayerTracker extends BaseTracker<PlayerImpl>
+public class PlayerTracker extends BaseTracker<IPlayer>
 {
-    public PlayerTracker(final PlayerImpl entity)
+    public PlayerTracker(final IPlayer entity)
     {
         super(entity);
     }
 
 //    @Override
-//    public void tick(final int tps, final Iterable<PlayerImpl> players)
+//    public void tick(final int tps, final Iterable<IPlayer> players)
 //    {
 //        super.tick(tps, players);
 //        if (this.isMoving)

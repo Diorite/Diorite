@@ -32,8 +32,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
-import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.entity.Entity;
 
@@ -72,7 +72,7 @@ public class EntityTrackers implements Tickable
         return this.stats;
     }
 
-    private void incrementStat(final EntityImpl entity)
+    private void incrementStat(final IEntity entity)
     {
         try
         {
@@ -87,7 +87,7 @@ public class EntityTrackers implements Tickable
         }
     }
 
-    private void decrementStat(final EntityImpl entity)
+    private void decrementStat(final IEntity entity)
     {
         try
         {
@@ -102,7 +102,7 @@ public class EntityTrackers implements Tickable
         }
     }
 
-    public PlayerTracker addTracked(final PlayerImpl trackable)
+    public PlayerTracker addTracked(final IPlayer trackable)
     {
         final PlayerTracker pt = new PlayerTracker(trackable);
         this.trackers.put(trackable.getId(), pt);
@@ -116,7 +116,7 @@ public class EntityTrackers implements Tickable
         return this.trackers.size();
     }
 
-    public EntityTracker addTracked(final EntityImpl trackable)
+    public EntityTracker addTracked(final IEntity trackable)
     {
         final EntityTracker et = new EntityTracker(trackable);
         this.trackers.put(trackable.getId(), et);
@@ -124,7 +124,7 @@ public class EntityTrackers implements Tickable
         return et;
     }
 
-    public boolean removeTracked(final EntityImpl trackable)
+    public boolean removeTracked(final IEntity trackable)
     {
         final BaseTracker<?> tracker = this.trackers.remove(trackable.getId());
         if (tracker == null)
@@ -132,16 +132,16 @@ public class EntityTrackers implements Tickable
             return false;
         }
         tracker.despawn();
-        if (trackable instanceof PlayerImpl)
+        if (trackable instanceof IPlayer)
         {
-            final PlayerImpl player = (PlayerImpl) trackable;
+            final IPlayer player = (IPlayer) trackable;
             this.trackers.values().forEach((t) -> t.remove(player));
         }
         this.decrementStat(trackable);
         return true;
     }
 
-    public void updatePlayer(final PlayerImpl player)
+    public void updatePlayer(final IPlayer player)
     {
         this.trackers.values().forEach((t) -> t.updatePlayer(player));
     }
@@ -150,7 +150,7 @@ public class EntityTrackers implements Tickable
     public void doTick(final int tps)
     {
         //noinspection ObjectEquality
-        final Collection<PlayerImpl> players = DioriteCore.getInstance().getPlayersManager().getOnlinePlayers(p -> p.getWorld() == this.world);
+        final Collection<IPlayer> players = DioriteCore.getInstance().getPlayersManager().getOnlinePlayers(p -> p.getWorld() == this.world);
         this.trackers.values().forEach((t) -> t.tick(tps, players));
     }
 
@@ -160,7 +160,7 @@ public class EntityTrackers implements Tickable
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("trackers", this.trackers).append("world", this.world).toString();
     }
 
-    public void spawn(final PlayerImpl player)
+    public void spawn(final IPlayer player)
     {
         final BaseTracker<?> tracker = this.trackers.get(player.getId());
         if (tracker != null)

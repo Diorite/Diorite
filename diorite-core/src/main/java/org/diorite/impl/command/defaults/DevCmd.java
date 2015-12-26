@@ -37,12 +37,14 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChan
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedSoundEffect;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffect;
-import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.entity.ItemImpl;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.ICreeper;
+import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Diorite;
+import org.diorite.EntityFactory;
+import org.diorite.ServerManager;
 import org.diorite.Sound;
 import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
@@ -79,15 +81,26 @@ public class DevCmd extends SystemCommandImpl
         super("dev", Pattern.compile("(dev)(:(?<action>([a-z0-9_]*))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             final String action = matchedPattern.group("action");
-            final PlayerImpl p = (PlayerImpl) sender;
+            final IPlayer p = (IPlayer) sender;
             if (action == null)
             {
                 p.getNetworkManager().sendPacket(new PacketPlayServerBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
                 return;
             }
-            final PermissionsManager mag = Diorite.getServerManager().getPermissionsManager();
+            final ServerManager serverManager = Diorite.getServerManager();
+            final PermissionsManager mag = serverManager.getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "mob":
+                {
+                    final EntityFactory entityFactory = serverManager.getEntityFactory();
+                    if (args.asString(0).equalsIgnoreCase("creeper"))
+                    {
+                        final ICreeper creeper = entityFactory.createEntity(ICreeper.class, p.getLocation());
+                        p.getWorld().addEntity(creeper);
+                    }
+                    break;
+                }
                 case "sound1":
                 {
                     p.getNetworkManager().sendPacket(new PacketPlayServerSoundEffect(Sound.getById(args.asInt(0)), p.getLocation(), 2, 63));
@@ -343,16 +356,16 @@ public class DevCmd extends SystemCommandImpl
                     sender.sendSimpleColoredMessage(p.getLocation().toBlockLocation().getBlock().toString());
                     break;
                 }
-                case "en":
-                {
-                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), p.getCore(), EntityImpl.getNextEntityID(), p.getLocation().addX(3).addY(1));
-                    item.setItemStack(new BaseItemStack(Material.TNT));
-                    p.getWorld().addEntity(item);
-                    break;
-                }
+//                case "en":
+//                {
+//                    final ItemImpl item = new ItemImpl(UUID.randomUUID(), p.getCore(), IEntity.getNextEntityID(), p.getLocation().addX(3).addY(1));
+//                    item.setItemStack(new BaseItemStack(Material.TNT));
+//                    p.getWorld().addEntity(item);
+//                    break;
+//                }
                 case "ep":
                 {
-                    for (final EntityImpl e : p.getNearbyEntities(args.asDouble(0), args.asDouble(0), args.asDouble(0)))
+                    for (final IEntity e : p.getNearbyEntities(args.asDouble(0), args.asDouble(0), args.asDouble(0)))
                     {
                         sender.sendSimpleColoredMessage("[" + e.getId() + "] " + e.getType() + ": " + e.getLocation());
                     }

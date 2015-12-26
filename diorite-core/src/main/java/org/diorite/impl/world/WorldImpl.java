@@ -26,7 +26,6 @@ package org.diorite.impl.world;
 
 import java.io.File;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -39,9 +38,9 @@ import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
-import org.diorite.impl.entity.EntityImpl;
-import org.diorite.impl.entity.ItemImpl;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IItem;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.entity.tracker.EntityTrackers;
 import org.diorite.impl.world.chunk.ChunkImpl;
@@ -87,6 +86,7 @@ public class WorldImpl implements World, Tickable
     private static final int    CHUNK_FLAG            = (Chunk.CHUNK_SIZE - 1);
     public static final  int    DEFAULT_AUTOSAVE_TIME = 20 * 60 * 5; // 5 min, TODO: load it from config
 
+    private final   DioriteCore      core;
     private final   Logger           worldLoaderLogger;
     protected final String           name;
     protected final WorldGroupImpl   worldGroup;
@@ -120,8 +120,9 @@ public class WorldImpl implements World, Tickable
     // TODO: world border impl
     // TODO: add some method allowing to set multiple blocks without calling getChunk so often
 
-    public WorldImpl(final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator, final Map<String, Object> generatorOptions)
+    public WorldImpl(final DioriteCore core, final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator, final Map<String, Object> generatorOptions)
     {
+        this.core = core;
         this.worldLoaderLogger = LoggerFactory.getLogger("[WorldLoader][" + name + "]");
         this.name = name;
         this.worldGroup = group;
@@ -136,9 +137,9 @@ public class WorldImpl implements World, Tickable
         chunkIO.start(this);
     }
 
-    public WorldImpl(final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator)
+    public WorldImpl(final DioriteCore core, final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator)
     {
-        this(chunkIO, name, group, dimension, worldType, generator, null);
+        this(core, chunkIO, name, group, dimension, worldType, generator, null);
     }
 
     public EntityTrackers getEntityTrackers()
@@ -295,7 +296,7 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
-    public ItemImpl dropItemNaturally(final ILocation loc, final ItemStack item)
+    public IItem dropItemNaturally(final ILocation loc, final ItemStack item)
     {
         final double xs = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
         final double ys = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
@@ -307,7 +308,7 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
-    public ItemImpl dropItemNaturally(final BlockLocation loc, final ItemStack item)
+    public IItem dropItemNaturally(final BlockLocation loc, final ItemStack item)
     {
         final double xs = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
         final double ys = (this.random.nextFloat() * ITEM_DROP_MOD_1) - ITEM_DROP_MOD_2;
@@ -319,15 +320,15 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
-    public ItemImpl dropItem(final ILocation loc, final ItemStack itemStack)
+    public IItem dropItem(final ILocation loc, final ItemStack itemStack)
     {
         if ((itemStack == null) || (itemStack.getAmount() == 0))
         {
             return null;
         }
-        final ItemImpl item = new ItemImpl(UUID.randomUUID(), DioriteCore.getInstance(), EntityImpl.getNextEntityID(), loc.toImmutableLocation());
+        final IItem item = this.core.getServerManager().getEntityFactory().createEntity(IItem.class, loc);
         item.setItemStack(itemStack);
-        item.setPickupDelay(ItemImpl.DEFAULT_BLOCK_DROP_PICKUP_DELAY);
+        item.setPickupDelay(IItem.DEFAULT_BLOCK_DROP_PICKUP_DELAY);
 
         this.addEntity(item);
         return item;
@@ -849,12 +850,12 @@ public class WorldImpl implements World, Tickable
         }
     }
 
-    public void addEntity(final EntityImpl entity)
+    public void addEntity(final IEntity entity)
     {
         final BaseTracker<?> tracker;
-        if (entity instanceof PlayerImpl)
+        if (entity instanceof IPlayer)
         {
-            tracker = this.entityTrackers.addTracked((PlayerImpl) entity);
+            tracker = this.entityTrackers.addTracked((IPlayer) entity);
         }
         else
         {
@@ -864,7 +865,7 @@ public class WorldImpl implements World, Tickable
         entity.onSpawn(tracker);
     }
 
-    public void removeEntity(final EntityImpl entity)
+    public void removeEntity(final IEntity entity)
     {
         this.entityTrackers.removeTracked(entity);
         entity.remove(false);

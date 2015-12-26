@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.diorite;
 
 import java.util.List;
 import java.util.Locale;
@@ -41,6 +41,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerResourceP
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerTabComplete;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerUpdateAttributes;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerWorldParticles;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
@@ -62,18 +63,18 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntCollection;
 
 // TODO: add Human or other entity not fully a player class for bots/npcs
-public class PlayerImpl extends HumanImpl implements IPlayer
+class PlayerImpl extends HumanImpl implements IPlayer
 {
-    protected final IntCollection removeQueue = new IntArrayList(5);
+    private final IntCollection removeQueue = new IntArrayList(5);
 
-    protected final CoreNetworkManager networkManager;
-    protected final PlayerChunksImpl   playerChunks;
-    protected       byte               viewDistance;
-    protected       byte               renderDistance;
-    protected       Locale             preferedLocale;
+    private final CoreNetworkManager networkManager;
+    private final PlayerChunksImpl   playerChunks;
+    private       byte               viewDistance;
+    private       byte               renderDistance;
+    private       Locale             preferedLocale;
 
     // TODO: add saving/loading data to/from NBT
-    public PlayerImpl(final DioriteCore core, final GameProfile gameProfile, final CoreNetworkManager networkManager, final int id, final ImmutableLocation location)
+    PlayerImpl(final DioriteCore core, final GameProfile gameProfile, final CoreNetworkManager networkManager, final int id, final ImmutableLocation location)
     {
         super(core, gameProfile, id, location);
         this.networkManager = networkManager;
@@ -137,6 +138,7 @@ public class PlayerImpl extends HumanImpl implements IPlayer
         }
     }
 
+    @Override
     @SuppressWarnings("ObjectEquality")
     public void removeEntityFromView(final BaseTracker<?> e)
     {
@@ -155,6 +157,7 @@ public class PlayerImpl extends HumanImpl implements IPlayer
         }
     }
 
+    @Override
     @SuppressWarnings("ObjectEquality")
     public void removeEntityFromView(final Entity e)
     {

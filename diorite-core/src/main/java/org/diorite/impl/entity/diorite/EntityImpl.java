@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.diorite;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,6 +34,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.GameObjectImpl;
+import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
@@ -54,77 +55,50 @@ import org.diorite.world.chunk.Chunk;
 
 abstract class EntityImpl extends GameObjectImpl implements IEntity
 {
-    protected static final double PHYSIC_GRAVITY_CONST_1 = 0.98D;
-    protected static final double PHYSIC_GRAVITY_CONST_2 = 0.08D;
-
-    public static final int MAX_AIR_LEVEL = 300;
-
-    /**
-     * byte entry, with flags. {@link org.diorite.impl.entity.EntityImpl.BasicFlags}
-     */
-    protected static final byte META_KEY_BASIC_FLAGS = 0;
-
-    /**
-     * short entry, air level
-     */
-    protected static final byte META_KEY_AIR = 1;
-
-    /**
-     * String entry, name/name tag
-     */
-    protected static final byte META_KEY_NAME_TAG = 2;
-
-    /**
-     * byte/bool entry, if name tag should be visible
-     */
-    protected static final byte META_KEY_ALWAYS_SHOW_NAME_TAG = 3;
-
-    /**
-     * byte/bool entry, if entity should make sound.
-     */
-    protected static final byte META_KEY_SILENT = 4;
+    static final double PHYSIC_GRAVITY_CONST_1 = 0.98D;
+    static final double PHYSIC_GRAVITY_CONST_2 = 0.08D;
 
     /**
      * Contains mask for basic flags used in matadata at index 0
      * http://wiki.vg/Entities#Entity
      */
-    public static final class BasicFlags
+    static final class BasicFlags
     {
-        public static final byte ON_FIRE   = 0x01;
-        public static final byte CROUCHED  = 0x01;
-        public static final byte SPRINTING = 0x01;
-        public static final byte ACTION    = 0x01;
-        public static final byte INVISIBLE = 0x01;
+        static final byte ON_FIRE   = 0x01;
+        static final byte CROUCHED  = 0x01;
+        static final byte SPRINTING = 0x01;
+        static final byte ACTION    = 0x01;
+        static final byte INVISIBLE = 0x01;
 
         private BasicFlags()
         {
         }
     }
 
-    protected final Set<Resetable> values = new HashSet<>(10);
+    private final Set<Resetable> values = new HashSet<>(10);
 
-    protected final    DioriteCore       core;
-    protected final    WorldImpl         world;
-    protected volatile Thread            lastTickThread;
-    protected          EntityBoundingBox aabb;
-    private            int               id;
-    protected          double            x;
-    protected          double            y;
-    protected          double            z;
-    protected          float             yaw;
-    protected          float             pitch;
-    protected          float             velX;
-    protected          float             velY;
-    protected          float             velZ;
-    protected final    EntityMetadata    metadata;
-    protected          BaseTracker<?>    tracker;
+    final    DioriteCore core;
+    final    WorldImpl   world;
+    volatile Thread      lastTickThread;
+    EntityBoundingBox aabb;
+    private int id;
+    double x;
+    double y;
+    double z;
+    float  yaw;
+    float  pitch;
+    float  velX;
+    float  velY;
+    float  velZ;
+    final EntityMetadata metadata;
+    BaseTracker<?> tracker;
 
-    protected boolean       aiEnabled = true; // don't do any actions if AI is disabled
-    protected DioriteRandom random    = DioriteRandomUtils.getRandom();
+    boolean       aiEnabled = true; // don't do any actions if AI is disabled
+    DioriteRandom random    = DioriteRandomUtils.getRandom();
 
-    protected final BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
+    final BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
 
-    protected EntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
+    EntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid);
         this.core = core;
@@ -142,11 +116,11 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     @Override
     public void initMetadata()
     {
-        this.metadata.add(new EntityMetadataByteEntry(EntityImpl.META_KEY_BASIC_FLAGS, 0));
-        this.metadata.add(new EntityMetadataByteEntry(EntityImpl.META_KEY_AIR, EntityImpl.MAX_AIR_LEVEL));
-        this.metadata.add(new EntityMetadataByteEntry(EntityImpl.META_KEY_SILENT, 0));
-        this.metadata.add(new EntityMetadataByteEntry(EntityImpl.META_KEY_ALWAYS_SHOW_NAME_TAG, 0));
-        this.metadata.add(new EntityMetadataStringEntry(EntityImpl.META_KEY_NAME_TAG, ""));
+        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_BASIC_FLAGS, 0));
+        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_AIR, EntityImpl.MAX_AIR_LEVEL));
+        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_SILENT, 0));
+        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_ALWAYS_SHOW_NAME_TAG, 0));
+        this.metadata.add(new EntityMetadataStringEntry(IEntity.META_KEY_NAME_TAG, ""));
 
 
         // test TODO: remove
@@ -186,13 +160,13 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public void setAiEnabled(boolean aiEnabled)
+    public void setAiEnabled(final boolean aiEnabled)
     {
         this.aiEnabled = aiEnabled;
     }
 
     @Override
-    public void remove(boolean full)
+    public void remove(final boolean full)
     {
         if (full)
         {
@@ -241,7 +215,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public void onSpawn(BaseTracker<?> tracker)
+    public void onSpawn(final BaseTracker<?> tracker)
     {
         if (this.tracker != null)
         {
@@ -251,7 +225,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public void move(double modX, double modY, double modZ, float modYaw, float modPitch)
+    public void move(final double modX, final double modY, final double modZ, final float modYaw, final float modPitch)
     {
         final ChunkImpl chunk = this.getChunk();
 
@@ -265,7 +239,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public void move(double modX, double modY, double modZ)
+    public void move(final double modX, final double modY, final double modZ)
     {
         final ChunkImpl chunk = this.getChunk();
 
@@ -277,14 +251,14 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public void setPositionAndRotation(double newX, double newY, double newZ, float newYaw, float newPitch)
+    public void setPositionAndRotation(final double newX, final double newY, final double newZ, final float newYaw, final float newPitch)
     {
         this.setPosition(newX, newY, newZ);
         this.setRotation(newYaw, newPitch);
     }
 
     @Override
-    public void setPosition(double newX, double newY, double newZ)
+    public void setPosition(final double newX, final double newY, final double newZ)
     {
         final ChunkImpl chunk = this.getChunk();
 
@@ -297,7 +271,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
 
     @Override
     @SuppressWarnings("ObjectEquality")
-    public void updateChunk(ChunkImpl chunk, ChunkImpl newChunk)
+    public void updateChunk(final ChunkImpl chunk, final ChunkImpl newChunk)
     {
         if (chunk == null)
         {
@@ -314,7 +288,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public void setRotation(float newYaw, float newPitch)
+    public void setRotation(final float newYaw, final float newPitch)
     {
         this.yaw = newYaw;
         this.pitch = newPitch;
@@ -470,11 +444,11 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final EntityType type)
+    public Collection<? extends IEntity> getNearbyEntities(final double x, final double y, final double z, final EntityType type)
     {
         final BoundingBox bb = this.aabb.grow(x, y, z);
 
-        final Set<T> entities = new HashSet<>(25);
+        final Set<IEntity> entities = new HashSet<>(25);
 
         final int cx = this.getChunk().getX(); // Chunk X location
         final int cz = this.getChunk().getZ(); // Chunk Z location
@@ -500,7 +474,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
                 }
 
                 //noinspection unchecked,ObjectEquality
-                chunk.getEntities().stream().filter(entity -> (entity != this) && type.equals(entity.getType()) && BoundingBox.intersects(bb, entity.getBoundingBox())).forEach(e -> entities.add((T) e));
+                chunk.getEntities().stream().filter(entity -> (entity != this) && type.equals(entity.getType()) && BoundingBox.intersects(bb, entity.getBoundingBox())).forEach(entities::add);
             }
         }
 

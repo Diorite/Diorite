@@ -17,11 +17,11 @@ public interface IHuman extends ILivingEntity, Human
     /**
      * byte entry with visible skin parts flags.
      */
-    byte META_KEY_SKIN_FLAGS = 10;
+    byte META_KEY_SKIN_FLAGS        = 10;
     /**
      * byte entry, 0x02 bool cape hidden
      */
-    byte META_KEY_CAPE = 16;
+    byte META_KEY_CAPE              = 16;
     /**
      * float entry, amount of absorption hearts (yellow/gold ones)
      */
@@ -29,7 +29,7 @@ public interface IHuman extends ILivingEntity, Human
     /**
      * int entry, amount of player points
      */
-    byte META_KEY_SCORE = 18;
+    byte META_KEY_SCORE             = 18;
 
     void setNamedUUID(NamedUUID namedUUID);
 

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.diorite;
 
 import java.util.UUID;
 
@@ -34,6 +34,8 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
+import org.diorite.impl.entity.EntityObject;
+import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
@@ -45,10 +47,10 @@ import org.diorite.utils.others.NamedUUID;
 
 class ItemImpl extends EntityImpl implements IItem, EntityObject
 {
-    private static final double JOIN_DISTANCE                   = 3; // TODO config.
-    private static final int    JOIN_DISTANCE_THRESHOLD         = 3; // TODO config.
+    private static final double JOIN_DISTANCE           = 3; // TODO config.
+    private static final int    JOIN_DISTANCE_THRESHOLD = 3; // TODO config.
 
-    private static final   int  DESPAWN_TIME  = 30000; // 5 min, TODO: add config value for that.
+    private static final int DESPAWN_TIME = 30000; // 5 min, TODO: add config value for that.
 
     // used for joining items when it moves away.
     private int xLastJoinPos;
@@ -59,7 +61,7 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
 
     private NamedUUID thrower;
 
-    public ItemImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
+    ItemImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
         this.aabb = BASE_SIZE.create(this);
@@ -138,7 +140,7 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
         this.zLastJoinPos = (int) this.z;
     }
 
-    public void joinNearbyItem(final boolean force)
+    void joinNearbyItem(final boolean force)
     {
         if (force || (Math.abs(this.y - this.yLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.x - this.xLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.z - this.zLastJoinPos) > JOIN_DISTANCE_THRESHOLD))
         {
@@ -146,7 +148,7 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
         }
     }
 
-    public void joinItem(final ItemImpl item)
+    void joinItem(final ItemImpl item)
     {
         //noinspection ObjectEquality
         if (this == item)

@@ -48,7 +48,6 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientHeldItemS
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientKeepAlive;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientLook;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientPosition;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientTeleportAccept;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientPositionLook;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientResourcePackStatus;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientSetCreativeSlot;
@@ -56,12 +55,14 @@ import org.diorite.impl.connection.packets.play.client.PacketPlayClientSettings;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientSpectate;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientSteerVehicle;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTabComplete;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientTeleportAccept;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientTransaction;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUpdateSign;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseEntity;
+import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseItem;
 import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerDisconnect;
-import org.diorite.impl.entity.PlayerImpl;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
 import org.diorite.GameMode;
@@ -79,9 +80,9 @@ public class PlayListener implements PacketPlayClientListener
 {
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
-    private final PlayerImpl         player;
+    private final IPlayer            player;
 
-    public PlayListener(final DioriteCore core, final CoreNetworkManager networkManager, final PlayerImpl player)
+    public PlayListener(final DioriteCore core, final CoreNetworkManager networkManager, final IPlayer player)
     {
         this.core = core;
         this.networkManager = networkManager;
@@ -232,6 +233,13 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
+    public void handle(final PacketPlayClientUseItem packet)
+    {
+        System.out.println(packet);
+        // TODO
+    }
+
+    @Override
     public void handle(final PacketPlayClientEntityAction packet)
     {
         this.core.sync(() -> packet.getEntityAction().doAction(this.player, packet.getJumpBoost()), this.player);
@@ -348,7 +356,7 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
-    public PlayerImpl getPlayer()
+    public IPlayer getPlayer()
     {
         return this.player;
     }

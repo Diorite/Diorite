@@ -28,7 +28,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.entity.HumanImpl;
+import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.entity.Human;
 import org.diorite.entity.Player;
@@ -50,7 +50,7 @@ public abstract class PlayerInventoryPartImpl extends InventoryImpl<Human> imple
     }
 
     @Override
-    public HumanImpl getHolder()
+    public IHuman getHolder()
     {
         return this.playerInventory.getHolder();
     }
