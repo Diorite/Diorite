@@ -44,7 +44,7 @@ public interface IEntity extends Entity, Tickable, Trackable
         return ENTITY_ID.getAndIncrement();
     }
 
-    void initMetadata();
+    BaseTracker<?> getTracker();
 
     boolean isOnGround();
 
@@ -55,8 +55,6 @@ public interface IEntity extends Entity, Tickable, Trackable
     boolean hasGravity();
 
     void remove(boolean full);
-
-    void doPhysics();
 
     @Override
     WorldImpl getWorld();
@@ -95,4 +93,6 @@ public interface IEntity extends Entity, Tickable, Trackable
     PacketPlayServer[] getSpawnPackets();
 
     EntityBoundingBox getBoundingBox();
+
+    void setBoundingBox(EntityBoundingBox box);
 }

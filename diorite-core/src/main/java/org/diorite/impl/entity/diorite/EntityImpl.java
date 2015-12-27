@@ -77,26 +77,27 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
 
     private final Set<Resetable> values = new HashSet<>(10);
 
-    final    DioriteCore core;
-    final    WorldImpl   world;
-    volatile Thread      lastTickThread;
-    EntityBoundingBox aabb;
-    private int id;
-    double x;
-    double y;
-    double z;
-    float  yaw;
-    float  pitch;
-    float  velX;
-    float  velY;
-    float  velZ;
-    final EntityMetadata metadata;
-    BaseTracker<?> tracker;
+    final            DioriteCore       core;
+    private final    WorldImpl         world;
+    private volatile Thread            lastTickThread;
+    private          EntityBoundingBox aabb;
+    private          int               id;
+    private final    EntityMetadata    metadata;
+    private          BaseTracker<?>    tracker;
 
-    boolean       aiEnabled = true; // don't do any actions if AI is disabled
-    DioriteRandom random    = DioriteRandomUtils.getRandom();
+    private double x;
+    private double y;
+    private double z;
+    private float  yaw;
+    private float  pitch;
+    float velocityX;
+    float velocityY;
+    float velocityZ;
 
-    final BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
+    private boolean aiEnabled = true; // don't do any actions if AI is disabled
+
+    final         DioriteRandom    random       = DioriteRandomUtils.getRandom();
+    private final BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
 
     EntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
@@ -113,11 +114,10 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.initMetadata();
     }
 
-    @Override
     public void initMetadata()
     {
         this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_BASIC_FLAGS, 0));
-        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_AIR, EntityImpl.MAX_AIR_LEVEL));
+        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_AIR, IEntity.MAX_AIR_LEVEL));
         this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_SILENT, 0));
         this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_ALWAYS_SHOW_NAME_TAG, 0));
         this.metadata.add(new EntityMetadataStringEntry(IEntity.META_KEY_NAME_TAG, ""));
@@ -127,6 +127,49 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
 //        this.metadata.add(new EntityMetadataByteEntry(META_KEY_ALWAYS_SHOW_NAME_TAG, 1));
 //        this.metadata.add(new EntityMetadataStringEntry(META_KEY_NAME_TAG, ChatColor.translateAlternateColorCodesInString("&a#&3OnlyDiorite")));
 
+    }
+
+
+    @Override
+    public float getVelocityX()
+    {
+        return this.velocityX;
+    }
+
+    @Override
+    public float getVelocityY()
+    {
+        return this.velocityY;
+    }
+
+    @Override
+    public float getVelocityZ()
+    {
+        return this.velocityZ;
+    }
+
+    @Override
+    public void setVelocityX(final float velocityX)
+    {
+        this.velocityX = velocityX;
+    }
+
+    @Override
+    public void setVelocityY(final float velocityY)
+    {
+        this.velocityY = velocityY;
+    }
+
+    @Override
+    public void setVelocityZ(final float velocityZ)
+    {
+        this.velocityZ = velocityZ;
+    }
+
+    @Override
+    public BaseTracker<?> getTracker()
+    {
+        return this.tracker;
     }
 
     @Override
@@ -177,7 +220,6 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.getChunk().removeEntity(this);
     }
 
-    @Override
     public void doPhysics()
     {
         final double multi = DioriteCore.getInstance().getSpeedMutli();
@@ -185,25 +227,25 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         double x = 0;
         double y = 0;
         double z = 0;
-        if (this.velX != 0)
+        if (this.velocityX != 0)
         {
-            x += (this.velX * multi);
+            x += (this.velocityX * multi);
         }
-        if ((this.velY != 0))
+        if ((this.velocityY != 0))
         {
             if (this.isOnGround())
             {
-                this.velY = 0;
+                this.velocityY = 0;
                 this.y = (this.getLocation().toBlockLocation().getY() + (1));
             }
             else
             {
-                y = (this.velY * multi);
+                y = (this.velocityY * multi);
             }
         }
-        if (this.velZ != 0)
+        if (this.velocityZ != 0)
         {
-            z = (this.velZ * multi);
+            z = (this.velocityZ * multi);
         }
         this.move(x, y, z);
     }
@@ -302,24 +344,6 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public float getVelocityX()
-    {
-        return this.velX;
-    }
-
-    @Override
-    public float getVelocityY()
-    {
-        return this.velY;
-    }
-
-    @Override
-    public float getVelocityZ()
-    {
-        return this.velZ;
-    }
-
-    @Override
     public float getHeadPitch()
     {
         return 0.0F;
@@ -361,6 +385,12 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     public EntityBoundingBox getBoundingBox()
     {
         return this.aabb;
+    }
+
+    @Override
+    public void setBoundingBox(final EntityBoundingBox aabb)
+    {
+        this.aabb = aabb;
     }
 
     @Override

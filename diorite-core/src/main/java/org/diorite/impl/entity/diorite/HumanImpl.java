@@ -51,29 +51,29 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     private static final float ITEM_DROP_MOD_VEL_Y = 0.02F;
 
     @SuppressWarnings("MagicNumber")
-    public static final ImmutableEntityBoundingBox DIE_SIZE = new ImmutableEntityBoundingBox(0.2F, 0.2F);
+    private static final ImmutableEntityBoundingBox DIE_SIZE = new ImmutableEntityBoundingBox(0.2F, 0.2F);
 
     // TODO: move this
     private static final AttributeModifier tempSprintMod = new SimpleAttributeModifier(UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D"), null, MagicNumbers.ATTRIBUTES__MODIFIERS__SPRINT, ModifierOperation.ADD_PERCENTAGE, null, null);
 
-    protected final GameProfile         gameProfile;
-    protected final PlayerInventoryImpl inventory;
+    private final GameProfile         gameProfile;
+    private final PlayerInventoryImpl inventory;
 
-    PacketPlayServerAbilities abilities    = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
-    HandSide                  mainHand     = HandSide.RIGHT;
-    int                       heldItemSlot = 0;
-    GameMode                  gameMode     = GameMode.SURVIVAL;
-    NamedUUID namedUUID;
+    private PacketPlayServerAbilities abilities    = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
+    private HandSide                  mainHand     = HandSide.RIGHT;
+    private int                       heldItemSlot = 0;
+    private GameMode                  gameMode     = GameMode.SURVIVAL;
+    private NamedUUID namedUUID;
 
-    PlayerPermissionsContainer permissionContainer;
+    private PlayerPermissionsContainer permissionContainer;
 
     HumanImpl(final DioriteCore core, final GameProfile gameProfile, final int id, final ImmutableLocation location)
     {
         super(gameProfile.getId(), core, id, location);
-        this.aabb = BASE_SIZE.create(this);
+        this.setBoundingBox(BASE_SIZE.create(this));
         this.gameProfile = gameProfile;
         this.permissionContainer = Diorite.getServerManager().getPermissionsManager().createPlayerContainer(this);
-        this.gameMode = this.world.getDefaultGameMode();
+        this.gameMode = this.getWorld().getDefaultGameMode();
         this.inventory = new PlayerInventoryImpl(this, 0); // 0 because this is owner of this inventory, and we need this to update
         this.namedUUID = new NamedUUID(gameProfile.getName(), gameProfile.getId());
     }
@@ -97,31 +97,33 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     }
 
     @Override
-    public ItemImpl dropItem(final ItemStack itemStack)
+    public IItem dropItem(final ItemStack itemStack)
     {
         if ((itemStack == null) || (itemStack.getAmount() == 0))
         {
             return null;
         }
-        final double newY = (this.y - ITEM_DROP_MOD_Y) + this.getHeadHeight();
-        final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), new ImmutableLocation(this.x, newY, this.z, this.world));
+        final double newY = (this.getY() - ITEM_DROP_MOD_Y) + this.getHeadHeight();
+        final ItemImpl item = new ItemImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), new ImmutableLocation(this.getX(), newY, this.getZ(), this.getWorld()));
         item.setItemStack(itemStack);
         item.setPickupDelay(IItem.DEFAULT_DROP_PICKUP_DELAY);
         item.setThrower(this.namedUUID);
 
         float yMod = ITEM_DROP_MOD_Y;
-        item.velX = (- DioriteMathUtils.sin((this.yaw / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * DioriteMathUtils.cos((this.pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod);
-        item.velZ = (DioriteMathUtils.cos((this.yaw / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * DioriteMathUtils.cos((this.pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod);
-        item.velY = ((- DioriteMathUtils.sin((this.pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod) + DioriteMathUtils.F_ONE_OF_10);
+        final float yaw = this.getYaw();
+        final float pitch = this.getPitch();
+        item.velocityX = (- DioriteMathUtils.sin((yaw / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * DioriteMathUtils.cos((pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod);
+        item.velocityZ = (DioriteMathUtils.cos((yaw / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * DioriteMathUtils.cos((pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod);
+        item.velocityY = ((- DioriteMathUtils.sin((pitch / DioriteMathUtils.HALF_CIRCLE_DEGREES) * DioriteMathUtils.F_PI) * yMod) + DioriteMathUtils.F_ONE_OF_10);
         final float randomAngle = this.random.nextFloat() * DioriteMathUtils.F_PI * 2;
         yMod = ITEM_DROP_MOD_VEL_Y * this.random.nextFloat();
-        item.velX += Math.cos(randomAngle) * yMod;
-        item.velY += (this.random.nextFloat() - this.random.nextFloat()) * DioriteMathUtils.F_ONE_OF_10;
-        item.velZ += Math.sin(randomAngle) * yMod;
+        item.velocityX += Math.cos(randomAngle) * yMod;
+        item.velocityY += (this.random.nextFloat() - this.random.nextFloat()) * DioriteMathUtils.F_ONE_OF_10;
+        item.velocityZ += Math.sin(randomAngle) * yMod;
 
         // TODO: event/pipeline etc.
 
-        this.world.addEntity(item);
+        this.getWorld().addEntity(item);
         return item;
     }
 
@@ -136,7 +138,7 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     public void pickupItems()
     {
         // TODO: maybe don't pickup every tick?
-        for (final ItemImpl entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
+        for (final IItem entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
         {
             if (entity.canPickup())
             {
@@ -155,10 +157,10 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     public void initMetadata()
     {
         super.initMetadata();
-        this.metadata.add(new EntityMetadataByteEntry(META_KEY_SKIN_FLAGS, 0));
-        this.metadata.add(new EntityMetadataByteEntry(META_KEY_CAPE, 0));
-        this.metadata.add(new EntityMetadataFloatEntry(META_KEY_ABSORPTION_HEARTS, 0));
-        this.metadata.add(new EntityMetadataIntEntry(META_KEY_SCORE, 0));
+        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_SKIN_FLAGS, 0));
+        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_CAPE, 0));
+        this.getMetadata().add(new EntityMetadataFloatEntry(META_KEY_ABSORPTION_HEARTS, 0));
+        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_SCORE, 0));
     }
 
     @Override
@@ -214,19 +216,19 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     @Override
     public boolean isCrouching()
     {
-        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED);
+        return this.getMetadata().getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED);
     }
 
     @Override
     public void setCrouching(final boolean isCrouching)
     {
-        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED, isCrouching);
+        this.getMetadata().setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED, isCrouching);
     }
 
     @Override
     public boolean isSprinting()
     {
-        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING);
+        return this.getMetadata().getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING);
     }
 
     @Override
@@ -238,7 +240,7 @@ class HumanImpl extends LivingEntityImpl implements IHuman
         {
             attrib.addModifier(tempSprintMod);
         }
-        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING, isSprinting);
+        this.getMetadata().setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING, isSprinting);
     }
 
     @Override

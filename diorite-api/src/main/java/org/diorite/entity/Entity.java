@@ -75,6 +75,12 @@ public interface Entity extends GameObject, Synchronizable
         return this.getType().getMinecraftId();
     }
 
+    void setVelocityX(float velocityX);
+
+    void setVelocityY(float velocityY);
+
+    void setVelocityZ(float velocityZ);
+
     boolean isAiEnabled();
 
     void setAiEnabled(boolean aiEnabled);

@@ -64,26 +64,26 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     ItemImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
-        this.aabb = BASE_SIZE.create(this);
+        this.setBoundingBox(BASE_SIZE.create(this));
     }
 
     @Override
     public void initMetadata()
     {
         super.initMetadata();
-        this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM, null));
+        this.getMetadata().add(new EntityMetadataItemStackEntry(META_KEY_ITEM, null));
     }
 
     @Override
     public ItemStack getItemStack()
     {
-        return this.metadata.getItemStack(META_KEY_ITEM);
+        return this.getMetadata().getItemStack(META_KEY_ITEM);
     }
 
     @Override
     public void setItemStack(final ItemStack item)
     {
-        this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM, item));
+        this.getMetadata().add(new EntityMetadataItemStackEntry(META_KEY_ITEM, item));
     }
 
     @Override
@@ -135,20 +135,20 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
 
     private void updateJoinPos()
     {
-        this.xLastJoinPos = (int) this.x;
-        this.yLastJoinPos = (int) this.y;
-        this.zLastJoinPos = (int) this.z;
+        this.xLastJoinPos = (int) this.getX();
+        this.yLastJoinPos = (int) this.getY();
+        this.zLastJoinPos = (int) this.getZ();
     }
 
-    void joinNearbyItem(final boolean force)
+    private void joinNearbyItem(final boolean force)
     {
-        if (force || (Math.abs(this.y - this.yLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.x - this.xLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.z - this.zLastJoinPos) > JOIN_DISTANCE_THRESHOLD))
+        if (force || (Math.abs(this.getY() - this.yLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.getX() - this.xLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.getZ() - this.zLastJoinPos) > JOIN_DISTANCE_THRESHOLD))
         {
             this.getNearbyEntities(JOIN_DISTANCE, JOIN_DISTANCE, JOIN_DISTANCE, ItemImpl.class).forEach((item) -> item.joinItem(this));
         }
     }
 
-    void joinItem(final ItemImpl item)
+    private void joinItem(final ItemImpl item)
     {
         //noinspection ObjectEquality
         if (this == item)
@@ -181,7 +181,7 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     public void onSpawn(final BaseTracker<?> tracker)
     {
         super.onSpawn(tracker);
-        if (this.aiEnabled)
+        if (this.isAiEnabled())
         {
             this.joinNearbyItem(true);
         }
@@ -191,7 +191,7 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     public void doTick(final int tps)
     {
         super.doTick(tps);
-        if (! this.aiEnabled)
+        if (! this.isAiEnabled())
         {
             return;
         }
@@ -217,14 +217,14 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     {
         if ((this.timeLived % 100) == 0)
         {
-            this.tracker.forceLocationUpdate();
+            this.getTracker().forceLocationUpdate();
         }
         super.doPhysics();
         if (this.isOnGround())
         {
-            this.velX = 0;
-            this.velY = 0;
-            this.velZ = 0;
+            this.velocityX = 0;
+            this.velocityY = 0;
+            this.velocityZ = 0;
             return;
         }
         double mod = PHYSIC_GRAVITY_CONST_1;
@@ -233,13 +233,13 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
         {
             mod = friction * mod;
         }
-        this.velX *= mod;
-        this.velZ *= mod;
-        this.velY *= PHYSIC_GRAVITY_CONST_1;
-        this.velY -= PHYSIC_GRAVITY_CONST_2;
+        this.velocityX *= mod;
+        this.velocityZ *= mod;
+        this.velocityY *= PHYSIC_GRAVITY_CONST_1;
+        this.velocityY -= PHYSIC_GRAVITY_CONST_2;
         if (this.isOnGround())
         {
-            this.velY *= - 0.5D;
+            this.velocityY *= - 0.5D;
         }
     }
 

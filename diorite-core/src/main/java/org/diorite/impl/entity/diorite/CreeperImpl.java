@@ -16,16 +16,16 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
     CreeperImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
-        this.aabb = BASE_SIZE.create(this);
+        this.setBoundingBox(BASE_SIZE.create(this));
     }
 
     @Override
     public void initMetadata()
     {
         super.initMetadata();
-        this.metadata.add(new EntityMetadataIntEntry(META_KEY_STATE, 0));
-        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_POWERED, false));
-        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_IGNITED, false));
+        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_STATE, 0));
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_POWERED, false));
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_IGNITED, false));
     }
 
     @Override

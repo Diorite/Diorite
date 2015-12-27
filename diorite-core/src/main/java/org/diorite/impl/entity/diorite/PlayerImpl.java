@@ -41,6 +41,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerResourceP
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerTabComplete;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerUpdateAttributes;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerWorldParticles;
+import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
@@ -109,7 +110,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
             return;
         }
         this.playerChunks.doTick(tps);
-        this.inventory.softUpdate();
+        this.getInventory().softUpdate();
 
 
         // send remove entity packets
@@ -129,7 +130,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public void pickupItems()
     {
         // TODO: maybe don't pickup every tick?
-        for (final ItemImpl entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
+        for (final IItem entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
         {
             if (entity.canPickup() && entity.pickUpItem(this))
             {
@@ -147,7 +148,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         {
             return;
         }
-        if ((e.getTracker() instanceof PlayerImpl) || (this.lastTickThread == Thread.currentThread()))
+        if ((e.getTracker() instanceof IPlayer) || (this.getLastTickThread() == Thread.currentThread()))
         {
             this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(id));
         }
@@ -166,7 +167,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         {
             return;
         }
-        if ((e instanceof PlayerImpl) || (this.lastTickThread == Thread.currentThread()))
+        if ((e instanceof IPlayer) || (this.getLastTickThread() == Thread.currentThread()))
         {
             this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(id));
         }
@@ -197,7 +198,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public void setGameMode(final GameMode gameMode)
     {
-        if (this.gameMode.equals(gameMode))
+        if (this.getGameMode().equals(gameMode))
         {
             return;
         }
@@ -302,14 +303,14 @@ class PlayerImpl extends HumanImpl implements IPlayer
 
     private void updateAbilities()
     {
-        this.abilities.setDirty();
-        this.abilities.send(this.networkManager);
+        this.getAbilities().setDirty();
+        this.getAbilities().send(this.networkManager);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.gameProfile.getName()).append("uuid", this.gameProfile.getId()).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.getGameProfile().getName()).append("uuid", this.getGameProfile().getId()).toString();
     }
 
     @Override
@@ -327,7 +328,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public void updateInventory()
     {
-        this.inventory.update(this);
+        this.getInventory().update(this);
     }
 
     protected final DioriteRandom random = DioriteRandomUtils.newRandom();
