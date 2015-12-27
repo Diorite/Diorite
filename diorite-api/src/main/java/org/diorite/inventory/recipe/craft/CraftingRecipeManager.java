@@ -19,6 +19,7 @@ public interface CraftingRecipeManager extends CraftingRecipeGroup
 
     /**
      * Returns iterator of crafting recipes, this iterator will flat all groups.
+     *
      * @return iterator of crafting recipes, this iterator will flat all groups.
      */
     Iterator<CraftingRecipe> craftingRecipeIterator();

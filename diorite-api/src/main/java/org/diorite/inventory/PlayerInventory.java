@@ -83,7 +83,7 @@ public interface PlayerInventory extends Inventory, PlayerArmorInventory, Player
      * Put the given ItemStack into the off-hand slot if it matches a excepted one.
      * NOTE: this is atomic operation.
      *
-     * @param excepted   excepted item to replace.
+     * @param excepted    excepted item to replace.
      * @param offHandItem The ItemStack to use as off-hand
      *
      * @return true if item was replaced.

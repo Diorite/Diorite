@@ -32,8 +32,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.utils.collections.arrays.primitive.ShortIterator;
 import org.diorite.utils.collections.arrays.fastutil.FastUtilShortIterator;
+import org.diorite.utils.collections.arrays.primitive.ShortIterator;
 
 /**
  * Additional nbt type, added by diorite, it will break minecraft compatybility, use with caution. <br>

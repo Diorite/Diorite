@@ -48,7 +48,7 @@ public class PluginCommandBuilderImpl implements PluginCommandBuilder
     private       List<String>     aliases;
     private       CommandExecutor  executor;
     private       ExceptionHandler handler;
-    private       int             priority;
+    private       int              priority;
 
     private PluginCommandBuilderImpl(final DioritePlugin dioritePlugin, final String name)
     {

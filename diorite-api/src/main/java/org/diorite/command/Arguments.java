@@ -34,8 +34,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockLocation;
 import org.diorite.Diorite;
-import org.diorite.ImmutableLocation;
 import org.diorite.ILocation;
+import org.diorite.ImmutableLocation;
 import org.diorite.command.exceptions.InvalidCommandArgumentException;
 import org.diorite.entity.Entity;
 import org.diorite.entity.Player;

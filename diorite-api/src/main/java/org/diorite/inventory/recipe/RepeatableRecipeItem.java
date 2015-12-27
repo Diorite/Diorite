@@ -13,7 +13,7 @@ public interface RepeatableRecipeItem extends RecipeItem
      * Transform result item using list of repeated ingredients.
      *
      * @param currentResult current result item.
-     * @param ingredients list of repeated ingredients.
+     * @param ingredients   list of repeated ingredients.
      *
      * @return transformed result item.
      */

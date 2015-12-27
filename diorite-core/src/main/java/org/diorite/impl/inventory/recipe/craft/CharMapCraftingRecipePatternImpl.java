@@ -33,8 +33,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
 import org.diorite.inventory.recipe.craft.CharMapCraftingRecipePattern;
+import org.diorite.inventory.recipe.craft.CraftingRecipeItem;
 import org.diorite.inventory.recipe.craft.CraftingRecipePattern;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;

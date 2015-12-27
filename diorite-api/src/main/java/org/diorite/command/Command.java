@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 import org.diorite.command.sender.CommandSender;
 
 // TODO: javadocs
+
 /**
  * Represent any command from diorite.
  */

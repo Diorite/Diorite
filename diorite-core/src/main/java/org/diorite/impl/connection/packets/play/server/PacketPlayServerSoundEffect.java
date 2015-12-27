@@ -47,7 +47,7 @@ public class PacketPlayServerSoundEffect extends PacketPlayServer
     private int   y; // 4 bytes
     private int   z; // 4 bytes
     private float volume; // 4 bytes
-    private int  pitch; // 1 byte
+    private int   pitch; // 1 byte
 
     public PacketPlayServerSoundEffect()
     {

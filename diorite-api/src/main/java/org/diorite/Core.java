@@ -260,12 +260,14 @@ public interface Core extends Synchronizable
 
     /**
      * Sets game speed multiplicator, may cause weird behavior.
+     *
      * @param mutli new speed multi.
      */
     void setSpeedMutli(double mutli);
 
     /**
      * Returns current TPS settings, how many ticks per seconds server should do.
+     *
      * @return current TPS settings, how many ticks per seconds server should do.
      */
     int getTps();
@@ -277,6 +279,7 @@ public interface Core extends Synchronizable
 
     /**
      * Set how many times per second server should do the tick loop.
+     *
      * @param tps new ticks per seconds.
      */
     void setTps(int tps);

@@ -39,7 +39,7 @@ import org.diorite.entity.data.HandType;
 @PacketClass(id = 0x1D, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 1)
 public class PacketPlayClientUseItem extends PacketPlayClient
 {
-    private HandType        handType; // ~1 byte
+    private HandType handType; // ~1 byte
 
 
     public PacketPlayClientUseItem()
@@ -64,13 +64,13 @@ public class PacketPlayClientUseItem extends PacketPlayClient
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-            this.handType = data.readEnum(HandType.class);
+        this.handType = data.readEnum(HandType.class);
     }
 
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-            data.writeEnum(this.handType);
+        data.writeEnum(this.handType);
     }
 
     @Override
