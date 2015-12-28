@@ -40,6 +40,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffe
 import org.diorite.impl.entity.ICreeper;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IPlayer;
+import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Diorite;
@@ -98,6 +99,20 @@ public class DevCmd extends SystemCommandImpl
                     {
                         final ICreeper creeper = entityFactory.createEntity(ICreeper.class, p.getLocation());
                         p.getWorld().addEntity(creeper);
+                    }
+                    else if (args.asString(0).equalsIgnoreCase("zombie"))
+                    {
+                        final IZombie zombie = entityFactory.createEntity(IZombie.class, p.getLocation());
+//                        zombie.setActionFlag(true); crash
+                        zombie.setCustomName("Custom name!");
+                        zombie.setCustomNameVisible(true);
+//                        zombie.setOnFire(true); crash
+//                        zombie.setCrouching(true); crash
+//                        zombie.setInvisible(true); crash
+//                        zombie.setSprinting(true); crash
+                        zombie.setAir(-5);
+                        zombie.setSilent(true);
+                        p.getWorld().addEntity(zombie);
                     }
                     break;
                 }

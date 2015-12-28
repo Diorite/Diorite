@@ -99,7 +99,7 @@ public class ChunkBlockData
     public void set(final int index, final int patternID)
     {
         Validate.inclusiveBetween(0, (this.size - 1), index);
-        Validate.inclusiveBetween(0, this.typeSize, patternID);
+//        Validate.inclusiveBetween(0, this.typeSize, patternID);
         final int baseOffset = index * this.bitsPerBlock;
         final int dataIndex = baseOffset / BITS_PER_ENTRY;
         final int indexOfLastBit = (((index + 1) * this.bitsPerBlock) - 1) / BITS_PER_ENTRY;

@@ -24,6 +24,8 @@
 
 package org.diorite.impl.connection.packets;
 
+import javax.vecmath.Vector3f;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -62,7 +64,6 @@ import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagType;
-import org.diorite.utils.math.geometry.Vector3F;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -318,16 +319,16 @@ public class PacketDataSerializer extends ByteBuf
         return i;
     }
 
-    public Vector3F readVector3F()
+    public Vector3f readVector3F()
     {
-        return new Vector3F(this.readFloat(), this.readFloat(), this.readFloat());
+        return new Vector3f(this.readFloat(), this.readFloat(), this.readFloat());
     }
 
-    public void writeVector3F(final Vector3F vec)
+    public void writeVector3F(final Vector3f vec)
     {
-        this.writeFloat(vec.getX());
-        this.writeFloat(vec.getY());
-        this.writeFloat(vec.getZ());
+        this.writeFloat(vec.x);
+        this.writeFloat(vec.y);
+        this.writeFloat(vec.z);
     }
 
     public void writeUUID(final UUID uuid)

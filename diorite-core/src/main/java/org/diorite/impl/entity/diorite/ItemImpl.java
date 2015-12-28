@@ -144,11 +144,11 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     {
         if (force || (Math.abs(this.getY() - this.yLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.getX() - this.xLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.getZ() - this.zLastJoinPos) > JOIN_DISTANCE_THRESHOLD))
         {
-            this.getNearbyEntities(JOIN_DISTANCE, JOIN_DISTANCE, JOIN_DISTANCE, ItemImpl.class).forEach((item) -> item.joinItem(this));
+            this.getNearbyEntities(JOIN_DISTANCE, JOIN_DISTANCE, JOIN_DISTANCE, ItemImpl.class).forEach(this::joinItem);
         }
     }
 
-    private void joinItem(final ItemImpl item)
+    void joinItem(final ItemImpl item)
     {
         //noinspection ObjectEquality
         if (this == item)

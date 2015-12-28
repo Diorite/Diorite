@@ -24,6 +24,8 @@
 
 package org.diorite.impl.connection.packets.play.client;
 
+import javax.vecmath.Vector3f;
+
 import java.io.IOException;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -35,14 +37,13 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
 import org.diorite.entity.data.HandType;
-import org.diorite.utils.math.geometry.Vector3F;
 
 @PacketClass(id = 0x0A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 20)
 public class PacketPlayClientUseEntity extends PacketPlayClient
 {
     private int             targetEntity; // ~5 bytes
     private EntityUseAction action; // ~1 byte
-    private Vector3F        interactAtLocation; // 12 bytes
+    private Vector3f        interactAtLocation; // 12 bytes
     private HandType        handType; // ~1 byte
 
 
@@ -56,7 +57,7 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
         this.action = action;
     }
 
-    public PacketPlayClientUseEntity(final int targetEntity, final EntityUseAction action, final Vector3F interactAtLocation, final HandType handType)
+    public PacketPlayClientUseEntity(final int targetEntity, final EntityUseAction action, final Vector3f interactAtLocation, final HandType handType)
     {
         this.targetEntity = targetEntity;
         this.action = action;
@@ -99,12 +100,12 @@ public class PacketPlayClientUseEntity extends PacketPlayClient
         this.action = action;
     }
 
-    public Vector3F getInteractAtLocation()
+    public Vector3f getInteractAtLocation()
     {
         return this.interactAtLocation;
     }
 
-    public void setInteractAtLocation(final Vector3F interactAtLocation)
+    public void setInteractAtLocation(final Vector3f interactAtLocation)
     {
         this.interactAtLocation = interactAtLocation;
     }

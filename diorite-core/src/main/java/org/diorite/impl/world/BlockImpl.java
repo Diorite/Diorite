@@ -24,6 +24,8 @@
 
 package org.diorite.impl.world;
 
+import javax.vecmath.Vector3d;
+
 import java.util.Optional;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,7 +35,6 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.geometry.BoundingBox;
-import org.diorite.utils.math.geometry.Vector;
 import org.diorite.world.Biome;
 import org.diorite.world.Block;
 import org.diorite.world.TileEntity;
@@ -65,7 +66,7 @@ public class BlockImpl implements Block
             final int z1 = this.z + (this.chunk.getZ() << 4);
             final int z2 = (z1 >= 0) ? (z1 + 1) : (z1 - 1);
 
-            return BoundingBox.fromCorners(new Vector(x1, y1, z1), new Vector(x2, y2, z2));
+            return BoundingBox.fromCorners(new Vector3d(x1, y1, z1), new Vector3d(x2, y2, z2));
         });
     }
 
@@ -87,7 +88,7 @@ public class BlockImpl implements Block
             final int z1 = this.z + (this.chunk.getZ() << 4);
             final int z2 = (z1 >= 0) ? (z1 + 1) : (z1 - 1);
 
-            return BoundingBox.fromCorners(new Vector(x1, this.y, z1), new Vector(x2, this.y + 1, z2));
+            return BoundingBox.fromCorners(new Vector3d(x1, this.y, z1), new Vector3d(x2, this.y + 1, z2));
         });
     }
 

@@ -289,7 +289,7 @@ public class PlayListener implements PacketPlayClientListener
         }
         this.core.sync(() -> EventType.callEvent(new PlayerInteractEvent(this.player, Action.RIGHT_CLICK_ON_BLOCK, packet.getLocation().setWorld(this.player.getWorld()).getBlock())));
 
-        final int y = packet.getLocation().getY();
+        final int y = packet.getLocation().getY() + packet.getCursorPos().getBlockFace().getModY();
         if ((y >= Chunk.CHUNK_FULL_HEIGHT) || (y < 0))
         {
             return; // TODO: some kind of event for that maybe? or edit PlayerBlockPlaceEvent

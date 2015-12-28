@@ -24,6 +24,8 @@
 
 package org.diorite.impl.connection.packets.play.server;
 
+import javax.vecmath.Vector3f;
+
 import java.io.IOException;
 import java.util.UUID;
 
@@ -76,9 +78,10 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
 
         this.objectData = entity.getEntityObjectData();
 
-        this.movX = (short) (entity.getVelocityX() * 8000); // IDK why 8000
-        this.movY = (short) (entity.getVelocityY() * 8000);
-        this.movZ = (short) (entity.getVelocityZ() * 8000);
+        final Vector3f vel = entity.getVelocity();
+        this.movX = (short) (vel.x * 8000); // IDK why 8000
+        this.movY = (short) (vel.y * 8000);
+        this.movZ = (short) (vel.z * 8000);
     }
 
     @Override

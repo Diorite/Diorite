@@ -63,10 +63,15 @@ public class ArrayPaletteImpl implements PaletteData
         {
             return - 1;
         }
-        final Material mat = Material.getByID(minecraftIDandData >> 4, minecraftIDandData & 15);
+        Material mat = Material.getByID(minecraftIDandData >> 4, minecraftIDandData & 15);
         if (! (mat instanceof BlockMaterialData))
         {
-            throw new IllegalArgumentException("Unknown material: " + minecraftIDandData + " (" + (minecraftIDandData >> 4) + ":" + (minecraftIDandData & 15) + ")");
+            mat = Material.getByID(minecraftIDandData >> 4);
+            if (! (mat instanceof BlockMaterialData))
+            {
+                mat = Material.AIR;
+//                throw new IllegalArgumentException("Unknown material: " + minecraftIDandData + " (" + (minecraftIDandData >> 4) + ":" + (minecraftIDandData & 15) + ")");
+            }
         }
         final int index = this.lastIndex++;
         pattern[index] = (BlockMaterialData) mat;

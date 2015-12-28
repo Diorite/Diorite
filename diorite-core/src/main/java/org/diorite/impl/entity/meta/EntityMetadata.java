@@ -24,6 +24,8 @@
 
 package org.diorite.impl.entity.meta;
 
+import javax.vecmath.Vector3f;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
@@ -49,7 +51,6 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.SimpleEnum;
-import org.diorite.utils.math.geometry.Vector3F;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
@@ -272,7 +273,7 @@ public class EntityMetadata
         entry.setDirty();
     }
 
-    public void setVector3F(final byte index, final Vector3F value)
+    public void setVector3F(final byte index, final Vector3f value)
     {
         final EntityMetadataEntry<?> entry = this.data.get(index);
         if (! (entry instanceof EntityMetadataVector3FEntry))
@@ -375,7 +376,7 @@ public class EntityMetadata
         this.setMaterial((byte) index, value);
     }
 
-    public void setVector3F(final int index, final Vector3F value)
+    public void setVector3F(final int index, final Vector3f value)
     {
         this.setVector3F((byte) index, value);
     }
@@ -572,7 +573,7 @@ public class EntityMetadata
         return ((EntityMetadataChatEntry) entry).getData();
     }
 
-    public Vector3F getVector3F(final byte index)
+    public Vector3f getVector3F(final byte index)
     {
         final EntityMetadataEntry<?> entry = this.data.get(index);
         if (entry == null)
@@ -651,7 +652,7 @@ public class EntityMetadata
         return this.getMaterial((byte) index);
     }
 
-    public Vector3F getVector3F(final int index)
+    public Vector3f getVector3F(final int index)
     {
         return this.getVector3F((byte) index);
     }

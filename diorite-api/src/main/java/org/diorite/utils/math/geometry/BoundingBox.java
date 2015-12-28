@@ -24,25 +24,27 @@
 
 package org.diorite.utils.math.geometry;
 
+import javax.vecmath.Vector3d;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class BoundingBox implements Cloneable
 {
-    protected final Vector min = new Vector();
-    protected final Vector max = new Vector();
+    protected final Vector3d min = new Vector3d();
+    protected final Vector3d max = new Vector3d();
 
-    public Vector getSize()
+    public Vector3d getSize()
     {
-        return this.max.clone().subtract(this.min);
+        return new Vector3d(this.max.x - this.min.x, this.max.y - this.min.y, this.max.z - this.min.z);
     }
 
-    public Vector getMin()
+    public Vector3d getMin()
     {
         return this.min;
     }
 
-    public Vector getMax()
+    public Vector3d getMax()
     {
         return this.max;
     }
@@ -54,50 +56,50 @@ public class BoundingBox implements Cloneable
 
     public static boolean intersects(final BoundingBox a, final BoundingBox b)
     {
-        final Vector minA = a.min;
-        final Vector maxA = a.max;
-        final Vector minB = b.min;
-        final Vector maxB = b.max;
-        return ((maxA.getX() >= minB.getX()) && (minA.getX() <= maxB.getX()) && (maxA.getY() >= minB.getY()) && (minA.getY() <= maxB.getY()) && (maxA.getZ() >= minB.getZ()) && (minA.getZ() <= maxB.getZ()));
+        final Vector3d minA = a.min;
+        final Vector3d maxA = a.max;
+        final Vector3d minB = b.min;
+        final Vector3d maxB = b.max;
+        return ((maxA.x >= minB.x) && (minA.x <= maxB.x) && (maxA.y >= minB.y) && (minA.y <= maxB.y) && (maxA.z >= minB.z) && (minA.z <= maxB.z));
     }
 
-    public static BoundingBox fromCorners(final Vector a, final Vector b)
+    public static BoundingBox fromCorners(final Vector3d a, final Vector3d b)
     {
         final BoundingBox box = new BoundingBox();
-        box.min.setX(Math.min(a.getX(), b.getX()));
-        box.min.setY(Math.min(a.getY(), b.getY()));
-        box.min.setZ(Math.min(a.getZ(), b.getZ()));
-        box.max.setX(Math.max(a.getX(), b.getX()));
-        box.max.setY(Math.max(a.getY(), b.getY()));
-        box.max.setZ(Math.max(a.getZ(), b.getZ()));
+        box.min.setX(Math.min(a.x, b.x));
+        box.min.setY(Math.min(a.y, b.y));
+        box.min.setZ(Math.min(a.z, b.z));
+        box.max.setX(Math.max(a.x, b.x));
+        box.max.setY(Math.max(a.y, b.y));
+        box.max.setZ(Math.max(a.z, b.z));
         return box;
     }
 
     public final BoundingBox grow(final double x, final double y, final double z)
     {
         final BoundingBox bb = new BoundingBox();
-        bb.min.setX(this.min.getX() - x);
-        bb.min.setY(this.min.getY() - y);
-        bb.min.setZ(this.min.getZ() - z);
-        bb.max.setX(this.max.getX() + x);
-        bb.max.setY(this.max.getY() + y);
-        bb.max.setZ(this.max.getZ() + z);
+        bb.min.setX(this.min.x - x);
+        bb.min.setY(this.min.y - y);
+        bb.min.setZ(this.min.z - z);
+        bb.max.setX(this.max.x + x);
+        bb.max.setY(this.max.y + y);
+        bb.max.setZ(this.max.z + z);
         return bb;
     }
 
-    public static BoundingBox fromPositionAndSize(final Vector pos, final Vector size)
+    public static BoundingBox fromPositionAndSize(final Vector3d pos, final Vector3d size)
     {
         final BoundingBox box = new BoundingBox();
-        box.min.copy(pos);
-        box.max.copy(pos.clone().add(size));
+        box.min.set(pos);
+        box.max.set(pos.x + size.x, pos.y + size.y, pos.z + size.z);
         return box;
     }
 
     public static BoundingBox copyOf(final BoundingBox original)
     {
         final BoundingBox box = new BoundingBox();
-        box.min.copy(original.min);
-        box.max.copy(original.max);
+        box.min.set(original.min);
+        box.max.set(original.max);
         return box;
     }
 

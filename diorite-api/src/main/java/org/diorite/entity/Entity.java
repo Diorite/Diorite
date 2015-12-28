@@ -24,6 +24,8 @@
 
 package org.diorite.entity;
 
+import javax.vecmath.Vector3f;
+
 import java.util.Collection;
 
 import org.diorite.Core;
@@ -36,13 +38,7 @@ public interface Entity extends GameObject, Synchronizable
 {
     EntityType getType();
 
-    float getVelocityX();
-
-    float getVelocityY();
-
-    float getVelocityZ();
-
-    float getHeadPitch();
+    Vector3f getVelocity();
 
     boolean exist();
 
@@ -75,13 +71,47 @@ public interface Entity extends GameObject, Synchronizable
         return this.getType().getMinecraftId();
     }
 
-    void setVelocityX(float velocityX);
-
-    void setVelocityY(float velocityY);
-
-    void setVelocityZ(float velocityZ);
+    void setVelocity(Vector3f velocity);
 
     boolean isAiEnabled();
 
     void setAiEnabled(boolean aiEnabled);
+
+//    boolean isOnFire();
+//
+//    void setOnFire(boolean onFire);
+//
+//    boolean isCrouching();
+//
+//    void setCrouching(boolean crouching);
+//
+//    boolean isSprinting();
+//
+//    void setSprinting(boolean sprinting);
+//
+//    boolean hasActionFlag();
+//
+//    void setActionFlag(boolean eating);
+//
+//    boolean isInvisible();
+//
+//    void setInvisible(boolean invisible);
+
+    int getAir();
+
+    void setAir(int air);
+
+    String getCustomName();
+
+    void setCustomName(String name);
+
+    boolean isCustomNameVisible();
+
+    void setCustomNameVisible(boolean visible);
+
+    boolean isSilent(); // TODO: check what the fuck is that
+
+    void setSilent(boolean silent);
+
+    float getHeadPitch();
 }

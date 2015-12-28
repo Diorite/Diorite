@@ -174,7 +174,7 @@ public class DioriteCore implements Core
 
         public void run()
         {
-            this.runnable.run();
+            runSync(this.runnable);
         }
 
         @Override
@@ -346,12 +346,23 @@ public class DioriteCore implements Core
         this.config.setNetworkCompressionThreshold(compressionThreshold);
     }
 
+    private static void runSync(final Runnable runnable)
+    {
+        try
+        {
+            runnable.run();
+        } catch (final Throwable throwable)
+        {
+            throwable.printStackTrace();
+        }
+    }
+
     public void sync(final Runnable runnable, final Synchronizable sync)
     {
         //noinspection ObjectEquality
         if (Thread.currentThread() == sync.getLastTickThread())
         {
-            runnable.run();
+            runSync(runnable);
             return;
         }
         this.syncQueue.add(new SimpleSyncTask(sync, runnable));
@@ -362,7 +373,7 @@ public class DioriteCore implements Core
         //noinspection ObjectEquality
         if (Thread.currentThread() == this.mainThread)
         {
-            runnable.run();
+            runSync(runnable);
             return;
         }
         this.sync(runnable, this);

@@ -13,6 +13,7 @@ import org.diorite.impl.entity.IEntityFactory;
 import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
+import org.diorite.impl.entity.IZombie;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
 import org.diorite.auth.GameProfile;
@@ -20,6 +21,7 @@ import org.diorite.entity.Creeper;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Item;
+import org.diorite.entity.Zombie;
 
 @SuppressWarnings("unchecked")
 public class DioriteEntityFactory implements IEntityFactory
@@ -48,6 +50,12 @@ public class DioriteEntityFactory implements IEntityFactory
             this.typeMap.put(EntityType.ITEM, func);
             this.typeClassMap.put(Item.class, func);
             this.typeClassMap.put(IItem.class, func);
+        }
+        {
+            final Function<ImmutableLocation, IEntity> func = (l) -> new ZombieImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
+            this.typeMap.put(EntityType.ZOMBIE, func);
+            this.typeClassMap.put(Zombie.class, func);
+            this.typeClassMap.put(IZombie.class, func);
         }
     }
 

@@ -40,6 +40,7 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static final EntityType PLAYER  = new EntityType("PLAYER", Player.class, - 1, "Player");
     public static final EntityType ITEM    = new EntityType("ITEM", Item.class, 2, "Item");
     public static final EntityType CREEPER = new EntityType("CREEPER", Creeper.class, 50, "Creeper");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
     // TODO
 
     private static final Int2ObjectMap<EntityType> byMcId = new Int2ObjectOpenHashMap<>(3, .1f);

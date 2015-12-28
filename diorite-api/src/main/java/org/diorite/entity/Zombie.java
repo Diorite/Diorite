@@ -22,29 +22,8 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity.meta.entry;
+package org.diorite.entity;
 
-import javax.vecmath.Vector3f;
-
-import org.diorite.impl.connection.packets.PacketDataSerializer;
-import org.diorite.impl.entity.meta.EntityMetadataType;
-
-public class EntityMetadataVector3FEntry extends EntityMetadataObjectEntry<Vector3f>
+public interface Zombie extends MonsterEntity
 {
-    public EntityMetadataVector3FEntry(final int index, final Vector3f data)
-    {
-        super(index, data);
-    }
-
-    @Override
-    public EntityMetadataType getDataType()
-    {
-        return EntityMetadataType.VECTOR3F;
-    }
-
-    @Override
-    public void write(final PacketDataSerializer data)
-    {
-        data.writeVector3F(this.data);
-    }
 }

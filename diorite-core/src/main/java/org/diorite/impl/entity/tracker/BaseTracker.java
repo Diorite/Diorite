@@ -24,6 +24,8 @@
 
 package org.diorite.impl.entity.tracker;
 
+import javax.vecmath.Vector3f;
+
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -69,9 +71,10 @@ public abstract class BaseTracker<T extends IEntity>
         this.yaw = entity.getYaw();
         this.pitch = entity.getPitch();
         this.headRot = entity.getHeadPitch();
-        this.velX = entity.getVelocityX();
-        this.velY = entity.getVelocityY();
-        this.velZ = entity.getVelocityZ();
+        final Vector3f vel = entity.getVelocity();
+        this.velX = vel.x;
+        this.velY = vel.y;
+        this.velZ = vel.z;
     }
 
     public T getTracker()
@@ -99,9 +102,10 @@ public abstract class BaseTracker<T extends IEntity>
             this.xLoc = this.tracker.getX();
             this.yLoc = this.tracker.getY();
             this.zLoc = this.tracker.getZ();
-            this.velX = this.tracker.getVelocityX();
-            this.velY = this.tracker.getVelocityY();
-            this.velZ = this.tracker.getVelocityZ();
+            final Vector3f vel = this.tracker.getVelocity();
+            this.velX = vel.x;
+            this.velY = vel.y;
+            this.velZ = vel.z;
             this.updatePlayers(players);
             this.sendToAllExceptOwn(new PacketPlayServerEntityTeleport(this.tracker));
             return;
@@ -119,9 +123,10 @@ public abstract class BaseTracker<T extends IEntity>
             this.xLoc = this.tracker.getX();
             this.yLoc = this.tracker.getY();
             this.zLoc = this.tracker.getZ();
-            this.velX = this.tracker.getVelocityX();
-            this.velY = this.tracker.getVelocityY();
-            this.velZ = this.tracker.getVelocityZ();
+            final Vector3f vel = this.tracker.getVelocity();
+            this.velX = vel.x;
+            this.velY = vel.y;
+            this.velZ = vel.z;
             this.updatePlayers(players);
         }
         if (this.tracker.getId() == - 1)

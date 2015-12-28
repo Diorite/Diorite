@@ -95,4 +95,26 @@ public interface IEntity extends Entity, Tickable, Trackable
     EntityBoundingBox getBoundingBox();
 
     void setBoundingBox(EntityBoundingBox box);
+
+    // TODO
+
+    boolean isOnFire();
+
+    void setOnFire(boolean onFire);
+
+    boolean isCrouching();
+
+    void setCrouching(boolean crouching);
+
+    boolean isSprinting();
+
+    void setSprinting(boolean sprinting);
+
+    boolean hasActionFlag();
+
+    void setActionFlag(boolean eating);
+
+    boolean isInvisible();
+
+    void setInvisible(boolean invisible);
 }

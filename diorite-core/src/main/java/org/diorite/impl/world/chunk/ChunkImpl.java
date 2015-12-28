@@ -420,10 +420,12 @@ public class ChunkImpl implements Chunk
             final int[] loading = new int[rawTypes.length];
             for (int i = 0; i < rawTypes.length; i++)
             {
-                final int k = ((((extTypes == null) ? 0 : extTypes.get(i)) << 12) | ((rawTypes[i] & 0xff) << 4) | data.get(i));
+                int k = ((((extTypes == null) ? 0 : extTypes.get(i)) << 12) | ((rawTypes[i] & 0xff) << 4) | data.get(i));
                 if (Material.getByID(k >> 4, k & 15) == null)
                 {
-                    throw new IllegalArgumentException("Unknown material: " + k + " (" + (k >> 4) + ":" + (k & 15) + ")");
+                    final Material material = Material.getByID(k >> 4);
+                    k = (material == null) ? 0 : material.getIdAndMeta();
+//                    throw new IllegalArgumentException("Unknown material: " + k + " (" + (k >> 4) + ":" + (k & 15) + ")");
                 }
                 loading[i] = k;
             }

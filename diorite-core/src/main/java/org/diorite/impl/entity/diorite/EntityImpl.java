@@ -24,6 +24,8 @@
 
 package org.diorite.impl.entity.diorite;
 
+import javax.vecmath.Vector3f;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +38,9 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.WorldImpl;
@@ -114,13 +118,135 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.initMetadata();
     }
 
+    @Override
+    public void setVelocity(final Vector3f velocity)
+    {
+        this.velocityX = velocity.x;
+        this.velocityY = velocity.y;
+        this.velocityZ = velocity.z;
+    }
+
+    @Override
+    public boolean isOnFire()
+    {
+        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.ON_FIRE);
+    }
+
+    @Override
+    public void setOnFire(final boolean onFire)
+    {
+        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.ON_FIRE, onFire);
+    }
+
+    @Override
+    public boolean isCrouching()
+    {
+        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED);
+    }
+
+    @Override
+    public void setCrouching(final boolean crouching)
+    {
+        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED, crouching);
+    }
+
+    @Override
+    public boolean isSprinting()
+    {
+        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING);
+    }
+
+    @Override
+    public void setSprinting(final boolean sprinting)
+    {
+        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING, sprinting);
+    }
+
+    @Override
+    public boolean hasActionFlag()
+    {
+        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.ACTION);
+    }
+
+    @Override
+    public void setActionFlag(final boolean flag)
+    {
+        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.ACTION, flag);
+    }
+
+    @Override
+    public boolean isInvisible()
+    {
+        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.INVISIBLE);
+    }
+
+    @Override
+    public void setInvisible(final boolean invisible)
+    {
+        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.INVISIBLE, invisible);
+    }
+
+    @Override
+    public int getAir()
+    {
+        return this.metadata.getInt(META_KEY_AIR);
+    }
+
+    @Override
+    public void setAir(final int air)
+    {
+        this.metadata.setInt(META_KEY_AIR, air);
+    }
+
+    @Override
+    public String getCustomName()
+    {
+        return this.metadata.getString(META_KEY_NAME_TAG);
+    }
+
+    @Override
+    public void setCustomName(final String name)
+    {
+        this.metadata.setString(META_KEY_NAME_TAG, name);
+    }
+
+    @Override
+    public boolean isCustomNameVisible()
+    {
+        return this.metadata.getBoolean(META_KEY_ALWAYS_SHOW_NAME_TAG);
+    }
+
+    @Override
+    public void setCustomNameVisible(final boolean visible)
+    {
+        this.metadata.setBoolean(META_KEY_ALWAYS_SHOW_NAME_TAG, visible);
+    }
+
+    @Override
+    public boolean isSilent()
+    {
+        return this.metadata.getBoolean(META_KEY_SILENT);
+    }
+
+    @Override
+    public void setSilent(final boolean silent)
+    {
+        this.metadata.setBoolean(META_KEY_SILENT, silent);
+    }
+
+    @Override
+    public Vector3f getVelocity()
+    {
+        return new Vector3f(this.velocityX, this.velocityY, this.velocityZ);
+    }
+
     public void initMetadata()
     {
         this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_BASIC_FLAGS, 0));
-        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_AIR, IEntity.MAX_AIR_LEVEL));
-        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_SILENT, 0));
-        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_ALWAYS_SHOW_NAME_TAG, 0));
+        this.metadata.add(new EntityMetadataIntEntry(IEntity.META_KEY_AIR, IEntity.MAX_AIR_LEVEL));
         this.metadata.add(new EntityMetadataStringEntry(IEntity.META_KEY_NAME_TAG, ""));
+        this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_SILENT, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ALWAYS_SHOW_NAME_TAG, false));
 
 
         // test TODO: remove
@@ -130,37 +256,31 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
 
-    @Override
     public float getVelocityX()
     {
         return this.velocityX;
     }
 
-    @Override
     public float getVelocityY()
     {
         return this.velocityY;
     }
 
-    @Override
     public float getVelocityZ()
     {
         return this.velocityZ;
     }
 
-    @Override
     public void setVelocityX(final float velocityX)
     {
         this.velocityX = velocityX;
     }
 
-    @Override
     public void setVelocityY(final float velocityY)
     {
         this.velocityY = velocityY;
     }
 
-    @Override
     public void setVelocityZ(final float velocityZ)
     {
         this.velocityZ = velocityZ;

@@ -24,6 +24,8 @@
 
 package org.diorite.impl.connection.packets.play.server;
 
+import javax.vecmath.Vector3f;
+
 import java.io.IOException;
 import java.util.UUID;
 
@@ -72,9 +74,10 @@ public class PacketPlayServerSpawnEntityLiving extends PacketPlayServer
         this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
         this.headPitch = (byte) ((entity.getHeadPitch() * 256.0F) / 360.0F);
 
-        this.movX = (short) (entity.getVelocityX() * 8000); // IDK why 8000
-        this.movY = (short) (entity.getVelocityY() * 8000);
-        this.movZ = (short) (entity.getVelocityZ() * 8000);
+        final Vector3f vel = entity.getVelocity();
+        this.movX = (short) (vel.x * 8000); // IDK why 8000
+        this.movY = (short) (vel.y * 8000);
+        this.movZ = (short) (vel.z * 8000);
         // TODO pasre metadata from entity, or get it if possible
         this.metadata = entity.getMetadata().getEntries();
     }

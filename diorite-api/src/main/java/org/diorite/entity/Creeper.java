@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface Creeper extends LivingEntity
+public interface Creeper extends MonsterEntity
 {
 }

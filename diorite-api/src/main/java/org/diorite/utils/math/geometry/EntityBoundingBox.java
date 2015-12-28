@@ -24,6 +24,8 @@
 
 package org.diorite.utils.math.geometry;
 
+import javax.vecmath.Vector3d;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -41,9 +43,9 @@ public class EntityBoundingBox extends BoundingBox
     }
 
     @Override
-    public Vector getSize()
+    public Vector3d getSize()
     {
-        return new Vector(this.hSize, this.vSize, this.hSize);
+        return new Vector3d(this.hSize, this.vSize, this.hSize);
     }
 
     public void setCenter(final double x, final double y, final double z)
