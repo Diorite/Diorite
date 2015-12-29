@@ -38,8 +38,56 @@ public class EntityType extends ASimpleEnum<EntityType>
     }
 
     public static final EntityType PLAYER  = new EntityType("PLAYER", Player.class, - 1, "Player");
+    public static final EntityType BOAT    = new EntityType("BOAT", Boat.class, 1, "Boat");
     public static final EntityType ITEM    = new EntityType("ITEM", Item.class, 2, "Item");
-    public static final EntityType CREEPER = new EntityType("CREEPER", Creeper.class, 50, "Creeper");
+    public static final EntityType AREA_EFFECT_CLOUD    = new EntityType("AREA_EFFECT_CLOUD", AreaEffectCloud.class, 3, "Area Effect Cloud");
+    public static final EntityType MINECART = new EntityType("MINECART", Minecart.class, 10, "Minecart");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
+    public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
     public static final EntityType ZOMBIE  = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
     // TODO
 
