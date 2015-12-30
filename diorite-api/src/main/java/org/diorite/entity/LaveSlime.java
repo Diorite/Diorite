@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface ZombiePigman extends MonsterEntity
+public interface LaveSlime extends MonsterEntity
 {
 }

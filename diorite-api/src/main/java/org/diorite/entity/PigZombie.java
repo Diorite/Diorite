@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface FireCharge extends Projectile, ObjectEntity
+public interface PigZombie extends MonsterEntity
 {
 }

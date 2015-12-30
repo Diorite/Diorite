@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface IronGolem extends AnimalEntity
+public interface SmallFireball extends Projectile, ObjectEntity
 {
 }

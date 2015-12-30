@@ -24,7 +24,7 @@
 
 package org.diorite.entity;
 
-public interface Item extends Entity
+public interface Item extends Entity, ObjectEntity
 {
     int getPickupDelay();
 

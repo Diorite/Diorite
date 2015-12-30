@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface Boat extends Entity
+public interface Boat extends Entity, ObjectEntity
 {
 }

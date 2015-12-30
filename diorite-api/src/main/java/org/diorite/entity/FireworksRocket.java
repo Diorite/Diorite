@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface ActivatedTNT extends ObjectEntity
+public interface FireworksRocket extends Projectile, ObjectEntity
 {
 }

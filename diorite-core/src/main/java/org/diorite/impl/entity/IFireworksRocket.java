@@ -1,9 +1,9 @@
 package org.diorite.impl.entity;
 
-import org.diorite.entity.FishingFloat;
+import org.diorite.entity.FireworksRocket;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 
-public interface IFishingFloat extends IEntity, FishingFloat
+public interface IFireworksRocket extends IProjectile, FireworksRocket
 {
     ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.25F, 0.25F);
 }

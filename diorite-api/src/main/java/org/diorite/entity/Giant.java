@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface FishingFloat extends ObjectEntity
+public interface Giant extends MonsterEntity
 {
 }

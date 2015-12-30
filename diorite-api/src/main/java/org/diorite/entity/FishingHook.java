@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface FireworkRocket extends Projectile, ObjectEntity
+public interface FishingHook extends ObjectEntity
 {
 }

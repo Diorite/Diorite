@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface EyeOfEnder extends Projectile, ObjectEntity
+public interface VillagerGolem extends AnimalEntity
 {
 }

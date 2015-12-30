@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface MagmaCube extends MonsterEntity
+public interface EyeOfEnderSignal extends Projectile, ObjectEntity
 {
 }

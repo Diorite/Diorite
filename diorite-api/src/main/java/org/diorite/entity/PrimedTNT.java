@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface GiantZombie extends MonsterEntity
+public interface PrimedTNT extends ObjectEntity
 {
 }

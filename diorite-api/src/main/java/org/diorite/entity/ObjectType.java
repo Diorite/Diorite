@@ -34,70 +34,45 @@ public class ObjectType extends ASimpleEnum<ObjectType>
 {
     static
     {
-        init(ObjectType.class, 3);
+        init(ObjectType.class, 27);
     }
 
-    public static final ObjectType BOAT              = new ObjectType("BOAT", Boat.class, 1, "Boat");
-    public static final ObjectType ITEM              = new ObjectType("ITEM", Item.class, 2, "Item");
-    public static final ObjectType AREA_EFFECT_CLOUD = new ObjectType("AREA_EFFECT_CLOUD", AreaEffectCloud.class, 3, "Area Effect Cloud");
-    public static final ObjectType MINECART          = new ObjectType("MINECART", Minecart.class, 10, "Minecart");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final ObjectType ZOMBIE            = new ObjectType("ZOMBIE", Zombie.class, 54, "Zombie");
-    // TODO
+    public static final ObjectType BOAT                = new ObjectType("BOAT", Boat.class, 1, "Boat");
+    public static final ObjectType ITEM                = new ObjectType("ITEM", Item.class, 2, "Item");
+    public static final ObjectType AREA_EFFECT_CLOUD   = new ObjectType("AREA_EFFECT_CLOUD", AreaEffectCloud.class, 3, "AreaEffectCloud");
+    public static final ObjectType MINECART            = new ObjectType("MINECART", Minecart.class, 10, "Minecart");
+    public static final ObjectType PRIMED_TNT          = new ObjectType("PRIMED_TNT", PrimedTNT.class, 50, "PrimedTnt");
+    public static final ObjectType ENDER_CRYSTAL       = new ObjectType("ENDER_CRYSTAL", EnderCrystal.class, 51, "EnderCrystal");
+    public static final ObjectType ARROW               = new ObjectType("ARROW", Arrow.class, 60, "Arrow");
+    public static final ObjectType SNOWBALL            = new ObjectType("SNOWBALL", Snowball.class, 61, "Snowball");
+    public static final ObjectType EGG                 = new ObjectType("EGG", Egg.class, 62, "Egg");
+    public static final ObjectType FIREBALL            = new ObjectType("FIREBALL", Fireball.class, 63, "Fireball");
+    public static final ObjectType SMALL_FIREBALL      = new ObjectType("SMALL_FIREBALL", SmallFireball.class, 64, "SmallFireball");
+    public static final ObjectType THROWN_ENDERPEARL   = new ObjectType("THROWN_ENDERPEARL", ThrownEnderpearl.class, 65, "ThrownEnderpearl");
+    public static final ObjectType WITHER_SKULL        = new ObjectType("WITHER_SKULL", WitherSkull.class, 66, "WitherSkull");
+    public static final ObjectType SHULKER_BULLET      = new ObjectType("SHULKER_BULLET", ShulkerBullet.class, 67, "ShulkerBullet ");
+    public static final ObjectType FALLING_BLOCK       = new ObjectType("FALLING_BLOCK", FallingBlock.class, 70, "FallingSand");
+    public static final ObjectType ITEM_FRAME          = new ObjectType("ITEM_FRAME", ItemFrame.class, 71, "ItemFrame");
+    public static final ObjectType EYE_OF_ENDER_SIGNAL = new ObjectType("EYE_OF_ENDER_SIGNAL", EyeOfEnderSignal.class, 72, "EyeOfEnderSignal");
+    public static final ObjectType THROWN_POTION       = new ObjectType("THROWN_POTION", ThrownPotion.class, 73, "ThrownPotion");
+    public static final ObjectType FALLING_DRAGON_EGG  = new ObjectType("ZOMBIE", FallingDragonEgg.class, 74, "FallingDragonEgg");
+    public static final ObjectType THROWN_EXP_BOTTLE   = new ObjectType("THROWN_EXP_BOTTLE", ThrownExpBottle.class, 75, "ThrownExpBottle");
+    public static final ObjectType FIREWORK_ROCKET     = new ObjectType("FIREWORK_ROCKET", FireworksRocket.class, 76, "FireworksRocketEntity");
+    public static final ObjectType LEASH_KNOT          = new ObjectType("LEASH_KNOT", LeashKnot.class, 77, "LeashKnot");
+    public static final ObjectType ARMOR_STAND         = new ObjectType("ARMOR_STAND", ArmorStand.class, 78, "ArmorStand");
+    public static final ObjectType FISHING_HOOK        = new ObjectType("FISHING_HOOK", FishingHook.class, 90, "FishingHook");
+    public static final ObjectType SPECTRAL_ARROW      = new ObjectType("SPECTRAL_ARROW", SpectralArrow.class, 91, "SpectralArrow");
+    public static final ObjectType TIPPED_ARROW        = new ObjectType("TIPPED_ARROW", TippedArrow.class, 92, "TippedArrow");
+    public static final ObjectType DRAGON_FIREBALL     = new ObjectType("DRAGON_FIREBALL", DragonFireball.class, 93, "DragonFireball");
 
-    private static final Int2ObjectMap<ObjectType> byMcId = new Int2ObjectOpenHashMap<>(3, .1f);
+    private static final Int2ObjectMap<ObjectType> byMcId = new Int2ObjectOpenHashMap<>(27, .1f);
 
-    private final Class<? extends Entity> dioriteEntityClass;
-    private final boolean                 living;
-    private final int                     mcId;
-    private final String                  mcName;
+    private final Class<? extends ObjectEntity> dioriteEntityClass;
+    private final boolean                       living;
+    private final int                           mcId;
+    private final String                        mcName;
 
-    public ObjectType(final String enumName, final int enumId, final Class<? extends Entity> dioriteEntityClass, final boolean living, final int mcId, final String mcName)
+    public ObjectType(final String enumName, final int enumId, final Class<? extends ObjectEntity> dioriteEntityClass, final boolean living, final int mcId, final String mcName)
     {
         super(enumName, enumId);
         this.dioriteEntityClass = dioriteEntityClass;
@@ -106,7 +81,7 @@ public class ObjectType extends ASimpleEnum<ObjectType>
         this.mcName = mcName;
     }
 
-    public ObjectType(final String enumName, final Class<? extends Entity> dioriteEntityClass, final int mcId, final String mcName)
+    public ObjectType(final String enumName, final Class<? extends ObjectEntity> dioriteEntityClass, final int mcId, final String mcName)
     {
         super(enumName);
         this.dioriteEntityClass = dioriteEntityClass;
@@ -130,7 +105,7 @@ public class ObjectType extends ASimpleEnum<ObjectType>
         return this.living;
     }
 
-    public Class<? extends Entity> getDioriteEntityClass()
+    public Class<? extends ObjectEntity> getDioriteEntityClass()
     {
         return this.dioriteEntityClass;
     }
@@ -193,8 +168,32 @@ public class ObjectType extends ASimpleEnum<ObjectType>
 
     static
     {
-        ObjectType.register(PLAYER);
+        ObjectType.register(BOAT);
         ObjectType.register(ITEM);
-        ObjectType.register(CREEPER);
+        ObjectType.register(AREA_EFFECT_CLOUD);
+        ObjectType.register(MINECART);
+        ObjectType.register(PRIMED_TNT);
+        ObjectType.register(ENDER_CRYSTAL);
+        ObjectType.register(ARROW);
+        ObjectType.register(SNOWBALL);
+        ObjectType.register(EGG);
+        ObjectType.register(FIREBALL);
+        ObjectType.register(SMALL_FIREBALL);
+        ObjectType.register(THROWN_ENDERPEARL);
+        ObjectType.register(WITHER_SKULL);
+        ObjectType.register(SHULKER_BULLET);
+        ObjectType.register(FALLING_BLOCK);
+        ObjectType.register(ITEM_FRAME);
+        ObjectType.register(EYE_OF_ENDER_SIGNAL);
+        ObjectType.register(THROWN_POTION);
+        ObjectType.register(FALLING_DRAGON_EGG);
+        ObjectType.register(THROWN_EXP_BOTTLE);
+        ObjectType.register(FIREWORK_ROCKET);
+        ObjectType.register(LEASH_KNOT);
+        ObjectType.register(ARMOR_STAND);
+        ObjectType.register(FISHING_HOOK);
+        ObjectType.register(SPECTRAL_ARROW);
+        ObjectType.register(TIPPED_ARROW);
+        ObjectType.register(DRAGON_FIREBALL);
     }
 }
