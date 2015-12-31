@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import org.diorite.impl.DioriteCore;
+import org.diorite.impl.IServerManager;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
@@ -39,13 +41,11 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedSoun
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffect;
 import org.diorite.impl.entity.ICreeper;
 import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IEntityFactory;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
-import org.diorite.Diorite;
-import org.diorite.EntityFactory;
-import org.diorite.ServerManager;
 import org.diorite.Sound;
 import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
@@ -59,6 +59,7 @@ import org.diorite.command.CommandPriority;
 import org.diorite.effect.StatusEffect;
 import org.diorite.effect.StatusEffectType;
 import org.diorite.enchantments.EnchantmentType;
+import org.diorite.entity.EntityType;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.inventory.InventoryHolder;
@@ -88,13 +89,13 @@ public class DevCmd extends SystemCommandImpl
                 p.getNetworkManager().sendPacket(new PacketPlayServerBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
                 return;
             }
-            final ServerManager serverManager = Diorite.getServerManager();
+            final IServerManager serverManager = DioriteCore.getInstance().getServerManager();
             final PermissionsManager mag = serverManager.getPermissionsManager();
             switch (action.toLowerCase())
             {
                 case "mob":
                 {
-                    final EntityFactory entityFactory = serverManager.getEntityFactory();
+                    final IEntityFactory entityFactory = serverManager.getEntityFactory();
                     if (args.asString(0).equalsIgnoreCase("creeper"))
                     {
                         final ICreeper creeper = entityFactory.createEntity(ICreeper.class, p.getLocation());
@@ -110,9 +111,14 @@ public class DevCmd extends SystemCommandImpl
 //                        zombie.setCrouching(true); crash
 //                        zombie.setInvisible(true); crash
 //                        zombie.setSprinting(true); crash
-                        zombie.setAir(-5);
+                        zombie.setAir(- 5);
                         zombie.setSilent(true);
                         p.getWorld().addEntity(zombie);
+                    }
+                    else
+                    {
+                        final IEntity entity = entityFactory.createEntity(EntityType.getByEnumName(args.asString(0)), p.getLocation());
+                        p.getWorld().addEntity(entity);
                     }
                     break;
                 }

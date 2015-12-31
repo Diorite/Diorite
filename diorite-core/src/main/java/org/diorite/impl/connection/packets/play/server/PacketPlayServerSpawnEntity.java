@@ -32,6 +32,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -39,6 +40,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.EntityObject;
 import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IEntityFactory;
 
 @PacketClass(id = 0x00, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 50)
 public class PacketPlayServerSpawnEntity extends PacketPlayServer
@@ -60,12 +62,14 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
     {
     }
 
+    private static final IEntityFactory factory = DioriteCore.getInstance().getServerManager().getEntityFactory();
+
     @SuppressWarnings("MagicNumber")
     public <T extends IEntity & EntityObject> PacketPlayServerSpawnEntity(final T entity)
     {
         this.entityId = entity.getId();
         this.entityUUID = entity.getUniqueID();
-        this.entityTypeId = (byte) entity.getMcId();
+        this.entityTypeId = (byte) factory.getEntityNetworkID(entity.getType());
         if (entity.getType().isLiving())
         {
             throw new IllegalArgumentException();

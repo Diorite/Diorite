@@ -3,8 +3,6 @@ package org.diorite.impl.entity.diorite;
 import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntityLiving;
 import org.diorite.impl.entity.IZombie;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
@@ -21,12 +19,6 @@ class ZombieImpl extends MonsterEntityImpl implements IZombie
     public void initMetadata()
     {
         super.initMetadata();
-    }
-
-    @Override
-    public PacketPlayServer getSpawnPacket()
-    {
-        return new PacketPlayServerSpawnEntityLiving(this);
     }
 
     @Override

@@ -76,7 +76,7 @@ public class EntityTrackers implements Tickable
     {
         try
         {
-            final short type = (short) entity.getType().getMinecraftId();
+            final short type = (short) entity.getType().ordinal();
             this.stats.put(type, this.stats.get(type) + 1);
         } catch (final Throwable ignored) // for sure that it will never cause any problems
         {
@@ -91,7 +91,7 @@ public class EntityTrackers implements Tickable
     {
         try
         {
-            final short type = (short) entity.getType().getMinecraftId();
+            final short type = (short) entity.getType().ordinal();
             this.stats.put(type, this.stats.get(type) - 1);
         } catch (final Throwable ignored) // for sure that it will never cause any problems
         {

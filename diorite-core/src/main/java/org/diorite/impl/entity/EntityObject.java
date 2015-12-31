@@ -24,10 +24,9 @@
 
 package org.diorite.impl.entity;
 
-/**
- * Mojang, I blame you for that.
- */
-public interface EntityObject
+import org.diorite.entity.ObjectEntity;
+
+public interface EntityObject extends ObjectEntity
 {
     int getEntityObjectData();
 }

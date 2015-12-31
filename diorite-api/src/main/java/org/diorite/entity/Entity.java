@@ -66,11 +66,6 @@ public interface Entity extends GameObject, Synchronizable
 
     Collection<? extends Entity> getNearbyEntities(double x, double y, double z, EntityType type);
 
-    default int getMcId()
-    {
-        return this.getType().getMinecraftId();
-    }
-
     void setVelocity(Vector3f velocity);
 
     boolean isAiEnabled();

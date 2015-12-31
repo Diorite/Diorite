@@ -69,9 +69,9 @@ public class SpawnEggMat extends ItemMaterialData
         this.entityType = EntityType.CREEPER;
     }
 
-    public SpawnEggMat(final EntityType type)
+    public SpawnEggMat(final EntityType type, final short typeID)
     {
-        super(SPAWN_EGG_CREEPER.name(), SPAWN_EGG_CREEPER.getId(), SPAWN_EGG_CREEPER.getMinecraftId(), type.name(), (short) type.getMinecraftId());
+        super(SPAWN_EGG_CREEPER.name(), SPAWN_EGG_CREEPER.getId(), SPAWN_EGG_CREEPER.getMinecraftId(), type.name(), typeID);
         this.entityType = type;
     }
 

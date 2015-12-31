@@ -27,89 +27,105 @@ package org.diorite.entity;
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 @SuppressWarnings({"ClassHasNoToStringMethod"})
 public class EntityType extends ASimpleEnum<EntityType>
 {
     static
     {
-        init(EntityType.class, 3);
+        init(EntityType.class, 61);
     }
 
-    public static final EntityType PLAYER         = new EntityType("PLAYER", Player.class, - 1, "Player");
-    public static final EntityType CREEPER        = new EntityType("CREEPER", Creeper.class, 1, "Creeper");
-    public static final EntityType SKELETON       = new EntityType("SKELETON", Skeleton.class, 51, "Skeleton");
-    public static final EntityType SPIDER         = new EntityType("SPIDER", Spider.class, 52, "Spider");
-    public static final EntityType GIANT          = new EntityType("GIANT", Giant.class, 53, "Giant");
-    public static final EntityType ZOMBIE         = new EntityType("ZOMBIE", Zombie.class, 54, "Zombie");
-    public static final EntityType SLIME          = new EntityType("SLIME", Slime.class, 55, "Slime");
-    public static final EntityType GHAST          = new EntityType("GHAST", Ghast.class, 56, "Ghast");
-    public static final EntityType ZOMBIE_PIGMAN  = new EntityType("PIG_ZOMBIE", PigZombie.class, 57, "PigZombie");
-    public static final EntityType ENDERMAN       = new EntityType("ENDERMAN", Enderman.class, 58, "Enderman");
-    public static final EntityType CAVE_SPIDER    = new EntityType("CAVE_SPIDER", CaveSpider.class, 59, "CaveSpider");
-    public static final EntityType SILVERFISH     = new EntityType("SILVERFISH", Silverfish.class, 60, "Silverfish");
-    public static final EntityType BLAZE          = new EntityType("BLAZE", Blaze.class, 61, "Blaze");
-    public static final EntityType LAVA_SLIME     = new EntityType("LAVA_SLIME", LaveSlime.class, 62, "LavaSlime");
-    public static final EntityType ENDER_DRAGON   = new EntityType("ENDER_DRAGON", EnderDragon.class, 63, "EnderDragon");
-    public static final EntityType WITHER         = new EntityType("WITHER", Wither.class, 64, "WitherBoss");
-    public static final EntityType BAT            = new EntityType("BAT", Bat.class, 65, "Bat");
-    public static final EntityType WITCH          = new EntityType("WITCH", Witch.class, 66, "Witch");
-    public static final EntityType ENDERMITE      = new EntityType("ENDERMITE", Endermite.class, 67, "Endermite");
-    public static final EntityType GUARDIAN       = new EntityType("GUARDIAN", Guardian.class, 68, "Guardian");
-    public static final EntityType SHULKER        = new EntityType("SHULKER", Shulker.class, 69, "Shulker");
-    public static final EntityType PIG            = new EntityType("PIG", Pig.class, 90, "Pig");
-    public static final EntityType SHEEP          = new EntityType("SHEEP", Sheep.class, 91, "Sheep");
-    public static final EntityType COW            = new EntityType("COW", Cow.class, 92, "Cow");
-    public static final EntityType CHICKEN        = new EntityType("CHICKEN", Chicken.class, 93, "Chicken");
-    public static final EntityType SQUID          = new EntityType("SQUID", Squid.class, 94, "Squid");
-    public static final EntityType WOLF           = new EntityType("WOLF", Wolf.class, 95, "Wolf");
-    public static final EntityType MOOSHROOM_COW  = new EntityType("MOOSHROOM_COW", MooshroomCow.class, 96, "MooshroomCow");
-    public static final EntityType SNOWMAN        = new EntityType("SNOWMAN", Snowman.class, 97, "SnowMan");
-    public static final EntityType OCELOT         = new EntityType("OCELOT", Ocelot.class, 98, "Ozelot");
-    public static final EntityType VILLAGER_GOLEM = new EntityType("VILLAGER_GOLEM", VillagerGolem.class, 99, "VillagerGolem");
-    public static final EntityType HORSE          = new EntityType("HORSE", Horse.class, 100, "EntityHorse");
-    public static final EntityType RABBIT         = new EntityType("RABBIT", Rabbit.class, 101, "Rabbit");
-    public static final EntityType VILLAGER       = new EntityType("VILLAGER", Villager.class, 120, "Villager");
+    public static final EntityType PLAYER         = new EntityType("PLAYER", Player.class, "Player", false);
+    public static final EntityType CREEPER        = new EntityType("CREEPER", Creeper.class, "Creeper", false);
+    public static final EntityType SKELETON       = new EntityType("SKELETON", Skeleton.class, "Skeleton", false);
+    public static final EntityType SPIDER         = new EntityType("SPIDER", Spider.class, "Spider", false);
+    public static final EntityType GIANT          = new EntityType("GIANT", Giant.class, "Giant", false);
+    public static final EntityType ZOMBIE         = new EntityType("ZOMBIE", Zombie.class, "Zombie", false);
+    public static final EntityType SLIME          = new EntityType("SLIME", Slime.class, "Slime", false);
+    public static final EntityType GHAST          = new EntityType("GHAST", Ghast.class, "Ghast", false);
+    public static final EntityType PIG_ZOMBIE     = new EntityType("PIG_ZOMBIE", PigZombie.class, "PigZombie", false);
+    public static final EntityType ENDERMAN       = new EntityType("ENDERMAN", Enderman.class, "Enderman", false);
+    public static final EntityType CAVE_SPIDER    = new EntityType("CAVE_SPIDER", CaveSpider.class, "CaveSpider", false);
+    public static final EntityType SILVERFISH     = new EntityType("SILVERFISH", Silverfish.class, "Silverfish", false);
+    public static final EntityType BLAZE          = new EntityType("BLAZE", Blaze.class, "Blaze", false);
+    public static final EntityType LAVA_SLIME     = new EntityType("LAVA_SLIME", LaveSlime.class, "LavaSlime", false);
+    public static final EntityType ENDER_DRAGON   = new EntityType("ENDER_DRAGON", EnderDragon.class, "EnderDragon", false);
+    public static final EntityType WITHER         = new EntityType("WITHER", Wither.class, "WitherBoss", false);
+    public static final EntityType BAT            = new EntityType("BAT", Bat.class, "Bat", false);
+    public static final EntityType WITCH          = new EntityType("WITCH", Witch.class, "Witch", false);
+    public static final EntityType ENDERMITE      = new EntityType("ENDERMITE", Endermite.class, "Endermite", false);
+    public static final EntityType GUARDIAN       = new EntityType("GUARDIAN", Guardian.class, "Guardian", false);
+    public static final EntityType SHULKER        = new EntityType("SHULKER", Shulker.class, "Shulker", false);
+    public static final EntityType PIG            = new EntityType("PIG", Pig.class, "Pig", false);
+    public static final EntityType SHEEP          = new EntityType("SHEEP", Sheep.class, "Sheep", false);
+    public static final EntityType COW            = new EntityType("COW", Cow.class, "Cow", false);
+    public static final EntityType CHICKEN        = new EntityType("CHICKEN", Chicken.class, "Chicken", false);
+    public static final EntityType SQUID          = new EntityType("SQUID", Squid.class, "Squid", false);
+    public static final EntityType WOLF           = new EntityType("WOLF", Wolf.class, "Wolf", false);
+    public static final EntityType MOOSHROOM_COW  = new EntityType("MOOSHROOM_COW", MooshroomCow.class, "MooshroomCow", false);
+    public static final EntityType SNOWMAN        = new EntityType("SNOWMAN", Snowman.class, "SnowMan", false);
+    public static final EntityType OCELOT         = new EntityType("OCELOT", Ocelot.class, "Ozelot", false);
+    public static final EntityType VILLAGER_GOLEM = new EntityType("VILLAGER_GOLEM", VillagerGolem.class, "VillagerGolem", false);
+    public static final EntityType HORSE          = new EntityType("HORSE", Horse.class, "EntityHorse", false);
+    public static final EntityType RABBIT         = new EntityType("RABBIT", Rabbit.class, "Rabbit", false);
+    public static final EntityType VILLAGER       = new EntityType("VILLAGER", Villager.class, "Villager", false);
 
-    private static final Int2ObjectMap<EntityType> byMcId = new Int2ObjectOpenHashMap<>(3, .1f);
+    public static final EntityType BOAT                = new EntityType("BOAT", Boat.class, "Boat", true);
+    public static final EntityType ITEM                = new EntityType("ITEM", Item.class, "Item", true);
+    public static final EntityType AREA_EFFECT_CLOUD   = new EntityType("AREA_EFFECT_CLOUD", AreaEffectCloud.class, "AreaEffectCloud", true);
+    public static final EntityType MINECART            = new EntityType("MINECART", Minecart.class, "Minecart", true);
+    public static final EntityType PRIMED_TNT          = new EntityType("PRIMED_TNT", PrimedTNT.class, "PrimedTnt", true);
+    public static final EntityType ENDER_CRYSTAL       = new EntityType("ENDER_CRYSTAL", EnderCrystal.class, "EnderCrystal", true);
+    public static final EntityType ARROW               = new EntityType("ARROW", Arrow.class, "Arrow", true);
+    public static final EntityType SNOWBALL            = new EntityType("SNOWBALL", Snowball.class, "Snowball", true);
+    public static final EntityType EGG                 = new EntityType("EGG", Egg.class, "Egg", true);
+    public static final EntityType FIREBALL            = new EntityType("FIREBALL", Fireball.class, "Fireball", true);
+    public static final EntityType SMALL_FIREBALL      = new EntityType("SMALL_FIREBALL", SmallFireball.class, "SmallFireball", true);
+    public static final EntityType THROWN_ENDERPEARL   = new EntityType("THROWN_ENDERPEARL", ThrownEnderpearl.class, "ThrownEnderpearl", true);
+    public static final EntityType WITHER_SKULL        = new EntityType("WITHER_SKULL", WitherSkull.class, "WitherSkull", true);
+    public static final EntityType SHULKER_BULLET      = new EntityType("SHULKER_BULLET", ShulkerBullet.class, "ShulkerBullet ", true);
+    public static final EntityType FALLING_BLOCK       = new EntityType("FALLING_BLOCK", FallingBlock.class, "FallingSand", true);
+    public static final EntityType ITEM_FRAME          = new EntityType("ITEM_FRAME", ItemFrame.class, "ItemFrame", true);
+    public static final EntityType EYE_OF_ENDER_SIGNAL = new EntityType("EYE_OF_ENDER_SIGNAL", EyeOfEnderSignal.class, "EyeOfEnderSignal", true);
+    public static final EntityType THROWN_POTION       = new EntityType("THROWN_POTION", ThrownPotion.class, "ThrownPotion", true);
+    public static final EntityType FALLING_DRAGON_EGG  = new EntityType("ZOMBIE", FallingDragonEgg.class, "FallingDragonEgg", true);
+    public static final EntityType THROWN_EXP_BOTTLE   = new EntityType("THROWN_EXP_BOTTLE", ThrownExpBottle.class, "ThrownExpBottle", true);
+    public static final EntityType FIREWORK_ROCKET     = new EntityType("FIREWORK_ROCKET", FireworksRocket.class, "FireworksRocketEntity", true);
+    public static final EntityType LEASH_KNOT          = new EntityType("LEASH_KNOT", LeashKnot.class, "LeashKnot", true);
+    public static final EntityType ARMOR_STAND         = new EntityType("ARMOR_STAND", ArmorStand.class, "ArmorStand", true);
+    public static final EntityType FISHING_HOOK        = new EntityType("FISHING_HOOK", FishingHook.class, "FishingHook", true);
+    public static final EntityType SPECTRAL_ARROW      = new EntityType("SPECTRAL_ARROW", SpectralArrow.class, "SpectralArrow", true);
+    public static final EntityType TIPPED_ARROW        = new EntityType("TIPPED_ARROW", TippedArrow.class, "TippedArrow", true);
+    public static final EntityType DRAGON_FIREBALL     = new EntityType("DRAGON_FIREBALL", DragonFireball.class, "DragonFireball", true);
 
     private final Class<? extends Entity> dioriteEntityClass;
     private final boolean                 living;
-    private final int                     mcId;
-    private final String                  mcName;
+    private final String                  name;
+    private final boolean                 isObject;
 
-    public EntityType(final String enumName, final int enumId, final Class<? extends Entity> dioriteEntityClass, final boolean living, final int mcId, final String mcName)
-    {
-        super(enumName, enumId);
-        this.dioriteEntityClass = dioriteEntityClass;
-        this.living = living;
-        this.mcId = mcId;
-        this.mcName = mcName;
-    }
-
-    public EntityType(final String enumName, final Class<? extends Entity> dioriteEntityClass, final int mcId, final String mcName)
+    public EntityType(final String enumName, final Class<? extends Entity> dioriteEntityClass, final String name, final boolean isObject)
     {
         super(enumName);
         this.dioriteEntityClass = dioriteEntityClass;
+        this.isObject = isObject;
         this.living = LivingEntity.class.isAssignableFrom(dioriteEntityClass);
-        this.mcId = mcId;
-        this.mcName = mcName;
+        this.name = name;
     }
 
-    public String getMcName()
+    public String getName()
     {
-        return this.mcName;
-    }
-
-    public int getMinecraftId()
-    {
-        return this.mcId;
+        return this.name;
     }
 
     public boolean isLiving()
     {
         return this.living;
+    }
+
+    public boolean isObject()
+    {
+        return this.isObject;
     }
 
     public Class<? extends Entity> getDioriteEntityClass()
@@ -125,7 +141,6 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static void register(final EntityType element)
     {
         ASimpleEnum.register(EntityType.class, element);
-        byMcId.put(element.getMinecraftId(), element);
     }
 
     /**
@@ -138,18 +153,6 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static EntityType getByEnumOrdinal(final int ordinal)
     {
         return getByEnumOrdinal(EntityType.class, ordinal);
-    }
-
-    /**
-     * Get one of {@link EntityType} entry by its mc id.
-     *
-     * @param id mc id of entry.
-     *
-     * @return one of entry or null.
-     */
-    public static EntityType getByMinecraftId(final int id)
-    {
-        return byMcId.get(id);
     }
 
     /**
@@ -183,7 +186,7 @@ public class EntityType extends ASimpleEnum<EntityType>
         EntityType.register(ZOMBIE);
         EntityType.register(SLIME);
         EntityType.register(GHAST);
-        EntityType.register(ZOMBIE_PIGMAN);
+        EntityType.register(PIG_ZOMBIE);
         EntityType.register(ENDERMAN);
         EntityType.register(CAVE_SPIDER);
         EntityType.register(SILVERFISH);
@@ -209,5 +212,32 @@ public class EntityType extends ASimpleEnum<EntityType>
         EntityType.register(HORSE);
         EntityType.register(RABBIT);
         EntityType.register(VILLAGER);
+        EntityType.register(BOAT);
+        EntityType.register(ITEM);
+        EntityType.register(AREA_EFFECT_CLOUD);
+        EntityType.register(MINECART);
+        EntityType.register(PRIMED_TNT);
+        EntityType.register(ENDER_CRYSTAL);
+        EntityType.register(ARROW);
+        EntityType.register(SNOWBALL);
+        EntityType.register(EGG);
+        EntityType.register(FIREBALL);
+        EntityType.register(SMALL_FIREBALL);
+        EntityType.register(THROWN_ENDERPEARL);
+        EntityType.register(WITHER_SKULL);
+        EntityType.register(SHULKER_BULLET);
+        EntityType.register(FALLING_BLOCK);
+        EntityType.register(ITEM_FRAME);
+        EntityType.register(EYE_OF_ENDER_SIGNAL);
+        EntityType.register(THROWN_POTION);
+        EntityType.register(FALLING_DRAGON_EGG);
+        EntityType.register(THROWN_EXP_BOTTLE);
+        EntityType.register(FIREWORK_ROCKET);
+        EntityType.register(LEASH_KNOT);
+        EntityType.register(ARMOR_STAND);
+        EntityType.register(FISHING_HOOK);
+        EntityType.register(SPECTRAL_ARROW);
+        EntityType.register(TIPPED_ARROW);
+        EntityType.register(DRAGON_FIREBALL);
     }
 }

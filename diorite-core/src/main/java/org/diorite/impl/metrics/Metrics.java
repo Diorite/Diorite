@@ -150,10 +150,10 @@ public class Metrics
                     core.getWorldsManager().getWorlds().forEach(w -> w.getEntityTrackers().getStats().short2IntEntrySet().forEach((entry) -> map.put(entry.getShortKey(), (map.get(entry.getShortKey()) + entry.getIntValue()))));
                     for (final Entry entry : map.short2IntEntrySet())
                     {
-                        final EntityType type = EntityType.getByMinecraftId(entry.getShortKey());
+                        final EntityType type = EntityType.getByEnumOrdinal(entry.getShortKey());
                         if (type != null)
                         {
-                            result.add(new SimpleMetricsPlotter(type.getMcName(), entry.getIntValue()));
+                            result.add(new SimpleMetricsPlotter(type.getName(), entry.getIntValue()));
                         }
                     }
                     return result;

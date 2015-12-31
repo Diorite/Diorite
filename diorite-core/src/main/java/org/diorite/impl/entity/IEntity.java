@@ -3,6 +3,7 @@ package org.diorite.impl.entity;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.entity.meta.EntityMetadata;
@@ -58,6 +59,9 @@ public interface IEntity extends Entity, Tickable, Trackable
 
     @Override
     WorldImpl getWorld();
+
+    @Override
+    DioriteCore getCore();
 
     void onSpawn(BaseTracker<?> tracker);
 

@@ -32,12 +32,14 @@ import java.util.UUID;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
 import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IEntityFactory;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 
 @PacketClass(id = 0x03, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 170)
@@ -61,12 +63,14 @@ public class PacketPlayServerSpawnEntityLiving extends PacketPlayServer
     {
     }
 
+    private static final IEntityFactory factory = DioriteCore.getInstance().getServerManager().getEntityFactory();
+
     @SuppressWarnings("MagicNumber")
     public PacketPlayServerSpawnEntityLiving(final IEntity entity)
     {
         this.entityId = entity.getId();
         this.entityUUID = entity.getUniqueID();
-        this.entityTypeId = (byte) entity.getMcId();
+        this.entityTypeId = (byte) factory.getEntityNetworkID(entity.getType());
         this.x = (int) (entity.getX() * 32);
         this.y = (int) (entity.getY() * 32);
         this.z = (int) (entity.getZ() * 32);

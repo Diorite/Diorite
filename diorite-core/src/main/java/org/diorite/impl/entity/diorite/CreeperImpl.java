@@ -3,8 +3,6 @@ package org.diorite.impl.entity.diorite;
 import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntityLiving;
 import org.diorite.impl.entity.ICreeper;
 import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
@@ -26,12 +24,6 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
         this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_STATE, 0));
         this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_POWERED, false));
         this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_IGNITED, false));
-    }
-
-    @Override
-    public PacketPlayServer getSpawnPacket()
-    {
-        return new PacketPlayServerSpawnEntityLiving(this);
     }
 
     @Override
