@@ -26,7 +26,7 @@ package org.diorite.scheduler;
 
 import org.diorite.Core;
 import org.diorite.Diorite;
-import org.diorite.plugin.DioritePlugin;
+import org.diorite.plugin.BasePlugin;
 
 /**
  * Represents a task being executed by the scheduler.
@@ -41,7 +41,7 @@ public interface DioriteTask
     /**
      * @return The Plugin that owns the task.
      */
-    DioritePlugin getOwner();
+    BasePlugin getOwner();
 
     /**
      * @return true if the task isn't run by any of main threads.

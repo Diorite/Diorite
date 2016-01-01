@@ -78,7 +78,13 @@ public class TickGroups implements Tickable
             /**
              * TODO count time of execution and split if needed.
              */
-            this.groups.iterator().next().doTick(tps);
+            try
+            {
+                this.groups.iterator().next().doTick(tps);
+            } catch (final Throwable throwable)
+            {
+                throwable.printStackTrace();
+            }
             return;
         }
         final AtomicInteger i = new AtomicInteger(0);

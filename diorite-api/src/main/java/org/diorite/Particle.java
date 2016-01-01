@@ -40,7 +40,7 @@ public class Particle extends ASimpleEnum<Particle>
 {
     static
     {
-        init(Particle.class, 42);
+        init(Particle.class, 46);
     }
 
     public static final Particle EXPLOSION_NORMAL  = new Particle("EXPLOSION_NORMAL", "explode", 0);
@@ -85,9 +85,13 @@ public class Particle extends ASimpleEnum<Particle>
     public static final Particle WATER_DROP        = new Particle("WATER_DROP", "droplet", 39);
     public static final Particle ITEM_TAKE         = new Particle("ITEM_TAKE", "take", 40);
     public static final Particle MOB_APPEARANCE    = new Particle("MOB_APPEARANCE", "mobappearance", 41);
+    public static final Particle DRAGON_BREATH     = new Particle("DRAGON_BREATH", "dragonbreath", 42);
+    public static final Particle END_ROD           = new Particle("END_ROD", "endRod", 43);
+    public static final Particle DAMAGE_INDICATOR  = new Particle("DAMAGE_INDICATOR", "damageIndicator", 44);
+    public static final Particle SWEEP_ATTACK      = new Particle("SWEEP_ATTACK", "sweepAttack", 45);
 
-    private static final Int2ObjectMap<Particle> byParticleID   = new Int2ObjectOpenHashMap<>(42, SMALL_LOAD_FACTOR);
-    private static final Map<String, Particle>   byParticleName = new CaseInsensitiveMap<>(42, SMALL_LOAD_FACTOR);
+    private static final Int2ObjectMap<Particle> byParticleID   = new Int2ObjectOpenHashMap<>(46, SMALL_LOAD_FACTOR);
+    private static final Map<String, Particle>   byParticleName = new CaseInsensitiveMap<>(46, SMALL_LOAD_FACTOR);
     private final String particleName;
     private final int    particleId;
     private final int    dataSize;
@@ -225,5 +229,9 @@ public class Particle extends ASimpleEnum<Particle>
         Particle.register(WATER_DROP);
         Particle.register(ITEM_TAKE);
         Particle.register(MOB_APPEARANCE);
+        Particle.register(DRAGON_BREATH);
+        Particle.register(END_ROD);
+        Particle.register(DAMAGE_INDICATOR);
+        Particle.register(SWEEP_ATTACK);
     }
 }

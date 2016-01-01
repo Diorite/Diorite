@@ -30,7 +30,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
-import org.diorite.plugin.DioritePlugin;
+import org.diorite.plugin.BasePlugin;
 import org.diorite.scheduler.DioriteTask;
 import org.diorite.scheduler.Synchronizable;
 
@@ -46,7 +46,7 @@ public class DioriteTaskImpl implements DioriteTask, Runnable
     private          long                          nextRun;
     private final    String                        name;
     private final    Runnable                      task;
-    private final    DioritePlugin                 dioritePlugin;
+    private final    BasePlugin                    dioritePlugin;
     private final    boolean                       safeMode;
     private final    WeakReference<Synchronizable> synchronizable;
     private final    int                           id;
@@ -66,7 +66,7 @@ public class DioriteTaskImpl implements DioriteTask, Runnable
         this(task.getClass().getName() + "@" + System.identityHashCode(task), null, task, null, false, - 1, STATE_SINGLE);
     }
 
-    DioriteTaskImpl(final String name, final DioritePlugin dioritePlugin, final Runnable task, final Synchronizable synchronizable, final boolean safeMode, final int id, final long period)
+    DioriteTaskImpl(final String name, final BasePlugin dioritePlugin, final Runnable task, final Synchronizable synchronizable, final boolean safeMode, final int id, final long period)
     {
         this.name = name;
         this.dioritePlugin = dioritePlugin;
@@ -84,7 +84,7 @@ public class DioriteTaskImpl implements DioriteTask, Runnable
     }
 
     @Override
-    public final DioritePlugin getOwner()
+    public final BasePlugin getOwner()
     {
         return this.dioritePlugin;
     }

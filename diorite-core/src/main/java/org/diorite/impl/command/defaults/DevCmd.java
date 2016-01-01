@@ -39,6 +39,8 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChan
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedSoundEffect;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffect;
+import org.diorite.impl.entity.IAreaEffectCloud;
+import org.diorite.impl.entity.IChicken;
 import org.diorite.impl.entity.ICreeper;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IEntityFactory;
@@ -46,6 +48,8 @@ import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
+import org.diorite.Location;
+import org.diorite.Particle;
 import org.diorite.Sound;
 import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.cfg.messages.Message.MessageData;
@@ -99,7 +103,25 @@ public class DevCmd extends SystemCommandImpl
                     if (args.asString(0).equalsIgnoreCase("creeper"))
                     {
                         final ICreeper creeper = entityFactory.createEntity(ICreeper.class, p.getLocation());
+                        creeper.getMetadata().setBoolean(ICreeper.META_KEY_POWERED, true);
                         p.getWorld().addEntity(creeper);
+                    }
+                    else if (args.asString(0).equalsIgnoreCase("chickenArmy"))
+                    {
+                        DioriteCore.getInstance().sync(() -> {
+                            for (double x = p.getX() - 10; x <= (p.getX() + 14); x+=1.5)
+                            {
+                                for (double y = p.getY() - 6; y <= (p.getY() + 5); y+=1.5)
+                                {
+                                    for (double z = p.getZ() - 3; z <= (p.getZ() + 3); z+=1.5)
+                                    {
+                                        System.out.println("Spawn on: " + x + ", " + y + ", " + z);
+                                        final IChicken entity = entityFactory.createEntity(IChicken.class, new Location(x, y, z, p.getWorld()));
+                                        p.getWorld().addEntity(entity);
+                                    }
+                                }
+                            }
+                        }, p);
                     }
                     else if (args.asString(0).equalsIgnoreCase("zombie"))
                     {
@@ -115,10 +137,37 @@ public class DevCmd extends SystemCommandImpl
                         zombie.setSilent(true);
                         p.getWorld().addEntity(zombie);
                     }
+                    else if (args.asString(0).equalsIgnoreCase("area"))
+                    {
+                        final IAreaEffectCloud entity = entityFactory.createEntity(IAreaEffectCloud.class, p.getLocation());
+                        entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_COLOR, 456);
+                        entity.getMetadata().setFloat(IAreaEffectCloud.META_KEY_RADIUS, 10);
+                        p.getWorld().addEntity(entity);
+                    }
+                    else if (args.asString(0).equalsIgnoreCase("area2"))
+                    {
+                        final IAreaEffectCloud entity = entityFactory.createEntity(IAreaEffectCloud.class, p.getLocation());
+                        entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_COLOR, Integer.parseInt(args.asString(3), 16));
+                        entity.getMetadata().setFloat(IAreaEffectCloud.META_KEY_RADIUS, args.asFloat(2));
+                        entity.getMetadata().setBoolean(IAreaEffectCloud.META_KEY_UNKNOWN, args.asBoolean(1));
+                        if (args.has(4))
+                        {
+                            Integer id = args.asInt(4);
+                            if (id == null)
+                            {
+                                id = Particle.getByParticleName(args.asString(4)).getParticleId();
+                            }
+                            entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_PARTICLE_ID, id);
+                        }
+                        p.getWorld().addEntity(entity);
+                    }
                     else
                     {
                         final IEntity entity = entityFactory.createEntity(EntityType.getByEnumName(args.asString(0)), p.getLocation());
-                        p.getWorld().addEntity(entity);
+                        if (entity != null)
+                        {
+                            p.getWorld().addEntity(entity);
+                        }
                     }
                     break;
                 }

@@ -27,8 +27,6 @@ package org.diorite.impl.entity.diorite;
 import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
 import org.diorite.impl.entity.ILivingEntity;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
@@ -53,12 +51,5 @@ abstract class LivingEntityImpl extends AttributableEntityImpl implements ILivin
 
         // test TODO: remove
 //        this.metadata.add(new EntityMetadataByteEntry(META_KEY_ARROWS_IN_BODY, 127));
-    }
-
-    @Override
-    public PacketPlayServer[] getSpawnPackets()
-    {
-        // TODO: add other stuff, like potions
-        return new PacketPlayServer[]{this.getSpawnPacket(), new PacketPlayServerEntityMetadata(this, true)};
     }
 }

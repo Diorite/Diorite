@@ -27,7 +27,7 @@ package org.diorite.impl.scheduler;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.plugin.DioritePlugin;
+import org.diorite.plugin.BasePlugin;
 import org.diorite.scheduler.DioriteWorker;
 
 public class DioriteWorkerImpl implements DioriteWorker
@@ -54,7 +54,7 @@ public class DioriteWorkerImpl implements DioriteWorker
     }
 
     @Override
-    public DioritePlugin getOwner()
+    public BasePlugin getOwner()
     {
         return this.dioriteAsyncTask.getOwner();
     }

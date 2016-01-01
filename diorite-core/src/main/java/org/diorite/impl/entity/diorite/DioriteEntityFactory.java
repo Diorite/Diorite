@@ -562,7 +562,7 @@ public class DioriteEntityFactory implements IEntityFactory
         this.registerID(EntityType.TIPPED_ARROW, 92);
         this.registerID(EntityType.DRAGON_FIREBALL, 93);
         this.registerID(EntityType.PLAYER, - 1);
-        this.registerID(EntityType.CREEPER, 1);
+        this.registerID(EntityType.CREEPER, 50);
         this.registerID(EntityType.SKELETON, 51);
         this.registerID(EntityType.SPIDER, 52);
         this.registerID(EntityType.GIANT, 53);

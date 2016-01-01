@@ -32,7 +32,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -58,10 +57,10 @@ public class TextComponentSerializer implements JsonSerializer<TextComponent>, J
     public JsonElement serialize(final TextComponent src, final Type typeOfSrc, final JsonSerializationContext context)
     {
         final List<BaseComponent> extra = src.getExtra();
-        if ((! src.hasFormatting()) && ((extra == null) || (extra.isEmpty())))
-        {
-            return new JsonPrimitive(src.getText());
-        }
+//        if ((! src.hasFormatting()) && ((extra == null) || (extra.isEmpty()))) Not for 1.9
+//        {
+//            return new JsonPrimitive(src.getText());
+//        }
         final JsonObject object = new JsonObject();
         this.serialize(object, src, context);
         object.addProperty("text", src.getText());

@@ -29,6 +29,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
+import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.DioritePlugin;
 
 /**
@@ -39,8 +40,8 @@ import org.diorite.plugin.DioritePlugin;
  */
 public class TaskBuilder
 {
-    private final DioritePlugin dioritePlugin;
-    private final Runnable      runnable;
+    private final BasePlugin dioritePlugin;
+    private final Runnable   runnable;
     private boolean        async          = false;
     private boolean        isRealTime     = false;
     private boolean        safeMode       = true;
@@ -49,7 +50,7 @@ public class TaskBuilder
     private Synchronizable synchronizable = Diorite.getCore();
     private String name; // optional
 
-    private TaskBuilder(final DioritePlugin dioritePlugin, final Runnable runnable)
+    private TaskBuilder(final BasePlugin dioritePlugin, final Runnable runnable)
     {
         Validate.notNull(dioritePlugin, "Plugin can't by null.");
         Validate.notNull(runnable, "Runnable can't be null.");
@@ -270,7 +271,7 @@ public class TaskBuilder
      * @see #sync(DioritePlugin, Runnable, Synchronizable)
      * @see #start()
      */
-    public static TaskBuilder start(final DioritePlugin dioritePlugin, final Runnable runnable)
+    public static TaskBuilder start(final BasePlugin dioritePlugin, final Runnable runnable)
     {
         return new TaskBuilder(dioritePlugin, runnable);
     }
@@ -288,7 +289,7 @@ public class TaskBuilder
      *
      * @return finished and registered diorite task.
      */
-    public static DioriteTask sync(final DioritePlugin dioritePlugin, final Runnable runnable)
+    public static DioriteTask sync(final BasePlugin dioritePlugin, final Runnable runnable)
     {
         return new TaskBuilder(dioritePlugin, runnable).start();
     }
@@ -308,7 +309,7 @@ public class TaskBuilder
      *
      * @return finished and registered diorite task.
      */
-    public static DioriteTask sync(final DioritePlugin dioritePlugin, final Runnable runnable, final Synchronizable synchronizable)
+    public static DioriteTask sync(final BasePlugin dioritePlugin, final Runnable runnable, final Synchronizable synchronizable)
     {
         return new TaskBuilder(dioritePlugin, runnable).syncTo(synchronizable).start();
     }
@@ -327,7 +328,7 @@ public class TaskBuilder
      *
      * @return finished and registered diorite task.
      */
-    public static DioriteTask async(final DioritePlugin dioritePlugin, final Runnable runnable)
+    public static DioriteTask async(final BasePlugin dioritePlugin, final Runnable runnable)
     {
         return new TaskBuilder(dioritePlugin, runnable).async().start();
     }
@@ -339,7 +340,7 @@ public class TaskBuilder
     /**
      * @return plugin that wan't register this task.
      */
-    public DioritePlugin getPlugin()
+    public BasePlugin getPlugin()
     {
         return this.dioritePlugin;
     }

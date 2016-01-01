@@ -47,6 +47,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
+import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.DioritePlugin;
 import org.diorite.scheduler.DioriteTask;
 import org.diorite.scheduler.DioriteWorker;
@@ -166,7 +167,7 @@ public class SchedulerImpl extends Scheduler
         @Override
         protected DioriteTask runTask(final TaskBuilder builder, final long startDelay) throws IllegalArgumentException
         {
-            final DioritePlugin dioritePlugin = builder.getPlugin();
+            final BasePlugin dioritePlugin = builder.getPlugin();
             final Runnable task = builder.getRunnable();
             validate(dioritePlugin, task);
             if (builder.isSingle() && (startDelay != 0))
@@ -627,7 +628,7 @@ public class SchedulerImpl extends Scheduler
         }
     }
 
-    private static void validate(final DioritePlugin dioritePlugin, final Object task)
+    private static void validate(final BasePlugin dioritePlugin, final Object task)
     {
         Validate.notNull(dioritePlugin, "Plugin cannot be null");
         Validate.notNull(task, "Task cannot be null");

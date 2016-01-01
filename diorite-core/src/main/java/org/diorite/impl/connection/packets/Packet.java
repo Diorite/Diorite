@@ -92,7 +92,7 @@ public abstract class Packet<T extends PacketListener> implements Dirtable
         {
             synchronized (this)
             {
-                tempData = this.preparePacket(false);
+                tempData = this.preparePacket(this.dirty);
                 this.dirty = false;
             }
             if (tempData == null)
