@@ -115,7 +115,6 @@ public class DevCmd extends SystemCommandImpl
                                 {
                                     for (double z = p.getZ() - 3; z <= (p.getZ() + 3); z += 1.5)
                                     {
-                                        System.out.println("Spawn on: " + x + ", " + y + ", " + z);
                                         final IChicken entity = entityFactory.createEntity(IChicken.class, new Location(x, y, z, p.getWorld()));
                                         p.getWorld().addEntity(entity);
                                     }
