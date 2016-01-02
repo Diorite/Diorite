@@ -44,7 +44,6 @@ public class AnyCraftingRecipeItem implements CraftingRecipeItem
      * Construct new recipe item with given item as pattern.
      *
      * @param item            pattern item.
-     * @param ignoreData      if pattern item should ignore subtype of material
      * @param replacementFunc replacement item function, see {@link #getReplacement(Player, CraftingGrid)}, may by null.
      * @param replacement     replacement item, see {@link #getReplacement()}
      * @param validators      validators of thic recipe item, allowing to check additional data of item. Player may be null.
@@ -61,7 +60,6 @@ public class AnyCraftingRecipeItem implements CraftingRecipeItem
      * Construct new recipe item with given item as pattern.
      *
      * @param item       pattern item.
-     * @param ignoreData if pattern item should ignore subtype of material
      * @param validators validators of thic recipe item, allowing to check additional data of item. Player may be null.
      */
     public AnyCraftingRecipeItem(final ItemStack item, final Collection<BiPredicate<Player, ItemStack>> validators)

@@ -30,6 +30,7 @@ public interface StringCustomValidator<T extends Predicate<String>> extends Vali
      * Create new custom String validator.
      *
      * @param predicate predicate to check string.
+     * @param <T>       type of Predicate.
      *
      * @return new custom string validator.
      */

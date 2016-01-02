@@ -109,11 +109,11 @@ public class DevCmd extends SystemCommandImpl
                     else if (args.asString(0).equalsIgnoreCase("chickenArmy"))
                     {
                         DioriteCore.getInstance().sync(() -> {
-                            for (double x = p.getX() - 10; x <= (p.getX() + 14); x+=1.5)
+                            for (double x = p.getX() - 10; x <= (p.getX() + 14); x += 1.5)
                             {
-                                for (double y = p.getY() - 6; y <= (p.getY() + 5); y+=1.5)
+                                for (double y = p.getY() - 6; y <= (p.getY() + 5); y += 1.5)
                                 {
-                                    for (double z = p.getZ() - 3; z <= (p.getZ() + 3); z+=1.5)
+                                    for (double z = p.getZ() - 3; z <= (p.getZ() + 3); z += 1.5)
                                     {
                                         System.out.println("Spawn on: " + x + ", " + y + ", " + z);
                                         final IChicken entity = entityFactory.createEntity(IChicken.class, new Location(x, y, z, p.getWorld()));

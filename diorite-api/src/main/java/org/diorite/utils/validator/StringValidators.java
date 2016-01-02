@@ -39,6 +39,7 @@ public final class StringValidators
      *
      * @param predicate predicate to be used as validator.
      * @param exception function that create exception from validated object and used validator. If function will return null, validator will not throw any exception.
+     * @param <T>       type of Predicate.
      *
      * @return created validator.
      */

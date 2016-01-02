@@ -774,9 +774,9 @@ public abstract class Material extends MaterialCounters implements SimpleEnum<Ma
     }
 
     /**
-     * Returns id and meta as one int. (id << 4) | meta
+     * Returns id and meta as one int. {@literal (id << 4) | meta}
      *
-     * @return id and meta as one int. (id << 4) | meta
+     * @return id and meta as one int. {@literal (id << 4) | meta}
      */
     public int getIdAndMeta()
     {

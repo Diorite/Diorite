@@ -16,8 +16,8 @@ public class NamedUUID
     /**
      * Construct new named UUID with given name and uuid.
      *
-     * @param name
-     * @param uuid
+     * @param name name of uuid.
+     * @param uuid named uuid.
      */
     public NamedUUID(final String name, final UUID uuid)
     {

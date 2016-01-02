@@ -30,7 +30,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
 import org.diorite.plugin.BasePlugin;
-import org.diorite.plugin.DioritePlugin;
 
 /**
  * Simple builder class to build all types of tasks.
@@ -266,9 +265,9 @@ public class TaskBuilder
      *
      * @return new task builder.
      *
-     * @see #async(DioritePlugin, Runnable)
-     * @see #sync(DioritePlugin, Runnable)
-     * @see #sync(DioritePlugin, Runnable, Synchronizable)
+     * @see #async(BasePlugin, Runnable)
+     * @see #sync(BasePlugin, Runnable)
+     * @see #sync(BasePlugin, Runnable, Synchronizable)
      * @see #start()
      */
     public static TaskBuilder start(final BasePlugin dioritePlugin, final Runnable runnable)
@@ -280,7 +279,7 @@ public class TaskBuilder
      * Simple method to create new sync task and run it. <br>
      * Equal to: <br>
      * <ol>
-     * <li>{@link #start(DioritePlugin, Runnable)}</li>
+     * <li>{@link #start(BasePlugin, Runnable)}</li>
      * <li>{@link #start()}</li>
      * </ol>
      *
@@ -298,7 +297,7 @@ public class TaskBuilder
      * Simple method to create new sync task and run it. <br>
      * Equal to: <br>
      * <ol>
-     * <li>{@link #start(DioritePlugin, Runnable)}</li>
+     * <li>{@link #start(BasePlugin, Runnable)}</li>
      * <li>{@link #syncTo(Synchronizable)}</li>
      * <li>{@link #start()}</li>
      * </ol>
@@ -318,7 +317,7 @@ public class TaskBuilder
      * Simple method to create new async task and run it. <br>
      * Equal to: <br>
      * <ol>
-     * <li>{@link #start(DioritePlugin, Runnable)}</li>
+     * <li>{@link #start(BasePlugin, Runnable)}</li>
      * <li>{@link #async()}</li>
      * <li>{@link #start()}</li>
      * </ol>
