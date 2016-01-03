@@ -26,8 +26,6 @@ package org.diorite.impl.world.chunk;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -38,6 +36,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunk;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.utils.collections.sets.ConcurrentSet;
+import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.chunk.ChunkPos;
 
 import it.unimi.dsi.fastutil.longs.LongCollection;
@@ -68,9 +67,9 @@ public class PlayerChunksImpl implements Tickable
         return this.player.getRenderDistance();
     }
 
-    public LongSet getVisibleChunks()
+    public boolean isVisible(final int x, final int z)
     {
-        return this.visibleChunks;
+        return this.visibleChunks.contains(BigEndianUtils.toLong(x, z));
     }
 
     public byte getViewDistance()
@@ -132,21 +131,29 @@ public class PlayerChunksImpl implements Tickable
         final int r = this.lastUpdateR++;
         final ChunkManagerImpl impl = this.player.getWorld().getChunkManager();
 
-        forChunks(r, this.lastUpdate, chunkPos -> {
-            impl.forcePopulation(chunkPos.getX(), chunkPos.getZ());
-            final long key = chunkPos.asLong();
-            if (this.visibleChunks.contains(key))
-            {
-                oldChunks.remove(key);
-            }
-            else
-            {
-                this.visibleChunks.add(key);
-                this.chunkLock.acquire(key);
-                chunksToSent.add(impl.getChunk(chunkPos));
-            }
+        final int cx = this.lastUpdate.getX();
+        final int cz = this.lastUpdate.getZ();
 
-        });
+        if (r == 0)
+        {
+            this.processChunk(cx, cz, impl, oldChunks, chunksToSent);
+        }
+        else
+        {
+            for (int x = - r; x <= r; x++)
+            {
+                if ((x == r) || (x == - r))
+                {
+                    for (int z = - r; z <= r; z++)
+                    {
+                        this.processChunk(cx + x, cz + z, impl, oldChunks, chunksToSent);
+                    }
+                }
+                this.processChunk(cx + x, cz + r, impl, oldChunks, chunksToSent);
+                this.processChunk(cx + x, cz - r, impl, oldChunks, chunksToSent);
+            }
+        }
+
         if (chunksToSent.isEmpty() /*&& oldChunks.isEmpty()*/)
         {
             return;
@@ -186,22 +193,19 @@ public class PlayerChunksImpl implements Tickable
         this.checkOld();
     }
 
-    static void forChunks(final int r, final ChunkPos center, final Consumer<ChunkPos> action)
+    private void processChunk(final int cx, final int cz, final ChunkManagerImpl impl, final LongCollection oldChunks, final Collection<ChunkImpl> chunksToSent)
     {
-        if (r == 0)
+        impl.forcePopulation(cx, cz);
+        final long key = BigEndianUtils.toLong(cx, cz);
+        if (this.visibleChunks.contains(key))
         {
-            action.accept(center);
-            return;
+            oldChunks.remove(key);
         }
-        IntStream.rangeClosed(- r, r).forEach(x -> {
-            if ((x == r) || (x == - r))
-            {
-                IntStream.rangeClosed(- r, r).forEach(z -> action.accept(center.add(x, z)));
-                return;
-            }
-            action.accept(center.add(x, r));
-            action.accept(center.add(x, - r));
-        });
+        else
+        {
+            this.visibleChunks.add(key);
+            this.chunkLock.acquire(key);
+            chunksToSent.add(impl.getChunk(cx, cz));
+        }
     }
-
 }

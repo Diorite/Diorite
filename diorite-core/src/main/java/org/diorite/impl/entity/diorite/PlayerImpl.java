@@ -58,7 +58,6 @@ import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.Inventory;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
-import org.diorite.utils.math.endian.BigEndianUtils;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntCollection;
@@ -192,7 +191,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public boolean isVisibleChunk(final int x, final int z)
     {
-        return this.playerChunks.getVisibleChunks().contains(BigEndianUtils.toLong(x, z));
+        return this.playerChunks.isVisible(x,z);
     }
 
     @Override
