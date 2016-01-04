@@ -72,25 +72,29 @@ public interface Entity extends GameObject, Synchronizable
 
     void setAiEnabled(boolean aiEnabled);
 
-//    boolean isOnFire();
-//
-//    void setOnFire(boolean onFire);
-//
-//    boolean isCrouching();
-//
-//    void setCrouching(boolean crouching);
-//
-//    boolean isSprinting();
-//
-//    void setSprinting(boolean sprinting);
-//
-//    boolean hasActionFlag();
-//
-//    void setActionFlag(boolean eating);
-//
-//    boolean isInvisible();
-//
-//    void setInvisible(boolean invisible);
+    boolean isOnFire();
+
+    void setOnFire(boolean onFire);
+
+    boolean isCrouching();
+
+    void setCrouching(boolean crouching);
+
+    boolean isSprinting();
+
+    void setSprinting(boolean sprinting);
+
+    boolean hasActionFlag();
+
+    void setActionFlag(boolean eating);
+
+    boolean isInvisible();
+
+    void setInvisible(boolean invisible);
+
+    boolean isGlowing();
+
+    void setGlowing(boolean glowing);
 
     int getAir();
 

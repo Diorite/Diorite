@@ -42,8 +42,10 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffe
 import org.diorite.impl.entity.IAreaEffectCloud;
 import org.diorite.impl.entity.IChicken;
 import org.diorite.impl.entity.ICreeper;
+import org.diorite.impl.entity.IEnderCrystal;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IEntityFactory;
+import org.diorite.impl.entity.ILivingEntity;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
@@ -79,6 +81,7 @@ import org.diorite.material.items.SkullMat;
 import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.PermissionsGroup;
 import org.diorite.permissions.PermissionsManager;
+import org.diorite.utils.math.DioriteMathUtils;
 
 public class DevCmd extends SystemCommandImpl
 {
@@ -97,6 +100,52 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = serverManager.getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "metadata":
+                {
+                    final IEntity entity = p.getNearbyEntities(3, 3, 3).iterator().next();
+                    final int index = args.asInt(1);
+                    switch (args.asString(0))
+                    {
+                        case "flag":
+                        {
+                            final String s = args.asString(2);
+                            for (final String flag : s.split(","))
+                            {
+                                entity.getMetadata().setBoolean(index, DioriteMathUtils.asInt(flag), args.asBoolean(3));
+                            }
+                            break;
+                        }
+                        case "int":
+                        {
+                            entity.getMetadata().setInt(index, args.asInt(2));
+                            break;
+                        }
+                        case "bool":
+                        {
+                            entity.getMetadata().setBoolean(index, args.asBoolean(2));
+                            break;
+                        }
+                        case "float":
+                        {
+                            entity.getMetadata().setFloat(index, args.asFloat(2));
+                            break;
+                        }
+                        case "loc":
+                        {
+                            entity.getMetadata().setBlockLocation(index, args.readCoordinates(2, p.getLocation().toBlockLocation()));
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "mobname":
+                {
+                    final IEntity entity = p.getNearbyEntities(3, 3, 3).iterator().next();
+                    System.out.println(args.asText());
+                    entity.setCustomName(ChatColor.translateAlternateColorCodesInString(args.asText().replace("%n", "\n")));
+                    entity.setCustomNameVisible(true);
+                    break;
+                }
                 case "mob":
                 {
                     final IEntityFactory entityFactory = serverManager.getEntityFactory();
@@ -125,13 +174,18 @@ public class DevCmd extends SystemCommandImpl
                     else if (args.asString(0).equalsIgnoreCase("zombie"))
                     {
                         final IZombie zombie = entityFactory.createEntity(IZombie.class, p.getLocation());
-//                        zombie.setActionFlag(true); crash
                         zombie.setCustomName("Custom name!");
                         zombie.setCustomNameVisible(true);
-//                        zombie.setOnFire(true); crash
-//                        zombie.setCrouching(true); crash
-//                        zombie.setInvisible(true); crash
-//                        zombie.setSprinting(true); crash
+//                        zombie.getMetadata().setInt(ILivingEntity.META_KEY_ARROWS_IN_BODY, args.has(1) ? args.asInt(1, 0) : 0);
+                        zombie.getMetadata().setInt(ILivingEntity.META_KEY_POTION_EFFECT_COLOR, args.has(1) ? Integer.parseInt(args.asString(1), 16) : 0);
+                        if (args.has(3))
+                        {
+                            String s = args.asString(2);
+                            for (final String flag : s.split(","))
+                            {
+                                zombie.getMetadata().setBoolean(IEntity.META_KEY_BASIC_FLAGS, DioriteMathUtils.asInt(flag), args.asBoolean(3));
+                            }
+                        }
                         zombie.setAir(- 5);
                         zombie.setSilent(true);
                         p.getWorld().addEntity(zombie);
@@ -157,6 +211,16 @@ public class DevCmd extends SystemCommandImpl
                                 id = Particle.getByParticleName(args.asString(4)).getParticleId();
                             }
                             entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_PARTICLE_ID, id);
+                        }
+                        p.getWorld().addEntity(entity);
+                    }
+                    else if (args.asString(0).equalsIgnoreCase("crystal"))
+                    {
+                        final IEnderCrystal entity = entityFactory.createEntity(IEnderCrystal.class, p.getLocation());
+                        entity.getMetadata().setBoolean(IEnderCrystal.META_KEY_SHOW_BOTTOM, args.asBoolean(1));
+                        if (args.has(4))
+                        {
+                            entity.getMetadata().setBlockLocation(IEnderCrystal.META_KEY_TARGET, args.readCoordinates(2, p.getLocation().toBlockLocation()));
                         }
                         p.getWorld().addEntity(entity);
                     }

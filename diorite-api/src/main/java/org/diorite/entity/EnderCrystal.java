@@ -24,6 +24,38 @@
 
 package org.diorite.entity;
 
+import org.diorite.BlockLocation;
+
+/**
+ * Represent ender crystal entity.
+ */
 public interface EnderCrystal extends Entity, ObjectEntity
 {
+    /**
+     * Returns true if this ender crystal include bottom pedestal.
+     *
+     * @return true if this ender crystal include bottom pedestal.
+     */
+    boolean isShowBottom();
+
+    /**
+     * Sets if this ender crystal should include bottom pedestal.
+     *
+     * @param showBottom if this ender crystal should include bottom pedestal.
+     */
+    void setShowBottom(boolean showBottom);
+
+    /**
+     * Returns beam target location, may be null.
+     *
+     * @return beam target location, may be null.
+     */
+    BlockLocation getBeamTarget();
+
+    /**
+     * Sets beam target location, use null value to disable beam.
+     *
+     * @param location new beam target location.
+     */
+    void setBeamTarget(final BlockLocation location);
 }

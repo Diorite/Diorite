@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.ILivingEntity;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
@@ -44,12 +45,10 @@ abstract class LivingEntityImpl extends AttributableEntityImpl implements ILivin
     public void initMetadata()
     {
         super.initMetadata();
+        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_UNKNOWN, 0));
         this.getMetadata().add(new EntityMetadataFloatEntry(META_KEY_HEALTH, 1F));
-        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_POTION_EFFECT_COLOR, 0));
-        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_POTION_IS_AMBIENT, 0));
-        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_ARROWS_IN_BODY, 0));
-
-        // test TODO: remove
-//        this.metadata.add(new EntityMetadataByteEntry(META_KEY_ARROWS_IN_BODY, 127));
+        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_POTION_EFFECT_COLOR, 5));
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_POTION_IS_AMBIENT, false));
+        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_ARROWS_IN_BODY, 0));
     }
 }

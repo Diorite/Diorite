@@ -39,7 +39,7 @@ public class EntityMetadataUUIDEntry extends EntityMetadataObjectEntry<UUID>
     @Override
     public EntityMetadataType getDataType()
     {
-        return EntityMetadataType.OPTIONAL_LOCATION;
+        return EntityMetadataType.OPTIONAL_UUID;
     }
 
     @Override

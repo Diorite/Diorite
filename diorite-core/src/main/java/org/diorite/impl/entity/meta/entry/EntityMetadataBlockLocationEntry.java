@@ -41,7 +41,7 @@ public class EntityMetadataBlockLocationEntry extends EntityMetadataObjectEntry<
     @Override
     public EntityMetadataType getDataType()
     {
-        return EntityMetadataType.LOCATION;
+        return this.optional ? EntityMetadataType.OPTIONAL_LOCATION : EntityMetadataType.LOCATION;
     }
 
     @Override

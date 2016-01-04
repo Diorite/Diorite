@@ -70,11 +70,12 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
      */
     static final class BasicFlags
     {
-        static final byte ON_FIRE   = 0x01;
-        static final byte CROUCHED  = 0x01;
-        static final byte SPRINTING = 0x01;
-        static final byte ACTION    = 0x01;
-        static final byte INVISIBLE = 0x01;
+        static final byte ON_FIRE   = 0;
+        static final byte CROUCHED  = 1;
+        static final byte SPRINTING = 2;
+        static final byte ACTION    = 3;
+        static final byte INVISIBLE = 4;
+        static final byte GLOWING   = 5;
 
         private BasicFlags()
         {
@@ -186,6 +187,18 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     public void setInvisible(final boolean invisible)
     {
         this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.INVISIBLE, invisible);
+    }
+
+    @Override
+    public boolean isGlowing()
+    {
+        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.GLOWING);
+    }
+
+    @Override
+    public void setGlowing(final boolean glowing)
+    {
+        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.GLOWING, glowing);
     }
 
     @Override
@@ -500,7 +513,10 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     {
         this.lastTickThread = Thread.currentThread();
         this.values.forEach(Resetable::reset);
-        this.aabb.setCenter(this);
+        if (this.aabb != null) // TODO
+        {
+            this.aabb.setCenter(this);
+        }
 
         if (this.hasGravity())
         {

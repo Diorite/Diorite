@@ -70,10 +70,10 @@ public class PacketPlayServerSpawnEntity extends PacketPlayServer
         this.entityId = entity.getId();
         this.entityUUID = entity.getUniqueID();
         this.entityTypeId = (byte) factory.getEntityNetworkID(entity.getType());
-        if (entity.getType().isLiving())
-        {
-            throw new IllegalArgumentException();
-        }
+//        if (entity.getType().isLiving())
+//        {
+//            throw new IllegalArgumentException();
+//        }
         this.x = (int) (entity.getX() * 32);
         this.y = (int) (entity.getY() * 32);
         this.z = (int) (entity.getZ() * 32);

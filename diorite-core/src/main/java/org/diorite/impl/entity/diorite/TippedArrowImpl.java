@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.ITippedArrow;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -19,6 +20,7 @@ class TippedArrowImpl extends AbstractArrowImpl implements ITippedArrow
     public void initMetadata()
     {
         super.initMetadata();
+        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_COLOR, 0));
     }
 
     @Override

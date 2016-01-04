@@ -56,6 +56,10 @@ public class BoundingBox implements Cloneable
 
     public static boolean intersects(final BoundingBox a, final BoundingBox b)
     {
+        if ((b == null) || (a == null)) // TODO maybe error?
+        {
+            return false;
+        }
         final Vector3d minA = a.min;
         final Vector3d maxA = a.max;
         final Vector3d minB = b.min;
