@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IAbstractArrow;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.ImmutableLocation;
 
@@ -15,10 +16,16 @@ abstract class AbstractArrowImpl extends ProjectileImpl implements IAbstractArro
     }
 
     @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IAbstractArrow.META_KEYS);
+    }
+
+    @Override
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_IS_CRITICAL, 0));
+        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_ARROW_IS_CRITICAL, 0));
     }
 }
 

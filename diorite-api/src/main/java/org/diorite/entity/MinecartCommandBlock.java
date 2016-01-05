@@ -24,6 +24,8 @@
 
 package org.diorite.entity;
 
-public interface Minecart extends AbstractMinecart
+import org.diorite.command.sender.CommandSender;
+
+public interface MinecartCommandBlock extends AbstractMinecart, CommandSender
 {
 }

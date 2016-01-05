@@ -216,19 +216,19 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     @Override
     public boolean isCrouching()
     {
-        return this.getMetadata().getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED);
+        return this.getMetadata().getBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.CROUCHED);
     }
 
     @Override
     public void setCrouching(final boolean isCrouching)
     {
-        this.getMetadata().setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED, isCrouching);
+        this.getMetadata().setBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.CROUCHED, isCrouching);
     }
 
     @Override
     public boolean isSprinting()
     {
-        return this.getMetadata().getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING);
+        return this.getMetadata().getBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.SPRINTING);
     }
 
     @Override
@@ -240,7 +240,7 @@ class HumanImpl extends LivingEntityImpl implements IHuman
         {
             attrib.addModifier(tempSprintMod);
         }
-        this.getMetadata().setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING, isSprinting);
+        this.getMetadata().setBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.SPRINTING, isSprinting);
     }
 
     @Override

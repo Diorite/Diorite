@@ -17,28 +17,47 @@ import org.diorite.utils.math.geometry.EntityBoundingBox;
 
 public interface IEntity extends Entity, Tickable, Trackable
 {
-    int           MAX_AIR_LEVEL                 = 300;
-    AtomicInteger ENTITY_ID                     = new AtomicInteger();
+    int           MAX_AIR_LEVEL = 300;
+    AtomicInteger ENTITY_ID     = new AtomicInteger();
+
     /**
-     * byte entry, with flags. {@link EntityImpl.BasicFlags}
+     * Size of metadata.
      */
-    byte          META_KEY_BASIC_FLAGS          = 0;
+    byte META_KEYS                            = 5;
+    /**
+     * byte entry, with flags.<br>
+     * OnFire, Crouched, Sprinting, Action, Invisible, Glowing (outline effect)
+     */
+    byte META_KEY_ENTITY_BASIC_FLAGS          = 0;
     /**
      * short entry, air level
      */
-    byte          META_KEY_AIR                  = 1;
+    byte META_KEY_ENTITY_AIR                  = 1;
     /**
      * String entry, name/name tag
      */
-    byte          META_KEY_NAME_TAG             = 2;
+    byte META_KEY_ENTITY_NAME_TAG             = 2;
     /**
      * byte/bool entry, if name tag should be visible
      */
-    byte          META_KEY_ALWAYS_SHOW_NAME_TAG = 3;
+    byte META_KEY_ENTITY_ALWAYS_SHOW_NAME_TAG = 3;
     /**
      * byte/bool entry, if entity should make sound.
      */
-    byte          META_KEY_SILENT               = 4;
+    byte META_KEY_ENTITY_SILENT               = 4;
+
+    /**
+     * Contains basic flags used in matadata.
+     */
+    interface EntityBasicFlags
+    {
+        byte ON_FIRE   = 0;
+        byte CROUCHED  = 1;
+        byte SPRINTING = 2;
+        byte ACTION    = 3;
+        byte INVISIBLE = 4;
+        byte GLOWING   = 5;
+    }
 
     static int getNextEntityID()
     {
@@ -50,6 +69,8 @@ public interface IEntity extends Entity, Tickable, Trackable
     boolean isOnGround();
 
     EntityMetadata getMetadata();
+
+    void setMetadata(EntityMetadata metadata);
 
     ChunkImpl getChunk();
 

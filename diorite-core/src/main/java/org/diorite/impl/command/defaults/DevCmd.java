@@ -152,7 +152,7 @@ public class DevCmd extends SystemCommandImpl
                     if (args.asString(0).equalsIgnoreCase("creeper"))
                     {
                         final ICreeper creeper = entityFactory.createEntity(ICreeper.class, p.getLocation());
-                        creeper.getMetadata().setBoolean(ICreeper.META_KEY_POWERED, true);
+                        creeper.getMetadata().setBoolean(ICreeper.META_KEY_CREEPER_POWERED, true);
                         p.getWorld().addEntity(creeper);
                     }
                     else if (args.asString(0).equalsIgnoreCase("chickenArmy"))
@@ -177,13 +177,13 @@ public class DevCmd extends SystemCommandImpl
                         zombie.setCustomName("Custom name!");
                         zombie.setCustomNameVisible(true);
 //                        zombie.getMetadata().setInt(ILivingEntity.META_KEY_ARROWS_IN_BODY, args.has(1) ? args.asInt(1, 0) : 0);
-                        zombie.getMetadata().setInt(ILivingEntity.META_KEY_POTION_EFFECT_COLOR, args.has(1) ? Integer.parseInt(args.asString(1), 16) : 0);
+                        zombie.getMetadata().setInt(ILivingEntity.META_KEY_LIVING_POTION_EFFECT_COLOR, args.has(1) ? Integer.parseInt(args.asString(1), 16) : 0);
                         if (args.has(3))
                         {
                             String s = args.asString(2);
                             for (final String flag : s.split(","))
                             {
-                                zombie.getMetadata().setBoolean(IEntity.META_KEY_BASIC_FLAGS, DioriteMathUtils.asInt(flag), args.asBoolean(3));
+                                zombie.getMetadata().setBoolean(IEntity.META_KEY_ENTITY_BASIC_FLAGS, DioriteMathUtils.asInt(flag), args.asBoolean(3));
                             }
                         }
                         zombie.setAir(- 5);
@@ -193,16 +193,16 @@ public class DevCmd extends SystemCommandImpl
                     else if (args.asString(0).equalsIgnoreCase("area"))
                     {
                         final IAreaEffectCloud entity = entityFactory.createEntity(IAreaEffectCloud.class, p.getLocation());
-                        entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_COLOR, 456);
-                        entity.getMetadata().setFloat(IAreaEffectCloud.META_KEY_RADIUS, 10);
+                        entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_COLOR, 456);
+                        entity.getMetadata().setFloat(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_RADIUS, 10);
                         p.getWorld().addEntity(entity);
                     }
                     else if (args.asString(0).equalsIgnoreCase("area2"))
                     {
                         final IAreaEffectCloud entity = entityFactory.createEntity(IAreaEffectCloud.class, p.getLocation());
-                        entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_COLOR, Integer.parseInt(args.asString(3), 16));
-                        entity.getMetadata().setFloat(IAreaEffectCloud.META_KEY_RADIUS, args.asFloat(2));
-                        entity.getMetadata().setBoolean(IAreaEffectCloud.META_KEY_UNKNOWN, args.asBoolean(1));
+                        entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_COLOR, Integer.parseInt(args.asString(3), 16));
+                        entity.getMetadata().setFloat(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_RADIUS, args.asFloat(2));
+                        entity.getMetadata().setBoolean(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_IS_POINT, args.asBoolean(1));
                         if (args.has(4))
                         {
                             Integer id = args.asInt(4);
@@ -210,17 +210,17 @@ public class DevCmd extends SystemCommandImpl
                             {
                                 id = Particle.getByParticleName(args.asString(4)).getParticleId();
                             }
-                            entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_PARTICLE_ID, id);
+                            entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID, id);
                         }
                         p.getWorld().addEntity(entity);
                     }
                     else if (args.asString(0).equalsIgnoreCase("crystal"))
                     {
                         final IEnderCrystal entity = entityFactory.createEntity(IEnderCrystal.class, p.getLocation());
-                        entity.getMetadata().setBoolean(IEnderCrystal.META_KEY_SHOW_BOTTOM, args.asBoolean(1));
+                        entity.getMetadata().setBoolean(IEnderCrystal.META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM, args.asBoolean(1));
                         if (args.has(4))
                         {
-                            entity.getMetadata().setBlockLocation(IEnderCrystal.META_KEY_TARGET, args.readCoordinates(2, p.getLocation().toBlockLocation()));
+                            entity.getMetadata().setBlockLocation(IEnderCrystal.META_KEY_ENDER_CRYSTAL_TARGET, args.readCoordinates(2, p.getLocation().toBlockLocation()));
                         }
                         p.getWorld().addEntity(entity);
                     }

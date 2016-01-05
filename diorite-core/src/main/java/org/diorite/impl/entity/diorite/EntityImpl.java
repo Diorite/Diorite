@@ -42,6 +42,7 @@ import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
@@ -64,24 +65,6 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     static final double PHYSIC_GRAVITY_CONST_1 = 0.98D;
     static final double PHYSIC_GRAVITY_CONST_2 = 0.08D;
 
-    /**
-     * Contains mask for basic flags used in matadata at index 0
-     * http://wiki.vg/Entities#Entity
-     */
-    static final class BasicFlags
-    {
-        static final byte ON_FIRE   = 0;
-        static final byte CROUCHED  = 1;
-        static final byte SPRINTING = 2;
-        static final byte ACTION    = 3;
-        static final byte INVISIBLE = 4;
-        static final byte GLOWING   = 5;
-
-        private BasicFlags()
-        {
-        }
-    }
-
     private final Set<Resetable> values = new HashSet<>(10);
 
     final            DioriteCore       core;
@@ -89,7 +72,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     private volatile Thread            lastTickThread;
     private          EntityBoundingBox aabb;
     private          int               id;
-    private final    EntityMetadata    metadata;
+    protected        EntityMetadata    metadata;
     private          BaseTracker<?>    tracker;
 
     private double x;
@@ -117,7 +100,6 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
         this.world = (WorldImpl) location.getWorld();
-        this.metadata = new EntityMetadata();
         this.initMetadata();
     }
 
@@ -132,121 +114,121 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     @Override
     public boolean isOnFire()
     {
-        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.ON_FIRE);
+        return this.metadata.getBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.ON_FIRE);
     }
 
     @Override
     public void setOnFire(final boolean onFire)
     {
-        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.ON_FIRE, onFire);
+        this.metadata.setBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.ON_FIRE, onFire);
     }
 
     @Override
     public boolean isCrouching()
     {
-        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED);
+        return this.metadata.getBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.CROUCHED);
     }
 
     @Override
     public void setCrouching(final boolean crouching)
     {
-        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.CROUCHED, crouching);
+        this.metadata.setBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.CROUCHED, crouching);
     }
 
     @Override
     public boolean isSprinting()
     {
-        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING);
+        return this.metadata.getBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.SPRINTING);
     }
 
     @Override
     public void setSprinting(final boolean sprinting)
     {
-        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.SPRINTING, sprinting);
+        this.metadata.setBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.SPRINTING, sprinting);
     }
 
     @Override
     public boolean hasActionFlag()
     {
-        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.ACTION);
+        return this.metadata.getBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.ACTION);
     }
 
     @Override
     public void setActionFlag(final boolean flag)
     {
-        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.ACTION, flag);
+        this.metadata.setBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.ACTION, flag);
     }
 
     @Override
     public boolean isInvisible()
     {
-        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.INVISIBLE);
+        return this.metadata.getBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.INVISIBLE);
     }
 
     @Override
     public void setInvisible(final boolean invisible)
     {
-        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.INVISIBLE, invisible);
+        this.metadata.setBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.INVISIBLE, invisible);
     }
 
     @Override
     public boolean isGlowing()
     {
-        return this.metadata.getBoolean(META_KEY_BASIC_FLAGS, BasicFlags.GLOWING);
+        return this.metadata.getBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.GLOWING);
     }
 
     @Override
     public void setGlowing(final boolean glowing)
     {
-        this.metadata.setBoolean(META_KEY_BASIC_FLAGS, BasicFlags.GLOWING, glowing);
+        this.metadata.setBoolean(META_KEY_ENTITY_BASIC_FLAGS, EntityBasicFlags.GLOWING, glowing);
     }
 
     @Override
     public int getAir()
     {
-        return this.metadata.getInt(META_KEY_AIR);
+        return this.metadata.getInt(META_KEY_ENTITY_AIR);
     }
 
     @Override
     public void setAir(final int air)
     {
-        this.metadata.setInt(META_KEY_AIR, air);
+        this.metadata.setInt(META_KEY_ENTITY_AIR, air);
     }
 
     @Override
     public String getCustomName()
     {
-        return this.metadata.getString(META_KEY_NAME_TAG);
+        return this.metadata.getString(META_KEY_ENTITY_NAME_TAG);
     }
 
     @Override
     public void setCustomName(final String name)
     {
-        this.metadata.setString(META_KEY_NAME_TAG, name);
+        this.metadata.setString(META_KEY_ENTITY_NAME_TAG, name);
     }
 
     @Override
     public boolean isCustomNameVisible()
     {
-        return this.metadata.getBoolean(META_KEY_ALWAYS_SHOW_NAME_TAG);
+        return this.metadata.getBoolean(META_KEY_ENTITY_ALWAYS_SHOW_NAME_TAG);
     }
 
     @Override
     public void setCustomNameVisible(final boolean visible)
     {
-        this.metadata.setBoolean(META_KEY_ALWAYS_SHOW_NAME_TAG, visible);
+        this.metadata.setBoolean(META_KEY_ENTITY_ALWAYS_SHOW_NAME_TAG, visible);
     }
 
     @Override
     public boolean isSilent()
     {
-        return this.metadata.getBoolean(META_KEY_SILENT);
+        return this.metadata.getBoolean(META_KEY_ENTITY_SILENT);
     }
 
     @Override
     public void setSilent(final boolean silent)
     {
-        this.metadata.setBoolean(META_KEY_SILENT, silent);
+        this.metadata.setBoolean(META_KEY_ENTITY_SILENT, silent);
     }
 
     @Override
@@ -255,13 +237,19 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         return new Vector3f(this.velocityX, this.velocityY, this.velocityZ);
     }
 
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(META_KEYS);
+    }
+
     public void initMetadata()
     {
-        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_BASIC_FLAGS, 0));
-        this.metadata.add(new EntityMetadataIntEntry(IEntity.META_KEY_AIR, IEntity.MAX_AIR_LEVEL));
-        this.metadata.add(new EntityMetadataStringEntry(IEntity.META_KEY_NAME_TAG, ""));
-        this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_SILENT, false));
-        this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ALWAYS_SHOW_NAME_TAG, false));
+        this.createMetadata();
+        this.metadata.add(new EntityMetadataByteEntry(IEntity.META_KEY_ENTITY_BASIC_FLAGS, 0));
+        this.metadata.add(new EntityMetadataIntEntry(IEntity.META_KEY_ENTITY_AIR, IEntity.MAX_AIR_LEVEL));
+        this.metadata.add(new EntityMetadataStringEntry(IEntity.META_KEY_ENTITY_NAME_TAG, ""));
+        this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ENTITY_SILENT, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ENTITY_ALWAYS_SHOW_NAME_TAG, false));
 
 
         // test TODO: remove
@@ -317,6 +305,13 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     public EntityMetadata getMetadata()
     {
         return this.metadata;
+    }
+
+    @Override
+    public void setMetadata(final EntityMetadata metadata)
+    {
+        this.metadata = metadata;
+        metadata.getEntries().forEach(EntityMetadataEntry::setDirty);
     }
 
     @Override

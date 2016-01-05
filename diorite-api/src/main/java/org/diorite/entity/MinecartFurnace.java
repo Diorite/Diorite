@@ -24,6 +24,6 @@
 
 package org.diorite.entity;
 
-public interface Minecart extends AbstractMinecart
+public interface MinecartFurnace extends AbstractMinecart
 {
 }

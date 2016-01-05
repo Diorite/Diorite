@@ -27,9 +27,9 @@ package org.diorite.impl.entity.meta;
 import javax.vecmath.Vector3f;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -50,33 +50,35 @@ import org.diorite.BlockLocation;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
-import org.diorite.utils.SimpleEnum;
-
-import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 public class EntityMetadata
 {
     public static final int END_MARKER = 0xff;
 
-    private final Byte2ObjectOpenHashMap<EntityMetadataEntry<?>> data;
+    private final EntityMetadataEntry<?>[] data;
 
-    public EntityMetadata()
+    public EntityMetadata(final int size)
     {
-        this.data = new Byte2ObjectOpenHashMap<>(9, SimpleEnum.SMALL_LOAD_FACTOR);
+        this.data = new EntityMetadataEntry<?>[size];
     }
 
     public void add(final EntityMetadataEntry<?> entry)
     {
-        final EntityMetadataEntry<?> old = this.data.put(entry.getIndex(), entry);
-        if (old != null)
-        {
-            entry.setDirty();
-        }
+        this.data[entry.getIndex()] = entry;
+        entry.setDirty();
     }
 
     public Collection<EntityMetadataEntry<?>> getOutdatedEntries()
     {
-        return this.data.values().stream().filter(EntityMetadataEntry::isDirty).collect(Collectors.toSet());
+        final Collection<EntityMetadataEntry<?>> result = new HashSet<>(this.data.length);
+        for (final EntityMetadataEntry<?> entry : this.data)
+        {
+            if (entry.isDirty())
+            {
+                result.add(entry);
+            }
+        }
+        return result;
     }
 
     /**
@@ -86,17 +88,22 @@ public class EntityMetadata
      */
     public Collection<EntityMetadataEntry<?>> popOutdatedEntries()
     {
-        final Collection<EntityMetadataEntry<?>> result = new HashSet<>(3);
-        this.data.values().stream().filter(EntityMetadataEntry::isDirty).forEach(e -> {
-            e.setClean();
-            result.add(e);
-        });
+        final Collection<EntityMetadataEntry<?>> result = new HashSet<>(this.data.length);
+        for (final EntityMetadataEntry<?> entry : this.data)
+        {
+            if (entry.setClean())
+            {
+                result.add(entry);
+            }
+        }
         return result;
     }
 
     public Collection<EntityMetadataEntry<?>> getEntries()
     {
-        return this.data.values().stream().collect(Collectors.toSet());
+        final Collection<EntityMetadataEntry<?>> result = new HashSet<>(this.data.length);
+        Collections.addAll(result, this.data);
+        return result;
     }
 
     /*
@@ -105,7 +112,7 @@ public class EntityMetadata
 
     public void setByte(final byte index, final byte value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataByteEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted byte but found: " + entry);
@@ -116,7 +123,7 @@ public class EntityMetadata
 
     public void setInt(final byte index, final int value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataIntEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted int but found: " + entry);
@@ -127,7 +134,7 @@ public class EntityMetadata
 
     public void setFloat(final byte index, final float value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataFloatEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted float but found: " + entry);
@@ -138,7 +145,7 @@ public class EntityMetadata
 
     public void setBoolean(final byte index, final int flagIndex, final boolean bool)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry instanceof EntityMetadataByteEntry)
         {
             final EntityMetadataByteEntry e = (EntityMetadataByteEntry) entry;
@@ -172,7 +179,7 @@ public class EntityMetadata
 
     public void swichBoolean(final byte index, final int flagIndex)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry instanceof EntityMetadataByteEntry)
         {
             final EntityMetadataByteEntry e = (EntityMetadataByteEntry) entry;
@@ -192,7 +199,7 @@ public class EntityMetadata
 
     public void setBoolean(final byte index, final boolean value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataBooleanEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
@@ -203,7 +210,7 @@ public class EntityMetadata
 
     public void swichBoolean(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataBooleanEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
@@ -215,7 +222,7 @@ public class EntityMetadata
 
     public void setString(final byte index, final String value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataStringEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted String but found: " + entry);
@@ -227,7 +234,7 @@ public class EntityMetadata
 
     public void setChatComponent(final byte index, final BaseComponent value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataChatEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted Chat but found: " + entry);
@@ -239,7 +246,7 @@ public class EntityMetadata
 
     public void setItemStack(final byte index, final ItemStack value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataItemStackEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted ItemStack but found: " + entry);
@@ -251,7 +258,7 @@ public class EntityMetadata
 
     public void setBlockLocation(final byte index, final BlockLocation value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataBlockLocationEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted BlockLocation but found: " + entry);
@@ -263,7 +270,7 @@ public class EntityMetadata
 
     public void setMaterial(final byte index, final Material value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataMaterialEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted Material but found: " + entry);
@@ -275,7 +282,7 @@ public class EntityMetadata
 
     public void setVector3F(final byte index, final Vector3f value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataVector3FEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted Vector3F but found: " + entry);
@@ -287,7 +294,7 @@ public class EntityMetadata
 
     public void setUUID(final byte index, final UUID value)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataUUIDEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted UUID but found: " + entry);
@@ -387,12 +394,12 @@ public class EntityMetadata
 
     private EntityMetadataEntry<?> get(final byte index)
     {
-        return this.data.get(index);
+        return this.data[index];
     }
 
     public byte getByte(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return 0;
@@ -406,7 +413,7 @@ public class EntityMetadata
 
     public int getInt(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return 0;
@@ -420,7 +427,7 @@ public class EntityMetadata
 
     public float getFloat(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return 0;
@@ -435,7 +442,7 @@ public class EntityMetadata
 
     public boolean getBoolean(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return false;
@@ -449,7 +456,7 @@ public class EntityMetadata
 
     public boolean getBoolean(final byte index, final int flagIndex)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return false;
@@ -467,7 +474,7 @@ public class EntityMetadata
 
     public int getNumberPart(final byte index, final int mask)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return 0;
@@ -485,7 +492,7 @@ public class EntityMetadata
 
     public String getString(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return null;
@@ -500,7 +507,7 @@ public class EntityMetadata
 
     public ItemStack getItemStack(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return null;
@@ -515,7 +522,7 @@ public class EntityMetadata
 
     public BlockLocation getBlockLocation(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return null;
@@ -530,7 +537,7 @@ public class EntityMetadata
 
     public Material getMaterial(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return null;
@@ -545,7 +552,7 @@ public class EntityMetadata
 
     public UUID getUUID(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return null;
@@ -560,7 +567,7 @@ public class EntityMetadata
 
     public BaseComponent getChatComponent(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return null;
@@ -575,7 +582,7 @@ public class EntityMetadata
 
     public Vector3f getVector3F(final byte index)
     {
-        final EntityMetadataEntry<?> entry = this.data.get(index);
+        final EntityMetadataEntry<?> entry = this.data[index];
         if (entry == null)
         {
             return null;

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IFireworksRocket;
+import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -19,6 +20,7 @@ class FireworksRocketImpl extends ProjectileImpl implements IFireworksRocket
     public void initMetadata()
     {
         super.initMetadata();
+        this.getMetadata().add(new EntityMetadataItemStackEntry(META_KEY_FIREWORK_ITEM, null));
     }
 
     @Override

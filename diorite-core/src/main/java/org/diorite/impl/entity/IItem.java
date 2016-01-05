@@ -8,13 +8,19 @@ import org.diorite.utils.others.NamedUUID;
 
 public interface IItem extends IEntity, Item
 {
-    int                        DEFAULT_BLOCK_DROP_PICKUP_DELAY = 50;
-    int                        DEFAULT_DROP_PICKUP_DELAY       = 200;
+    int DEFAULT_BLOCK_DROP_PICKUP_DELAY = 50;
+    int DEFAULT_DROP_PICKUP_DELAY       = 200;
+
+    ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.25F, 0.25F);
+
+    /**
+     * Size of metadata.
+     */
+    byte META_KEYS          = 6;
     /**
      * ItemStack entry
      */
-    byte                       META_KEY_ITEM                   = 5;
-    ImmutableEntityBoundingBox BASE_SIZE                       = new ImmutableEntityBoundingBox(0.25F, 0.25F);
+    byte META_KEY_ITEM_ITEM = 5;
 
     ItemStack getItemStack();
 

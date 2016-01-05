@@ -71,19 +71,19 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataItemStackEntry(META_KEY_ITEM, null));
+        this.getMetadata().add(new EntityMetadataItemStackEntry(META_KEY_ITEM_ITEM, null));
     }
 
     @Override
     public ItemStack getItemStack()
     {
-        return this.getMetadata().getItemStack(META_KEY_ITEM);
+        return this.getMetadata().getItemStack(META_KEY_ITEM_ITEM);
     }
 
     @Override
     public void setItemStack(final ItemStack item)
     {
-        this.getMetadata().add(new EntityMetadataItemStackEntry(META_KEY_ITEM, item));
+        this.getMetadata().add(new EntityMetadataItemStackEntry(META_KEY_ITEM_ITEM, item));
     }
 
     @Override

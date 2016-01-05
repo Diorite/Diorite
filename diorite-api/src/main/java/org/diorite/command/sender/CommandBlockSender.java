@@ -22,8 +22,25 @@
  * SOFTWARE.
  */
 
-package org.diorite.entity;
+package org.diorite.command.sender;
 
-public interface Minecart extends AbstractMinecart
+public interface CommandBlockSender extends CommandSender
 {
+    @Override
+    default boolean isConsole()
+    {
+        return false;
+    }
+
+    @Override
+    default boolean isPlayer()
+    {
+        return false;
+    }
+
+    @Override
+    default boolean isCommandBlock()
+    {
+        return true;
+    }
 }

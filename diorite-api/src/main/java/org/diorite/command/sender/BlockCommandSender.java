@@ -24,7 +24,7 @@
 
 package org.diorite.command.sender;
 
-public interface BlockCommandSender extends CommandSender
+public interface BlockCommandSender extends CommandBlockSender
 {
     @Override
     default boolean isConsole()

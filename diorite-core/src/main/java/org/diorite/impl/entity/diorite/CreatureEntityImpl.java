@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
+import org.diorite.impl.entity.IAbstractArrow;
 import org.diorite.impl.entity.ICreatureEntity;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.ImmutableLocation;
 
 abstract class CreatureEntityImpl extends InsentientEntityImpl implements ICreatureEntity

@@ -32,6 +32,9 @@ import org.diorite.chat.DioriteMarkdownParser;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.permissions.ServerOperator;
 
+/**
+ * Represent source of command.
+ */
 public interface CommandSender extends ServerOperator
 {
     String getName();

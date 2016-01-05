@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IWitherSkull;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -19,6 +20,7 @@ class WitherSkullImpl extends ProjectileImpl implements IWitherSkull
     public void initMetadata()
     {
         super.initMetadata();
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_INVULNERABLE, false));
     }
 
     @Override

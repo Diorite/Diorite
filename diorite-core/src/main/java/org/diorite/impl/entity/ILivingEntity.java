@@ -5,27 +5,27 @@ import org.diorite.entity.LivingEntity;
 public interface ILivingEntity extends IEntity, LivingEntity
 {
     /**
+     * Size of metadata.
+     */
+    byte META_KEYS                           = 10;
+    /**
      * byte, possible used hand.
      */
-    byte META_KEY_UNKNOWN             = 5;
+    byte META_KEY_LIVING_UNKNOWN             = 5;
     /**
      * float entry, hp of entity
      */
-    byte META_KEY_HEALTH              = 6;
+    byte META_KEY_LIVING_HEALTH              = 6;
     /**
      * int entry, Potion effect color over entity
      */
-    byte META_KEY_POTION_EFFECT_COLOR = 7;
+    byte META_KEY_LIVING_POTION_EFFECT_COLOR = 7;
     /**
      * boolean entry, if potion is ambiend (less visible)
      */
-    byte META_KEY_POTION_IS_AMBIENT   = 8;
+    byte META_KEY_LIVING_POTION_IS_AMBIENT   = 8;
     /**
      * int entry, number of arrows in player.
      */
-    byte META_KEY_ARROWS_IN_BODY      = 9;
-//    /**
-//     * byte/bool entry, if entity have AI
-//     */
-//    byte META_KEY_NO_AI               = 15;
+    byte META_KEY_LIVING_ARROWS_IN_BODY      = 9;
 }
