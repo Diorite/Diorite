@@ -24,25 +24,19 @@
 
 package org.diorite.command.sender;
 
-public interface BlockCommandSender extends CommandBlockSender
+import org.diorite.world.Block;
+
+/**
+ * Represent block - command block sender.
+ */
+public interface BlockCommandSender extends CommandBlockSender, TileEntityCommandSender
 {
-    @Override
-    default boolean isConsole()
-    {
-        return false;
-    }
+    /**
+     * Returns command block block instance.
+     *
+     * @return command block block instance.
+     */
+    Block getBlock();
 
-    @Override
-    default boolean isPlayer()
-    {
-        return false;
-    }
-
-    @Override
-    default boolean isCommandBlock()
-    {
-        return true;
-    }
-
-    // getBlock();
+    // TODO: override getTileEntity to return CommandBlock tile entity.
 }

@@ -26,8 +26,7 @@ import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.auth.GameProfile;
 import org.diorite.cfg.magic.MagicNumbers;
-import org.diorite.chat.ChatPosition;
-import org.diorite.chat.component.BaseComponent;
+import org.diorite.command.sender.MessageOutput;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Human;
 import org.diorite.entity.Player;
@@ -59,10 +58,11 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     private final GameProfile         gameProfile;
     private final PlayerInventoryImpl inventory;
 
-    private PacketPlayServerAbilities abilities    = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
-    private HandSide                  mainHand     = HandSide.RIGHT;
-    private int                       heldItemSlot = 0;
-    private GameMode                  gameMode     = GameMode.SURVIVAL;
+    private   PacketPlayServerAbilities abilities     = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
+    private   HandSide                  mainHand      = HandSide.RIGHT;
+    private   int                       heldItemSlot  = 0;
+    private   GameMode                  gameMode      = GameMode.SURVIVAL;
+    protected MessageOutput             messageOutput = MessageOutput.IGNORE;
     private NamedUUID namedUUID;
 
     private PlayerPermissionsContainer permissionContainer;
@@ -374,21 +374,27 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     }
 
     @Override
-    public Human getPlayer()
+    public Human getSenderEntity()
     {
         return this;
-    }
-
-    @Override
-    public void sendMessage(final ChatPosition position, final BaseComponent component)
-    {
-        // not needed
     }
 
     @Override
     public String getName()
     {
         return this.gameProfile.getName();
+    }
+
+    @Override
+    public MessageOutput getMessageOutput()
+    {
+        return this.messageOutput;
+    }
+
+    @Override
+    public void setMessageOutput(final MessageOutput messageOutput)
+    {
+        this.messageOutput = messageOutput;
     }
 
     @Override

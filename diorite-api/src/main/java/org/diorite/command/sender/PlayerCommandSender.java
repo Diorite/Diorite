@@ -32,5 +32,5 @@ import org.diorite.entity.Player;
 public interface PlayerCommandSender extends HumanCommandSender
 {
     @Override
-    Player getPlayer();
+    Player getSenderEntity();
 }

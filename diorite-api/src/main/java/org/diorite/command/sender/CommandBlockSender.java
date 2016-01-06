@@ -24,20 +24,11 @@
 
 package org.diorite.command.sender;
 
+/**
+ * Represent any command block sender
+ */
 public interface CommandBlockSender extends CommandSender
 {
-    @Override
-    default boolean isConsole()
-    {
-        return false;
-    }
-
-    @Override
-    default boolean isPlayer()
-    {
-        return false;
-    }
-
     @Override
     default boolean isCommandBlock()
     {

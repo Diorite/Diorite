@@ -24,13 +24,18 @@
 
 package org.diorite.command.sender;
 
-import org.diorite.entity.Human;
+import org.diorite.entity.Entity;
 
 /**
- * Represent human command sender, it may be real player or some NPC.
+ * Represent entity command sender.
  */
-public interface HumanCommandSender extends EntityCommandSender
+public interface EntityCommandSender extends CommandSender
 {
-    @Override
-    Human getSenderEntity();
+    /**
+     * Returns entity related to this sender. <br>
+     * It will be this same object for most cases.
+     *
+     * @return entity related to this sender.
+     */
+    Entity getSenderEntity();
 }

@@ -30,9 +30,11 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.fusesource.jansi.Ansi;
+import org.slf4j.Marker;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.chat.ChatColor;
+import org.diorite.command.sender.MessageOutput;
 
 import jline.Terminal;
 
@@ -69,31 +71,8 @@ public class ColoredConsoleCommandSenderImpl extends ConsoleCommandSenderImpl
         this.replacements.put(ChatColor.UNDERLINE, Ansi.ansi().a(Ansi.Attribute.UNDERLINE).toString());
         this.replacements.put(ChatColor.ITALIC, Ansi.ansi().a(Ansi.Attribute.ITALIC).toString());
         this.replacements.put(ChatColor.RESET, Ansi.ansi().a(Ansi.Attribute.RESET).toString());
-    }
 
-    @Override
-    public void sendMessage(final String message)
-    {
-        if (this.terminal.isAnsiSupported())
-        {
-            String result = message;
-            for (final ChatColor color : this.colors)
-            {
-                if (this.replacements.containsKey(color))
-                {
-                    result = result.replaceAll("(?i)" + color.toString(), this.replacements.get(color));
-                }
-                else
-                {
-                    result = result.replaceAll("(?i)" + color.toString(), "");
-                }
-            }
-            System.out.println(result + Ansi.ansi().reset().toString());
-        }
-        else
-        {
-            super.sendMessage(message);
-        }
+        this.messageOutput = new ColoredConsoleMessageOutput(core);
     }
 
     @Override
@@ -109,5 +88,43 @@ public class ColoredConsoleCommandSenderImpl extends ConsoleCommandSenderImpl
             return core.getConsoleSender();
         }
         return new ColoredConsoleCommandSenderImpl(core);
+    }
+
+    public class ColoredConsoleMessageOutput extends ConsoleMessageOutput implements MessageOutput
+    {
+        public ColoredConsoleMessageOutput(final DioriteCore core)
+        {
+            super(core);
+        }
+
+        @Override
+        protected void sendMessage(final Marker marker, final String str)
+        {
+            super.sendMessage(marker, this.fix(str));
+        }
+
+        private String fix(final String message)
+        {
+            if (ColoredConsoleCommandSenderImpl.this.terminal.isAnsiSupported())
+            {
+                String result = message;
+                for (final ChatColor color : ColoredConsoleCommandSenderImpl.this.colors)
+                {
+                    if (ColoredConsoleCommandSenderImpl.this.replacements.containsKey(color))
+                    {
+                        result = result.replaceAll("(?i)" + color.toString(), ColoredConsoleCommandSenderImpl.this.replacements.get(color));
+                    }
+                    else
+                    {
+                        result = result.replaceAll("(?i)" + color.toString(), "");
+                    }
+                }
+                return result + Ansi.ansi().reset().toString();
+            }
+            else
+            {
+                return message;
+            }
+        }
     }
 }

@@ -38,7 +38,7 @@ import org.diorite.utils.math.DioriteRandom;
 public interface Player extends Human, PlayerCommandSender, OfflinePlayer
 {
     @Override
-    default Player getPlayer()
+    default Player getSenderEntity()
     {
         return this;
     }

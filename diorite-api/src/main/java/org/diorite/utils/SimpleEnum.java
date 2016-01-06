@@ -252,6 +252,10 @@ public interface SimpleEnum<T extends SimpleEnum<T>>
 
         protected static <T extends SimpleEnum<?>> T getByEnumName(final Class<T> clazz, final String name)
         {
+            if (name == null)
+            {
+                return null;
+            }
             return (T) byName.get(clazz).get(name);
         }
 

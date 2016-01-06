@@ -51,6 +51,7 @@ import org.diorite.Particle;
 import org.diorite.auth.GameProfile;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.command.sender.MessageOutput;
 import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
@@ -80,6 +81,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         this.networkManager = networkManager;
         this.renderDistance = core.getRenderDistance();
         this.playerChunks = new PlayerChunksImpl(this);
+        this.messageOutput = new PacketMessageOutput(networkManager);
     }
 
     @Override
@@ -191,7 +193,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public boolean isVisibleChunk(final int x, final int z)
     {
-        return this.playerChunks.isVisible(x,z);
+        return this.playerChunks.isVisible(x, z);
     }
 
     @Override
@@ -215,12 +217,6 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public void kick(final BaseComponent s)
     {
         this.core.sync(() -> this.networkManager.close(s, false));
-    }
-
-    @Override
-    public void sendMessage(final ChatPosition position, final BaseComponent component)
-    {
-        this.networkManager.sendPacket(new PacketPlayServerChat(component, position));
     }
 
     @Override
@@ -347,8 +343,30 @@ class PlayerImpl extends HumanImpl implements IPlayer
     }
 
     @Override
-    public Player getPlayer()
+    public Player getSenderEntity()
     {
         return this;
+    }
+
+    private static class PacketMessageOutput implements MessageOutput
+    {
+        private final CoreNetworkManager networkManager;
+
+        private PacketMessageOutput(final CoreNetworkManager networkManager)
+        {
+            this.networkManager = networkManager;
+        }
+
+        @Override
+        public void sendMessage(final ChatPosition position, final BaseComponent component)
+        {
+            this.networkManager.sendPacket(new PacketPlayServerChat(component, position));
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("networkManager", this.networkManager).toString();
+        }
     }
 }

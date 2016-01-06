@@ -24,13 +24,13 @@
 
 package org.diorite.command.sender;
 
-import org.diorite.entity.Human;
+import org.diorite.entity.MinecartCommandBlock;
 
 /**
- * Represent human command sender, it may be real player or some NPC.
+ * Represent minecraft - command block sender.
  */
-public interface HumanCommandSender extends EntityCommandSender
+public interface MinecartCommandSender extends CommandBlockSender, EntityCommandSender
 {
     @Override
-    Human getSenderEntity();
+    MinecartCommandBlock getSenderEntity();
 }

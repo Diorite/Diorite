@@ -24,6 +24,9 @@
 
 package org.diorite.command.sender;
 
+/**
+ * Represent console command sender.
+ */
 public interface ConsoleCommandSender extends CommandSender
 {
     @Override
@@ -36,18 +39,6 @@ public interface ConsoleCommandSender extends CommandSender
     default boolean isConsole()
     {
         return true;
-    }
-
-    @Override
-    default boolean isPlayer()
-    {
-        return false;
-    }
-
-    @Override
-    default boolean isCommandBlock()
-    {
-        return false;
     }
 
     @Override

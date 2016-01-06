@@ -24,13 +24,16 @@
 
 package org.diorite.command.sender;
 
-import org.diorite.entity.Human;
-
 /**
- * Represent human command sender, it may be real player or some NPC.
+ * Represent a sign command sender.
  */
-public interface HumanCommandSender extends EntityCommandSender
+public interface SignSender extends TileEntityCommandSender
 {
     @Override
-    Human getSenderEntity();
+    default boolean isSign()
+    {
+        return true;
+    }
+
+    // TODO: override getTileEntity to return Sign tile entity.
 }
