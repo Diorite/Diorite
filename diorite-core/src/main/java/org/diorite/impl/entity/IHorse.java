@@ -34,4 +34,19 @@ public interface IHorse extends IAnimalEntity, Horse
      * int, enum? Armor type.
      */
     byte META_KEY_HORSE_ARMOR      = 16;
+
+
+    /**
+     * Contains status flags used in matadata.
+     */
+    interface HorseStatusFlag
+    {
+        byte TAMED      = 1;
+        byte SADDLE     = 2;
+        byte CHEST      = 3;
+        byte BRED       = 4;
+        byte EATING     = 5;
+        byte REARING    = 6;
+        byte MOUTH_OPEN = 7;
+    }
 }
