@@ -6,12 +6,13 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
 import org.diorite.impl.entity.IMinecart;
+import org.diorite.impl.entity.IMinecartHopper;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
-class MinecartImpl extends AbstractMinecartImpl implements IMinecart
+class MinecartHopperImpl extends AbstractMinecartImpl implements IMinecartHopper
 {
-    MinecartImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
+    MinecartHopperImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
         this.setBoundingBox(IMinecart.BASE_SIZE.create(this));
@@ -32,7 +33,7 @@ class MinecartImpl extends AbstractMinecartImpl implements IMinecart
     @Override
     public EntityType getType()
     {
-        return EntityType.MINECART;
+        return EntityType.MINECART_HOPPER;
     }
 
     @Override

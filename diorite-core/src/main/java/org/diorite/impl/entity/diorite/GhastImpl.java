@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IGhast;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -13,6 +14,12 @@ class GhastImpl extends MonsterEntityImpl implements IGhast
     {
         super(uuid, core, id, location);
         this.setBoundingBox(BASE_SIZE.create(this));
+    }
+
+    @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IGhast.META_KEYS);
     }
 
     @Override

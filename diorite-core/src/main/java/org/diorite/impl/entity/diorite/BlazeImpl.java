@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IBlaze;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -13,6 +14,12 @@ class BlazeImpl extends MonsterEntityImpl implements IBlaze
     {
         super(uuid, core, id, location);
         this.setBoundingBox(BASE_SIZE.create(this));
+    }
+
+    @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IBlaze.META_KEYS);
     }
 
     @Override

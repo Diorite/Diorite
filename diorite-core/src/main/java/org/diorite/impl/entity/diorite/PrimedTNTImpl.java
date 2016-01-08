@@ -3,9 +3,8 @@ package org.diorite.impl.entity.diorite;
 import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
 import org.diorite.impl.entity.IPrimedTNT;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -18,9 +17,9 @@ class PrimedTNTImpl extends FallingBlockImpl implements IPrimedTNT
     }
 
     @Override
-    public PacketPlayServer getSpawnPacket()
+    protected void createMetadata()
     {
-        return new PacketPlayServerSpawnEntity(this);
+        this.metadata = new EntityMetadata(IPrimedTNT.META_KEYS);
     }
 
     @Override

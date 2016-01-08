@@ -15,6 +15,10 @@ public interface IHuman extends ILivingEntity, Human
     @SuppressWarnings("MagicNumber")
     ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.6F, 1.8F);
     /**
+     * Size of metadata. TODO validate
+     */
+    byte META_KEYS                  = 19;
+    /**
      * byte entry with visible skin parts flags.
      */
     byte META_KEY_SKIN_FLAGS        = 10;

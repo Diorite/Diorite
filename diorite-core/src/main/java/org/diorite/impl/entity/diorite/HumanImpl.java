@@ -16,6 +16,7 @@ import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
@@ -76,6 +77,12 @@ class HumanImpl extends LivingEntityImpl implements IHuman
         this.gameMode = this.getWorld().getDefaultGameMode();
         this.inventory = new PlayerInventoryImpl(this, 0); // 0 because this is owner of this inventory, and we need this to update
         this.namedUUID = new NamedUUID(gameProfile.getName(), gameProfile.getId());
+    }
+
+    @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IHuman.META_KEYS);
     }
 
     @Override

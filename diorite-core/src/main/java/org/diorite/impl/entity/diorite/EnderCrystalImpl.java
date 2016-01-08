@@ -22,6 +22,12 @@ class EnderCrystalImpl extends EntityImpl implements IEnderCrystal
     }
 
     @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IEnderCrystal.META_KEYS);
+    }
+
+    @Override
     public PacketPlayServer getSpawnPacket()
     {
         return new PacketPlayServerSpawnEntity(this);

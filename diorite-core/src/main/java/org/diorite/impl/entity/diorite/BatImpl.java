@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IBat;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -13,6 +14,12 @@ class BatImpl extends AmbientEntityImpl implements IBat
     {
         super(uuid, core, id, location);
         this.setBoundingBox(BASE_SIZE.create(this));
+    }
+
+    @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IBat.META_KEYS);
     }
 
     @Override

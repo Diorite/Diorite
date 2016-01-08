@@ -27,7 +27,6 @@ package org.diorite.impl.entity.meta;
 import javax.vecmath.Vector3f;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -73,7 +72,7 @@ public class EntityMetadata
         final Collection<EntityMetadataEntry<?>> result = new HashSet<>(this.data.length);
         for (final EntityMetadataEntry<?> entry : this.data)
         {
-            if (entry.isDirty())
+            if ((entry != null) && entry.isDirty())
             {
                 result.add(entry);
             }
@@ -91,7 +90,7 @@ public class EntityMetadata
         final Collection<EntityMetadataEntry<?>> result = new HashSet<>(this.data.length);
         for (final EntityMetadataEntry<?> entry : this.data)
         {
-            if (entry.setClean())
+            if ((entry != null) && entry.setClean())
             {
                 result.add(entry);
             }
@@ -102,7 +101,13 @@ public class EntityMetadata
     public Collection<EntityMetadataEntry<?>> getEntries()
     {
         final Collection<EntityMetadataEntry<?>> result = new HashSet<>(this.data.length);
-        Collections.addAll(result, this.data);
+        for (final EntityMetadataEntry<?> entry : this.data)
+        {
+            if (entry != null)
+            {
+                result.add(entry);
+            }
+        }
         return result;
     }
 

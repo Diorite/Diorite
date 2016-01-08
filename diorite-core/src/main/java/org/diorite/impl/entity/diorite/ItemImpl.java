@@ -36,6 +36,7 @@ import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMet
 import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
 import org.diorite.impl.entity.EntityObject;
 import org.diorite.impl.entity.IItem;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
@@ -65,6 +66,12 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     {
         super(uuid, core, id, location);
         this.setBoundingBox(BASE_SIZE.create(this));
+    }
+
+    @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IItem.META_KEYS);
     }
 
     @Override

@@ -7,12 +7,12 @@ import org.diorite.impl.entity.ICaveSpider;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
-class CaveSpiderImpl extends MonsterEntityImpl implements ICaveSpider
+class CaveSpiderImpl extends SpiderImpl implements ICaveSpider
 {
     CaveSpiderImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
-        this.setBoundingBox(BASE_SIZE.create(this));
+        this.setBoundingBox(ICaveSpider.BASE_SIZE.create(this));
     }
 
     @Override

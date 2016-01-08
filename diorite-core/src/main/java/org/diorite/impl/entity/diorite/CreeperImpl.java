@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.ICreeper;
+import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
@@ -15,6 +16,12 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
     {
         super(uuid, core, id, location);
         this.setBoundingBox(BASE_SIZE.create(this));
+    }
+
+    @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(ICreeper.META_KEYS);
     }
 
     @Override

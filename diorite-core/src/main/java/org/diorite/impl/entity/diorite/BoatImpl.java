@@ -21,6 +21,12 @@ class BoatImpl extends EntityImpl implements IBoat
     }
 
     @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IBoat.META_KEYS);
+    }
+
+    @Override
     public PacketPlayServer getSpawnPacket()
     {
         return new PacketPlayServerSpawnEntity(this);

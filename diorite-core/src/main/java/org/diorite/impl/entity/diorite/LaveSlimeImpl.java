@@ -7,12 +7,12 @@ import org.diorite.impl.entity.ILaveSlime;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
-class LaveSlimeImpl extends MonsterEntityImpl implements ILaveSlime
+class LaveSlimeImpl extends SlimeImpl implements ILaveSlime
 {
     LaveSlimeImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
-        this.setBoundingBox(BASE_SIZE.create(this));
+        this.setBoundingBox(ILaveSlime.BASE_SIZE.create(this));
     }
 
     @Override

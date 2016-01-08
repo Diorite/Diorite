@@ -26,6 +26,12 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
     }
 
     @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IAreaEffectCloud.META_KEYS);
+    }
+
+    @Override
     public PacketPlayServer getSpawnPacket()
     {
         return new PacketPlayServerSpawnEntity(this);

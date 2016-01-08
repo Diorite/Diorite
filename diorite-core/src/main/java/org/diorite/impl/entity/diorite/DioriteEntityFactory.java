@@ -41,6 +41,11 @@ import org.diorite.impl.entity.IItemFrame;
 import org.diorite.impl.entity.ILaveSlime;
 import org.diorite.impl.entity.ILeashKnot;
 import org.diorite.impl.entity.IMinecart;
+import org.diorite.impl.entity.IMinecartChest;
+import org.diorite.impl.entity.IMinecartCommandBlock;
+import org.diorite.impl.entity.IMinecartFurnace;
+import org.diorite.impl.entity.IMinecartHopper;
+import org.diorite.impl.entity.IMinecartTNT;
 import org.diorite.impl.entity.IMooshroomCow;
 import org.diorite.impl.entity.IOcelot;
 import org.diorite.impl.entity.IPig;
@@ -107,6 +112,11 @@ import org.diorite.entity.ItemFrame;
 import org.diorite.entity.LaveSlime;
 import org.diorite.entity.LeashKnot;
 import org.diorite.entity.Minecart;
+import org.diorite.entity.MinecartChest;
+import org.diorite.entity.MinecartCommandBlock;
+import org.diorite.entity.MinecartFurnace;
+import org.diorite.entity.MinecartHopper;
+import org.diorite.entity.MinecartTNT;
 import org.diorite.entity.MooshroomCow;
 import org.diorite.entity.Ocelot;
 import org.diorite.entity.Pig;
@@ -365,6 +375,36 @@ public class DioriteEntityFactory implements IEntityFactory
             this.typeMap.put(EntityType.MINECART, func);
             this.typeClassMap.put(Minecart.class, func);
             this.typeClassMap.put(IMinecart.class, func);
+        }
+        {
+            final Function<ImmutableLocation, IEntity> func = (l) -> new MinecartChestImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
+            this.typeMap.put(EntityType.MINECART_CHEST, func);
+            this.typeClassMap.put(MinecartChest.class, func);
+            this.typeClassMap.put(IMinecartChest.class, func);
+        }
+        {
+            final Function<ImmutableLocation, IEntity> func = (l) -> new MinecartCommandBlockImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
+            this.typeMap.put(EntityType.MINECART_COMMAND_BLOCK, func);
+            this.typeClassMap.put(MinecartCommandBlock.class, func);
+            this.typeClassMap.put(IMinecartCommandBlock.class, func);
+        }
+        {
+            final Function<ImmutableLocation, IEntity> func = (l) -> new MinecartFurnaceImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
+            this.typeMap.put(EntityType.MINECART_FURNACE, func);
+            this.typeClassMap.put(MinecartFurnace.class, func);
+            this.typeClassMap.put(IMinecartFurnace.class, func);
+        }
+        {
+            final Function<ImmutableLocation, IEntity> func = (l) -> new MinecartHopperImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
+            this.typeMap.put(EntityType.MINECART_HOPPER, func);
+            this.typeClassMap.put(MinecartHopper.class, func);
+            this.typeClassMap.put(IMinecartHopper.class, func);
+        }
+        {
+            final Function<ImmutableLocation, IEntity> func = (l) -> new MinecartTNTImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
+            this.typeMap.put(EntityType.MINECART_TNT, func);
+            this.typeClassMap.put(MinecartTNT.class, func);
+            this.typeClassMap.put(IMinecartTNT.class, func);
         }
         {
             final Function<ImmutableLocation, IEntity> func = (l) -> new MooshroomCowImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
