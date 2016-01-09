@@ -101,7 +101,6 @@ import javassist.NotFoundException;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ConfigField implements Comparable<ConfigField>, CfgEntryData
 {
-    public static final CtClass[] EMPTY_CLASSES = new CtClass[0];
 
     private static final Pattern VALID_JAVA_NAME = Pattern.compile("[^a-zA-Z0-9_]");
 
@@ -546,7 +545,7 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             };
         }
         init.setInterfaces(new CtClass[]{interfaceType});
-        init.addMethod(CtNewMethod.make(returnType, "eval", EMPTY_CLASSES, new CtClass[]{pool.get(Exception.class.getName())}, "{\n" + str + "\n}", init));
+        init.addMethod(CtNewMethod.make(returnType, "eval", DioriteReflectionUtils.EMPTY_CLASSES, new CtClass[]{pool.get(Exception.class.getName())}, "{\n" + str + "\n}", init));
         return func.apply(init.toClass(clazz.getClassLoader()));
     }
 

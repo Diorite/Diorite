@@ -36,9 +36,16 @@ import java.util.Map;
 import org.diorite.cfg.system.ConfigField;
 import org.diorite.utils.SimpleEnum;
 
+import javassist.CtClass;
+
 @SuppressWarnings({"unchecked", "ObjectEquality"})
 public final class DioriteReflectionUtils
 {
+    /**
+     * Array of empty javassit classes
+     */
+    public static final CtClass[] EMPTY_CLASSES = new CtClass[0];
+
     private DioriteReflectionUtils()
     {
     }

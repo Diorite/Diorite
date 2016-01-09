@@ -25,6 +25,7 @@
 package org.diorite.impl.connection;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -32,9 +33,15 @@ import com.google.common.collect.Maps;
 
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketClass;
+import org.diorite.utils.reflections.DioriteReflectionUtils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtField;
+import javassist.CtMethod;
+import javassist.Modifier;
 
 public enum EnumProtocol
 {
@@ -43,15 +50,21 @@ public enum EnumProtocol
     STATUS("STATUS", 1),
     LOGIN("LOGIN", 2);
 
-    private static final Int2ObjectMap<EnumProtocol>                          enumProtocolMap;
-    private static final Map<Class<?>, EnumProtocol>                          classEnumProtocolMap;
-    private final        String                                               name;
-    private final        int                                                  status;
-    private final        Map<EnumProtocolDirection, BiMap<Integer, Class<?>>> packetsMap;
+    private static final int    PLAY_PACKETS_SIZE  = 50;
+    private static final int    OTHER_PACKETS_SIZE = 50;
+    private static final String INNER_CLASS_NAME   = "<PacketInit>";
+
+    private static final Int2ObjectMap<EnumProtocol>                                              enumProtocolMap;
+    private static final Map<Class<?>, EnumProtocol>                                              classEnumProtocolMap;
+    private final        String                                                                   name;
+    private final        int                                                                      status;
+    private final        Map<EnumProtocolDirection, BiMap<Integer, Class<?>>>                     packetsMap;
+    private final        Map<EnumProtocolDirection, Int2ObjectMap<Supplier<? extends Packet<?>>>> packetsSupplierMap;
 
     EnumProtocol(final String name, final int status)
     {
         this.packetsMap = Maps.newEnumMap(EnumProtocolDirection.class);
+        this.packetsSupplierMap = Maps.newEnumMap(EnumProtocolDirection.class);
         this.name = name;
         this.status = status;
     }
@@ -66,13 +79,20 @@ public enum EnumProtocol
         return this.status;
     }
 
-    public synchronized void init(final EnumProtocolDirection enumProtocolDirection, final int id, final Class<? extends Packet<?>> clazz)
+    public synchronized <T extends Packet<?>> void init(final EnumProtocolDirection enumProtocolDirection, final int id, final Class<T> clazz, final Supplier<T> supplier)
     {
         BiMap<Integer, Class<?>> create = this.packetsMap.get(enumProtocolDirection);
+        final Int2ObjectMap<Supplier<? extends Packet<?>>> suppMap;
         if (create == null)
         {
             create = HashBiMap.create();
+            suppMap = new Int2ObjectOpenHashMap<>((this == PLAY) ? PLAY_PACKETS_SIZE : OTHER_PACKETS_SIZE, .1f);
             this.packetsMap.put(enumProtocolDirection, create);
+            this.packetsSupplierMap.put(enumProtocolDirection, suppMap);
+        }
+        else
+        {
+            suppMap = this.packetsSupplierMap.get(enumProtocolDirection);
         }
         if (create.containsValue(clazz))
         {
@@ -84,6 +104,44 @@ public enum EnumProtocol
         }
         classEnumProtocolMap.put(clazz, this);
         create.put(id, clazz);
+        suppMap.put(id, supplier);
+    }
+
+    public synchronized <T extends Packet<?>> void init(final EnumProtocolDirection enumProtocolDirection, final int id, final Class<T> clazz)
+    {
+        this.init(enumProtocolDirection, id, clazz, getOrCreateSuppiler(clazz));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Packet<?>> Supplier<T> getOrCreateSuppiler(final Class<T> clazz)
+    {
+        try
+        {
+            final ClassPool pool = ClassPool.getDefault();
+            final CtClass tempClass = pool.getOrNull(clazz.getName() + "$" + INNER_CLASS_NAME);
+            if (tempClass != null)
+            {
+                return (Supplier<T>) Class.forName(clazz.getName() + "$" + INNER_CLASS_NAME).getFields()[0].get(null);
+            }
+            final CtClass packetClass = pool.get(clazz.getName());
+            final CtClass packetInitClass = packetClass.makeNestedClass(INNER_CLASS_NAME, true);
+            final CtClass suppCtClass = pool.get(Supplier.class.getName());
+            packetInitClass.addInterface(suppCtClass);
+
+            final CtMethod method = new CtMethod(pool.get(Object.class.getName()), "get", DioriteReflectionUtils.EMPTY_CLASSES, packetInitClass);
+            method.setBody("{return new " + clazz.getName() + "();}");
+            packetInitClass.addMethod(method);
+
+            final CtField field = new CtField(suppCtClass, "INSTANCE", packetInitClass);
+            field.setModifiers(Modifier.setPublic(field.getModifiers() | Modifier.STATIC));
+            packetInitClass.addField(field, "Class.forName(\"" + packetInitClass.getName() + "\").newInstance();");
+
+            final Class<?> createdClass = packetInitClass.toClass();
+            return (Supplier<T>) createdClass.getFields()[0].get(null);
+        } catch (final Throwable e)
+        {
+            throw new RuntimeException("Fatal error when creating packet suppliers.", e);
+        }
     }
 
     public Integer getPacketID(final EnumProtocolDirection protocolDirection, final Packet<?> packet)
@@ -93,14 +151,14 @@ public enum EnumProtocol
 
     public Packet<?> createPacket(final EnumProtocolDirection protocolDirection, final int id)
     {
-        final Class<?> clazz = this.packetsMap.get(protocolDirection).get(id);
-        if (clazz == null)
+        final Supplier<? extends Packet<?>> supplier = this.packetsSupplierMap.get(protocolDirection).get(id);
+        if (supplier == null)
         {
             return null;
         }
         try
         {
-            return (Packet<?>) clazz.newInstance();
+            return supplier.get();
         } catch (final Exception e)
         {
             throw new RuntimeException("Can't create packet instance!");
