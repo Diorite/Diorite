@@ -32,9 +32,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerWindowItems;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundWindowClick;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
 import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.item.ItemStackImpl;
@@ -108,7 +108,7 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
     @Override
     public Slot getSlot(final int slot)
     {
-        return ((slot == PacketPlayClientWindowClick.SLOT_NOT_NEEDED) || (slot == PacketPlayClientWindowClick.INVALID_SLOT)) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
+        return ((slot == PacketPlayServerboundWindowClick.SLOT_NOT_NEEDED) || (slot == PacketPlayServerboundWindowClick.INVALID_SLOT)) ? Slot.BASE_OUTSIDE_SLOT : this.slots[slot];
     }
 
     @Override
@@ -606,7 +606,7 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
             throw new IllegalArgumentException("Player must be a viewer of inventory.");
         }
 
-        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayServerWindowItems(this.windowId, this.content));
+        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayClientboundWindowItems(this.windowId, this.content));
     }
 
     private boolean isCraftingSlot(final int i)
@@ -620,12 +620,12 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
         return type.equals(SlotType.CRAFTING) || type.equals(SlotType.RESULT);
     }
 
-    private Map<Short, PacketPlayServerSetSlot> softUpdate0() // TODO change if we will switch to fastutils
+    private Map<Short, PacketPlayClientboundSetSlot> softUpdate0() // TODO change if we will switch to fastutils
     {
         boolean craftingGridUpdated = false;
         boolean onlyResult = true;
         final int itemsLength = this.content.length();
-        final Map<Short, PacketPlayServerSetSlot> packets = new LinkedHashMap<>(itemsLength);
+        final Map<Short, PacketPlayClientboundSetSlot> packets = new LinkedHashMap<>(itemsLength);
         for (short i = 0; i < itemsLength; i++)
         {
             final ItemStackImpl item = this.content.get(i);
@@ -636,7 +636,7 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
                 {
                     this.replace(i, item, null);
                     packets.remove(i);
-                    packets.put(i, new PacketPlayServerSetSlot(this.windowId, i, null));
+                    packets.put(i, new PacketPlayClientboundSetSlot(this.windowId, i, null));
                     continue;
                 }
                 this.notNullItems.add(i);
@@ -651,7 +651,7 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
                         }
                     }
                     packets.remove(i);
-                    packets.put(i, new PacketPlayServerSetSlot(this.windowId, i, item));
+                    packets.put(i, new PacketPlayClientboundSetSlot(this.windowId, i, item));
                 }
             }
             else if (this.notNullItems.remove(i))
@@ -665,7 +665,7 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
                     }
                 }
                 packets.remove(i);
-                packets.put(i, new PacketPlayServerSetSlot(this.windowId, i, null));
+                packets.put(i, new PacketPlayClientboundSetSlot(this.windowId, i, null));
             }
         }
         if (craftingGridUpdated)
@@ -675,7 +675,7 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
             {
                 final short slotIndex = (short) (this.crafting.getSlotOffset() + i);
                 packets.remove(slotIndex);
-                packets.put(slotIndex, new PacketPlayServerSetSlot(this.windowId, slotIndex, this.getItem(slotIndex)));
+                packets.put(slotIndex, new PacketPlayClientboundSetSlot(this.windowId, slotIndex, this.getItem(slotIndex)));
             }
         }
         // cursor
@@ -697,7 +697,7 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
                     }
                 }
                 packets.remove(CURSOR_SLOT);
-                packets.put(CURSOR_SLOT, new PacketPlayServerSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
+                packets.put(CURSOR_SLOT, new PacketPlayClientboundSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
             }
         }
         return packets;
@@ -706,10 +706,10 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
     @Override
     public boolean softUpdate()
     {
-        final Map<Short, PacketPlayServerSetSlot> packets = this.softUpdate0();
+        final Map<Short, PacketPlayClientboundSetSlot> packets = this.softUpdate0();
         if (! packets.isEmpty())
         {
-            final PacketPlayServerSetSlot[] packetsArray = packets.values().toArray(new PacketPlayServerSetSlot[packets.size()]);
+            final PacketPlayClientboundSetSlot[] packetsArray = packets.values().toArray(new PacketPlayClientboundSetSlot[packets.size()]);
             this.viewers.stream().filter(p -> p instanceof IPlayer).forEach(p -> ((IPlayer) p).getNetworkManager().sendPackets(packetsArray));
             return true;
         }

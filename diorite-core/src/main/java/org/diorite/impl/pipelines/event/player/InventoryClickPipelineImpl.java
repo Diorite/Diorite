@@ -27,7 +27,7 @@ package org.diorite.impl.pipelines.event.player;
 import java.util.Collection;
 import java.util.Objects;
 
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerTransaction;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
@@ -54,13 +54,13 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         this.addLast("Diorite|Handle", (evt, pipeline) -> {
             if (evt.isCancelled())
             {
-                ((IPlayer) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayServerTransaction(evt.getWindowId(), evt.getActionNumber(), false));
+                ((IPlayer) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayClientboundTransaction(evt.getWindowId(), evt.getActionNumber(), false));
                 return;
             }
 //            System.out.println(evt.toString());
             final boolean accepted = this.handleClick(evt);
 
-            ((IPlayer) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayServerTransaction(evt.getWindowId(), evt.getActionNumber(), accepted));
+            ((IPlayer) evt.getPlayer()).getNetworkManager().sendPacket(new PacketPlayClientboundTransaction(evt.getWindowId(), evt.getActionNumber(), accepted));
 
             if (! accepted)
             {

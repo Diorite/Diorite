@@ -42,13 +42,13 @@ import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.MinecraftEncryption;
-import org.diorite.impl.connection.packets.login.PacketLoginClientListener;
-import org.diorite.impl.connection.packets.login.client.PacketLoginClientEncryptionBegin;
-import org.diorite.impl.connection.packets.login.client.PacketLoginClientStart;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerDisconnect;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerEncryptionBegin;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerSetCompression;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerSuccess;
+import org.diorite.impl.connection.packets.login.PacketLoginServerboundListener;
+import org.diorite.impl.connection.packets.login.serverbound.PacketLoginServerboundEncryptionBegin;
+import org.diorite.impl.connection.packets.login.serverbound.PacketLoginServerboundStart;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundDisconnect;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundEncryptionBegin;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundSetCompression;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundSuccess;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.server.connection.NetworkManager;
 import org.diorite.impl.server.connection.ThreadPlayerLookupUUID;
@@ -56,7 +56,7 @@ import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
-public class LoginListener implements PacketLoginClientListener
+public class LoginListener implements PacketLoginServerboundListener
 {
     private static final int TIMEOUT_TICKS = 600;
 
@@ -111,14 +111,14 @@ public class LoginListener implements PacketLoginClientListener
     }
 
     @Override
-    public void handle(final PacketLoginClientStart packet)
+    public void handle(final PacketLoginServerboundStart packet)
     {
         Validate.validState(this.protocolState == ProtocolState.HELLO, "Unexpected hello packet");
         this.gameProfile = packet.getProfile();
         if (this.onlineMode == OnlineMode.TRUE) // TODO
         {
             this.protocolState = ProtocolState.KEY;
-            this.networkManager.sendPacket(new PacketLoginServerEncryptionBegin(this.serverID, this.core.getKeyPair().getPublic(), this.token));
+            this.networkManager.sendPacket(new PacketLoginClientboundEncryptionBegin(this.serverID, this.core.getKeyPair().getPublic(), this.token));
         }
         else
         {
@@ -127,7 +127,7 @@ public class LoginListener implements PacketLoginClientListener
     }
 
     @Override
-    public void handle(final PacketLoginClientEncryptionBegin packet)
+    public void handle(final PacketLoginServerboundEncryptionBegin packet)
     {
         Validate.validState(this.protocolState == ProtocolState.KEY, "Unexpected key packet");
         final PrivateKey privateKey = this.core.getKeyPair().getPrivate();
@@ -145,9 +145,9 @@ public class LoginListener implements PacketLoginClientListener
     {
         if (this.core.getCompressionThreshold() >= 0)
         {
-            this.networkManager.sendPacket(new PacketLoginServerSetCompression(this.core.getCompressionThreshold()), future -> this.networkManager.setCompression(this.core.getCompressionThreshold()));
+            this.networkManager.sendPacket(new PacketLoginClientboundSetCompression(this.core.getCompressionThreshold()), future -> this.networkManager.setCompression(this.core.getCompressionThreshold()));
         }
-        this.networkManager.sendPacket(new PacketLoginServerSuccess(this.gameProfile), future -> {
+        this.networkManager.sendPacket(new PacketLoginClientboundSuccess(this.gameProfile), future -> {
             this.networkManager.setProtocol(EnumProtocol.PLAY);
 
             final IPlayer player = this.core.getPlayersManager().createPlayer(this.gameProfile, this.networkManager);
@@ -181,7 +181,7 @@ public class LoginListener implements PacketLoginClientListener
         {
             this.logger.info("Disconnecting " + this.gameProfile + ": " + msg);
             final BaseComponent tc = TextComponent.fromLegacyText(msg);
-            this.networkManager.sendPacket(new PacketLoginServerDisconnect(tc));
+            this.networkManager.sendPacket(new PacketLoginClientboundDisconnect(tc));
             this.networkManager.close(tc, false);
         } catch (final Exception exception)
         {

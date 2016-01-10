@@ -24,19 +24,23 @@
 
 package org.diorite.impl.client.connection.listeners;
 
+import java.util.UUID;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
+import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.connection.packets.login.PacketLoginServerListener;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerDisconnect;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerEncryptionBegin;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerSetCompression;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerSuccess;
+import org.diorite.impl.connection.packets.login.PacketLoginClientboundListener;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundDisconnect;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundEncryptionBegin;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundSetCompression;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundSuccess;
+import org.diorite.cfg.DioriteConfig.OnlineMode;
 import org.diorite.chat.component.BaseComponent;
 
-public class LoginListener implements PacketLoginServerListener
+public class LoginListener implements PacketLoginClientboundListener
 {
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
@@ -48,25 +52,25 @@ public class LoginListener implements PacketLoginServerListener
     }
 
     @Override
-    public void handle(final PacketLoginServerEncryptionBegin packet)
+    public void handle(final PacketLoginClientboundEncryptionBegin packet)
     {
         System.out.println(packet);
     }
 
     @Override
-    public void handle(final PacketLoginServerSuccess packet)
+    public void handle(final PacketLoginClientboundSuccess packet)
     {
         System.out.println(packet);
     }
 
     @Override
-    public void handle(final PacketLoginServerDisconnect packet)
+    public void handle(final PacketLoginClientboundDisconnect packet)
     {
         System.out.println(packet);
     }
 
     @Override
-    public void handle(final PacketLoginServerSetCompression packet)
+    public void handle(final PacketLoginClientboundSetCompression packet)
     {
         System.out.println(packet);
     }
@@ -76,7 +80,39 @@ public class LoginListener implements PacketLoginServerListener
     {
 
     }
+    // TODO
 
+    @Override
+    public GameProfileImpl getGameProfile()
+    {
+        return null;
+    }
+
+    @Override
+    public OnlineMode getOnlineMode()
+    {
+        return null;
+    }
+
+    @Override
+    public void setUUID(final UUID uuid)
+    {
+
+    }
+
+    @Override
+    public void setGameProfile(final GameProfileImpl newProfile)
+    {
+
+    }
+
+    @Override
+    public void setProtocolState(final ProtocolState state)
+    {
+
+    }
+
+    @Override
     public CoreNetworkManager getNetworkManager()
     {
         return this.networkManager;

@@ -40,8 +40,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.Packet;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundKeepAlive;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Player;
@@ -93,7 +93,7 @@ public class PlayersManagerImpl implements Tickable
 
     public void playerQuit(final IPlayer player)
     {
-        this.forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player));
+        this.forEach(new PacketPlayClientboundPlayerInfo(PacketPlayClientboundPlayerInfo.PlayerInfoAction.REMOVE_PLAYER, player));
         this.players.remove(player.getUniqueID());
         player.onLogout();
     }
@@ -117,7 +117,7 @@ public class PlayersManagerImpl implements Tickable
         final long curr = System.currentTimeMillis();
         if ((curr - this.lastKeepAlive) > this.keepAliveTimer)
         {
-            this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayServerKeepAlive(p.getId())));
+            this.players.values().parallelStream().forEach(p -> p.getNetworkManager().sendPacket(new PacketPlayClientboundKeepAlive(p.getId())));
             this.lastKeepAlive = curr;
         }
     }

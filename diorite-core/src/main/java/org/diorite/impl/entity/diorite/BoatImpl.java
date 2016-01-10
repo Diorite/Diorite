@@ -3,8 +3,8 @@ package org.diorite.impl.entity.diorite;
 import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
 import org.diorite.impl.entity.IBoat;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
@@ -27,9 +27,9 @@ class BoatImpl extends EntityImpl implements IBoat
     }
 
     @Override
-    public PacketPlayServer getSpawnPacket()
+    public PacketPlayClientbound getSpawnPacket()
     {
-        return new PacketPlayServerSpawnEntity(this);
+        return new PacketPlayClientboundSpawnEntity(this);
     }
 
     @Override

@@ -29,49 +29,50 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.connection.packets.play.PacketPlayServerListener;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerChunkUnload;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerCloseWindow;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerCustomPayload;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerDisconnect;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntity;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityDestroy;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityLook;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityTeleport;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerHeldItemSlot;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerLogin;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerMapChunk;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedEntitySpawn;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedSoundEffect;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerOpenWindow;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerListHeaderFooter;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPosition;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerRelEntityMove;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerRelEntityMoveLook;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerResourcePackSend;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerServerDifficulty;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffect;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntityLiving;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnPosition;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerTabComplete;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerTransaction;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerUpdateAttributes;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerWindowItems;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerWorldParticles;
+import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChat;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChunkUnload;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCloseWindow;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCollect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCustomPayload;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundDisconnect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntity;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityDestroy;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityLook;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityMetadata;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityTeleport;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundHeldItemSlot;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundKeepAlive;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundLogin;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundMapChunk;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundNamedEntitySpawn;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundNamedSoundEffect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundOpenWindow;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerListHeaderFooter;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPosition;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMove;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMoveLook;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSoundEffect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntityLiving;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnPosition;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTabComplete;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTitle;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.chat.component.BaseComponent;
 
-public class PlayListener implements PacketPlayServerListener
+public class PlayListener implements PacketPlayClientboundListener
 {
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
@@ -83,235 +84,235 @@ public class PlayListener implements PacketPlayServerListener
     }
 
     @Override
-    public void handle(final PacketPlayServerKeepAlive packet)
+    public void handle(final PacketPlayClientboundKeepAlive packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerLogin packet)
+    public void handle(final PacketPlayClientboundLogin packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerCustomPayload packet)
+    public void handle(final PacketPlayClientboundCustomPayload packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerServerDifficulty packet)
+    public void handle(final PacketPlayClientboundWorldDifficulty packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerSpawnPosition packet)
+    public void handle(final PacketPlayClientboundSpawnPosition packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerAbilities packet)
+    public void handle(final PacketPlayClientboundAbilities packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerHeldItemSlot packet)
+    public void handle(final PacketPlayClientboundHeldItemSlot packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerPosition packet)
+    public void handle(final PacketPlayClientboundPosition packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerUpdateAttributes packet)
+    public void handle(final PacketPlayClientboundUpdateAttributes packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerChat packet)
+    public void handle(final PacketPlayClientboundChat packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerBlockChange packet)
+    public void handle(final PacketPlayClientboundBlockChange packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerTabComplete packet)
+    public void handle(final PacketPlayClientboundTabComplete packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerDisconnect packet)
+    public void handle(final PacketPlayClientboundDisconnect packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerPlayerInfo packet)
+    public void handle(final PacketPlayClientboundPlayerInfo packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerPlayerListHeaderFooter packet)
+    public void handle(final PacketPlayClientboundPlayerListHeaderFooter packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerTitle packet)
+    public void handle(final PacketPlayClientboundTitle packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerResourcePackSend packet)
+    public void handle(final PacketPlayClientboundResourcePackSend packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerWorldParticles packet)
+    public void handle(final PacketPlayClientboundWorldParticles packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerCollect packet)
+    public void handle(final PacketPlayClientboundCollect packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerSpawnEntity packet)
+    public void handle(final PacketPlayClientboundSpawnEntity packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerEntityMetadata packet)
+    public void handle(final PacketPlayClientboundEntityMetadata packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerGameStateChange packet)
+    public void handle(final PacketPlayClientboundGameStateChange packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerOpenWindow packet)
+    public void handle(final PacketPlayClientboundOpenWindow packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerCloseWindow packet)
+    public void handle(final PacketPlayClientboundCloseWindow packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerTransaction packet)
+    public void handle(final PacketPlayClientboundTransaction packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerSetSlot packet)
+    public void handle(final PacketPlayClientboundSetSlot packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerWindowItems packet)
+    public void handle(final PacketPlayClientboundWindowItems packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerEntityDestroy packet)
+    public void handle(final PacketPlayClientboundEntityDestroy packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerSpawnEntityLiving packet)
+    public void handle(final PacketPlayClientboundSpawnEntityLiving packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerNamedEntitySpawn packet)
+    public void handle(final PacketPlayClientboundNamedEntitySpawn packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerEntity packet)
+    public void handle(final PacketPlayClientboundEntity packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerRelEntityMove packet)
+    public void handle(final PacketPlayClientboundRelEntityMove packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerEntityLook packet)
+    public void handle(final PacketPlayClientboundEntityLook packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerRelEntityMoveLook packet)
+    public void handle(final PacketPlayClientboundRelEntityMoveLook packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerEntityTeleport packet)
+    public void handle(final PacketPlayClientboundEntityTeleport packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerMapChunk packet)
+    public void handle(final PacketPlayClientboundMapChunk packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerChunkUnload packet)
+    public void handle(final PacketPlayClientboundChunkUnload packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerSoundEffect packet)
+    public void handle(final PacketPlayClientboundSoundEffect packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketPlayServerNamedSoundEffect packet)
+    public void handle(final PacketPlayClientboundNamedSoundEffect packet)
     {
 
     }
@@ -337,5 +338,11 @@ public class PlayListener implements PacketPlayServerListener
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("core", this.core).append("networkManager", this.networkManager).toString();
+    }
+
+    @Override
+    public IPlayer getPlayer()
+    {
+        return null; // TODO
     }
 }

@@ -1,7 +1,7 @@
 package org.diorite.impl.entity;
 
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
 import org.diorite.entity.Human;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.others.NamedUUID;
@@ -41,11 +41,11 @@ public interface IHuman extends ILivingEntity, Human
 
     void pickupItems();
 
-    PacketPlayServerAbilities getAbilities();
+    PacketPlayClientboundAbilities getAbilities();
 
-    void setAbilities(PacketPlayServerAbilities abilities);
+    void setAbilities(PacketPlayClientboundAbilities abilities);
 
-    void setAbilities(PacketPlayClientAbilities abilities);
+    void setAbilities(PacketPlayServerboundAbilities abilities);
 
     void closeInventory(int id);
 }

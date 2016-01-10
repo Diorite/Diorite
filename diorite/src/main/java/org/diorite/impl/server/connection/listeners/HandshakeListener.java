@@ -38,13 +38,13 @@ import org.slf4j.Logger;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
-import org.diorite.impl.connection.packets.handshake.PacketHandshakingClientListener;
-import org.diorite.impl.connection.packets.handshake.client.PacketHandshakingClientSetProtocol;
-import org.diorite.impl.connection.packets.login.server.PacketLoginServerDisconnect;
+import org.diorite.impl.connection.packets.handshake.PacketHandshakingServerboundListener;
+import org.diorite.impl.connection.packets.handshake.serverbound.PacketHandshakingServerboundSetProtocol;
+import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundDisconnect;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
-public class HandshakeListener implements PacketHandshakingClientListener
+public class HandshakeListener implements PacketHandshakingServerboundListener
 {
     public static final  int                    CLEANUP_THROTTLE = 200;
     private static final Map<InetAddress, Long> throttleTracker  = new ConcurrentHashMap<>(100, 0.2f, 8);
@@ -59,7 +59,7 @@ public class HandshakeListener implements PacketHandshakingClientListener
     }
 
     @Override
-    public void handle(final PacketHandshakingClientSetProtocol packet)
+    public void handle(final PacketHandshakingServerboundSetProtocol packet)
     {
 
         switch (packet.getRequestType())
@@ -125,7 +125,7 @@ public class HandshakeListener implements PacketHandshakingClientListener
     @Override
     public void disconnect(final BaseComponent baseComponent)
     {
-        this.networkManager.sendPacket(new PacketLoginServerDisconnect(baseComponent));
+        this.networkManager.sendPacket(new PacketLoginClientboundDisconnect(baseComponent));
         this.networkManager.close(baseComponent, true);
     }
 

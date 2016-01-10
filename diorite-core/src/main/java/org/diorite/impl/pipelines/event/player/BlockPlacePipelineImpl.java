@@ -25,7 +25,7 @@
 package org.diorite.impl.pipelines.event.player;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
 import org.diorite.event.pipelines.event.player.BlockPlacePipeline;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.inventory.item.ItemStack;
@@ -64,7 +64,7 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
             }
 
             evt.getBlock().setType((BlockMaterialData) item.getMaterial());
-            DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getBlock().getWorld()), new PacketPlayServerBlockChange(evt.getBlock().getLocation(), evt.getBlock().getType()));
+            DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getBlock().getWorld()), new PacketPlayClientboundBlockChange(evt.getBlock().getLocation(), evt.getBlock().getType()));
         });
     }
 }

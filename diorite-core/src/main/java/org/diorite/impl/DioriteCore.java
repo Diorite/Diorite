@@ -63,9 +63,9 @@ import org.diorite.impl.command.defaults.RegisterDefaultCommands;
 import org.diorite.impl.connection.ConnectionHandler;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.MinecraftEncryption;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerListHeaderFooter;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerTitle;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChat;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerListHeaderFooter;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTitle;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.input.ConsoleReaderThread;
 import org.diorite.impl.input.InputThread;
@@ -480,7 +480,7 @@ public class DioriteCore implements Core
     @Override
     public void broadcastMessage(final ChatPosition position, final BaseComponent component)
     {
-        this.playersManager.forEach(new PacketPlayServerChat(component, position));
+        this.playersManager.forEach(new PacketPlayClientboundChat(component, position));
         if (! Objects.equals(position, ChatPosition.ACTION))
         {
             this.sendConsoleMessage(component);
@@ -574,7 +574,7 @@ public class DioriteCore implements Core
     @Override
     public void updatePlayerListHeaderAndFooter(final BaseComponent header, final BaseComponent footer, final Player player)
     {
-        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayServerPlayerListHeaderFooter(header, footer));
+        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayClientboundPlayerListHeaderFooter(header, footer));
     }
 
     @Override
@@ -590,27 +590,27 @@ public class DioriteCore implements Core
 
         if (title != null)
         {
-            n.sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.SET_TITLE, title));
+            n.sendPacket(new PacketPlayClientboundTitle(PacketPlayClientboundTitle.TitleAction.SET_TITLE, title));
         }
 
         if (subtitle != null)
         {
-            n.sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.SET_SUBTITLE, subtitle));
+            n.sendPacket(new PacketPlayClientboundTitle(PacketPlayClientboundTitle.TitleAction.SET_SUBTITLE, subtitle));
         }
 
-        n.sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.SET_TIMES, fadeIn, stay, fadeOut));
+        n.sendPacket(new PacketPlayClientboundTitle(PacketPlayClientboundTitle.TitleAction.SET_TIMES, fadeIn, stay, fadeOut));
     }
 
     @Override
     public void removeTitle(final Player player)
     {
-        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.RESET));
+        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayClientboundTitle(PacketPlayClientboundTitle.TitleAction.RESET));
     }
 
     @Override
     public void removeAllTitles()
     {
-        this.playersManager.forEach(new PacketPlayServerTitle(PacketPlayServerTitle.TitleAction.RESET));
+        this.playersManager.forEach(new PacketPlayClientboundTitle(PacketPlayClientboundTitle.TitleAction.RESET));
     }
 
     @Override

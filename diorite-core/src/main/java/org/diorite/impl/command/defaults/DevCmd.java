@@ -35,10 +35,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.IServerManager;
 import org.diorite.impl.command.SystemCommandImpl;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedSoundEffect;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSoundEffect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundNamedSoundEffect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSoundEffect;
 import org.diorite.impl.entity.IAreaEffectCloud;
 import org.diorite.impl.entity.IChicken;
 import org.diorite.impl.entity.ICreeper;
@@ -93,7 +93,7 @@ public class DevCmd extends SystemCommandImpl
             final IPlayer p = (IPlayer) sender;
             if (action == null)
             {
-                p.getNetworkManager().sendPacket(new PacketPlayServerBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
+                p.getNetworkManager().sendPacket(new PacketPlayClientboundBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
                 return;
             }
             final IServerManager serverManager = DioriteCore.getInstance().getServerManager();
@@ -236,12 +236,12 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "sound1":
                 {
-                    p.getNetworkManager().sendPacket(new PacketPlayServerSoundEffect(Sound.getById(args.asInt(0)), p.getLocation(), 2, 63));
+                    p.getNetworkManager().sendPacket(new PacketPlayClientboundSoundEffect(Sound.getById(args.asInt(0)), p.getLocation(), 2, 63));
                     break;
                 }
                 case "sound2":
                 {
-                    p.getNetworkManager().sendPacket(new PacketPlayServerNamedSoundEffect(args.asString(0), p.getLocation(), 2, 63));
+                    p.getNetworkManager().sendPacket(new PacketPlayClientboundNamedSoundEffect(args.asString(0), p.getLocation(), 2, 63));
                     break;
                 }
                 case "eq":
@@ -480,7 +480,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "gs":
                 {
-                    p.getNetworkManager().sendPacket(new PacketPlayServerGameStateChange(args.asInt(0), args.asFloat(1)));
+                    p.getNetworkManager().sendPacket(new PacketPlayClientboundGameStateChange(args.asInt(0), args.asFloat(1)));
                     sender.sendSimpleColoredMessage("&3Done.");
                     break;
                 }

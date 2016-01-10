@@ -7,11 +7,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerNamedEntitySpawn;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundNamedEntitySpawn;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.entity.IItem;
@@ -59,11 +59,11 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     private final GameProfile         gameProfile;
     private final PlayerInventoryImpl inventory;
 
-    private   PacketPlayServerAbilities abilities     = new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
-    private   HandSide                  mainHand      = HandSide.RIGHT;
-    private   int                       heldItemSlot  = 0;
-    private   GameMode                  gameMode      = GameMode.SURVIVAL;
-    protected MessageOutput             messageOutput = MessageOutput.IGNORE;
+    private   PacketPlayClientboundAbilities abilities     = new PacketPlayClientboundAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED);
+    private   HandSide                       mainHand      = HandSide.RIGHT;
+    private   int                            heldItemSlot  = 0;
+    private   GameMode                       gameMode      = GameMode.SURVIVAL;
+    protected MessageOutput                  messageOutput = MessageOutput.IGNORE;
     private NamedUUID namedUUID;
 
     private PlayerPermissionsContainer permissionContainer;
@@ -155,9 +155,9 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     }
 
     @Override
-    public PacketPlayServer getSpawnPacket()
+    public PacketPlayClientbound getSpawnPacket()
     {
-        return new PacketPlayServerNamedEntitySpawn(this);
+        return new PacketPlayClientboundNamedEntitySpawn(this);
     }
 
     @Override
@@ -217,7 +217,7 @@ class HumanImpl extends LivingEntityImpl implements IHuman
             return;
         }
         this.gameMode = gameMode;
-        this.core.getPlayersManager().forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayServerPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
+        this.core.getPlayersManager().forEach(new PacketPlayClientboundPlayerInfo(PacketPlayClientboundPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayClientboundPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
     }
 
     @Override
@@ -314,19 +314,19 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     }
 
     @Override
-    public PacketPlayServerAbilities getAbilities()
+    public PacketPlayClientboundAbilities getAbilities()
     {
         return this.abilities;
     }
 
     @Override
-    public void setAbilities(final PacketPlayServerAbilities abilities)
+    public void setAbilities(final PacketPlayClientboundAbilities abilities)
     {
         this.abilities = abilities;
     }
 
     @Override
-    public void setAbilities(final PacketPlayClientAbilities abilities)
+    public void setAbilities(final PacketPlayServerboundAbilities abilities)
     {
         // TOOD: I should check what player want change here (cheats)
         this.abilities.setCanFly(abilities.isCanFly());

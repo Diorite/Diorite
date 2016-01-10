@@ -3,8 +3,8 @@ package org.diorite.impl.entity.diorite;
 import java.util.UUID;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
 import org.diorite.impl.entity.EntityObject;
 import org.diorite.impl.entity.IProjectile;
 import org.diorite.ImmutableLocation;
@@ -29,9 +29,9 @@ abstract class ProjectileImpl extends EntityImpl implements IProjectile, EntityO
     }
 
     @Override
-    public PacketPlayServer getSpawnPacket()
+    public PacketPlayClientbound getSpawnPacket()
     {
-        return new PacketPlayServerSpawnEntity(this);
+        return new PacketPlayClientboundSpawnEntity(this);
     }
 }
 

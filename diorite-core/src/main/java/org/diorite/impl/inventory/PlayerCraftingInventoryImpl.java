@@ -24,7 +24,7 @@
 
 package org.diorite.impl.inventory;
 
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
 import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.item.ItemStackImpl;
@@ -200,13 +200,13 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         // fix ghost items (custom recipes), meh mojang...
         if (possibleBugs != null)
         {
-            final PacketPlayServerSetSlot[] packets = new PacketPlayServerSetSlot[possibleBugs.size()];
+            final PacketPlayClientboundSetSlot[] packets = new PacketPlayClientboundSetSlot[possibleBugs.size()];
             int i = 0;
             for (final ShortIterator it = possibleBugs.iterator(); it.hasNext(); )
             {
                 final short slot = it.next();
                 final ItemStackImpl item = this.playerInventory.getItem(slot);
-                packets[i++] = new PacketPlayServerSetSlot(this.playerInventory.getWindowId(), slot, item);
+                packets[i++] = new PacketPlayClientboundSetSlot(this.playerInventory.getWindowId(), slot, item);
             }
             ((IPlayer) holder).getNetworkManager().sendPackets(packets);
         }

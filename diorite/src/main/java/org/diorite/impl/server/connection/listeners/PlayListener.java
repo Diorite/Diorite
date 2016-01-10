@@ -31,37 +31,37 @@ import org.slf4j.Logger;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.connection.packets.play.PacketPlayClientListener;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientAbilities;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientArmAnimation;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientBlockDig;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientBlockDig.BlockDigAction;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientBlockPlace;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientChat;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientClientCommand;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientCloseWindow;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientCustomPayload;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientEnchantItem;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientEntityAction;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientFlying;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientHeldItemSlot;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientKeepAlive;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientLook;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientPosition;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientPositionLook;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientResourcePackStatus;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientSetCreativeSlot;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientSettings;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientSpectate;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientSteerVehicle;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientTabComplete;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientTeleportAccept;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientTransaction;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientUpdateSign;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseEntity;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientUseItem;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientWindowClick;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerDisconnect;
+import org.diorite.impl.connection.packets.play.PacketPlayServerboundListener;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundArmAnimation;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockDig;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockDig.BlockDigAction;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockPlace;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundChat;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCommand;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCloseWindow;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCustomPayload;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundEnchantItem;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundEntityAction;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundFlying;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundHeldItemSlot;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundKeepAlive;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundLook;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundPosition;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundPositionLook;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundResourcePackStatus;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSetCreativeSlot;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSettings;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSpectate;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSteerVehicle;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundTabComplete;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundTeleportAccept;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundTransaction;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUpdateSign;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseEntity;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseItem;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundWindowClick;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundDisconnect;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
@@ -76,7 +76,7 @@ import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
 import org.diorite.world.chunk.Chunk;
 
-public class PlayListener implements PacketPlayClientListener
+public class PlayListener implements PacketPlayServerboundListener
 {
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
@@ -91,13 +91,13 @@ public class PlayListener implements PacketPlayClientListener
 
 
     @Override
-    public void handle(final PacketPlayClientKeepAlive packet)
+    public void handle(final PacketPlayServerboundKeepAlive packet)
     {
         this.networkManager.updateKeepAlive();
     }
 
     @Override
-    public void handle(final PacketPlayClientSettings packet)
+    public void handle(final PacketPlayServerboundSettings packet)
     {
 //        final byte oldViewDistance = this.player.getViewDistance();
         this.core.sync(() -> this.player.setViewDistance(packet.getViewDistance()), this.player);
@@ -109,43 +109,43 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
-    public void handle(final PacketPlayClientCustomPayload packet)
+    public void handle(final PacketPlayServerboundCustomPayload packet)
     {
         // TODO: implement
     }
 
     @Override
-    public void handle(final PacketPlayClientHeldItemSlot packet)
+    public void handle(final PacketPlayServerboundHeldItemSlot packet)
     {
         this.core.sync(() -> this.player.setHeldItemSlot(packet.getSlot()), this.player);
     }
 
     @Override
-    public void handle(final PacketPlayClientPositionLook packet)
+    public void handle(final PacketPlayServerboundPositionLook packet)
     {
         this.core.sync(() -> this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), this.player);
     }
 
     @Override
-    public void handle(final PacketPlayClientFlying packet)
+    public void handle(final PacketPlayServerboundFlying packet)
     {
         // TODO: implement
     }
 
     @Override
-    public void handle(final PacketPlayClientPosition packet)
+    public void handle(final PacketPlayServerboundPosition packet)
     {
         this.core.sync(() -> this.player.setPosition(packet.getX(), packet.getY(), packet.getZ()), this.player);
     }
 
     @Override
-    public void handle(final PacketPlayClientLook packet)
+    public void handle(final PacketPlayServerboundLook packet)
     {
         this.core.sync(() -> this.player.setRotation(packet.getYaw(), packet.getPitch()), this.player);
     }
 
     @Override
-    public void handle(final PacketPlayClientChat packet)
+    public void handle(final PacketPlayServerboundChat packet)
     {
         final String str = packet.getContent();
         //noinspection HardcodedFileSeparator
@@ -160,25 +160,25 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
-    public void handle(final PacketPlayClientTabComplete packet)
+    public void handle(final PacketPlayServerboundTabComplete packet)
     {
         this.core.getInputThread().add(new InputAction(packet.getContent(), this.player, InputActionType.TAB_COMPLETE));
     }
 
     @Override
-    public void handle(final PacketPlayClientAbilities packet)
+    public void handle(final PacketPlayServerboundAbilities packet)
     {
         this.core.sync(() -> this.player.setAbilities(packet), this.player);
     }
 
     @Override
-    public void handle(final PacketPlayClientResourcePackStatus packet)
+    public void handle(final PacketPlayServerboundResourcePackStatus packet)
     {
         // TODO This is not needed? Maybe create event or something other...
     }
 
     @Override
-    public void handle(final PacketPlayClientSetCreativeSlot packet)
+    public void handle(final PacketPlayServerboundSetCreativeSlot packet)
     {
         if (this.player.getGameMode().equals(GameMode.CREATIVE))
         {
@@ -191,68 +191,68 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
-    public void handle(final PacketPlayClientSpectate packet)
+    public void handle(final PacketPlayServerboundSpectate packet)
     {
         // TODO
     }
 
     @Override
-    public void handle(final PacketPlayClientEnchantItem packet)
+    public void handle(final PacketPlayServerboundEnchantItem packet)
     {
         // TODO
     }
 
     @Override
-    public void handle(final PacketPlayClientSteerVehicle packet)
+    public void handle(final PacketPlayServerboundSteerVehicle packet)
     {
         // TODO
     }
 
     @Override
-    public void handle(final PacketPlayClientTransaction packet)
+    public void handle(final PacketPlayServerboundTransaction packet)
     {
         // TODO
     }
 
     @Override
-    public void handle(final PacketPlayClientUpdateSign packet)
+    public void handle(final PacketPlayServerboundUpdateSign packet)
     {
         // TODO
     }
 
     @Override
-    public void handle(final PacketPlayClientUseEntity packet)
+    public void handle(final PacketPlayServerboundUseEntity packet)
     {
         // TODO
     }
 
     @Override
-    public void handle(final PacketPlayClientTeleportAccept packet)
+    public void handle(final PacketPlayServerboundTeleportAccept packet)
     {
         System.out.println(packet);
     }
 
     @Override
-    public void handle(final PacketPlayClientUseItem packet)
+    public void handle(final PacketPlayServerboundUseItem packet)
     {
         System.out.println(packet);
         // TODO
     }
 
     @Override
-    public void handle(final PacketPlayClientEntityAction packet)
+    public void handle(final PacketPlayServerboundEntityAction packet)
     {
         this.core.sync(() -> packet.getEntityAction().doAction(this.player, packet.getJumpBoost()), this.player);
     }
 
     @Override
-    public void handle(final PacketPlayClientArmAnimation packet)
+    public void handle(final PacketPlayServerboundArmAnimation packet)
     {
         // TODO: implement
     }
 
     @Override
-    public void handle(final PacketPlayClientBlockDig packet)
+    public void handle(final PacketPlayServerboundBlockDig packet)
     {
         this.core.sync(() -> {
             if ((packet.getAction() == BlockDigAction.FINISH_DIG) || ((packet.getAction() == BlockDigAction.START_DIG) && this.player.getGameMode().equals(GameMode.CREATIVE)))
@@ -280,7 +280,7 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
-    public void handle(final PacketPlayClientBlockPlace packet)
+    public void handle(final PacketPlayServerboundBlockPlace packet)
     {
         System.out.println(packet);
         if (packet.getCursorPos().getBlockFace() == null)
@@ -298,13 +298,13 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
-    public void handle(final PacketPlayClientClientCommand packet)
+    public void handle(final PacketPlayServerboundCommand packet)
     {
         // TODO: implement
     }
 
     @Override
-    public void handle(final PacketPlayClientCloseWindow packet)
+    public void handle(final PacketPlayServerboundCloseWindow packet)
     {
         CoreMain.debug("Close windows: " + packet.getId());
         this.core.sync(() -> this.player.closeInventory(packet.getId()));
@@ -312,7 +312,7 @@ public class PlayListener implements PacketPlayClientListener
     }
 
     @Override
-    public void handle(final PacketPlayClientWindowClick p)
+    public void handle(final PacketPlayServerboundWindowClick p)
     {
         if (p.getClickType() == null)
         {
@@ -338,7 +338,7 @@ public class PlayListener implements PacketPlayClientListener
     {
         this.core.getPlayersManager().playerQuit(this.player);
 
-        this.networkManager.sendPacket(new PacketPlayServerDisconnect(message));
+        this.networkManager.sendPacket(new PacketPlayClientboundDisconnect(message));
         this.networkManager.close(message, true);
         // TODO: implement
     }

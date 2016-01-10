@@ -30,12 +30,12 @@ import org.slf4j.Logger;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.connection.packets.status.PacketStatusServerListener;
-import org.diorite.impl.connection.packets.status.server.PacketStatusServerPong;
-import org.diorite.impl.connection.packets.status.server.PacketStatusServerServerInfo;
+import org.diorite.impl.connection.packets.status.PacketStatusClientboundListener;
+import org.diorite.impl.connection.packets.status.clientbound.PacketStatusClientboundPong;
+import org.diorite.impl.connection.packets.status.clientbound.PacketStatusClientboundServerInfo;
 import org.diorite.chat.component.BaseComponent;
 
-public class StatusListener implements PacketStatusServerListener
+public class StatusListener implements PacketStatusClientboundListener
 {
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
@@ -47,13 +47,13 @@ public class StatusListener implements PacketStatusServerListener
     }
 
     @Override
-    public void handle(final PacketStatusServerServerInfo packet)
+    public void handle(final PacketStatusClientboundServerInfo packet)
     {
 
     }
 
     @Override
-    public void handle(final PacketStatusServerPong packet)
+    public void handle(final PacketStatusClientboundPong packet)
     {
 
     }

@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.entity.tracker.Trackable;
@@ -107,7 +107,7 @@ public interface IEntity extends Entity, Tickable, Trackable
     /**
      * @return Packet need to spawn entity
      */
-    PacketPlayServer getSpawnPacket();
+    PacketPlayClientbound getSpawnPacket();
 
     /**
      * Need return array of packet in valid order needed to spawn entity with all data. <br>
@@ -115,7 +115,7 @@ public interface IEntity extends Entity, Tickable, Trackable
      *
      * @return array of packets.
      */
-    PacketPlayServer[] getSpawnPackets();
+    PacketPlayClientbound[] getSpawnPackets();
 
     EntityBoundingBox getBoundingBox();
 

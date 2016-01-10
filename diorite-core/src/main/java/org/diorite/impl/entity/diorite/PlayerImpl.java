@@ -32,15 +32,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerChat;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityDestroy;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerGameStateChange.ReasonCodes;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerResourcePackSend;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerTabComplete;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerUpdateAttributes;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerWorldParticles;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChat;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCollect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityDestroy;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange.ReasonCodes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTabComplete;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
@@ -123,7 +123,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
                 ids = this.removeQueue.toIntArray();
                 this.removeQueue.clear();
             }
-            this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(ids));
+            this.networkManager.sendPacket(new PacketPlayClientboundEntityDestroy(ids));
         }
     }
 
@@ -135,7 +135,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         {
             if (entity.canPickup() && entity.pickUpItem(this))
             {
-                this.networkManager.sendPacket(new PacketPlayServerCollect(entity.getId(), this.getId()));
+                this.networkManager.sendPacket(new PacketPlayClientboundCollect(entity.getId(), this.getId()));
             }
         }
     }
@@ -151,7 +151,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         }
         if ((e.getTracker() instanceof IPlayer) || (this.getLastTickThread() == Thread.currentThread()))
         {
-            this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(id));
+            this.networkManager.sendPacket(new PacketPlayClientboundEntityDestroy(id));
         }
         else
         {
@@ -170,7 +170,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         }
         if ((e instanceof IPlayer) || (this.getLastTickThread() == Thread.currentThread()))
         {
-            this.networkManager.sendPacket(new PacketPlayServerEntityDestroy(id));
+            this.networkManager.sendPacket(new PacketPlayClientboundEntityDestroy(id));
         }
         else
         {
@@ -204,7 +204,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
             return;
         }
         super.setGameMode(gameMode);
-        this.networkManager.sendPacket(new PacketPlayServerGameStateChange(ReasonCodes.CHANGE_GAME_MODE, gameMode.ordinal()));
+        this.networkManager.sendPacket(new PacketPlayClientboundGameStateChange(ReasonCodes.CHANGE_GAME_MODE, gameMode.ordinal()));
     }
 
     @Override
@@ -223,7 +223,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public void setSprinting(final boolean isSprinting)
     {
         super.setSprinting(isSprinting);
-        this.networkManager.sendPacket(new PacketPlayServerUpdateAttributes(0, this.attributes));
+        this.networkManager.sendPacket(new PacketPlayClientboundUpdateAttributes(0, this.attributes));
     }
 
     @Override
@@ -253,13 +253,13 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public void setResourcePack(final String resourcePack)
     {
-        this.networkManager.sendPacket(new PacketPlayServerResourcePackSend(resourcePack, "DIORITE"));
+        this.networkManager.sendPacket(new PacketPlayClientboundResourcePackSend(resourcePack, "DIORITE"));
     }
 
     @Override
     public void setResourcePack(final String resourcePack, final String hash)
     {
-        this.networkManager.sendPacket(new PacketPlayServerResourcePackSend(resourcePack, hash));
+        this.networkManager.sendPacket(new PacketPlayClientboundResourcePackSend(resourcePack, hash));
     }
 
     @Override
@@ -293,7 +293,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public void showParticle(final Particle particle, final boolean isLongDistance, final float x, final float y, final float z, final float offsetX, final float offsetY, final float offsetZ, final float particleData, final int particleCount, final int... data)
     {
-        this.networkManager.sendPacket(new PacketPlayServerWorldParticles(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data));
+        this.networkManager.sendPacket(new PacketPlayClientboundWorldParticles(particle, isLongDistance, x, y, z, offsetX, offsetY, offsetZ, particleData, particleCount, data));
     }
 
     private void updateAbilities()
@@ -317,7 +317,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public void sendTabCompletes(final List<String> strs)
     {
-        this.networkManager.sendPacket(new PacketPlayServerTabComplete(strs));
+        this.networkManager.sendPacket(new PacketPlayClientboundTabComplete(strs));
     }
 
     @Override
@@ -360,7 +360,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         @Override
         public void sendMessage(final ChatPosition position, final BaseComponent component)
         {
-            this.networkManager.sendPacket(new PacketPlayServerChat(component, position));
+            this.networkManager.sendPacket(new PacketPlayClientboundChat(component, position));
         }
 
         @Override

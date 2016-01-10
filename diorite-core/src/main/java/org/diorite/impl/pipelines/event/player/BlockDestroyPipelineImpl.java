@@ -25,7 +25,7 @@
 package org.diorite.impl.pipelines.event.player;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerBlockChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
 import org.diorite.GameMode;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.BlockDestroyPipeline;
@@ -48,7 +48,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
                 return;
             }
             evt.getWorld().setBlock(evt.getLocation(), Material.AIR);
-            DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getWorld()), new PacketPlayServerBlockChange(evt.getLocation(), Material.AIR));
+            DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getWorld()), new PacketPlayClientboundBlockChange(evt.getLocation(), Material.AIR));
         });
 
         /*this.addAfter(EventPriority.NORMAL, "Diorite|AddToEq", (evt, pipeline) ->

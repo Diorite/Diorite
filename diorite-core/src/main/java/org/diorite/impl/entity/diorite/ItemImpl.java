@@ -30,10 +30,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerCollect;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnEntity;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCollect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityMetadata;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
 import org.diorite.impl.entity.EntityObject;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.meta.EntityMetadata;
@@ -133,7 +133,7 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
             return false;
         }
 
-        this.getWorld().getEntityTrackers().getTracker(human).sendToAll(new PacketPlayServerCollect(this.getId(), human.getId()));
+        this.getWorld().getEntityTrackers().getTracker(human).sendToAll(new PacketPlayClientboundCollect(this.getId(), human.getId()));
         this.remove(true);
         return true;
     }
@@ -251,15 +251,15 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     }
 
     @Override
-    public PacketPlayServer getSpawnPacket()
+    public PacketPlayClientbound getSpawnPacket()
     {
-        return new PacketPlayServerSpawnEntity(this);
+        return new PacketPlayClientboundSpawnEntity(this);
     }
 
     @Override
-    public PacketPlayServer[] getSpawnPackets()
+    public PacketPlayClientbound[] getSpawnPackets()
     {
-        return new PacketPlayServer[]{this.getSpawnPacket(), new PacketPlayServerEntityMetadata(this, true)};
+        return new PacketPlayClientbound[]{this.getSpawnPacket(), new PacketPlayClientboundEntityMetadata(this, true)};
     }
 
     @Override

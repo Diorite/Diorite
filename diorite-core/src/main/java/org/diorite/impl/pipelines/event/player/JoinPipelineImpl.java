@@ -27,15 +27,15 @@ package org.diorite.impl.pipelines.event.player;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfiles;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerAbilities;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerCustomPayload;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerHeldItemSlot;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerLogin;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPlayerInfo;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerPosition;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerServerDifficulty;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSpawnPosition;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCustomPayload;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundHeldItemSlot;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundLogin;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPosition;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnPosition;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
@@ -62,13 +62,13 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
         this.addFirst("Diorite|StartPackets", ((evt, pipeline) -> {
             // TODO
             final IPlayer player = (IPlayer) evt.getPlayer();
-            player.getNetworkManager().sendPacket(new PacketPlayServerLogin(player.getId(), player.getGameMode(), false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
-            player.getNetworkManager().sendPacket(new PacketPlayServerCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
-            player.getNetworkManager().sendPacket(new PacketPlayServerServerDifficulty(Difficulty.EASY));
-            player.getNetworkManager().sendPacket(new PacketPlayServerSpawnPosition(new BlockLocation(2, 255, - 2)));
-            player.getNetworkManager().sendPacket(new PacketPlayServerAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
-            player.getNetworkManager().sendPacket(new PacketPlayServerHeldItemSlot(player.getHeldItemSlot()));
-            player.getNetworkManager().sendPacket(new PacketPlayServerPosition(new TeleportData(2, 255, - 2), 5));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundWorldDifficulty(Difficulty.EASY));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundSpawnPosition(new BlockLocation(2, 255, - 2)));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundHeldItemSlot(player.getHeldItemSlot()));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundPosition(new TeleportData(2, 255, - 2), 5));
         }));
 
         this.addAfter("Diorite|StartPackets", "Diorite|EntityStuff", ((evt, pipeline) -> {
@@ -76,9 +76,9 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             player.getWorld().addEntity(player);
 
             DioriteCore.getInstance().addSync(() -> {
-                final PacketPlayServer[] newPackets = player.getSpawnPackets();
+                final PacketPlayClientbound[] newPackets = player.getSpawnPackets();
                 DioriteCore.getInstance().getPlayersManager().forEachExcept(player, p -> {
-                    final PacketPlayServer[] playerPackets = p.getSpawnPackets();
+                    final PacketPlayClientbound[] playerPackets = p.getSpawnPackets();
                     player.getNetworkManager().sendPackets(playerPackets);
                     p.getNetworkManager().sendPackets(newPackets);
                 });
@@ -88,8 +88,8 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
         this.addAfter("Diorite|EntityStuff", "Diorite|PlayerListStuff", ((evt, pipeline) -> {
             final IPlayer player = (IPlayer) evt.getPlayer();
 
-            DioriteCore.getInstance().getPlayersManager().forEach(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
-            DioriteCore.getInstance().getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayServerPlayerInfo(PacketPlayServerPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
+            DioriteCore.getInstance().getPlayersManager().forEach(new PacketPlayClientboundPlayerInfo(PacketPlayClientboundPlayerInfo.PlayerInfoAction.ADD_PLAYER, player));
+            DioriteCore.getInstance().getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayClientboundPlayerInfo(PacketPlayClientboundPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
         }));
 
         this.addAfter(EventPriority.NORMAL, "Diorite|JoinMessage", ((evt, pipeline) -> {

@@ -34,14 +34,14 @@ import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.listeners.PacketHandshakeListener;
-import org.diorite.impl.connection.packets.handshake.PacketHandshakingServerListener;
+import org.diorite.impl.connection.packets.handshake.PacketHandshakingClientboundListener;
 import org.diorite.impl.connection.packets.handshake.RequestType;
-import org.diorite.impl.connection.packets.handshake.client.PacketHandshakingClientSetProtocol;
-import org.diorite.impl.connection.packets.login.client.PacketLoginClientStart;
+import org.diorite.impl.connection.packets.handshake.serverbound.PacketHandshakingServerboundSetProtocol;
+import org.diorite.impl.connection.packets.login.serverbound.PacketLoginServerboundStart;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.utils.DioriteUtils;
 
-public class HandshakeListener implements PacketHandshakingServerListener
+public class HandshakeListener implements PacketHandshakingClientboundListener
 {
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
@@ -69,9 +69,9 @@ public class HandshakeListener implements PacketHandshakingServerListener
                 this.networkManager.setPacketListener(new LoginListener(this.core, this.networkManager));
                 // TODO finish
                 final InetSocketAddress address = (InetSocketAddress) this.networkManager.getSocketAddress();
-                this.networkManager.sendPacket(new PacketHandshakingClientSetProtocol(PacketHandshakeListener.CURRENT_PROTOCOL, RequestType.LOGIN, address.getPort(), address.getHostName()));
+                this.networkManager.sendPacket(new PacketHandshakingServerboundSetProtocol(PacketHandshakeListener.CURRENT_PROTOCOL, RequestType.LOGIN, address.getPort(), address.getHostName()));
                 this.networkManager.setProtocol(EnumProtocol.LOGIN);
-                this.networkManager.sendPacket(new PacketLoginClientStart(new GameProfileImpl(DioriteUtils.getCrackedUuid("player"), "player")));
+                this.networkManager.sendPacket(new PacketLoginServerboundStart(new GameProfileImpl(DioriteUtils.getCrackedUuid("player"), "player")));
                 break;
         }
     }

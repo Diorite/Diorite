@@ -33,7 +33,7 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerSetSlot;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
@@ -81,7 +81,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     public boolean softUpdate()
     {
         final ItemStackImpl[] items = this.getArray().toArray(new ItemStackImpl[this.getArray().length()]);
-        final Set<PacketPlayServerSetSlot> packets = new HashSet<>(items.length);
+        final Set<PacketPlayClientboundSetSlot> packets = new HashSet<>(items.length);
         for (short i = 0, itemsLength = (short) items.length; i < itemsLength; i++)
         {
             final ItemStackImpl item = items[i];
@@ -91,23 +91,23 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
                 if ((item.getAmount() == 0) || (Material.AIR.simpleEquals(item.getMaterial())))
                 {
                     this.replace(i, item, null);
-                    packets.add(new PacketPlayServerSetSlot(this.getWindowId(), i, null));
+                    packets.add(new PacketPlayClientboundSetSlot(this.getWindowId(), i, null));
                     continue;
                 }
                 this.notNullItems.add(i);
                 if (item.setClean()) // returns true if item was dirty before cleaning
                 {
-                    packets.add(new PacketPlayServerSetSlot(this.getWindowId(), i, item));
+                    packets.add(new PacketPlayClientboundSetSlot(this.getWindowId(), i, item));
                 }
             }
             else if (this.notNullItems.remove(i))
             {
-                packets.add(new PacketPlayServerSetSlot(this.getWindowId(), i, null));
+                packets.add(new PacketPlayClientboundSetSlot(this.getWindowId(), i, null));
             }
         }
         if (! packets.isEmpty())
         {
-            final PacketPlayServerSetSlot[] packetsArray = packets.toArray(new PacketPlayServerSetSlot[packets.size()]);
+            final PacketPlayClientboundSetSlot[] packetsArray = packets.toArray(new PacketPlayClientboundSetSlot[packets.size()]);
             this.viewers.stream().filter(h -> h instanceof IPlayer).map(h -> (IPlayer) h).forEach(p -> p.getNetworkManager().sendPackets(packetsArray));
             return true;
         }

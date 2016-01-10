@@ -45,8 +45,8 @@ import org.diorite.impl.connection.packets.PacketCompression;
 import org.diorite.impl.connection.packets.PacketEncryptor;
 import org.diorite.impl.connection.packets.PacketListener;
 import org.diorite.impl.connection.packets.QueuedPacket;
-import org.diorite.impl.connection.packets.play.client.PacketPlayClientKeepAlive;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerKeepAlive;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundKeepAlive;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundKeepAlive;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.TranslatableComponent;
@@ -206,7 +206,7 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
             this.handleClosed();
             return;
         }
-        if ((packet instanceof PacketPlayServerKeepAlive) || (packet instanceof PacketPlayClientKeepAlive))
+        if ((packet instanceof PacketPlayClientboundKeepAlive) || (packet instanceof PacketPlayServerboundKeepAlive))
         {
             this.sentAlive = System.currentTimeMillis();
         }

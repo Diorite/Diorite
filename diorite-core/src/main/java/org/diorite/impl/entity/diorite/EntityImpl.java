@@ -36,8 +36,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.GameObjectImpl;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServer;
-import org.diorite.impl.connection.packets.play.server.PacketPlayServerEntityMetadata;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityMetadata;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
@@ -397,9 +397,9 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public PacketPlayServer[] getSpawnPackets()
+    public PacketPlayClientbound[] getSpawnPackets()
     {
-        return new PacketPlayServer[]{this.getSpawnPacket(), new PacketPlayServerEntityMetadata(this, true)};
+        return new PacketPlayClientbound[]{this.getSpawnPacket(), new PacketPlayClientboundEntityMetadata(this, true)};
     }
 
     @Override
