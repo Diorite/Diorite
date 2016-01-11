@@ -57,7 +57,6 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMove;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMoveLook;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
-import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSoundEffect;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
@@ -68,6 +67,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.chat.component.BaseComponent;

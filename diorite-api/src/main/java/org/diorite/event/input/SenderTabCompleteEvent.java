@@ -50,12 +50,12 @@ public class SenderTabCompleteEvent extends SenderEvent
      * @param sender  sender that typed command.
      * @param message message that player typed.
      */
-    public SenderTabCompleteEvent(final CommandSender sender, final String message)
+    public SenderTabCompleteEvent(final CommandSender sender, final String message, final boolean assumeCommand)
     {
         super(sender);
         Validate.notNull(message, "command message can't be null.");
-        this.message = message;
-        this.isCommand = (! message.isEmpty()) && (message.charAt(0) == '/');
+        this.isCommand = assumeCommand || ((! message.isEmpty()) && (message.charAt(0) == '/'));
+        this.message = this.isCommand ? (assumeCommand ? message : message.substring(1)) : message;
         if (this.isCommand)
         {
             this.command = sender.getCore().getCommandMap().findCommand(message);
@@ -69,14 +69,13 @@ public class SenderTabCompleteEvent extends SenderEvent
      * @param message message that player typed.
      * @param command command that is typed, may be null.
      */
-    public SenderTabCompleteEvent(final CommandSender sender, final String message, final Command command)
+    public SenderTabCompleteEvent(final CommandSender sender, final String message, final boolean assumeCommand, final Command command)
     {
         super(sender);
         Validate.notNull(message, "command message can't be null.");
-        this.message = message;
         this.command = command;
-        //noinspection HardcodedFileSeparator
-        this.isCommand = (! message.isEmpty()) && (message.charAt(0) == '/');
+        this.isCommand = assumeCommand || ((! message.isEmpty()) && (message.charAt(0) == '/'));
+        this.message = this.isCommand ? (assumeCommand ? message : message.substring(1)) : message;
     }
 
     /**
@@ -105,7 +104,9 @@ public class SenderTabCompleteEvent extends SenderEvent
     }
 
     /**
-     * @return command message typed by sender, may be already changed by other event handlers
+     * Returns command message typed by sender, may be already changed by other event handlers.
+     *
+     * @return command message typed by sender, may be already changed by other event handlers.
      */
     public String getMessage()
     {
@@ -124,6 +125,8 @@ public class SenderTabCompleteEvent extends SenderEvent
     }
 
     /**
+     * Returns list of possible endings of current command/message.
+     *
      * @return list of possible endings of current command/message.
      */
     public List<String> getCompletes()
@@ -142,6 +145,8 @@ public class SenderTabCompleteEvent extends SenderEvent
     }
 
     /**
+     * Returns true if this is tab complete used when typing command.
+     *
      * @return true if this is tab complete used when typing command.
      */
     public boolean isCommand()

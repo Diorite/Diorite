@@ -60,10 +60,6 @@ public class CommandPipelineImpl extends SimpleEventPipeline<SenderCommandEvent>
             {
                 return;
             }
-            if (sender.isPlayer())
-            {
-                DioriteCore.getInstance().getConsoleSender().sendMessage(sender.getName() + ": " + Command.COMMAND_PREFIX + evt.getMessage());
-            }
             //else if (sender.isCommandBlock()) TODO
             final String command = args[0];
             final String[] newArgs;
@@ -76,7 +72,18 @@ public class CommandPipelineImpl extends SimpleEventPipeline<SenderCommandEvent>
                 newArgs = new String[args.length - 1];
                 System.arraycopy(args, 1, newArgs, 0, args.length - 1);
             }
-            evt.getCommand().tryDispatch(sender, command, newArgs);
+            final boolean r = evt.getCommand().tryDispatch(sender, command, newArgs);
+            if (sender.isPlayer())
+            {
+                if (r)
+                {
+                    DioriteCore.getInstance().getConsoleSender().sendMessage(sender.getName() + ": " + Command.COMMAND_PREFIX + evt.getMessage());
+                }
+                else
+                {
+                    DioriteCore.getInstance().getConsoleSender().sendMessage("Failed to execute: " + sender.getName() + ": " + Command.COMMAND_PREFIX + evt.getMessage());
+                }
+            }
         });
     }
 }

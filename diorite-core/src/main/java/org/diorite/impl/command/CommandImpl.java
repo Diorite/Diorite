@@ -254,7 +254,7 @@ public abstract class CommandImpl implements Command
     @Override
     public boolean tryDispatch(final CommandSender sender, final String label, final String[] args)
     {
-        final Matcher matcher = this.matcher(label);
+        final Matcher matcher = this.matcher(label.toLowerCase());
         if (! matcher.matches())
         {
             return false;

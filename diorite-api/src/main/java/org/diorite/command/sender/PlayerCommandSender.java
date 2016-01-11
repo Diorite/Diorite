@@ -33,4 +33,10 @@ public interface PlayerCommandSender extends HumanCommandSender
 {
     @Override
     Player getSenderEntity();
+
+    @Override
+    default boolean isPlayer()
+    {
+        return true;
+    }
 }

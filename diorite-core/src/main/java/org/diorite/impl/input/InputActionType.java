@@ -72,7 +72,7 @@ public enum InputActionType
                 @Override
                 public void doAction(final InputAction action)
                 {
-                    EventType.callEvent(new SenderTabCompleteEvent(action.getSender(), action.getMsg()));
+                    EventType.callEvent(new SenderTabCompleteEvent(action.getSender(), action.getMsg(), action.isAssumeCommand()));
                 }
             };
 

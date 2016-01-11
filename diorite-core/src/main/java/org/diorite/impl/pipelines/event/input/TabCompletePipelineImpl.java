@@ -24,6 +24,8 @@
 
 package org.diorite.impl.pipelines.event.input;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 import org.diorite.command.sender.CommandSender;
@@ -44,14 +46,16 @@ public class TabCompletePipelineImpl extends SimpleEventPipeline<SenderTabComple
             }
             final CommandSender sender = evt.getSender();
             final String msg = evt.getMessage();
+            List<String> completes = null;
             if (evt.isCommand())
             {
-                evt.setCompletes(this.core.getCommandMap().tabComplete(sender, msg.substring(1)));
+                completes = this.core.getCommandMap().tabComplete(sender, msg);
             }
-            else
+            if (completes == null)
             {
-                evt.setCompletes((msg.isEmpty()) ? this.core.getOnlinePlayersNames() : this.core.getOnlinePlayersNames(msg));
+                completes = (msg.isEmpty()) ? this.core.getOnlinePlayersNames() : this.core.getOnlinePlayersNames(msg);
             }
+            evt.setCompletes(completes);
         });
         this.addLast("Diorite|Send", (evt, pipeline) -> {
             if (evt.isCancelled() || (evt.getCompletes() == null) || evt.getCompletes().isEmpty())

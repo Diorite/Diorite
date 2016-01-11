@@ -151,18 +151,18 @@ public class PlayListener implements PacketPlayServerboundListener
         //noinspection HardcodedFileSeparator
         if (str.startsWith("/"))
         {
-            this.core.getInputThread().add(new InputAction(str.substring(1), this.player, InputActionType.COMMAND));
+            this.core.getInputThread().add(new InputAction(str.substring(1), true, this.player, InputActionType.COMMAND));
         }
         else
         {
-            this.core.getInputThread().add(new InputAction(str, this.player, InputActionType.CHAT));
+            this.core.getInputThread().add(new InputAction(str, false, this.player, InputActionType.CHAT));
         }
     }
 
     @Override
     public void handle(final PacketPlayServerboundTabComplete packet)
     {
-        this.core.getInputThread().add(new InputAction(packet.getContent(), this.player, InputActionType.TAB_COMPLETE));
+        this.core.getInputThread().add(new InputAction(packet.getContent(), packet.isAssumeCommand(), this.player, InputActionType.TAB_COMPLETE));
     }
 
     @Override

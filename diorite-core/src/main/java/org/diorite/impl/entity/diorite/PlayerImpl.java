@@ -82,6 +82,8 @@ class PlayerImpl extends HumanImpl implements IPlayer
         this.renderDistance = core.getRenderDistance();
         this.playerChunks = new PlayerChunksImpl(this);
         this.messageOutput = new PacketMessageOutput(networkManager);
+
+        this.metadata.setBoolean(0, EntityBasicFlags.ACTION, true);
     }
 
     @Override

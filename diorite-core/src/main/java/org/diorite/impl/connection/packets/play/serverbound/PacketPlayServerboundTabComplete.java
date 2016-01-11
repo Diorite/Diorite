@@ -36,10 +36,11 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerboundListener;
 import org.diorite.BlockLocation;
 
-@PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 140)
+@PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 141)
 public class PacketPlayServerboundTabComplete extends PacketPlayServerbound
 {
     private String        content; // ~128 bytes
+    private boolean       assumeCommand; // 1 byte
     private BlockLocation blockLocation; // 8 bytes + bool
 
     public PacketPlayServerboundTabComplete()
@@ -51,9 +52,10 @@ public class PacketPlayServerboundTabComplete extends PacketPlayServerbound
         this.content = content;
     }
 
-    public PacketPlayServerboundTabComplete(final String content, final BlockLocation blockLocation)
+    public PacketPlayServerboundTabComplete(final String content, final boolean assumeCommand, final BlockLocation blockLocation)
     {
         this.content = content;
+        this.assumeCommand = assumeCommand;
         this.blockLocation = blockLocation;
     }
 
@@ -61,6 +63,7 @@ public class PacketPlayServerboundTabComplete extends PacketPlayServerbound
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.content = data.readText(Short.MAX_VALUE);
+        this.assumeCommand = data.readBoolean();
         this.blockLocation = data.readBoolean() ? data.readBlockLocationFromLong() : null;
     }
 
@@ -68,6 +71,7 @@ public class PacketPlayServerboundTabComplete extends PacketPlayServerbound
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.content);
+        data.writeBoolean(this.assumeCommand);
         data.writeBoolean(this.blockLocation != null);
         if (this.blockLocation != null)
         {
@@ -93,6 +97,16 @@ public class PacketPlayServerboundTabComplete extends PacketPlayServerbound
     public void setBlockLocation(final BlockLocation blockLocation)
     {
         this.blockLocation = blockLocation;
+    }
+
+    public boolean isAssumeCommand()
+    {
+        return this.assumeCommand;
+    }
+
+    public void setAssumeCommand(final boolean assumeCommand)
+    {
+        this.assumeCommand = assumeCommand;
     }
 
     @Override

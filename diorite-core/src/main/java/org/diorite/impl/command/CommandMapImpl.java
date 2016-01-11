@@ -164,7 +164,7 @@ public class CommandMapImpl implements CommandMap
     }
 
     private final Function<String, Predicate<Map.Entry<String, MainCommand>>> tabCompeleterFilter = lcCmd -> e -> {
-        final String key = e.getKey();
+        final String key = e.getKey().toLowerCase();
         final String plugin = key.substring(0, key.indexOf(Command.COMMAND_PLUGIN_SEPARATOR) + 2);
         return (key.startsWith(lcCmd) || (! lcCmd.contains(Command.COMMAND_PLUGIN_SEPARATOR) && key.startsWith(plugin + lcCmd))) && ! key.equals(lcCmd);
     };
@@ -180,11 +180,11 @@ public class CommandMapImpl implements CommandMap
         final String command;
         if (index == - 1)
         {
-            command = cmdLine;
+            command = cmdLine.toLowerCase();
         }
         else
         {
-            command = cmdLine.substring(0, index);
+            command = cmdLine.substring(0, index).toLowerCase();
         }
         for (final MainCommand cmd : this.getSortedCommandList())
         {

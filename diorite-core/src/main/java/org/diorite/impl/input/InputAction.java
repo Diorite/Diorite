@@ -32,19 +32,30 @@ import org.diorite.command.sender.CommandSender;
 public class InputAction
 {
     private final String          msg;
+    private final boolean         assumeCommand;
     private final CommandSender   sender;
     private final InputActionType type;
 
-    public InputAction(final String msg, final CommandSender sender, final InputActionType type)
+    public InputAction(final String msg, final boolean assumeCommand, final CommandSender sender, final InputActionType type)
     {
         this.msg = msg;
+        this.assumeCommand = assumeCommand;
         this.sender = sender;
         this.type = type;
+        if ((type == InputActionType.CHAT) && assumeCommand)
+        {
+            throw new IllegalStateException("Chat input action type with assumeCommand = true. (" + sender + ": " + msg + ")");
+        }
     }
 
     public String getMsg()
     {
         return this.msg;
+    }
+
+    public boolean isAssumeCommand()
+    {
+        return this.assumeCommand;
     }
 
     public CommandSender getSender()
@@ -55,14 +66,6 @@ public class InputAction
     public InputActionType getType()
     {
         return this.type;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = (this.msg != null) ? this.msg.hashCode() : 0;
-        result = (31 * result) + ((this.sender != null) ? this.sender.hashCode() : 0);
-        return result;
     }
 
     @Override
@@ -78,13 +81,22 @@ public class InputAction
         }
 
         final InputAction that = (InputAction) o;
+        return (this.assumeCommand == that.assumeCommand) && ((this.msg != null) ? this.msg.equals(that.msg) : ((that.msg == null) && ((this.sender != null) ? this.sender.equals(that.sender) : ((that.sender == null) && (this.type == that.type)))));
+    }
 
-        return ! ((this.msg != null) ? ! this.msg.equals(that.msg) : (that.msg != null)) && ! ((this.sender != null) ? ! this.sender.equals(that.sender) : (that.sender != null));
+    @Override
+    public int hashCode()
+    {
+        int result = (this.msg != null) ? this.msg.hashCode() : 0;
+        result = (31 * result) + (this.assumeCommand ? 1 : 0);
+        result = (31 * result) + ((this.sender != null) ? this.sender.hashCode() : 0);
+        result = (31 * result) + this.type.hashCode();
+        return result;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("msg", this.msg).append("sender", this.sender).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("msg", this.msg).append("assumeCommand", this.assumeCommand).append("sender", this.sender).append("type", this.type).toString();
     }
 }
