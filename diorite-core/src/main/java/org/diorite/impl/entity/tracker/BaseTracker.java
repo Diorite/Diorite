@@ -114,7 +114,7 @@ public abstract class BaseTracker<T extends IEntity>
         double deltaY = 0;
         double deltaZ = 0;
         this.isMoving = this.forceLocationUpdate || (this.velY != 0) || (this.velZ != 0) || (this.velX != 0);
-        if (this.isMoving) // TODO: rethink
+//        if (this.isMoving) // TODO: rethink
         {
             this.forceLocationUpdate = false;
             deltaX = this.tracker.getX() - this.xLoc;
@@ -134,7 +134,7 @@ public abstract class BaseTracker<T extends IEntity>
             this.tracked.forEach(p -> p.removeEntityFromView(this));
         }
 
-        if (this.isMoving && ! this.tracked.isEmpty()) // TODO: rethink
+//        if (this.isMoving && ! this.tracked.isEmpty()) // TODO: rethink
         {
             if ((deltaX < 4) && (deltaX > - 4) && (deltaY < 4) && (deltaY > - 4) && (deltaZ < 4) && (deltaZ > - 4))
             {

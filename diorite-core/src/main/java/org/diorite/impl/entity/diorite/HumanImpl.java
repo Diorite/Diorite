@@ -145,11 +145,12 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     public void pickupItems()
     {
         // TODO: maybe don't pickup every tick?
-        for (final IItem entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
+        for (final IItem entity : this.getNearbyEntities(2, 2, 2, ItemImpl.class))
         {
             if (entity.canPickup())
             {
                 entity.pickUpItem(this);
+                entity.remove(true);
             }
         }
     }

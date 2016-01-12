@@ -133,11 +133,12 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public void pickupItems()
     {
         // TODO: maybe don't pickup every tick?
-        for (final IItem entity : this.getNearbyEntities(1, 2, 1, ItemImpl.class))
+        for (final IItem entity : this.getNearbyEntities(2, 2, 2, IItem.class))
         {
             if (entity.canPickup() && entity.pickUpItem(this))
             {
                 this.networkManager.sendPacket(new PacketPlayClientboundCollect(entity.getId(), this.getId()));
+                entity.remove(true);
             }
         }
     }

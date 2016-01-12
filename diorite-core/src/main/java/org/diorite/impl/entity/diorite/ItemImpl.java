@@ -134,7 +134,6 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
         }
 
         this.getWorld().getEntityTrackers().getTracker(human).sendToAll(new PacketPlayClientboundCollect(this.getId(), human.getId()));
-        this.remove(true);
         return true;
     }
 
