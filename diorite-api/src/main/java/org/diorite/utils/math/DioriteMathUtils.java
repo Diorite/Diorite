@@ -746,6 +746,18 @@ public final class DioriteMathUtils
      *
      * @return num * num
      */
+    public static float square(final float num)
+    {
+        return num * num;
+    }
+
+    /**
+     * Simple square number, just num * num.
+     *
+     * @param num number to square
+     *
+     * @return num * num
+     */
     public static int square(final int num)
     {
         return num * num;

@@ -25,6 +25,7 @@
 package org.diorite.utils.math.geometry;
 
 import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -33,29 +34,37 @@ import org.diorite.entity.Entity;
 
 public class EntityBoundingBox extends BoundingBox
 {
-    protected final float hSize;
-    protected final float vSize;
+    protected Vector3f size;
 
     public EntityBoundingBox(final float hSize, final float vSize)
     {
-        this.hSize = hSize;
-        this.vSize = vSize;
+        this.size = new Vector3f(hSize, vSize, hSize);
+    }
+
+    public EntityBoundingBox(final double hSize, final double vSize)
+    {
+        this.size = new Vector3f((float) hSize, (float) vSize, (float) hSize);
+    }
+
+    public Vector3f getEntitySize()
+    {
+        return this.size;
     }
 
     @Override
     public Vector3d getSize()
     {
-        return new Vector3d(this.hSize, this.vSize, this.hSize);
+        return new Vector3d(this.size);
     }
 
     public void setCenter(final double x, final double y, final double z)
     {
-        this.min.setX(x - (this.hSize / 2));
+        this.min.setX(x - (this.size.x / 2));
         this.min.setY(y);
-        this.min.setZ(z - (this.hSize / 2));
-        this.max.setX(x + (this.hSize / 2));
-        this.max.setY(y + this.vSize);
-        this.max.setZ(z + (this.hSize / 2));
+        this.min.setZ(z - (this.size.z / 2));
+        this.max.setX(x + (this.size.x / 2));
+        this.max.setY(y + this.size.y);
+        this.max.setZ(z + (this.size.z / 2));
     }
 
     public void setCenter(final Entity entity)
@@ -66,6 +75,6 @@ public class EntityBoundingBox extends BoundingBox
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("hSize", this.hSize).append("vSize", this.vSize).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("size", this.size).toString();
     }
 }
