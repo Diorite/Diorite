@@ -542,6 +542,12 @@ public class DioriteCore implements Core
     }
 
     @Override
+    public int getCpt()
+    {
+        return 100 / this.tps;
+    }
+
+    @Override
     public void resetRecentTps()
     {
         Arrays.fill(this.recentTps, this.tps);

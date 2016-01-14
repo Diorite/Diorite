@@ -44,6 +44,10 @@ public interface Entity extends GameObject, Synchronizable
 
     int getId();
 
+    int getAge();
+
+    void setAge(int age);
+
     double getX();
 
     double getZ();
@@ -60,11 +64,17 @@ public interface Entity extends GameObject, Synchronizable
 
     Core getCore();
 
-    Collection<? extends Entity> getNearbyEntities(double x, double y, double z);
+    default Collection<? extends Entity> getNearbyEntities(final double x, final double y, final double z)
+    {
+        return this.getNearbyEntities(x, y, z, Entity.class);
+    }
+
+    default Collection<? extends Entity> getNearbyEntities(final double x, final double y, final double z, final EntityType type)
+    {
+        return this.getNearbyEntities(x, y, z, type.getDioriteEntityClass());
+    }
 
     <T extends Entity> Collection<? extends T> getNearbyEntities(double x, double y, double z, Class<? extends T> type);
-
-    Collection<? extends Entity> getNearbyEntities(double x, double y, double z, EntityType type);
 
     void setVelocity(Vector3f velocity);
 

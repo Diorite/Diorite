@@ -4,6 +4,8 @@ import org.diorite.entity.AreaEffectCloud;
 
 public interface IAreaEffectCloud extends IEntity, AreaEffectCloud, EntityObject
 {
+    float HEIGHT = 0.5F;
+
     /**
      * Size of metadata.
      */

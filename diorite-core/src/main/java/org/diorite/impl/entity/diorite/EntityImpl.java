@@ -74,6 +74,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     private          int               id;
     protected        EntityMetadata    metadata;
     private          BaseTracker<?>    tracker;
+    protected        int               age; // in 1/100th of second
 
     private double x;
     private double y;
@@ -506,6 +507,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     @Override
     public void doTick(final int tps)
     {
+        this.age += (100 / tps);
         this.lastTickThread = Thread.currentThread();
         this.values.forEach(Resetable::reset);
         if (this.aabb != null) // TODO
@@ -536,6 +538,18 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     public int getId()
     {
         return this.id;
+    }
+
+    @Override
+    public int getAge()
+    {
+        return this.age;
+    }
+
+    @Override
+    public void setAge(final int age)
+    {
+        this.age = age;
     }
 
     @Override

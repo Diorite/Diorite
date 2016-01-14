@@ -24,6 +24,8 @@
 
 package org.diorite.entity;
 
-public interface TippedArrow extends AbstractArrow
+import org.diorite.utils.others.Colorable;
+
+public interface TippedArrow extends AbstractArrow, Colorable
 {
 }

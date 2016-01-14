@@ -51,7 +51,7 @@ public enum EnumProtocol
     LOGIN("LOGIN", 2);
 
     private static final int    PLAY_PACKETS_SIZE  = 50;
-    private static final int    OTHER_PACKETS_SIZE = 50;
+    private static final int    OTHER_PACKETS_SIZE = 5;
     private static final String INNER_CLASS_NAME   = "<PacketInit>";
 
     private static final Int2ObjectMap<EnumProtocol>                                              enumProtocolMap;
