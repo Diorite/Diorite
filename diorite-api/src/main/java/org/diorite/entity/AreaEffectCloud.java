@@ -27,6 +27,7 @@ package org.diorite.entity;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.diorite.LookupShape;
 import org.diorite.Particle;
 import org.diorite.effect.StatusEffect;
 import org.diorite.effect.StatusEffectType;
@@ -211,6 +212,6 @@ public interface AreaEffectCloud extends ObjectEntity, Colorable
      */
     default Collection<? extends Entity> getEntitesInRadius()
     {
-        return this.getNearbyEntities(0, 0, 0);
+        return this.getNearbyEntities(0, 0, 0, LookupShape.CYLINDER);
     }
 }

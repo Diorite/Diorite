@@ -25,6 +25,7 @@ import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
+import org.diorite.LookupShape;
 import org.diorite.auth.GameProfile;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.command.sender.MessageOutput;
@@ -145,7 +146,7 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     public void pickupItems()
     {
         // TODO: maybe don't pickup every tick?
-        for (final IItem entity : this.getNearbyEntities(2, 2, 2, ItemImpl.class))
+        for (final IItem entity : this.getNearbyEntities(2, 2, 2, ItemImpl.class, LookupShape.RECTANGLE))
         {
             if (entity.canPickup())
             {

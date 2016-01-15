@@ -8,6 +8,7 @@ import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
+import org.diorite.utils.Color;
 
 class TippedArrowImpl extends AbstractArrowImpl implements ITippedArrow
 {
@@ -40,6 +41,18 @@ class TippedArrowImpl extends AbstractArrowImpl implements ITippedArrow
     public int getEntityObjectData()
     {
         return 0;
+    }
+
+    @Override
+    public Color getColor()
+    {
+        return null;
+    }
+
+    @Override
+    public void setColor(final Color color)
+    {
+
     }
 }
 

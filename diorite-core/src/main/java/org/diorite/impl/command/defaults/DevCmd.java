@@ -51,6 +51,7 @@ import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Location;
+import org.diorite.LookupShape;
 import org.diorite.Particle;
 import org.diorite.Sound;
 import org.diorite.cfg.messages.DioriteMesssges;
@@ -81,6 +82,7 @@ import org.diorite.material.items.SkullMat;
 import org.diorite.permissions.PermissionLevel;
 import org.diorite.permissions.PermissionsGroup;
 import org.diorite.permissions.PermissionsManager;
+import org.diorite.utils.Color;
 import org.diorite.utils.math.DioriteMathUtils;
 
 public class DevCmd extends SystemCommandImpl
@@ -102,7 +104,7 @@ public class DevCmd extends SystemCommandImpl
             {
                 case "metadata":
                 {
-                    final IEntity entity = p.getNearbyEntities(3, 3, 3).iterator().next();
+                    final IEntity entity = p.getNearbyEntities(3, 3, 3, LookupShape.RECTANGLE).iterator().next();
                     final int index = args.asInt(1);
                     switch (args.asString(0))
                     {
@@ -140,7 +142,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "mobname":
                 {
-                    final IEntity entity = p.getNearbyEntities(3, 3, 3).iterator().next();
+                    final IEntity entity = p.getNearbyEntities(3, 3, 3, LookupShape.RECTANGLE).iterator().next();
                     System.out.println(args.asText());
                     entity.setCustomName(ChatColor.translateAlternateColorCodesInString(args.asText().replace("%n", "\n")));
                     entity.setCustomNameVisible(true);
@@ -193,8 +195,8 @@ public class DevCmd extends SystemCommandImpl
                     else if (args.asString(0).equalsIgnoreCase("area"))
                     {
                         final IAreaEffectCloud entity = entityFactory.createEntity(IAreaEffectCloud.class, p.getLocation());
-                        entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_COLOR, 456);
-                        entity.getMetadata().setFloat(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_RADIUS, 10);
+                        entity.setColor(Color.AQUA);
+                        entity.setRadius(30);
                         p.getWorld().addEntity(entity);
                     }
                     else if (args.asString(0).equalsIgnoreCase("area2"))
@@ -498,7 +500,7 @@ public class DevCmd extends SystemCommandImpl
 //                }
                 case "ep":
                 {
-                    for (final IEntity e : p.getNearbyEntities(args.asDouble(0), args.asDouble(0), args.asDouble(0)))
+                    for (final IEntity e : p.getNearbyEntities(args.asDouble(0), args.asDouble(0), args.asDouble(0), LookupShape.RECTANGLE))
                     {
                         sender.sendSimpleColoredMessage("[" + e.getId() + "] " + e.getType() + ": " + e.getLocation());
                     }

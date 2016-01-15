@@ -47,6 +47,7 @@ import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
+import org.diorite.LookupShape;
 import org.diorite.Particle;
 import org.diorite.auth.GameProfile;
 import org.diorite.chat.ChatPosition;
@@ -133,7 +134,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public void pickupItems()
     {
         // TODO: maybe don't pickup every tick?
-        for (final IItem entity : this.getNearbyEntities(2, 2, 2, IItem.class))
+        for (final IItem entity : this.getNearbyEntities(2, 2, 2, IItem.class, LookupShape.RECTANGLE))
         {
             if (entity.canPickup() && entity.pickUpItem(this))
             {

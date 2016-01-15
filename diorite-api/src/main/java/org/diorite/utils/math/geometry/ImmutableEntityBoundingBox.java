@@ -47,7 +47,7 @@ public class ImmutableEntityBoundingBox extends EntityBoundingBox
 
     public EntityBoundingBox create(final double x, final double y, final double z)
     {
-        final EntityBoundingBox aabb = new EntityBoundingBox(this.hSize, this.vSize);
+        final EntityBoundingBox aabb = new EntityBoundingBox(this.size.x, this.size.y);
         aabb.setCenter(x, y, z);
         return aabb;
     }

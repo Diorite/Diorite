@@ -11,6 +11,7 @@ import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.entity.tracker.Trackable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.LookupShape;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
@@ -99,10 +100,10 @@ public interface IEntity extends Entity, Tickable, Trackable
     void setRotation(float newYaw, float newPitch);
 
     @Override
-    Collection<? extends IEntity> getNearbyEntities(double x, double y, double z);
+    Collection<? extends IEntity> getNearbyEntities(double x, double y, double z, LookupShape shape);
 
     @Override
-    Collection<? extends IEntity> getNearbyEntities(double x, double y, double z, EntityType type);
+    Collection<? extends IEntity> getNearbyEntities(double x, double y, double z, EntityType type, LookupShape shape);
 
     /**
      * @return Packet need to spawn entity

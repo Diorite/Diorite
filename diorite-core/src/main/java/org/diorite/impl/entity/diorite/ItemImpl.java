@@ -40,6 +40,7 @@ import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
+import org.diorite.LookupShape;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Human;
 import org.diorite.inventory.item.ItemStack;
@@ -150,7 +151,7 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     {
         if (force || (Math.abs(this.getY() - this.yLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.getX() - this.xLastJoinPos) > JOIN_DISTANCE_THRESHOLD) || (Math.abs(this.getZ() - this.zLastJoinPos) > JOIN_DISTANCE_THRESHOLD))
         {
-            this.getNearbyEntities(JOIN_DISTANCE, JOIN_DISTANCE, JOIN_DISTANCE, ItemImpl.class).forEach(this::joinItem);
+            this.getNearbyEntities(JOIN_DISTANCE, JOIN_DISTANCE, JOIN_DISTANCE, ItemImpl.class, LookupShape.RECTANGLE).forEach(this::joinItem);
         }
     }
 

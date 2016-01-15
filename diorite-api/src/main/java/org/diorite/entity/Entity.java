@@ -27,10 +27,12 @@ package org.diorite.entity;
 import javax.vecmath.Vector3f;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
 import org.diorite.Core;
 import org.diorite.GameObject;
 import org.diorite.ImmutableLocation;
+import org.diorite.LookupShape;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.world.World;
 
@@ -64,17 +66,15 @@ public interface Entity extends GameObject, Synchronizable
 
     Core getCore();
 
-    default Collection<? extends Entity> getNearbyEntities(final double x, final double y, final double z)
-    {
-        return this.getNearbyEntities(x, y, z, Entity.class);
-    }
+    Collection<? extends Entity> getNearbyEntities(final double x, final double y, final double z, final LookupShape shape);
 
-    default Collection<? extends Entity> getNearbyEntities(final double x, final double y, final double z, final EntityType type)
-    {
-        return this.getNearbyEntities(x, y, z, type.getDioriteEntityClass());
-    }
+    Collection<? extends Entity> getNearbyEntities(final double x, final double y, final double z, final EntityType type, final LookupShape shape);
 
-    <T extends Entity> Collection<? extends T> getNearbyEntities(double x, double y, double z, Class<? extends T> type);
+    <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Class<? extends T> type, final LookupShape shape);
+
+    <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Class<? extends T> type, final Predicate<Entity> predicate);
+
+    <T extends Entity> Collection<? extends T> getNearbyEntities(double x, double y, double z, Predicate<Entity> predicate);
 
     void setVelocity(Vector3f velocity);
 

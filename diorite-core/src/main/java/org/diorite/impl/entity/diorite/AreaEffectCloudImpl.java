@@ -18,6 +18,7 @@ import org.diorite.ImmutableLocation;
 import org.diorite.Particle;
 import org.diorite.effect.StatusEffect;
 import org.diorite.effect.StatusEffectType;
+import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.inventory.item.meta.PotionMeta.PotionTypes;
 import org.diorite.utils.Color;
@@ -37,7 +38,6 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
     private double radiusPerCentisecond = DEF_RADIUS_PER_CENTI;
     private String defaultPotionEffect  = PotionTypes.AWKWARD_POTION;
     private UUID owner;
-
 
     AreaEffectCloudImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
@@ -75,7 +75,11 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
     public void doTick(final int tps)
     {
         super.doTick(tps);
-
+        final Collection<? extends Entity> entitesInRadius = this.getEntitesInRadius();
+        if (! entitesInRadius.isEmpty())
+        {
+            System.out.println(entitesInRadius); // TODO: remove
+        }
     }
 
     @Override
@@ -177,7 +181,7 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
     @Override
     public double getRadius()
     {
-        return this.metadata.getInt(META_KEY_AREA_EFFECT_CLOUD_RADIUS);
+        return this.metadata.getFloat(META_KEY_AREA_EFFECT_CLOUD_RADIUS);
     }
 
     @Override

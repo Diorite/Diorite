@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -49,13 +50,13 @@ import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ImmutableLocation;
+import org.diorite.LookupShape;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.utils.lazy.BooleanLazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
-import org.diorite.utils.math.geometry.BoundingBox;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
 import org.diorite.utils.others.Resetable;
 import org.diorite.world.chunk.Chunk;
@@ -251,12 +252,6 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.metadata.add(new EntityMetadataStringEntry(IEntity.META_KEY_ENTITY_NAME_TAG, ""));
         this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ENTITY_SILENT, false));
         this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ENTITY_ALWAYS_SHOW_NAME_TAG, false));
-
-
-        // test TODO: remove
-//        this.metadata.add(new EntityMetadataByteEntry(META_KEY_ALWAYS_SHOW_NAME_TAG, 1));
-//        this.metadata.add(new EntityMetadataStringEntry(META_KEY_NAME_TAG, ChatColor.translateAlternateColorCodesInString("&a#&3OnlyDiorite")));
-
     }
 
 
@@ -589,18 +584,17 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Class<? extends T> type)
+    public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Predicate<Entity> predicate)
     {
-        final BoundingBox bb = this.aabb.grow(x, y, z);
-
+        final Vector3f entitySize = this.aabb.getEntitySize();
         final Set<T> entities = new HashSet<>(25);
 
         final int cx = this.getChunk().getX(); // Chunk X location
         final int cz = this.getChunk().getZ(); // Chunk Z location
 
 
-        final int chunkScanSizeX = 1 + DioriteMathUtils.ceil(x / Chunk.CHUNK_SIZE);
-        final int chunkScanSizeZ = 1 + DioriteMathUtils.ceil(z / Chunk.CHUNK_SIZE);
+        final int chunkScanSizeX = 1 + DioriteMathUtils.ceil((x + entitySize.x) / Chunk.CHUNK_SIZE);
+        final int chunkScanSizeZ = 1 + DioriteMathUtils.ceil((z + entitySize.z) / Chunk.CHUNK_SIZE);
 
         final int cxBeginScan = cx - chunkScanSizeX;
         final int czBeginScan = cz - chunkScanSizeZ;
@@ -619,7 +613,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
                 }
 
                 //noinspection unchecked,ObjectEquality
-                chunk.getEntities().stream().filter(entity -> (entity != this) && type.isAssignableFrom(entity.getClass()) && BoundingBox.intersects(bb, entity.getBoundingBox())).forEach(e -> entities.add((T) e));
+                chunk.getEntities().stream().filter(e -> (e != this) && predicate.test(e)).forEach(e -> entities.add((T) e));
             }
         }
 
@@ -627,18 +621,38 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public Collection<? extends IEntity> getNearbyEntities(final double x, final double y, final double z, final EntityType type)
+    public Collection<? extends IEntity> getNearbyEntities(final double x, final double y, final double z, final LookupShape shape)
     {
-        final BoundingBox bb = this.aabb.grow(x, y, z);
+        final Predicate<Entity> entityPredicate;
+        final Vector3f entitySize = this.aabb.getEntitySize();
+        if ((x == y) && (y == z) && (entitySize.x == entitySize.y))
+        {
+            entityPredicate = e -> shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 1) + x, e.getX(), e.getY(), e.getZ());
+        }
+        else if ((x == z) && (entitySize.x == entitySize.y))
+        {
+            entityPredicate = e -> shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 1) + x, (entitySize.y / 1) + y, e.getX(), e.getY(), e.getZ());
+        }
+        else
+        {
+            entityPredicate = e -> shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 1) + x, (entitySize.y / 1) + y, (entitySize.z / 1) + z, e.getX(), e.getY(), e.getZ());
+        }
+        return this.<IEntity>getNearbyEntities(x, y, z, entityPredicate);
+    }
 
+    @SuppressWarnings("ObjectEquality")
+    @Override
+    public Collection<? extends IEntity> getNearbyEntities(final double x, final double y, final double z, final EntityType type, final LookupShape shape)
+    {
+        final Vector3f entitySize = this.aabb.getEntitySize();
         final Set<IEntity> entities = new HashSet<>(25);
 
         final int cx = this.getChunk().getX(); // Chunk X location
         final int cz = this.getChunk().getZ(); // Chunk Z location
 
 
-        final int chunkScanSizeX = 1 + DioriteMathUtils.ceil(x / Chunk.CHUNK_SIZE);
-        final int chunkScanSizeZ = 1 + DioriteMathUtils.ceil(z / Chunk.CHUNK_SIZE);
+        final int chunkScanSizeX = 1 + DioriteMathUtils.ceil((x + entitySize.x) / Chunk.CHUNK_SIZE);
+        final int chunkScanSizeZ = 1 + DioriteMathUtils.ceil((z + entitySize.z) / Chunk.CHUNK_SIZE);
 
         final int cxBeginScan = cx - chunkScanSizeX;
         final int czBeginScan = cz - chunkScanSizeZ;
@@ -646,6 +660,20 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         final int cxEndScan = cx + chunkScanSizeX;
         final int czEndScan = cz + chunkScanSizeZ;
 
+        final Predicate<Entity> entityPredicate;
+        final Class<? extends Entity> typeClass = type.getDioriteEntityClass();
+        if ((x == y) && (y == z))
+        {
+            entityPredicate = e -> (e != this) && typeClass.isAssignableFrom(e.getClass()) && shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 2) + x, e.getX(), e.getY(), e.getZ());
+        }
+        else if (x == z)
+        {
+            entityPredicate = e -> (e != this) && typeClass.isAssignableFrom(e.getClass()) && shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 2) + x, (entitySize.y / 2) + y, e.getX(), e.getY(), e.getZ());
+        }
+        else
+        {
+            entityPredicate = e -> (e != this) && typeClass.isAssignableFrom(e.getClass()) && shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 2) + x, (entitySize.y / 2) + y, (entitySize.z / 2) + z, e.getX(), e.getY(), e.getZ());
+        }
         for (int i = cxBeginScan; i <= cxEndScan; i++)
         {
             for (int j = czBeginScan; j <= czEndScan; j++)
@@ -657,7 +685,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
                 }
 
                 //noinspection unchecked,ObjectEquality
-                chunk.getEntities().stream().filter(entity -> (entity != this) && type.equals(entity.getType()) && BoundingBox.intersects(bb, entity.getBoundingBox())).forEach(entities::add);
+                chunk.getEntities().stream().filter(entityPredicate).forEach(entities::add);
             }
         }
 
@@ -665,41 +693,29 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public Collection<IEntity> getNearbyEntities(final double x, final double y, final double z)
+    public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Class<? extends T> type, final LookupShape shape)
     {
-        final BoundingBox bb = this.aabb.grow(x, y, z);
-
-        final Set<IEntity> entities = new HashSet<>(25);
-
-        final int cx = this.getChunk().getX(); // Chunk X location
-        final int cz = this.getChunk().getZ(); // Chunk Z location
-
-
-        final int chunkScanSizeX = 1 + DioriteMathUtils.ceil(x / Chunk.CHUNK_SIZE);
-        final int chunkScanSizeZ = 1 + DioriteMathUtils.ceil(z / Chunk.CHUNK_SIZE);
-
-        final int cxBeginScan = cx - chunkScanSizeX;
-        final int czBeginScan = cz - chunkScanSizeZ;
-
-        final int cxEndScan = cx + chunkScanSizeX;
-        final int czEndScan = cz + chunkScanSizeZ;
-
-        for (int i = cxBeginScan; i <= cxEndScan; i++)
+        final Predicate<Entity> entityPredicate;
+        final Vector3f entitySize = this.aabb.getEntitySize();
+        if ((x == y) && (y == z) && (entitySize.x == entitySize.y))
         {
-            for (int j = czBeginScan; j <= czEndScan; j++)
-            {
-                final ChunkImpl chunk = this.world.getChunkAt(i, j);
-                if (! chunk.isLoaded())
-                {
-                    continue;
-                }
-
-                //noinspection ObjectEquality
-                chunk.getEntities().stream().filter(entity -> (entity != this) && BoundingBox.intersects(bb, entity.getBoundingBox())).forEach(entities::add);
-            }
+            entityPredicate = e -> type.isAssignableFrom(e.getClass()) && shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 2) + x, e.getX(), e.getY(), e.getZ());
         }
+        else if ((x == z) && (entitySize.x == entitySize.y))
+        {
+            entityPredicate = e -> type.isAssignableFrom(e.getClass()) && shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 2) + x, (entitySize.y / 2) + y, e.getX(), e.getY(), e.getZ());
+        }
+        else
+        {
+            entityPredicate = e -> type.isAssignableFrom(e.getClass()) && shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 2) + x, (entitySize.y / 2) + y, (entitySize.z / 2) + z, e.getX(), e.getY(), e.getZ());
+        }
+        return this.<T>getNearbyEntities(x, y, z, entityPredicate);
+    }
 
-        return entities;
+    @Override
+    public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Class<? extends T> type, final Predicate<Entity> predicate)
+    {
+        return this.<T>getNearbyEntities(x, y, z, e -> type.isAssignableFrom(e.getClass()) && predicate.test(e));
     }
 
     @Override
