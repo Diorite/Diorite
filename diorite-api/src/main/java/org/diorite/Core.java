@@ -272,7 +272,9 @@ public interface Core extends Synchronizable
      */
     int getTps();
 
-    int getCpt();
+    double getCpt();
+
+    double getCpt(int tps);
 
     /**
      * Resets recent TPS calculations, used when TPS settings is changed.

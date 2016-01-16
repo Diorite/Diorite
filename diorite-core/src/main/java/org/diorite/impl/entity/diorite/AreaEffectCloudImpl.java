@@ -10,6 +10,7 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
 import org.diorite.impl.entity.IAreaEffectCloud;
+import org.diorite.impl.entity.ILivingEntity;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
@@ -29,15 +30,17 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
     public static final double DEF_RADIUS_PER_CENTI = - 0.001;
     public static final double DEF_RADIUS_ON_USE    = - 0.5;
 
-    private final Collection<StatusEffect> effects = new CopyOnWriteArrayList<>();
-    private int durtation;
-    private int    reapplicationDelay   = 100;
-    private int    waitTime             = 0;
-    private double durationOnUse        = 0;
-    private double radiusOnUse          = DEF_RADIUS_ON_USE;
-    private double radiusPerCentisecond = DEF_RADIUS_PER_CENTI;
-    private String defaultPotionEffect  = PotionTypes.AWKWARD_POTION;
+    private final Collection<StatusEffect> effects              = new CopyOnWriteArrayList<>();
+    private       int                      duration             = - 1;
+    private       int                      reapplicationDelay   = 100;
+    private       int                      waitTime             = 0;
+    private       double                   durationOnUse        = 0;
+    private       double                   radiusOnUse          = DEF_RADIUS_ON_USE;
+    private       double                   radiusPerCentisecond = DEF_RADIUS_PER_CENTI;
+    private       String                   defaultPotionEffect  = PotionTypes.AWKWARD_POTION;
     private UUID owner;
+
+    private transient int lastRep = 0;
 
     AreaEffectCloudImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
@@ -75,23 +78,60 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
     public void doTick(final int tps)
     {
         super.doTick(tps);
-        final Collection<? extends Entity> entitesInRadius = this.getEntitesInRadius();
-        if (! entitesInRadius.isEmpty())
+        if ((this.duration != - 1) && (this.age >= this.duration))
         {
-            System.out.println(entitesInRadius); // TODO: remove
+            this.remove(true);
+            return;
+        }
+        if (this.waitTime > this.age)
+        {
+            return;
+        }
+        double radius = this.getRadius();
+        if (this.radiusPerCentisecond != 0)
+        {
+            radius += (this.radiusPerCentisecond * this.core.getCpt(tps));
+            this.setRadius(radius);
+        }
+        if (this.age <= (this.lastRep + this.reapplicationDelay))
+        {
+            return;
+        }
+        this.lastRep = this.age;
+        final Collection<? extends Entity> entitesInRadius = this.getEntitesInRadius();
+        if (entitesInRadius.isEmpty())
+        {
+            return;
+        }
+        for (final Entity entity : entitesInRadius)
+        {
+            // TODO: arrow case
+            if (entity instanceof ILivingEntity)
+            {
+                final ILivingEntity livingEntity = (ILivingEntity) entity;
+                // TODO apply effect
+                radius += this.radiusOnUse;
+                this.duration += this.durationOnUse;
+                if (radius <= 0)
+                {
+                    this.remove(true);
+                    return;
+                }
+                this.setRadius(radius);
+            }
         }
     }
 
     @Override
     public int getDuration()
     {
-        return this.durtation;
+        return this.duration;
     }
 
     @Override
     public void setDuration(final int duration)
     {
-        this.durtation = duration;
+        this.duration = duration;
     }
 
     @Override
