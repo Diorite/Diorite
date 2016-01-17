@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.diorite</groupId>
         <artifactId>diorite-parent</artifactId>
-        <version>indev-0.0.1-SNAPSHOT</version>
+        <version>indev-0.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
