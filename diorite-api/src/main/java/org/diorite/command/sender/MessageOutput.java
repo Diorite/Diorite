@@ -239,7 +239,7 @@ public interface MessageOutput
     }
 
     /**
-     * Sends message with color codes using '&' char.
+     * Sends message with color codes using '&amp;' char.
      *
      * @param str message to send.
      */
@@ -249,7 +249,7 @@ public interface MessageOutput
     }
 
     /**
-     * Sends messages with color codes using '&' char.
+     * Sends messages with color codes using '&amp;' char.
      *
      * @param strs messages to send.
      */
@@ -347,7 +347,7 @@ public interface MessageOutput
     }
 
     /**
-     * Sends given message (colored using '&' char) on given position if supported, if output don't support given position message will be displayed in other position.
+     * Sends given message (colored using '&amp;' char) on given position if supported, if output don't support given position message will be displayed in other position.
      *
      * @param position position of message.
      * @param str      message to send.
@@ -358,7 +358,7 @@ public interface MessageOutput
     }
 
     /**
-     * Sends given messages (colored using '&' char) on given position if supported, if output don't support given position message will be displayed in other position.
+     * Sends given messages (colored using '&amp;' char) on given position if supported, if output don't support given position message will be displayed in other position.
      *
      * @param position position of message.
      * @param strs     messages to send.

@@ -47,8 +47,9 @@ public class SenderTabCompleteEvent extends SenderEvent
     /**
      * Construct new chat event with given sender and message.
      *
-     * @param sender  sender that typed command.
-     * @param message message that player typed.
+     * @param sender        sender that typed command.
+     * @param message       message that player typed.
+     * @param assumeCommand if message should be assumed as command.
      */
     public SenderTabCompleteEvent(final CommandSender sender, final String message, final boolean assumeCommand)
     {
@@ -65,9 +66,10 @@ public class SenderTabCompleteEvent extends SenderEvent
     /**
      * Construct new chat event with given sender and message.
      *
-     * @param sender  sender that typed command.
-     * @param message message that player typed.
-     * @param command command that is typed, may be null.
+     * @param sender        sender that typed command.
+     * @param message       message that player typed.
+     * @param assumeCommand if message should be assumed as command.
+     * @param command       command that is typed, may be null.
      */
     public SenderTabCompleteEvent(final CommandSender sender, final String message, final boolean assumeCommand, final Command command)
     {
