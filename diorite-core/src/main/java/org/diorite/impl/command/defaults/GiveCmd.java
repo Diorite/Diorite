@@ -40,6 +40,7 @@ public class GiveCmd extends SystemCommandImpl
     public GiveCmd()
     {
         super("give", (Pattern) null, CommandPriority.LOW);
+        this.setDescription("Give item.");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             int param = 0; // counter for current param.
             parseGiveCommand((args.has(param) ? args.asPlayer(param++) : null), sender, args, param);

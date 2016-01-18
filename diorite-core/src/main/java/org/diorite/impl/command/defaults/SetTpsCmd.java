@@ -35,6 +35,7 @@ public class SetTpsCmd extends SystemCommandImpl
     public SetTpsCmd()
     {
         super("setTps", (Pattern) null, CommandPriority.LOW);
+        this.setDescription("Set TPS");
         //noinspection HardcodedFileSeparator
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> sender.sendMessage("§4Invalid usage, please type /setTps <number from 1 to 99>"));
         this.registerSubCommand("core", Pattern.compile("(?<tps>([0-9]{2})|([1-9]))((-multi=(?<multi>\\d+((\\.\\d+)|)))|)", Pattern.CASE_INSENSITIVE), (sender, command, label, matchedPattern, args) -> {

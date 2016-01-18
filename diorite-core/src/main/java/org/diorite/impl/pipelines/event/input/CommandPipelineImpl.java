@@ -52,7 +52,7 @@ public class CommandPipelineImpl extends SimpleEventPipeline<SenderCommandEvent>
             final CommandSender sender = evt.getSender();
             if (evt.getCommand() == null)
             {
-                sender.sendSimpleColoredMessage("&4No command: &c" + evt.getMessage());
+                sender.sendSimpleColoredMessage("&cThere is no command named &7" + evt.getMessage());
                 return;
             }
             final String[] args = DioriteStringUtils.splitArguments(evt.getMessage());

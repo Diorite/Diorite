@@ -34,6 +34,7 @@ public class StopCmd extends SystemCommandImpl
     public StopCmd()
     {
         super("stop", (Pattern) null, CommandPriority.LOW);
+        this.setDescription("Stop the server.");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (sender.isConsole()) // TODO: temp
             {

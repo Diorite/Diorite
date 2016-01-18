@@ -36,6 +36,7 @@ public class GamemodeCmd extends SystemCommandImpl
     public GamemodeCmd()
     {
         super("gamemode", Collections.singletonList("gm"), CommandPriority.LOW);
+        this.setDescription("Change gamemode.");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             final Player target = args.has(1) ? args.asPlayer(1) : ((sender instanceof Player) ? (Player) sender : null);
             if (target == null)

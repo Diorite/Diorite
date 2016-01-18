@@ -36,6 +36,7 @@ public class SaveCmd extends SystemCommandImpl
     public SaveCmd()
     {
         super("save", Pattern.compile("(save(-all|))", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
+        this.setDescription("Saves the world");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             sender.getCore().broadcastSimpleColoredMessage(Core.PREFIX_MSG + "&7Saving all worlds...");
             ForkJoinPool.commonPool().submit(() -> {

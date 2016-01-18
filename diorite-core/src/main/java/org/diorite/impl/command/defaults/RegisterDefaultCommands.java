@@ -53,6 +53,7 @@ public final class RegisterDefaultCommands
         cmds.registerCommand(new PerformanceMonitorCmd());
         cmds.registerCommand(new PluginsCmd());
         cmds.registerCommand(new VersionCmd());
-        cmds.registerCommand(new TimingsCommand());
+        cmds.registerCommand(new TimingsCmd());
+        cmds.registerCommand(new HelpCmd());
     }
 }
