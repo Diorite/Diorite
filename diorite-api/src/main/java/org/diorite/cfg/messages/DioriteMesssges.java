@@ -44,11 +44,6 @@ import org.diorite.plugin.ChildPlugin;
  */
 public final class DioriteMesssges
 {
-    static
-    {
-        DioriteMesssges.reload();
-    }
-
     /**
      * Helper variable to prevent a typo. Separator used in path.
      */

@@ -29,13 +29,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.Core;
 import org.diorite.OfflinePlayer;
+import org.diorite.cfg.DioriteConfig;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
@@ -52,6 +55,14 @@ public class PlaceholderType<T>
 {
     private static final Map<String, PlaceholderType<?>> types = new HashMap<>(5, .1f);
 
+    /**
+     * {@link org.diorite.Core} placeholder type.
+     */
+    public static final PlaceholderType<Core>          CORE    = create("core", Core.class);
+    /**
+     * {@link org.diorite.Core} placeholder type.
+     */
+    public static final PlaceholderType<DioriteConfig> CONFIG  = create("config", DioriteConfig.class);
     /**
      * {@link CommandSender} placeholder type.
      */
@@ -76,8 +87,17 @@ public class PlaceholderType<T>
 
     static
     {
-        SENDER.registerItem(new PlaceholderItem<>(SENDER, "name", CommandSender::getName));
-        OFFLINE.registerItem(new PlaceholderItem<>(OFFLINE, "name", OfflinePlayer::getName));
+        SENDER.registerItem(SENDER, "name", CommandSender::getName);
+
+        CORE.registerItem(CORE, "version", Core::getVersion);
+
+        CONFIG.registerItem(CONFIG, "hostname", DioriteConfig::getHostname);
+
+        OFFLINE.registerItem(OFFLINE, "name", OfflinePlayer::getName);
+
+
+        SENDER.registerChild("core", CORE, CommandSender::getCore);
+        CORE.registerChild("config", CONFIG, Core::getConfig);
     }
 
     @SafeVarargs
@@ -104,8 +124,66 @@ public class PlaceholderType<T>
 
     private final String   id;
     private final Class<T> type;
-    private final Map<String, PlaceholderItem<T>> items = new CaseInsensitiveMap<>(5, .3f);
+    private final Map<String, PlaceholderItem<T>>         items            = new CaseInsensitiveMap<>(5, .3f);
+    private final Map<String, ChildPlaceholderItem<?, ?>> cachedChildItems = new CaseInsensitiveMap<>(5, .3f);
+    private final Map<String, ChildPlaceholderType<?, ?>> childTypes       = new CaseInsensitiveMap<>(5, .3f);
     private final Set<PlaceholderType<? super T>> superTypes;
+
+    private static class ChildPlaceholderItem<PARENT, CHILD> implements PlaceholderItem<PARENT>
+    {
+        private final ChildPlaceholderType<PARENT, CHILD> type;
+        private final PlaceholderItem<CHILD>              item;
+
+        private ChildPlaceholderItem(final ChildPlaceholderType<PARENT, CHILD> type, final PlaceholderItem<CHILD> item)
+        {
+            this.type = type;
+            this.item = item;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("type", this.type).append("item", this.item).toString();
+        }
+
+        @Override
+        public PlaceholderType<PARENT> getType()
+        {
+            return this.type.parent;
+        }
+
+        @Override
+        public String getId()
+        {
+            return this.item.getId();
+        }
+
+        @Override
+        public Object apply(final PARENT obj)
+        {
+            return this.item.apply(this.type.function.apply(obj));
+        }
+    }
+
+    private static class ChildPlaceholderType<PARENT, CHILD>
+    {
+        private final PlaceholderType<PARENT> parent;
+        private final PlaceholderType<CHILD>  type;
+        private final Function<PARENT, CHILD> function;
+
+        private ChildPlaceholderType(final PlaceholderType<PARENT> parent, final PlaceholderType<CHILD> type, final Function<PARENT, CHILD> function)
+        {
+            this.parent = parent;
+            this.type = type;
+            this.function = function;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("type", this.type).append("function", this.function).toString();
+        }
+    }
 
     /**
      * Construct new placeholder type for given id and class without any super types.
@@ -160,6 +238,33 @@ public class PlaceholderType<T>
     }
 
     /**
+     * Register new placeholder item to this placeholder type.
+     *
+     * @param type type of placeholder, like that "player" in player.name.
+     * @param id   id/name of placeholder, like that "name" in player.name.
+     * @param func function that should return {@link String} or {@link org.diorite.chat.component.BaseComponent}, when using BaseComponent you may add click events, hovers events and all that stuff.
+     *
+     * @return Created placeholder.
+     */
+    public PlaceholderItem<T> registerItem(final PlaceholderType<T> type, final String id, final Function<T, Object> func)
+    {
+        final PlaceholderItem<T> item = new BasePlaceholderItem<>(type, id, func);
+        this.registerItem(item);
+        return item;
+    }
+
+    /**
+     * Register new child-type to this type.
+     *
+     * @param name key-name of type.
+     * @param type child type to register.
+     */
+    public <C> void registerChild(final String name, final PlaceholderType<C> type, final Function<T, C> converter)
+    {
+        this.childTypes.put(name, new ChildPlaceholderType<>(this, type, converter));
+    }
+
+    /**
      * Returns item for given id, or null if there isn't any item with maching name. <br>
      * If there is no maching item in this types, method will try get maching item from one
      * of super types.
@@ -168,12 +273,24 @@ public class PlaceholderType<T>
      *
      * @return placeholder item or null.
      */
-    public PlaceholderItem<? super T> getItem(final String id)
+    public PlaceholderItem<?> getItem(final String id)
     {
-        PlaceholderItem<? super T> item = this.items.get(id);
-        if ((item == null) && ! this.superTypes.isEmpty())
+        PlaceholderItem<?> item = this.items.get(id);
+        if (item == null)
         {
-            for (final PlaceholderType<? super T> type : this.superTypes)
+            item = this.cachedChildItems.get(id);
+            if (item != null)
+            {
+                return item;
+            }
+        }
+        else
+        {
+            return item;
+        }
+        if (! this.superTypes.isEmpty())
+        {
+            for (final PlaceholderType<?> type : this.superTypes)
             {
                 item = type.getItem(id);
                 if (item != null)
@@ -181,6 +298,24 @@ public class PlaceholderType<T>
                     break;
                 }
             }
+        }
+        if (item == null)
+        {
+            final int index = id.indexOf('.');
+            if (index == - 1)
+            {
+                return null;
+            }
+            final String childTypeID = id.substring(0, index);
+            final ChildPlaceholderType<?, ?> childType = this.childTypes.get(childTypeID);
+            if (childType == null)
+            {
+                return null;
+            }
+            //noinspection unchecked, rawtypes
+            final ChildPlaceholderItem<?, ?> childItem = new ChildPlaceholderItem(childType, childType.type.getItem(id.substring(index + 1)));
+            item = childItem;
+            this.cachedChildItems.put(id, childItem);
         }
         return item;
     }

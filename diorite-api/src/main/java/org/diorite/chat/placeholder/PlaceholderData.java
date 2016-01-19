@@ -88,13 +88,13 @@ public class PlaceholderData<T>
     }
 
     /**
-     * Delegated method from {@link PlaceholderItem}
+     * Delegated method from {@link BasePlaceholderItem}
      *
      * @param obj object to fetch the data needed for placeholder.
      *
      * @return Object to use instead of placeholder.
      *
-     * @see PlaceholderItem#apply(Object)
+     * @see BasePlaceholderItem#apply(Object)
      */
     public Object apply(final T obj)
     {
@@ -356,7 +356,7 @@ public class PlaceholderData<T>
                         PlaceholderItem<?> item = placeholderType.getItem(value);
                         if ((item == null) && simple)
                         {
-                            item = new PlaceholderItem<>(placeholderType, typeID, o -> o);
+                            item = new BasePlaceholderItem<>(placeholderType, typeID, o -> o);
                         }
                         if (item != null)
                         {
