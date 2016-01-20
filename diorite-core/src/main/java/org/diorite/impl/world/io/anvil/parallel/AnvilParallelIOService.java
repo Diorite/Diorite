@@ -25,6 +25,7 @@
 package org.diorite.impl.world.io.anvil.parallel;
 
 import java.io.File;
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -57,7 +58,7 @@ public class AnvilParallelIOService implements ParallelChunkIOService
     }
 
     @Override
-    public <OUT, T extends Request<OUT>> T queue(final T request)
+    public <OUT, T extends Request<OUT>> T queue(final T request, final Consumer<Request<OUT>> callback)
     {
         return null;
     }

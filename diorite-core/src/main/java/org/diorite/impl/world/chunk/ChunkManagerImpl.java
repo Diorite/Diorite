@@ -31,15 +31,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.generator.ChunkBuilderImpl;
 import org.diorite.impl.world.io.ChunkIOService;
+import org.diorite.impl.world.io.requests.ChunkLoadRequest;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkGenerateEvent;
 import org.diorite.event.chunk.ChunkLoadEvent;
@@ -56,6 +59,11 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 public class ChunkManagerImpl implements ChunkManager, Tickable
 {
+
+    /**
+     * Core instance.
+     */
+    private final DioriteCore core;
 
     /**
      * The world this ChunkManager is managing.
@@ -88,8 +96,9 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
      */
     private final ConcurrentMap<Long, Set<ChunkLock>> locks = new ConcurrentHashMap<>(1000, .25f, 8);
 
-    public ChunkManagerImpl(final WorldImpl world, final ChunkIOService service, final WorldGenerator generator)
+    public ChunkManagerImpl(final DioriteCore core, final WorldImpl world, final ChunkIOService service, final WorldGenerator generator)
     {
+        this.core = core;
         this.world = world;
         this.service = service;
         this.generator = generator;
@@ -154,6 +163,34 @@ public class ChunkManagerImpl implements ChunkManager, Tickable
         final Long key = BigEndianUtils.toLong(x, z);
         final Set<ChunkLock> lockSet = this.locks.get(key);
         return (lockSet != null) && ! lockSet.isEmpty();
+    }
+
+    public void loadChunkAsync(final int x, final int z, final boolean generate, final BiConsumer<ChunkImpl, Boolean> onEnd)
+    {
+        final ChunkImpl chunk = this.getChunk(x, z);
+        if (chunk.isLoaded())
+        {
+            onEnd.accept(chunk, false);
+            return;
+        }
+        final ChunkLoadRequest chunkLoadRequest = new ChunkLoadRequest(ChunkIOService.INSTANT_PRIORITY, chunk, x, z);
+        chunkLoadRequest.addOnEnd(r -> {
+            ChunkImpl loadedChunk = r.get();
+            if (generate && (loadedChunk == null))
+            {
+                this.core.sync(() -> {
+                    final ChunkGenerateEvent genEvt = new ChunkGenerateEvent(chunk);
+                    EventType.callEvent(genEvt);
+                });
+                loadedChunk = chunk;
+            }
+            else if (loadedChunk == null)
+            {
+                loadedChunk = chunk;
+            }
+            onEnd.accept(loadedChunk, true);
+        });
+        this.service.queue(chunkLoadRequest);
     }
 
     @Override

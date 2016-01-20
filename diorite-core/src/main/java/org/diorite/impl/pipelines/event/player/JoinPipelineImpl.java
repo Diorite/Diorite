@@ -34,8 +34,8 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundLogin;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPosition;
-import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnPosition;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;

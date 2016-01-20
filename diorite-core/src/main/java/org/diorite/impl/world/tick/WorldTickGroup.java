@@ -30,7 +30,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.world.WorldImpl;
-import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.world.World;
 
 public class WorldTickGroup implements TickGroupImpl
@@ -49,7 +48,7 @@ public class WorldTickGroup implements TickGroupImpl
         if (impl != null)
         {
             impl.doTick(tps);
-            impl.getChunkManager().getLoadedChunks().stream().filter(ChunkImpl::isLoaded).forEach(c -> this.tickChunk(c, tps));
+            impl.getChunkManager().getLoadedChunks().stream().filter(c -> c.isLoaded() || ! c.getEntities().isEmpty()).forEach(c -> this.tickChunk(c, tps));
         }
     }
 

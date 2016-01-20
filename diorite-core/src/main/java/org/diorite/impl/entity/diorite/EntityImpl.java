@@ -337,6 +337,10 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     @Override
     public void remove(final boolean full)
     {
+        if (! this.exist())
+        {
+            return;
+        }
         if (full)
         {
             this.world.removeEntity(this);

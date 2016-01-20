@@ -25,6 +25,8 @@
 package org.diorite.impl.world.chunk;
 
 import java.util.Collection;
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -35,6 +37,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundMapChunk;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
+import org.diorite.LookupShape;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.chunk.ChunkPos;
@@ -117,7 +120,6 @@ public class PlayerChunksImpl implements Tickable
         }
     }
 
-
     private void continueUpdate()
     {
         final byte render = this.getRenderDistance();
@@ -134,9 +136,18 @@ public class PlayerChunksImpl implements Tickable
         final int cx = this.lastUpdate.getX();
         final int cz = this.lastUpdate.getZ();
 
+        {
+            final Deque<ChunkImpl> toProcess = this.toProcess;
+            ChunkImpl chunk;
+            while ((chunk = toProcess.poll()) != null)
+            {
+                this.processChunk(chunk, cx, cz, view, impl, oldChunks, chunksToSent);
+            }
+        }
+
         if (r == 0)
         {
-            this.processChunk(cx, cz, impl, oldChunks, chunksToSent);
+            this.processChunk(cx, cz, cx, cz, view, impl, oldChunks, chunksToSent);
         }
         else
         {
@@ -146,11 +157,11 @@ public class PlayerChunksImpl implements Tickable
                 {
                     for (int z = - r; z <= r; z++)
                     {
-                        this.processChunk(cx + x, cz + z, impl, oldChunks, chunksToSent);
+                        this.processChunk(cx + x, cz + z, cx, cz, view, impl, oldChunks, chunksToSent);
                     }
                 }
-                this.processChunk(cx + x, cz + r, impl, oldChunks, chunksToSent);
-                this.processChunk(cx + x, cz - r, impl, oldChunks, chunksToSent);
+                this.processChunk(cx + x, cz + r, cx, cz, view, impl, oldChunks, chunksToSent);
+                this.processChunk(cx + x, cz - r, cx, cz, view, impl, oldChunks, chunksToSent);
             }
         }
 
@@ -174,6 +185,14 @@ public class PlayerChunksImpl implements Tickable
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("player", this.player).toString();
     }
 
+    public void reRun(final ChunkPos center)
+    {
+        this.lastUpdateR = 0;
+        this.lastUpdate = center;
+        this.continueUpdate();
+        this.checkOld();
+    }
+
     @Override
     public void doTick(final int tps)
     {
@@ -187,25 +206,79 @@ public class PlayerChunksImpl implements Tickable
             this.continueUpdate();
             return;
         }
-        this.lastUpdateR = 0;
-        this.lastUpdate = center;
-        this.continueUpdate();
-        this.checkOld();
+        this.reRun(center);
     }
 
-    private void processChunk(final int cx, final int cz, final ChunkManagerImpl impl, final LongCollection oldChunks, final Collection<ChunkImpl> chunksToSent)
+    private final Deque<ChunkImpl> toProcess = new ConcurrentLinkedDeque<>();
+
+    private void processChunk(final ChunkImpl chunk, final int centerX, final int centerZ, final int radius, final ChunkManagerImpl impl, final LongCollection oldChunks, final Collection<ChunkImpl> chunksToSent)
     {
-        impl.forcePopulation(cx, cz);
-        final long key = BigEndianUtils.toLong(cx, cz);
-        if (this.visibleChunks.contains(key))
+        final int cx = chunk.getX();
+        final int cz = chunk.getZ();
+        if (! LookupShape.RECTANGLE.isNotOutside(centerX, 0, centerZ, radius, cx, 0, cz))
         {
-            oldChunks.remove(key);
+            if (chunk.isLoaded() && ! impl.isChunkInUse(cx, cz))
+            {
+                chunk.unload();
+            }
+            return;
+        }
+        if (chunk.isLoaded())
+        {
+            impl.populateChunk(cx, cz, false);
+            final long key = BigEndianUtils.toLong(cx, cz);
+            if (this.visibleChunks.contains(key))
+            {
+                oldChunks.remove(key);
+            }
+            else
+            {
+                this.visibleChunks.add(key);
+                this.chunkLock.acquire(key);
+                chunksToSent.add(chunk);
+            }
         }
         else
         {
-            this.visibleChunks.add(key);
-            this.chunkLock.acquire(key);
-            chunksToSent.add(impl.getChunk(cx, cz));
+            impl.loadChunkAsync(cx, cz, true, (loadedChunk, s) -> {
+                if (s && (loadedChunk != null))
+                {
+                    this.toProcess.offer(loadedChunk);
+                }
+            });
+        }
+    }
+
+    private void processChunk(final int cx, final int cz, final int centerX, final int centerZ, final int radius, final ChunkManagerImpl impl, final LongCollection oldChunks, final Collection<ChunkImpl> chunksToSent)
+    {
+        if (! LookupShape.RECTANGLE.isNotOutside(centerX, 0, centerZ, radius, cx, 0, cz))
+        {
+            return;
+        }
+        if (impl.isChunkLoaded(cx, cz))
+        {
+            impl.populateChunk(cx, cz, false);
+            final long key = BigEndianUtils.toLong(cx, cz);
+            if (this.visibleChunks.contains(key))
+            {
+                oldChunks.remove(key);
+            }
+            else
+            {
+                this.visibleChunks.add(key);
+                this.chunkLock.acquire(key);
+                chunksToSent.add(impl.getChunk(cx, cz));
+            }
+        }
+        else
+        {
+            // TODO: fix chunk load event.
+            impl.loadChunkAsync(cx, cz, true, (chunk, s) -> {
+                if (s && (chunk != null))
+                {
+                    this.toProcess.offer(chunk);
+                }
+            });
         }
     }
 }

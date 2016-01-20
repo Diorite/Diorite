@@ -129,7 +129,7 @@ public class WorldImpl implements World, Tickable
         this.dimension = dimension;
         this.worldType = worldType;
         this.generator = WorldGenerators.getGenerator(generator, this, generatorOptions);
-        this.chunkManager = new ChunkManagerImpl(this, chunkIO, WorldGenerators.getGenerator(generator, this, generatorOptions));
+        this.chunkManager = new ChunkManagerImpl(core, this, chunkIO, WorldGenerators.getGenerator(generator, this, generatorOptions));
 
         this.spawnLock = this.createLock("spawn loader");
         this.entityTrackers = new EntityTrackers(this);

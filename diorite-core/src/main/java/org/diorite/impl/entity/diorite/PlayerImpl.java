@@ -44,6 +44,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
+import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
@@ -103,6 +104,17 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public boolean isValidSynchronizable()
     {
         return this.isOnline() && super.isValidSynchronizable();
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    @Override
+    public void updateChunk(final ChunkImpl chunk, final ChunkImpl newChunk)
+    {
+        super.updateChunk(chunk, newChunk);
+        if (! newChunk.isLoaded())
+        {
+            this.playerChunks.reRun(this.getLocation().getChunkPos());
+        }
     }
 
     @Override
