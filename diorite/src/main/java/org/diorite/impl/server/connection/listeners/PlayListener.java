@@ -32,14 +32,15 @@ import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayServerboundListener;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundDisconnect;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundArmAnimation;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockDig;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockDig.BlockDigAction;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockPlace;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundChat;
-import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCommand;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCloseWindow;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCommand;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCustomPayload;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundEnchantItem;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundEntityAction;
@@ -61,7 +62,6 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseEntity;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseItem;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundWindowClick;
-import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundDisconnect;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
@@ -120,11 +120,6 @@ public class PlayListener implements PacketPlayServerboundListener
         this.core.sync(() -> this.player.setHeldItemSlot(packet.getSlot()), this.player);
     }
 
-    @Override
-    public void handle(final PacketPlayServerboundPositionLook packet)
-    {
-        this.core.sync(() -> this.player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), this.player);
-    }
 
     @Override
     public void handle(final PacketPlayServerboundFlying packet)
@@ -133,15 +128,49 @@ public class PlayListener implements PacketPlayServerboundListener
     }
 
     @Override
+    public void handle(final PacketPlayServerboundPositionLook packet)
+    {
+        // TODO: don't sync packets when client sends too much of them
+        final IPlayer player = this.player;
+        if ((player.getX() == packet.getX()) && (player.getY() == packet.getY()) && (player.getZ() == packet.getZ()))
+        {
+            if ((player.getYaw() == packet.getYaw()) && (player.getPitch() == packet.getPitch()))
+            {
+                return;
+            }
+            this.core.sync(() -> player.setRotation(packet.getYaw(), packet.getPitch()), player);
+            return;
+        }
+        if ((player.getYaw() == packet.getYaw()) && (player.getPitch() == packet.getPitch()))
+        {
+            this.core.sync(() -> player.setPosition(packet.getX(), packet.getY(), packet.getZ()), player);
+            return;
+        }
+        this.core.sync(() -> player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), player);
+    }
+
+    @Override
     public void handle(final PacketPlayServerboundPosition packet)
     {
-        this.core.sync(() -> this.player.setPosition(packet.getX(), packet.getY(), packet.getZ()), this.player);
+        final IPlayer player = this.player;
+        if ((player.getX() == packet.getX()) && (player.getY() == packet.getY()) && (player.getZ() == packet.getZ()))
+        {
+            return;
+        }
+        // TODO: don't sync packets when client sends too much of them
+        this.core.sync(() -> player.setPosition(packet.getX(), packet.getY(), packet.getZ()), player);
     }
 
     @Override
     public void handle(final PacketPlayServerboundLook packet)
     {
-        this.core.sync(() -> this.player.setRotation(packet.getYaw(), packet.getPitch()), this.player);
+        final IPlayer player = this.player;
+        if ((player.getYaw() == packet.getYaw()) && (player.getPitch() == packet.getPitch()))
+        {
+            return;
+        }
+        // TODO: don't sync packets when client sends too much of them
+        this.core.sync(() -> player.setRotation(packet.getYaw(), packet.getPitch()), player);
     }
 
     @Override
