@@ -38,6 +38,12 @@ public class SayCmd extends SystemCommandImpl
     {
         super("say", Pattern.compile("(say)(:(?<type>[a-z0-9]+)|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
+            if (! args.has(0))
+            {
+                sender.sendSimpleColoredMessage("&4Invalid usage. Use: /say <some text>");
+                return;
+            }
+
             ChatPosition chatPosition;
             try
             {

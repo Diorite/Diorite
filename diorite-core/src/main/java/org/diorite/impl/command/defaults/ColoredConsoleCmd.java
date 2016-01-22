@@ -37,6 +37,7 @@ public class ColoredConsoleCmd extends SystemCommandImpl
     public ColoredConsoleCmd()
     {
         super("coloredConsole", Pattern.compile("(set|)Col(ored|)Con(sole|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
+        this.setDescription("Enable or disable colours in console.");
         //noinspection HardcodedFileSeparator
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> sender.sendMessage("§4Invalid usage, please type /setColoredConsole <true|false>"));
         this.registerSubCommand("core", "(?<bool>(true|false))", (sender, command, label, matchedPattern, args) -> {

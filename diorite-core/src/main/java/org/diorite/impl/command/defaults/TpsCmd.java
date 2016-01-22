@@ -48,6 +48,7 @@ public class TpsCmd extends SystemCommandImpl
     public TpsCmd()
     {
         super("tps", (Pattern) null, CommandPriority.LOW);
+        this.setDescription("TPS");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
 
             if (args.has(0) && args.asString(0).equalsIgnoreCase("-r"))

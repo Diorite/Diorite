@@ -54,6 +54,10 @@ public interface Command
 
     void setPattern(Pattern pattern);
 
+    void setDescription(String description);
+
+    String getDescription();
+
     ExceptionHandler getExceptionHandler();
 
     void setExceptionHandler(ExceptionHandler exceptionHandler);

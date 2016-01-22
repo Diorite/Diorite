@@ -37,6 +37,7 @@ public class FlyCmd extends SystemCommandImpl
     public FlyCmd()
     {
         super("fly", Pattern.compile("(fly)(:(?<speed>((\\d+|)(\\.\\d+|)))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
+        this.setDescription("Enable or disable fly mode.");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             final String speedArg = matchedPattern.group("speed");
             final double speed;

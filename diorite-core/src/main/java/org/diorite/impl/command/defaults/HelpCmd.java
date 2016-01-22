@@ -24,45 +24,38 @@
 
 package org.diorite.impl.command.defaults;
 
+import org.diorite.Diorite;
+import org.diorite.ImmutableLocation;
+import org.diorite.command.Command;
+import org.diorite.command.CommandMap;
+import org.diorite.command.CommandPriority;
+import org.diorite.command.MainCommand;
+import org.diorite.entity.Player;
+import org.diorite.impl.command.CommandMapImpl;
+import org.diorite.impl.command.SystemCommandImpl;
+import sun.applet.Main;
+
+import java.util.*;
 import java.util.regex.Pattern;
 
-import org.diorite.impl.command.SystemCommandImpl;
-import org.diorite.command.CommandPriority;
-import org.diorite.command.sender.CommandSender;
-import org.diorite.event.EventType;
-
-public class TimingsCommand extends SystemCommandImpl
+public class HelpCmd extends SystemCommandImpl
 {
-    public TimingsCommand() // TODO
+    public HelpCmd()
     {
-        super("timings", (Pattern) null, CommandPriority.LOW);
+        super("help", (Pattern) null, CommandPriority.LOW);
+        this.setDescription("Command list");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            if (args.length() == 0)
+            sender.sendSimpleColoredMessage("&2Help");
+            for(final MainCommand cmd : Diorite.getCommandMap().getCommandMap().values())
             {
-                this.showHelp(sender);
-            }
-            else if (args.length() == 1)
-            {
-                this.showTimings(sender);
-            }
-            else
-            {
-                this.showHelp(sender);
+                String desc = cmd.getDescription();
+                if(desc == null)
+                {
+                    desc = "This command does not have description.";
+                }
+
+                sender.sendSimpleColoredMessage("&3/" + cmd.getName() + " &7- " + desc);
             }
         });
-    }
-
-    private void showHelp(final CommandSender sender)
-    {
-
-    }
-
-    private void showTimings(final CommandSender s)
-    {
-        for (final EventType<?, ?> event : EventType.values())
-        {
-            s.sendSimpleColoredMessage("&7" + event.getEventClass().getSimpleName());
-            event.getPipeline().getTimings().forEach((eventPipelineHandler, timingsContainer) -> s.sendSimpleColoredMessage("&7  " + timingsContainer.getName() + " &3[" + timingsContainer.getLatestTime() + "/" + timingsContainer.getAvarageTime() + "]"));
-        }
     }
 }

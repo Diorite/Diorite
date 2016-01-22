@@ -26,43 +26,44 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
-import org.diorite.impl.CoreMain;
 import org.diorite.impl.command.SystemCommandImpl;
-import org.diorite.chat.component.TextComponent;
 import org.diorite.command.CommandPriority;
-import org.diorite.entity.Player;
+import org.diorite.command.sender.CommandSender;
+import org.diorite.event.EventType;
 
-public class KickCmd extends SystemCommandImpl
+public class TimingsCmd extends SystemCommandImpl
 {
-    public KickCmd()
+    public TimingsCmd() // TODO
     {
-        super("kick", (Pattern) null, CommandPriority.LOW);
-        this.setDescription("Kick player");
+        super("timings", (Pattern) null, CommandPriority.LOW);
+        this.setDescription("Timmings");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            if (CoreMain.isEnabledDebug())
+            if (args.length() == 0)
             {
-                sender.sendSimpleColoredMessage("&4Command disabled for testing. (Will be re-added with permission system)");
-                return;
+                this.showHelp(sender);
             }
-            if (! args.has(1))
+            else if (args.length() == 1)
             {
-                sender.sendSimpleColoredMessage("&4Invalid usage. Use: /kick <nick> <reason>");
-                return;
+                this.showTimings(sender);
             }
-
-            final Player target = args.asPlayer(0);
-
-            if (target == null)
+            else
             {
-                sender.sendSimpleColoredMessage("&4Given player isn't online!");
-                return;
+                this.showHelp(sender);
             }
-
-            final String reason = args.asText(1);
-
-            target.kick(TextComponent.fromLegacyText(reason));
-
-            sender.getCore().broadcastMessage(target.getName() + " has been kicked by " + sender.getName()); //TODO: Send only to ops
         });
+    }
+
+    private void showHelp(final CommandSender sender)
+    {
+
+    }
+
+    private void showTimings(final CommandSender s)
+    {
+        for (final EventType<?, ?> event : EventType.values())
+        {
+            s.sendSimpleColoredMessage("&7" + event.getEventClass().getSimpleName());
+            event.getPipeline().getTimings().forEach((eventPipelineHandler, timingsContainer) -> s.sendSimpleColoredMessage("&7  " + timingsContainer.getName() + " &3[" + timingsContainer.getLatestTime() + "/" + timingsContainer.getAvarageTime() + "]"));
+        }
     }
 }

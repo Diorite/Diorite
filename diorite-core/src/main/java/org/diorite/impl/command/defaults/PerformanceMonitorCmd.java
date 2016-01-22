@@ -43,6 +43,7 @@ public class PerformanceMonitorCmd extends SystemCommandImpl
     public PerformanceMonitorCmd()
     {
         super("performanceMonitor", Pattern.compile("(performance(Monitor|)|perf)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
+        this.setDescription("Performance monitor");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             final Runtime rt = Runtime.getRuntime();
             if (args.has(0) && args.asString(0).equalsIgnoreCase("-dump"))

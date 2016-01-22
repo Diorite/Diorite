@@ -37,6 +37,7 @@ public class ParticleCmd extends SystemCommandImpl
     public ParticleCmd()
     {
         super("particle", Pattern.compile("(particle)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
+        this.setDescription("Particle");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (args.length() < 10)
             {
