@@ -90,6 +90,7 @@ public class DevCmd extends SystemCommandImpl
     public DevCmd()
     { // TODO: remove
         super("dev", Pattern.compile("(dev)(:(?<action>([a-z0-9_]*))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
+        this.setDescription("Debug");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             final String action = matchedPattern.group("action");
             final IPlayer p = (IPlayer) sender;

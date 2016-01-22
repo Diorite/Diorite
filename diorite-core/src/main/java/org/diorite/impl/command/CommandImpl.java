@@ -50,6 +50,7 @@ public abstract class CommandImpl implements Command
 {
     private final String                  name;
     protected     Pattern                 pattern;
+    protected     String                  description;
     private       Map<String, SubCommand> subCommandMap;
 
     private transient ExceptionHandler exceptionHandler;
@@ -105,6 +106,18 @@ public abstract class CommandImpl implements Command
     public void setPattern(final String pattern)
     {
         this.pattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+    }
+
+    @Override
+    public void setDescription(final String description)
+    {
+        this.description = description;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return description;
     }
 
     @Override

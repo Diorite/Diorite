@@ -35,6 +35,7 @@ public class ItemCmd extends SystemCommandImpl
     public ItemCmd()
     {
         super("item", Collections.singletonList("i"), CommandPriority.LOW);
+        this.setDescription("Give item.");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (! sender.isPlayer())
             {

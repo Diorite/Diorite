@@ -41,6 +41,7 @@ public class PluginsCmd extends SystemCommandImpl
     public PluginsCmd()
     {
         super("plugins", Pattern.compile("(pl(ugin(s|)|))", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
+        this.setDescription("Displays plugin list");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             // TODO check permissions
             if (args.length() == 0)
