@@ -24,6 +24,22 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent bat entity.
+ */
 public interface Bat extends AmbientEntity
 {
+    /**
+     * Returns true if bat is in hanging state.
+     *
+     * @return true if bat is in hanging state.
+     */
+    boolean isHanging();
+
+    /**
+     * Set bat to hanging state.
+     *
+     * @param hanging new hanging state.
+     */
+    void setHanging(boolean hanging);
 }

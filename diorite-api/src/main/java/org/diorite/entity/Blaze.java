@@ -24,6 +24,22 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent blaze entity.
+ */
 public interface Blaze extends MonsterEntity
 {
+    /**
+     * Returns true if blaze is on fire. (in active state)
+     *
+     * @return true if blaze is on fire. (in active state)
+     */
+    boolean canShotFireballs();
+
+    /**
+     * Sets if this blaze can shot fireballs. (blaze is on fire)
+     *
+     * @param fire if blaze can shot.
+     */
+    void setShotFireballs(boolean fire);
 }

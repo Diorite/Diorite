@@ -542,9 +542,15 @@ public class DioriteCore implements Core
     }
 
     @Override
-    public int getCpt()
+    public double getCpt()
     {
-        return 100 / this.tps;
+        return 100D / this.tps;
+    }
+
+    @Override
+    public double getCpt(int tps)
+    {
+        return 100D / tps;
     }
 
     @Override
