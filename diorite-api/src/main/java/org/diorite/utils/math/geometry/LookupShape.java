@@ -1,4 +1,4 @@
-package org.diorite;
+package org.diorite.utils.math.geometry;
 
 import static org.diorite.utils.math.DioriteMathUtils.square;
 
@@ -56,6 +56,57 @@ public enum LookupShape
                     final double dx;
                     final double dy;
                     final double dz;
+                    if (((dx = Math.abs(px - cx) - sx) > 0) || ((dy = Math.abs(py - cy) - sy) > 0) || ((dz = Math.abs(pz - cz) - sz) > 0))
+                    {
+                        return Result.OUT;
+                    }
+                    if ((dx == 0) || (dy == 0) || (dz == 0))
+                    {
+                        return Result.ON;
+                    }
+                    return Result.IN;
+                }
+
+                @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    final long dx;
+                    final long dy;
+                    final long dz;
+                    if (((dx = Math.abs(px - cx) - size) > 0) || ((dy = Math.abs(py - cy) - size) > 0) || ((dz = Math.abs(pz - cz) - size) > 0))
+                    {
+                        return Result.OUT;
+                    }
+                    if ((dx == 0) || (dy == 0) || (dz == 0))
+                    {
+                        return Result.ON;
+                    }
+                    return Result.IN;
+                }
+
+                @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    final long dx;
+                    final long dy;
+                    final long dz;
+                    if (((dx = Math.abs(px - cx) - sxz) > 0) || ((dy = Math.abs(py - cy) - sy) > 0) || ((dz = Math.abs(pz - cz) - sxz) > 0))
+                    {
+                        return Result.OUT;
+                    }
+                    if ((dx == 0) || (dy == 0) || (dz == 0))
+                    {
+                        return Result.ON;
+                    }
+                    return Result.IN;
+                }
+
+                @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
+                {
+                    final long dx;
+                    final long dy;
+                    final long dz;
                     if (((dx = Math.abs(px - cx) - sx) > 0) || ((dy = Math.abs(py - cy) - sy) > 0) || ((dz = Math.abs(pz - cz) - sz) > 0))
                     {
                         return Result.OUT;
@@ -188,6 +239,24 @@ public enum LookupShape
                 }
 
                 @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(px - cx) - size) <= 0) && ((Math.abs(py - cy) - size) <= 0) && ((Math.abs(pz - cz) - size) <= 0);
+                }
+
+                @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(px - cx) - sxz) <= 0) && ((Math.abs(py - cy) - sy) <= 0) && ((Math.abs(pz - cz) - sxz) <= 0);
+                }
+
+                @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(px - cx) - sx) <= 0) && ((Math.abs(py - cy) - sy) <= 0) && ((Math.abs(pz - cz) - sz) <= 0);
+                }
+
+                @Override
                 public boolean isNotOutside(final float cx, final float cy, final float cz, final float size, final float px, final float py, final float pz)
                 {
                     return ((Math.abs(px - cx) - size) <= 0) && ((Math.abs(py - cy) - size) <= 0) && ((Math.abs(pz - cz) - size) <= 0);
@@ -242,6 +311,24 @@ public enum LookupShape
                 }
 
                 @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(px - cx) - size) < 0) && ((Math.abs(py - cy) - size) < 0) && ((Math.abs(pz - cz) - size) < 0);
+                }
+
+                @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(px - cx) - sxz) < 0) && ((Math.abs(py - cy) - sy) < 0) && ((Math.abs(pz - cz) - sxz) < 0);
+                }
+
+                @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(px - cx) - sx) < 0) && ((Math.abs(py - cy) - sy) < 0) && ((Math.abs(pz - cz) - sz) < 0);
+                }
+
+                @Override
                 public boolean isExactlyIn(final float cx, final float cy, final float cz, final float size, final float px, final float py, final float pz)
                 {
                     return ((Math.abs(px - cx) - size) < 0) && ((Math.abs(py - cy) - size) < 0) && ((Math.abs(pz - cz) - size) < 0);
@@ -291,6 +378,24 @@ public enum LookupShape
 
                 @Override
                 public boolean isExactlyOn(final double cx, final double cy, final double cz, final double sx, final double sy, final double sz, final double px, final double py, final double pz)
+                {
+                    return ((Math.abs(px - cx) - sx) == 0) && ((Math.abs(py - cy) - sy) == 0) && ((Math.abs(pz - cz) - sz) == 0);
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(px - cx) - size) == 0) && ((Math.abs(py - cy) - size) == 0) && ((Math.abs(pz - cz) - size) == 0);
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(px - cx) - sxz) == 0) && ((Math.abs(py - cy) - sy) == 0) && ((Math.abs(pz - cz) - sxz) == 0);
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
                 {
                     return ((Math.abs(px - cx) - sx) == 0) && ((Math.abs(py - cy) - sy) == 0) && ((Math.abs(pz - cz) - sz) == 0);
                 }
@@ -364,6 +469,36 @@ public enum LookupShape
                 }
 
                 @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    if ((Math.abs(py - cy) - size) > 0)
+                    {
+                        return Result.OUT;
+                    }
+                    return getResult((square(px - cx) + square(pz - cz)) - square(size));
+                }
+
+                @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    if ((Math.abs(py - cy) - sy) > 0)
+                    {
+                        return Result.OUT;
+                    }
+                    return getResult((square(px - cx) + square(pz - cz)) - square(sxz));
+                }
+
+                @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
+                {
+                    if ((Math.abs(py - cy) - sy) > 0)
+                    {
+                        return Result.OUT;
+                    }
+                    return getResult(((square(px - cx) / square(sx)) + (square(pz - cz) / square(sz))) - 1);
+                }
+
+                @Override
                 public Result isIn(final float cx, final float cy, final float cz, final float size, final float px, final float py, final float pz)
                 {
                     if ((Math.abs(py - cy) - size) > 0)
@@ -442,6 +577,24 @@ public enum LookupShape
                 }
 
                 @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(py - cy) - size) <= 0) && (((square(px - cx) + square(pz - cz)) - square(size)) <= 0);
+                }
+
+                @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(py - cy) - sy) <= 0) && (((square(px - cx) + square(pz - cz)) - square(sxz)) <= 0);
+                }
+
+                @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(py - cy) - sy) <= 0) && ((((square(px - cx) / square(sx)) + (square(pz - cz) / square(sz))) - 1) <= 0);
+                }
+
+                @Override
                 public boolean isNotOutside(final float cx, final float cy, final float cz, final float size, final float px, final float py, final float pz)
                 {
                     return ((Math.abs(py - cy) - size) <= 0) && (((square(px - cx) + square(pz - cz)) - square(size)) <= 0);
@@ -496,6 +649,24 @@ public enum LookupShape
                 }
 
                 @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(py - cy) - size) < 0) && (((square(px - cx) + square(pz - cz)) - square(size)) < 0);
+                }
+
+                @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(py - cy) - sy) < 0) && (((square(px - cx) + square(pz - cz)) - square(sxz)) < 0);
+                }
+
+                @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(py - cy) - sy) <= 0) && ((((square(px - cx) / square(sx)) + (square(pz - cz) / square(sz))) - 1) <= 0);
+                }
+
+                @Override
                 public boolean isExactlyIn(final float cx, final float cy, final float cz, final float size, final float px, final float py, final float pz)
                 {
                     return ((Math.abs(py - cy) - size) < 0) && (((square(px - cx) + square(pz - cz)) - square(size)) < 0);
@@ -545,6 +716,24 @@ public enum LookupShape
 
                 @Override
                 public boolean isExactlyOn(final double cx, final double cy, final double cz, final double sx, final double sy, final double sz, final double px, final double py, final double pz)
+                {
+                    return ((Math.abs(py - cy) - sy) == 0) && ((((square(px - cx) / square(sx)) + (square(pz - cz) / square(sz))) - 1) == 0);
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(py - cy) - size) == 0) && (((square(px - cx) + square(pz - cz)) - square(size)) == 0);
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((Math.abs(py - cy) - sy) == 0) && (((square(px - cx) + square(pz - cz)) - square(sxz)) == 0);
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
                 {
                     return ((Math.abs(py - cy) - sy) == 0) && ((((square(px - cx) / square(sx)) + (square(pz - cz) / square(sz))) - 1) == 0);
                 }
@@ -606,6 +795,24 @@ public enum LookupShape
                 }
 
                 @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return getResult((square(px - cx) + square(py - cy) + square(pz - cz)) - square(size));
+                }
+
+                @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return getResult((((square(px - cx) + square(pz - cz)) / square(sxz)) + (square(py - cy) / square(sy))) - 1);
+                }
+
+                @Override
+                public Result isIn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
+                {
+                    return getResult(((square(px - cx) / square(sx)) + (square(py - cy) / square(sy)) + (square(pz - cz) / square(sz))) - 1);
+                }
+
+                @Override
                 public Result isIn(final float cx, final float cy, final float cz, final float size, final float px, final float py, final float pz)
                 {
                     return getResult((square(px - cx) + square(py - cy) + square(pz - cz)) - square(size));
@@ -655,6 +862,24 @@ public enum LookupShape
 
                 @Override
                 public boolean isNotOutside(final double cx, final double cy, final double cz, final double sx, final double sy, final double sz, final double px, final double py, final double pz)
+                {
+                    return (((square(px - cx) / square(sx)) + (square(py - cy) / square(sy)) + (square(pz - cz) / square(sz))) - 1) <= 0;
+                }
+
+                @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((square(px - cx) + square(py - cy) + square(pz - cz)) - square(size)) <= 0;
+                }
+
+                @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((((square(px - cx) + square(pz - cz)) / square(sxz)) + (square(py - cy) / square(sy))) - 1) <= 0;
+                }
+
+                @Override
+                public boolean isNotOutside(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
                 {
                     return (((square(px - cx) / square(sx)) + (square(py - cy) / square(sy)) + (square(pz - cz) / square(sz))) - 1) <= 0;
                 }
@@ -714,6 +939,24 @@ public enum LookupShape
                 }
 
                 @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((square(px - cx) + square(py - cy) + square(pz - cz)) - square(size)) < 0;
+                }
+
+                @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((((square(px - cx) + square(pz - cz)) / square(sxz)) + (square(py - cy) / square(sy))) - 1) < 0;
+                }
+
+                @Override
+                public boolean isExactlyIn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
+                {
+                    return (((square(px - cx) / square(sx)) + (square(py - cy) / square(sy)) + (square(pz - cz) / square(sz))) - 1) < 0;
+                }
+
+                @Override
                 public boolean isExactlyIn(final float cx, final float cy, final float cz, final float size, final float px, final float py, final float pz)
                 {
                     return ((square(px - cx) + square(py - cy) + square(pz - cz)) - square(size)) < 0;
@@ -763,6 +1006,24 @@ public enum LookupShape
 
                 @Override
                 public boolean isExactlyOn(final double cx, final double cy, final double cz, final double sx, final double sy, final double sz, final double px, final double py, final double pz)
+                {
+                    return (((square(px - cx) / square(sx)) + (square(py - cy) / square(sy)) + (square(pz - cz) / square(sz))) - 1) == 0;
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long size, final long px, final long py, final long pz)
+                {
+                    return ((square(px - cx) + square(py - cy) + square(pz - cz)) - square(size)) == 0;
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long sxz, final long sy, final long px, final long py, final long pz)
+                {
+                    return ((((square(px - cx) + square(pz - cz)) / square(sxz)) + (square(py - cy) / square(sy))) - 1) == 0;
+                }
+
+                @Override
+                public boolean isExactlyOn(final long cx, final long cy, final long cz, final long sx, final long sy, final long sz, final long px, final long py, final long pz)
                 {
                     return (((square(px - cx) / square(sx)) + (square(py - cy) / square(sy)) + (square(pz - cz) / square(sz))) - 1) == 0;
                 }
@@ -1091,6 +1352,54 @@ public enum LookupShape
      * @return enum element indicating that element is inside, outside or on border of area.
      */
     public abstract Result isIn(double cx, double cy, double cz, double sx, double sy, double sz, double px, double py, double pz);
+
+    /**
+     * Returns enum element indicating that element is inside, outside or on border of area.
+     *
+     * @param cx   x center coordinates of area.
+     * @param cy   y center coordinates of area.
+     * @param cz   z center coordinates of area.
+     * @param size size of area in all 3 axis.
+     * @param px   x coordinates of point to check.
+     * @param py   y coordinates of point to check.
+     * @param pz   z coordinates of point to check.
+     *
+     * @return enum element indicating that element is inside, outside or on border of area.
+     */
+    public abstract Result isIn(long cx, long cy, long cz, long size, long px, long py, long pz);
+
+    /**
+     * Returns enum element indicating that element is inside, outside or on border of area.
+     *
+     * @param cx  x center coordinates of area.
+     * @param cy  y center coordinates of area.
+     * @param cz  z center coordinates of area.
+     * @param sxz size of area in xz axis.
+     * @param sy  size of area in y axis.
+     * @param px  x coordinates of point to check.
+     * @param py  y coordinates of point to check.
+     * @param pz  z coordinates of point to check.
+     *
+     * @return enum element indicating that element is inside, outside or on border of area.
+     */
+    public abstract Result isIn(long cx, long cy, long cz, long sxz, long sy, long px, long py, long pz);
+
+    /**
+     * Returns enum element indicating that element is inside, outside or on border of area.
+     *
+     * @param cx x center coordinates of area.
+     * @param cy y center coordinates of area.
+     * @param cz z center coordinates of area.
+     * @param sx size of area in x axis.
+     * @param sy size of area in y axis.
+     * @param sz size of area in z axis.
+     * @param px x coordinates of point to check.
+     * @param py y coordinates of point to check.
+     * @param pz z coordinates of point to check.
+     *
+     * @return enum element indicating that element is inside, outside or on border of area.
+     */
+    public abstract Result isIn(long cx, long cy, long cz, long sx, long sy, long sz, long px, long py, long pz);
 
     /**
      * Returns enum element indicating that element is inside, outside or on border of area.
@@ -1719,6 +2028,54 @@ public enum LookupShape
     /**
      * Returns true if point is in area or on area border.
      *
+     * @param cx   x center coordinates of area.
+     * @param cy   y center coordinates of area.
+     * @param cz   z center coordinates of area.
+     * @param size size of area in all 3 axis.
+     * @param px   x coordinates of point to check.
+     * @param py   y coordinates of point to check.
+     * @param pz   z coordinates of point to check.
+     *
+     * @return true if point is in area or on area border.
+     */
+    public abstract boolean isNotOutside(long cx, long cy, long cz, long size, long px, long py, long pz);
+
+    /**
+     * Returns true if point is in area or on area border.
+     *
+     * @param cx  x center coordinates of area.
+     * @param cy  y center coordinates of area.
+     * @param cz  z center coordinates of area.
+     * @param sxz size of area in xz axis.
+     * @param sy  size of area in y axis.
+     * @param px  x coordinates of point to check.
+     * @param py  y coordinates of point to check.
+     * @param pz  z coordinates of point to check.
+     *
+     * @return true if point is in area or on area border.
+     */
+    public abstract boolean isNotOutside(long cx, long cy, long cz, long sxz, long sy, long px, long py, long pz);
+
+    /**
+     * Returns true if point is in area or on area border.
+     *
+     * @param cx x center coordinates of area.
+     * @param cy y center coordinates of area.
+     * @param cz z center coordinates of area.
+     * @param sx size of area in x axis.
+     * @param sy size of area in y axis.
+     * @param sz size of area in z axis.
+     * @param px x coordinates of point to check.
+     * @param py y coordinates of point to check.
+     * @param pz z coordinates of point to check.
+     *
+     * @return true if point is in area or on area border.
+     */
+    public abstract boolean isNotOutside(long cx, long cy, long cz, long sx, long sy, long sz, long px, long py, long pz);
+
+    /**
+     * Returns true if point is in area or on area border.
+     *
      * @param center center point of area.
      * @param size   size of area in all 3 axis.
      * @param point  point to be checked if it is inside of given area.
@@ -2339,6 +2696,54 @@ public enum LookupShape
      * @return true if point is exacly in area. (it can't be on border)
      */
     public abstract boolean isExactlyIn(double cx, double cy, double cz, double sx, double sy, double sz, double px, double py, double pz);
+
+    /**
+     * Returns true if point is exacly in area. (it can't be on border)
+     *
+     * @param cx   x center coordinates of area.
+     * @param cy   y center coordinates of area.
+     * @param cz   z center coordinates of area.
+     * @param size size of area in all 3 axis.
+     * @param px   x coordinates of point to check.
+     * @param py   y coordinates of point to check.
+     * @param pz   z coordinates of point to check.
+     *
+     * @return true if point is exacly in area. (it can't be on border)
+     */
+    public abstract boolean isExactlyIn(long cx, long cy, long cz, long size, long px, long py, long pz);
+
+    /**
+     * Returns true if point is exacly in area. (it can't be on border)
+     *
+     * @param cx  x center coordinates of area.
+     * @param cy  y center coordinates of area.
+     * @param cz  z center coordinates of area.
+     * @param sxz size of area in xz axis.
+     * @param sy  size of area in y axis.
+     * @param px  x coordinates of point to check.
+     * @param py  y coordinates of point to check.
+     * @param pz  z coordinates of point to check.
+     *
+     * @return true if point is exacly in area. (it can't be on border)
+     */
+    public abstract boolean isExactlyIn(long cx, long cy, long cz, long sxz, long sy, long px, long py, long pz);
+
+    /**
+     * Returns true if point is exacly in area. (it can't be on border)
+     *
+     * @param cx x center coordinates of area.
+     * @param cy y center coordinates of area.
+     * @param cz z center coordinates of area.
+     * @param sx size of area in x axis.
+     * @param sy size of area in y axis.
+     * @param sz size of area in z axis.
+     * @param px x coordinates of point to check.
+     * @param py y coordinates of point to check.
+     * @param pz z coordinates of point to check.
+     *
+     * @return true if point is exacly in area. (it can't be on border)
+     */
+    public abstract boolean isExactlyIn(long cx, long cy, long cz, long sx, long sy, long sz, long px, long py, long pz);
 
     /**
      * Returns true if point is exacly in area. (it can't be on border)
@@ -2967,6 +3372,54 @@ public enum LookupShape
     /**
      * Returns true if point is exacly on area border.
      *
+     * @param cx   x center coordinates of area.
+     * @param cy   y center coordinates of area.
+     * @param cz   z center coordinates of area.
+     * @param size size of area in all 3 axis.
+     * @param px   x coordinates of point to check.
+     * @param py   y coordinates of point to check.
+     * @param pz   z coordinates of point to check.
+     *
+     * @return true if point is exacly on area border.
+     */
+    public abstract boolean isExactlyOn(long cx, long cy, long cz, long size, long px, long py, long pz);
+
+    /**
+     * Returns true if point is exacly on area border.
+     *
+     * @param cx  x center coordinates of area.
+     * @param cy  y center coordinates of area.
+     * @param cz  z center coordinates of area.
+     * @param sxz size of area in xz axis.
+     * @param sy  size of area in y axis.
+     * @param px  x coordinates of point to check.
+     * @param py  y coordinates of point to check.
+     * @param pz  z coordinates of point to check.
+     *
+     * @return true if point is exacly on area border.
+     */
+    public abstract boolean isExactlyOn(long cx, long cy, long cz, long sxz, long sy, long px, long py, long pz);
+
+    /**
+     * Returns true if point is exacly on area border.
+     *
+     * @param cx x center coordinates of area.
+     * @param cy y center coordinates of area.
+     * @param cz z center coordinates of area.
+     * @param sx size of area in x axis.
+     * @param sy size of area in y axis.
+     * @param sz size of area in z axis.
+     * @param px x coordinates of point to check.
+     * @param py y coordinates of point to check.
+     * @param pz z coordinates of point to check.
+     *
+     * @return true if point is exacly on area border.
+     */
+    public abstract boolean isExactlyOn(long cx, long cy, long cz, long sx, long sy, long sz, long px, long py, long pz);
+
+    /**
+     * Returns true if point is exacly on area border.
+     *
      * @param center center point of area.
      * @param size   size of area in all 3 axis.
      * @param point  point to be checked if it is inside of given area.
@@ -3346,6 +3799,19 @@ public enum LookupShape
     }
 
     private static Result getResult(final int i)
+    {
+        if (i > 0)
+        {
+            return Result.OUT;
+        }
+        if (i == 0)
+        {
+            return Result.ON;
+        }
+        return Result.IN;
+    }
+
+    private static Result getResult(final long i)
     {
         if (i > 0)
         {

@@ -32,7 +32,7 @@ import java.util.function.Predicate;
 import org.diorite.Core;
 import org.diorite.GameObject;
 import org.diorite.ImmutableLocation;
-import org.diorite.LookupShape;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.world.World;
 

@@ -51,7 +51,7 @@ import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Location;
-import org.diorite.LookupShape;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.Particle;
 import org.diorite.Sound;
 import org.diorite.cfg.messages.DioriteMesssges;

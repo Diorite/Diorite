@@ -50,7 +50,7 @@ import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ImmutableLocation;
-import org.diorite.LookupShape;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.utils.lazy.BooleanLazyValue;

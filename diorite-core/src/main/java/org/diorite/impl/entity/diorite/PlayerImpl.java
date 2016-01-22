@@ -48,7 +48,7 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
-import org.diorite.LookupShape;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.Particle;
 import org.diorite.auth.GameProfile;
 import org.diorite.chat.ChatPosition;
