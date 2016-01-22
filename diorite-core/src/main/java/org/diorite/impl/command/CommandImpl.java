@@ -50,7 +50,7 @@ public abstract class CommandImpl implements Command
 {
     private final String                  name;
     protected     Pattern                 pattern;
-    protected     String                  description;
+    private       String                  description;
     private       Map<String, SubCommand> subCommandMap;
 
     private transient ExceptionHandler exceptionHandler;
