@@ -51,19 +51,19 @@ public class GiveCmd extends SystemCommandImpl
     {
         if (target == null)
         {
-            sender.sendSimpleColoredMessage("&4No player."); // TODO: change message and add it to config.
+            sender.sendSimpleColoredMessage("&cNo player."); // TODO: change message and add it to config.
             return;
         }
         final Material mat;
         if (! args.has(param) || ((((mat = Material.matchValidInventoryMaterial(args.asString(param++), true)))) == null))
         {
-            sender.sendSimpleColoredMessage("&4No material"); // TODO: change message and add it to config.
+            sender.sendSimpleColoredMessage("&cNo material"); // TODO: change message and add it to config.
             return;
         }
         Integer amount = 1;
         if (args.has(param) && (((amount = args.asInt(param))) == null))
         {
-            sender.sendSimpleColoredMessage("&4Amount must be a number."); // TODO: change message and add it to config.
+            sender.sendSimpleColoredMessage("&cAmount must be a number."); // TODO: change message and add it to config.
             return;
         }
         // TODO: nbt, or other shit

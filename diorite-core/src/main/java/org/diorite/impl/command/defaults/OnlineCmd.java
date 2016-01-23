@@ -38,6 +38,6 @@ public class OnlineCmd extends SystemCommandImpl
     {
         super("online", Pattern.compile("(online|who|list)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setDescription("Displays online players list");
-        this.setCommandExecutor((sender, command, label, matchedPattern, args) -> sender.sendSimpleColoredMessage("&3Online players: &7" + StringUtils.join(DioriteCore.getInstance().getPlayersManager().getOnlinePlayersNames(), "&9, &7")));
+        this.setCommandExecutor((sender, command, label, matchedPattern, args) -> sender.sendSimpleColoredMessage("&7Online players (&3" + DioriteCore.getInstance().getPlayersManager().getRawPlayers().size() + "&7): " + StringUtils.join(DioriteCore.getInstance().getPlayersManager().getOnlinePlayersNames(), "&f, &7")));
     }
 }

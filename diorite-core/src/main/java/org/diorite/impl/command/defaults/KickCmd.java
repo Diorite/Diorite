@@ -39,14 +39,14 @@ public class KickCmd extends SystemCommandImpl
         super("kick", (Pattern) null, CommandPriority.LOW);
         this.setDescription("Kick player");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            if (CoreMain.isEnabledDebug())
+            if (CoreMain.isEnabledDebug() && !sender.isConsole())
             {
-                sender.sendSimpleColoredMessage("&4Command disabled for testing. (Will be re-added with permission system)");
+                sender.sendSimpleColoredMessage("&cCommand disabled for testing. (Will be re-added with permission system)");
                 return;
             }
             if (! args.has(1))
             {
-                sender.sendSimpleColoredMessage("&4Invalid usage. Use: /kick <nick> <reason>");
+                sender.sendSimpleColoredMessage("&cCorrect usage &7/kick <player> <reason>");
                 return;
             }
 
@@ -54,7 +54,7 @@ public class KickCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                sender.sendSimpleColoredMessage("&4Given player isn't online!");
+                sender.sendSimpleColoredMessage("&cGiven player isn't online!");
                 return;
             }
 
@@ -62,7 +62,7 @@ public class KickCmd extends SystemCommandImpl
 
             target.kick(TextComponent.fromLegacyText(reason));
 
-            sender.getCore().broadcastMessage(target.getName() + " has been kicked by " + sender.getName()); //TODO: Send only to ops
+            sender.getCore().broadcastMessage("&7" + target.getName() + " &chas been kicked by&7 " + sender.getName()); //TODO: Send only to ops
         });
     }
 }

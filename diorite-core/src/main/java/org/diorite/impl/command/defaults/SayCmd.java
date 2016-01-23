@@ -40,7 +40,7 @@ public class SayCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (! args.has(0))
             {
-                sender.sendSimpleColoredMessage("&4Invalid usage. Use: /say <some text>");
+                sender.sendSimpleColoredMessage("&cCorrect usage &7/say <some text>");
                 return;
             }
 

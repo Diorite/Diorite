@@ -41,7 +41,7 @@ public class ParticleCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (args.length() < 10)
             {
-                sender.sendMessage("&cUsage: /particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");
+                sender.sendMessage("&cCorrect usage &7/particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");
                 return;
             }
 

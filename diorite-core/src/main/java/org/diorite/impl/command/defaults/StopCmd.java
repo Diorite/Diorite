@@ -42,7 +42,7 @@ public class StopCmd extends SystemCommandImpl
                 sender.getCore().stop();
                 return;
             }
-            sender.sendSimpleColoredMessage("&4No permissions...");
+            sender.sendSimpleColoredMessage("&cCommand disabled for testing. (Will be re-added with permission system)");
         });
     }
 }

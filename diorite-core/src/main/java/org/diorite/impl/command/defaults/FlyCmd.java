@@ -56,7 +56,7 @@ public class FlyCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                sender.sendSimpleColoredMessage("&4No target...");
+                sender.sendSimpleColoredMessage("&cTarget is not specified or player is offline.");
                 return;
             }
 
@@ -74,7 +74,7 @@ public class FlyCmd extends SystemCommandImpl
             }
 //            if (speed > 1)
 //            {
-//                sender.sendSimpleColoredMessage("&4Speed can't by larger than 100");
+//                sender.sendSimpleColoredMessage("&cSpeed can't by larger than 100");
 //                return;
 //            }
 

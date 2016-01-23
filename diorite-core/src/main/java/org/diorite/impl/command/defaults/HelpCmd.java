@@ -25,17 +25,10 @@
 package org.diorite.impl.command.defaults;
 
 import org.diorite.Diorite;
-import org.diorite.ImmutableLocation;
-import org.diorite.command.Command;
-import org.diorite.command.CommandMap;
 import org.diorite.command.CommandPriority;
 import org.diorite.command.MainCommand;
-import org.diorite.entity.Player;
-import org.diorite.impl.command.CommandMapImpl;
 import org.diorite.impl.command.SystemCommandImpl;
-import sun.applet.Main;
 
-import java.util.*;
 import java.util.regex.Pattern;
 
 public class HelpCmd extends SystemCommandImpl
