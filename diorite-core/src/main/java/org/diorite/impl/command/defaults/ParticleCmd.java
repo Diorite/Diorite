@@ -26,6 +26,8 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.Message;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Particle;
 import org.diorite.command.CommandPriority;
@@ -38,10 +40,12 @@ public class ParticleCmd extends SystemCommandImpl
     {
         super("particle", Pattern.compile("(particle)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setDescription("Particle");
+        setUsage("particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (args.length() < 10)
             {
-                sender.sendMessage("&cCorrect usage &7/particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
+                //sender.sendMessage("&cCorrect usage &7/particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");
                 return;
             }
 

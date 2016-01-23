@@ -52,19 +52,19 @@ public class GiveCmd extends SystemCommandImpl
     {
         if (target == null)
         {
-            sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED).toString());
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale());
             return;
         }
         final Material mat;
         if (! args.has(param) || ((((mat = Material.matchValidInventoryMaterial(args.asString(param++), true)))) == null))
         {
-            sender.sendSimpleColoredMessage("&cNo material"); // TODO: change message and add it to config.
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_MATERIAL, sender, sender.getPreferedLocale());
             return;
         }
         Integer amount = 1;
         if (args.has(param) && (((amount = args.asInt(param))) == null))
         {
-            sender.sendSimpleColoredMessage("&cAmount must be a number."); // TODO: change message and add it to config.
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_NUMBER, sender, sender.getPreferedLocale());
             return;
         }
         // TODO: nbt, or other shit

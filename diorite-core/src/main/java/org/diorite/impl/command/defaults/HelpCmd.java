@@ -26,7 +26,6 @@ package org.diorite.impl.command.defaults;
 
 import org.diorite.Diorite;
 import org.diorite.cfg.messages.DioriteMesssges;
-import org.diorite.cfg.messages.Message;
 import org.diorite.command.CommandPriority;
 import org.diorite.command.MainCommand;
 import org.diorite.impl.command.SystemCommandImpl;

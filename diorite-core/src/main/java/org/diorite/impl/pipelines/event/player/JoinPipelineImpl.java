@@ -102,7 +102,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             }
             final Player player = evt.getPlayer();
             GameProfiles.addToCache(player.getGameProfile());
-            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_CMD_PLAYER_JOIN, MessageData.e("player", player));
+            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_PLAYER_JOIN, MessageData.e("player", player));
 //            this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!"); maybe we should not make users angry with this message :D
 //            this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
 //        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");

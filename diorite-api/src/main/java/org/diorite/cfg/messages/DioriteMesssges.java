@@ -70,25 +70,25 @@ public final class DioriteMesssges
      */
     public static final String KEY_HELP              = "help";
     /**
-     * Helper variable to prevent a typo. Common help node.
+     * Helper variable to prevent a typo. Common save node.
      */
     public static final String KEY_SAVE              = "save";
     /**
-     * Helper variable to prevent a typo. No player message for commands.
+     * Helper variable to prevent a typo. Common plugin node.
      */
-    public static final String MSG_CMD_NO_PLAYER     = KEY_COMMANDS + SEP + "no-player";
-    /**
-     * Helper variable to prevent a typo. No player message for commands.
-     */
-    public static final String MSG_CMD_NO_PERMISSION = KEY_COMMANDS + SEP + "no-permission";
+    public static final String KEY_PLUGIN            = "plugin";
+
+
     /**
      * Helper variable to prevent a typo. Player join message.
      */
-    public static final String MSG_CMD_PLAYER_JOIN   = KEY_PLAYER + SEP + "join";
+    public static final String MSG_PLAYER_JOIN   = KEY_PLAYER + SEP + "join";
     /**
      * Helper variable to prevent a typo. Player left message.
      */
-    public static final String MSG_CMD_PLAYER_QUIT   = KEY_PLAYER + SEP + "quit";
+    public static final String MSG_PLAYER_QUIT   = KEY_PLAYER + SEP + "quit";
+
+
     /**
      * Helper variable to prevent a typo. Command is disabled.
      */
@@ -104,7 +104,21 @@ public final class DioriteMesssges
     /**
      * Helper variable to prevent a typo. Command cannot be used by player
      */
-    public static final String MSG_CMD_NO_TARGET     = KEY_COMMANDS + SEP + "notarget";
+    public static final String MSG_CMD_NO_TARGET     = KEY_COMMANDS + SEP + "no-target";
+    /**
+     * Helper variable to prevent a typo. Command cannot be used by player
+     */
+    public static final String MSG_CMD_NO_MATERIAL   = KEY_COMMANDS + SEP + "no-material";
+    /**
+     * Helper variable to prevent a typo. Command cannot be used by player
+     */
+    public static final String MSG_CMD_NO_NUMBER     = KEY_COMMANDS + SEP + "no-number";
+    /**
+     * Helper variable to prevent a typo. Command cannot be used by player
+     */
+    public static final String MSG_CMD_CORRECT       = KEY_COMMANDS + SEP + "correct-usage";
+
+
     /**
      * Helper variable to prevent a typo. Command cannot be used by player
      */
@@ -113,6 +127,8 @@ public final class DioriteMesssges
      * Helper variable to prevent a typo. Command cannot be used by player
      */
     public static final String MSG_HELP_NODESC       = KEY_HELP + SEP + "nodesc";
+
+
     /**
      * Helper variable to prevent a typo. Save start
      */
@@ -121,6 +137,53 @@ public final class DioriteMesssges
      * Helper variable to prevent a typo. Save done
      */
     public static final String MSG_SAVE_DONE         = KEY_SAVE + SEP + "done";
+
+
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_NOTFOUND   = KEY_PLUGIN + SEP + "notfound";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_OVERVIEW   = KEY_PLUGIN + SEP + "overview";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_NAME       = KEY_PLUGIN + SEP + "name";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_AUTHOR     = KEY_PLUGIN + SEP + "author";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_VERSION    = KEY_PLUGIN + SEP + "version";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_DESC       = KEY_PLUGIN + SEP + "description";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_WEBSITE    = KEY_PLUGIN + SEP + "website";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_STATS      = KEY_PLUGIN + SEP + "stats";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_PARENT     = KEY_PLUGIN + SEP + "parent";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_LOADED     = KEY_PLUGIN + SEP + "loaded";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_PLUGIN_LOADER     = KEY_PLUGIN + SEP + "loader";
+
 
     private static Messages msgs;
 

@@ -51,6 +51,7 @@ public abstract class CommandImpl implements Command
     private final String                  name;
     protected     Pattern                 pattern;
     private       String                  description;
+    private       String                  usage;
     private       Map<String, SubCommand> subCommandMap;
 
     private transient ExceptionHandler exceptionHandler;
@@ -118,6 +119,22 @@ public abstract class CommandImpl implements Command
     public String getDescription()
     {
         return description;
+    }
+
+    @Override
+    public void setUsage(final String usage)
+    {
+        this.usage = usage;
+    }
+
+    @Override
+    public String getUsage()
+    {
+        if(this.usage == null)
+        {
+            return name;
+        }
+        return usage;
     }
 
     @Override

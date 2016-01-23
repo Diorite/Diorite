@@ -2,8 +2,7 @@ player:
   join: "&3$<player.name>&7 dołączył do gry!"
   quit: "&3$<player.name>&7 opuscil gre!"
 commands:
-  no-player: "&7Nie ma gracza o nicku: &3$<name>&7."
   disabled: "&cKomenda wylaczona."
   onlyconsole: "&cTa komenda moze byc uzywana wylacznie przez graczy."
   onlyplayer: "&cTa komenda moze byc uzywana wylacznie przez konsole."
-  notarget: "&cNie wskazales celu lub jest offline.."
+  no-target: "&cNie wskazales celu lub jest offline.."

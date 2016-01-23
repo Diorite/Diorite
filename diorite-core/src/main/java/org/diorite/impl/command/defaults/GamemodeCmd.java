@@ -42,7 +42,7 @@ public class GamemodeCmd extends SystemCommandImpl
             final Player target = args.has(1) ? args.asPlayer(1) : ((sender instanceof Player) ? (Player) sender : null);
             if (target == null)
             {
-                sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED).toString());
+                sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_NO_TARGET).toString());
                 return;
             }
             final GameMode gameMode = args.has(0) ? args.asSimpleEnumValue(GameMode.class, 0) : (target.getGameMode().equals(GameMode.CREATIVE) ? GameMode.SURVIVAL : GameMode.CREATIVE);

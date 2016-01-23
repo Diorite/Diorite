@@ -36,9 +36,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.OfflinePlayer;
+import org.diorite.command.Command;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
+import org.diorite.plugin.BasePlugin;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 /**
@@ -69,6 +71,14 @@ public class PlaceholderType<T>
      */
     public static final PlaceholderType<Player>        PLAYER  = create("player", Player.class, SENDER, OFFLINE, ENTITY);
     /**
+     * {@link Command} placeholder type
+     */
+    public static final PlaceholderType<Command>       COMMAND = create("command", Command.class);
+    /**
+     * {@link BasePlugin} placeholder type
+     */
+    public static final PlaceholderType<BasePlugin>    PLUGIN  = create("plugin", BasePlugin.class);
+    /**
      * {@link Object} placeholder type, used by simple placeholders without any type, like just "points" instead of some object like "player.points"
      */
     public static final PlaceholderType<Object>        OBJECT  = create("", Object.class);
@@ -78,6 +88,21 @@ public class PlaceholderType<T>
     {
         SENDER.registerItem(new PlaceholderItem<>(SENDER, "name", CommandSender::getName));
         OFFLINE.registerItem(new PlaceholderItem<>(OFFLINE, "name", OfflinePlayer::getName));
+        //Command
+        COMMAND.registerItem(new PlaceholderItem<>(COMMAND, "name", Command::getName));
+        COMMAND.registerItem(new PlaceholderItem<>(COMMAND, "description", Command::getDescription));
+        COMMAND.registerItem(new PlaceholderItem<>(COMMAND, "executor", Command::getCommandExecutor));
+        COMMAND.registerItem(new PlaceholderItem<>(COMMAND, "pattern", Command::getPattern));
+        COMMAND.registerItem(new PlaceholderItem<>(COMMAND, "usage", Command::getUsage));
+        //Plugin
+        PLUGIN.registerItem(new PlaceholderItem<>(PLUGIN, "name", BasePlugin::getName));
+        PLUGIN.registerItem(new PlaceholderItem<>(PLUGIN, "author", BasePlugin::getAuthor));
+        PLUGIN.registerItem(new PlaceholderItem<>(PLUGIN, "version", BasePlugin::getVersion));
+        PLUGIN.registerItem(new PlaceholderItem<>(PLUGIN, "description", BasePlugin::getDescription));
+        PLUGIN.registerItem(new PlaceholderItem<>(PLUGIN, "website", BasePlugin::getWebsite));
+        PLUGIN.registerItem(new PlaceholderItem<>(PLUGIN, "parent", BasePlugin::getName)); //TODO
+        PLUGIN.registerItem(new PlaceholderItem<>(PLUGIN, "loaded", BasePlugin::getName)); //TODO
+        PLUGIN.registerItem(new PlaceholderItem<>(PLUGIN, "loader", BasePlugin::getName)); //TODO
     }
 
     @SafeVarargs

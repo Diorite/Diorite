@@ -40,6 +40,7 @@ public class KickCmd extends SystemCommandImpl
     {
         super("kick", (Pattern) null, CommandPriority.LOW);
         this.setDescription("Kick player");
+        this.setUsage("kick <player> <reason>");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (CoreMain.isEnabledDebug() && !sender.isConsole())
             {
@@ -48,7 +49,8 @@ public class KickCmd extends SystemCommandImpl
             }
             if (! args.has(1))
             {
-                sender.sendSimpleColoredMessage("&cCorrect usage &7/kick <player> <reason>");
+                //sender.sendSimpleColoredMessage("&cCorrect usage &7/kick <player> <reason>");
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
                 return;
             }
 

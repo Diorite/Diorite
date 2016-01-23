@@ -27,6 +27,8 @@ package org.diorite.impl.command.defaults;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.Message;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Core;
 import org.diorite.chat.ChatPosition;
@@ -37,10 +39,12 @@ public class SayCmd extends SystemCommandImpl
     public SayCmd()
     {
         super("say", Pattern.compile("(say)(:(?<type>[a-z0-9]+)|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
+        this.setDescription("Say");
+        this.setUsage("say <some text>");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (! args.has(0))
             {
-                sender.sendSimpleColoredMessage("&cCorrect usage &7/say <some text>");
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
                 return;
             }
 

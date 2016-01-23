@@ -37,7 +37,7 @@ public class QuitPipelineImpl extends SimpleEventPipeline<PlayerQuitEvent> imple
     public void reset_()
     {
         this.addAfter(EventPriority.NORMAL, "Diorite|SendMessages", ((evt, pipeline) -> {
-            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_CMD_PLAYER_QUIT, Message.MessageData.e("player", evt.getPlayer()));
+            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_PLAYER_QUIT, Message.MessageData.e("player", evt.getPlayer()));
             //this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + evt.getPlayer().getName() + "&7&l left from the server!");
             //this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + evt.getPlayer().getName() + "&7 left from the server!");
         }));
