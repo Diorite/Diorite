@@ -38,12 +38,6 @@ public class BroadcastCmd extends SystemCommandImpl
         super("broadcast", Pattern.compile("(b(road|)c(ast|))(:(?<type>[a-z0-9]+)|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setDescription("Broadcast");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            if (! args.has(0))
-            {
-                sender.sendSimpleColoredMessage("&cCorrect usage &7/broadcast <some text>");
-                return;
-            }
-
             ChatPosition chatPosition;
             try
             {
