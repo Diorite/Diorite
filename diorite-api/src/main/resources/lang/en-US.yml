@@ -7,3 +7,9 @@ commands:
   onlyconsole: "&cThis command cannot be used by player."
   onlyplayer: "&cThis command cannot be used by console."
   notarget: "&cTarget is not specified or player is offline."
+help:
+  header: "Help"
+  nodesc: "This command does not have description."
+save:
+  start: "&7Saving all worlds..."
+  done: "&7All worlds saved!"

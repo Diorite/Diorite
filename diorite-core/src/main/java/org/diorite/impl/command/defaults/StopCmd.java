@@ -43,7 +43,7 @@ public class StopCmd extends SystemCommandImpl
                 sender.getCore().stop();
                 return;
             }
-            sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED).toString());
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED, sender, sender.getPreferedLocale());
         });
     }
 }

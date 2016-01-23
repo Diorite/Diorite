@@ -25,6 +25,8 @@
 package org.diorite.impl.command.defaults;
 
 import org.diorite.Diorite;
+import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.Message;
 import org.diorite.command.CommandPriority;
 import org.diorite.command.MainCommand;
 import org.diorite.impl.command.SystemCommandImpl;
@@ -38,13 +40,13 @@ public class HelpCmd extends SystemCommandImpl
         super("help", (Pattern) null, CommandPriority.LOW);
         this.setDescription("Command list");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            sender.sendSimpleColoredMessage("&2Help");
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_HELP_HEADER, sender, sender.getPreferedLocale());
             for(final MainCommand cmd : Diorite.getCommandMap().getCommandMap().values())
             {
                 String desc = cmd.getDescription();
                 if(desc == null)
                 {
-                    desc = "This command does not have description.";
+                    desc = DioriteMesssges.getMessage(DioriteMesssges.MSG_HELP_NODESC).toString();
                 }
 
                 sender.sendSimpleColoredMessage("&3/" + cmd.getName() + " &7- " + desc);

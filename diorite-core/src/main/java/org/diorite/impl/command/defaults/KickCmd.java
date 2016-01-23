@@ -27,6 +27,7 @@ package org.diorite.impl.command.defaults;
 import java.util.regex.Pattern;
 
 import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.Message;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.chat.component.TextComponent;
@@ -42,7 +43,7 @@ public class KickCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (CoreMain.isEnabledDebug() && !sender.isConsole())
             {
-                sender.sendSimpleColoredMessage("&cCommand disabled for testing. (Will be re-added with permission system)");
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED, sender, sender.getPreferedLocale(), Message.MessageData.e("sender", sender));
                 return;
             }
             if (! args.has(1))
@@ -55,7 +56,7 @@ public class KickCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_NO_TARGET).toString());
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale(), Message.MessageData.e("sender", sender), Message.MessageData.e("target", target));
                 return;
             }
 

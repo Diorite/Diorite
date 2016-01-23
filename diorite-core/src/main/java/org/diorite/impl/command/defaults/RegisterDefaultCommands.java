@@ -37,7 +37,7 @@ public final class RegisterDefaultCommands
     {
         if (CoreMain.isEnabledDebug())
         {
-            cmds.registerCommand(new DevCmd()); // TODO: remove
+            cmds.registerCommand(new DevCmd());
         }
 
         cmds.registerCommand(new SayCmd());

@@ -66,17 +66,13 @@ public final class DioriteMesssges
      */
     public static final String KEY_ENTITY            = "entity";
     /**
-     * Helper variable to prevent a typo. Common join node.
+     * Helper variable to prevent a typo. Common help node.
      */
-    public static final String KEY_JOIN              = "join";
+    public static final String KEY_HELP              = "help";
     /**
-     * Helper variable to prevent a typo. Common quit node.
+     * Helper variable to prevent a typo. Common help node.
      */
-    public static final String KEY_QUIT              = "quit";
-    /**
-     * Helper variable to prevent a typo. Common killed by node.
-     */
-    public static final String KEY_KILLED_BY         = "killedby";
+    public static final String KEY_SAVE              = "save";
     /**
      * Helper variable to prevent a typo. No player message for commands.
      */
@@ -108,7 +104,23 @@ public final class DioriteMesssges
     /**
      * Helper variable to prevent a typo. Command cannot be used by player
      */
-    public static final String MSG_CMD_NO_TARGET  = KEY_COMMANDS + SEP + "notarget";
+    public static final String MSG_CMD_NO_TARGET     = KEY_COMMANDS + SEP + "notarget";
+    /**
+     * Helper variable to prevent a typo. Command cannot be used by player
+     */
+    public static final String MSG_HELP_HEADER       = KEY_HELP + SEP + "header";
+    /**
+     * Helper variable to prevent a typo. Command cannot be used by player
+     */
+    public static final String MSG_HELP_NODESC       = KEY_HELP + SEP + "nodesc";
+    /**
+     * Helper variable to prevent a typo. Save start
+     */
+    public static final String MSG_SAVE_START        = KEY_SAVE + SEP + "start";
+    /**
+     * Helper variable to prevent a typo. Save done
+     */
+    public static final String MSG_SAVE_DONE         = KEY_SAVE + SEP + "done";
 
     private static Messages msgs;
 
