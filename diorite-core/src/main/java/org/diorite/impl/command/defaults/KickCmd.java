@@ -26,6 +26,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.chat.component.TextComponent;
@@ -54,7 +55,7 @@ public class KickCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                sender.sendSimpleColoredMessage("&cGiven player isn't online!");
+                sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_NO_TARGET).toString());
                 return;
             }
 

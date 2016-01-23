@@ -26,6 +26,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.command.Arguments;
 import org.diorite.command.CommandPriority;
@@ -56,7 +57,7 @@ public class FlyCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                sender.sendSimpleColoredMessage("&cTarget is not specified or player is offline.");
+                sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_NO_TARGET).toString());
                 return;
             }
 

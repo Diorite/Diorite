@@ -88,7 +88,27 @@ public final class DioriteMesssges
     /**
      * Helper variable to prevent a typo. Player join message.
      */
-    public static final String MSG_CMD_PLAYER_JOIN   = KEY_PLAYER + SEP + KEY_JOIN;
+    public static final String MSG_CMD_PLAYER_JOIN   = KEY_PLAYER + SEP + "join";
+    /**
+     * Helper variable to prevent a typo. Player left message.
+     */
+    public static final String MSG_CMD_PLAYER_QUIT   = KEY_PLAYER + SEP + "quit";
+    /**
+     * Helper variable to prevent a typo. Command is disabled.
+     */
+    public static final String MSG_CMD_CMD_DISABLED  = KEY_COMMANDS + SEP + "disabled";
+    /**
+     * Helper variable to prevent a typo. Command cannot be used by console
+     */
+    public static final String MSG_CMD_ONLY_PLAYER   = KEY_COMMANDS + SEP + "onlyplayer";
+    /**
+     * Helper variable to prevent a typo. Command cannot be used by player
+     */
+    public static final String MSG_CMD_ONLY_CONSOLE  = KEY_COMMANDS + SEP + "onlyconsole";
+    /**
+     * Helper variable to prevent a typo. Command cannot be used by player
+     */
+    public static final String MSG_CMD_NO_TARGET  = KEY_COMMANDS + SEP + "notarget";
 
     private static Messages msgs;
 

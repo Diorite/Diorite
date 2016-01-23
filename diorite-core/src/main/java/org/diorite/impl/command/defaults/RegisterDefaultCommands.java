@@ -24,6 +24,7 @@
 
 package org.diorite.impl.command.defaults;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.command.CommandMapImpl;
 
 public final class RegisterDefaultCommands
@@ -34,7 +35,10 @@ public final class RegisterDefaultCommands
 
     public static void init(final CommandMapImpl cmds)
     {
-        cmds.registerCommand(new DevCmd()); // TODO: remove
+        if (CoreMain.isEnabledDebug())
+        {
+            cmds.registerCommand(new DevCmd()); // TODO: remove
+        }
 
         cmds.registerCommand(new SayCmd());
         cmds.registerCommand(new TpsCmd());

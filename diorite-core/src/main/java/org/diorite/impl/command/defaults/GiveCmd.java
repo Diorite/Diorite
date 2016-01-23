@@ -26,6 +26,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.command.Arguments;
 import org.diorite.command.CommandPriority;
@@ -51,7 +52,7 @@ public class GiveCmd extends SystemCommandImpl
     {
         if (target == null)
         {
-            sender.sendSimpleColoredMessage("&cNo player."); // TODO: change message and add it to config.
+            sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED).toString());
             return;
         }
         final Material mat;

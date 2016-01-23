@@ -26,6 +26,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.Collections;
 
+import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.GameMode;
 import org.diorite.command.CommandPriority;
@@ -41,7 +42,7 @@ public class GamemodeCmd extends SystemCommandImpl
             final Player target = args.has(1) ? args.asPlayer(1) : ((sender instanceof Player) ? (Player) sender : null);
             if (target == null)
             {
-                sender.sendSimpleColoredMessage("&cTarget is not specified or player is offline.");
+                sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED).toString());
                 return;
             }
             final GameMode gameMode = args.has(0) ? args.asSimpleEnumValue(GameMode.class, 0) : (target.getGameMode().equals(GameMode.CREATIVE) ? GameMode.SURVIVAL : GameMode.CREATIVE);

@@ -1,4 +1,9 @@
 player:
   join: "&3$<player.name>&7 joined the server!"
+  quit: "&3$<player.name>&7 left from the server!"
 commands:
   no-player: "&7There is no player with name: &3$<name>&7."
+  disabled: "&cCommand disabled."
+  onlyconsole: "&cThis command cannot be used by player."
+  onlyplayer: "&cThis command cannot be used by console."
+  notarget: "&cTarget is not specified or player is offline."
