@@ -74,11 +74,11 @@ public class FlyCmd extends SystemCommandImpl
             {
                 speed = (Arguments.asDouble(speedArg) / 100);
             }
-//            if (speed > 1)
-//            {
-//                sender.sendSimpleColoredMessage("&cSpeed can't by larger than 100");
-//                return;
-//            }
+            if (speed > 1)
+            {
+                sender.sendSimpleColoredMessage("&cSpeed can't by larger than 100");
+                return;
+            }
 
             if (on == null)
             {
