@@ -26,6 +26,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.command.Arguments;
 import org.diorite.command.CommandPriority;
@@ -51,19 +52,19 @@ public class GiveCmd extends SystemCommandImpl
     {
         if (target == null)
         {
-            sender.sendSimpleColoredMessage("&4No player."); // TODO: change message and add it to config.
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale());
             return;
         }
         final Material mat;
         if (! args.has(param) || ((((mat = Material.matchValidInventoryMaterial(args.asString(param++), true)))) == null))
         {
-            sender.sendSimpleColoredMessage("&4No material"); // TODO: change message and add it to config.
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_MATERIAL, sender, sender.getPreferedLocale());
             return;
         }
         Integer amount = 1;
         if (args.has(param) && (((amount = args.asInt(param))) == null))
         {
-            sender.sendSimpleColoredMessage("&4Amount must be a number."); // TODO: change message and add it to config.
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_NUMBER, sender, sender.getPreferedLocale());
             return;
         }
         // TODO: nbt, or other shit

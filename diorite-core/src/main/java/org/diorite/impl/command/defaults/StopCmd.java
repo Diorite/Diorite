@@ -26,6 +26,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.command.CommandPriority;
 
@@ -42,7 +43,7 @@ public class StopCmd extends SystemCommandImpl
                 sender.getCore().stop();
                 return;
             }
-            sender.sendSimpleColoredMessage("&4No permissions...");
+            DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED, sender, sender.getPreferedLocale());
         });
     }
 }

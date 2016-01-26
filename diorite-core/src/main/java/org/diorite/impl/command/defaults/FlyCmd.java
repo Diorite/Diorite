@@ -26,6 +26,7 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
+import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.command.Arguments;
 import org.diorite.command.CommandPriority;
@@ -38,6 +39,7 @@ public class FlyCmd extends SystemCommandImpl
     {
         super("fly", Pattern.compile("(fly)(:(?<speed>((\\d+|)(\\.\\d+|)))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setDescription("Enable or disable fly mode.");
+        this.setUsage("fly[:speed] [player] [true|false]");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             final String speedArg = matchedPattern.group("speed");
             final double speed;
@@ -56,7 +58,7 @@ public class FlyCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                sender.sendSimpleColoredMessage("&4No target...");
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale());
                 return;
             }
 
@@ -72,11 +74,11 @@ public class FlyCmd extends SystemCommandImpl
             {
                 speed = (Arguments.asDouble(speedArg) / 100);
             }
-//            if (speed > 1)
-//            {
-//                sender.sendSimpleColoredMessage("&4Speed can't by larger than 100");
-//                return;
-//            }
+            if (speed > 1)
+            {
+                sender.sendSimpleColoredMessage("&cSpeed can't by larger than 100");
+                return;
+            }
 
             if (on == null)
             {

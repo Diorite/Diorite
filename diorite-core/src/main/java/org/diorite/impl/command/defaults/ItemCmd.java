@@ -25,7 +25,11 @@
 package org.diorite.impl.command.defaults;
 
 import java.util.Collections;
+import java.util.Locale;
 
+import org.diorite.Diorite;
+import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.Message;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.command.CommandPriority;
 import org.diorite.entity.Player;
@@ -39,7 +43,9 @@ public class ItemCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (! sender.isPlayer())
             {
-                sender.sendSimpleColoredMessage("&4Only for players!"); // TODO: change message and add it to config.
+                //sender.sendSimpleColoredMessage("&cThis command cannot be used by console.");
+                //sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_ONLY_PLAYER).toString());
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_ONLY_PLAYER, sender, sender.getPreferedLocale(), Message.MessageData.e("sender", sender));
                 return;
             }
             GiveCmd.parseGiveCommand((Player) sender, sender, args, 0);

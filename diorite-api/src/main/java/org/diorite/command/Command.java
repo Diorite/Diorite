@@ -58,6 +58,10 @@ public interface Command
 
     String getDescription();
 
+    void setUsage(String usage);
+
+    String getUsage();
+
     ExceptionHandler getExceptionHandler();
 
     void setExceptionHandler(ExceptionHandler exceptionHandler);

@@ -24,6 +24,7 @@
 
 package org.diorite.impl.pipelines.event.player;
 
+import org.diorite.GameMode;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
 import org.diorite.event.pipelines.event.player.BlockPlacePipeline;
@@ -53,14 +54,16 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
             {
                 return;
             }
-
-            if (item.getAmount() == 1)
+            if (evt.getPlayer().getGameMode() != GameMode.CREATIVE) //don't remove item from inventory if player is in creative mode
             {
-                evt.getPlayer().getInventory().getHotbarInventory().replace(evt.getPlayer().getHeldItemSlot(), item, null);
-            }
-            else
-            {
-                item.setAmount(item.getAmount() - 1);
+                if (item.getAmount() == 1)
+                {
+                    evt.getPlayer().getInventory().getHotbarInventory().replace(evt.getPlayer().getHeldItemSlot(), item, null);
+                }
+                else
+                {
+                    item.setAmount(item.getAmount() - 1);
+                }
             }
 
             evt.getBlock().setType((BlockMaterialData) item.getMaterial());

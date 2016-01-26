@@ -39,9 +39,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.Core;
 import org.diorite.OfflinePlayer;
 import org.diorite.cfg.DioriteConfig;
+import org.diorite.command.Command;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
+import org.diorite.plugin.BasePlugin;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 /**
@@ -80,6 +82,14 @@ public class PlaceholderType<T>
      */
     public static final PlaceholderType<Player>        PLAYER  = create("player", Player.class, SENDER, OFFLINE, ENTITY);
     /**
+     * {@link Command} placeholder type
+     */
+    public static final PlaceholderType<Command>       COMMAND = create("command", Command.class);
+    /**
+     * {@link BasePlugin} placeholder type
+     */
+    public static final PlaceholderType<BasePlugin>    PLUGIN  = create("plugin", BasePlugin.class);
+    /**
      * {@link Object} placeholder type, used by simple placeholders without any type, like just "points" instead of some object like "player.points"
      */
     public static final PlaceholderType<Object>        OBJECT  = create("", Object.class);
@@ -88,13 +98,28 @@ public class PlaceholderType<T>
     static
     {
         SENDER.registerItem(SENDER, "name", CommandSender::getName);
+        OFFLINE.registerItem(OFFLINE, "name", OfflinePlayer::getName);
+        //Command
+        COMMAND.registerItem(COMMAND, "name", Command::getName);
+        COMMAND.registerItem(COMMAND, "description", Command::getDescription);
+        COMMAND.registerItem(COMMAND, "executor", Command::getCommandExecutor);
+        COMMAND.registerItem(COMMAND, "pattern", Command::getPattern);
+        COMMAND.registerItem(COMMAND, "usage", Command::getUsage);
+        //Plugin
+        PLUGIN.registerItem(PLUGIN, "name", BasePlugin::getName);
+        PLUGIN.registerItem(PLUGIN, "author", BasePlugin::getAuthor);
+        PLUGIN.registerItem(PLUGIN, "version", BasePlugin::getVersion);
+        PLUGIN.registerItem(PLUGIN, "description", BasePlugin::getDescription);
+        PLUGIN.registerItem(PLUGIN, "website", BasePlugin::getWebsite);
+        PLUGIN.registerItem(PLUGIN, "parent", BasePlugin::getName); //TODO
+        PLUGIN.registerItem(PLUGIN, "loaded", BasePlugin::getName); //TODO
+        PLUGIN.registerItem(PLUGIN, "loader", BasePlugin::getName); //TODO
 
+        //Core
         CORE.registerItem(CORE, "version", Core::getVersion);
 
+        //Config
         CONFIG.registerItem(CONFIG, "hostname", DioriteConfig::getHostname);
-
-        OFFLINE.registerItem(OFFLINE, "name", OfflinePlayer::getName);
-
 
         SENDER.registerChild("core", CORE, CommandSender::getCore);
         CORE.registerChild("config", CONFIG, Core::getConfig);

@@ -62,11 +62,14 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
         this.addFirst("Diorite|StartPackets", ((evt, pipeline) -> {
             // TODO
             final IPlayer player = (IPlayer) evt.getPlayer();
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
+            //player.getNetworkManager().sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), player.getWorld().getHardcore().isEnabled(), player.getWorld().getDimension(), player.getWorld().getDifficulty(), DioriteCore.getInstance().getPlayersManager().getRawPlayers().size(), player.getWorld().getWorldType()));
             player.getNetworkManager().sendPacket(new PacketPlayClientboundCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundWorldDifficulty(Difficulty.EASY));
+            //player.getNetworkManager().sendPacket(new PacketPlayClientboundWorldDifficulty(Difficulty.EASY));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundWorldDifficulty(player.getWorld().getDifficulty()));
             player.getNetworkManager().sendPacket(new PacketPlayClientboundSpawnPosition(new BlockLocation(2, 255, - 2)));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
+            //player.getNetworkManager().sendPacket(new PacketPlayClientboundAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
+            player.getNetworkManager().sendPacket(new PacketPlayClientboundAbilities(false, false, player.canFly(), false, Player.WALK_SPEED, Player.FLY_SPEED));
             player.getNetworkManager().sendPacket(new PacketPlayClientboundHeldItemSlot(player.getHeldItemSlot()));
             player.getNetworkManager().sendPacket(new PacketPlayClientboundPosition(new TeleportData(2, 255, - 2), 5));
         }));
@@ -99,13 +102,13 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             }
             final Player player = evt.getPlayer();
             GameProfiles.addToCache(player.getGameProfile());
-            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_CMD_PLAYER_JOIN, MessageData.e("player", player));
+            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_PLAYER_JOIN, MessageData.e("player", player));
 //            this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!"); maybe we should not make users angry with this message :D
 //            this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
 //        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
 
             this.core.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
-            player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 100, 20); // TODO Tests, remove it
+            player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 60, 20); // TODO Tests, remove it
         }));
 
         this.addLast("Diorite|KickIfCancelled", ((evt, pipeline) -> {

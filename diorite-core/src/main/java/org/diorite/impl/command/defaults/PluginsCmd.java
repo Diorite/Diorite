@@ -28,6 +28,8 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.Message;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Diorite;
 import org.diorite.chat.ChatColor;
@@ -42,12 +44,14 @@ public class PluginsCmd extends SystemCommandImpl
     {
         super("plugins", Pattern.compile("(pl(ugin(s|)|))", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setDescription("Displays plugin list");
+        this.setUsage("plugins <plugin>");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             // TODO check permissions
             if (args.length() == 0)
             {
                 final Collection<BasePlugin> plugins = Diorite.getCore().getPluginManager().getPlugins();
                 String msg = "&7Plugins (&3" + plugins.size() + "&7): ";
+                //msg += plugins.stream().map(pl -> pl.isEnabled() ? (pl.isCoreMod() ? (ChatColor.DARK_AQUA + pl.getName()) : (ChatColor.GREEN + pl.getName())) : (pl.isCoreMod() ? (ChatColor.DARK_RED + pl.getName()) : (ChatColor.RED + pl.getName()))).collect(Collectors.joining("&7, "));
                 msg += plugins.stream().map(pl -> pl.isEnabled() ? (pl.isCoreMod() ? (ChatColor.DARK_AQUA + pl.getName()) : (ChatColor.GREEN + pl.getName())) : (pl.isCoreMod() ? (ChatColor.DARK_RED + pl.getName()) : (ChatColor.RED + pl.getName()))).collect(Collectors.joining("&7, "));
 
                 sender.sendSimpleColoredMessage(msg);
@@ -57,36 +61,46 @@ public class PluginsCmd extends SystemCommandImpl
                 final BasePlugin pl = Diorite.getPluginManager().getPlugin(args.asString(0));
                 if (pl == null)
                 {
-                    sender.sendMessage(ChatColor.RED + "Plugin not found");
+                    DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_NOTFOUND, sender, sender.getPreferedLocale());
                     return;
                 }
 
-                sender.sendSimpleColoredMessage("&7Plugin overview:");
-                sender.sendSimpleColoredMessage("  &7Name: &3" + pl.getName());
-                sender.sendSimpleColoredMessage("  &7Author: &3" + pl.getAuthor());
-                sender.sendSimpleColoredMessage("  &7Version: &3" + pl.getVersion());
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_OVERVIEW, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
+                //sender.sendSimpleColoredMessage("  &7Name: &3" + pl.getName());
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_NAME, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
+                //sender.sendSimpleColoredMessage("  &7Author: &3" + pl.getAuthor());
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_AUTHOR, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
+                //sender.sendSimpleColoredMessage("  &7Version: &3" + pl.getVersion());
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_VERSION, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
                 if (pl.getDescription() != null)
                 {
-                    sender.sendSimpleColoredMessage("  &7Description: &3" + pl.getDescription());
+                    //sender.sendSimpleColoredMessage("  &7Description: &3" + pl.getDescription());
+                    DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_DESC, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
                 }
                 if (pl.getWebsite() != null)
                 {
-                    sender.sendSimpleColoredMessage("  &7Support website: &3" + pl.getWebsite());
+                    //sender.sendSimpleColoredMessage("  &7Support website: &3" + pl.getWebsite());
+                    DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_WEBSITE, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
                 }
-                sender.sendSimpleColoredMessage("&7Stats for nerds:");
+                //sender.sendSimpleColoredMessage("&7Stats for nerds:");
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_STATS, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
                 if (pl instanceof ChildPlugin)
                 {
-                    sender.sendSimpleColoredMessage("  &7Parent plugin: &3" + ((ChildPlugin) pl).getParent().getName());
+                    //sender.sendSimpleColoredMessage("  &7Parent plugin: &3" + ((ChildPlugin) pl).getParent().getName());
+                    DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_PARENT, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
                 }
                 else
                 {
-                    sender.sendSimpleColoredMessage("  &7Loaded classes: &3" + ((DioritePlugin) pl).getClassLoader().loadedClasses());
+                    //sender.sendSimpleColoredMessage("  &7Loaded classes: &3" + ((DioritePlugin) pl).getClassLoader().loadedClasses());
+                    DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_LOADED, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
                 }
-                sender.sendSimpleColoredMessage("  &7Plugin loader: &3" + pl.getPluginLoader().getClass().getSimpleName());
+                //sender.sendSimpleColoredMessage("  &7Plugin loader: &3" + pl.getPluginLoader().getClass().getSimpleName());
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_PLUGIN_LOADER, sender, sender.getPreferedLocale(), Message.MessageData.e("plugin", pl));
             }
             else
             {
-                sender.sendMessage(ChatColor.RED + "Usage: /plugins [plugin]");
+                //sender.sendMessage(ChatColor.RED + "Usage: /plugins [plugin]");
+                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
             }
         });
     }

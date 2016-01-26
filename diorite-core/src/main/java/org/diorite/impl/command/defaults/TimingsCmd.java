@@ -55,7 +55,7 @@ public class TimingsCmd extends SystemCommandImpl
 
     private void showHelp(final CommandSender sender)
     {
-
+        showTimings(sender);
     }
 
     private void showTimings(final CommandSender s)
