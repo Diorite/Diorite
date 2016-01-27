@@ -97,29 +97,29 @@ public class PlaceholderType<T>
 
     static
     {
-        SENDER.registerItem(SENDER, "name", CommandSender::getName);
-        OFFLINE.registerItem(OFFLINE, "name", OfflinePlayer::getName);
+        SENDER.registerItem("name", CommandSender::getName);
+        OFFLINE.registerItem("name", OfflinePlayer::getName);
         //Command
-        COMMAND.registerItem(COMMAND, "name", Command::getName);
-        COMMAND.registerItem(COMMAND, "description", Command::getDescription);
-        COMMAND.registerItem(COMMAND, "executor", Command::getCommandExecutor);
-        COMMAND.registerItem(COMMAND, "pattern", Command::getPattern);
-        COMMAND.registerItem(COMMAND, "usage", Command::getUsage);
+        COMMAND.registerItem("name", Command::getName);
+        COMMAND.registerItem("description", Command::getDescription);
+        COMMAND.registerItem("executor", Command::getCommandExecutor);
+        COMMAND.registerItem("pattern", Command::getPattern);
+        COMMAND.registerItem("usage", Command::getUsage);
         //Plugin
-        PLUGIN.registerItem(PLUGIN, "name", BasePlugin::getName);
-        PLUGIN.registerItem(PLUGIN, "author", BasePlugin::getAuthor);
-        PLUGIN.registerItem(PLUGIN, "version", BasePlugin::getVersion);
-        PLUGIN.registerItem(PLUGIN, "description", BasePlugin::getDescription);
-        PLUGIN.registerItem(PLUGIN, "website", BasePlugin::getWebsite);
-        PLUGIN.registerItem(PLUGIN, "parent", BasePlugin::getName); //TODO
-        PLUGIN.registerItem(PLUGIN, "loaded", BasePlugin::getName); //TODO
-        PLUGIN.registerItem(PLUGIN, "loader", BasePlugin::getName); //TODO
+        PLUGIN.registerItem("name", BasePlugin::getName);
+        PLUGIN.registerItem("author", BasePlugin::getAuthor);
+        PLUGIN.registerItem("version", BasePlugin::getVersion);
+        PLUGIN.registerItem("description", BasePlugin::getDescription);
+        PLUGIN.registerItem("website", BasePlugin::getWebsite);
+        PLUGIN.registerItem("parent", BasePlugin::getName); //TODO
+        PLUGIN.registerItem("loaded", BasePlugin::getName); //TODO
+        PLUGIN.registerItem("loader", BasePlugin::getName); //TODO
 
         //Core
-        CORE.registerItem(CORE, "version", Core::getVersion);
+        CORE.registerItem("version", Core::getVersion);
 
         //Config
-        CONFIG.registerItem(CONFIG, "hostname", DioriteConfig::getHostname);
+        CONFIG.registerItem("hostname", DioriteConfig::getHostname);
 
         SENDER.registerChild("core", CORE, CommandSender::getCore);
         CORE.registerChild("config", CONFIG, Core::getConfig);
@@ -274,6 +274,21 @@ public class PlaceholderType<T>
     public PlaceholderItem<T> registerItem(final PlaceholderType<T> type, final String id, final Function<T, Object> func)
     {
         final PlaceholderItem<T> item = new BasePlaceholderItem<>(type, id, func);
+        this.registerItem(item);
+        return item;
+    }
+
+    /**
+     * Register new placeholder item to this placeholder type.
+     *
+     * @param id   id/name of placeholder, like that "name" in player.name.
+     * @param func function that should return {@link String} or {@link org.diorite.chat.component.BaseComponent}, when using BaseComponent you may add click events, hovers events and all that stuff.
+     *
+     * @return Created placeholder.
+     */
+    public PlaceholderItem<T> registerItem(final String id, final Function<T, Object> func)
+    {
+        final PlaceholderItem<T> item = new BasePlaceholderItem<>(this, id, func);
         this.registerItem(item);
         return item;
     }

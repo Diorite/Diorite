@@ -40,7 +40,7 @@ public class ChunkPopulateEvent extends ChunkEvent
     /**
      * Construct new chunk populate event.
      *
-     * @param chunk chunk to populate, can't by null.
+     * @param chunk chunk to populate, can't be null.
      * @param force if chunk should be force-populated
      */
     public ChunkPopulateEvent(final Chunk chunk, final boolean force)
