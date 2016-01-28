@@ -25,9 +25,10 @@ public interface PlaceholderItem<T>
      * Get data for this placeholder item as String or BaseComponent, like player.name should return here name of given player. <br>
      * If method return other object than String or BaseComponent it will be changed to string by {@link Object#toString()} method.
      *
-     * @param obj object to fetch the data needed for placeholder.
+     * @param obj  object to fetch the data needed for placeholder.
+     * @param args arguments of item
      *
      * @return String of BaseComponent to use instead of placeholder.
      */
-    Object apply(T obj);
+    Object apply(T obj, Object[] args);
 }

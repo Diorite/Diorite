@@ -28,8 +28,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.google.common.collect.Sets;
 
@@ -37,14 +39,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Core;
+import org.diorite.Diorite;
 import org.diorite.OfflinePlayer;
 import org.diorite.cfg.DioriteConfig;
+import org.diorite.chat.component.BaseComponent;
 import org.diorite.command.Command;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.entity.Entity;
+import org.diorite.entity.LivingEntity;
 import org.diorite.entity.Player;
 import org.diorite.plugin.BasePlugin;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.world.World;
 
 /**
  * Represent type of placeholder, like {@link Player} for player.name. <br>
@@ -55,44 +61,53 @@ import org.diorite.utils.collections.maps.CaseInsensitiveMap;
  */
 public class PlaceholderType<T>
 {
-    private static final Map<String, PlaceholderType<?>> types = new HashMap<>(5, .1f);
+    private static final Map<String, PlaceholderType<?>>       types       = new HashMap<>(5, .1f);
+    private static final Map<String, GlobalPlaceholderType<?>> globalTypes = new HashMap<>(5, .1f);
 
     /**
      * {@link org.diorite.Core} placeholder type.
      */
-    public static final PlaceholderType<Core>          CORE    = create("core", Core.class);
+    public static final PlaceholderType<Core>          CORE          = createGlobal("core", Core.class, Diorite::getCore); // Can cause deadlock?
     /**
      * {@link org.diorite.Core} placeholder type.
      */
-    public static final PlaceholderType<DioriteConfig> CONFIG  = create("config", DioriteConfig.class);
+    public static final PlaceholderType<DioriteConfig> CONFIG        = create("config", DioriteConfig.class);
     /**
      * {@link CommandSender} placeholder type.
      */
-    public static final PlaceholderType<CommandSender> SENDER  = create("sender", CommandSender.class);
+    public static final PlaceholderType<CommandSender> SENDER        = create("sender", CommandSender.class);
     /**
      * {@link org.diorite.OfflinePlayer} placeholder type.
      */
-    public static final PlaceholderType<OfflinePlayer> OFFLINE = create("offline", OfflinePlayer.class);
+    public static final PlaceholderType<OfflinePlayer> OFFLINE       = create("offline", OfflinePlayer.class);
     /**
      * {@link Entity} placeholder type.
      */
-    public static final PlaceholderType<Entity>        ENTITY  = create("entity", Entity.class);
+    public static final PlaceholderType<Entity>        ENTITY        = create("entity", Entity.class);
+    /**
+     * {@link org.diorite.entity.LivingEntity} placeholder type.
+     */
+    public static final PlaceholderType<LivingEntity>  LIVING_ENTITY = create("entity", LivingEntity.class, ENTITY);
+    /**
+     * {@link org.diorite.world.World} placeholder type.
+     */
+    public static final PlaceholderType<World>         WORLD         = create("world", World.class);
     /**
      * {@link Player} placeholder type, it use sender and entity placeholders too.
      */
-    public static final PlaceholderType<Player>        PLAYER  = create("player", Player.class, SENDER, OFFLINE, ENTITY);
+    public static final PlaceholderType<Player>        PLAYER        = create("player", Player.class, SENDER, OFFLINE, LIVING_ENTITY);
     /**
      * {@link Command} placeholder type
      */
-    public static final PlaceholderType<Command>       COMMAND = create("command", Command.class);
+    public static final PlaceholderType<Command>       COMMAND       = create("command", Command.class);
     /**
      * {@link BasePlugin} placeholder type
      */
-    public static final PlaceholderType<BasePlugin>    PLUGIN  = create("plugin", BasePlugin.class);
+    public static final PlaceholderType<BasePlugin>    PLUGIN        = create("plugin", BasePlugin.class);
     /**
      * {@link Object} placeholder type, used by simple placeholders without any type, like just "points" instead of some object like "player.points"
      */
-    public static final PlaceholderType<Object>        OBJECT  = create("", Object.class);
+    public static final PlaceholderType<Object>        OBJECT        = create("", Object.class);
 
 
     static
@@ -115,6 +130,40 @@ public class PlaceholderType<T>
         PLUGIN.registerItem("loaded", BasePlugin::getName); //TODO
         PLUGIN.registerItem("loader", BasePlugin::getName); //TODO
 
+        //Entity
+        ENTITY.registerItem("x", Entity::getX);
+        ENTITY.registerItem("y", Entity::getY);
+        ENTITY.registerItem("z", Entity::getZ);
+        ENTITY.registerItem("age", Entity::getAge);
+        ENTITY.registerItem("air", Entity::getAir);
+        ENTITY.registerItem("world", e -> e.getWorld().getName());
+        ENTITY.registerItem("customName", Entity::getCustomName);
+        ENTITY.registerItem("id", Entity::getId);
+        ENTITY.registerItem("velX", e -> e.getVelocity().x);
+        ENTITY.registerItem("velY", e -> e.getVelocity().y);
+        ENTITY.registerItem("velZ", e -> e.getVelocity().z);
+        ENTITY.registerItem("isEnabled", Entity::isAiEnabled);
+        ENTITY.registerItem("isCrouching", Entity::isCrouching);
+        ENTITY.registerItem("isGlowing", Entity::isGlowing);
+        ENTITY.registerItem("isInvisible", Entity::isInvisible);
+        ENTITY.registerItem("isOnFire", Entity::isOnFire);
+        ENTITY.registerItem("isSprinting", Entity::isSprinting);
+        ENTITY.registerItem("isSilent", Entity::isSilent);
+        ENTITY.registerItem("uuid", Entity::getUniqueID);
+
+//        LIVING_ENTITY.registerItem("", LivingEntity::get) TODO
+
+        //World
+        WORLD.registerItem("name", World::getName);
+        WORLD.registerItem("difficulty", w -> w.getDifficulty().name().toLowerCase());
+        WORLD.registerItem("dimension", w -> w.getDimension().name().toLowerCase());
+        WORLD.registerItem("seed", World::getSeed);
+        WORLD.registerItem("gamemode", w -> w.getDefaultGameMode().getName());
+        WORLD.registerItem("generator", w -> w.getGenerator().getName());
+        WORLD.registerItem("maxHeight", World::getMaxHeight);
+        WORLD.registerItem("group", w -> w.getWorldGroup().getName());
+        WORLD.registerItem("playersNum", w -> w.getPlayersInWorld().size());
+
         //Core
         CORE.registerItem("version", Core::getVersion);
 
@@ -122,15 +171,54 @@ public class PlaceholderType<T>
         CONFIG.registerItem("hostname", DioriteConfig::getHostname);
 
         SENDER.registerChild("core", CORE, CommandSender::getCore);
+        ENTITY.registerChild("world", WORLD, Entity::getWorld);
         CORE.registerChild("config", CONFIG, Core::getConfig);
     }
 
     @SafeVarargs
-    private static <T> PlaceholderType<T> create(final String id, final Class<T> clazz, final PlaceholderType<? super T>... superTypes)
+    public static <T> PlaceholderType<T> create(final String id, final Class<T> clazz, final PlaceholderType<? super T>... superTypes)
     {
         final PlaceholderType<T> type = new PlaceholderType<>(id, clazz, superTypes);
         types.put(type.getId(), type);
         return type;
+    }
+
+    @SafeVarargs
+    public static <T> GlobalPlaceholderType<T> createGlobal(final String id, final Class<T> clazz, final Supplier<T> globalSupplier, final PlaceholderType<? super T>... superTypes)
+    {
+        final GlobalPlaceholderType<T> type = new GlobalPlaceholderType<>(id, clazz, globalSupplier, superTypes);
+        types.put(type.getId(), type);
+        globalTypes.put(type.getId(), type);
+        return type;
+    }
+
+    /**
+     * Replace global placeholders in given component. <br>
+     * Used by message implementation classes.
+     *
+     * @param component    message with placeholders.
+     * @param placeholders placeholders in message.
+     *
+     * @return component with replaced global placeholders.
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static BaseComponent replaceGlobal(BaseComponent component, final Map<String, Collection<PlaceholderData<?>>> placeholders)
+    {
+        component = component.duplicate();
+        for (final Entry<String, GlobalPlaceholderType<?>> entry : globalTypes.entrySet())
+        {
+            final Collection<PlaceholderData<?>> placeholderDatas = placeholders.get(entry.getKey());
+            if (placeholderDatas == null)
+            {
+                continue;
+            }
+            final Object o = entry.getValue().globalSupplier.get();
+            for (final PlaceholderData placeholderData : placeholderDatas)
+            {
+                placeholderData.replace(component, o);
+            }
+        }
+        return component;
     }
 
     /**
@@ -154,62 +242,6 @@ public class PlaceholderType<T>
     private final Map<String, ChildPlaceholderType<?, ?>> childTypes       = new CaseInsensitiveMap<>(5, .3f);
     private final Set<PlaceholderType<? super T>> superTypes;
 
-    private static class ChildPlaceholderItem<PARENT, CHILD> implements PlaceholderItem<PARENT>
-    {
-        private final ChildPlaceholderType<PARENT, CHILD> type;
-        private final PlaceholderItem<CHILD>              item;
-
-        private ChildPlaceholderItem(final ChildPlaceholderType<PARENT, CHILD> type, final PlaceholderItem<CHILD> item)
-        {
-            this.type = type;
-            this.item = item;
-        }
-
-        @Override
-        public String toString()
-        {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("type", this.type).append("item", this.item).toString();
-        }
-
-        @Override
-        public PlaceholderType<PARENT> getType()
-        {
-            return this.type.parent;
-        }
-
-        @Override
-        public String getId()
-        {
-            return this.item.getId();
-        }
-
-        @Override
-        public Object apply(final PARENT obj)
-        {
-            return this.item.apply(this.type.function.apply(obj));
-        }
-    }
-
-    private static class ChildPlaceholderType<PARENT, CHILD>
-    {
-        private final PlaceholderType<PARENT> parent;
-        private final PlaceholderType<CHILD>  type;
-        private final Function<PARENT, CHILD> function;
-
-        private ChildPlaceholderType(final PlaceholderType<PARENT> parent, final PlaceholderType<CHILD> type, final Function<PARENT, CHILD> function)
-        {
-            this.parent = parent;
-            this.type = type;
-            this.function = function;
-        }
-
-        @Override
-        public String toString()
-        {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("type", this.type).append("function", this.function).toString();
-        }
-    }
-
     /**
      * Construct new placeholder type for given id and class without any super types.
      *
@@ -218,7 +250,7 @@ public class PlaceholderType<T>
      */
     public PlaceholderType(final String id, final Class<T> type)
     {
-        this.id = id;
+        this.id = id.intern();
         this.type = type;
         this.superTypes = new HashSet<>(3);
     }
@@ -232,7 +264,7 @@ public class PlaceholderType<T>
      */
     public PlaceholderType(final String id, final Class<T> type, final Collection<PlaceholderType<? super T>> superTypes)
     {
-        this.id = id;
+        this.id = id.intern();
         this.type = type;
         this.superTypes = new HashSet<>(superTypes);
     }
@@ -247,7 +279,7 @@ public class PlaceholderType<T>
     @SafeVarargs
     public PlaceholderType(final String id, final Class<T> type, final PlaceholderType<? super T>... superTypes)
     {
-        this.id = id;
+        this.id = id.intern();
         this.type = type;
         this.superTypes = Sets.newHashSet(superTypes);
     }
@@ -410,5 +442,91 @@ public class PlaceholderType<T>
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("type", this.type).append("id", this.id).toString();
+    }
+
+    private static class ChildPlaceholderItem<PARENT, CHILD> implements PlaceholderItem<PARENT>
+    {
+        private final ChildPlaceholderType<PARENT, CHILD> type;
+        private final PlaceholderItem<CHILD>              item;
+
+        private ChildPlaceholderItem(final ChildPlaceholderType<PARENT, CHILD> type, final PlaceholderItem<CHILD> item)
+        {
+            this.type = type;
+            this.item = item;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("type", this.type).append("item", this.item).toString();
+        }
+
+        @Override
+        public PlaceholderType<PARENT> getType()
+        {
+            return this.type.parent;
+        }
+
+        @Override
+        public String getId()
+        {
+            return this.item.getId();
+        }
+
+        @Override
+        public Object apply(final PARENT obj, final Object[] args)
+        {
+            return this.item.apply(this.type.function.apply(obj), args);
+        }
+    }
+
+    private static class ChildPlaceholderType<PARENT, CHILD>
+    {
+        private final PlaceholderType<PARENT> parent;
+        private final PlaceholderType<CHILD>  type;
+        private final Function<PARENT, CHILD> function;
+
+        private ChildPlaceholderType(final PlaceholderType<PARENT> parent, final PlaceholderType<CHILD> type, final Function<PARENT, CHILD> function)
+        {
+            this.parent = parent;
+            this.type = type;
+            this.function = function;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("type", this.type).append("function", this.function).toString();
+        }
+    }
+
+    static class GlobalPlaceholderType<T> extends PlaceholderType<T>
+    {
+        protected final Supplier<T> globalSupplier;
+
+        GlobalPlaceholderType(final String id, final Class<T> type, final Supplier<T> globalSupplier)
+        {
+            super(id, type);
+            this.globalSupplier = globalSupplier;
+        }
+
+        GlobalPlaceholderType(final String id, final Class<T> type, final Supplier<T> globalSupplier, final Collection<PlaceholderType<? super T>> superTypes)
+        {
+            super(id, type, superTypes);
+            this.globalSupplier = globalSupplier;
+        }
+
+        @SafeVarargs
+        GlobalPlaceholderType(final String id, final Class<T> type, final Supplier<T> globalSupplier, final PlaceholderType<? super T>... superTypes)
+        {
+            super(id, type, superTypes);
+            this.globalSupplier = globalSupplier;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("globalSupplier", this.globalSupplier).toString();
+        }
     }
 }

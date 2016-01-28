@@ -38,6 +38,7 @@ import org.diorite.Diorite;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.chat.placeholder.PlaceholderData;
+import org.diorite.chat.placeholder.PlaceholderType;
 import org.diorite.command.sender.CommandSender;
 import org.diorite.utils.math.DioriteRandomUtils;
 
@@ -432,7 +433,7 @@ public abstract class Message
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static BaseComponent replace(BaseComponent component, final Map<String, Collection<PlaceholderData<?>>> placeholders, final MessageData... data)
     {
-        component = component.duplicate();
+        component = PlaceholderType.replaceGlobal(component, placeholders);
         for (final MessageData d : data)
         {
             final Collection<PlaceholderData<?>> placeholderDatas = placeholders.get(d.name);
