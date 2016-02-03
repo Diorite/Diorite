@@ -67,6 +67,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
 import org.diorite.impl.entity.IPlayer;
@@ -315,6 +316,12 @@ public class PlayListener implements PacketPlayClientboundListener
     public void handle(final PacketPlayClientboundNamedSoundEffect packet)
     {
 
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundWorldBorder packet)
+    {
+        
     }
 
     @Override
