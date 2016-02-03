@@ -40,10 +40,12 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTabComplete;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
+import org.diorite.impl.world.WorldBorderImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.GameMode;
@@ -356,6 +358,14 @@ class PlayerImpl extends HumanImpl implements IPlayer
         this.remove(true);
 
         EventType.callEvent(new PlayerQuitEvent(this));
+    }
+
+    @Override
+    public void sendWorldBorderUpdate()
+    {
+        final WorldBorderImpl wb = this.getWorld().getWorldBorder();
+        final PacketPlayClientboundWorldBorder p = new PacketPlayClientboundWorldBorder(wb.getCenter().getX(), wb.getCenter().getZ(), wb.getSize(), wb.getTargetSize(), wb.getTargetSizeReachTime(), wb.getPortalTeleportBoundary(), wb.getWarningTime(), wb.getWarningDistance());
+        this.networkManager.sendPacket(p);
     }
 
     @Override

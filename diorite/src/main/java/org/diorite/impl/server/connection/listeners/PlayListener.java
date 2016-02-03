@@ -329,7 +329,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundCommand packet)
     {
-        // TODO: implement
+        System.out.println(packet); // TODO
     }
 
     @Override

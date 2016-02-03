@@ -25,6 +25,7 @@
 package org.diorite.impl.world;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
+import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
@@ -50,6 +52,7 @@ import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.impl.world.io.requests.Request;
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
+import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
@@ -59,6 +62,8 @@ import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.nbt.NbtNamedTagContainer;
+import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandom;
@@ -94,6 +99,7 @@ public class WorldImpl implements World, Tickable
     protected final Dimension        dimension;
     protected final WorldType        worldType;
     protected final EntityTrackers   entityTrackers;
+    protected final WorldBorderImpl  worldBorder = new WorldBorderImpl(this);
     protected     boolean          vanillaCompatible = false;
     protected     Difficulty       difficulty        = Difficulty.NORMAL;
     protected     HardcoreSettings hardcore          = new HardcoreSettings(false);
@@ -117,7 +123,6 @@ public class WorldImpl implements World, Tickable
     protected       boolean       autosave     = true;
 
 
-    // TODO: world border impl
     // TODO: add some method allowing to set multiple blocks without calling getChunk so often
 
     public WorldImpl(final DioriteCore core, final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator, final Map<String, Object> generatorOptions)
@@ -273,6 +278,17 @@ public class WorldImpl implements World, Tickable
         tag.setBoolean("thundering", this.thundering);
         tag.setInt("thunderTime", this.thunderTime);
         tag.setLong("Time", this.time);
+
+        tag.setDouble("BorderCenterX", this.worldBorder.getCenter().getX());
+        tag.setDouble("BorderCenterZ", this.worldBorder.getCenter().getZ());
+        tag.setDouble("BorderSize", this.worldBorder.getSize());
+        tag.setDouble("BorderSizeLerpTarget", this.worldBorder.getTargetSize());
+        tag.setLong("BorderSizeLerpTime", this.worldBorder.getTargetSizeReachTime());
+        tag.setDouble("BorderSafeZone", this.worldBorder.getDamageBuffer());
+        tag.setDouble("BorderDamagePerBlock", this.worldBorder.getDamageAmount());
+        tag.setDouble("BorderWarningBlocks", this.worldBorder.getWarningDistance());
+        tag.setDouble("BorderWarningTime", this.worldBorder.getWarningTime());
+
         return tag;
     }
 
@@ -293,6 +309,15 @@ public class WorldImpl implements World, Tickable
         this.hardcore = new HardcoreSettings(cfg.isHardcore(), cfg.getHardcoreAction());
         this.forceLoadedRadius = cfg.getForceLoadedRadius();
         this.spawn = new Location(cfg.getSpawnX(), cfg.getSpawnY(), cfg.getSpawnZ(), cfg.getSpawnYaw(), cfg.getSpawnPitch(), this);
+
+        this.worldBorder.setCenter(tag.getDouble("BorderCenterX", 0), tag.getDouble("BorderCenterZ", 0));
+        this.worldBorder.setSize(tag.getDouble("BorderSize", WorldBorderImpl.DEFAULT_BORDER_SIZE));
+        this.worldBorder.setDamageAmount(tag.getDouble("BorderDamagePerBlock", 0.2));
+        this.worldBorder.setDamageBuffer(tag.getDouble("BorderSafeZone", 5));
+        this.worldBorder.setWarningDistance((int)tag.getDouble("BorderWarningBlocks", 5));
+        this.worldBorder.setWarningTime((int)tag.getDouble("BorderWarningTime", 15));
+        this.worldBorder.setTargetSize(tag.getDouble("BorderSizeLerpTarget", this.worldBorder.getSize()));
+        this.worldBorder.setTargetReachTime(tag.getLong("BorderSizeLerpTime", 0));
     }
 
     @Override
@@ -730,6 +755,12 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
+    public WorldBorderImpl getWorldBorder()
+    {
+        return this.worldBorder;
+    }
+
+    @Override
     public boolean hasSkyLight()
     {
         return this.dimension.hasSkyLight();
@@ -769,6 +800,7 @@ public class WorldImpl implements World, Tickable
     @Override
     public void doTick(final int tps)
     {
+        this.worldBorder.doTick(tps);
         this.entityTrackers.doTick(tps);
         this.activeChunks.clear();
         for (final Player entity : this.getPlayersInWorld())
@@ -777,22 +809,22 @@ public class WorldImpl implements World, Tickable
             // server view distance is taken here
             final int radius = entity.getRenderDistance();
             final ImmutableLocation playerLocation = entity.getLocation();
-            if (playerLocation.getWorld() == this)
+            //if (playerLocation.getWorld() == this) // TODO Redundant if?
+            //{
+            final ChunkPos cp = playerLocation.getChunkPos();
+            final int cx = cp.getX();
+            final int cz = cp.getZ();
+            for (int x = cx - radius, rx = cx + radius; x <= rx; x++)
             {
-                final ChunkPos cp = playerLocation.getChunkPos();
-                final int cx = cp.getX();
-                final int cz = cp.getZ();
-                for (int x = cx - radius, rx = cx + radius; x <= rx; x++)
+                for (int z = cz - radius, rz = cz + radius; z <= rz; z++)
                 {
-                    for (int z = cz - radius, rz = cz + radius; z <= rz; z++)
+                    if (this.isChunkLoaded(cx, cz))
                     {
-                        if (this.isChunkLoaded(cx, cz))
-                        {
-                            this.activeChunks.add(BigEndianUtils.toLong(x, z));
-                        }
+                        this.activeChunks.add(BigEndianUtils.toLong(x, z));
                     }
                 }
             }
+            //}
             this.chunkManager.doTick(tps);
         }
 
@@ -848,6 +880,22 @@ public class WorldImpl implements World, Tickable
                 request.await();
             }
         }
+
+        { // write level.dat // TODO temp code
+            try (final NbtOutputStream os = NbtOutputStream.getCompressed(new File(this.getWorldFile(), "level.dat")))
+            {
+                final NbtTagCompound nbt = new NbtTagCompound();
+                this.writeTo(nbt);
+                final NbtNamedTagContainer nbtData = new NbtTagCompound();
+                nbtData.setTag("data", nbt);
+                os.write(nbtData);
+                os.flush();
+                os.close();
+            } catch (final IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void addEntity(final IEntity entity)
@@ -869,5 +917,11 @@ public class WorldImpl implements World, Tickable
     {
         this.entityTrackers.removeTracked(entity);
         entity.remove(false);
+    }
+
+    public void broadcastPacketInWorld(final Packet<?> packet)
+    {
+        //noinspection ObjectEquality
+        Diorite.getCore().getOnlinePlayers().stream().filter(p -> p.getWorld() == this).forEach(player -> ((IPlayer) player).getNetworkManager().sendPacket(packet));
     }
 }

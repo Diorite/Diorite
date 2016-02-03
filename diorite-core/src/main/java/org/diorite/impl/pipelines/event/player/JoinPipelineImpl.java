@@ -95,6 +95,11 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             DioriteCore.getInstance().getPlayersManager().forEach(p -> player.getNetworkManager().sendPacket(new PacketPlayClientboundPlayerInfo(PacketPlayClientboundPlayerInfo.PlayerInfoAction.ADD_PLAYER, p)));
         }));
 
+        this.addAfter("Diorite|PlayerListStuff", "Diorite|WorldBorderUpdate", ((evt, pipeline) -> {
+            final IPlayer player = (IPlayer) evt.getPlayer();
+            player.sendWorldBorderUpdate();
+        }));
+
         this.addAfter(EventPriority.NORMAL, "Diorite|JoinMessage", ((evt, pipeline) -> {
             if (evt.isCancelled())
             {

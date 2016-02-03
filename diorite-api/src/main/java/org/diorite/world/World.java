@@ -25,8 +25,8 @@
 package org.diorite.world;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.diorite.BlockLocation;
 import org.diorite.Difficulty;
@@ -158,22 +158,17 @@ public interface World
 
     void showParticle(Particle particle, boolean isLongDistance, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int particleData, int particleCount, int... data);
 
+    @SuppressWarnings("ObjectEquality")
     default Collection<Player> getPlayersInWorld()
     {
-        // TODO: improve
-        final Collection<Player> temp = new ArrayList<>(Diorite.getCore().getOnlinePlayers().size());
-        Diorite.getCore().getOnlinePlayers().forEach(player -> {
-            if (player.getWorld().equals(this))
-            {
-                temp.add(player);
-            }
-        });
-        return temp;
+        return Diorite.getCore().getOnlinePlayers().stream().filter(p -> p.getWorld() == this).collect(Collectors.toList());
     }
 
     Biome getBiome(int x, int y, int z);
 
     void setBiome(int x, int y, int z, Biome biome); // y is ignored, added for future possible changes.
+
+    WorldBorder getWorldBorder();
 
     boolean hasSkyLight();
 

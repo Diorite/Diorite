@@ -27,4 +27,6 @@ public interface IPlayer extends IHuman, Player
     void setViewDistance(byte viewDistance);
 
     void onLogout();
+
+    void sendWorldBorderUpdate();
 }
