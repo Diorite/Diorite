@@ -321,7 +321,7 @@ public class PlayListener implements PacketPlayClientboundListener
     @Override
     public void handle(final PacketPlayClientboundWorldBorder packet)
     {
-        
+
     }
 
     @Override

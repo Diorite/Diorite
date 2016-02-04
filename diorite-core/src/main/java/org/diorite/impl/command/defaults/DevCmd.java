@@ -39,7 +39,6 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundNamedSoundEffect;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSoundEffect;
-import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.entity.IAreaEffectCloud;
 import org.diorite.impl.entity.IChicken;
 import org.diorite.impl.entity.ICreeper;
@@ -51,9 +50,7 @@ import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
-import org.diorite.Diorite;
 import org.diorite.Location;
-import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.Particle;
 import org.diorite.Sound;
 import org.diorite.cfg.messages.DioriteMesssges;
@@ -86,6 +83,7 @@ import org.diorite.permissions.PermissionsGroup;
 import org.diorite.permissions.PermissionsManager;
 import org.diorite.utils.Color;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.utils.math.geometry.LookupShape;
 
 public class DevCmd extends SystemCommandImpl
 {
@@ -506,47 +504,6 @@ public class DevCmd extends SystemCommandImpl
                     for (final IEntity e : p.getNearbyEntities(args.asDouble(0), args.asDouble(0), args.asDouble(0), LookupShape.RECTANGLE))
                     {
                         sender.sendSimpleColoredMessage("[" + e.getId() + "] " + e.getType() + ": " + e.getLocation());
-                    }
-                    break;
-                }
-                case "wb":
-                {
-                    final String wbAction = args.asString(0);
-                    switch (wbAction)
-                    {
-                        case "setSize":
-                        {
-                            if (args.length() == 2)
-                            {
-                                p.getWorld().getWorldBorder().setSize(args.asDouble(1));
-                            }
-                            else if (args.length() == 3)
-                            {
-                                p.getWorld().getWorldBorder().setSize(args.asDouble(1), args.asLong(2));
-                            }
-                            sender.sendSimpleColoredMessage("&3Done.");
-
-                            break;
-                        }
-
-                        case "setCenter":
-                        {
-                            p.getWorld().getWorldBorder().setCenter(args.asDouble(1), args.asDouble(2));
-                            sender.sendSimpleColoredMessage("&3Done.");
-                            break;
-                        }
-
-                        case "info":
-                        {
-                            Diorite.broadcastDioriteMessage(p.getWorld().getWorldBorder().toString());
-                            break;
-                        }
-
-                        case "update":
-                        {
-                            sender.sendSimpleColoredMessage("&3Done. (sended WB to all players in your world)");
-                            p.getWorld().getWorldBorder().broadcastUpdate();
-                        }
                     }
                     break;
                 }

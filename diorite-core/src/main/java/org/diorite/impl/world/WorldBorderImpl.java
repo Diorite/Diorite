@@ -101,11 +101,20 @@ public class WorldBorderImpl implements WorldBorder, Tickable
     @Override
     public void setSize(final double size)
     {
+        final double oldSize = this.size;
         this.targetSize = size;
         this.size = size;
         this.startSize = size;
         this.teleportBoundary = (int) (size / 2);
-        this.world.broadcastPacketInWorld(new PacketPlayClientboundWorldBorder(size));
+        this.targetReachTime = 0;
+        if (size > oldSize)
+        {
+            this.broadcastUpdate();
+        }
+        else
+        {
+            this.world.broadcastPacketInWorld(new PacketPlayClientboundWorldBorder(size));
+        }
     }
 
     @Override
@@ -115,17 +124,32 @@ public class WorldBorderImpl implements WorldBorder, Tickable
         this.targetSize = size;
         this.targetReachTime = ticks;
         this.teleportBoundary = (int) (size / 2);
-        this.world.broadcastPacketInWorld(new PacketPlayClientboundWorldBorder(this.size, size, ticks));
+        if (size > this.startSize)
+        {
+            this.broadcastUpdate();
+        }
+        else
+        {
+            this.world.broadcastPacketInWorld(new PacketPlayClientboundWorldBorder(this.size, size, ticks));
+        }
     }
 
+    @Override
     public double getTargetSize()
     {
         return this.targetSize;
     }
 
+    @Override
     public long getTargetSizeReachTime()
     {
         return this.targetReachTime;
+    }
+
+    @Override
+    public double getStartSize()
+    {
+        return this.startSize;
     }
 
     @Override
@@ -138,6 +162,7 @@ public class WorldBorderImpl implements WorldBorder, Tickable
     public void setWarningDistance(final int warningDistance)
     {
         this.warningDistance = warningDistance;
+        this.world.broadcastPacketInWorld(new PacketPlayClientboundWorldBorder(PacketPlayClientboundWorldBorder.Action.SET_WARNING_BLOCKS, warningDistance));
     }
 
     @Override
@@ -150,6 +175,7 @@ public class WorldBorderImpl implements WorldBorder, Tickable
     public void setWarningTime(final int warningTime)
     {
         this.warningTime = warningTime;
+        this.world.broadcastPacketInWorld(new PacketPlayClientboundWorldBorder(PacketPlayClientboundWorldBorder.Action.SET_WARNING_TIME, warningTime));
     }
 
     @Override
@@ -186,6 +212,7 @@ public class WorldBorderImpl implements WorldBorder, Tickable
     public void setPortalTeleportBoundary(final int portalTeleportBoundary)
     {
         this.teleportBoundary = portalTeleportBoundary;
+        this.broadcastUpdate();
     }
 
     @Override
@@ -203,6 +230,7 @@ public class WorldBorderImpl implements WorldBorder, Tickable
             if (this.size > this.targetSize)
             {
                 this.size = this.targetSize;
+                this.targetReachTime = 0;
                 return;
             }
         }
@@ -213,6 +241,7 @@ public class WorldBorderImpl implements WorldBorder, Tickable
             if (this.size < this.targetSize)
             {
                 this.size = this.targetSize;
+                this.targetReachTime = 0;
                 return;
             }
         }

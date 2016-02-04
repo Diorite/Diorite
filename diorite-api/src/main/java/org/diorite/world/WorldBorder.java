@@ -40,7 +40,13 @@ public interface WorldBorder
 
     void setSize(double size);
 
-    void setSize(double size, long seconds);
+    void setSize(double size, long ticks);
+
+    double getStartSize();
+
+    double getTargetSize();
+
+    long getTargetSizeReachTime();
 
     int getWarningDistance();
 
