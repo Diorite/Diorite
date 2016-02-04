@@ -42,7 +42,7 @@ import org.diorite.plugin.ChildPlugin;
 /**
  * Static bindings for message methods related with Diorite.
  */
-public final class DioriteMesssges
+public final class DioriteMessages
 {
     /**
      * Helper variable to prevent a typo. Separator used in path.
@@ -182,7 +182,7 @@ public final class DioriteMesssges
 
     private static Messages msgs;
 
-    private DioriteMesssges()
+    private DioriteMessages()
     {
     }
 

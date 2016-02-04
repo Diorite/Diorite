@@ -24,13 +24,13 @@
 
 package org.diorite.impl.command.defaults;
 
+import java.util.regex.Pattern;
+
+import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Diorite;
-import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.command.CommandPriority;
 import org.diorite.command.MainCommand;
-import org.diorite.impl.command.SystemCommandImpl;
-
-import java.util.regex.Pattern;
 
 public class HelpCmd extends SystemCommandImpl
 {
@@ -39,13 +39,13 @@ public class HelpCmd extends SystemCommandImpl
         super("help", (Pattern) null, CommandPriority.LOW);
         this.setDescription("Command list");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            DioriteMesssges.sendMessage(DioriteMesssges.MSG_HELP_HEADER, sender, sender.getPreferedLocale());
+            DioriteMessages.sendMessage(DioriteMessages.MSG_HELP_HEADER, sender, sender.getPreferedLocale());
             for(final MainCommand cmd : Diorite.getCommandMap().getCommandMap().values())
             {
                 String desc = cmd.getDescription();
                 if(desc == null)
                 {
-                    desc = DioriteMesssges.getMessage(DioriteMesssges.MSG_HELP_NODESC).toString();
+                    desc = DioriteMessages.getMessage(DioriteMessages.MSG_HELP_NODESC).toString();
                 }
 
                 sender.sendSimpleColoredMessage("&3/" + cmd.getName() + " &7- " + desc);

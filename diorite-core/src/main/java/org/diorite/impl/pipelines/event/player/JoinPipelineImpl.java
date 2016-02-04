@@ -38,9 +38,8 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.BlockLocation;
-import org.diorite.Difficulty;
 import org.diorite.TeleportData;
-import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.messages.Message.MessageData;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.entity.Player;
@@ -48,8 +47,6 @@ import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.JoinPipeline;
 import org.diorite.event.player.PlayerJoinEvent;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
-import org.diorite.world.Dimension;
-import org.diorite.world.WorldType;
 
 import io.netty.buffer.Unpooled;
 
@@ -107,7 +104,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             }
             final Player player = evt.getPlayer();
             GameProfiles.addToCache(player.getGameProfile());
-            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_PLAYER_JOIN, MessageData.e("player", player));
+            DioriteMessages.broadcastMessage(DioriteMessages.MSG_PLAYER_JOIN, MessageData.e("player", player));
 //            this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!"); maybe we should not make users angry with this message :D
 //            this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
 //        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");

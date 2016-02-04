@@ -27,10 +27,10 @@ package org.diorite.impl.command.defaults;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import org.diorite.cfg.messages.DioriteMesssges;
-import org.diorite.cfg.messages.Message;
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.Core;
+import org.diorite.cfg.messages.DioriteMessages;
+import org.diorite.cfg.messages.Message;
 import org.diorite.chat.ChatPosition;
 import org.diorite.command.CommandPriority;
 
@@ -44,7 +44,7 @@ public class SayCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (! args.has(0))
             {
-                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
                 return;
             }
 

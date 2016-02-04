@@ -24,7 +24,7 @@
 
 package org.diorite.impl.pipelines.event.player;
 
-import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.messages.Message;
 import org.diorite.event.EventPriority;
 import org.diorite.event.pipelines.event.player.QuitPipeline;
@@ -37,7 +37,7 @@ public class QuitPipelineImpl extends SimpleEventPipeline<PlayerQuitEvent> imple
     public void reset_()
     {
         this.addAfter(EventPriority.NORMAL, "Diorite|SendMessages", ((evt, pipeline) -> {
-            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_PLAYER_QUIT, Message.MessageData.e("player", evt.getPlayer()));
+            DioriteMessages.broadcastMessage(DioriteMessages.MSG_PLAYER_QUIT, Message.MessageData.e("player", evt.getPlayer()));
             //this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + evt.getPlayer().getName() + "&7&l left from the server!");
             //this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + evt.getPlayer().getName() + "&7 left from the server!");
         }));

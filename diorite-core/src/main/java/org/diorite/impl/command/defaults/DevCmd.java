@@ -53,7 +53,7 @@ import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Location;
 import org.diorite.Particle;
 import org.diorite.Sound;
-import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.messages.Message.MessageData;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.component.ClickEvent;
@@ -445,14 +445,14 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "msgr":
                 {
-                    DioriteMesssges.reload();
+                    DioriteMessages.reload();
                     System.out.println("Done");
                     break;
                 }
                 case "msg":
                 {
                     p.setPreferedLocale(Locale.forLanguageTag("pl-PL"));
-                    DioriteMesssges.broadcastMessage(args.asText(), MessageData.e("player", p), MessageData.e("test", "Meeeh"));
+                    DioriteMessages.broadcastMessage(args.asText(), MessageData.e("player", p), MessageData.e("test", "Meeeh"));
                     break;
                 }
                 case "tc":
