@@ -67,6 +67,11 @@ public class GiveCmd extends SystemCommandImpl
             DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_NUMBER, sender, sender.getPreferedLocale());
             return;
         }
+        if (amount <= 0)
+        {
+            // TODO: block placking blocks with item stacks <= 0
+            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NUMBER_NOT_POSITIVE, sender, sender.getPreferedLocale());
+        }
         // TODO: nbt, or other shit
         final ItemStack[] notAdded = target.getInventory().add(new BaseItemStack(mat, amount));
         final int notAddedAmount = (notAdded.length == 0) ? 0 : notAdded[0].getAmount();
