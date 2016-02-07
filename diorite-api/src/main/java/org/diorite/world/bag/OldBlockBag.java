@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.world;
+package org.diorite.world.bag;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,16 +33,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 
 /**
  * Special object used to store blocks to change
  */
-public class BlockBag
+public class OldBlockBag
 {
     private final Map<Long, BlockMaterialData[/* X */][/* Z */][/* Y */]> data;
 
-    public BlockBag(final Map<Long, BlockMaterialData[][][]> data)
+    public OldBlockBag(final Map<Long, BlockMaterialData[][][]> data)
     {
         this.data = data;
     }
@@ -91,7 +92,7 @@ public class BlockBag
             return this.add(new BlockLocation(x, y, z, this.world), mat);
         }
 
-        public BlockBag build()
+        public OldBlockBag build()
         {
             final Map<Long, BlockMaterialData[][][]> data = new HashMap<>(25);
             for (final Entry<BlockLocation, BlockMaterialData> entry : this.data.entrySet())
@@ -105,7 +106,7 @@ public class BlockBag
                 }
                 blocks[loc.getX() & (Chunk.CHUNK_SIZE - 1)][loc.getZ() & (Chunk.CHUNK_SIZE - 1)][loc.getY()] = entry.getValue();
             }
-            return new BlockBag(data);
+            return new OldBlockBag(data);
         }
 
         @Override

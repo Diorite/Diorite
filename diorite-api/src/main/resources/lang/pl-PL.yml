@@ -8,6 +8,8 @@ commands:
   no-target: "&cNie wskazałeś celu lub cel jest offline.."
   no-material: "&cNie podałeś materiału."
   no-number: "&cNie podałeś cyfry."
+  number-not-positive: "&cLiczba musi być większa od 0."
+  number-not-positive-or-zero: "&cLiczba musi być większa lub równa 0."
   no-world: "&cŚwiat o podanej nazwie nie istnieje."
   correct-usage: "&cPoprawne użycie komendy &7/$<command.usage>"
 help:

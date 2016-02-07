@@ -8,6 +8,8 @@ commands:
   no-target: "&cTarget is not specified or player is offline."
   no-material: "&cMaterial is not specifed."
   no-number: "&cNumber is not specifed."
+  number-not-positive: "&cNumber must be greater than 0."
+  number-not-positive-or-zero: "&cNumber must be greater or equals to 0."
   no-world: "&cWorld isn't found."
   correct-usage: "&cCorrect usage &7/$<command.usage>"
 help:
