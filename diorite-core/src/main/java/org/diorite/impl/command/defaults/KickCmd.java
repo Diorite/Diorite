@@ -49,7 +49,6 @@ public class KickCmd extends SystemCommandImpl
             }
             if (! args.has(1))
             {
-                //sender.sendSimpleColoredMessage("&cCorrect usage &7/kick <player> <reason>");
                 DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
                 return;
             }

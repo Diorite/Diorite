@@ -129,7 +129,6 @@ public class TestWorldGeneratorImpl extends WorldGenerator
                         }
                     }
                 }
-
             }
         }
         return builder;
