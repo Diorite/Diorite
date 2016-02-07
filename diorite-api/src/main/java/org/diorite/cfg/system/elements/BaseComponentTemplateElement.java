@@ -53,7 +53,7 @@ public class BaseComponentTemplateElement extends TemplateElement<BaseComponent>
             {
                 try
                 {
-                    return ComponentSerializer.safeParseOne((String) obj, '&');
+                    return ComponentSerializer.safeParse((String) obj, '&');
                 } catch (final Exception e)
                 {
                     return TextComponent.fromLegacyText((String) obj);
@@ -74,7 +74,7 @@ public class BaseComponentTemplateElement extends TemplateElement<BaseComponent>
         {
             try
             {
-                return ComponentSerializer.parseOne((String) def);
+                return TextComponent.join(ComponentSerializer.parse((String) def));
             } catch (final Exception e)
             {
                 return TextComponent.fromLegacyText((String) def);

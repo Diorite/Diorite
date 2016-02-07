@@ -456,7 +456,7 @@ public abstract class Message
         SimpleMessage(final String msg)
         {
             super(PlaceholderData.parseString(msg, true));
-            this.msg = (msg == null) ? null : ComponentSerializer.safeParseOne(msg, '&');
+            this.msg = (msg == null) ? null : ComponentSerializer.safeParse(msg, '&');
         }
 
         @Override
@@ -487,7 +487,7 @@ public abstract class Message
         SimpleRandomMessage(final String[] msg)
         {
             super(PlaceholderData.parseString((msg == null) ? null : StringUtils.join(msg), true));
-            this.msg = (msg == null) ? null : ComponentSerializer.safeParseOne(msg, '&');
+            this.msg = (msg == null) ? null : ComponentSerializer.safeParse(msg, '&');
         }
 
         @Override
@@ -527,7 +527,7 @@ public abstract class Message
             this.msg = new HashMap<>(msg.size(), .1f);
             for (final Entry<Locale, String> entry : msg.entrySet())
             {
-                this.msg.put(entry.getKey(), ComponentSerializer.safeParseOne(entry.getValue(), '&'));
+                this.msg.put(entry.getKey(), ComponentSerializer.safeParse(entry.getValue(), '&'));
             }
         }
 
@@ -594,7 +594,7 @@ public abstract class Message
             this.msg = new HashMap<>(msg.size(), .1f);
             for (final Entry<Locale, String[]> entry : msg.entrySet())
             {
-                this.msg.put(entry.getKey(), ComponentSerializer.safeParseOne(entry.getValue(), '&'));
+                this.msg.put(entry.getKey(), ComponentSerializer.safeParse(entry.getValue(), '&'));
             }
         }
 
@@ -661,7 +661,7 @@ public abstract class Message
                 this.msg1 = new HashMap<>(msg1.size(), .1f);
                 for (final Entry<Locale, String> entry : msg1.entrySet())
                 {
-                    this.msg1.put(entry.getKey(), ComponentSerializer.safeParseOne(entry.getValue(), '&'));
+                    this.msg1.put(entry.getKey(), ComponentSerializer.safeParse(entry.getValue(), '&'));
                 }
             }
             if (msg2 == null)
@@ -673,7 +673,7 @@ public abstract class Message
                 this.msg2 = new HashMap<>(msg2.size(), .1f);
                 for (final Entry<Locale, String[]> entry : msg2.entrySet())
                 {
-                    this.msg2.put(entry.getKey(), ComponentSerializer.safeParseOne(entry.getValue(), '&'));
+                    this.msg2.put(entry.getKey(), ComponentSerializer.safeParse(entry.getValue(), '&'));
                 }
             }
         }

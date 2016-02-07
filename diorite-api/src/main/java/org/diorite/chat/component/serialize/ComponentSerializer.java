@@ -34,6 +34,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.component.BaseComponent;
@@ -74,11 +75,27 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
      */
     public static BaseComponent[] parse(final String json)
     {
-        if (json.startsWith("["))
+        final char first = json.charAt(0);
+        final char last = json.charAt(json.length() - 1);
+        if ((first == '[') && (last == ']'))
         {
             return gson.fromJson(json, BaseComponent[].class);
         }
-        return new BaseComponent[]{gson.fromJson(json, BaseComponent.class)};
+        if ((first == '{') && (last == '}'))
+        {
+            return new BaseComponent[]{gson.fromJson(json, BaseComponent.class)};
+        }
+        throw new JsonSyntaxException("Can't parse given string, it isn't valid json string: " + json);
+    }
+
+    private static BaseComponent parseArrayOne(final String json)
+    {
+        final BaseComponent[] parts = gson.fromJson(json, BaseComponent[].class);
+        if (parts.length > 0)
+        {
+            return parts[0];
+        }
+        return new TextComponent();
     }
 
     /**
@@ -90,16 +107,17 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
      */
     public static BaseComponent parseOne(final String json)
     {
-        if (json.startsWith("["))
+        final char first = json.charAt(0);
+        final char last = json.charAt(json.length() - 1);
+        if ((first == '[') && (last == ']'))
         {
-            final BaseComponent[] parts = gson.fromJson(json, BaseComponent[].class);
-            if (parts.length > 0)
-            {
-                return parts[0];
-            }
-            return new TextComponent();
+            return parseArrayOne(json);
         }
-        return gson.fromJson(json, BaseComponent.class);
+        if ((first == '{') && (last == '}'))
+        {
+            return gson.fromJson(json, BaseComponent.class);
+        }
+        throw new JsonSyntaxException("Can't parse given string, it isn't valid json string: " + json);
     }
 
     /**
@@ -115,18 +133,18 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
         for (int i = 0, jsonsLength = jsons.length; i < jsonsLength; i++)
         {
             final String json = jsons[i];
-            if (json.startsWith("["))
+            final char first = json.charAt(0);
+            final char last = json.charAt(json.length() - 1);
+            if ((first == '[') && (last == ']'))
             {
-                final BaseComponent[] parts = gson.fromJson(json, BaseComponent[].class);
-                if (parts.length > 0)
-                {
-                    result[i] = parts[0];
-                    continue;
-                }
-                result[i] = new TextComponent();
+                result[i] = parseArrayOne(json);
                 continue;
             }
-            result[i] = gson.fromJson(json, BaseComponent.class);
+            if ((first == '{') && (last == '}'))
+            {
+                result[i] = gson.fromJson(json, BaseComponent.class);
+            }
+            throw new JsonSyntaxException("Can't parse given string, it isn't valid json string: " + json);
         }
         return result;
     }
@@ -144,24 +162,24 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
     {
         try
         {
-            if (json.startsWith("["))
+            final char first = json.charAt(0);
+            final char last = json.charAt(json.length() - 1);
+            if ((first == '[') && (last == ']'))
             {
-                final BaseComponent[] parts = gson.fromJson(json, BaseComponent[].class);
-                if (parts.length > 0)
-                {
-                    return parts[0];
-                }
-                return new TextComponent();
+                return parseArrayOne(json);
             }
-            return gson.fromJson(json, BaseComponent.class);
-        } catch (final Exception e)
+            if ((first == '{') && (last == '}'))
+            {
+                return gson.fromJson(json, BaseComponent.class);
+            }
+        } catch (final Exception ignored)
         {
-            if (colorChar == null)
-            {
-                return TextComponent.fromLegacyText(json);
-            }
-            return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodesInString(colorChar, json));
         }
+        if (colorChar == null)
+        {
+            return TextComponent.fromLegacyText(json);
+        }
+        return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodesInString(colorChar, json));
     }
 
     /**
@@ -175,43 +193,64 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
      */
     public static BaseComponent[] safeParseOne(final String[] jsons, final Character colorChar)
     {
+        final BaseComponent[] result = new BaseComponent[jsons.length];
+        for (int i = 0, jsonsLength = jsons.length; i < jsonsLength; i++)
+        {
+            result[i] = safeParse(jsons[i], colorChar);
+        }
+        return result;
+    }
+
+    /**
+     * Parse given json to {@link BaseComponent}.(if json is a list all elements are joined using {@link TextComponent#join(BaseComponent...)}) <br>
+     * If json isn't valid json, {@link TextComponent} with given string will be returned. {@link TextComponent#fromLegacyText(String)}
+     *
+     * @param json      json to parse.
+     * @param colorChar {@link org.diorite.chat.ChatColor#translateAlternateColorCodes(char, String)}, use null to skip.
+     *
+     * @return parsed base component.
+     */
+    public static BaseComponent safeParse(final String json, final Character colorChar)
+    {
         try
         {
-            final BaseComponent[] result = new BaseComponent[jsons.length];
-            for (int i = 0, jsonsLength = jsons.length; i < jsonsLength; i++)
+            final char first = json.charAt(0);
+            final char last = json.charAt(json.length() - 1);
+            if ((first == '[') && (last == ']'))
             {
-                final String json = jsons[i];
-                if (json.startsWith("["))
-                {
-                    final BaseComponent[] parts = gson.fromJson(json, BaseComponent[].class);
-                    if (parts.length > 0)
-                    {
-                        result[i] = parts[0];
-                        continue;
-                    }
-                    result[i] = new TextComponent();
-                    continue;
-                }
-                result[i] = gson.fromJson(json, BaseComponent.class);
+                return TextComponent.join(gson.fromJson(json, BaseComponent[].class));
             }
-            return result;
-        } catch (final Exception e)
+            if ((first == '{') && (last == '}'))
+            {
+                return gson.fromJson(json, BaseComponent.class);
+            }
+        } catch (final Exception ignored)
         {
-            final BaseComponent[] result = new BaseComponent[jsons.length];
-            if (colorChar == null)
-            {
-                for (int i = 0; i < result.length; i++)
-                {
-                    result[i] = TextComponent.fromLegacyText(jsons[i]);
-                }
-                return result;
-            }
-            for (int i = 0; i < result.length; i++)
-            {
-                result[i] = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodesInString(colorChar, jsons[i]));
-            }
-            return result;
         }
+        if (colorChar == null)
+        {
+            return TextComponent.fromLegacyText(json);
+        }
+        return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodesInString(colorChar, json));
+    }
+
+    /**
+     * Parse given array of jsons to array {@link BaseComponent}.(if any json is a list all elements are joined using {@link TextComponent#join(BaseComponent...)})
+     * If json isn't valid json, {@link TextComponent} with given string will be returned. {@link TextComponent#fromLegacyText(String)}
+     *
+     * @param jsons     json arrays to parse.
+     * @param colorChar {@link org.diorite.chat.ChatColor#translateAlternateColorCodes(char, String)}, use null to skip.
+     *
+     * @return parsed base component.
+     */
+    public static BaseComponent[] safeParse(final String[] jsons, final Character colorChar)
+    {
+        final BaseComponent[] result = new BaseComponent[jsons.length];
+        for (int i = 0, jsonsLength = jsons.length; i < jsonsLength; i++)
+        {
+            result[i] = safeParse(jsons[i], colorChar);
+        }
+        return result;
     }
 
     /**

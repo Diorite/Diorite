@@ -49,6 +49,7 @@ import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.BlockLocation;
 import org.diorite.Core;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.serialize.ComponentSerializer;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeProperty;
@@ -200,7 +201,7 @@ public class PacketDataSerializer extends ByteBuf
 
     public BaseComponent readBaseComponent()
     {
-        return ComponentSerializer.parseOne(this.readText(Short.MAX_VALUE));
+        return TextComponent.join(ComponentSerializer.parse(this.readText(Short.MAX_VALUE)));
     }
 
     public void writeBaseComponent(final BaseComponent baseComponent)
