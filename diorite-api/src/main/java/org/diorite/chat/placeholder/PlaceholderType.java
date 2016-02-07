@@ -119,12 +119,18 @@ public class PlaceholderType<T>
     {
         SENDER.registerItem("name", CommandSender::getName);
         OFFLINE.registerItem("name", OfflinePlayer::getName);
+
+        //Player
+        PLAYER.registerItem("ping", Player::getPing);
+        PLAYER.registerItem("customname", Player::getCustomName);
+
         //Command
         COMMAND.registerItem("name", Command::getName);
         COMMAND.registerItem("description", Command::getDescription);
         COMMAND.registerItem("executor", Command::getCommandExecutor);
         COMMAND.registerItem("pattern", Command::getPattern);
         COMMAND.registerItem("usage", Command::getUsage);
+
         //Plugin
         PLUGIN.registerItem("name", BasePlugin::getName);
         PLUGIN.registerItem("author", BasePlugin::getAuthor);
