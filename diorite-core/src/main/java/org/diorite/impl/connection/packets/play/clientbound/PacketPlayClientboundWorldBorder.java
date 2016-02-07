@@ -222,7 +222,49 @@ public class PacketPlayClientboundWorldBorder extends PacketPlayClientbound
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        // TODO
+        this.action = Action.values()[data.readVarInt()];
+        switch(this.action)
+        {
+            case SET_SIZE:
+                this.newSize = data.readDouble();
+                break;
+
+            case LERP_SIZE:
+            {
+                this.oldSize = data.readDouble();
+                this.newSize = data.readDouble();
+                this.speed = data.readVarLong();
+                break;
+            }
+
+            case SET_CENTER:
+            {
+                this.x = data.readDouble();
+                this.z = data.readDouble();
+                break;
+            }
+
+            case INITIALIZE:
+            {
+                this.x = data.readDouble();
+                this.z = data.readDouble();
+                this.oldSize = data.readDouble();
+                this.newSize = data.readDouble();
+                this.speed = data.readVarLong();
+                this.portalTeleportBoundary = data.readVarInt();
+                this.warningTime = data.readVarInt();
+                this.warningBlocks = data.readVarInt();
+                break;
+            }
+
+            case SET_WARNING_TIME:
+                this.warningTime = data.readVarInt();
+                break;
+
+            case SET_WARNING_BLOCKS:
+                this.warningBlocks = data.readVarInt();
+                break;
+        }
     }
 
     @Override
