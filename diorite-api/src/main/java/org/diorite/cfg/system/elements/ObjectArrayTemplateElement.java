@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Diorite (by Bart≥omiej Mazur (aka GotoFinal))
+ * Copyright (c) 2016. Diorite (by Bart≈Çomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
