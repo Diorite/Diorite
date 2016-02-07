@@ -352,8 +352,10 @@ public class PlaceholderType<T>
     /**
      * Register new child-type to this type.
      *
-     * @param name key-name of type.
-     * @param type child type to register.
+     * @param name      key-name of type.
+     * @param type      child type to register.
+     * @param converter function that maps to child placeholder type.
+     * @param <C>       child placeholder type.
      */
     public <C> void registerChild(final String name, final PlaceholderType<C> type, final Function<T, C> converter)
     {

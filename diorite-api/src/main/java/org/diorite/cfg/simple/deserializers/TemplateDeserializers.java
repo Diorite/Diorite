@@ -40,7 +40,7 @@ public final class TemplateDeserializers
     /**
      * @return editable pipeline with template elements.
      *
-     * @see TemplateElements
+     * @see TemplateDeserializer
      */
     public static Pipeline<TemplateDeserializer<?>> getElements()
     {

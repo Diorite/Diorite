@@ -88,6 +88,8 @@ public interface PlaceholderData<T>
     /**
      * Returns array of parsed arguments used by this placeholder.
      *
+     * @param obj data object used by placeholder.
+     *
      * @return array of parsed arguments used by this placeholder.
      */
     default Object[] getArguments(final T obj)
@@ -127,7 +129,7 @@ public interface PlaceholderData<T>
      *
      * @return Object to use instead of placeholder.
      *
-     * @see BasePlaceholderItem#apply(Object)
+     * @see BasePlaceholderItem#apply(Object, Object[])
      */
     default Object apply(final T obj)
     {
@@ -193,6 +195,7 @@ public interface PlaceholderData<T>
         return result;
     }
 // TODO add support for method placeholders
+
     /**
      * Get collection of used placeholders in given string.
      *
