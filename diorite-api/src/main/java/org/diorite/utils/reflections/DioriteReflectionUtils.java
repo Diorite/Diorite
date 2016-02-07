@@ -475,55 +475,103 @@ public final class DioriteReflectionUtils
     /**
      * Retrieve a field accessor for a specific field type and name.
      *
-     * @param target    - the target type.
-     * @param name      - the name of the field, or NULL to ignore.
-     * @param fieldType - a compatible field type.
-     * @param <T>       - type of field.
+     * @param target    the target type.
+     * @param name      the name of the field, or NULL to ignore.
+     * @param fieldType a compatible field type.
+     * @param <T>       type of field.
      *
      * @return The field accessor.
      */
     public static <T> FieldAccessor<T> getField(final Class<?> target, final String name, final Class<T> fieldType)
     {
-        return getField(target, name, fieldType, 0);
+        return getField(target, name, fieldType, 0, true);
     }
 
     /**
      * Retrieve a field accessor for a specific field type and name.
      *
-     * @param className - lookup name of the class, see {@link #getCanonicalClass(String)}.
-     * @param name      - the name of the field, or NULL to ignore.
-     * @param fieldType - a compatible field type.
-     * @param <T>       - type of field.
+     * @param className lookup name of the class, see {@link #getCanonicalClass(String)}.
+     * @param name      the name of the field, or NULL to ignore.
+     * @param fieldType a compatible field type.
+     * @param <T>       type of field.
      *
      * @return The field accessor.
      */
     public static <T> FieldAccessor<T> getField(final String className, final String name, final Class<T> fieldType)
     {
-        return getField(getCanonicalClass(className), name, fieldType, 0);
+        return getField(getCanonicalClass(className), name, fieldType, 0, true);
     }
 
     /**
      * Retrieve a field accessor for a specific field type and name.
      *
-     * @param target    - the target type.
-     * @param fieldType - a compatible field type.
-     * @param index     - the number of compatible fields to skip.
-     * @param <T>       - type of field.
+     * @param target    the target type.
+     * @param fieldType a compatible field type.
+     * @param index     the number of compatible fields to skip.
+     * @param <T>       type of field.
      *
      * @return The field accessor.
      */
     public static <T> FieldAccessor<T> getField(final Class<?> target, final Class<T> fieldType, final int index)
     {
-        return getField(target, null, fieldType, index);
+        return getField(target, null, fieldType, index, true);
     }
 
     /**
      * Retrieve a field accessor for a specific field type and name.
      *
-     * @param className - lookup name of the class, see {@link #getCanonicalClass(String)}.
-     * @param fieldType - a compatible field type.
-     * @param index     - the number of compatible fields to skip.
-     * @param <T>       - type of field.
+     * @param target         the target type.
+     * @param name           the name of the field, or NULL to ignore.
+     * @param fieldType      a compatible field type.
+     * @param throwException if method should throw exception when there is no given field.
+     * @param <T>            type of field.
+     *
+     * @return The field accessor.
+     */
+    public static <T> FieldAccessor<T> getField(final Class<?> target, final String name, final Class<T> fieldType, final boolean throwException)
+    {
+        return getField(target, name, fieldType, 0, throwException);
+    }
+
+    /**
+     * Retrieve a field accessor for a specific field type and name.
+     *
+     * @param className      lookup name of the class, see {@link #getCanonicalClass(String)}.
+     * @param name           the name of the field, or NULL to ignore.
+     * @param fieldType      a compatible field type.
+     * @param throwException if method should throw exception when there is no given field.
+     * @param <T>            type of field.
+     *
+     * @return The field accessor.
+     */
+    public static <T> FieldAccessor<T> getField(final String className, final String name, final Class<T> fieldType, final boolean throwException)
+    {
+        return getField(getCanonicalClass(className), name, fieldType, 0, throwException);
+    }
+
+    /**
+     * Retrieve a field accessor for a specific field type and name.
+     *
+     * @param target         the target type.
+     * @param fieldType      a compatible field type.
+     * @param index          the number of compatible fields to skip.
+     * @param throwException if method should throw exception when there is no given field.
+     * @param <T>            type of field.
+     *
+     * @return The field accessor.
+     */
+    public static <T> FieldAccessor<T> getField(final Class<?> target, final Class<T> fieldType, final int index, final boolean throwException)
+    {
+        return getField(target, null, fieldType, index, throwException);
+    }
+
+    /**
+     * Retrieve a field accessor for a specific field type and name.
+     *
+     * @param className lookup name of the class, see {@link #getCanonicalClass(String)}.
+     * @param fieldType a compatible field type.
+     * @param index     the number of compatible fields to skip.
+     * @param <T>       type of field.
      *
      * @return The field accessor.
      */
@@ -577,15 +625,16 @@ public final class DioriteReflectionUtils
     /**
      * Search for the first publically and privately defined field of thie given name.
      *
-     * @param target class to search in.
-     * @param name   name of field.
-     * @param <T>    type of field.
+     * @param target         class to search in.
+     * @param name           name of field.
+     * @param throwException if method should throw exception when there is no given field.
+     * @param <T>            type of field.
      *
      * @return field accessor for this field.
      *
      * @throws IllegalStateException If we cannot find this field.
      */
-    public static <T> FieldAccessor<T> getField(final Class<?> target, final String name)
+    public static <T> FieldAccessor<T> getField(final Class<?> target, final String name, final boolean throwException)
     {
         for (final Field field : target.getDeclaredFields())
         {
@@ -599,14 +648,34 @@ public final class DioriteReflectionUtils
         // Search in parent classes
         if (target.getSuperclass() != null)
         {
-            return getField(target.getSuperclass(), name);
+            return getField(target.getSuperclass(), name, throwException);
         }
-        throw new IllegalArgumentException("Cannot find field with name " + name);
+        if (throwException)
+        {
+            throw new IllegalArgumentException("Cannot find field with name " + name);
+        }
+        return null;
+    }
+
+    /**
+     * Search for the first publically and privately defined field of thie given name.
+     *
+     * @param target class to search in.
+     * @param name   name of field.
+     * @param <T>    type of field.
+     *
+     * @return field accessor for this field.
+     *
+     * @throws IllegalStateException If we cannot find this field.
+     */
+    public static <T> FieldAccessor<T> getField(final Class<?> target, final String name)
+    {
+        return getField(target, name, true);
     }
 
 
     // Common method
-    private static <T> FieldAccessor<T> getField(final Class<?> target, final String name, final Class<T> fieldType, int index)
+    private static <T> FieldAccessor<T> getField(final Class<?> target, final String name, final Class<T> fieldType, int index, final boolean throwException)
     {
         for (final Field field : target.getDeclaredFields())
         {
@@ -620,17 +689,21 @@ public final class DioriteReflectionUtils
         // Search in parent classes
         if (target.getSuperclass() != null)
         {
-            return getField(target.getSuperclass(), name, fieldType, index);
+            return getField(target.getSuperclass(), name, fieldType, index, throwException);
         }
-        throw new IllegalArgumentException("Cannot find field with type " + fieldType + " in " + target + ", index: " + index);
+        if (throwException)
+        {
+            throw new IllegalArgumentException("Cannot find field with type " + fieldType + " in " + target + ", index: " + index);
+        }
+        return null;
     }
 
     /**
      * Search for the first publically and privately defined method of the given name and parameter count.
      *
-     * @param className  - lookup name of the class, see {@link #getCanonicalClass(String)}.
-     * @param methodName - the method name, or NULL to skip.
-     * @param params     - the expected parameters.
+     * @param className  lookup name of the class, see {@link #getCanonicalClass(String)}.
+     * @param methodName the method name, or NULL to skip.
+     * @param params     the expected parameters.
      *
      * @return An object that invokes this specific method.
      *
@@ -638,15 +711,15 @@ public final class DioriteReflectionUtils
      */
     public static MethodInvoker getMethod(final String className, final String methodName, final Class<?>... params)
     {
-        return getSimpleMethod(getCanonicalClass(className), methodName, null, params);
+        return getSimpleMethod(getCanonicalClass(className), methodName, null, true, params);
     }
 
     /**
      * Search for the first publically and privately defined method of the given name and parameter count.
      *
-     * @param clazz      - a class to start with.
-     * @param methodName - the method name, or NULL to skip.
-     * @param params     - the expected parameters.
+     * @param clazz      a class to start with.
+     * @param methodName the method name, or NULL to skip.
+     * @param params     the expected parameters.
      *
      * @return An object that invokes this specific method.
      *
@@ -654,16 +727,50 @@ public final class DioriteReflectionUtils
      */
     public static MethodInvoker getMethod(final Class<?> clazz, final String methodName, final Class<?>... params)
     {
-        return getSimpleMethod(clazz, methodName, null, params);
+        return getSimpleMethod(clazz, methodName, null, true, params);
     }
 
     /**
      * Search for the first publically and privately defined method of the given name and parameter count.
      *
-     * @param clazz      - a class to start with.
-     * @param methodName - the method name, or NULL to skip.
-     * @param returnType - the expected return type, or NULL to ignore.
-     * @param params     - the expected parameters.
+     * @param className      lookup name of the class, see {@link #getCanonicalClass(String)}.
+     * @param methodName     the method name, or NULL to skip.
+     * @param throwException if method should throw exception when there is no given method.
+     * @param params         the expected parameters.
+     *
+     * @return An object that invokes this specific method.
+     *
+     * @throws IllegalStateException If we cannot find this method.
+     */
+    public static MethodInvoker getMethod(final String className, final String methodName, final boolean throwException, final Class<?>... params)
+    {
+        return getSimpleMethod(getCanonicalClass(className), methodName, null, throwException, params);
+    }
+
+    /**
+     * Search for the first publically and privately defined method of the given name and parameter count.
+     *
+     * @param clazz          a class to start with.
+     * @param methodName     the method name, or NULL to skip.
+     * @param throwException if method should throw exception when there is no given method.
+     * @param params         the expected parameters.
+     *
+     * @return An object that invokes this specific method.
+     *
+     * @throws IllegalStateException If we cannot find this method.
+     */
+    public static MethodInvoker getMethod(final Class<?> clazz, final String methodName, final boolean throwException, final Class<?>... params)
+    {
+        return getSimpleMethod(clazz, methodName, null, throwException, params);
+    }
+
+    /**
+     * Search for the first publically and privately defined method of the given name and parameter count.
+     *
+     * @param clazz      a class to start with.
+     * @param methodName the method name, or NULL to skip.
+     * @param returnType the expected return type, or NULL to ignore.
+     * @param params     the expected parameters.
      *
      * @return An object that invokes this specific method.
      *
@@ -690,16 +797,51 @@ public final class DioriteReflectionUtils
     /**
      * Search for the first publically and privately defined method of the given name and parameter count.
      *
-     * @param clazz      - a class to start with.
-     * @param methodName - the method name, or NULL to skip.
-     * @param returnType - the expected return type, or NULL to ignore.
-     * @param params     - the expected parameters.
+     * @param clazz          a class to start with.
+     * @param methodName     the method name, or NULL to skip.
+     * @param returnType     the expected return type, or NULL to ignore.
+     * @param throwException if method should throw exception when there is no given method.
+     * @param params         the expected parameters.
      *
      * @return An object that invokes this specific method.
      *
      * @throws IllegalStateException If we cannot find this method.
      */
-    private static MethodInvoker getSimpleMethod(final Class<?> clazz, final String methodName, final Class<?> returnType, final Class<?>... params)
+    public static MethodInvoker getTypedMethod(final Class<?> clazz, final String methodName, final Class<?> returnType, final boolean throwException, final Class<?>... params)
+    {
+        for (final Method method : clazz.getDeclaredMethods())
+        {
+            if (((methodName == null) || method.getName().equals(methodName)) && ((returnType == null) || method.getReturnType().equals(returnType)) && Arrays.equals(method.getParameterTypes(), params))
+            {
+                getAccess(method);
+                return new MethodInvoker(method);
+            }
+        }
+        // Search in every superclass
+        if (clazz.getSuperclass() != null)
+        {
+            return getMethod(clazz.getSuperclass(), methodName, throwException, params);
+        }
+        if (throwException)
+        {
+            throw new IllegalStateException(String.format("Unable to find method %s (%s).", methodName, Arrays.asList(params)));
+        }
+        return null;
+    }
+
+    /**
+     * Search for the first publically and privately defined method of the given name and parameter count.
+     *
+     * @param clazz      a class to start with.
+     * @param methodName the method name, or NULL to skip.
+     * @param returnType the expected return type, or NULL to ignore.
+     * @param params     the expected parameters.
+     *
+     * @return An object that invokes this specific method.
+     *
+     * @throws IllegalStateException If we cannot find this method.
+     */
+    private static MethodInvoker getSimpleMethod(final Class<?> clazz, final String methodName, final Class<?> returnType, final boolean throwException, final Class<?>... params)
     {
         for (final Method method : clazz.getDeclaredMethods())
         {
@@ -712,16 +854,20 @@ public final class DioriteReflectionUtils
         // Search in every superclass
         if (clazz.getSuperclass() != null)
         {
-            return getMethod(clazz.getSuperclass(), methodName, params);
+            return getMethod(clazz.getSuperclass(), methodName, throwException, params);
         }
-        throw new IllegalStateException(String.format("Unable to find method %s (%s).", methodName, Arrays.asList(params)));
+        if (throwException)
+        {
+            throw new IllegalStateException(String.format("Unable to find method %s (%s).", methodName, Arrays.asList(params)));
+        }
+        return null;
     }
 
     /**
      * Search for the first publically and privately defined constructor of the given name and parameter count.
      *
-     * @param className - lookup name of the class, see {@link #getCanonicalClass(String)}.
-     * @param params    - the expected parameters.
+     * @param className lookup name of the class, see {@link #getCanonicalClass(String)}.
+     * @param params    the expected parameters.
      *
      * @return An object that invokes this constructor.
      *
@@ -735,8 +881,8 @@ public final class DioriteReflectionUtils
     /**
      * Search for the first publically and privately defined constructor of the given name and parameter count.
      *
-     * @param clazz  - a class to start with.
-     * @param params - the expected parameters.
+     * @param clazz  a class to start with.
+     * @param params the expected parameters.
      *
      * @return An object that invokes this constructor.
      *
@@ -758,8 +904,8 @@ public final class DioriteReflectionUtils
     /**
      * Search for nested class with givan name.
      *
-     * @param clazz - a class to start with.
-     * @param name  - name of class.
+     * @param clazz a class to start with.
+     * @param name  name of class.
      *
      * @return nested class form given class.
      */

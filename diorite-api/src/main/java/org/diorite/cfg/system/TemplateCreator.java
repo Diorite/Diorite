@@ -52,14 +52,11 @@ import org.diorite.cfg.annotations.CfgFooterComment;
 import org.diorite.cfg.annotations.CfgFooterComments;
 import org.diorite.cfg.annotations.CfgFooterCommentsArray;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
-import org.diorite.cfg.annotations.defaults.CfgDelegateImport;
-import org.diorite.cfg.annotations.defaults.CfgDelegateImportArray;
-import org.diorite.cfg.annotations.defaults.CfgDelegateImports;
 import org.diorite.cfg.system.elements.TemplateElements;
+import org.diorite.utils.reflections.ConstructorInvoker;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
-
-import javassist.CannotCompileException;
-import javassist.NotFoundException;
+import org.diorite.utils.reflections.MethodInvoker;
+import org.diorite.utils.reflections.ReflectGetter;
 
 /**
  * Class for generating config templates, with simple cache system.
@@ -161,47 +158,64 @@ public final class TemplateCreator
         }
         Supplier<T> def = null;
         {
-
             final CfgDelegateDefault annotation = clazz.getAnnotation(CfgDelegateDefault.class);
-            final Collection<String> imports = new HashSet<>(5);
-            imports.add(clazz.getPackage().getName());
-            {
-                {
-                    final CfgDelegateImportArray a = clazz.getAnnotation(CfgDelegateImportArray.class);
-                    if (a != null)
-                    {
-                        for (final CfgDelegateImport di : a.value())
-                        {
-                            imports.add(di.value());
-                        }
-                    }
-                }
-                {
-                    final CfgDelegateImports a = clazz.getAnnotation(CfgDelegateImports.class);
-                    if (a != null)
-                    {
-                        Collections.addAll(imports, a.value());
-                    }
-                }
-            }
-
             if (annotation != null)
             {
                 final String path = annotation.value();
-                switch (path)
+                final Supplier<Object> basicDelegate = ConfigField.getBasicDelegate(path);
+                if (basicDelegate != null)
                 {
-                    case "{<init>}":
-                        def = () -> (T) DioriteReflectionUtils.getConstructor(clazz).invoke();
-                        break;
-                    default:
+                    def = (Supplier<T>) basicDelegate;
+                }
+                else if (path.equalsIgnoreCase("{new}"))
+                {
+                    final ConstructorInvoker constructor = DioriteReflectionUtils.getConstructor(clazz);
+                    def = () -> (T) constructor.invoke();
+                }
+                else
+                {
+                    final int sepIndex = path.indexOf("::");
+                    final Class<?> targetClass;
+                    final String methodName;
+                    if (sepIndex == - 1)
+                    {
+                        targetClass = clazz;
+                        methodName = path;
+                    }
+                    else
+                    {
                         try
                         {
-                            def = path.startsWith("adv|") ? ConfigField.parseMethodAdv(path.substring(4), clazz, clazz, imports.toArray(new String[imports.size()])) : ConfigField.parseMethod(path, clazz, clazz, imports.toArray(new String[imports.size()]));
-                        } catch (CannotCompileException | NotFoundException e)
+                            Class<?> tmpClass = DioriteReflectionUtils.tryGetCanonicalClass(path.substring(0, sepIndex));
+                            if (tmpClass == null)
+                            {
+                                tmpClass = DioriteReflectionUtils.tryGetCanonicalClass(clazz.getPackage().getName() + "." + path.substring(0, sepIndex));
+                                if (tmpClass == null)
+                                {
+                                    tmpClass = DioriteReflectionUtils.getNestedClass(clazz, path.substring(0, sepIndex));
+                                }
+                            }
+                            targetClass = tmpClass;
+                        } catch (final Exception e)
                         {
-                            e.printStackTrace();
+                            throw new RuntimeException("Can't find class for: " + path, e);
                         }
-                        break;
+                        methodName = path.substring(sepIndex + 2);
+                    }
+                    if (targetClass == null)
+                    {
+                        throw new RuntimeException("Can't find class for delegate: " + path);
+                    }
+                    final MethodInvoker methodInvoker = DioriteReflectionUtils.getMethod(targetClass, methodName, false);
+                    if (methodInvoker == null)
+                    {
+                        final ReflectGetter<Object> reflectGetter = DioriteReflectionUtils.getReflectGetter(methodName, targetClass);
+                        def = () -> (T) reflectGetter.get(null);
+                    }
+                    else
+                    {
+                        def = () -> (T) methodInvoker.invoke(null);
+                    }
                 }
             }
         }

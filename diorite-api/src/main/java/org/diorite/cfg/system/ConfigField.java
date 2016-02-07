@@ -32,13 +32,25 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.TreeMap;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -55,9 +67,6 @@ import org.diorite.cfg.annotations.defaults.CfgCharArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgCharDefault;
 import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
-import org.diorite.cfg.annotations.defaults.CfgDelegateImport;
-import org.diorite.cfg.annotations.defaults.CfgDelegateImportArray;
-import org.diorite.cfg.annotations.defaults.CfgDelegateImports;
 import org.diorite.cfg.annotations.defaults.CfgDoubleArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgDoubleDefault;
 import org.diorite.cfg.annotations.defaults.CfgFloatArrayDefault;
@@ -72,27 +81,19 @@ import org.diorite.cfg.annotations.defaults.CfgStringArrayDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
 import org.diorite.cfg.system.elements.TemplateElement;
 import org.diorite.cfg.system.elements.TemplateElements;
-import org.diorite.utils.collections.WeakCollection;
 import org.diorite.utils.collections.comparators.AlphanumComparator;
-import org.diorite.utils.function.eval.BooleanEvaluator;
-import org.diorite.utils.function.eval.ByteEvaluator;
-import org.diorite.utils.function.eval.CharEvaluator;
-import org.diorite.utils.function.eval.DoubleEvaluator;
-import org.diorite.utils.function.eval.FloatEvaluator;
-import org.diorite.utils.function.eval.IntEvaluator;
-import org.diorite.utils.function.eval.LongEvaluator;
-import org.diorite.utils.function.eval.ObjectEvaluator;
-import org.diorite.utils.function.eval.ShortEvaluator;
+import org.diorite.utils.collections.maps.ByValueSortingConcurrentSkipListMap;
+import org.diorite.utils.collections.maps.ByValueSortingTreeMap;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
+import org.diorite.utils.collections.maps.ConcurrentIdentityHashMap;
+import org.diorite.utils.collections.maps.SimpleEnumMap;
+import org.diorite.utils.collections.sets.CaseInsensitiveHashSet;
+import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.math.DioriteRandomUtils;
+import org.diorite.utils.reflections.ConstructorInvoker;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
 import org.diorite.utils.reflections.MethodInvoker;
-
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtNewMethod;
-import javassist.LoaderClassPath;
-import javassist.NotFoundException;
+import org.diorite.utils.reflections.ReflectGetter;
 
 /**
  * Main implementation of {@link CfgEntryData} contains all information
@@ -101,6 +102,67 @@ import javassist.NotFoundException;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ConfigField implements Comparable<ConfigField>, CfgEntryData
 {
+    private static final Map<String, Supplier<Object>> basicDelegates = new CaseInsensitiveMap<>(20);
+
+    /**
+     * Register new basic delegate alias (supplier of default value used by {@link CfgDelegateDefault}),
+     * like {RandomUUID} returns supplier that always give new random uuid.
+     *
+     * @param key      supplier name/key.
+     * @param supplier supplier of value.
+     */
+    public static void registerBasicDelegate(final String key, final Supplier<Object> supplier)
+    {
+        basicDelegates.put(key, supplier);
+    }
+
+    /**
+     * Get supplier of default value by key/name. (used by {@link CfgDelegateDefault})
+     *
+     * @param key key/name of default value supplier.
+     *
+     * @return supplier of default value or null.
+     */
+    public static Supplier<Object> getBasicDelegate(final String key)
+    {
+        return basicDelegates.get(key);
+    }
+
+    static
+    {
+        registerBasicDelegate("{ByValueSortingConcurrentSkipListMap}", ByValueSortingConcurrentSkipListMap::new);
+        registerBasicDelegate("{ConcurrentIdentityHashMap}", () -> new ConcurrentIdentityHashMap<>(16));
+        registerBasicDelegate("{CaseInsensitiveHashSet}", () -> new CaseInsensitiveHashSet(16));
+        registerBasicDelegate("{CaseInsensitiveMap}", () -> new CaseInsensitiveMap<>(16));
+        registerBasicDelegate("{ByValueSortingTreeMap}", ByValueSortingTreeMap::new);
+        registerBasicDelegate("{ConcurrentLinkedDeque}", ConcurrentLinkedDeque::new);
+        registerBasicDelegate("{ConcurrentLinkedQueue}", ConcurrentLinkedQueue::new);
+        registerBasicDelegate("{ConcurrentSkipListMap}", ConcurrentSkipListMap::new);
+        registerBasicDelegate("{ConcurrentSkipListSet}", ConcurrentSkipListSet::new);
+        registerBasicDelegate("{ConcurrentHashMap}", () -> new ConcurrentHashMap<>(16));
+        registerBasicDelegate("{ArrayDeque}", () -> new java.util.ArrayDeque<>(16));
+        registerBasicDelegate("{IdentityHashMap}", () -> new IdentityHashMap<>(16));
+        registerBasicDelegate("{CopyOnWriteArrayList}", CopyOnWriteArrayList::new);
+        registerBasicDelegate("{Hashtable}", () -> new java.util.Hashtable<>(16));
+        registerBasicDelegate("{CopyOnWriteArraySet}", CopyOnWriteArraySet::new);
+        registerBasicDelegate("{LinkedBlockingDeque}", LinkedBlockingDeque::new);
+        registerBasicDelegate("{LinkedBlockingQueue}", LinkedBlockingQueue::new);
+        registerBasicDelegate("{LinkedTransferQueue}", LinkedTransferQueue::new);
+        registerBasicDelegate("{ConcurrentSet}", () -> new ConcurrentSet<>(16));
+        registerBasicDelegate("{LinkedHashSet}", () -> new LinkedHashSet<>(16));
+        registerBasicDelegate("{SimpleEnumMap}", () -> new SimpleEnumMap<>(16));
+        registerBasicDelegate("{SynchronousQueue}", SynchronousQueue::new);
+        registerBasicDelegate("{BitSet}", () -> new java.util.BitSet(10));
+        registerBasicDelegate("{ArrayList}", () -> new ArrayList<>(16));
+        registerBasicDelegate("{HashSet}", () -> new HashSet<>(16));
+        registerBasicDelegate("{HashMap}", () -> new HashMap<>(16));
+        registerBasicDelegate("{TreeMap}", TreeMap::new);
+
+        registerBasicDelegate("{randLong}", DioriteRandomUtils::nextLong);
+
+        registerBasicDelegate("{randomUUID}", UUID::randomUUID);
+        registerBasicDelegate("{randomUUIDString}", () -> UUID.randomUUID().toString());
+    }
 
     private static final Pattern VALID_JAVA_NAME = Pattern.compile("[^a-zA-Z0-9_]");
 
@@ -314,239 +376,66 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
             }
         }
         final CfgDelegateDefault annotation = field.getAnnotation(CfgDelegateDefault.class);
-        final Collection<String> imports = new HashSet<>(5);
-        final Package pack = field.getType().getPackage();
-        if ((pack != null) && (pack.getName() != null) && ! pack.getName().equals("java.lang"))
-        {
-            imports.add(pack.getName());
-        }
-        {
-            {
-                final CfgDelegateImportArray a = field.getAnnotation(CfgDelegateImportArray.class);
-                if (a != null)
-                {
-                    for (final CfgDelegateImport di : a.value())
-                    {
-                        imports.add(di.value());
-                    }
-                }
-            }
-            {
-                final CfgDelegateImports a = field.getAnnotation(CfgDelegateImports.class);
-                if (a != null)
-                {
-                    Collections.addAll(imports, a.value());
-                }
-            }
-            {
-                final CfgDelegateImport a = field.getAnnotation(CfgDelegateImport.class);
-                if (a != null)
-                {
-                    imports.add(a.value());
-                }
-            }
-        }
         if (annotation != null)
         {
             final String path = annotation.value();
-            switch (path)
+            final Supplier<Object> basicDelegate = getBasicDelegate(path);
+            if (basicDelegate != null)
             {
-                case "{emptyMap}":
-                    def = () -> new HashMap<>(1);
-                    break;
-                case "{emptyList}":
-                    def = () -> new ArrayList<>(1);
-                    break;
-                case "{emptySet}":
-                    def = () -> new HashSet<>(1);
-                    break;
-                case "{<init>}":
-                    def = () -> DioriteReflectionUtils.getConstructor(field.getType()).invoke();
-                    break;
-                default:
-                    try
-                    {
-                        def = path.startsWith("adv|") ? ConfigField.parseMethodAdv(path.substring(4), field.getDeclaringClass(), field.getType(), imports.toArray(new String[imports.size()])) : parseMethod(path, field.getDeclaringClass(), field.getType(), imports.toArray(new String[imports.size()]));
-                    } catch (CannotCompileException | NotFoundException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    break;
+                def = basicDelegate;
             }
-        }
-        this.def = def;
-    }
-
-    static Supplier parseMethod(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, NotFoundException
-    {
-        return parseMethodAdv("return " + str + ";", clazz, returnClass, imports);
-    }
-
-    private static final WeakCollection<ClassLoader> loaders = WeakCollection.usingHashSet(40);
-
-    static Supplier parseMethodAdv(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, NotFoundException
-    {
-        final ClassPool pool = ClassPool.getDefault();
-        if (loaders.add(clazz.getClassLoader()))
-        {
-            pool.insertClassPath(new LoaderClassPath(clazz.getClassLoader()));
-        }
-        pool.clearImportedPackages();
-        for (final String impor : imports)
-        {
-            pool.importPackage(impor);
-        }
-
-        final CtClass init = pool.makeClass((clazz.getName().startsWith("java") ? (ConfigField.class.getPackage().getName()) : clazz.getPackage().getName()) + "." + VALID_JAVA_NAME.matcher(clazz.getName() + DioriteRandomUtils.nextLong()).replaceAll("_"));
-
-        final CtClass returnType;
-        final CtClass interfaceType;
-        final Function<Class<?>, Supplier<Object>> func;
-        if (returnClass.isPrimitive())
-        {
-            if (returnClass.equals(boolean.class))
+            else if (path.equalsIgnoreCase("{new}"))
             {
-                returnType = CtClass.booleanType;
-                interfaceType = pool.get(BooleanEvaluator.class.getName());
-                func = c -> {
-                    try
-                    {
-                        final BooleanEvaluator e = (BooleanEvaluator) c.newInstance();
-                        return e::eval;
-                    } catch (final Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                };
-            }
-            else if (returnClass.equals(byte.class))
-            {
-                returnType = CtClass.byteType;
-                interfaceType = pool.get(ByteEvaluator.class.getName());
-                func = c -> {
-                    try
-                    {
-                        final ByteEvaluator e = (ByteEvaluator) c.newInstance();
-                        return e::eval;
-                    } catch (final Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                };
-            }
-            else if (returnClass.equals(char.class))
-            {
-                returnType = CtClass.charType;
-                interfaceType = pool.get(CharEvaluator.class.getName());
-                func = c -> {
-                    try
-                    {
-                        final CharEvaluator e = (CharEvaluator) c.newInstance();
-                        return e::eval;
-                    } catch (final Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                };
-            }
-            else if (returnClass.equals(short.class))
-            {
-                returnType = CtClass.shortType;
-                interfaceType = pool.get(ShortEvaluator.class.getName());
-                func = c -> {
-                    try
-                    {
-                        final ShortEvaluator e = (ShortEvaluator) c.newInstance();
-                        return e::eval;
-                    } catch (final Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                };
-            }
-            else if (returnClass.equals(int.class))
-            {
-                returnType = CtClass.intType;
-                interfaceType = pool.get(IntEvaluator.class.getName());
-                func = c -> {
-                    try
-                    {
-                        final IntEvaluator e = (IntEvaluator) c.newInstance();
-                        return e::eval;
-                    } catch (final Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                };
-            }
-            else if (returnClass.equals(long.class))
-            {
-                returnType = CtClass.longType;
-                interfaceType = pool.get(LongEvaluator.class.getName());
-                func = c -> {
-                    try
-                    {
-                        final LongEvaluator e = (LongEvaluator) c.newInstance();
-                        return e::eval;
-                    } catch (final Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                };
-            }
-            else if (returnClass.equals(float.class))
-            {
-                returnType = CtClass.floatType;
-                interfaceType = pool.get(FloatEvaluator.class.getName());
-                func = c -> {
-                    try
-                    {
-                        final FloatEvaluator e = (FloatEvaluator) c.newInstance();
-                        return e::eval;
-                    } catch (final Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                };
-            }
-            else if (returnClass.equals(double.class))
-            {
-                returnType = CtClass.doubleType;
-                interfaceType = pool.get(DoubleEvaluator.class.getName());
-                func = c -> {
-                    try
-                    {
-                        final DoubleEvaluator e = (DoubleEvaluator) c.newInstance();
-                        return e::eval;
-                    } catch (final Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                };
+                final ConstructorInvoker constructor = DioriteReflectionUtils.getConstructor(field.getType());
+                def = constructor::invoke;
             }
             else
             {
-                throw new AssertionError("Unknown primitive type.");
+                final int sepIndex = path.indexOf("::");
+                final Class<?> clazz;
+                final String methodName;
+                if (sepIndex == - 1)
+                {
+                    clazz = field.getDeclaringClass();
+                    methodName = path;
+                }
+                else
+                {
+                    try
+                    {
+                        Class<?> tmpClass = DioriteReflectionUtils.tryGetCanonicalClass(path.substring(0, sepIndex));
+                        if (tmpClass == null)
+                        {
+                            tmpClass = DioriteReflectionUtils.tryGetCanonicalClass(field.getDeclaringClass().getPackage().getName() + "." + path.substring(0, sepIndex));
+                            if (tmpClass == null)
+                            {
+                                tmpClass = DioriteReflectionUtils.getNestedClass(field.getDeclaringClass(), path.substring(0, sepIndex));
+                            }
+                        }
+                        clazz = tmpClass;
+                    } catch (final Exception e)
+                    {
+                        throw new RuntimeException("Can't find class for: " + path, e);
+                    }
+                    methodName = path.substring(sepIndex + 2);
+                }
+                if (clazz == null)
+                {
+                    throw new RuntimeException("Can't find class for delegate: " + path);
+                }
+                final MethodInvoker methodInvoker = DioriteReflectionUtils.getMethod(clazz, methodName, false);
+                if (methodInvoker == null)
+                {
+                    final ReflectGetter<Object> reflectGetter = DioriteReflectionUtils.getReflectGetter(methodName, clazz);
+                    def = () -> reflectGetter.get(null);
+                }
+                else
+                {
+                    def = () -> methodInvoker.invoke(null);
+                }
             }
         }
-        else
-        {
-            returnType = pool.get(Object.class.getName());
-            interfaceType = pool.get(ObjectEvaluator.class.getName());
-            func = c -> {
-                try
-                {
-                    final ObjectEvaluator e = (ObjectEvaluator) c.newInstance();
-                    return e::eval;
-                } catch (final Exception e)
-                {
-                    throw new RuntimeException(e);
-                }
-            };
-        }
-        init.setInterfaces(new CtClass[]{interfaceType});
-        init.addMethod(CtNewMethod.make(returnType, "eval", DioriteReflectionUtils.EMPTY_CLASSES, new CtClass[]{pool.get(Exception.class.getName())}, "{\n" + str + "\n}", init));
-        return func.apply(init.toClass(clazz.getClassLoader()));
+        this.def = def;
     }
 
     public static void getAllPossibleTypes(final Set<Class<?>> classes, final Set<Type> checkedTypes, final Type rawType)
@@ -727,4 +616,175 @@ public class ConfigField implements Comparable<ConfigField>, CfgEntryData
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("field", this.field).append("name", this.name).append("header", this.header).append("footer", this.footer).append("priority", this.priority).toString();
     }
+
+
+//    private static final WeakCollection<ClassLoader> loaders = WeakCollection.usingHashSet(40);
+//    static Supplier parseMethod(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, NotFoundException
+//    {
+//        return parseMethodAdv("return " + str + ";", clazz, returnClass, imports);
+//    }
+//    static Supplier parseMethodAdv(final String str, final Class<?> clazz, final Class<?> returnClass, final String... imports) throws CannotCompileException, NotFoundException
+//    {
+//        final ClassPool pool = ClassPool.getDefault();
+//        if (loaders.add(clazz.getClassLoader()))
+//        {
+//            pool.insertClassPath(new LoaderClassPath(clazz.getClassLoader()));
+//        }
+//        pool.clearImportedPackages();
+//        for (final String impor : imports)
+//        {
+//            pool.importPackage(impor);
+//        }
+//
+//        final CtClass init = pool.makeClass((clazz.getName().startsWith("java") ? (ConfigField.class.getPackage().getName()) : clazz.getPackage().getName()) + "." + VALID_JAVA_NAME.matcher(clazz.getName() + DioriteRandomUtils.nextLong()).replaceAll("_"));
+//
+//        final CtClass returnType;
+//        final CtClass interfaceType;
+//        final Function<Class<?>, Supplier<Object>> func;
+//        if (returnClass.isPrimitive())
+//        {
+//            if (returnClass.equals(boolean.class))
+//            {
+//                returnType = CtClass.booleanType;
+//                interfaceType = pool.get(BooleanEvaluator.class.getName());
+//                func = c -> {
+//                    try
+//                    {
+//                        final BooleanEvaluator e = (BooleanEvaluator) c.newInstance();
+//                        return e::eval;
+//                    } catch (final Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                };
+//            }
+//            else if (returnClass.equals(byte.class))
+//            {
+//                returnType = CtClass.byteType;
+//                interfaceType = pool.get(ByteEvaluator.class.getName());
+//                func = c -> {
+//                    try
+//                    {
+//                        final ByteEvaluator e = (ByteEvaluator) c.newInstance();
+//                        return e::eval;
+//                    } catch (final Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                };
+//            }
+//            else if (returnClass.equals(char.class))
+//            {
+//                returnType = CtClass.charType;
+//                interfaceType = pool.get(CharEvaluator.class.getName());
+//                func = c -> {
+//                    try
+//                    {
+//                        final CharEvaluator e = (CharEvaluator) c.newInstance();
+//                        return e::eval;
+//                    } catch (final Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                };
+//            }
+//            else if (returnClass.equals(short.class))
+//            {
+//                returnType = CtClass.shortType;
+//                interfaceType = pool.get(ShortEvaluator.class.getName());
+//                func = c -> {
+//                    try
+//                    {
+//                        final ShortEvaluator e = (ShortEvaluator) c.newInstance();
+//                        return e::eval;
+//                    } catch (final Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                };
+//            }
+//            else if (returnClass.equals(int.class))
+//            {
+//                returnType = CtClass.intType;
+//                interfaceType = pool.get(IntEvaluator.class.getName());
+//                func = c -> {
+//                    try
+//                    {
+//                        final IntEvaluator e = (IntEvaluator) c.newInstance();
+//                        return e::eval;
+//                    } catch (final Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                };
+//            }
+//            else if (returnClass.equals(long.class))
+//            {
+//                returnType = CtClass.longType;
+//                interfaceType = pool.get(LongEvaluator.class.getName());
+//                func = c -> {
+//                    try
+//                    {
+//                        final LongEvaluator e = (LongEvaluator) c.newInstance();
+//                        return e::eval;
+//                    } catch (final Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                };
+//            }
+//            else if (returnClass.equals(float.class))
+//            {
+//                returnType = CtClass.floatType;
+//                interfaceType = pool.get(FloatEvaluator.class.getName());
+//                func = c -> {
+//                    try
+//                    {
+//                        final FloatEvaluator e = (FloatEvaluator) c.newInstance();
+//                        return e::eval;
+//                    } catch (final Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                };
+//            }
+//            else if (returnClass.equals(double.class))
+//            {
+//                returnType = CtClass.doubleType;
+//                interfaceType = pool.get(DoubleEvaluator.class.getName());
+//                func = c -> {
+//                    try
+//                    {
+//                        final DoubleEvaluator e = (DoubleEvaluator) c.newInstance();
+//                        return e::eval;
+//                    } catch (final Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                };
+//            }
+//            else
+//            {
+//                throw new AssertionError("Unknown primitive type.");
+//            }
+//        }
+//        else
+//        {
+//            returnType = pool.get(Object.class.getName());
+//            interfaceType = pool.get(ObjectEvaluator.class.getName());
+//            func = c -> {
+//                try
+//                {
+//                    final ObjectEvaluator e = (ObjectEvaluator) c.newInstance();
+//                    return e::eval;
+//                } catch (final Exception e)
+//                {
+//                    throw new RuntimeException(e);
+//                }
+//            };
+//        }
+//        init.setInterfaces(new CtClass[]{interfaceType});
+//        init.addMethod(CtNewMethod.make(returnType, "eval", DioriteReflectionUtils.EMPTY_CLASSES, new CtClass[]{pool.get(Exception.class.getName())}, "{\n" + str + "\n}", init));
+//        return func.apply(init.toClass(clazz.getClassLoader()));
+//    }
 }

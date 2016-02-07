@@ -45,7 +45,6 @@ import org.diorite.cfg.annotations.defaults.CfgBooleanDefault;
 import org.diorite.cfg.annotations.defaults.CfgByteDefault;
 import org.diorite.cfg.annotations.defaults.CfgCustomDefault;
 import org.diorite.cfg.annotations.defaults.CfgDelegateDefault;
-import org.diorite.cfg.annotations.defaults.CfgDelegateImport;
 import org.diorite.cfg.annotations.defaults.CfgIntDefault;
 import org.diorite.cfg.annotations.defaults.CfgStringDefault;
 import org.diorite.cfg.system.Template;
@@ -58,13 +57,17 @@ import org.diorite.world.WorldType;
 @SuppressWarnings({"SimplifiableIfStatement"})
 public class WorldsConfigImpl implements WorldsConfig
 {
-    static final List<WorldConfigImpl>      def2;
-    static final List<WorldGroupConfigImpl> def1;
+    private static final List<WorldGroupConfigImpl> def1;
+    private static final List<WorldConfigImpl>      def2;
 
-    @Override
-    public String toString()
+    private static List<WorldGroupConfigImpl> getDefaultWorldGroupConfigs()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("defaultWorld", this.defaultWorld).append("groups", this.groups).toString();
+        return new ArrayList<>(def1);
+    }
+
+    private static List<WorldConfigImpl> getDefaultWorldConfigs()
+    {
+        return new ArrayList<>(def2);
     }
 
     static
@@ -107,7 +110,7 @@ public class WorldsConfigImpl implements WorldsConfig
     private File worldsDir;
 
     @CfgComment("All groups, every group have separate players data. (EQ, level etc..)")
-    @CfgDelegateDefault("adv| return org.diorite.impl.cfg.WorldsConfigImpl.def1;")
+    @CfgDelegateDefault("getDefaultWorldGroupConfigs")
     private List<WorldGroupConfigImpl> groups;
 
     @Override
@@ -152,7 +155,7 @@ public class WorldsConfigImpl implements WorldsConfig
         private String name = "default";
 
         @CfgComment("All worlds for this group.")
-        @CfgDelegateDefault("new ArrayList(org.diorite.impl.cfg.WorldsConfigImpl.def2)")
+        @CfgDelegateDefault("WorldsConfigImpl::getDefaultWorldConfigs")
         private List<WorldConfigImpl> worlds = new ArrayList<>(def2);
 
         @Override
@@ -230,8 +233,7 @@ public class WorldsConfigImpl implements WorldsConfig
         private boolean vanillaCompatible;
 
         @CfgComment("Default gamemode for new players.")
-        @CfgDelegateImport("org.diorite")
-        @CfgDelegateDefault("GameMode.SURVIVAL")
+        @CfgDelegateDefault("org.diorite.GameMode::SURVIVAL")
         private GameMode gamemode;
 
         @CfgComment("If true, then gamemode will be always changed on join to default one.")
@@ -239,8 +241,7 @@ public class WorldsConfigImpl implements WorldsConfig
         private boolean forceGamemode;
 
         @CfgComment("Difficulty for world.")
-        @CfgDelegateImport("org.diorite")
-        @CfgDelegateDefault("Difficulty.NORMAL")
+        @CfgDelegateDefault("org.diorite.Difficulty::NORMAL")
         private Difficulty difficulty;
 
         @CfgComment("Enable PvP on the server. Players shooting themselves with arrows will only receive damage if PvP is enabled.")
@@ -276,18 +277,15 @@ public class WorldsConfigImpl implements WorldsConfig
         private float spawnPitch;
 
         @CfgComment("Seed of world.")
-        @CfgDelegateImport("org.diorite.utils.math")
-        @CfgDelegateDefault("DioriteRandomUtils.nextLong()")
+        @CfgDelegateDefault("{randLong}")
         private long seed;
 
         @CfgComment("Dimension of world.")
-        @CfgDelegateImport("org.diorite.world")
-        @CfgDelegateDefault("Dimension.OVERWORLD")
+        @CfgDelegateDefault("org.diorite.world.Dimension::OVERWORLD")
         private Dimension dimension;
 
         @CfgComment("Type of world.")
-        @CfgDelegateImport("org.diorite.world")
-        @CfgDelegateDefault("WorldType.NORMAL")
+        @CfgDelegateDefault("org.diorite.world.WorldType::NORMAL")
         private WorldType worldType;
 
         @CfgComment("Generator for world.")
@@ -295,7 +293,7 @@ public class WorldsConfigImpl implements WorldsConfig
         private String generator;
 
         @CfgComment("Generator settings, every generator may have own options here.")
-        @CfgDelegateDefault("{emptyMap}")
+        @CfgDelegateDefault("{HashMap}")
         private Map<String, Object> generatorSettings;
 
         @Override
@@ -673,5 +671,11 @@ public class WorldsConfigImpl implements WorldsConfig
     public @interface CfgHardcoreActionDefault
     {
         HardcoreAction value();
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("defaultWorld", this.defaultWorld).append("groups", this.groups).toString();
     }
 }
