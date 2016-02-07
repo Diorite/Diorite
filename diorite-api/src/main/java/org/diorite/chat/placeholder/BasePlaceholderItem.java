@@ -22,56 +22,59 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.world.tick;
+package org.diorite.chat.placeholder;
 
-import java.lang.ref.WeakReference;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.world.WorldImpl;
-import org.diorite.world.World;
-
-public class WorldTickGroup implements TickGroupImpl
+/**
+ * Represent single placeholder item, like "name" in player.name placeholder.
+ *
+ * @param <T> type of object needed to get data for placeholder.
+ */
+class BasePlaceholderItem<T> implements PlaceholderItem<T>
 {
-    private final WeakReference<WorldImpl> world;
+    protected final PlaceholderType<T>  type;
+    protected final String              id;
+    protected final Function<T, Object> func;
 
-    public WorldTickGroup(final WorldImpl world)
+    /**
+     * Construct new placeholder item, using given type and functiom.
+     *
+     * @param type type of placeholder, like that "player" in player.name.
+     * @param id   id/name of placeholder, like that "name" in player.name.
+     * @param func function that should return {@link String} or {@link org.diorite.chat.component.BaseComponent}, when using BaseComponent you may add click events, hovers events and all that stuff.
+     */
+    BasePlaceholderItem(final PlaceholderType<T> type, final String id, final Function<T, Object> func)
     {
-        this.world = new WeakReference<>(world);
+        this.type = type;
+        this.id = id.intern();
+        this.func = func;
     }
 
     @Override
-    public void doTick(final int tps)
+    public PlaceholderType<T> getType()
     {
-        final WorldImpl impl = this.world.get();
-        if (impl != null)
-        {
-            impl.doTick(tps);
-            impl.getChunkManager().getLoadedChunks().stream().filter(c -> c.isLoaded() || ! c.getEntities().isEmpty()).forEach(c -> this.tickChunk(c, tps));
-        }
+        return this.type;
     }
 
     @Override
-    public boolean removeWorld(final World world)
+    public String getId()
     {
-        if (world.equals(this.world.get()))
-        {
-            this.world.clear();
-            return true;
-        }
-        return false;
+        return this.id;
     }
 
     @Override
-    public boolean isEmpty()
+    public Object apply(final T obj, final Object[] args)
     {
-        return this.world.get() == null;
+        return this.func.apply(obj);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("world", this.world).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("type", this.type).append("id", this.id).toString();
     }
 }

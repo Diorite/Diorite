@@ -26,8 +26,8 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
-import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.command.SystemCommandImpl;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.command.Arguments;
 import org.diorite.command.CommandPriority;
 import org.diorite.entity.Player;
@@ -58,7 +58,7 @@ public class FlyCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale());
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale());
                 return;
             }
 
@@ -76,7 +76,7 @@ public class FlyCmd extends SystemCommandImpl
             }
             if (speed > 1)
             {
-                sender.sendSimpleColoredMessage("&cSpeed can't by larger than 100");
+                sender.sendSimpleColoredMessage("&cSpeed can't be larger than 100");
                 return;
             }
 

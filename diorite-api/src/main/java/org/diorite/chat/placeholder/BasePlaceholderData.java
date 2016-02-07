@@ -22,58 +22,50 @@
  * SOFTWARE.
  */
 
-package org.diorite.event.chunk;
+package org.diorite.chat.placeholder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.world.chunk.Chunk;
-
 /**
- * When map want populate some chunk.
+ * Represent simple placeholder found in string, it contains full string to replace, object name and placeholder item.
+ *
+ * @param <T> type of placeholder item.
  */
-public class ChunkPopulateEvent extends ChunkEvent
+class BasePlaceholderData<T> implements PlaceholderData<T>
 {
-    protected final Chunk   chunk;
-    protected final boolean force;
+    static final Map<String, PlaceholderData<?>> cache = new HashMap<>(100, .2f);
 
-    /**
-     * Construct new chunk populate event.
-     *
-     * @param chunk chunk to populate, can't be null.
-     * @param force if chunk should be force-populated
-     */
-    public ChunkPopulateEvent(final Chunk chunk, final boolean force)
+    protected final String             fullName;
+    protected final String             objectName;
+    protected final PlaceholderItem<T> item;
+
+    BasePlaceholderData(final String fullName, final String objectName, final PlaceholderItem<T> item)
     {
-        super(chunk.getPos());
-        this.chunk = chunk;
-        this.force = force;
+        this.fullName = fullName.intern();
+        this.objectName = objectName.intern();
+        this.item = item;
     }
 
-    /**
-     * @return true if chunk should be force-populated.
-     */
-    public boolean isForce()
+    @Override
+    public String getFullName()
     {
-        return this.force;
+        return (this.fullName == null) ? this.item.getType().getId() : this.fullName;
     }
 
-    /**
-     * @return chunk to populate.
-     */
-    public Chunk getChunk()
+    @Override
+    public String getObjectName()
     {
-        return this.chunk;
+        return this.objectName;
     }
 
-    /**
-     * @return true if chunk is already populated.
-     *
-     * @see Chunk#isPopulated()
-     */
-    public boolean isPopulated()
+    @Override
+    public PlaceholderItem<T> getItem()
     {
-        return this.chunk.isPopulated();
+        return this.item;
     }
 
     @Override
@@ -83,32 +75,25 @@ public class ChunkPopulateEvent extends ChunkEvent
         {
             return true;
         }
-        if (! (o instanceof ChunkPopulateEvent))
-        {
-            return false;
-        }
-        if (! super.equals(o))
+        if (! (o instanceof BasePlaceholderData))
         {
             return false;
         }
 
-        final ChunkPopulateEvent that = (ChunkPopulateEvent) o;
+        final BasePlaceholderData<?> that = (BasePlaceholderData<?>) o;
 
-        return this.chunk.equals(that.chunk);
-
+        return this.fullName.equals(that.fullName);
     }
 
     @Override
     public int hashCode()
     {
-        int result = super.hashCode();
-        result = (31 * result) + this.chunk.hashCode();
-        return result;
+        return this.fullName.hashCode();
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("chunk", this.chunk).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("fullName", this.fullName).append("type", this.item.getType().getType().getName()).toString();
     }
 }

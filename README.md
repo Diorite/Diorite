@@ -138,7 +138,7 @@ See here: https://github.com/Diorite/Diorite/blob/master/CONTRIBUTING.md
 - [ ] Suffering in blocks.
 - [ ] Scoreboards
 - [x] Titles
-- [ ] World border
+- [x] World border
 - [ ] Redstone stuff.
 
 #### Others

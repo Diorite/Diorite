@@ -62,6 +62,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
 
@@ -144,4 +145,6 @@ public interface PacketPlayClientboundListener extends PacketPlayListener
     void handle(PacketPlayClientboundSoundEffect packet);
 
     void handle(PacketPlayClientboundNamedSoundEffect packet);
+
+    void handle(PacketPlayClientboundWorldBorder packet);
 }

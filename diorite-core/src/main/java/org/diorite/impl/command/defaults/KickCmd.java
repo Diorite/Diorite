@@ -26,10 +26,10 @@ package org.diorite.impl.command.defaults;
 
 import java.util.regex.Pattern;
 
-import org.diorite.cfg.messages.DioriteMesssges;
-import org.diorite.cfg.messages.Message;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.command.SystemCommandImpl;
+import org.diorite.cfg.messages.DioriteMessages;
+import org.diorite.cfg.messages.Message;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.CommandPriority;
 import org.diorite.entity.Player;
@@ -44,13 +44,13 @@ public class KickCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (CoreMain.isEnabledDebug() && !sender.isConsole())
             {
-                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CMD_DISABLED, sender, sender.getPreferedLocale(), Message.MessageData.e("sender", sender));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CMD_DISABLED, sender, sender.getPreferedLocale(), Message.MessageData.e("sender", sender));
                 return;
             }
             if (! args.has(1))
             {
                 //sender.sendSimpleColoredMessage("&cCorrect usage &7/kick <player> <reason>");
-                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CORRECT, sender, sender.getPreferedLocale(), Message.MessageData.e("command", command));
                 return;
             }
 
@@ -58,7 +58,7 @@ public class KickCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                DioriteMesssges.sendMessage(DioriteMesssges.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale(), Message.MessageData.e("sender", sender), Message.MessageData.e("target", target));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale(), Message.MessageData.e("sender", sender), Message.MessageData.e("target", target));
                 return;
             }
 

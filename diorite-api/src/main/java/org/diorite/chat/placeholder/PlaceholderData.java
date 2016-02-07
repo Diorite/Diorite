@@ -1,104 +1,113 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2015 Diorite (by Bartłomiej Mazur (aka GotoFinal))
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 package org.diorite.chat.placeholder;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.utils.DioriteUtils;
 
 /**
  * Represent placeholder found in string, it contains full string to replace, object name and placeholder item.
  *
  * @param <T> type of placeholder item.
  */
-public class PlaceholderData<T>
+public interface PlaceholderData<T>
 {
-    private static final Map<String, PlaceholderData<?>> cache = new HashMap<>(100, .2f);
-
-    private final String             fullName;
-    private final String             objectName;
-    private final PlaceholderItem<T> item;
-
-    private PlaceholderData(final String fullName, final String objectName, final PlaceholderItem<T> item)
-    {
-        this.fullName = fullName;
-        this.objectName = objectName;
-        this.item = item;
-    }
-
     /**
      * Returns full string to replace.
      *
      * @return full string to replace.
      */
-    public String getFullName()
-    {
-        return (this.fullName == null) ? this.item.getType().getId() : this.fullName;
-    }
+    String getFullName();
 
     /**
      * Returns object name, like "player" for player.name, or "killer" for player#killer.name.
      *
      * @return object name.
      */
-    public String getObjectName()
-    {
-        return this.objectName;
-    }
+    String getObjectName();
 
     /**
      * Returns placeholder item used in this placeholder.
      *
      * @return placeholder item used in this placeholder.
      */
-    public PlaceholderItem<T> getItem()
+    PlaceholderItem<T> getItem();
+
+    /**
+     * Returns array of arguments used by this placeholder.
+     *
+     * @return array of arguments used by this placeholder.
+     */
+    default Object[] getArguments()
     {
-        return this.item;
+        return DioriteUtils.EMPTY_OBJECT;
     }
 
     /**
-     * Delegated method from {@link PlaceholderItem}
+     * Returns true if this placeholder contains sub-placeholders used as arguments.
+     *
+     * @return true if this placeholder contains sub-placeholders used as arguments.
+     */
+    default boolean containsSubPlaceholders()
+    {
+        return false;
+    }
+
+    /**
+     * Returns array of parsed arguments used by this placeholder.
+     *
+     * @return array of parsed arguments used by this placeholder.
+     */
+    default Object[] getArguments(final T obj)
+    {
+        final Object[] args = this.getArguments();
+        if (args.length == 0)
+        {
+            return DioriteUtils.EMPTY_OBJECT;
+        }
+        if (this.containsSubPlaceholders())
+        {
+            final Object[] parsed = new Object[args.length];
+            int i = 0;
+            for (final Object arg : args)
+            {
+                if (arg instanceof Supplier)
+                {
+                    parsed[i++] = ((Supplier<?>) arg).get();
+                }
+                else
+                {
+                    parsed[i++] = arg;
+                }
+            }
+            return parsed;
+        }
+        else
+        {
+            return args;
+        }
+    }
+
+    /**
+     * Delegated method from {@link BasePlaceholderItem}
      *
      * @param obj object to fetch the data needed for placeholder.
      *
      * @return Object to use instead of placeholder.
      *
-     * @see PlaceholderItem#apply(Object)
+     * @see BasePlaceholderItem#apply(Object)
      */
-    public Object apply(final T obj)
+    default Object apply(final T obj)
     {
-        return this.item.apply(obj);
+        return this.getItem().apply(obj, this.getArguments(obj));
     }
 
     /**
@@ -109,16 +118,16 @@ public class PlaceholderData<T>
      *
      * @return string with replaced placeholder.
      */
-    public String replace(final String str, final T obj)
+    default String replace(final String str, final T obj)
     {
         final Object result = this.apply(obj);
         if (result instanceof BaseComponent)
         {
-            return StringUtils.replace(str, this.fullName, ((BaseComponent) result).toLegacyText());
+            return StringUtils.replace(str, this.getFullName(), ((BaseComponent) result).toLegacyText());
         }
         else
         {
-            return StringUtils.replace(str, this.fullName, result.toString());
+            return StringUtils.replace(str, this.getFullName(), result.toString());
         }
     }
 
@@ -131,69 +140,46 @@ public class PlaceholderData<T>
      *
      * @return this same component as given.
      */
-    public BaseComponent replace(final BaseComponent component, final T obj)
+    default BaseComponent replace(final BaseComponent component, final T obj)
     {
         final Object result = this.apply(obj);
         if (result instanceof BaseComponent)
         {
-            component.replace(this.fullName, (BaseComponent) result);
+            component.replace(this.getFullName(), (BaseComponent) result);
         }
         else
         {
-            component.replace(this.fullName, result.toString());
+            component.replace(this.getFullName(), result.toString());
         }
         return component;
     }
 
-    @Override
-    public boolean equals(final Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (! (o instanceof PlaceholderData))
-        {
-            return false;
-        }
-
-        final PlaceholderData<?> that = (PlaceholderData<?>) o;
-
-        return this.fullName.equals(that.fullName);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return this.fullName.hashCode();
-    }
-
     @SuppressWarnings("unchecked")
-    public static <T> PlaceholderData<T> valueOf(final String fullName, final String objectName, final PlaceholderItem<T> item)
+    static <T> PlaceholderData<T> valueOf(final String fullName, final String objectName, final PlaceholderItem<T> item)
     {
         {
-            final PlaceholderData<?> cached = cache.get(fullName);
+            final PlaceholderData<?> cached = BasePlaceholderData.cache.get(fullName);
             if (cached != null)
             {
                 return (PlaceholderData<T>) cached;
             }
         }
-        final PlaceholderData<T> result = new PlaceholderData<>(fullName, objectName, item);
-        cache.put(fullName, result);
+        final PlaceholderData<T> result = new BasePlaceholderData<>(fullName, objectName, item);
+        BasePlaceholderData.cache.put(fullName, result);
         return result;
     }
-
+// TODO add supprot for method placeholders
     /**
      * Get collection of used placeholders in given string.
      *
      * @param str  string to parse.
      * @param warn if true, method will print warnings about invalid placeholders to console.
      *
-     * @return collection of used placeholders, {@link PlaceholderData}
+     * @return collection of used placeholders, {@link BasePlaceholderData}
      *
      * @throws NullPointerException of string is null.
      */
-    public static Collection<PlaceholderData<?>> getPlaceholdersKeys(final String str, final boolean warn)
+    static Collection<PlaceholderData<?>> getPlaceholdersKeys(final String str, final boolean warn)
     {
         Validate.notNull(str, "String can't be null");
         final Collection<PlaceholderData<?>> keys = new HashSet<>(10, .2f);
@@ -246,7 +232,7 @@ public class PlaceholderData<T>
                     }
                 }
                 fullName += ">";
-                final PlaceholderData<?> cached = cache.get(fullName);
+                final PlaceholderData<?> cached = BasePlaceholderData.cache.get(fullName);
                 if (cached == null)
                 {
                     final PlaceholderType<?> placeholderType = PlaceholderType.get(typeID);
@@ -289,9 +275,9 @@ public class PlaceholderData<T>
      * @param str  string to parse.
      * @param warn if true, method will print warnings about invalid placeholders to console.
      *
-     * @return collection of used placeholders. {@link PlaceholderData}
+     * @return collection of used placeholders. {@link BasePlaceholderData}
      */
-    public static Map<String, Collection<PlaceholderData<?>>> parseString(final String str, final boolean warn)
+    static Map<String, Collection<PlaceholderData<?>>> parseString(final String str, final boolean warn)
     {
         if (str == null)
         {
@@ -347,7 +333,7 @@ public class PlaceholderData<T>
                     }
                 }
                 fullName += (simple ? "" : ".") + value + ">";
-                PlaceholderData<?> data = cache.get(fullName);
+                PlaceholderData<?> data = BasePlaceholderData.cache.get(fullName);
                 if (data == null)
                 {
                     final PlaceholderType<?> placeholderType = PlaceholderType.get(typeID);
@@ -356,7 +342,7 @@ public class PlaceholderData<T>
                         PlaceholderItem<?> item = placeholderType.getItem(value);
                         if ((item == null) && simple)
                         {
-                            item = new PlaceholderItem<>(placeholderType, typeID, o -> o);
+                            item = new BasePlaceholderItem<>(placeholderType, typeID, o -> o);
                         }
                         if (item != null)
                         {
@@ -374,7 +360,7 @@ public class PlaceholderData<T>
                 }
                 if (data != null)
                 {
-                    final String dataID = simple ? value : data.objectName;
+                    final String dataID = simple ? value : data.getObjectName();
                     Collection<PlaceholderData<?>> collection = result.get(dataID);
                     if (collection == null)
                     {
@@ -396,11 +382,5 @@ public class PlaceholderData<T>
             lastChar = c;
         }
         return result;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("fullName", this.fullName).append("type", this.item.getType().getType().getName()).toString();
     }
 }

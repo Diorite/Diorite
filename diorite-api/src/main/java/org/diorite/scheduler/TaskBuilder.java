@@ -51,7 +51,7 @@ public class TaskBuilder
 
     private TaskBuilder(final BasePlugin dioritePlugin, final Runnable runnable)
     {
-        Validate.notNull(dioritePlugin, "Plugin can't by null.");
+        Validate.notNull(dioritePlugin, "Plugin can't be null.");
         Validate.notNull(runnable, "Runnable can't be null.");
         this.dioritePlugin = dioritePlugin;
         this.runnable = runnable;

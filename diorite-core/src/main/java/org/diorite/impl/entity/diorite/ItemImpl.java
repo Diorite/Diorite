@@ -40,7 +40,7 @@ import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
-import org.diorite.LookupShape;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Human;
 import org.diorite.inventory.item.ItemStack;

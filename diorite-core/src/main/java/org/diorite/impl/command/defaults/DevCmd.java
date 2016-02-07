@@ -51,10 +51,9 @@ import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Location;
-import org.diorite.LookupShape;
 import org.diorite.Particle;
 import org.diorite.Sound;
-import org.diorite.cfg.messages.DioriteMesssges;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.messages.Message.MessageData;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.component.ClickEvent;
@@ -84,6 +83,7 @@ import org.diorite.permissions.PermissionsGroup;
 import org.diorite.permissions.PermissionsManager;
 import org.diorite.utils.Color;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.utils.math.geometry.LookupShape;
 
 public class DevCmd extends SystemCommandImpl
 {
@@ -445,14 +445,14 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "msgr":
                 {
-                    DioriteMesssges.reload();
+                    DioriteMessages.reload();
                     System.out.println("Done");
                     break;
                 }
                 case "msg":
                 {
                     p.setPreferedLocale(Locale.forLanguageTag("pl-PL"));
-                    DioriteMesssges.broadcastMessage(args.asText(), MessageData.e("player", p), MessageData.e("test", "Meeeh"));
+                    DioriteMessages.broadcastMessage(args.asText(), MessageData.e("player", p), MessageData.e("test", "Meeeh"));
                     break;
                 }
                 case "tc":

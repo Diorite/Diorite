@@ -40,24 +40,25 @@ public final class RegisterDefaultCommands
             cmds.registerCommand(new DevCmd());
         }
 
-        cmds.registerCommand(new SayCmd());
-        cmds.registerCommand(new TpsCmd());
-        cmds.registerCommand(new FlyCmd());
-        cmds.registerCommand(new SaveCmd());
-        cmds.registerCommand(new StopCmd());
-        cmds.registerCommand(new KickCmd());
-        cmds.registerCommand(new GiveCmd());
-        cmds.registerCommand(new ItemCmd());
-        cmds.registerCommand(new OnlineCmd());
-        cmds.registerCommand(new SetTpsCmd());
-        cmds.registerCommand(new GamemodeCmd());
-        cmds.registerCommand(new ParticleCmd());
         cmds.registerCommand(new BroadcastCmd());
         cmds.registerCommand(new ColoredConsoleCmd());
+        cmds.registerCommand(new FlyCmd());
+        cmds.registerCommand(new GamemodeCmd());
+        cmds.registerCommand(new GiveCmd());
+        cmds.registerCommand(new HelpCmd());
+        cmds.registerCommand(new ItemCmd());
+        cmds.registerCommand(new KickCmd());
+        cmds.registerCommand(new OnlineCmd());
+        cmds.registerCommand(new ParticleCmd());
         cmds.registerCommand(new PerformanceMonitorCmd());
         cmds.registerCommand(new PluginsCmd());
-        cmds.registerCommand(new VersionCmd());
+        cmds.registerCommand(new SaveCmd());
+        cmds.registerCommand(new SayCmd());
+        cmds.registerCommand(new SetTpsCmd());
+        cmds.registerCommand(new StopCmd());
         cmds.registerCommand(new TimingsCmd());
-        cmds.registerCommand(new HelpCmd());
+        cmds.registerCommand(new TpsCmd());
+        cmds.registerCommand(new VersionCmd());
+        cmds.registerCommand(new WorldBorderCmd());
     }
 }

@@ -22,24 +22,59 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.pipelines.event.player;
+package org.diorite.world;
 
-import org.diorite.cfg.messages.DioriteMessages;
-import org.diorite.cfg.messages.Message;
-import org.diorite.event.EventPriority;
-import org.diorite.event.pipelines.event.player.QuitPipeline;
-import org.diorite.event.player.PlayerQuitEvent;
-import org.diorite.utils.pipeline.SimpleEventPipeline;
+import org.diorite.ILocation;
 
-public class QuitPipelineImpl extends SimpleEventPipeline<PlayerQuitEvent> implements QuitPipeline
+public interface WorldBorder
 {
-    @Override
-    public void reset_()
+    State getWorldBorderState();
+
+    void reset();
+
+    ILocation getCenter();
+
+    void setCenter(double x, double z);
+
+    double getSize();
+
+    void setSize(double size);
+
+    void setSize(double size, long ticks);
+
+    double getStartSize();
+
+    double getTargetSize();
+
+    long getTargetSizeReachTime();
+
+    int getWarningDistance();
+
+    void setWarningDistance(int warningDistance);
+
+    int getWarningTime();
+
+    void setWarningTime(int warningTime);
+
+    double getDamageAmount();
+
+    void setDamageAmount(double damageAmount);
+
+    double getDamageBuffer();
+
+    void setDamageBuffer(double damageBuffer);
+
+    int getPortalTeleportBoundary();
+
+    void setPortalTeleportBoundary(int portalTeleportBoundary);
+
+    default void setCenter(final ILocation location)
     {
-        this.addAfter(EventPriority.NORMAL, "Diorite|SendMessages", ((evt, pipeline) -> {
-            DioriteMessages.broadcastMessage(DioriteMessages.MSG_PLAYER_QUIT, Message.MessageData.e("player", evt.getPlayer()));
-            //this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + evt.getPlayer().getName() + "&7&l left from the server!");
-            //this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + evt.getPlayer().getName() + "&7 left from the server!");
-        }));
+        this.setCenter(location.getX(), location.getZ());
+    }
+
+    enum State
+    {
+        GROWING, DECREASING, STATIONARY;
     }
 }

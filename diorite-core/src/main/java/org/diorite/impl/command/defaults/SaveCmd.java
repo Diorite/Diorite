@@ -27,9 +27,8 @@ package org.diorite.impl.command.defaults;
 import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Pattern;
 
-import org.diorite.cfg.messages.DioriteMesssges;
 import org.diorite.impl.command.SystemCommandImpl;
-import org.diorite.Core;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.command.CommandPriority;
 
 public class SaveCmd extends SystemCommandImpl
@@ -40,11 +39,11 @@ public class SaveCmd extends SystemCommandImpl
         this.setDescription("Saves the world");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             //sender.getCore().broadcastSimpleColoredMessage(Core.PREFIX_MSG + "&7Saving all worlds...");
-            DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_SAVE_START);
+            DioriteMessages.broadcastMessage(DioriteMessages.MSG_SAVE_START);
             ForkJoinPool.commonPool().submit(() -> {
                 sender.getCore().getWorldsManager().getWorlds().parallelStream().forEach(w -> w.save(args.has(0) && args.asBoolean(0)));
                 //sender.getCore().broadcastSimpleColoredMessage(Core.PREFIX_MSG + "&7All worlds saved!");
-                DioriteMesssges.broadcastMessage(DioriteMesssges.MSG_SAVE_DONE);
+                DioriteMessages.broadcastMessage(DioriteMessages.MSG_SAVE_DONE);
             });
         });
     }

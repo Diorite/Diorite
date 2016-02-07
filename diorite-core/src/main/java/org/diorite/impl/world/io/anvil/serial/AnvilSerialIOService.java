@@ -26,6 +26,7 @@ package org.diorite.impl.world.io.anvil.serial;
 
 import java.io.File;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -66,7 +67,7 @@ public class AnvilSerialIOService extends Thread implements SerialChunkIOService
     }
 
     @Override
-    public <OUT, T extends Request<OUT>> T queue(final T request)
+    public <OUT, T extends Request<OUT>> T queue(final T request, final Consumer<Request<OUT>> callback)
     {
         if (request instanceof ChunkSaveRequest)
         {
@@ -74,6 +75,10 @@ public class AnvilSerialIOService extends Thread implements SerialChunkIOService
             final long key = req.getData().getPos().asLong();
             this.lock.acquire(key);
             req.addOnEnd(r -> this.lock.release(key));
+        }
+        if (callback != null)
+        {
+            request.addOnEnd(callback);
         }
         this.queue.add(request);
         synchronized (this.queue)

@@ -25,6 +25,7 @@
 package org.diorite.impl.world.io;
 
 import java.io.File;
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 import org.diorite.impl.world.WorldImpl;
@@ -107,7 +108,12 @@ public interface ChunkIOService
 
     void start(WorldImpl world);
 
-    <OUT, T extends Request<OUT>> T queue(T request);
+    default <OUT, T extends Request<OUT>> T queue(final T request)
+    {
+        return this.queue(request, null);
+    }
+
+    <OUT, T extends Request<OUT>> T queue(T request, Consumer<Request<OUT>> callback);
 
     default void await()
     {

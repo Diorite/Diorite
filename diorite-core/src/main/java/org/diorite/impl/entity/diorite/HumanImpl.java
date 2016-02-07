@@ -25,7 +25,7 @@ import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
-import org.diorite.LookupShape;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.auth.GameProfile;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.command.sender.MessageOutput;

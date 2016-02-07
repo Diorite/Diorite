@@ -44,7 +44,7 @@ public class AnyCraftingRecipeItem implements CraftingRecipeItem
      * Construct new recipe item with given item as pattern.
      *
      * @param item            pattern item.
-     * @param replacementFunc replacement item function, see {@link #getReplacement(Player, CraftingGrid)}, may by null.
+     * @param replacementFunc replacement item function, see {@link #getReplacement(Player, CraftingGrid)}, may be null.
      * @param replacement     replacement item, see {@link #getReplacement()}
      * @param validators      validators of thic recipe item, allowing to check additional data of item. Player may be null.
      */

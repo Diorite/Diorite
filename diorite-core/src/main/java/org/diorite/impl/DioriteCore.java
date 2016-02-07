@@ -100,6 +100,7 @@ import org.diorite.Core;
 import org.diorite.Diorite;
 import org.diorite.ItemFactory;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
 import org.diorite.chat.ChatPosition;
@@ -1160,6 +1161,8 @@ public class DioriteCore implements Core
             s.serverManager = new ServerManagerImpl(s);
             s.playersManager = new PlayersManagerImpl(s);
             s.worldsManager = new WorldsManagerImpl(s);
+
+            DioriteMessages.reload();
         });
         initPipeline.addLast("DioriteCore|initRecipes", (s, p, d) -> s.serverManager.getRecipeManager().addDefaultRecipes());
 
