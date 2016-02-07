@@ -6,3 +6,5 @@ commands:
   onlyconsole: "&cTa komenda moze byc uzywana wylacznie przez graczy."
   onlyplayer: "&cTa komenda moze byc uzywana wylacznie przez konsole."
   no-target: "&cNie wskazales celu lub jest offline.."
+  number-not-positive: "&cLiczba musi być większa od 0."
+  number-not-positive-or-zero: "&cLiczba musi być większa lub równa 0."
