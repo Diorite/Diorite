@@ -51,7 +51,7 @@ public class WorldBorderCmd extends SystemCommandImpl
                 }
                 else
                 {
-                    sender.sendSimpleColoredMessage("&cYou must specify world! Use /worldborder:<worldName>");
+                    sender.sendSimpleColoredMessage("" /*DioriteMessages.WORLDBORDER_NO_WORLD*/);
                     return;
                 }
             }

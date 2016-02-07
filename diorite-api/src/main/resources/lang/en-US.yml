@@ -8,6 +8,7 @@ commands:
   no-target: "&cTarget is not specified or player is offline."
   no-material: "&cMaterial is not specifed."
   no-number: "&cNumber is not specifed."
+  no-world: "&cWorld isn't found."
   correct-usage: "&cCorrect usage &7/$<command.usage>"
 help:
   header: "Help"
@@ -27,3 +28,15 @@ plugin:
   parent: "  &7Parent plugin: &3$<plugin.parent>"
   loaded: "  &7Loaded classes: &3$<plugin.loaded>"
   loader: "  &7Plugin loader: &3$<plugin.loader>"
+worldborder:
+  help:
+    status-header: "&7Current world border status in &3$<world.name>"
+    border-status: " &7Border state: &3$<world.worldborder.status>"
+    current-size: " &7Current size: &3$<world.worldborder.size>"
+    target-size: " &7Target size: &3$<world.worldborder.targetSize>"
+    target-size-reach-time: " &7Target size reach time: &3$<world.worldborder.targetSizeReachTime>"
+    commands-header: "&7World border commands"
+    command-reset: " &7/wb &3reset &7- restore default world border settings"
+    command-setsize: " &7/wb &3setsize <size> [<time>] &7- change world border size"
+    command-setcenter: " &7/wb &3setcenter <x> <z> &7- change center point of world border"
+  console-no-world: "&cYou must specify world! Use /worldborder:<worldName>"

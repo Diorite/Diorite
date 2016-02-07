@@ -32,7 +32,6 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
-import org.diorite.entity.Player;
 import org.diorite.world.WorldBorder;
 
 public class WorldBorderImpl implements WorldBorder, Tickable
@@ -42,7 +41,7 @@ public class WorldBorderImpl implements WorldBorder, Tickable
     private double centerX, centerZ;
     private double size;
     private double targetSize;
-    private double startSize; // Used where border is growing or decreasing
+    private double startSize; // Used when world border is growing or decreasing
     private long targetReachTime;
     private double damageAmount;
     private double damageBuffer;
@@ -231,7 +230,6 @@ public class WorldBorderImpl implements WorldBorder, Tickable
             {
                 this.size = this.targetSize;
                 this.targetReachTime = 0;
-                return;
             }
         }
         else if (wbState == State.DECREASING)
@@ -242,13 +240,7 @@ public class WorldBorderImpl implements WorldBorder, Tickable
             {
                 this.size = this.targetSize;
                 this.targetReachTime = 0;
-                return;
             }
-        }
-
-        for (final Player p : this.world.getPlayersInWorld())
-        {
-            // TODO apply damage to players
         }
     }
 
