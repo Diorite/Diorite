@@ -279,7 +279,7 @@ public interface PermissionsManager
 
     /**
      * Method will add given permissible to given group with given priority,
-     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return false. <br>
+     * if group doesn't exist (isn't registred) or permissible doesn't support groups method will do nothing and return false. <br>
      * If permissible is already in this group only priority will be updated.
      *
      * @param permissible permissible to add to a group.
@@ -296,7 +296,7 @@ public interface PermissionsManager
 
     /**
      * Method will add given permissible to given group with given priority,
-     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return false. <br>
+     * if group doesn't exist (isn't registred) or permissible doesn't support groups method will do nothing and return false. <br>
      * If permissible is already in this group only priority will be updated.
      *
      * @param permissible permissible to add to a group.
@@ -322,7 +322,7 @@ public interface PermissionsManager
 
     /**
      * Method will add given permissible to given group with given priority,
-     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return false. <br>
+     * if group doesn't exist (isn't registred) or permissible doesn't support groups method will do nothing and return false. <br>
      * If permissible is already in this group only priority will be updated.
      *
      * @param permissible permissible to add to a group.
@@ -334,7 +334,7 @@ public interface PermissionsManager
 
     /**
      * Method will remove given permissible from given group.
-     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return true. <br>
+     * if group doesn't exist (isn't registred) or permissible doesn't support groups method will do nothing and return true. <br>
      *
      * @param permissible permissible to remove from a group.
      * @param group       group of permissible.
@@ -349,7 +349,7 @@ public interface PermissionsManager
 
     /**
      * Method will remove given permissible from given group.
-     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return true. <br>
+     * if group doesn't exist (isn't registred) or permissible doesn't support groups method will do nothing and return true. <br>
      *
      * @param permissible permissible to remove from a group.
      * @param group       group of permissible.
@@ -360,7 +360,7 @@ public interface PermissionsManager
 
     /**
      * Method will remove given permissible from given group only if priority matches.
-     * if group doesn't exist (isn't registred) or permissible doesn't supprot groups method will do nothing and return true. <br>
+     * if group doesn't exist (isn't registred) or permissible doesn't support groups method will do nothing and return true. <br>
      *
      * @param permissible permissible to remove from a group.
      * @param groupEntry  group of permissible.

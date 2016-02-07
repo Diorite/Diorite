@@ -243,7 +243,7 @@ public class DioritePermissionsManager implements PermissionsManager
         {
             return new AdvancedPermissionImpl((ExtendedPermissionPattern) permissionPattern, defaultLevel, permission);
         }
-        // TODO: supprot for special permissions
+        // TODO: support for special permissions
         throw new UnsupportedOperationException();
     }
 

@@ -42,9 +42,9 @@ public abstract class SimpleTemplateElement<T> extends TemplateElement<T>
     /**
      * construct new template for given class, convert function and class type checking function.
      *
-     * @param fieldType      type of supproted template element.
+     * @param fieldType      type of supported template element.
      * @param function       function used to convert other types to this type (may throw errors)
-     * @param classPredicate returns true for classes that can be converted into supproted type.
+     * @param classPredicate returns true for classes that can be converted into supported type.
      */
     public SimpleTemplateElement(final Class<T> fieldType, final Function<Object, T> function, final Predicate<Class<?>> classPredicate)
     {
@@ -54,7 +54,7 @@ public abstract class SimpleTemplateElement<T> extends TemplateElement<T>
     /**
      * construct new template for given class.
      *
-     * @param clazz type of supproted template element.
+     * @param clazz type of supported template element.
      */
     public SimpleTemplateElement(final Class<T> clazz)
     {

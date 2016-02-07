@@ -29,7 +29,7 @@ package org.diorite.material;
  */
 public interface PlaceableMat
 {
-    // TODO: multiple relative blocks supprot
+    // TODO: multiple relative blocks support
 //    /**
 //     * Returns block material that will be placed instead of that item.
 //     *

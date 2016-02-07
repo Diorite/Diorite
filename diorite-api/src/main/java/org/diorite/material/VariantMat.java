@@ -30,8 +30,8 @@ import org.diorite.material.blocks.SandMat;
 
 /**
  * enum with some common types (variants) of blocks.
- * Block supproting variant may (and mostly it will) supprot only few of them.
- * If block don't supprot given variant, {@link #CLASSIC} should be ussed instead.
+ * Block supporting variant may (and mostly it will) support only few of them.
+ * If block don't support given variant, {@link #CLASSIC} should be ussed instead.
  */
 public enum VariantMat
 {

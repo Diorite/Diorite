@@ -1121,7 +1121,7 @@ public interface Inventory extends Iterable<ItemStack>
     String getTitle();
 
     /**
-     * Change title of inventory, vanilla minecraft don't supprot this operation,
+     * Change title of inventory, vanilla minecraft don't support this operation,
      * so it must be done by re-sending whole inventory.
      *
      * @param str new title.

@@ -52,7 +52,7 @@ public @interface Plugin
      *
      * @return prefix of plugin.
      */
-    String prefix() default "%name% v%version%"; // supprot name and version placeholder
+    String prefix() default "%name% v%version%"; // support name and version placeholder
 
     /**
      * Author of plugin.

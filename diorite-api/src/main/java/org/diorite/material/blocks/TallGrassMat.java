@@ -139,7 +139,7 @@ public class TallGrassMat extends FlowerMat
 
     /**
      * Returns one of TallGrass sub-type based on {@link FlowerTypeMat}
-     * If this flower don't supprot given type, it will return default one.
+     * If this flower don't support given type, it will return default one.
      *
      * @param flowerType type of flower
      *

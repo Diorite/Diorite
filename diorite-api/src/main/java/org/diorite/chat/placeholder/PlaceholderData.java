@@ -168,7 +168,7 @@ public interface PlaceholderData<T>
         BasePlaceholderData.cache.put(fullName, result);
         return result;
     }
-// TODO add supprot for method placeholders
+// TODO add support for method placeholders
     /**
      * Get collection of used placeholders in given string.
      *

@@ -41,12 +41,12 @@ import org.diorite.utils.reflections.ReflectGetter;
 /**
  * Base class for all template elements handlers.
  *
- * @param <T> type of supproted/handled element.
+ * @param <T> type of supported/handled element.
  */
 public abstract class TemplateElement<T>
 {
     /**
-     * type of supproted/handled element.
+     * type of supported/handled element.
      */
     protected final Class<T>            fieldType;
     /**
@@ -54,7 +54,7 @@ public abstract class TemplateElement<T>
      */
     protected final Function<Object, T> function;
     /**
-     * returns true for classes that can be converted into supproted type.
+     * returns true for classes that can be converted into supported type.
      */
     protected final Predicate<Class<?>> classPredicate;
 
@@ -62,9 +62,9 @@ public abstract class TemplateElement<T>
     /**
      * Construct new template for given class, convert function and class type checking function.
      *
-     * @param fieldType      type of supproted template element.
+     * @param fieldType      type of supported template element.
      * @param function       function used to convert other types to this type (may throw errors)
-     * @param classPredicate returns true for classes that can be converted into supproted type.
+     * @param classPredicate returns true for classes that can be converted into supported type.
      */
     public TemplateElement(final Class<T> fieldType, final Function<Object, T> function, final Predicate<Class<?>> classPredicate)
     {

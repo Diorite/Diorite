@@ -87,7 +87,7 @@ public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
      *
      * @param fieldType      type of template element, should be array type.
      * @param function       function used to convert other types to this type (may throw errors)
-     * @param classPredicate returns true for classes that can be converted into supproted type.
+     * @param classPredicate returns true for classes that can be converted into supported type.
      */
     public SimpleArrayTemplateElement(final Class<T> fieldType, final Function<Object, T> function, final Predicate<Class<?>> classPredicate)
     {

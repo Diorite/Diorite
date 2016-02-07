@@ -38,7 +38,7 @@ public interface VariantableMat
 
     /**
      * Returns sub-type of block, based on {@link VariantMat}.
-     * If block don't supprot given variant, {@link VariantMat#CLASSIC} one will be returned.
+     * If block don't support given variant, {@link VariantMat#CLASSIC} one will be returned.
      *
      * @param variant variant of block.
      *

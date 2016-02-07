@@ -300,7 +300,7 @@ public abstract class CommandImpl implements Command
         Objects.requireNonNull(label, "label can't be null");
         Objects.requireNonNull(matchedPattern, "matchedPattern can't be null");
         Objects.requireNonNull(args, "args can't be null");
-        try // TODO: add supprot for basic exceptions
+        try // TODO: add support for basic exceptions
         {
             if ((this.subCommandMap != null) && (args.length > 0))
             {
@@ -355,7 +355,7 @@ public abstract class CommandImpl implements Command
         Objects.requireNonNull(label, "label can't be null");
         Objects.requireNonNull(matchedPattern, "matchedPattern can't be null");
         Objects.requireNonNull(args, "args can't be null");
-        try // TODO: add supprot for basic exceptions
+        try // TODO: add support for basic exceptions
         {
             if ((this.subCommandMap != null) && (args.length > 0))
             {
