@@ -24,12 +24,17 @@
 
 package org.diorite.impl.command.defaults;
 
+import static org.diorite.cfg.messages.Message.MessageData;
+
+
 import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.impl.entity.IPlayer;
+import org.diorite.impl.world.WorldBorderImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.Diorite;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.command.CommandPriority;
 import org.diorite.world.WorldBorder;
 
@@ -51,7 +56,7 @@ public class WorldBorderCmd extends SystemCommandImpl
                 }
                 else
                 {
-                    sender.sendSimpleColoredMessage("" /*DioriteMessages.WORLDBORDER_NO_WORLD*/);
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_CONSOLE_NO_WORLD, sender);
                     return;
                 }
             }
@@ -60,30 +65,27 @@ public class WorldBorderCmd extends SystemCommandImpl
                 world = (WorldImpl) Diorite.getWorldsManager().getWorld(parWorld);
                 if (world == null)
                 {
-                    sender.sendSimpleColoredMessage("&cWorld &3'" + parWorld + "' &cdoesn't exists!");
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_WORLD, sender);
                     return;
                 }
             }
 
             if (args.length() == 0)
             {
-                sender.sendSimpleColoredMessage("&7Current world border status in &3" + world.getName());
-                sender.sendSimpleColoredMessage(" &7Border state: &3" + world.getWorldBorder().getWorldBorderState());
+                final WorldBorderImpl wb = world.getWorldBorder();
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_STATUS_HEADER, sender, MessageData.e("world", world));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_BORDER_STATUS, sender, MessageData.e("worldborder", wb));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_CURRENT_SIZE, sender, MessageData.e("worldborder", wb));
                 if (world.getWorldBorder().getWorldBorderState() != WorldBorder.State.STATIONARY)
                 {
-                    sender.sendSimpleColoredMessage(" &7Current size: &3~" + Math.round(world.getWorldBorder().getSize()));
-                    sender.sendSimpleColoredMessage(" &7Target size: &3" + world.getWorldBorder().getTargetSize());
-                    sender.sendSimpleColoredMessage(" &7Target size reach time: &3" + world.getWorldBorder().getTargetSizeReachTime());
-                }
-                else
-                {
-                    sender.sendSimpleColoredMessage(" &7Current size: &3" + world.getWorldBorder().getSize());
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_TARGET_SIZE, sender, MessageData.e("worldborder", wb));
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_TARGET_SIZE_REACH_TIME, sender, MessageData.e("worldborder", wb));
                 }
 
-                sender.sendSimpleColoredMessage("&7World border commands");
-                sender.sendSimpleColoredMessage(" &7/wb &3reset &7- restore default world border settings");
-                sender.sendSimpleColoredMessage(" &7/wb &3setsize <size> [<time>] &7- change world border size");
-                sender.sendSimpleColoredMessage(" &7/wb &3setcenter <x> <z> &7- change center point of world border");
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMANDS_HEADER, sender);
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_RESET, sender);
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_SETSIZE, sender);
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_SETCENTER, sender);
                 return;
             }
 
@@ -107,7 +109,7 @@ public class WorldBorderCmd extends SystemCommandImpl
                     }
                     else
                     {
-                        sender.sendSimpleColoredMessage("&cInvalid arguments!");
+                        DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_INVALID_ARGUMENTS, sender);
                     }
                     break;
                 }
@@ -116,7 +118,7 @@ public class WorldBorderCmd extends SystemCommandImpl
                 {
                     if (args.length() != 3)
                     {
-                        sender.sendSimpleColoredMessage("&cInvalid arguments!");
+                        DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_INVALID_ARGUMENTS, sender);
                         return;
                     }
                     world.getWorldBorder().setCenter(args.asDouble(1), args.asDouble(2));
@@ -125,7 +127,7 @@ public class WorldBorderCmd extends SystemCommandImpl
 
                 default:
                 {
-                    sender.sendSimpleColoredMessage("&cInvalid sub-command!");
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_INVALID_ARGUMENTS, sender);
                     break;
                 }
             }

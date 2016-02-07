@@ -12,6 +12,7 @@ commands:
   number-not-positive-or-zero: "&cNumber must be greater or equals to 0."
   no-world: "&cWorld isn't found."
   correct-usage: "&cCorrect usage &7/$<command.usage>"
+  invalid-arguments: "&cInvalid arguments!"
 help:
   header: "Help"
   nodesc: "This command does not have description."
@@ -33,10 +34,10 @@ plugin:
 worldborder:
   help:
     status-header: "&7Current world border status in &3$<world.name>"
-    border-status: " &7Border state: &3$<world.worldborder.status>"
-    current-size: " &7Current size: &3$<world.worldborder.size>"
-    target-size: " &7Target size: &3$<world.worldborder.targetSize>"
-    target-size-reach-time: " &7Target size reach time: &3$<world.worldborder.targetSizeReachTime>"
+    border-status: " &7Border state: &3$<worldborder.status>"
+    current-size: " &7Current size: &3$<worldborder.size>"
+    target-size: " &7Target size: &3$<worldborder.targetSize>"
+    target-size-reach-time: " &7Target size reach time: &3$<worldborder.targetSizeReachTime>"
     commands-header: "&7World border commands"
     command-reset: " &7/wb &3reset &7- restore default world border settings"
     command-setsize: " &7/wb &3setsize <size> [<time>] &7- change world border size"

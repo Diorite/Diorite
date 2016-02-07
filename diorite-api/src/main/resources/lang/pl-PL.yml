@@ -12,6 +12,7 @@ commands:
   number-not-positive-or-zero: "&cLiczba musi być większa lub równa 0."
   no-world: "&cŚwiat o podanej nazwie nie istnieje."
   correct-usage: "&cPoprawne użycie komendy &7/$<command.usage>"
+  invalid-arguments: "&cNiepoprawne argumenty!"
 help:
   header: "Pomoc"
   nodesc: "Ta komenda nie posiada opisu."
@@ -33,12 +34,12 @@ plugin:
 worldborder:
   help:
     status-header: "&7Informacje o granicy świata w &3$<world.name>"
-    border-status: " &7Status granicy: &3$<world.worldborder.status>"
-    current-size: " &7Rozmiar: &3$<world.worldborder.size>"
-    target-size: " &7Docelowy rozmiar: &3$<world.worldborder.targetSize>"
-    target-size-reach-time: " &7Czas do osiągnięcia docelowego rozmiaru: &3$<world.worldborder.targetSizeReachTime>"
+    border-status: " &7Status granicy: &3$<worldborder.status>"
+    current-size: " &7Rozmiar: &3$<worldborder.size>"
+    target-size: " &7Docelowy rozmiar: &3$<worldborder.targetSize>"
+    target-size-reach-time: " &7Czas do osiągnięcia docelowego rozmiaru: &3$<worldborder.targetSizeReachTime>"
     commands-header: "&7Komendy"
     command-reset: " &7/wb &3reset &7- przywraca domyślne ustawienia granicy świata"
-    command-setsize: " &7/wb &3setsize <size> [<time>] &7- zmienia rozmiar granicy świata"
+    command-setsize: " &7/wb &3setsize <rozmiar> [<czas>] &7- zmienia rozmiar granicy świata"
     command-setcenter: " &7/wb &3setcenter <x> <z> &7- zmienia środkowy punkt granicy świata"
   console-no-world: "&cMusisz podać nazwę świata! Użyj /worldborder:<nazwa>"

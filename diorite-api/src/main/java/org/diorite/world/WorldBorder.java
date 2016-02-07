@@ -28,6 +28,8 @@ import org.diorite.ILocation;
 
 public interface WorldBorder
 {
+    World getWorld();
+
     State getWorldBorderState();
 
     void reset();

@@ -51,6 +51,7 @@ import org.diorite.entity.Player;
 import org.diorite.plugin.BasePlugin;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.world.World;
+import org.diorite.world.WorldBorder;
 
 /**
  * Represent type of placeholder, like {@link Player} for player.name. <br>
@@ -92,6 +93,10 @@ public class PlaceholderType<T>
      * {@link org.diorite.world.World} placeholder type.
      */
     public static final PlaceholderType<World>         WORLD         = create("world", World.class);
+    /**
+     * {@link org.diorite.world.WorldBorder} placeholder type.
+     */
+    public static final PlaceholderType<WorldBorder>   WORLDBORDER   = create("worldborder", WorldBorder.class);
     /**
      * {@link Player} placeholder type, it use sender and entity placeholders too.
      */
@@ -163,6 +168,25 @@ public class PlaceholderType<T>
         WORLD.registerItem("maxHeight", World::getMaxHeight);
         WORLD.registerItem("group", w -> w.getWorldGroup().getName());
         WORLD.registerItem("playersNum", w -> w.getPlayersInWorld().size());
+        WORLD.registerItem("worldborder", World::getWorldBorder);
+
+        //WorldBorder
+        WORLDBORDER.registerItem("world", WorldBorder::getWorld);
+        WORLDBORDER.registerItem("size", worldBorder -> {
+            if (worldBorder.getWorldBorderState() == WorldBorder.State.STATIONARY)
+            {
+                return worldBorder.getSize();
+            }
+            else
+            {
+                return "~" + Math.round(worldBorder.getSize());
+            }
+        });
+        WORLDBORDER.registerItem("exactSize", WorldBorder::getSize);
+        WORLDBORDER.registerItem("status", WorldBorder::getWorldBorderState);
+        WORLDBORDER.registerItem("targetSize", WorldBorder::getTargetSize);
+        WORLDBORDER.registerItem("targetSizeReachTime", WorldBorder::getTargetSizeReachTime);
+        WORLDBORDER.registerItem("startSize", WorldBorder::getStartSize);
 
         //Core
         CORE.registerItem("version", Core::getVersion);

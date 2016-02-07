@@ -47,31 +47,35 @@ public final class DioriteMessages
     /**
      * Helper variable to prevent a typo.
      */
-    public static final char   SEP          = '.';
+    public static final char   SEP             = '.';
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String KEY_COMMANDS = "commands";
+    public static final String KEY_COMMANDS    = "commands";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String KEY_PLAYER   = "player";
+    public static final String KEY_PLAYER      = "player";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String KEY_ENTITY   = "entity";
+    public static final String KEY_ENTITY      = "entity";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String KEY_HELP     = "help";
+    public static final String KEY_HELP        = "help";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String KEY_SAVE     = "save";
+    public static final String KEY_SAVE        = "save";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String KEY_PLUGIN   = "plugin";
+    public static final String KEY_PLUGIN      = "plugin";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String KEY_WORLDBORDER = "worldborder";
 
 
     /**
@@ -119,7 +123,15 @@ public final class DioriteMessages
     /**
      * Helper variable to prevent a typo.
      */
+    public static final String MSG_CMD_NO_WORLD                    = KEY_COMMANDS + SEP + "no-world";
+    /**
+     * Helper variable to prevent a typo.
+     */
     public static final String MSG_CMD_CORRECT                     = KEY_COMMANDS + SEP + "correct-usage";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_CMD_INVALID_ARGUMENTS           = KEY_COMMANDS + SEP + "invalid-arguments";
 
 
     /**
@@ -186,6 +198,48 @@ public final class DioriteMessages
      * Helper variable to prevent a typo.
      */
     public static final String MSG_PLUGIN_LOADER   = KEY_PLUGIN + SEP + "loader";
+
+
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_STATUS_HEADER          = KEY_WORLDBORDER + SEP + "help" + SEP + "status-header";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_BORDER_STATUS          = KEY_WORLDBORDER + SEP + "help" + SEP + "border-status";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_CURRENT_SIZE           = KEY_WORLDBORDER + SEP + "help" + SEP + "current-size";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_TARGET_SIZE            = KEY_WORLDBORDER + SEP + "help" + SEP + "target-size";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_TARGET_SIZE_REACH_TIME = KEY_WORLDBORDER + SEP + "help" + SEP + "target-size-reach-time";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_COMMANDS_HEADER        = KEY_WORLDBORDER + SEP + "help" + SEP + "commands-header";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_COMMAND_RESET          = KEY_WORLDBORDER + SEP + "help" + SEP + "command-reset";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_COMMAND_SETSIZE        = KEY_WORLDBORDER + SEP + "help" + SEP + "command-setsize";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_HELP_COMMAND_SETCENTER      = KEY_WORLDBORDER + SEP + "help" + SEP + "command-setcenter";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_WORLDBORDER_CONSOLE_NO_WORLD            = KEY_WORLDBORDER + SEP + "console-no-world";
 
 
     private static Messages msgs;
@@ -265,6 +319,21 @@ public final class DioriteMessages
     }
 
     /**
+     * Try send this message to given {@link CommandSender}, if message is disabled method will just return false.
+     * Language will be automatically fetched from given {@link CommandSender}
+     *
+     * @param path   path to message.
+     * @param target target of message.
+     * @param data   placeholder objects to use.
+     *
+     * @return true if message was send.
+     */
+    public static boolean sendMessage(final String path, final CommandSender target, final MessageData... data)
+    {
+        return msgs.sendMessage(path, target, target.getPreferedLocale(), data);
+    }
+
+    /**
      * Try broadcast this message (to all players), if message is disabled method will just return false.
      *
      * @param path path to message.
@@ -279,7 +348,7 @@ public final class DioriteMessages
     }
 
     /**
-     * Try broadcast this message to selected comamnd senders, if message is disabled method will just return false.
+     * Try broadcast this message to selected command senders, if message is disabled method will just return false.
      *
      * @param path    path to message.
      * @param targets targets of message.
