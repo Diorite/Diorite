@@ -45,11 +45,6 @@ public class PacketLoginClientboundSuccess extends PacketLoginClientbound
     {
     }
 
-    public static void main(final String[] args)
-    {
-
-    }
-
     public PacketLoginClientboundSuccess(final GameProfileImpl profile)
     {
         this.profile = profile;

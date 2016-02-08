@@ -54,6 +54,7 @@ public class WorldBorderImpl implements WorldBorder, Tickable
         this.world = world;
     }
 
+    @Override
     public WorldImpl getWorld()
     {
         return this.world;

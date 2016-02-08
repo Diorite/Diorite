@@ -25,7 +25,6 @@
 package org.diorite.impl.connection.packets.handshake.serverbound;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -47,11 +46,6 @@ public class PacketHandshakingServerboundSetProtocol extends PacketHandshakingSe
 
     public PacketHandshakingServerboundSetProtocol()
     {
-    }
-
-    public static void main(final String[] args)
-    {
-        System.out.println("diorite.org.se.f.d.f.geefr.frgdrdfvs".getBytes(StandardCharsets.UTF_8).length);
     }
 
     public PacketHandshakingServerboundSetProtocol(final int protocolVersion, final RequestType requestType, final int serverPort, final String serverAddress)
