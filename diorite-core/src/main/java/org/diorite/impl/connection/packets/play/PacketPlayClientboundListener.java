@@ -52,6 +52,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMove;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMoveLook;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundScoreboardDisplayObjective;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSoundEffect;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
@@ -147,4 +148,6 @@ public interface PacketPlayClientboundListener extends PacketPlayListener
     void handle(PacketPlayClientboundNamedSoundEffect packet);
 
     void handle(PacketPlayClientboundWorldBorder packet);
+
+    void handle(PacketPlayClientboundScoreboardDisplayObjective packet);
 }
