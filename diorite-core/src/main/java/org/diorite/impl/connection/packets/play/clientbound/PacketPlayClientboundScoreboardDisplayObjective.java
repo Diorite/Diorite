@@ -34,7 +34,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.scoreboard.Scoreboard;
 import org.diorite.scoreboard.ScoreboardPosition;
 
-@PacketClass(id = 0x38, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 180)
+@PacketClass(id = 0x38, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 20)
 public class PacketPlayClientboundScoreboardDisplayObjective extends PacketPlayClientbound
 {
     private ScoreboardPosition position;
