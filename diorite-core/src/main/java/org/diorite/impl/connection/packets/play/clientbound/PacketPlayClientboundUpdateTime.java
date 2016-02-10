@@ -31,63 +31,62 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
-import org.diorite.scoreboard.Scoreboard;
-import org.diorite.scoreboard.ScoreboardPosition;
+import org.diorite.world.World;
 
-@PacketClass(id = 0x38, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 20)
-public class PacketPlayClientboundScoreboardDisplayObjective extends PacketPlayClientbound
+@PacketClass(id = 0x44, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 10)
+public class PacketPlayClientboundUpdateTime extends PacketPlayClientbound
 {
-    private ScoreboardPosition position;
-    private String             name;
+    private long worldAge;
+    private long time;
 
-    public PacketPlayClientboundScoreboardDisplayObjective()
+    public PacketPlayClientboundUpdateTime()
     {
     }
 
-    public PacketPlayClientboundScoreboardDisplayObjective(final String scoreboardName, final ScoreboardPosition position)
+    public PacketPlayClientboundUpdateTime(final long worldAge, final long time)
     {
-        this.position = position;
-        this.name = scoreboardName;
+        this.worldAge = worldAge;
+        this.time = time;
     }
 
-    public PacketPlayClientboundScoreboardDisplayObjective(final Scoreboard scoreboard)
+    public PacketPlayClientboundUpdateTime(final World world)
     {
-        this.position = scoreboard.getPosition();
-        this.name = scoreboard.getName();
+        this.worldAge = 0; // TODO
+        this.time = world.getTime();
     }
 
-    public ScoreboardPosition getPosition()
+    public long getWorldAge()
     {
-        return position;
+        return worldAge;
     }
 
-    public void setPosition(final ScoreboardPosition position)
+    public void setWorldAge(final long worldAge)
     {
-        this.position = position;
+        this.worldAge = worldAge;
     }
 
-    public String getName()
+    public long getTime()
     {
-        return name;
+        return time;
     }
 
-    public void setName(final String name)
+    public void setTime(final long time)
     {
-        this.name = name;
+        this.time = time;
     }
 
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.position = ScoreboardPosition.getByEnumOrdinal(data.readByte());
-        this.name = data.readText(16);
+        this.worldAge = data.readLong();
+        this.time = data.readLong();
     }
 
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-        data.writeByte(this.position.ordinal());
-        data.writeText(this.name);
+        data.writeLong(this.worldAge);
+        data.writeLong(this.time);
     }
 
     @Override

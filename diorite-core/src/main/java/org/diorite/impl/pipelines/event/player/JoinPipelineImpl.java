@@ -26,6 +26,7 @@ package org.diorite.impl.pipelines.event.player;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfiles;
+import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
@@ -35,6 +36,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPosition;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnPosition;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateTime;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.BlockLocation;
@@ -59,16 +61,16 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
         this.addFirst("Diorite|StartPackets", ((evt, pipeline) -> {
             // TODO
             final IPlayer player = (IPlayer) evt.getPlayer();
-            //player.getNetworkManager().sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), false, Dimension.OVERWORLD, Difficulty.PEACEFUL, 20, WorldType.FLAT));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), player.getWorld().getHardcore().isEnabled(), player.getWorld().getDimension(), player.getWorld().getDifficulty(), DioriteCore.getInstance().getPlayersManager().getRawPlayers().size(), player.getWorld().getWorldType()));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
-            //player.getNetworkManager().sendPacket(new PacketPlayClientboundWorldDifficulty(Difficulty.EASY));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundWorldDifficulty(player.getWorld().getDifficulty()));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundSpawnPosition(new BlockLocation(2, 255, - 2)));
-            //player.getNetworkManager().sendPacket(new PacketPlayClientboundAbilities(false, false, false, false, Player.WALK_SPEED, Player.FLY_SPEED));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundAbilities(false, false, player.canFly(), false, Player.WALK_SPEED, Player.FLY_SPEED));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundHeldItemSlot(player.getHeldItemSlot()));
-            player.getNetworkManager().sendPacket(new PacketPlayClientboundPosition(new TeleportData(2, 255, - 2), 5));
+            final CoreNetworkManager networkManager = player.getNetworkManager();
+
+            networkManager.sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), player.getWorld().getHardcore().isEnabled(), player.getWorld().getDimension(), player.getWorld().getDifficulty(), DioriteCore.getInstance().getPlayersManager().getRawPlayers().size(), player.getWorld().getWorldType()));
+            networkManager.sendPacket(new PacketPlayClientboundCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
+            networkManager.sendPacket(new PacketPlayClientboundWorldDifficulty(player.getWorld().getDifficulty()));
+            networkManager.sendPacket(new PacketPlayClientboundSpawnPosition(new BlockLocation(2, 255, - 2)));
+            networkManager.sendPacket(new PacketPlayClientboundAbilities(false, false, player.canFly(), false, Player.WALK_SPEED, Player.FLY_SPEED));
+            networkManager.sendPacket(new PacketPlayClientboundHeldItemSlot(player.getHeldItemSlot()));
+            networkManager.sendPacket(new PacketPlayClientboundPosition(new TeleportData(2, 255, - 2), 5));
+            networkManager.sendPacket(new PacketPlayClientboundUpdateTime(player.getWorld()));
         }));
 
         this.addAfter("Diorite|StartPackets", "Diorite|EntityStuff", ((evt, pipeline) -> {

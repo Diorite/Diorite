@@ -75,6 +75,10 @@ public final class DioriteMessages
     /**
      * Helper variable to prevent a typo.
      */
+    public static final String KEY_TIME        = "time";
+    /**
+     * Helper variable to prevent a typo.
+     */
     public static final String KEY_WORLDBORDER = "worldborder";
 
 
@@ -124,6 +128,10 @@ public final class DioriteMessages
      * Helper variable to prevent a typo.
      */
     public static final String MSG_CMD_NO_WORLD                    = KEY_COMMANDS + SEP + "no-world";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_CMD_CONSOLE_NO_WORLD            = KEY_COMMANDS + SEP + "console-no-world";
     /**
      * Helper variable to prevent a typo.
      */
@@ -203,6 +211,16 @@ public final class DioriteMessages
     /**
      * Helper variable to prevent a typo.
      */
+    public static final String MSG_TIME_CURRENT   = KEY_TIME + SEP + "current";
+    /**
+     * Helper variable to prevent a typo.
+     */
+    public static final String MSG_TIME_CHANGED   = KEY_TIME + SEP + "changed";
+
+
+    /**
+     * Helper variable to prevent a typo.
+     */
     public static final String MSG_WORLDBORDER_HELP_STATUS_HEADER          = KEY_WORLDBORDER + SEP + "help" + SEP + "status-header";
     /**
      * Helper variable to prevent a typo.
@@ -236,10 +254,6 @@ public final class DioriteMessages
      * Helper variable to prevent a typo.
      */
     public static final String MSG_WORLDBORDER_HELP_COMMAND_SETCENTER      = KEY_WORLDBORDER + SEP + "help" + SEP + "command-setcenter";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_WORLDBORDER_CONSOLE_NO_WORLD            = KEY_WORLDBORDER + SEP + "console-no-world";
 
 
     private static Messages msgs;

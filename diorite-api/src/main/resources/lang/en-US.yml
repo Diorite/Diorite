@@ -11,6 +11,7 @@ commands:
   number-not-positive: "&cNumber must be greater than 0."
   number-not-positive-or-zero: "&cNumber must be greater or equals to 0."
   no-world: "&cWorld isn't found."
+  console-no-world: "&cYou must specify world! Use /$<command.name>:<worldName>"
   correct-usage: "&cCorrect usage &7/$<command.usage>"
   invalid-arguments: "&cInvalid arguments!"
 help:
@@ -31,6 +32,9 @@ plugin:
   parent: "  &7Parent plugin: &3$<plugin.parent>"
   loaded: "  &7Loaded classes: &3$<plugin.loaded>"
   loader: "  &7Plugin loader: &3$<plugin.loader>"
+time:
+  current: "&7Current time in &3$<world.name> &7is &3$<world.time>"
+  changed: "&7Time has been changed to &3$<world.time> &7in &3$<world.name>"
 worldborder:
   help:
     status-header: "&7Current world border status in &3$<world.name>"
@@ -42,4 +46,3 @@ worldborder:
     command-reset: " &7/wb &3reset &7- restore default world border settings"
     command-setsize: " &7/wb &3setsize <size> [<time>] &7- change world border size"
     command-setcenter: " &7/wb &3setcenter <x> <z> &7- change center point of world border"
-  console-no-world: "&cYou must specify world! Use /worldborder:<worldName>"

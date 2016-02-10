@@ -168,6 +168,7 @@ public class PlaceholderType<T>
         WORLD.registerItem("maxHeight", World::getMaxHeight);
         WORLD.registerItem("group", w -> w.getWorldGroup().getName());
         WORLD.registerItem("playersNum", w -> w.getPlayersInWorld().size());
+        WORLD.registerItem("time", World::getTime);
         WORLD.registerItem("worldborder", World::getWorldBorder);
 
         //WorldBorder

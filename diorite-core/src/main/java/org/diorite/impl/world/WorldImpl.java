@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.Tickable;
 import org.diorite.impl.connection.packets.Packet;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateTime;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
@@ -734,6 +735,7 @@ public class WorldImpl implements World, Tickable
     public void setTime(final long time)
     {
         this.time = time;
+        this.broadcastPacketInWorld(new PacketPlayClientboundUpdateTime(this));
     }
 
     @Override
@@ -826,6 +828,14 @@ public class WorldImpl implements World, Tickable
             }
             //}
             this.chunkManager.doTick(tps);
+        }
+
+        {
+            if (this.time == 24000)
+            {
+                this.time = 0;
+            }
+            this.time++; // TODO scale it with server TPS
         }
 
         if (this.saveTimer-- <= 0)

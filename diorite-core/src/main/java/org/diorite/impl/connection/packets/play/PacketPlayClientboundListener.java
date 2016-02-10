@@ -62,6 +62,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTitle;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateTime;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
@@ -150,4 +151,6 @@ public interface PacketPlayClientboundListener extends PacketPlayListener
     void handle(PacketPlayClientboundWorldBorder packet);
 
     void handle(PacketPlayClientboundScoreboardDisplayObjective packet);
+
+    void handle(PacketPlayClientboundUpdateTime packet);
 }

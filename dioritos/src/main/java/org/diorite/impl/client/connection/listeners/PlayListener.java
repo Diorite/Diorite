@@ -67,6 +67,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTitle;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateTime;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
@@ -327,6 +328,12 @@ public class PlayListener implements PacketPlayClientboundListener
 
     @Override
     public void handle(final PacketPlayClientboundScoreboardDisplayObjective packet)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundUpdateTime packet)
     {
 
     }

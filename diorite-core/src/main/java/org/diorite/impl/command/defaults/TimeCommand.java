@@ -24,27 +24,22 @@
 
 package org.diorite.impl.command.defaults;
 
-import static org.diorite.cfg.messages.Message.MessageData;
-
-
 import java.util.regex.Pattern;
 
 import org.diorite.impl.command.SystemCommandImpl;
 import org.diorite.impl.entity.IPlayer;
-import org.diorite.impl.world.WorldBorderImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.Diorite;
 import org.diorite.cfg.messages.DioriteMessages;
+import org.diorite.cfg.messages.Message;
 import org.diorite.command.CommandPriority;
-import org.diorite.world.WorldBorder;
+import org.diorite.utils.math.DioriteMathUtils;
 
-public class WorldBorderCmd extends SystemCommandImpl
+public class TimeCommand extends SystemCommandImpl
 {
-    public WorldBorderCmd()
+    public TimeCommand()
     {
-        // TODO Move messages to DioriteMessages
-        super("worldborder", Pattern.compile("((worldborder|)(wb|)(world-border|))(:(?<world>([a-z0-9_]*))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
-        this.setDescription("Manages world border");
+        super("time", Pattern.compile("((time|)(t|))(:(?<world>([a-z0-9_]*))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             final WorldImpl world;
             final String parWorld = matchedPattern.group("world");
@@ -56,7 +51,7 @@ public class WorldBorderCmd extends SystemCommandImpl
                 }
                 else
                 {
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CONSOLE_NO_WORLD, sender, MessageData.e("command", this));
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CONSOLE_NO_WORLD, sender, Message.MessageData.e("command", this));
                     return;
                 }
             }
@@ -72,56 +67,72 @@ public class WorldBorderCmd extends SystemCommandImpl
 
             if (args.length() == 0)
             {
-                final WorldBorderImpl wb = world.getWorldBorder();
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_STATUS_HEADER, sender, MessageData.e("world", world));
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_BORDER_STATUS, sender, MessageData.e("worldborder", wb));
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_CURRENT_SIZE, sender, MessageData.e("worldborder", wb));
-                if (world.getWorldBorder().getWorldBorderState() != WorldBorder.State.STATIONARY)
-                {
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_TARGET_SIZE, sender, MessageData.e("worldborder", wb));
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_TARGET_SIZE_REACH_TIME, sender, MessageData.e("worldborder", wb));
-                }
-
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMANDS_HEADER, sender);
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_RESET, sender);
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_SETSIZE, sender);
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_SETCENTER, sender);
+                DioriteMessages.sendMessage(DioriteMessages.MSG_TIME_CURRENT, sender, Message.MessageData.e("world", world));
                 return;
+            }
+            else if (args.length() == 1)
+            {
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_INVALID_ARGUMENTS, sender);
             }
 
             switch (args.asString(0).toLowerCase())
             {
-                case "reset":
+                case "set":
                 {
-                    world.getWorldBorder().reset();
-                    break;
-                }
+                    final String timeString = args.asString(1);
 
-                case "setsize":
-                {
-                    if (args.length() == 2)
+                    Integer newTime = DioriteMathUtils.asInt(timeString);
+                    if (newTime == null)
                     {
-                        world.getWorldBorder().setSize(args.asDouble(1));
-                    }
-                    else if (args.length() == 3)
-                    {
-                        world.getWorldBorder().setSize(args.asDouble(1), args.asLong(2));
+                        if (timeString.equalsIgnoreCase("day"))
+                        {
+                            newTime = 1000;
+                        }
+                        else if (timeString.equalsIgnoreCase("night"))
+                        {
+                            newTime = 14000;
+                        }
+                        else
+                        {
+                            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_INVALID_ARGUMENTS, sender);
+                            return;
+                        }
                     }
                     else
                     {
-                        DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_INVALID_ARGUMENTS, sender);
+                        if (newTime < 0)
+                        {
+                            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NUMBER_NOT_POSITIVE_OR_ZERO, sender);
+                            return;
+                        }
                     }
+
+                    world.setTime(newTime);
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_TIME_CHANGED, sender, Message.MessageData.e("world", world));
                     break;
                 }
 
-                case "setcenter":
+                case "add":
                 {
-                    if (args.length() != 3)
+                    final Integer timeDelta = DioriteMathUtils.asInt(args.asString(1));
+                    if (timeDelta == null)
                     {
                         DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_INVALID_ARGUMENTS, sender);
                         return;
                     }
-                    world.getWorldBorder().setCenter(args.asDouble(1), args.asDouble(2));
+
+                    long newTime = world.getTime() + timeDelta;
+                    if (newTime > 24000)
+                    {
+                        newTime =- 24000;
+                    }
+                    else if (newTime < 0)
+                    {
+                        newTime =+ 24000;
+                    }
+
+                    world.setTime(newTime);
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_TIME_CHANGED, sender, Message.MessageData.e("world", world));
                     break;
                 }
 

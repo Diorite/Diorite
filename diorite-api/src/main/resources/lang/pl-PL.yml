@@ -11,6 +11,7 @@ commands:
   number-not-positive: "&cLiczba musi być większa od 0."
   number-not-positive-or-zero: "&cLiczba musi być większa lub równa 0."
   no-world: "&cŚwiat o podanej nazwie nie istnieje."
+  console-no-world: "&cMusisz podać nazwę świata! Użyj /$<command.name>:<nazwa>"
   correct-usage: "&cPoprawne użycie komendy &7/$<command.usage>"
   invalid-arguments: "&cNiepoprawne argumenty!"
 help:
@@ -31,6 +32,9 @@ plugin:
   parent: "  &7Plugin rodzic: &3$<plugin.parent>"
   loaded: "  &7Załadowane klasy: &3$<plugin.loaded>"
   loader: "  &7Plugin loader: &3$<plugin.loader>"
+time:
+  current: "&7Aktualny czas w &3$<world.name> &7to &3$<world.time>"
+  changed: "&7Czas został zmieniony na &3$<world.time> &7w &3$<world.name>"
 worldborder:
   help:
     status-header: "&7Informacje o granicy świata w &3$<world.name>"
@@ -42,4 +46,3 @@ worldborder:
     command-reset: " &7/wb &3reset &7- przywraca domyślne ustawienia granicy świata"
     command-setsize: " &7/wb &3setsize <rozmiar> [<czas>] &7- zmienia rozmiar granicy świata"
     command-setcenter: " &7/wb &3setcenter <x> <z> &7- zmienia środkowy punkt granicy świata"
-  console-no-world: "&cMusisz podać nazwę świata! Użyj /worldborder:<nazwa>"

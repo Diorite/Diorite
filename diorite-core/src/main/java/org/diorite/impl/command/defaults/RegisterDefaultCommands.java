@@ -56,6 +56,7 @@ public final class RegisterDefaultCommands
         cmds.registerCommand(new SayCmd());
         cmds.registerCommand(new SetTpsCmd());
         cmds.registerCommand(new StopCmd());
+        cmds.registerCommand(new TimeCommand());
         cmds.registerCommand(new TimingsCmd());
         cmds.registerCommand(new TpsCmd());
         cmds.registerCommand(new VersionCmd());
