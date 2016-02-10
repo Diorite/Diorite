@@ -73,19 +73,13 @@ public class WorldBorderCmd extends SystemCommandImpl
             if (args.length() == 0)
             {
                 final WorldBorderImpl wb = world.getWorldBorder();
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_STATUS_HEADER, sender, MessageData.e("world", world));
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_BORDER_STATUS, sender, MessageData.e("worldborder", wb));
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_CURRENT_SIZE, sender, MessageData.e("worldborder", wb));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_INFO_BASE, sender, MessageData.e("world", world), MessageData.e("worldborder", wb));
                 if (world.getWorldBorder().getWorldBorderState() != WorldBorder.State.STATIONARY)
                 {
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_TARGET_SIZE, sender, MessageData.e("worldborder", wb));
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_TARGET_SIZE_REACH_TIME, sender, MessageData.e("worldborder", wb));
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_INFO_RESIZING, sender, MessageData.e("world", world), MessageData.e("worldborder", wb));
                 }
 
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMANDS_HEADER, sender);
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_RESET, sender);
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_SETSIZE, sender);
-                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_HELP_COMMAND_SETCENTER, sender);
+                DioriteMessages.sendMessage(DioriteMessages.MSG_WORLDBORDER_INFO_COMMANDS, sender);
                 return;
             }
 

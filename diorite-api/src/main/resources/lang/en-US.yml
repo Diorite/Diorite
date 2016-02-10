@@ -36,13 +36,16 @@ time:
   current: "&7Current time in &3$<world.name> &7is &3$<world.time>"
   changed: "&7Time has been changed to &3$<world.time> &7in &3$<world.name>"
 worldborder:
-  help:
-    status-header: "&7Current world border status in &3$<world.name>"
-    border-status: " &7Border state: &3$<worldborder.status>"
-    current-size: " &7Current size: &3$<worldborder.size>"
-    target-size: " &7Target size: &3$<worldborder.targetSize>"
-    target-size-reach-time: " &7Target size reach time: &3$<worldborder.targetSizeReachTime>"
-    commands-header: "&7World border commands"
-    command-reset: " &7/wb &3reset &7- restore default world border settings"
-    command-setsize: " &7/wb &3setsize <size> [<time>] &7- change world border size"
-    command-setcenter: " &7/wb &3setcenter <x> <z> &7- change center point of world border"
+  info:
+    base: |2-
+      &7Current world border status in &3$<world.name>
+       &7Border state: &3$<worldborder.status>
+       &7Current size: &3$<worldborder.size>
+    resizing: |2-
+       &7Target size: &3$<worldborder.targetSize>
+       &7Target size reach time: &3$<worldborder.targetSizeReachTime>
+    commands: |2-
+      &7World border commands
+       &7/wb &3reset &7- restore default world border settings
+       &7/wb &3setsize <size> [<time>] &7- change world border size
+       &7/wb &3setcenter <x> <z> &7- change center point of world border

@@ -221,39 +221,15 @@ public final class DioriteMessages
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_WORLDBORDER_HELP_STATUS_HEADER          = KEY_WORLDBORDER + SEP + "help" + SEP + "status-header";
+    public static final String MSG_WORLDBORDER_INFO_BASE          = KEY_WORLDBORDER + SEP + "info" + SEP + "base";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_WORLDBORDER_HELP_BORDER_STATUS          = KEY_WORLDBORDER + SEP + "help" + SEP + "border-status";
+    public static final String MSG_WORLDBORDER_INFO_RESIZING      = KEY_WORLDBORDER + SEP + "info" + SEP + "resizing";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_WORLDBORDER_HELP_CURRENT_SIZE           = KEY_WORLDBORDER + SEP + "help" + SEP + "current-size";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_WORLDBORDER_HELP_TARGET_SIZE            = KEY_WORLDBORDER + SEP + "help" + SEP + "target-size";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_WORLDBORDER_HELP_TARGET_SIZE_REACH_TIME = KEY_WORLDBORDER + SEP + "help" + SEP + "target-size-reach-time";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_WORLDBORDER_HELP_COMMANDS_HEADER        = KEY_WORLDBORDER + SEP + "help" + SEP + "commands-header";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_WORLDBORDER_HELP_COMMAND_RESET          = KEY_WORLDBORDER + SEP + "help" + SEP + "command-reset";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_WORLDBORDER_HELP_COMMAND_SETSIZE        = KEY_WORLDBORDER + SEP + "help" + SEP + "command-setsize";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_WORLDBORDER_HELP_COMMAND_SETCENTER      = KEY_WORLDBORDER + SEP + "help" + SEP + "command-setcenter";
+    public static final String MSG_WORLDBORDER_INFO_COMMANDS      = KEY_WORLDBORDER + SEP + "info" + SEP + "commands";
 
 
     private static Messages msgs;
