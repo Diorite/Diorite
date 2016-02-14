@@ -69,7 +69,7 @@ public interface BaseComponentSerializer
         }
         if (object.has("strikethrough"))
         {
-            component.setUnderlined(object.get("strikethrough").getAsBoolean());
+            component.setStrikethrough(object.get("strikethrough").getAsBoolean());
         }
         if (object.has("obfuscated"))
         {
