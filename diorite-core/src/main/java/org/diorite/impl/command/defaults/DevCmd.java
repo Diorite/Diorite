@@ -109,6 +109,7 @@ public class DevCmd extends SystemCommandImpl
                     final int index = args.asInt(1);
                     switch (args.asString(0))
                     {
+
                         case "flag":
                         {
                             final String s = args.asString(2);

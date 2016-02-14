@@ -33,7 +33,7 @@ import com.google.common.collect.Maps;
 
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketClass;
-import org.diorite.utils.reflections.DioriteReflectionUtils;
+import org.diorite.utils.reflections.JavassistUtils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -128,7 +128,7 @@ public enum EnumProtocol
             final CtClass suppCtClass = pool.get(Supplier.class.getName());
             packetInitClass.addInterface(suppCtClass);
 
-            final CtMethod method = new CtMethod(pool.get(Object.class.getName()), "get", DioriteReflectionUtils.EMPTY_CLASSES, packetInitClass);
+            final CtMethod method = new CtMethod(pool.get(Object.class.getName()), "get", JavassistUtils.EMPTY_CLASSES, packetInitClass);
             method.setBody("{return new " + clazz.getName() + "();}");
             packetInitClass.addMethod(method);
 

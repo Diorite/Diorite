@@ -37,7 +37,6 @@ import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.slot.Slot;
 import org.diorite.material.Material;
-import org.diorite.utils.DioriteUtils;
 
 /**
  * Represent inventory, contains default implementation for most of methods.
@@ -251,9 +250,9 @@ public interface Inventory extends Iterable<ItemStack>
     {
         if (items == null)
         {
-            return DioriteUtils.EMPTY_ITEM_STACK;
+            return ItemStack.EMPTY_ITEM_STACK;
         }
-        items = DioriteUtils.compact(false, items);
+        items = ItemStack.compact(false, items);
         synchronized (this.getContents())
         {
             if (ifContains)
@@ -302,7 +301,7 @@ public interface Inventory extends Iterable<ItemStack>
                     }
                 } while (toDelete > 0);
             }
-            return fully ? DioriteUtils.EMPTY_ITEM_STACK : leftover;
+            return fully ? ItemStack.EMPTY_ITEM_STACK : leftover;
         }
     }
 
@@ -326,9 +325,9 @@ public interface Inventory extends Iterable<ItemStack>
     {
         if (items == null)
         {
-            return DioriteUtils.EMPTY_ITEM_STACK;
+            return ItemStack.EMPTY_ITEM_STACK;
         }
-        items = DioriteUtils.compact(false, items);
+        items = ItemStack.compact(false, items);
         synchronized (this.getContents())
         {
             if (ifContains)
@@ -377,7 +376,7 @@ public interface Inventory extends Iterable<ItemStack>
                     }
                 } while (toDelete > 0);
             }
-            return fully ? DioriteUtils.EMPTY_ITEM_STACK : leftover;
+            return fully ? ItemStack.EMPTY_ITEM_STACK : leftover;
         }
     }
 
@@ -1017,7 +1016,7 @@ public interface Inventory extends Iterable<ItemStack>
                 }
             }
         }
-        return fully ? DioriteUtils.EMPTY_ITEM_STACK : leftover;
+        return fully ? ItemStack.EMPTY_ITEM_STACK : leftover;
     }
 
     /**
@@ -1091,7 +1090,7 @@ public interface Inventory extends Iterable<ItemStack>
                 }
             }
         }
-        return fully ? DioriteUtils.EMPTY_ITEM_STACK : leftover;
+        return fully ? ItemStack.EMPTY_ITEM_STACK : leftover;
     }
 
     /**

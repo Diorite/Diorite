@@ -27,14 +27,11 @@ package org.diorite.impl.cfg;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.ConfigManager;
-import org.diorite.cfg.simple.ConfigurationSection;
-import org.diorite.cfg.simple.MemorySection;
 import org.diorite.cfg.yaml.DioriteYaml;
 
 public class ConfigManagerImpl implements ConfigManager
@@ -70,23 +67,10 @@ public class ConfigManagerImpl implements ConfigManager
         return this.yaml.loadAs(reader, clazz);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public ConfigurationSection loadToSection(final Reader reader, final char pathSeparator) throws IOException
-    {
-        return new MemorySection((Map<String, Object>) this.yaml.load(reader), pathSeparator);
-    }
-
     @Override
     public void save(final Writer writer, final Object object) throws IOException
     {
         this.yaml.dump(object, writer);
-    }
-
-    @Override
-    public void saveToSection(final Writer writer, final ConfigurationSection section) throws IOException
-    {
-        this.yaml.dump(section.getValues(true));
     }
 
     @Override
