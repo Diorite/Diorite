@@ -161,18 +161,6 @@ public interface MessageOutput
         {
 
         }
-
-//        @Override
-//        public Locale getPreferedLocale()
-//        {
-//            return null;
-//        }
-//
-//        @Override
-//        public void setPreferedLocale(final Locale locale)
-//        {
-//
-//        }
     };
 
     /**
@@ -448,7 +436,7 @@ public interface MessageOutput
      *
      * @return prefered locale for this sender, may return null.
      */
-    default Locale getPreferedLocale()
+    default Locale getPreferredLocale()
     {
         return null;
     }

@@ -155,7 +155,7 @@ public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
 
 
     @Override
-    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object object, final int level, final ElementPlace elementPlace) throws IOException
+    public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object object, final int level, final ElementPlace elementPlace) throws IOException
     {
         IterableTemplateElement.INSTANCE.appendValue(writer, field, source, new ReflectArrayIterator(object), level, elementPlace);
     }

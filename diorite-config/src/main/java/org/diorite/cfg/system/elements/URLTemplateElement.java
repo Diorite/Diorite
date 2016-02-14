@@ -88,7 +88,7 @@ public class URLTemplateElement extends TemplateElement<URL>
     }
 
     @Override
-    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
+    public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
         final URL element = (elementRaw instanceof URL) ? ((URL) elementRaw) : this.validateType(elementRaw);
         StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(element.toString()), level, elementPlace);

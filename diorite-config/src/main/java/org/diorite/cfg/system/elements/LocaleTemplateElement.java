@@ -80,7 +80,7 @@ public class LocaleTemplateElement extends TemplateElement<Locale>
     }
 
     @Override
-    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
+    public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
         final Locale element = (elementRaw instanceof Locale) ? ((Locale) elementRaw) : this.validateType(elementRaw);
         String str = element.toLanguageTag();

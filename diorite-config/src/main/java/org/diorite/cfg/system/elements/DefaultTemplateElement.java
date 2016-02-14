@@ -56,7 +56,7 @@ public class DefaultTemplateElement extends TemplateElement<Object>
     }
 
     @Override
-    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object element, final int level, final ElementPlace elementPlace) throws IOException
+    public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object element, final int level, final ElementPlace elementPlace) throws IOException
     {
         final Template template = TemplateCreator.getTemplate(element.getClass(), false);
         if (template != null)

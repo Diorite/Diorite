@@ -64,7 +64,7 @@ public class SimpleEnumTemplateElement extends TemplateElement<SimpleEnum>
     }
 
     @Override
-    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
+    public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
         final SimpleEnum element = (elementRaw instanceof SimpleEnum) ? ((SimpleEnum) elementRaw) : this.validateType(elementRaw);
         StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(element.name()), level, elementPlace);

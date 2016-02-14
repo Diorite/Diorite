@@ -320,7 +320,7 @@ public final class DioriteMessages
      */
     public static boolean sendMessage(final String path, final CommandSender target, final MessageData... data)
     {
-        return msgs.sendMessage(path, target, target.getPreferedLocale(), data);
+        return msgs.sendMessage(path, target, target.getPreferredLocale(), data);
     }
 
     /**

@@ -58,7 +58,7 @@ public class FlyCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale());
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_TARGET, sender, sender.getPreferredLocale());
                 return;
             }
 

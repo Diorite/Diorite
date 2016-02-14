@@ -243,9 +243,9 @@ public abstract class TemplateElement<T>
      *
      * @throws IOException from {@link Appendable}
      */
-    protected abstract void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object element, final int level, final ElementPlace elementPlace) throws IOException;
+    public abstract void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object element, final int level, final ElementPlace elementPlace) throws IOException;
 
-    protected T validateType(final Object obj)
+    public T validateType(final Object obj)
     {
         if (this.fieldType.isAssignableFrom(obj.getClass()))
         {

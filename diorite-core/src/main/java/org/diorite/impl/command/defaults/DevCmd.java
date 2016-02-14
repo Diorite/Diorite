@@ -441,7 +441,7 @@ public class DevCmd extends SystemCommandImpl
                 case "setlocale":
                 {
                     p.setPreferedLocale((args.length() == 0) ? null : Locale.forLanguageTag(args.asText()));
-                    System.out.println("Done: " + p.getPreferedLocale());
+                    System.out.println("Done: " + p.getPreferredLocale());
                     break;
                 }
                 case "msgr":

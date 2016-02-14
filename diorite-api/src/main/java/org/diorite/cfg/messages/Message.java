@@ -327,7 +327,7 @@ public abstract class Message
         boolean anyMsgSent = false;
         for (final CommandSender target : targets)
         {
-            Locale locale = target.getPreferedLocale();
+            Locale locale = target.getPreferredLocale();
             if (locale == null)
             {
                 locale = Diorite.getConfig().getLanguages()[0];

@@ -91,7 +91,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     }
 
     @Override
-    public Locale getPreferedLocale()
+    public Locale getPreferredLocale()
     {
         return this.preferedLocale;
     }

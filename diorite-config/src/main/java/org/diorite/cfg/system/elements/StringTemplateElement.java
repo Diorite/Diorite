@@ -81,7 +81,7 @@ public class StringTemplateElement extends TemplateElement<String>
     }
 
     @Override
-    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
+    public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
         StringStyle style = field.getOption(FieldOptions.STRING_STYLE, StringStyle.DEFAULT);
         if ((style == StringStyle.ALWAYS_MULTI_LINE) && (elementPlace == ElementPlace.SIMPLE_LIST_OR_MAP)) // multi line strings don't works in simple lists/maps.

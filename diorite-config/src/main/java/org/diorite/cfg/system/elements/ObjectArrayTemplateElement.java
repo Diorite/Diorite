@@ -59,7 +59,7 @@ public class ObjectArrayTemplateElement extends SimpleArrayTemplateElement<Objec
     }
 
     @Override
-    protected void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
+    public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
         IterableTemplateElement.INSTANCE.appendValue(writer, field, source, new ObjectArrayIterator((elementRaw instanceof Object[]) ? ((Object[]) elementRaw) : this.validateType(elementRaw)), level, elementPlace);
     }
