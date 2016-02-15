@@ -25,9 +25,6 @@
 package org.diorite.cfg.messages;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
@@ -211,31 +208,42 @@ public final class DioriteMessages
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_TIME_CURRENT   = KEY_TIME + SEP + "current";
+    public static final String MSG_TIME_CURRENT = KEY_TIME + SEP + "current";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_TIME_CHANGED   = KEY_TIME + SEP + "changed";
+    public static final String MSG_TIME_CHANGED = KEY_TIME + SEP + "changed";
 
 
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_WORLDBORDER_INFO_BASE          = KEY_WORLDBORDER + SEP + "info" + SEP + "base";
+    public static final String MSG_WORLDBORDER_INFO_BASE     = KEY_WORLDBORDER + SEP + "info" + SEP + "base";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_WORLDBORDER_INFO_RESIZING      = KEY_WORLDBORDER + SEP + "info" + SEP + "resizing";
+    public static final String MSG_WORLDBORDER_INFO_RESIZING = KEY_WORLDBORDER + SEP + "info" + SEP + "resizing";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_WORLDBORDER_INFO_COMMANDS      = KEY_WORLDBORDER + SEP + "info" + SEP + "commands";
+    public static final String MSG_WORLDBORDER_INFO_COMMANDS = KEY_WORLDBORDER + SEP + "info" + SEP + "commands";
 
 
-    private static Messages msgs;
+    private static Messages      msgs;
+    private static MessageLoader loader;
 
     private DioriteMessages()
     {
+    }
+
+    /**
+     * Returns message loader used by diorite, it change on messages reload so don't store it.
+     *
+     * @return message loader used by diorite, it change on messages reload so don't store it.
+     */
+    public static MessageLoader getLoader()
+    {
+        return loader;
     }
 
     /**
@@ -254,43 +262,11 @@ public final class DioriteMessages
      */
     public static void reload()
     {
+        loader = new MessageLoader(Diorite.getConfig().getLanguages());
         final File langFolder = new File("lang");
         langFolder.mkdirs();
-        final File[] files = new File[Diorite.getConfig().getLanguages().length];
-        final Locale[] languages = Diorite.getConfig().getLanguages();
-        for (int i = 0; i < languages.length; i++)
-        {
-            final Locale loc = languages[i];
-            String name = loc.toLanguageTag();
-            if (name.equals("und"))
-            {
-                name = loc.getDisplayName();
-            }
-            final File file = new File(langFolder, "lang_" + name + ".yml");
-            if (! file.exists())
-            {
-                try (final InputStream is = Core.class.getClassLoader().getResourceAsStream("lang/" + name + ".yml"))
-                {
-                    if (is == null)
-                    {
-                        try (final InputStream defIs = Core.class.getClassLoader().getResourceAsStream("lang/en-US.yml"))
-                        {
-                            Files.copy(defIs, file.toPath());
-                        }
-                    }
-                    else
-                    {
-                        Files.copy(is, file.toPath());
-                    }
-                } catch (final IOException e)
-                {
-                    e.printStackTrace();
-                }
-
-            }
-            files[i] = file;
-        }
-        msgs = MessageLoader.loadMessages("lang_", files);
+        msgs = loader.loadMessages("lang_", langFolder, Core.class, "/lang/");
+        loader.saveMessages(msgs, langFolder, "lang_");
     }
 
     /**
@@ -320,7 +296,7 @@ public final class DioriteMessages
      */
     public static boolean sendMessage(final String path, final CommandSender target, final MessageData... data)
     {
-        return msgs.sendMessage(path, target, target.getPreferredLocale(), data);
+        return msgs.sendMessage(path, target, data);
     }
 
     /**

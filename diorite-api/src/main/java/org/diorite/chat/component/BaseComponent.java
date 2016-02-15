@@ -108,6 +108,37 @@ public abstract class BaseComponent extends ReplacableComponent
     {
     }
 
+    /**
+     * Returns true if this base component can be changed to legacy string without removing any features. <br>
+     * Method just check if this component use any events that can't be used in legacy chat format.
+     *
+     * @return true if this base component can be changed to legacy string without removing any features.
+     */
+    public boolean canBeLegacy()
+    {
+        if (this.clickEvent != null)
+        {
+            return false;
+        }
+        if (this.hoverEvent != null)
+        {
+            return false;
+        }
+        final List<BaseComponent> extra = this.extra;
+        if ((extra == null) || extra.isEmpty())
+        {
+            return true;
+        }
+        for (final BaseComponent component : extra)
+        {
+            if (! component.canBeLegacy())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     protected int replace_(final String text, final BaseComponent component, int limit)
     {
@@ -553,6 +584,40 @@ public abstract class BaseComponent extends ReplacableComponent
             {
                 e.toLegacyText(builder);
             }
+        }
+    }
+
+    /**
+     * Adds color codes of this element to given string builder.
+     *
+     * @param builder string builder to be used.
+     */
+    protected void addFormat(final StringBuilder builder)
+    {
+        final ChatColor color = this.color;
+        if (color != null)
+        {
+            builder.append(color);
+        }
+        if (this.isBold())
+        {
+            builder.append(ChatColor.BOLD);
+        }
+        if (this.isItalic())
+        {
+            builder.append(ChatColor.ITALIC);
+        }
+        if (this.isUnderlined())
+        {
+            builder.append(ChatColor.UNDERLINE);
+        }
+        if (this.isStrikethrough())
+        {
+            builder.append(ChatColor.STRIKETHROUGH);
+        }
+        if (this.isObfuscated())
+        {
+            builder.append(ChatColor.MAGIC);
         }
     }
 

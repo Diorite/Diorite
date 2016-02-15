@@ -121,12 +121,19 @@ public class StringTemplateElement extends TemplateElement<String>
                     return;
                 }
                 final char f = element.charAt(0);
-                for (final char c : CANT_BE_FIRST)
+                if (StringUtils.contains(element, ':'))
                 {
-                    if (c == f)
+                    needQuote = true;
+                }
+                else
+                {
+                    for (final char c : CANT_BE_FIRST)
                     {
-                        needQuote = true;
-                        break;
+                        if (c == f)
+                        {
+                            needQuote = true;
+                            break;
+                        }
                     }
                 }
                 if (needQuote)

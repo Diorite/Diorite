@@ -43,7 +43,7 @@ public class ItemCmd extends SystemCommandImpl
             {
                 //sender.sendSimpleColoredMessage("&cThis command cannot be used by console.");
                 //sender.sendSimpleColoredMessage(DioriteMesssges.getMessage(DioriteMesssges.MSG_CMD_ONLY_PLAYER).toString());
-                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_ONLY_PLAYER, sender, sender.getPreferredLocale(), Message.MessageData.e("sender", sender));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_ONLY_PLAYER, sender, Message.MessageData.e("sender", sender));
                 return;
             }
             GiveCmd.parseGiveCommand((Player) sender, sender, args, 0);

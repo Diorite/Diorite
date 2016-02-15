@@ -44,7 +44,7 @@ public class ParticleCmd extends SystemCommandImpl
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             if (args.length() < 10)
             {
-                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CORRECT, sender, sender.getPreferredLocale(), Message.MessageData.e("command", command));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CORRECT, sender, Message.MessageData.e("command", command));
                 //sender.sendMessage("&cCorrect usage &7/particle <id or name> <x> <y> <z> <offsetX> <offsetY> <offsetZ> <particleData> <count> [<data...>]");
                 return;
             }

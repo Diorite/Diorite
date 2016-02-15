@@ -42,15 +42,15 @@ public class KickCmd extends SystemCommandImpl
         this.setDescription("Kick player");
         this.setUsage("kick <player> <reason>");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            if (CoreMain.isEnabledDebug() && !sender.isConsole())
+            if (CoreMain.isEnabledDebug() && ! sender.isConsole())
             {
-                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CMD_DISABLED, sender, sender.getPreferredLocale(), Message.MessageData.e("sender", sender));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CMD_DISABLED, sender, Message.MessageData.e("sender", sender));
                 return;
             }
             if (! args.has(1))
             {
                 //sender.sendSimpleColoredMessage("&cCorrect usage &7/kick <player> <reason>");
-                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CORRECT, sender, sender.getPreferredLocale(), Message.MessageData.e("command", command));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CORRECT, sender, Message.MessageData.e("command", command));
                 return;
             }
 
@@ -58,7 +58,7 @@ public class KickCmd extends SystemCommandImpl
 
             if (target == null)
             {
-                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_TARGET, sender, sender.getPreferredLocale(), Message.MessageData.e("sender", sender), Message.MessageData.e("target", target));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_TARGET, sender, Message.MessageData.e("sender", sender));
                 return;
             }
 

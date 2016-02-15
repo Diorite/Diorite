@@ -22,28 +22,28 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.cfg;
+package org.diorite.cfg;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.cfg.ConfigManager;
 import org.diorite.cfg.yaml.DioriteYaml;
 
-public class ConfigManagerImpl implements ConfigManager
+public class SimpleConfigManager implements ConfigManager
 {
     protected final DioriteYaml yaml;
 
-    public ConfigManagerImpl()
+    public SimpleConfigManager()
     {
         this.yaml = new DioriteYaml();
     }
 
-    public ConfigManagerImpl(final DioriteYaml yaml)
+    public SimpleConfigManager(final DioriteYaml yaml)
     {
         this.yaml = yaml;
     }
@@ -70,7 +70,15 @@ public class ConfigManagerImpl implements ConfigManager
     @Override
     public void save(final Writer writer, final Object object) throws IOException
     {
-        this.yaml.dump(object, writer);
+        if (object instanceof Map)
+        {
+            writer.write(this.yaml.dumpAsMap(object));
+            writer.flush();
+        }
+        else
+        {
+            this.yaml.dump(object, writer);
+        }
     }
 
     @Override

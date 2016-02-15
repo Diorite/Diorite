@@ -167,35 +167,7 @@ public class TextComponent extends BaseComponent
     @Override
     protected void toLegacyText(final StringBuilder builder)
     {
-        final ChatColor color = this.getColor();
-        if (color != null)
-        {
-            builder.append(color);
-        }
-        if (this.isBold())
-        {
-            builder.append(ChatColor.BOLD);
-        }
-        if (this.isItalic())
-        {
-            builder.append(ChatColor.ITALIC);
-        }
-        if (this.isUnderlined())
-        {
-            builder.append(ChatColor.UNDERLINE);
-        }
-        if (this.isStrikethrough())
-        {
-            builder.append(ChatColor.STRIKETHROUGH);
-        }
-        if (this.isObfuscated())
-        {
-            builder.append(ChatColor.MAGIC);
-        }
-        if (this.text != null)
-        {
-            builder.append(this.text);
-        }
+        this.addFormat(builder);
         super.toLegacyText(builder);
     }
 
