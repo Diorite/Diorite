@@ -42,7 +42,6 @@ public class WorldBorderCmd extends SystemCommandImpl
 {
     public WorldBorderCmd()
     {
-        // TODO Move messages to DioriteMessages
         super("worldborder", Pattern.compile("((worldborder|)(wb|)(world-border|))(:(?<world>([a-z0-9_]*))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setDescription("Manages world border");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {

@@ -73,6 +73,7 @@ public class TimeCommand extends SystemCommandImpl
             else if (args.length() == 1)
             {
                 DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_INVALID_ARGUMENTS, sender);
+                return;
             }
 
             switch (args.asString(0).toLowerCase())
