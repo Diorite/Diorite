@@ -42,7 +42,7 @@ If you want implement new packet to Diorite: (that exist in vanilla Minecraft)
 * Every packet MUST have empty, public constructor, but you can add other constructors
 
 ## Others
-* Try not to use enums if possible, create classes like this: [**Difficulty.java**](https://github.com/Diorite/Diorite/blob/master/DioriteAPI/src/main/java/org/diorite/Difficulty.java)
+* Try not to use enums if possible, create classes like this: [**Difficulty.java**](https://github.com/Diorite/Diorite/blob/master/diorite-api/src/main/java/org/diorite/Difficulty.java)
   * Keep modding simple.
 * Add TODO comments where something needs to be implemented later.
 * Don't add any Minecraft decompiled source code
