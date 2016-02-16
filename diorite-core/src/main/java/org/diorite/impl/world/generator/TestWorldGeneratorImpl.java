@@ -52,7 +52,7 @@ public class TestWorldGeneratorImpl extends WorldGenerator
     public TestWorldGeneratorImpl(final World world, final String name, final Map<String, Object> options)
     {
         super(world, name, options);
-        this.generator = new SimplexNoiseGenerator(world);
+        this.generator = new SimplexNoiseGenerator(world.getSeed());
     }
 
     org.diorite.impl.world.generator.FlatWorldGeneratorImpl flat = new org.diorite.impl.world.generator.FlatWorldGeneratorImpl(this.world, this.name, this.options);
@@ -66,8 +66,8 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 //            return this.flat.generate(builder, pos);
 //        }
         // Main.debug("Generating: " + pos + ", (" + this.world.getName() + ")");
-        final SimplexOctaveGenerator overhangs = new SimplexOctaveGenerator(this.world, 8);
-        final SimplexOctaveGenerator bottoms = new SimplexOctaveGenerator(this.world, 8);
+        final SimplexOctaveGenerator overhangs = new SimplexOctaveGenerator(this.world.getSeed(), 8);
+        final SimplexOctaveGenerator bottoms = new SimplexOctaveGenerator(this.world.getSeed(), 8);
 
         overhangs.setScale(1 / 64.0);
         bottoms.setScale(1 / 128.0);

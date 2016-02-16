@@ -39,7 +39,7 @@ public class HelpCmd extends SystemCommandImpl
         super("help", (Pattern) null, CommandPriority.LOW);
         this.setDescription("Command list");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
-            DioriteMessages.sendMessage(DioriteMessages.MSG_HELP_HEADER, sender, sender.getPreferedLocale());
+            DioriteMessages.sendMessage(DioriteMessages.MSG_HELP_HEADER, sender);
             for(final MainCommand cmd : Diorite.getCommandMap().getCommandMap().values())
             {
                 String desc = cmd.getDescription();

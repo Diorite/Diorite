@@ -25,12 +25,13 @@
 package org.diorite.cfg.messages;
 
 import java.io.File;
-import java.io.InputStream;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.Diorite;
 import org.diorite.plugin.BasePlugin;
 import org.diorite.plugin.ChildPlugin;
 
@@ -42,21 +43,34 @@ public class PluginMessages extends Messages
     private final BasePlugin  plugin;
     private final File        languageFolder;
     private final String      prefix;
-    private final InputStream defaultData;
 
     /**
      * Construct new Plugin messages for given plugin and default data.
      *
      * @param plugin      owner of messages.
      * @param prefix      prefix of message files, like "lang_"pl-PL.yml
-     * @param defaultData default data for messages.
      */
-    public PluginMessages(final BasePlugin plugin, final String prefix, final InputStream defaultData)
+    public PluginMessages(final BasePlugin plugin, final String prefix)
     {
+        super(Diorite.getConfig().getLanguages());
         this.plugin = plugin;
         this.languageFolder = plugin.getLanguageFolder();
         this.prefix = prefix;
-        this.defaultData = defaultData;
+    }
+
+    /**
+     * Construct new Plugin messages for given plugin and default data.
+     *
+     * @param plugin      owner of messages.
+     * @param prefix      prefix of message files, like "lang_"pl-PL.yml
+     * @param languages   languages supported by this messages node.
+     */
+    public PluginMessages(final BasePlugin plugin, final String prefix, final Locale... languages)
+    {
+        super(languages);
+        this.plugin = plugin;
+        this.languageFolder = plugin.getLanguageFolder();
+        this.prefix = prefix;
     }
 
     /**
@@ -89,16 +103,6 @@ public class PluginMessages extends Messages
     public File getLanguageFolder()
     {
         return this.languageFolder;
-    }
-
-    /**
-     * Returns default data, used when diorite can't find data for given language.
-     *
-     * @return default data.
-     */
-    public InputStream getDefaultData()
-    {
-        return this.defaultData;
     }
 
     /**

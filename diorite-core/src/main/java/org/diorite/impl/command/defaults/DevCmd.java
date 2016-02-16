@@ -109,6 +109,7 @@ public class DevCmd extends SystemCommandImpl
                     final int index = args.asInt(1);
                     switch (args.asString(0))
                     {
+
                         case "flag":
                         {
                             final String s = args.asString(2);
@@ -440,7 +441,7 @@ public class DevCmd extends SystemCommandImpl
                 case "setlocale":
                 {
                     p.setPreferedLocale((args.length() == 0) ? null : Locale.forLanguageTag(args.asText()));
-                    System.out.println("Done: " + p.getPreferedLocale());
+                    System.out.println("Done: " + p.getPreferredLocale());
                     break;
                 }
                 case "msgr":

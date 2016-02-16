@@ -52,25 +52,25 @@ public class GiveCmd extends SystemCommandImpl
     {
         if (target == null)
         {
-            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_TARGET, sender, sender.getPreferedLocale());
+            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_TARGET, sender);
             return;
         }
         final Material mat;
         if (! args.has(param) || ((((mat = Material.matchValidInventoryMaterial(args.asString(param++), true)))) == null))
         {
-            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_MATERIAL, sender, sender.getPreferedLocale());
+            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_MATERIAL, sender);
             return;
         }
         Integer amount = 1;
         if (args.has(param) && (((amount = args.asInt(param))) == null))
         {
-            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_NUMBER, sender, sender.getPreferedLocale());
+            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NO_NUMBER, sender);
             return;
         }
         if (amount <= 0)
         {
             // TODO: block placking blocks with item stacks <= 0
-            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NUMBER_NOT_POSITIVE, sender, sender.getPreferedLocale());
+            DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_NUMBER_NOT_POSITIVE, sender);
         }
         // TODO: nbt, or other shit
         final ItemStack[] notAdded = target.getInventory().add(new BaseItemStack(mat, amount));

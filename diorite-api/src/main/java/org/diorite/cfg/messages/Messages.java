@@ -27,35 +27,49 @@ package org.diorite.cfg.messages;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.messages.Message.MessageData;
+import org.diorite.chat.component.BaseComponent;
 import org.diorite.command.sender.CommandSender;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
+/**
+ * Represent messages node, every node may contains message objects and other nodes.
+ */
 public class Messages
 {
-    private final char nodeSeparator; // '.' by default
+    /**
+     * languages supported by this messages instance.
+     */
+    protected final Locale[]              languages;
+    /**
+     * Used in get/set method to separate nodes.
+     */
+    protected final char                  nodeSeparator; // '.' by default
+    private final   Messages              parentNode;
+    private final   Map<String, Message>  messages;
+    private final   Map<String, Messages> nodes;
 
-    private final Messages              parentNode;
-    private final Map<String, Message>  messages;
-    private final Map<String, Messages> nodes;
-
-    private Messages(final char nodeSeparator, final Messages parentNode, final Map<String, Message> messages, final Map<String, Messages> nodes)
+    private Messages(final Locale[] languages, final char nodeSeparator, final Messages parentNode, final Map<String, Message> messages, final Map<String, Messages> nodes)
     {
+        this.languages = languages;
         this.nodeSeparator = nodeSeparator;
         this.messages = messages;
         this.nodes = nodes;
         this.parentNode = parentNode;
     }
 
-    private Messages(final char nodeSeparator, final Messages parentNode)
+    private Messages(final Locale[] languages, final char nodeSeparator, final Messages parentNode)
     {
+        this.languages = languages;
         this.nodeSeparator = nodeSeparator;
-        this.messages = new HashMap<>(20, .5f);
-        this.nodes = new HashMap<>(5, .2f);
+        this.messages = new CaseInsensitiveMap<>(20, .5f);
+        this.nodes = new CaseInsensitiveMap<>(5, .2f);
         this.parentNode = parentNode;
     }
 
@@ -63,53 +77,62 @@ public class Messages
     /**
      * Construct new Messages root node with given separator, messages and sub-nodes.
      *
+     * @param languages     languages supported by this messages instance.
      * @param nodeSeparator node separator.
      * @param messages      messages in this node.
      * @param nodes         sub-nodes for this node.
      */
-    public Messages(final char nodeSeparator, final Map<String, Message> messages, final Map<String, Messages> nodes)
+    public Messages(final Locale[] languages, final char nodeSeparator, final Map<String, Message> messages, final Map<String, Messages> nodes)
     {
+        this.languages = languages;
         this.nodeSeparator = nodeSeparator;
-        this.messages = messages;
-        this.nodes = nodes;
+        this.messages = new CaseInsensitiveMap<>(messages);
+        this.nodes = new CaseInsensitiveMap<>(nodes);
         this.parentNode = null;
     }
 
     /**
      * Construct new Messages root node with given separator.
      *
+     * @param languages     languages supported by this messages instance.
      * @param nodeSeparator node separator.
      */
-    public Messages(final char nodeSeparator)
+    public Messages(final Locale[] languages, final char nodeSeparator)
     {
+        this.languages = languages;
         this.nodeSeparator = nodeSeparator;
-        this.messages = new HashMap<>(20, .5f);
-        this.nodes = new HashMap<>(5, .2f);
+        this.messages = new CaseInsensitiveMap<>(20, .5f);
+        this.nodes = new CaseInsensitiveMap<>(5, .2f);
         this.parentNode = null;
     }
 
     /**
      * Construct new Messages root node with given messages and sub-nodes.
      *
-     * @param messages messages in this node.
-     * @param nodes    sub-nodes for this node.
+     * @param languages languages supported by this messages instance.
+     * @param messages  messages in this node.
+     * @param nodes     sub-nodes for this node.
      */
-    public Messages(final Map<String, Message> messages, final Map<String, Messages> nodes)
+    public Messages(final Locale[] languages, final Map<String, Message> messages, final Map<String, Messages> nodes)
     {
+        this.languages = languages;
         this.nodeSeparator = '.';
-        this.messages = messages;
-        this.nodes = nodes;
+        this.messages = new CaseInsensitiveMap<>(messages);
+        this.nodes = new CaseInsensitiveMap<>(nodes);
         this.parentNode = null;
     }
 
     /**
      * Construct new Messages root.
+     *
+     * @param languages languages supported by this messages instance.
      */
-    public Messages()
+    public Messages(final Locale... languages)
     {
+        this.languages = languages;
         this.nodeSeparator = '.';
-        this.messages = new HashMap<>(20, .5f);
-        this.nodes = new HashMap<>(5, .2f);
+        this.messages = new CaseInsensitiveMap<>(20, .5f);
+        this.nodes = new CaseInsensitiveMap<>(5, .2f);
         this.parentNode = null;
     }
 
@@ -366,6 +389,92 @@ public class Messages
     }
 
     /**
+     * Try send this message to given {@link CommandSender}, if message is disabled method will just return false.
+     *
+     * @param path   path to message.
+     * @param target target of message.
+     * @param data   placeholder objects to use.
+     *
+     * @return true if message was send.
+     */
+    public boolean sendMessage(final String path, final CommandSender target, final MessageData... data)
+    {
+        final Message message = this.getMessage(path);
+        return (message != null) && message.sendMessage(target, target.getPreferredLocale(), data);
+    }
+
+    /**
+     * Serialize all messages to given map, all base components are serialized to json string.
+     *
+     * @param map             map where all messages will be added.
+     * @param defaultLanguage default locale of messages.
+     *
+     * @return this same map as given.
+     *
+     * @see BaseComponent#canBeLegacy()
+     */
+    @SuppressWarnings("unchecked")
+    public Map<Locale, Map<String, Object>> toMap(final Map<Locale, Map<String, Object>> map, final Locale defaultLanguage)
+    {
+        for (final Entry<String, Message> entry : this.messages.entrySet())
+        {
+            final String key = entry.getKey();
+            final Message message = entry.getValue();
+
+            final Map<Locale, Map<String, Object>> messageValues = message.toMap(new HashMap<>(this.languages.length), defaultLanguage, key);
+            for (final Entry<Locale, Map<String, Object>> localeMapEntry : messageValues.entrySet())
+            {
+                final Locale locale = localeMapEntry.getKey();
+                final Map<String, Object> valueMap = localeMapEntry.getValue();
+
+                Map<String, Object> targetMap = map.get(locale);
+                if (targetMap == null)
+                {
+                    targetMap = new CaseInsensitiveMap<>(20);
+                    map.put(locale, targetMap);
+                }
+                targetMap.putAll(valueMap);
+            }
+        }
+        for (final Entry<String, Messages> entry : this.nodes.entrySet())
+        {
+            final String key = entry.getKey();
+            final Messages messages = entry.getValue();
+
+            final Map<Locale, Map<String, Object>> messageValues = messages.toMap(new HashMap<>(this.languages.length), defaultLanguage);
+            for (final Entry<Locale, Map<String, Object>> localeMapEntry : messageValues.entrySet())
+            {
+                final Locale locale = localeMapEntry.getKey();
+                final Map<String, Object> valueMap = localeMapEntry.getValue();
+
+                Map<String, Object> nestedMap = map.get(locale);
+                if (nestedMap == null)
+                {
+                    nestedMap = new CaseInsensitiveMap<>(20);
+                    map.put(locale, nestedMap);
+                }
+                final Object tmp = nestedMap.get(key);
+                if ((tmp != null) && ! (tmp instanceof Map))
+                {
+                    throw new RuntimeException("Duplicated node and message for key: " + key + ": " + tmp);
+                }
+                final Map<String, Object> targetMap;
+                if (tmp == null)
+                {
+                    targetMap = new CaseInsensitiveMap<>(20);
+                    nestedMap.put(key, targetMap);
+                }
+                else
+                {
+                    targetMap = (Map<String, Object>) tmp;
+                }
+                targetMap.putAll(valueMap);
+            }
+        }
+        return map;
+    }
+
+    /**
      * Add given node to nodes map.
      *
      * @param pack node to add.
@@ -381,13 +490,13 @@ public class Messages
 
         protected MessagePack(final Messages parentNode, final String node)
         {
-            super(parentNode.nodeSeparator, parentNode);
+            super(parentNode.languages, parentNode.nodeSeparator, parentNode);
             this.node = node;
         }
 
         protected MessagePack(final Messages parentNode, final String node, final Map<String, Message> messages, final Map<String, Messages> nodes)
         {
-            super(parentNode.nodeSeparator, parentNode, messages, nodes);
+            super(parentNode.languages, parentNode.nodeSeparator, parentNode, messages, nodes);
             this.node = node;
         }
 

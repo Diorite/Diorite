@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -100,11 +101,13 @@ import org.diorite.Core;
 import org.diorite.Diorite;
 import org.diorite.ItemFactory;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
-import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
+import org.diorite.cfg.system.elements.BaseComponentTemplateElement;
+import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkGenerateEvent;
@@ -1143,6 +1146,7 @@ public class DioriteCore implements Core
                 }
             }
         });
+        initPipeline.addLast("DioriteCore|registerTemplateElements", (s, p, d) -> TemplateElements.getElements().addAfter(Locale.class.getName(), BaseComponent.class.getName(), BaseComponentTemplateElement.INSTANCE));
         initPipeline.addLast("DioriteCore|registerEvents", (s, p, d) -> s.registerEvents());
         initPipeline.addLast("DioriteCore|initTimings", (s, p, d) -> s.timings = new TimingsManagerImpl());
         initPipeline.addLast("DioriteCore|initSessionService", (s, p, d) -> s.sessionService = new YggdrasilSessionService(d.proxy, UUID.randomUUID().toString()));

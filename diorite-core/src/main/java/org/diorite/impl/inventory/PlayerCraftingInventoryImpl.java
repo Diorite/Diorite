@@ -39,7 +39,6 @@ import org.diorite.inventory.recipe.craft.CraftingGrid;
 import org.diorite.inventory.recipe.craft.CraftingRecipe;
 import org.diorite.inventory.recipe.craft.CraftingRecipeCheckResult;
 import org.diorite.inventory.recipe.craft.CraftingRecipeManager;
-import org.diorite.utils.DioriteUtils;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
@@ -100,7 +99,7 @@ public class PlayerCraftingInventoryImpl extends PlayerInventoryPartImpl impleme
         if ((holder instanceof IPlayer) && ! this.recipe.getRecipe().isVanilla())
         {
             final CraftingGrid itemsToConsume = this.recipe.getItemsToConsume();
-            final ItemStack[] items = DioriteUtils.compact(false, itemsToConsume.getItems());
+            final ItemStack[] items = ItemStack.compact(false, itemsToConsume.getItems());
             possibleBugs = new ShortOpenHashSet(items.length);
             short k = 0;
             short bugSlot;

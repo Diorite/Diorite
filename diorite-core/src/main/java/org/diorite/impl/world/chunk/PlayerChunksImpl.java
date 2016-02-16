@@ -281,4 +281,16 @@ public class PlayerChunksImpl implements Tickable
             });
         }
     }
+
+    public void reset()
+    {
+        for (final Long visibleChunk : this.visibleChunks)
+        {
+            this.player.getNetworkManager().sendPacket(new PacketPlayClientboundChunkUnload(ChunkPos.fromLong(visibleChunk)));
+        }
+        this.visibleChunks.clear();
+        this.toProcess.clear();
+        this.lastUpdate = null;
+        this.lastUpdateR = 0;
+    }
 }

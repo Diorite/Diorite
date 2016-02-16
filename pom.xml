@@ -32,6 +32,8 @@
         <url>https://github.com/Diorite/Diorite</url>
     </scm>
     <modules>
+        <module>diorite-utils</module>
+        <module>diorite-config</module>
         <module>diorite-api</module>
         <module>diorite-core</module>
         <module>diorite</module>
@@ -60,6 +62,16 @@
             <dependency>
                 <groupId>org.diorite</groupId>
                 <artifactId>diorite-api</artifactId>
+                <version>${diorite.version.raw}-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.diorite</groupId>
+                <artifactId>diorite-utils</artifactId>
+                <version>${diorite.version.raw}-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.diorite</groupId>
+                <artifactId>diorite-config</artifactId>
                 <version>${diorite.version.raw}-SNAPSHOT</version>
             </dependency>
 
