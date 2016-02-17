@@ -179,7 +179,10 @@ public class RomanNumeral
     public static int toInt(String roman) throws NumberFormatException
     {
         final boolean negative = roman.startsWith("-");
-        roman = roman.substring(1);
+        if (negative)
+        {
+            roman = roman.substring(1);
+        }
         if (roman.isEmpty())
         {
             return 0;

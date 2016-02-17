@@ -22,7 +22,48 @@
  * SOFTWARE.
  */
 
+package org.diorite.utils.math;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
- * Noise generators used by map generator.
+ * Represent weighted random choice for existing object as wrapper.
+ *
+ * @param <T> type of wrapped object.
  */
-package org.diorite.utils.math.noise;
+public class WeightedRandomChoiceWrapper<T> extends WeightedRandomChoice
+{
+    /**
+     * Wrapped object.
+     */
+    protected final T wrapped;
+
+    /**
+     * Construnt new choice with given weight.
+     *
+     * @param weight  weight of this choice.
+     * @param wrapped wrapped object.
+     */
+    public WeightedRandomChoiceWrapper(final int weight, final T wrapped)
+    {
+        super(weight);
+        this.wrapped = wrapped;
+    }
+
+    /**
+     * Returns wrapped object.
+     *
+     * @return wrapped object.
+     */
+    public T getWrapped()
+    {
+        return this.wrapped;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("wrapped", this.wrapped).toString();
+    }
+}

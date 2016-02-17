@@ -26,6 +26,7 @@ package org.diorite.utils.math;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -34,6 +35,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class ByteRange
 {
+    static final String[] SPLITS = {" - ", " : ", " ; ", ", ", " ", ",", ";", ":", "-"};
+
     /**
      * Range from 1 to 1.
      */
@@ -94,7 +97,7 @@ public class ByteRange
      */
     public byte getRandom()
     {
-        return ((this.max - this.min) == 0) ? this.max : (byte) DioriteRandomUtils.getRandInt(this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : (byte) DioriteRandomUtils.getRandomInt(this.min, this.max);
     }
 
     /**
@@ -106,7 +109,7 @@ public class ByteRange
      */
     public byte getRandom(final Random random)
     {
-        return ((this.max - this.min) == 0) ? this.max : (byte) DioriteRandomUtils.getRandInt(random, this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : (byte) DioriteRandomUtils.getRandomInt(random, this.min, this.max);
     }
 
     /**
@@ -301,5 +304,47 @@ public class ByteRange
     public static ByteRange fixed(final byte num)
     {
         return new ByteRange(num, num);
+    }
+
+    /**
+     * Parses given string to range, string is valid range when contains 2 numbers (second greater than first) and splt char: <br>
+     * " - ", " : ", " ; ", ", ", " ", ",", ";", ":", "-"
+     *
+     * @param string string to parse.
+     *
+     * @return parsed range or null.
+     */
+    public static ByteRange valueOf(String string)
+    {
+        if (string.isEmpty())
+        {
+            return null;
+        }
+        String[] nums = null;
+        int i = 0;
+        final boolean firstMinus = string.charAt(0) == '-';
+        if (firstMinus)
+        {
+            string = string.substring(1);
+        }
+        while ((i < SPLITS.length) && ((nums == null) || (nums.length != 2)))
+        {
+            nums = StringUtils.splitByWholeSeparator(string, SPLITS[i++], 2);
+        }
+        if ((nums == null) || (nums.length != 2))
+        {
+            return null;
+        }
+        final Integer min = DioriteMathUtils.asInt(firstMinus ? ("-" + nums[0]) : nums[0]);
+        if ((min == null) || (min < Byte.MIN_VALUE))
+        {
+            return null;
+        }
+        final Integer max = DioriteMathUtils.asInt(nums[1]);
+        if ((max == null) || (max > Byte.MAX_VALUE) || (min > max))
+        {
+            return null;
+        }
+        return new ByteRange(min.byteValue(), max.byteValue());
     }
 }

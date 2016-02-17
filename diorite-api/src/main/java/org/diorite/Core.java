@@ -378,12 +378,12 @@ public interface Core extends Synchronizable
 
     default <E extends Collection<Player>> E getRandomPlayers(final int num, final E target)
     {
-        return DioriteRandomUtils.getRand(this.getOnlinePlayers(), target, num);
+        return DioriteRandomUtils.getRandom(this.getOnlinePlayers(), target, num);
     }
 
     default Player getRandomPlayer()
     {
-        return DioriteRandomUtils.getRand(this.getOnlinePlayers());
+        return DioriteRandomUtils.getRandom(this.getOnlinePlayers());
     }
 
     default void broadcastMessage(final ChatPosition position, final String str)

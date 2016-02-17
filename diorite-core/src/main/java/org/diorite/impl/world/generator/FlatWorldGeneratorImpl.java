@@ -57,7 +57,7 @@ public class FlatWorldGeneratorImpl extends WorldGenerator
                     }
                     else if ((y == 2) || (y == 1))
                     {
-                        builder.setBlock(x, y, z, Material.STONE.getType(DioriteRandomUtils.getRandInt(3, 4)));
+                        builder.setBlock(x, y, z, Material.STONE.getType(DioriteRandomUtils.getRandomInt(3, 4)));
                     }
                     else
                     {

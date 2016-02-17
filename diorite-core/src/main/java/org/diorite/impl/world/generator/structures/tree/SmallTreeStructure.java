@@ -69,7 +69,7 @@ public class SmallTreeStructure extends TreeStructure
     @Override
     protected boolean genTree(final ChunkPos chunkPos, final Random random, final BlockLocation location)
     {
-        return this.genTree(chunkPos, random, location.addY(1), DioriteRandomUtils.getRandInt(random, 4, this.extraBlock ? 7 : 6));
+        return this.genTree(chunkPos, random, location.addY(1), DioriteRandomUtils.getRandomInt(random, 4, this.extraBlock ? 7 : 6));
     }
 
     @SuppressWarnings("PointlessArithmeticExpression") // it looks better, java should simplify that on compilation time

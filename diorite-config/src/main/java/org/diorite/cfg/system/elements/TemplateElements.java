@@ -35,6 +35,13 @@ import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
 import org.diorite.cfg.system.ConfigField;
+import org.diorite.cfg.system.elements.math.ByteRangeTemplateElement;
+import org.diorite.cfg.system.elements.math.DoubleRangeTemplateElement;
+import org.diorite.cfg.system.elements.math.FloatRangeTemplateElement;
+import org.diorite.cfg.system.elements.math.IntRangeTemplateElement;
+import org.diorite.cfg.system.elements.math.LongRangeTemplateElement;
+import org.diorite.cfg.system.elements.math.RomanNumeralTemplateElement;
+import org.diorite.cfg.system.elements.math.ShortRangeTemplateElement;
 import org.diorite.cfg.system.elements.primitives.BooleanTemplateElement;
 import org.diorite.cfg.system.elements.primitives.ByteTemplateElement;
 import org.diorite.cfg.system.elements.primitives.CharTemplateElement;
@@ -44,6 +51,13 @@ import org.diorite.cfg.system.elements.primitives.IntTemplateElement;
 import org.diorite.cfg.system.elements.primitives.LongTemplateElement;
 import org.diorite.cfg.system.elements.primitives.ShortTemplateElement;
 import org.diorite.utils.SimpleEnum;
+import org.diorite.utils.math.ByteRange;
+import org.diorite.utils.math.DoubleRange;
+import org.diorite.utils.math.FloatRange;
+import org.diorite.utils.math.IntRange;
+import org.diorite.utils.math.LongRange;
+import org.diorite.utils.math.RomanNumeral;
+import org.diorite.utils.math.ShortRange;
 import org.diorite.utils.pipeline.BasePipeline;
 import org.diorite.utils.pipeline.Pipeline;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
@@ -198,6 +212,13 @@ public final class TemplateElements
 
         elements.addLast(Locale.class.getName(), LocaleTemplateElement.INSTANCE);
         /* BaseComponent */
+        elements.addLast(RomanNumeral.class.getName(), RomanNumeralTemplateElement.INSTANCE);
+        elements.addLast(ByteRange.class.getName(), ByteRangeTemplateElement.INSTANCE);
+        elements.addLast(ShortRange.class.getName(), ShortRangeTemplateElement.INSTANCE);
+        elements.addLast(IntRange.class.getName(), IntRangeTemplateElement.INSTANCE);
+        elements.addLast(LongRange.class.getName(), LongRangeTemplateElement.INSTANCE);
+        elements.addLast(FloatRange.class.getName(), FloatRangeTemplateElement.INSTANCE);
+        elements.addLast(DoubleRange.class.getName(), DoubleRangeTemplateElement.INSTANCE);
 
         elements.addLast(Map.class.getName(), MapTemplateElement.INSTANCE);
         elements.addLast(Iterable.class.getName(), IterableTemplateElement.INSTANCE);
