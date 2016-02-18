@@ -24,43 +24,7 @@
 
 package org.diorite.utils.math;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
-/**
- * Represent weighted random choice option, class to extend, see {@link WeightedRandomChoiceWrapper}
- */
-public class WeightedRandomChoice implements IWeightedRandomChoice
+public interface IWeightedRandomChoice
 {
-    /**
-     * weight of this choice.
-     */
-    protected final int weight;
-
-    /**
-     * Construnt new choice with given weight.
-     *
-     * @param weight weight of this choice.
-     */
-    public WeightedRandomChoice(final int weight)
-    {
-        this.weight = weight;
-    }
-
-    /**
-     * Returns weight of this choice.
-     *
-     * @return weight of this choice.
-     */
-    @Override
-    public int getWeight()
-    {
-        return this.weight;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("weight", this.weight).toString();
-    }
+    int getWeight();
 }

@@ -867,17 +867,17 @@ public final class DioriteRandomUtils
         return new DioriteRandom(seed);
     }
 
-    public static int sumWeight(final Iterable<? extends WeightedRandomChoice> choices)
+    public static int sumWeight(final Iterable<? extends IWeightedRandomChoice> choices)
     {
         int i = 0;
-        for (final WeightedRandomChoice choice : choices)
+        for (final IWeightedRandomChoice choice : choices)
         {
-            i += choice.weight;
+            i += choice.getWeight();
         }
         return i;
     }
 
-    public static <T extends WeightedRandomChoice> T getWeightedRandom(final Random random, final Iterable<T> choices, final int weight)
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(final Random random, final Iterable<? extends T> choices, final int weight)
     {
         if (weight <= 0)
         {
@@ -886,12 +886,12 @@ public final class DioriteRandomUtils
         return getWeightedRandomElement(choices, random.nextInt(weight));
     }
 
-    public static <T extends WeightedRandomChoice> T getWeightedRandom(final Iterable<T> choices, final int weight)
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(final Iterable<? extends T> choices, final int weight)
     {
         return getWeightedRandom(getRandom(), choices, weight);
     }
 
-    public static <T extends WeightedRandomChoice> T getWeightedRandomElement(final Iterable<T> choices, int weight)
+    public static <T extends IWeightedRandomChoice> T getWeightedRandomElement(final Iterable<? extends T> choices, int weight)
     {
         for (final T choice : choices)
         {
@@ -904,12 +904,12 @@ public final class DioriteRandomUtils
         return null;
     }
 
-    public static <T extends WeightedRandomChoice> T getWeightedRandom(final Random random, final Iterable<T> choices)
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(final Random random, final Iterable<? extends T> choices)
     {
         return getWeightedRandom(random, choices, sumWeight(choices));
     }
 
-    public static <T extends WeightedRandomChoice> T getWeightedRandom(final Iterable<T> choices)
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(final Iterable<? extends T> choices)
     {
         return getWeightedRandom(getRandom(), choices);
     }
