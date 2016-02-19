@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface CfgCommentOptions
+public @interface CfgCommentOptions // TODO: fix this
 {
     /**
      * @return if every element from list/map should contains comments.

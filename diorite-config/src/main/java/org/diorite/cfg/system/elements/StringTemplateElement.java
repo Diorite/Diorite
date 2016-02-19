@@ -121,7 +121,7 @@ public class StringTemplateElement extends TemplateElement<String>
                     return;
                 }
                 final char f = element.charAt(0);
-                if (StringUtils.contains(element, ':'))
+                if (StringUtils.containsAny(element, ':', '#'))
                 {
                     needQuote = true;
                 }
