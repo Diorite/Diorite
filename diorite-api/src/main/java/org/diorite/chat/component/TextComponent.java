@@ -168,6 +168,10 @@ public class TextComponent extends BaseComponent
     protected void toLegacyText(final StringBuilder builder)
     {
         this.addFormat(builder);
+        if (this.text != null)
+        {
+            builder.append(this.text);
+        }
         super.toLegacyText(builder);
     }
 
