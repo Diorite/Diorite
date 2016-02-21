@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by bytes.
  */
-public class ByteTemplateElement extends SimpleTemplateElement<Byte>
+public class ByteTemplateElement extends PrimitiveTemplateElement<Byte>
 {
     /**
      * Instance of template to direct-use.

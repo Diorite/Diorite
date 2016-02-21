@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by shorts.
  */
-public class ShortTemplateElement extends SimpleTemplateElement<Short>
+public class ShortTemplateElement extends PrimitiveTemplateElement<Short>
 {
     /**
      * Instance of template to direct-use.

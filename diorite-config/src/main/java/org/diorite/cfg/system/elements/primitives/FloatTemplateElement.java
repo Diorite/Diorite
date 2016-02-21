@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by floats.
  */
-public class FloatTemplateElement extends SimpleTemplateElement<Float>
+public class FloatTemplateElement extends PrimitiveTemplateElement<Float>
 {
     /**
      * Instance of template to direct-use.

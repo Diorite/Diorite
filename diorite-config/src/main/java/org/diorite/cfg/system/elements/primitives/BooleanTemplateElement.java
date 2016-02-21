@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by booleans.
  */
-public class BooleanTemplateElement extends SimpleTemplateElement<Boolean>
+public class BooleanTemplateElement extends PrimitiveTemplateElement<Boolean>
 {
     /**
      * Instance of template to direct-use.

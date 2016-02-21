@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by ints.
  */
-public class IntTemplateElement extends SimpleTemplateElement<Integer>
+public class IntTemplateElement extends PrimitiveTemplateElement<Integer>
 {
     /**
      * Instance of template to direct-use.

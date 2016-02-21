@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by doubles.
  */
-public class DoubleTemplateElement extends SimpleTemplateElement<Double>
+public class DoubleTemplateElement extends PrimitiveTemplateElement<Double>
 {
     /**
      * Instance of template to direct-use.

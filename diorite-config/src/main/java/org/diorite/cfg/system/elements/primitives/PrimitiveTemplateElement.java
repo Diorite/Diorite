@@ -32,14 +32,14 @@ import org.diorite.cfg.system.elements.TemplateElement;
 /**
  * Template used by primitive values.
  */
-public abstract class SimpleTemplateElement<T> extends TemplateElement<T>
+public abstract class PrimitiveTemplateElement<T> extends TemplateElement<T>
 {
     /**
      * construct new template for given class.
      *
      * @param clazz type of supported template element.
      */
-    public SimpleTemplateElement(final Class<T> clazz)
+    PrimitiveTemplateElement(final Class<T> clazz)
     {
         super(clazz);
     }

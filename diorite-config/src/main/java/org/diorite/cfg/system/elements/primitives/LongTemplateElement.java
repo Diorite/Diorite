@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by longs.
  */
-public class LongTemplateElement extends SimpleTemplateElement<Long>
+public class LongTemplateElement extends PrimitiveTemplateElement<Long>
 {
     /**
      * Instance of template to direct-use.

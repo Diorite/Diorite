@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by chars.
  */
-public class CharTemplateElement extends SimpleTemplateElement<Character>
+public class CharTemplateElement extends PrimitiveTemplateElement<Character>
 {
     /**
      * Instance of template to direct-use.
