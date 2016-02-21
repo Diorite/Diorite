@@ -26,6 +26,7 @@ package org.diorite.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public final class DioriteStringUtils // other name to allow simple import StringUtils from other libs.
 {
@@ -38,6 +39,43 @@ public final class DioriteStringUtils // other name to allow simple import Strin
 
     private DioriteStringUtils()
     {
+    }
+
+    public static String toTimeUnits(long time)
+    {
+        time = Math.abs(time);
+        final StringBuilder sb = new StringBuilder(50);
+
+        final long days = time / TimeUnit.DAYS.toMillis(1);
+        if (days > 0)
+        {
+            time -= (days * TimeUnit.DAYS.toMillis(1));
+            sb.append(days).append("D ");
+        }
+        final long hours = time / TimeUnit.HOURS.toMillis(1);
+        if (hours > 0)
+        {
+            time -= (hours * TimeUnit.HOURS.toMillis(1));
+            sb.append(hours).append("h ");
+        }
+        final long minutes = time / TimeUnit.MINUTES.toMillis(1);
+        if (minutes > 0)
+        {
+            time -= (minutes * TimeUnit.MINUTES.toMillis(1));
+            sb.append(minutes).append("m ");
+        }
+        final long seconds = time / TimeUnit.SECONDS.toMillis(1);
+        if (seconds > 0)
+        {
+//            time -= (seconds * TimeUnit.SECONDS.toMillis(1));
+            sb.append(seconds).append("s");
+        }
+        final String s = sb.toString().trim();
+        if (s.isEmpty())
+        {
+            return "0s";
+        }
+        return s;
     }
 
     public static String[] splitArguments(final String str)

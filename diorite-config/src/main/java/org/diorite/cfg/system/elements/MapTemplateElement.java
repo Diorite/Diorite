@@ -230,8 +230,8 @@ public class MapTemplateElement extends TemplateElement<Map>
                 }
                 continue;
             }
-            final boolean canAddComments = ! isPrimitiveOrStrings(value);
-            TemplateElements.getElement(value.getClass()).writeValue(writer, field, element, value, level + 1, canAddComments && (commentEveryElement || isFirst), ElementPlace.NORMAL);
+//            final boolean canAddComments = ! isPrimitiveOrStrings(value);
+            TemplateElements.getElement(value.getClass()).writeValue(writer, field, element, value, level + 1, /*canAddComments && (commentEveryElement || isFirst)*/ false, ElementPlace.NORMAL);
 
             isFirst = false;
             if (! iterator.hasNext())

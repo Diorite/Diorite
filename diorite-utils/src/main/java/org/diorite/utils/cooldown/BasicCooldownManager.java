@@ -72,7 +72,7 @@ class BasicCooldownManager<K> implements CooldownManager<K>
     public boolean hasExpired(final K key, final long from)
     {
         final BasicCooldownEntry entry = this.map.get(key);
-        return (entry == null) || (entry.fastDelta(from) <= 0);
+        return (entry == null) || (entry.deltaLazy(from) <= 0);
     }
 
     @Override
@@ -85,7 +85,7 @@ class BasicCooldownManager<K> implements CooldownManager<K>
             this.map.put(key, entry);
             return true;
         }
-        if (entry.fastDelta(from) > 0)
+        if (entry.deltaLazy(from) > 0)
         {
             return false;
         }
@@ -106,7 +106,7 @@ class BasicCooldownManager<K> implements CooldownManager<K>
         for (final Iterator<Entry<K, BasicCooldownEntry>> iterator = this.map.entrySet().iterator(); iterator.hasNext(); )
         {
             final BasicCooldownEntry entry = iterator.next().getValue();
-            if (entry.fastDelta(from) <= 0)
+            if (entry.deltaLazy(from) <= 0)
             {
                 if (expired == null)
                 {
@@ -122,7 +122,7 @@ class BasicCooldownManager<K> implements CooldownManager<K>
     @Override
     public boolean removeExpired(final long from)
     {
-        return this.map.entrySet().removeIf(e -> e.getValue().fastDelta(from) <= 0);
+        return this.map.entrySet().removeIf(e -> e.getValue().deltaLazy(from) <= 0);
     }
 
     @Override
@@ -180,21 +180,22 @@ class BasicCooldownManager<K> implements CooldownManager<K>
             this.cooldownTime = cooldownTime;
         }
 
-        private long fastDelta(final long currentTime)
-        {
-            final long sum = this.startTime + this.cooldownTime;
-            return sum - currentTime;
-        }
-
         @Override
         public synchronized long delta(final long currentTime)
         {
-            final long delta = this.fastDelta(currentTime);
+            final long delta = this.deltaLazy(currentTime);
             if (delta <= 0)
             {
                 BasicCooldownManager.this.map.remove(this.key);
             }
             return delta;
+        }
+
+        @Override
+        public synchronized long deltaLazy(final long currentTime)
+        {
+            final long sum = this.startTime + this.cooldownTime;
+            return sum - currentTime;
         }
 
         private BasicCooldownManager<K> getManager()

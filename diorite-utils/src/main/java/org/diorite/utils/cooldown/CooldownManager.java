@@ -90,7 +90,7 @@ public interface CooldownManager<K>
     default boolean hasExpired(final K key, final long from)
     {
         final CooldownEntry<K> entry = this.getEntry(key);
-        return (entry == null) || entry.expired();
+        return (entry == null) || entry.hasExpired();
     }
 
     /**
