@@ -61,23 +61,33 @@ public class StringTemplateElement extends TemplateElement<String>
      */
     public StringTemplateElement()
     {
-        super(String.class, (obj) -> {
-            if (obj instanceof Enum)
-            {
-                return ((Enum<?>) obj).name();
-            }
-            if (obj instanceof CharSequence)
-            {
-                return obj.toString();
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to String: " + obj);
-        }, CharSequence.class::isAssignableFrom);
+        super(String.class);
     }
 
     @Override
-    protected String convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        return def.toString();
+        return CharSequence.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected String convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof Enum)
+        {
+            return ((Enum<?>) obj).name();
+        }
+        if (obj instanceof CharSequence)
+        {
+            return obj.toString();
+        }
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected String convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        return obj.toString();
     }
 
     @Override

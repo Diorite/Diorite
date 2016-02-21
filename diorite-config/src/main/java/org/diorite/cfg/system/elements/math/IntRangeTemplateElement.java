@@ -25,7 +25,6 @@
 package org.diorite.cfg.system.elements.math;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.elements.StringTemplateElement;
@@ -49,91 +48,80 @@ public class IntRangeTemplateElement extends TemplateElement<IntRange>
      */
     public IntRangeTemplateElement()
     {
-        super(IntRange.class, obj -> {
-            if (obj instanceof String)
-            {
-                final IntRange intRange = IntRange.valueOf((String) obj);
-                if (intRange == null)
-                {
-                    throw new UnsupportedOperationException("Can't convert string to IntRange: " + obj);
-                }
-                return intRange;
-            }
-            if (obj instanceof byte[])
-            {
-                final byte[] array = (byte[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to IntRange: " + Arrays.toString(array));
-                }
-                return new IntRange(array[0], array[1]);
-            }
-            if (obj instanceof short[])
-            {
-                final short[] array = (short[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to IntRange: " + Arrays.toString(array));
-                }
-                return new IntRange(array[0], array[1]);
-            }
-            if (obj instanceof int[])
-            {
-                final int[] array = (int[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to IntRange: " + Arrays.toString(array));
-                }
-                return new IntRange(array[0], array[1]);
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to IntRange: " + obj);
-        }, c -> IntRange.class.isAssignableFrom(c) || String.class.isAssignableFrom(c));
+        super(IntRange.class);
     }
 
     @Override
-    protected IntRange convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof IntRange)
+        return IntRange.class.isAssignableFrom(c) || String.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected IntRange convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        final IntRange convert = this.convert(obj);
+        if (convert != null)
         {
-            return (IntRange) def;
+            return convert;
         }
-        if (def instanceof String)
+        throw this.getException(obj);
+    }
+
+    private IntRange convert(final Object obj)
+    {
+        if (obj instanceof String)
         {
-            final IntRange intRange = IntRange.valueOf((String) def);
+            final IntRange intRange = IntRange.valueOf((String) obj);
             if (intRange == null)
             {
-                throw new UnsupportedOperationException("Can't convert string to IntRange: " + def);
+                throw this.getException(obj);
             }
             return intRange;
         }
-        if (def instanceof byte[])
+        if (obj instanceof byte[])
         {
-            final byte[] array = (byte[]) def;
+            final byte[] array = (byte[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to IntRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new IntRange(array[0], array[1]);
         }
-        if (def instanceof short[])
+        if (obj instanceof short[])
         {
-            final short[] array = (short[]) def;
+            final short[] array = (short[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to IntRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new IntRange(array[0], array[1]);
         }
-        if (def instanceof int[])
+        if (obj instanceof int[])
         {
-            final int[] array = (int[]) def;
+            final int[] array = (int[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to IntRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new IntRange(array[0], array[1]);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        return null;
+    }
+
+    @Override
+    protected IntRange convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof IntRange)
+        {
+            return (IntRange) obj;
+        }
+        final IntRange convert = this.convert(obj);
+        if (convert != null)
+        {
+            return convert;
+        }
+        throw this.getException(obj);
     }
 
     @Override

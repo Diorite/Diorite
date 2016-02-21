@@ -25,7 +25,6 @@
 package org.diorite.cfg.system.elements.math;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.elements.StringTemplateElement;
@@ -49,91 +48,80 @@ public class ShortRangeTemplateElement extends TemplateElement<ShortRange>
      */
     public ShortRangeTemplateElement()
     {
-        super(ShortRange.class, obj -> {
-            if (obj instanceof String)
-            {
-                final ShortRange shortRange = ShortRange.valueOf((String) obj);
-                if (shortRange == null)
-                {
-                    throw new UnsupportedOperationException("Can't convert string to ShortRange: " + obj);
-                }
-                return shortRange;
-            }
-            if (obj instanceof byte[])
-            {
-                final byte[] array = (byte[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to ShortRange: " + Arrays.toString(array));
-                }
-                return new ShortRange(array[0], array[1]);
-            }
-            if (obj instanceof short[])
-            {
-                final short[] array = (short[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to ShortRange: " + Arrays.toString(array));
-                }
-                return new ShortRange(array[0], array[1]);
-            }
-            if (obj instanceof int[])
-            {
-                final int[] array = (int[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to ShortRange: " + Arrays.toString(array));
-                }
-                return new ShortRange(array[0], array[1]);
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to ShortRange: " + obj);
-        }, c -> ShortRange.class.isAssignableFrom(c) || String.class.isAssignableFrom(c));
+        super(ShortRange.class);
     }
 
     @Override
-    protected ShortRange convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof ShortRange)
+        return ShortRange.class.isAssignableFrom(c) || String.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected ShortRange convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        final ShortRange convert = this.convert(obj);
+        if (convert != null)
         {
-            return (ShortRange) def;
+            return convert;
         }
-        if (def instanceof String)
+        throw this.getException(obj);
+    }
+
+    private ShortRange convert(final Object obj)
+    {
+        if (obj instanceof String)
         {
-            final ShortRange shortRange = ShortRange.valueOf((String) def);
+            final ShortRange shortRange = ShortRange.valueOf((String) obj);
             if (shortRange == null)
             {
-                throw new UnsupportedOperationException("Can't convert string to ShortRange: " + def);
+                throw this.getException(obj);
             }
             return shortRange;
         }
-        if (def instanceof byte[])
+        if (obj instanceof byte[])
         {
-            final byte[] array = (byte[]) def;
+            final byte[] array = (byte[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to ShortRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new ShortRange(array[0], array[1]);
         }
-        if (def instanceof short[])
+        if (obj instanceof short[])
         {
-            final short[] array = (short[]) def;
+            final short[] array = (short[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to ShortRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new ShortRange(array[0], array[1]);
         }
-        if (def instanceof int[])
+        if (obj instanceof int[])
         {
-            final int[] array = (int[]) def;
+            final int[] array = (int[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to ShortRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new ShortRange(array[0], array[1]);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        return null;
+    }
+
+    @Override
+    protected ShortRange convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof ShortRange)
+        {
+            return (ShortRange) obj;
+        }
+        final ShortRange convert = this.convert(obj);
+        if (convert != null)
+        {
+            return convert;
+        }
+        throw this.getException(obj);
     }
 
     @Override

@@ -61,34 +61,44 @@ public class IterableTemplateElement extends TemplateElement<Iterable>
      */
     public IterableTemplateElement()
     {
-        super(Iterable.class, obj -> {
-            if (obj instanceof Map)
-            {
-                return ((Map) obj).entrySet();
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Iterable: " + obj);
-        }, Map.class::isAssignableFrom);
+        super(Iterable.class);
     }
 
     @Override
-    protected Iterable convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof Iterable)
+        return Map.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected Iterable convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof Map)
         {
-            return (Iterable) def;
+            return ((Map) obj).entrySet();
         }
-        final Class<?> c = def.getClass();
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected Iterable convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof Iterable)
+        {
+            return (Iterable) obj;
+        }
+        final Class<?> c = obj.getClass();
         if (c.isArray())
         {
-            return new ReflectArrayIterator(def);
+            return new ReflectArrayIterator(obj);
         }
-        if (def instanceof Iterator)
+        if (obj instanceof Iterator)
         {
             final Collection col = new ArrayList<>(10);
-            ((Iterator) def).forEachRemaining(col::add);
+            ((Iterator) obj).forEachRemaining(col::add);
             return col;
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + c.getName() + "): " + def);
+        throw this.getException(obj);
     }
 
     @Override

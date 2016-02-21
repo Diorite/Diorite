@@ -48,39 +48,49 @@ public class BaseComponentTemplateElement extends TemplateElement<BaseComponent>
      */
     public BaseComponentTemplateElement()
     {
-        super(BaseComponent.class, obj -> {
-            if (obj instanceof String)
-            {
-                try
-                {
-                    return ComponentSerializer.safeParse((String) obj, '&');
-                } catch (final Exception e)
-                {
-                    return TextComponent.fromLegacyText((String) obj);
-                }
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to BaseComponent: " + obj);
-        }, c -> BaseComponent.class.isAssignableFrom(c) || String.class.isAssignableFrom(c));
+        super(BaseComponent.class);
     }
 
     @Override
-    protected BaseComponent convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof BaseComponent)
-        {
-            return (BaseComponent) def;
-        }
-        if (def instanceof String)
+        return BaseComponent.class.isAssignableFrom(c) || String.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected BaseComponent convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof String)
         {
             try
             {
-                return TextComponent.join(ComponentSerializer.parse((String) def));
+                return ComponentSerializer.safeParse((String) obj, '&');
             } catch (final Exception e)
             {
-                return TextComponent.fromLegacyText((String) def);
+                return TextComponent.fromLegacyText((String) obj);
             }
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected BaseComponent convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof BaseComponent)
+        {
+            return (BaseComponent) obj;
+        }
+        if (obj instanceof String)
+        {
+            try
+            {
+                return TextComponent.join(ComponentSerializer.parse((String) obj));
+            } catch (final Exception e)
+            {
+                return TextComponent.fromLegacyText((String) obj);
+            }
+        }
+        throw new UnsupportedOperationException("Can't convert default value (" + obj.getClass().getName() + "): " + obj);
     }
 
     @Override

@@ -39,22 +39,32 @@ public class ShortTemplateElement extends SimpleTemplateElement<Short>
      */
     public ShortTemplateElement()
     {
-        super(short.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).shortValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Short: " + obj);
-        }, Number.class::isAssignableFrom);
+        super(short.class);
     }
 
     @Override
-    protected Short convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof Number)
+        return Number.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected Short convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof Number)
         {
-            return ((Number) def).shortValue();
+            return ((Number) obj).shortValue();
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected Short convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof Number)
+        {
+            return ((Number) obj).shortValue();
+        }
+        throw this.getException(obj);
     }
 }

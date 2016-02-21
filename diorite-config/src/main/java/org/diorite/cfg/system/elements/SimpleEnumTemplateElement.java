@@ -48,19 +48,29 @@ public class SimpleEnumTemplateElement extends TemplateElement<SimpleEnum>
      */
     public SimpleEnumTemplateElement()
     {
-        super(SimpleEnum.class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to SimpleEnum: " + obj);
-        }, c -> false);
+        super(SimpleEnum.class);
     }
 
     @Override
-    protected SimpleEnum convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof String)
+        return false;
+    }
+
+    @Override
+    protected SimpleEnum convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected SimpleEnum convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof String)
         {
-            return SimpleEnum.getSimpleEnumValueSafe(def.toString(), DioriteMathUtils.asInt(def.toString(), - 1), (Class<SimpleEnum>) fieldType);
+            return SimpleEnum.getSimpleEnumValueSafe(obj.toString(), DioriteMathUtils.asInt(obj.toString(), - 1), (Class<SimpleEnum>) fieldType);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
     }
 
     @Override

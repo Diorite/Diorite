@@ -25,7 +25,6 @@
 package org.diorite.cfg.system.elements.math;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.elements.StringTemplateElement;
@@ -49,145 +48,107 @@ public class FloatRangeTemplateElement extends TemplateElement<FloatRange>
      */
     public FloatRangeTemplateElement()
     {
-        super(FloatRange.class, obj -> {
-            if (obj instanceof String)
-            {
-                final FloatRange floatRange = FloatRange.valueOf((String) obj);
-                if (floatRange == null)
-                {
-                    throw new UnsupportedOperationException("Can't convert string to FloatRange: " + obj);
-                }
-                return floatRange;
-            }
-            if (obj instanceof byte[])
-            {
-                final byte[] array = (byte[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
-                }
-                return new FloatRange(array[0], array[1]);
-            }
-            if (obj instanceof short[])
-            {
-                final short[] array = (short[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
-                }
-                return new FloatRange(array[0], array[1]);
-            }
-            if (obj instanceof int[])
-            {
-                final int[] array = (int[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
-                }
-                return new FloatRange(array[0], array[1]);
-            }
-            if (obj instanceof float[])
-            {
-                final float[] array = (float[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
-                }
-                return new FloatRange(array[0], array[1]);
-            }
-            if (obj instanceof double[])
-            {
-                final double[] array = (double[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
-                }
-                return new FloatRange(array[0], array[1]);
-            }
-            if (obj instanceof long[])
-            {
-                final long[] array = (long[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
-                }
-                return new FloatRange(array[0], array[1]);
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to FloatRange: " + obj);
-        }, c -> FloatRange.class.isAssignableFrom(c) || String.class.isAssignableFrom(c));
+        super(FloatRange.class);
     }
 
     @Override
-    protected FloatRange convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof FloatRange)
+        return FloatRange.class.isAssignableFrom(c) || String.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected FloatRange convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        final FloatRange convert = this.convert(obj);
+        if (convert != null)
         {
-            return (FloatRange) def;
+            return convert;
         }
-        if (def instanceof String)
+        throw this.getException(obj);
+    }
+
+    private FloatRange convert(final Object obj)
+    {
+        if (obj instanceof String)
         {
-            final FloatRange floatRange = FloatRange.valueOf((String) def);
+            final FloatRange floatRange = FloatRange.valueOf((String) obj);
             if (floatRange == null)
             {
-                throw new UnsupportedOperationException("Can't convert string to FloatRange: " + def);
+                throw this.getException(obj);
             }
             return floatRange;
         }
-        if (def instanceof byte[])
+        if (obj instanceof byte[])
         {
-            final byte[] array = (byte[]) def;
+            final byte[] array = (byte[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new FloatRange(array[0], array[1]);
         }
-        if (def instanceof short[])
+        if (obj instanceof short[])
         {
-            final short[] array = (short[]) def;
+            final short[] array = (short[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new FloatRange(array[0], array[1]);
         }
-        if (def instanceof int[])
+        if (obj instanceof int[])
         {
-            final int[] array = (int[]) def;
+            final int[] array = (int[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new FloatRange(array[0], array[1]);
         }
-        if (def instanceof float[])
+        if (obj instanceof float[])
         {
-            final float[] array = (float[]) def;
+            final float[] array = (float[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new FloatRange(array[0], array[1]);
         }
-        if (def instanceof double[])
+        if (obj instanceof double[])
         {
-            final double[] array = (double[]) def;
+            final double[] array = (double[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new FloatRange(array[0], array[1]);
         }
-        if (def instanceof long[])
+        if (obj instanceof long[])
         {
-            final long[] array = (long[]) def;
+            final long[] array = (long[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to FloatRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new FloatRange(array[0], array[1]);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        return null;
+    }
+
+    @Override
+    protected FloatRange convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof FloatRange)
+        {
+            return (FloatRange) obj;
+        }
+        final FloatRange convert = this.convert(obj);
+        if (convert != null)
+        {
+            return convert;
+        }
+        throw this.getException(obj);
     }
 
     @Override

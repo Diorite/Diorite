@@ -46,19 +46,29 @@ public class EnumTemplateElement extends TemplateElement<Enum>
      */
     public EnumTemplateElement()
     {
-        super(Enum.class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Enum: " + obj);
-        }, c -> false);
+        super(Enum.class);
     }
 
     @Override
-    protected Enum convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof String)
+        return false;
+    }
+
+    @Override
+    protected Enum convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+       throw this.getException(obj);
+    }
+
+    @Override
+    protected Enum convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof String)
         {
-            return Enum.valueOf((Class<Enum>) fieldType, def.toString());
+            return Enum.valueOf((Class<Enum>) fieldType, obj.toString());
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
     }
 
     @Override

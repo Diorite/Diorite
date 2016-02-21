@@ -46,13 +46,25 @@ public class DefaultTemplateElement extends TemplateElement<Object>
      */
     public DefaultTemplateElement()
     {
-        super(Object.class, obj -> obj, c -> true);
+        super(Object.class);
     }
 
     @Override
-    protected Object convertDefault0(final Object def, final Class<?> fieldType)
+    protected Object convertObject0(final Object def)
     {
         return def;
+    }
+
+    @Override
+    protected boolean canBeConverted0(final Class<?> clazz)
+    {
+        return true;
+    }
+
+    @Override
+    protected Object convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        return obj;
     }
 
     @Override

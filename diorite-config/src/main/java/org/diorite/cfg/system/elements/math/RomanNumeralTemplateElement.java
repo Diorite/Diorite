@@ -26,12 +26,7 @@ package org.diorite.cfg.system.elements.math;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.cfg.system.CfgEntryData;
-import org.diorite.cfg.system.Template;
-import org.diorite.cfg.system.TemplateCreator;
 import org.diorite.cfg.system.elements.StringTemplateElement;
 import org.diorite.cfg.system.elements.TemplateElement;
 import org.diorite.utils.math.RomanNumeral;
@@ -53,49 +48,59 @@ public class RomanNumeralTemplateElement extends TemplateElement<RomanNumeral>
      */
     public RomanNumeralTemplateElement()
     {
-        super(RomanNumeral.class, obj -> {
-            if (obj instanceof String)
-            {
-                try
-                {
-                    return new RomanNumeral((String) obj, false);
-                } catch (final Exception e)
-                {
-                    throw new UnsupportedOperationException("Can't convert string to RomanNumeral: " + obj);
-                }
-            }
-            if (obj instanceof Number)
-            {
-                final Number n = (Number) obj;
-                return new RomanNumeral(n.intValue(), false);
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to RomanNumeral: " + obj);
-        }, c -> RomanNumeral.class.isAssignableFrom(c) || String.class.isAssignableFrom(c));
+        super(RomanNumeral.class);
     }
 
     @Override
-    protected RomanNumeral convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof RomanNumeral)
-        {
-            return (RomanNumeral) def;
-        }
-        if (def instanceof String)
+        return RomanNumeral.class.isAssignableFrom(c) || String.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected RomanNumeral convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof String)
         {
             try
             {
-                return new RomanNumeral((String) def, false);
+                return new RomanNumeral((String) obj, false);
             } catch (final Exception e)
             {
-                throw new UnsupportedOperationException("Can't convert string to RomanNumeral: " + def);
+                throw this.getException(obj, e);
             }
         }
-        if (def instanceof Number)
+        if (obj instanceof Number)
         {
-            final Number n = (Number) def;
+            final Number n = (Number) obj;
             return new RomanNumeral(n.intValue(), false);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected RomanNumeral convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof RomanNumeral)
+        {
+            return (RomanNumeral) obj;
+        }
+        if (obj instanceof String)
+        {
+            try
+            {
+                return new RomanNumeral((String) obj, false);
+            } catch (final Exception e)
+            {
+                throw this.getException(obj, e);
+            }
+        }
+        if (obj instanceof Number)
+        {
+            final Number n = (Number) obj;
+            return new RomanNumeral(n.intValue(), false);
+        }
+        throw this.getException(obj);
     }
 
     @Override
@@ -104,24 +109,4 @@ public class RomanNumeralTemplateElement extends TemplateElement<RomanNumeral>
         final RomanNumeral element = (elementRaw instanceof RomanNumeral) ? ((RomanNumeral) elementRaw) : this.validateType(elementRaw);
         StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(element.toString()), level, elementPlace);
     }
-
-    public static void main(String[] args)
-    {
-        final Template<Test> template = TemplateCreator.getTemplate(Test.class);
-        String str = template.dumpAsString(new Test());
-        System.out.println(str);
-        System.out.println(template.load(str).level.toInt());
-    }
-
-    static class Test
-    {
-        RomanNumeral level = new RomanNumeral(250);
-
-        @Override
-        public String toString()
-        {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("level", this.level).toString();
-        }
-    }
-
 }

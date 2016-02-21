@@ -25,7 +25,6 @@
 package org.diorite.cfg.system.elements.math;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.cfg.system.elements.StringTemplateElement;
@@ -49,91 +48,80 @@ public class ByteRangeTemplateElement extends TemplateElement<ByteRange>
      */
     public ByteRangeTemplateElement()
     {
-        super(ByteRange.class, obj -> {
-            if (obj instanceof String)
-            {
-                final ByteRange byteRange = ByteRange.valueOf((String) obj);
-                if (byteRange == null)
-                {
-                    throw new UnsupportedOperationException("Can't convert string to ByteRange: " + obj);
-                }
-                return byteRange;
-            }
-            if (obj instanceof byte[])
-            {
-                final byte[] array = (byte[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to ByteRange: " + Arrays.toString(array));
-                }
-                return new ByteRange(array[0], array[1]);
-            }
-            if (obj instanceof short[])
-            {
-                final short[] array = (short[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to ByteRange: " + Arrays.toString(array));
-                }
-                return new ByteRange(array[0], array[1]);
-            }
-            if (obj instanceof int[])
-            {
-                final int[] array = (int[]) obj;
-                if ((array.length != 2) || (array[0] > array[1]))
-                {
-                    throw new UnsupportedOperationException("Can't convert array to ByteRange: " + Arrays.toString(array));
-                }
-                return new ByteRange(array[0], array[1]);
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to ByteRange: " + obj);
-        }, c -> ByteRange.class.isAssignableFrom(c) || String.class.isAssignableFrom(c));
+        super(ByteRange.class);
     }
 
     @Override
-    protected ByteRange convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof ByteRange)
+        return ByteRange.class.isAssignableFrom(c) || String.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected ByteRange convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        final ByteRange convert = this.convert(obj);
+        if (convert != null)
         {
-            return (ByteRange) def;
+            return convert;
         }
-        if (def instanceof String)
+        throw this.getException(obj);
+    }
+
+    private ByteRange convert(final Object obj)
+    {
+        if (obj instanceof String)
         {
-            final ByteRange byteRange = ByteRange.valueOf((String) def);
+            final ByteRange byteRange = ByteRange.valueOf((String) obj);
             if (byteRange == null)
             {
-                throw new UnsupportedOperationException("Can't convert string to ByteRange: " + def);
+                throw this.getException(obj);
             }
             return byteRange;
         }
-        if (def instanceof byte[])
+        if (obj instanceof byte[])
         {
-            final byte[] array = (byte[]) def;
+            final byte[] array = (byte[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to ByteRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new ByteRange(array[0], array[1]);
         }
-        if (def instanceof short[])
+        if (obj instanceof short[])
         {
-            final short[] array = (short[]) def;
+            final short[] array = (short[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to ByteRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new ByteRange(array[0], array[1]);
         }
-        if (def instanceof int[])
+        if (obj instanceof int[])
         {
-            final int[] array = (int[]) def;
+            final int[] array = (int[]) obj;
             if ((array.length != 2) || (array[0] > array[1]))
             {
-                throw new UnsupportedOperationException("Can't convert array to ByteRange: " + Arrays.toString(array));
+                throw this.getException(obj);
             }
             return new ByteRange(array[0], array[1]);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        return null;
+    }
+
+    @Override
+    protected ByteRange convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof ByteRange)
+        {
+            return (ByteRange) obj;
+        }
+        final ByteRange convert = this.convert(obj);
+        if (convert != null)
+        {
+            return convert;
+        }
+        throw this.getException(obj);
     }
 
     @Override
