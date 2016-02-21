@@ -114,6 +114,12 @@ class BasicCooldownManager<K> implements CooldownManager<K>
     }
 
     @Override
+    public void clear()
+    {
+        this.map.clear();
+    }
+
+    @Override
     public Collection<BasicCooldownEntry> getEntires()
     {
         return this.map.values();

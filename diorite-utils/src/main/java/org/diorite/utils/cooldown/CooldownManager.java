@@ -155,6 +155,11 @@ public interface CooldownManager<K>
     }
 
     /**
+     * Removes all entries from manager.
+     */
+    void clear();
+
+    /**
      * Returns all entires without removing expired one.
      *
      * @return all entires without removing expired one.
