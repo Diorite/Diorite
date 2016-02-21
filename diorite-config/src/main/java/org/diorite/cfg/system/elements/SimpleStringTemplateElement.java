@@ -24,70 +24,42 @@
 
 package org.diorite.cfg.system.elements;
 
+import java.io.IOException;
+
+import org.diorite.cfg.system.CfgEntryData;
+
 /**
- * Base class for template elements handlers, with simpler methods.
+ * Base class for template elements handlers, with simpler methods and made for String representation of objects.
  *
  * @param <T> type of supported/handled element.
  */
-public abstract class SimpleTemplateElement<T> extends TemplateElement<T>
+public abstract class SimpleStringTemplateElement<T> extends SimpleTemplateElement<T>
 {
     /**
      * Construct new template for given class, convert function and class type checking function.
      *
      * @param fieldType type of supported template element.
      */
-    public SimpleTemplateElement(final Class<T> fieldType)
+    public SimpleStringTemplateElement(final Class<T> fieldType)
     {
         super(fieldType);
     }
 
     /**
-     * Function used to convert other types to this type (may throw errors).
-     * Simple convert method, used both by {@link #convertDefault0(Object, Class)} and {@link #convertObject0(Object)} to make creating element simpler.
+     * Convert given object to string that will be saved in configuration file. <br>
+     * String returned by this method must produce this same object via {@link #simpleConvert(Object)}.
      *
-     * @param obj object to convert.
+     * @param object object to be coverted.
      *
-     * @return converted object.
-     *
-     * @throws UnsupportedOperationException when method can't convert object.
+     * @return ready to save string.
      */
-    protected abstract T simpleConvert(final Object obj) throws UnsupportedOperationException;
-
-    @Override
-    protected T convertObject0(final Object obj)
-    {
-        return this.convert0(obj);
-    }
+    protected abstract String convertToString(T object);
 
     @SuppressWarnings("unchecked")
     @Override
-    protected T convertDefault0(final Object obj, final Class<?> fieldType)
+    public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
-        if (this.fieldType.isAssignableFrom(obj.getClass()))
-        {
-            return (T) obj;
-        }
-        return this.convert0(obj);
-    }
-
-    private T convert0(final Object obj)
-    {
-        final T converted;
-        try
-        {
-            converted = this.simpleConvert(obj);
-        } catch (final Exception e)
-        {
-            if (e instanceof UnsupportedOperationException)
-            {
-                throw e;
-            }
-            throw this.getException(obj, e);
-        }
-        if (converted == null)
-        {
-            throw this.getException(obj);
-        }
-        return converted;
+        final T element = (this.fieldType.isAssignableFrom(elementRaw.getClass())) ? (T) elementRaw : this.validateType(elementRaw);
+        StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(this.convertToString(element)), level, elementPlace);
     }
 }

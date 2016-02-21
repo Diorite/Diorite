@@ -97,7 +97,6 @@ public class BaseComponentTemplateElement extends TemplateElement<BaseComponent>
     public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object elementRaw, final int level, final ElementPlace elementPlace) throws IOException
     {
         final BaseComponent element = (elementRaw instanceof BaseComponent) ? ((BaseComponent) elementRaw) : this.validateType(elementRaw);
-        StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(element.toString()), level, elementPlace);
+        StringTemplateElement.INSTANCE.appendValue(writer, field, source, StringTemplateElement.INSTANCE.validateType(ComponentSerializer.toString(element)), level, elementPlace);
     }
-
 }
