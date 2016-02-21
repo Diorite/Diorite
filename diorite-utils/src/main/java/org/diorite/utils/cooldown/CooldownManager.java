@@ -66,31 +66,65 @@ public interface CooldownManager<K>
     CooldownEntry<K> remove(K key);
 
     /**
-     * Returns true if given key isn't in manager or his cooldown already expired. <br>
+     * Returns true if given key isn't in manager or cooldown already expired. <br>
      * If cooldown will be expired at moment of check, it will be removed from manager.
      *
      * @param key key to be checked.
      *
-     * @return true if given key isn't in manager or his cooldown already expired.
+     * @return true if given key isn't in manager or cooldown already expired.
      */
-    default boolean expired(final K key)
+    default boolean hasExpired(final K key)
     {
-        return this.expired(key, System.currentTimeMillis());
+        return this.hasExpired(key, System.currentTimeMillis());
     }
 
     /**
-     * Returns true if given key isn't in manager or his cooldown already expired. <br>
+     * Returns true if given key isn't in manager or cooldown already expired. <br>
      * If cooldown will be expired at moment of check, it will be removed from manager.
      *
      * @param key  key to be checked.
      * @param from time to use as current time. (in milliseconds)
      *
-     * @return true if given key isn't in manager or his cooldown already expired.
+     * @return true if given key isn't in manager or cooldown already expired.
      */
-    default boolean expired(final K key, final long from)
+    default boolean hasExpired(final K key, final long from)
     {
         final CooldownEntry<K> entry = this.getEntry(key);
         return (entry == null) || entry.expired();
+    }
+
+    /**
+     * Returns true if given key isn't in manager or cooldown already expired. <br>
+     * If cooldown has expired (or is missing), new cooldown will be set.
+     *
+     * @param key          key to be checked/added.
+     * @param cooldownTime time of cooldown.
+     *
+     * @return true if given key isn't in manager or cooldown already expired.
+     */
+    default boolean hasExpiredOrAdd(final K key, final long cooldownTime)
+    {
+        return this.hasExpiredOrAdd(key, cooldownTime, System.currentTimeMillis());
+    }
+
+    /**
+     * Returns true if given key isn't in manager or cooldown already expired. <br>
+     * If cooldown has expired (or is missing), new cooldown will be set.
+     *
+     * @param key          key to be checked/added.
+     * @param cooldownTime time of cooldown.
+     * @param from         time to use as current time. (in milliseconds)
+     *
+     * @return true if given key isn't in manager or cooldown already expired.
+     */
+    default boolean hasExpiredOrAdd(final K key, final long cooldownTime, final long from)
+    {
+        if (! this.hasExpired(key, from))
+        {
+            return false;
+        }
+        this.add(key, cooldownTime, from);
+        return true;
     }
 
     /**
