@@ -90,6 +90,28 @@ public abstract class TemplateElement<T>
         return this.isValidType(clazz) || this.canBeConverted0(clazz);
     }
 
+    private String getExceptionMessage(final Object obj, final String s)
+    {
+        if (s == null)
+        {
+            return "Can't convert object (" + obj.getClass().getName() + ") to " + this.fieldType.getName() + ": " + ToStringBuilder.reflectionToString(obj);
+        }
+        return "Can't convert object (" + obj.getClass().getName() + ") to " + this.fieldType.getName() + ", caused by: '" + s + "', object: " + ToStringBuilder.reflectionToString(obj);
+    }
+
+    /**
+     * Create UnsupportedOperationException "Can't convert object" for given object.
+     *
+     * @param obj   object that fail to convert.
+     * @param cause cause message.
+     *
+     * @return created exception.
+     */
+    protected UnsupportedOperationException getException(final Object obj, final String cause)
+    {
+        return new UnsupportedOperationException(this.getExceptionMessage(obj, cause));
+    }
+
     /**
      * Create UnsupportedOperationException "Can't convert object" for given object.
      *
@@ -99,7 +121,7 @@ public abstract class TemplateElement<T>
      */
     protected UnsupportedOperationException getException(final Object obj)
     {
-        return new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to " + this.fieldType.getName() + ": " + ToStringBuilder.reflectionToString(obj));
+        return this.getException(obj, (String) null);
     }
 
     /**
@@ -112,7 +134,7 @@ public abstract class TemplateElement<T>
      */
     protected UnsupportedOperationException getException(final Object obj, final Throwable cause)
     {
-        return new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to " + this.fieldType.getName() + ": " + ToStringBuilder.reflectionToString(obj), cause);
+        return new UnsupportedOperationException(this.getExceptionMessage(obj, null), cause);
     }
 
     /**
