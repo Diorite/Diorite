@@ -73,9 +73,9 @@ public interface CooldownManager<K>
      *
      * @return true if given key isn't in manager or his cooldown already expired.
      */
-    default boolean check(final K key)
+    default boolean expired(final K key)
     {
-        return this.check(key, System.currentTimeMillis());
+        return this.expired(key, System.currentTimeMillis());
     }
 
     /**
@@ -87,7 +87,11 @@ public interface CooldownManager<K>
      *
      * @return true if given key isn't in manager or his cooldown already expired.
      */
-    boolean check(K key, long from);
+    default boolean expired(final K key, final long from)
+    {
+        final CooldownEntry<K> entry = this.getEntry(key);
+        return (entry == null) || entry.expired();
+    }
 
     /**
      * Returns cooldown entry for given key, or null if entry don't exist. <br>
@@ -119,11 +123,36 @@ public interface CooldownManager<K>
     Set<? extends CooldownEntry<K>> getExpired(long from);
 
     /**
+     * Check all entries if they are expired, and remove them from manager.
+     *
+     * @return true if any element was removed.
+     */
+    default boolean removeExpired()
+    {
+        return this.removeExpired(System.currentTimeMillis());
+    }
+
+    /**
+     * Check all entries if they are expired, and remove them from manager.
+     *
+     * @param from time to use as current time. (in milliseconds)
+     *
+     * @return true if any element was removed.
+     */
+    default boolean removeExpired(final long from)
+    {
+        return ! this.getExpired(from).isEmpty();
+    }
+
+    /**
      * Returns true if there is no entires in this manager.
      *
      * @return true if there is no entires in this manager.
      */
-    boolean isEmpty();
+    default boolean isEmpty()
+    {
+        return this.getEntires().isEmpty();
+    }
 
     /**
      * Returns all entires without removing expired one.

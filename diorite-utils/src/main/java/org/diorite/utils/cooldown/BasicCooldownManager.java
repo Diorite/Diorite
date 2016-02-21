@@ -69,7 +69,7 @@ class BasicCooldownManager<K> implements CooldownManager<K>
     }
 
     @Override
-    public boolean check(final K key, final long from)
+    public boolean expired(final K key, final long from)
     {
         final BasicCooldownEntry entry = this.map.get(key);
         return (entry == null) || (entry.fastDelta(from) <= 0);
@@ -99,6 +99,12 @@ class BasicCooldownManager<K> implements CooldownManager<K>
             }
         }
         return (expired == null) ? Collections.emptySet() : expired;
+    }
+
+    @Override
+    public boolean removeExpired(final long from)
+    {
+        return this.map.entrySet().removeIf(e -> e.getValue().fastDelta(from) <= 0);
     }
 
     @Override
