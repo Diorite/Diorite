@@ -102,7 +102,7 @@
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
-                <version>5.0.0.Alpha3-SNAPSHOT</version>
+                <version>4.1.0.CR3</version>
             </dependency>
             <dependency>
                 <groupId>jline</groupId>
@@ -248,7 +248,6 @@
                     <executions>
                         <execution>
                             <id>attach-sources</id>
-                            <phase>deploy</phase>
                             <goals>
                                 <goal>jar</goal>
                             </goals>

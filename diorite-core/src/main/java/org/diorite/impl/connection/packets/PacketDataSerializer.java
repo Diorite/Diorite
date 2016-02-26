@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
@@ -223,32 +224,6 @@ public class PacketDataSerializer extends ByteBuf
     {
         this.writeVarInt(abyte.length);
         this.writeBytes(abyte);
-    }
-
-    @SuppressWarnings("MagicNumber")
-    public static int varintSize(final int i)
-    {
-        if ((i < 0) || (i >= 268435456))
-        {
-            return 5;
-        }
-        if (i < 128)
-        {
-            return 1;
-        }
-        if (i < 16384)
-        {
-            return 2;
-        }
-        if (i < 2097152)
-        {
-            return 3;
-        }
-        if (i < 268435456)
-        {
-            return 4;
-        }
-        throw new AssertionError();
     }
 
     public byte[] readByteWord()
@@ -739,6 +714,12 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public int getBytes(final int i, final FileChannel fileChannel, final long l, final int i1) throws IOException
+    {
+        return this.byteBuf.getBytes(i, fileChannel, l, i1);
+    }
+
+    @Override
     public ByteBuf setBoolean(final int i, final boolean flag)
     {
         return this.byteBuf.setBoolean(i, flag);
@@ -862,6 +843,12 @@ public class PacketDataSerializer extends ByteBuf
     public int setBytes(final int i, final ScatteringByteChannel scatteringbytechannel, final int j) throws IOException
     {
         return this.byteBuf.setBytes(i, scatteringbytechannel, j);
+    }
+
+    @Override
+    public int setBytes(final int i, final FileChannel fileChannel, final long l, final int i1) throws IOException
+    {
+        return this.byteBuf.setBytes(i, fileChannel, l, i1);
     }
 
     @Override
@@ -1051,6 +1038,12 @@ public class PacketDataSerializer extends ByteBuf
     }
 
     @Override
+    public int readBytes(final FileChannel fileChannel, final long l, final int i) throws IOException
+    {
+        return this.byteBuf.readBytes(fileChannel, l, i);
+    }
+
+    @Override
     public ByteBuf skipBytes(final int i)
     {
         return this.byteBuf.skipBytes(i);
@@ -1180,6 +1173,12 @@ public class PacketDataSerializer extends ByteBuf
     public int writeBytes(final ScatteringByteChannel scatteringbytechannel, final int i) throws IOException
     {
         return this.byteBuf.writeBytes(scatteringbytechannel, i);
+    }
+
+    @Override
+    public int writeBytes(final FileChannel fileChannel, final long l, final int i) throws IOException
+    {
+        return this.byteBuf.writeBytes(fileChannel, l, i);
     }
 
     @Override

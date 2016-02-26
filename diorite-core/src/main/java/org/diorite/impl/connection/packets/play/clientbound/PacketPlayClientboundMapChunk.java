@@ -37,6 +37,8 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
 
+import org.diorite.utils.math.DioriteMathUtils;
+
 import io.netty.buffer.Unpooled;
 
 @SuppressWarnings("MagicNumber")
@@ -193,7 +195,7 @@ public class PacketPlayClientboundMapChunk extends PacketPlayClientbound
             final ChunkPartImpl section = sections[i];
             if ((section != null) && (! full || ! section.isEmpty()) && ((mask & (1 << i)) != 0))
             {
-                bytes += 1 + section.getPalette().byteSize() + PacketDataSerializer.varintSize(i) + (section.getBlockData().size() * 8);
+                bytes += 1 + section.getPalette().byteSize() + DioriteMathUtils.varintSize(i) + (section.getBlockData().size() * 8);
                 bytes += section.getBlockLight().byteSize();
                 if (skyLight)
                 {

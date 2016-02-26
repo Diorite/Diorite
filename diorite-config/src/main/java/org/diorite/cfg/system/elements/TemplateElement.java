@@ -224,7 +224,7 @@ public abstract class TemplateElement<T>
         }
         if (element != null)
         {
-            writer.append('\n');
+//            writer.append('\n');
             if (addComments && (field.getHeader() != null))
             {
                 Template.appendComment(writer, field.getHeader(), level, false);
@@ -243,7 +243,7 @@ public abstract class TemplateElement<T>
                 }
                 else
                 {
-                    writer.append('\n');
+//                    writer.append('\n');
                     Template.appendComment(writer, field.getFooter(), level, false);
                 }
             }
@@ -271,7 +271,7 @@ public abstract class TemplateElement<T>
             if (addComments && (field.getHeader() != null) && (elementPlace == ElementPlace.NORMAL))
             {
                 Template.appendComment(writer, field.getHeader(), level, false);
-                writer.append('\n');
+//                writer.append('\n');
             }
 
             this.appendValue(writer, field, object, this.validateType(element), level, elementPlace);
@@ -283,7 +283,7 @@ public abstract class TemplateElement<T>
             if (addComments && (field.getFooter() != null))
             {
                 Template.appendComment(writer, field.getFooter(), level, false);
-                writer.append('\n');
+//                writer.append('\n');
             }
         }
     }

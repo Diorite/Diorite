@@ -138,6 +138,38 @@ public interface CooldownManager<K>
     CooldownEntry<K> getEntry(final K key);
 
     /**
+     * Returns cooldown entry for given key, or create new one if entry don't exist. <br>
+     *
+     * @param key          key to check.
+     * @param cooldownTime time of cooldown.
+     *
+     * @return cooldown entry for given key.
+     */
+    default CooldownEntry<K> getOrCreateEntry(final K key, final long cooldownTime)
+    {
+        return this.getOrCreateEntry(key, cooldownTime, System.currentTimeMillis());
+    }
+
+    /**
+     * Returns cooldown entry for given key, or create new one if entry don't exist. <br>
+     *
+     * @param key          key to check.
+     * @param cooldownTime time of cooldown.
+     * @param from         time to use as current time. (in milliseconds)
+     *
+     * @return cooldown entry for given key.
+     */
+    default CooldownEntry<K> getOrCreateEntry(final K key, final long cooldownTime, final long from)
+    {
+        final CooldownEntry<K> entry = this.getEntry(key);
+        if (entry == null)
+        {
+            return this.add(key, cooldownTime, from);
+        }
+        return entry;
+    }
+
+    /**
      * Check all entries if they are expired, and remove them from manager.
      *
      * @return all removed entires.

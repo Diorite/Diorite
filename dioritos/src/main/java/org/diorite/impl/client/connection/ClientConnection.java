@@ -26,6 +26,8 @@ package org.diorite.impl.client.connection;
 
 import java.net.InetAddress;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -45,7 +47,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
-import io.netty.util.concurrent.DefaultExecutorServiceFactory;
 
 public class ClientConnection extends Thread implements ConnectionHandler
 {
@@ -62,9 +63,9 @@ public class ClientConnection extends Thread implements ConnectionHandler
     {
         this.core = core;
         this.setDaemon(true);
-        this.setName("{Diorite|SrvCon}");
-        this.nioEventLoopGroupLazyValue = new LazyValue<>(() -> new NioEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Client")));
-        this.epollEventLoopGroupLazyValue = new LazyValue<>(() -> new EpollEventLoopGroup(0, new DefaultExecutorServiceFactory("Netty Epoll Client")));
+        this.setName("{DioritOS|ClientCon}");
+        this.nioEventLoopGroupLazyValue = new LazyValue<>(() -> new NioEventLoopGroup(0, new ThreadFactoryBuilder().setNameFormat("DioritOS-Netty#%d").setDaemon(true).build()));
+        this.epollEventLoopGroupLazyValue = new LazyValue<>(() -> new EpollEventLoopGroup(0, new ThreadFactoryBuilder().setNameFormat("DioritOS-Netty#%d").setDaemon(true).build()));
     }
 
     @Override

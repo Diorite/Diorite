@@ -46,6 +46,32 @@ public final class DioriteMathUtils
     private static final float   UNKNOWN_CONST  = 10430.378F;
     private static final float[] sinCache       = new float[SIN_CACHE_SIZE];
 
+    @SuppressWarnings("MagicNumber")
+    public static int varintSize(final int i)
+    {
+        if ((i < 0) || (i >= 268435456))
+        {
+            return 5;
+        }
+        if (i < 128)
+        {
+            return 1;
+        }
+        if (i < 16384)
+        {
+            return 2;
+        }
+        if (i < 2097152)
+        {
+            return 3;
+        }
+        if (i < 268435456)
+        {
+            return 4;
+        }
+        throw new AssertionError();
+    }
+
     static
     {
         for (int i = 0; i < SIN_CACHE_SIZE; i++)
@@ -58,8 +84,8 @@ public final class DioriteMathUtils
     {
     }
 
-    private static final NumberFormat simpleFormat          = new DecimalFormat("###.##");
-    private static final NumberFormat simpleFormatForceZero = new DecimalFormat("###.00");
+    private static final NumberFormat simpleFormat          = new DecimalFormat("##0.##");
+    private static final NumberFormat simpleFormatForceZero = new DecimalFormat("##0.00");
 
     /**
      * Faster sin method using special cache, based on Mojang code.

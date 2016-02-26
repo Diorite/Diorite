@@ -24,7 +24,6 @@
 
 package org.diorite.impl.connection;
 
-
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,11 +31,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketClass;
+import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.internal.TypeParameterMatcher;
@@ -55,37 +54,11 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
 {
     public abstract static class PacketByteToMessageCodec extends ByteToMessageCodec<Packet<?>>
     {
-        @SuppressWarnings("MagicNumber")
-        private static int varintSize(final int i)
-        {
-            if ((i < 0) || (i >= 268435456))
-            {
-                return 5;
-            }
-            if (i < 128)
-            {
-                return 1;
-            }
-            if (i < 16384)
-            {
-                return 2;
-            }
-            if (i < 2097152)
-            {
-                return 3;
-            }
-            if (i < 268435456)
-            {
-                return 4;
-            }
-            throw new AssertionError();
-        }
-
         @Override
         protected ByteBuf allocateBuffer(final ChannelHandlerContext ctx, final Packet<?> msg, final boolean preferDirect) throws Exception
         {
             final PacketClass pc = msg.getPacketData();
-            final int size = varintSize(pc.id()) + pc.size();
+            final int size = DioriteMathUtils.varintSize(pc.id()) + pc.size();
             if (size < 0)
             {
                 throw new IllegalArgumentException("Size can't be lower than 0!");
@@ -103,37 +76,11 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
 
     public abstract static class PacketByteBufByteToMessageCodec extends ByteToMessageCodec<ByteBuf>
     {
-        @SuppressWarnings("MagicNumber")
-        private static int varintSize(final int i)
-        {
-            if ((i < 0) || (i >= 268435456))
-            {
-                return 5;
-            }
-            if (i < 128)
-            {
-                return 1;
-            }
-            if (i < 16384)
-            {
-                return 2;
-            }
-            if (i < 2097152)
-            {
-                return 3;
-            }
-            if (i < 268435456)
-            {
-                return 4;
-            }
-            throw new AssertionError();
-        }
-
         @Override
         protected ByteBuf allocateBuffer(final ChannelHandlerContext ctx, final ByteBuf msg, final boolean preferDirect) throws Exception
         {
             final int dataSize = msg.readableBytes();
-            final int size = varintSize(dataSize) + dataSize;
+            final int size = DioriteMathUtils.varintSize(dataSize) + dataSize;
             if (size < 0)
             {
                 throw new IllegalArgumentException("Size can't be lower than 0!");
@@ -224,18 +171,6 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
     public boolean acceptOutboundMessage(final Object msg) throws Exception
     {
         return this.outboundMsgMatcher.match(msg);
-    }
-
-    @Override
-    public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception
-    {
-        this.decoder.channelRead(ctx, msg);
-    }
-
-    @Override
-    public void write(final ChannelHandlerContext ctx, final Object msg, final ChannelPromise promise) throws Exception
-    {
-        this.encoder.write(ctx, msg, promise);
     }
 
     /**

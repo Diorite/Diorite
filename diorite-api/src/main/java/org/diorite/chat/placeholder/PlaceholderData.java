@@ -35,7 +35,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.diorite.Diorite;
 import org.diorite.chat.component.BaseComponent;
-import org.diorite.utils.DioriteUtils;
+import org.diorite.utils.collections.arrays.DioriteArrayUtils;
 
 /**
  * Represent placeholder found in string, it contains full string to replace, object name and placeholder item.
@@ -72,7 +72,7 @@ public interface PlaceholderData<T>
      */
     default Object[] getArguments()
     {
-        return DioriteUtils.EMPTY_OBJECT;
+        return DioriteArrayUtils.EMPTY_OBJECT;
     }
 
     /**
@@ -97,7 +97,7 @@ public interface PlaceholderData<T>
         final Object[] args = this.getArguments();
         if (args.length == 0)
         {
-            return DioriteUtils.EMPTY_OBJECT;
+            return DioriteArrayUtils.EMPTY_OBJECT;
         }
         if (this.containsSubPlaceholders())
         {
