@@ -62,4 +62,28 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
     {
         return EntityType.CREEPER;
     }
+    
+    @Override
+    boolean canExplode()
+    {
+    	
+    }
+	
+    @Override
+    void setCanExplode(boolean canExplode)
+    {
+    	
+    }
+
+    @Override
+    boolean isPowered()
+    {
+    	
+    }
+	
+    @Override
+    void setPowered(boolean powered)
+    {
+    	
+    }
 }
