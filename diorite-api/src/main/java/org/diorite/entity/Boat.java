@@ -31,26 +31,26 @@ public interface Boat extends Entity, ObjectEntity
      *
      * @return Value of the boat's max speed.
      */
-    public double getMaxSpeed();
+    double getMaxSpeed();
 	
     /**
      * Sets max speed of a boat.
      *
      * @param isWorkingOnLand if a boat should work on the land.
      */
-    public void setMaxSpeed(double maxSpeed);
+    void setMaxSpeed(double maxSpeed);
 	
     /**
      * Returns true if a boat works on land.
      *
      * @return true if a boat works on land.
      */
-    public boolean getWorkingOnLand();
+    boolean getWorkingOnLand();
 	
     /**
      * Sets if a boat should be working on the land.
      *
      * @param workingOnLand if a boat should be working on the land.
      */
-    public void setWorkingOnLand(boolean workingOnLand);
+    void setWorkingOnLand(boolean workingOnLand);
 }

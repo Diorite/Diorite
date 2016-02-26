@@ -31,26 +31,26 @@ public interface Creeper extends MonsterEntity
      *
      * @return true if a creeper can explode.
      */
-    public boolean canExplode();
+    boolean canExplode();
 	
     /**
      * Sets if a creeper can explode.
      *
      * @param canExplode if a creeper can explode.
      */
-    public void setCanExplode(boolean canExplode);
+    void setCanExplode(boolean canExplode);
 	
     /**
      * Returns true if a creeper is powered.
      *
      * @return true if a creeper is powered.
      */
-    public boolean isPowered();
+    boolean isPowered();
 	
     /**
      * Sets if a creeper is powered.
      *
      * @param powered if a creeper should be powered.
      */
-    public void setPowered(boolean powered);
+    void setPowered(boolean powered);
 }

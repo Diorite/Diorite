@@ -33,40 +33,40 @@ public interface Wolf extends AnimalEntity
      *
      * @return true if a wolf is sitting.
      */
-    public boolean getSitting();
+    boolean getSitting();
     
     /**
      * Sets if a wolf is sitting
      *
      * @param canExplode if a wolf is sitting.
      */
-    public void setSitting(boolean sitting);
+    void setSitting(boolean sitting);
     
     /**
      * Returns true if a wolf is angry.
      *
      * @return true if a wolf is angry.
      */
-    public boolean isAngry();
+    boolean isAngry();
     
     /**
      * Sets if a wolf is angry.
      *
      * @param angry if a wolf is angry.
      */
-    public void setAngry(boolean angry);
+    void setAngry(boolean angry);
     
     /**
      * Returns a color of the wolf's collar.
      *
      * @return a color of the wolf's collar.
      */
-    public DyeColor getCollarColor();
+    DyeColor getCollarColor();
     
     /**
      * Sets a color of the wolf's collar.
      *
      * @param color to define collar's color.
      */
-    public void setCollarColor(DyeColor color);
+    void setCollarColor(DyeColor color);
 }
