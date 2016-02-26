@@ -26,6 +26,9 @@ package org.diorite.entity;
 
 import org.diorite.DyeColor;
 
+/**
+ * Represent wolf entity.
+ */
 public interface Wolf extends AnimalEntity
 {
     /**
