@@ -31,6 +31,7 @@ import org.diorite.impl.entity.IWolf;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
+import org.diorite.DyeColor;
 
 class WolfImpl extends AnimalEntityImpl implements IWolf
 {
