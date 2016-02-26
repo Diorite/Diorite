@@ -50,7 +50,7 @@ public interface Creeper extends MonsterEntity
     /**
      * Sets if a creeper is powered.
      *
-     * @param isPowered if a creeper should be powered.
+     * @param powered if a creeper should be powered.
      */
-    public void setPowered(boolean isPowered);
+    public void setPowered(boolean powered);
 }

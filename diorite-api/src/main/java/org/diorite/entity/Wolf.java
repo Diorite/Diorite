@@ -26,4 +26,7 @@ package org.diorite.entity;
 
 public interface Wolf extends AnimalEntity
 {
+    public boolean isAngry();
+    
+    public void setAngry(boolean isAngry);
 }

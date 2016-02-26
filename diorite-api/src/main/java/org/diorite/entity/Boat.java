@@ -50,7 +50,7 @@ public interface Boat extends Entity, ObjectEntity
     /**
      * Sets if a boat should be working on the land.
      *
-     * @param isWorkingOnLand if a boat should be working on the land.
+     * @param workingOnLand if a boat should be working on the land.
      */
-    public void setWorkingOnLand(boolean isWorkingOnLand);
+    public void setWorkingOnLand(boolean workingOnLand);
 }
