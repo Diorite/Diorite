@@ -55,6 +55,7 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
         this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_CREEPER_STATE, 0));
         this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_CREEPER_POWERED, false));
         this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_CREEPER_IGNITED, false));
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_CREEPER_CAN_EXPLODE, true));
     }
 
     @Override
@@ -66,24 +67,24 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
     @Override
     public boolean canExplode()
     {
-    	return true; //TODO
+    	return this.getMetadata().getBoolean(META_KEY_CREEPER_CAN_EXPLODE);
     }
 	
     @Override
     public void setCanExplode(boolean canExplode)
     {
-    	
+    	this.getMetadata().setBoolean(META_KEY_CREEPER_CAN_EXPLODE, canExplode);
     }
 
     @Override
     public boolean isPowered()
     {
-    	return false; //TODO
+    	return this.getMetadata().getBoolean(META_KEY_CREEPER_POWERED);
     }
 	
     @Override
     public void setPowered(boolean powered)
     {
-    	
+    	this.getMetadata().setBoolean(META_KEY_CREEPER_POWERED, powered);
     }
 }
