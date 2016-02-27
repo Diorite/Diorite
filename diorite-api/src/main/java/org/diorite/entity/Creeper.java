@@ -30,20 +30,6 @@ package org.diorite.entity;
 public interface Creeper extends MonsterEntity
 {
     /**
-     * Returns true if a creeper can explode.
-     *
-     * @return true if a creeper can explode.
-     */
-    boolean canExplode();
-	
-    /**
-     * Sets if a creeper can explode.
-     *
-     * @param canExplode if a creeper can explode.
-     */
-    void setCanExplode(boolean canExplode);
-	
-    /**
      * Returns true if a creeper is powered.
      *
      * @return true if a creeper is powered.
