@@ -62,31 +62,37 @@ class WolfImpl extends AnimalEntityImpl implements IWolf
     @Override
     public boolean getSitting()
     {
-    	
+    	return false; //TODO
+    }
+
+    @Override
+    public void setSitting(boolean sitting)
+    {
+        //TODO
     }
 
     @Override
     public boolean isAngry()
     {
-    	
+    	return false; //TODO
     }
     
     @Override
     public void setAngry(boolean angry)
     {
-    	
+        //TODO
     }
 
     @Override
     public DyeColor getCollarColor()
     {
-    	
+    	return DyeColor.RED; //TODO
     }
 
     @Override
     public void setCollarColor(DyeColor color)
     {
-    	
+    	//TODO
     }
 }
 

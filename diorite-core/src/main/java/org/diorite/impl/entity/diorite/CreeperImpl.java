@@ -66,7 +66,7 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
     @Override
     public boolean canExplode()
     {
-    	
+    	return true; //TODO
     }
 	
     @Override
@@ -78,7 +78,7 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
     @Override
     public boolean isPowered()
     {
-    	
+    	return false; //TODO
     }
 	
     @Override
