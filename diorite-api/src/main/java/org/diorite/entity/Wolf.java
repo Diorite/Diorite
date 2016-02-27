@@ -41,7 +41,7 @@ public interface Wolf extends AnimalEntity
     /**
      * Sets if a wolf is sitting
      *
-     * @param canExplode if a wolf is sitting.
+     * @param sitting if a wolf is sitting.
      */
     void setSitting(boolean sitting);
     
