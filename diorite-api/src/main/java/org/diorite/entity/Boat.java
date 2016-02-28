@@ -24,6 +24,36 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent boat entity.
+ */
 public interface Boat extends Entity, ObjectEntity
 {
+    /**
+     * Returns the max speed of a boat.
+     *
+     * @return Value of the boat's max speed.
+     */
+    double getMaxSpeed();
+	
+    /**
+     * Sets max speed of a boat.
+     *
+     * @param maxSpeed if a boat should work on the land.
+     */
+    void setMaxSpeed(double maxSpeed);
+	
+    /**
+     * Returns true if a boat works on land.
+     *
+     * @return true if a boat works on land.
+     */
+    boolean getWorkingOnLand();
+	
+    /**
+     * Sets if a boat should be working on the land.
+     *
+     * @param workingOnLand if a boat should be working on the land.
+     */
+    void setWorkingOnLand(boolean workingOnLand);
 }

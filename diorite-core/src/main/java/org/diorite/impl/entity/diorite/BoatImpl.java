@@ -78,5 +78,29 @@ class BoatImpl extends EntityImpl implements IBoat
     {
         return 0;
     }
+    
+    @Override
+    public double getMaxSpeed()
+    {
+    	return 0.0; //TODO
+    }
+	
+    @Override
+    public void setMaxSpeed(double maxSpeed)
+    {
+    	//TODO
+    }
+
+    @Override
+    public boolean getWorkingOnLand()
+    {
+    	return true; //TODO
+    }
+	
+    @Override
+    public void setWorkingOnLand(boolean workingOnLand)
+    {
+        //TODO
+    }
 }
 

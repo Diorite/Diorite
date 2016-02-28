@@ -24,6 +24,52 @@
 
 package org.diorite.entity;
 
+import org.diorite.DyeColor;
+
+/**
+ * Represent wolf entity.
+ */
 public interface Wolf extends AnimalEntity
 {
+    /**
+     * Returns true if a wolf is sitting.
+     *
+     * @return true if a wolf is sitting.
+     */
+    boolean getSitting();
+    
+    /**
+     * Sets if a wolf is sitting
+     *
+     * @param sitting if a wolf is sitting.
+     */
+    void setSitting(boolean sitting);
+    
+    /**
+     * Returns true if a wolf is angry.
+     *
+     * @return true if a wolf is angry.
+     */
+    boolean isAngry();
+    
+    /**
+     * Sets if a wolf is angry.
+     *
+     * @param angry if a wolf is angry.
+     */
+    void setAngry(boolean angry);
+    
+    /**
+     * Returns a color of the wolf's collar.
+     *
+     * @return a color of the wolf's collar.
+     */
+    DyeColor getCollarColor();
+    
+    /**
+     * Sets a color of the wolf's collar.
+     *
+     * @param color to define collar's color.
+     */
+    void setCollarColor(DyeColor color);
 }

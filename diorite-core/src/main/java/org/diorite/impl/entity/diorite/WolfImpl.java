@@ -31,6 +31,7 @@ import org.diorite.impl.entity.IWolf;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
+import org.diorite.DyeColor;
 
 class WolfImpl extends AnimalEntityImpl implements IWolf
 {
@@ -56,6 +57,42 @@ class WolfImpl extends AnimalEntityImpl implements IWolf
     public EntityType getType()
     {
         return EntityType.WOLF;
+    }
+    
+    @Override
+    public boolean getSitting()
+    {
+    	return false; //TODO
+    }
+
+    @Override
+    public void setSitting(boolean sitting)
+    {
+        //TODO
+    }
+
+    @Override
+    public boolean isAngry()
+    {
+    	return false; //TODO
+    }
+    
+    @Override
+    public void setAngry(boolean angry)
+    {
+        //TODO
+    }
+
+    @Override
+    public DyeColor getCollarColor()
+    {
+    	return DyeColor.RED; //TODO
+    }
+
+    @Override
+    public void setCollarColor(DyeColor color)
+    {
+    	//TODO
     }
 }
 
