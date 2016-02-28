@@ -39,7 +39,7 @@ public interface Boat extends Entity, ObjectEntity
     /**
      * Sets max speed of a boat.
      *
-     * @param isWorkingOnLand if a boat should work on the land.
+     * @param maxSpeed if a boat should work on the land.
      */
     void setMaxSpeed(double maxSpeed);
 	
