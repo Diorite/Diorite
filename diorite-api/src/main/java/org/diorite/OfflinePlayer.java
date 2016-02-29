@@ -28,9 +28,24 @@ import java.util.UUID;
 
 public interface OfflinePlayer
 {
+    /**
+     * Get offline player's name
+     *
+     * @return offline player's name
+     */
     String getName();
 
+    /**
+     * Check if player is online
+     *
+     * @return true if player is online
+     */
     boolean isOnline();
 
+    /**
+     * Get offline player's UUID
+     *
+     * @return offline player's UUID
+     */
     UUID getUniqueID();
 }

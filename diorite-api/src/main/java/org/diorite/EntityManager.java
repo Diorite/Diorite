@@ -30,15 +30,45 @@ import org.diorite.entity.Entity;
 
 public interface EntityManager
 {
+    /**
+     * Get entity by its ID
+     *
+     * @return entity by its ID
+     */
     Entity getEntity(int id);
 
+    /**
+     * Get entity by its UUID
+     *
+     * @return entity by its UUID
+     */
     Entity getEntity(UUID id);
 
+    /**
+     * Remove entity by its reference
+     *
+     * @param entity Entity to remove
+     */
     Entity removeEntity(Entity entity);
 
+    /**
+     * Remove entity by its ID
+     *
+     * @param id ID of entity to remove
+     */
     Entity removeEntity(int id);
 
+    /**
+     * Get current ID
+     *
+     * @return current ID
+     */
     int getCurrentID();
 
+    /**
+     * Get current server
+     *
+     * @return current server
+     */
     Core getServer();
 }
