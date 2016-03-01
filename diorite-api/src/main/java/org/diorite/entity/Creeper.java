@@ -26,4 +26,17 @@ package org.diorite.entity;
 
 public interface Creeper extends MonsterEntity
 {
+    /**
+     * Returns true if a creeper is powered
+     *
+     * @return true if a creeper is powered
+     */
+    boolean isPowered();
+
+    /**
+     * Sets if a creeper is powered
+     *
+     * @param powered if a creeper is powered
+     */
+    void setPowered(boolean powered);
 }
