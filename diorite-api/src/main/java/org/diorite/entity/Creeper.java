@@ -31,7 +31,7 @@ public interface Creeper extends MonsterEntity
      *
      * @return true if a creeper is powered
      */
-    boolean isPowered();
+    boolean getPowered();
 
     /**
      * Sets if a creeper is powered
@@ -39,4 +39,18 @@ public interface Creeper extends MonsterEntity
      * @param powered if a creeper is powered
      */
     void setPowered(boolean powered);
+
+    /**
+     * Returns true if a creeper is ignited
+     *
+     * @return true if a creeper is ignited
+     */
+    boolean getIgnited();
+
+    /**
+     * Sets if a creeper is ignited
+     *
+     * @param ignited if a creeper is ignited
+     */
+    void setIgnited(boolean ignited);
 }

@@ -63,7 +63,7 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
         return EntityType.CREEPER;
     }
 
-    public boolean isPowered()
+    public boolean getPowered()
     {
         return this.getMetadata().getBoolean(META_KEY_CREEPER_POWERED);
     }
@@ -71,5 +71,15 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
     public void setPowered(boolean powered)
     {
         this.getMetadata().setBoolean(META_KEY_CREEPER_POWERED, powered);
+    }
+
+    public boolean getIgnited()
+    {
+        return this.getMetadata().getBoolean(META_KEY_CREEPER_IGNITED);
+    }
+
+    public void setIgnited(boolean ignited)
+    {
+        this.getMetadata().setBoolean(META_KEY_CREEPER_IGNITED, ignited);
     }
 }
