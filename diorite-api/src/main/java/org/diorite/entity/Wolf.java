@@ -24,6 +24,49 @@
 
 package org.diorite.entity;
 
+import org.diorite.DyeColor;
+
 public interface Wolf extends AnimalEntity
 {
+    /**
+     * Returns taken damage
+     *
+     * @return taken damage
+     */
+    double getTakenDamage();
+
+    /**
+     * Sets taken damage
+     *
+     * @param damage for taken damage value
+     */
+    void setTakenDamage(double damage);
+
+    /**
+     * Returns true if a wolf is begging
+     *
+     * @return true if a wolf is begging
+     */
+    boolean getBegging();
+
+    /**
+     * Sets if a wolf is begging
+     *
+     * @param begging if a wolf is begging
+     */
+    void setBegging(boolean begging);
+
+    /**
+     * Returns the collar's color
+     *
+     * @return the collar's color
+     */
+    DyeColor getCollarColor();
+
+    /**
+     * Sets the collar's color
+     *
+     * @param collarColor defines the collar's color
+     */
+    void setCollarColor(DyeColor collarColor);
 }

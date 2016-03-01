@@ -29,6 +29,7 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IPig;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -50,12 +51,23 @@ class PigImpl extends AnimalEntityImpl implements IPig
     public void initMetadata()
     {
         super.initMetadata();
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_PIG_HAS_SADDLE, false));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.PIG;
+    }
+
+    public boolean getSaddle()
+    {
+        return this.getMetadata().getBoolean(META_KEY_PIG_HAS_SADDLE);
+    }
+
+    public void setSaddle(boolean saddle)
+    {
+        this.getMetadata().setBoolean(META_KEY_PIG_HAS_SADDLE, saddle);
     }
 }
 
