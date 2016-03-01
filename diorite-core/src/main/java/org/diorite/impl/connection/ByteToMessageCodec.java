@@ -34,8 +34,9 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerAdapter;
+import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.internal.TypeParameterMatcher;
@@ -50,8 +51,26 @@ import io.netty.util.internal.TypeParameterMatcher;
  * Be aware that sub-classes of {@link ByteToMessageCodec} <strong>MUST NOT</strong>
  * annotated with {@link io.netty.channel.ChannelHandler.Sharable}.
  */
-public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
+@SuppressWarnings("ThrowFromFinallyBlock")
+public abstract class ByteToMessageCodec<I> extends ChannelDuplexHandler
 {
+    private final TypeParameterMatcher    outboundMsgMatcher;
+    private final MessageToByteEncoder<I> encoder;
+    private final ByteToMessageDecoder decoder = new ByteToMessageDecoder()
+    {
+        @Override
+        public void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
+        {
+            ByteToMessageCodec.this.decode(ctx, in, out);
+        }
+
+        @Override
+        protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
+        {
+            ByteToMessageCodec.this.decodeLast(ctx, in, out);
+        }
+    };
+
     public abstract static class PacketByteToMessageCodec extends ByteToMessageCodec<Packet<?>>
     {
         @Override
@@ -95,24 +114,6 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
             }
         }
     }
-
-    private final TypeParameterMatcher    outboundMsgMatcher;
-    private final MessageToByteEncoder<I> encoder;
-
-    private final ByteToMessageDecoder decoder = new ByteToMessageDecoder()
-    {
-        @Override
-        public void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
-        {
-            ByteToMessageCodec.this.decode(ctx, in, out);
-        }
-
-        @Override
-        protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
-        {
-            ByteToMessageCodec.this.decodeLast(ctx, in, out);
-        }
-    };
 
     /**
      * @see #ByteToMessageCodec(boolean) with {@code true} as boolean parameter.
@@ -173,6 +174,54 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
         return this.outboundMsgMatcher.match(msg);
     }
 
+    @Override
+    public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception
+    {
+        this.decoder.channelRead(ctx, msg);
+    }
+
+    @Override
+    public void write(final ChannelHandlerContext ctx, final Object msg, final ChannelPromise promise) throws Exception
+    {
+        this.encoder.write(ctx, msg, promise);
+    }
+
+    @Override
+    public void channelReadComplete(final ChannelHandlerContext ctx) throws Exception
+    {
+        this.decoder.channelReadComplete(ctx);
+    }
+
+    @Override
+    public void channelInactive(final ChannelHandlerContext ctx) throws Exception
+    {
+        this.decoder.channelInactive(ctx);
+    }
+
+    @Override
+    public void handlerAdded(final ChannelHandlerContext ctx) throws Exception
+    {
+        try
+        {
+            this.decoder.handlerAdded(ctx);
+        } finally
+        {
+            this.encoder.handlerAdded(ctx);
+        }
+    }
+
+    @Override
+    public void handlerRemoved(final ChannelHandlerContext ctx) throws Exception
+    {
+        try
+        {
+            this.decoder.handlerRemoved(ctx);
+        } finally
+        {
+            this.encoder.handlerRemoved(ctx);
+        }
+    }
+
     /**
      * Encode a message into a {@link ByteBuf}. This method will be called for each written message that can be handled
      * by this encoder.
@@ -199,6 +248,14 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
     protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception;
 
     /**
+     * @see ByteToMessageDecoder#decodeLast(ChannelHandlerContext, ByteBuf, List)
+     */
+    protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
+    {
+        this.decode(ctx, in, out);
+    }
+
+    /**
      * Allocate a {@link ByteBuf} which will be used as argument of {@link #encode(ChannelHandlerContext, Object, ByteBuf)}.
      * Sub-classes may override this method to returna {@link ByteBuf} with a perfect matching {@code initialCapacity}.
      *
@@ -220,24 +277,6 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
         {
             return ctx.alloc().heapBuffer();
         }
-    }
-
-    /**
-     * Is called one last time when the {@link ChannelHandlerContext} goes in-active. Which means the
-     * {@link #channelInactive(ChannelHandlerContext)} was triggered.
-     * <br>
-     * By default this will just call {@link #decode(ChannelHandlerContext, ByteBuf, List)} but sub-classes may
-     * override this for some special cleanup operation.
-     *
-     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
-     * @param in  the {@link ByteBuf} from which to read data
-     * @param out the {@link List} to which decoded messages should be added
-     *
-     * @throws Exception if decode fail.
-     */
-    protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
-    {
-        this.decode(ctx, in, out);
     }
 
     private final class Encoder extends MessageToByteEncoder<I>
