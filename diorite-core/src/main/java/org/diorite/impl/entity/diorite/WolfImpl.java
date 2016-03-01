@@ -29,6 +29,10 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IWolf;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
+import org.diorite.DyeColor;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -50,12 +54,45 @@ class WolfImpl extends AnimalEntityImpl implements IWolf
     public void initMetadata()
     {
         super.initMetadata();
+        this.getMetadata().add(new EntityMetadataFloatEntry(META_KEY_WOLF_DAMAGE_TAKEN, 0.0f));
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_WOLF_IS_BEGGING, false));
+        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_WOLF_COLLAR_COLOR, DyeColor.RED.getItemFlag()));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.WOLF;
+    }
+
+    public float getTakenDamage()
+    {
+        return this.getMetadata().getFloat(META_KEY_WOLF_DAMAGE_TAKEN);
+    }
+
+    public void setTakenDamage(float damage)
+    {
+        this.getMetadata().setFloat(META_KEY_WOLF_DAMAGE_TAKEN, damage);
+    }
+
+    public boolean getBegging()
+    {
+        return this.getMetadata().getBoolean(META_KEY_WOLF_IS_BEGGING);
+    }
+
+    public void setBegging(boolean begging)
+    {
+        this.getMetadata().setBoolean(META_KEY_WOLF_IS_BEGGING, begging);
+    }
+
+    public DyeColor getCollarColor()
+    {
+        return DyeColor.getByItemFlag(this.getMetadata().getInt(META_KEY_WOLF_COLLAR_COLOR));
+    }
+
+    public void setCollarColor(DyeColor collarColor)
+    {
+        this.getMetadata().setInt(META_KEY_WOLF_COLLAR_COLOR, collarColor.getItemFlag());
     }
 }
 
