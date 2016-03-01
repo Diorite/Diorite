@@ -33,14 +33,14 @@ public interface Wolf extends AnimalEntity
      *
      * @return taken damage
      */
-    float getTakenDamage();
+    double getTakenDamage();
 
     /**
      * Sets taken damage
      *
      * @param damage for taken damage value
      */
-    void setTakenDamage(float damage);
+    void setTakenDamage(double damage);
 
     /**
      * Returns true if a wolf is begging

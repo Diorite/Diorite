@@ -65,12 +65,12 @@ class WolfImpl extends AnimalEntityImpl implements IWolf
         return EntityType.WOLF;
     }
 
-    public float getTakenDamage()
+    public double getTakenDamage()
     {
         return this.getMetadata().getFloat(META_KEY_WOLF_DAMAGE_TAKEN);
     }
 
-    public void setTakenDamage(float damage)
+    public void setTakenDamage(double damage)
     {
         this.getMetadata().setFloat(META_KEY_WOLF_DAMAGE_TAKEN, damage);
     }
