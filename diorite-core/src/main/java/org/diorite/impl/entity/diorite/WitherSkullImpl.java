@@ -59,5 +59,15 @@ class WitherSkullImpl extends ProjectileImpl implements IWitherSkull
     {
         return EntityType.WITHER_SKULL;
     }
+
+    public boolean getInvulnerable()
+    {
+        return this.getMetadata().getBoolean(META_KEY_INVULNERABLE);
+    }
+
+    public void setInvulnerable(boolean invulnerable)
+    {
+        this.getMetadata().setBoolean(META_KEY_INVULNERABLE, invulnerable);
+    }
 }
 

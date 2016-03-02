@@ -32,6 +32,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.entity.IMinecart;
 import org.diorite.impl.entity.IMinecartFurnace;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -59,6 +60,7 @@ class MinecartFurnaceImpl extends AbstractMinecartImpl implements IMinecartFurna
     public void initMetadata()
     {
         super.initMetadata();
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_MINECART_FURNACE_IS_POWERED, false));
     }
 
     @Override
@@ -71,6 +73,16 @@ class MinecartFurnaceImpl extends AbstractMinecartImpl implements IMinecartFurna
     public int getEntityObjectData()
     {
         return 0;
+    }
+
+    public boolean getPowered()
+    {
+        return this.getMetadata().getBoolean(META_KEY_MINECART_FURNACE_IS_POWERED);
+    }
+
+    public void setPowered(boolean powered)
+    {
+        this.getMetadata().setBoolean(META_KEY_MINECART_FURNACE_IS_POWERED, powered);
     }
 }
 

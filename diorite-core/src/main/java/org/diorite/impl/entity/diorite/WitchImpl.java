@@ -29,6 +29,7 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IWitch;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -50,12 +51,23 @@ class WitchImpl extends MonsterEntityImpl implements IWitch
     public void initMetadata()
     {
         super.initMetadata();
+        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_WITCH_IS_AGGRESIVE, false));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.WITCH;
+    }
+
+    public boolean getAggresive()
+    {
+        return this.getMetadata().getBoolean(META_KEY_WITCH_IS_AGGRESIVE);
+    }
+
+    public void setAggresive(boolean aggresive)
+    {
+        this.getMetadata().setBoolean(META_KEY_WITCH_IS_AGGRESIVE, aggresive);
     }
 }
 
