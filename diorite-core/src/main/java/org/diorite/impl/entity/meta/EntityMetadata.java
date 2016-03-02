@@ -205,12 +205,12 @@ public class EntityMetadata
     public void setBoolean(final byte index, final boolean value)
     {
         final EntityMetadataEntry<?> entry = this.data[index];
-        if (! (entry instanceof EntityMetadataBooleanEntry))
+        if (! (entry instanceof EntityMetadataBooleanEntry) && ! (entry instanceof EntityMetadataByteEntry))
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
         }
 
-        if(entry instanceof EntityMetadataByteEntry)
+        if (entry instanceof EntityMetadataByteEntry)
         {
             ((EntityMetadataByteEntry) entry).setValue(value ? 1 : 0);
             entry.setDirty();
