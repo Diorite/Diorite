@@ -205,21 +205,18 @@ public class EntityMetadata
     public void setBoolean(final byte index, final boolean value)
     {
         final EntityMetadataEntry<?> entry = this.data[index];
-        if (! (entry instanceof EntityMetadataBooleanEntry) && ! (entry instanceof EntityMetadataByteEntry))
-        {
-            throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
-        }
 
         if (entry instanceof EntityMetadataByteEntry)
         {
             ((EntityMetadataByteEntry) entry).setValue(value ? 1 : 0);
             entry.setDirty();
         }
-        else
+        else if (entry instanceof EntityMetadataBooleanEntry)
         {
             ((EntityMetadataBooleanEntry) entry).setValue(value);
             entry.setDirty();
         }
+        else throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
     }
 
     public void switchBoolean(final byte index)
@@ -459,21 +456,21 @@ public class EntityMetadata
     public boolean getBoolean(final byte index)
     {
         final EntityMetadataEntry<?> entry = this.data[index];
+
         if (entry == null)
         {
             return false;
-        }
-        if (! (entry instanceof EntityMetadataBooleanEntry))
-        {
-            throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
         }
 
         if (entry instanceof EntityMetadataByteEntry)
         {
             return ((EntityMetadataByteEntry) entry).getValue() == 1;
         }
-
-        return ((EntityMetadataBooleanEntry) entry).getValue();
+        else if (entry instanceof EntityMetadataBooleanEntry)
+        {
+            return ((EntityMetadataBooleanEntry) entry).getValue();
+        }
+        else throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
     }
 
     public boolean getBoolean(final byte index, final int flagIndex)
