@@ -55,13 +55,13 @@ abstract class AbstractArrowImpl extends ProjectileImpl implements IAbstractArro
     @Override
     public boolean isCritical()
     {
-        return this.metadata.getBoolean(META_KEY_ARROW_IS_CRITICAL);
+        return this.getMetadata().getByte(META_KEY_ARROW_IS_CRITICAL) == 1;
     }
 
     @Override
     public void setCritical(final boolean critical)
     {
-        this.metadata.setBoolean(META_KEY_ARROW_IS_CRITICAL, critical);
+        this.getMetadata().setBoolean(META_KEY_ARROW_IS_CRITICAL, critical);
     }
 }
 
