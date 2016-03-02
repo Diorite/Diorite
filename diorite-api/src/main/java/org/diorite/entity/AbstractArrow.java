@@ -26,7 +26,17 @@ package org.diorite.entity;
 
 public interface AbstractArrow extends Projectile, ObjectEntity
 {
+    /**
+     * Returns true if an arrow is critical.
+     *
+     * @return true if an arrow is critical.
+     */
     boolean isCritical();
 
+    /**
+     * Sets if an arrow is critical.
+     *
+     * @param critical if an arrow is critical.
+     */
     void setCritical(boolean critical);
 }
