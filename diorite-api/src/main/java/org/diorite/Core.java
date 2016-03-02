@@ -67,9 +67,9 @@ public interface Core extends Synchronizable
      */
     String PREFIX_MSG = PREFIX + " " + ChatColor.RESET.toString();
     /**
-     * Name of diorite.
+     * Name of Diorite.
      */
-    String NANE       = "Diorite";
+    String NAME       = "Diorite";
 
     /**
      * Number of ns in ms.

@@ -72,7 +72,7 @@ public class StatusListener implements PacketStatusServerboundListener
         ping.setFavicon(null);
         ping.setMotd(ChatColor.translateAlternateColorCodes(cfg.getMotd()));
         ping.setPlayerData(new ServerPingPlayerSample(cfg.getMaxPlayers(), DioriteCore.getInstance().getOnlinePlayers().size()));
-        ping.setServerData(new ServerPingServerData(Core.NANE + " " + this.core.getVersion(), HandshakeListener.CURRENT_PROTOCOL));
+        ping.setServerData(new ServerPingServerData(Core.NAME + " " + this.core.getVersion(), HandshakeListener.CURRENT_PROTOCOL));
         this.networkManager.sendPacket(new PacketStatusClientboundServerInfo(ping));
     }
 

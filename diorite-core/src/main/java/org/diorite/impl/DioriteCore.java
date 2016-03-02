@@ -998,7 +998,7 @@ public class DioriteCore implements Core
 
     public String getServerModName()
     {
-        return NANE + " v" + this.getVersion();
+        return NAME + " v" + this.getVersion();
     }
 
     public ConsoleReader getReader()
