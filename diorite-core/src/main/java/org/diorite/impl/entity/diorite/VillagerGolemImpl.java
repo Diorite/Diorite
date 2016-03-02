@@ -67,7 +67,7 @@ class VillagerGolemImpl extends CreatureEntityImpl implements IVillagerGolem
 
     public void setPlayerCreated(boolean playerCreated)
     {
-        this.metadata.setBoolean(META_KEY_VILLAGER_GOLEM_IS_PLAYER_CREATED, playerCreated);
+        this.metadata.setByte(META_KEY_VILLAGER_GOLEM_IS_PLAYER_CREATED, playerCreated ? 1 : 0);
     }
 }
 
