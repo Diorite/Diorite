@@ -29,8 +29,10 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.ISlime;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
+import org.diorite.entity.Slime;
 
 class SlimeImpl extends MonsterEntityImpl implements ISlime
 {
@@ -50,12 +52,23 @@ class SlimeImpl extends MonsterEntityImpl implements ISlime
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_SLIME_SIZE, Slime.BIG));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.SLIME;
+    }
+
+    public int getSize()
+    {
+        return this.metadata.getInt(META_KEY_SLIME_SIZE);
+    }
+
+    public void setSize(int size)
+    {
+        this.metadata.setInt(META_KEY_SLIME_SIZE, size);
     }
 }
 

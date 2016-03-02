@@ -29,6 +29,7 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IVillagerGolem;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -50,12 +51,23 @@ class VillagerGolemImpl extends CreatureEntityImpl implements IVillagerGolem
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_VILLAGER_GOLEM_IS_PLAYER_CREATED, 0));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.VILLAGER_GOLEM;
+    }
+
+    public boolean getPlayerCreated()
+    {
+        return this.metadata.getBoolean(META_KEY_VILLAGER_GOLEM_IS_PLAYER_CREATED);
+    }
+
+    public void setPlayerCreated(boolean playerCreated)
+    {
+        this.metadata.setBoolean(META_KEY_VILLAGER_GOLEM_IS_PLAYER_CREATED, playerCreated);
     }
 }
 
