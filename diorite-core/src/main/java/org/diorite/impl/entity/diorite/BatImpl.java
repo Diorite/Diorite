@@ -57,13 +57,13 @@ class BatImpl extends AmbientEntityImpl implements IBat
     @Override
     public boolean isHanging()
     {
-        return this.metadata.getByte(META_KEY_BAT_IS_HANGING) == 1;
+        return this.metadata.getBoolean(META_KEY_BAT_IS_HANGING);
     }
 
     @Override
     public void setHanging(final boolean hanging)
     {
-        this.metadata.setByte(META_KEY_BAT_IS_HANGING, hanging ? 1 : 0);
+        this.metadata.setBoolean(META_KEY_BAT_IS_HANGING, hanging);
     }
 
     @Override

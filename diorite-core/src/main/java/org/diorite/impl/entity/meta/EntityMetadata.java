@@ -182,7 +182,7 @@ public class EntityMetadata
         throw new IllegalArgumentException("Metadata type mismatch excepted byte or int but found: " + entry);
     }
 
-    public void swichBoolean(final byte index, final int flagIndex)
+    public void switchBoolean(final byte index, final int flagIndex)
     {
         final EntityMetadataEntry<?> entry = this.data[index];
         if (entry instanceof EntityMetadataByteEntry)
@@ -209,11 +209,20 @@ public class EntityMetadata
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
         }
-        ((EntityMetadataBooleanEntry) entry).setValue(value);
-        entry.setDirty();
+
+        if(entry instanceof EntityMetadataByteEntry)
+        {
+            ((EntityMetadataByteEntry) entry).setValue(value ? 1 : 0);
+            entry.setDirty();
+        }
+        else
+        {
+            ((EntityMetadataBooleanEntry) entry).setValue(value);
+            entry.setDirty();
+        }
     }
 
-    public void swichBoolean(final byte index)
+    public void switchBoolean(final byte index)
     {
         final EntityMetadataEntry<?> entry = this.data[index];
         if (! (entry instanceof EntityMetadataBooleanEntry))
@@ -323,6 +332,8 @@ public class EntityMetadata
         this.setByte((byte) index, value);
     }
 
+    public void setByte(final int index, final boolean value) { this.setByte((byte) index, value ? 1 : 0);}
+
     public void setInt(final int index, final int value)
     {
         this.setInt((byte) index, value);
@@ -343,9 +354,9 @@ public class EntityMetadata
         this.setBoolean((byte) index, bool);
     }
 
-    public void swichBoolean(final int index)
+    public void switchBoolean(final int index)
     {
-        this.swichBoolean((byte) index);
+        this.switchBoolean((byte) index);
     }
 
     public void setBoolean(final int index, final int flagIndex, final boolean bool)
@@ -353,9 +364,9 @@ public class EntityMetadata
         this.setBoolean((byte) index, flagIndex, bool);
     }
 
-    public void swichBoolean(final int index, final int flagIndex)
+    public void switchBoolean(final int index, final int flagIndex)
     {
-        this.swichBoolean((byte) index, flagIndex);
+        this.switchBoolean((byte) index, flagIndex);
     }
 
     public void setString(final int index, final String value)
@@ -456,6 +467,12 @@ public class EntityMetadata
         {
             throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
         }
+
+        if (entry instanceof EntityMetadataByteEntry)
+        {
+            return ((EntityMetadataByteEntry) entry).getValue() == 1;
+        }
+
         return ((EntityMetadataBooleanEntry) entry).getValue();
     }
 
