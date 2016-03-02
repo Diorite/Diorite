@@ -26,4 +26,17 @@ package org.diorite.entity;
 
 public interface MinecartFurnace extends AbstractMinecart
 {
+    /**
+     * Returns true if a minecart with furnace is powered.
+     *
+     * @return true if a minecart with furnace is powered.
+     */
+    boolean getPowered();
+
+    /**
+     * Sets if a minecart with furnace is powered.
+     *
+     * @param powered if a minecart with furnace is powered.
+     */
+    void setPowered(boolean powered);
 }

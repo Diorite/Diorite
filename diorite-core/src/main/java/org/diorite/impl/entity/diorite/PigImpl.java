@@ -51,7 +51,7 @@ class PigImpl extends AnimalEntityImpl implements IPig
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_PIG_HAS_SADDLE, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_PIG_HAS_SADDLE, false));
     }
 
     @Override
@@ -62,12 +62,12 @@ class PigImpl extends AnimalEntityImpl implements IPig
 
     public boolean getSaddle()
     {
-        return this.getMetadata().getBoolean(META_KEY_PIG_HAS_SADDLE);
+        return this.metadata.getBoolean(META_KEY_PIG_HAS_SADDLE);
     }
 
     public void setSaddle(boolean saddle)
     {
-        this.getMetadata().setBoolean(META_KEY_PIG_HAS_SADDLE, saddle);
+        this.metadata.setBoolean(META_KEY_PIG_HAS_SADDLE, saddle);
     }
 }
 
