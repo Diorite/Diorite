@@ -60,7 +60,7 @@ class MinecartFurnaceImpl extends AbstractMinecartImpl implements IMinecartFurna
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_MINECART_FURNACE_IS_POWERED, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_MINECART_FURNACE_IS_POWERED, false));
     }
 
     @Override
@@ -77,12 +77,12 @@ class MinecartFurnaceImpl extends AbstractMinecartImpl implements IMinecartFurna
 
     public boolean getPowered()
     {
-        return this.getMetadata().getBoolean(META_KEY_MINECART_FURNACE_IS_POWERED);
+        return this.metadata.getBoolean(META_KEY_MINECART_FURNACE_IS_POWERED);
     }
 
     public void setPowered(boolean powered)
     {
-        this.getMetadata().setBoolean(META_KEY_MINECART_FURNACE_IS_POWERED, powered);
+        this.metadata.setBoolean(META_KEY_MINECART_FURNACE_IS_POWERED, powered);
     }
 }
 

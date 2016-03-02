@@ -54,9 +54,9 @@ class WolfImpl extends AnimalEntityImpl implements IWolf
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataFloatEntry(META_KEY_WOLF_DAMAGE_TAKEN, 0.0f));
-        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_WOLF_IS_BEGGING, false));
-        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_WOLF_COLLAR_COLOR, DyeColor.RED.getItemFlag()));
+        this.metadata.add(new EntityMetadataFloatEntry(META_KEY_WOLF_DAMAGE_TAKEN, 0.0f));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_WOLF_IS_BEGGING, false));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_WOLF_COLLAR_COLOR, DyeColor.RED.getItemFlag()));
     }
 
     @Override
@@ -67,32 +67,32 @@ class WolfImpl extends AnimalEntityImpl implements IWolf
 
     public double getTakenDamage()
     {
-        return this.getMetadata().getFloat(META_KEY_WOLF_DAMAGE_TAKEN);
+        return this.metadata.getFloat(META_KEY_WOLF_DAMAGE_TAKEN);
     }
 
     public void setTakenDamage(double damage)
     {
-        this.getMetadata().setFloat(META_KEY_WOLF_DAMAGE_TAKEN, damage);
+        this.metadata.setFloat(META_KEY_WOLF_DAMAGE_TAKEN, damage);
     }
 
     public boolean getBegging()
     {
-        return this.getMetadata().getBoolean(META_KEY_WOLF_IS_BEGGING);
+        return this.metadata.getBoolean(META_KEY_WOLF_IS_BEGGING);
     }
 
     public void setBegging(boolean begging)
     {
-        this.getMetadata().setBoolean(META_KEY_WOLF_IS_BEGGING, begging);
+        this.metadata.setBoolean(META_KEY_WOLF_IS_BEGGING, begging);
     }
 
     public DyeColor getCollarColor()
     {
-        return DyeColor.getByItemFlag(this.getMetadata().getInt(META_KEY_WOLF_COLLAR_COLOR));
+        return DyeColor.getByItemFlag(this.metadata.getInt(META_KEY_WOLF_COLLAR_COLOR));
     }
 
     public void setCollarColor(DyeColor collarColor)
     {
-        this.getMetadata().setInt(META_KEY_WOLF_COLLAR_COLOR, collarColor.getItemFlag());
+        this.metadata.setInt(META_KEY_WOLF_COLLAR_COLOR, collarColor.getItemFlag());
     }
 }
 

@@ -91,11 +91,10 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
     public void initMetadata()
     {
         super.initMetadata();
-        final EntityMetadata met = this.getMetadata();
-        met.add(new EntityMetadataFloatEntry(META_KEY_AREA_EFFECT_CLOUD_RADIUS, 3));
-        met.add(new EntityMetadataIntEntry(META_KEY_AREA_EFFECT_CLOUD_COLOR, 0));
-        met.add(new EntityMetadataBooleanEntry(META_KEY_AREA_EFFECT_CLOUD_IS_POINT, false));
-        met.add(new EntityMetadataIntEntry(META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID, Particle.SPELL_MOB.getParticleId()));
+        this.metadata.add(new EntityMetadataFloatEntry(META_KEY_AREA_EFFECT_CLOUD_RADIUS, 3));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_AREA_EFFECT_CLOUD_COLOR, 0));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_AREA_EFFECT_CLOUD_IS_POINT, false));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID, Particle.SPELL_MOB.getParticleId()));
     }
 
     @Override

@@ -52,10 +52,10 @@ abstract class LivingEntityImpl extends AttributableEntityImpl implements ILivin
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_LIVING_UNKNOWN, 0));
-        this.getMetadata().add(new EntityMetadataFloatEntry(META_KEY_LIVING_HEALTH, 1F));
-        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_LIVING_POTION_EFFECT_COLOR, 0));
-        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_LIVING_POTION_IS_AMBIENT, false));
-        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_LIVING_ARROWS_IN_BODY, 0));
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_LIVING_UNKNOWN, 0));
+        this.metadata.add(new EntityMetadataFloatEntry(META_KEY_LIVING_HEALTH, 1F));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_LIVING_POTION_EFFECT_COLOR, 0));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_LIVING_POTION_IS_AMBIENT, false));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_LIVING_ARROWS_IN_BODY, 0));
     }
 }

@@ -60,11 +60,10 @@ class BoatImpl extends EntityImpl implements IBoat
     public void initMetadata()
     {
         super.initMetadata();
-        final EntityMetadata metadata = this.getMetadata();
-        metadata.add(new EntityMetadataIntEntry(META_KEY_BOAT_TIME_SINCE_LAST_HIT, 0));
-        metadata.add(new EntityMetadataIntEntry(META_KEY_BOAT_FORWARD_DIRECTION, 0));
-        metadata.add(new EntityMetadataFloatEntry(META_KEY_BOAT_DAMAGE_TAKEN, 0));
-        metadata.add(new EntityMetadataIntEntry(META_KEY_BOAT_TYPE, 0));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_BOAT_TIME_SINCE_LAST_HIT, 0));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_BOAT_FORWARD_DIRECTION, 0));
+        this.metadata.add(new EntityMetadataFloatEntry(META_KEY_BOAT_DAMAGE_TAKEN, 0));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_BOAT_TYPE, 0));
     }
 
     @Override

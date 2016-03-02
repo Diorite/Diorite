@@ -51,7 +51,7 @@ class WitchImpl extends MonsterEntityImpl implements IWitch
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_WITCH_IS_AGGRESIVE, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_WITCH_IS_AGGRESIVE, false));
     }
 
     @Override
@@ -62,12 +62,12 @@ class WitchImpl extends MonsterEntityImpl implements IWitch
 
     public boolean getAggresive()
     {
-        return this.getMetadata().getBoolean(META_KEY_WITCH_IS_AGGRESIVE);
+        return this.metadata.getBoolean(META_KEY_WITCH_IS_AGGRESIVE);
     }
 
     public void setAggresive(boolean aggresive)
     {
-        this.getMetadata().setBoolean(META_KEY_WITCH_IS_AGGRESIVE, aggresive);
+        this.metadata.setBoolean(META_KEY_WITCH_IS_AGGRESIVE, aggresive);
     }
 }
 

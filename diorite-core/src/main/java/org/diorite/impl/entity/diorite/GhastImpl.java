@@ -51,7 +51,7 @@ class GhastImpl extends MonsterEntityImpl implements IGhast
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_GHAST_IS_ATTACKING, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_GHAST_IS_ATTACKING, false));
     }
 
     @Override
@@ -62,12 +62,12 @@ class GhastImpl extends MonsterEntityImpl implements IGhast
     
     public boolean getAttacking()
     {
-        return this.getMetadata().getBoolean(META_KEY_GHAST_IS_ATTACKING);
+        return this.metadata.getBoolean(META_KEY_GHAST_IS_ATTACKING);
     }
 
     public void setAttacking(boolean attacking)
     {
-        this.getMetadata().setBoolean(META_KEY_GHAST_IS_ATTACKING, attacking);
+        this.metadata.setBoolean(META_KEY_GHAST_IS_ATTACKING, attacking);
     }
 }
 

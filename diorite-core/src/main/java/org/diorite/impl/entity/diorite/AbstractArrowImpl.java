@@ -49,19 +49,19 @@ abstract class AbstractArrowImpl extends ProjectileImpl implements IAbstractArro
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataByteEntry(META_KEY_ARROW_IS_CRITICAL, 0));
+        this.metadata.add(new EntityMetadataByteEntry(META_KEY_ARROW_IS_CRITICAL, 0));
     }
 
     @Override
     public boolean isCritical()
     {
-        return this.getMetadata().getByte(META_KEY_ARROW_IS_CRITICAL) == 1;
+        return this.metadata.getByte(META_KEY_ARROW_IS_CRITICAL) == 1;
     }
 
     @Override
     public void setCritical(final boolean critical)
     {
-        this.getMetadata().setBoolean(META_KEY_ARROW_IS_CRITICAL, critical);
+        this.metadata.setBoolean(META_KEY_ARROW_IS_CRITICAL, critical);
     }
 }
 

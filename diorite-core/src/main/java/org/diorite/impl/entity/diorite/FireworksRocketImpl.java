@@ -51,7 +51,7 @@ class FireworksRocketImpl extends ProjectileImpl implements IFireworksRocket
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataItemStackEntry(META_KEY_FIREWORK_ITEM, null));
+        this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_FIREWORK_ITEM, null));
     }
 
     @Override
