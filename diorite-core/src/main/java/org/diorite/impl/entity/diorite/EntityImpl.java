@@ -737,12 +737,16 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
 
     public void teleport(ILocation location)
     {
+        final ChunkImpl chunk = this.getChunk();
+
         this.x = location.getX();
         this.y = location.getY();
         this.z = location.getZ();
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
         this.world = (WorldImpl) location.getWorld();
+
+        this.updateChunk(chunk, this.getChunk());
     }
 
     public void teleport(Entity entity)
