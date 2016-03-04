@@ -49,6 +49,7 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
 import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.entity.Entity;
@@ -69,7 +70,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     private final Set<Resetable> values = new HashSet<>(10);
 
     final            DioriteCore       core;
-    private final    WorldImpl         world;
+    private          WorldImpl         world;
     private volatile Thread            lastTickThread;
     private          EntityBoundingBox aabb;
     private          int               id;
@@ -732,5 +733,22 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("world", this.world).append("x", this.x).append("y", this.y).append("z", this.z).toString();
+    }
+
+    public void teleport(ILocation location)
+    {
+        this.x = location.getX();
+        this.y = location.getY();
+        this.z = location.getZ();
+        this.yaw = location.getYaw();
+        this.pitch = location.getPitch();
+        this.world = (WorldImpl) location.getWorld();
+    }
+
+    public void teleport(Entity entity)
+    {
+        final ImmutableLocation location = entity.getLocation();
+
+        this.teleport(location);
     }
 }
