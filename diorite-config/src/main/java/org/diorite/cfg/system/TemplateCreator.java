@@ -261,6 +261,10 @@ public final class TemplateCreator
                 {
                     classes.add(fieldsSrc);
                     fieldsSrc = fieldsSrc.getSuperclass();
+                    if (fieldsSrc == null)
+                    {
+                        break;
+                    }
                     final CfgClass cfgInfo = fieldsSrc.getAnnotation(CfgClass.class);
                     if ((cfgInfo != null) && ! cfgInfo.superFields())
                     {

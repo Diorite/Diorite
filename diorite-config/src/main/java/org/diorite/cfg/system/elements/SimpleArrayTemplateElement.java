@@ -27,11 +27,6 @@ package org.diorite.cfg.system.elements;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Iterator;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.cfg.system.CfgEntryData;
 import org.diorite.utils.DioriteUtils;
@@ -83,25 +78,23 @@ public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
     /**
      * Construct new array template handler for given class.
      *
-     * @param fieldType      type of template element, should be array type.
-     * @param function       function used to convert other types to this type (may throw errors)
-     * @param classPredicate returns true for classes that can be converted into supported type.
-     */
-    public SimpleArrayTemplateElement(final Class<T> fieldType, final Function<Object, T> function, final Predicate<Class<?>> classPredicate)
-    {
-        super(fieldType, function, classPredicate);
-    }
-
-    /**
-     * Construct new array template handler for given class.
-     *
      * @param clazz type of template element, should be array type.
      */
     public SimpleArrayTemplateElement(final Class<T> clazz)
     {
-        super(clazz, obj -> {
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to " + clazz.getSimpleName() + ": " + obj);
-        }, c -> false);
+        super(clazz);
+    }
+
+    @Override
+    protected boolean canBeConverted0(final Class<?> c)
+    {
+        return false;
+    }
+
+    @Override
+    protected T convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        throw this.getException(obj);
     }
 
     @Override
@@ -158,11 +151,5 @@ public class SimpleArrayTemplateElement<T> extends TemplateElement<T>
     public void appendValue(final Appendable writer, final CfgEntryData field, final Object source, final Object object, final int level, final ElementPlace elementPlace) throws IOException
     {
         IterableTemplateElement.INSTANCE.appendValue(writer, field, source, new ReflectArrayIterator(object), level, elementPlace);
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("function", this.function).toString();
     }
 }

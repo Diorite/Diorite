@@ -57,13 +57,13 @@ class BlazeImpl extends MonsterEntityImpl implements IBlaze
     @Override
     public boolean canShotFireballs()
     {
-        return this.metadata.getByte(META_KEY_BLAZE_IS_ON_FIRE) == 1;
+        return this.metadata.getBoolean(META_KEY_BLAZE_IS_ON_FIRE);
     }
 
     @Override
     public void setShotFireballs(final boolean fire)
     {
-        this.metadata.setByte(META_KEY_BLAZE_IS_ON_FIRE, fire ? 1 : 0);
+        this.metadata.setBoolean(META_KEY_BLAZE_IS_ON_FIRE, fire);
     }
 
     @Override

@@ -26,4 +26,17 @@ package org.diorite.entity;
 
 public interface Witch extends MonsterEntity
 {
+    /**
+     * Returns true if a witch is aggresive.
+     *
+     * @return true if a witch is aggresive.
+     */
+    boolean getAggresive();
+
+    /**
+     * Sets if a witch is aggresive.
+     *
+     * @param aggresive if a witch is aggresive.
+     */
+    void setAggresive(boolean aggresive);
 }

@@ -48,69 +48,69 @@ public final class DioriteRandomUtils
         return random.get();
     }
 
-    public static <T> T getRand(final T[] array)
+    public static <T> T getRandom(final T[] array)
     {
-        return getRand(getRandom(), array);
+        return getRandom(getRandom(), array);
     }
 
-    public static <T> T getRand(final List<T> coll)
+    public static <T> T getRandom(final List<T> coll)
     {
-        return getRand(getRandom(), coll);
+        return getRandom(getRandom(), coll);
     }
 
-    public static <T, E extends Collection<T>> E getRand(final Collection<T> coll, final E target, final int amount)
+    public static <T, E extends Collection<T>> E getRandom(final Collection<T> coll, final E target, final int amount)
     {
-        return getRand(getRandom(), coll, target, amount, true);
+        return getRandom(getRandom(), coll, target, amount, true);
     }
 
-    public static <T, E extends Collection<T>> E getRand(final Collection<T> coll, final E target, final int amount, final boolean noRepeat)
+    public static <T, E extends Collection<T>> E getRandom(final Collection<T> coll, final E target, final int amount, final boolean noRepeat)
     {
-        return getRand(getRandom(), coll, target, amount, noRepeat);
+        return getRandom(getRandom(), coll, target, amount, noRepeat);
     }
 
-    public static <T> T getRand(final Collection<T> coll)
+    public static <T> T getRandom(final Collection<T> coll)
     {
-        return getRand(getRandom(), coll);
+        return getRandom(getRandom(), coll);
     }
 
-    public static long getRandLongSafe(final long a, final long b)
+    public static long getRandomLongSafe(final long a, final long b)
     {
-        return getRandLongSafe(getRandom(), a, b);
+        return getRandomLongSafe(getRandom(), a, b);
     }
 
-    public static int getRandIntSafe(final int a, final int b)
+    public static int getRandomIntSafe(final int a, final int b)
     {
-        return getRandIntSafe(getRandom(), a, b);
+        return getRandomIntSafe(getRandom(), a, b);
     }
 
-    public static double getRandDoubleSafe(final double a, final double b)
+    public static double getRandomDoubleSafe(final double a, final double b)
     {
-        return getRandDoubleSafe(getRandom(), a, b);
+        return getRandomDoubleSafe(getRandom(), a, b);
     }
 
-    public static float getRandFloatSafe(final float a, final float b)
+    public static float getRandomFloatSafe(final float a, final float b)
     {
-        return getRandFloatSafe(getRandom(), a, b);
+        return getRandomFloatSafe(getRandom(), a, b);
     }
 
-    public static long getRandLong(final long min, final long max) throws IllegalArgumentException
+    public static long getRandomLong(final long min, final long max) throws IllegalArgumentException
     {
-        return getRandLong(getRandom(), min, max);
+        return getRandomLong(getRandom(), min, max);
     }
 
-    public static int getRandInt(final int min, final int max) throws IllegalArgumentException
+    public static int getRandomInt(final int min, final int max) throws IllegalArgumentException
     {
-        return getRandInt(getRandom(), min, max);
+        return getRandomInt(getRandom(), min, max);
     }
 
-    public static double getRandDouble(final double min, final double max) throws IllegalArgumentException
+    public static double getRandomDouble(final double min, final double max) throws IllegalArgumentException
     {
-        return getRandDouble(getRandom(), min, max);
+        return getRandomDouble(getRandom(), min, max);
     }
 
-    public static float getRandFloat(final float min, final float max) throws IllegalArgumentException
+    public static float getRandomFloat(final float min, final float max) throws IllegalArgumentException
     {
-        return getRandFloat(getRandom(), min, max);
+        return getRandomFloat(getRandom(), min, max);
     }
 
     public static boolean getChance(final double chance)
@@ -120,7 +120,7 @@ public final class DioriteRandomUtils
 
 
     // custom random
-    public static <T> T getRand(final Random random, final T[] array)
+    public static <T> T getRandom(final Random random, final T[] array)
     {
         if (array.length == 0)
         {
@@ -129,17 +129,17 @@ public final class DioriteRandomUtils
         return array[random.nextInt(array.length)];
     }
 
-    public static <T> T getRand(final Random random, final List<T> coll)
+    public static <T> T getRandom(final Random random, final List<T> coll)
     {
         return coll.get(random.nextInt(coll.size()));
     }
 
-    public static <T, E extends Collection<T>> E getRand(final Random random, final Collection<T> coll, final E target, final int amount)
+    public static <T, E extends Collection<T>> E getRandom(final Random random, final Collection<T> coll, final E target, final int amount)
     {
-        return getRand(random, coll, target, amount, true);
+        return getRandom(random, coll, target, amount, true);
     }
 
-    public static <T, E extends Collection<T>> E getRand(final Random random, final Collection<T> coll, final E target, int amount, final boolean noRepeat)
+    public static <T, E extends Collection<T>> E getRandom(final Random random, final Collection<T> coll, final E target, int amount, final boolean noRepeat)
     {
         if (coll.isEmpty())
         {
@@ -163,7 +163,7 @@ public final class DioriteRandomUtils
         return target;
     }
 
-    public static <T> T getRand(final Random random, final Collection<T> coll)
+    public static <T> T getRandom(final Random random, final Collection<T> coll)
     {
         if (coll.isEmpty())
         {
@@ -186,39 +186,39 @@ public final class DioriteRandomUtils
         }
     }
 
-    public static long getRandLongSafe(final Random random, final long a, final long b)
+    public static long getRandomLongSafe(final Random random, final long a, final long b)
     {
         if (a > b)
         {
-            return getRandLong(random, b, a);
+            return getRandomLong(random, b, a);
         }
-        return getRandLong(random, a, b);
+        return getRandomLong(random, a, b);
     }
 
-    public static int getRandIntSafe(final Random random, final int a, final int b)
+    public static int getRandomIntSafe(final Random random, final int a, final int b)
     {
-        return (int) getRandLongSafe(random, a, b);
+        return (int) getRandomLongSafe(random, a, b);
     }
 
-    public static double getRandDoubleSafe(final Random random, final double a, final double b)
-    {
-        if (a > b)
-        {
-            return getRandDouble(random, b, a);
-        }
-        return getRandDouble(random, a, b);
-    }
-
-    public static float getRandFloatSafe(final Random random, final float a, final float b)
+    public static double getRandomDoubleSafe(final Random random, final double a, final double b)
     {
         if (a > b)
         {
-            return getRandFloat(random, b, a);
+            return getRandomDouble(random, b, a);
         }
-        return getRandFloat(random, a, b);
+        return getRandomDouble(random, a, b);
     }
 
-    public static long getRandLong(final Random random, final long min, final long max) throws IllegalArgumentException
+    public static float getRandomFloatSafe(final Random random, final float a, final float b)
+    {
+        if (a > b)
+        {
+            return getRandomFloat(random, b, a);
+        }
+        return getRandomFloat(random, a, b);
+    }
+
+    public static long getRandomLong(final Random random, final long min, final long max) throws IllegalArgumentException
     {
         if (min == max)
         {
@@ -228,17 +228,17 @@ public final class DioriteRandomUtils
         return (Math.abs(random.nextLong()) % ((max - min) + 1)) + min;
     }
 
-    public static int getRandInt(final Random random, final int min, final int max) throws IllegalArgumentException
+    public static int getRandomInt(final Random random, final int min, final int max) throws IllegalArgumentException
     {
         if (min == max)
         {
             return max;
         }
         Validate.isTrue(max > min, "Max can't be smaller than min!");
-        return (int) getRandLong(random, min, max);
+        return (int) getRandomLong(random, min, max);
     }
 
-    public static double getRandDouble(final Random random, final double min, final double max) throws IllegalArgumentException
+    public static double getRandomDouble(final Random random, final double min, final double max) throws IllegalArgumentException
     {
         if (Double.compare(min, max) == 0)
         {
@@ -248,7 +248,7 @@ public final class DioriteRandomUtils
         return (random.nextDouble() * (max - min)) + min;
     }
 
-    public static float getRandFloat(final Random random, final float min, final float max) throws IllegalArgumentException
+    public static float getRandomFloat(final Random random, final float min, final float max) throws IllegalArgumentException
     {
         if (Float.compare(min, max) == 0)
         {
@@ -260,7 +260,7 @@ public final class DioriteRandomUtils
 
     public static boolean getChance(final Random random, final double chance)
     {
-        return (chance > 0) && ((chance >= 100) || (chance >= getRandDouble(random, 0, 100)));
+        return (chance > 0) && ((chance >= 100) || (chance >= getRandomDouble(random, 0, 100)));
     }
 
     /**
@@ -845,13 +845,72 @@ public final class DioriteRandomUtils
         return getRandom().doubles(randomNumberOrigin, randomNumberBound);
     }
 
+    /**
+     * Construct new diorite random instance.
+     *
+     * @return created random instance.
+     */
     public static DioriteRandom newRandom()
     {
         return new DioriteRandom();
     }
 
+    /**
+     * Construct new diorite random instance with given seed.
+     *
+     * @param seed seed of random instance.
+     *
+     * @return created random instance.
+     */
     public static DioriteRandom newRandom(final long seed)
     {
         return new DioriteRandom(seed);
+    }
+
+    public static int sumWeight(final Iterable<? extends IWeightedRandomChoice> choices)
+    {
+        int i = 0;
+        for (final IWeightedRandomChoice choice : choices)
+        {
+            i += choice.getWeight();
+        }
+        return i;
+    }
+
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(final Random random, final Iterable<? extends T> choices, final int weight)
+    {
+        if (weight <= 0)
+        {
+            throw new IllegalArgumentException("Weight must be greater than 0.");
+        }
+        return getWeightedRandomElement(choices, random.nextInt(weight));
+    }
+
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(final Iterable<? extends T> choices, final int weight)
+    {
+        return getWeightedRandom(getRandom(), choices, weight);
+    }
+
+    public static <T extends IWeightedRandomChoice> T getWeightedRandomElement(final Iterable<? extends T> choices, int weight)
+    {
+        for (final T choice : choices)
+        {
+            weight -= choice.getWeight();
+            if (weight < 0)
+            {
+                return choice;
+            }
+        }
+        return null;
+    }
+
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(final Random random, final Iterable<? extends T> choices)
+    {
+        return getWeightedRandom(random, choices, sumWeight(choices));
+    }
+
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(final Iterable<? extends T> choices)
+    {
+        return getWeightedRandom(getRandom(), choices);
     }
 }

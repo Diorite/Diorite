@@ -46,37 +46,47 @@ public class LocaleTemplateElement extends TemplateElement<Locale>
      */
     public LocaleTemplateElement()
     {
-        super(Locale.class, obj -> {
-            if (obj instanceof String)
-            {
-                Locale loc = Locale.forLanguageTag((String) obj);
-                if (loc.getDisplayName().isEmpty())
-                {
-                    loc = new Locale((String) obj);
-                }
-                return loc;
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Locale: " + obj);
-        }, c -> Locale.class.isAssignableFrom(c) || String.class.isAssignableFrom(c));
+        super(Locale.class);
     }
 
     @Override
-    protected Locale convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof Locale)
+        return Locale.class.isAssignableFrom(c) || String.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected Locale convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof String)
         {
-            return (Locale) def;
+            return this.toLocale((String) obj);
         }
-        if (def instanceof String)
+        throw this.getException(obj);
+    }
+
+    private Locale toLocale(final String str)
+    {
+        Locale loc = Locale.forLanguageTag(str);
+        if (loc.getDisplayName().isEmpty())
         {
-            Locale loc = Locale.forLanguageTag((String) def);
-            if (loc.getDisplayName().isEmpty())
-            {
-                loc = new Locale((String) def);
-            }
-            return loc;
+            loc = new Locale(str);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        return loc;
+    }
+
+    @Override
+    protected Locale convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof Locale)
+        {
+            return (Locale) obj;
+        }
+        if (obj instanceof String)
+        {
+            return this.toLocale((String) obj);
+        }
+        throw this.getException(obj);
     }
 
     @Override

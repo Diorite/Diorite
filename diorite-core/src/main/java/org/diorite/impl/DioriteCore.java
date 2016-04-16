@@ -101,13 +101,13 @@ import org.diorite.Core;
 import org.diorite.Diorite;
 import org.diorite.ItemFactory;
 import org.diorite.cfg.DioriteConfig.OnlineMode;
+import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.system.Template;
 import org.diorite.cfg.system.TemplateCreator;
 import org.diorite.cfg.system.elements.BaseComponentTemplateElement;
 import org.diorite.cfg.system.elements.TemplateElements;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
-import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkGenerateEvent;
@@ -998,7 +998,7 @@ public class DioriteCore implements Core
 
     public String getServerModName()
     {
-        return NANE + " v" + this.getVersion();
+        return NAME + " v" + this.getVersion();
     }
 
     public ConsoleReader getReader()

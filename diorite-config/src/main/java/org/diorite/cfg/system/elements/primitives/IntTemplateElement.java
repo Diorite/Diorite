@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by ints.
  */
-public class IntTemplateElement extends SimpleTemplateElement<Integer>
+public class IntTemplateElement extends PrimitiveTemplateElement<Integer>
 {
     /**
      * Instance of template to direct-use.
@@ -39,22 +39,32 @@ public class IntTemplateElement extends SimpleTemplateElement<Integer>
      */
     public IntTemplateElement()
     {
-        super(int.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).intValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Int: " + obj);
-        }, Number.class::isAssignableFrom);
+        super(int.class);
     }
 
     @Override
-    protected Integer convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof Number)
+        return Number.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected Integer convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof Number)
         {
-            return ((Number) def).intValue();
+            return ((Number) obj).intValue();
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected Integer convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof Number)
+        {
+            return ((Number) obj).intValue();
+        }
+        throw this.getException(obj);
     }
 }

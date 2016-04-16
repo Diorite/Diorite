@@ -25,8 +25,6 @@
 package org.diorite.cfg.system.elements;
 
 import java.io.IOException;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -48,29 +46,16 @@ public abstract class TemplateElement<T>
     /**
      * type of supported/handled element.
      */
-    protected final Class<T>            fieldType;
-    /**
-     * function used to convert other types to this type (may throw errors)
-     */
-    protected final Function<Object, T> function;
-    /**
-     * returns true for classes that can be converted into supported type.
-     */
-    protected final Predicate<Class<?>> classPredicate;
-
+    protected final Class<T> fieldType;
 
     /**
      * Construct new template for given class, convert function and class type checking function.
      *
-     * @param fieldType      type of supported template element.
-     * @param function       function used to convert other types to this type (may throw errors)
-     * @param classPredicate returns true for classes that can be converted into supported type.
+     * @param fieldType type of supported template element.
      */
-    public TemplateElement(final Class<T> fieldType, final Function<Object, T> function, final Predicate<Class<?>> classPredicate)
+    public TemplateElement(final Class<T> fieldType)
     {
         this.fieldType = fieldType;
-        this.function = function;
-        this.classPredicate = classPredicate;
     }
 
     /**
@@ -102,20 +87,92 @@ public abstract class TemplateElement<T>
      */
     public boolean canBeConverted(final Class<?> clazz)
     {
-        return this.isValidType(clazz) || ((this.classPredicate != null) && this.classPredicate.test(clazz));
+        return this.isValidType(clazz) || this.canBeConverted0(clazz);
     }
+
+    private String getExceptionMessage(final Object obj, final String s)
+    {
+        if (s == null)
+        {
+            return "Can't convert object (" + obj.getClass().getName() + ") to " + this.fieldType.getName() + ": " + ToStringBuilder.reflectionToString(obj);
+        }
+        return "Can't convert object (" + obj.getClass().getName() + ") to " + this.fieldType.getName() + ", caused by: '" + s + "', object: " + ToStringBuilder.reflectionToString(obj);
+    }
+
+    /**
+     * Create UnsupportedOperationException "Can't convert object" for given object.
+     *
+     * @param obj   object that fail to convert.
+     * @param cause cause message.
+     *
+     * @return created exception.
+     */
+    protected UnsupportedOperationException getException(final Object obj, final String cause)
+    {
+        return new UnsupportedOperationException(this.getExceptionMessage(obj, cause));
+    }
+
+    /**
+     * Create UnsupportedOperationException "Can't convert object" for given object.
+     *
+     * @param obj object that fail to convert.
+     *
+     * @return created exception.
+     */
+    protected UnsupportedOperationException getException(final Object obj)
+    {
+        return this.getException(obj, (String) null);
+    }
+
+    /**
+     * Create UnsupportedOperationException "Can't convert object" for given object.
+     *
+     * @param obj   object that fail to convert.
+     * @param cause cause of exception.
+     *
+     * @return created exception.
+     */
+    protected UnsupportedOperationException getException(final Object obj, final Throwable cause)
+    {
+        return new UnsupportedOperationException(this.getExceptionMessage(obj, null), cause);
+    }
+
+    /**
+     * Check if given class can be compatible with this template after using convert function..
+     *
+     * @param clazz class to check.
+     *
+     * @return true if class can be used in this template.
+     */
+    protected abstract boolean canBeConverted0(final Class<?> c);
+//    {
+//        return false;
+//    }
+
+    /**
+     * Function used to convert other types to this type (may throw errors).
+     *
+     * @param obj object to convert.
+     *
+     * @return converted object.
+     *
+     * @throws UnsupportedOperationException when method can't convert object.
+     */
+    protected abstract T convertObject0(Object obj) throws UnsupportedOperationException;
 
     /**
      * Convert object from default-value annotation to compatible type. <br>
      * May throw error if object can't be converted.<br>
      * This method don't need to check if object is already good one.
      *
-     * @param def       object to convert.
+     * @param obj       object to convert.
      * @param fieldType expected type of returned object.
      *
      * @return converted object.
+     *
+     * @throws UnsupportedOperationException when method can't convert object.
      */
-    protected abstract T convertDefault0(Object def, Class<?> fieldType);
+    protected abstract T convertDefault0(Object obj, Class<?> fieldType) throws UnsupportedOperationException;
 
     /**
      * Convert object from default-value annotation to compatible type.<br>
@@ -167,7 +224,7 @@ public abstract class TemplateElement<T>
         }
         if (element != null)
         {
-            writer.append('\n');
+//            writer.append('\n');
             if (addComments && (field.getHeader() != null))
             {
                 Template.appendComment(writer, field.getHeader(), level, false);
@@ -186,7 +243,7 @@ public abstract class TemplateElement<T>
                 }
                 else
                 {
-                    writer.append('\n');
+//                    writer.append('\n');
                     Template.appendComment(writer, field.getFooter(), level, false);
                 }
             }
@@ -214,7 +271,7 @@ public abstract class TemplateElement<T>
             if (addComments && (field.getHeader() != null) && (elementPlace == ElementPlace.NORMAL))
             {
                 Template.appendComment(writer, field.getHeader(), level, false);
-                writer.append('\n');
+//                writer.append('\n');
             }
 
             this.appendValue(writer, field, object, this.validateType(element), level, elementPlace);
@@ -226,7 +283,7 @@ public abstract class TemplateElement<T>
             if (addComments && (field.getFooter() != null))
             {
                 Template.appendComment(writer, field.getFooter(), level, false);
-                writer.append('\n');
+//                writer.append('\n');
             }
         }
     }
@@ -252,7 +309,7 @@ public abstract class TemplateElement<T>
             //noinspection unchecked
             return (T) obj;
         }
-        return this.function.apply(obj);
+        return this.convertObject0(obj);
     }
 
     /**

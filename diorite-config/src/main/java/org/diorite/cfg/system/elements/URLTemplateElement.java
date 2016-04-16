@@ -50,41 +50,51 @@ public class URLTemplateElement extends TemplateElement<URL>
      */
     public URLTemplateElement()
     {
-        super(URL.class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to URL: " + obj);
-        }, c -> false);
+        super(URL.class);
     }
 
     @Override
-    protected URL convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
+    {
+        return false;
+    }
+
+    @Override
+    protected URL convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected URL convertDefault0(final Object obj, final Class<?> fieldType)
     {
         try
         {
-            if (def instanceof URL)
+            if (obj instanceof URL)
             {
-                return ((URL) def);
+                return ((URL) obj);
             }
-            if (def instanceof URI)
+            if (obj instanceof URI)
             {
-                return ((URI) def).toURL();
+                return ((URI) obj).toURL();
             }
-            if (def instanceof Path)
+            if (obj instanceof Path)
             {
-                return ((Path) def).toUri().toURL();
+                return ((Path) obj).toUri().toURL();
             }
-            if (def instanceof File)
+            if (obj instanceof File)
             {
-                return ((File) def).toURI().toURL();
+                return ((File) obj).toURI().toURL();
             }
-            if (def instanceof String)
+            if (obj instanceof String)
             {
-                return new URL(def.toString());
+                return new URL(obj.toString());
             }
         } catch (final MalformedURLException e)
         {
-            throw new RuntimeException("Can't convert default value (" + def.getClass().getName() + "): " + def, e);
+            throw this.getException(obj, e);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
     }
 
     @Override

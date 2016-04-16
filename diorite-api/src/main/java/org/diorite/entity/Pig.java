@@ -26,4 +26,17 @@ package org.diorite.entity;
 
 public interface Pig extends AnimalEntity
 {
+    /**
+     * Returns true if a pig has a saddle
+     *
+     * @return true if a pig has a saddle
+     */
+    boolean getSaddle();
+
+    /**
+     * Sets if a pig has a saddle
+     *
+     * @param saddle if a pig has a saddle
+     */
+    void setSaddle(boolean saddle);
 }

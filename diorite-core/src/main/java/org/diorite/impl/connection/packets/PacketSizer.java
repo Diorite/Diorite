@@ -28,6 +28,7 @@ package org.diorite.impl.connection.packets;
 import java.util.List;
 
 import org.diorite.impl.connection.ByteToMessageCodec.PacketByteBufByteToMessageCodec;
+import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -40,7 +41,7 @@ public class PacketSizer extends PacketByteBufByteToMessageCodec
     protected void encode(final ChannelHandlerContext context, final ByteBuf srcByteBuf, final ByteBuf byteBuf)
     {
         final int readableBytes = srcByteBuf.readableBytes();
-        final int neededBytes = PacketDataSerializer.neededBytes(readableBytes);
+        final int neededBytes = DioriteMathUtils.varintSize(readableBytes);
         if (neededBytes > 3)
         {
             throw new IllegalArgumentException("unable to fit " + readableBytes + " into " + 3);

@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by bytes.
  */
-public class ByteTemplateElement extends SimpleTemplateElement<Byte>
+public class ByteTemplateElement extends PrimitiveTemplateElement<Byte>
 {
     /**
      * Instance of template to direct-use.
@@ -39,22 +39,32 @@ public class ByteTemplateElement extends SimpleTemplateElement<Byte>
      */
     public ByteTemplateElement()
     {
-        super(byte.class, obj -> {
-            if (obj instanceof Number)
-            {
-                return ((Number) obj).byteValue();
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Byte: " + obj);
-        }, Number.class::isAssignableFrom);
+        super(byte.class);
     }
 
     @Override
-    protected Byte convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof Number)
+        return Number.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected Byte convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof Number)
         {
-            return ((Number) def).byteValue();
+            return ((Number) obj).byteValue();
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected Byte convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof Number)
+        {
+            return ((Number) obj).byteValue();
+        }
+        throw this.getException(obj);
     }
 }

@@ -26,6 +26,7 @@ package org.diorite.utils.math;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -83,7 +84,7 @@ public class IntRange
      */
     public int getRandom()
     {
-        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandInt(this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandomInt(this.min, this.max);
     }
 
     /**
@@ -95,7 +96,7 @@ public class IntRange
      */
     public int getRandom(final Random random)
     {
-        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandInt(random, this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandomInt(random, this.min, this.max);
     }
 
     /**
@@ -203,5 +204,47 @@ public class IntRange
     public static IntRange fixed(final int num)
     {
         return new IntRange(num, num);
+    }
+
+    /**
+     * Parses given string to range, string is valid range when contains 2 numbers (second greater than first) and splt char: <br>
+     * " - ", " : ", " ; ", ", ", " ", ",", ";", ":", "-"
+     *
+     * @param string string to parse.
+     *
+     * @return parsed range or null.
+     */
+    public static IntRange valueOf(String string)
+    {
+        if (string.isEmpty())
+        {
+            return null;
+        }
+        String[] nums = null;
+        int i = 0;
+        final boolean firstMinus = string.charAt(0) == '-';
+        if (firstMinus)
+        {
+            string = string.substring(1);
+        }
+        while ((i < ByteRange.SPLITS.length) && ((nums == null) || (nums.length != 2)))
+        {
+            nums = StringUtils.splitByWholeSeparator(string, ByteRange.SPLITS[i++], 2);
+        }
+        if ((nums == null) || (nums.length != 2))
+        {
+            return null;
+        }
+        final Integer min = DioriteMathUtils.asInt(firstMinus ? ("-" + nums[0]) : nums[0]);
+        if (min == null)
+        {
+            return null;
+        }
+        final Integer max = DioriteMathUtils.asInt(nums[1]);
+        if ((max == null) || (min > max))
+        {
+            return null;
+        }
+        return new IntRange(min, max);
     }
 }

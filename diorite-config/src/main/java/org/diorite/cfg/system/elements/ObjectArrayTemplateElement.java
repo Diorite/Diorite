@@ -49,13 +49,23 @@ public class ObjectArrayTemplateElement extends SimpleArrayTemplateElement<Objec
      */
     public ObjectArrayTemplateElement()
     {
-        super(Object[].class, obj -> {
-            if (obj instanceof Collection)
-            {
-                return ((Collection) obj).toArray();
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Object[]: " + obj);
-        }, Collection.class::isAssignableFrom);
+        super(Object[].class);
+    }
+
+    @Override
+    protected Object[] convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof Collection)
+        {
+            return ((Collection) obj).toArray();
+        }
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected boolean canBeConverted0(final Class<?> c)
+    {
+        return Collection.class.isAssignableFrom(c);
     }
 
     @Override

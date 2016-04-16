@@ -45,8 +45,8 @@ import org.diorite.impl.connection.packets.PacketCompression;
 import org.diorite.impl.connection.packets.PacketEncryptor;
 import org.diorite.impl.connection.packets.PacketListener;
 import org.diorite.impl.connection.packets.QueuedPacket;
-import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundKeepAlive;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundKeepAlive;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundKeepAlive;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.chat.component.TranslatableComponent;
@@ -275,7 +275,7 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
     }
 
     @Override
-    protected void messageReceived(final ChannelHandlerContext channelHandlerContext, final Packet<? super PacketListener> packet) throws Exception
+    protected void channelRead0(final ChannelHandlerContext channelHandlerContext, final Packet<? super PacketListener> packet) throws Exception
     {
         if (this.closed)
         {

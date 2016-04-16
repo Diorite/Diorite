@@ -27,7 +27,7 @@ package org.diorite.cfg.system.elements.primitives;
 /**
  * Template used by chars.
  */
-public class CharTemplateElement extends SimpleTemplateElement<Character>
+public class CharTemplateElement extends PrimitiveTemplateElement<Character>
 {
     /**
      * Instance of template to direct-use.
@@ -39,18 +39,28 @@ public class CharTemplateElement extends SimpleTemplateElement<Character>
      */
     public CharTemplateElement()
     {
-        super(char.class, obj -> {
-            if (obj instanceof Character)
-            {
-                return (char) obj;
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Character: " + obj);
-        }, Character.class::isAssignableFrom);
+        super(char.class);
     }
 
     @Override
-    protected Character convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        return Character.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected Character convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof Character)
+        {
+            return (char) obj;
+        }
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected Character convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        throw this.getException(obj);
     }
 }

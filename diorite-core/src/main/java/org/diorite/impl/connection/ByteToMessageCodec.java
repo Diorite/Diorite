@@ -24,7 +24,6 @@
 
 package org.diorite.impl.connection;
 
-
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,9 +31,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.PacketClass;
+import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerAdapter;
+import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -51,41 +51,33 @@ import io.netty.util.internal.TypeParameterMatcher;
  * Be aware that sub-classes of {@link ByteToMessageCodec} <strong>MUST NOT</strong>
  * annotated with {@link io.netty.channel.ChannelHandler.Sharable}.
  */
-public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
+@SuppressWarnings("ThrowFromFinallyBlock")
+public abstract class ByteToMessageCodec<I> extends ChannelDuplexHandler
 {
-    public abstract static class PacketByteToMessageCodec extends ByteToMessageCodec<Packet<?>>
+    private final TypeParameterMatcher    outboundMsgMatcher;
+    private final MessageToByteEncoder<I> encoder;
+    private final ByteToMessageDecoder decoder = new ByteToMessageDecoder()
     {
-        @SuppressWarnings("MagicNumber")
-        private static int varintSize(final int i)
+        @Override
+        public void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
         {
-            if ((i < 0) || (i >= 268435456))
-            {
-                return 5;
-            }
-            if (i < 128)
-            {
-                return 1;
-            }
-            if (i < 16384)
-            {
-                return 2;
-            }
-            if (i < 2097152)
-            {
-                return 3;
-            }
-            if (i < 268435456)
-            {
-                return 4;
-            }
-            throw new AssertionError();
+            ByteToMessageCodec.this.decode(ctx, in, out);
         }
 
+        @Override
+        protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
+        {
+            ByteToMessageCodec.this.decodeLast(ctx, in, out);
+        }
+    };
+
+    public abstract static class PacketByteToMessageCodec extends ByteToMessageCodec<Packet<?>>
+    {
         @Override
         protected ByteBuf allocateBuffer(final ChannelHandlerContext ctx, final Packet<?> msg, final boolean preferDirect) throws Exception
         {
             final PacketClass pc = msg.getPacketData();
-            final int size = varintSize(pc.id()) + pc.size();
+            final int size = DioriteMathUtils.varintSize(pc.id()) + pc.size();
             if (size < 0)
             {
                 throw new IllegalArgumentException("Size can't be lower than 0!");
@@ -103,37 +95,11 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
 
     public abstract static class PacketByteBufByteToMessageCodec extends ByteToMessageCodec<ByteBuf>
     {
-        @SuppressWarnings("MagicNumber")
-        private static int varintSize(final int i)
-        {
-            if ((i < 0) || (i >= 268435456))
-            {
-                return 5;
-            }
-            if (i < 128)
-            {
-                return 1;
-            }
-            if (i < 16384)
-            {
-                return 2;
-            }
-            if (i < 2097152)
-            {
-                return 3;
-            }
-            if (i < 268435456)
-            {
-                return 4;
-            }
-            throw new AssertionError();
-        }
-
         @Override
         protected ByteBuf allocateBuffer(final ChannelHandlerContext ctx, final ByteBuf msg, final boolean preferDirect) throws Exception
         {
             final int dataSize = msg.readableBytes();
-            final int size = varintSize(dataSize) + dataSize;
+            final int size = DioriteMathUtils.varintSize(dataSize) + dataSize;
             if (size < 0)
             {
                 throw new IllegalArgumentException("Size can't be lower than 0!");
@@ -148,24 +114,6 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
             }
         }
     }
-
-    private final TypeParameterMatcher    outboundMsgMatcher;
-    private final MessageToByteEncoder<I> encoder;
-
-    private final ByteToMessageDecoder decoder = new ByteToMessageDecoder()
-    {
-        @Override
-        public void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
-        {
-            ByteToMessageCodec.this.decode(ctx, in, out);
-        }
-
-        @Override
-        protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
-        {
-            ByteToMessageCodec.this.decodeLast(ctx, in, out);
-        }
-    };
 
     /**
      * @see #ByteToMessageCodec(boolean) with {@code true} as boolean parameter.
@@ -238,6 +186,42 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
         this.encoder.write(ctx, msg, promise);
     }
 
+    @Override
+    public void channelReadComplete(final ChannelHandlerContext ctx) throws Exception
+    {
+        this.decoder.channelReadComplete(ctx);
+    }
+
+    @Override
+    public void channelInactive(final ChannelHandlerContext ctx) throws Exception
+    {
+        this.decoder.channelInactive(ctx);
+    }
+
+    @Override
+    public void handlerAdded(final ChannelHandlerContext ctx) throws Exception
+    {
+        try
+        {
+            this.decoder.handlerAdded(ctx);
+        } finally
+        {
+            this.encoder.handlerAdded(ctx);
+        }
+    }
+
+    @Override
+    public void handlerRemoved(final ChannelHandlerContext ctx) throws Exception
+    {
+        try
+        {
+            this.decoder.handlerRemoved(ctx);
+        } finally
+        {
+            this.encoder.handlerRemoved(ctx);
+        }
+    }
+
     /**
      * Encode a message into a {@link ByteBuf}. This method will be called for each written message that can be handled
      * by this encoder.
@@ -264,6 +248,14 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
     protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception;
 
     /**
+     * @see ByteToMessageDecoder#decodeLast(ChannelHandlerContext, ByteBuf, List)
+     */
+    protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
+    {
+        this.decode(ctx, in, out);
+    }
+
+    /**
      * Allocate a {@link ByteBuf} which will be used as argument of {@link #encode(ChannelHandlerContext, Object, ByteBuf)}.
      * Sub-classes may override this method to returna {@link ByteBuf} with a perfect matching {@code initialCapacity}.
      *
@@ -285,24 +277,6 @@ public abstract class ByteToMessageCodec<I> extends ChannelHandlerAdapter
         {
             return ctx.alloc().heapBuffer();
         }
-    }
-
-    /**
-     * Is called one last time when the {@link ChannelHandlerContext} goes in-active. Which means the
-     * {@link #channelInactive(ChannelHandlerContext)} was triggered.
-     * <br>
-     * By default this will just call {@link #decode(ChannelHandlerContext, ByteBuf, List)} but sub-classes may
-     * override this for some special cleanup operation.
-     *
-     * @param ctx the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
-     * @param in  the {@link ByteBuf} from which to read data
-     * @param out the {@link List} to which decoded messages should be added
-     *
-     * @throws Exception if decode fail.
-     */
-    protected void decodeLast(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception
-    {
-        this.decode(ctx, in, out);
     }
 
     private final class Encoder extends MessageToByteEncoder<I>

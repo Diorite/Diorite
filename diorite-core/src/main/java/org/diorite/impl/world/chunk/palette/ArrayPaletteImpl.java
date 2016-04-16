@@ -31,6 +31,7 @@ import org.diorite.impl.CoreMain;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
+import org.diorite.utils.math.DioriteMathUtils;
 
 public class ArrayPaletteImpl implements PaletteData
 {
@@ -139,10 +140,10 @@ public class ArrayPaletteImpl implements PaletteData
     @Override
     public int byteSize()
     {
-        int bytes = PacketDataSerializer.varintSize(this.lastIndex);
+        int bytes = DioriteMathUtils.varintSize(this.lastIndex);
         for (int var2 = 0; var2 < this.lastIndex; ++ var2)
         {
-            bytes += PacketDataSerializer.varintSize(this.pattern[var2].getIdAndMeta());
+            bytes += DioriteMathUtils.varintSize(this.pattern[var2].getIdAndMeta());
         }
         return bytes;
     }

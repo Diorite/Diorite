@@ -50,47 +50,57 @@ public class URITemplateElement extends TemplateElement<URI>
      */
     public URITemplateElement()
     {
-        super(URI.class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to URI: " + obj);
-        }, c -> false);
+        super(URI.class);
     }
 
     @Override
-    protected URI convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof URI)
+        return false;
+    }
+
+    @Override
+    protected URI convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected URI convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof URI)
         {
-            return ((URI) def);
+            return ((URI) obj);
         }
-        if (def instanceof URL)
-        {
-            try
-            {
-                return ((URL) def).toURI();
-            } catch (final URISyntaxException e)
-            {
-                throw new RuntimeException("Can't convert default value (" + def.getClass().getName() + "): " + def, e);
-            }
-        }
-        if (def instanceof Path)
-        {
-            return ((Path) def).toUri();
-        }
-        if (def instanceof File)
-        {
-            return ((File) def).toURI();
-        }
-        if (def instanceof String)
+        if (obj instanceof URL)
         {
             try
             {
-                return new URI(def.toString());
+                return ((URL) obj).toURI();
             } catch (final URISyntaxException e)
             {
-                throw new RuntimeException("Can't convert default value (" + def.getClass().getName() + "): " + def, e);
+                throw this.getException(obj, e);
             }
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        if (obj instanceof Path)
+        {
+            return ((Path) obj).toUri();
+        }
+        if (obj instanceof File)
+        {
+            return ((File) obj).toURI();
+        }
+        if (obj instanceof String)
+        {
+            try
+            {
+                return new URI(obj.toString());
+            } catch (final URISyntaxException e)
+            {
+                throw this.getException(obj, e);
+            }
+        }
+        throw this.getException(obj);
     }
 
     @Override

@@ -26,4 +26,17 @@ package org.diorite.entity;
 
 public interface WitherSkull extends Projectile, ObjectEntity
 {
+    /**
+     * Returns true if a wither's head is invulnerable.
+     *
+     * @return true if a wither's head is invulnerable.
+     */
+    boolean getInvulnerable();
+
+    /**
+     * Sets if a wither's head is invulnerable.
+     *
+     * @param invulnerable if a wither's head is invulnerable.
+     */
+    void setInvulnerable(boolean invulnerable);
 }

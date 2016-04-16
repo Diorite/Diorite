@@ -29,6 +29,7 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IGhast;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -50,12 +51,23 @@ class GhastImpl extends MonsterEntityImpl implements IGhast
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_GHAST_IS_ATTACKING, false));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.GHAST;
+    }
+    
+    public boolean getAttacking()
+    {
+        return this.metadata.getBoolean(META_KEY_GHAST_IS_ATTACKING);
+    }
+
+    public void setAttacking(boolean attacking)
+    {
+        this.metadata.setBoolean(META_KEY_GHAST_IS_ATTACKING, attacking);
     }
 }
 

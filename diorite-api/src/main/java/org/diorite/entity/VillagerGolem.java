@@ -26,4 +26,17 @@ package org.diorite.entity;
 
 public interface VillagerGolem extends AnimalEntity
 {
+    /**
+     * Returns true if a golem has been created by player.
+     *
+     * @return true if a golem has been created by player.
+     */
+    boolean getPlayerCreated();
+
+    /**
+     * Sets if a golem has been created by player.
+     *
+     * @param playerCreated if a golem has been created by player.
+     */
+    void setPlayerCreated(boolean playerCreated);
 }

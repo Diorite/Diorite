@@ -26,6 +26,7 @@ package org.diorite.utils.math;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -75,7 +76,7 @@ public class DoubleRange
      */
     public double getRandom()
     {
-        return DioriteRandomUtils.getRandDouble(this.min, this.max);
+        return DioriteRandomUtils.getRandomDouble(this.min, this.max);
     }
 
     /**
@@ -87,7 +88,7 @@ public class DoubleRange
      */
     public double getRandom(final Random random)
     {
-        return DioriteRandomUtils.getRandDouble(random, this.min, this.max);
+        return DioriteRandomUtils.getRandomDouble(random, this.min, this.max);
     }
 
     /**
@@ -199,5 +200,47 @@ public class DoubleRange
     public static DoubleRange fixed(final double num)
     {
         return new DoubleRange(num, num);
+    }
+
+    /**
+     * Parses given string to range, string is valid range when contains 2 numbers (second greater than first) and splt char: <br>
+     * " - ", " : ", " ; ", ", ", " ", ",", ";", ":", "-"
+     *
+     * @param string string to parse.
+     *
+     * @return parsed range or null.
+     */
+    public static DoubleRange valueOf(String string)
+    {
+        if (string.isEmpty())
+        {
+            return null;
+        }
+        String[] nums = null;
+        int i = 0;
+        final boolean firstMinus = string.charAt(0) == '-';
+        if (firstMinus)
+        {
+            string = string.substring(1);
+        }
+        while ((i < ByteRange.SPLITS.length) && ((nums == null) || (nums.length != 2)))
+        {
+            nums = StringUtils.splitByWholeSeparator(string, ByteRange.SPLITS[i++], 2);
+        }
+        if ((nums == null) || (nums.length != 2))
+        {
+            return null;
+        }
+        final Double min = DioriteMathUtils.asDouble(firstMinus ? ("-" + nums[0]) : nums[0]);
+        if (min == null)
+        {
+            return null;
+        }
+        final Double max = DioriteMathUtils.asDouble(nums[1]);
+        if ((max == null) || (min > max))
+        {
+            return null;
+        }
+        return new DoubleRange(min, max);
     }
 }

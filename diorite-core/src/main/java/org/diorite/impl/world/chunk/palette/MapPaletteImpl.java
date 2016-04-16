@@ -31,6 +31,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.utils.math.DioriteMathUtils;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap.Entry;
@@ -87,10 +88,10 @@ public class MapPaletteImpl implements PaletteData
     @Override
     public int byteSize()
     {
-        int bytes = PacketDataSerializer.varintSize(this.lastUsed);
+        int bytes = DioriteMathUtils.varintSize(this.lastUsed);
         for (int i = 0; i < this.lastUsed; ++ i)
         {
-            bytes += PacketDataSerializer.varintSize(this.pattern.get(i));
+            bytes += DioriteMathUtils.varintSize(this.pattern.get(i));
         }
         return bytes;
     }

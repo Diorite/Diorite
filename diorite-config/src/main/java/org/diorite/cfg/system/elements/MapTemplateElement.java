@@ -54,19 +54,29 @@ public class MapTemplateElement extends TemplateElement<Map>
      */
     public MapTemplateElement()
     {
-        super(Map.class, obj -> {
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Map: " + obj);
-        }, c -> false);
+        super(Map.class);
     }
 
     @Override
-    protected Map convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof Map)
+        return false;
+    }
+
+    @Override
+    protected Map convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        throw this.getException(obj);
+    }
+
+    @Override
+    protected Map convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof Map)
         {
-            return (Map) def;
+            return (Map) obj;
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw this.getException(obj);
     }
 
     @Override
@@ -220,8 +230,8 @@ public class MapTemplateElement extends TemplateElement<Map>
                 }
                 continue;
             }
-            final boolean canAddComments = ! isPrimitiveOrStrings(value);
-            TemplateElements.getElement(value.getClass()).writeValue(writer, field, element, value, level + 1, canAddComments && (commentEveryElement || isFirst), ElementPlace.NORMAL);
+//            final boolean canAddComments = ! isPrimitiveOrStrings(value);
+            TemplateElements.getElement(value.getClass()).writeValue(writer, field, element, value, level + 1, /*canAddComments && (commentEveryElement || isFirst)*/ false, ElementPlace.NORMAL);
 
             isFirst = false;
             if (! iterator.hasNext())

@@ -42,7 +42,7 @@ import org.diorite.inventory.Inventory;
 import org.diorite.inventory.InventoryHolder;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
-import org.diorite.utils.DioriteUtils;
+import org.diorite.utils.collections.arrays.DioriteArrayUtils;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -179,7 +179,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         final ItemStackImplArray content = this.getArray();
         if (itemStack == null)
         {
-            return DioriteUtils.EMPTY_INT;
+            return DioriteArrayUtils.EMPTY_INTS;
         }
         final IntCollection list = new IntArrayList(10);
         for (int i = 0, size = content.length(); i < size; i++)
@@ -193,7 +193,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         }
         if (list.isEmpty())
         {
-            return DioriteUtils.EMPTY_INT;
+            return DioriteArrayUtils.EMPTY_INTS;
         }
         return list.toIntArray();
     }
@@ -239,7 +239,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
 
         if (material == null)
         {
-            return DioriteUtils.EMPTY_INT;
+            return DioriteArrayUtils.EMPTY_INTS;
         }
         final IntCollection list = new IntArrayList(10);
         for (int i = 0, size = content.length(); i < size; i++)
@@ -266,7 +266,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         }
         if (list.isEmpty())
         {
-            return DioriteUtils.EMPTY_INT;
+            return DioriteArrayUtils.EMPTY_INTS;
         }
         return list.toIntArray();
     }
@@ -298,7 +298,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         final ItemStackImplArray content = this.getArray();
         if (itemStack == null)
         {
-            return DioriteUtils.EMPTY_INT;
+            return DioriteArrayUtils.EMPTY_INTS;
         }
         final IntCollection list = new IntArrayList(10);
         for (int i = content.length() - 1; i >= 0; i--)
@@ -312,7 +312,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         }
         if (list.isEmpty())
         {
-            return DioriteUtils.EMPTY_INT;
+            return DioriteArrayUtils.EMPTY_INTS;
         }
         return list.toIntArray();
     }
@@ -358,7 +358,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
 
         if (material == null)
         {
-            return DioriteUtils.EMPTY_INT;
+            return DioriteArrayUtils.EMPTY_INTS;
         }
         final IntCollection list = new IntArrayList(10);
         for (int i = content.length() - 1; i >= 0; i--)
@@ -385,7 +385,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
         }
         if (list.isEmpty())
         {
-            return DioriteUtils.EMPTY_INT;
+            return DioriteArrayUtils.EMPTY_INTS;
         }
         return list.toIntArray();
     }

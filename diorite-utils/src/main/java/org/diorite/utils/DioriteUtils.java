@@ -37,8 +37,6 @@ import sun.misc.Unsafe;
 public final class DioriteUtils
 {
     private static final Unsafe unsafeInstance;
-    public static final Object[] EMPTY_OBJECT = new Object[0];
-    public static final int[]    EMPTY_INT    = new int[0];
 
     private DioriteUtils()
     {

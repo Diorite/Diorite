@@ -194,15 +194,15 @@ public class WorldImpl implements World, Tickable
         this.spawn = this.generator.getSpawnLocation();
         if (this.spawn == null)
         {
-            int spawnX = DioriteRandomUtils.getRandInt(- 64, 64);
-            int spawnZ = DioriteRandomUtils.getRandInt(- 64, 64);
+            int spawnX = DioriteRandomUtils.getRandomInt(- 64, 64);
+            int spawnZ = DioriteRandomUtils.getRandomInt(- 64, 64);
             final ChunkImpl chunk = this.getChunkAt(spawnX >> 4, spawnZ >> 4);
             chunk.load(true);
             final int spawnY = this.getHighestBlockY(spawnX, spawnZ);
             for (int tries = 0; (tries < 1000) && ! this.generator.canSpawn(spawnX, spawnY, spawnZ); ++ tries)
             {
-                spawnX += DioriteRandomUtils.getRandInt(- 64, 64);
-                spawnZ += DioriteRandomUtils.getRandInt(- 64, 64);
+                spawnX += DioriteRandomUtils.getRandomInt(- 64, 64);
+                spawnZ += DioriteRandomUtils.getRandomInt(- 64, 64);
             }
             this.spawn = new ImmutableLocation(spawnX, spawnY, spawnZ);
         }

@@ -26,6 +26,7 @@ package org.diorite.utils.math;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -94,7 +95,7 @@ public class ShortRange
      */
     public short getRandom()
     {
-        return ((this.max - this.min) == 0) ? this.max : (short) DioriteRandomUtils.getRandInt(this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : (short) DioriteRandomUtils.getRandomInt(this.min, this.max);
     }
 
     /**
@@ -106,7 +107,7 @@ public class ShortRange
      */
     public short getRandom(final Random random)
     {
-        return ((this.max - this.min) == 0) ? this.max : (short) DioriteRandomUtils.getRandInt(random, this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : (short) DioriteRandomUtils.getRandomInt(random, this.min, this.max);
     }
 
     /**
@@ -301,5 +302,47 @@ public class ShortRange
     public static ShortRange fixed(final short num)
     {
         return new ShortRange(num, num);
+    }
+
+    /**
+     * Parses given string to range, string is valid range when contains 2 numbers (second greater than first) and splt char: <br>
+     * " - ", " : ", " ; ", ", ", " ", ",", ";", ":", "-"
+     *
+     * @param string string to parse.
+     *
+     * @return parsed range or null.
+     */
+    public static ShortRange valueOf(String string)
+    {
+        if (string.isEmpty())
+        {
+            return null;
+        }
+        String[] nums = null;
+        int i = 0;
+        final boolean firstMinus = string.charAt(0) == '-';
+        if (firstMinus)
+        {
+            string = string.substring(1);
+        }
+        while ((i < ByteRange.SPLITS.length) && ((nums == null) || (nums.length != 2)))
+        {
+            nums = StringUtils.splitByWholeSeparator(string, ByteRange.SPLITS[i++], 2);
+        }
+        if ((nums == null) || (nums.length != 2))
+        {
+            return null;
+        }
+        final Integer min = DioriteMathUtils.asInt(firstMinus ? ("-" + nums[0]) : nums[0]);
+        if ((min == null) || (min < Short.MIN_VALUE))
+        {
+            return null;
+        }
+        final Integer max = DioriteMathUtils.asInt(nums[1]);
+        if ((max == null) || (max > Short.MAX_VALUE) || (min > max))
+        {
+            return null;
+        }
+        return new ShortRange(min.shortValue(), max.shortValue());
     }
 }

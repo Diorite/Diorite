@@ -95,13 +95,13 @@ public class TestWorldGeneratorImpl extends WorldGenerator
 
                         if (density > threshold)
                         {
-                            builder.setBlock(x, y, z, StoneMat.getByID(DioriteRandomUtils.getRandInt(3, 4)));
+                            builder.setBlock(x, y, z, StoneMat.getByID(DioriteRandomUtils.getRandomInt(3, 4)));
                         }
 
                     }
                     else
                     {
-                        builder.setBlock(x, y, z, StoneMat.getByID(DioriteRandomUtils.getRandInt(3, 4)));
+                        builder.setBlock(x, y, z, StoneMat.getByID(DioriteRandomUtils.getRandomInt(3, 4)));
                     }
                 }
 

@@ -28,5 +28,10 @@ import java.util.UUID;
 
 public interface GameObject
 {
+    /**
+     * Get game object's UUID
+     *
+     * @return game object's UUID
+     */
     UUID getUniqueID();
 }

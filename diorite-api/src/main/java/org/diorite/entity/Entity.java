@@ -31,6 +31,7 @@ import java.util.function.Predicate;
 
 import org.diorite.Core;
 import org.diorite.GameObject;
+import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
 import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.scheduler.Synchronizable;
@@ -123,4 +124,8 @@ public interface Entity extends GameObject, Synchronizable
     void setSilent(boolean silent);
 
     float getHeadPitch();
+
+    void teleport(ILocation location); //TODO: left by skprime to check by GoToFinal
+
+    void teleport(Entity entity);
 }

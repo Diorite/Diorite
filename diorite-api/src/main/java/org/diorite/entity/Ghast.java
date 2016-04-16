@@ -26,4 +26,17 @@ package org.diorite.entity;
 
 public interface Ghast extends MonsterEntity
 {
+    /**
+     * Returns true if a ghast is attacking.
+     *
+     * @return true if a ghast is attacking.
+     */
+    boolean getAttacking();
+
+    /**
+     * Sets if a ghast is attacking.
+     *
+     * @param attacking if a ghast is attacking.
+     */
+    void setAttacking(boolean attacking);
 }

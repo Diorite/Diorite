@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -51,7 +52,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.AttributeKey;
-import io.netty.util.concurrent.DefaultExecutorServiceFactory;
 
 public class ServerConnection extends Thread implements ConnectionHandler
 {
@@ -71,8 +71,8 @@ public class ServerConnection extends Thread implements ConnectionHandler
         this.setDaemon(true);
         this.setName("{Diorite|SrvCon}");
         final int threads = core.getConfig().getNettyThreads();
-        this.nioEventLoopGroupLazyValue = new LazyValue<>(() -> new NioEventLoopGroup(threads, new DefaultExecutorServiceFactory("Netty Client")));
-        this.epollEventLoopGroupLazyValue = new LazyValue<>(() -> new EpollEventLoopGroup(threads, new DefaultExecutorServiceFactory("Netty Epoll Client")));
+        this.nioEventLoopGroupLazyValue = new LazyValue<>(() -> new NioEventLoopGroup(threads, new ThreadFactoryBuilder().setNameFormat("Diorite-Netty#%d").setDaemon(true).build()));
+        this.epollEventLoopGroupLazyValue = new LazyValue<>(() -> new EpollEventLoopGroup(threads, new ThreadFactoryBuilder().setNameFormat("Diorite-Netty-Epoll#%d").setDaemon(true).build()));
     }
 
     @Override

@@ -51,45 +51,55 @@ public class PathTemplateElement extends TemplateElement<Path>
      */
     public PathTemplateElement()
     {
-        super(Path.class, obj -> {
+        super(Path.class);
+    }
+
+    @Override
+    protected boolean canBeConverted0(final Class<?> c)
+    {
+        return Path.class.isAssignableFrom(c) || File.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected Path convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof File)
+        {
+            return ((File) obj).toPath();
+        }
+        throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Path: " + obj);
+    }
+
+    @Override
+    protected Path convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        try
+        {
+            if (obj instanceof Path)
+            {
+                return (Path) obj;
+            }
             if (obj instanceof File)
             {
                 return ((File) obj).toPath();
             }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Path: " + obj);
-        }, c -> Path.class.isAssignableFrom(c) || File.class.isAssignableFrom(c));
-    }
-
-    @Override
-    protected Path convertDefault0(final Object def, final Class<?> fieldType)
-    {
-        try
-        {
-            if (def instanceof Path)
+            if (obj instanceof String)
             {
-                return (Path) def;
+                return new File(obj.toString()).toPath();
             }
-            if (def instanceof File)
+            if (obj instanceof URI)
             {
-                return ((File) def).toPath();
+                return new File(((URI) obj).toURL().getFile()).toPath();
             }
-            if (def instanceof String)
+            if (obj instanceof URL)
             {
-                return new File(def.toString()).toPath();
-            }
-            if (def instanceof URI)
-            {
-                return new File(((URI) def).toURL().getFile()).toPath();
-            }
-            if (def instanceof URL)
-            {
-                return new File(((URL) def).getFile()).toPath();
+                return new File(((URL) obj).getFile()).toPath();
             }
         } catch (final MalformedURLException e)
         {
-            throw new RuntimeException("Can't convert default value (" + def.getClass().getName() + "): " + def, e);
+            throw new RuntimeException("Can't convert default value (" + obj.getClass().getName() + "): " + obj, e);
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + def.getClass().getName() + "): " + def);
+        throw new UnsupportedOperationException("Can't convert default value (" + obj.getClass().getName() + "): " + obj);
     }
 
     @Override

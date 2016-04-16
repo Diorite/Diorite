@@ -182,4 +182,41 @@ public class DioriteRandom extends Random
     {
         return (chance > 0) && ((chance >= 100) || (chance >= this.getRandDouble(0, 100)));
     }
+
+    public int sumWeight(final Iterable<? extends IWeightedRandomChoice> choices)
+    {
+        int i = 0;
+        for (final IWeightedRandomChoice choice : choices)
+        {
+            i += choice.getWeight();
+        }
+        return i;
+    }
+
+    public <T extends IWeightedRandomChoice> T getWeightedRandom(final Iterable<? extends T> choices, final int weight)
+    {
+        if (weight <= 0)
+        {
+            throw new IllegalArgumentException("Weight must be greater than 0.");
+        }
+        return this.getWeightedRandomElement(choices, this.nextInt(weight));
+    }
+
+    public <T extends IWeightedRandomChoice> T getWeightedRandomElement(final Iterable<? extends T> choices, int weight)
+    {
+        for (final T choice : choices)
+        {
+            weight -= choice.getWeight();
+            if (weight < 0)
+            {
+                return choice;
+            }
+        }
+        return null;
+    }
+
+    public <T extends IWeightedRandomChoice> T getWeightedRandom(final Iterable<? extends T> choices)
+    {
+        return this.getWeightedRandom(choices, this.sumWeight(choices));
+    }
 }

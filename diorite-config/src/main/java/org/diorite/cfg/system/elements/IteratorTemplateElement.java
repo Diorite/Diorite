@@ -53,32 +53,42 @@ public class IteratorTemplateElement extends TemplateElement<Iterator>
      */
     public IteratorTemplateElement()
     {
-        super(Iterator.class, obj -> {
-            if (obj instanceof Iterable)
-            {
-                return ((Iterable) obj).iterator();
-            }
-            throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Iterator: " + obj);
-        }, Map.class::isAssignableFrom);
+        super(Iterator.class);
     }
 
     @Override
-    protected Iterator convertDefault0(final Object def, final Class<?> fieldType)
+    protected boolean canBeConverted0(final Class<?> c)
     {
-        if (def instanceof Iterator)
+        return Map.class.isAssignableFrom(c);
+    }
+
+    @Override
+    protected Iterator convertObject0(final Object obj) throws UnsupportedOperationException
+    {
+        if (obj instanceof Iterable)
         {
-            return (Iterator) def;
+            return ((Iterable) obj).iterator();
         }
-        final Class<?> c = def.getClass();
+        throw new UnsupportedOperationException("Can't convert object (" + obj.getClass().getName() + ") to Iterator: " + obj);
+    }
+
+    @Override
+    protected Iterator convertDefault0(final Object obj, final Class<?> fieldType)
+    {
+        if (obj instanceof Iterator)
+        {
+            return (Iterator) obj;
+        }
+        final Class<?> c = obj.getClass();
         if (c.isArray())
         {
-            return new ReflectArrayIterator(def);
+            return new ReflectArrayIterator(obj);
         }
-        if (def instanceof Iterable)
+        if (obj instanceof Iterable)
         {
-            return ((Iterable) def).iterator();
+            return ((Iterable) obj).iterator();
         }
-        throw new UnsupportedOperationException("Can't convert default value (" + c.getName() + "): " + def);
+        throw new UnsupportedOperationException("Can't convert default value (" + c.getName() + "): " + obj);
     }
 
     @Override

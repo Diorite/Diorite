@@ -52,7 +52,7 @@ class TippedArrowImpl extends AbstractArrowImpl implements ITippedArrow
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_COLOR, 0));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_COLOR, 0));
     }
 
     @Override

@@ -61,9 +61,8 @@ class EnderCrystalImpl extends EntityImpl implements IEnderCrystal
     public void initMetadata()
     {
         super.initMetadata();
-        final EntityMetadata meta = this.getMetadata();
-        meta.add(new EntityMetadataBlockLocationEntry(META_KEY_ENDER_CRYSTAL_TARGET, null, true));
-        meta.add(new EntityMetadataBooleanEntry(META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM, true));
+        this.metadata.add(new EntityMetadataBlockLocationEntry(META_KEY_ENDER_CRYSTAL_TARGET, null, true));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM, true));
     }
 
     @Override
@@ -81,25 +80,25 @@ class EnderCrystalImpl extends EntityImpl implements IEnderCrystal
     @Override
     public boolean isShowBottom()
     {
-        return this.getMetadata().getBoolean(META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM);
+        return this.metadata.getBoolean(META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM);
     }
 
     @Override
     public void setShowBottom(final boolean showBottom)
     {
-        this.getMetadata().setBoolean(META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM, showBottom);
+        this.metadata.setBoolean(META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM, showBottom);
     }
 
     @Override
     public BlockLocation getBeamTarget()
     {
-        return this.getMetadata().getBlockLocation(META_KEY_ENDER_CRYSTAL_TARGET);
+        return this.metadata.getBlockLocation(META_KEY_ENDER_CRYSTAL_TARGET);
     }
 
     @Override
     public void setBeamTarget(final BlockLocation location)
     {
-        this.getMetadata().setBlockLocation(META_KEY_ENDER_CRYSTAL_TARGET, location);
+        this.metadata.setBlockLocation(META_KEY_ENDER_CRYSTAL_TARGET, location);
     }
 }
 

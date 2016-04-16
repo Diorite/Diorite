@@ -26,6 +26,7 @@ package org.diorite.utils.math;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -86,7 +87,7 @@ public class FloatRange
      */
     public float getRandom()
     {
-        return DioriteRandomUtils.getRandFloat(this.min, this.max);
+        return DioriteRandomUtils.getRandomFloat(this.min, this.max);
     }
 
     /**
@@ -98,7 +99,7 @@ public class FloatRange
      */
     public float getRandom(final Random random)
     {
-        return DioriteRandomUtils.getRandFloat(random, this.min, this.max);
+        return DioriteRandomUtils.getRandomFloat(random, this.min, this.max);
     }
 
     /**
@@ -293,5 +294,47 @@ public class FloatRange
     public static FloatRange fixed(final double num)
     {
         return new FloatRange(num, num);
+    }
+
+    /**
+     * Parses given string to range, string is valid range when contains 2 numbers (second greater than first) and splt char: <br>
+     * " - ", " : ", " ; ", ", ", " ", ",", ";", ":", "-"
+     *
+     * @param string string to parse.
+     *
+     * @return parsed range or null.
+     */
+    public static FloatRange valueOf(String string)
+    {
+        if (string.isEmpty())
+        {
+            return null;
+        }
+        String[] nums = null;
+        int i = 0;
+        final boolean firstMinus = string.charAt(0) == '-';
+        if (firstMinus)
+        {
+            string = string.substring(1);
+        }
+        while ((i < ByteRange.SPLITS.length) && ((nums == null) || (nums.length != 2)))
+        {
+            nums = StringUtils.splitByWholeSeparator(string, ByteRange.SPLITS[i++], 2);
+        }
+        if ((nums == null) || (nums.length != 2))
+        {
+            return null;
+        }
+        final Float min = DioriteMathUtils.asFloat(firstMinus ? ("-" + nums[0]) : nums[0]);
+        if (min == null)
+        {
+            return null;
+        }
+        final Float max = DioriteMathUtils.asFloat(nums[1]);
+        if ((max == null) || (min > max))
+        {
+            return null;
+        }
+        return new FloatRange(min, max);
     }
 }

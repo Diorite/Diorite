@@ -52,14 +52,34 @@ class CreeperImpl extends MonsterEntityImpl implements ICreeper
     public void initMetadata()
     {
         super.initMetadata();
-        this.getMetadata().add(new EntityMetadataIntEntry(META_KEY_CREEPER_STATE, 0));
-        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_CREEPER_POWERED, false));
-        this.getMetadata().add(new EntityMetadataBooleanEntry(META_KEY_CREEPER_IGNITED, false));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_CREEPER_STATE, 0));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_CREEPER_POWERED, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_CREEPER_IGNITED, false));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.CREEPER;
+    }
+
+    public boolean getPowered()
+    {
+        return this.metadata.getBoolean(META_KEY_CREEPER_POWERED);
+    }
+
+    public void setPowered(boolean powered)
+    {
+        this.metadata.setBoolean(META_KEY_CREEPER_POWERED, powered);
+    }
+
+    public boolean getIgnited()
+    {
+        return this.metadata.getBoolean(META_KEY_CREEPER_IGNITED);
+    }
+
+    public void setIgnited(boolean ignited)
+    {
+        this.metadata.setBoolean(META_KEY_CREEPER_IGNITED, ignited);
     }
 }

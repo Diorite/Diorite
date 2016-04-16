@@ -26,6 +26,7 @@ package org.diorite.utils.math;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -83,7 +84,7 @@ public class LongRange
      */
     public long getRandom()
     {
-        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandLong(this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandomLong(this.min, this.max);
     }
 
     /**
@@ -95,7 +96,7 @@ public class LongRange
      */
     public long getRandom(final Random random)
     {
-        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandLong(random, this.min, this.max);
+        return ((this.max - this.min) == 0) ? this.max : DioriteRandomUtils.getRandomLong(random, this.min, this.max);
     }
 
     /**
@@ -203,5 +204,47 @@ public class LongRange
     public static LongRange fixed(final long num)
     {
         return new LongRange(num, num);
+    }
+
+    /**
+     * Parses given string to range, string is valid range when contains 2 numbers (second greater than first) and splt char: <br>
+     * " - ", " : ", " ; ", ", ", " ", ",", ";", ":", "-"
+     *
+     * @param string string to parse.
+     *
+     * @return parsed range or null.
+     */
+    public static LongRange valueOf(String string)
+    {
+        if (string.isEmpty())
+        {
+            return null;
+        }
+        String[] nums = null;
+        int i = 0;
+        final boolean firstMinus = string.charAt(0) == '-';
+        if (firstMinus)
+        {
+            string = string.substring(1);
+        }
+        while ((i < ByteRange.SPLITS.length) && ((nums == null) || (nums.length != 2)))
+        {
+            nums = StringUtils.splitByWholeSeparator(string, ByteRange.SPLITS[i++], 2);
+        }
+        if ((nums == null) || (nums.length != 2))
+        {
+            return null;
+        }
+        final Long min = DioriteMathUtils.asLong(firstMinus ? ("-" + nums[0]) : nums[0]);
+        if (min == null)
+        {
+            return null;
+        }
+        final Long max = DioriteMathUtils.asLong(nums[1]);
+        if ((max == null) || (min > max))
+        {
+            return null;
+        }
+        return new LongRange(min, max);
     }
 }

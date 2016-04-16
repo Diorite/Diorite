@@ -193,7 +193,7 @@ public class Main
             // useless code, deal with it.
             for (int i = 0, k = DioriteRandomUtils.nextInt(50); i < k; i++)
             {
-                rect(DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(- 1, 1), DioriteRandomUtils.getRandDouble(0, 5));
+                rect(DioriteRandomUtils.getRandomDouble(- 1, 1), DioriteRandomUtils.getRandomDouble(- 1, 1), DioriteRandomUtils.getRandomDouble(- 1, 1), DioriteRandomUtils.getRandomDouble(- 1, 1), DioriteRandomUtils.getRandomDouble(0, 5));
             }
             glfwSwapBuffers(this.window); // swap the color buffers
 
