@@ -35,6 +35,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
@@ -98,17 +99,17 @@ public class HandshakeListener implements PacketHandshakingServerboundListener
                 {
                     LogManager.getLogger().debug("Failed to check connection throttle", t);
                 }
-//                if (packet.getProtocolVersion() > CURRENT_PROTOCOL)
-//                {
-//                    CoreMain.debug("Player fail to join, invalid protocol version (" + packet.getProtocolVersion() + " > " + CURRENT_PROTOCOL + ")");
-//                    this.disconnect(TextComponent.fromLegacyText("Outdated server, we are still on 1.9"));
-//                }
-//                else if (packet.getProtocolVersion() < CURRENT_PROTOCOL)
-//                {
-//                    CoreMain.debug("Player fail to join, invalid protocol version (" + packet.getProtocolVersion() + " < " + CURRENT_PROTOCOL + ")");
-//                    this.disconnect(TextComponent.fromLegacyText("Outdated client, we are on 1.9"));
-//                }
-//                else
+                if (packet.getProtocolVersion() > CURRENT_PROTOCOL)
+                {
+                    CoreMain.debug("Player fail to join, invalid protocol version (" + packet.getProtocolVersion() + " > " + CURRENT_PROTOCOL + ")");
+                    this.disconnect(TextComponent.fromLegacyText("Outdated server, we are still on 1.9"));
+                }
+                else if (packet.getProtocolVersion() < CURRENT_PROTOCOL)
+                {
+                    CoreMain.debug("Player fail to join, invalid protocol version (" + packet.getProtocolVersion() + " < " + CURRENT_PROTOCOL + ")");
+                    this.disconnect(TextComponent.fromLegacyText("Outdated client, we are on 1.9"));
+                }
+                else
             {
                 this.networkManager.setPacketListener(new LoginListener(this.core, this.networkManager, packet.getServerAddress() + ":" + packet.getServerPort()));
             }

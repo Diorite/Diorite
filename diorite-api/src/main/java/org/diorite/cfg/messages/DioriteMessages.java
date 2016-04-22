@@ -162,47 +162,31 @@ public final class DioriteMessages
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_PLUGIN_NOTFOUND = KEY_PLUGIN + SEP + "notfound";
+    public static final String MSG_PLUGIN_NOTFOUND               = KEY_PLUGIN + SEP + "notfound";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_PLUGIN_OVERVIEW = KEY_PLUGIN + SEP + "overview";
+    public static final String MSG_PLUGIN_OVERVIEW_BASE          = KEY_PLUGIN + SEP + "overview" + SEP + "base";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_PLUGIN_NAME     = KEY_PLUGIN + SEP + "name";
+    public static final String MSG_PLUGIN_OVERVIEW_DESCRIPTION   = KEY_PLUGIN + SEP + "overview" + SEP + "description";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_PLUGIN_AUTHOR   = KEY_PLUGIN + SEP + "author";
+    public static final String MSG_PLUGIN_OVERVIEW_WEBSITE       = KEY_PLUGIN + SEP + "overview" + SEP + "website";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_PLUGIN_VERSION  = KEY_PLUGIN + SEP + "version";
+    public static final String MSG_PLUGIN_OVERVIEW_NERDS_BASE    = KEY_PLUGIN + SEP + "overview" + SEP + "nerds" + SEP + "base";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_PLUGIN_DESC     = KEY_PLUGIN + SEP + "description";
+    public static final String MSG_PLUGIN_OVERVIEW_NERDS_CHILD   = KEY_PLUGIN + SEP + "overview" + SEP + "nerds" + SEP + "child";
     /**
      * Helper variable to prevent a typo.
      */
-    public static final String MSG_PLUGIN_WEBSITE  = KEY_PLUGIN + SEP + "website";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_PLUGIN_STATS    = KEY_PLUGIN + SEP + "stats";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_PLUGIN_PARENT   = KEY_PLUGIN + SEP + "parent";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_PLUGIN_LOADED   = KEY_PLUGIN + SEP + "loaded";
-    /**
-     * Helper variable to prevent a typo.
-     */
-    public static final String MSG_PLUGIN_LOADER   = KEY_PLUGIN + SEP + "loader";
+    public static final String MSG_PLUGIN_OVERVIEW_NERDS_REGULAR = KEY_PLUGIN + SEP + "overview" + SEP + "nerds" + SEP + "regular";
 
 
     /**

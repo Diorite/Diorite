@@ -22,16 +22,20 @@ save:
   done: "&7Wszystkie światy zapisane!"
 plugin:
   notfound: "&cNie znaleziono pluginu."
-  overview: "&7Informacje o pluginie:"
-  name: "  &7Nazwa: &3$<plugin.name>"
-  author: "  &7Autor: &3$<plugin.author>"
-  version: "  &7Wersja: &3$<plugin.version>"
-  description: "  &7Opis: &3$<plugin.description>"
-  website: "  &7Witryna wsparcia: &3$<plugin.website>"
-  stats: "&7Statystyki dla nerdów:"
-  parent: "  &7Plugin rodzic: &3$<plugin.parent>"
-  loaded: "  &7Załadowane klasy: &3$<plugin.loaded>"
-  loader: "  &7Plugin loader: &3$<plugin.loader>"
+  overview:
+    base: |2-
+      &7Informacje o pluginie:
+        &7Nazwa: &3$<plugin.name>
+        &7Autor: &3$<plugin.author>
+        &7Wersja: &3$<plugin.version>
+    description: "  &7Opis: &3$<plugin.description>"
+    website: "  &7Witryna wsparcia: &3$<plugin.website>"
+    nerds:
+      base: |2-
+        &7Statystyki dla nerdów:
+          &7Plugin loader: &3$<plugin.loader>
+      child: "  &7Nadrzędny plugin: &3$<plugin.parent>"
+      regular: "  &7Załadowane klasy: &3$<plugin.loaded>"
 time:
   current: "&7Aktualny czas w &3$<world.name> &7to &3$<world.time>"
   changed: "&7Czas został zmieniony na &3$<world.time> &7w &3$<world.name>"

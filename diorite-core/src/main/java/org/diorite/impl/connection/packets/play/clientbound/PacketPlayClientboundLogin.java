@@ -87,7 +87,7 @@ public class PacketPlayClientboundLogin extends PacketPlayClientbound
         final int gmFlags = data.readUnsignedByte();
         this.hardcore = (gmFlags & 8) == 8;
         this.gameMode = GameMode.getByEnumOrdinal(gmFlags & - 9);
-        this.dimension = Dimension.getByDimensionId(data.readByte());
+        this.dimension = Dimension.getByDimensionId(data.readInt());
         this.difficulty = Difficulty.getByLevel(data.readUnsignedByte());
         this.maxPlayers = data.readUnsignedByte();
         this.worldType = WorldType.getType(data.readText(MAX_WORLD_NAME_SIZE));
@@ -104,7 +104,7 @@ public class PacketPlayClientboundLogin extends PacketPlayClientbound
             gmFlags |= 8;
         }
         data.writeByte(gmFlags);
-        data.writeByte(this.dimension.getDimensionId());
+        data.writeInt(this.dimension.getDimensionId());
         data.writeByte(this.difficulty.getLevel());
         data.writeByte(this.maxPlayers);
         data.writeText(this.worldType.getName());

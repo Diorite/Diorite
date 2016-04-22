@@ -314,7 +314,6 @@ public abstract class CoreNetworkManager extends SimpleChannelInboundHandler<Pac
             this.disconnectMessage = new TranslatableComponent("disconnect.genericReason", "Internal Exception: " + throwable);
             this.handleClosed();
         }
-        //throwable.printStackTrace();
     }
 
     @Override

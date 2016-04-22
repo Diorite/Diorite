@@ -44,9 +44,9 @@ public class PacketPlayClientboundNamedEntitySpawn extends PacketPlayClientbound
 {
     private int                              entityId; // ~5 bytes
     private UUID                             uuid; // 16 bytes
-    private int                              x; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int                              y; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int                              z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private double                           x; // 4 bytes, WARNING! This is 'fixed-point' number
+    private double                           y; // 4 bytes, WARNING! This is 'fixed-point' number
+    private double                           z; // 4 bytes, WARNING! This is 'fixed-point' number
     private byte                             yaw; // 1 byte
     private byte                             pitch; // 1 byte
     private Iterable<EntityMetadataEntry<?>> metadata; // ~not more than 128 bytes
@@ -75,9 +75,9 @@ public class PacketPlayClientboundNamedEntitySpawn extends PacketPlayClientbound
     {
         this.entityId = data.readVarInt();
         this.uuid = data.readUUID();
-        this.x = data.readInt();
-        this.y = data.readInt();
-        this.z = data.readInt();
+        this.x = data.readDouble();
+        this.y = data.readDouble();
+        this.z = data.readDouble();
         this.yaw = data.readByte();
         this.pitch = data.readByte();
         this.metadata = data.readEntityMetadata();
@@ -88,9 +88,9 @@ public class PacketPlayClientboundNamedEntitySpawn extends PacketPlayClientbound
     {
         data.writeVarInt(this.entityId);
         data.writeUUID(this.uuid);
-        data.writeInt(this.x);
-        data.writeInt(this.y);
-        data.writeInt(this.z);
+        data.writeDouble(this.x);
+        data.writeDouble(this.y);
+        data.writeDouble(this.z);
         data.writeByte(this.yaw);
         data.writeByte(this.pitch);
         data.writeEntityMetadata(this.metadata);
@@ -122,32 +122,32 @@ public class PacketPlayClientboundNamedEntitySpawn extends PacketPlayClientbound
         this.uuid = uuid;
     }
 
-    public int getX()
+    public double getX()
     {
         return this.x;
     }
 
-    public void setX(final int x)
+    public void setX(final double x)
     {
         this.x = x;
     }
 
-    public int getY()
+    public double getY()
     {
         return this.y;
     }
 
-    public void setY(final int y)
+    public void setY(final double y)
     {
         this.y = y;
     }
 
-    public int getZ()
+    public double getZ()
     {
         return this.z;
     }
 
-    public void setZ(final int z)
+    public void setZ(final double z)
     {
         this.z = z;
     }

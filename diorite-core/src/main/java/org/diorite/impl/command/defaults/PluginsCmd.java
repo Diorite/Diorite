@@ -43,14 +43,13 @@ public class PluginsCmd extends SystemCommandImpl
     {
         super("plugins", Pattern.compile("(pl(ugin(s|)|))", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setDescription("Displays plugin list");
-        this.setUsage("plugins <plugin>");
+        this.setUsage("plugins [plugin]");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
             // TODO check permissions
             if (args.length() == 0)
             {
                 final Collection<BasePlugin> plugins = Diorite.getCore().getPluginManager().getPlugins();
-                String msg = "&7Plugins (&3" + plugins.size() + "&7): ";
-                //msg += plugins.stream().map(pl -> pl.isEnabled() ? (pl.isCoreMod() ? (ChatColor.DARK_AQUA + pl.getName()) : (ChatColor.GREEN + pl.getName())) : (pl.isCoreMod() ? (ChatColor.DARK_RED + pl.getName()) : (ChatColor.RED + pl.getName()))).collect(Collectors.joining("&7, "));
+                String msg = "&7Plugins (&3" + plugins.size() + "&7): "; // TODO
                 msg += plugins.stream().map(pl -> pl.isEnabled() ? (pl.isCoreMod() ? (ChatColor.DARK_AQUA + pl.getName()) : (ChatColor.GREEN + pl.getName())) : (pl.isCoreMod() ? (ChatColor.DARK_RED + pl.getName()) : (ChatColor.RED + pl.getName()))).collect(Collectors.joining("&7, "));
 
                 sender.sendSimpleColoredMessage(msg);
@@ -64,41 +63,27 @@ public class PluginsCmd extends SystemCommandImpl
                     return;
                 }
 
-                DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW, sender, Message.MessageData.e("plugin", pl));
-                //sender.sendSimpleColoredMessage("  &7Name: &3" + pl.getName());
-                DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_NAME, sender, Message.MessageData.e("plugin", pl));
-                //sender.sendSimpleColoredMessage("  &7Author: &3" + pl.getAuthor());
-                DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_AUTHOR, sender, Message.MessageData.e("plugin", pl));
-                //sender.sendSimpleColoredMessage("  &7Version: &3" + pl.getVersion());
-                DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_VERSION, sender, Message.MessageData.e("plugin", pl));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_BASE, sender, Message.MessageData.e("plugin", pl));
                 if (pl.getDescription() != null)
                 {
-                    //sender.sendSimpleColoredMessage("  &7Description: &3" + pl.getDescription());
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_DESC, sender, Message.MessageData.e("plugin", pl));
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_DESCRIPTION, sender, Message.MessageData.e("plugin", pl));
                 }
                 if (pl.getWebsite() != null)
                 {
-                    //sender.sendSimpleColoredMessage("  &7Support website: &3" + pl.getWebsite());
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_WEBSITE, sender, Message.MessageData.e("plugin", pl));
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_WEBSITE, sender, Message.MessageData.e("plugin", pl));
                 }
-                //sender.sendSimpleColoredMessage("&7Stats for nerds:");
-                DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_STATS, sender, Message.MessageData.e("plugin", pl));
+                DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_NERDS_BASE, sender, Message.MessageData.e("plugin", pl));
                 if (pl instanceof ChildPlugin)
                 {
-                    //sender.sendSimpleColoredMessage("  &7Parent plugin: &3" + ((ChildPlugin) pl).getParent().getName());
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_PARENT, sender, Message.MessageData.e("plugin", pl));
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_NERDS_CHILD, sender, Message.MessageData.e("plugin", pl));
                 }
                 else
                 {
-                    //sender.sendSimpleColoredMessage("  &7Loaded classes: &3" + ((DioritePlugin) pl).getClassLoader().loadedClasses());
-                    DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_LOADED, sender, Message.MessageData.e("plugin", pl));
+                    DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_NERDS_REGULAR, sender, Message.MessageData.e("plugin", pl));
                 }
-                //sender.sendSimpleColoredMessage("  &7Plugin loader: &3" + pl.getPluginLoader().getClass().getSimpleName());
-                DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_LOADER, sender, Message.MessageData.e("plugin", pl));
             }
             else
             {
-                //sender.sendMessage(ChatColor.RED + "Usage: /plugins [plugin]");
                 DioriteMessages.sendMessage(DioriteMessages.MSG_CMD_CORRECT, sender, Message.MessageData.e("command", command));
             }
         });

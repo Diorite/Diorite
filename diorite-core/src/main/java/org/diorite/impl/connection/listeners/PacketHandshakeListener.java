@@ -33,7 +33,7 @@ public interface PacketHandshakeListener extends PacketListener
      *
      * @see #getCurrentProtocolVersion()
      */
-    int CURRENT_PROTOCOL = 86;//76;
+    int CURRENT_PROTOCOL = 109;
 
     /**
      * This method returns current protocol version.
