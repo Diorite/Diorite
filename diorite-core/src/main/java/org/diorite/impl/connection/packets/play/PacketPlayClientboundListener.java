@@ -27,6 +27,7 @@ package org.diorite.impl.connection.packets.play;
 import org.diorite.impl.connection.listeners.PacketPlayListener;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCamera;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChat;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChunkUnload;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCloseWindow;
@@ -35,6 +36,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundDisconnect;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntity;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityDestroy;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityHeadRotation;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityLook;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityMetadata;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityTeleport;
@@ -56,6 +58,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSoundEffect;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntityExperienceOrb;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntityLiving;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnPosition;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTabComplete;
@@ -153,4 +156,10 @@ public interface PacketPlayClientboundListener extends PacketPlayListener
     void handle(PacketPlayClientboundScoreboardDisplayObjective packet);
 
     void handle(PacketPlayClientboundUpdateTime packet);
+
+    void handle(PacketPlayClientboundSpawnEntityExperienceOrb packet);
+
+    void handle(PacketPlayClientboundCamera packet);
+
+    void handle(PacketPlayClientboundEntityHeadRotation packet);
 }

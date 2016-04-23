@@ -42,15 +42,15 @@ import org.diorite.impl.entity.EntityObject;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IEntityFactory;
 
-@PacketClass(id = 0x00, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 50)
+@PacketClass(id = 0x00, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 58)
 public class PacketPlayClientboundSpawnEntity extends PacketPlayClientbound
 {
     private int    entityId; // ~5 bytes
     private UUID   entityUUID; // 16 bytes
     private byte   entityTypeId; // 1 byte
-    private double x; // 4 bytes, WARNING! This is 'fixed-point' number
-    private double y; // 4 bytes, WARNING! This is 'fixed-point' number
-    private double z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private double x; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double y; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double z; // 8 bytes, WARNING! This is 'fixed-point' number
     private byte   pitch; // 1 byte
     private byte   yaw; // 1 byte
     private int    objectData; // 4 bytes
@@ -74,9 +74,12 @@ public class PacketPlayClientboundSpawnEntity extends PacketPlayClientbound
 //        {
 //            throw new IllegalArgumentException();
 //        }
-        this.x = (int) (entity.getX() * 32);
-        this.y = (int) (entity.getY() * 32);
-        this.z = (int) (entity.getZ() * 32);
+        //this.x = (int) (entity.getX() * 32);
+        //this.y = (int) (entity.getY() * 32);
+        //this.z = (int) (entity.getZ() * 32);
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.z = entity.getZ();
         this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
         this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);
 

@@ -35,20 +35,20 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 
-@PacketClass(id = 0x25, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 9)
+@PacketClass(id = 0x25, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 12)
 public class PacketPlayClientboundRelEntityMove extends PacketPlayClientbound
 {
     private int     entityId; // ~5 bytes
-    private byte    deltaX; // 1 byte
-    private byte    deltaY; // 1 byte
-    private byte    deltaZ; // 1 byte
+    private short   deltaX; // 2 bytes
+    private short   deltaY; // 2 bytes
+    private short   deltaZ; // 2 bytes
     private boolean onGround; // 1 byte
 
     public PacketPlayClientboundRelEntityMove()
     {
     }
 
-    public PacketPlayClientboundRelEntityMove(final int entityId, final byte deltaX, final byte deltaY, final byte deltaZ, final boolean onGround)
+    public PacketPlayClientboundRelEntityMove(final int entityId, final short deltaX, final short deltaY, final short deltaZ, final boolean onGround)
     {
         this.entityId = entityId;
         this.deltaX = deltaX;
@@ -61,9 +61,9 @@ public class PacketPlayClientboundRelEntityMove extends PacketPlayClientbound
     public PacketPlayClientboundRelEntityMove(final int entityId, final double deltaX, final double deltaY, final double deltaZ, final boolean onGround)
     {
         this.entityId = entityId;
-        this.deltaX = (byte) (deltaX * 32);
-        this.deltaY = (byte) (deltaY * 32);
-        this.deltaZ = (byte) (deltaZ * 32);
+        this.deltaX = (short) (deltaX * 32);
+        this.deltaY = (short) (deltaY * 32);
+        this.deltaZ = (short) (deltaZ * 32);
         this.onGround = onGround;
     }
 
@@ -71,9 +71,9 @@ public class PacketPlayClientboundRelEntityMove extends PacketPlayClientbound
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.entityId = data.readVarInt();
-        this.deltaX = data.readByte();
-        this.deltaY = data.readByte();
-        this.deltaZ = data.readByte();
+        this.deltaX = data.readShort();
+        this.deltaY = data.readShort();
+        this.deltaZ = data.readShort();
         this.onGround = data.readBoolean();
     }
 
@@ -81,9 +81,9 @@ public class PacketPlayClientboundRelEntityMove extends PacketPlayClientbound
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.entityId);
-        data.writeByte(this.deltaX);
-        data.writeByte(this.deltaY);
-        data.writeByte(this.deltaZ);
+        data.writeShort(this.deltaX);
+        data.writeShort(this.deltaY);
+        data.writeShort(this.deltaZ);
         data.writeBoolean(this.onGround);
     }
 
@@ -103,32 +103,32 @@ public class PacketPlayClientboundRelEntityMove extends PacketPlayClientbound
         this.entityId = entityId;
     }
 
-    public byte getDeltaX()
+    public short getDeltaX()
     {
         return this.deltaX;
     }
 
-    public void setDeltaX(final byte deltaX)
+    public void setDeltaX(final short deltaX)
     {
         this.deltaX = deltaX;
     }
 
-    public byte getDeltaY()
+    public short getDeltaY()
     {
         return this.deltaY;
     }
 
-    public void setDeltaY(final byte deltaY)
+    public void setDeltaY(final short deltaY)
     {
         this.deltaY = deltaY;
     }
 
-    public byte getDeltaZ()
+    public short getDeltaZ()
     {
         return this.deltaZ;
     }
 
-    public void setDeltaZ(final byte deltaZ)
+    public void setDeltaZ(final short deltaZ)
     {
         this.deltaZ = deltaZ;
     }

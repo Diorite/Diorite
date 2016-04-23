@@ -48,9 +48,9 @@ public class PacketPlayClientboundSpawnEntityLiving extends PacketPlayClientboun
     private int                              entityId; // ~5 bytes
     private UUID                             entityUUID; // 16 bytes
     private byte                             entityTypeId; // 1 byte
-    private int                              x; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int                              y; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int                              z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private double                           x; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double                           y; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double                           z; // 8 bytes, WARNING! This is 'fixed-point' number
     private byte                             yaw; // 1 byte
     private byte                             pitch; // 1 byte
     private byte                             headPitch; // 1 byte
@@ -82,7 +82,7 @@ public class PacketPlayClientboundSpawnEntityLiving extends PacketPlayClientboun
         this.movX = (short) (vel.x * 8000); // IDK why 8000
         this.movY = (short) (vel.y * 8000);
         this.movZ = (short) (vel.z * 8000);
-        // TODO pasre metadata from entity, or get it if possible
+        // TODO parse metadata from entity, or get it if possible
         this.metadata = entity.getMetadata().getEntries();
     }
 
@@ -92,9 +92,9 @@ public class PacketPlayClientboundSpawnEntityLiving extends PacketPlayClientboun
         this.entityId = data.readVarInt();
         this.entityUUID = data.readUUID();
         this.entityTypeId = data.readByte();
-        this.x = data.readInt();
-        this.y = data.readInt();
-        this.z = data.readInt();
+        this.x = data.readDouble();
+        this.y = data.readDouble();
+        this.z = data.readDouble();
         this.yaw = data.readByte();
         this.pitch = data.readByte();
         this.headPitch = data.readByte();
@@ -111,9 +111,9 @@ public class PacketPlayClientboundSpawnEntityLiving extends PacketPlayClientboun
         data.writeVarInt(this.entityId);
         data.writeUUID(this.entityUUID);
         data.writeByte(this.entityTypeId);
-        data.writeInt(this.x);
-        data.writeInt(this.y);
-        data.writeInt(this.z);
+        data.writeDouble(this.x);
+        data.writeDouble(this.y);
+        data.writeDouble(this.z);
         data.writeByte(this.yaw);
         data.writeByte(this.pitch);
         data.writeByte(this.headPitch);
@@ -149,32 +149,32 @@ public class PacketPlayClientboundSpawnEntityLiving extends PacketPlayClientboun
         this.entityTypeId = entityTypeId;
     }
 
-    public int getX()
+    public double getX()
     {
         return this.x;
     }
 
-    public void setX(final int x)
+    public void setX(final double x)
     {
         this.x = x;
     }
 
-    public int getY()
+    public double getY()
     {
         return this.y;
     }
 
-    public void setY(final int y)
+    public void setY(final double y)
     {
         this.y = y;
     }
 
-    public int getZ()
+    public double getZ()
     {
         return this.z;
     }
 
-    public void setZ(final int z)
+    public void setZ(final double z)
     {
         this.z = z;
     }

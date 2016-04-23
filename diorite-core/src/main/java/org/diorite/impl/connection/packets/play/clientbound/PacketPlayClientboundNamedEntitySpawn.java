@@ -60,9 +60,9 @@ public class PacketPlayClientboundNamedEntitySpawn extends PacketPlayClientbound
     {
         this.entityId = entity.getId();
         this.uuid = entity.getUniqueID();
-        this.x = (int) (entity.getX() * 32);
-        this.y = (int) (entity.getY() * 32);
-        this.z = (int) (entity.getZ() * 32);
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.z = entity.getZ();
         this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);
         this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
 

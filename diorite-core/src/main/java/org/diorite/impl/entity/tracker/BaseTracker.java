@@ -51,7 +51,7 @@ public abstract class BaseTracker<T extends IEntity>
     protected       double zLoc;
     protected final float  yaw;
     protected final float  pitch;
-    protected final float  headRot;
+    protected       float  headRot;
     protected       float  velX;
     protected       float  velY;
     protected       float  velZ;
@@ -134,7 +134,7 @@ public abstract class BaseTracker<T extends IEntity>
             this.tracked.forEach(p -> p.removeEntityFromView(this));
         }
 
-//        if (this.isMoving && ! this.tracked.isEmpty()) // TODO: rethink
+        //if (this.isMoving && ! this.tracked.isEmpty()) // TODO: rethink
         {
             if ((deltaX < 4) && (deltaX > - 4) && (deltaY < 4) && (deltaY > - 4) && (deltaZ < 4) && (deltaZ > - 4))
             {
@@ -145,6 +145,12 @@ public abstract class BaseTracker<T extends IEntity>
                 this.sendToAllExceptOwn(new PacketPlayClientboundEntityTeleport(this.tracker));
             }
         }
+
+        //if (this.tracker.getHeadPitch() != this.headRot)
+        //{
+        //    this.headRot = this.tracker.getHeadPitch();
+        //    this.sendToAllExceptOwn(new PacketPlayClientboundEntityHeadRotation(this.id, this.headRot));
+        //}
 
         // meta update
         final Collection<EntityMetadataEntry<?>> meta = this.tracker.getMetadata().popOutdatedEntries();

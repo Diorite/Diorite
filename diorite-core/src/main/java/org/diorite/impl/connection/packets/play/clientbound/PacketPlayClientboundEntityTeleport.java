@@ -36,13 +36,13 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.impl.entity.IEntity;
 
-@PacketClass(id = 0x4A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 20)
+@PacketClass(id = 0x4A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 32)
 public class PacketPlayClientboundEntityTeleport extends PacketPlayClientbound
 {
     private int     entityId; // ~5 bytes
-    private int     x; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int     y; // 4 bytes, WARNING! This is 'fixed-point' number
-    private int     z; // 4 bytes, WARNING! This is 'fixed-point' number
+    private double  x; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double  y; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double  z; // 8 bytes, WARNING! This is 'fixed-point' number
     private byte    yaw; // 1 byte
     private byte    pitch; // 1 byte
     private boolean onGround; // 1 byte
@@ -51,7 +51,7 @@ public class PacketPlayClientboundEntityTeleport extends PacketPlayClientbound
     {
     }
 
-    public PacketPlayClientboundEntityTeleport(final int entityId, final int x, final int y, final int z, final byte yaw, final byte pitch, final boolean onGround)
+    public PacketPlayClientboundEntityTeleport(final int entityId, final double x, final double y, final double z, final byte yaw, final byte pitch, final boolean onGround)
     {
         this.entityId = entityId;
         this.x = x;
@@ -66,9 +66,12 @@ public class PacketPlayClientboundEntityTeleport extends PacketPlayClientbound
     public PacketPlayClientboundEntityTeleport(final IEntity entity)
     {
         this.entityId = entity.getId();
-        this.x = (int) (entity.getX() * 32);
-        this.y = (int) (entity.getY() * 32);
-        this.z = (int) (entity.getZ() * 32);
+        //this.x = (int) (entity.getX() * 32);
+        //this.y = (int) (entity.getY() * 32);
+        //this.z = (int) (entity.getZ() * 32);
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.z = entity.getZ();
         this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);
         this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
         this.onGround = entity.isOnGround();
@@ -78,9 +81,9 @@ public class PacketPlayClientboundEntityTeleport extends PacketPlayClientbound
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.entityId = data.readVarInt();
-        this.x = data.readInt();
-        this.y = data.readInt();
-        this.z = data.readInt();
+        this.x = data.readDouble();
+        this.y = data.readDouble();
+        this.z = data.readDouble();
         this.yaw = data.readByte();
         this.pitch = data.readByte();
         this.onGround = data.readBoolean();
@@ -90,9 +93,9 @@ public class PacketPlayClientboundEntityTeleport extends PacketPlayClientbound
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.entityId);
-        data.writeInt(this.x);
-        data.writeInt(this.y);
-        data.writeInt(this.z);
+        data.writeDouble(this.x);
+        data.writeDouble(this.y);
+        data.writeDouble(this.z);
         data.writeByte(this.yaw);
         data.writeByte(this.pitch);
         data.writeBoolean(this.onGround);
@@ -114,32 +117,32 @@ public class PacketPlayClientboundEntityTeleport extends PacketPlayClientbound
         this.entityId = entityId;
     }
 
-    public int getX()
+    public double getX()
     {
         return this.x;
     }
 
-    public void setX(final int x)
+    public void setX(final double x)
     {
         this.x = x;
     }
 
-    public int getY()
+    public double getY()
     {
         return this.y;
     }
 
-    public void setY(final int y)
+    public void setY(final double y)
     {
         this.y = y;
     }
 
-    public int getZ()
+    public double getZ()
     {
         return this.z;
     }
 
-    public void setZ(final int z)
+    public void setZ(final double z)
     {
         this.z = z;
     }
