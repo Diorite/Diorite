@@ -212,7 +212,7 @@ public class DevCmd extends SystemCommandImpl
                             Integer id = args.asInt(4);
                             if (id == null)
                             {
-                                id = Particle.getByParticleName(args.asString(4)).getParticleId();
+                                id = Particle.getByParticleName(args.asString(4)).ordinal();
                             }
                             entity.getMetadata().setInt(IAreaEffectCloud.META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID, id);
                         }

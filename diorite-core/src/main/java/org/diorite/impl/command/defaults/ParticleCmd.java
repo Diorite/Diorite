@@ -51,7 +51,7 @@ public class ParticleCmd extends SystemCommandImpl
 
             final String particles = args.asString(0);
             final Integer particleID = DioriteMathUtils.asInt(particles);
-            final Particle particle = (particleID == null) ? Particle.getByParticleName(particles.toUpperCase()) : Particle.getByParticleId(particleID);
+            final Particle particle = (particleID == null) ? Particle.getByParticleName(particles.toUpperCase()) : Particle.getByEnumOrdinal(particleID);
             if (particle == null)
             {
                 sender.sendSimpleColoredMessage("&cSorry, this particle isn't found (" + particles + ")");

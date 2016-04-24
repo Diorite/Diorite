@@ -48,9 +48,9 @@ public class PacketPlayClientboundSpawnEntity extends PacketPlayClientbound
     private int    entityId; // ~5 bytes
     private UUID   entityUUID; // 16 bytes
     private byte   entityTypeId; // 1 byte
-    private double x; // 8 bytes, WARNING! This is 'fixed-point' number
-    private double y; // 8 bytes, WARNING! This is 'fixed-point' number
-    private double z; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double x; // 8 bytes
+    private double y; // 8 bytes
+    private double z; // 8 bytes
     private byte   pitch; // 1 byte
     private byte   yaw; // 1 byte
     private int    objectData; // 4 bytes
@@ -74,9 +74,6 @@ public class PacketPlayClientboundSpawnEntity extends PacketPlayClientbound
 //        {
 //            throw new IllegalArgumentException();
 //        }
-        //this.x = (int) (entity.getX() * 32);
-        //this.y = (int) (entity.getY() * 32);
-        //this.z = (int) (entity.getZ() * 32);
         this.x = entity.getX();
         this.y = entity.getY();
         this.z = entity.getZ();

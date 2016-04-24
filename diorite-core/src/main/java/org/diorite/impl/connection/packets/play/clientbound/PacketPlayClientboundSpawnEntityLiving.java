@@ -48,9 +48,9 @@ public class PacketPlayClientboundSpawnEntityLiving extends PacketPlayClientboun
     private int                              entityId; // ~5 bytes
     private UUID                             entityUUID; // 16 bytes
     private byte                             entityTypeId; // 1 byte
-    private double                           x; // 8 bytes, WARNING! This is 'fixed-point' number
-    private double                           y; // 8 bytes, WARNING! This is 'fixed-point' number
-    private double                           z; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double                           x; // 8 bytes
+    private double                           y; // 8 bytes
+    private double                           z; // 8 bytes
     private byte                             yaw; // 1 byte
     private byte                             pitch; // 1 byte
     private byte                             headPitch; // 1 byte
@@ -71,9 +71,9 @@ public class PacketPlayClientboundSpawnEntityLiving extends PacketPlayClientboun
         this.entityId = entity.getId();
         this.entityUUID = entity.getUniqueID();
         this.entityTypeId = (byte) factory.getEntityNetworkID(entity.getType());
-        this.x = (int) (entity.getX() * 32);
-        this.y = (int) (entity.getY() * 32);
-        this.z = (int) (entity.getZ() * 32);
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.z = entity.getZ();
         this.yaw = (byte) ((entity.getYaw() * 256.0F) / 360.0F);
         this.pitch = (byte) ((entity.getPitch() * 256.0F) / 360.0F);
         this.headPitch = (byte) ((entity.getHeadPitch() * 256.0F) / 360.0F);

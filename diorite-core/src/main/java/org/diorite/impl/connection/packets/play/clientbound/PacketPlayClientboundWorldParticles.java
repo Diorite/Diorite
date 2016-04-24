@@ -183,7 +183,7 @@ public class PacketPlayClientboundWorldParticles extends PacketPlayClientbound
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.particle = Particle.getByParticleId(data.readInt());
+        this.particle = Particle.getByEnumOrdinal(data.readInt());
         this.longDistance = data.readBoolean();
         this.x = data.readFloat();
         this.y = data.readFloat();

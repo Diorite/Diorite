@@ -521,7 +521,7 @@ public class Sound extends ASimpleEnum<Sound>
     /**
      * Get one of Sound entry by its minecraft id.
      *
-     * @param name id of entry.
+     * @param name name of entry.
      *
      * @return one of entry or null.
      */

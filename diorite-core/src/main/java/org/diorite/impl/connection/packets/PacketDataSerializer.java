@@ -242,7 +242,6 @@ public class PacketDataSerializer extends ByteBuf
     public void writeEnum(final Enum<?> oenum)
     {
         this.writeVarInt(oenum.ordinal());
-        this.readInt();
     }
 
     public void writeGameProfile(final GameProfileImpl gameProfile)

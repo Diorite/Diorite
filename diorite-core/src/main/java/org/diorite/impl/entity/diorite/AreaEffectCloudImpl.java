@@ -94,7 +94,7 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
         this.metadata.add(new EntityMetadataFloatEntry(META_KEY_AREA_EFFECT_CLOUD_RADIUS, 3));
         this.metadata.add(new EntityMetadataIntEntry(META_KEY_AREA_EFFECT_CLOUD_COLOR, 0));
         this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_AREA_EFFECT_CLOUD_IS_POINT, false));
-        this.metadata.add(new EntityMetadataIntEntry(META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID, Particle.SPELL_MOB.getParticleId()));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID, Particle.SPELL_MOB.ordinal()));
     }
 
     @Override
@@ -282,13 +282,13 @@ class AreaEffectCloudImpl extends EntityImpl implements IAreaEffectCloud
     @Override
     public Particle getParticle()
     {
-        return Particle.getByParticleId(this.metadata.getInt(META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID));
+        return Particle.getByEnumOrdinal(this.metadata.getInt(META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID));
     }
 
     @Override
     public void setParticle(final Particle particle)
     {
-        this.metadata.setInt(META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID, particle.getParticleId());
+        this.metadata.setInt(META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID, particle.ordinal());
     }
 
     @Override

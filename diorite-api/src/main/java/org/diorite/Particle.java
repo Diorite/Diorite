@@ -33,9 +33,7 @@ import org.diorite.utils.SimpleEnum.ASimpleEnum;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
-@SuppressWarnings("MagicNumber")
 public class Particle extends ASimpleEnum<Particle>
 {
     static
@@ -43,75 +41,67 @@ public class Particle extends ASimpleEnum<Particle>
         init(Particle.class, 46);
     }
 
-    public static final Particle EXPLOSION_NORMAL  = new Particle("EXPLOSION_NORMAL", "explode", 0);
-    public static final Particle EXPLOSION_LARGE   = new Particle("EXPLOSION_LARGE", "largeexplode", 1);
-    public static final Particle EXPLOSION_HUGE    = new Particle("EXPLOSION_HUGE", "hugeexplosion", 2);
-    public static final Particle FIREWORKS_SPARK   = new Particle("FIREWORKS_SPARK", "fireworksSpark", 3);
-    public static final Particle WATER_BUBBLE      = new Particle("WATER_BUBBLE", "bubble", 4);
-    public static final Particle WATER_SPLASH      = new Particle("WATER_SPLASH", "splash", 5);
-    public static final Particle WATER_WAKE        = new Particle("WATER_WAKE", "wake", 6);
-    public static final Particle SUSPENDED         = new Particle("SUSPENDED", "suspended", 7);
-    public static final Particle SUSPENDED_DEPTH   = new Particle("SUSPENDED_DEPTH", "depthsuspend", 8);
-    public static final Particle CRIT              = new Particle("CRIT", "crit", 9);
-    public static final Particle CRIT_MAGIC        = new Particle("CRIT_MAGIC", "magicCrit", 10);
-    public static final Particle SMOKE_NORMAL      = new Particle("SMOKE_NORMAL", "smoke", 11);
-    public static final Particle SMOKE_LARGE       = new Particle("SMOKE_LARGE", "largesmoke", 12);
-    public static final Particle SPELL             = new Particle("SPELL", "spell", 13);
-    public static final Particle SPELL_INSTANT     = new Particle("SPELL_INSTANT", "instantSpell", 14);
-    public static final Particle SPELL_MOB         = new Particle("SPELL_MOB", "mobSpell", 15);
-    public static final Particle SPELL_MOB_AMBIENT = new Particle("SPELL_MOB_AMBIENT", "mobSpellAmbient", 16);
-    public static final Particle SPELL_WITCH       = new Particle("SPELL_WITCH", "witchMagic", 17);
-    public static final Particle DRIP_WATER        = new Particle("DRIP_WATER", "dripWater", 18);
-    public static final Particle DRIP_LAVA         = new Particle("DRIP_LAVA", "dripLava", 19);
-    public static final Particle VILLAGER_ANGRY    = new Particle("VILLAGER_ANGRY", "angryVillager", 20);
-    public static final Particle VILLAGER_HAPPY    = new Particle("VILLAGER_HAPPY", "happyVillager", 21);
-    public static final Particle TOWN_AURA         = new Particle("TOWN_AURA", "townaura", 22);
-    public static final Particle NOTE              = new Particle("NOTE", "note", 23);
-    public static final Particle PORTAL            = new Particle("PORTAL", "portal", 24);
-    public static final Particle ENCHANTMENT_TABLE = new Particle("ENCHANTMENT_TABLE", "enchantmenttable", 25);
-    public static final Particle FLAME             = new Particle("FLAME", "flame", 26);
-    public static final Particle LAVA              = new Particle("LAVA", "lava", 27);
-    public static final Particle FOOTSTEP          = new Particle("FOOTSTEP", "footstep", 28);
-    public static final Particle CLOUD             = new Particle("CLOUD", "cloud", 29);
-    public static final Particle REDSTONE          = new Particle("REDSTONE", "reddust", 30);
-    public static final Particle SNOWBALL          = new Particle("SNOWBALL", "snowballpoof", 31);
-    public static final Particle SNOW_SHOVEL       = new Particle("SNOW_SHOVEL", "snowshovel", 32);
-    public static final Particle SLIME             = new Particle("SLIME", "slime", 33);
-    public static final Particle HEART             = new Particle("HEART", "heart", 34);
-    public static final Particle BARRIER           = new Particle("BARRIER", "barrier", 35);
-    public static final Particle ITEM_CRACK        = new Particle("ITEM_CRACK", "iconcrack_", 36, 2);
-    public static final Particle BLOCK_CRACK       = new Particle("BLOCK_CRACK", "blockcrack_", 37, 1);
-    public static final Particle BLOCK_DUST        = new Particle("BLOCK_DUST", "blockdust_", 38, 1);
-    public static final Particle WATER_DROP        = new Particle("WATER_DROP", "droplet", 39);
-    public static final Particle ITEM_TAKE         = new Particle("ITEM_TAKE", "take", 40);
-    public static final Particle MOB_APPEARANCE    = new Particle("MOB_APPEARANCE", "mobappearance", 41);
-    public static final Particle DRAGON_BREATH     = new Particle("DRAGON_BREATH", "dragonbreath", 42);
-    public static final Particle END_ROD           = new Particle("END_ROD", "endRod", 43);
-    public static final Particle DAMAGE_INDICATOR  = new Particle("DAMAGE_INDICATOR", "damageIndicator", 44);
-    public static final Particle SWEEP_ATTACK      = new Particle("SWEEP_ATTACK", "sweepAttack", 45);
+    public static final Particle EXPLOSION_NORMAL  = new Particle("EXPLOSION_NORMAL", "explode");
+    public static final Particle EXPLOSION_LARGE   = new Particle("EXPLOSION_LARGE", "largeexplode");
+    public static final Particle EXPLOSION_HUGE    = new Particle("EXPLOSION_HUGE", "hugeexplosion");
+    public static final Particle FIREWORKS_SPARK   = new Particle("FIREWORKS_SPARK", "fireworksSpark");
+    public static final Particle WATER_BUBBLE      = new Particle("WATER_BUBBLE", "bubble");
+    public static final Particle WATER_SPLASH      = new Particle("WATER_SPLASH", "splash");
+    public static final Particle WATER_WAKE        = new Particle("WATER_WAKE", "wake");
+    public static final Particle SUSPENDED         = new Particle("SUSPENDED", "suspended");
+    public static final Particle SUSPENDED_DEPTH   = new Particle("SUSPENDED_DEPTH", "depthsuspend");
+    public static final Particle CRIT              = new Particle("CRIT", "crit");
+    public static final Particle CRIT_MAGIC        = new Particle("CRIT_MAGIC", "magicCrit");
+    public static final Particle SMOKE_NORMAL      = new Particle("SMOKE_NORMAL", "smoke");
+    public static final Particle SMOKE_LARGE       = new Particle("SMOKE_LARGE", "largesmoke");
+    public static final Particle SPELL             = new Particle("SPELL", "spell");
+    public static final Particle SPELL_INSTANT     = new Particle("SPELL_INSTANT", "instantSpell");
+    public static final Particle SPELL_MOB         = new Particle("SPELL_MOB", "mobSpell");
+    public static final Particle SPELL_MOB_AMBIENT = new Particle("SPELL_MOB_AMBIENT", "mobSpellAmbient");
+    public static final Particle SPELL_WITCH       = new Particle("SPELL_WITCH", "witchMagic");
+    public static final Particle DRIP_WATER        = new Particle("DRIP_WATER", "dripWater");
+    public static final Particle DRIP_LAVA         = new Particle("DRIP_LAVA", "dripLava");
+    public static final Particle VILLAGER_ANGRY    = new Particle("VILLAGER_ANGRY", "angryVillager");
+    public static final Particle VILLAGER_HAPPY    = new Particle("VILLAGER_HAPPY", "happyVillager");
+    public static final Particle TOWN_AURA         = new Particle("TOWN_AURA", "townaura");
+    public static final Particle NOTE              = new Particle("NOTE", "note");
+    public static final Particle PORTAL            = new Particle("PORTAL", "portal");
+    public static final Particle ENCHANTMENT_TABLE = new Particle("ENCHANTMENT_TABLE", "enchantmenttable");
+    public static final Particle FLAME             = new Particle("FLAME", "flame");
+    public static final Particle LAVA              = new Particle("LAVA", "lava");
+    public static final Particle FOOTSTEP          = new Particle("FOOTSTEP", "footstep");
+    public static final Particle CLOUD             = new Particle("CLOUD", "cloud");
+    public static final Particle REDSTONE          = new Particle("REDSTONE", "reddust");
+    public static final Particle SNOWBALL          = new Particle("SNOWBALL", "snowballpoof");
+    public static final Particle SNOW_SHOVEL       = new Particle("SNOW_SHOVEL", "snowshovel");
+    public static final Particle SLIME             = new Particle("SLIME", "slime");
+    public static final Particle HEART             = new Particle("HEART", "heart");
+    public static final Particle BARRIER           = new Particle("BARRIER", "barrier");
+    public static final Particle ITEM_CRACK        = new Particle("ITEM_CRACK", "iconcrack_", 2);
+    public static final Particle BLOCK_CRACK       = new Particle("BLOCK_CRACK", "blockcrack_", 1);
+    public static final Particle BLOCK_DUST        = new Particle("BLOCK_DUST", "blockdust_", 1);
+    public static final Particle WATER_DROP        = new Particle("WATER_DROP", "droplet");
+    public static final Particle ITEM_TAKE         = new Particle("ITEM_TAKE", "take");
+    public static final Particle MOB_APPEARANCE    = new Particle("MOB_APPEARANCE", "mobappearance");
+    public static final Particle DRAGON_BREATH     = new Particle("DRAGON_BREATH", "dragonbreath");
+    public static final Particle END_ROD           = new Particle("END_ROD", "endRod");
+    public static final Particle DAMAGE_INDICATOR  = new Particle("DAMAGE_INDICATOR", "damageIndicator");
+    public static final Particle SWEEP_ATTACK      = new Particle("SWEEP_ATTACK", "sweepAttack");
 
-    private static final Int2ObjectMap<Particle> byParticleID   = new Int2ObjectOpenHashMap<>(46, SMALL_LOAD_FACTOR);
     private static final Map<String, Particle>   byParticleName = new CaseInsensitiveMap<>(46, SMALL_LOAD_FACTOR);
     private final String particleName;
-    private final int    particleId;
     private final int    dataSize;
 
-    public Particle(final String enumName, final String name, final int particleId, final int dataSize)
+    public Particle(final String enumName, final String name, final int dataSize)
     {
         super(enumName);
         this.particleName = name;
-        this.particleId = particleId;
         this.dataSize = dataSize;
     }
 
-    public Particle(final String enumName, final String name, final int particleId)
+    public Particle(final String enumName, final String name)
     {
-        this(enumName, name, particleId, 0);
-    }
-
-    public int getParticleId()
-    {
-        return this.particleId;
+        this(enumName, name, 0);
     }
 
     public int getDataSize()
@@ -122,11 +112,6 @@ public class Particle extends ASimpleEnum<Particle>
     public String getParticleName()
     {
         return this.particleName;
-    }
-
-    public static Particle getByParticleId(final int id)
-    {
-        return byParticleID.get(id);
     }
 
     public static Particle getByParticleName(final String name)
@@ -142,7 +127,6 @@ public class Particle extends ASimpleEnum<Particle>
     public static void register(final Particle element)
     {
         ASimpleEnum.register(Particle.class, element);
-        byParticleID.put(element.getParticleId(), element);
         byParticleName.put(element.getParticleName(), element);
     }
 
@@ -182,7 +166,7 @@ public class Particle extends ASimpleEnum<Particle>
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("particleName", this.particleName).append("id", this.particleId).append("dataSize", this.dataSize).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("enumName", this.enumName).append("particleName", this.particleName).append("dataSize", this.dataSize).toString();
     }
 
     static

@@ -71,7 +71,7 @@ public class PacketPlayClientboundTitle extends PacketPlayClientbound
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.action = TitleAction.fromId(data.readVarInt());
+        this.action = TitleAction.values()[data.readVarInt()];
         if (this.action == null)
         {
             return;
@@ -89,7 +89,7 @@ public class PacketPlayClientboundTitle extends PacketPlayClientbound
                 break;
             case HIDE:
             case RESET:
-                //No fields
+                // No fields
                 break;
         }
     }
@@ -97,7 +97,7 @@ public class PacketPlayClientboundTitle extends PacketPlayClientbound
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(this.action.getActionId());
+        data.writeVarInt(this.action.ordinal());
         switch (this.action)
         {
             case SET_TITLE:
@@ -111,7 +111,7 @@ public class PacketPlayClientboundTitle extends PacketPlayClientbound
                 break;
             case HIDE:
             case RESET:
-                //No fields
+                // No fields
                 break;
         }
     }
@@ -124,35 +124,11 @@ public class PacketPlayClientboundTitle extends PacketPlayClientbound
 
     public enum TitleAction
     {
-        SET_TITLE(0),
-        SET_SUBTITLE(1),
-        SET_TIMES(2),
-        HIDE(3),
-        RESET(4);
-
-        private final int actionId;
-
-        TitleAction(final int actionId)
-        {
-            this.actionId = actionId;
-        }
-
-        public int getActionId()
-        {
-            return this.actionId;
-        }
-
-        public static TitleAction fromId(final int id)
-        {
-            for (final TitleAction ta : TitleAction.values())
-            {
-                if (ta.getActionId() == id)
-                {
-                    return ta;
-                }
-            }
-            return null;
-        }
+        SET_TITLE,
+        SET_SUBTITLE,
+        SET_TIMES,
+        HIDE,
+        RESET
     }
 
     @Override
