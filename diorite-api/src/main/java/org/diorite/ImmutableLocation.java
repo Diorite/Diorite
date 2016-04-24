@@ -39,11 +39,11 @@ public class ImmutableLocation implements ILocation
     private final float  pitch;
     private final World  world;
 
-    public ImmutableLocation(final double x, final double z, final double y)
+    public ImmutableLocation(final double x, final double y, final double z)
     {
         this.x = x;
-        this.z = z;
         this.y = y;
+        this.z = z;
         this.yaw = 0;
         this.pitch = 0;
         this.world = null;
