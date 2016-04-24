@@ -38,11 +38,11 @@ public class Location implements ILocation
     private float  pitch;
     private World  world;
 
-    public Location(final double x, final double z, final double y)
+    public Location(final double x, final double y, final double z)
     {
         this.x = x;
-        this.z = z;
         this.y = y;
+        this.z = z;
         this.yaw = 0;
         this.pitch = 0;
     }
