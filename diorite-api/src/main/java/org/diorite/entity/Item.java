@@ -26,7 +26,17 @@ package org.diorite.entity;
 
 public interface Item extends Entity, ObjectEntity
 {
+    /**
+     * Returns pickup delay
+     *
+     * @return pickup delay
+     */
     int getPickupDelay();
 
+    /**
+     * Sets pickup delay
+     *
+     * @param pickupDelay for a pickup delay value
+     */
     void setPickupDelay(int pickupDelay);
 }
