@@ -15,14 +15,14 @@ import org.diorite.Art;
 import org.diorite.BlockFace;
 import org.diorite.BlockLocation;
 
-@PacketClass(id = 0x04, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 170)
+@PacketClass(id = 0x04, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 40)
 public class PacketPlayClientboundSpawnEntityPainting extends PacketPlayClientbound
 {
     private int           entityId; // ~5 bytes
     private UUID          entityUuid; // 16 bytes
-    private Art           painting;
-    private BlockLocation blockLocation;
-    private byte          direction;
+    private Art           painting; // ~10 bytes?
+    private BlockLocation blockLocation; // 8 bytes?
+    private byte          direction; // 1 byte
 
     public PacketPlayClientboundSpawnEntityPainting()
     {
