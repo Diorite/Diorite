@@ -27,6 +27,7 @@ package org.diorite.impl.connection.packets.play;
 import org.diorite.impl.connection.listeners.PacketPlayListener;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBoss;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCamera;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChat;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChunkUnload;
@@ -168,4 +169,6 @@ public interface PacketPlayClientboundListener extends PacketPlayListener
     void handle(PacketPlayClientboundSpawnEntityWeather packet);
 
     void handle(PacketPlayClientboundSpawnEntityPainting packet);
+
+    void handle(PacketPlayClientboundBoss packet);
 }
