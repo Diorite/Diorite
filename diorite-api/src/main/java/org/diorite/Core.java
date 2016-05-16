@@ -119,7 +119,7 @@ public interface Core extends Synchronizable
      */
     static String getMinecraftVersion()
     {
-        return "1.9.2";
+        return "1.9.4";
     }
 
     /**

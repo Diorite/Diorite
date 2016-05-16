@@ -25,6 +25,8 @@
 package org.diorite.impl.connection.packets.play.clientbound;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -36,7 +38,7 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.ChunkPartImpl;
-
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteMathUtils;
 
 import io.netty.buffer.Unpooled;
@@ -47,12 +49,13 @@ public class PacketPlayClientboundMapChunk extends PacketPlayClientbound
 {
     public static final int MASK = 0xffff;
 
-    private int     x; // 4 bytes
-    private int     z; // 4 bytes
-    private byte[]  data; // ~many bytes
-    private boolean fullChunk; // 1 byte
-    private boolean skyLight; // 1 byte
-    private int     mask; // 4 byte
+    private int                  x; // 4 bytes
+    private int                  z; // 4 bytes
+    private byte[]               data; // ~many bytes
+    private boolean              fullChunk; // 1 byte
+    private boolean              skyLight; // 1 byte
+    private int                  mask; // 4 byte
+    private List<NbtTagCompound> tileEntities;
 
     public PacketPlayClientboundMapChunk()
     {
@@ -60,28 +63,12 @@ public class PacketPlayClientboundMapChunk extends PacketPlayClientbound
 
     public PacketPlayClientboundMapChunk(final boolean fullChunk, final ChunkImpl chunk)
     {
-        this.x = chunk.getPos().getX();
-        this.z = chunk.getPos().getZ();
-        this.fullChunk = fullChunk;
-        this.mask = chunk.getMask(); // '\uFFFF';
-        this.skyLight = chunk.getWorld().hasSkyLight();
-        this.data = new byte[calcSize(chunk, fullChunk, this.skyLight, this.mask)];
-        final PacketDataSerializer chunkSer = new PacketDataSerializer(Unpooled.wrappedBuffer(this.data));
-        chunkSer.writerIndex(0);
-        write(chunkSer, chunk, fullChunk, this.skyLight, this.mask);
+        this(fullChunk, chunk, chunk.getWorld().hasSkyLight());
     }
 
     public PacketPlayClientboundMapChunk(final boolean fullChunk, final ChunkImpl chunk, final boolean includeSkyLight)
     {
-        this.x = chunk.getPos().getX();
-        this.z = chunk.getPos().getZ();
-        this.fullChunk = fullChunk;
-        this.mask = chunk.getMask();
-        this.skyLight = includeSkyLight;
-        this.data = new byte[calcSize(chunk, fullChunk, this.skyLight, this.mask)];
-        final PacketDataSerializer chunkSer = new PacketDataSerializer(Unpooled.wrappedBuffer(this.data));
-        chunkSer.writerIndex(0);
-        write(chunkSer, chunk, fullChunk, includeSkyLight, this.mask);
+        this(fullChunk, chunk, includeSkyLight, chunk.getMask());
     }
 
     public PacketPlayClientboundMapChunk(final boolean fullChunk, final ChunkImpl chunk, final boolean includeSkyLight, final int mask)
@@ -95,6 +82,9 @@ public class PacketPlayClientboundMapChunk extends PacketPlayClientbound
         final PacketDataSerializer chunkSer = new PacketDataSerializer(Unpooled.wrappedBuffer(this.data));
         chunkSer.writerIndex(0);
         write(chunkSer, chunk, fullChunk, includeSkyLight, mask);
+
+        this.tileEntities = new ArrayList<>(chunk.getTileEntities().size());
+        // TODO load tile entities
     }
 
     @Override
@@ -105,6 +95,11 @@ public class PacketPlayClientboundMapChunk extends PacketPlayClientbound
         this.fullChunk = data.readBoolean();
         this.mask = data.readVarInt();
         this.data = data.readByteWord();
+        this.tileEntities = new ArrayList<>(data.readVarInt());
+        for (int i = 0; i < this.tileEntities.size(); i++)
+        {
+            this.tileEntities.add(data.readNbtTagCompound());
+        }
     }
 
     @Override
@@ -115,6 +110,8 @@ public class PacketPlayClientboundMapChunk extends PacketPlayClientbound
         data.writeBoolean(this.fullChunk);
         data.writeVarInt(this.mask);
         data.writeByteWord(this.data);
+        data.writeVarInt(this.tileEntities.size());
+        this.tileEntities.forEach(data::writeNbtTagCompound);
     }
 
     @Override
@@ -151,6 +148,11 @@ public class PacketPlayClientboundMapChunk extends PacketPlayClientbound
     public void setFullChunk(final boolean fullChunk)
     {
         this.fullChunk = fullChunk;
+    }
+
+    public List<NbtTagCompound> getTileEntities()
+    {
+        return this.tileEntities;
     }
 
     @Override

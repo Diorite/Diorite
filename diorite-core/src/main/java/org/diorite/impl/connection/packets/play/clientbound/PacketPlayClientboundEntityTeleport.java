@@ -36,13 +36,13 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.impl.entity.IEntity;
 
-@PacketClass(id = 0x4A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 32)
+@PacketClass(id = 0x49, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 32)
 public class PacketPlayClientboundEntityTeleport extends PacketPlayClientbound
 {
     private int     entityId; // ~5 bytes
-    private double  x; // 8 bytes, WARNING! This is 'fixed-point' number
-    private double  y; // 8 bytes, WARNING! This is 'fixed-point' number
-    private double  z; // 8 bytes, WARNING! This is 'fixed-point' number
+    private double  x; // 8 bytes
+    private double  y; // 8 bytes
+    private double  z; // 8 bytes
     private byte    yaw; // 1 byte
     private byte    pitch; // 1 byte
     private boolean onGround; // 1 byte
@@ -66,9 +66,6 @@ public class PacketPlayClientboundEntityTeleport extends PacketPlayClientbound
     public PacketPlayClientboundEntityTeleport(final IEntity entity)
     {
         this.entityId = entity.getId();
-        //this.x = (int) (entity.getX() * 32);
-        //this.y = (int) (entity.getY() * 32);
-        //this.z = (int) (entity.getZ() * 32);
         this.x = entity.getX();
         this.y = entity.getY();
         this.z = entity.getZ();

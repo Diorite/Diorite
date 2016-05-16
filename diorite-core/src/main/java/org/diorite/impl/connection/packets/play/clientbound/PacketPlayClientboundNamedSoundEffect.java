@@ -38,7 +38,7 @@ import org.diorite.BlockLocation;
 import org.diorite.ILocation;
 
 @SuppressWarnings("MultiplyOrDivideByPowerOfTwo")
-@PacketClass(id = 0x19, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 278)
+@PacketClass(id = 0x46, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 278)
 public class PacketPlayClientboundNamedSoundEffect extends PacketPlayClientbound
 {
     private static final int MAX_SOUND_NAME_SIZE = 256;

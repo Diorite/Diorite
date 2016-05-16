@@ -153,7 +153,6 @@ import joptsimple.OptionSet;
 
 public class DioriteCore implements Core
 {
-
     private static final CoreInitPipeline  initPipeline;
     private static final CoreStartPipeline startPipeline;
     private static       DioriteCore       instance;

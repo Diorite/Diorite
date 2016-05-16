@@ -39,7 +39,7 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.entity.attrib.AttributeProperty;
 import org.diorite.entity.attrib.AttributeStorage;
 
-@PacketClass(id = 0x4B, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
+@PacketClass(id = 0x4A, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 512)
 public class PacketPlayClientboundUpdateAttributes extends PacketPlayClientbound
 {
     private int entityID; // ~5 bytes

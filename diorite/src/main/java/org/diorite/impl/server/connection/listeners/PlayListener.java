@@ -312,6 +312,7 @@ public class PlayListener implements PacketPlayServerboundListener
     public void handle(final PacketPlayServerboundBlockPlace packet)
     {
         System.out.println(packet);
+
         if (packet.getCursorPos().getBlockFace() == null)
         {
             return;

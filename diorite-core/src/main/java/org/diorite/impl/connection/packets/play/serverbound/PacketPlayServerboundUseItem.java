@@ -41,7 +41,6 @@ public class PacketPlayServerboundUseItem extends PacketPlayServerbound
 {
     private HandType handType; // ~1 byte
 
-
     public PacketPlayServerboundUseItem()
     {
     }
