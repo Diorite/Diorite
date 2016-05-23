@@ -24,6 +24,35 @@
 
 package org.diorite.entity;
 
+import org.diorite.inventory.item.ItemStack;
+
 public interface ItemFrame extends ObjectEntity
 {
+    /**
+     * Returns item inside frame
+     *
+     * @return item inside frame
+     */
+    ItemStack getItem();
+
+    /**
+     * Sets item inside frame
+     *
+     * @param item to set item inside frame
+     */
+    void setItem(ItemStack item);
+
+    /**
+     * Returns item rotation
+     *
+     * @return item rotation
+     */
+    int getRotation();
+
+    /**
+     * Sets item's rotation
+     *
+     * @param rotation to set item's rotation
+     */
+    void setRotation(final int rotation);
 }

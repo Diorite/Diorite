@@ -31,8 +31,11 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
 import org.diorite.impl.entity.IItemFrame;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
+import org.diorite.inventory.item.ItemStack;
 
 class ItemFrameImpl extends EntityImpl implements IItemFrame
 {
@@ -59,6 +62,8 @@ class ItemFrameImpl extends EntityImpl implements IItemFrame
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM_FRAME_ITEM, null));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_ITEM_FRAME_ROTATION, 0));
     }
 
     @Override
@@ -71,6 +76,30 @@ class ItemFrameImpl extends EntityImpl implements IItemFrame
     public int getEntityObjectData()
     {
         return 0;
+    }
+
+    @Override
+    public ItemStack getItem()
+    {
+        return this.metadata.getItemStack(META_KEY_ITEM_FRAME_ITEM);
+    }
+
+    @Override
+    public void setItem(final ItemStack item)
+    {
+        this.metadata.setItemStack(META_KEY_ITEM_FRAME_ITEM, item);
+    }
+
+    @Override
+    public int getRotation()
+    {
+        return this.metadata.getInt(META_KEY_ITEM_FRAME_ROTATION);
+    }
+
+    @Override
+    public void setRotation(final int rotation)
+    {
+        this.metadata.setInt(META_KEY_ITEM_FRAME_ROTATION, rotation);
     }
 }
 
