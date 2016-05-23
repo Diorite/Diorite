@@ -24,6 +24,7 @@
 
 package org.diorite.impl.pipelines.event.player;
 
+import org.diorite.impl.BossBarImpl;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.auth.GameProfiles;
 import org.diorite.impl.connection.CoreNetworkManager;
@@ -97,6 +98,11 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
         this.addAfter("Diorite|PlayerListStuff", "Diorite|WorldBorderUpdate", ((evt, pipeline) -> {
             final IPlayer player = (IPlayer) evt.getPlayer();
             player.sendWorldBorderUpdate();
+        }));
+
+        this.addAfter("Diorite|WorldBorderUpdate", "Diorite|BossBarUpdate", ((evt, pipeline) -> {
+            final IPlayer player = (IPlayer) evt.getPlayer();
+            player.getWorld().getBossBars(true).forEach(bossBar -> ((BossBarImpl) bossBar).addHolder(player));
         }));
 
         this.addAfter(EventPriority.NORMAL, "Diorite|JoinMessage", ((evt, pipeline) -> {

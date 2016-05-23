@@ -24,12 +24,15 @@
 
 package org.diorite.impl.entity.diorite;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.BossBarImpl;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChat;
@@ -46,11 +49,12 @@ import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.WorldBorderImpl;
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
+import org.diorite.BossBar;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
-import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.Particle;
 import org.diorite.auth.GameProfile;
 import org.diorite.chat.ChatPosition;
@@ -63,6 +67,7 @@ import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.Inventory;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
+import org.diorite.utils.math.geometry.LookupShape;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntCollection;
@@ -70,7 +75,8 @@ import it.unimi.dsi.fastutil.ints.IntCollection;
 // TODO: add Human or other entity not fully a player class for bots/npcs
 class PlayerImpl extends HumanImpl implements IPlayer
 {
-    private final IntCollection removeQueue = new IntArrayList(5);
+    private final IntCollection           removeQueue = new IntArrayList(5);
+    private final Collection<BossBarImpl> bossBars    = new ArrayList<>(5);
 
     private final CoreNetworkManager networkManager;
     private final PlayerChunksImpl   playerChunks;
@@ -372,6 +378,41 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public Player getSenderEntity()
     {
         return this;
+    }
+
+    @Override
+    public void addBossBar(final BossBar bossBar)
+    {
+        final BossBarImpl bossBarImpl = (BossBarImpl) bossBar;
+        this.bossBars.add(bossBarImpl);
+        bossBarImpl.addHolder(this);
+    }
+
+    @Override
+    public void removeBossBar(final BossBar bossBar)
+    {
+        final BossBarImpl bossBarImpl = (BossBarImpl) bossBar;
+        this.bossBars.remove(bossBarImpl);
+        bossBarImpl.removeHolder(this);
+    }
+
+    @Override
+    public Collection<BossBar> getBossBars(final boolean includeParents)
+    {
+        final Collection<BossBar> temp = new ArrayList<>(this.bossBars);
+        if (includeParents)
+        {
+            temp.addAll(this.getWorld().getBossBars(true));
+        }
+        return temp;
+    }
+
+    @Override
+    protected void worldChange(final WorldImpl oldW, final WorldImpl newW)
+    {
+        super.worldChange(oldW, newW);
+        oldW.getBossBars(false).forEach(bossBar -> ((BossBarImpl) bossBar).removeHolder(this));
+        newW.getBossBars(false).forEach(bossBar -> ((BossBarImpl) bossBar).addHolder(this));
     }
 
     private static class PacketMessageOutput implements MessageOutput

@@ -22,37 +22,66 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite;
 
-import org.diorite.impl.connection.CoreNetworkManager;
-import org.diorite.impl.entity.tracker.BaseTracker;
-import org.diorite.impl.inventory.PlayerInventoryImpl;
-import org.diorite.impl.world.chunk.PlayerChunksImpl;
-import org.diorite.entity.Entity;
-import org.diorite.entity.Player;
+import java.util.UUID;
 
-public interface IPlayer extends IHuman, Player
+import org.diorite.chat.component.BaseComponent;
+
+public interface BossBar // TODO javadocs
 {
-    @SuppressWarnings("ObjectEquality")
-    void removeEntityFromView(BaseTracker<?> e);
+    enum Color
+    {
+        PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
+    }
 
-    @SuppressWarnings("ObjectEquality")
-    void removeEntityFromView(Entity e);
+    enum Style
+    {
+        PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
+    }
 
-    CoreNetworkManager getNetworkManager();
+    /**
+     * Returns the Universally Unique Identifier of this BossBar
+     * Every BossBar has own UUID
+     *
+     * @return UUID of this BossBar
+     */
+    UUID getUUID();
 
-    PlayerChunksImpl getPlayerChunks();
+    /**
+     * Return text (in form of {@link BaseComponent}) displayed above BossBar
+     *
+     * @return text displayed above BossBar
+     */
+    BaseComponent getTitle();
 
-    @Override
-    PlayerInventoryImpl getInventory();
+    void setTitle(BaseComponent component);
 
-    boolean isVisibleChunk(int x, int z);
+    /**
+     * Returns current progress of BossBar
+     * This is a numbe
+     *
+     * @return
+     */
+    int getHealth();
 
-    void setViewDistance(byte viewDistance);
+    void setHealth(int health);
 
-    void onLogout();
+    Color getColor();
 
-    void sendWorldBorderUpdate();
+    void setColor(Color color);
 
+    Style getStyle();
 
+    void setStyle(Style style);
+
+    void setColorAndStyle(Color color, Style style);
+
+    boolean isDragonBar();
+
+    void setIsDragonBar(boolean isDragonBar);
+
+    boolean isDarkSky();
+
+    void setIsDarkSky(boolean isDarkSky);
 }

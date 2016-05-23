@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.diorite.BlockLocation;
+import org.diorite.BossBarHolder;
 import org.diorite.Difficulty;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
@@ -45,7 +46,7 @@ import org.diorite.world.chunk.ChunkManager;
 import org.diorite.world.chunk.ChunkPos;
 import org.diorite.world.generator.WorldGenerator;
 
-public interface World
+public interface World extends BossBarHolder
 {
     Item dropItemNaturally(ILocation loc, ItemStack item);
 

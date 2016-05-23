@@ -24,6 +24,7 @@
 
 package org.diorite;
 
+import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.Event;
 import org.diorite.event.EventType;
 import org.diorite.event.pipelines.EventPipeline;
@@ -95,4 +96,12 @@ public interface ServerManager
      * @return entity factory that can be used to create new entites.
      */
     EntityFactory getEntityFactory();
+
+    /**
+     * Creates a new boss bar instance with random UUID
+     *
+     * @see BossBar
+     * @return new boss bar instance
+     */
+    BossBar createBossBar(int health, BaseComponent title, BossBar.Style style, BossBar.Color color);
 }

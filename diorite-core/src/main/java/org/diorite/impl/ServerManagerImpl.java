@@ -24,6 +24,8 @@
 
 package org.diorite.impl;
 
+import java.util.UUID;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -32,6 +34,8 @@ import org.diorite.impl.entity.diorite.DioriteEntityFactory;
 import org.diorite.impl.inventory.recipe.IRecipeManager;
 import org.diorite.impl.inventory.recipe.RecipeManagerImpl;
 import org.diorite.impl.permissions.DioritePermissionsManager;
+import org.diorite.BossBar;
+import org.diorite.chat.component.BaseComponent;
 import org.diorite.permissions.PermissionsManager;
 
 /**
@@ -68,6 +72,12 @@ public class ServerManagerImpl implements IServerManager
     public IEntityFactory getEntityFactory()
     {
         return this.entityFactory;
+    }
+
+    @Override
+    public BossBarImpl createBossBar(final int health, final BaseComponent title, final BossBar.Style style, final BossBar.Color color)
+    {
+        return new BossBarImpl(UUID.randomUUID(), health, title, style, color);
     }
 
     @Override

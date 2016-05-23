@@ -35,6 +35,7 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
@@ -735,24 +736,37 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("world", this.world).append("x", this.x).append("y", this.y).append("z", this.z).toString();
     }
 
-    public void teleport(ILocation location)
+    @Override
+    public void teleport(final ILocation location)
     {
         final ChunkImpl chunk = this.getChunk();
-
         this.x = location.getX();
         this.y = location.getY();
         this.z = location.getZ();
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
-        this.world = (WorldImpl) location.getWorld();
+
+        final WorldImpl newWorld = (WorldImpl) location.getWorld();
+        if (this.world != newWorld)
+        {
+            this.worldChange(this.world, newWorld);
+            this.world = newWorld;
+        }
 
         this.updateChunk(chunk, this.getChunk());
     }
 
-    public void teleport(Entity entity)
+    @Override
+    public void teleport(final Entity entity)
     {
         final ImmutableLocation location = entity.getLocation();
 
         this.teleport(location);
+    }
+
+    protected void worldChange(final WorldImpl oldW, final WorldImpl newW)
+    {
+        CoreMain.debug("Entity " + this + " moved from " + oldW + " to " + newW);
+        // TODO add event?
     }
 }

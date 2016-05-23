@@ -26,6 +26,7 @@ package org.diorite.entity;
 
 import java.util.List;
 
+import org.diorite.BossBarHolder;
 import org.diorite.Core;
 import org.diorite.OfflinePlayer;
 import org.diorite.Particle;
@@ -35,7 +36,7 @@ import org.diorite.command.sender.PlayerCommandSender;
 import org.diorite.inventory.Inventory;
 import org.diorite.utils.math.DioriteRandom;
 
-public interface Player extends Human, PlayerCommandSender, OfflinePlayer
+public interface Player extends Human, PlayerCommandSender, OfflinePlayer, BossBarHolder
 {
     @Override
     default Player getSenderEntity()
