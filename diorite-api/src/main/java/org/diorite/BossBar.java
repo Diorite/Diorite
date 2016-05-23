@@ -55,20 +55,42 @@ public interface BossBar // TODO javadocs
      */
     BaseComponent getTitle();
 
+    /**
+     * Changes text displayed above BossBar
+     *
+     * @param component new text displayed above BossBar
+     */
     void setTitle(BaseComponent component);
 
     /**
      * Returns current progress of BossBar
-     * This is a numbe
+     * The standard supported values are 0-100
      *
-     * @return
+     * @return current progress of BossBar
      */
     int getHealth();
 
+    /**
+     * Changes current progress of BossBar
+     * The standard supported values are 0-100
+     *
+     * @param health new BossBar progress
+     */
     void setHealth(int health);
 
+    /**
+     * Returns current color of BossBar
+     *
+     * @see Color
+     * @return current color of BossBar
+     */
     Color getColor();
 
+    /**
+     * Changes current color of BossBar
+     *
+     * @param color new BossBar color
+     */
     void setColor(Color color);
 
     Style getStyle();
