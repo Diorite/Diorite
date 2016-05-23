@@ -32,6 +32,7 @@ import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBoss;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCamera;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChat;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChunkUnload;
@@ -369,6 +370,12 @@ public class PlayListener implements PacketPlayClientboundListener
 
     @Override
     public void handle(final PacketPlayClientboundSpawnEntityPainting packet)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundBoss packet)
     {
 
     }
