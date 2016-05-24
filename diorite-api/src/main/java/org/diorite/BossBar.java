@@ -28,7 +28,10 @@ import java.util.UUID;
 
 import org.diorite.chat.component.BaseComponent;
 
-public interface BossBar // TODO javadocs
+/**
+ * Represents a single boss bar
+ */
+public interface BossBar
 {
     enum Color
     {
@@ -41,45 +44,45 @@ public interface BossBar // TODO javadocs
     }
 
     /**
-     * Returns the Universally Unique Identifier of this BossBar
-     * Every BossBar has own UUID
+     * Returns the Universally Unique Identifier of this BossBar.
+     * Every BossBar has own UUID.
      *
      * @return UUID of this BossBar
      */
     UUID getUUID();
 
     /**
-     * Return text (in form of {@link BaseComponent}) displayed above BossBar
+     * Return text (in form of {@link BaseComponent}) displayed above BossBar.
      *
      * @return text displayed above BossBar
      */
     BaseComponent getTitle();
 
     /**
-     * Changes text displayed above BossBar
+     * Changes text displayed above BossBar.
      *
      * @param component new text displayed above BossBar
      */
     void setTitle(BaseComponent component);
 
     /**
-     * Returns current progress of BossBar
-     * The standard supported values are 0-100
+     * Returns current progress of BossBar.
+     * The standard supported values are 0-100.
      *
      * @return current progress of BossBar
      */
     int getHealth();
 
     /**
-     * Changes current progress of BossBar
-     * The standard supported values are 0-100
+     * Changes current progress of BossBar.
+     * The standard supported values are 0-100.
      *
      * @param health new BossBar progress
      */
     void setHealth(int health);
 
     /**
-     * Returns current color of BossBar
+     * Returns current color of BossBar.
      *
      * @see Color
      * @return current color of BossBar
@@ -87,16 +90,32 @@ public interface BossBar // TODO javadocs
     Color getColor();
 
     /**
-     * Changes current color of BossBar
+     * Changes current color of BossBar.
      *
      * @param color new BossBar color
      */
     void setColor(Color color);
 
+    /**
+     * Returns current {@link Style} of BossBar.
+     *
+     * @return current style of BossBar
+     */
     Style getStyle();
 
+    /**
+     * Changes current {@link Style} of BossBar.
+     *
+     * @param style new BossBar style
+     */
     void setStyle(Style style);
 
+    /**
+     * Changes both Color and Style of BossBar.
+     *
+     * @param color new BossBar color
+     * @param style new BossBar style
+     */
     void setColorAndStyle(Color color, Style style);
 
     boolean isDragonBar();

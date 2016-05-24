@@ -210,7 +210,40 @@ public class PacketPlayClientboundBoss extends PacketPlayClientbound
         this.action = data.readEnum(Action.class);
         switch (this.action)
         {
-            // TODO
+            case ADD:
+            {
+                this.title = data.readBaseComponent();
+                this.health = data.readFloat();
+                this.color = data.readEnum(Color.class);
+                this.style = data.readEnum(Style.class);
+                this.decodeFlags(data.readByte());
+                break;
+            }
+
+            case UPDATE_HEALTH:
+            {
+                this.health = data.readFloat();
+                break;
+            }
+
+            case UPDATE_TITLE:
+            {
+                this.title = data.readBaseComponent();
+                break;
+            }
+
+            case UPDATE_STYLE:
+            {
+                this.color = data.readEnum(Color.class);
+                this.style = data.readEnum(Style.class);
+                break;
+            }
+
+            case UPDATE_FLAGS:
+            {
+                this.decodeFlags(data.readByte());
+                break;
+            }
         }
     }
 
