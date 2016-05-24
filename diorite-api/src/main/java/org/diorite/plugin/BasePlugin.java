@@ -28,8 +28,6 @@ import java.io.File;
 
 import org.slf4j.Logger;
 
-import org.diorite.Diorite;
-
 public interface BasePlugin
 {
     /**
@@ -118,10 +116,7 @@ public interface BasePlugin
      *
      * @return folder where plugin should store all data.
      */
-    default File getDataFolder()
-    {
-        return new File(Diorite.getPluginManager().getDirectory(), this.getName());
-    }
+    File getDataFolder();
 
     /**
      * Returns folder where plugin should store all languages files, with default settings this is /lang/{pluginName} folder.
@@ -136,11 +131,12 @@ public interface BasePlugin
     /**
      * Method invoked on plugin init, do not override.
      *
+     * @param pluginsDirectory directory where is placed plugin's file
      * @param classLoader  used class loader.
      * @param pluginLoader used plugin loader.
      * @param pluginData   other data of plugin. (like name, version, author etc.)
      */
-    void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder pluginData);
+    void init(final File pluginsDirectory, final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder pluginData);
 
     /**
      * Set if plugin is enabled.

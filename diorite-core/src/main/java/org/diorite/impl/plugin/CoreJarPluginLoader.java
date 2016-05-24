@@ -50,6 +50,7 @@ public class CoreJarPluginLoader implements PluginLoader
     @Override
     public DioriteMod loadPlugin(final File file) throws PluginException
     {
+        final PluginsDirectoryImpl pluginsDirectory = (PluginsDirectoryImpl) DioriteCore.getInstance().getPluginManager().getPluginsDirectory(file.getParentFile());
         try
         {
             if (DioriteCore.getInstance().isStartedCore())
@@ -61,7 +62,7 @@ public class CoreJarPluginLoader implements PluginLoader
             Class<?> mainClass = null;
             try
             {
-                final String className = PluginManagerImpl.getCachedClass("corejar|" + file.getName());
+                final String className = pluginsDirectory.getCachedClass("corejar|" + file.getName());
                 if (className != null)
                 {
                     mainClass = classLoader.findClass(className, false);
@@ -117,11 +118,11 @@ public class CoreJarPluginLoader implements PluginLoader
                 throw new PluginException("Plugin/Mod " + pluginDescription.name() + " is arleady loaded!");
             }
 
-            dioriteMod.init(classLoader, this, new PluginDataBuilder(pluginDescription));
+            dioriteMod.init(pluginsDirectory.getDirectory(), classLoader, this, new PluginDataBuilder(pluginDescription));
             dioriteMod.getLogger().info("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
             dioriteMod.onLoad();
 
-            PluginManagerImpl.setCachedClass("corejar|" + file.getName(), mainClass);
+            pluginsDirectory.setCachedClass("corejar|" + file.getName(), mainClass);
             return dioriteMod;
         } catch (final InstantiationException | IllegalAccessException | MalformedURLException e)
         {

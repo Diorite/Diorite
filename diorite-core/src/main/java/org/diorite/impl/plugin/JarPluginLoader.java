@@ -48,6 +48,7 @@ public class JarPluginLoader implements PluginLoader
     @Override
     public DioritePlugin loadPlugin(final File file) throws PluginException
     {
+        final PluginsDirectoryImpl pluginsDirectory = (PluginsDirectoryImpl) DioriteCore.getInstance().getPluginManager().getPluginsDirectory(file.getParentFile());
         try
         {
             final PluginClassLoader classLoader = new PluginClassLoader(file);
@@ -55,7 +56,7 @@ public class JarPluginLoader implements PluginLoader
             Class<?> mainClass = null;
             try
             {
-                final String className = PluginManagerImpl.getCachedClass("jar|" + file.getName());
+                final String className = pluginsDirectory.getCachedClass("jar|" + file.getName());
                 if (className != null)
                 {
                     mainClass = classLoader.findClass(className, false);
@@ -116,11 +117,11 @@ public class JarPluginLoader implements PluginLoader
                 throw new PluginException("Plugin " + pluginDescription.name() + " is arleady loaded!");
             }
 
-            dioritePlugin.init(classLoader, this, new PluginDataBuilder(pluginDescription));
+            dioritePlugin.init(pluginsDirectory.getDirectory(), classLoader, this, new PluginDataBuilder(pluginDescription));
             dioritePlugin.getLogger().info("Loading " + pluginDescription.name() + " v" + pluginDescription.version() + " by " + pluginDescription.author() + " from file " + file.getName());
             dioritePlugin.onLoad();
 
-            PluginManagerImpl.setCachedClass("jar|" + file.getName(), mainClass);
+            pluginsDirectory.setCachedClass("jar|" + file.getName(), mainClass);
             return dioritePlugin;
         } catch (final InstantiationException | IllegalAccessException | MalformedURLException e)
         {

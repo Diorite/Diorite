@@ -25,44 +25,18 @@
 package org.diorite.plugin;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.Map;
 
-/**
- * This class manages and redirects load/enable/disable requests to valid PluginLoaders
- *
- * @see PluginLoader
- */
-public interface PluginManager
+public interface PluginsDirectory
 {
-    void addPluginsDirectory(File directory);
+    File getDirectory();
 
-    PluginsDirectory getPluginsDirectory(File directory);
+    default File getCacheFile()
+    {
+        return new File(this.getDirectory(), "pluginsCache.txt");
+    }
 
-    Collection<PluginsDirectory> getPluginsDirectories();
+    Map<String, String> getMainClassCache();
 
-    void registerPluginLoader(PluginLoader pluginLoader);
-
-    PluginLoader getPluginLoader(String suffix);
-
-    void scanForPlugins();
-
-    void loadPlugin(File file) throws PluginException;
-
-    void injectPlugin(FakeDioritePlugin plugin) throws PluginException;
-
-    void enablePlugin(BasePlugin name) throws PluginException;
-
-    void disablePlugin(BasePlugin name) throws PluginException;
-
-    BasePlugin getPlugin(String name);
-
-    Collection<BasePlugin> getPlugins();
-
-    void enablePlugins();
-
-    void disablePlugins();
-
-    void saveClassCaches();
-
-    PluginData createPluginData(PluginDataBuilder builder);
+    void resetMainClassCache();
 }

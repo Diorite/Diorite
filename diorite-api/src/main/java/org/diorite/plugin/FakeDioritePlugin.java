@@ -131,7 +131,7 @@ public class FakeDioritePlugin implements ChildPlugin
     }
 
     @Override
-    public void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder data)
+    public void init(final File pluginsDirectory, final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder data)
     {
         this.loader = pluginLoader;
     }

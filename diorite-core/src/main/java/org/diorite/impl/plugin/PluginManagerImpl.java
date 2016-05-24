@@ -26,17 +26,12 @@ package org.diorite.impl.plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -50,119 +45,42 @@ import org.diorite.plugin.PluginDataBuilder;
 import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginLoader;
 import org.diorite.plugin.PluginManager;
+import org.diorite.plugin.PluginsDirectory;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 public class PluginManagerImpl implements PluginManager
 {
-    private static final String                    CACHE_PATTERN_SEP = " == ";
-    private static final Pattern                   CACHE_PATTERN     = Pattern.compile(CACHE_PATTERN_SEP);
-    private final        Collection<BasePlugin>    plugins           = new ArrayList<>(20);
-    private final        Map<String, PluginLoader> pluginLoaders     = new CaseInsensitiveMap<>(5);
-    private final File directory;
-    private static final Map<String, String> mainClassCache = new HashMap<>(20);
+    private final Collection<PluginsDirectoryImpl> pluginDirectories = new ArrayList<>(1);
+    private final Collection<File>                 loadedFiles       = new ArrayList<>(20);
+    private final Collection<BasePlugin>           plugins           = new ArrayList<>(20);
+    private final Map<String, PluginLoader>        pluginLoaders     = new CaseInsensitiveMap<>(5);
 
-    public static String getCachedClass(final String file)
+    @Override
+    public Collection<PluginsDirectory> getPluginsDirectories()
     {
+        return ImmutableSet.copyOf(this.pluginDirectories);
+    }
+
+    @Override
+    public void addPluginsDirectory(final File directory)
+    {
+        CoreMain.debug("Added new plugins directory: " + directory);
+        final PluginsDirectoryImpl pluginsDirectory = new PluginsDirectoryImpl(directory);
+        this.pluginDirectories.add(pluginsDirectory);
         try
         {
-            return mainClassCache.get(file);
-        } catch (final Exception e)
+            pluginsDirectory.init();
+        }
+        catch (final IOException e)
         {
-            if (CoreMain.isEnabledDebug())
-            {
-                e.printStackTrace();
-            }
-            return null;
+            e.printStackTrace();
         }
     }
 
-    public static void setCachedClass(final String file, final Class<?> clazz)
+    @Override
+    public PluginsDirectoryImpl getPluginsDirectory(final File directory)
     {
-        try
-        {
-            mainClassCache.put(file, clazz.getName());
-        } catch (final Exception e)
-        {
-            if (CoreMain.isEnabledDebug())
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void saveCache()
-    {
-        try
-        {
-            Files.write(new File("pluginsCache.txt").toPath(), mainClassCache.entrySet().stream().map(e -> e.getValue() + CACHE_PATTERN_SEP + e.getKey()).collect(Collectors.toList()), StandardCharsets.UTF_8, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-        } catch (final Exception e)
-        {
-            if (CoreMain.isEnabledDebug())
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public PluginManagerImpl(final File directory)
-    {
-        this.directory = directory;
-        final File cache = new File("pluginsCache.txt");
-        try
-        {
-            if (cache.exists())
-            {
-                try
-                {
-                    Files.readAllLines(cache.toPath(), StandardCharsets.UTF_8).forEach(s -> {
-                        try
-                        {
-                            final String[] parts = CACHE_PATTERN.split(s, 2);
-                            if ((parts != null) && (parts.length == 2))
-                            {
-                                mainClassCache.put(parts[1], parts[0]);
-                            }
-                        } catch (final Exception e)
-                        {
-                            if (CoreMain.isEnabledDebug())
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                } catch (final IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            else
-            {
-                try
-                {
-                    cache.createNewFile();
-                } catch (final IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        } catch (final Exception t)
-        {
-            System.err.println("Error when loading plugin main classes cache: " + t.getClass().getName() + ", " + t.getMessage());
-            if (CoreMain.isEnabledDebug())
-            {
-                t.printStackTrace();
-            }
-            try
-            {
-                cache.delete();
-            } catch (final Exception e)
-            {
-                if (CoreMain.isEnabledDebug())
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
+        return this.pluginDirectories.stream().filter(dir -> dir.getDirectory().equals(directory)).findAny().orElse(null);
     }
 
     @Override
@@ -176,6 +94,44 @@ public class PluginManagerImpl implements PluginManager
     public PluginLoader getPluginLoader(final String suffix)
     {
         return this.pluginLoaders.get(suffix);
+    }
+
+    @Override
+    public void scanForPlugins()
+    {
+        CoreMain.debug("Scanning for plugins...");
+        for (final PluginsDirectoryImpl directory : this.pluginDirectories)
+        {
+            final File pluginsFile = directory.getDirectory();
+            Arrays.stream(Objects.requireNonNull(pluginsFile.listFiles())).filter(File::isFile).forEach(plugin ->
+            {
+                if (! this.loadedFiles.contains(plugin))
+                {
+                    final String extension = "." + plugin.getName().substring(plugin.getName().indexOf('.') + 1);
+                    final PluginLoader pluginLoader = this.pluginLoaders.get(extension);
+                    if (pluginLoader != null)
+                    {
+                        try
+                        {
+                            this.plugins.add(pluginLoader.loadPlugin(plugin));
+                            this.loadedFiles.add(plugin);
+                        }
+                        catch (final PluginException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        CoreMain.debug("Not found plugin loader for " + plugin);
+                    }
+                }
+                else
+                {
+                    CoreMain.debug("Skipped " + plugin + " because is arleady loaded");
+                }
+            });
+        }
     }
 
     @Override
@@ -198,10 +154,9 @@ public class PluginManagerImpl implements PluginManager
         }
         if (pluginLoader == null)
         {
-//            CoreMain.debug("Non-plugin file: " + file.getName());
             return;
         }
-//        CoreMain.debug("Loading plugin " + file.getName() + " with pluginloader: " + pluginLoader.getClass().getSimpleName());
+
         final BasePlugin plugin = pluginLoader.loadPlugin(file);
         if (plugin != null)
         {
@@ -216,9 +171,8 @@ public class PluginManagerImpl implements PluginManager
         {
             throw new PluginException("Plugin with name " + plugin.getName() + " is arleady loaded!");
         }
-//        CoreMain.debug("Injecting plugin: " + plugin.getName());
         this.plugins.add(plugin);
-        plugin.init(null, this.pluginLoaders.get(FakePluginLoader.FAKE_PLUGIN_SUFFIX), null);
+        plugin.init(null, null, this.pluginLoaders.get(FakePluginLoader.FAKE_PLUGIN_SUFFIX), null);
     }
 
     @Override
@@ -252,13 +206,7 @@ public class PluginManagerImpl implements PluginManager
     @Override
     public BasePlugin getPlugin(final String name)
     {
-        try
-        {
-            return this.plugins.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().get();
-        } catch (final NoSuchElementException ignored)
-        {
-            return null;
-        }
+        return this.plugins.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     @Override
@@ -302,9 +250,9 @@ public class PluginManagerImpl implements PluginManager
     }
 
     @Override
-    public File getDirectory()
+    public void saveClassCaches()
     {
-        return this.directory;
+        this.pluginDirectories.forEach(PluginsDirectoryImpl::saveCache);
     }
 
     @Override

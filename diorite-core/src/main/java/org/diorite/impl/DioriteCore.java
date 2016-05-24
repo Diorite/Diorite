@@ -137,7 +137,6 @@ import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.event.player.PlayerJoinEvent;
 import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.plugin.DioritePlugin;
-import org.diorite.plugin.PluginException;
 import org.diorite.plugin.PluginManager;
 import org.diorite.scheduler.Scheduler;
 import org.diorite.scheduler.Synchronizable;
@@ -710,91 +709,28 @@ public class DioriteCore implements Core
     {
         if (this.pluginManager == null)
         {
-            this.pluginManager = new PluginManagerImpl(this.config.getPluginsDirectory());
+            this.pluginManager = new PluginManagerImpl();
+        }
+        else
+        {
+            return;
         }
         this.pluginManager.registerPluginLoader(new FakePluginLoader());
-        this.pluginManager.registerPluginLoader(new JarPluginLoader());
-        this.pluginManager.registerPluginLoader(new CoreJarPluginLoader());
-
-    }
-
-    private void loadPlugins()
-    {
-        this.checkPluginManager();
-        final File dir = this.pluginManager.getDirectory();
-        if (dir.exists() && ! dir.isDirectory())
-        {
-            throw new RuntimeException("Plugin directory must be a folder!");
-        }
-        CoreMain.debug("Plugins directory is: " + dir.getAbsolutePath());
-        if (! dir.exists())
-        {
-            dir.mkdirs();
-            CoreMain.debug("Created plugins directory...");
-        }
-
-        final File[] files = dir.listFiles();
-        if (files == null)
-        {
-            throw new RuntimeException("Plugin directory must be a folder!");
-        }
-        for (final File file : files)
-        {
-            if (file.isDirectory())
-            {
-                continue;
-            }
-
-            try
-            {
-                this.pluginManager.loadPlugin(file);
-            } catch (final PluginException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("Loaded " + this.pluginManager.getPlugins().size() + " plugins and core mods!");
+        this.pluginManager.addPluginsDirectory(new File("plugins")); // TODO allow to change in config
     }
 
     private void loadCoreMods()
     {
         this.checkPluginManager();
+        this.pluginManager.registerPluginLoader(new CoreJarPluginLoader());
+        this.pluginManager.scanForPlugins();
+    }
 
-        final File dir = this.pluginManager.getDirectory();
-        if (dir.exists() && ! dir.isDirectory())
-        {
-            throw new RuntimeException("Plugin directory must be a folder!");
-        }
-        CoreMain.debug("Plugins directory is: " + dir.getAbsolutePath());
-        if (! dir.exists())
-        {
-            dir.mkdirs();
-            CoreMain.debug("Created plugins directory...");
-        }
-
-        final File[] files = dir.listFiles();
-        if (files == null)
-        {
-            throw new RuntimeException("Plugin directory must be a folder!");
-        }
-        for (final File file : files)
-        {
-            if (file.isDirectory() || ! file.getName().toLowerCase().endsWith(CoreJarPluginLoader.CORE_JAR_SUFFIX.toLowerCase()))
-            {
-                continue;
-            }
-
-            try
-            {
-                this.pluginManager.loadPlugin(file);
-            } catch (final PluginException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("Loaded " + this.pluginManager.getPlugins().size() + " core mods!");
+    private void loadPlugins()
+    {
+        this.checkPluginManager();
+        this.pluginManager.registerPluginLoader(new JarPluginLoader());
+        this.pluginManager.scanForPlugins();
     }
 
     private void registerEvents()
@@ -868,13 +804,13 @@ public class DioriteCore implements Core
         {
             return;
         }
-        PluginManagerImpl.saveCache();
         if (this.metrics != null)
         {
             this.metrics.stop();
         }
         if (this.pluginManager != null)
         {
+            this.pluginManager.saveClassCaches();
             this.pluginManager.disablePlugins();
         }
         this.hasStopped = true;
@@ -1043,7 +979,6 @@ public class DioriteCore implements Core
 
     public void run()
     {
-        PluginManagerImpl.saveCache();
         this.metrics = Metrics.start(this);
         Arrays.fill(this.recentTps, (double) DEFAULT_TPS);
         try

@@ -64,11 +64,11 @@ public class PluginsCmd extends SystemCommandImpl
                 }
 
                 DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_BASE, sender, Message.MessageData.e("plugin", pl));
-                if (pl.getDescription() != null)
+                if (! pl.getDescription().isEmpty())
                 {
                     DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_DESCRIPTION, sender, Message.MessageData.e("plugin", pl));
                 }
-                if (pl.getWebsite() != null)
+                if (! pl.getWebsite().isEmpty())
                 {
                     DioriteMessages.sendMessage(DioriteMessages.MSG_PLUGIN_OVERVIEW_WEBSITE, sender, Message.MessageData.e("plugin", pl));
                 }

@@ -43,5 +43,10 @@ public interface PluginLoader
 
     void disablePlugin(BasePlugin name) throws PluginException;
 
+    /**
+     * Returns a file extension (/suffix) which is associated with this plugin loader
+     *
+     * @return file extension handled by this plugin loader
+     */
     String getFileSuffix();
 }

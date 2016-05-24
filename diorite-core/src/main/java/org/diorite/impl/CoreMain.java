@@ -26,10 +26,12 @@ package org.diorite.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -41,6 +43,7 @@ import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.auth.properties.PropertyImpl;
 import org.diorite.impl.connection.packets.RegisterPackets;
 import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
+import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.Core;
 import org.diorite.auth.GameProfile;
 import org.diorite.auth.Property;
@@ -243,6 +246,19 @@ public final class CoreMain
                 return options;
             default:
                 return null;
+        }
+    }
+
+    /**
+     * Prints stacktrace to console if debug is enabled
+     *
+     * @param throwable stacktrace to print
+     */
+    public static void debug(final Throwable throwable)
+    {
+        if (enabledDebug)
+        {
+            throwable.printStackTrace(new PrintWriter(new LoggerOutputStream(debugLogger, Level.INFO)));
         }
     }
 

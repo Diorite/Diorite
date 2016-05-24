@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.diorite.Core;
-import org.diorite.Diorite;
 
 public abstract class DioritePlugin implements BasePlugin
 {
@@ -43,6 +42,7 @@ public abstract class DioritePlugin implements BasePlugin
     private boolean           initialised;
     private boolean           enabled;
     private PluginData        pluginData;
+    private File              pluginFolder;
     private File              dataFolder;
 
     protected DioritePlugin()
@@ -134,7 +134,7 @@ public abstract class DioritePlugin implements BasePlugin
     {
         if (this.dataFolder == null)
         {
-            this.dataFolder = new File(Diorite.getPluginManager().getDirectory(), this.getName());
+            this.dataFolder = new File(this.pluginFolder, this.getName());
         }
         return this.dataFolder;
     }
@@ -146,12 +146,13 @@ public abstract class DioritePlugin implements BasePlugin
 //    }
 
     @Override
-    public final void init(final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder data)
+    public final void init(final File pluginsDirectory, final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder data)
     {
         if (this.initialised)
         {
             throw new RuntimeException("Internal method");
         }
+        this.pluginFolder = pluginsDirectory;
         this.classLoader = classLoader;
         this.pluginLoader = pluginLoader;
         this.pluginData = data.build();
@@ -211,13 +212,13 @@ public abstract class DioritePlugin implements BasePlugin
     {
         if (! this.initialised)
         {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Plugin isn't initialised");
         }
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("name", this.getName()).append("version", this.getVersion()).append("author", this.getAuthor()).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("classLoader", this.classLoader).append("pluginLoader", this.pluginLoader).append("initialised", this.initialised).append("enabled", this.enabled).append("pluginData", this.pluginData).append("pluginFolder", this.pluginFolder).append("dataFolder", this.dataFolder).toString();
     }
 }
