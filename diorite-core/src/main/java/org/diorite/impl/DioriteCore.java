@@ -716,7 +716,10 @@ public class DioriteCore implements Core
             return;
         }
         this.pluginManager.registerPluginLoader(new FakePluginLoader());
-        this.pluginManager.addPluginsDirectory(new File("plugins")); // TODO allow to change in config
+        for (final File pluginsDirectory : this.getConfig().getPluginsDirectories())
+        {
+            this.pluginManager.addPluginsDirectory(pluginsDirectory);
+        }
     }
 
     private void loadCoreMods()

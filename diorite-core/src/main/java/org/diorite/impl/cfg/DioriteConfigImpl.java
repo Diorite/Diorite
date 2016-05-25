@@ -124,9 +124,9 @@ public class DioriteConfigImpl implements DioriteConfig
     @CfgStringDefault("adms.yml")
     private File administratorsFile;
 
-    @CfgComment("Path to plugins directory. Plugins will be loaded from this directory.")
-    @CfgStringDefault("plugins")
-    private File pluginsDirectory;
+    @CfgComment("Paths to plugins directories. Plugins will be loaded from these directories.")
+    @CfgStringArrayDefault("plugins")
+    private File[] pluginsDirectories;
 
     @CfgComment("If true, only players from special file can join to server.")
     @CfgBooleanDefault(false)
@@ -334,14 +334,14 @@ public class DioriteConfigImpl implements DioriteConfig
     }
 
     @Override
-    public File getPluginsDirectory()
+    public File[] getPluginsDirectories()
     {
-        return this.pluginsDirectory;
+        return this.pluginsDirectories;
     }
 
-    public void setPluginsDirectory(final File pluginsDirectory)
+    public void setPluginsDirectories(final File[] pluginsDirectories)
     {
-        this.pluginsDirectory = pluginsDirectory;
+        this.pluginsDirectories = pluginsDirectories;
     }
 
     @Override

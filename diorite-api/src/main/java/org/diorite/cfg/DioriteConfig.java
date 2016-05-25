@@ -183,11 +183,11 @@ public interface DioriteConfig
     File getAdministratorsFile();
 
     /**
-     * Returns name/location of directory used to store plugins.
+     * Returns names/locations of directories used to store plugins.
      *
-     * @return name/location of directory used to store plugins.
+     * @return names/locations of directories used to store plugins.
      */
-    File getPluginsDirectory();
+    File[] getPluginsDirectories();
 
     /**
      * Returns if whitelist is enabled on server.

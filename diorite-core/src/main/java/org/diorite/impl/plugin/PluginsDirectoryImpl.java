@@ -58,6 +58,10 @@ public class PluginsDirectoryImpl implements PluginsDirectory
         {
             throw new IllegalStateException("Arleady initialised!");
         }
+        if (! this.directory.exists())
+        {
+            this.directory.mkdir();
+        }
         final File cache = this.getCacheFile();
         if (cache.exists())
         {
