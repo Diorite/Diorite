@@ -35,8 +35,7 @@ import org.diorite.Core;
 
 public abstract class DioritePlugin implements BasePlugin
 {
-    private Logger logger;
-
+    private Logger            logger;
     private PluginClassLoader classLoader;
     private PluginLoader      pluginLoader;
     private boolean           initialised;
@@ -126,12 +125,14 @@ public abstract class DioritePlugin implements BasePlugin
     @Override
     public final PluginLoader getPluginLoader()
     {
+        this.initCheck();
         return this.pluginLoader;
     }
 
     @Override
     public File getDataFolder()
     {
+        this.initCheck();
         if (this.dataFolder == null)
         {
             this.dataFolder = new File(this.pluginFolder, this.getName());

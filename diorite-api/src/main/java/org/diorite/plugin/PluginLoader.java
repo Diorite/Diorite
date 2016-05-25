@@ -41,7 +41,7 @@ public interface PluginLoader
 
     void enablePlugin(BasePlugin plugin) throws PluginException;
 
-    void disablePlugin(BasePlugin name) throws PluginException;
+    void disablePlugin(BasePlugin plugin) throws PluginException;
 
     /**
      * Returns a file extension (/suffix) which is associated with this plugin loader

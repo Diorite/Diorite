@@ -58,9 +58,31 @@ public interface PluginManager
 
     Collection<BasePlugin> getPlugins();
 
-    void enablePlugins();
+    default void enablePlugins()
+    {
+        this.getPlugins().stream().filter(p -> ! p.isEnabled() && ! p.isCoreMod()).forEach(plugin -> {
+            try
+            {
+                this.enablePlugin(plugin);
+            } catch (final PluginException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
 
-    void disablePlugins();
+    default void disablePlugins()
+    {
+        this.getPlugins().stream().filter(p -> p.isEnabled() && ! p.isCoreMod()).forEach(plugin -> {
+            try
+            {
+                this.disablePlugin(plugin);
+            } catch (final PluginException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
 
     void saveClassCaches();
 

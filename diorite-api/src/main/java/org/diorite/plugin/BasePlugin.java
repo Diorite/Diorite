@@ -136,7 +136,7 @@ public interface BasePlugin
      * @param pluginLoader used plugin loader.
      * @param pluginData   other data of plugin. (like name, version, author etc.)
      */
-    void init(final File pluginsDirectory, final PluginClassLoader classLoader, final PluginLoader pluginLoader, final PluginDataBuilder pluginData);
+    void init(File pluginsDirectory, PluginClassLoader classLoader, PluginLoader pluginLoader, PluginDataBuilder pluginData);
 
     /**
      * Set if plugin is enabled.

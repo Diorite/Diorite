@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableMap;
+
 import org.diorite.impl.CoreMain;
 import org.diorite.plugin.PluginsDirectory;
 
@@ -52,6 +54,10 @@ public class PluginsDirectoryImpl implements PluginsDirectory
 
     public void init() throws IOException
     {
+        if (this.isInitialised)
+        {
+            throw new IllegalStateException("Arleady initialised!");
+        }
         final File cache = this.getCacheFile();
         if (cache.exists())
         {
@@ -67,6 +73,7 @@ public class PluginsDirectoryImpl implements PluginsDirectory
         {
             cache.createNewFile();
         }
+        this.isInitialised = true;
         CoreMain.debug("Loaded " + this.mainClassCache.size() + " cached main classes!");
     }
 
@@ -79,18 +86,21 @@ public class PluginsDirectoryImpl implements PluginsDirectory
     @Override
     public Map<String, String> getMainClassCache()
     {
-        return null; // TODO
+        this.checkInitialised();
+        return ImmutableMap.copyOf(this.mainClassCache);
     }
 
     @Override
     public void resetMainClassCache()
     {
+        this.checkInitialised();
         this.getCacheFile().delete();
         this.mainClassCache.clear();
     }
 
     public String getCachedClass(final String file)
     {
+        this.checkInitialised();
         try
         {
             return this.mainClassCache.get(file);
@@ -103,6 +113,7 @@ public class PluginsDirectoryImpl implements PluginsDirectory
 
     public void setCachedClass(final String file, final Class<?> clazz)
     {
+        this.checkInitialised();
         try
         {
             this.mainClassCache.put(file, clazz.getName());
@@ -114,6 +125,7 @@ public class PluginsDirectoryImpl implements PluginsDirectory
 
     public void saveCache()
     {
+        this.checkInitialised();
         try
         {
             Files.write(this.getCacheFile().toPath(), mainClassCache.entrySet().stream().map(e -> e.getValue() + CACHE_PATTERN_SEP + e.getKey()).collect(Collectors.toList()), StandardCharsets.UTF_8, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
@@ -125,7 +137,7 @@ public class PluginsDirectoryImpl implements PluginsDirectory
 
     private void checkInitialised()
     {
-        if (this.isInitialised)
+        if (! this.isInitialised)
         {
             throw new IllegalStateException();
         }

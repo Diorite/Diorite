@@ -107,23 +107,13 @@ public class PluginManagerImpl implements PluginManager
             {
                 if (! this.loadedFiles.contains(plugin))
                 {
-                    final String extension = "." + plugin.getName().substring(plugin.getName().indexOf('.') + 1);
-                    final PluginLoader pluginLoader = this.pluginLoaders.get(extension);
-                    if (pluginLoader != null)
+                    try
                     {
-                        try
-                        {
-                            this.plugins.add(pluginLoader.loadPlugin(plugin));
-                            this.loadedFiles.add(plugin);
-                        }
-                        catch (final PluginException e)
-                        {
-                            e.printStackTrace();
-                        }
+                        this.loadPlugin(plugin);
                     }
-                    else
+                    catch (final PluginException e)
                     {
-                        CoreMain.debug("Not found plugin loader for " + plugin);
+                        e.printStackTrace();
                     }
                 }
                 else
@@ -154,12 +144,14 @@ public class PluginManagerImpl implements PluginManager
         }
         if (pluginLoader == null)
         {
+            CoreMain.debug("Not found plugin loader for " + file);
             return;
         }
 
         final BasePlugin plugin = pluginLoader.loadPlugin(file);
         if (plugin != null)
         {
+            this.loadedFiles.add(file);
             this.plugins.add(plugin);
         }
     }
@@ -219,34 +211,6 @@ public class PluginManagerImpl implements PluginManager
     public PluginDataImpl createPluginData(final PluginDataBuilder builder)
     {
         return new PluginDataImpl(builder);
-    }
-
-    @Override
-    public void enablePlugins()
-    {
-        this.plugins.stream().filter(p -> ! p.isEnabled() && ! p.isCoreMod()).forEach(plugin -> {
-            try
-            {
-                this.enablePlugin(plugin);
-            } catch (final PluginException e)
-            {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    @Override
-    public void disablePlugins()
-    {
-        this.plugins.stream().filter(p -> p.isEnabled() && ! p.isCoreMod()).forEach(plugin -> {
-            try
-            {
-                this.disablePlugin(plugin);
-            } catch (final PluginException e)
-            {
-                e.printStackTrace();
-            }
-        });
     }
 
     @Override
