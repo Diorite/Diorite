@@ -97,7 +97,7 @@ public class BossBarImpl implements BossBar
 
     private float healthInPacketFormat()
     {
-        return this.health / 100;
+        return this.health / 100F;
     }
 
     @Override
