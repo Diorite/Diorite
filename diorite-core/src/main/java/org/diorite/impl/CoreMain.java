@@ -27,12 +27,10 @@ package org.diorite.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.reflections.Reflections;
@@ -65,9 +63,6 @@ import joptsimple.OptionSet;
 
 public final class CoreMain
 {
-    public static final  float   JAVA_8         = 52.0f;
-    public static final  int     MB_128         = 131072; // 1024KB * 128
-    private static final Pattern PERM_GEN_PAT   = Pattern.compile("[^\\d]");
     private static final Logger  debugLogger    = LoggerFactory.getLogger("[DEBUG]");
     static               boolean consoleEnabled = true;
     static               boolean useJline       = true;
@@ -145,19 +140,6 @@ public final class CoreMain
             if (options.has("noconsole"))
             {
                 CoreMain.consoleEnabled = false;
-            }
-            int maxPermGen = 0;
-            for (final String s : ManagementFactory.getRuntimeMXBean().getInputArguments())
-            {
-                if (s.startsWith("-XX:MaxPermSize"))
-                {
-                    maxPermGen = DioriteMathUtils.asInt(PERM_GEN_PAT.matcher(s).replaceAll(""), 0);
-                    maxPermGen <<= 10 * "kmg".indexOf(Character.toLowerCase(s.charAt(s.length() - 1)));
-                }
-            }
-            if ((Float.parseFloat(System.getProperty("java.class.version")) < JAVA_8) && (maxPermGen < MB_128))
-            {
-                System.out.println("Warning, your max perm gen size is not set or less than 128mb. It is recommended you restart Java with the following argument: -XX:MaxPermSize=128M");
             }
             System.out.println("Starting server, please wait...");
 
