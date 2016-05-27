@@ -158,7 +158,6 @@ public abstract class BaseTracker<T extends IEntity>
         {
             this.sendToAll(new PacketPlayClientboundEntityMetadata(this.tracker, meta));
         }
-
     }
 
     public void sendToAll(final PacketPlayClientbound packet)
@@ -191,14 +190,15 @@ public abstract class BaseTracker<T extends IEntity>
         final int range = this.getTrackRange();
         if (player != this.tracker)
         {
-            final double dX = player.getX() - (this.xLoc / 32);
-            final double dZ = player.getZ() - (this.zLoc / 32);
-            if (((dX < - range) || (dX > range) || (dZ < - range) || (dZ > range)))
+            final double dX = player.getX() - this.xLoc;
+            final double dZ = player.getZ() - this.zLoc;
+            final boolean isInTrackedRange = !((dX < - range) || (dX > range) || (dZ < - range) || (dZ > range));
+            final boolean isTracked = this.tracked.contains(player);
+            if (isTracked && !isInTrackedRange)
             {
                 this.remove(player);
-                return;
             }
-            if (! this.tracked.contains(player))
+            else if (!isTracked && isInTrackedRange)
             {
                 this.tracked.add(player);
                 this.spawn();
