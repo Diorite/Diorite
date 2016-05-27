@@ -51,6 +51,8 @@ import org.diorite.effect.StatusEffect;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.BasicAttributeModifier;
 import org.diorite.firework.FireworkEffect;
+import org.diorite.inventory.item.BaseItemStack;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.map.MapIcon;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtSerializable;
@@ -164,6 +166,7 @@ public final class CoreMain
     @SuppressWarnings("unchecked")
     private static void registerNbt()
     {
+        NbtSerialization.register(BaseItemStack::new, ItemStack.class, BaseItemStack.class);
         NbtSerialization.register(PropertyImpl::new, Property.class, PropertyImpl.class);
         NbtSerialization.register(BannerPattern::new, BannerPattern.class);
         NbtSerialization.register(StatusEffect::new, StatusEffect.class);

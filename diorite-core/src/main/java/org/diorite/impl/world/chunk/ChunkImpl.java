@@ -25,6 +25,7 @@
 package org.diorite.impl.world.chunk;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,16 +33,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.palette.PaletteImpl;
+import org.diorite.Location;
+import org.diorite.entity.EntityType;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkUnloadEvent;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.nbt.NbtTagDouble;
+import org.diorite.nbt.NbtTagFloat;
 import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.world.Biome;
@@ -442,7 +448,23 @@ public class ChunkImpl implements Chunk
         this.recalculateBlockCounts();
 
         this.populated.set(tag.getBoolean("TerrainPopulated"));
-        // TODO: load tile entites and other entities
+
+        final List<NbtTagCompound> entities = tag.getList("Entities", NbtTagCompound.class);
+        for (final NbtTagCompound entity : entities)
+        {
+            final List<NbtTagDouble> pos = entity.getList("Pos", NbtTagDouble.class);
+            final List<NbtTagFloat> rotation = entity.getList("Rotation", NbtTagFloat.class);
+            final Location entityLocation = new Location(pos.get(0).getValue(), pos.get(1).getValue(), pos.get(2).getValue(), rotation.get(0).getValue(), rotation.get(1).getValue(), this.getWorld());
+            final EntityType entityType = EntityType.getByEntityName(entity.getString("id"));
+
+            final IEntity dioriteEntity = DioriteCore.getInstance().getServerManager().getEntityFactory().createEntity(entityType, entityLocation);
+            dioriteEntity.loadFromNbt(entity);
+
+            this.getWorld().addEntity(dioriteEntity, false);
+            dioriteEntity.updateChunk(null, this);
+        }
+
+        // TODO tile entities
 
         final byte[] biomes = tag.getByteArray("Biomes");
         if (biomes != null)
@@ -567,8 +589,22 @@ public class ChunkImpl implements Chunk
             {
                 tag.setByteArray("Biomes", this.biomes);
             }
-            tag.setList("Entities", new ArrayList<>(1));
-            tag.setList("TileEntities", new ArrayList<>(1));
+
+            final List<NbtTag> entities = new ArrayList<>(this.getEntities().size());
+            for (final IEntity dioriteEntity : this.getEntities())
+            {
+                final NbtTagCompound entity = new NbtTagCompound();
+
+                entity.setString("id", dioriteEntity.getType().getName());
+                entity.setList("Pos", Arrays.asList(new NbtTagDouble("x", dioriteEntity.getX()), new NbtTagDouble("y", dioriteEntity.getY()), new NbtTagDouble("z", dioriteEntity.getZ())));
+                entity.setList("Rotation", Arrays.asList(new NbtTagFloat("yaw", dioriteEntity.getYaw()), new NbtTagFloat("pitch", dioriteEntity.getPitch())));
+
+                dioriteEntity.saveToNbt(entity);
+                entities.add(entity);
+            }
+
+            tag.setList("Entities", entities);
+            tag.setList("TileEntities", new ArrayList<>(1)); // TODO
             return tag;
         }
     }
@@ -616,6 +652,7 @@ public class ChunkImpl implements Chunk
 
     public void init()
     {
+        this.getEntities().forEach(iEntity -> iEntity.onSpawn(this.getWorld().getEntityTrackers().getTracker(iEntity))); // this is needed?
         // TODO: init tile entities and other stuff
     }
 

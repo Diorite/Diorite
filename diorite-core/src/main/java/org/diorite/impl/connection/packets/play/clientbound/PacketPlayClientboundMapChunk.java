@@ -207,7 +207,7 @@ public class PacketPlayClientboundMapChunk extends PacketPlayClientbound
         }
         if (full)
         {
-            bytes += chunk.getBiomes().length;
+            bytes += chunk.getBiomes().length; // TODO NPE here?
         }
         return bytes;
     }

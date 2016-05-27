@@ -25,6 +25,7 @@
 package org.diorite.entity;
 
 import org.diorite.utils.SimpleEnum.ASimpleEnum;
+import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
@@ -104,6 +105,8 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static final EntityType TIPPED_ARROW           = new EntityType("TIPPED_ARROW", TippedArrow.class, "TippedArrow", true);
     public static final EntityType DRAGON_FIREBALL        = new EntityType("DRAGON_FIREBALL", DragonFireball.class, "DragonFireball", true);
 
+    private static final CaseInsensitiveMap<EntityType> byEntityName = new CaseInsensitiveMap<>(61, SMALL_LOAD_FACTOR);
+
     private final Class<? extends Entity> dioriteEntityClass;
     private final boolean                 living;
     private final String                  name;
@@ -146,6 +149,7 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static void register(final EntityType element)
     {
         ASimpleEnum.register(EntityType.class, element);
+        byEntityName.put(element.getName(), element);
     }
 
     /**
@@ -170,6 +174,18 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static EntityType getByEnumName(final String name)
     {
         return getByEnumName(EntityType.class, name);
+    }
+
+    /**
+     * Get one of {@link EntityType} entry by its Minecraft name.
+     *
+     * @param name Minecraft name of entry.
+     *
+     * @return one of entry or null.
+     */
+    public static EntityType getByEntityName(final String name)
+    {
+        return byEntityName.get(name);
     }
 
     /**

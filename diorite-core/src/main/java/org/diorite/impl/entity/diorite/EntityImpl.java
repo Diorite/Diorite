@@ -52,6 +52,7 @@ import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
@@ -715,13 +716,13 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         {
             entityPredicate = e -> type.isAssignableFrom(e.getClass()) && shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 2) + x, (entitySize.y / 2) + y, (entitySize.z / 2) + z, e.getX(), e.getY(), e.getZ());
         }
-        return this.<T>getNearbyEntities(x, y, z, entityPredicate);
+        return this.getNearbyEntities(x, y, z, entityPredicate);
     }
 
     @Override
     public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Class<? extends T> type, final Predicate<Entity> predicate)
     {
-        return this.<T>getNearbyEntities(x, y, z, e -> type.isAssignableFrom(e.getClass()) && predicate.test(e));
+        return this.getNearbyEntities(x, y, z, e -> type.isAssignableFrom(e.getClass()) && predicate.test(e));
     }
 
     @Override
@@ -768,5 +769,19 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     {
         CoreMain.debug("Entity " + this + " moved from " + oldW + " to " + newW);
         // TODO add event?
+    }
+
+    @Override
+    public void loadFromNbt(final NbtTagCompound nbtEntity)
+    {
+        this.setAir(nbtEntity.getShort("Air", 300));
+        // TODO
+    }
+
+    @Override
+    public void saveToNbt(final NbtTagCompound nbtEntity)
+    {
+        nbtEntity.setShort("Air", this.getAir());
+        // TODO
     }
 }

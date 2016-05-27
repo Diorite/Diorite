@@ -29,8 +29,9 @@ import java.util.List;
 
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
+import org.diorite.nbt.NbtSerializable;
 
-public interface ItemStack extends Cloneable
+public interface ItemStack extends Cloneable, NbtSerializable
 {
     /**
      * Empty array of itemstacks.

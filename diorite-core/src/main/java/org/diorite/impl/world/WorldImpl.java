@@ -938,6 +938,11 @@ public class WorldImpl implements World, Tickable
 
     public void addEntity(final IEntity entity)
     {
+        this.addEntity(entity, true);
+    }
+
+    public void addEntity(final IEntity entity, final boolean doInit)
+    {
         final BaseTracker<?> tracker;
         if (entity instanceof IPlayer)
         {
@@ -946,6 +951,10 @@ public class WorldImpl implements World, Tickable
         else
         {
             tracker = this.entityTrackers.addTracked(entity);
+        }
+        if (! doInit)
+        {
+            return;
         }
         entity.updateChunk(null, this.getChunkAt(entity.getLocation().getChunkPos()));
         entity.onSpawn(tracker);

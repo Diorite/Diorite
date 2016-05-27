@@ -35,6 +35,7 @@ import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.entity.tracker.Trackable;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
@@ -145,4 +146,8 @@ public interface IEntity extends Entity, Tickable, Trackable
     EntityBoundingBox getBoundingBox();
 
     void setBoundingBox(EntityBoundingBox box);
+
+    void loadFromNbt(NbtTagCompound nbtEntity);
+
+    void saveToNbt(NbtTagCompound nbtEntity);
 }

@@ -32,6 +32,7 @@ import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.others.Dirtable;
 
 public class ItemStackImpl implements Dirtable, ItemStack
@@ -185,6 +186,12 @@ public class ItemStackImpl implements Dirtable, ItemStack
     public ItemStackImpl clone()
     {
         return new ItemStackImpl(this.wrapped.clone());
+    }
+
+    @Override
+    public NbtTagCompound serializeToNBT()
+    {
+        return this.wrapped.serializeToNBT();
     }
 
     public static ItemStackImpl wrap(final ItemStack item)

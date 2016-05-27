@@ -40,11 +40,14 @@ import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataItemStackEntry;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.ImmutableLocation;
-import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.entity.EntityType;
 import org.diorite.entity.Human;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.nbt.NbtSerialization;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteMathUtils;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.utils.others.NamedUUID;
 
 class ItemImpl extends EntityImpl implements IItem, EntityObject
@@ -279,6 +282,22 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     public int getEntityObjectData()
     {
         return 1;
+    }
+
+    @Override
+    public void loadFromNbt(final NbtTagCompound nbtEntity)
+    {
+        super.loadFromNbt(nbtEntity);
+        this.setItemStack(NbtSerialization.deserialize(BaseItemStack.class, nbtEntity.getCompound("Item")));
+        this.setAge(nbtEntity.getShort("Age"));
+    }
+
+    @Override
+    public void saveToNbt(final NbtTagCompound nbtEntity)
+    {
+        super.saveToNbt(nbtEntity);
+        nbtEntity.addTag(this.getItemStack().serializeToNBT());
+        nbtEntity.setShort("Age", this.getAge());
     }
 
     @Override

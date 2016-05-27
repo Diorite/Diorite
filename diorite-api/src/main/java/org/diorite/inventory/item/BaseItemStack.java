@@ -32,6 +32,7 @@ import org.diorite.Diorite;
 import org.diorite.ItemFactory;
 import org.diorite.inventory.item.meta.ItemMeta;
 import org.diorite.material.Material;
+import org.diorite.nbt.NbtTagCompound;
 
 /**
  * Interface for item stack representation.
@@ -59,6 +60,13 @@ public class BaseItemStack implements ItemStack
     {
         this(item.getMaterial(), item.getAmount());
         this.itemMeta = item.getItemMeta().clone();
+    }
+
+    public BaseItemStack(final NbtTagCompound nbt)
+    {
+        this.amount = nbt.getByte("Count");
+        this.material = Material.matchMaterial(nbt.getString("id"));
+        // TODO
     }
 
     @Override
@@ -285,4 +293,12 @@ public class BaseItemStack implements ItemStack
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("material", this.material).append("amount", this.amount).append("itemMeta", this.itemMeta).toString();
     }
 
+    @Override
+    public NbtTagCompound serializeToNBT()
+    {
+        final NbtTagCompound nbt = new NbtTagCompound("Item");
+        nbt.setByte("Count", this.amount);
+        nbt.setString("id", this.material.getMinecraftId());
+        return nbt;
+    }
 }
