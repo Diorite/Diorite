@@ -25,7 +25,6 @@
 package org.diorite.impl.world.chunk;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,16 +37,12 @@ import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.palette.PaletteImpl;
-import org.diorite.Location;
-import org.diorite.entity.EntityType;
 import org.diorite.event.EventType;
 import org.diorite.event.chunk.ChunkUnloadEvent;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
-import org.diorite.nbt.NbtTagDouble;
-import org.diorite.nbt.NbtTagFloat;
 import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.world.Biome;
@@ -452,13 +447,16 @@ public class ChunkImpl implements Chunk
         final List<NbtTagCompound> entities = tag.getList("Entities", NbtTagCompound.class);
         for (final NbtTagCompound entity : entities)
         {
-            final List<NbtTagDouble> pos = entity.getList("Pos", NbtTagDouble.class);
-            final List<NbtTagFloat> rotation = entity.getList("Rotation", NbtTagFloat.class);
-            final Location entityLocation = new Location(pos.get(0).getValue(), pos.get(1).getValue(), pos.get(2).getValue(), rotation.get(0).getValue(), rotation.get(1).getValue(), this.getWorld());
-            final EntityType entityType = EntityType.getByEntityName(entity.getString("id"));
-
-            final IEntity dioriteEntity = DioriteCore.getInstance().getServerManager().getEntityFactory().createEntity(entityType, entityLocation);
-            dioriteEntity.loadFromNbt(entity);
+            final IEntity dioriteEntity;
+            try
+            {
+                dioriteEntity = DioriteCore.getInstance().getServerManager().getEntityFactory().createEntity(entity, this.getWorld());
+            }
+            catch (final Exception e)
+            {
+                System.err.println("Failed to load entity (" + entity + ")");
+                continue;
+            }
 
             this.getWorld().addEntity(dioriteEntity, false);
             dioriteEntity.updateChunk(null, this);
@@ -594,12 +592,8 @@ public class ChunkImpl implements Chunk
             for (final IEntity dioriteEntity : this.getEntities())
             {
                 final NbtTagCompound entity = new NbtTagCompound();
-
-                entity.setString("id", dioriteEntity.getType().getName());
-                entity.setList("Pos", Arrays.asList(new NbtTagDouble("x", dioriteEntity.getX()), new NbtTagDouble("y", dioriteEntity.getY()), new NbtTagDouble("z", dioriteEntity.getZ())));
-                entity.setList("Rotation", Arrays.asList(new NbtTagFloat("yaw", dioriteEntity.getYaw()), new NbtTagFloat("pitch", dioriteEntity.getPitch())));
-
                 dioriteEntity.saveToNbt(entity);
+
                 entities.add(entity);
             }
 
@@ -652,7 +646,7 @@ public class ChunkImpl implements Chunk
 
     public void init()
     {
-        this.getEntities().forEach(iEntity -> iEntity.onSpawn(this.getWorld().getEntityTrackers().getTracker(iEntity))); // this is needed?
+        // TODO dodac podzial metod w Entity na onSpawn i onLoad
         // TODO: init tile entities and other stuff
     }
 

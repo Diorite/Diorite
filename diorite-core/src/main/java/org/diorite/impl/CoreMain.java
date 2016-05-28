@@ -41,6 +41,7 @@ import org.diorite.impl.auth.GameProfileImpl;
 import org.diorite.impl.auth.properties.PropertyImpl;
 import org.diorite.impl.connection.packets.RegisterPackets;
 import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
+import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.Core;
 import org.diorite.auth.GameProfile;
@@ -166,7 +167,7 @@ public final class CoreMain
     @SuppressWarnings("unchecked")
     private static void registerNbt()
     {
-        NbtSerialization.register(BaseItemStack::new, ItemStack.class, BaseItemStack.class);
+        NbtSerialization.register(BaseItemStack::new, ItemStack.class, BaseItemStack.class, ItemStackImpl.class);
         NbtSerialization.register(PropertyImpl::new, Property.class, PropertyImpl.class);
         NbtSerialization.register(BannerPattern::new, BannerPattern.class);
         NbtSerialization.register(StatusEffect::new, StatusEffect.class);

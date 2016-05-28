@@ -26,6 +26,7 @@ package org.diorite.impl.entity.diorite;
 
 import javax.vecmath.Vector3f;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,6 +54,8 @@ import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.nbt.NbtTagDouble;
+import org.diorite.nbt.NbtTagFloat;
 import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
@@ -644,7 +647,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         {
             entityPredicate = e -> shape.isNotOutside(this.x, this.y, this.z, (entitySize.x / 1) + x, (entitySize.y / 1) + y, (entitySize.z / 1) + z, e.getX(), e.getY(), e.getZ());
         }
-        return this.<IEntity>getNearbyEntities(x, y, z, entityPredicate);
+        return this.getNearbyEntities(x, y, z, entityPredicate);
     }
 
     @SuppressWarnings("ObjectEquality")
@@ -732,12 +735,6 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("world", this.world).append("x", this.x).append("y", this.y).append("z", this.z).toString();
-    }
-
-    @Override
     public void teleport(final ILocation location)
     {
         final ChunkImpl chunk = this.getChunk();
@@ -750,8 +747,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         final WorldImpl newWorld = (WorldImpl) location.getWorld();
         if (this.world != newWorld)
         {
-            this.worldChange(this.world, newWorld);
-            this.world = newWorld;
+            this.worldChange(this.world, this.world = newWorld);
         }
 
         this.updateChunk(chunk, this.getChunk());
@@ -781,7 +777,16 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     @Override
     public void saveToNbt(final NbtTagCompound nbtEntity)
     {
+        nbtEntity.setString("id", this.getType().getName());
+        nbtEntity.setList("Pos", Arrays.asList(new NbtTagDouble("x", this.x), new NbtTagDouble("y", this.y), new NbtTagDouble("z", this.z)));
+        nbtEntity.setList("Rotation", Arrays.asList(new NbtTagFloat("yaw", this.yaw), new NbtTagFloat("pitch", this.pitch)));
         nbtEntity.setShort("Air", this.getAir());
         // TODO
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("id", this.id).append("world", this.world).append("x", this.x).append("y", this.y).append("z", this.z).toString();
     }
 }

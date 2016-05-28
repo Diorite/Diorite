@@ -25,10 +25,12 @@
 package org.diorite.impl.entity;
 
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.EntityFactory;
 import org.diorite.ILocation;
 import org.diorite.auth.GameProfile;
 import org.diorite.entity.EntityType;
+import org.diorite.nbt.NbtTagCompound;
 
 public interface IEntityFactory extends EntityFactory
 {
@@ -36,6 +38,8 @@ public interface IEntityFactory extends EntityFactory
 
     @Override
     IEntity createEntity(EntityType type, ILocation location);
+
+    IEntity createEntity(NbtTagCompound nbt, WorldImpl world);
 
     int getEntityNetworkID(EntityType type);
 

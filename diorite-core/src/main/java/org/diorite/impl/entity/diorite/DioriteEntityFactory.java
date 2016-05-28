@@ -25,6 +25,7 @@
 package org.diorite.impl.entity.diorite;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -100,8 +101,10 @@ import org.diorite.impl.entity.IWither;
 import org.diorite.impl.entity.IWitherSkull;
 import org.diorite.impl.entity.IWolf;
 import org.diorite.impl.entity.IZombie;
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
+import org.diorite.Location;
 import org.diorite.auth.GameProfile;
 import org.diorite.entity.AreaEffectCloud;
 import org.diorite.entity.ArmorStand;
@@ -170,6 +173,9 @@ import org.diorite.entity.Wither;
 import org.diorite.entity.WitherSkull;
 import org.diorite.entity.Wolf;
 import org.diorite.entity.Zombie;
+import org.diorite.nbt.NbtTagCompound;
+import org.diorite.nbt.NbtTagDouble;
+import org.diorite.nbt.NbtTagFloat;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
@@ -670,6 +676,20 @@ public class DioriteEntityFactory implements IEntityFactory
             return null;
         }
         return func.apply(location.toImmutableLocation());
+    }
+
+    @Override
+    public IEntity createEntity(final NbtTagCompound nbt, final WorldImpl world)
+    {
+        final Iterator<NbtTagDouble> pos = nbt.getList("Pos", NbtTagDouble.class).iterator();
+        final Iterator<NbtTagFloat> rotation = nbt.getList("Rotation", NbtTagFloat.class).iterator();
+        final Location entityLocation = new Location(pos.next().getValue(), pos.next().getValue(), pos.next().getValue(), rotation.next().getValue(), rotation.next().getValue(), world);
+        final EntityType entityType = EntityType.getByEntityName(nbt.getString("id"));
+
+        final IEntity entity = this.createEntity(entityType, entityLocation);
+        entity.loadFromNbt(nbt);
+
+        return entity;
     }
 
     @Override

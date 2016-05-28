@@ -140,6 +140,7 @@ See here: https://github.com/Diorite/Diorite/blob/master/CONTRIBUTING.md
 - [x] Titles
 - [x] World border
 - [ ] Redstone stuff.
+- [x] Boss bars
 
 #### Others
 - [x] Create basic plugin loader
