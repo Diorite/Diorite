@@ -941,7 +941,14 @@ public class WorldImpl implements World, Tickable
         this.addEntity(entity, true);
     }
 
-    public void addEntity(final IEntity entity, final boolean doInit)
+    /**
+     * This method adds entity to this world
+     *
+     * @param entity entity which should be spawned
+     * @param isSpawn true when entity is spawned
+     *                false when is loaded from map
+     */
+    public void addEntity(final IEntity entity, final boolean isSpawn)
     {
         final BaseTracker<?> tracker;
         if (entity instanceof IPlayer)
@@ -952,12 +959,12 @@ public class WorldImpl implements World, Tickable
         {
             tracker = this.entityTrackers.addTracked(entity);
         }
-        if (! doInit)
+        entity.onLoad(tracker);
+        if (isSpawn)
         {
-            return;
+            entity.updateChunk(null, this.getChunkAt(entity.getLocation().getChunkPos()));
+            entity.onSpawn();
         }
-        entity.updateChunk(null, this.getChunkAt(entity.getLocation().getChunkPos()));
-        entity.onSpawn(tracker);
     }
 
     public void removeEntity(final IEntity entity)

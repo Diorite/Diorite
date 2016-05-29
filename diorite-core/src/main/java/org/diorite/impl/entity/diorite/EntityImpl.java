@@ -393,13 +393,18 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     }
 
     @Override
-    public void onSpawn(final BaseTracker<?> tracker)
+    public void onLoad(final BaseTracker<?> tracker)
     {
         if (this.tracker != null)
         {
             throw new IllegalArgumentException("Entity was already spawned.");
         }
         this.tracker = tracker;
+    }
+
+    @Override
+    public void onSpawn()
+    {
     }
 
     @Override

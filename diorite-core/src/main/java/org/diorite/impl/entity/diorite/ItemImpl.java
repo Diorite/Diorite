@@ -188,9 +188,14 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     }
 
     @Override
-    public void onSpawn(final BaseTracker<?> tracker)
+    public void onLoad(final BaseTracker<?> tracker)
     {
-        super.onSpawn(tracker);
+        super.onLoad(tracker);
+    }
+
+    @Override
+    public void onSpawn()
+    {
         if (this.isAiEnabled())
         {
             this.joinNearbyItem(true);

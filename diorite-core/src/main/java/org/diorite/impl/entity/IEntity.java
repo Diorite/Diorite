@@ -110,7 +110,18 @@ public interface IEntity extends Entity, Tickable, Trackable
     @Override
     DioriteCore getCore();
 
-    void onSpawn(BaseTracker<?> tracker);
+    /**
+     * This method is invoked when entity is loaded from chunk files
+     * and when is spawned
+     *
+     * @param tracker tracker related with this entity
+     */
+    void onLoad(BaseTracker<?> tracker);
+
+    /**
+     * This method invokes only when entity is spawned (by Command/API Call/Naturally/etc.)
+     */
+    void onSpawn();
 
     void move(double modX, double modY, double modZ, float modYaw, float modPitch);
 

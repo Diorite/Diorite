@@ -646,8 +646,7 @@ public class ChunkImpl implements Chunk
 
     public void init()
     {
-        // TODO dodac podzial metod w Entity na onSpawn i onLoad
-        // TODO: init tile entities and other stuff
+        // TODO
     }
 
     public static ChunkImpl loadFromNBT(final World world, final NbtTagCompound tag)
