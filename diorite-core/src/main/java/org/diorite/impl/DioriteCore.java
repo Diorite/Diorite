@@ -422,7 +422,7 @@ public class DioriteCore implements Core
         final double[] result = new double[this.recentTps.length];
         for (int i = 0; i < this.recentTps.length; i++)
         {
-            result[i] = (this.recentTps[i] > this.tps) ? this.tps : this.recentTps[i];
+            result[i] = Math.min(this.tps, this.recentTps[i]);
         }
         return result;
     }
@@ -983,7 +983,7 @@ public class DioriteCore implements Core
     public void run()
     {
         this.metrics = Metrics.start(this);
-        Arrays.fill(this.recentTps, (double) DEFAULT_TPS);
+        Arrays.fill(this.recentTps, (double) this.tps);
         try
         {
             long lastTick = System.nanoTime();
@@ -1003,7 +1003,7 @@ public class DioriteCore implements Core
                     catchupTime = Math.min(NANOS_IN_SECOND, Math.abs(wait));
                     if ((this.currentTick++ % 100) == 0)
                     {
-                        final double currentTps = (((double) NANOS_IN_SECOND) / (curTime - tickSection)) * 100;
+                        final double currentTps = Math.min(this.tps, (((double) NANOS_IN_SECOND) / (curTime - tickSection)) * 100);
                         //noinspection MagicNumber
                         this.recentTps[0] = calcTps(this.recentTps[0], 0.92D, currentTps);
                         //noinspection MagicNumber
