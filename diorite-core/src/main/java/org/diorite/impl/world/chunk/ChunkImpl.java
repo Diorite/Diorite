@@ -34,6 +34,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.world.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.palette.PaletteImpl;
@@ -591,6 +592,10 @@ public class ChunkImpl implements Chunk
             final List<NbtTag> entities = new ArrayList<>(this.getEntities().size());
             for (final IEntity dioriteEntity : this.getEntities())
             {
+                if (dioriteEntity instanceof IPlayer)
+                {
+                    continue;
+                }
                 final NbtTagCompound entity = new NbtTagCompound();
                 dioriteEntity.saveToNbt(entity);
 
