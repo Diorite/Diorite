@@ -71,7 +71,7 @@ public class PacketPlayClientboundTitle extends PacketPlayClientbound
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        this.action = TitleAction.values()[data.readVarInt()];
+        this.action = data.readEnum(TitleAction.class);
         if (this.action == null)
         {
             return;
@@ -97,7 +97,7 @@ public class PacketPlayClientboundTitle extends PacketPlayClientbound
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(this.action.ordinal());
+        data.writeEnum(this.action);
         switch (this.action)
         {
             case SET_TITLE:

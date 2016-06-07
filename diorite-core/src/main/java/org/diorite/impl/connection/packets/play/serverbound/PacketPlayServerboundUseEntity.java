@@ -124,7 +124,7 @@ public class PacketPlayServerboundUseEntity extends PacketPlayServerbound
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.targetEntity = data.readVarInt();
-        this.action = EntityUseAction.values()[data.readVarInt()];
+        this.action = data.readEnum(EntityUseAction.class);
         if (this.action == EntityUseAction.INTERACTAT)
         {
             this.interactAtLocation = data.readVector3F();
@@ -140,7 +140,7 @@ public class PacketPlayServerboundUseEntity extends PacketPlayServerbound
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.targetEntity);
-        data.writeVarInt(this.action.ordinal());
+        data.writeEnum(this.action);
         if (this.action == EntityUseAction.INTERACTAT)
         {
             data.writeVector3F(this.interactAtLocation);
