@@ -66,6 +66,7 @@ import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagType;
+import org.diorite.utils.SimpleEnum;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -232,6 +233,11 @@ public class PacketDataSerializer extends ByteBuf
 
         this.readBytes(abyte);
         return abyte;
+    }
+
+    public <T extends SimpleEnum.ASimpleEnum<T>> T readFakeEnum(final Class<T> fakeEnumClass)
+    {
+        return SimpleEnum.getSimpleEnumValueSafe(this.readVarInt(), fakeEnumClass);
     }
 
     public <T extends Enum<T>> T readEnum(final Class<T> c)
@@ -1418,6 +1424,8 @@ public class PacketDataSerializer extends ByteBuf
     {
         return this.byteBuf.release(i);
     }
+
+    
 
     public static int neededBytes(final int i)
     {

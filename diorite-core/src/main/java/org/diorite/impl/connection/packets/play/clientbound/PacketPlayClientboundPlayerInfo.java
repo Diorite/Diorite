@@ -34,6 +34,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.auth.GameProfileImpl;
+import org.diorite.impl.auth.properties.PropertyImpl;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
@@ -104,13 +105,62 @@ public class PacketPlayClientboundPlayerInfo extends PacketPlayClientbound
     @Override
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
-        // TODO
+        this.action = data.readEnum(PlayerInfoAction.class);
+        final int playersNum = data.readVarInt();
+        this.players = new ArrayList<>(playersNum);
+        for (int i = 0; i < playersNum; i++)
+        {
+            final UUID uuid = data.readUUID();
+            switch (this.action)
+            {
+                case ADD_PLAYER:
+                {
+                    final String name = data.readText(16);
+                    final GameProfileImpl gameProfile = new GameProfileImpl(uuid, name);
+                    final int propertyNum = data.readVarInt();
+                    for (int j = 0; j < propertyNum; j++)
+                    {
+                        final String propertyName = data.readText(Short.MAX_VALUE);
+                        final String propertyValue = data.readText(Short.MAX_VALUE);
+                        final boolean hasSignature = data.readBoolean();
+                        final String signature = hasSignature ? data.readText(Short.MAX_VALUE) : null;
+                        gameProfile.getProperties().put(propertyName, new PropertyImpl(propertyName, propertyValue, signature));
+                    }
+                    final GameMode gameMode = data.readFakeEnum(GameMode.class);
+                    final int latency = data.readVarInt();
+                    final boolean setDisplayName = data.readBoolean();
+                    final BaseComponent displayName = setDisplayName ? data.readBaseComponent() : null;
+
+                    this.players.add(new PlayerInfoData(gameProfile, latency, gameMode, displayName));
+                    break;
+                }
+
+                case UPDATE_LATENCY:
+                {
+                    this.players.add(new PlayerInfoData(uuid, data.readVarInt()));
+                    break;
+                }
+
+                case UPDATE_GAMEMODE:
+                {
+                    this.players.add(new PlayerInfoData(uuid, data.readFakeEnum(GameMode.class)));
+                    break;
+                }
+
+                case UPDATE_DISPLAY_NAME:
+                {
+                    final BaseComponent displayName = data.readBoolean() ? data.readBaseComponent() : null;
+                    this.players.add(new PlayerInfoData(uuid, displayName));
+                    break;
+                }
+            }
+        }
     }
 
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
-        data.writeVarInt(this.action.getActionId()); // VarInt with action id
+        data.writeEnum(this.action); // VarInt with action id
         data.writeVarInt(this.players.size());
         for (final PlayerInfoData pid : this.players)
         {
@@ -260,23 +310,7 @@ public class PacketPlayClientboundPlayerInfo extends PacketPlayClientbound
 
     public enum PlayerInfoAction
     {
-        ADD_PLAYER(0),
-        REMOVE_PLAYER(4),
-        UPDATE_GAMEMODE(1),
-        UPDATE_LATENCY(2),
-        UPDATE_DISPLAY_NAME(3);
-
-        private final int actionId;
-
-        PlayerInfoAction(final int actionId)
-        {
-            this.actionId = actionId;
-        }
-
-        public int getActionId()
-        {
-            return this.actionId;
-        }
+        ADD_PLAYER, UPDATE_GAMEMODE, UPDATE_LATENCY, UPDATE_DISPLAY_NAME, REMOVE_PLAYER
     }
 
     @Override
