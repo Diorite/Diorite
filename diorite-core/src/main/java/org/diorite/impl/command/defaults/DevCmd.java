@@ -249,6 +249,12 @@ public class DevCmd extends SystemCommandImpl
                     p.getNetworkManager().sendPacket(new PacketPlayClientboundNamedSoundEffect(args.asString(0), SoundCategory.MASTER, p.getLocation(), 1, 2));
                     break;
                 }
+                case "polarbear":
+                {
+                    final IEntity polarBear = serverManager.getEntityFactory().createEntity(EntityType.POLAR_BEAR, p.getLocation());
+                    p.getWorld().addEntity(polarBear);
+                    break;
+                }
                 case "eq":
                 {
 //                    Core

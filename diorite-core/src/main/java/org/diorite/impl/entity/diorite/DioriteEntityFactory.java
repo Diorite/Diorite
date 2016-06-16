@@ -76,6 +76,7 @@ import org.diorite.impl.entity.IOcelot;
 import org.diorite.impl.entity.IPig;
 import org.diorite.impl.entity.IPigZombie;
 import org.diorite.impl.entity.IPlayer;
+import org.diorite.impl.entity.IPolarBear;
 import org.diorite.impl.entity.IPrimedTNT;
 import org.diorite.impl.entity.IRabbit;
 import org.diorite.impl.entity.ISheep;
@@ -148,6 +149,7 @@ import org.diorite.entity.MooshroomCow;
 import org.diorite.entity.Ocelot;
 import org.diorite.entity.Pig;
 import org.diorite.entity.PigZombie;
+import org.diorite.entity.PolarBear;
 import org.diorite.entity.PrimedTNT;
 import org.diorite.entity.Rabbit;
 import org.diorite.entity.Sheep;
@@ -455,6 +457,12 @@ public class DioriteEntityFactory implements IEntityFactory
             this.typeClassMap.put(IPig.class, func);
         }
         {
+            final Function<ImmutableLocation, IEntity> func = (l) -> new PolarBearImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
+            this.typeMap.put(EntityType.POLAR_BEAR, func);
+            this.typeClassMap.put(PolarBear.class, func);
+            this.typeClassMap.put(IPolarBear.class, func);
+        }
+        {
             final Function<ImmutableLocation, IEntity> func = (l) -> new PigZombieImpl(UUID.randomUUID(), this.core, IEntity.getNextEntityID(), l);
             this.typeMap.put(EntityType.PIG_ZOMBIE, func);
             this.typeClassMap.put(PigZombie.class, func);
@@ -664,6 +672,7 @@ public class DioriteEntityFactory implements IEntityFactory
         this.registerID(EntityType.VILLAGER_GOLEM, 99);
         this.registerID(EntityType.HORSE, 100);
         this.registerID(EntityType.RABBIT, 101);
+        this.registerID(EntityType.POLAR_BEAR, 102);
         this.registerID(EntityType.VILLAGER, 120);
     }
 

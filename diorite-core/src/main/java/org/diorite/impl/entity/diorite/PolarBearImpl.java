@@ -22,34 +22,41 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.diorite;
 
-import org.diorite.entity.LivingEntity;
+import java.util.UUID;
 
-public interface ILivingEntity extends IEntity, LivingEntity
+import org.diorite.impl.DioriteCore;
+import org.diorite.impl.entity.IPolarBear;
+import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
+import org.diorite.ImmutableLocation;
+import org.diorite.entity.EntityType;
+
+class PolarBearImpl extends AnimalEntityImpl implements IPolarBear
 {
-    /**
-     * Size of metadata.
-     */
-    byte META_KEYS                           = 11;
-    /**
-     * byte, possible used hand.
-     */
-    byte META_KEY_LIVING_UNKNOWN             = 6;
-    /**
-     * float entry, hp of entity
-     */
-    byte META_KEY_LIVING_HEALTH              = 7;
-    /**
-     * int entry, Potion effect color over entity
-     */
-    byte META_KEY_LIVING_POTION_EFFECT_COLOR = 8;
-    /**
-     * boolean entry, if potion is ambiend (less visible)
-     */
-    byte META_KEY_LIVING_POTION_IS_AMBIENT   = 9;
-    /**
-     * int entry, number of arrows in player.
-     */
-    byte META_KEY_LIVING_ARROWS_IN_BODY      = 10;
+    PolarBearImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
+    {
+        super(uuid, core, id, location);
+        this.setBoundingBox(BASE_SIZE.create(this));
+    }
+
+    @Override
+    public EntityType getType()
+    {
+        return EntityType.POLAR_BEAR;
+    }
+
+    @Override
+    protected void createMetadata()
+    {
+        this.metadata = new EntityMetadata(IPolarBear.META_KEYS);
+    }
+
+    @Override
+    public void initMetadata()
+    {
+        super.initMetadata();
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_POLAR_BEAR_IS_STANDING, false));
+    }
 }

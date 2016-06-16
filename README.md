@@ -127,6 +127,7 @@ See here: https://github.com/Diorite/Diorite/blob/master/CONTRIBUTING.md
 - [ ] Horse
 - [ ] Rabbit
 - [ ] Villager
+- [ ] Polar Bear
 
 #### Features
 - [ ] Enchanting

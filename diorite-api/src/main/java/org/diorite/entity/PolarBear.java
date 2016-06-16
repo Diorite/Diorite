@@ -22,34 +22,9 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.entity;
 
-import org.diorite.entity.LivingEntity;
-
-public interface ILivingEntity extends IEntity, LivingEntity
+public interface PolarBear extends AnimalEntity
 {
-    /**
-     * Size of metadata.
-     */
-    byte META_KEYS                           = 11;
-    /**
-     * byte, possible used hand.
-     */
-    byte META_KEY_LIVING_UNKNOWN             = 6;
-    /**
-     * float entry, hp of entity
-     */
-    byte META_KEY_LIVING_HEALTH              = 7;
-    /**
-     * int entry, Potion effect color over entity
-     */
-    byte META_KEY_LIVING_POTION_EFFECT_COLOR = 8;
-    /**
-     * boolean entry, if potion is ambiend (less visible)
-     */
-    byte META_KEY_LIVING_POTION_IS_AMBIENT   = 9;
-    /**
-     * int entry, number of arrows in player.
-     */
-    byte META_KEY_LIVING_ARROWS_IN_BODY      = 10;
+    // TODO
 }

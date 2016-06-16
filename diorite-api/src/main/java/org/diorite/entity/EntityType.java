@@ -34,10 +34,11 @@ public class EntityType extends ASimpleEnum<EntityType>
 {
     static
     {
-        init(EntityType.class, 61);
+        init(EntityType.class, 62);
     }
 
     public static final EntityType PLAYER         = new EntityType("PLAYER", Player.class, "Player", false);
+    public static final EntityType POLAR_BEAR     = new EntityType("POLAR_BEAR", Player.class, "PolarBear", false);
     public static final EntityType CREEPER        = new EntityType("CREEPER", Creeper.class, "Creeper", false);
     public static final EntityType SKELETON       = new EntityType("SKELETON", Skeleton.class, "Skeleton", false);
     public static final EntityType SPIDER         = new EntityType("SPIDER", Spider.class, "Spider", false);
@@ -105,7 +106,7 @@ public class EntityType extends ASimpleEnum<EntityType>
     public static final EntityType TIPPED_ARROW           = new EntityType("TIPPED_ARROW", TippedArrow.class, "TippedArrow", true);
     public static final EntityType DRAGON_FIREBALL        = new EntityType("DRAGON_FIREBALL", DragonFireball.class, "DragonFireball", true);
 
-    private static final CaseInsensitiveMap<EntityType> byEntityName = new CaseInsensitiveMap<>(61, SMALL_LOAD_FACTOR);
+    private static final CaseInsensitiveMap<EntityType> byEntityName = new CaseInsensitiveMap<>(62, SMALL_LOAD_FACTOR);
 
     private final Class<? extends Entity> dioriteEntityClass;
     private final boolean                 living;

@@ -24,32 +24,19 @@
 
 package org.diorite.impl.entity;
 
-import org.diorite.entity.LivingEntity;
+import org.diorite.entity.PolarBear;
+import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 
-public interface ILivingEntity extends IEntity, LivingEntity
+public interface IPolarBear extends IAnimalEntity, PolarBear
 {
+    ImmutableEntityBoundingBox BASE_SIZE = new ImmutableEntityBoundingBox(0.9F, 0.9F); // TODO
+
     /**
      * Size of metadata.
      */
-    byte META_KEYS                           = 11;
+    byte META_KEYS                       = 14;
     /**
-     * byte, possible used hand.
+     * bool
      */
-    byte META_KEY_LIVING_UNKNOWN             = 6;
-    /**
-     * float entry, hp of entity
-     */
-    byte META_KEY_LIVING_HEALTH              = 7;
-    /**
-     * int entry, Potion effect color over entity
-     */
-    byte META_KEY_LIVING_POTION_EFFECT_COLOR = 8;
-    /**
-     * boolean entry, if potion is ambiend (less visible)
-     */
-    byte META_KEY_LIVING_POTION_IS_AMBIENT   = 9;
-    /**
-     * int entry, number of arrows in player.
-     */
-    byte META_KEY_LIVING_ARROWS_IN_BODY      = 10;
+    byte META_KEY_POLAR_BEAR_IS_STANDING = 13;
 }
