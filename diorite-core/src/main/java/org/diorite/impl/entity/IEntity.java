@@ -49,7 +49,7 @@ public interface IEntity extends Entity, Tickable, Trackable
     /**
      * Size of metadata.
      */
-    byte META_KEYS                            = 5;
+    byte META_KEYS                            = 6;
     /**
      * byte entry, with flags.<br>
      * OnFire, Crouched, Sprinting, Action, Invisible, Glowing (outline effect)
@@ -71,6 +71,10 @@ public interface IEntity extends Entity, Tickable, Trackable
      * byte/bool entry, if entity should make sound.
      */
     byte META_KEY_ENTITY_SILENT               = 4;
+    /**
+     * byte/bool entry, if entity doesn't has gravity
+     */
+    byte META_KEY_ENTITY_NO_GRAVITY           = 5;
 
     /**
      * Contains basic flags used in matadata.
@@ -83,6 +87,7 @@ public interface IEntity extends Entity, Tickable, Trackable
         byte ACTION    = 3;
         byte INVISIBLE = 4;
         byte GLOWING   = 5;
+        // TODO flying with elytra? (0x80)
     }
 
     static int getNextEntityID()

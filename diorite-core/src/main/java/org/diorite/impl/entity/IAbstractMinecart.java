@@ -34,29 +34,29 @@ public interface IAbstractMinecart extends IEntity, Minecart, EntityObject
     /**
      * Size of metadata.
      */
-    byte META_KEYS                            = 11;
+    byte META_KEYS                            = 12;
     /**
      * int
      */
-    byte META_KEY_MINECART_SHAKING_POWER      = 5;
+    byte META_KEY_MINECART_SHAKING_POWER      = 6;
     /**
      * int, enum?
      */
-    byte META_KEY_MINECART_SHAKING_DIRECTION  = 6;
+    byte META_KEY_MINECART_SHAKING_DIRECTION  = 7;
     /**
      * float
      */
-    byte META_KEY_MINECART_SHAKING_MULTIPLIER = 7;
+    byte META_KEY_MINECART_SHAKING_MULTIPLIER = 8;
     /**
      * int, id and meta of material.
      */
-    byte META_KEY_MINECART_BLOCK              = 8;
+    byte META_KEY_MINECART_BLOCK              = 9;
     /**
      * int
      */
-    byte META_KEY_MINECART_BLOCK_Y_POSITION   = 9;
+    byte META_KEY_MINECART_BLOCK_Y_POSITION   = 10;
     /**
      * boolean
      */
-    byte META_KEY_MINECART_SHOW_BLOCK         = 10;
+    byte META_KEY_MINECART_SHOW_BLOCK         = 11;
 }

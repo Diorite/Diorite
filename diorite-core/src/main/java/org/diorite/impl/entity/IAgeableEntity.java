@@ -29,9 +29,9 @@ public interface IAgeableEntity extends ICreatureEntity
     /**
      * Size of metadata.
      */
-    byte META_KEYS                = 12;
+    byte META_KEYS                = 13;
     /**
      * Boolean
      */
-    byte META_KEY_AGEABLE_IS_BABY = 11;
+    byte META_KEY_AGEABLE_IS_BABY = 12;
 }

@@ -258,8 +258,8 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.metadata.add(new EntityMetadataStringEntry(IEntity.META_KEY_ENTITY_NAME_TAG, ""));
         this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ENTITY_SILENT, false));
         this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ENTITY_ALWAYS_SHOW_NAME_TAG, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(IEntity.META_KEY_ENTITY_NO_GRAVITY, false));
     }
-
 
     public float getVelocityX()
     {

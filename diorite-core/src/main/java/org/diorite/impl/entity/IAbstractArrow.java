@@ -31,9 +31,9 @@ public interface IAbstractArrow extends IEntity, AbstractArrow, EntityObject
     /**
      * Size of metadata.
      */
-    byte META_KEYS                  = 6;
+    byte META_KEYS                  = 7;
     /**
      * Byte as boolean?
      */
-    byte META_KEY_ARROW_IS_CRITICAL = 5;
+    byte META_KEY_ARROW_IS_CRITICAL = 6;
 }

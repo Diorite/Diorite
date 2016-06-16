@@ -40,11 +40,11 @@ public interface IItem extends IEntity, Item
     /**
      * Size of metadata.
      */
-    byte META_KEYS          = 6;
+    byte META_KEYS          = 7;
     /**
      * ItemStack entry
      */
-    byte META_KEY_ITEM_ITEM = 5;
+    byte META_KEY_ITEM_ITEM = 6;
 
     ItemStack getItemStack();
 
