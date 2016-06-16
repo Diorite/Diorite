@@ -245,6 +245,11 @@ public class PacketDataSerializer extends ByteBuf
         return c.getEnumConstants()[this.readVarInt()];
     }
 
+    public void writeFakeEnum(final SimpleEnum.ASimpleEnum<?> fakeEnum)
+    {
+        this.writeVarInt(fakeEnum.ordinal());
+    }
+
     public void writeEnum(final Enum<?> oenum)
     {
         this.writeVarInt(oenum.ordinal());

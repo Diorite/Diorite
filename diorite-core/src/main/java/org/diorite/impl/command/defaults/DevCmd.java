@@ -53,6 +53,7 @@ import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Location;
 import org.diorite.Particle;
 import org.diorite.Sound;
+import org.diorite.SoundCategory;
 import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.messages.Message.MessageData;
 import org.diorite.chat.ChatColor;
@@ -240,12 +241,12 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "sound1":
                 {
-                    p.getNetworkManager().sendPacket(new PacketPlayClientboundSoundEffect(Sound.getById(args.asInt(0)), p.getLocation(), 2, 63));
+                    p.getNetworkManager().sendPacket(new PacketPlayClientboundSoundEffect(Sound.getById(args.asInt(0)), SoundCategory.MASTER, p.getLocation(), 1, 2));
                     break;
                 }
                 case "sound2":
                 {
-                    p.getNetworkManager().sendPacket(new PacketPlayClientboundNamedSoundEffect(args.asString(0), p.getLocation(), 2, 63));
+                    p.getNetworkManager().sendPacket(new PacketPlayClientboundNamedSoundEffect(args.asString(0), SoundCategory.MASTER, p.getLocation(), 1, 2));
                     break;
                 }
                 case "eq":

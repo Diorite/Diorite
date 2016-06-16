@@ -37,25 +37,28 @@ import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.BlockLocation;
 import org.diorite.ILocation;
 import org.diorite.Sound;
+import org.diorite.SoundCategory;
 
 @SuppressWarnings("MultiplyOrDivideByPowerOfTwo")
-@PacketClass(id = 0x19, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 22)
+@PacketClass(id = 0x19, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 26)
 public class PacketPlayClientboundSoundEffect extends PacketPlayClientbound
 {
-    private Sound sound; // 1-5 bytes
-    private int   x; // 4 bytes
-    private int   y; // 4 bytes
-    private int   z; // 4 bytes
-    private float volume; // 4 bytes
-    private int   pitch; // 1 byte
+    private Sound         sound; // 1-5 bytes
+    private SoundCategory soundCategory; // 4 bytes
+    private int           x; // 4 bytes
+    private int           y; // 4 bytes
+    private int           z; // 4 bytes
+    private float         volume; // 4 bytes
+    private float         pitch; // 1 byte
 
     public PacketPlayClientboundSoundEffect()
     {
     }
 
-    public PacketPlayClientboundSoundEffect(final Sound sound, final int x, final int y, final int z, final float volume, final int pitch)
+    public PacketPlayClientboundSoundEffect(final Sound sound, final SoundCategory soundCategory, final int x, final int y, final int z, final float volume, final float pitch)
     {
         this.sound = sound;
+        this.soundCategory = soundCategory;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -63,19 +66,21 @@ public class PacketPlayClientboundSoundEffect extends PacketPlayClientbound
         this.pitch = pitch;
     }
 
-    public PacketPlayClientboundSoundEffect(final Sound sound, final BlockLocation location, final float volume, final int pitch)
+    public PacketPlayClientboundSoundEffect(final Sound sound, final SoundCategory soundCategory, final BlockLocation location, final float volume, final float pitch)
     {
         this.sound = sound;
-        this.x = location.getX() * 8;
+        this.soundCategory = soundCategory;
+        this.x = location.getX() * 8; // TODO check is it needed
         this.y = location.getY() * 8;
         this.z = location.getZ() * 8;
         this.volume = volume;
         this.pitch = pitch;
     }
 
-    public PacketPlayClientboundSoundEffect(final Sound sound, final ILocation location, final float volume, final int pitch)
+    public PacketPlayClientboundSoundEffect(final Sound sound, final SoundCategory soundCategory, final ILocation location, final float volume, final float pitch)
     {
         this.sound = sound;
+        this.soundCategory = soundCategory;
         this.x = (int) (location.getX() * 8);
         this.y = (int) (location.getY() * 8);
         this.z = (int) (location.getZ() * 8);
@@ -87,22 +92,24 @@ public class PacketPlayClientboundSoundEffect extends PacketPlayClientbound
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.sound = Sound.getById(data.readVarInt());
+        this.soundCategory = data.readFakeEnum(SoundCategory.class);
         this.x = data.readInt();
         this.y = data.readInt();
         this.z = data.readInt();
         this.volume = data.readFloat();
-        this.pitch = data.readUnsignedByte();
+        this.pitch = data.readFloat();
     }
 
     @Override
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeVarInt(this.sound.getId());
+        data.writeFakeEnum(this.soundCategory);
         data.writeInt(this.x);
         data.writeInt(this.y);
         data.writeInt(this.z);
         data.writeFloat(this.volume);
-        data.writeByte(this.pitch);
+        data.writeFloat(this.pitch);
     }
 
     public Sound getSound()
@@ -113,6 +120,16 @@ public class PacketPlayClientboundSoundEffect extends PacketPlayClientbound
     public void setSound(final Sound sound)
     {
         this.sound = sound;
+    }
+
+    public SoundCategory getSoundCategory()
+    {
+        return this.soundCategory;
+    }
+
+    public void setSoundCategory(final SoundCategory soundCategory)
+    {
+        this.soundCategory = soundCategory;
     }
 
     public int getX()
@@ -155,12 +172,12 @@ public class PacketPlayClientboundSoundEffect extends PacketPlayClientbound
         this.volume = volume;
     }
 
-    public int getPitch()
+    public float getPitch()
     {
         return this.pitch;
     }
 
-    public void setPitch(final int pitch)
+    public void setPitch(final float pitch)
     {
         this.pitch = pitch;
     }

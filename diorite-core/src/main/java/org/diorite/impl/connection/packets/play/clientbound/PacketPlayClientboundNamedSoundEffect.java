@@ -36,27 +36,30 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.BlockLocation;
 import org.diorite.ILocation;
+import org.diorite.SoundCategory;
 
 @SuppressWarnings("MultiplyOrDivideByPowerOfTwo")
-@PacketClass(id = 0x46, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 278)
+@PacketClass(id = 0x46, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 282)
 public class PacketPlayClientboundNamedSoundEffect extends PacketPlayClientbound
 {
     private static final int MAX_SOUND_NAME_SIZE = 256;
 
-    private String name; // 1-261 bytes
-    private int    x; // 4 bytes
-    private int    y; // 4 bytes
-    private int    z; // 4 bytes
-    private float  volume; // 4 bytes
-    private int    pitch; // 1 byte
+    private String        name; // 1-261 bytes
+    private SoundCategory soundCategory; // 4 bytes
+    private int           x; // 4 bytes
+    private int           y; // 4 bytes
+    private int           z; // 4 bytes
+    private float         volume; // 4 bytes
+    private int           pitch; // 1 byte
 
     public PacketPlayClientboundNamedSoundEffect()
     {
     }
 
-    public PacketPlayClientboundNamedSoundEffect(final String name, final int x, final int y, final int z, final float volume, final int pitch)
+    public PacketPlayClientboundNamedSoundEffect(final String name, final SoundCategory soundCategory, final int x, final int y, final int z, final float volume, final int pitch)
     {
         this.name = name;
+        this.soundCategory = soundCategory;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -64,9 +67,10 @@ public class PacketPlayClientboundNamedSoundEffect extends PacketPlayClientbound
         this.pitch = pitch;
     }
 
-    public PacketPlayClientboundNamedSoundEffect(final String name, final BlockLocation location, final float volume, final int pitch)
+    public PacketPlayClientboundNamedSoundEffect(final String name, final SoundCategory soundCategory, final BlockLocation location, final float volume, final int pitch)
     {
         this.name = name;
+        this.soundCategory = soundCategory;
         this.x = location.getX() * 8;
         this.y = location.getY() * 8;
         this.z = location.getZ() * 8;
@@ -74,9 +78,10 @@ public class PacketPlayClientboundNamedSoundEffect extends PacketPlayClientbound
         this.pitch = pitch;
     }
 
-    public PacketPlayClientboundNamedSoundEffect(final String name, final ILocation location, final float volume, final int pitch)
+    public PacketPlayClientboundNamedSoundEffect(final String name, final SoundCategory soundCategory, final ILocation location, final float volume, final int pitch)
     {
         this.name = name;
+        this.soundCategory = soundCategory;
         this.x = (int) (location.getX() * 8);
         this.y = (int) (location.getY() * 8);
         this.z = (int) (location.getZ() * 8);
@@ -88,6 +93,7 @@ public class PacketPlayClientboundNamedSoundEffect extends PacketPlayClientbound
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.name = data.readText(MAX_SOUND_NAME_SIZE);
+        this.soundCategory = data.readFakeEnum(SoundCategory.class);
         this.x = data.readInt();
         this.y = data.readInt();
         this.z = data.readInt();
@@ -99,6 +105,7 @@ public class PacketPlayClientboundNamedSoundEffect extends PacketPlayClientbound
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeText(this.name);
+        data.writeFakeEnum(this.soundCategory);
         data.writeInt(this.x);
         data.writeInt(this.y);
         data.writeInt(this.z);
@@ -114,6 +121,16 @@ public class PacketPlayClientboundNamedSoundEffect extends PacketPlayClientbound
     public void setName(final String name)
     {
         this.name = name;
+    }
+
+    public SoundCategory getSoundCategory()
+    {
+        return this.soundCategory;
+    }
+
+    public void setSoundCategory(final SoundCategory soundCategory)
+    {
+        this.soundCategory = soundCategory;
     }
 
     public int getX()
