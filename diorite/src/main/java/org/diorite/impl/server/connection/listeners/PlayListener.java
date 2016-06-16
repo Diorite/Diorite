@@ -176,16 +176,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundChat packet)
     {
-        final String str = packet.getContent();
-        //noinspection HardcodedFileSeparator
-        if (str.startsWith("/"))
-        {
-            this.core.getInputThread().add(new InputAction(str.substring(1), true, this.player, InputActionType.COMMAND));
-        }
-        else
-        {
-            this.core.getInputThread().add(new InputAction(str, false, this.player, InputActionType.CHAT));
-        }
+        this.player.chat(packet.getContent());
     }
 
     @Override

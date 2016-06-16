@@ -119,6 +119,14 @@ public interface Player extends Human, PlayerCommandSender, OfflinePlayer, BossB
     void setResourcePack(String resourcePack, String hash);
 
     /**
+     * Sends message in context of this player
+     * If you want send command, add slash at the beginning of line
+     *
+     * @param line message or command to send
+     */
+    void chat(String line);
+
+    /**
      * Creates particle <b>only</b> to this player
      *
      * @param particle       Particle which should be shown

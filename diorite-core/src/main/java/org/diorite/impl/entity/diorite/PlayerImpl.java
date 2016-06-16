@@ -48,6 +48,8 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
+import org.diorite.impl.input.InputAction;
+import org.diorite.impl.input.InputActionType;
 import org.diorite.impl.world.WorldBorderImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
@@ -284,6 +286,20 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public void setResourcePack(final String resourcePack, final String hash)
     {
         this.networkManager.sendPacket(new PacketPlayClientboundResourcePackSend(resourcePack, hash));
+    }
+
+    @Override
+    public void chat(final String line)
+    {
+        //noinspection HardcodedFileSeparator
+        if (line.startsWith("/"))
+        {
+            this.core.getInputThread().add(new InputAction(line.substring(1), true, this, InputActionType.COMMAND));
+        }
+        else
+        {
+            this.core.getInputThread().add(new InputAction(line, false, this, InputActionType.CHAT));
+        }
     }
 
     @Override
