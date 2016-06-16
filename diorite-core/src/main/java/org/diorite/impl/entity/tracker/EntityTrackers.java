@@ -80,10 +80,7 @@ public class EntityTrackers implements Tickable
             this.stats.put(type, this.stats.get(type) + 1);
         } catch (final Throwable ignored) // for sure that it will never cause any problems
         {
-            if (CoreMain.isEnabledDebug())
-            {
-                ignored.printStackTrace();
-            }
+            CoreMain.debug(ignored);
         }
     }
 
@@ -95,10 +92,7 @@ public class EntityTrackers implements Tickable
             this.stats.put(type, this.stats.get(type) - 1);
         } catch (final Throwable ignored) // for sure that it will never cause any problems
         {
-            if (CoreMain.isEnabledDebug())
-            {
-                ignored.printStackTrace();
-            }
+            CoreMain.debug(ignored);
         }
     }
 
