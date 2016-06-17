@@ -26,5 +26,7 @@ package org.diorite.entity;
 
 public interface PolarBear extends AnimalEntity
 {
-    // TODO
+    boolean isStanding();
+
+    void setStanding(boolean standing);
 }

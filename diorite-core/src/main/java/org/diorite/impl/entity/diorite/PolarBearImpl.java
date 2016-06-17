@@ -59,4 +59,16 @@ class PolarBearImpl extends AnimalEntityImpl implements IPolarBear
         super.initMetadata();
         this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_POLAR_BEAR_IS_STANDING, false));
     }
+
+    @Override
+    public boolean isStanding()
+    {
+        return this.metadata.getBoolean(META_KEY_POLAR_BEAR_IS_STANDING);
+    }
+
+    @Override
+    public void setStanding(final boolean standing)
+    {
+        this.metadata.setBoolean(META_KEY_POLAR_BEAR_IS_STANDING, standing);
+    }
 }
