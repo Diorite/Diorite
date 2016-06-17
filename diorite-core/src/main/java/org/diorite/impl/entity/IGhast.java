@@ -34,9 +34,9 @@ public interface IGhast extends IMonsterEntity, Ghast
     /**
      * Size of metadata.
      */
-    byte META_KEYS                   = 12;
+    byte META_KEYS                   = 13;
     /**
      * boolean
      */
-    byte META_KEY_GHAST_IS_ATTACKING = 11;
+    byte META_KEY_GHAST_IS_ATTACKING = 12;
 }

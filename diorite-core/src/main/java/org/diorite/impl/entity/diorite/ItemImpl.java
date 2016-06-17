@@ -44,6 +44,7 @@ import org.diorite.entity.EntityType;
 import org.diorite.entity.Human;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.Material;
 import org.diorite.nbt.NbtSerialization;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteMathUtils;
@@ -82,7 +83,7 @@ class ItemImpl extends EntityImpl implements IItem, EntityObject
     public void initMetadata()
     {
         super.initMetadata();
-        this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM_ITEM, null));
+        this.metadata.add(new EntityMetadataItemStackEntry(META_KEY_ITEM_ITEM, new BaseItemStack(Material.STONE)));
     }
 
     @Override

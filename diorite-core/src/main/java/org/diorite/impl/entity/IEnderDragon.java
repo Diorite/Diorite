@@ -34,9 +34,9 @@ public interface IEnderDragon extends IMonsterEntity, EnderDragon
     /**
      * Size of metadata.
      */
-    byte META_KEYS                   = 12;
+    byte META_KEYS                   = 13;
     /**
      * int, enum, dragon phase.
      */
-    byte META_KEY_ENDER_DRAGON_PHASE = 11;
+    byte META_KEY_ENDER_DRAGON_PHASE = 12;
 }

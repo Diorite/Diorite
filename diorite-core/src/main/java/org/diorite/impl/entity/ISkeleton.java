@@ -34,13 +34,15 @@ public interface ISkeleton extends IMonsterEntity, Skeleton
     /**
      * Size of metadata.
      */
-    byte META_KEYS              = 13;
+    byte META_KEYS              = 14;
     /**
      * int, enum
      */
-    byte META_KEY_SKELETON_TYPE = 11;
+    byte META_KEY_SKELETON_TYPE = 12;
     /**
      * TODO bool, something hand related
      */
-    byte META_KEY_SKELETON_HAND = 12;
+    byte META_KEY_SKELETON_HAND = 13;
+
+
 }

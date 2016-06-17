@@ -34,17 +34,17 @@ public interface ICreeper extends IMonsterEntity, Creeper
     /**
      * Size of metadata.
      */
-    byte META_KEYS                = 14;
+    byte META_KEYS                = 15;
     /**
      * Int,  (-1 = Idle, 1 = Fuse), ignored if {@link #META_KEY_CREEPER_IGNITED} is true
      */
-    byte META_KEY_CREEPER_STATE   = 11;
+    byte META_KEY_CREEPER_STATE   = 12;
     /**
      * Boolean, powered, lightning creeper
      */
-    byte META_KEY_CREEPER_POWERED = 12;
+    byte META_KEY_CREEPER_POWERED = 13;
     /**
      * Boolean, if creepers is going to explode.
      */
-    byte META_KEY_CREEPER_IGNITED = 13;
+    byte META_KEY_CREEPER_IGNITED = 14;
 }

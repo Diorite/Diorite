@@ -31,19 +31,19 @@ public interface ITameableEntity extends IAnimalEntity, TameableEntity
     /**
      * Size of metadata.
      */
-    byte META_KEYS                = 14;
+    byte META_KEYS                = 15;
     /**
      * String
      */
-    byte META_KEY_TAMEABLE_STATUS = 12;
+    byte META_KEY_TAMEABLE_STATUS = 13;
     /**
      * UUID
      */
-    byte META_KEY_TAMEABLE_OWNER  = 13;
+    byte META_KEY_TAMEABLE_OWNER  = 14;
 
 
     /**
-     * Contains status flags used in matadata.
+     * Contains status flags used in metadata.
      */
     interface TameableStatusFlag
     {

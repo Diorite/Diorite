@@ -34,9 +34,9 @@ public interface ISlime extends IMonsterEntity, Slime
     /**
      * Size of metadata.
      */
-    byte META_KEYS           = 12;
+    byte META_KEYS           = 13;
     /**
      * int, size of slime.
      */
-    byte META_KEY_SLIME_SIZE = 11;
+    byte META_KEY_SLIME_SIZE = 12;
 }

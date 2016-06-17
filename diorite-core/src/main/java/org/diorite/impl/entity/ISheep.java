@@ -34,11 +34,11 @@ public interface ISheep extends IAnimalEntity, Sheep
     /**
      * Size of metadata.
      */
-    byte META_KEYS            = 13;
+    byte META_KEYS            = 14;
     /**
      * int, enum
      */
-    byte META_KEY_SHEEP_STATUS = 12;
+    byte META_KEY_SHEEP_STATUS = 13;
 
 
     /**

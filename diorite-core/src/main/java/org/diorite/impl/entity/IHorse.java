@@ -34,30 +34,30 @@ public interface IHorse extends IAnimalEntity, Horse
     /**
      * Size of metadata.
      */
-    byte META_KEYS                 = 17;
+    byte META_KEYS                 = 18;
     /**
      * Status bit set. <br>
      * none, IsTamed, HasSaddle, HasChest, IsBred, IsEating, IsRearing, MouthOpen
      */
-    byte META_KEY_HORSE_STATUS     = 12;
+    byte META_KEY_HORSE_STATUS     = 13;
     /**
      * int, enum, horse type, Normal, Donkey, Mule, Zombie, Sekeleton
      */
-    byte META_KEY_HORSE_TYPE       = 13;
+    byte META_KEY_HORSE_TYPE       = 14;
     /**
      * int, 2x enum, horse variant and color. <br>
      * 0x00FF - color: White, Creamy, Chestnut, Brown, Black, Gray, Dark Brown <br>
      * 0xFF00 - variant: None, White, Whitefield, White Dots, Black Dots.
      */
-    byte META_KEY_HORSE_VARIANT    = 14;
+    byte META_KEY_HORSE_VARIANT    = 15;
     /**
      * UUID
      */
-    byte META_KEY_HORSE_OWNER_UUID = 15;
+    byte META_KEY_HORSE_OWNER_UUID = 16;
     /**
      * int, enum? Armor type.
      */
-    byte META_KEY_HORSE_ARMOR      = 16;
+    byte META_KEY_HORSE_ARMOR      = 17;
 
 
     /**

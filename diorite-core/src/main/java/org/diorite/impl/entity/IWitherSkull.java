@@ -34,9 +34,9 @@ public interface IWitherSkull extends IProjectile, WitherSkull
     /**
      * Size of metadata.
      */
-    byte META_KEYS             = 6;
+    byte META_KEYS             = 7;
     /**
      * Boolean
      */
-    byte META_KEY_INVULNERABLE = 5;
+    byte META_KEY_INVULNERABLE = 6;
 }

@@ -34,9 +34,9 @@ public interface IWitch extends IMonsterEntity, Witch
     /**
      * Size of metadata.
      */
-    byte META_KEYS                   = 12;
+    byte META_KEYS                   = 13;
     /**
      * bool
      */
-    byte META_KEY_WITCH_IS_AGGRESIVE = 11;
+    byte META_KEY_WITCH_IS_AGGRESIVE = 12;
 }

@@ -34,13 +34,13 @@ public interface IEnderCrystal extends IEntity, EnderCrystal, EntityObject
     /**
      * Size of metadata.
      */
-    byte META_KEYS                          = 7;
+    byte META_KEYS                          = 8;
     /**
      * optional location.
      */
-    byte META_KEY_ENDER_CRYSTAL_TARGET      = 5;
+    byte META_KEY_ENDER_CRYSTAL_TARGET      = 6;
     /**
      * boolean
      */
-    byte META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM = 6;
+    byte META_KEY_ENDER_CRYSTAL_SHOW_BOTTOM = 7;
 }

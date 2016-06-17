@@ -34,21 +34,22 @@ public interface IZombie extends IMonsterEntity, Zombie
     /**
      * Size of metadata.
      */
-    byte META_KEYS                          = 15;
+    byte META_KEYS                          = 16;
     /**
      * boolean
      */
-    byte META_KEY_ZOMBIE_IS_BABY            = 11;
+    byte META_KEY_ZOMBIE_IS_BABY            = 12;
     /**
-     * int, profession type
+     * int, zombie type
+     * 0 = Default, 1-5 = Villager Profession, 6 = Husk
      */
-    byte META_KEY_ZOMBIE_VILLAGER           = 12;
-    /**
-     * boolean
-     */
-    byte META_KEY_ZOMBIE_IS_CONVERTING      = 13;
+    byte META_KEY_ZOMBIE_TYPE               = 13;
     /**
      * boolean
      */
-    byte META_KEY_ZOMBIE_ARE_HANDS_RISED_UP = 14;
+    byte META_KEY_ZOMBIE_IS_CONVERTING      = 14;
+    /**
+     * boolean
+     */
+    byte META_KEY_ZOMBIE_ARE_HANDS_RISED_UP = 15;
 }

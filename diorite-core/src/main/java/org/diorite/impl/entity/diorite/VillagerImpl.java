@@ -29,6 +29,7 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IVillager;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -50,12 +51,25 @@ class VillagerImpl extends CreatureEntityImpl implements IVillager
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_VILLAGER_TYPE, Profession.FARMER.ordinal())); // FARMER is 0
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.VILLAGER;
+    }
+
+    @Override
+    public Profession getProfession()
+    {
+        return Profession.values()[this.metadata.getInt(META_KEY_VILLAGER_TYPE)];
+    }
+
+    @Override
+    public void setProfession(final Profession profession)
+    {
+        this.metadata.setInt(META_KEY_VILLAGER_TYPE, profession.ordinal());
     }
 }
 

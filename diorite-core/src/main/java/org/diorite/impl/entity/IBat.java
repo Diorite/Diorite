@@ -34,9 +34,9 @@ public interface IBat extends IAmbientEntity, Bat
     /**
      * Size of metadata.
      */
-    byte META_KEYS               = 12;
+    byte META_KEYS               = 13;
     /**
      * Byte, as boolean.
      */
-    byte META_KEY_BAT_IS_HANGING = 11;
+    byte META_KEY_BAT_IS_HANGING = 12;
 }

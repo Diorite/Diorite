@@ -34,9 +34,9 @@ public interface IFireworksRocket extends IProjectile, FireworksRocket
     /**
      * Size of metadata.
      */
-    byte META_KEYS              = 6;
+    byte META_KEYS              = 7;
     /**
      * ItemStack
      */
-    byte META_KEY_FIREWORK_ITEM = 5;
+    byte META_KEY_FIREWORK_ITEM = 6;
 }

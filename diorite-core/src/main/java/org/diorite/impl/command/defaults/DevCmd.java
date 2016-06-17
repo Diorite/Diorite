@@ -157,7 +157,7 @@ public class DevCmd extends SystemCommandImpl
                     if (args.asString(0).equalsIgnoreCase("creeper"))
                     {
                         final ICreeper creeper = entityFactory.createEntity(ICreeper.class, p.getLocation());
-                        creeper.getMetadata().setBoolean(ICreeper.META_KEY_CREEPER_POWERED, true);
+                        creeper.setPowered(true);
                         p.getWorld().addEntity(creeper);
                     }
                     else if (args.asString(0).equalsIgnoreCase("chickenArmy"))
@@ -185,7 +185,7 @@ public class DevCmd extends SystemCommandImpl
                         zombie.getMetadata().setInt(ILivingEntity.META_KEY_LIVING_POTION_EFFECT_COLOR, args.has(1) ? Integer.parseInt(args.asString(1), 16) : 0);
                         if (args.has(3))
                         {
-                            String s = args.asString(2);
+                            final String s = args.asString(2);
                             for (final String flag : s.split(","))
                             {
                                 zombie.getMetadata().setBoolean(IEntity.META_KEY_ENTITY_BASIC_FLAGS, DioriteMathUtils.asInt(flag), args.asBoolean(3));

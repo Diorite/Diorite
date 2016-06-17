@@ -34,9 +34,9 @@ public interface IPig extends IAnimalEntity, Pig
     /**
      * Size of metadata.
      */
-    byte META_KEYS               = 13;
+    byte META_KEYS               = 14;
     /**
      * bool
      */
-    byte META_KEY_PIG_HAS_SADDLE = 12;
+    byte META_KEY_PIG_HAS_SADDLE = 13;
 }

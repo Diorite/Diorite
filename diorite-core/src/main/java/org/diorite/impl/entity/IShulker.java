@@ -34,17 +34,17 @@ public interface IShulker extends IMonsterEntity, Shulker
     /**
      * Size of metadata.
      */
-    byte META_KEYS                            = 14;
+    byte META_KEYS                            = 15;
     /**
      * direction
      */
-    byte META_KEY_SHULKER_FACING_DIRECTION    = 11;
+    byte META_KEY_SHULKER_FACING_DIRECTION    = 12;
     /**
      * opt position
      */
-    byte META_KEY_SHULKER_ATTACHMENT_POSITION = 12;
+    byte META_KEY_SHULKER_ATTACHMENT_POSITION = 13;
     /**
      * byte
      */
-    byte META_KEY_SHULKER_SHIELD_HEIGHT       = 13;
+    byte META_KEY_SHULKER_SHIELD_HEIGHT       = 14;
 }

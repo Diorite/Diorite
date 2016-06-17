@@ -29,6 +29,8 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.ISkeleton;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -50,12 +52,26 @@ class SkeletonImpl extends MonsterEntityImpl implements ISkeleton
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_SKELETON_TYPE, Type.DEFAULT.ordinal()));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_SKELETON_HAND, false));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.SKELETON;
+    }
+
+    @Override
+    public Type getSkeletonType()
+    {
+        return Type.values()[this.metadata.getInt(META_KEY_SKELETON_TYPE)];
+    }
+
+    @Override
+    public void setSkeletonType(final Type skeletonType)
+    {
+        this.metadata.setInt(META_KEY_SKELETON_TYPE, skeletonType.ordinal());
     }
 }
 

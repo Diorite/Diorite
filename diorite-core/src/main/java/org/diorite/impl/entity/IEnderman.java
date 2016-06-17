@@ -34,13 +34,13 @@ public interface IEnderman extends IMonsterEntity, Enderman
     /**
      * Size of metadata.
      */
-    byte META_KEYS                      = 13;
+    byte META_KEYS                      = 14;
     /**
      * ItemStack in hand.
      */
-    byte META_KEY_ENDERMAN_CARRIED_ITEM = 11;
+    byte META_KEY_ENDERMAN_CARRIED_ITEM = 12;
     /**
      * boolean
      */
-    byte META_KEY_ENDERMAN_IS_SCREAMING = 12;
+    byte META_KEY_ENDERMAN_IS_SCREAMING = 13;
 }

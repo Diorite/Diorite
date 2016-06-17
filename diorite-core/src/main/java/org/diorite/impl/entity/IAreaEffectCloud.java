@@ -33,21 +33,29 @@ public interface IAreaEffectCloud extends IEntity, AreaEffectCloud, EntityObject
     /**
      * Size of metadata.
      */
-    byte META_KEYS                              = 9;
+    byte META_KEYS                              = 12;
     /**
      * Float
      */
-    byte META_KEY_AREA_EFFECT_CLOUD_RADIUS      = 5;
+    byte META_KEY_AREA_EFFECT_CLOUD_RADIUS      = 6;
     /**
      * Int  (only for mob spell particle)
      */
-    byte META_KEY_AREA_EFFECT_CLOUD_COLOR       = 6;
+    byte META_KEY_AREA_EFFECT_CLOUD_COLOR       = 7;
     /**
      * Boolean, make effect visible only as point.
      */
-    byte META_KEY_AREA_EFFECT_CLOUD_IS_POINT    = 7; // TODO
+    byte META_KEY_AREA_EFFECT_CLOUD_IS_POINT    = 8; // TODO
     /**
      * Int
      */
-    byte META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID = 8;
+    byte META_KEY_AREA_EFFECT_CLOUD_PARTICLE_ID = 9;
+    /**
+     * Int
+     */
+    byte META_KEY_AREA_EFFECT_CLOUD_PARAMETER_1 = 10; // TODO
+    /**
+     * Int
+     */
+    byte META_KEY_AREA_EFFECT_CLOUD_PARAMETER_2 = 11; // TODO
 }

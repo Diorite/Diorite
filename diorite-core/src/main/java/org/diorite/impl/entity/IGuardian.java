@@ -34,16 +34,16 @@ public interface IGuardian extends IMonsterEntity, Guardian
     /**
      * Size of metadata.
      */
-    byte META_KEYS                = 13;
+    byte META_KEYS                = 14;
     /**
      * byte, bit flags. <br>
      * Eldery, RetractingSpikes
      */
-    byte META_KEY_GUARDIAN_STATUS = 11;
+    byte META_KEY_GUARDIAN_STATUS = 12;
     /**
      * int, entity id
      */
-    byte META_KEY_GUARDIAN_TARGET = 12;
+    byte META_KEY_GUARDIAN_TARGET = 13;
 
     /**
      * Contains status flags used in matadata.

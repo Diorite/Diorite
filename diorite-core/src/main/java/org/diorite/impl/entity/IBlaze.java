@@ -34,9 +34,9 @@ public interface IBlaze extends IMonsterEntity, Blaze
     /**
      * Size of metadata.
      */
-    byte META_KEYS                 = 12;
+    byte META_KEYS                 = 13;
     /**
      * Byte, as boolean.
      */
-    byte META_KEY_BLAZE_IS_ON_FIRE = 11;
+    byte META_KEY_BLAZE_IS_ON_FIRE = 12;
 }

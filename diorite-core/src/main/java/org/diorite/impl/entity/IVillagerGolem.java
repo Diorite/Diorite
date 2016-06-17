@@ -34,9 +34,9 @@ public interface IVillagerGolem extends IAnimalEntity, VillagerGolem
     /**
      * Size of metadata.
      */
-    byte META_KEYS                                 = 12;
+    byte META_KEYS                                 = 13;
     /**
      * byte as bool
      */
-    byte META_KEY_VILLAGER_GOLEM_IS_PLAYER_CREATED = 11;
+    byte META_KEY_VILLAGER_GOLEM_IS_PLAYER_CREATED = 12;
 }

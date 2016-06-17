@@ -31,6 +31,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
 import org.diorite.impl.entity.IBoat;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
@@ -64,6 +65,8 @@ class BoatImpl extends EntityImpl implements IBoat
         this.metadata.add(new EntityMetadataIntEntry(META_KEY_BOAT_FORWARD_DIRECTION, 0));
         this.metadata.add(new EntityMetadataFloatEntry(META_KEY_BOAT_DAMAGE_TAKEN, 0));
         this.metadata.add(new EntityMetadataIntEntry(META_KEY_BOAT_TYPE, 0));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_BOAT_PADDLE_TURN_RIGHT, false));
+        this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_BOAT_PADDLE_TURN_LEFT, false));
     }
 
     @Override

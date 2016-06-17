@@ -34,9 +34,9 @@ public interface IVillager extends IAnimalEntity, Villager
     /**
      * Size of metadata.
      */
-    byte META_KEYS              = 13;
+    byte META_KEYS              = 14;
     /**
      * int, enum
      */
-    byte META_KEY_VILLAGER_TYPE = 12;
+    byte META_KEY_VILLAGER_TYPE = 13;
 }

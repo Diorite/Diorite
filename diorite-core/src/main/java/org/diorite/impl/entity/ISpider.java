@@ -34,9 +34,9 @@ public interface ISpider extends IMonsterEntity, Spider
     /**
      * Size of metadata.
      */
-    byte META_KEYS                   = 12;
+    byte META_KEYS                   = 13;
     /**
      * byte as bool
      */
-    byte META_KEY_SPIDER_IS_CLIMBING = 11;
+    byte META_KEY_SPIDER_IS_CLIMBING = 12;
 }

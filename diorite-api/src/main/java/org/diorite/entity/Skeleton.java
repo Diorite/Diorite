@@ -26,4 +26,12 @@ package org.diorite.entity;
 
 public interface Skeleton extends MonsterEntity
 {
+    Type getSkeletonType();
+
+    void setSkeletonType(Type skeletonType);
+
+    enum Type
+    {
+        DEFAULT, WITHER, STRAY
+    }
 }

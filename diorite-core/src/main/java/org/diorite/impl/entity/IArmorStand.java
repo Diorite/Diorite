@@ -34,36 +34,36 @@ public interface IArmorStand extends ILivingEntity, ArmorStand, EntityObject
     /**
      * Size of metadata.
      */
-    byte META_KEYS                               = 17;
+    byte META_KEYS                               = 18;
     /**
      * Byte bit mask. <br>
      * Small armorstand, HasGravity, HasArms, RemoveBasePlate, Marker (no bounding box)
      */
-    byte META_KEY_ARMOR_STAND_STATUS             = 10;
+    byte META_KEY_ARMOR_STAND_STATUS             = 11;
     /**
      * Vector3F, Euler angle
      */
-    byte META_KEY_ARMOR_STAND_HEAD_ROTATION      = 11;
+    byte META_KEY_ARMOR_STAND_HEAD_ROTATION      = 12;
     /**
      * Vector3F, Euler angle
      */
-    byte META_KEY_ARMOR_STAND_BODY_ROTATION      = 12;
+    byte META_KEY_ARMOR_STAND_BODY_ROTATION      = 13;
     /**
      * Vector3F, Euler angle
      */
-    byte META_KEY_ARMOR_STAND_LEFT_ARM_ROTATION  = 13;
+    byte META_KEY_ARMOR_STAND_LEFT_ARM_ROTATION  = 14;
     /**
      * Vector3F, Euler angle
      */
-    byte META_KEY_ARMOR_STAND_RIGHT_ARM_ROTATION = 14;
+    byte META_KEY_ARMOR_STAND_RIGHT_ARM_ROTATION = 15;
     /**
      * Vector3F, Euler angle
      */
-    byte META_KEY_ARMOR_STAND_LEFT_LEG_ROTATION  = 15;
+    byte META_KEY_ARMOR_STAND_LEFT_LEG_ROTATION  = 16;
     /**
      * Vector3F, Euler angle
      */
-    byte META_KEY_ARMOR_STAND_RIGHT_LEG_ROTATION = 16;
+    byte META_KEY_ARMOR_STAND_RIGHT_LEG_ROTATION = 17;
 
     /**
      * Contains status flags used in matadata.

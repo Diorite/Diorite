@@ -34,21 +34,21 @@ public interface IWither extends IMonsterEntity, Wither
     /**
      * Size of metadata.
      */
-    byte META_KEYS                          = 15;
+    byte META_KEYS                          = 16;
     /**
      * int, entity id
      */
-    byte META_KEY_WITHER_FIRST_HEAD_TARGET  = 11;
+    byte META_KEY_WITHER_FIRST_HEAD_TARGET  = 12;
     /**
      * int, entity id
      */
-    byte META_KEY_WITHER_SECOND_HEAD_TARGET = 12;
+    byte META_KEY_WITHER_SECOND_HEAD_TARGET = 13;
     /**
      * int, entity id
      */
-    byte META_KEY_WITHER_THIRD_HEAD_TARGET  = 13;
+    byte META_KEY_WITHER_THIRD_HEAD_TARGET  = 14;
     /**
      * int, entity id
      */
-    byte META_KEY_WITHER_INVULNERABLE_TIME  = 14;
+    byte META_KEY_WITHER_INVULNERABLE_TIME  = 15;
 }

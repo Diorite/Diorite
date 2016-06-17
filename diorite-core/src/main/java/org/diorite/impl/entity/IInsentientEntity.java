@@ -31,12 +31,12 @@ public interface IInsentientEntity extends ILivingEntity, InsentientEntity
     /**
      * Size of metadata.
      */
-    byte META_KEYS                  = 11;
+    byte META_KEYS                  = 12;
     /**
      * Status bit set. <br>
      * NoAI, Left handed.
      */
-    byte META_KEY_INSENTIENT_STATUS = 10;
+    byte META_KEY_INSENTIENT_STATUS = 11;
 
     /**
      * Contains status flags used in matadata.

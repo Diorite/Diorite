@@ -34,9 +34,9 @@ public interface IOcelot extends IAnimalEntity, Ocelot
     /**
      * Size of metadata.
      */
-    byte META_KEYS            = 15;
+    byte META_KEYS            = 16;
     /**
      * Int, enum
      */
-    byte META_KEY_OCELOT_TYPE = 14;
+    byte META_KEY_OCELOT_TYPE = 15;
 }

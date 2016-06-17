@@ -34,21 +34,29 @@ public interface IBoat extends IEntity, Boat, EntityObject
     /**
      * Size of metadata.
      */
-    byte META_KEYS                         = 9;
+    byte META_KEYS                         = 12;
     /**
      * int
      */
-    byte META_KEY_BOAT_TIME_SINCE_LAST_HIT = 5;
+    byte META_KEY_BOAT_TIME_SINCE_LAST_HIT = 6;
     /**
      * int
      */
-    byte META_KEY_BOAT_FORWARD_DIRECTION   = 6;
+    byte META_KEY_BOAT_FORWARD_DIRECTION   = 7;
     /**
      * float
      */
-    byte META_KEY_BOAT_DAMAGE_TAKEN        = 7;
+    byte META_KEY_BOAT_DAMAGE_TAKEN        = 8;
     /**
      * int, enum? wood type of boat.
      */
-    byte META_KEY_BOAT_TYPE                = 8;
+    byte META_KEY_BOAT_TYPE                = 9;
+    /**
+     * bool
+     */
+    byte META_KEY_BOAT_PADDLE_TURN_RIGHT   = 10;
+    /**
+     * bool
+     */
+    byte META_KEY_BOAT_PADDLE_TURN_LEFT    = 11;
 }

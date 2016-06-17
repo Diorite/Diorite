@@ -31,13 +31,13 @@ public interface IItemFrame extends IEntity, ItemFrame, EntityObject
     /**
      * Size of metadata.
      */
-    byte META_KEYS                    = 7;
+    byte META_KEYS                    = 8;
     /**
      * ItemStack
      */
-    byte META_KEY_ITEM_FRAME_ITEM     = 5;
+    byte META_KEY_ITEM_FRAME_ITEM     = 6;
     /**
      * int, enum, item rotation.
      */
-    byte META_KEY_ITEM_FRAME_ROTATION = 6;
+    byte META_KEY_ITEM_FRAME_ROTATION = 7;
 }

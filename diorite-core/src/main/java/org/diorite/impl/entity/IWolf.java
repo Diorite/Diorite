@@ -34,17 +34,17 @@ public interface IWolf extends IAnimalEntity, Wolf
     /**
      * Size of metadata.
      */
-    byte META_KEYS                  = 17;
+    byte META_KEYS                  = 18;
     /**
      * Float
      */
-    byte META_KEY_WOLF_DAMAGE_TAKEN = 14;
+    byte META_KEY_WOLF_DAMAGE_TAKEN = 15;
     /**
      * Boolean
      */
-    byte META_KEY_WOLF_IS_BEGGING   = 15;
+    byte META_KEY_WOLF_IS_BEGGING   = 16;
     /**
      * int, color
      */
-    byte META_KEY_WOLF_COLLAR_COLOR = 16;
+    byte META_KEY_WOLF_COLLAR_COLOR = 17;
 }
