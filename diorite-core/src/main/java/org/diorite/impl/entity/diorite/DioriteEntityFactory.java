@@ -214,6 +214,7 @@ public class DioriteEntityFactory implements IEntityFactory
         this.enumToNetwork.put(type.ordinal(), id);
     }
 
+    @SuppressWarnings("MagicNumber")
     private void init()
     {
         {
@@ -692,7 +693,7 @@ public class DioriteEntityFactory implements IEntityFactory
     {
         final Iterator<NbtTagDouble> pos = nbt.getList("Pos", NbtTagDouble.class).iterator();
         final Iterator<NbtTagFloat> rotation = nbt.getList("Rotation", NbtTagFloat.class).iterator();
-        final Location entityLocation = new Location(pos.next().getValue(), pos.next().getValue(), pos.next().getValue(), rotation.next().getValue(), rotation.next().getValue(), world);
+        final ILocation entityLocation = new Location(pos.next().getValue(), pos.next().getValue(), pos.next().getValue(), rotation.next().getValue(), rotation.next().getValue(), world);
         final EntityType entityType = EntityType.getByEntityName(nbt.getString("id"));
 
         final IEntity entity = this.createEntity(entityType, entityLocation);

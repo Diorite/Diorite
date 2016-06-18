@@ -60,12 +60,14 @@ class PigImpl extends AnimalEntityImpl implements IPig
         return EntityType.PIG;
     }
 
+    @Override
     public boolean getSaddle()
     {
         return this.metadata.getBoolean(META_KEY_PIG_HAS_SADDLE);
     }
 
-    public void setSaddle(boolean saddle)
+    @Override
+    public void setSaddle(final boolean saddle)
     {
         this.metadata.setBoolean(META_KEY_PIG_HAS_SADDLE, saddle);
     }

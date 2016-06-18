@@ -29,6 +29,7 @@ import javax.vecmath.Vector3f;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -95,7 +96,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     private boolean aiEnabled = true; // don't do any actions if AI is disabled
 
     final         DioriteRandom    random       = DioriteRandomUtils.getRandom();
-    private final BooleanLazyValue lazyOnGround = new BooleanLazyValue(this.values, () -> (this.y >= 0) && (this.y < Chunk.CHUNK_FULL_HEIGHT) && this.getLocation().toBlockLocation().getBlock().getType().isSolid()); // TODO: maybe something better?
+    private final BooleanLazyValue lazyOnGround;
 
     EntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
@@ -109,6 +110,18 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.pitch = location.getPitch();
         this.world = (WorldImpl) location.getWorld();
         this.initMetadata();
+
+        this.lazyOnGround = new BooleanLazyValue(this.values, () -> {
+            if ((this.y <= 0) || (this.y > Chunk.CHUNK_FULL_HEIGHT))
+            {
+                return false; // we're outside world
+            }
+
+            final int yRounded = (int) this.y;
+            final int toRemove = (yRounded == this.y) ? 1 : 0;
+
+            return this.getLocation().setY(this.y - toRemove).toBlockLocation().getBlock().getType().isSolid();
+        });
     }
 
     @Override
@@ -367,15 +380,23 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         {
             x += (this.velocityX * multi);
         }
-        if ((this.velocityY != 0))
+        if (this.velocityY == 0)
         {
-            if (this.isOnGround())
+            if (! this.isOnGround()) // velocityY is 0, and we're not on ground. Apply gravitation
+            {
+                this.velocityY = - 0.6F; // this is my deduced value.
+            }
+        }
+        else
+        {
+            if (this.isOnGround()) // we're on ground and velocity isn't 0. Set it to 0
             {
                 this.velocityY = 0;
-                this.y = (this.getLocation().toBlockLocation().getY() + (1));
+                this.y = this.getLocation().toBlockLocation().getY() + 1;
             }
-            else
+            else // we're still falling...
             {
+                this.velocityY *= 1.05F; // speed up falling?
                 y = (this.velocityY * multi);
             }
         }
@@ -750,20 +771,12 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.pitch = location.getPitch();
 
         final WorldImpl newWorld = (WorldImpl) location.getWorld();
-        if (this.world != newWorld)
+        if (! Objects.equals(this.world, newWorld))
         {
             this.worldChange(this.world, this.world = newWorld);
         }
 
         this.updateChunk(chunk, this.getChunk());
-    }
-
-    @Override
-    public void teleport(final Entity entity)
-    {
-        final ImmutableLocation location = entity.getLocation();
-
-        this.teleport(location);
     }
 
     protected void worldChange(final WorldImpl oldW, final WorldImpl newW)

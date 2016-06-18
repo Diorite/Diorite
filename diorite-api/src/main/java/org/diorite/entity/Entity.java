@@ -127,5 +127,8 @@ public interface Entity extends GameObject, Synchronizable
 
     void teleport(ILocation location); //TODO: left by skprime to check by GoToFinal
 
-    void teleport(Entity entity);
+    default void teleport(final Entity entity)
+    {
+        this.teleport(entity.getLocation());
+    }
 }
