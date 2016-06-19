@@ -25,6 +25,7 @@
 package org.diorite;
 
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.entity.pathfinder.PathfinderService;
 import org.diorite.event.Event;
 import org.diorite.event.EventType;
 import org.diorite.event.pipelines.EventPipeline;
@@ -96,6 +97,20 @@ public interface ServerManager
      * @return entity factory that can be used to create new entites.
      */
     EntityFactory getEntityFactory();
+
+    /**
+     * Returns a pathfinder service what is currently used by server
+     *
+     * @return currently used pathfinder service
+     */
+    PathfinderService getPathfinderService();
+
+    /**
+     * Changes a currently used pathfinder service
+     *
+     * @param pathfinderService new pathfinder service
+     */
+    void setPathfinderService(PathfinderService pathfinderService);
 
     /**
      * Creates a new boss bar instance with random UUID

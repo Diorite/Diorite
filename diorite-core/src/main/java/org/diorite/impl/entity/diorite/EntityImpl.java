@@ -49,22 +49,24 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
+import org.diorite.impl.entity.pathfinder.EntityControllerImpl;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
+import org.diorite.BlockLocation;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
+import org.diorite.entity.Entity;
+import org.diorite.entity.EntityType;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagDouble;
 import org.diorite.nbt.NbtTagFloat;
-import org.diorite.utils.math.geometry.LookupShape;
-import org.diorite.entity.Entity;
-import org.diorite.entity.EntityType;
 import org.diorite.utils.lazy.BooleanLazyValue;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.geometry.EntityBoundingBox;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.utils.others.Resetable;
 import org.diorite.world.chunk.Chunk;
 
@@ -75,6 +77,10 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
 
     private final Set<Resetable> values = new HashSet<>(10);
 
+    private final BooleanLazyValue     lazyOnGround;
+    private final EntityControllerImpl controller;
+    private          boolean           aiEnabled = true; // don't do any actions if AI is disabled
+    final            DioriteRandom     random    = DioriteRandomUtils.getRandom();
     final            DioriteCore       core;
     private          WorldImpl         world;
     private volatile Thread            lastTickThread;
@@ -93,11 +99,6 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     float velocityY;
     float velocityZ;
 
-    private boolean aiEnabled = true; // don't do any actions if AI is disabled
-
-    final         DioriteRandom    random       = DioriteRandomUtils.getRandom();
-    private final BooleanLazyValue lazyOnGround;
-
     EntityImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid);
@@ -109,6 +110,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
         this.world = (WorldImpl) location.getWorld();
+        this.controller = new EntityControllerImpl(this);
         this.initMetadata();
 
         this.lazyOnGround = new BooleanLazyValue(this.values, () -> {
@@ -119,8 +121,13 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
 
             final int yRounded = (int) this.y;
             final int toRemove = (yRounded == this.y) ? 1 : 0;
+            final BlockLocation blockUnderFoot = this.getLocation().setY(this.y - toRemove).toBlockLocation();
+            if (blockUnderFoot.getY() <= 0)
+            {
+                return false;
+            }
 
-            return this.getLocation().setY(this.y - toRemove).toBlockLocation().getBlock().getType().isSolid();
+            return blockUnderFoot.getBlock().getType().isSolid();
         });
     }
 
@@ -550,6 +557,11 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         {
             this.doPhysics();
         }
+
+        if (this.aiEnabled)
+        {
+            this.controller.tick();
+        }
         // TODO
     }
 
@@ -752,6 +764,12 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     public <T extends Entity> Collection<? extends T> getNearbyEntities(final double x, final double y, final double z, final Class<? extends T> type, final Predicate<Entity> predicate)
     {
         return this.getNearbyEntities(x, y, z, e -> type.isAssignableFrom(e.getClass()) && predicate.test(e));
+    }
+
+    @Override
+    public EntityControllerImpl getEntityController()
+    {
+        return this.controller;
     }
 
     @Override

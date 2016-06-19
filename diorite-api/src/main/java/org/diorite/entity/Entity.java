@@ -33,8 +33,9 @@ import org.diorite.Core;
 import org.diorite.GameObject;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
-import org.diorite.utils.math.geometry.LookupShape;
+import org.diorite.entity.pathfinder.EntityController;
 import org.diorite.scheduler.Synchronizable;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.world.World;
 
 public interface Entity extends GameObject, Synchronizable
@@ -131,4 +132,6 @@ public interface Entity extends GameObject, Synchronizable
     {
         this.teleport(entity.getLocation());
     }
+
+    EntityController getEntityController();
 }

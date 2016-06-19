@@ -31,11 +31,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.entity.IEntityFactory;
 import org.diorite.impl.entity.diorite.DioriteEntityFactory;
+import org.diorite.impl.entity.pathfinder.DefaultPathfinderService;
 import org.diorite.impl.inventory.recipe.IRecipeManager;
 import org.diorite.impl.inventory.recipe.RecipeManagerImpl;
 import org.diorite.impl.permissions.DioritePermissionsManager;
 import org.diorite.BossBar;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.entity.pathfinder.PathfinderService;
 import org.diorite.permissions.PermissionsManager;
 
 /**
@@ -47,6 +49,7 @@ public class ServerManagerImpl implements IServerManager
     private       PermissionsManager permissionsManager;
     private       IRecipeManager     recipeManager;
     private       IEntityFactory     entityFactory;
+    private       PathfinderService  pathfinderService;
 
     public ServerManagerImpl(final DioriteCore core)
     {
@@ -54,6 +57,7 @@ public class ServerManagerImpl implements IServerManager
         this.permissionsManager = new DioritePermissionsManager();
         this.recipeManager = new RecipeManagerImpl();
         this.entityFactory = new DioriteEntityFactory(core);
+        this.pathfinderService = new DefaultPathfinderService();
     }
 
     @Override
@@ -72,6 +76,18 @@ public class ServerManagerImpl implements IServerManager
     public IEntityFactory getEntityFactory()
     {
         return this.entityFactory;
+    }
+
+    @Override
+    public PathfinderService getPathfinderService()
+    {
+        return this.pathfinderService;
+    }
+
+    @Override
+    public void setPathfinderService(final PathfinderService pathfinderService)
+    {
+        this.pathfinderService = pathfinderService;
     }
 
     @Override

@@ -104,6 +104,12 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = serverManager.getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "navigatehere":
+                {
+                    final IEntity entity = p.getNearbyEntities(16, 16, 16, LookupShape.RECTANGLE).iterator().next();
+                    entity.getEntityController().navigateTo(p.getLocation());
+                    break;
+                }
                 case "metadata":
                 {
                     final IEntity entity = p.getNearbyEntities(3, 3, 3, LookupShape.RECTANGLE).iterator().next();
