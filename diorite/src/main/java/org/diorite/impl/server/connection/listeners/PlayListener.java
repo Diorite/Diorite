@@ -89,7 +89,6 @@ public class PlayListener implements PacketPlayServerboundListener
         this.player = player;
     }
 
-
     @Override
     public void handle(final PacketPlayServerboundKeepAlive packet)
     {
@@ -310,14 +309,13 @@ public class PlayListener implements PacketPlayServerboundListener
         }
         this.core.sync(() -> EventType.callEvent(new PlayerInteractEvent(this.player, Action.RIGHT_CLICK_ON_BLOCK, packet.getLocation().setWorld(this.player.getWorld()).getBlock())));
 
+        final PlayerBlockPlaceEvent event = new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()));
         final int y = packet.getLocation().getY() + packet.getCursorPos().getBlockFace().getModY();
         if ((y >= Chunk.CHUNK_FULL_HEIGHT) || (y < 0))
         {
-            return; // TODO: some kind of event for that maybe? or edit PlayerBlockPlaceEvent
+            event.setCancelled(true);
         }
-
-        final PlayerBlockPlaceEvent event = new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()));
-        if (this.player.getInventory().getItem(this.player.getHeldItemSlot()).getAmount() < 1)
+        else if (this.player.getInventory().getItemInHand() == null || this.player.getInventory().getItemInHand().getAmount() < 1)
         {
             event.setCancelled(true);
         }

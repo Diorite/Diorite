@@ -24,9 +24,9 @@
 
 package org.diorite.impl.pipelines.event.player;
 
-import org.diorite.GameMode;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
+import org.diorite.GameMode;
 import org.diorite.event.pipelines.event.player.BlockPlacePipeline;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.inventory.item.ItemStack;
