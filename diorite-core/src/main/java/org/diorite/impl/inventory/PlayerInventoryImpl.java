@@ -32,9 +32,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundWindowClick;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundWindowClick;
 import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.item.ItemStackImpl;
@@ -50,9 +50,9 @@ import org.diorite.material.Material;
 
 public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements PlayerInventory
 {
+    public static final  int   SECOND_HAND_SLOT = 45;
     private static final short CURSOR_SLOT      = - 1;
     private static final int   CURSOR_WINDOW    = - 1;
-    private static final int   SECOND_HAND_SLOT = 45;
 
     private final int    windowId;
     private final IHuman holder;

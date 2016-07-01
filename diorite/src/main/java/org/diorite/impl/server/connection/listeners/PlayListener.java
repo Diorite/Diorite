@@ -65,6 +65,7 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
+import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.GameMode;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.event.EventType;
@@ -74,6 +75,7 @@ import org.diorite.event.player.PlayerInteractEvent;
 import org.diorite.event.player.PlayerInteractEvent.Action;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
+import org.diorite.inventory.item.ItemStack;
 import org.diorite.world.chunk.Chunk;
 
 public class PlayListener implements PacketPlayServerboundListener
@@ -309,15 +311,33 @@ public class PlayListener implements PacketPlayServerboundListener
         }
         this.core.sync(() -> EventType.callEvent(new PlayerInteractEvent(this.player, Action.RIGHT_CLICK_ON_BLOCK, packet.getLocation().setWorld(this.player.getWorld()).getBlock())));
 
-        final PlayerBlockPlaceEvent event = new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()));
+        final PlayerBlockPlaceEvent event = new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()), packet.getCursorPos().getHandType());
         final int y = packet.getLocation().getY() + packet.getCursorPos().getBlockFace().getModY();
         if ((y >= Chunk.CHUNK_FULL_HEIGHT) || (y < 0))
         {
             event.setCancelled(true);
         }
-        else if (this.player.getInventory().getItemInHand() == null || this.player.getInventory().getItemInHand().getAmount() < 1)
+        else
         {
-            event.setCancelled(true);
+            final ItemStack item;
+
+            switch (event.getHand())
+            {
+                //TODO add getInventory().getItem(HandType) ?
+                case MAIN:
+                    item = this.player.getInventory().getItemInHand();
+                    break;
+                case OFF:
+                    item = this.player.getInventory().getItem(PlayerInventoryImpl.SECOND_HAND_SLOT);
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Trying to place block with unknown HandType");
+            }
+
+            if (item == null || item.getAmount() < 1)
+            {
+                event.setCancelled(true);
+            }
         }
 
         this.core.sync(() -> EventType.callEvent(event), this.player);
