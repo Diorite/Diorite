@@ -89,7 +89,7 @@ import org.diorite.utils.math.geometry.LookupShape;
 public class DevCmd extends SystemCommandImpl
 {
     public DevCmd()
-    { // TODO: remove
+    {
         super("dev", Pattern.compile("(dev)(:(?<action>([a-z0-9_]*))|)", Pattern.CASE_INSENSITIVE), CommandPriority.LOW);
         this.setDescription("Debug");
         this.setCommandExecutor((sender, command, label, matchedPattern, args) -> {
@@ -109,6 +109,14 @@ public class DevCmd extends SystemCommandImpl
                     final IEntity entity = p.getNearbyEntities(16, 16, 16, LookupShape.RECTANGLE).iterator().next();
                     entity.getEntityController().navigateTo(p.getLocation());
                     break;
+                }
+                case "removeentities":
+                {
+                    for (final IEntity entity : p.getNearbyEntities(16, 16, 16, LookupShape.RECTANGLE))
+                    {
+                        p.sendMessage(entity.getType() + " - x:" + entity.getX() + ", y:" + entity.getY() + ", z:" + entity.getZ());
+                        entity.remove(true);
+                    }
                 }
                 case "metadata":
                 {

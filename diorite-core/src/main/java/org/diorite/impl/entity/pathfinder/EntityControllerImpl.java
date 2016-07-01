@@ -39,11 +39,13 @@ import org.diorite.entity.pathfinder.PathfinderService;
 
 public class EntityControllerImpl implements EntityController
 {
-    private final IEntity    entity;
-    private       Pathfinder currentPathfinder;
-    private Queue<BlockLocation> currentPath = new LinkedList<>();
-    private int lastMove;
+    private final IEntity              entity;
+    private final Queue<BlockLocation> currentPath = new LinkedList<>();
+    private       Pathfinder           currentPathfinder;
 
+    private int           blockMoves;
+    private BlockLocation currBlock;
+    private BlockLocation newBlock;
 
     public EntityControllerImpl(final IEntity entity)
     {
@@ -65,9 +67,8 @@ public class EntityControllerImpl implements EntityController
     @Override
     public void cancelNavigation()
     {
-        this.getService().cancellPathfinding(this.currentPathfinder);
+        this.getService().cancelPathfinding(this.currentPathfinder);
         this.currentPathfinder = null;
-        this.lastMove = 0;
         this.currentPath.clear();
     }
 
@@ -82,7 +83,7 @@ public class EntityControllerImpl implements EntityController
         this.currentPathfinder = this.getService().initPathfinding(this.entity, location, this::receivePath);
     }
 
-    public void tick()
+    public void tick(final int tps)
     {
         if (! this.isCurrentlyNavigating())
         {
@@ -94,24 +95,40 @@ public class EntityControllerImpl implements EntityController
             this.getService().processPathfinding(this.currentPathfinder);
         }
 
-        if (! this.currentPath.isEmpty() && (this.lastMove++ > 10))
+        if (this.currentPath.isEmpty())
         {
-            this.lastMove = 0;
-            this.move(this.currentPath.poll());
+            return;
         }
+
+        if (this.blockMoves++ == 0)
+        {
+            if (this.newBlock == null)
+            {
+                this.currBlock = this.getEntity().getLocation().toBlockLocation();
+            }
+            else
+            {
+                this.currBlock = this.newBlock;
+            }
+            this.newBlock = this.currentPath.poll();
+        }
+        else if (this.blockMoves > 10)
+        {
+            this.blockMoves = 0;
+            return;
+        }
+        this.move();
     }
 
-    private void move(final BlockLocation newBlock)
+    private void move()
     {
-        final BlockLocation currBlock = this.getEntity().getLocation().toBlockLocation();
+        final double x = (this.newBlock.getX() - this.currBlock.getX()) * 0.1D;
+        final double y = (this.newBlock.getY() - this.currBlock.getY()) * 0.1D;
+        final double z = (this.newBlock.getZ() - this.currBlock.getZ()) * 0.1D;
 
-        int x = newBlock.getX() - currBlock.getX();
-        int y = newBlock.getY() - currBlock.getY();
-        int z = newBlock.getZ() - currBlock.getZ();
-
-        CoreMain.debug("currBlock=" + currBlock);
+        CoreMain.debug("currBlock=" + this.currBlock);
         CoreMain.debug("x=" + x + ", y=" + y + ", z=" + z);
-        CoreMain.debug("newBlock=" + newBlock);
+        CoreMain.debug("newBlock=" + this.newBlock);
         CoreMain.debug(" ");
 
         this.entity.move(x, y, z);

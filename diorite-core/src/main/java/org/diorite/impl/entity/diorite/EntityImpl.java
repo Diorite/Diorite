@@ -560,7 +560,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
 
         if (this.aiEnabled)
         {
-            this.controller.tick();
+            this.controller.tick(tps);
         }
         // TODO
     }

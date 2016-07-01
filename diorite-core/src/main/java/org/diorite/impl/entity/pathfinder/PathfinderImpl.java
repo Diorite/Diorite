@@ -135,17 +135,16 @@ public class PathfinderImpl implements Pathfinder
             }
         }
 
-        if (this.goal.equals(candidate))
-        {
-            CoreMain.debug("Completed");
-            this.isCompleted = true;
-            return;
-        }
-
         this.currentBlock = candidate;
         final Queue<BlockLocation> path = new LinkedBlockingQueue<>();
         path.add(candidate);
 
         this.callback.accept(new PathImpl(path));
+
+        if (this.goal.equals(candidate))
+        {
+            CoreMain.debug("Completed");
+            this.isCompleted = true;
+        }
     }
 }

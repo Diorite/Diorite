@@ -60,7 +60,7 @@ public interface PathfinderService<T extends Pathfinder>
      *
      * @param pathfinder Pathfinder that will be stopped
      */
-    default void cancellPathfinding(final T pathfinder)
+    default void cancelPathfinding(final T pathfinder)
     {
     }
 }
