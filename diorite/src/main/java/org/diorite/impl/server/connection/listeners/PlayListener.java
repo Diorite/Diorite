@@ -315,7 +315,14 @@ public class PlayListener implements PacketPlayServerboundListener
         {
             return; // TODO: some kind of event for that maybe? or edit PlayerBlockPlaceEvent
         }
-        this.core.sync(() -> EventType.callEvent(new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()))), this.player);
+
+        final PlayerBlockPlaceEvent event = new PlayerBlockPlaceEvent(this.player, packet.getLocation().setWorld(this.player.getWorld()).getBlock().getRelative(packet.getCursorPos().getBlockFace()));
+        if (this.player.getInventory().getItem(this.player.getHeldItemSlot()).getAmount() < 1)
+        {
+            event.setCancelled(true);
+        }
+
+        this.core.sync(() -> EventType.callEvent(event), this.player);
     }
 
     @Override
