@@ -33,7 +33,7 @@ public class ClickType extends ASimpleEnum<ClickType>
 {
     static
     {
-        init(ClickType.class, 25);
+        init(ClickType.class, 26);
     }
 
     public static final ClickType MOUSE_LEFT                = new ClickType("MOUSE_LEFT", 0, 0, true);
@@ -56,6 +56,7 @@ public class ClickType extends ASimpleEnum<ClickType>
     public static final ClickType CTRL_DROP_KEY             = new ClickType("CTRL_DROP_KEY", 4, 1, true);
     public static final ClickType MOUSE_LEFT_OUTSIDE_EMPTY  = new ClickType("MOUSE_LEFT_OUTSIDE_EMPTY", 4, 0, false);
     public static final ClickType MOUSE_RIGHT_OUTSIDE_EMPTY = new ClickType("MOUSE_RIGHT_OUTSIDE_EMPTY", 4, 1, false);
+    public static final ClickType SWAP_OFF_HAND             = new ClickType("SWAP_OFF_HAND", 4, 2, false);
     public static final ClickType MOUSE_LEFT_DRAG_START     = new ClickType("MOUSE_LEFT_DRAG_START", 5, 0, false);
     public static final ClickType MOUSE_LEFT_DRAG_ADD       = new ClickType("MOUSE_LEFT_DRAG_ADD", 5, 1, true);
     public static final ClickType MOUSE_LEFT_DRAG_END       = new ClickType("MOUSE_LEFT_DRAG_END", 5, 2, false);
@@ -178,5 +179,6 @@ public class ClickType extends ASimpleEnum<ClickType>
         ClickType.register(MOUSE_RIGHT_DRAG_ADD);
         ClickType.register(MOUSE_RIGHT_DRAG_END);
         ClickType.register(DOUBLE_CLICK);
+        ClickType.register(SWAP_OFF_HAND);
     }
 }

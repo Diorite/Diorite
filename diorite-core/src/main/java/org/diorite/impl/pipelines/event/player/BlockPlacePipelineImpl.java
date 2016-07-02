@@ -46,7 +46,7 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
                 return;
             }
 
-            int slot = evt.getPlayer().getHeldItemSlot() + 36;
+            int slot = evt.getPlayer().getInventory().getHeldItemSlot() + evt.getPlayer().getInventory().getHotbarInventory().getSlotOffset();
             if (evt.getHand() == HandType.OFF)
             {
                 slot = PlayerInventoryImpl.SECOND_HAND_SLOT;

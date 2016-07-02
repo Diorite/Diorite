@@ -71,6 +71,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
     protected boolean handleClick(final PlayerInventoryClickEvent e)
     {
+        System.out.println(e);
         final IPlayer player = (IPlayer) e.getPlayer();
         final ClickType ct = e.getClickType();
         ItemStackImpl.validate(e.getCursorItem());
@@ -449,6 +450,18 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                         return false;
                     }
                 }
+            }
+            else if (Objects.equals(ct, ClickType.SWAP_ITEM_IN_HAND))
+            {
+                final ItemStackImpl second = inv.getItem(PlayerInventoryImpl.SECOND_HAND_SLOT);
+                boolean secondSlot = inv.replace(PlayerInventoryImpl.SECOND_HAND_SLOT, second, e.getClickedItem());
+                boolean hand = inv.replace(e.getClickedSlot(), e.getClickedItem(), second);
+                
+                if (second != null)
+                {
+                    second.setDirty();
+                }
+                return hand && secondSlot;
             }
             // TODO remember about throwing item on cursor to ground when closing eq
             else

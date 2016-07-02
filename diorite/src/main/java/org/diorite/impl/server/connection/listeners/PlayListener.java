@@ -296,6 +296,11 @@ public class PlayListener implements PacketPlayServerboundListener
                 this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.CTRL_DROP_KEY)), this.player);
             }
 
+            if (packet.getAction() == BlockDigAction.SWAP_OFF_HAND)
+            {
+                this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.SWAP_ITEM_IN_HAND)), this.player);
+            }
+
             // TODO: implement
         }, this.player);
     }
