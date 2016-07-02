@@ -62,7 +62,6 @@ public class HandshakeListener implements PacketHandshakingServerboundListener
     @Override
     public void handle(final PacketHandshakingServerboundSetProtocol packet)
     {
-
         switch (packet.getRequestType())
         {
             case LOGIN:
@@ -99,6 +98,7 @@ public class HandshakeListener implements PacketHandshakingServerboundListener
                 {
                     LogManager.getLogger().debug("Failed to check connection throttle", t);
                 }
+                boolean reject = true;
                 if (packet.getProtocolVersion() > CURRENT_PROTOCOL)
                 {
                     CoreMain.debug("Player fail to join, invalid protocol version (" + packet.getProtocolVersion() + " > " + CURRENT_PROTOCOL + ")");
@@ -110,10 +110,11 @@ public class HandshakeListener implements PacketHandshakingServerboundListener
                     this.disconnect(TextComponent.fromLegacyText("Outdated client, we are on 1.9"));
                 }
                 else
-            {
-                this.networkManager.setPacketListener(new LoginListener(this.core, this.networkManager, packet.getServerAddress() + ":" + packet.getServerPort()));
-            }
-            break;
+                {
+                    reject = false;
+                }
+                this.networkManager.setPacketListener(new LoginListener(this.core, this.networkManager, packet.getServerAddress() + ":" + packet.getServerPort(), reject));
+                break;
             case STATUS:
                 this.networkManager.setProtocol(EnumProtocol.STATUS);
                 this.networkManager.setPacketListener(new StatusListener(this.core, this.networkManager));
