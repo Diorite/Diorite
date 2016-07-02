@@ -43,7 +43,6 @@ public class ExampleCommand implements CommandExecutor
 
     public static class ExampleSubCmdCommand implements CommandExecutor
     {
-
         @Override
         public void runCommand(final CommandSender sender, final Command command, final String label, final Matcher matchedPattern, final Arguments args)
         {
