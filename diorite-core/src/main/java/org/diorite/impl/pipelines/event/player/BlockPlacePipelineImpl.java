@@ -52,7 +52,7 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
                 slot = PlayerInventoryImpl.SECOND_HAND_SLOT;
             }
 
-            ItemStack item = evt.getPlayer().getInventory().getItem(slot);
+            final ItemStack item = evt.getPlayer().getInventory().getItem(slot);
 
             if (item == null)
             {
