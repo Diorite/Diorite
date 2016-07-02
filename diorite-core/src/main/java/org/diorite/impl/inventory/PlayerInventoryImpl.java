@@ -50,7 +50,7 @@ import org.diorite.material.Material;
 
 public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements PlayerInventory
 {
-    public static final  int   SECOND_HAND_SLOT = 45;
+    public static final  short SECOND_HAND_SLOT = 45;
     private static final short CURSOR_SLOT      = - 1;
     private static final int   CURSOR_WINDOW    = - 1;
 
@@ -700,6 +700,7 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
                 packets.put(CURSOR_SLOT, new PacketPlayClientboundSetSlot(CURSOR_WINDOW, CURSOR_SLOT, cursor));
             }
         }
+        // TODO second/off hand
         return packets;
     }
 
