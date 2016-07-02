@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -171,7 +172,7 @@ public class WorldsManagerImpl implements WorldsManager
     }
 
     @Override
-    public Collection<Player> getPlayersInWorld(final World world)
+    public Set<? extends Player> getPlayersInWorld(final World world)
     {
         return world.getPlayersInWorld();
     }

@@ -26,6 +26,7 @@ package org.diorite.world;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.diorite.cfg.WorldsConfig;
@@ -49,5 +50,5 @@ public interface WorldsManager
 
     World getWorld(String name);
 
-    Collection<Player> getPlayersInWorld(World world);
+    Set<? extends Player> getPlayersInWorld(World world);
 }

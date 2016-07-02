@@ -25,13 +25,11 @@
 package org.diorite.world;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.diorite.BlockLocation;
 import org.diorite.BossBarHolder;
 import org.diorite.Difficulty;
-import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
@@ -159,11 +157,7 @@ public interface World extends BossBarHolder
 
     void showParticle(Particle particle, boolean isLongDistance, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int particleData, int particleCount, int... data);
 
-    @SuppressWarnings("ObjectEquality")
-    default Collection<Player> getPlayersInWorld()
-    {
-        return Diorite.getCore().getOnlinePlayers().stream().filter(p -> p.getWorld() == this).collect(Collectors.toList());
-    }
+    Set<? extends Player> getPlayersInWorld();
 
     Biome getBiome(int x, int y, int z);
 
