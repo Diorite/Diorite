@@ -26,7 +26,9 @@ package org.diorite.impl.pipelines.event.player;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
+import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.GameMode;
+import org.diorite.entity.data.HandType;
 import org.diorite.event.pipelines.event.player.BlockPlacePipeline;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.inventory.item.ItemStack;
@@ -43,7 +45,15 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
             {
                 return;
             }
-            final ItemStack item = evt.getPlayer().getInventory().getItemInHand();
+
+            int slot = evt.getPlayer().getInventory().getHeldItemSlot() + evt.getPlayer().getInventory().getHotbarInventory().getSlotOffset();
+            if (evt.getHand() == HandType.OFF)
+            {
+                slot = PlayerInventoryImpl.SECOND_HAND_SLOT;
+            }
+
+            final ItemStack item = evt.getPlayer().getInventory().getItem(slot);
+
             if (item == null)
             {
                 evt.setCancelled(true);
@@ -54,17 +64,19 @@ public class BlockPlacePipelineImpl extends SimpleEventPipeline<PlayerBlockPlace
             {
                 return;
             }
+
             if (evt.getPlayer().getGameMode() != GameMode.CREATIVE) //don't remove item from inventory if player is in creative mode
             {
                 if (item.getAmount() == 1)
                 {
-                    evt.getPlayer().getInventory().getHotbarInventory().replace(evt.getPlayer().getHeldItemSlot(), item, null);
+                    evt.getPlayer().getInventory().replace(slot, item, null);
                 }
                 else
                 {
                     item.setAmount(item.getAmount() - 1);
                 }
             }
+
 
             evt.getBlock().setType((BlockMaterialData) item.getMaterial());
             DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getBlock().getWorld()), new PacketPlayClientboundBlockChange(evt.getBlock().getLocation(), evt.getBlock().getType()));

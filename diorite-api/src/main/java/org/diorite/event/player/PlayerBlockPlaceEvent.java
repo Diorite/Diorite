@@ -28,11 +28,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
+import org.diorite.entity.data.HandType;
 import org.diorite.world.Block;
 
 public class PlayerBlockPlaceEvent extends PlayerEvent
 {
-    private Block block;
+    private Block    block;
+    private HandType hand;
 
     /**
      * Construct new player event.
@@ -40,10 +42,11 @@ public class PlayerBlockPlaceEvent extends PlayerEvent
      * @param player player related to event, can't be null.
      * @param block  block that player wan't place.
      */
-    public PlayerBlockPlaceEvent(final Player player, final Block block)
+    public PlayerBlockPlaceEvent(final Player player, final Block block, final HandType hand)
     {
         super(player);
         this.block = block;
+        this.hand = hand;
     }
 
     public Block getBlock()
@@ -54,6 +57,16 @@ public class PlayerBlockPlaceEvent extends PlayerEvent
     public void setBlock(final Block block)
     {
         this.block = block;
+    }
+
+    public HandType getHand()
+    {
+        return this.hand;
+    }
+
+    public void setHand(final HandType hand)
+    {
+        this.hand = hand;
     }
 
     @Override
