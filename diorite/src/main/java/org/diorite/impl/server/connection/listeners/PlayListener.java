@@ -76,6 +76,7 @@ import org.diorite.event.player.PlayerInteractEvent.Action;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.items.ArmorMat;
 import org.diorite.world.chunk.Chunk;
 
 public class PlayListener implements PacketPlayServerboundListener
@@ -256,6 +257,11 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundUseItem packet)
     {
+        if (this.player.getInventory().getItemInHand() instanceof ArmorMat)
+        {
+            // TODO
+            //this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getHeldItemSlot(), ClickType.SHIFT_MOUSE_RIGHT)), this.player);
+        }
         System.out.println(packet);
         // TODO
     }
@@ -298,7 +304,7 @@ public class PlayListener implements PacketPlayServerboundListener
 
             if (packet.getAction() == BlockDigAction.SWAP_OFF_HAND)
             {
-                this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.SWAP_ITEM_IN_HAND)), this.player);
+                this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.SWAP_OFF_HAND)), this.player);
             }
 
             // TODO: implement

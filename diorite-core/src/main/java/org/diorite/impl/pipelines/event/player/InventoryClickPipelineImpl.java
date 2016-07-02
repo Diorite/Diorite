@@ -451,12 +451,12 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     }
                 }
             }
-            else if (Objects.equals(ct, ClickType.SWAP_ITEM_IN_HAND))
+            else if (Objects.equals(ct, ClickType.SWAP_OFF_HAND))
             {
                 final ItemStackImpl second = inv.getItem(PlayerInventoryImpl.SECOND_HAND_SLOT);
                 boolean secondSlot = inv.replace(PlayerInventoryImpl.SECOND_HAND_SLOT, second, e.getClickedItem());
                 boolean hand = inv.replace(e.getClickedSlot(), e.getClickedItem(), second);
-                
+
                 if (second != null)
                 {
                     second.setDirty();
