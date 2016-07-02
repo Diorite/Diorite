@@ -57,10 +57,9 @@ public class SimplePluginMain extends DioritePlugin
     public void onEnable()
     {
         this.getLogger().info("Hello world in onEnable!");
-        // TODO: change to plugin folder method
         try
         {
-            cfg = Configuration.loadConfigFile(new File("plugins/SimpleExamplePlugin/cfg.yml"), MyCfg.class);
+            cfg = Configuration.loadConfigFile(new File(getDataFolder() + "/cfg.yml"), MyCfg.class);
         } catch (final IOException e)
         {
             this.getLogger().warn("Can't load config file.");
@@ -77,7 +76,7 @@ public class SimplePluginMain extends DioritePlugin
         this.getLogger().info("Hello world in onDisable!");
         try
         {
-            Configuration.saveConfigFile(new File("plugins/SimpleExamplePlugin/cfg.yml"), MyCfg.class, cfg);
+            Configuration.saveConfigFile(new File(getDataFolder() + "/cfg.yml"), MyCfg.class, cfg);
         } catch (final IOException e)
         {
             this.getLogger().warn("Can't save config file.");

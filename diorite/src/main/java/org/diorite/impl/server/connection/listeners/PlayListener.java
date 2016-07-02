@@ -24,6 +24,8 @@
 
 package org.diorite.impl.server.connection.listeners;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -102,7 +104,11 @@ public class PlayListener implements PacketPlayServerboundListener
     public void handle(final PacketPlayServerboundSettings packet)
     {
 //        final byte oldViewDistance = this.player.getViewDistance();
-        this.core.sync(() -> this.player.setViewDistance(packet.getViewDistance()), this.player);
+        this.core.sync(() -> {
+            this.player.setViewDistance(packet.getViewDistance());
+            this.player.setMainHand(packet.getHandSide());
+            this.player.setPreferedLocale(Locale.forLanguageTag(packet.getLocale().replace('_', '-')));
+        }, this.player);
 //        if (oldViewDistance != this.player.getViewDistance())
 //        {
 //            this.player.getPlayerChunks().wantUpdate();

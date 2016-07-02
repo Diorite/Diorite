@@ -43,12 +43,12 @@ import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.MinecraftEncryption;
 import org.diorite.impl.connection.packets.login.PacketLoginServerboundListener;
-import org.diorite.impl.connection.packets.login.serverbound.PacketLoginServerboundEncryptionBegin;
-import org.diorite.impl.connection.packets.login.serverbound.PacketLoginServerboundStart;
 import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundDisconnect;
 import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundEncryptionBegin;
 import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundSetCompression;
 import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundSuccess;
+import org.diorite.impl.connection.packets.login.serverbound.PacketLoginServerboundEncryptionBegin;
+import org.diorite.impl.connection.packets.login.serverbound.PacketLoginServerboundStart;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.server.connection.NetworkManager;
 import org.diorite.impl.server.connection.ThreadPlayerLookupUUID;
@@ -67,6 +67,7 @@ public class LoginListener implements PacketLoginServerboundListener
     private final byte[] token = new byte[4];
     private final DioriteCore        core;
     private final CoreNetworkManager networkManager;
+    private final boolean            reject;
     private       GameProfileImpl    gameProfile;
     private       SecretKey          secretKey;
     private       String             hostname;
@@ -76,19 +77,20 @@ public class LoginListener implements PacketLoginServerboundListener
 
     private String serverID = ""; // unused?
 
-    public LoginListener(final DioriteCore core, final CoreNetworkManager networkManager)
+    public LoginListener(final DioriteCore core, final CoreNetworkManager networkManager, final boolean reject)
     {
         this.core = core;
         this.networkManager = networkManager;
+        this.reject = reject;
         this.onlineMode = core.getOnlineMode();
         random.nextBytes(this.token);
         this.protocolState = ProtocolState.HELLO;
         this.logger = core.getLogger();
     }
 
-    public LoginListener(final DioriteCore core, final CoreNetworkManager networkManager, final String hostname)
+    public LoginListener(final DioriteCore core, final CoreNetworkManager networkManager, final String hostname, final boolean reject)
     {
-        this(core, networkManager);
+        this(core, networkManager, reject);
         this.hostname = hostname;
     }
 
@@ -113,6 +115,10 @@ public class LoginListener implements PacketLoginServerboundListener
     @Override
     public void handle(final PacketLoginServerboundStart packet)
     {
+        if (this.reject)
+        {
+            return;
+        }
         Validate.validState(this.protocolState == ProtocolState.HELLO, "Unexpected hello packet");
         this.gameProfile = packet.getProfile();
         if (this.onlineMode == OnlineMode.TRUE) // TODO
@@ -129,6 +135,10 @@ public class LoginListener implements PacketLoginServerboundListener
     @Override
     public void handle(final PacketLoginServerboundEncryptionBegin packet)
     {
+        if (this.reject)
+        {
+            return;
+        }
         Validate.validState(this.protocolState == ProtocolState.KEY, "Unexpected key packet");
         final PrivateKey privateKey = this.core.getKeyPair().getPrivate();
         if (Arrays.equals(this.token, packet.getVerifyToken()))

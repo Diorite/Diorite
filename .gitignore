@@ -124,3 +124,4 @@ hs_err_pid*
 
 ### Others ###
 logs/
+diorite/src/main/java/META-INF/MANIFEST.MF
