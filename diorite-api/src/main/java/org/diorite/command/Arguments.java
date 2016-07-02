@@ -42,6 +42,7 @@ import org.diorite.entity.Player;
 import org.diorite.utils.SimpleEnum;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.reflections.DioriteReflectionUtils;
+import org.diorite.world.World;
 
 /**
  * Class used to read command parametrs instead of String[] to make some stuff easier/simpler
@@ -233,6 +234,11 @@ public class Arguments implements Iterable<String>
     {
         return Diorite.getCore().getPlayer(this.asString(index));
     } // TODO: add asOfflinePlayer
+
+    public World asWorld(final int index) throws ArrayIndexOutOfBoundsException
+    {
+        return Diorite.getCore().getWorldsManager().getWorld(this.asString(index));
+    } // TODO Something more amazing. Like fetching by world uuid or incomplete name
 
     /**
      * Read x, y, z block coordinates from next 3 elements.
