@@ -41,6 +41,10 @@ import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.slot.Slot;
 import org.diorite.inventory.slot.SlotType;
 import org.diorite.material.items.ArmorMat;
+import org.diorite.material.items.BootsMat;
+import org.diorite.material.items.ChestplateMat;
+import org.diorite.material.items.HelmetMat;
+import org.diorite.material.items.LeggingsMat;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
 @SuppressWarnings("ObjectEquality")
@@ -71,7 +75,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
 
     protected boolean handleClick(final PlayerInventoryClickEvent e)
     {
-        System.out.println(e);
+        System.out.println("InventoryClick = " + e);
         final IPlayer player = (IPlayer) e.getPlayer();
         final ClickType ct = e.getClickType();
         ItemStackImpl.validate(e.getCursorItem());
@@ -236,14 +240,32 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                     return true;
                 }
 
-                // FIXME zbroja wskakuje na pola od armoru - tylko jesli sa wolne
-                // TODO dopracowac to bo ledwo dziala
-
                 final ItemStack[] rest;
 
-                if ((slotProp.getSlotType().equals(SlotType.CONTAINER) || slotProp.getSlotType().equals(SlotType.HOTBAR)) && (clicked.getMaterial() instanceof ArmorMat))
+                if ((slotProp.getSlotType().equals(SlotType.CONTAINER) || slotProp.getSlotType().equals(SlotType.HOTBAR) || slotProp.getSlotType().equals(SlotType.SECOND_HAND)) && (clicked.getMaterial() instanceof ArmorMat))
                 {
-                    return ! ((ArmorMat) clicked.getMaterial()).getArmorType().setItem(inv, clicked) || inv.replace(slot, clicked, null);
+                    //TODO Item update animation is called even though nothing happens (ex helmet equpied but trying to equip another)
+                    ArmorMat mat = (ArmorMat) clicked.getMaterial();
+                    if (mat instanceof HelmetMat && inv.getHelmet() == null) //TODO better way ?
+                    {
+                        return inv.replaceHelmet(null, clicked) && inv.replace(slot, clicked, null);
+                    }
+                    else if (mat instanceof ChestplateMat && inv.getChestplate() == null)
+                    {
+                        return inv.replaceChestplate(null, clicked) && inv.replace(slot, clicked, null);
+                    }
+                    else if (mat instanceof LeggingsMat && inv.getLeggings() == null)
+                    {
+                        return inv.replaceLeggings(null, clicked) && inv.replace(slot, clicked, null);
+                    }
+                    else if (mat instanceof BootsMat && inv.getBoots() == null)
+                    {
+                        return inv.replaceBoots(null, clicked) && inv.replace(slot, clicked, null);
+                    }
+                    else if (e.getActionNumber() == - 2)
+                    {
+                        return false;
+                    }
                 }
                 if (slotProp.getSlotType().equals(SlotType.CONTAINER))
                 {

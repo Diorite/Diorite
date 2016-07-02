@@ -70,6 +70,7 @@ import org.diorite.impl.input.InputActionType;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.GameMode;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.entity.data.HandType;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
@@ -77,6 +78,7 @@ import org.diorite.event.player.PlayerInteractEvent;
 import org.diorite.event.player.PlayerInteractEvent.Action;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
+import org.diorite.inventory.PlayerInventory;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.items.ArmorMat;
 import org.diorite.world.chunk.Chunk;
@@ -263,10 +265,10 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundUseItem packet)
     {
-        if (this.player.getInventory().getItemInHand() instanceof ArmorMat)
+        final ItemStackWithSlot itemWithSlot = getItemFromHand(this.player.getInventory(), packet.getHandType());
+        if (itemWithSlot.item.getMaterial() instanceof ArmorMat)
         {
-            // TODO
-            //this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getHeldItemSlot(), ClickType.SHIFT_MOUSE_RIGHT)), this.player);
+            this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 2, - 1, itemWithSlot.slot, ClickType.SHIFT_MOUSE_RIGHT)), this.player);
         }
         System.out.println(packet);
         // TODO
@@ -336,20 +338,7 @@ public class PlayListener implements PacketPlayServerboundListener
         }
         else
         {
-            final ItemStack item;
-
-            switch (event.getHand())
-            {
-                //TODO add getInventory().getItem(HandType) ?
-                case MAIN:
-                    item = this.player.getInventory().getItemInHand();
-                    break;
-                case OFF:
-                    item = this.player.getInventory().getItem(PlayerInventoryImpl.SECOND_HAND_SLOT);
-                    break;
-                default:
-                    throw new UnsupportedOperationException("Trying to place block with unknown HandType");
-            }
+            final ItemStack item = getItemFromHand(this.player.getInventory(), event.getHand()).item;
 
             if (item == null || item.getAmount() < 1)
             {
@@ -422,5 +411,33 @@ public class PlayListener implements PacketPlayServerboundListener
     public IPlayer getPlayer()
     {
         return this.player;
+    }
+
+    private ItemStackWithSlot getItemFromHand(final PlayerInventory inv, final HandType hand)
+    {
+        if (hand == HandType.MAIN)
+        {
+            return new ItemStackWithSlot(inv.getItemInHand(), inv.getHeldItemSlot() + inv.getHotbarInventory().getSlotOffset());
+        }
+        else if (hand == HandType.OFF)
+        {
+            return new ItemStackWithSlot(inv.getItem(PlayerInventoryImpl.SECOND_HAND_SLOT), PlayerInventoryImpl.SECOND_HAND_SLOT);
+        }
+        else
+        {
+            throw new UnsupportedOperationException("Unknown HandType");
+        }
+    }
+
+    private class ItemStackWithSlot
+    {
+        public final ItemStack item;
+        public final int       slot;
+
+        public ItemStackWithSlot(final ItemStack item, final int slot)
+        {
+            this.item = item;
+            this.slot = slot;
+        }
     }
 }
