@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.IServerManager;
@@ -67,6 +68,7 @@ import org.diorite.effect.StatusEffect;
 import org.diorite.effect.StatusEffectType;
 import org.diorite.enchantments.EnchantmentType;
 import org.diorite.entity.EntityType;
+import org.diorite.entity.Player;
 import org.diorite.entity.attrib.AttributeModifier;
 import org.diorite.entity.attrib.AttributeType;
 import org.diorite.inventory.InventoryHolder;
@@ -85,6 +87,7 @@ import org.diorite.permissions.PermissionsManager;
 import org.diorite.utils.Color;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.LookupShape;
+import org.diorite.world.World;
 
 public class DevCmd extends SystemCommandImpl
 {
@@ -97,13 +100,27 @@ public class DevCmd extends SystemCommandImpl
             final IPlayer p = (IPlayer) sender;
             if (action == null)
             {
-                p.getNetworkManager().sendPacket(new PacketPlayClientboundBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
+                p.sendSimpleColoredMessage("&cDiorite debug command. Use /debug:<action> and have fun!");
                 return;
             }
             final IServerManager serverManager = DioriteCore.getInstance().getServerManager();
             final PermissionsManager mag = serverManager.getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "playersinworld":
+                {
+                    final World world;
+                    if (args.has(0))
+                    {
+                        world = args.asWorld(0);
+                    }
+                    else
+                    {
+                        world = p.getWorld();
+                    }
+                    p.sendSimpleColoredMessage("&aPlayers in " + world.getName() + ": " + StringUtils.join(world.getPlayersInWorld().stream().map(Player::getName).collect(Collectors.toList()), ","));
+                    break;
+                }
                 case "navigatehere":
                 {
                     final IEntity entity = p.getNearbyEntities(16, 16, 16, LookupShape.RECTANGLE).iterator().next();
@@ -112,11 +129,22 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "removeentities":
                 {
-                    for (final IEntity entity : p.getNearbyEntities(16, 16, 16, LookupShape.RECTANGLE))
+                    int size = 16; // default removing size
+                    if (args.has(0))
+                    {
+                        size = args.asInt(0);
+                    }
+                    for (final IEntity entity : p.getNearbyEntities(size, size, size, LookupShape.RECTANGLE))
                     {
                         p.sendMessage(entity.getType() + " - x:" + entity.getX() + ", y:" + entity.getY() + ", z:" + entity.getZ());
                         entity.remove(true);
                     }
+                    break;
+                }
+                case "blockupdate":
+                {
+                    p.getNetworkManager().sendPacket(new PacketPlayClientboundBlockChange(args.readCoordinates(0, p.getLocation().toBlockLocation()), args.asInt(3), args.asInt(4).byteValue()));
+                    break;
                 }
                 case "metadata":
                 {

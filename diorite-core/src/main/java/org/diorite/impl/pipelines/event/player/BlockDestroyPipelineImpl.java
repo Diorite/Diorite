@@ -41,7 +41,6 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
     @Override
     public void reset_()
     {
-        // TODO Drop item on ground, not to eq
         this.addBefore(EventPriority.NORMAL, "Diorite|RemoveBlock", (evt, pipeline) -> {
             if (evt.isCancelled())
             {
@@ -50,16 +49,6 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
             evt.getWorld().setBlock(evt.getLocation(), Material.AIR);
             DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getWorld()), new PacketPlayClientboundBlockChange(evt.getLocation(), Material.AIR));
         });
-
-        /*this.addAfter(EventPriority.NORMAL, "Diorite|AddToEq", (evt, pipeline) ->
-        {
-            if (evt.isCancelled())
-            {
-                return;
-            }
-            evt.getPlayer().getInventory().getFullEqInventory().add(new ItemStack(evt.getBlock().getType()));
-            evt.getPlayer().getInventory().update(); // TODO This shouldn't be needed
-        });*/
 
         this.addAfter(EventPriority.NORMAL, "Diorite|DropItem", (evt, pipeline) -> {
             if (evt.isCancelled() || evt.getPlayer().getGameMode().equals(GameMode.CREATIVE))

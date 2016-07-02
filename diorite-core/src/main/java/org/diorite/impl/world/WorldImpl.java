@@ -28,7 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -57,7 +59,6 @@ import org.diorite.impl.world.io.requests.Request;
 import org.diorite.BlockLocation;
 import org.diorite.BossBar;
 import org.diorite.Difficulty;
-import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
@@ -70,6 +71,7 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.nbt.NbtNamedTagContainer;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
@@ -104,15 +106,16 @@ public class WorldImpl implements World, Tickable
     protected final Dimension        dimension;
     protected final WorldType        worldType;
     protected final EntityTrackers   entityTrackers;
-    protected final WorldBorderImpl  worldBorder = new WorldBorderImpl(this);
-    protected final Collection<BossBarImpl> bossBars = new ArrayList<>(5);
-    protected     boolean          vanillaCompatible = false;
-    protected     Difficulty       difficulty        = Difficulty.NORMAL;
-    protected     HardcoreSettings hardcore          = new HardcoreSettings(false);
-    protected     GameMode         defaultGameMode   = GameMode.SURVIVAL;
-    protected     int              maxHeight         = Chunk.CHUNK_FULL_HEIGHT - 1;
-    protected     byte             forceLoadedRadius = 5;
-    private final LongCollection   activeChunks      = new LongOpenHashSet(1000);
+    protected final WorldBorderImpl  worldBorder       = new WorldBorderImpl(this);
+    protected final Set<BossBarImpl> bossBars          = new ConcurrentSet<>(2);
+    protected final Set<IPlayer>     players           = new ConcurrentSet<>();
+    protected       boolean          vanillaCompatible = false;
+    protected       Difficulty       difficulty        = Difficulty.NORMAL;
+    protected       HardcoreSettings hardcore          = new HardcoreSettings(false);
+    protected       GameMode         defaultGameMode   = GameMode.SURVIVAL;
+    protected       int              maxHeight         = Chunk.CHUNK_FULL_HEIGHT - 1;
+    protected       byte             forceLoadedRadius = 5;
+    private final   LongCollection   activeChunks      = new LongOpenHashSet(1000);
     protected       long           seed;
     protected       boolean        raining;
     protected       boolean        thundering;
@@ -773,6 +776,12 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
+    public Set<IPlayer> getPlayersInWorld()
+    {
+        return Collections.unmodifiableSet(this.players);
+    }
+
+    @Override
     public Biome getBiome(final int x, final int y, final int z) // y is ignored, added for future possible changes.
     {
         return this.getChunkAt(x >> 4, z >> 4).getBiome(x & CHUNK_FLAG, y, z & CHUNK_FLAG);
@@ -953,7 +962,10 @@ public class WorldImpl implements World, Tickable
         final BaseTracker<?> tracker;
         if (entity instanceof IPlayer)
         {
-            tracker = this.entityTrackers.addTracked((IPlayer) entity);
+            final IPlayer playerEntity = (IPlayer) entity;
+
+            tracker = this.entityTrackers.addTracked(playerEntity);
+            this.players.add(playerEntity);
         }
         else
         {
@@ -969,13 +981,18 @@ public class WorldImpl implements World, Tickable
 
     public void removeEntity(final IEntity entity)
     {
+        if (entity instanceof IPlayer)
+        {
+            final IPlayer playerEntity = (IPlayer) entity;
+
+            this.players.remove(playerEntity);
+        }
         this.entityTrackers.removeTracked(entity);
         entity.remove(false);
     }
 
     public void broadcastPacketInWorld(final Packet<?> packet)
     {
-        //noinspection ObjectEquality
-        Diorite.getCore().getOnlinePlayers().stream().filter(p -> p.getWorld() == this).forEach(player -> ((IPlayer) player).getNetworkManager().sendPacket(packet));
+        this.players.stream().map(IPlayer::getNetworkManager).forEach(net -> net.sendPacket(packet));
     }
 }
