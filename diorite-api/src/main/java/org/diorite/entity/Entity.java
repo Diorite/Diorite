@@ -120,7 +120,12 @@ public interface Entity extends GameObject, Synchronizable
 
     void setCustomNameVisible(boolean visible);
 
-    boolean isSilent(); // TODO: check what the fuck is that
+    /**
+     * If true, this entity will not make sound.
+     *
+     * @return
+     */
+    boolean isSilent();
 
     void setSilent(boolean silent);
 

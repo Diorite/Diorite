@@ -166,7 +166,7 @@ public class WorldImpl implements World, Tickable
     {
         final BossBarImpl bossBarImpl = (BossBarImpl) bossBar;
         this.bossBars.add(bossBarImpl);
-        this.getPlayersInWorld().forEach(player ->  bossBarImpl.addHolder((IPlayer) player));
+        this.getPlayersInWorld().forEach(player -> bossBarImpl.addHolder((IPlayer) player));
     }
 
     @Override
@@ -174,7 +174,7 @@ public class WorldImpl implements World, Tickable
     {
         final BossBarImpl bossBarImpl = (BossBarImpl) bossBar;
         this.bossBars.remove(bossBarImpl);
-        this.getPlayersInWorld().forEach(player ->  bossBarImpl.removeHolder((IPlayer) player));
+        this.getPlayersInWorld().forEach(player -> bossBarImpl.removeHolder((IPlayer) player));
     }
 
     @Override
@@ -346,8 +346,8 @@ public class WorldImpl implements World, Tickable
         this.worldBorder.setSize(tag.getDouble("BorderSize", WorldBorderImpl.DEFAULT_BORDER_SIZE));
         this.worldBorder.setDamageAmount(tag.getDouble("BorderDamagePerBlock", 0.2));
         this.worldBorder.setDamageBuffer(tag.getDouble("BorderSafeZone", 5));
-        this.worldBorder.setWarningDistance((int)tag.getDouble("BorderWarningBlocks", 5));
-        this.worldBorder.setWarningTime((int)tag.getDouble("BorderWarningTime", 15));
+        this.worldBorder.setWarningDistance((int) tag.getDouble("BorderWarningBlocks", 5));
+        this.worldBorder.setWarningTime((int) tag.getDouble("BorderWarningTime", 15));
         this.worldBorder.setTargetSize(tag.getDouble("BorderSizeLerpTarget", this.worldBorder.getSize()));
         this.worldBorder.setTargetReachTime(tag.getLong("BorderSizeLerpTime", 0));
     }
@@ -868,10 +868,7 @@ public class WorldImpl implements World, Tickable
         }
 
         {
-            if (this.time == 24000)
-            {
-                this.time = 0;
-            }
+            this.time %= 24000;
             this.time++; // TODO scale it with server TPS
         }
 
@@ -953,7 +950,7 @@ public class WorldImpl implements World, Tickable
     /**
      * This method adds entity to this world
      *
-     * @param entity entity which should be spawned
+     * @param entity  entity which should be spawned
      * @param isSpawn true when entity is spawned
      *                false when is loaded from map
      */

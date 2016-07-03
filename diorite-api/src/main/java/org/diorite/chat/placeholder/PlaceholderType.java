@@ -134,8 +134,8 @@ public class PlaceholderType<T>
         PLUGIN.registerItem("description", BasePlugin::getDescription);
         PLUGIN.registerItem("website", BasePlugin::getWebsite);
         PLUGIN.registerItem("parent", BasePlugin::getName); //TODO
-        PLUGIN.registerItem("loaded", BasePlugin::getName); //TODO
-        PLUGIN.registerItem("loader", BasePlugin::getName); //TODO
+        PLUGIN.registerItem("loaded", BasePlugin::isInitialised);
+        PLUGIN.registerItem("loader", BasePlugin::getPluginLoader);
 
         //Entity
         ENTITY.registerItem("x", Entity::getX);
