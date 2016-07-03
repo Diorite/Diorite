@@ -35,8 +35,8 @@ public class ScoreboardPosition extends ASimpleEnum<ScoreboardPosition>
         init(ScoreboardPosition.class, 3);
     }
 
-    public static final ScoreboardPosition LIST = new ScoreboardPosition("LIST", 0);
-    public static final ScoreboardPosition SIDEBAR = new ScoreboardPosition("SIDEBAR", 1);
+    public static final ScoreboardPosition LIST       = new ScoreboardPosition("LIST", 0);
+    public static final ScoreboardPosition SIDEBAR    = new ScoreboardPosition("SIDEBAR", 1);
     public static final ScoreboardPosition BELOW_NAME = new ScoreboardPosition("BELOW_NAME", 2);
 
     public ScoreboardPosition(final String enumName, final int ordinal)

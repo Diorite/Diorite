@@ -70,8 +70,7 @@ public class PluginManagerImpl implements PluginManager
         try
         {
             pluginsDirectory.init();
-        }
-        catch (final IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -103,15 +102,13 @@ public class PluginManagerImpl implements PluginManager
         for (final PluginsDirectoryImpl directory : this.pluginDirectories)
         {
             final File pluginsFile = directory.getDirectory();
-            Arrays.stream(Objects.requireNonNull(pluginsFile.listFiles())).filter(File::isFile).forEach(plugin ->
-            {
+            Arrays.stream(Objects.requireNonNull(pluginsFile.listFiles())).filter(File::isFile).forEach(plugin -> {
                 if (! this.loadedFiles.contains(plugin))
                 {
                     try
                     {
                         this.loadPlugin(plugin);
-                    }
-                    catch (final PluginException e)
+                    } catch (final PluginException e)
                     {
                         e.printStackTrace();
                     }

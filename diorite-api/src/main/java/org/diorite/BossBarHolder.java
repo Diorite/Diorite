@@ -46,6 +46,7 @@ public interface BossBarHolder
      * Returns a list of bossbars of this holder
      *
      * @param includeParents should parent's BossBars be included
+     *
      * @return list of player's bossbars
      */
     Collection<BossBar> getBossBars(boolean includeParents);

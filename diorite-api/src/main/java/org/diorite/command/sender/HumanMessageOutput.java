@@ -118,6 +118,7 @@ public interface HumanMessageOutput extends MessageOutput
             }
         }
     }
+
     default void sendMessage(final ChatPosition position, final BaseComponent[] components)
     {
         if (components != null)

@@ -216,7 +216,10 @@ public class EntityMetadata
             ((EntityMetadataBooleanEntry) entry).setValue(value);
             entry.setDirty();
         }
-        else throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
+        else
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
+        }
     }
 
     public void switchBoolean(final byte index)
@@ -329,7 +332,10 @@ public class EntityMetadata
         this.setByte((byte) index, value);
     }
 
-    public void setByte(final int index, final boolean value) { this.setByte((byte) index, value ? 1 : 0);}
+    public void setByte(final int index, final boolean value)
+    {
+        this.setByte((byte) index, value ? 1 : 0);
+    }
 
     public void setInt(final int index, final int value)
     {
@@ -470,7 +476,10 @@ public class EntityMetadata
         {
             return ((EntityMetadataBooleanEntry) entry).getValue();
         }
-        else throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
+        else
+        {
+            throw new IllegalArgumentException("Metadata type mismatch excepted boolean but found: " + entry);
+        }
     }
 
     public boolean getBoolean(final byte index, final int flagIndex)

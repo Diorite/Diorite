@@ -115,8 +115,9 @@ public interface ServerManager
     /**
      * Creates a new boss bar instance with random UUID
      *
-     * @see BossBar
      * @return new boss bar instance
+     *
+     * @see BossBar
      */
     BossBar createBossBar(int health, BaseComponent title, BossBar.Style style, BossBar.Color color);
 }

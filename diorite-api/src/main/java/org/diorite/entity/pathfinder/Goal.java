@@ -28,7 +28,9 @@ public interface Goal
 {
     enum Priority
     {
-        LOW, NORMAL, HIGH
+        LOW,
+        NORMAL,
+        HIGH
     }
 
     Priority getPriority();

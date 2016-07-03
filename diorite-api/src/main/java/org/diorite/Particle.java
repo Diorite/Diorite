@@ -88,7 +88,7 @@ public class Particle extends ASimpleEnum<Particle>
     public static final Particle DAMAGE_INDICATOR  = new Particle("DAMAGE_INDICATOR", "damageIndicator");
     public static final Particle SWEEP_ATTACK      = new Particle("SWEEP_ATTACK", "sweepAttack");
 
-    private static final Map<String, Particle>   byParticleName = new CaseInsensitiveMap<>(46, SMALL_LOAD_FACTOR);
+    private static final Map<String, Particle> byParticleName = new CaseInsensitiveMap<>(46, SMALL_LOAD_FACTOR);
     private final String particleName;
     private final int    dataSize;
 

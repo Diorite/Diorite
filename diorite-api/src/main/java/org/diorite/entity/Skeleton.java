@@ -32,6 +32,8 @@ public interface Skeleton extends MonsterEntity
 
     enum Type
     {
-        DEFAULT, WITHER, STRAY
+        DEFAULT,
+        WITHER,
+        STRAY
     }
 }

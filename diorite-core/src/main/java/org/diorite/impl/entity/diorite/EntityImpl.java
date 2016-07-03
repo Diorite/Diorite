@@ -79,8 +79,8 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
 
     private final BooleanLazyValue     lazyOnGround;
     private final EntityControllerImpl controller;
-    private          boolean           aiEnabled = true; // don't do any actions if AI is disabled
-    final            DioriteRandom     random    = DioriteRandomUtils.getRandom();
+    private boolean       aiEnabled = true; // don't do any actions if AI is disabled
+    final   DioriteRandom random    = DioriteRandomUtils.getRandom();
     final            DioriteCore       core;
     private          WorldImpl         world;
     private volatile Thread            lastTickThread;

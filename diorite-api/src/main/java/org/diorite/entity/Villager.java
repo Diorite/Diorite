@@ -32,6 +32,10 @@ public interface Villager extends AnimalEntity
 
     enum Profession
     {
-        FARMER, LIBRARIAN, PRIEST, BLACKSMITH, BUTCHER
+        FARMER,
+        LIBRARIAN,
+        PRIEST,
+        BLACKSMITH,
+        BUTCHER
     }
 }

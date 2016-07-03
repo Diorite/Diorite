@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 public class FakeDioritePlugin implements ChildPlugin
 {
-    private Logger              logger;
+    private       Logger        logger;
     private final DioritePlugin parent;
     private       PluginLoader  loader;
     private       boolean       enabled;

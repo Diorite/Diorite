@@ -192,13 +192,13 @@ public abstract class BaseTracker<T extends IEntity>
         {
             final double dX = player.getX() - this.xLoc;
             final double dZ = player.getZ() - this.zLoc;
-            final boolean isInTrackedRange = !((dX < - range) || (dX > range) || (dZ < - range) || (dZ > range));
+            final boolean isInTrackedRange = ! ((dX < - range) || (dX > range) || (dZ < - range) || (dZ > range));
             final boolean isTracked = this.tracked.contains(player);
-            if (isTracked && !isInTrackedRange)
+            if (isTracked && ! isInTrackedRange)
             {
                 this.remove(player);
             }
-            else if (!isTracked && isInTrackedRange)
+            else if (! isTracked && isInTrackedRange)
             {
                 this.tracked.add(player);
                 this.spawn();

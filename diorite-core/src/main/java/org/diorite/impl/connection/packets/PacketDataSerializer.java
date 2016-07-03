@@ -1430,7 +1430,6 @@ public class PacketDataSerializer extends ByteBuf
         return this.byteBuf.release(i);
     }
 
-    
 
     public static int neededBytes(final int i)
     {

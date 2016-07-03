@@ -30,8 +30,8 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockDig;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockPlace;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundChat;
-import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCommand;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCloseWindow;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCommand;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCustomPayload;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundEnchantItem;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundEntityAction;

@@ -26,9 +26,9 @@ package org.diorite.entity;
 
 public interface Slime extends MonsterEntity
 {
-    public static final int BIG = 4;
+    public static final int BIG   = 4;
     public static final int SMALL = 2;
-    public static final int TINY = 1;
+    public static final int TINY  = 1;
 
     /**
      * Returns slime's size.

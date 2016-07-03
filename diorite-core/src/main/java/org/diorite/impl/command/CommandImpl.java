@@ -130,7 +130,7 @@ public abstract class CommandImpl implements Command
     @Override
     public String getUsage()
     {
-        if(this.usage == null)
+        if (this.usage == null)
         {
             return name;
         }

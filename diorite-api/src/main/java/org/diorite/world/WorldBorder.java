@@ -77,6 +77,8 @@ public interface WorldBorder
 
     enum State
     {
-        GROWING, DECREASING, STATIONARY;
+        GROWING,
+        DECREASING,
+        STATIONARY;
     }
 }

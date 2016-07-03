@@ -80,7 +80,7 @@ public class PathfinderImpl implements Pathfinder
             return false;
         }
 
-        if (! blockLocation.addY(-1).getBlock().getType().isSolid())
+        if (! blockLocation.addY(- 1).getBlock().getType().isSolid())
         {
             return false;
         }
@@ -92,9 +92,9 @@ public class PathfinderImpl implements Pathfinder
     {
         final LinkedList<BlockLocation> locations = new LinkedList<>();
 
-        for (int x = -1; x < 2; x++)
+        for (int x = - 1; x < 2; x++)
         {
-            for (int z = -1; z < 2; z++)
+            for (int z = - 1; z < 2; z++)
             {
                 if ((x == 0) && (z == 0))
                 {

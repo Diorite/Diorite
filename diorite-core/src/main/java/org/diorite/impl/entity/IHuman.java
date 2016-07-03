@@ -24,8 +24,8 @@
 
 package org.diorite.impl.entity;
 
-import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.entity.Human;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
 import org.diorite.utils.others.NamedUUID;

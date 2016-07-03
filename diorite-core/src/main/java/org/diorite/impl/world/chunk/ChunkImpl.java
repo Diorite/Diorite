@@ -452,8 +452,7 @@ public class ChunkImpl implements Chunk
             try
             {
                 dioriteEntity = DioriteCore.getInstance().getServerManager().getEntityFactory().createEntity(entity, this.getWorld());
-            }
-            catch (final Exception e)
+            } catch (final Exception e)
             {
                 System.err.println("Failed to load entity (" + entity + ")");
                 continue;
