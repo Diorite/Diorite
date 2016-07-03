@@ -115,7 +115,7 @@ public class PluginManagerImpl implements PluginManager
                 }
                 else
                 {
-                    CoreMain.debug("Skipped " + plugin + " because is arleady loaded");
+                    CoreMain.debug("Skipped " + plugin + " because it is already loaded");
                 }
             });
         }
@@ -158,7 +158,7 @@ public class PluginManagerImpl implements PluginManager
     {
         if (this.getPlugin(plugin.getName()) != null)
         {
-            throw new PluginException("Plugin with name " + plugin.getName() + " is arleady loaded!");
+            throw new PluginException("Plugin with name " + plugin.getName() + " is already loaded!");
         }
         this.plugins.add(plugin);
         plugin.init(null, null, this.pluginLoaders.get(FakePluginLoader.FAKE_PLUGIN_SUFFIX), null);

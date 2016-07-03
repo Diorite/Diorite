@@ -49,6 +49,7 @@ import org.diorite.entity.Entity;
 import org.diorite.entity.LivingEntity;
 import org.diorite.entity.Player;
 import org.diorite.plugin.BasePlugin;
+import org.diorite.plugin.ChildPlugin;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 import org.diorite.world.World;
 import org.diorite.world.WorldBorder;
@@ -133,9 +134,18 @@ public class PlaceholderType<T>
         PLUGIN.registerItem("version", BasePlugin::getVersion);
         PLUGIN.registerItem("description", BasePlugin::getDescription);
         PLUGIN.registerItem("website", BasePlugin::getWebsite);
-        PLUGIN.registerItem("parent", BasePlugin::getName); //TODO
+        PLUGIN.registerItem("parent", plugin -> {
+            if (plugin instanceof ChildPlugin)
+            {
+                return ((ChildPlugin) plugin).getParent().getName();
+            }
+            else
+            {
+                return "None";
+            }
+        });
+        PLUGIN.registerItem("loader", p -> p.getPluginLoader().getClass().getName()); // TODO
         PLUGIN.registerItem("loaded", BasePlugin::isInitialised);
-        PLUGIN.registerItem("loader", BasePlugin::getPluginLoader);
 
         //Entity
         ENTITY.registerItem("x", Entity::getX);

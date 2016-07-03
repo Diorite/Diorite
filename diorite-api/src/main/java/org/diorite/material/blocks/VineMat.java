@@ -31,7 +31,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.BlockFace;
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.Material;
+import org.diorite.material.data.drops.PossibleDrops;
+import org.diorite.material.data.drops.PossibleFixedDropWithTool;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -265,6 +268,12 @@ public class VineMat extends PlantMat
     public VineMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    protected PossibleDrops initPossibleDrops()
+    {
+        return new PossibleDrops(new PossibleFixedDropWithTool(new BaseItemStack(VINE), SHEARS));
     }
 
     private static byte combine(final BlockFace... faces)

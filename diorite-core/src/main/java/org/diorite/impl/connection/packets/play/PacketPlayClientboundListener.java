@@ -27,6 +27,7 @@ package org.diorite.impl.connection.packets.play;
 import org.diorite.impl.connection.listeners.PacketPlayListener;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAnimation;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockBreakAnimation;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBoss;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCamera;
@@ -176,11 +177,13 @@ public interface PacketPlayClientboundListener extends PacketPlayListener
 
     void handle(PacketPlayClientboundBoss packet);
 
-    void handle(PacketPlayClientboundAnimation packetPlayClientboundAnimation);
+    void handle(PacketPlayClientboundAnimation packet);
 
-    void handle(PacketPlayClientboundWindowProperty packetPlayClientboundWindowProperty);
+    void handle(PacketPlayClientboundWindowProperty packet);
 
-    void handle(PacketPlayClientboundSetCooldown packetPlayClientboundSetCooldown);
+    void handle(PacketPlayClientboundSetCooldown packet);
 
-    void handle(PacketPlayClientboundEntityStatus packetPlayClientboundEntityStatus);
+    void handle(PacketPlayClientboundEntityStatus packet);
+
+    void handle(PacketPlayClientboundBlockBreakAnimation packet);
 }

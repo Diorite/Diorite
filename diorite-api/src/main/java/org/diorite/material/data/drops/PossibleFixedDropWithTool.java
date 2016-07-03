@@ -26,49 +26,34 @@ package org.diorite.material.data.drops;
 
 import java.util.Set;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.diorite.entity.Entity;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.material.Material;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.world.Block;
 
-public class PossibleFixedDrop extends PossibleDrop
+public class PossibleFixedDropWithTool extends PossibleFixedDrop
 {
-    protected final int amount;
+    private Material tool;
 
-    public PossibleFixedDrop(final ItemStack itemStack, final int amount)
+    public PossibleFixedDropWithTool(final ItemStack itemStack, final int amount, final Material tool)
     {
-        super(itemStack);
-        this.amount = amount;
+        super(itemStack, amount);
+        this.tool = tool;
     }
 
-    public PossibleFixedDrop(final ItemStack itemStack)
+    public PossibleFixedDropWithTool(final ItemStack itemStack, final Material tool)
     {
         super(itemStack);
-        this.amount = 1;
+        this.tool = tool;
     }
 
     @Override
     public void simulateDrop(final Entity entity, final DioriteRandom rand, final Set<ItemStack> drops, final ItemStack usedTool, final Block block)
     {
-        if (this.amount == 0)
+        if (usedTool.getMaterial() == tool)
         {
-            return;
+            super.simulateDrop(entity, rand, drops, usedTool, block);
         }
-        if (this.amount >= 1)
-        {
-            final ItemStack item = this.getItemStack();
-            item.setAmount(this.amount);
-            drops.add(item);
-            return;
-        }
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("amount", this.amount).toString();
     }
 }

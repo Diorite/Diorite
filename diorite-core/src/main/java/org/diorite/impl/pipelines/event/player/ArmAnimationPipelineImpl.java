@@ -24,31 +24,25 @@
 
 package org.diorite.impl.pipelines.event.player;
 
-import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockBreakAnimation;
-import org.diorite.event.pipelines.event.player.InteractPipeline;
-import org.diorite.event.player.PlayerInteractEvent;
-import org.diorite.event.player.PlayerInteractEvent.Action;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAnimation;
+import org.diorite.entity.data.HandType;
+import org.diorite.event.pipelines.event.player.ArmAnimationPipeline;
+import org.diorite.event.player.PlayerArmAnimationEvent;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
-public class InteractPipelineImpl extends SimpleEventPipeline<PlayerInteractEvent> implements InteractPipeline
+public class ArmAnimationPipelineImpl extends SimpleEventPipeline<PlayerArmAnimationEvent> implements ArmAnimationPipeline
 {
     @Override
     public void reset_()
     {
-        this.addFirst("Diorite|InteractDebug", ((event, pipeline) -> {
-            if (event.isCancelled())
+        this.addLast("Diorite|UpdateClients", (evt, pipeline) -> {
+            if (evt.isCancelled())
             {
                 return;
             }
-            System.out.println("event.getAction() = " + event.getAction());
-            if (event.getAction() == Action.LEFT_CLICK_ON_BLOCK)
-            {
-                DioriteCore.getInstance().getPlayersManager().forEachExcept(event.getPlayer(), p -> p.getWorld().equals(event.getPlayer().getWorld()), new PacketPlayClientboundBlockBreakAnimation(event.getPlayer().getId(), event.getBlock().getLocation(), 5)); // TODO correct break stage
-            }
-            //Just a debug
-            CoreMain.debug(event);
-        }));
+            
+            DioriteCore.getInstance().getPlayersManager().forEachExcept(evt.getPlayer(), p -> p.getWorld().equals(evt.getPlayer().getWorld()), new PacketPlayClientboundAnimation(evt.getPlayer().getId(), evt.getHand() == HandType.MAIN ? 0 : 3));
+        });
     }
 }

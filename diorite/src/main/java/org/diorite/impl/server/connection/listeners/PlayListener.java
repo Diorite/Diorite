@@ -35,6 +35,7 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayServerboundListener;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundDisconnect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityLook;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundArmAnimation;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockDig;
@@ -56,6 +57,7 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSetCreativeSlot;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSettings;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSpectate;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSteerBoat;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSteerVehicle;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundTabComplete;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundTeleportAccept;
@@ -63,6 +65,7 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUpdateSign;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseEntity;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseItem;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundVehicleMove;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundWindowClick;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.input.InputAction;
@@ -72,6 +75,7 @@ import org.diorite.GameMode;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.entity.data.HandType;
 import org.diorite.event.EventType;
+import org.diorite.event.player.PlayerArmAnimationEvent;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
 import org.diorite.event.player.PlayerInteractEvent;
@@ -157,6 +161,7 @@ public class PlayListener implements PacketPlayServerboundListener
             return;
         }
         this.core.sync(() -> player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), player);
+        this.core.getPlayersManager().forEachExcept(this.player, p -> p.getWorld().equals(this.player.getWorld()), new PacketPlayClientboundEntityLook(this.player.getId(), player.getYaw(), player.getPitch(), player.isOnGround()));
     }
 
     @Override
@@ -181,6 +186,7 @@ public class PlayListener implements PacketPlayServerboundListener
         }
         // TODO: don't sync packets when client sends too much of them
         this.core.sync(() -> player.setRotation(packet.getYaw(), packet.getPitch()), player);
+        this.core.getPlayersManager().forEachExcept(this.player, p -> p.getWorld().equals(this.player.getWorld()), new PacketPlayClientboundEntityLook(this.player.getId(), player.getYaw(), player.getPitch(), player.isOnGround()));
     }
 
     @Override
@@ -275,6 +281,18 @@ public class PlayListener implements PacketPlayServerboundListener
     }
 
     @Override
+    public void handle(final PacketPlayServerboundVehicleMove packet)
+    {
+        // TODO
+    }
+
+    @Override
+    public void handle(final PacketPlayServerboundSteerBoat packet)
+    {
+        // TODO
+    }
+
+    @Override
     public void handle(final PacketPlayServerboundEntityAction packet)
     {
         this.core.sync(() -> packet.getEntityAction().doAction(this.player, packet.getJumpBoost()), this.player);
@@ -283,7 +301,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundArmAnimation packet)
     {
-        // TODO: implement
+        this.core.sync(() -> EventType.callEvent(new PlayerArmAnimationEvent(this.player, packet.getHandType())), this.player);
     }
 
     @Override
@@ -309,7 +327,6 @@ public class PlayListener implements PacketPlayServerboundListener
             {
                 this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.CTRL_DROP_KEY)), this.player);
             }
-
             if (packet.getAction() == BlockDigAction.SWAP_OFF_HAND)
             {
                 this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 1, - 1, this.player.getInventory().getHotbarInventory().getSlotOffset() + this.player.getInventory().getHeldItemSlot(), ClickType.SWAP_OFF_HAND)), this.player);

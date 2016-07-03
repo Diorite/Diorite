@@ -52,7 +52,7 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * Reduces most damage. <br>
      * Exceptions: doesn't reduce damage from the Void, the /kill command, and hunger damage.
      */
-    public static final EnchantmentType PROTECTION            = new EnchantmentType("PROTECTION", "protection", 0, t -> false, 4);
+    public static final EnchantmentType PROTECTION            = new EnchantmentType("PROTECTION", "protection", 0, t -> false);
     /**
      * Reduces fire damage. <br>
      * Also reduces burn time when set on fire. Every Level will reduce the initiated Burn time by 15%. <br>
@@ -60,22 +60,22 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * At Level VII for example you can't be lit on fire through Fire Aspect Enchantments. The only way to burn is staying in Lava or a Firesource. <br>
      * The initiated Fireticks (Lava=300, Fire=150) will be canceled, and only the remaining time in the firesource will be added to the Fireticktimer. However, this Level can not be achieved without editing.
      */
-    public static final EnchantmentType FIRE_PROTECTION       = new EnchantmentType("FIRE_PROTECTION", "fire_protection", 1, t -> false, 4);
+    public static final EnchantmentType FIRE_PROTECTION       = new EnchantmentType("FIRE_PROTECTION", "fire_protection", 1, t -> false);
     /**
      * Reduces fall damage. <br>
      * Also reduces the damage from ender pearl teleportations.
      */
-    public static final EnchantmentType FEATHER_FALLING       = new EnchantmentType("FEATHER_FALLING", "feather_falling", 2, t -> false, 4);
+    public static final EnchantmentType FEATHER_FALLING       = new EnchantmentType("FEATHER_FALLING", "feather_falling", 2, t -> false);
     /**
      * Reduces explosion damage.
      * Also reduces explosion knockback.
      */
-    public static final EnchantmentType BLAST_PROTECTION      = new EnchantmentType("BLAST_PROTECTION", "blast_protection", 3, t -> false, 4);
+    public static final EnchantmentType BLAST_PROTECTION      = new EnchantmentType("BLAST_PROTECTION", "blast_protection", 3, t -> false);
     /**
      * Reduces projectile damage. <br>
      * Includes damage from arrows, ghast/blaze fire charges, etc.
      */
-    public static final EnchantmentType PROJECTILE_PROTECTION = new EnchantmentType("PROJECTILE_PROTECTION", "projectile_protection", 4, t -> false, 4);
+    public static final EnchantmentType PROJECTILE_PROTECTION = new EnchantmentType("PROJECTILE_PROTECTION", "projectile_protection", 4, t -> false);
     /**
      * Extends underwater breathing time. <br>
      * Increases underwater breathing time by +15 seconds per level. <br>
@@ -83,12 +83,12 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * Improves underwater vision. <br>
      * Levels above III (which require editing to achieve) don't work, as they increase visibility over 100% which resembles swimming in ice slush.
      */
-    public static final EnchantmentType RESPIRATION           = new EnchantmentType("RESPIRATION", "respiration", 5, t -> false, 3);
+    public static final EnchantmentType RESPIRATION           = new EnchantmentType("RESPIRATION", "respiration", 5, t -> false);
     /**
      * Increases underwater mining rate. <br>
      * Breaking blocks underwater is allowed at regular speed, though the player cannot be floating to get the full effect. Different levels (through editing) are no different from lvl 1.
      */
-    public static final EnchantmentType AQUA_AFFINITY         = new EnchantmentType("AQUA_AFFINITY", "aqua_affinity", 6, t -> false, 1);
+    public static final EnchantmentType AQUA_AFFINITY         = new EnchantmentType("AQUA_AFFINITY", "aqua_affinity", 6, t -> false);
     /**
      * Damages attackers. <br>
      * (Level * 15)% chance of inflicting 1-4 hp (or Level - 10 if Level {@literal > 10}) damage on anyone who attacks wearer. <br>
@@ -96,7 +96,7 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * If present on multiple pieces of armor, only the "bottommost" piece of armor counts. <br>
      * If present on multiple pieces of armor one will be chosen at random.
      */
-    public static final EnchantmentType THORNS                = new EnchantmentType("THORNS", "thorns", 7, t -> false, 3);
+    public static final EnchantmentType THORNS                = new EnchantmentType("THORNS", "thorns", 7, t -> false);
     /**
      * Increases underwater movement speed. <br>
      * Every level reduces the amount water slows you by 1/3. <br>
@@ -106,22 +106,22 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * If editing is used to put it on other pieces of armor (such as a helmet) it works normally. <br>
      * Not currently in console versions.
      */
-    public static final EnchantmentType DEPTH_STRIDER         = new EnchantmentType("DEPTH_STRIDER", "depth_strider", 8, t -> false, 3);
+    public static final EnchantmentType DEPTH_STRIDER         = new EnchantmentType("DEPTH_STRIDER", "depth_strider", 8, t -> false);
     /**
      * Creates frost blocks when walking over water. <br>
      * If standing on a solid block (and not in a solid block), any still water blocks within a radius of 2 + Level around the block being stood on will be turned into frosted ice.
      */
-    public static final EnchantmentType FROST_WALKER          = new EnchantmentType("FROST_WALKER", "frost_walker", 9, t -> false, 2);
+    public static final EnchantmentType FROST_WALKER          = new EnchantmentType("FROST_WALKER", "frost_walker", 9, t -> false);
     /**
      * Increases damage. <br>
      * Adds 1 extra damage for the first level, and 0.5 for each additional level.
      */
-    public static final EnchantmentType SHARPNESS             = new EnchantmentType("SHARPNESS", "sharpness", 16, t -> false, 5);
+    public static final EnchantmentType SHARPNESS             = new EnchantmentType("SHARPNESS", "sharpness", 16, t -> false);
     /**
      * Increases damage to "undead" mobs (skeletons, zombies, withers, wither skeletons, and zombie pigmen) <br>
      * Each level separately adds 2.5 extra damage to each hit, to "undead" mobs only
      */
-    public static final EnchantmentType SMITE                 = new EnchantmentType("SMITE", "smite", 17, t -> false, 5);
+    public static final EnchantmentType SMITE                 = new EnchantmentType("SMITE", "smite", 17, t -> false);
     /**
      * Increases damage to "arthropod" mobs (spiders, cave spiders, silverfish and endermites) <br>
      * Each level separately adds 2.5 extra damage to each hit, to "arthropods" only. The enchantment will also cause "arthropods" to have the Slowness IV effect when hit. <br>
@@ -129,12 +129,12 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * <br>
      * Notably, the slowness effect applies not only to "arthropod" kills with the sword itself, but to any "arthropod" kills while simply holding the sword.
      */
-    public static final EnchantmentType BANE_OF_ARTHROPODS    = new EnchantmentType("BANE_OF_ARTHROPODS", "bane_of_arthropods", 18, t -> false, 5);
+    public static final EnchantmentType BANE_OF_ARTHROPODS    = new EnchantmentType("BANE_OF_ARTHROPODS", "bane_of_arthropods", 18, t -> false);
     /**
      * Increases knockback. <br>
      * Increases knockback by 3 blocks at level I, and +3 blocks with every additional level. Does combine slightly with knockback caused by attacking while sprinting.
      */
-    public static final EnchantmentType KNOCKBACK             = new EnchantmentType("KNOCKBACK", "knockback", 19, t -> false, 2);
+    public static final EnchantmentType KNOCKBACK             = new EnchantmentType("KNOCKBACK", "knockback", 19, t -> false);
     /**
      * Sets the target on fire. <br>
      * Fire Aspect adds 80 Fireticks (4 seconds of burning) per Level to the target. <br>
@@ -143,7 +143,7 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * When possible, dropped meat will be cooked if the mob is killed while on fire. <br>
      * XP will only be dropped if non-fire damage was dealt by the player within 5 seconds of the death.
      */
-    public static final EnchantmentType FIRE_ASPECT           = new EnchantmentType("FIRE_ASPECT", "fire_aspect", 20, t -> false, 2);
+    public static final EnchantmentType FIRE_ASPECT           = new EnchantmentType("FIRE_ASPECT", "fire_aspect", 20, t -> false);
     /**
      * Mobs can drop more loot. <br>
      * Increases maximum loot drop by +1 per level. <br>
@@ -152,19 +152,19 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * For example, a player can fire an arrow at a target and then switch to a looting sword before the arrow hits to get the looting effect.<br>
      * The exact drop chances depend on the type of drop.<br>
      */
-    public static final EnchantmentType LOOTING               = new EnchantmentType("LOOTING", "looting", 21, t -> false, 3);
+    public static final EnchantmentType LOOTING               = new EnchantmentType("LOOTING", "looting", 21, t -> false);
     /**
      * Increases mining speed. <br>
      * Increases mining speed +30% over the previous level: I=130%, II=169%, III=220%, IV=286%, V=371%. <br>
      * One must use the proper tool for a block in order to receive the speed. Does not matter if you mine it with the incorrect tier. <br>
      * The speed increase applies to all blocks that when mined, will drop an item.
      */
-    public static final EnchantmentType EFFICIENCY            = new EnchantmentType("EFFICIENCY", "efficiency", 32, t -> false, 5);
+    public static final EnchantmentType EFFICIENCY            = new EnchantmentType("EFFICIENCY", "efficiency", 32, t -> false);
     /**
      * Mined blocks drop themselves instead of the usual items. <br>
      * Allows collection of blocks that are normally unobtainable.
      */
-    public static final EnchantmentType SILK_TOUCH            = new EnchantmentType("SILK_TOUCH", "silk_touch", 33, t -> false, 1);
+    public static final EnchantmentType SILK_TOUCH            = new EnchantmentType("SILK_TOUCH", "silk_touch", 33, t -> false);
     /**
      * Increases durability. <br>
      * For most items, (100/(Level+1))% chance a use reduces durability. On average, lifetime is (Level+1) times as long. <br>
@@ -174,7 +174,7 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * When durability is reduced by multiple points (e.g. hooking a mob with a fishing rods or Thorns armor). <br>
      * Unbreaking is applied for each point of reduction. <br>
      */
-    public static final EnchantmentType UNBREAKING            = new EnchantmentType("UNBREAKING", "unbreaking", 34, t -> false, 3);
+    public static final EnchantmentType UNBREAKING            = new EnchantmentType("UNBREAKING", "unbreaking", 34, t -> false);
     /**
      * Increases block drops. <br>
      * For coal, diamond, emerald, nether quartz, and lapis lazuli, <br>
@@ -188,19 +188,19 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * <br>
      * Fortune increases the probability of flint dropping from gravel, and saplings dropping from leaves, and apples dropping from oak and dark oak leaves.
      */
-    public static final EnchantmentType FORTUNE               = new EnchantmentType("FORTUNE", "fortune", 35, t -> false, 3);
+    public static final EnchantmentType FORTUNE               = new EnchantmentType("FORTUNE", "fortune", 35, t -> false);
     /**
      * Increases damage. <br>
      * Increases arrow damage by 25% * (level + 1), rounded up to nearest half-heart. <br>
      * <br>
      * Arrow entities have an NBT tag damage, which for an unenchanted bow is 2, and increments by 0.5 per enchantment level.
      */
-    public static final EnchantmentType POWER                 = new EnchantmentType("POWER", "power", 48, t -> false, 5);
+    public static final EnchantmentType POWER                 = new EnchantmentType("POWER", "power", 48, t -> false);
     /**
      * Increases knockback. <br>
      * Mobs and players are knocked back further.
      */
-    public static final EnchantmentType PUNCH                 = new EnchantmentType("PUNCH", "punch", 49, t -> false, 2);
+    public static final EnchantmentType PUNCH                 = new EnchantmentType("PUNCH", "punch", 49, t -> false);
     /**
      * Flaming arrows. <br>
      * Arrows are on fire when shot and deal 5 hp fire damage over 5 seconds. <br>
@@ -209,32 +209,32 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * Fire damage applies after initial damage, similar to Fire Aspect. <br>
      * Creatures killed by fire only drop XP if a player dealt non-fire damage to it within the past 5 seconds.
      */
-    public static final EnchantmentType FLAME                 = new EnchantmentType("FLAME", "flame", 50, t -> false, 1);
+    public static final EnchantmentType FLAME                 = new EnchantmentType("FLAME", "flame", 50, t -> false);
     /**
      * Shooting consumes no arrows. <br>
      * Allows user to fire infinite arrows as long as they have 1 arrow in their inventory. <br>
      * Fired arrows cannot be retrieved except in creative mode (where they are erased instead of added to your arrows).
      */
-    public static final EnchantmentType INFINITY              = new EnchantmentType("INFINITY", "infinity", 51, t -> false, 1);
+    public static final EnchantmentType INFINITY              = new EnchantmentType("INFINITY", "infinity", 51, t -> false);
     /**
      * Decreases odds of catching worthless junk. <br>
      * Lowers chance of "junk" catches by 2.5% per level, and increases chance of "treasure" catches by 1% per level.
      */
-    public static final EnchantmentType LUCK_OF_THE_SEA       = new EnchantmentType("LUCK_OF_THE_SEA", "luck_of_the_sea", 61, t -> false, 3);
+    public static final EnchantmentType LUCK_OF_THE_SEA       = new EnchantmentType("LUCK_OF_THE_SEA", "luck_of_the_sea", 61, t -> false);
     /**
      * Increases rate of fish biting your hook. <br>
      * Decreases wait time until a catch by 5 seconds per level. Also decreases chances of both "junk" and "treasure" catches by 1% per level.  <br>
      * At Level VIII, the fish-catching particle effects start almost instantly. <br>
      * At Level IX, you are not able to catch anything.
      */
-    public static final EnchantmentType LURE                  = new EnchantmentType("LURE", "lure", 62, t -> false, 3);
+    public static final EnchantmentType LURE                  = new EnchantmentType("LURE", "lure", 62, t -> false);
     /**
      * Uses XP to increase durability. <br>
      * When an item with the enchantment is held and needs repair,
      * XP orbs collected will repair the item at a rate of 2 durability per XP instead of adding the XP to the player's total. <br>
      * If multiple items have the enchantment, one will be chosen at random for each XP orb collected.
      */
-    public static final EnchantmentType MENDING               = new EnchantmentType("MENDING", "mending", 70, t -> false, 1);
+    public static final EnchantmentType MENDING               = new EnchantmentType("MENDING", "mending", 70, t -> false);
 
     private static final Map<String, EnchantmentType>     byStringID    = new CaseInsensitiveMap<>(27, SMALL_LOAD_FACTOR);
     private static final Short2ObjectMap<EnchantmentType> byNumericType = new Short2ObjectOpenHashMap<>(27, SMALL_LOAD_FACTOR);
@@ -251,10 +251,6 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * Predictate for checking conflicts with other enchantment types.
      */
     protected final Predicate<EnchantmentType> isConflicting;
-    /**
-     * Max level of this enchantment.
-     */
-    protected final int                        maxLevel;
 
     /**
      * Construct new EnchantmentType.
@@ -265,13 +261,12 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * @param numericID     id of this type.
      * @param isConflicting predictate for checking conflicts with other enchantment types.
      */
-    public EnchantmentType(final String enumName, final int enumId, final String stringID, final int numericID, final Predicate<EnchantmentType> isConflicting, final int maxLevel)
+    public EnchantmentType(final String enumName, final int enumId, final String stringID, final int numericID, final Predicate<EnchantmentType> isConflicting)
     {
         super(enumName, enumId);
         this.stringID = stringID;
         this.numericID = (short) numericID;
         this.isConflicting = isConflicting;
-        this.maxLevel = maxLevel;
     }
 
     /**
@@ -282,13 +277,12 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      * @param numericID     id of this type.
      * @param isConflicting predictate for checking conflicts with other enchantment types.
      */
-    public EnchantmentType(final String enumName, final String stringID, final int numericID, final Predicate<EnchantmentType> isConflicting, final int maxLevel)
+    public EnchantmentType(final String enumName, final String stringID, final int numericID, final Predicate<EnchantmentType> isConflicting)
     {
         super(enumName);
         this.stringID = stringID;
         this.numericID = (short) numericID;
         this.isConflicting = isConflicting;
-        this.maxLevel = maxLevel;
     }
 
     /**
@@ -321,7 +315,7 @@ public class EnchantmentType extends ASimpleEnum<EnchantmentType>
      */
     public int getMaxLevel(final ItemStack itemStack, final boolean onEnchantTable)
     {
-        return maxLevel;
+        return 3; // TODO
     }
 
     /**
