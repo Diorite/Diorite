@@ -18,13 +18,13 @@
         <lwjgl.version>3.0.0a</lwjgl.version>
         <log4j.version>2.4.1</log4j.version>
         <diorite.build>unspecified</diorite.build>
-        <diorite.version.raw>indev-0.0.2</diorite.version.raw>
+        <diorite.version.raw>indev-0.0.3</diorite.version.raw>
         <diorite.version>${diorite.version.raw}-b${diorite.build}</diorite.version>
     </properties>
 
     <groupId>org.diorite</groupId>
     <artifactId>diorite-parent</artifactId>
-    <version>indev-0.0.2-SNAPSHOT</version>
+    <version>indev-0.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:https://github.com/Diorite/Diorite.git</connection>
@@ -274,20 +274,12 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.5</version>
                     <configuration>
-                        <compilerId>eclipse</compilerId>
                         <source>1.8</source>
                         <target>1.8</target>
                         <optimize>true</optimize>
                         <showWarnings>false</showWarnings>
                         <showDeprecation>true</showDeprecation>
                     </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.codehaus.plexus</groupId>
-                            <artifactId>plexus-compiler-eclipse</artifactId>
-                            <version>2.7</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
