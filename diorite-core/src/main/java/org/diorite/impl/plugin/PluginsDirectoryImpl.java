@@ -56,7 +56,7 @@ public class PluginsDirectoryImpl implements PluginsDirectory
     {
         if (this.isInitialised)
         {
-            throw new IllegalStateException("Arleady initialised!");
+            throw new IllegalStateException("Already initialised!");
         }
         if (! this.directory.exists())
         {

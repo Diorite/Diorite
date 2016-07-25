@@ -33,6 +33,7 @@ import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
+import org.diorite.material.items.ToolMat;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 import org.diorite.world.Block;
 
@@ -46,6 +47,7 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
             {
                 return;
             }
+
             evt.getWorld().setBlock(evt.getLocation(), Material.AIR);
             DioriteCore.getInstance().getPlayersManager().forEach(p -> p.getWorld().equals(evt.getWorld()), new PacketPlayClientboundBlockChange(evt.getLocation(), Material.AIR));
         });
@@ -61,6 +63,24 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
             for (final ItemStack itemStack : type.getPossibleDrops().simulateDrop(evt.getPlayer(), evt.getPlayer().getRandom(), evt.getItemInHand(), block))
             {
                 block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
+            }
+        });
+
+        this.addLast("Diorite|UpdateDurability", (evt, pipeline) -> {
+            if (evt.isCancelled() || evt.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+            {
+                return;
+            }
+
+            if (evt.getItemInHand().getMaterial() instanceof ToolMat)
+            {
+                // TODO fix
+                ToolMat mat = (ToolMat) evt.getItemInHand().getMaterial();
+                mat = (ToolMat) mat.decreaseLeftUses();
+                evt.getItemInHand().setMaterial(mat);
+                // TODO if destroyed block isnt destroyed by preferable tool decrease uses twice
+                // for example: mined dirt with shovel -> -1 uses
+                //              mined dirt with axe    -> -2 uses
             }
         });
     }

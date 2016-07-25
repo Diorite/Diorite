@@ -33,8 +33,11 @@ import org.slf4j.Logger;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.impl.connection.packets.Packet;
+import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.impl.connection.packets.play.PacketPlayServerboundListener;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundDisconnect;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityHeadRotation;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityLook;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundArmAnimation;
@@ -67,6 +70,7 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseItem;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundVehicleMove;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundWindowClick;
+import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
@@ -161,7 +165,7 @@ public class PlayListener implements PacketPlayServerboundListener
             return;
         }
         this.core.sync(() -> player.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch()), player);
-        this.core.getPlayersManager().forEachExcept(this.player, p -> p.getWorld().equals(this.player.getWorld()), new PacketPlayClientboundEntityLook(this.player.getId(), player.getYaw(), player.getPitch(), player.isOnGround()));
+        this.core.getPlayersManager().forEachExcept(this.player, p -> p.getWorld().equals(this.player.getWorld()), this.packetAndHeadRotation(this.player, new PacketPlayClientboundEntityLook(this.player.getId(), player.getYaw(), player.getPitch(), player.isOnGround())));
     }
 
     @Override
@@ -186,7 +190,17 @@ public class PlayListener implements PacketPlayServerboundListener
         }
         // TODO: don't sync packets when client sends too much of them
         this.core.sync(() -> player.setRotation(packet.getYaw(), packet.getPitch()), player);
-        this.core.getPlayersManager().forEachExcept(this.player, p -> p.getWorld().equals(this.player.getWorld()), new PacketPlayClientboundEntityLook(this.player.getId(), player.getYaw(), player.getPitch(), player.isOnGround()));
+        this.core.getPlayersManager().forEachExcept(this.player, p -> p.getWorld().equals(this.player.getWorld()), this.packetAndHeadRotation(this.player, new PacketPlayClientboundEntityLook(this.player.getId(), player.getYaw(), player.getPitch(), player.isOnGround())));
+    }
+
+    private Packet<PacketPlayClientboundListener>[] packetAndHeadRotation(final IEntity e, final Packet<PacketPlayClientboundListener> base)
+    {
+        final Packet<PacketPlayClientboundListener>[] packets = new Packet[2];
+
+        packets[0] = base;
+        packets[1] = new PacketPlayClientboundEntityHeadRotation(e.getId(), e.getYaw());
+
+        return packets;
     }
 
     @Override
@@ -271,7 +285,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundUseItem packet)
     {
-        final ItemStackWithSlot itemWithSlot = getItemFromHand(this.player.getInventory(), packet.getHandType());
+        final ItemStackWithSlot itemWithSlot = this.getItemFromHand(this.player.getInventory(), packet.getHandType());
         if (itemWithSlot.item.getMaterial() instanceof ArmorMat)
         {
             this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 2, - 1, itemWithSlot.slot, ClickType.SHIFT_MOUSE_RIGHT)), this.player);
@@ -355,9 +369,9 @@ public class PlayListener implements PacketPlayServerboundListener
         }
         else
         {
-            final ItemStack item = getItemFromHand(this.player.getInventory(), event.getHand()).item;
+            final ItemStack item = this.getItemFromHand(this.player.getInventory(), event.getHand()).item;
 
-            if (item == null || item.getAmount() < 1)
+            if ((item == null) || (item.getAmount() < 1))
             {
                 event.setCancelled(true);
             }
@@ -451,7 +465,7 @@ public class PlayListener implements PacketPlayServerboundListener
         public final ItemStack item;
         public final int       slot;
 
-        public ItemStackWithSlot(final ItemStack item, final int slot)
+        ItemStackWithSlot(final ItemStack item, final int slot)
         {
             this.item = item;
             this.slot = slot;
