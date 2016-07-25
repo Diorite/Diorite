@@ -58,6 +58,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMove;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMoveLook;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRespawn;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundScoreboardDisplayObjective;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetCooldown;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
@@ -72,7 +73,9 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTitle;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateHealth;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateTime;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUseBed;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowProperty;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
@@ -186,4 +189,10 @@ public interface PacketPlayClientboundListener extends PacketPlayListener
     void handle(PacketPlayClientboundEntityStatus packet);
 
     void handle(PacketPlayClientboundBlockBreakAnimation packet);
+
+    void handle(PacketPlayClientboundUseBed packet);
+
+    void handle(PacketPlayClientboundRespawn packet);
+
+    void handle(PacketPlayClientboundUpdateHealth packet);
 }
