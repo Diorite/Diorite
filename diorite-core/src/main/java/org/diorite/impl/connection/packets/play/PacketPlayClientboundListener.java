@@ -69,6 +69,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntityPainting;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntityWeather;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnPosition;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnThunderbolt;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTabComplete;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTitle;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
@@ -195,4 +196,6 @@ public interface PacketPlayClientboundListener extends PacketPlayListener
     void handle(PacketPlayClientboundRespawn packet);
 
     void handle(PacketPlayClientboundUpdateHealth packet);
+
+    void handle(PacketPlayClientboundSpawnThunderbolt packet);
 }
