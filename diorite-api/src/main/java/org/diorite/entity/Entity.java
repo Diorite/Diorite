@@ -52,6 +52,10 @@ public interface Entity extends GameObject, Synchronizable
 
     void setAge(int age);
 
+    double getHealth();
+
+    void setHealth(double health);
+
     double getX();
 
     double getZ();

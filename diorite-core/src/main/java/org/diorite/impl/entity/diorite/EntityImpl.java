@@ -89,6 +89,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     protected        EntityMetadata    metadata;
     private          BaseTracker<?>    tracker;
     protected        int               age; // in 1/100th of second
+    private          double            health;
 
     private double x;
     private double y;
@@ -137,6 +138,18 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.velocityX = velocity.x;
         this.velocityY = velocity.y;
         this.velocityZ = velocity.z;
+    }
+
+    @Override
+    public double getHealth()
+    {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(final double health)
+    {
+        this.health = health;
     }
 
     @Override

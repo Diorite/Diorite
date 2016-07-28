@@ -50,11 +50,24 @@ class ZombieImpl extends MonsterEntityImpl implements IZombie
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.setInt(META_KEY_ZOMBIE_TYPE, ZombieType.ZOMBIE.ordinal());
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.ZOMBIE;
+    }
+
+    @Override
+    public ZombieType getZombieType()
+    {
+        return ZombieType.values()[this.metadata.getInt(META_KEY_ZOMBIE_TYPE)];
+    }
+
+    @Override
+    public void setZombieType(final ZombieType type)
+    {
+        this.metadata.setInt(META_KEY_ZOMBIE_TYPE, type.ordinal());
     }
 }

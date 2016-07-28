@@ -26,4 +26,18 @@ package org.diorite.entity;
 
 public interface Zombie extends MonsterEntity
 {
+    ZombieType getZombieType();
+
+    void setZombieType(ZombieType type);
+
+    enum ZombieType
+    {
+        ZOMBIE,
+        FARMER_VILLAGER,
+        LIBRARIAN_VILLAGER,
+        PRIEST_VILLAGER,
+        BLACKSMITH_VILLAGER,
+        BUTCHER_VILLAGER,
+        HUSK
+    }
 }

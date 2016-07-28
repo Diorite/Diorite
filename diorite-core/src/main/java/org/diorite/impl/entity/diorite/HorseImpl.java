@@ -29,11 +29,15 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IHorse;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
 class HorseImpl extends AnimalEntityImpl implements IHorse
 {
+    private static final int MARKINGS       = 256;
+    private static final int MARKINGS_SHIFT = MARKINGS / 32;
+
     HorseImpl(final UUID uuid, final DioriteCore core, final int id, final ImmutableLocation location)
     {
         super(uuid, core, id, location);
@@ -50,12 +54,64 @@ class HorseImpl extends AnimalEntityImpl implements IHorse
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_HORSE_TYPE, HorseType.HORSE.ordinal()));
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_HORSE_VARIANT, HorseColor.WHITE.ordinal() + (HorseMarkings.NONE.ordinal() << MARKINGS_SHIFT)));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.HORSE;
+    }
+
+    @Override
+    public HorseType getHorseType()
+    {
+        return HorseType.values()[this.metadata.getInt(META_KEY_HORSE_TYPE)];
+    }
+
+    @Override
+    public void setHorseType(final HorseType type)
+    {
+        this.metadata.setInt(META_KEY_HORSE_TYPE, type.ordinal());
+    }
+
+    @Override
+    public HorseColor getHorseColor()
+    {
+        return HorseColor.values()[this.getVariant() % MARKINGS];
+    }
+
+    @Override
+    public void setHorseColor(final HorseColor color)
+    {
+        this.setVariant(color.ordinal() + (this.getHorseMarkings().ordinal() << MARKINGS_SHIFT));
+    }
+
+    @Override
+    public HorseMarkings getHorseMarkings()
+    {
+        final int variant = this.getVariant();
+        final int color = variant % MARKINGS;
+        return HorseMarkings.values()[(variant % (MARKINGS - 1)) - color];
+    }
+
+    @Override
+    public void setHorseMarkings(final HorseMarkings markings)
+    {
+        this.setVariant(this.getHorseColor().ordinal() + (markings.ordinal() << MARKINGS_SHIFT));
+    }
+
+    @Override
+    public int getVariant()
+    {
+        return this.metadata.getInt(META_KEY_HORSE_VARIANT);
+    }
+
+    @Override
+    public void setVariant(final int variant)
+    {
+        this.metadata.setInt(META_KEY_HORSE_VARIANT, variant);
     }
 }
 
