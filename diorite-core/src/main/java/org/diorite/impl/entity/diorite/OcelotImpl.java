@@ -29,8 +29,10 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.IOcelot;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
+import org.diorite.entity.Ocelot;
 
 class OcelotImpl extends AnimalEntityImpl implements IOcelot
 {
@@ -50,12 +52,25 @@ class OcelotImpl extends AnimalEntityImpl implements IOcelot
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.add(new EntityMetadataIntEntry(META_KEY_OCELOT_TYPE, OcelotType.WILD_OCELOT.ordinal()));
     }
 
     @Override
     public EntityType getType()
     {
         return EntityType.OCELOT;
+    }
+
+    @Override
+    public OcelotType getOcelotType()
+    {
+        return OcelotType.values()[this.metadata.getInt(META_KEY_OCELOT_TYPE)];
+    }
+
+    @Override
+    public void setOcelotType(OcelotType type)
+    {
+        this.metadata.setInt(META_KEY_OCELOT_TYPE, type.ordinal());
     }
 }
 
