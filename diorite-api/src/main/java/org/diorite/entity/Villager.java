@@ -26,8 +26,18 @@ package org.diorite.entity;
 
 public interface Villager extends AnimalEntity
 {
+    /**
+     * Returns villager's profession
+     *
+     * @return villager's profession
+     */
     Profession getProfession();
 
+    /**
+     * Sets villager's profession
+     *
+     * @param profession defines villager's profession
+     */
     void setProfession(Profession profession);
 
     enum Profession
