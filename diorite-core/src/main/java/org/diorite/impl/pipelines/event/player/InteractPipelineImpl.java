@@ -42,7 +42,7 @@ public class InteractPipelineImpl extends SimpleEventPipeline<PlayerInteractEven
             {
                 return;
             }
-            
+
             if (event.getAction() == Action.LEFT_CLICK_ON_BLOCK)
             {
                 DioriteCore.getInstance().getPlayersManager().forEachExcept(event.getPlayer(), p -> p.getWorld().equals(event.getPlayer().getWorld()), new PacketPlayClientboundBlockBreakAnimation(event.getPlayer().getId(), event.getBlock().getLocation(), 5)); // TODO correct break stage
