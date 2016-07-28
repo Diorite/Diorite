@@ -67,14 +67,14 @@ public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDes
         });
 
         this.addLast("Diorite|UpdateDurability", (evt, pipeline) -> {
-            if (evt.isCancelled() || evt.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+            if (evt.isCancelled() || evt.getPlayer().getGameMode().equals(GameMode.CREATIVE) || (evt.getItemInHand() == null))
             {
                 return;
             }
 
             if (evt.getItemInHand().getMaterial() instanceof ToolMat)
             {
-                // TODO fix
+                // TODO fix -- solution underneath isnt decreasing usages (after /dev:inv durability returns to full)
                 ToolMat mat = (ToolMat) evt.getItemInHand().getMaterial();
                 mat = (ToolMat) mat.decreaseLeftUses();
                 evt.getItemInHand().setMaterial(mat);

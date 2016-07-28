@@ -97,6 +97,7 @@ public class WorldImpl implements World, Tickable
     private static final double ITEM_DROP_MOD_2       = 0.35D;
     private static final int    CHUNK_FLAG            = (Chunk.CHUNK_SIZE - 1);
     public static final  int    DEFAULT_AUTOSAVE_TIME = 20 * 60 * 5; // 5 min, TODO: load it from config
+    public static final  int    DAY_LENGTH            = 24000;
 
     private final   DioriteCore      core;
     private final   Logger           worldLoaderLogger;
@@ -868,7 +869,10 @@ public class WorldImpl implements World, Tickable
         }
 
         {
-            this.time %= 24000;
+            if (this.time == DAY_LENGTH)
+            {
+                this.time = 0;
+            }
             this.time++; // TODO scale it with server TPS
         }
 
