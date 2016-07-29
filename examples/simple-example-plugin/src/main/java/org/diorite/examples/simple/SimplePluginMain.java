@@ -59,7 +59,7 @@ public class SimplePluginMain extends DioritePlugin
         this.getLogger().info("Hello world in onEnable!");
         try
         {
-            cfg = Configuration.loadConfigFile(new File(getDataFolder() + "/cfg.yml"), MyCfg.class);
+            cfg = Configuration.loadConfigFile(new File(this.getDataFolder() + "/cfg.yml"), MyCfg.class);
         } catch (final IOException e)
         {
             this.getLogger().warn("Can't load config file.");
@@ -76,7 +76,7 @@ public class SimplePluginMain extends DioritePlugin
         this.getLogger().info("Hello world in onDisable!");
         try
         {
-            Configuration.saveConfigFile(new File(getDataFolder() + "/cfg.yml"), MyCfg.class, cfg);
+            Configuration.saveConfigFile(new File(this.getDataFolder() + "/cfg.yml"), MyCfg.class, cfg);
         } catch (final IOException e)
         {
             this.getLogger().warn("Can't save config file.");
@@ -91,9 +91,9 @@ public class SimplePluginMain extends DioritePlugin
 
     private void registerCommand()
     {
-        Diorite.getCommandMap().registerCommand(Diorite.getCore().createCommand(this, "helloworld").alias("hello").executor((sender, command, label, matchedPattern, args) -> {
+        Diorite.createCommand(this, "helloworld").alias("hello").executor((sender, command, label, matchedPattern, args) -> {
             sender.sendSimpleColoredMessage("&cHello world!", "&a#OnlyDiorite");
-        }).build());
+        }).register();
 
         final PluginCommandBuilder builder = Diorite.createCommand(this, "example");
         builder.pattern(Pattern.compile("example(:(?<superArg>(\\d))|)")); // you can now use command like /example:4, /example:1 and still just /example

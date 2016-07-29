@@ -36,7 +36,8 @@ class ArgPlaceholderData<T> implements PlaceholderData<T>
     protected final PlaceholderItem<T> item;
     protected final Object[]           args;
     protected final boolean            containsSubPlaceholders;
-// TODO: how to parse and use nested placeholders?
+
+    // TODO: how to parse and use nested placeholders?
     ArgPlaceholderData(final String fullName, final String objectName, final PlaceholderItem<T> item, final Object[] args)
     {
         this.fullName = fullName.intern();

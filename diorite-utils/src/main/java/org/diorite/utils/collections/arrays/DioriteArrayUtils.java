@@ -47,47 +47,47 @@ import it.unimi.dsi.fastutil.shorts.ShortArrayList;
  */
 public final class DioriteArrayUtils
 {
-    private static final Map<Class<?>, Object> arrayMaps = new ConcurrentIdentityHashMap<>(20);
+    private static final Map<Class<?>, Object> arrayMaps      = new ConcurrentIdentityHashMap<>(20);
     /**
      * Empty array of boolean type.
      */
-    public static final boolean[] EMPTY_BOOLEANS = getEmptyArrayByArrayClass(boolean[].class);
+    public static final  boolean[]             EMPTY_BOOLEANS = getEmptyArrayByArrayClass(boolean[].class);
     /**
      * Empty array of char type.
      */
-    public static final char[]    EMPTY_CHARS    = getEmptyArrayByArrayClass(char[].class);
+    public static final  char[]                EMPTY_CHARS    = getEmptyArrayByArrayClass(char[].class);
     /**
      * Empty array of byte type.
      */
-    public static final byte[]    EMPTY_BYTES    = getEmptyArrayByArrayClass(byte[].class);
+    public static final  byte[]                EMPTY_BYTES    = getEmptyArrayByArrayClass(byte[].class);
     /**
      * Empty array of short type.
      */
-    public static final short[]   EMPTY_SHORTS   = getEmptyArrayByArrayClass(short[].class);
+    public static final  short[]               EMPTY_SHORTS   = getEmptyArrayByArrayClass(short[].class);
     /**
      * Empty array of int type.
      */
-    public static final int[]     EMPTY_INTS     = getEmptyArrayByArrayClass(int[].class);
+    public static final  int[]                 EMPTY_INTS     = getEmptyArrayByArrayClass(int[].class);
     /**
      * Empty array of long type.
      */
-    public static final long[]    EMPTY_LONGS    = getEmptyArrayByArrayClass(long[].class);
+    public static final  long[]                EMPTY_LONGS    = getEmptyArrayByArrayClass(long[].class);
     /**
      * Empty array of float type.
      */
-    public static final float[]   EMPTY_FLOATS   = getEmptyArrayByArrayClass(float[].class);
+    public static final  float[]               EMPTY_FLOATS   = getEmptyArrayByArrayClass(float[].class);
     /**
      * Empty array of double type.
      */
-    public static final double[]  EMPTY_DOUBLES  = getEmptyArrayByArrayClass(double[].class);
+    public static final  double[]              EMPTY_DOUBLES  = getEmptyArrayByArrayClass(double[].class);
     /**
      * Empty array of Object type.
      */
-    public static final Object[]  EMPTY_OBJECT   = getEmptyArrayByArrayClass(Object[].class);
+    public static final  Object[]              EMPTY_OBJECT   = getEmptyArrayByArrayClass(Object[].class);
     /**
      * Empty array of String type.
      */
-    public static final String[]  EMPTY_STRINGS  = getEmptyArrayByArrayClass(String[].class);
+    public static final  String[]              EMPTY_STRINGS  = getEmptyArrayByArrayClass(String[].class);
 
     private DioriteArrayUtils()
     {

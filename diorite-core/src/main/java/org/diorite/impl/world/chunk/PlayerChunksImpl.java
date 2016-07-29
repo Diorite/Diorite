@@ -37,9 +37,9 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundMapChunk;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
-import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.math.endian.BigEndianUtils;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.world.chunk.ChunkPos;
 
 import it.unimi.dsi.fastutil.longs.LongCollection;

@@ -43,10 +43,10 @@ public class PacketPlayClientboundWorldBorder extends PacketPlayClientbound
     private double z;
     private double oldSize;
     private double newSize;
-    private long speed; // Time in ticks
-    private int portalTeleportBoundary;
-    private int warningTime;
-    private int warningBlocks;
+    private long   speed; // Time in ticks
+    private int    portalTeleportBoundary;
+    private int    warningTime;
+    private int    warningBlocks;
 
     public PacketPlayClientboundWorldBorder()
     {
@@ -223,7 +223,7 @@ public class PacketPlayClientboundWorldBorder extends PacketPlayClientbound
     public void readPacket(final PacketDataSerializer data) throws IOException
     {
         this.action = data.readEnum(Action.class);
-        switch(this.action)
+        switch (this.action)
         {
             case SET_SIZE:
                 this.newSize = data.readDouble();
@@ -271,7 +271,7 @@ public class PacketPlayClientboundWorldBorder extends PacketPlayClientbound
     public void writeFields(final PacketDataSerializer data) throws IOException
     {
         data.writeEnum(this.action);
-        switch(this.action)
+        switch (this.action)
         {
             case SET_SIZE:
                 data.writeDouble(this.newSize);
@@ -323,7 +323,12 @@ public class PacketPlayClientboundWorldBorder extends PacketPlayClientbound
 
     public enum Action
     {
-        SET_SIZE, LERP_SIZE, SET_CENTER, INITIALIZE, SET_WARNING_TIME, SET_WARNING_BLOCKS
+        SET_SIZE,
+        LERP_SIZE,
+        SET_CENTER,
+        INITIALIZE,
+        SET_WARNING_TIME,
+        SET_WARNING_BLOCKS
     }
 
     @Override

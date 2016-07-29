@@ -53,7 +53,7 @@ public class PacketPlayClientboundEntityHeadRotation extends PacketPlayClientbou
 
     public int getEntityId()
     {
-        return entityId;
+        return this.entityId;
     }
 
     public void setEntityId(final int entityId)
@@ -63,7 +63,7 @@ public class PacketPlayClientboundEntityHeadRotation extends PacketPlayClientbou
 
     public byte getHeadYaw()
     {
-        return headYaw;
+        return this.headYaw;
     }
 
     public void setHeadYaw(final byte headYaw)

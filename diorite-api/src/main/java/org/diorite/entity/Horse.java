@@ -26,4 +26,63 @@ package org.diorite.entity;
 
 public interface Horse extends AnimalEntity
 {
+    HorseType getHorseType();
+
+    void setHorseType(final HorseType type);
+
+    default HorseColor getHorseColor()
+    {
+        return HorseColor.values()[this.getVariant() % 256];
+    }
+
+    void setHorseColor(final HorseColor color);
+
+    default HorseMarkings getHorseMarkings()
+    {
+        final int variant = this.getVariant();
+        final int color = variant % 256;
+        return HorseMarkings.values()[(variant % 15) - color];
+    }
+
+    void setHorseMarkings(final HorseMarkings markings);
+
+    int getVariant();
+
+    default void setVariant(final int variant)
+    {
+        final int color = variant % 256;
+        final int marks = (variant % 15) - color;
+
+        setHorseColor(HorseColor.values()[color]);
+        setHorseMarkings(HorseMarkings.values()[marks]);
+    }
+
+    enum HorseType
+    {
+        HORSE,
+        DONKEY,
+        MULE,
+        ZOMBIE,
+        SKELETON
+    }
+
+    enum HorseColor
+    {
+        WHITE,
+        CREAMY,
+        CHESTNUT,
+        BROWN,
+        BLACK,
+        GRAY,
+        DARK_BROWN
+    }
+
+    enum HorseMarkings
+    {
+        NONE,
+        WHITE,
+        WHITE_FIELDS,
+        WHITE_DOTS,
+        BLACK_DOTS
+    }
 }

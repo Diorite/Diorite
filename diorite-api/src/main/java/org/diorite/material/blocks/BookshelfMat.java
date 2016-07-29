@@ -26,8 +26,11 @@ package org.diorite.material.blocks;
 
 import java.util.Map;
 
+import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.FuelMat;
+import org.diorite.material.data.drops.PossibleDrops;
+import org.diorite.material.data.drops.PossibleFixedDrop;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -74,6 +77,12 @@ public class BookshelfMat extends BlockMaterialData implements FuelMat
     public BookshelfMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    protected PossibleDrops initPossibleDrops()
+    {
+        return new PossibleDrops(new PossibleFixedDrop(new BaseItemStack(BOOK), 3));
     }
 
     @SuppressWarnings("MagicNumber")

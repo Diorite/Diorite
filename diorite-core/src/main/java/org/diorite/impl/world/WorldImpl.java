@@ -97,6 +97,7 @@ public class WorldImpl implements World, Tickable
     private static final double ITEM_DROP_MOD_2       = 0.35D;
     private static final int    CHUNK_FLAG            = (Chunk.CHUNK_SIZE - 1);
     public static final  int    DEFAULT_AUTOSAVE_TIME = 20 * 60 * 5; // 5 min, TODO: load it from config
+    public static final  int    DAY_LENGTH            = 24000;
 
     private final   DioriteCore      core;
     private final   Logger           worldLoaderLogger;
@@ -166,7 +167,7 @@ public class WorldImpl implements World, Tickable
     {
         final BossBarImpl bossBarImpl = (BossBarImpl) bossBar;
         this.bossBars.add(bossBarImpl);
-        this.getPlayersInWorld().forEach(player ->  bossBarImpl.addHolder((IPlayer) player));
+        this.getPlayersInWorld().forEach(player -> bossBarImpl.addHolder((IPlayer) player));
     }
 
     @Override
@@ -174,7 +175,7 @@ public class WorldImpl implements World, Tickable
     {
         final BossBarImpl bossBarImpl = (BossBarImpl) bossBar;
         this.bossBars.remove(bossBarImpl);
-        this.getPlayersInWorld().forEach(player ->  bossBarImpl.removeHolder((IPlayer) player));
+        this.getPlayersInWorld().forEach(player -> bossBarImpl.removeHolder((IPlayer) player));
     }
 
     @Override
@@ -346,8 +347,8 @@ public class WorldImpl implements World, Tickable
         this.worldBorder.setSize(tag.getDouble("BorderSize", WorldBorderImpl.DEFAULT_BORDER_SIZE));
         this.worldBorder.setDamageAmount(tag.getDouble("BorderDamagePerBlock", 0.2));
         this.worldBorder.setDamageBuffer(tag.getDouble("BorderSafeZone", 5));
-        this.worldBorder.setWarningDistance((int)tag.getDouble("BorderWarningBlocks", 5));
-        this.worldBorder.setWarningTime((int)tag.getDouble("BorderWarningTime", 15));
+        this.worldBorder.setWarningDistance((int) tag.getDouble("BorderWarningBlocks", 5));
+        this.worldBorder.setWarningTime((int) tag.getDouble("BorderWarningTime", 15));
         this.worldBorder.setTargetSize(tag.getDouble("BorderSizeLerpTarget", this.worldBorder.getSize()));
         this.worldBorder.setTargetReachTime(tag.getLong("BorderSizeLerpTime", 0));
     }
@@ -868,7 +869,7 @@ public class WorldImpl implements World, Tickable
         }
 
         {
-            if (this.time == 24000)
+            if (this.time == DAY_LENGTH)
             {
                 this.time = 0;
             }
@@ -953,7 +954,7 @@ public class WorldImpl implements World, Tickable
     /**
      * This method adds entity to this world
      *
-     * @param entity entity which should be spawned
+     * @param entity  entity which should be spawned
      * @param isSpawn true when entity is spawned
      *                false when is loaded from map
      */

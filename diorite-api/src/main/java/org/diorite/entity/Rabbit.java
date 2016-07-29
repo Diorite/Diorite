@@ -26,4 +26,48 @@ package org.diorite.entity;
 
 public interface Rabbit extends AnimalEntity
 {
+    RabbitType getRabbitType();
+
+    void setRabbitType(RabbitType type);
+
+    enum RabbitType
+    {
+        BROWN,
+        WHITE,
+        BLACK,
+        BLACK_AND_WHITE,
+        GOLD,
+        SALT_AND_PEPPER,
+        KILLER(99);
+        private int id;
+
+        RabbitType()
+        {
+            this.id = this.ordinal();
+        }
+
+        RabbitType(int id)
+        {
+            this.id = id;
+        }
+
+        public int getId()
+        {
+            return this.id;
+        }
+
+        // Replacement for values()[99]
+        public static RabbitType get(int id)
+        {
+            for (final RabbitType type : values())
+            {
+                if (type.id == id)
+                {
+                    return type;
+                }
+            }
+
+            return null;
+        }
+    }
 }

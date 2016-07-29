@@ -70,8 +70,7 @@ public class PluginManagerImpl implements PluginManager
         try
         {
             pluginsDirectory.init();
-        }
-        catch (final IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -103,22 +102,20 @@ public class PluginManagerImpl implements PluginManager
         for (final PluginsDirectoryImpl directory : this.pluginDirectories)
         {
             final File pluginsFile = directory.getDirectory();
-            Arrays.stream(Objects.requireNonNull(pluginsFile.listFiles())).filter(File::isFile).forEach(plugin ->
-            {
+            Arrays.stream(Objects.requireNonNull(pluginsFile.listFiles())).filter(File::isFile).forEach(plugin -> {
                 if (! this.loadedFiles.contains(plugin))
                 {
                     try
                     {
                         this.loadPlugin(plugin);
-                    }
-                    catch (final PluginException e)
+                    } catch (final PluginException e)
                     {
                         e.printStackTrace();
                     }
                 }
                 else
                 {
-                    CoreMain.debug("Skipped " + plugin + " because is arleady loaded");
+                    CoreMain.debug("Skipped " + plugin + " because it is already loaded");
                 }
             });
         }
@@ -161,7 +158,7 @@ public class PluginManagerImpl implements PluginManager
     {
         if (this.getPlugin(plugin.getName()) != null)
         {
-            throw new PluginException("Plugin with name " + plugin.getName() + " is arleady loaded!");
+            throw new PluginException("Plugin with name " + plugin.getName() + " is already loaded!");
         }
         this.plugins.add(plugin);
         plugin.init(null, null, this.pluginLoaders.get(FakePluginLoader.FAKE_PLUGIN_SUFFIX), null);

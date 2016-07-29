@@ -64,7 +64,7 @@ public class Art extends ASimpleEnum<Art>
     public static final Art DONKEY_KONG     = new Art("DONKEY_KONG", "DonkeyKong", 64, 48);
 
     private static final CaseInsensitiveMap<Art> byArtName = new CaseInsensitiveMap<>(26, SMALL_LOAD_FACTOR);
-    private static       int                     maxArtNameLength;
+    private static int maxArtNameLength;
 
     private final String artName;
     private final int    width;

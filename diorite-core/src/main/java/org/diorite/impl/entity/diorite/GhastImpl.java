@@ -59,7 +59,7 @@ class GhastImpl extends MonsterEntityImpl implements IGhast
     {
         return EntityType.GHAST;
     }
-    
+
     public boolean getAttacking()
     {
         return this.metadata.getBoolean(META_KEY_GHAST_IS_ATTACKING);

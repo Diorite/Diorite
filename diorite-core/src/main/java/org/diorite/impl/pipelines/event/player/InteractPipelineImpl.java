@@ -25,8 +25,11 @@
 package org.diorite.impl.pipelines.event.player;
 
 import org.diorite.impl.CoreMain;
+import org.diorite.impl.DioriteCore;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockBreakAnimation;
 import org.diorite.event.pipelines.event.player.InteractPipeline;
 import org.diorite.event.player.PlayerInteractEvent;
+import org.diorite.event.player.PlayerInteractEvent.Action;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
 public class InteractPipelineImpl extends SimpleEventPipeline<PlayerInteractEvent> implements InteractPipeline
@@ -35,6 +38,15 @@ public class InteractPipelineImpl extends SimpleEventPipeline<PlayerInteractEven
     public void reset_()
     {
         this.addFirst("Diorite|InteractDebug", ((event, pipeline) -> {
+            if (event.isCancelled())
+            {
+                return;
+            }
+
+            if (event.getAction() == Action.LEFT_CLICK_ON_BLOCK)
+            {
+                DioriteCore.getInstance().getPlayersManager().forEachExcept(event.getPlayer(), p -> p.getWorld().equals(event.getPlayer().getWorld()), new PacketPlayClientboundBlockBreakAnimation(event.getPlayer().getId(), event.getBlock().getLocation(), 5)); // TODO correct break stage
+            }
             //Just a debug
             CoreMain.debug(event);
         }));

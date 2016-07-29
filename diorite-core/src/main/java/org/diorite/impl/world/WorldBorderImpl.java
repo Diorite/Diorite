@@ -38,16 +38,16 @@ public class WorldBorderImpl implements WorldBorder, Tickable
 {
     public static final double DEFAULT_BORDER_SIZE = 60000000;
     private final WorldImpl world;
-    private double centerX, centerZ;
+    private       double    centerX, centerZ;
     private double size;
     private double targetSize;
     private double startSize; // Used when world border is growing or decreasing
-    private long targetReachTime;
+    private long   targetReachTime;
     private double damageAmount;
     private double damageBuffer;
-    private int warningDistance;
-    private int warningTime;
-    private int teleportBoundary;
+    private int    warningDistance;
+    private int    warningTime;
+    private int    teleportBoundary;
 
     public WorldBorderImpl(final WorldImpl world)
     {

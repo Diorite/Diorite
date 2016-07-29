@@ -42,6 +42,7 @@ import org.diorite.impl.connection.EnumProtocol;
 import org.diorite.impl.connection.packets.handshake.PacketHandshakingServerboundListener;
 import org.diorite.impl.connection.packets.handshake.serverbound.PacketHandshakingServerboundSetProtocol;
 import org.diorite.impl.connection.packets.login.clientbound.PacketLoginClientboundDisconnect;
+import org.diorite.Core;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 
@@ -102,12 +103,12 @@ public class HandshakeListener implements PacketHandshakingServerboundListener
                 if (packet.getProtocolVersion() > CURRENT_PROTOCOL)
                 {
                     CoreMain.debug("Player fail to join, invalid protocol version (" + packet.getProtocolVersion() + " > " + CURRENT_PROTOCOL + ")");
-                    this.disconnect(TextComponent.fromLegacyText("Outdated server, we are still on 1.9"));
+                    this.disconnect(TextComponent.fromLegacyText("Outdated server, we are still on " + Core.getMinecraftVersion()));
                 }
                 else if (packet.getProtocolVersion() < CURRENT_PROTOCOL)
                 {
                     CoreMain.debug("Player fail to join, invalid protocol version (" + packet.getProtocolVersion() + " < " + CURRENT_PROTOCOL + ")");
-                    this.disconnect(TextComponent.fromLegacyText("Outdated client, we are on 1.9"));
+                    this.disconnect(TextComponent.fromLegacyText("Outdated client, we are on " + Core.getMinecraftVersion()));
                 }
                 else
                 {

@@ -39,9 +39,9 @@ import org.diorite.entity.pathfinder.PathfinderService;
 
 public class EntityControllerImpl implements EntityController
 {
-    private final IEntity              entity;
+    private final IEntity entity;
     private final Queue<BlockLocation> currentPath = new LinkedList<>();
-    private       Pathfinder           currentPathfinder;
+    private Pathfinder currentPathfinder;
 
     private int           blockMoves;
     private BlockLocation currBlock;

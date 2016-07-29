@@ -29,6 +29,7 @@ import java.util.UUID;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.entity.ISheep;
 import org.diorite.impl.entity.meta.EntityMetadata;
+import org.diorite.DyeColor;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 
@@ -56,6 +57,32 @@ class SheepImpl extends AnimalEntityImpl implements ISheep
     public EntityType getType()
     {
         return EntityType.SHEEP;
+    }
+
+    @Override
+    public boolean isSheared()
+    {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public void setSheared(final boolean sheared)
+    {
+        //TODO
+    }
+
+    @Override
+    public DyeColor getColor()
+    {
+        // TODO
+        return DyeColor.WHITE;
+    }
+
+    @Override
+    public void setColor(final DyeColor color)
+    {
+        //TODO
     }
 }
 

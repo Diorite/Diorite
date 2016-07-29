@@ -31,6 +31,8 @@ import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAnimation;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockBreakAnimation;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBlockChange;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundBoss;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCamera;
@@ -45,6 +47,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityHeadRotation;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityLook;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityMetadata;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityStatus;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityTeleport;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundHeldItemSlot;
@@ -60,7 +63,9 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMove;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRelEntityMoveLook;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRespawn;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundScoreboardDisplayObjective;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetCooldown;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSetSlot;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSoundEffect;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundSpawnEntity;
@@ -73,8 +78,11 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTitle;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateHealth;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateTime;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUseBed;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowProperty;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
@@ -376,6 +384,54 @@ public class PlayListener implements PacketPlayClientboundListener
 
     @Override
     public void handle(final PacketPlayClientboundBoss packet)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundAnimation packetPlayClientboundAnimation)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundWindowProperty packetPlayClientboundWindowProperty)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundSetCooldown packetPlayClientboundSetCooldown)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundEntityStatus packetPlayClientboundEntityStatus)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundBlockBreakAnimation packet)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundUseBed packet)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundRespawn packet)
+    {
+
+    }
+
+    @Override
+    public void handle(final PacketPlayClientboundUpdateHealth packet)
     {
 
     }

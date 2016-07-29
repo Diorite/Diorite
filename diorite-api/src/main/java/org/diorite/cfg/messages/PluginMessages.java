@@ -40,15 +40,15 @@ import org.diorite.plugin.ChildPlugin;
  */
 public class PluginMessages extends Messages
 {
-    private final BasePlugin  plugin;
-    private final File        languageFolder;
-    private final String      prefix;
+    private final BasePlugin plugin;
+    private final File       languageFolder;
+    private final String     prefix;
 
     /**
      * Construct new Plugin messages for given plugin and default data.
      *
-     * @param plugin      owner of messages.
-     * @param prefix      prefix of message files, like "lang_"pl-PL.yml
+     * @param plugin owner of messages.
+     * @param prefix prefix of message files, like "lang_"pl-PL.yml
      */
     public PluginMessages(final BasePlugin plugin, final String prefix)
     {
@@ -61,9 +61,9 @@ public class PluginMessages extends Messages
     /**
      * Construct new Plugin messages for given plugin and default data.
      *
-     * @param plugin      owner of messages.
-     * @param prefix      prefix of message files, like "lang_"pl-PL.yml
-     * @param languages   languages supported by this messages node.
+     * @param plugin    owner of messages.
+     * @param prefix    prefix of message files, like "lang_"pl-PL.yml
+     * @param languages languages supported by this messages node.
      */
     public PluginMessages(final BasePlugin plugin, final String prefix, final Locale... languages)
     {

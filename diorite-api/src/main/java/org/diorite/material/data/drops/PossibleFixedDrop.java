@@ -57,18 +57,12 @@ public class PossibleFixedDrop extends PossibleDrop
         {
             return;
         }
-        if (this.amount == 1)
+        if (this.amount >= 1)
         {
-            drops.add(this.getItemStack());
+            final ItemStack item = this.getItemStack();
+            item.setAmount(this.amount);
+            drops.add(item);
             return;
-        }
-        for (int i = 0; i < this.amount; i++)
-        {
-            final ItemStack itemStack = this.getItemStack();
-            if ((itemStack.getMaterial().getId() != 0) && (itemStack.getAmount() != 0))
-            {
-                drops.add(itemStack);
-            }
         }
     }
 

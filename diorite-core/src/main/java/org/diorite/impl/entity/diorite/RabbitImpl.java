@@ -52,6 +52,7 @@ class RabbitImpl extends AnimalEntityImpl implements IRabbit
     public void initMetadata()
     {
         super.initMetadata();
+        this.metadata.setInt(META_KEY_RABBIT_TYPE, RabbitType.WHITE.getId());
     }
 
     @Override
@@ -64,6 +65,18 @@ class RabbitImpl extends AnimalEntityImpl implements IRabbit
     public EntityType getType()
     {
         return EntityType.RABBIT;
+    }
+
+    @Override
+    public RabbitType getRabbitType()
+    {
+        return RabbitType.get(this.metadata.getInt(META_KEY_RABBIT_TYPE));
+    }
+
+    @Override
+    public void setRabbitType(final RabbitType type)
+    {
+        this.metadata.setInt(META_KEY_RABBIT_TYPE, type.getId());
     }
 }
 

@@ -41,11 +41,11 @@ import org.diorite.plugin.PluginsDirectory;
 
 public class PluginsDirectoryImpl implements PluginsDirectory
 {
-    private static final String  CACHE_PATTERN_SEP   = " == ";
-    private static final Pattern CACHE_PATTERN       = Pattern.compile(CACHE_PATTERN_SEP);
-    private final Map<String, String> mainClassCache = new HashMap<>(20);
-    private boolean isInitialised;
-    private final File directory;
+    private static final String              CACHE_PATTERN_SEP = " == ";
+    private static final Pattern             CACHE_PATTERN     = Pattern.compile(CACHE_PATTERN_SEP);
+    private final        Map<String, String> mainClassCache    = new HashMap<>(20);
+    private       boolean isInitialised;
+    private final File    directory;
 
     public PluginsDirectoryImpl(final File directory)
     {
@@ -56,7 +56,7 @@ public class PluginsDirectoryImpl implements PluginsDirectory
     {
         if (this.isInitialised)
         {
-            throw new IllegalStateException("Arleady initialised!");
+            throw new IllegalStateException("Already initialised!");
         }
         if (! this.directory.exists())
         {

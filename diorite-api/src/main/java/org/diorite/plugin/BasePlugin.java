@@ -132,9 +132,9 @@ public interface BasePlugin
      * Method invoked on plugin init, do not override.
      *
      * @param pluginsDirectory directory where is placed plugin's file
-     * @param classLoader  used class loader.
-     * @param pluginLoader used plugin loader.
-     * @param pluginData   other data of plugin. (like name, version, author etc.)
+     * @param classLoader      used class loader.
+     * @param pluginLoader     used plugin loader.
+     * @param pluginData       other data of plugin. (like name, version, author etc.)
      */
     void init(File pluginsDirectory, PluginClassLoader classLoader, PluginLoader pluginLoader, PluginDataBuilder pluginData);
 

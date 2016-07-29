@@ -35,12 +35,22 @@ public interface BossBar
 {
     enum Color
     {
-        PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
+        PINK,
+        BLUE,
+        RED,
+        GREEN,
+        YELLOW,
+        PURPLE,
+        WHITE
     }
 
     enum Style
     {
-        PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
+        PROGRESS,
+        NOTCHED_6,
+        NOTCHED_10,
+        NOTCHED_12,
+        NOTCHED_20
     }
 
     /**
@@ -84,8 +94,9 @@ public interface BossBar
     /**
      * Returns current color of BossBar.
      *
-     * @see Color
      * @return current color of BossBar
+     *
+     * @see Color
      */
     Color getColor();
 

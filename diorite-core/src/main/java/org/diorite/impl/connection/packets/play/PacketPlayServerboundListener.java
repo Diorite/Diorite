@@ -30,8 +30,8 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockDig;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundBlockPlace;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundChat;
-import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCommand;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCloseWindow;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCommand;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundCustomPayload;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundEnchantItem;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundEntityAction;
@@ -45,6 +45,7 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSetCreativeSlot;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSettings;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSpectate;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSteerBoat;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundSteerVehicle;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundTabComplete;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundTeleportAccept;
@@ -52,6 +53,7 @@ import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboun
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUpdateSign;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseEntity;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundUseItem;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundVehicleMove;
 import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundWindowClick;
 
 public interface PacketPlayServerboundListener extends PacketPlayListener
@@ -111,4 +113,8 @@ public interface PacketPlayServerboundListener extends PacketPlayListener
     void handle(PacketPlayServerboundTeleportAccept packet);
 
     void handle(PacketPlayServerboundUseItem packet);
+
+    void handle(PacketPlayServerboundVehicleMove packet);
+
+    void handle(PacketPlayServerboundSteerBoat packet);
 }

@@ -24,6 +24,15 @@
 
 package org.diorite.entity;
 
+import org.diorite.DyeColor;
+
 public interface Sheep extends AnimalEntity
 {
+    boolean isSheared();
+
+    void setSheared(boolean sheared);
+
+    DyeColor getColor();
+
+    void setColor(DyeColor color);
 }

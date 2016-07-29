@@ -31,11 +31,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
-import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundNamedEntitySpawn;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IHuman;
 import org.diorite.impl.entity.IItem;
@@ -49,7 +49,6 @@ import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.Diorite;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
-import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.auth.GameProfile;
 import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.command.sender.MessageOutput;
@@ -69,6 +68,7 @@ import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.permissions.PlayerPermissionsContainer;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.geometry.ImmutableEntityBoundingBox;
+import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.utils.others.NamedUUID;
 
 class HumanImpl extends LivingEntityImpl implements IHuman

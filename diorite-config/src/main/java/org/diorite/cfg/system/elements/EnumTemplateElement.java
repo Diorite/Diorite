@@ -58,7 +58,7 @@ public class EnumTemplateElement extends TemplateElement<Enum>
     @Override
     protected Enum convertObject0(final Object obj) throws UnsupportedOperationException
     {
-       throw this.getException(obj);
+        throw this.getException(obj);
     }
 
     @Override

@@ -39,13 +39,13 @@ import org.diorite.utils.collections.WeakCollection;
 public class BossBarImpl implements BossBar
 {
     private final Collection<IPlayer> holders = new WeakCollection<>(5);
-    private final         UUID uuid;
-    private int           health;
-    private BaseComponent title;
-    private Color         color;
-    private Style         style;
-    private boolean       isDarkSky;
-    private boolean       isDragonBar;
+    private final UUID          uuid;
+    private       int           health;
+    private       BaseComponent title;
+    private       Color         color;
+    private       Style         style;
+    private       boolean       isDarkSky;
+    private       boolean       isDragonBar;
 
     public BossBarImpl(final UUID uuid, final int health, final BaseComponent title, final Style style, final Color color)
     {

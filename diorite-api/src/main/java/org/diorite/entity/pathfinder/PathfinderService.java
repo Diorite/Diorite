@@ -35,10 +35,11 @@ public interface PathfinderService<T extends Pathfinder>
      * That method will create new Pathfinder instance. <br />
      * Calculations should not be here performed!
      *
-     * @param entity Entity what will go
-     * @param goal The point what will be reached by entity
+     * @param entity   Entity what will go
+     * @param goal     The point what will be reached by entity
      * @param callback you should send here results of your calculations. <br />
      *                 Entity will intermeditaly go on this Path.
+     *
      * @return
      */
     T initPathfinding(Entity entity, ILocation goal, Consumer<Path> callback);

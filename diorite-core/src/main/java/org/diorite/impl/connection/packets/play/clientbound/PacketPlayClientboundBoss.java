@@ -200,7 +200,7 @@ public class PacketPlayClientboundBoss extends PacketPlayClientbound
     private void decodeFlags(final byte flags)
     {
         this.darkSky = (flags & 0x01) > 0;
-        this.isDragonBar =(flags & 0x02) > 0;
+        this.isDragonBar = (flags & 0x02) > 0;
     }
 
     @Override
@@ -299,7 +299,12 @@ public class PacketPlayClientboundBoss extends PacketPlayClientbound
 
     public enum Action
     {
-        ADD, REMOVE, UPDATE_HEALTH, UPDATE_TITLE, UPDATE_STYLE, UPDATE_FLAGS
+        ADD,
+        REMOVE,
+        UPDATE_HEALTH,
+        UPDATE_TITLE,
+        UPDATE_STYLE,
+        UPDATE_FLAGS
     }
 
     @Override
