@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent abstract arrow.
+ */
 public interface AbstractArrow extends Projectile, ObjectEntity
 {
     /**

@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent squid entity.
+ */
 public interface Squid extends AnimalEntity
 {
 }

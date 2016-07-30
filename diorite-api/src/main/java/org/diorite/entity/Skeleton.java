@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent skeleton entity.
+ */
 public interface Skeleton extends MonsterEntity
 {
     /**

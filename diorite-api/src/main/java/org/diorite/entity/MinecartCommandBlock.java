@@ -26,6 +26,9 @@ package org.diorite.entity;
 
 import org.diorite.command.sender.CommandSender;
 
+/**
+ * Represent minecart with command block entity.
+ */
 public interface MinecartCommandBlock extends AbstractMinecart, CommandSender
 {
 }

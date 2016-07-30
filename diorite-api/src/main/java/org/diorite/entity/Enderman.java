@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent enderman entity.
+ */
 public interface Enderman extends MonsterEntity
 {
 }

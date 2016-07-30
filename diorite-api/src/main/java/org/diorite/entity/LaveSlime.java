@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent lava slime entity.
+ */
 public interface LaveSlime extends MonsterEntity
 {
 }

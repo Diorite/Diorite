@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent pig zombie entity.
+ */
 public interface PigZombie extends MonsterEntity
 {
 }

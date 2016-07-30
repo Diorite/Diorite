@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent ghast entity.
+ */
 public interface Ghast extends MonsterEntity
 {
     /**

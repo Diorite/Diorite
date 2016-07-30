@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent spectral arrow entity.
+ */
 public interface SpectralArrow extends AbstractArrow
 {
 }

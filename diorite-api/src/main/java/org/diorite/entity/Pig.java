@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent pig entity.
+ */
 public interface Pig extends AnimalEntity
 {
     /**

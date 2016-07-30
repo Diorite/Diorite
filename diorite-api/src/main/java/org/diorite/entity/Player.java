@@ -36,6 +36,9 @@ import org.diorite.command.sender.PlayerCommandSender;
 import org.diorite.inventory.Inventory;
 import org.diorite.utils.math.DioriteRandom;
 
+/**
+ * Represent player entity.
+ */
 public interface Player extends Human, PlayerCommandSender, OfflinePlayer, BossBarHolder
 {
     @Override

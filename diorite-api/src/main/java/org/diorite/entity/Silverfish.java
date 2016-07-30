@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent silverfish entity.
+ */
 public interface Silverfish extends MonsterEntity
 {
 }
