@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent falling dragon egg entity.
+ */
 public interface FallingDragonEgg extends ObjectEntity // extends FallingBlock?
 {
 }

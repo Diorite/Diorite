@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent leash knot entity.
+ */
 public interface LeashKnot extends ObjectEntity
 {
 }

@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent shulker bullet entity.
+ */
 public interface ShulkerBullet extends Projectile, ObjectEntity
 {
 }

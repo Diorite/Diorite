@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent polar bear entity.
+ */
 public interface PolarBear extends AnimalEntity
 {
     /**

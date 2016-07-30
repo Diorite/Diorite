@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent ocelot entity.
+ */
 public interface Ocelot extends AnimalEntity
 {
     /**

@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent guardian entity.
+ */
 public interface Guardian extends MonsterEntity
 {
 }

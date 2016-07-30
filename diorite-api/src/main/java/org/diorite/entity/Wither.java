@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent wither entity.
+ */
 public interface Wither extends MonsterEntity
 {
 }

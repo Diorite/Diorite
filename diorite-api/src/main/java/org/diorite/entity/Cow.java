@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent cow entity.
+ */
 public interface Cow extends AnimalEntity
 {
 }

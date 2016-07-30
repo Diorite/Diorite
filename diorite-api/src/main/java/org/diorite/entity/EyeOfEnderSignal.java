@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent eye of ender signal entity.
+ */
 public interface EyeOfEnderSignal extends Projectile, ObjectEntity
 {
 }

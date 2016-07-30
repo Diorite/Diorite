@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent slime entity.
+ */
 public interface Slime extends MonsterEntity
 {
     public static final int BIG = 4;

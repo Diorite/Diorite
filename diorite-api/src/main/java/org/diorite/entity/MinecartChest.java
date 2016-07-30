@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent minecart with chest entity.
+ */
 public interface MinecartChest extends AbstractMinecart
 {
 }
