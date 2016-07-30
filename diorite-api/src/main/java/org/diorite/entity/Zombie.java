@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent zombie entity.
+ */
 public interface Zombie extends MonsterEntity
 {
     ZombieType getZombieType();

@@ -26,6 +26,9 @@ package org.diorite.entity;
 
 import org.diorite.utils.others.Colorable;
 
+/**
+ * Represent tipped arrow entity.
+ */
 public interface TippedArrow extends AbstractArrow, Colorable
 {
 }

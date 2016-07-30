@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent creeper entity.
+ */
 public interface Creeper extends MonsterEntity
 {
     /**

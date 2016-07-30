@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent thrown enderpearl entity.
+ */
 public interface ThrownEnderpearl extends Projectile, ObjectEntity
 {
 }

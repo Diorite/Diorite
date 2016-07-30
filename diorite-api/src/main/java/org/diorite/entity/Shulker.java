@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent shulker entity.
+ */
 public interface Shulker extends MonsterEntity
 {
 }

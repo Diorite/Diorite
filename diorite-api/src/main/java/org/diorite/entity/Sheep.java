@@ -26,6 +26,9 @@ package org.diorite.entity;
 
 import org.diorite.DyeColor;
 
+/**
+ * Represent sheep entity.
+ */
 public interface Sheep extends AnimalEntity
 {
     boolean isSheared();

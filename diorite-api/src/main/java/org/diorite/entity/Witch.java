@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent witch entity.
+ */
 public interface Witch extends MonsterEntity
 {
     /**

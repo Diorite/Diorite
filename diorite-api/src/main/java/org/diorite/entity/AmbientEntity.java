@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent ambient entity entity.
+ */
 public interface AmbientEntity extends InsentientEntity
 {
 }

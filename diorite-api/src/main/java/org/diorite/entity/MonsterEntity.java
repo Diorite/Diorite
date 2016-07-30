@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent monster entity.
+ */
 public interface MonsterEntity extends CreatureEntity
 {
 }

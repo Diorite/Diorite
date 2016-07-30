@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent thrown experience bottle entity.
+ */
 public interface ThrownExpBottle extends Projectile, ObjectEntity
 {
 }

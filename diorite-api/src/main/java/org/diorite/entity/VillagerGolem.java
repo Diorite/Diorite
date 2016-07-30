@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent villager golem entity.
+ */
 public interface VillagerGolem extends AnimalEntity
 {
     /**

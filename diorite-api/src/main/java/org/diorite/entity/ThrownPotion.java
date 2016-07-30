@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent thrown potion entity.
+ */
 public interface ThrownPotion extends Projectile, ObjectEntity
 {
 }
