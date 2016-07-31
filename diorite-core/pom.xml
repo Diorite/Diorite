@@ -51,13 +51,19 @@
                             <Implementation-Version>${diorite.version}</Implementation-Version>
                             <Specification-Title>DioriteAPI</Specification-Title>
                         </manifestEntries>
+
                     </archive>
                 </configuration>
             </plugin>
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-shade-plugin</artifactId>-->
-            <!--</plugin>-->
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <transformers>
+                        <transformer implementation="com.github.edwgiz.mavenShadePlugin.log4j2CacheTransformer.PluginsCacheFileTransformer" />
+                    </transformers>
+                </configuration>
+            </plugin>-->
         </plugins>
     </build>
 </project>

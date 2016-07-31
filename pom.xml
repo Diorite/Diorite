@@ -16,7 +16,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lwjgl.version>3.0.0a</lwjgl.version>
-        <log4j.version>2.4.1</log4j.version>
+        <log4j.version>2.6.2</log4j.version>
         <diorite.build>unspecified</diorite.build>
         <diorite.version.raw>indev-0.0.3</diorite.version.raw>
         <diorite.version>${diorite.version.raw}-b${diorite.build}</diorite.version>
@@ -238,8 +238,21 @@
                             <goals>
                                 <goal>shade</goal>
                             </goals>
+                            <configuration>
+                                <transformers>
+                                    <transformer implementation="com.github.edwgiz.mavenShadePlugin.log4j2CacheTransformer.PluginsCacheFileTransformer" />
+                                </transformers>
+                            </configuration>
                         </execution>
                     </executions>
+
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.github.edwgiz</groupId>
+                            <artifactId>maven-shade-plugin.log4j2-cachefile-transformer</artifactId>
+                            <version>2.6.1</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
