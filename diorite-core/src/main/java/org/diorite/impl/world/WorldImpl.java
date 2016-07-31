@@ -996,12 +996,13 @@ public class WorldImpl implements World, Tickable
                 {
                     final NbtTagCompound nbt = new NbtTagCompound();
 
-                    //TODO
+                    //TODO: load from world's settings
                     nbt.setDouble("PosX", 0.0);
                     nbt.setDouble("PosY", 0.0);
                     nbt.setDouble("PosZ", 0.0);
                     nbt.setFloat("Yaw", 0.0f);
                     nbt.setFloat("Pitch", 0.0f);
+                    nbt.setString("GameMode", playerEntity.getGameMode().getName());
 
                     nbtStream.write(nbt);
                     nbtStream.flush();
@@ -1019,6 +1020,7 @@ public class WorldImpl implements World, Tickable
                     NbtTagCompound nbt = (NbtTagCompound) nbtStream.readTag(NbtLimiter.getUnlimited());
 
                     playerEntity.teleport(new ImmutableLocation(nbt.getDouble("PosX"), nbt.getDouble("PosY"), nbt.getDouble("PosZ"), nbt.getFloat("Yaw"), nbt.getFloat("Pitch")));
+                    playerEntity.setGameMode(GameMode.getByEnumName(nbt.getString("GameMode")));
                 }
                 catch (IOException e)
                 {
@@ -1062,11 +1064,12 @@ public class WorldImpl implements World, Tickable
 
             try(final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(worldPlayerDataFile)))
             {
-                nbt.setDouble("PosX", playerEntity.getLocation().getX());
-                nbt.setDouble("PosY", playerEntity.getLocation().getY());
-                nbt.setDouble("PosZ", playerEntity.getLocation().getZ());
+                nbt.setDouble("PosX", playerEntity.getX());
+                nbt.setDouble("PosY", playerEntity.getY());
+                nbt.setDouble("PosZ", playerEntity.getZ());
                 nbt.setFloat("Yaw", playerEntity.getYaw());
                 nbt.setFloat("Pitch", playerEntity.getPitch());
+                nbt.setString("GameMode", playerEntity.getGameMode().getName());
 
                 nbtStream.write(nbt);
                 nbtStream.flush();
