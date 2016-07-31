@@ -144,6 +144,10 @@ public class DevCmd extends SystemCommandImpl
                     }
                     for (final IEntity entity : p.getNearbyEntities(size, size, size, LookupShape.RECTANGLE))
                     {
+                        if (entity instanceof IPlayer)
+                        {
+                            continue;
+                        }
                         p.sendMessage(entity.getType() + " - x:" + entity.getX() + ", y:" + entity.getY() + ", z:" + entity.getZ());
                         entity.remove(true);
                     }

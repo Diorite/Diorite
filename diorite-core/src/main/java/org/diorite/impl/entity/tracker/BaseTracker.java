@@ -32,7 +32,6 @@ import java.util.Iterator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.CoreMain;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityMetadata;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityTeleport;
@@ -137,7 +136,6 @@ public abstract class BaseTracker<T extends IEntity>
 
         if (this.isMoving && ! this.tracked.isEmpty())
         {
-            CoreMain.debug("Updating location.");
             if ((deltaX < 4) && (deltaX > - 4) && (deltaY < 4) && (deltaY > - 4) && (deltaZ < 4) && (deltaZ > - 4))
             {
                 this.sendToAllExceptOwn(new PacketPlayClientboundRelEntityMoveLook(this.tracker, deltaX, deltaY, deltaZ));
