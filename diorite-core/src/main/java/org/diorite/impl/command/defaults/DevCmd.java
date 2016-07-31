@@ -107,6 +107,14 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = serverManager.getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "tp":
+                {
+                    final Location location = new Location(args.asDouble(0), args.asDouble(1), args.asDouble(2));
+                    sender.sendSimpleColoredMessage("&cOld: " + p.getLocation());
+                    p.teleport(location);
+                    sender.sendSimpleColoredMessage("&cNew: " + location);
+                    break;
+                }
                 case "playersinworld":
                 {
                     final World world;

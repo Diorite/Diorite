@@ -802,17 +802,20 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.pitch = location.getPitch();
 
         final WorldImpl newWorld = (WorldImpl) location.getWorld();
-        if (! Objects.equals(this.world, newWorld))
+        if (newWorld != null && ! Objects.equals(this.world, newWorld))
         {
             this.worldChange(this.world, this.world = newWorld);
         }
 
         this.updateChunk(chunk, this.getChunk());
+        this.getTracker().forceLocationUpdate();
     }
 
     protected void worldChange(final WorldImpl oldW, final WorldImpl newW)
     {
         CoreMain.debug("Entity " + this + " moved from " + oldW + " to " + newW);
+        oldW.removeEntity(this);
+        newW.addEntity(this);
         // TODO add event?
     }
 
