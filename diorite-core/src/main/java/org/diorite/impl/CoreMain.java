@@ -150,6 +150,17 @@ public final class CoreMain
             // register all packet classes.
             RegisterPackets.init();
 
+            File playersDir = new File("players");
+
+            try
+            {
+                if(!playersDir.exists() || playersDir.isFile()) playersDir.mkdir();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
             // TODO: load "magic values"
             // never remove this line (Material.values), it's needed even if it don't do anything for you.
             // it will force load all material classes, loading class of one material before "Material" is loaded will throw error.
