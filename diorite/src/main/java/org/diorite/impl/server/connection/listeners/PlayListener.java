@@ -279,7 +279,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundTeleportAccept packet)
     {
-        System.out.println(packet);
+        CoreMain.debug(packet);
     }
 
     @Override
@@ -290,7 +290,7 @@ public class PlayListener implements PacketPlayServerboundListener
         {
             this.core.sync(() -> EventType.callEvent(new PlayerInventoryClickEvent(this.player, (short) - 2, - 1, itemWithSlot.slot, ClickType.SHIFT_MOUSE_RIGHT)), this.player);
         }
-        System.out.println(packet);
+        CoreMain.debug(packet);
         // TODO
     }
 
@@ -353,7 +353,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundBlockPlace packet)
     {
-        System.out.println(packet);
+        CoreMain.debug(packet);
 
         if (packet.getCursorPos().getBlockFace() == null)
         {
@@ -383,7 +383,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundCommand packet)
     {
-        System.out.println(packet); // TODO
+        CoreMain.debug(packet); // TODO
     }
 
     @Override
