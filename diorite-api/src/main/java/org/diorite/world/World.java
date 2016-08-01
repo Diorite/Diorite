@@ -27,7 +27,8 @@ package org.diorite.world;
 import java.io.File;
 import java.util.Set;
 
-import org.diorite.BlockLocation;
+import org.diorite.block.Block;
+import org.diorite.block.BlockLocation;
 import org.diorite.BossBarHolder;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -140,6 +141,8 @@ public interface World extends BossBarHolder
     Chunk getChunkAt(ChunkPos pos);
 
     Block getBlock(int x, int y, int z);
+
+    Block getBlock(BlockLocation location);
 
     int getHighestBlockY(int x, int z);
 

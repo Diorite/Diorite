@@ -22,43 +22,30 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.world;
+package org.diorite.tileentity;
 
-import java.util.UUID;
+import java.util.Set;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.diorite.block.Block;
+import org.diorite.block.BlockLocation;
+import org.diorite.inventory.item.ItemStack;
+import org.diorite.utils.math.DioriteRandom;
 
-import org.diorite.impl.GameObjectImpl;
-import org.diorite.impl.Tickable;
-import org.diorite.BlockLocation;
-import org.diorite.world.TileEntity;
-
-public abstract class TileEntityImpl extends GameObjectImpl implements TileEntity, Tickable
+public interface TileEntity
 {
-    private final BlockLocation location;
+    BlockLocation getLocation();
 
-    public TileEntityImpl(final UUID uuid, final BlockLocation location)
-    {
-        super(uuid);
-        this.location = location;
-    }
+    Block getBlock();
 
-    public TileEntityImpl(final BlockLocation location)
-    {
-        super(UUID.randomUUID());
-        this.location = location;
-    }
-
-    @Override
-    public BlockLocation getLocation()
-    {
-        return this.location;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("location", this.location).toString();
-    }
+    /**
+     * Implementation of this method should simulate real drop from this tile-entity. <br>
+     * Method should only add items resulting from being tile-entity, like chest should add
+     * all items from it, but should not add a chest item itself. <br>
+     * From simple blocks that drops itself first element of drop list should be always
+     * item representation of this block. You may edit it from this method.
+     *
+     * @param rand  random instance, should be used if random number is needed.
+     * @param drops drop list, add drops here.
+     */
+    void simulateDrop(DioriteRandom rand, Set<ItemStack> drops);
 }

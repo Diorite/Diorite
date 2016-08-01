@@ -38,7 +38,7 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataMaterialEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataUUIDEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataVector3FEntry;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.material.Material;
 
 public enum EntityMetadataType

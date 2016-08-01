@@ -36,8 +36,8 @@ import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
 import org.diorite.Art;
-import org.diorite.BlockFace;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockFace;
+import org.diorite.block.BlockLocation;
 
 @PacketClass(id = 0x04, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.CLIENTBOUND, size = 40)
 public class PacketPlayClientboundSpawnEntityPainting extends PacketPlayClientbound

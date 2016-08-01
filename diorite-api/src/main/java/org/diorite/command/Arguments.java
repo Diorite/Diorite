@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.Diorite;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;

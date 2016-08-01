@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.entity.IEntity;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.ILocation;
 import org.diorite.entity.Entity;
 import org.diorite.entity.pathfinder.Path;

@@ -26,9 +26,9 @@ package org.diorite.world.generator.structures;
 
 import java.util.Random;
 
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.material.BlockMaterialData;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 import org.diorite.world.chunk.ChunkPos;
 
 @FunctionalInterface

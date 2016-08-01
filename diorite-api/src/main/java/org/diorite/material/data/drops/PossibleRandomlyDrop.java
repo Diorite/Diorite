@@ -33,7 +33,7 @@ import org.diorite.entity.Entity;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.IntRange;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 
 public class PossibleRandomlyDrop extends PossibleDrop
 {

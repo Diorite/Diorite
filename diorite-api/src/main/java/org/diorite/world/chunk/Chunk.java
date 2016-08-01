@@ -27,7 +27,7 @@ package org.diorite.world.chunk;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.world.Biome;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 import org.diorite.world.World;
 
 public interface Chunk extends Synchronizable

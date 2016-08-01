@@ -35,7 +35,7 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.material.items.ToolMat;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 
 public class BlockDestroyPipelineImpl extends SimpleEventPipeline<PlayerBlockDestroyEvent> implements BlockDestroyPipeline
 {

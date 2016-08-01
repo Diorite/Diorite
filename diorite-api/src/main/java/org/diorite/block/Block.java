@@ -22,15 +22,16 @@
  * SOFTWARE.
  */
 
-package org.diorite.world;
+package org.diorite.block;
 
 import java.util.Optional;
 
-import org.diorite.BlockFace;
-import org.diorite.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.math.geometry.BoundingBox;
+import org.diorite.world.Biome;
+import org.diorite.tileentity.TileEntity;
+import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 
 /**

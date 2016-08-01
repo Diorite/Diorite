@@ -24,8 +24,6 @@
 
 package org.diorite.entity;
 
-import org.diorite.BlockLocation;
-
 /**
  * Represent falling block entity.
  */

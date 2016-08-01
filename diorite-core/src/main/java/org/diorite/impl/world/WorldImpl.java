@@ -58,7 +58,7 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.impl.world.io.requests.Request;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.BossBar;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -81,7 +81,7 @@ import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.Biome;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings;
 import org.diorite.world.World;
@@ -720,6 +720,12 @@ public class WorldImpl implements World, Tickable
             throw new IllegalArgumentException("Y (" + y + ") must be in range 0-" + (Chunk.CHUNK_FULL_HEIGHT - 1));
         }
         return this.getChunkAt(x >> 4, z >> 4).getBlock((x & CHUNK_FLAG), y, (z & CHUNK_FLAG));
+    }
+
+    @Override
+    public Block getBlock(final BlockLocation location)
+    {
+        return this.getBlock(location.getX(), location.getY(), location.getZ());
     }
 
     @Override

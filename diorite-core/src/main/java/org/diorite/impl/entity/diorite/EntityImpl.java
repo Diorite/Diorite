@@ -53,7 +53,7 @@ import org.diorite.impl.entity.pathfinder.EntityControllerImpl;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Entity;

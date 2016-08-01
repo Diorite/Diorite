@@ -32,7 +32,6 @@ import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCustomPayload;
-import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityHeadRotation;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundHeldItemSlot;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundLogin;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
@@ -41,8 +40,6 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateTime;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.entity.IPlayer;
-import org.diorite.BlockLocation;
-import org.diorite.ImmutableLocation;
 import org.diorite.TeleportData;
 import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.messages.Message.MessageData;
