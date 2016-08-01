@@ -996,12 +996,13 @@ public class WorldImpl implements World, Tickable
                 {
                     final NbtTagCompound nbt = new NbtTagCompound();
 
-                    //TODO: load from world's settings
-                    nbt.setDouble("PosX", 0.0);
-                    nbt.setDouble("PosY", 0.0);
-                    nbt.setDouble("PosZ", 0.0);
-                    nbt.setFloat("Yaw", 0.0f);
-                    nbt.setFloat("Pitch", 0.0f);
+                    ImmutableLocation spawnLocation = getSpawn();
+
+                    nbt.setDouble("PosX", spawnLocation.getX());
+                    nbt.setDouble("PosY", spawnLocation.getY());
+                    nbt.setDouble("PosZ", spawnLocation.getZ());
+                    nbt.setFloat("Yaw", spawnLocation.getYaw());
+                    nbt.setFloat("Pitch", spawnLocation.getPitch());
                     nbt.setString("GameMode", playerEntity.getGameMode().getName());
 
                     nbtStream.write(nbt);

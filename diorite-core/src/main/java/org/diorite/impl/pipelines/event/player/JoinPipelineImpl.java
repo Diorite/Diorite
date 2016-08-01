@@ -42,6 +42,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldDifficulty;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.BlockLocation;
+import org.diorite.ImmutableLocation;
 import org.diorite.TeleportData;
 import org.diorite.cfg.messages.DioriteMessages;
 import org.diorite.cfg.messages.Message.MessageData;
@@ -68,7 +69,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             networkManager.sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), player.getWorld().getHardcore().isEnabled(), player.getWorld().getDimension(), player.getWorld().getDifficulty(), DioriteCore.getInstance().getPlayersManager().getRawPlayers().size(), player.getWorld().getWorldType()));
             networkManager.sendPacket(new PacketPlayClientboundCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
             networkManager.sendPacket(new PacketPlayClientboundWorldDifficulty(player.getWorld().getDifficulty()));
-            networkManager.sendPacket(new PacketPlayClientboundSpawnPosition(new BlockLocation(2, 255, - 2)));
+            networkManager.sendPacket(new PacketPlayClientboundSpawnPosition(player.getWorld().getSpawn().toBlockLocation()));
             networkManager.sendPacket(new PacketPlayClientboundAbilities(false, false, player.canFly(), false, Player.WALK_SPEED, Player.FLY_SPEED));
             networkManager.sendPacket(new PacketPlayClientboundHeldItemSlot(player.getHeldItemSlot()));
             TeleportData teleportData = new TeleportData(player.getX(), player.getY(), player.getZ());

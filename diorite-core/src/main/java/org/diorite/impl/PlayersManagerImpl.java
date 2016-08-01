@@ -77,7 +77,9 @@ public class PlayersManagerImpl implements Tickable
     {// TODO: loading player
         //noinspection MagicNumber
 
-        ImmutableLocation destLocation = new ImmutableLocation(4, 120, -4, 0, 0, this.core.getWorldsManager().getDefaultWorld());
+        WorldImpl defaultWorld = this.core.getWorldsManager().getDefaultWorld();
+
+        ImmutableLocation destLocation = defaultWorld.getSpawn();
         GameMode destGameMode = GameMode.SURVIVAL;
 
         File playerDataFile = new File("players" + File.separator + gameProfile.getId().toString() + ".dat");
